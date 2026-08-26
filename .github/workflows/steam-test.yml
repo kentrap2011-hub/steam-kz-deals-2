@@ -1,0 +1,116 @@
+name: Steam test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/steam-test.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Fetch Steam Kazakhstan page
+        run: |
+          cat > /tmp/test.py <<'PY'
+          import json
+          from pathlib import Path
+
+          import requests
+          from bs4 import BeautifulSoup
+
+          url = "https://store.steampowered.com/search/results/"
+
+          params = {
+              "query": "",
+              "start": 0,
+              "count": 50,
+              "specials": 1,
+              "cc": "kz",
+              "l": "english",
+              "infinite": 1,
+              "ignore_preferences": 1,
+          }
+
+          headers = {
+              "User-Agent": "Mozilla/5.0",
+              "Accept": "application/json,text/plain,*/*",
+          }
+
+          response = requests.get(
+              url,
+              params=params,
+              headers=headers,
+              timeout=40,
+          )
+
+          response.raise_for_status()
+
+          data = response.json()
+          html = data.get("results_html", "")
+
+          soup = BeautifulSoup(html, "html.parser")
+          rows = soup.select("a.search_result_row")
+
+          samples = []
+
+          for row in rows[:10]:
+              title = row.select_one("span.title")
+
+              samples.append({
+                  "title": (
+                      title.get_text(" ", strip=True)
+                      if title else None
+                  ),
+                  "text": row.get_text(" ", strip=True),
+                  "html": str(row)[:6000],
+              })
+
+          Path("data").mkdir(exist_ok=True)
+
+          Path("data/diagnostic.json").write_text(
+              json.dumps(
+                  {
+                      "status": response.status_code,
+                      "total_count": data.get("total_count"),
+                      "rows": len(rows),
+                      "samples": samples,
+                  },
+                  ensure_ascii=False,
+                  indent=2,
+              ),
+              encoding="utf-8",
+          )
+
+          print("HTTP:", response.status_code)
+          print("Rows:", len(rows))
+          print("Steam total:", data.get("total_count"))
+          PY
+
+          python /tmp/test.py
+
+      - name: Save diagnostic
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+
+          git add data/diagnostic.json
+          git commit -m "Save Steam diagnostic" || exit 0
+          git push
