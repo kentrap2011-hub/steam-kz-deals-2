@@ -1,0 +1,219 @@
+name: Build compact deal feed
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/build-feed.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build compact chunks
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          import shutil
+          from pathlib import Path
+
+          SOURCE = Path(
+              "data/candidates_under_3500.json"
+          )
+
+          OUT = Path("data/feed")
+          CHUNK_SIZE = 300
+
+          if OUT.exists():
+              shutil.rmtree(OUT)
+
+          OUT.mkdir(parents=True)
+
+          source = json.loads(
+              SOURCE.read_text(encoding="utf-8")
+          )
+
+          items = source["items"]
+          metadata = source["metadata"]
+
+          columns = [
+              "key",
+              "appid",
+              "discount_percent",
+              "final_kzt",
+              "title",
+          ]
+
+          chunks = []
+
+
+          def clean(value):
+              if value is None:
+                  return ""
+
+              return (
+                  str(value)
+                  .replace("\t", " ")
+                  .replace("\r", " ")
+                  .replace("\n", " ")
+              )
+
+
+          for chunk_number, start in enumerate(
+              range(0, len(items), CHUNK_SIZE),
+              start=1,
+          ):
+              subset = items[
+                  start:start + CHUNK_SIZE
+              ]
+
+              lines = []
+
+              for item in subset:
+                  price = item.get("final_kzt")
+
+                  if isinstance(price, float):
+                      price = f"{price:g}"
+
+                  row = [
+                      item.get("key"),
+                      item.get("appid"),
+                      item.get(
+                          "discount_percent"
+                      ),
+                      price,
+                      item.get("title"),
+                  ]
+
+                  lines.append(
+                      "\t".join(
+                          clean(value)
+                          for value in row
+                      )
+                  )
+
+              text = "\n".join(lines) + "\n"
+
+              filename = (
+                  f"chunk_{chunk_number:03d}.tsv"
+              )
+
+              path = OUT / filename
+
+              path.write_text(
+                  text,
+                  encoding="utf-8",
+              )
+
+              chunks.append({
+                  "file":
+                      f"data/feed/{filename}",
+
+                  "count":
+                      len(subset),
+
+                  "bytes":
+                      len(
+                          text.encode("utf-8")
+                      ),
+
+                  "sha256":
+                      hashlib.sha256(
+                          text.encode("utf-8")
+                      ).hexdigest(),
+              })
+
+
+          index = {
+              "version": 1,
+
+              "format": "tsv",
+
+              "columns": columns,
+
+              "country_code": "kz",
+
+              "source_updated_at_utc":
+                  metadata.get(
+                      "updated_at_utc"
+                  ),
+
+              "source_complete":
+                  metadata.get("complete"),
+
+              "source_coverage_ratio":
+                  metadata.get(
+                      "coverage_ratio"
+                  ),
+
+              "item_count":
+                  len(items),
+
+              "chunk_size":
+                  CHUNK_SIZE,
+
+              "chunk_count":
+                  len(chunks),
+
+              "chunks":
+                  chunks,
+          }
+
+
+          (OUT / "index.json").write_text(
+              json.dumps(
+                  index,
+                  ensure_ascii=False,
+                  indent=2,
+              ),
+              encoding="utf-8",
+          )
+
+
+          print(
+              json.dumps(
+                  {
+                      "items": len(items),
+                      "chunks": len(chunks),
+                      "largest_chunk_bytes":
+                          max(
+                              chunk["bytes"]
+                              for chunk in chunks
+                          ),
+                  },
+                  ensure_ascii=False,
+                  indent=2,
+              )
+          )
+          PY
+
+      - name: Commit compact feed
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+
+          git add data/feed/
+
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+
+          git commit -m "Build compact Steam deal feed"
+          git push
