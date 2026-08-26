@@ -1,7 +1,12 @@
-name: Steam test
+name: Update Steam KZ deals
 
 on:
   workflow_dispatch:
+
+  schedule:
+    # 07:17 по Самаре
+    - cron: "17 3 * * *"
+
   push:
     branches: [main]
     paths:
@@ -10,10 +15,14 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: steam-kz-collector
+  cancel-in-progress: false
+
 jobs:
-  test:
+  collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 40
 
     steps:
       - name: Checkout
@@ -27,90 +36,701 @@ jobs:
       - name: Install dependencies
         run: pip install requests beautifulsoup4
 
-      - name: Fetch Steam Kazakhstan page
+      - name: Collect Kazakhstan Steam specials
+        shell: bash
         run: |
-          cat > /tmp/test.py <<'PY'
+          cat > /tmp/collect.py <<'PY'
           import json
+          import time
+          from datetime import datetime, timezone
           from pathlib import Path
 
           import requests
           from bs4 import BeautifulSoup
 
-          url = "https://store.steampowered.com/search/results/"
 
-          params = {
-              "query": "",
-              "start": 0,
-              "count": 50,
-              "specials": 1,
-              "cc": "kz",
-              "l": "english",
-              "infinite": 1,
-              "ignore_preferences": 1,
-          }
+          URL = "https://store.steampowered.com/search/results/"
+          PAGE_SIZE = 50
+          MAX_KZT = 3500
+          REQUEST_DELAY = 0.9
 
-          headers = {
-              "User-Agent": "Mozilla/5.0",
+          OUT = Path("data")
+          OUT.mkdir(exist_ok=True)
+
+
+          session = requests.Session()
+
+          session.headers.update({
+              "User-Agent": (
+                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                  "AppleWebKit/537.36 (KHTML, like Gecko) "
+                  "Chrome/140.0 Safari/537.36"
+              ),
               "Accept": "application/json,text/plain,*/*",
-          }
+              "Accept-Language": "en-US,en;q=0.9",
+          })
 
-          response = requests.get(
-              url,
-              params=params,
-              headers=headers,
-              timeout=40,
+          session.cookies.update({
+              "birthtime": "568022401",
+              "lastagecheckage": "1-January-1988",
+              "wants_mature_content": "1",
+          })
+
+
+          def to_int(value):
+              try:
+                  return int(value)
+              except (TypeError, ValueError):
+                  return None
+
+
+          def get_page(start, sort_by):
+              params = {
+                  "query": "",
+                  "start": start,
+                  "count": PAGE_SIZE,
+                  "specials": 1,
+                  "cc": "kz",
+                  "l": "english",
+                  "infinite": 1,
+                  "ignore_preferences": 1,
+                  "sort_by": sort_by,
+              }
+
+              last_error = None
+
+              for attempt in range(1, 9):
+                  try:
+                      response = session.get(
+                          URL,
+                          params=params,
+                          timeout=40,
+                      )
+
+                      if response.status_code == 429:
+                          retry_after = to_int(
+                              response.headers.get(
+                                  "Retry-After"
+                              )
+                          )
+
+                          wait = (
+                              retry_after
+                              or min(
+                                  90,
+                                  3 * (2 ** (attempt - 1))
+                              )
+                          )
+
+                          print(
+                              "429:",
+                              "start=", start,
+                              "sort=", sort_by,
+                              "wait=", wait,
+                          )
+
+                          time.sleep(wait)
+                          continue
+
+                      response.raise_for_status()
+                      return response.json()
+
+                  except Exception as exc:
+                      last_error = exc
+
+                      wait = min(
+                          90,
+                          3 * (2 ** (attempt - 1))
+                      )
+
+                      print(
+                          "Retry:",
+                          "start=", start,
+                          "sort=", sort_by,
+                          "error=", exc,
+                          "wait=", wait,
+                      )
+
+                      time.sleep(wait)
+
+              raise RuntimeError(
+                  f"Failed start={start}: {last_error}"
+              )
+
+
+          def identity(row):
+              item_key = (
+                  row.get("data-ds-itemkey")
+                  or ""
+              ).strip()
+
+              if item_key:
+                  return item_key
+
+              appid = row.get("data-ds-appid")
+
+              if appid:
+                  return "App_" + appid.split(",")[0]
+
+              href = (
+                  row.get("href")
+                  or ""
+              )
+
+              return href.split("?", 1)[0]
+
+
+          def parse_row(row):
+              title_node = row.select_one(
+                  "span.title"
+              )
+
+              if not title_node:
+                  return None
+
+              title = title_node.get_text(
+                  " ",
+                  strip=True,
+              )
+
+              key = identity(row)
+
+              appid = row.get("data-ds-appid")
+
+              if appid:
+                  appid = appid.split(",")[0]
+
+              block = row.select_one(
+                  ".discount_block"
+              )
+
+              price_wrapper = row.select_one(
+                  ".search_price_discount_combined"
+              )
+
+              discount = None
+              final_minor = None
+
+              if block:
+                  discount = to_int(
+                      block.get("data-discount")
+                  )
+
+                  final_minor = to_int(
+                      block.get("data-price-final")
+                  )
+
+              if (
+                  final_minor is None
+                  and price_wrapper
+              ):
+                  final_minor = to_int(
+                      price_wrapper.get(
+                          "data-price-final"
+                      )
+                  )
+
+              release = row.select_one(
+                  ".search_released"
+              )
+
+              href = (
+                  row.get("href")
+                  or ""
+              ).strip()
+
+              return {
+                  "key": key,
+                  "appid": appid,
+                  "title": title,
+
+                  "discount_percent": discount,
+
+                  # Steam хранит цену в сотых долях.
+                  # 136400 = 1364.00 ₸
+                  "final_minor": final_minor,
+
+                  "final_kzt": (
+                      final_minor / 100
+                      if final_minor is not None
+                      else None
+                  ),
+
+                  "release_date": (
+                      release.get_text(
+                          " ",
+                          strip=True,
+                      )
+                      if release else ""
+                  ),
+
+                  "url": href,
+              }
+
+
+          def collect(sort_by):
+              start = 0
+              catalog = {}
+
+              rows_seen = 0
+              duplicate_rows = 0
+              requests_made = 0
+
+              total = None
+              reached_end = False
+
+              seen_pages = set()
+
+              while True:
+                  data = get_page(
+                      start,
+                      sort_by,
+                  )
+
+                  requests_made += 1
+
+                  current_total = to_int(
+                      data.get("total_count")
+                  )
+
+                  if current_total is not None:
+                      total = current_total
+
+                  soup = BeautifulSoup(
+                      data.get(
+                          "results_html",
+                          ""
+                      ),
+                      "html.parser",
+                  )
+
+                  rows = soup.select(
+                      "a.search_result_row"
+                  )
+
+                  rows_seen += len(rows)
+
+                  print(
+                      f"{sort_by}: "
+                      f"start={start} "
+                      f"rows={len(rows)} "
+                      f"total={total} "
+                      f"unique={len(catalog)}"
+                  )
+
+                  if not rows:
+                      reached_end = True
+                      break
+
+                  page_keys = []
+
+                  for row in rows:
+                      item = parse_row(row)
+
+                      if not item:
+                          continue
+
+                      key = item["key"]
+
+                      page_keys.append(key)
+
+                      if key in catalog:
+                          duplicate_rows += 1
+
+                      catalog[key] = item
+
+                  signature = tuple(page_keys)
+
+                  if signature in seen_pages:
+                      raise RuntimeError(
+                          "Steam repeated a page: "
+                          f"start={start}"
+                      )
+
+                  seen_pages.add(signature)
+
+                  start += PAGE_SIZE
+
+                  if len(rows) < PAGE_SIZE:
+                      reached_end = True
+                      break
+
+                  if (
+                      total is not None
+                      and start >= total
+                  ):
+                      reached_end = True
+                      break
+
+                  time.sleep(REQUEST_DELAY)
+
+              return {
+                  "catalog": catalog,
+                  "rows_seen": rows_seen,
+                  "duplicate_rows": duplicate_rows,
+                  "requests_made": requests_made,
+                  "total": total,
+                  "reached_end": reached_end,
+                  "sort": sort_by,
+              }
+
+
+          started = datetime.now(timezone.utc)
+
+          # Стабильная сортировка по названию,
+          # чтобы позиции меньше "ездили"
+          # между страницами во время обхода.
+          first = collect("Name_ASC")
+
+          catalog = dict(first["catalog"])
+
+          first_total = first["total"] or 0
+
+          first_coverage = (
+              len(catalog) / first_total
+              if first_total
+              else 0
           )
 
-          response.raise_for_status()
+          second = None
 
-          data = response.json()
-          html = data.get("results_html", "")
+          # Если первый проход поймал слишком
+          # много повторов/сдвигов,
+          # делаем обратный проход и объединяем.
+          if (
+              first_total
+              and first_coverage < 0.985
+          ):
+              print(
+                  "Coverage is low:",
+                  first_coverage,
+                  "Running recovery pass."
+              )
 
-          soup = BeautifulSoup(html, "html.parser")
-          rows = soup.select("a.search_result_row")
+              second = collect("Name_DESC")
 
-          samples = []
+              catalog.update(
+                  second["catalog"]
+              )
 
-          for row in rows[:10]:
-              title = row.select_one("span.title")
 
-              samples.append({
-                  "title": (
-                      title.get_text(" ", strip=True)
-                      if title else None
+          finished = datetime.now(timezone.utc)
+
+
+          items = sorted(
+              catalog.values(),
+              key=lambda x: (
+                  x["title"].casefold(),
+                  x["key"],
+              ),
+          )
+
+
+          paid_candidates = [
+              item
+              for item in items
+              if (
+                  item["discount_percent"]
+                  is not None
+                  and item["discount_percent"] > 0
+                  and item["final_minor"]
+                  is not None
+                  and item["final_minor"] > 0
+                  and item["final_minor"]
+                  <= MAX_KZT * 100
+              )
+          ]
+
+
+          paid_candidates.sort(
+              key=lambda x: (
+                  x["final_minor"],
+                  x["title"].casefold(),
+              )
+          )
+
+
+          free_items = [
+              item
+              for item in items
+              if (
+                  item["discount_percent"]
+                  is not None
+                  and item["discount_percent"] > 0
+                  and item["final_minor"] == 0
+              )
+          ]
+
+
+          unparsed = [
+              item
+              for item in items
+              if (
+                  item["discount_percent"]
+                  is None
+                  or item["final_minor"]
+                  is None
+              )
+          ]
+
+
+          rows_seen = first["rows_seen"]
+          requests_made = first["requests_made"]
+          duplicate_rows = first[
+              "duplicate_rows"
+          ]
+
+          totals = []
+
+          if first["total"] is not None:
+              totals.append(first["total"])
+
+          reached_end = first[
+              "reached_end"
+          ]
+
+
+          if second:
+              rows_seen += second["rows_seen"]
+
+              requests_made += second[
+                  "requests_made"
+              ]
+
+              duplicate_rows += second[
+                  "duplicate_rows"
+              ]
+
+              if second["total"] is not None:
+                  totals.append(
+                      second["total"]
+                  )
+
+              reached_end = (
+                  reached_end
+                  and second["reached_end"]
+              )
+
+
+          reported_total = (
+              max(totals)
+              if totals
+              else None
+          )
+
+
+          coverage = (
+              len(items) / reported_total
+              if reported_total
+              else None
+          )
+
+
+          metadata = {
+              "collector_version": 2,
+
+              "source": "Steam Store",
+
+              "country_code": "kz",
+
+              "region": "Kazakhstan",
+
+              "started_at_utc":
+                  started.isoformat(),
+
+              "updated_at_utc":
+                  finished.isoformat(),
+
+              "page_size": PAGE_SIZE,
+
+              "max_candidate_price_kzt":
+                  MAX_KZT,
+
+              "steam_total_reported":
+                  reported_total,
+
+              "unique_items":
+                  len(items),
+
+              "rows_seen":
+                  rows_seen,
+
+              "duplicate_rows_seen":
+                  duplicate_rows,
+
+              "requests_made":
+                  requests_made,
+
+              "recovery_pass_used":
+                  second is not None,
+
+              "coverage_ratio": (
+                  round(coverage, 6)
+                  if coverage is not None
+                  else None
+              ),
+
+              "paid_candidates":
+                  len(paid_candidates),
+
+              "free_items":
+                  len(free_items),
+
+              "unparsed_items":
+                  len(unparsed),
+
+              "reached_reported_end":
+                  reached_end,
+
+              "complete": (
+                  reached_end
+                  and len(items) > 1000
+                  and len(paid_candidates) > 0
+              ),
+          }
+
+
+          def save(name, payload):
+              (OUT / name).write_text(
+                  json.dumps(
+                      payload,
+                      ensure_ascii=False,
+                      indent=2,
                   ),
-                  "text": row.get_text(" ", strip=True),
-                  "html": str(row)[:6000],
-              })
+                  encoding="utf-8",
+              )
 
-          Path("data").mkdir(exist_ok=True)
 
-          Path("data/diagnostic.json").write_text(
-              json.dumps(
-                  {
-                      "status": response.status_code,
-                      "total_count": data.get("total_count"),
-                      "rows": len(rows),
-                      "samples": samples,
+          save(
+              "manifest.json",
+              metadata,
+          )
+
+
+          # Полный индекс всех найденных
+          # Steam Specials.
+          save(
+              "catalog_index.json",
+              {
+                  "metadata": metadata,
+                  "items": items,
+              },
+          )
+
+
+          save(
+              "candidates_under_3500.json",
+              {
+                  "metadata": {
+                      **metadata,
+                      "item_count":
+                          len(paid_candidates),
                   },
+                  "items":
+                      paid_candidates,
+              },
+          )
+
+
+          buckets = [
+              (0, 1000),
+              (1001, 2000),
+              (2001, 3000),
+              (3001, MAX_KZT),
+          ]
+
+
+          for low, high in buckets:
+              subset = [
+                  item
+                  for item in paid_candidates
+                  if (
+                      low * 100
+                      <= item["final_minor"]
+                      <= high * 100
+                  )
+              ]
+
+              save(
+                  f"deals_{low:04d}_{high:04d}.json",
+                  {
+                      "metadata": {
+                          **metadata,
+
+                          "range_kzt": [
+                              low,
+                              high,
+                          ],
+
+                          "item_count":
+                              len(subset),
+                      },
+
+                      "items": subset,
+                  },
+              )
+
+
+          save(
+              "free_items.json",
+              {
+                  "metadata": {
+                      **metadata,
+                      "item_count":
+                          len(free_items),
+                  },
+                  "items": free_items,
+              },
+          )
+
+
+          save(
+              "unparsed_items.json",
+              {
+                  "metadata": {
+                      **metadata,
+                      "item_count":
+                          len(unparsed),
+                  },
+
+                  # На случай изменения
+                  # разметки Steam не раздуваем
+                  # диагностический файл.
+                  "items": unparsed[:500],
+              },
+          )
+
+
+          print(
+              json.dumps(
+                  metadata,
                   ensure_ascii=False,
                   indent=2,
-              ),
-              encoding="utf-8",
+              )
           )
 
-          print("HTTP:", response.status_code)
-          print("Rows:", len(rows))
-          print("Steam total:", data.get("total_count"))
+
+          if not metadata["complete"]:
+              raise SystemExit(
+                  "Completeness check failed"
+              )
+
           PY
 
-          python /tmp/test.py
+          python /tmp/collect.py
 
-      - name: Save diagnostic
+      - name: Commit fresh catalog
+        shell: bash
         run: |
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
 
-          git add data/diagnostic.json
-          git commit -m "Save Steam diagnostic" || exit 0
+          git add data/
+
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+
+          git commit -m "Update Steam KZ deals"
           git push
