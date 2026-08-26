@@ -8,27 +8,42 @@ on:
     paths:
       - ".github/workflows/build-feed.yml"
 
+  workflow_run:
+    workflows:
+      - "Update Steam KZ deals"
+    types:
+      - completed
+
 permissions:
   contents: write
 
+concurrency:
+  group: steam-kz-feed
+  cancel-in-progress: true
+
 jobs:
   build:
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Build compact chunks
+      - name: Build small feed chunks
         run: |
           python - <<'PY'
-          import hashlib
           import json
           import shutil
           from pathlib import Path
@@ -38,29 +53,41 @@ jobs:
           )
 
           OUT = Path("data/feed")
-          CHUNK_SIZE = 300
+
+          # 100 строк — специально небольшой размер,
+          # чтобы ChatGPT/GitHub-коннектор
+          # мог читать каждый файл полностью.
+          CHUNK_SIZE = 100
+
+          if not SOURCE.exists():
+              raise SystemExit(
+                  "Source candidates file is missing"
+              )
+
+          source = json.loads(
+              SOURCE.read_text(
+                  encoding="utf-8"
+              )
+          )
+
+          items = source.get("items", [])
+          metadata = source.get(
+              "metadata",
+              {}
+          )
+
+          if not items:
+              raise SystemExit(
+                  "Candidate list is empty"
+              )
 
           if OUT.exists():
               shutil.rmtree(OUT)
 
-          OUT.mkdir(parents=True)
-
-          source = json.loads(
-              SOURCE.read_text(encoding="utf-8")
+          OUT.mkdir(
+              parents=True,
+              exist_ok=True,
           )
-
-          items = source["items"]
-          metadata = source["metadata"]
-
-          columns = [
-              "key",
-              "appid",
-              "discount_percent",
-              "final_kzt",
-              "title",
-          ]
-
-          chunks = []
 
 
           def clean(value):
@@ -75,23 +102,34 @@ jobs:
               )
 
 
-          for chunk_number, start in enumerate(
-              range(0, len(items), CHUNK_SIZE),
-              start=1,
+          chunk_count = 0
+
+
+          for start in range(
+              0,
+              len(items),
+              CHUNK_SIZE,
           ):
+              chunk_count += 1
+
               subset = items[
                   start:start + CHUNK_SIZE
               ]
 
-              lines = []
+              rows = []
 
               for item in subset:
-                  price = item.get("final_kzt")
+                  price = item.get(
+                      "final_kzt"
+                  )
 
-                  if isinstance(price, float):
+                  if isinstance(
+                      price,
+                      float,
+                  ):
                       price = f"{price:g}"
 
-                  row = [
+                  values = [
                       item.get("key"),
                       item.get("appid"),
                       item.get(
@@ -101,66 +139,37 @@ jobs:
                       item.get("title"),
                   ]
 
-                  lines.append(
+                  rows.append(
                       "\t".join(
                           clean(value)
-                          for value in row
+                          for value in values
                       )
                   )
 
-              text = "\n".join(lines) + "\n"
-
               filename = (
-                  f"chunk_{chunk_number:03d}.tsv"
+                  f"chunk_{chunk_count:03d}.tsv"
               )
 
-              path = OUT / filename
-
-              path.write_text(
-                  text,
+              (OUT / filename).write_text(
+                  "\n".join(rows) + "\n",
                   encoding="utf-8",
               )
 
-              chunks.append({
-                  "file":
-                      f"data/feed/{filename}",
-
-                  "count":
-                      len(subset),
-
-                  "bytes":
-                      len(
-                          text.encode("utf-8")
-                      ),
-
-                  "sha256":
-                      hashlib.sha256(
-                          text.encode("utf-8")
-                      ).hexdigest(),
-              })
-
 
           index = {
-              "version": 1,
+              "version": 2,
 
               "format": "tsv",
 
-              "columns": columns,
+              "columns": [
+                  "key",
+                  "appid",
+                  "discount_percent",
+                  "final_kzt",
+                  "title",
+              ],
 
               "country_code": "kz",
-
-              "source_updated_at_utc":
-                  metadata.get(
-                      "updated_at_utc"
-                  ),
-
-              "source_complete":
-                  metadata.get("complete"),
-
-              "source_coverage_ratio":
-                  metadata.get(
-                      "coverage_ratio"
-                  ),
 
               "item_count":
                   len(items),
@@ -169,10 +178,25 @@ jobs:
                   CHUNK_SIZE,
 
               "chunk_count":
-                  len(chunks),
+                  chunk_count,
 
-              "chunks":
-                  chunks,
+              "chunk_pattern":
+                  "data/feed/chunk_NNN.tsv",
+
+              "source_updated_at_utc":
+                  metadata.get(
+                      "updated_at_utc"
+                  ),
+
+              "source_complete":
+                  metadata.get(
+                      "complete"
+                  ),
+
+              "source_coverage_ratio":
+                  metadata.get(
+                      "coverage_ratio"
+                  ),
           }
 
 
@@ -189,18 +213,27 @@ jobs:
           print(
               json.dumps(
                   {
-                      "items": len(items),
-                      "chunks": len(chunks),
-                      "largest_chunk_bytes":
-                          max(
-                              chunk["bytes"]
-                              for chunk in chunks
-                          ),
+                      "items":
+                          len(items),
+
+                      "chunk_size":
+                          CHUNK_SIZE,
+
+                      "chunk_count":
+                          chunk_count,
+
+                      "last_chunk_items":
+                          (
+                              len(items)
+                              % CHUNK_SIZE
+                          )
+                          or CHUNK_SIZE,
                   },
                   ensure_ascii=False,
                   indent=2,
               )
           )
+
           PY
 
       - name: Commit compact feed
@@ -208,12 +241,12 @@ jobs:
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
 
-          git add data/feed/
+          git add -A data/feed/
 
           if git diff --cached --quiet; then
-            echo "No changes"
+            echo "No feed changes"
             exit 0
           fi
 
-          git commit -m "Build compact Steam deal feed"
+          git commit -m "Rebuild compact Steam deal feed"
           git push
