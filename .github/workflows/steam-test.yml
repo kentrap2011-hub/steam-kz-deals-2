@@ -1,10 +1,10 @@
-name: Update Steam KZ deals
+name: Steam KZ production shortlist
 
 on:
   workflow_dispatch:
 
   schedule:
-    # 07:17 по Самаре
+    # 07:17 по Самаре (03:17 UTC)
     - cron: "17 3 * * *"
 
   push:
@@ -16,13 +16,13 @@ permissions:
   contents: write
 
 concurrency:
-  group: steam-kz-collector
+  group: steam-kz-production
   cancel-in-progress: false
 
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 45
 
     steps:
       - name: Checkout
@@ -36,12 +36,15 @@ jobs:
       - name: Install dependencies
         run: pip install requests beautifulsoup4
 
-      - name: Collect Kazakhstan Steam specials
+      - name: Collect full Steam KZ catalog and build production shortlist
         shell: bash
         run: |
-          cat > /tmp/collect.py <<'PY'
+          cat > /tmp/steam_production.py <<'PY'
           import json
+          import re
+          import shutil
           import time
+          from collections import Counter
           from datetime import datetime, timezone
           from pathlib import Path
 
@@ -51,20 +54,129 @@ jobs:
 
           URL = "https://store.steampowered.com/search/results/"
           PAGE_SIZE = 50
-          MAX_KZT = 3500
           REQUEST_DELAY = 0.9
 
-          OUT = Path("data")
-          OUT.mkdir(exist_ok=True)
+          OUT = Path("data/production")
+          SHORT = OUT / "shortlist"
+          SHORT_CHUNK = 50
+
+
+          FIT_TAGS = {
+              19: "Action",
+              21: "Adventure",
+              122: "RPG",
+              4182: "Singleplayer",
+              1742: "Story Rich",
+              4106: "Action-Adventure",
+              1697: "Third Person",
+              6426: "Choices Matter",
+              1695: "Open World",
+              3834: "Exploration",
+              3993: "Combat",
+              4145: "Cinematic",
+              4231: "Action RPG",
+              5608: "Emotional",
+              4604: "Dark Fantasy",
+              5716: "Mystery",
+              1687: "Stealth",
+              4434: "JRPG",
+              5613: "Detective",
+              4115: "Cyberpunk",
+              3955: "Character Action",
+              1671: "Superhero",
+              1647: "Western",
+              5708: "Remake",
+              6378: "Crime",
+              7702: "Narrative",
+              1646: "Hack and Slash",
+              29482: "Souls-like",
+              3978: "Survival Horror",
+              1667: "Horror",
+              3942: "Sci-fi",
+              1684: "Fantasy",
+          }
+
+          SOFTWARE_TAGS = {
+              87, 8013, 84, 872, 784, 1027, 809,
+              13906, 1445, 5432, 5407, 603297,
+          }
+
+          GAME_TAGS = set(FIT_TAGS) | {
+              9, 599, 699, 701, 1774, 1625,
+              1716, 3959, 1666, 1752, 1743, 1770,
+          }
+
+          CORE = {
+              "Story Rich",
+              "Action-Adventure",
+              "Third Person",
+              "Choices Matter",
+              "Open World",
+              "Cinematic",
+              "Action RPG",
+              "Emotional",
+              "Dark Fantasy",
+              "Mystery",
+              "Stealth",
+              "JRPG",
+              "Detective",
+              "Cyberpunk",
+              "Character Action",
+              "Superhero",
+              "Western",
+              "Remake",
+              "Crime",
+              "Narrative",
+              "Hack and Slash",
+              "Souls-like",
+              "Survival Horror",
+              "Horror",
+              "Sci-fi",
+              "Fantasy",
+          }
+
+          SECONDARY = {
+              "Action",
+              "Adventure",
+              "RPG",
+              "Singleplayer",
+              "Exploration",
+              "Combat",
+          }
+
+          EXTRA_RE = re.compile(
+              r"\b("
+              r"soundtrack|ost|art\s*book|artbook|wallpapers?|"
+              r"skin\s*pack|costume\s*pack|cosmetic\s*pack|"
+              r"avatar\s*pack|digital\s*artwork|digital\s*artbook|"
+              r"music\s*pack|supporter\s*pack"
+              r")\b",
+              re.I,
+          )
+
+          CONTENT_RE = re.compile(
+              r"\b("
+              r"expansion|season\s*pass|story\s*(?:pack|dlc)|"
+              r"episode|chapter|campaign"
+              r")\b",
+              re.I,
+          )
+
+          REVIEW_RE = re.compile(
+              r"(\d{1,3})%\s+of\s+the\s+"
+              r"([\d,]+)\s+user reviews",
+              re.I,
+          )
 
 
           session = requests.Session()
 
           session.headers.update({
               "User-Agent": (
-                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                  "AppleWebKit/537.36 (KHTML, like Gecko) "
-                  "Chrome/140.0 Safari/537.36"
+                  "Mozilla/5.0 "
+                  "(Windows NT 10.0; Win64; x64) "
+                  "AppleWebKit/537.36 "
+                  "Chrome/140 Safari/537.36"
               ),
               "Accept": "application/json,text/plain,*/*",
               "Accept-Language": "en-US,en;q=0.9",
@@ -84,6 +196,26 @@ jobs:
                   return None
 
 
+          def parse_list(value):
+              try:
+                  parsed = json.loads(value or "[]")
+                  if isinstance(parsed, list):
+                      return parsed
+              except Exception:
+                  pass
+              return []
+
+
+          def parse_release(text):
+              try:
+                  return datetime.strptime(
+                      text.strip(),
+                      "%d %b, %Y",
+                  ).date()
+              except Exception:
+                  return None
+
+
           def get_page(start, sort_by):
               params = {
                   "query": "",
@@ -99,7 +231,7 @@ jobs:
 
               last_error = None
 
-              for attempt in range(1, 9):
+              for attempt in range(8):
                   try:
                       response = session.get(
                           URL,
@@ -109,26 +241,18 @@ jobs:
 
                       if response.status_code == 429:
                           retry_after = to_int(
-                              response.headers.get(
-                                  "Retry-After"
-                              )
+                              response.headers.get("Retry-After")
                           )
-
                           wait = (
                               retry_after
-                              or min(
-                                  90,
-                                  3 * (2 ** (attempt - 1))
-                              )
+                              or min(90, 3 * (2 ** attempt))
                           )
-
                           print(
-                              "429:",
+                              "429",
                               "start=", start,
                               "sort=", sort_by,
                               "wait=", wait,
                           )
-
                           time.sleep(wait)
                           continue
 
@@ -137,24 +261,19 @@ jobs:
 
                   except Exception as exc:
                       last_error = exc
-
-                      wait = min(
-                          90,
-                          3 * (2 ** (attempt - 1))
-                      )
-
+                      wait = min(90, 3 * (2 ** attempt))
                       print(
-                          "Retry:",
+                          "retry",
                           "start=", start,
                           "sort=", sort_by,
                           "error=", exc,
                           "wait=", wait,
                       )
-
                       time.sleep(wait)
 
               raise RuntimeError(
-                  f"Failed start={start}: {last_error}"
+                  f"failed start={start} sort={sort_by}: "
+                  f"{last_error}"
               )
 
 
@@ -172,99 +291,109 @@ jobs:
               if appid:
                   return "App_" + appid.split(",")[0]
 
-              href = (
+              return (
                   row.get("href")
                   or ""
-              )
-
-              return href.split("?", 1)[0]
+              ).split("?", 1)[0]
 
 
           def parse_row(row):
-              title_node = row.select_one(
-                  "span.title"
-              )
+              title_node = row.select_one("span.title")
 
               if not title_node:
                   return None
 
-              title = title_node.get_text(
-                  " ",
-                  strip=True,
+              title = title_node.get_text(" ", strip=True)
+
+              block = row.select_one(".discount_block")
+              wrapper = row.select_one(
+                  ".search_price_discount_combined"
               )
 
-              key = identity(row)
+              discount = (
+                  to_int(block.get("data-discount"))
+                  if block
+                  else None
+              )
+
+              final_minor = (
+                  to_int(block.get("data-price-final"))
+                  if block
+                  else None
+              )
+
+              if final_minor is None and wrapper:
+                  final_minor = to_int(
+                      wrapper.get("data-price-final")
+                  )
+
+              tag_ids = [
+                  to_int(value)
+                  for value in parse_list(
+                      row.get("data-ds-tagids")
+                  )
+              ]
+
+              tag_ids = [
+                  value
+                  for value in tag_ids
+                  if value is not None
+              ]
+
+              review = row.select_one(
+                  ".search_review_summary"
+              )
+
+              positive = None
+              review_count = None
+
+              if review:
+                  tooltip = (
+                      review.get("data-tooltip-html")
+                      or ""
+                  )
+                  match = REVIEW_RE.search(tooltip)
+
+                  if match:
+                      positive = int(match.group(1))
+                      review_count = int(
+                          match.group(2).replace(",", "")
+                      )
+
+              release_node = row.select_one(
+                  ".search_released"
+              )
+
+              release_text = (
+                  release_node.get_text(" ", strip=True)
+                  if release_node
+                  else ""
+              )
 
               appid = row.get("data-ds-appid")
 
               if appid:
                   appid = appid.split(",")[0]
 
-              block = row.select_one(
-                  ".discount_block"
-              )
-
-              price_wrapper = row.select_one(
-                  ".search_price_discount_combined"
-              )
-
-              discount = None
-              final_minor = None
-
-              if block:
-                  discount = to_int(
-                      block.get("data-discount")
-                  )
-
-                  final_minor = to_int(
-                      block.get("data-price-final")
-                  )
-
-              if (
-                  final_minor is None
-                  and price_wrapper
-              ):
-                  final_minor = to_int(
-                      price_wrapper.get(
-                          "data-price-final"
-                      )
-                  )
-
-              release = row.select_one(
-                  ".search_released"
-              )
-
-              href = (
-                  row.get("href")
-                  or ""
-              ).strip()
-
               return {
-                  "key": key,
+                  "key": identity(row),
                   "appid": appid,
                   "title": title,
-
                   "discount_percent": discount,
-
-                  # Steam хранит цену в сотых долях.
-                  # 136400 = 1364.00 ₸
                   "final_minor": final_minor,
-
                   "final_kzt": (
                       final_minor / 100
                       if final_minor is not None
                       else None
                   ),
-
-                  "release_date": (
-                      release.get_text(
-                          " ",
-                          strip=True,
-                      )
-                      if release else ""
-                  ),
-
-                  "url": href,
+                  "review_positive": positive,
+                  "review_count": review_count,
+                  "tag_ids": tag_ids,
+                  "release_date": release_text,
+                  "url": (
+                      row.get("href")
+                      or ""
+                  ).strip(),
               }
 
 
@@ -278,15 +407,10 @@ jobs:
 
               total = None
               reached_end = False
-
               seen_pages = set()
 
               while True:
-                  data = get_page(
-                      start,
-                      sort_by,
-                  )
-
+                  data = get_page(start, sort_by)
                   requests_made += 1
 
                   current_total = to_int(
@@ -297,10 +421,7 @@ jobs:
                       total = current_total
 
                   soup = BeautifulSoup(
-                      data.get(
-                          "results_html",
-                          ""
-                      ),
+                      data.get("results_html", ""),
                       "html.parser",
                   )
 
@@ -331,7 +452,6 @@ jobs:
                           continue
 
                       key = item["key"]
-
                       page_keys.append(key)
 
                       if key in catalog:
@@ -344,21 +464,17 @@ jobs:
                   if signature in seen_pages:
                       raise RuntimeError(
                           "Steam repeated a page: "
-                          f"start={start}"
+                          f"start={start} sort={sort_by}"
                       )
 
                   seen_pages.add(signature)
-
                   start += PAGE_SIZE
 
                   if len(rows) < PAGE_SIZE:
                       reached_end = True
                       break
 
-                  if (
-                      total is not None
-                      and start >= total
-                  ):
+                  if total is not None and start >= total:
                       reached_end = True
                       break
 
@@ -371,146 +487,250 @@ jobs:
                   "requests_made": requests_made,
                   "total": total,
                   "reached_end": reached_end,
-                  "sort": sort_by,
               }
+
+
+          def broad_reasons(item, today):
+              discount = item["discount_percent"]
+              price = item["final_kzt"]
+
+              if (
+                  discount is None
+                  or discount <= 0
+                  or price is None
+                  or price <= 0
+              ):
+                  return [], []
+
+              title = item["title"]
+              tags = set(item["tag_ids"])
+
+              if EXTRA_RE.search(title):
+                  return [], []
+
+              if (
+                  tags & SOFTWARE_TAGS
+                  and not tags & GAME_TAGS
+              ):
+                  return [], []
+
+              fit_tags = [
+                  FIT_TAGS[tag]
+                  for tag in item["tag_ids"]
+                  if tag in FIT_TAGS
+              ]
+
+              positive = item["review_positive"]
+              review_count = item["review_count"]
+              reasons = []
+
+              def reviews(minimum_count, minimum_positive):
+                  return (
+                      review_count is not None
+                      and positive is not None
+                      and review_count >= minimum_count
+                      and positive >= minimum_positive
+                  )
+
+              if (
+                  price <= 3500
+                  and discount >= 40
+                  and reviews(3000, 75)
+              ):
+                  reasons.append("affordable_quality")
+
+              if (
+                  price <= 4500
+                  and discount >= 30
+                  and fit_tags
+                  and reviews(1000, 72)
+              ):
+                  reasons.append("genre_fit")
+
+              if (
+                  price <= 5000
+                  and discount >= 70
+                  and reviews(1000, 72)
+              ):
+                  reasons.append("big_discount")
+
+              if (
+                  price <= 5000
+                  and discount >= 35
+                  and reviews(20000, 80)
+              ):
+                  reasons.append("popular_quality")
+
+              if (
+                  price <= 4500
+                  and discount >= 25
+                  and reviews(3000, 90)
+              ):
+                  reasons.append("very_high_rating")
+
+              if (
+                  price <= 2000
+                  and discount >= 25
+                  and reviews(1000, 80)
+              ):
+                  reasons.append("cheap_quality")
+
+              if (
+                  fit_tags
+                  and price <= 2500
+                  and discount >= 40
+                  and reviews(100, 88)
+              ):
+                  reasons.append("niche_fit")
+
+              release_date = parse_release(
+                  item["release_date"]
+              )
+
+              if release_date:
+                  age_days = (today - release_date).days
+
+                  if (
+                      0 <= age_days <= 730
+                      and price <= 4500
+                      and discount >= 20
+                      and reviews(500, 80)
+                  ):
+                      reasons.append("recent_quality")
+
+              if (
+                  CONTENT_RE.search(title)
+                  and fit_tags
+                  and price <= 3500
+                  and discount >= 50
+              ):
+                  reasons.append("substantive_content")
+
+              return reasons, fit_tags
+
+
+          def refined_reasons(item):
+              price = item["final_kzt"]
+              discount = item["discount_percent"]
+              positive = item["review_positive"]
+              reviews_count = item["review_count"]
+
+              fit_tags = set(item["fit_tags"])
+              core = fit_tags & CORE
+              secondary = fit_tags & SECONDARY
+
+              reasons = []
+
+              def rated(min_reviews, min_positive):
+                  return (
+                      reviews_count is not None
+                      and positive is not None
+                      and reviews_count >= min_reviews
+                      and positive >= min_positive
+                  )
+
+              if (
+                  price <= 4500
+                  and discount >= 40
+                  and rated(5000, 80)
+              ):
+                  reasons.append("mainstream_quality")
+
+              if (
+                  price <= 4500
+                  and discount >= 35
+                  and len(core) >= 1
+                  and rated(1500, 78)
+              ):
+                  reasons.append("strong_fit")
+
+              if (
+                  price <= 2500
+                  and discount >= 40
+                  and len(core) >= 2
+                  and rated(300, 88)
+              ):
+                  reasons.append("strong_niche_fit")
+
+              if (
+                  price <= 3500
+                  and discount >= 75
+                  and rated(3000, 78)
+              ):
+                  reasons.append("exceptional_discount")
+
+              if (
+                  price <= 4000
+                  and discount >= 25
+                  and rated(3000, 92)
+              ):
+                  reasons.append("very_high_rating")
+
+              if (
+                  "recent_quality" in item["broad_reasons"]
+                  and price <= 4000
+                  and discount >= 25
+                  and len(core) >= 1
+                  and rated(750, 82)
+              ):
+                  reasons.append("recent_fit")
+
+              if (
+                  price <= 2500
+                  and discount >= 50
+                  and not core
+                  and rated(10000, 88)
+              ):
+                  reasons.append(
+                      "high_confidence_adjacent"
+                  )
+
+              if (
+                  "substantive_content"
+                  in item["broad_reasons"]
+                  and price <= 3000
+                  and discount >= 50
+                  and (
+                      len(core) >= 1
+                      or len(secondary) >= 2
+                  )
+                  and rated(100, 80)
+              ):
+                  reasons.append("substantive_content")
+
+              return reasons, len(core)
 
 
           started = datetime.now(timezone.utc)
 
-          # Стабильная сортировка по названию,
-          # чтобы позиции меньше "ездили"
-          # между страницами во время обхода.
           first = collect("Name_ASC")
-
           catalog = dict(first["catalog"])
 
           first_total = first["total"] or 0
-
-          first_coverage = (
-              len(catalog) / first_total
-              if first_total
-              else 0
-          )
-
           second = None
 
-          # Если первый проход поймал слишком
-          # много повторов/сдвигов,
-          # делаем обратный проход и объединяем.
           if (
               first_total
-              and first_coverage < 0.985
+              and len(catalog) != first_total
           ):
               print(
-                  "Coverage is low:",
-                  first_coverage,
-                  "Running recovery pass."
+                  "First pass is not exact:",
+                  len(catalog),
+                  "/",
+                  first_total,
+                  "Running Name_DESC recovery pass.",
               )
 
               second = collect("Name_DESC")
-
-              catalog.update(
-                  second["catalog"]
-              )
-
-
-          finished = datetime.now(timezone.utc)
-
-
-          items = sorted(
-              catalog.values(),
-              key=lambda x: (
-                  x["title"].casefold(),
-                  x["key"],
-              ),
-          )
-
-
-          paid_candidates = [
-              item
-              for item in items
-              if (
-                  item["discount_percent"]
-                  is not None
-                  and item["discount_percent"] > 0
-                  and item["final_minor"]
-                  is not None
-                  and item["final_minor"] > 0
-                  and item["final_minor"]
-                  <= MAX_KZT * 100
-              )
-          ]
-
-
-          paid_candidates.sort(
-              key=lambda x: (
-                  x["final_minor"],
-                  x["title"].casefold(),
-              )
-          )
-
-
-          free_items = [
-              item
-              for item in items
-              if (
-                  item["discount_percent"]
-                  is not None
-                  and item["discount_percent"] > 0
-                  and item["final_minor"] == 0
-              )
-          ]
-
-
-          unparsed = [
-              item
-              for item in items
-              if (
-                  item["discount_percent"]
-                  is None
-                  or item["final_minor"]
-                  is None
-              )
-          ]
-
-
-          rows_seen = first["rows_seen"]
-          requests_made = first["requests_made"]
-          duplicate_rows = first[
-              "duplicate_rows"
-          ]
+              catalog.update(second["catalog"])
 
           totals = []
 
           if first["total"] is not None:
               totals.append(first["total"])
 
-          reached_end = first[
-              "reached_end"
-          ]
-
-
-          if second:
-              rows_seen += second["rows_seen"]
-
-              requests_made += second[
-                  "requests_made"
-              ]
-
-              duplicate_rows += second[
-                  "duplicate_rows"
-              ]
-
-              if second["total"] is not None:
-                  totals.append(
-                      second["total"]
-                  )
-
-              reached_end = (
-                  reached_end
-                  and second["reached_end"]
-              )
-
+          if second and second["total"] is not None:
+              totals.append(second["total"])
 
           reported_total = (
               max(totals)
@@ -518,6 +738,27 @@ jobs:
               else None
           )
 
+          rows_seen = first["rows_seen"]
+          duplicate_rows = first["duplicate_rows"]
+          requests_made = first["requests_made"]
+          reached_end = first["reached_end"]
+
+          if second:
+              rows_seen += second["rows_seen"]
+              duplicate_rows += second["duplicate_rows"]
+              requests_made += second["requests_made"]
+              reached_end = (
+                  reached_end
+                  and second["reached_end"]
+              )
+
+          items = sorted(
+              catalog.values(),
+              key=lambda item: (
+                  item["title"].casefold(),
+                  item["key"],
+              ),
+          )
 
           coverage = (
               len(items) / reported_total
@@ -525,212 +766,439 @@ jobs:
               else None
           )
 
+          complete = bool(
+              reported_total
+              and reached_end
+              and len(items) == reported_total
+          )
 
-          metadata = {
-              "collector_version": 2,
+          items_with_review_data = sum(
+              item["review_count"] is not None
+              for item in items
+          )
 
+          items_with_tags = sum(
+              bool(item["tag_ids"])
+              for item in items
+          )
+
+          tag_coverage = (
+              items_with_tags / len(items)
+              if items
+              else 0
+          )
+
+          review_coverage = (
+              items_with_review_data / len(items)
+              if items
+              else 0
+          )
+
+          today = datetime.now(timezone.utc).date()
+
+          broad = []
+          broad_reason_counts = Counter()
+
+          excluded_extra = 0
+          excluded_software = 0
+
+          for item in items:
+              tags = set(item["tag_ids"])
+
+              if EXTRA_RE.search(item["title"]):
+                  excluded_extra += 1
+
+              elif (
+                  tags & SOFTWARE_TAGS
+                  and not tags & GAME_TAGS
+              ):
+                  excluded_software += 1
+
+              reasons, fit_tags = broad_reasons(
+                  item,
+                  today,
+              )
+
+              if not reasons:
+                  continue
+
+              broad_reason_counts.update(reasons)
+
+              broad.append({
+                  "key": item["key"],
+                  "appid": item["appid"],
+                  "title": item["title"],
+                  "discount_percent":
+                      item["discount_percent"],
+                  "final_kzt": item["final_kzt"],
+                  "review_positive":
+                      item["review_positive"],
+                  "review_count":
+                      item["review_count"],
+                  "fit_tags": fit_tags,
+                  "release_date":
+                      item["release_date"],
+                  "broad_reasons": reasons,
+              })
+
+          selected = []
+          refined_reason_counts = Counter()
+
+          for item in broad:
+              reasons, core_fit_count = (
+                  refined_reasons(item)
+              )
+
+              if not reasons:
+                  continue
+
+              refined_reason_counts.update(reasons)
+
+              selected.append({
+                  "key": item["key"],
+                  "appid": item["appid"],
+                  "discount_percent":
+                      item["discount_percent"],
+                  "final_kzt":
+                      item["final_kzt"],
+                  "review_positive":
+                      item["review_positive"],
+                  "review_count":
+                      item["review_count"],
+                  "core_fit_count":
+                      core_fit_count,
+                  "reasons":
+                      reasons,
+                  "fit_tags":
+                      item["fit_tags"],
+                  "release_date":
+                      item["release_date"],
+                  "title":
+                      item["title"],
+              })
+
+          # Только сортировка. Никакого top-N.
+          selected.sort(
+              key=lambda item: (
+                  -len(item["reasons"]),
+                  -item["core_fit_count"],
+                  -item["discount_percent"],
+                  item["final_kzt"],
+                  item["title"].casefold(),
+              )
+          )
+
+          free_items = [
+              item
+              for item in items
+              if (
+                  item["discount_percent"] is not None
+                  and item["discount_percent"] > 0
+                  and item["final_minor"] == 0
+              )
+          ]
+
+          finished = datetime.now(timezone.utc)
+
+          # Если полный обход или парсинг сломался,
+          # workflow завершается ошибкой ДО удаления
+          # предыдущего рабочего production feed.
+          if not complete:
+              raise SystemExit(
+                  "Full Steam traversal completeness "
+                  f"check failed: unique={len(items)} "
+                  f"reported={reported_total}"
+              )
+
+          if tag_coverage < 0.85:
+              raise SystemExit(
+                  "Steam tag parsing coverage too low: "
+                  f"{tag_coverage:.3f}"
+              )
+
+          if review_coverage < 0.40:
+              raise SystemExit(
+                  "Steam review parsing coverage too low: "
+                  f"{review_coverage:.3f}"
+              )
+
+          if not broad:
+              raise SystemExit("Broad shortlist is empty")
+
+          if not selected:
+              raise SystemExit(
+                  "Production shortlist is empty"
+              )
+
+          if OUT.exists():
+              shutil.rmtree(OUT)
+
+          SHORT.mkdir(
+              parents=True,
+              exist_ok=True,
+          )
+
+          columns = [
+              "key",
+              "appid",
+              "discount_percent",
+              "final_kzt",
+              "review_positive",
+              "review_count",
+              "core_fit_count",
+              "reasons",
+              "fit_tags",
+              "release_date",
+              "title",
+          ]
+
+
+          def clean(value):
+              if value is None:
+                  return ""
+
+              if isinstance(value, list):
+                  value = "|".join(map(str, value))
+
+              return (
+                  str(value)
+                  .replace("\t", " ")
+                  .replace("\r", " ")
+                  .replace("\n", " ")
+              )
+
+
+          for chunk_number, start in enumerate(
+              range(
+                  0,
+                  len(selected),
+                  SHORT_CHUNK,
+              ),
+              start=1,
+          ):
+              subset = selected[
+                  start:start + SHORT_CHUNK
+              ]
+
+              lines = []
+
+              for item in subset:
+                  lines.append(
+                      "\t".join(
+                          clean(item[column])
+                          for column in columns
+                      )
+                  )
+
+              (
+                  SHORT
+                  / f"chunk_{chunk_number:03d}.tsv"
+              ).write_text(
+                  "\n".join(lines) + "\n",
+                  encoding="utf-8",
+              )
+
+          chunk_count = (
+              len(selected)
+              + SHORT_CHUNK
+              - 1
+          ) // SHORT_CHUNK
+
+          manifest = {
+              "collector_version": 5,
               "source": "Steam Store",
-
               "country_code": "kz",
-
               "region": "Kazakhstan",
-
               "started_at_utc":
                   started.isoformat(),
-
               "updated_at_utc":
                   finished.isoformat(),
-
               "page_size": PAGE_SIZE,
-
-              "max_candidate_price_kzt":
-                  MAX_KZT,
-
               "steam_total_reported":
                   reported_total,
-
               "unique_items":
                   len(items),
-
               "rows_seen":
                   rows_seen,
-
               "duplicate_rows_seen":
                   duplicate_rows,
-
               "requests_made":
                   requests_made,
-
               "recovery_pass_used":
                   second is not None,
-
               "coverage_ratio": (
                   round(coverage, 6)
                   if coverage is not None
                   else None
               ),
-
-              "paid_candidates":
-                  len(paid_candidates),
-
+              "complete": complete,
+              "items_with_review_data":
+                  items_with_review_data,
+              "review_coverage": round(
+                  review_coverage,
+                  6,
+              ),
+              "items_with_tags":
+                  items_with_tags,
+              "tag_coverage": round(
+                  tag_coverage,
+                  6,
+              ),
+              "excluded_obvious_extras":
+                  excluded_extra,
+              "excluded_software_only":
+                  excluded_software,
+              "broad_shortlist_items":
+                  len(broad),
+              "shortlist_items":
+                  len(selected),
+              "shortlist_chunk_size":
+                  SHORT_CHUNK,
+              "shortlist_chunk_count":
+                  chunk_count,
               "free_items":
                   len(free_items),
-
-              "unparsed_items":
-                  len(unparsed),
-
-              "reached_reported_end":
-                  reached_end,
-
-              "complete": (
-                  reached_end
-                  and len(items) > 1000
-                  and len(paid_candidates) > 0
-              ),
+              "needs_tuning":
+                  len(selected) > 800,
+              "broad_reason_counts":
+                  dict(broad_reason_counts),
+              "reason_counts":
+                  dict(refined_reason_counts),
           }
 
-
-          def save(name, payload):
-              (OUT / name).write_text(
-                  json.dumps(
-                      payload,
-                      ensure_ascii=False,
-                      indent=2,
-                  ),
-                  encoding="utf-8",
-              )
-
-
-          save(
-              "manifest.json",
-              metadata,
+          (OUT / "manifest.json").write_text(
+              json.dumps(
+                  manifest,
+                  ensure_ascii=False,
+                  indent=2,
+              ),
+              encoding="utf-8",
           )
 
+          index = {
+              "version": 5,
+              "format": "tsv",
+              "columns": columns,
+              "country_code": "kz",
+              "item_count": len(selected),
+              "chunk_size": SHORT_CHUNK,
+              "chunk_count": chunk_count,
+              "chunk_pattern":
+                  "data/production/shortlist/"
+                  "chunk_NNN.tsv",
+              "source_total": reported_total,
+              "source_complete": complete,
+              "source_coverage_ratio": (
+                  round(coverage, 6)
+                  if coverage is not None
+                  else None
+              ),
+              "source_updated_at_utc":
+                  finished.isoformat(),
+              "needs_tuning":
+                  len(selected) > 800,
+              "reason_counts":
+                  dict(refined_reason_counts),
+          }
 
-          # Полный индекс всех найденных
-          # Steam Specials.
-          save(
-              "catalog_index.json",
-              {
-                  "metadata": metadata,
-                  "items": items,
-              },
+          (
+              SHORT / "index.json"
+          ).write_text(
+              json.dumps(
+                  index,
+                  ensure_ascii=False,
+                  indent=2,
+              ),
+              encoding="utf-8",
           )
 
-
-          save(
-              "candidates_under_3500.json",
-              {
-                  "metadata": {
-                      **metadata,
-                      "item_count":
-                          len(paid_candidates),
-                  },
-                  "items":
-                      paid_candidates,
-              },
-          )
-
-
-          buckets = [
-              (0, 1000),
-              (1001, 2000),
-              (2001, 3000),
-              (3001, MAX_KZT),
+          free_columns = [
+              "key",
+              "appid",
+              "discount_percent",
+              "review_positive",
+              "review_count",
+              "fit_tags",
+              "title",
           ]
 
+          free_lines = []
 
-          for low, high in buckets:
-              subset = [
-                  item
-                  for item in paid_candidates
-                  if (
-                      low * 100
-                      <= item["final_minor"]
-                      <= high * 100
-                  )
+          for item in free_items:
+              fit_tags = [
+                  FIT_TAGS[tag]
+                  for tag in item["tag_ids"]
+                  if tag in FIT_TAGS
               ]
 
-              save(
-                  f"deals_{low:04d}_{high:04d}.json",
-                  {
-                      "metadata": {
-                          **metadata,
+              free_row = {
+                  "key": item["key"],
+                  "appid": item["appid"],
+                  "discount_percent":
+                      item["discount_percent"],
+                  "review_positive":
+                      item["review_positive"],
+                  "review_count":
+                      item["review_count"],
+                  "fit_tags": fit_tags,
+                  "title": item["title"],
+              }
 
-                          "range_kzt": [
-                              low,
-                              high,
-                          ],
-
-                          "item_count":
-                              len(subset),
-                      },
-
-                      "items": subset,
-                  },
+              free_lines.append(
+                  "\t".join(
+                      clean(free_row[column])
+                      for column in free_columns
+                  )
               )
 
-
-          save(
-              "free_items.json",
-              {
-                  "metadata": {
-                      **metadata,
-                      "item_count":
-                          len(free_items),
-                  },
-                  "items": free_items,
-              },
+          (OUT / "freebies.tsv").write_text(
+              (
+                  "\n".join(free_lines) + "\n"
+                  if free_lines
+                  else ""
+              ),
+              encoding="utf-8",
           )
 
-
-          save(
-              "unparsed_items.json",
-              {
-                  "metadata": {
-                      **metadata,
-                      "item_count":
-                          len(unparsed),
+          (OUT / "freebies_index.json").write_text(
+              json.dumps(
+                  {
+                      "format": "tsv",
+                      "columns": free_columns,
+                      "item_count": len(free_items),
+                      "source_updated_at_utc":
+                          finished.isoformat(),
                   },
-
-                  # На случай изменения
-                  # разметки Steam не раздуваем
-                  # диагностический файл.
-                  "items": unparsed[:500],
-              },
+                  ensure_ascii=False,
+                  indent=2,
+              ),
+              encoding="utf-8",
           )
-
 
           print(
               json.dumps(
-                  metadata,
+                  manifest,
                   ensure_ascii=False,
                   indent=2,
               )
           )
 
-
-          if not metadata["complete"]:
-              raise SystemExit(
-                  "Completeness check failed"
-              )
-
           PY
 
-          python /tmp/collect.py
+          python /tmp/steam_production.py
 
-      - name: Commit fresh catalog
+      - name: Commit production feed
         shell: bash
         run: |
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
 
-          git add data/
+          git add -A data/production/
 
           if git diff --cached --quiet; then
-            echo "No changes"
+            echo "No production feed changes"
             exit 0
           fi
 
-          git commit -m "Update Steam KZ deals"
+          git commit -m "Update Steam KZ production shortlist"
           git push
