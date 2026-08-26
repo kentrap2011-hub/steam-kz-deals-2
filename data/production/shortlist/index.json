@@ -1,0 +1,37 @@
+{
+  "version": 5,
+  "format": "tsv",
+  "columns": [
+    "key",
+    "appid",
+    "discount_percent",
+    "final_kzt",
+    "review_positive",
+    "review_count",
+    "core_fit_count",
+    "reasons",
+    "fit_tags",
+    "release_date",
+    "title"
+  ],
+  "country_code": "kz",
+  "item_count": 423,
+  "chunk_size": 50,
+  "chunk_count": 9,
+  "chunk_pattern": "data/production/shortlist/chunk_NNN.tsv",
+  "source_total": 15228,
+  "source_complete": true,
+  "source_coverage_ratio": 1.0,
+  "source_updated_at_utc": "2026-08-26T20:06:30.507874+00:00",
+  "needs_tuning": false,
+  "reason_counts": {
+    "strong_fit": 243,
+    "very_high_rating": 123,
+    "mainstream_quality": 173,
+    "strong_niche_fit": 95,
+    "high_confidence_adjacent": 34,
+    "exceptional_discount": 124,
+    "substantive_content": 10,
+    "recent_fit": 47
+  }
+}
