@@ -26,8 +26,7 @@ jobs:
           import json
           from pathlib import Path
 
-          path = Path("config/mailing_policy.json")
-          policy = json.loads(path.read_text(encoding="utf-8"))
+          policy = json.loads(Path("config/mailing_policy.json").read_text(encoding="utf-8"))
 
           checks = {
               "contract": policy.get("contract") == "GAME-DEALS-MAILING",
@@ -56,15 +55,24 @@ jobs:
               "moderate_threshold": policy["personal_filter"]["minimum_interest_threshold"] == "moderate",
               "default_include": policy["personal_filter"]["default_include_on_reasonable_uncertainty"] is True,
               "exclude_requires_reason": policy["personal_filter"]["exclusion_requires_concrete_negative_reason"] is True,
+              "strong_fit_presumption": policy["personal_filter"]["feed_strong_fit_presumption"] is True,
+              "strong_fit_discount_safety": "exceptional_discount" in policy["personal_filter"]["strong_fit_plus_exceptional_discount_rule"],
               "ledger_required": policy["decision_ledger"]["required"] is True,
               "ledger_covers_all": policy["decision_ledger"]["require_included_plus_excluded_equals_processed_candidates"] is True,
-              "false_negative_audit": policy["false_negative_audit"]["required"] is True,
+              "targeted_audit": policy["false_negative_audit"]["mode"] == "targeted_conflict_audit",
+              "no_mass_reaudit": policy["false_negative_audit"]["do_not_reaudit_nearly_all_excludes"] is True,
               "family_resolution": policy["offer_family_resolution"]["required"] is True,
+              "family_strong_fit_safety": bool(policy["offer_family_resolution"].get("strong_fit_family_safety")),
               "soft_500": policy["pricing"]["target_rub"] == 500 and policy["pricing"]["target_is_hard_cap"] is False,
               "rub_only": policy["pricing"]["user_visible_currency"] == "RUB" and policy["pricing"]["show_foreign_currency_to_user"] is False,
               "steamdb_history_only": policy["verification"]["steamdb_usage"] == "history_only_after_personal_selection",
+              "cache_not_discovery": policy["external_cache"]["cache_is_never_discovery_source"] is True,
               "compact_chunks": policy["runtime_optimization"]["mailing_chunk_target_size"] >= 100,
               "no_speed_loss": policy["runtime_optimization"]["do_not_trade_completeness_for_speed"] is True,
+              "silent_rejected_freebies": policy["freebies"]["silently_omit_rejected_freebies"] is True,
+              "upcoming_one": policy["upcoming"]["max_items"] == 1 and policy["upcoming"]["selection"] == "nearest_relevant_event_only",
+              "silent_exclusions": policy["output_visibility"]["silent_exclusions"] is True,
+              "no_rejected_explanations": policy["output_visibility"]["do_not_explain_why_rejected_games_or_freebies_were_omitted"] is True,
               "freebies_after_ingest": policy["freebies"]["only_after_successful_main_ingest"] is True,
               "upcoming_after_ingest": policy["upcoming"]["only_after_successful_main_ingest"] is True,
           }
