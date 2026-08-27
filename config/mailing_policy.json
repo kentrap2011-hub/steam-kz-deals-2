@@ -1,0 +1,184 @@
+{
+  "contract": "GAME-DEALS-MAILING",
+  "version": "1.1",
+  "status": "canonical",
+  "purpose": "Single source of truth for the personalized daily game-deals mailing.",
+  "delivery": {
+    "mode": "full_daily_snapshot",
+    "delta_only": false,
+    "repeat_still_active_relevant_deals_each_day": true,
+    "fixed_top_n": null,
+    "completed_games_auto_excluded": false,
+    "completed_status_is_context_only": true
+  },
+  "taste_profile": {
+    "canonical_url": "https://raw.githubusercontent.com/kentrap2011-hub/stopgame-ratings-data/main/gaming_taste_live.json",
+    "load_once_per_run": true,
+    "historical_snapshot_forbidden_as_fallback": "gaming_taste_database_2026-08-12.json",
+    "ratings_optional_context": "ratings.json",
+    "wishlist_optional_context": "steam_wishlist.json",
+    "wishlist_is_discovery_source": false,
+    "wishlist_is_taste_proof": false,
+    "fail_if_canonical_profile_unavailable": true
+  },
+  "paid_discovery": {
+    "repository": "kentrap2011-hub/steam-kz-deals-2",
+    "store": "Steam",
+    "region": "Kazakhstan",
+    "country_code": "kz",
+    "manifest_path": "data/production/manifest.json",
+    "shortlist_index_path": "data/production/shortlist/index.json",
+    "format_source": "shortlist_index",
+    "chunk_pattern_source": "shortlist_index",
+    "read_all_chunks": true,
+    "production_feed_is_primary_discovery_source": true,
+    "steamdb_for_discovery": false,
+    "web_search_may_replace_failed_ingest": false
+  },
+  "ingest_qa": {
+    "fail_closed": true,
+    "manifest_complete_required": true,
+    "minimum_coverage_ratio": 0.99,
+    "needs_tuning_must_be_false": true,
+    "maximum_snapshot_age_hours": 18,
+    "index_source_complete_required": true,
+    "minimum_index_source_coverage_ratio": 0.99,
+    "index_needs_tuning_must_be_false": true,
+    "require_country_code_kz": true,
+    "require_all_chunks": true,
+    "require_actual_chunk_count_equals_index_chunk_count": true,
+    "require_actual_data_rows_equals_item_count": true,
+    "tsv_header_is_not_data_row": true,
+    "on_failure": "do_not_generate_any_mailing",
+    "no_partial_freebies_or_upcoming_on_failure": true
+  },
+  "personal_filter": {
+    "minimum_interest_threshold": "moderate",
+    "broad_filtering": true,
+    "do_not_limit_to_aaa": true,
+    "do_not_limit_to_action_adventure": true,
+    "do_not_limit_by_genre_popularity_or_age": true,
+    "default_include_on_reasonable_uncertainty": true,
+    "absence_of_strong_positive_evidence_is_not_exclusion_reason": true,
+    "exclusion_requires_concrete_negative_reason": true,
+    "completed_game_is_not_exclusion_reason": true
+  },
+  "decision_ledger": {
+    "required": true,
+    "scope": "every_ingested_candidate",
+    "allowed_decisions": ["INCLUDE", "EXCLUDE"],
+    "exclude_requires_reason": true,
+    "include_requires_fit_level": true,
+    "require_included_plus_excluded_equals_processed_candidates": true,
+    "keep_internal_unless_debug_requested": true
+  },
+  "false_negative_audit": {
+    "required": true,
+    "audit_all_excluded_with_strong_positive_signal": true,
+    "strong_positive_signals": [
+      "strong_fit",
+      "strong_niche_fit",
+      "high_confidence_adjacent",
+      "exceptional_discount",
+      "very_high_rating",
+      "recent_fit",
+      "substantive_content",
+      "very_large_discount",
+      "historical_or_near_historical_low",
+      "high_value_complete_edition_or_bundle"
+    ],
+    "rule": "An excluded candidate with a strong positive signal must have a specific negative reason that still justifies exclusion after a second pass. Otherwise change it to INCLUDE."
+  },
+  "offer_family_resolution": {
+    "required": true,
+    "group_related_offers_before_expensive_external_checks": true,
+    "families": [
+      "base_game",
+      "remaster_or_remake",
+      "deluxe_gold_complete_ultimate_definitive",
+      "substantive_dlc",
+      "season_or_expansion_pass",
+      "bundle",
+      "franchise_bundle",
+      "complete_the_set"
+    ],
+    "choose_best_purchase_variant": true,
+    "do_not_drop_a_game_family_because_one_variant_is_weaker": true
+  },
+  "pricing": {
+    "target_rub": 500,
+    "target_is_hard_cap": false,
+    "small_overage_allowed_if_still_good_value": true,
+    "user_visible_currency": "RUB",
+    "show_foreign_currency_to_user": false,
+    "mark_converted_amounts_approximate": true
+  },
+  "verification": {
+    "production_feed_for_initial_current_price_and_discount": true,
+    "steam_store_final_check_for_included_candidates": true,
+    "steam_store_wins_current_price_discount_or_active_status_conflict": true,
+    "exclude_if_steam_store_confirms_sale_ended": true,
+    "steamdb_usage": "history_only_after_personal_selection",
+    "steamdb_region": "Kazakhstan",
+    "check_historical_minimum": true,
+    "check_sale_end_date": true,
+    "if_final_check_unavailable_mark_unverified_instead_of_inventing": true
+  },
+  "runtime_optimization": {
+    "goal": "Minimize expensive network/tool calls without reducing feed completeness or recall.",
+    "stage_a": "Load policy, profile, manifest, index and all chunks exactly once. No Steam Store or SteamDB during ingest.",
+    "stage_b": "In one local pass assign INCLUDE/EXCLUDE ledger decisions and normalize related SKUs into offer families.",
+    "stage_c": "Run false-negative audit only over EXCLUDE rows carrying strong positive signals or uncertain fit.",
+    "stage_d": "Perform Steam Store checks only for INCLUDE families and borderline audited candidates that may become INCLUDE.",
+    "stage_e": "Use SteamDB only for final INCLUDE candidates after selection.",
+    "stage_f": "Batch external checks when supported, reuse results within one offer family, and never repeat the same lookup in one run.",
+    "stage_g": "Run one Steam promo control pass near the end as omission insurance.",
+    "do_not_trade_completeness_for_speed": true
+  },
+  "freebies": {
+    "steam_feed_path": "data/production/freebies.tsv",
+    "check_epic_gog_and_other_major_legal_pc_stores": true,
+    "personal_filter_required": true,
+    "minimum_fit": "moderate",
+    "only_after_successful_main_ingest": true
+  },
+  "upcoming": {
+    "enabled": true,
+    "horizon_days": 60,
+    "include_relevant_sales_and_events": true,
+    "distinguish_confirmed_from_estimated_dates": true,
+    "only_after_successful_main_ingest": true
+  },
+  "sorting": {
+    "primary_factors": ["taste_fit", "price_quality_vs_history"],
+    "do_not_sort_only_by_discount_absolute_price_popularity_or_genre": true
+  },
+  "paid_output_fields": [
+    "title",
+    "discount_percent",
+    "current_price_rub",
+    "historical_minimum_rub_kazakhstan",
+    "delta_vs_historical_minimum",
+    "record_or_near_record_status",
+    "sale_end_date",
+    "best_edition_or_bundle",
+    "buy_now_or_wait",
+    "why_it_fits"
+  ],
+  "final_self_check": {
+    "policy_loaded": true,
+    "profile_loaded": true,
+    "production_qa_passed": true,
+    "all_chunks_read": true,
+    "rows_equal_item_count": true,
+    "ledger_covers_every_processed_candidate": true,
+    "false_negative_audit_completed": true,
+    "no_artificial_top_n": true,
+    "completed_games_not_auto_excluded": true,
+    "still_active_deals_not_hidden_because_shown_yesterday": true,
+    "wishlist_not_used_for_discovery": true,
+    "steamdb_not_used_for_discovery": true,
+    "all_user_visible_money_in_rub": true,
+    "freebies_and_upcoming_only_after_successful_ingest": true
+  }
+}
