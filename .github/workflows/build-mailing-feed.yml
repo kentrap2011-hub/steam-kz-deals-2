@@ -1,0 +1,149 @@
+name: Build mailing-optimized feed
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "Steam KZ production shortlist"
+    types:
+      - completed
+
+permissions:
+  contents: write
+
+concurrency:
+  group: steam-kz-mailing-feed
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Build compact mailing chunks
+        run: |
+          python - <<'PY'
+          import json
+          import shutil
+          from pathlib import Path
+
+          ROOT = Path("data/production")
+          SOURCE_INDEX = ROOT / "shortlist/index.json"
+          SOURCE_MANIFEST = ROOT / "manifest.json"
+          OUT = ROOT / "mailing"
+          CHUNK_SIZE = 150
+
+          index = json.loads(SOURCE_INDEX.read_text(encoding="utf-8"))
+          manifest = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+
+          if index.get("format") != "tsv":
+              raise SystemExit("Mailing compactor currently expects TSV source")
+
+          expected_chunks = int(index["chunk_count"])
+          expected_rows = int(index["item_count"])
+          pattern = index["chunk_pattern"]
+          columns = list(index["columns"])
+
+          rows = []
+          source_files = []
+
+          for number in range(1, expected_chunks + 1):
+              rel = pattern.replace("NNN", f"{number:03d}")
+              path = Path(rel)
+              if not path.exists():
+                  raise SystemExit(f"Missing source chunk: {rel}")
+              text = path.read_text(encoding="utf-8")
+              chunk_rows = [line for line in text.splitlines() if line.strip()]
+              rows.extend(chunk_rows)
+              source_files.append(rel)
+
+          if len(rows) != expected_rows:
+              raise SystemExit(
+                  f"Source row mismatch: actual={len(rows)} expected={expected_rows}"
+              )
+
+          # Remove duplicated compatibility fields to reduce payload.
+          drop = {"review_positive", "review_count"}
+          keep_indices = [i for i, name in enumerate(columns) if name not in drop]
+          out_columns = [columns[i] for i in keep_indices]
+
+          compact_rows = []
+          for row in rows:
+              cells = row.split("\t")
+              if len(cells) != len(columns):
+                  raise SystemExit(
+                      f"Column mismatch: got={len(cells)} expected={len(columns)} row={row[:120]!r}"
+                  )
+              compact_rows.append("\t".join(cells[i] for i in keep_indices))
+
+          if OUT.exists():
+              shutil.rmtree(OUT)
+          OUT.mkdir(parents=True, exist_ok=True)
+
+          chunk_count = 0
+          for start in range(0, len(compact_rows), CHUNK_SIZE):
+              chunk_count += 1
+              subset = compact_rows[start:start + CHUNK_SIZE]
+              (OUT / f"chunk_{chunk_count:03d}.tsv").write_text(
+                  "\n".join(subset) + "\n",
+                  encoding="utf-8",
+              )
+
+          mailing_index = {
+              "version": 1,
+              "purpose": "chatgpt_mailing_optimized_view",
+              "format": "tsv",
+              "has_header": False,
+              "columns": out_columns,
+              "country_code": index.get("country_code"),
+              "item_count": len(compact_rows),
+              "chunk_size": CHUNK_SIZE,
+              "chunk_count": chunk_count,
+              "chunk_pattern": "data/production/mailing/chunk_NNN.tsv",
+              "source_index_path": "data/production/shortlist/index.json",
+              "source_index_version": index.get("version"),
+              "source_chunk_count": expected_chunks,
+              "source_item_count": expected_rows,
+              "source_complete": index.get("source_complete"),
+              "source_coverage_ratio": index.get("source_coverage_ratio"),
+              "source_updated_at_utc": index.get("source_updated_at_utc"),
+              "needs_tuning": index.get("needs_tuning"),
+              "manifest_complete": manifest.get("complete"),
+              "manifest_coverage_ratio": manifest.get("coverage_ratio"),
+              "manifest_updated_at_utc": manifest.get("updated_at_utc"),
+              "manifest_needs_tuning": manifest.get("needs_tuning"),
+              "source_files_verified": source_files,
+          }
+
+          (OUT / "index.json").write_text(
+              json.dumps(mailing_index, ensure_ascii=False, indent=2),
+              encoding="utf-8",
+          )
+
+          print(
+              f"Mailing feed: {len(compact_rows)} rows, "
+              f"{expected_chunks} source chunks -> {chunk_count} mailing chunks"
+          )
+          PY
+
+      - name: Commit mailing feed
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add -A data/production/mailing/
+          if git diff --cached --quiet; then
+            echo "No mailing feed changes"
+            exit 0
+          fi
+          git commit -m "Rebuild mailing-optimized feed"
+          git push
