@@ -36,7 +36,7 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Build compact mailing chunks
+      - name: Build compact mailing chunks and Store state cache
         run: |
           python - <<'PY'
           import json
@@ -47,6 +47,8 @@ jobs:
           SOURCE_INDEX = ROOT / "shortlist/index.json"
           SOURCE_MANIFEST = ROOT / "manifest.json"
           OUT = ROOT / "mailing"
+          CACHE_DIR = Path("data/cache")
+          STORE_CACHE = CACHE_DIR / "store_state.json"
           CHUNK_SIZE = 150
 
           index = json.loads(SOURCE_INDEX.read_text(encoding="utf-8"))
@@ -59,6 +61,12 @@ jobs:
           expected_rows = int(index["item_count"])
           pattern = index["chunk_pattern"]
           columns = list(index["columns"])
+          column_index = {name: i for i, name in enumerate(columns)}
+
+          required = {"key", "appid", "discount_percent", "final_kzt", "title"}
+          missing = required - set(columns)
+          if missing:
+              raise SystemExit(f"Missing required columns: {sorted(missing)}")
 
           rows = []
           source_files = []
@@ -78,22 +86,27 @@ jobs:
                   f"Source row mismatch: actual={len(rows)} expected={expected_rows}"
               )
 
-          drop = {"review_positive", "review_count"}
-          keep_indices = [i for i, name in enumerate(columns) if name not in drop]
-          out_columns = [columns[i] for i in keep_indices]
-
-          compact_rows = []
+          parsed_rows = []
           for row in rows:
               cells = row.split("\t")
               if len(cells) != len(columns):
                   raise SystemExit(
                       f"Column mismatch: got={len(cells)} expected={len(columns)} row={row[:120]!r}"
                   )
-              compact_rows.append("\t".join(cells[i] for i in keep_indices))
+              parsed_rows.append(cells)
+
+          drop = {"review_positive", "review_count"}
+          keep_indices = [i for i, name in enumerate(columns) if name not in drop]
+          out_columns = [columns[i] for i in keep_indices]
+          compact_rows = [
+              "\t".join(cells[i] for i in keep_indices)
+              for cells in parsed_rows
+          ]
 
           if OUT.exists():
               shutil.rmtree(OUT)
           OUT.mkdir(parents=True, exist_ok=True)
+          CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
           chunk_count = 0
           for start in range(0, len(compact_rows), CHUNK_SIZE):
@@ -103,6 +116,8 @@ jobs:
                   "\n".join(subset) + "\n",
                   encoding="utf-8",
               )
+
+          source_updated_at = index.get("source_updated_at_utc")
 
           mailing_index = {
               "version": 1,
@@ -121,7 +136,7 @@ jobs:
               "source_item_count": expected_rows,
               "source_complete": index.get("source_complete"),
               "source_coverage_ratio": index.get("source_coverage_ratio"),
-              "source_updated_at_utc": index.get("source_updated_at_utc"),
+              "source_updated_at_utc": source_updated_at,
               "needs_tuning": index.get("needs_tuning"),
               "manifest_complete": manifest.get("complete"),
               "manifest_coverage_ratio": manifest.get("coverage_ratio"),
@@ -135,20 +150,72 @@ jobs:
               encoding="utf-8",
           )
 
+          # This is a reusable current-state cache, not a second discovery feed.
+          # It is derived from the same fully validated Steam KZ production snapshot.
+          store_entries = {}
+          for cells in parsed_rows:
+              key = cells[column_index["key"]]
+              appid = cells[column_index["appid"]]
+              discount_text = cells[column_index["discount_percent"]]
+              price_text = cells[column_index["final_kzt"]]
+              title = cells[column_index["title"]]
+
+              try:
+                  discount = int(float(discount_text))
+              except Exception:
+                  discount = None
+
+              try:
+                  final_kzt = float(price_text)
+              except Exception:
+                  final_kzt = None
+
+              store_entries[key] = {
+                  "key": key,
+                  "appid": appid or None,
+                  "steam_type": "sub" if key.startswith("Sub_") else "app",
+                  "steam_id": key.split("_", 1)[1] if "_" in key else None,
+                  "title": title,
+                  "discount_percent": discount,
+                  "final_kzt": final_kzt,
+                  "active_discount": bool(discount and discount > 0 and final_kzt and final_kzt > 0),
+              }
+
+          store_cache = {
+              "schema_version": 1,
+              "purpose": "reusable_current_store_state_for_mailing",
+              "source": "validated Steam Store Kazakhstan production snapshot",
+              "country_code": "kz",
+              "source_updated_at_utc": source_updated_at,
+              "source_item_count": expected_rows,
+              "entry_count": len(store_entries),
+              "source_complete": index.get("source_complete"),
+              "source_coverage_ratio": index.get("source_coverage_ratio"),
+              "source_needs_tuning": index.get("needs_tuning"),
+              "discovery_source": False,
+              "entries": store_entries,
+          }
+
+          STORE_CACHE.write_text(
+              json.dumps(store_cache, ensure_ascii=False, separators=(",", ":")),
+              encoding="utf-8",
+          )
+
           print(
               f"Mailing feed: {len(compact_rows)} rows, "
-              f"{expected_chunks} source chunks -> {chunk_count} mailing chunks"
+              f"{expected_chunks} source chunks -> {chunk_count} mailing chunks; "
+              f"Store cache={len(store_entries)} entries"
           )
           PY
 
-      - name: Commit mailing feed
+      - name: Commit mailing feed and Store cache
         run: |
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git add -A data/production/mailing/
+          git add -A data/production/mailing/ data/cache/store_state.json
           if git diff --cached --quiet; then
-            echo "No mailing feed changes"
+            echo "No mailing feed/cache changes"
             exit 0
           fi
-          git commit -m "Rebuild mailing-optimized feed"
+          git commit -m "Rebuild mailing feed and Store state cache"
           git push
