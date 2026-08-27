@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
   schedule:
-    # 07:17 по Самаре (03:17 UTC)
-    - cron: "17 3 * * *"
+    # 06:30 по Самаре (02:30 UTC)
+    - cron: "30 2 * * *"
 
   push:
     branches: [main]
@@ -68,6 +68,11 @@ jobs:
           # структурно могут пройти shortlist.
           REVIEW_WORKERS = 8
           REVIEW_RETRIES = 5
+
+          # Для русскоязычного рейтинга не требуем тысячи
+          # русских отзывов. Но мировой total_reviews всё равно
+          # обязан пройти исходный minimum_count конкретного правила.
+          RUSSIAN_REVIEW_COUNT_CAP = 500
 
           OUT = Path("data/production")
           SHORT = OUT / "shortlist"
@@ -821,16 +826,25 @@ jobs:
               minimum_positive,
           ):
               """
-              Главное новое правило:
+              Количество отзывов остаётся МИРОВЫМ критерием:
+              global_review_count должен пройти исходный
+              minimum_count конкретного правила.
 
-              игра проходит проверку рейтинга, если
-              МИРОВОЙ ИЛИ РУССКОЯЗЫЧНЫЙ рейтинг
-              одновременно удовлетворяет:
-                - минимуму количества отзывов;
-                - минимуму процента положительных.
+              После этого качество может подтвердить:
+                1) мировой рейтинг;
+                ИЛИ
+                2) русскоязычный рейтинг.
 
-              Количество отзывов проверяется отдельно
-              для каждого источника.
+              Для русского рейтинга нужна собственная
+              достаточная выборка: исходный minimum_count,
+              но не более 500 отзывов.
+
+              Примеры:
+                rule >= 100 reviews -> Russian тоже >= 100
+                rule >= 300 reviews -> Russian тоже >= 300
+                rule >= 1500 reviews -> Russian >= 500
+                rule >= 20000 reviews -> Russian >= 500,
+                  НО global_count всё равно должен быть >= 20000.
               """
               global_positive = item.get(
                   "global_review_positive"
@@ -848,19 +862,28 @@ jobs:
                   or 0
               )
 
-              global_ok = (
+              # Не ослабляем критерий известности / размера
+              # общей выборки конкретного правила.
+              if global_count < minimum_count:
+                  return False
+
+              global_rating_ok = (
                   global_positive is not None
-                  and global_count >= minimum_count
                   and global_positive >= minimum_positive
               )
 
-              russian_ok = (
+              russian_minimum_count = min(
+                  minimum_count,
+                  RUSSIAN_REVIEW_COUNT_CAP,
+              )
+
+              russian_rating_ok = (
                   russian_positive is not None
-                  and russian_count >= minimum_count
+                  and russian_count >= russian_minimum_count
                   and russian_positive >= minimum_positive
               )
 
-              return global_ok or russian_ok
+              return global_rating_ok or russian_rating_ok
 
 
           def broad_reasons(item, today):
@@ -1548,7 +1571,7 @@ jobs:
           ) // SHORT_CHUNK
 
           manifest = {
-              "collector_version": 6,
+              "collector_version": 7,
               "source": "Steam Store",
               "country_code": "kz",
               "region": "Kazakhstan",
@@ -1613,7 +1636,11 @@ jobs:
                   russian_review_appids,
 
               "review_selection_rule":
-                  "global_or_russian",
+                  "global_count_and_global_or_russian_rating",
+              "review_count_basis":
+                  "global",
+              "russian_review_count_cap":
+                  RUSSIAN_REVIEW_COUNT_CAP,
               "global_review_language":
                   "all",
               "russian_review_language":
@@ -1659,7 +1686,7 @@ jobs:
           )
 
           index = {
-              "version": 6,
+              "version": 7,
               "format": "tsv",
               "columns": columns,
               "country_code": "kz",
@@ -1682,7 +1709,11 @@ jobs:
                   len(selected) > 800,
 
               "review_selection_rule":
-                  "global_or_russian",
+                  "global_count_and_global_or_russian_rating",
+              "review_count_basis":
+                  "global",
+              "russian_review_count_cap":
+                  RUSSIAN_REVIEW_COUNT_CAP,
               "review_fields": {
                   "global": [
                       "global_review_positive",
