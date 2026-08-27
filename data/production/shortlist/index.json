@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "format": "tsv",
   "columns": [
     "key",
@@ -8,6 +8,10 @@
     "final_kzt",
     "review_positive",
     "review_count",
+    "global_review_positive",
+    "global_review_count",
+    "russian_review_positive",
+    "russian_review_count",
     "core_fit_count",
     "reasons",
     "fit_tags",
@@ -15,23 +19,34 @@
     "title"
   ],
   "country_code": "kz",
-  "item_count": 423,
+  "item_count": 588,
   "chunk_size": 50,
-  "chunk_count": 9,
+  "chunk_count": 12,
   "chunk_pattern": "data/production/shortlist/chunk_NNN.tsv",
-  "source_total": 15228,
+  "source_total": 15260,
   "source_complete": true,
   "source_coverage_ratio": 1.0,
-  "source_updated_at_utc": "2026-08-26T20:06:30.507874+00:00",
+  "source_updated_at_utc": "2026-08-27T04:07:44.484807+00:00",
   "needs_tuning": false,
+  "review_selection_rule": "global_or_russian",
+  "review_fields": {
+    "global": [
+      "global_review_positive",
+      "global_review_count"
+    ],
+    "russian": [
+      "russian_review_positive",
+      "russian_review_count"
+    ]
+  },
   "reason_counts": {
-    "strong_fit": 243,
-    "very_high_rating": 123,
-    "mainstream_quality": 173,
-    "strong_niche_fit": 95,
-    "high_confidence_adjacent": 34,
-    "exceptional_discount": 124,
-    "substantive_content": 10,
-    "recent_fit": 47
+    "mainstream_quality": 308,
+    "strong_fit": 311,
+    "very_high_rating": 174,
+    "high_confidence_adjacent": 55,
+    "exceptional_discount": 225,
+    "strong_niche_fit": 111,
+    "recent_fit": 53,
+    "substantive_content": 12
   }
 }
