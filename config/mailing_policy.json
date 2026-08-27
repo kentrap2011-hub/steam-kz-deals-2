@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.7",
+  "version": "1.8",
   "status": "canonical",
   "purpose": "Single source of truth for the personalized daily game-deals mailing.",
 
@@ -25,8 +25,11 @@
   },
 
   "taste_profile": {
+    "canonical_repository": "kentrap2011-hub/stopgame-ratings-data",
+    "canonical_path": "gaming_taste_live.json",
     "canonical_url": "https://raw.githubusercontent.com/kentrap2011-hub/stopgame-ratings-data/main/gaming_taste_live.json",
     "load_once_per_run": true,
+    "record_current_blob_sha": true,
     "historical_snapshot_forbidden_as_fallback": "gaming_taste_database_2026-08-12.json",
     "ratings_optional_context": "ratings.json",
     "wishlist_optional_context": "steam_wishlist.json",
@@ -77,6 +80,35 @@
     "no_partial_freebies_or_upcoming_on_failure": true
   },
 
+  "taste_deal_separation": {
+    "required": true,
+    "taste_verdict_must_be_price_blind": true,
+    "fields_forbidden_as_positive_taste_evidence": [
+      "discount_percent",
+      "final_kzt",
+      "global_review_positive",
+      "global_review_count",
+      "russian_review_positive",
+      "russian_review_count",
+      "exceptional_discount",
+      "very_high_rating",
+      "mainstream_quality",
+      "popular_quality",
+      "cheap_quality",
+      "historical_minimum",
+      "sale_end_date",
+      "steamdb_history"
+    ],
+    "feed_recall_flags_may_trigger_audit_but_do_not_count_as_taste_evidence": [
+      "strong_fit",
+      "strong_niche_fit",
+      "recent_fit",
+      "high_confidence_adjacent"
+    ],
+    "quality_popularity_or_deal_value_can_never_raise_below_moderate_to_moderate": true,
+    "deal_quality_evaluated_only_after_taste_fit_and_family_resolution": true
+  },
+
   "personal_filter": {
     "minimum_interest_threshold": "moderate",
     "broad_filtering": true,
@@ -84,27 +116,40 @@
     "do_not_limit_to_action_adventure": true,
     "do_not_limit_by_genre_popularity_or_age": true,
     "completed_game_is_not_exclusion_reason": true,
-    "feed_reason_role": "recall_and_supporting_evidence_only",
-    "feed_signals_never_auto_include": true,
     "strong_fit_is_not_final_taste_verdict": true,
     "allow_analogical_fit_from_profile": true,
     "do_not_require_exact_title_or_exact_tag_match": true,
-    "moderate_fit_rule": "INCLUDE when the candidate is at least moderately likely to interest the user after comparing its available metadata with the full canonical taste profile. Moderate fit may be inferred by analogy to multiple durable positive patterns or examples; a direct title match is not required.",
-    "deterministic_compound_floor": {
-      "enabled": true,
-      "minimum_core_fit_count": 2,
-      "requires_any_recall_signal": ["strong_fit", "strong_niche_fit"],
-      "requires_any_supporting_signal": ["exceptional_discount", "very_high_rating", "recent_fit", "substantive_content"],
-      "blocked_by_direct_strong_negative_user_evidence": true,
-      "blocked_by_known_specific_contradictory_mechanic_or_structure": true,
-      "result": "at_least_moderate_fit",
-      "rule": "When core_fit_count is at least 2, at least one recall signal and at least one independent supporting signal are present, and there is no direct strong negative user evidence or known specific contradictory mechanic/structure, classify the candidate as at least moderate fit. This is a general deterministic floor and must not depend on candidate names or whitelists."
+    "no_automatic_include_floor_from_feed_signals": true,
+    "candidate_context_allowed_for_taste": [
+      "title",
+      "appid_or_exact_key",
+      "fit_tags",
+      "core_fit_count",
+      "release_date",
+      "confident_intrinsic_game_properties_known_without_external_lookup"
+    ],
+    "do_not_invent_unknown_game_properties": true,
+    "structured_taste_evaluation": {
+      "required_for_cache_miss": true,
+      "positive_evidence_sources": [
+        "direct_positive_same_series_or_close_mechanical_anchor_from_canonical_profile",
+        "durable_positive_pattern_from_canonical_profile",
+        "factor_importance_match_from_canonical_profile",
+        "mastery_or_shared_play_match_when_intrinsically_relevant"
+      ],
+      "negative_evidence_sources": [
+        "direct_strong_negative_user_evidence",
+        "durable_negative_pattern_from_canonical_profile",
+        "known_specific_structure_conflicting_with_user_preferences"
+      ],
+      "moderate_rule": "INCLUDE at moderate or above when there are at least two independent substantive positive taste signals and no direct strong negative evidence or known specific contradictory structure. One especially direct same-series or close-mechanical positive anchor may count as one signal but still needs a second independent positive signal.",
+      "below_moderate_rule": "EXCLUDE when positive evidence is weaker than the moderate rule, or concrete negative evidence clearly outweighs it.",
+      "borderline_rule": "If one substantive positive signal exists and the rest is genuinely uncertain, mark borderline_fit_needs_audit instead of guessing.",
+      "generic_tags_alone_are_insufficient": true,
+      "review_score_or_discount_never_breaks_a_taste_tie": true
     },
-    "mixed_evidence_rule": "Do not treat a mixed cluster as negative by default. When the profile contains both liked and disliked games with broadly similar tags or structure, compare the candidate against both sides. If at least two independent durable positive analogies are supported by the candidate metadata or feed fit signals and there is no direct strong negative user evidence, the candidate reaches at least moderate fit unless a specific contradictory mechanic or structure is known.",
-    "sparse_metadata_rule": "Sparse generic tags such as Action or Open World are not enough to reject a candidate. For a taste-based EXCLUDE with sparse metadata, combine core_fit_count, feed fit signals and relevant positive/negative anchors from the canonical profile. If the evidence remains genuinely balanced, route to targeted audit.",
     "unknown_is_not_automatic_include": true,
     "below_moderate_fit_is_valid_exclusion": true,
-    "reasonable_uncertainty_rule": "When meaningful positive and negative evidence place a candidate near the moderate threshold, treat it as borderline and route it to the targeted local audit instead of silently discarding it or automatically including it.",
     "exclusion_requires_specific_reason": true,
     "valid_exclusion_reason_codes": [
       "below_moderate_fit",
@@ -112,9 +157,24 @@
       "sale_confirmed_inactive",
       "price_clearly_unreasonable_even_after_soft_target_evaluation",
       "not_a_game_or_not_relevant_game_content",
+      "ineligible_dlc_or_addon_without_relevant_base_context",
       "inferior_duplicate_variant_after_offer_family_resolution",
       "borderline_fit_needs_audit"
     ]
+  },
+
+  "content_eligibility": {
+    "required": true,
+    "dlc_is_not_independent_recommendation_by_default": true,
+    "dlc_or_chapter_include_only_if": [
+      "base_game_family_is_taste_include_in_same_run",
+      "canonical_profile_or_current_user_context_directly_supports_the_base_game",
+      "addon_is_effectively_standalone_game_like_content_and_itself_meets_taste_threshold"
+    ],
+    "do_not_assume_wishlist_means_ownership": true,
+    "cosmetic_soundtrack_artbook_and_non_game_addons_excluded": true,
+    "bundle_with_base_game_may_be_purchase_variant_of_included_family": true,
+    "franchise_bundle_requires_each_recommended_component_or_clear_bundle_value_context": true
   },
 
   "decision_ledger": {
@@ -130,32 +190,26 @@
 
   "false_negative_audit": {
     "required": true,
-    "mode": "targeted_local_conflict_audit",
+    "mode": "targeted_price_blind_taste_audit",
     "external_lookups_during_audit": false,
     "do_not_reaudit_nearly_all_excludes": true,
-    "compound_recall_signals": ["strong_fit", "strong_niche_fit"],
-    "supporting_signals": ["exceptional_discount", "very_high_rating", "recent_fit", "substantive_content", "high_confidence_adjacent"],
     "audit_when": [
       "exclude_reason_is_borderline_fit_needs_audit",
       "exclude_reason_is_missing_ambiguous_or_not_specific",
-      "candidate_meets_deterministic_compound_floor_but_first_pass_excluded_it",
-      "candidate_has_strong_fit_or_strong_niche_fit_and_core_fit_count_at_least_1_and_at_least_one_supporting_signal_and_exclusion_is_taste_based",
-      "candidate_has_multiple_independent_profile_analogies_but_first_pass_excluded_it",
-      "candidate_has_sparse_generic_tags_but_core_fit_count_at_least_2_and_compound_recall_signal_and_taste_based_exclusion",
-      "offer_family_would_disappear_even_though_a_related_variant_has_compound_positive_fit_evidence"
+      "strong_fit_or_strong_niche_fit_recall_flag_conflicts_with_taste_based_exclusion",
+      "core_fit_count_at_least_2_with_sparse_metadata_and_taste_based_exclusion",
+      "candidate_has_multiple_profile_analogies_but_first_pass_excluded_it",
+      "offer_family_would_disappear_despite_an_included_related_content_variant"
     ],
+    "recall_flags_are_not_positive_taste_evidence": true,
     "do_not_audit_only_because": [
-      "strong_fit_alone",
-      "strong_niche_fit_alone",
-      "very_high_rating_alone",
-      "exceptional_discount_alone",
-      "popularity_alone",
-      "age_or_newness_alone"
+      "very_high_rating",
+      "exceptional_discount",
+      "popularity",
+      "age_or_newness"
     ],
+    "audit_rule": "Re-evaluate the candidate using only the canonical taste profile and price-blind candidate context. Apply personal_filter.structured_taste_evaluation exactly. Store, SteamDB, reviews, discount and price cannot affect the taste verdict.",
     "direct_strong_negative_user_evidence_skips_audit_unless_contradictory_newer_user_evidence_exists": true,
-    "deterministic_floor_audit_rule": "If a candidate meets personal_filter.deterministic_compound_floor and no blocker defined there is present, an audit must return at least moderate fit. Do not re-litigate this result through free-form analogy reasoning.",
-    "audit_verdict_rule": "For candidates not covered by the deterministic floor, if the local second pass finds at least two independent durable positive analogies and no direct strong negative user evidence or known contradictory mechanic, classify at least moderate fit. Feed signals support this judgment but never force INCLUDE by themselves.",
-    "rule": "Re-evaluate only the conflicting candidate against the canonical taste profile and its local feed metadata. If the evidence reaches at least moderate likely interest, change it to INCLUDE. Otherwise keep EXCLUDE with a specific reason. Do not use Store, SteamDB or web lookups to decide taste fit.",
     "no_candidate_name_whitelists": true,
     "no_control_game_names_in_policy": true
   },
@@ -174,7 +228,7 @@
       "complete_the_set"
     ],
     "family_detection_rules": [
-      "rows_with_the_same_appid_but_different_App_or_Sub_keys_belong_to_the_same_purchase_family",
+      "rows_with_the_same_appid_but_different_App_or_Sub_keys_belong_to_the_same_purchase_family_when_content_relationship_is_clear",
       "normalize_titles_by_removing_trademark_symbols_and_edition_suffixes_such_as_remastered_remake_deluxe_gold_complete_ultimate_definitive_full_package_goty_collection_bundle",
       "rows_with_the_same_normalized_base_title_may_be_grouped_when_the_relationship_is_clear",
       "do_not_merge_merely_because_titles_share_a_franchise_word"
@@ -193,11 +247,10 @@
     "prefer_complete_variant_when_incremental_cost_is_small_and_content_is_material": true,
     "do_not_assume_base_game_is_best": true,
     "do_not_drop_a_game_family_because_one_variant_is_weaker": true,
-    "family_safety_rule": "If a family would disappear but one or more related variants carry compound positive fit evidence, run the local family audit before dropping the family. This does not force INCLUDE.",
     "one_primary_output_row_per_purchase_family": true,
     "primary_row_must_use_best_purchase_variant": true,
     "mention_useful_alternative_variant_in_same_row_when_relevant": true,
-    "store_check_scope": "For a final INCLUDE family, use a live Store family check only when local production variants do not contain enough information to choose between materially competitive editions or bundles. Do not perform one Store lookup per ordinary final row."
+    "store_check_scope": "For a final INCLUDE family, use a live Store family check only when local production variants do not contain enough information to choose between materially competitive editions or bundles."
   },
 
   "pricing": {
@@ -243,6 +296,54 @@
     "cache_is_never_discovery_source": true,
     "load_each_cache_at_most_once_per_run": true,
 
+    "taste_fit": {
+      "path": "data/cache/taste_fit.json",
+      "schema_version": 1,
+      "purpose": "derived verdict cache only; never user evidence and never a second taste profile",
+      "taste_model_version": "taste-v1",
+      "keying": "exact production candidate key",
+      "profile_binding": "canonical gaming_taste_live.json Git blob SHA must match exactly",
+      "fingerprint_fields": [
+        "key",
+        "appid",
+        "normalized_title_for_taste",
+        "sorted_fit_tags",
+        "core_fit_count",
+        "release_date"
+      ],
+      "fingerprint_explicitly_excludes": [
+        "discount_percent",
+        "final_kzt",
+        "review_scores",
+        "review_counts",
+        "feed_reason_flags",
+        "historical_price",
+        "sale_end_date"
+      ],
+      "required_entry_fields": [
+        "key",
+        "appid",
+        "profile_blob_sha",
+        "taste_model_version",
+        "taste_fingerprint",
+        "verdict",
+        "fit_level",
+        "reason_code",
+        "positive_evidence_count",
+        "negative_evidence_count",
+        "evidence_summary",
+        "evaluated_at_utc"
+      ],
+      "reuse_rule": "Reuse the cached taste verdict without semantic re-evaluation only when exact key, current profile blob SHA, taste_model_version and taste fingerprint all match.",
+      "cache_miss_rule": "Run the structured price-blind taste evaluation and targeted audit if triggered, then cache the final taste verdict.",
+      "profile_sha_change_rule": "Treat every old entry as a miss. On write, replace the cache with entries evaluated against the new profile SHA rather than mixing profile generations.",
+      "do_not_cache_borderline_before_audit": true,
+      "write_back": "Merge final current-profile verdicts in memory and perform at most one GitHub update of data/cache/taste_fit.json per run when entries changed.",
+      "write_back_best_effort": true,
+      "write_failure_does_not_invalidate_mailing": true,
+      "entry_count_must_equal_len_entries": true
+    },
+
     "store_state": {
       "path": "data/cache/store_state.json",
       "producer": ".github/workflows/build-mailing-feed.yml",
@@ -262,31 +363,36 @@
 
     "steamdb_history": {
       "path": "data/cache/steamdb_history.json",
+      "writer_schema_version": 2,
+      "accept_legacy_schema_version_1": true,
       "persistent_outside_production_directory": true,
-      "schema_version": 1,
       "currency": "KZT",
       "keying": "exact Steam entity key such as App_123 or Sub_456",
-      "required_entry_fields": [
-        "key",
-        "steam_type",
-        "steam_id",
-        "historical_min_kzt",
-        "checked_at_utc",
-        "source"
-      ],
-      "reuse_rule": "Reuse a confirmed historical_min_kzt without a new SteamDB lookup when the selected exact variant has a valid cache entry and current verified KZT price is greater than or equal to the cached minimum.",
-      "zero_min_entry_rule": "A cached historical_min_kzt of 0 is valid evidence that the title was previously free, but it is not a comparable paid historical minimum. Apply pricing.historical_zero_handling and do not re-query solely because the cached value is zero.",
+      "legacy_v1_rule": "An existing v1 entry with historical_min_kzt is read as confirmed_min when value > 0 and previously_free when value = 0.",
+      "status_values": ["confirmed_min", "previously_free", "unavailable_exact_history"],
+      "confirmed_reuse_rule": "Reuse confirmed_min without a new SteamDB lookup when current verified KZT price is greater than or equal to the cached nonzero minimum.",
+      "previously_free_rule": "Reuse previously_free without re-querying solely because the value is zero; apply pricing.historical_zero_handling.",
+      "negative_cache_rule": {
+        "persist_only_when_source_was_reached_and_exact_history_was_confirmed_unavailable": true,
+        "status": "unavailable_exact_history",
+        "ttl_days": 14,
+        "unexpired_entry_skips_lookup": true,
+        "network_blocked_timeout_or_tool_failure_is_not_persisted_as_negative": true,
+        "display_as": "history_unverified"
+      },
       "lookup_required_when": [
-        "cache_entry_missing",
-        "cache_entry_invalid_or_uncertain",
+        "entry_missing",
+        "entry_invalid",
+        "unavailable_exact_history_ttl_expired",
         "current_verified_kzt_price_is_below_cached_nonzero_historical_min_kzt"
       ],
-      "new_lower_price_rule": "If current price is below a cached nonzero minimum, query SteamDB before calling it a new paid record; then lower the cached minimum only when confirmed.",
-      "write_back": "After all SteamDB cache misses are resolved, merge confirmed results in memory and update the cache with exactly one GitHub file write for the entire run when there are changes.",
+      "new_lower_price_rule": "If current price is below a cached nonzero minimum, query SteamDB before calling it a new paid record; lower the cached minimum only when confirmed.",
+      "entry_count_rule": "Always compute actual_entry_count = len(entries) for runtime statistics and every write. Never trust stale metadata entry_count over the actual object.",
+      "metadata_mismatch_rule": "Use the actual count immediately and repair entry_count on the next permitted cache write; a metadata-only repair may use the same single write budget.",
+      "write_back": "Merge confirmed minima, previously_free and eligible unavailable_exact_history entries in memory and update the cache with at most one GitHub file write per run when there are changes.",
       "write_back_best_effort": true,
       "write_failure_does_not_invalidate_mailing": true,
-      "do_not_store_inferred_or_guessed_minima": true,
-      "first_run_with_empty_cache_is_warmup": true
+      "do_not_store_inferred_or_guessed_minima": true
     },
 
     "lookup_registry": {
@@ -297,20 +403,20 @@
       "shared_across_family_resolution_verification_and_promo_control": true
     },
 
-    "cache_miss_action": "perform_only_the_specific_external_lookup_needed_for_that_final_variant",
-    "cache_failure_action": "do_not_fail_source_ingest; fall back to the minimum necessary finalist lookup"
+    "cache_failure_action": "do_not_fail_source_ingest; fall back to the minimum necessary evaluation or finalist lookup"
   },
 
   "runtime_optimization": {
-    "goal": "Minimize expensive network/tool calls and free-form semantic re-evaluation without reducing feed completeness or recall.",
-    "stage_a": "Load canonical policy from GitHub first, then profile, manifest, source index, validated mailing-optimized index and each external cache at most once. Read each chosen feed chunk exactly once. No Store, SteamDB or web probes during ingest.",
-    "stage_b": "In one local pass assign INCLUDE/EXCLUDE ledger decisions and normalize related SKUs into offer families. Apply deterministic_compound_floor mechanically before free-form borderline reasoning. Feed reason flags outside that exact floor remain supporting signals, not automatic INCLUDE decisions.",
-    "stage_c": "Run only the targeted local conflict audit conditions. Candidates covered by deterministic_compound_floor must not be re-litigated through open-ended analogy reasoning unless a defined blocker is present. The audit must not make external network lookups.",
-    "stage_d": "After taste fit and family resolution are final, treat the validated fresh production snapshot as current price/discount verification. Use live Steam Store only for the conditional triggers in verification; do not check every final INCLUDE.",
-    "stage_e": "For each selected best purchase variant, consult the persistent SteamDB KZ history cache first. Query SteamDB only for a cache miss, invalid entry, or a current price below the cached nonzero minimum.",
-    "stage_f": "Use one shared lookup_registry for all Store/SteamDB calls. Batch when supported, reuse results within one offer family, and never repeat the same provider+exact-key lookup in one run, including failures and probe attempts.",
-    "stage_g": "Merge all newly confirmed SteamDB history results and perform at most one GitHub write to data/cache/steamdb_history.json after external checks. Cache write is best-effort maintenance and does not invalidate an otherwise correct mailing.",
-    "stage_h": "Run at most one promo control pass near the end as omission insurance; reuse lookup_registry results already obtained.",
+    "goal": "Minimize repeated semantic evaluation and network/tool calls without reducing feed completeness or recall.",
+    "stage_a": "Load canonical policy first, then canonical profile once and record its Git blob SHA. Load manifest, source index, validated mailing-optimized index and taste/store/SteamDB caches at most once. Read each chosen feed chunk exactly once.",
+    "stage_b": "For every candidate compute the price-blind taste fingerprint. Reuse valid taste-cache hits immediately. Only taste-cache misses receive structured semantic taste evaluation. Do not expose price, discount, reviews or SteamDB history to the taste decision.",
+    "stage_c": "Run targeted price-blind false-negative audit only for fresh uncached verdicts that meet audit conditions. Cached verdicts with matching profile/model/fingerprint are already final and are not re-audited.",
+    "stage_d": "Apply content eligibility and offer-family resolution after taste verdicts. Compare local App/Sub/edition/bundle variants and choose one primary purchase variant per included family.",
+    "stage_e": "Write changed current-profile taste verdicts with at most one GitHub update. Taste-cache write is best-effort and does not invalidate an otherwise correct mailing.",
+    "stage_f": "Treat validated production snapshot as current price/discount verification. Use live Store only for conditional triggers, never for every INCLUDE.",
+    "stage_g": "Consult SteamDB history cache for the selected exact purchase variant. Reuse confirmed and unexpired negative entries; query only true misses/expired negatives/new-lower-price cases.",
+    "stage_h": "Use one shared lookup_registry for all external Store/SteamDB calls and never repeat the same provider+exact-key lookup, including failed attempts.",
+    "stage_i": "Merge SteamDB cache changes and perform at most one GitHub write. Run at most one promo control pass using existing registry results.",
     "mailing_chunk_target_size": 150,
     "do_not_trade_completeness_for_speed": true
   },
@@ -377,34 +483,37 @@
 
   "final_self_check": {
     "policy_loaded_from_canonical_repository_before_ingest": true,
-    "profile_loaded": true,
+    "profile_loaded_once_and_blob_sha_recorded": true,
     "production_qa_passed": true,
     "all_chosen_chunks_read": true,
     "rows_equal_item_count": true,
     "optimized_view_if_used_matches_source": true,
     "ledger_covers_every_processed_candidate": true,
-    "feed_signals_not_used_as_automatic_include_outside_defined_deterministic_floor": true,
-    "deterministic_compound_floor_applied_consistently": true,
-    "targeted_local_false_negative_audit_completed": true,
-    "required_compound_signal_excludes_audited": true,
-    "sparse_metadata_conflicts_audited": true,
+    "taste_verdicts_were_price_blind": true,
+    "deal_quality_never_promoted_taste_fit": true,
+    "taste_cache_consulted_before_semantic_evaluation": true,
+    "taste_cache_hits_not_re_evaluated": true,
+    "taste_cache_entries_match_profile_model_and_fingerprint": true,
+    "targeted_price_blind_false_negative_audit_completed": true,
     "no_candidate_name_whitelists": true,
+    "content_eligibility_applied": true,
+    "ineligible_orphan_dlc_not_recommended": true,
     "taste_fit_final_before_external_checks": true,
     "offer_families_resolved_before_external_checks": true,
-    "all_included_families_compared_for_local_bundle_and_edition_variants": true,
     "one_primary_row_per_purchase_family": true,
     "primary_rows_use_best_purchase_variant": true,
     "current_price_and_discount_verified_by_fresh_production_snapshot_or_conditional_live_store": true,
     "steamdb_history_cache_consulted_before_each_history_lookup": true,
+    "steamdb_actual_entry_count_used_not_stale_metadata": true,
+    "unexpired_negative_history_cache_respected": true,
     "historical_zero_not_used_as_paid_price_delta": true,
-    "no_per_candidate_store_reverification_of_unchanged_feed_price_discount": true,
     "lookup_registry_used_for_all_external_exact_key_calls": true,
     "no_duplicate_external_lookups": true,
     "deterministic_sort_applied": true,
     "no_artificial_top_n": true,
     "completed_games_not_auto_excluded": true,
     "still_active_deals_not_hidden_because_shown_yesterday": true,
-    "wishlist_not_used_for_discovery": true,
+    "wishlist_not_used_for_discovery_or_taste_proof": true,
     "steamdb_not_used_for_discovery": true,
     "all_user_visible_money_in_rub": true,
     "excluded_items_not_mentioned": true,
@@ -413,7 +522,9 @@
   },
 
   "maintenance": {
-    "steamdb_cache_write_attempted_once_if_confirmed_cache_updates_exist": true,
+    "taste_cache_write_attempted_once_if_changed": true,
+    "taste_cache_write_failure_is_warning_only": true,
+    "steamdb_cache_write_attempted_once_if_changed": true,
     "steamdb_cache_write_failure_is_warning_only": true
   }
 }
