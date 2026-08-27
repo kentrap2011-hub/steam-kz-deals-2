@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.4",
+  "version": "1.5",
   "status": "canonical",
   "purpose": "Single source of truth for the personalized daily game-deals mailing.",
 
@@ -90,6 +90,8 @@
     "allow_analogical_fit_from_profile": true,
     "do_not_require_exact_title_or_exact_tag_match": true,
     "moderate_fit_rule": "INCLUDE when the candidate is at least moderately likely to interest the user after comparing its available metadata with the full canonical taste profile. Moderate fit may be inferred by analogy to multiple durable positive patterns or examples; a direct title match is not required.",
+    "mixed_evidence_rule": "Do not treat a mixed cluster as negative by default. When the profile contains both liked and disliked games with broadly similar tags or structure, compare the candidate against both sides. If at least two independent durable positive analogies are supported by the candidate metadata or feed fit signals and there is no direct strong negative user evidence, the candidate reaches at least moderate fit unless a specific contradictory mechanic or structure is known.",
+    "sparse_metadata_rule": "Sparse generic tags such as Action or Open World are not enough to reject a candidate. For a taste-based EXCLUDE with sparse metadata, combine core_fit_count, feed fit signals and relevant positive/negative anchors from the canonical profile. If the evidence remains genuinely balanced, route to targeted audit.",
     "unknown_is_not_automatic_include": true,
     "below_moderate_fit_is_valid_exclusion": true,
     "reasonable_uncertainty_rule": "When meaningful positive and negative evidence place a candidate near the moderate threshold, treat it as borderline and route it to the targeted local audit instead of silently discarding it or automatically including it.",
@@ -128,6 +130,7 @@
       "exclude_reason_is_missing_ambiguous_or_not_specific",
       "candidate_has_strong_fit_or_strong_niche_fit_and_core_fit_count_at_least_1_and_at_least_one_supporting_signal_and_exclusion_is_taste_based",
       "candidate_has_multiple_independent_profile_analogies_but_first_pass_excluded_it",
+      "candidate_has_sparse_generic_tags_but_core_fit_count_at_least_2_and_compound_recall_signal_and_taste_based_exclusion",
       "offer_family_would_disappear_even_though_a_related_variant_has_compound_positive_fit_evidence"
     ],
     "do_not_audit_only_because": [
@@ -139,6 +142,7 @@
       "age_or_newness_alone"
     ],
     "direct_strong_negative_user_evidence_skips_audit_unless_contradictory_newer_user_evidence_exists": true,
+    "audit_verdict_rule": "If the local second pass finds at least two independent durable positive analogies and no direct strong negative user evidence or known contradictory mechanic, classify at least moderate fit. Feed signals support this judgment but never force INCLUDE by themselves.",
     "rule": "Re-evaluate only the conflicting candidate against the canonical taste profile and its local feed metadata. If the evidence reaches at least moderate likely interest, change it to INCLUDE. Otherwise keep EXCLUDE with a specific reason. Do not use Store, SteamDB or web lookups to decide taste fit.",
     "no_candidate_name_whitelists": true,
     "no_control_game_names_in_policy": true
@@ -157,9 +161,31 @@
       "franchise_bundle",
       "complete_the_set"
     ],
+    "family_detection_rules": [
+      "rows_with_the_same_appid_but_different_App_or_Sub_keys_belong_to_the_same_purchase_family",
+      "normalize_titles_by_removing_trademark_symbols_and_edition_suffixes_such_as_remastered_remake_deluxe_gold_complete_ultimate_definitive_full_package_goty_collection_bundle",
+      "rows_with_the_same_normalized_base_title_may_be_grouped_when_the_relationship_is_clear",
+      "do_not_merge_merely_because_titles_share_a_franchise_word"
+    ],
+    "sub_rows_are_purchase_variants_not_noise": true,
+    "compare_all_local_variants_in_an_included_family": true,
     "choose_best_purchase_variant": true,
+    "best_variant_factors": [
+      "contains_the_recommended_base_content",
+      "substantive_extra_content",
+      "current_price",
+      "discount",
+      "historical_price_quality_when_available",
+      "small_incremental_cost_for_materially_more_content"
+    ],
+    "prefer_complete_variant_when_incremental_cost_is_small_and_content_is_material": true,
+    "do_not_assume_base_game_is_best": true,
     "do_not_drop_a_game_family_because_one_variant_is_weaker": true,
-    "family_safety_rule": "If a family would disappear but one or more related variants carry compound positive fit evidence, run the local family audit before dropping the family. This does not force INCLUDE."
+    "family_safety_rule": "If a family would disappear but one or more related variants carry compound positive fit evidence, run the local family audit before dropping the family. This does not force INCLUDE.",
+    "one_primary_output_row_per_purchase_family": true,
+    "primary_row_must_use_best_purchase_variant": true,
+    "mention_useful_alternative_variant_in_same_row_when_relevant": true,
+    "store_check_scope": "For a final INCLUDE family, one Store-family check should verify the selected variant and any materially competitive bundle/edition instead of separate duplicate lookups per row."
   },
 
   "pricing": {
@@ -200,8 +226,8 @@
     "stage_a": "Load canonical policy from GitHub first, then profile, manifest, source index, and validated mailing-optimized index. Read each chosen chunk exactly once. No Store, SteamDB or web probes during ingest.",
     "stage_b": "In one local pass assign INCLUDE/EXCLUDE ledger decisions and normalize related SKUs into offer families. Feed reason flags are supporting signals, not automatic INCLUDE decisions.",
     "stage_c": "Run only the targeted local conflict audit conditions. The audit must not make external network lookups.",
-    "stage_d": "After fit and family resolution are final, use valid Store cache first and query Steam Store only for final INCLUDE families that need current-state verification.",
-    "stage_e": "Use valid SteamDB history cache first and query SteamDB only for final INCLUDE cache misses or when current verified price may establish a new minimum.",
+    "stage_d": "After fit and family resolution are final, use valid Store cache first and query Steam Store only for final INCLUDE families that need current-state verification. Resolve bundle/edition competition at family level, not by duplicate per-row lookups.",
+    "stage_e": "Use valid SteamDB history cache first and query SteamDB only for the selected best purchase variant of each final INCLUDE family, plus an alternative only when historical comparison is necessary to choose between materially competitive variants.",
     "stage_f": "Batch external checks when supported, reuse results within one offer family, and never repeat the same lookup in one run, including probe lookups.",
     "stage_g": "Run at most one promo control pass near the end as omission insurance; reuse any results already obtained.",
     "mailing_chunk_target_size": 150,
@@ -234,23 +260,36 @@
     "do_not_explain_why_rejected_games_or_freebies_were_omitted": true,
     "do_not_list_not_fit_items": true,
     "do_not_publish_internal_ledger": true,
+    "do_not_emit_candidate_names_in_progress_messages_before_final_verification": true,
     "technical_debug_stats_only_when_explicitly_requested": true
   },
 
   "sorting": {
-    "primary_factors": ["taste_fit", "price_quality_vs_history"],
-    "do_not_sort_only_by_discount_absolute_price_popularity_or_genre": true
+    "required": true,
+    "do_not_preserve_feed_or_processing_order": true,
+    "purchase_decision_order": ["БРАТЬ СЕЙЧАС", "МОЖНО БРАТЬ", "ЛУЧШЕ ЖДАТЬ"],
+    "within_decision_order": [
+      "taste_fit_desc",
+      "price_quality_vs_history_desc",
+      "best_variant_value_desc",
+      "discount_percent_desc",
+      "current_price_rub_asc",
+      "title_asc"
+    ],
+    "price_quality_order": ["record", "near_record", "good_vs_history", "unverified", "well_above_history"],
+    "do_not_sort_only_by_discount_absolute_price_popularity_or_genre": true,
+    "sorting_must_be_applied_after_final_verification_and_family_resolution": true
   },
 
   "paid_output_fields": [
     "title",
+    "best_edition_or_bundle",
     "discount_percent",
     "current_price_rub",
     "historical_minimum_rub_kazakhstan",
     "delta_vs_historical_minimum",
     "record_or_near_record_status",
     "sale_end_date",
-    "best_edition_or_bundle",
     "buy_now_or_wait",
     "why_it_fits"
   ],
@@ -266,8 +305,14 @@
     "feed_signals_not_used_as_automatic_include": true,
     "targeted_local_false_negative_audit_completed": true,
     "required_compound_signal_excludes_audited": true,
+    "sparse_metadata_conflicts_audited": true,
     "no_candidate_name_whitelists": true,
     "taste_fit_final_before_external_checks": true,
+    "offer_families_resolved_before_external_checks": true,
+    "all_included_families_compared_for_local_bundle_and_edition_variants": true,
+    "one_primary_row_per_purchase_family": true,
+    "primary_rows_use_best_purchase_variant": true,
+    "deterministic_sort_applied": true,
     "no_artificial_top_n": true,
     "completed_games_not_auto_excluded": true,
     "still_active_deals_not_hidden_because_shown_yesterday": true,
