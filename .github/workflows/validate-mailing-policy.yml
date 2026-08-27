@@ -1,0 +1,70 @@
+name: Validate mailing policy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "config/mailing_policy.json"
+      - ".github/workflows/validate-mailing-policy.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate locked invariants
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("config/mailing_policy.json")
+          policy = json.loads(path.read_text(encoding="utf-8"))
+
+          checks = {
+              "contract": policy.get("contract") == "GAME-DEALS-MAILING",
+              "canonical": policy.get("status") == "canonical",
+              "full_daily_snapshot": policy["delivery"]["mode"] == "full_daily_snapshot",
+              "not_delta": policy["delivery"]["delta_only"] is False,
+              "repeat_active": policy["delivery"]["repeat_still_active_relevant_deals_each_day"] is True,
+              "no_fixed_top_n": policy["delivery"]["fixed_top_n"] is None,
+              "completed_not_excluded": policy["delivery"]["completed_games_auto_excluded"] is False,
+              "wishlist_not_discovery": policy["taste_profile"]["wishlist_is_discovery_source"] is False,
+              "production_primary": policy["paid_discovery"]["production_feed_is_primary_discovery_source"] is True,
+              "steamdb_not_discovery": policy["paid_discovery"]["steamdb_for_discovery"] is False,
+              "all_chunks": policy["paid_discovery"]["read_all_chunks"] is True,
+              "qa_fail_closed": policy["ingest_qa"]["fail_closed"] is True,
+              "coverage": policy["ingest_qa"]["minimum_coverage_ratio"] >= 0.99,
+              "freshness": policy["ingest_qa"]["maximum_snapshot_age_hours"] <= 18,
+              "chunk_count_check": policy["ingest_qa"]["require_actual_chunk_count_equals_index_chunk_count"] is True,
+              "row_count_check": policy["ingest_qa"]["require_actual_data_rows_equals_item_count"] is True,
+              "no_partial_on_failure": policy["ingest_qa"]["on_failure"] == "do_not_generate_any_mailing",
+              "moderate_threshold": policy["personal_filter"]["minimum_interest_threshold"] == "moderate",
+              "default_include": policy["personal_filter"]["default_include_on_reasonable_uncertainty"] is True,
+              "exclude_requires_reason": policy["personal_filter"]["exclusion_requires_concrete_negative_reason"] is True,
+              "ledger_required": policy["decision_ledger"]["required"] is True,
+              "ledger_covers_all": policy["decision_ledger"]["require_included_plus_excluded_equals_processed_candidates"] is True,
+              "false_negative_audit": policy["false_negative_audit"]["required"] is True,
+              "family_resolution": policy["offer_family_resolution"]["required"] is True,
+              "soft_500": policy["pricing"]["target_rub"] == 500 and policy["pricing"]["target_is_hard_cap"] is False,
+              "rub_only": policy["pricing"]["user_visible_currency"] == "RUB" and policy["pricing"]["show_foreign_currency_to_user"] is False,
+              "steamdb_history_only": policy["verification"]["steamdb_usage"] == "history_only_after_personal_selection",
+              "no_speed_loss": policy["runtime_optimization"]["do_not_trade_completeness_for_speed"] is True,
+              "freebies_after_ingest": policy["freebies"]["only_after_successful_main_ingest"] is True,
+              "upcoming_after_ingest": policy["upcoming"]["only_after_successful_main_ingest"] is True,
+          }
+
+          failed = [name for name, ok in checks.items() if not ok]
+          if failed:
+              raise SystemExit("Mailing policy invariant failure: " + ", ".join(failed))
+
+          print(f"OK: {len(checks)} locked mailing invariants validated")
+          PY
