@@ -1,8 +1,19 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.3",
+  "version": "1.4",
   "status": "canonical",
   "purpose": "Single source of truth for the personalized daily game-deals mailing.",
+
+  "policy_loading": {
+    "primary_repository": "kentrap2011-hub/steam-kz-deals-2",
+    "primary_path": "config/mailing_policy.json",
+    "primary_method": "github_connector_or_github_contents",
+    "raw_fallback_url": "https://raw.githubusercontent.com/kentrap2011-hub/steam-kz-deals-2/main/config/mailing_policy.json",
+    "web_cached_copy_is_not_authoritative": true,
+    "if_sources_disagree": "github_repository_copy_wins",
+    "do_not_start_ingest_before_canonical_policy_loaded": true,
+    "fail_if_canonical_policy_unavailable": true
+  },
 
   "delivery": {
     "mode": "full_daily_snapshot",
@@ -72,22 +83,26 @@
     "do_not_limit_to_aaa": true,
     "do_not_limit_to_action_adventure": true,
     "do_not_limit_by_genre_popularity_or_age": true,
-    "default_include_on_reasonable_uncertainty": true,
-    "absence_of_strong_positive_evidence_is_not_exclusion_reason": true,
-    "exclusion_requires_concrete_negative_reason": true,
     "completed_game_is_not_exclusion_reason": true,
-    "feed_strong_fit_presumption": true,
-    "strong_fit_signals": ["strong_fit", "strong_niche_fit"],
-    "strong_fit_rule": "If a candidate has strong_fit or strong_niche_fit in the production feed, presume INCLUDE. EXCLUDE is allowed only for a hard blocker or direct strong negative user evidence that specifically outweighs the fit signal.",
-    "strong_fit_plus_exceptional_discount_rule": "If strong_fit/strong_niche_fit is combined with exceptional_discount and the offer is active, INCLUDE unless a hard blocker exists.",
-    "hard_blockers": [
-      "sale_confirmed_inactive",
-      "not_a_game_or_not_relevant_game_content",
+    "feed_reason_role": "recall_and_supporting_evidence_only",
+    "feed_signals_never_auto_include": true,
+    "strong_fit_is_not_final_taste_verdict": true,
+    "allow_analogical_fit_from_profile": true,
+    "do_not_require_exact_title_or_exact_tag_match": true,
+    "moderate_fit_rule": "INCLUDE when the candidate is at least moderately likely to interest the user after comparing its available metadata with the full canonical taste profile. Moderate fit may be inferred by analogy to multiple durable positive patterns or examples; a direct title match is not required.",
+    "unknown_is_not_automatic_include": true,
+    "below_moderate_fit_is_valid_exclusion": true,
+    "reasonable_uncertainty_rule": "When meaningful positive and negative evidence place a candidate near the moderate threshold, treat it as borderline and route it to the targeted local audit instead of silently discarding it or automatically including it.",
+    "exclusion_requires_specific_reason": true,
+    "valid_exclusion_reason_codes": [
+      "below_moderate_fit",
       "direct_strong_negative_user_evidence",
+      "sale_confirmed_inactive",
       "price_clearly_unreasonable_even_after_soft_target_evaluation",
-      "inferior_duplicate_variant_after_offer_family_resolution"
-    ],
-    "hard_blocker_must_be_specific": true
+      "not_a_game_or_not_relevant_game_content",
+      "inferior_duplicate_variant_after_offer_family_resolution",
+      "borderline_fit_needs_audit"
+    ]
   },
 
   "decision_ledger": {
@@ -103,28 +118,30 @@
 
   "false_negative_audit": {
     "required": true,
-    "mode": "targeted_conflict_audit",
+    "mode": "targeted_local_conflict_audit",
+    "external_lookups_during_audit": false,
     "do_not_reaudit_nearly_all_excludes": true,
+    "compound_recall_signals": ["strong_fit", "strong_niche_fit"],
+    "supporting_signals": ["exceptional_discount", "very_high_rating", "recent_fit", "substantive_content", "high_confidence_adjacent"],
     "audit_when": [
-      "exclude_reason_is_taste_or_uncertainty_based_and_candidate_has_strong_positive_fit_signal",
-      "candidate_has_strong_fit_or_strong_niche_fit_but_was_excluded_without_hard_blocker",
-      "candidate_has_strong_fit_or_strong_niche_fit_plus_exceptional_discount_but_was_excluded",
-      "offer_family_contains_an_included_or_strong_fit_variant_but_all_family_variants_would_otherwise_disappear",
-      "exclude_reason_is_missing_ambiguous_or_not_specific"
+      "exclude_reason_is_borderline_fit_needs_audit",
+      "exclude_reason_is_missing_ambiguous_or_not_specific",
+      "candidate_has_strong_fit_or_strong_niche_fit_and_core_fit_count_at_least_1_and_at_least_one_supporting_signal_and_exclusion_is_taste_based",
+      "candidate_has_multiple_independent_profile_analogies_but_first_pass_excluded_it",
+      "offer_family_would_disappear_even_though_a_related_variant_has_compound_positive_fit_evidence"
     ],
     "do_not_audit_only_because": [
+      "strong_fit_alone",
+      "strong_niche_fit_alone",
       "very_high_rating_alone",
       "exceptional_discount_alone",
       "popularity_alone",
       "age_or_newness_alone"
     ],
-    "strong_positive_fit_signals": [
-      "strong_fit",
-      "strong_niche_fit",
-      "recent_fit",
-      "substantive_content"
-    ],
-    "rule": "A conflicting EXCLUDE must survive a second pass only if its concrete negative reason still clearly outweighs the positive fit evidence. Otherwise change it to INCLUDE."
+    "direct_strong_negative_user_evidence_skips_audit_unless_contradictory_newer_user_evidence_exists": true,
+    "rule": "Re-evaluate only the conflicting candidate against the canonical taste profile and its local feed metadata. If the evidence reaches at least moderate likely interest, change it to INCLUDE. Otherwise keep EXCLUDE with a specific reason. Do not use Store, SteamDB or web lookups to decide taste fit.",
+    "no_candidate_name_whitelists": true,
+    "no_control_game_names_in_policy": true
   },
 
   "offer_family_resolution": {
@@ -142,7 +159,7 @@
     ],
     "choose_best_purchase_variant": true,
     "do_not_drop_a_game_family_because_one_variant_is_weaker": true,
-    "strong_fit_family_safety": "If any related variant has strong_fit/strong_niche_fit, the family must not disappear unless every viable variant has a hard blocker."
+    "family_safety_rule": "If a family would disappear but one or more related variants carry compound positive fit evidence, run the local family audit before dropping the family. This does not force INCLUDE."
   },
 
   "pricing": {
@@ -163,7 +180,8 @@
     "steamdb_region": "Kazakhstan",
     "check_historical_minimum": true,
     "check_sale_end_date": true,
-    "if_final_check_unavailable_mark_unverified_instead_of_inventing": true
+    "if_final_check_unavailable_mark_unverified_instead_of_inventing": true,
+    "taste_fit_must_be_final_before_external_checks": true
   },
 
   "external_cache": {
@@ -179,15 +197,14 @@
 
   "runtime_optimization": {
     "goal": "Minimize expensive network/tool calls without reducing feed completeness or recall.",
-    "stage_a": "Load policy, profile, manifest, source index, then prefer the validated mailing-optimized index. Read each chosen chunk exactly once. No Steam Store or SteamDB during ingest.",
-    "stage_b": "In one local pass assign INCLUDE/EXCLUDE ledger decisions and normalize related SKUs into offer families.",
-    "stage_c": "Run targeted conflict audit only for audit_when conditions; do not send hundreds of routine hard EXCLUDE rows through a second semantic pass.",
-    "stage_d": "Use valid external cache first. Perform Steam Store checks only for INCLUDE families and genuinely unresolved borderline candidates.",
-    "stage_e": "Use valid SteamDB history cache first. Query SteamDB only for final INCLUDE cache misses or when current price may establish a new minimum.",
+    "stage_a": "Load canonical policy from GitHub first, then profile, manifest, source index, and validated mailing-optimized index. Read each chosen chunk exactly once. No Store, SteamDB or web probes during ingest.",
+    "stage_b": "In one local pass assign INCLUDE/EXCLUDE ledger decisions and normalize related SKUs into offer families. Feed reason flags are supporting signals, not automatic INCLUDE decisions.",
+    "stage_c": "Run only the targeted local conflict audit conditions. The audit must not make external network lookups.",
+    "stage_d": "After fit and family resolution are final, use valid Store cache first and query Steam Store only for final INCLUDE families that need current-state verification.",
+    "stage_e": "Use valid SteamDB history cache first and query SteamDB only for final INCLUDE cache misses or when current verified price may establish a new minimum.",
     "stage_f": "Batch external checks when supported, reuse results within one offer family, and never repeat the same lookup in one run, including probe lookups.",
-    "stage_g": "Run one Steam promo control pass near the end as omission insurance.",
+    "stage_g": "Run at most one promo control pass near the end as omission insurance; reuse any results already obtained.",
     "mailing_chunk_target_size": 150,
-    "expected_current_read_reduction": "12 source chunks to about 4 mailing chunks for ~600 rows",
     "do_not_trade_completeness_for_speed": true
   },
 
@@ -239,15 +256,18 @@
   ],
 
   "final_self_check": {
-    "policy_loaded": true,
+    "policy_loaded_from_canonical_repository_before_ingest": true,
     "profile_loaded": true,
     "production_qa_passed": true,
     "all_chosen_chunks_read": true,
     "rows_equal_item_count": true,
     "optimized_view_if_used_matches_source": true,
     "ledger_covers_every_processed_candidate": true,
-    "targeted_false_negative_audit_completed": true,
-    "strong_fit_candidates_not_excluded_without_hard_blocker": true,
+    "feed_signals_not_used_as_automatic_include": true,
+    "targeted_local_false_negative_audit_completed": true,
+    "required_compound_signal_excludes_audited": true,
+    "no_candidate_name_whitelists": true,
+    "taste_fit_final_before_external_checks": true,
     "no_artificial_top_n": true,
     "completed_games_not_auto_excluded": true,
     "still_active_deals_not_hidden_because_shown_yesterday": true,
