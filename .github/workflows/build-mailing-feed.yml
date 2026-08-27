@@ -7,6 +7,12 @@ on:
       - "Steam KZ production shortlist"
     types:
       - completed
+  push:
+    branches: [main]
+    paths:
+      - "data/production/manifest.json"
+      - "data/production/shortlist/**"
+      - ".github/workflows/build-mailing-feed.yml"
 
 permissions:
   contents: write
@@ -72,7 +78,6 @@ jobs:
                   f"Source row mismatch: actual={len(rows)} expected={expected_rows}"
               )
 
-          # Remove duplicated compatibility fields to reduce payload.
           drop = {"review_positive", "review_count"}
           keep_indices = [i for i, name in enumerate(columns) if name not in drop]
           out_columns = [columns[i] for i in keep_indices]
