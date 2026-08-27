@@ -22,11 +22,13 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -1799,4 +1801,30 @@ jobs:
           fi
 
           git commit -m "Update Steam KZ production shortlist"
-          git push
+
+          # Пока длинный сборщик работает, main может успеть
+          # продвинуться другим commit/workflow.
+          # Подтягиваем свежий main, перебазируем наш commit
+          # и повторяем push при редкой гонке.
+          for attempt in 1 2 3; do
+            echo "Push attempt ${attempt}/3"
+
+            git fetch origin main:refs/remotes/origin/main
+
+            if ! git rebase origin/main; then
+              echo "Rebase failed; aborting."
+              git rebase --abort || true
+              exit 1
+            fi
+
+            if git push origin HEAD:main; then
+              echo "Production feed pushed successfully."
+              exit 0
+            fi
+
+            echo "main changed again before push; retrying..."
+            sleep $((attempt * 5))
+          done
+
+          echo "Push failed after 3 attempts."
+          exit 1
