@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.5",
+  "version": "1.6",
   "status": "canonical",
   "purpose": "Single source of truth for the personalized daily game-deals mailing.",
 
@@ -185,7 +185,7 @@
     "one_primary_output_row_per_purchase_family": true,
     "primary_row_must_use_best_purchase_variant": true,
     "mention_useful_alternative_variant_in_same_row_when_relevant": true,
-    "store_check_scope": "For a final INCLUDE family, one Store-family check should verify the selected variant and any materially competitive bundle/edition instead of separate duplicate lookups per row."
+    "store_check_scope": "For a final INCLUDE family, use a live Store family check only when local production variants do not contain enough information to choose between materially competitive editions or bundles. Do not perform one Store lookup per ordinary final row."
   },
 
   "pricing": {
@@ -198,38 +198,91 @@
   },
 
   "verification": {
-    "production_feed_for_initial_current_price_and_discount": true,
-    "steam_store_final_check_for_included_candidates": true,
-    "steam_store_wins_current_price_discount_or_active_status_conflict": true,
-    "exclude_if_steam_store_confirms_sale_ended": true,
+    "production_feed_for_current_price_and_discount": true,
+    "production_snapshot_satisfies_current_state_when_qa_passes": true,
+    "steam_store_live_check_mode": "conditional_only",
+    "steam_store_live_check_triggers": [
+      "production_feed_conflicts_with_another_current_source",
+      "materially_competitive_bundle_or_edition_cannot_be_resolved_from_local_family_rows",
+      "sale_end_date_is_material_to_buy_now_or_wait_verdict_and_not_already_cached",
+      "one_final_promo_control_pass_requires_confirmation"
+    ],
+    "do_not_query_store_only_to_repeat_price_or_discount_already_in_fresh_production_snapshot": true,
+    "sale_end_date_is_optional": true,
+    "if_sale_end_unknown": "show_unverified_or_omit_exact_date; do_not_make_a_store_lookup_only_to_fill_the_date",
+    "steam_store_wins_if_a_live_check_conflicts_with_feed": true,
+    "exclude_if_live_store_check_confirms_sale_ended": true,
     "steamdb_usage": "history_only_after_personal_selection",
     "steamdb_region": "Kazakhstan",
     "check_historical_minimum": true,
-    "check_sale_end_date": true,
-    "if_final_check_unavailable_mark_unverified_instead_of_inventing": true,
+    "if_history_check_unavailable_mark_unverified_instead_of_inventing": true,
     "taste_fit_must_be_final_before_external_checks": true
   },
 
   "external_cache": {
-    "enabled_when_available": true,
-    "store_cache_path": "data/production/cache/store_cache.json",
-    "steamdb_cache_path": "data/production/cache/steamdb_cache.json",
+    "enabled": true,
     "cache_is_never_discovery_source": true,
-    "store_cache_reuse_rule": "Reuse a cached Store result when app/family identity, current production-feed price and discount still match and cached sale_end is still in the future.",
-    "steamdb_cache_reuse_rule": "Reuse historical minimum indefinitely unless the current verified price is below the cached minimum or cache integrity is uncertain.",
-    "cache_miss_action": "perform_normal_finalist_lookup",
-    "cache_failure_action": "do_not_fail_source_ingest; fall back to normal finalist lookup"
+    "load_each_cache_at_most_once_per_run": true,
+
+    "store_state": {
+      "path": "data/cache/store_state.json",
+      "producer": ".github/workflows/build-mailing-feed.yml",
+      "source": "same validated Steam Store Kazakhstan snapshot as production feed",
+      "required_for_mailing": false,
+      "validation": [
+        "country_code_is_kz",
+        "source_complete_true",
+        "source_coverage_ratio_at_least_0_99",
+        "source_needs_tuning_false",
+        "source_updated_at_matches_chosen_source_index",
+        "source_item_count_matches_source_index_item_count"
+      ],
+      "reuse_rule": "When valid, its current price, discount and active-discount state are equivalent to the already-loaded fresh production row. Do not make a live Store lookup merely to reconfirm those fields.",
+      "do_not_reread_per_candidate": true
+    },
+
+    "steamdb_history": {
+      "path": "data/cache/steamdb_history.json",
+      "persistent_outside_production_directory": true,
+      "schema_version": 1,
+      "currency": "KZT",
+      "keying": "exact Steam entity key such as App_123 or Sub_456",
+      "required_entry_fields": [
+        "key",
+        "steam_type",
+        "steam_id",
+        "historical_min_kzt",
+        "checked_at_utc",
+        "source"
+      ],
+      "reuse_rule": "Reuse a confirmed historical_min_kzt without a new SteamDB lookup when the selected exact variant has a valid cache entry and current verified KZT price is greater than or equal to the cached minimum.",
+      "lookup_required_when": [
+        "cache_entry_missing",
+        "cache_entry_invalid_or_uncertain",
+        "current_verified_kzt_price_is_below_cached_historical_min_kzt"
+      ],
+      "new_lower_price_rule": "If current price is below cached minimum, query SteamDB before calling it a new record; then lower the cached minimum only when confirmed.",
+      "write_back": "After all SteamDB cache misses are resolved, merge confirmed results in memory and update the cache with exactly one GitHub file write for the entire run when there are changes.",
+      "write_back_best_effort": true,
+      "write_failure_does_not_invalidate_mailing": true,
+      "do_not_store_inferred_or_guessed_minima": true,
+      "first_run_with_empty_cache_is_warmup": true
+    },
+
+    "cache_miss_action": "perform_only_the_specific_external_lookup_needed_for_that_final_variant",
+    "cache_failure_action": "do_not_fail_source_ingest; fall back to the minimum necessary finalist lookup"
   },
 
   "runtime_optimization": {
     "goal": "Minimize expensive network/tool calls without reducing feed completeness or recall.",
-    "stage_a": "Load canonical policy from GitHub first, then profile, manifest, source index, and validated mailing-optimized index. Read each chosen chunk exactly once. No Store, SteamDB or web probes during ingest.",
+    "stage_a": "Load canonical policy from GitHub first, then profile, manifest, source index, validated mailing-optimized index and each external cache at most once. Read each chosen feed chunk exactly once. No Store, SteamDB or web probes during ingest.",
     "stage_b": "In one local pass assign INCLUDE/EXCLUDE ledger decisions and normalize related SKUs into offer families. Feed reason flags are supporting signals, not automatic INCLUDE decisions.",
     "stage_c": "Run only the targeted local conflict audit conditions. The audit must not make external network lookups.",
-    "stage_d": "After fit and family resolution are final, use valid Store cache first and query Steam Store only for final INCLUDE families that need current-state verification. Resolve bundle/edition competition at family level, not by duplicate per-row lookups.",
-    "stage_e": "Use valid SteamDB history cache first and query SteamDB only for the selected best purchase variant of each final INCLUDE family, plus an alternative only when historical comparison is necessary to choose between materially competitive variants.",
+    "stage_d": "After taste fit and family resolution are final, treat the validated fresh production snapshot as current price/discount verification. Use live Steam Store only for the conditional triggers in verification; do not check every final INCLUDE.",
+    "stage_e": "For each selected best purchase variant, consult the persistent SteamDB KZ history cache first. Query SteamDB only for a cache miss, invalid entry, or a current price below the cached minimum.",
     "stage_f": "Batch external checks when supported, reuse results within one offer family, and never repeat the same lookup in one run, including probe lookups.",
-    "stage_g": "Run at most one promo control pass near the end as omission insurance; reuse any results already obtained.",
+    "stage_g": "Merge all newly confirmed SteamDB history results and perform at most one GitHub write to data/cache/steamdb_history.json after external checks. Cache write is best-effort maintenance and does not invalidate an otherwise correct mailing.",
+    "stage_h": "Run at most one promo control pass near the end as omission insurance; reuse any results already obtained.",
     "mailing_chunk_target_size": 150,
     "do_not_trade_completeness_for_speed": true
   },
@@ -289,7 +342,7 @@
     "historical_minimum_rub_kazakhstan",
     "delta_vs_historical_minimum",
     "record_or_near_record_status",
-    "sale_end_date",
+    "sale_end_date_if_known",
     "buy_now_or_wait",
     "why_it_fits"
   ],
@@ -312,6 +365,9 @@
     "all_included_families_compared_for_local_bundle_and_edition_variants": true,
     "one_primary_row_per_purchase_family": true,
     "primary_rows_use_best_purchase_variant": true,
+    "current_price_and_discount_verified_by_fresh_production_snapshot_or_conditional_live_store": true,
+    "steamdb_history_cache_consulted_before_each_history_lookup": true,
+    "no_per_candidate_store_reverification_of_unchanged_feed_price_discount": true,
     "deterministic_sort_applied": true,
     "no_artificial_top_n": true,
     "completed_games_not_auto_excluded": true,
@@ -323,5 +379,10 @@
     "excluded_items_not_mentioned": true,
     "upcoming_items_at_most_one": true,
     "freebies_and_upcoming_only_after_successful_ingest": true
+  },
+
+  "maintenance": {
+    "steamdb_cache_write_attempted_once_if_confirmed_cache_updates_exist": true,
+    "steamdb_cache_write_failure_is_warning_only": true
   }
 }
