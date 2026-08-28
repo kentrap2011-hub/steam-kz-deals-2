@@ -1,6 +1,6 @@
 {
   "contract": "FULL-TASTE-FINGERPRINT-VALIDATION",
-  "version": "1.0",
+  "version": "1.1",
   "status": "implementation_only",
   "purpose": "Move the deterministic 583-candidate fingerprint comparison into CI and publish a small content-addressed result that can be verified quickly by the diagnostic consumer.",
   "authority": {
@@ -39,18 +39,34 @@
     ],
     "confirmed_hit_is_final_and_not_semantically_re_evaluated": true
   },
+  "consumer_identity_inputs": {
+    "mailing_tree_sha": "reuse the exact current mailing tree identity already proven by stage 03; do not fetch it again inside stage 07",
+    "mailing_index_blob_sha": "reuse the exact current mailing index identity already proven by stage 03; do not fetch it again inside stage 07",
+    "taste_index_blob_sha": "reuse the exact current taste index identity already proven by stage 04; do not fetch it again inside stage 07",
+    "profile_blob_sha": "reuse the exact current canonical profile SHA already proven by stage 02/04; do not fetch it again inside stage 07",
+    "fingerprint_contract_blob_sha": "reuse the exact current fingerprint contract identity already proven by stage 06; do not fetch it again inside stage 07",
+    "taste_model_version": "reuse the canonical model version already proven from policy/stage 06"
+  },
   "consumer_accept_only_if_all": [
     "validation status is complete",
-    "current data/production/mailing Git tree SHA equals validation mailing_tree_sha",
-    "current data/cache/taste_fit.index.json blob SHA equals validation taste_index_blob_sha",
-    "current config/taste_fingerprint_contract.json blob SHA equals validation fingerprint_contract_blob_sha",
+    "validation mailing_tree_sha equals stage 03 current mailing_tree_sha",
+    "validation mailing_index_blob_sha equals stage 03 current mailing_index_blob_sha",
+    "validation taste_index_blob_sha equals stage 04 current taste_index_blob_sha",
+    "validation fingerprint_contract_blob_sha equals stage 06 current fingerprint_contract_blob_sha",
     "validation profile_blob_sha equals current canonical profile SHA proven by stage 02/04",
     "validation taste_model_version equals canonical policy taste model version",
-    "validation feed_candidate_count equals current mailing item_count",
+    "validation feed_candidate_count equals stage 03 current mailing item_count",
     "validation processed_count equals feed_candidate_count",
     "validation hit_count plus miss_or_stale_count equals feed_candidate_count",
     "validation complete_coverage is true"
   ],
+  "consumer_runtime_rule": {
+    "stage_07_should_fetch_only": [
+      "data/cache/taste_fit.validation.json"
+    ],
+    "do_not_repeat_prerequisite_github_reads_inside_stage_07": true,
+    "reason": "The diagnostic runner already treats stages 03, 04 and 06 as prerequisites. Re-reading the same immutable identities inside stage 07 adds latency without adding proof strength."
+  },
   "failure_behavior": {
     "stale_or_mismatched_attestation": "invalid; do not use counts; targeted retest must wait for/rebuild current validation artifact or fall back to direct full mechanical validation",
     "workflow_or_parse_failure": "fail closed",
@@ -61,7 +77,7 @@
     "targeted_retest_dependencies": [
       "01_policy_bootstrap",
       "02_profile_load",
-      "03_feed_ingest_qa proof or exact current mailing tree identity",
+      "03_feed_ingest_qa",
       "04_taste_cache_load",
       "06_fingerprint_schema_test",
       "taste_validation_contract"
