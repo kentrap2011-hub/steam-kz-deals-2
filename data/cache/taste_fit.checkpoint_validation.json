@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "purpose": "mandatory_taste_checkpoint_proof",
+  "status": "complete",
+  "bindings": {
+    "policy_blob_sha": "bbadfa1739a268dac7df0a1b6a714d1c9b002f0f",
+    "taste_cache_blob_sha": "b9206e7db88755794f6b721ef4bbdc098e943949",
+    "taste_index_blob_sha": "0784c399676607e64747845c7aa78cb67d6c9e7e",
+    "taste_validation_blob_sha": "0a21f42de02b161ff39530b500a0be74e80f4548",
+    "ledger_validation_blob_sha": "9b0b2fbb09c7712ac6501dae6f64f484e288f6bf",
+    "profile_blob_sha": "b0d11172aea762cb7274efe24d71734b2fc6b5b0",
+    "taste_model_version": "taste-v2"
+  },
+  "cache_changes_required": 0,
+  "github_writes_required": 0,
+  "github_writes_performed_by_checkpoint": 0,
+  "checkpoint_complete": true,
+  "checks": {
+    "policy_canonical": true,
+    "validation_complete": true,
+    "zero_misses_or_stale": true,
+    "ledger_complete": true,
+    "ledger_bound_to_same_validation": true,
+    "ledger_bound_to_same_index": true,
+    "cache_blob_matches_index_attestation": true,
+    "recovery_artifact_absent": true
+  }
+}
