@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
   schedule:
-    # 06:30 по Самаре (02:30 UTC); calibrated-threshold production trigger
+    # 06:30 по Самаре (02:30 UTC); canonical app-identity production trigger
     - cron: "30 2 * * *"
 
   push:
