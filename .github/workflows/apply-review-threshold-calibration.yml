@@ -1,0 +1,215 @@
+name: One-shot apply review threshold calibration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/apply-review-threshold-calibration.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Apply calibrated review thresholds
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          profile = "personal-calibrated-v1"
+          thresholds = {
+              "affordable_quality": 75,
+              "genre_fit": 75,
+              "big_discount": 75,
+              "popular_quality": 82,
+              "very_high_rating": 90,
+              "cheap_quality": 80,
+              "niche_fit": 78,
+              "recent_quality": 78,
+              "mainstream_quality": 80,
+              "strong_fit": 78,
+              "strong_niche_fit": 78,
+              "exceptional_discount": 75,
+              "recent_fit": 78,
+              "high_confidence_adjacent": 88,
+              "substantive_content": 78,
+          }
+
+          # 1) Canonical policy.
+          policy_path = Path("config/mailing_policy.json")
+          policy = json.loads(policy_path.read_text(encoding="utf-8"))
+          policy["version"] = "1.12"
+          policy["review_threshold_calibration"] = {
+              "profile": profile,
+              "calibrated_at": "2026-08-28",
+              "calibration_repository": "kentrap2011-hub/stopgame-ratings-data",
+              "calibration_artifact": "steam_review_threshold_decision_table_2026-08-28.json",
+              "rated_games_total": 120,
+              "rated_games_exact_safe_for_calibration": 45,
+              "wishlist_games": 87,
+              "principle": "Steam review percentage is a quality/technical-risk guard and recall control, not a predictor of personal taste. Personal taste is decided later by the price-blind taste stage.",
+              "scale": {
+                  "broad_recall": 75,
+                  "personal_signal": 78,
+                  "ordinary_quality_without_personal_signal": 80,
+                  "mass_quality": 82,
+                  "adjacent_without_normal_fit": 88,
+                  "very_high_rating_discovery": 90,
+              },
+              "thresholds": thresholds,
+              "russian_rating_uses_same_thresholds": True,
+              "russian_sample_rule_unchanged": "min(rule_global_minimum_count, 500)",
+              "global_review_count_baseline_unchanged": True,
+          }
+          policy["ingest_qa"]["required_review_threshold_profile"] = profile
+          policy["ingest_qa"]["require_review_threshold_map_match"] = True
+          policy_path.write_text(json.dumps(policy, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+          # 2) Collector: one named threshold map, no scattered percentages for these rules.
+          script_path = Path("scripts/steam_production.py")
+          s = script_path.read_text(encoding="utf-8")
+
+          marker = "RUSSIAN_REVIEW_COUNT_CAP = 500\n\nOUT = Path(\"data/production\")"
+          insert = '''RUSSIAN_REVIEW_COUNT_CAP = 500\n\n# Calibrated on the user's own rated games + current Steam wishlist.\n# These percentages are quality/recall guards only; personal taste is\n# evaluated later by the price-blind taste stage.\nREVIEW_THRESHOLD_PROFILE = "personal-calibrated-v1"\nREVIEW_THRESHOLDS = {\n    "affordable_quality": 75,\n    "genre_fit": 75,\n    "big_discount": 75,\n    "popular_quality": 82,\n    "very_high_rating": 90,\n    "cheap_quality": 80,\n    "niche_fit": 78,\n    "recent_quality": 78,\n    "mainstream_quality": 80,\n    "strong_fit": 78,\n    "strong_niche_fit": 78,\n    "exceptional_discount": 75,\n    "recent_fit": 78,\n    "high_confidence_adjacent": 88,\n    "substantive_content": 78,\n}\n\nOUT = Path("data/production")'''
+          if marker not in s:
+              raise SystemExit("collector constants marker not found")
+          s = s.replace(marker, insert, 1)
+
+          replacements = {
+              'review_passes(russian_rescue, 1500, 78)': 'review_passes(russian_rescue, 1500, REVIEW_THRESHOLDS["strong_fit"])',
+              'review_passes(too_few_russian, 1500, 78)': 'review_passes(too_few_russian, 1500, REVIEW_THRESHOLDS["strong_fit"])',
+              'review_passes(global_rescue, 1500, 78)': 'review_passes(global_rescue, 1500, REVIEW_THRESHOLDS["strong_fit"])',
+              'review_passes(global_count_too_low, 1500, 78)': 'review_passes(global_count_too_low, 1500, REVIEW_THRESHOLDS["strong_fit"])',
+              'review_passes(item, 3000, 75)': 'review_passes(item, 3000, REVIEW_THRESHOLDS["affordable_quality"])',
+              'review_passes(item, 1000, 72)': 'review_passes(item, 1000, REVIEW_THRESHOLDS["genre_fit"])',
+              'review_passes(item, 20000, 80)': 'review_passes(item, 20000, REVIEW_THRESHOLDS["popular_quality"])',
+              'review_passes(item, 3000, 90)': 'review_passes(item, 3000, REVIEW_THRESHOLDS["very_high_rating"])',
+              'review_passes(item, 1000, 80)': 'review_passes(item, 1000, REVIEW_THRESHOLDS["cheap_quality"])',
+              'review_passes(item, 100, 88)': 'review_passes(item, 100, REVIEW_THRESHOLDS["niche_fit"])',
+              'review_passes(item, 500, 80)': 'review_passes(item, 500, REVIEW_THRESHOLDS["recent_quality"])',
+              'review_passes(item, 5000, 80)': 'review_passes(item, 5000, REVIEW_THRESHOLDS["mainstream_quality"])',
+              'review_passes(item, 1500, 78)': 'review_passes(item, 1500, REVIEW_THRESHOLDS["strong_fit"])',
+              'review_passes(item, 300, 88)': 'review_passes(item, 300, REVIEW_THRESHOLDS["strong_niche_fit"])',
+              'review_passes(item, 3000, 78)': 'review_passes(item, 3000, REVIEW_THRESHOLDS["exceptional_discount"])',
+              'review_passes(item, 3000, 92)': 'review_passes(item, 3000, REVIEW_THRESHOLDS["very_high_rating"])',
+              'review_passes(item, 750, 82)': 'review_passes(item, 750, REVIEW_THRESHOLDS["recent_fit"])',
+              'review_passes(item, 10000, 88)': 'review_passes(item, 10000, REVIEW_THRESHOLDS["high_confidence_adjacent"])',
+              'review_passes(item, 100, 80)': 'review_passes(item, 100, REVIEW_THRESHOLDS["substantive_content"])',
+          }
+          for old, new in replacements.items():
+              count = s.count(old)
+              if count == 0:
+                  raise SystemExit(f"collector threshold expression missing: {old}")
+              s = s.replace(old, new)
+
+          # big_discount shares the same old 1000/72 expression with genre_fit;
+          # after the global replacement above both currently point to genre_fit.
+          old_block = '''    if (\n        price <= 5000\n        and discount >= 70\n        and review_passes(item, 1000, REVIEW_THRESHOLDS["genre_fit"])\n    ):\n        reasons.append("big_discount")'''
+          new_block = '''    if (\n        price <= 5000\n        and discount >= 70\n        and review_passes(item, 1000, REVIEW_THRESHOLDS["big_discount"])\n    ):\n        reasons.append("big_discount")'''
+          if old_block not in s:
+              raise SystemExit("big_discount block not found after threshold replacement")
+          s = s.replace(old_block, new_block, 1)
+
+          # Embed the exact profile/map in every produced snapshot.
+          manifest_anchor = '''    "review_policy_regression_guard":\n        True,\n    "global_review_language":'''
+          manifest_insert = '''    "review_policy_regression_guard":\n        True,\n    "review_threshold_profile":\n        REVIEW_THRESHOLD_PROFILE,\n    "review_thresholds":\n        dict(REVIEW_THRESHOLDS),\n    "global_review_language":'''
+          if manifest_anchor not in s:
+              raise SystemExit("manifest review metadata anchor not found")
+          s = s.replace(manifest_anchor, manifest_insert, 1)
+
+          index_anchor = '''    "review_policy_regression_guard":\n        True,\n    "review_fields": {'''
+          index_insert = '''    "review_policy_regression_guard":\n        True,\n    "review_threshold_profile":\n        REVIEW_THRESHOLD_PROFILE,\n    "review_thresholds":\n        dict(REVIEW_THRESHOLDS),\n    "review_fields": {'''
+          if index_anchor not in s:
+              raise SystemExit("index review metadata anchor not found")
+          s = s.replace(index_anchor, index_insert, 1)
+
+          script_path.write_text(s, encoding="utf-8")
+
+          # 3) Feed QA: policy and produced feed must agree exactly on profile + map.
+          qa_path = Path("scripts/build_feed_ingest_validation.py")
+          q = qa_path.read_text(encoding="utf-8")
+          old = "qa = policy['ingest_qa']\natt = mailing_index.get('integrity_attestation') or {}"
+          new = "qa = policy['ingest_qa']\nthreshold_policy = policy['review_threshold_calibration']\natt = mailing_index.get('integrity_attestation') or {}"
+          if old not in q:
+              raise SystemExit("feed QA setup anchor not found")
+          q = q.replace(old, new, 1)
+          old = "    'review_policy_regression_guard': manifest.get('review_policy_regression_guard') is qa['require_review_policy_regression_guard'] and source_index.get('review_policy_regression_guard') is qa['require_review_policy_regression_guard'],\n"
+          new = old + "    'review_threshold_profile': manifest.get('review_threshold_profile') == qa['required_review_threshold_profile'] == threshold_policy['profile'] and source_index.get('review_threshold_profile') == threshold_policy['profile'],\n    'review_threshold_map': manifest.get('review_thresholds') == threshold_policy['thresholds'] and source_index.get('review_thresholds') == threshold_policy['thresholds'] and qa['require_review_threshold_map_match'] is True,\n"
+          if old not in q:
+              raise SystemExit("feed QA review guard anchor not found")
+          q = q.replace(old, new, 1)
+          qa_path.write_text(q, encoding="utf-8")
+
+          # 4) Canonical policy validator: lock version and calibrated map.
+          validator_path = Path(".github/workflows/validate-mailing-policy.yml")
+          v = validator_path.read_text(encoding="utf-8")
+          if '"version": p.get("version") == "1.10"' not in v:
+              raise SystemExit("policy validator version anchor not found")
+          v = v.replace('"version": p.get("version") == "1.10"', '"version": p.get("version") == "1.12"', 1)
+          setup_old = '          reg = p["external_cache"]["lookup_registry"]\n\n          checks = {'
+          setup_new = '          reg = p["external_cache"]["lookup_registry"]\n          rtc = p["review_threshold_calibration"]\n          expected_review_thresholds = ' + repr(thresholds) + '\n\n          checks = {'
+          if setup_old not in v:
+              raise SystemExit("policy validator setup anchor not found")
+          v = v.replace(setup_old, setup_new, 1)
+          check_anchor = '              "max_age_18": p["ingest_qa"]["maximum_snapshot_age_hours"] == 18,\n'
+          check_insert = check_anchor + '              "review_threshold_profile": rtc["profile"] == "personal-calibrated-v1",\n              "review_thresholds": rtc["thresholds"] == expected_review_thresholds,\n              "review_threshold_qa_binding": p["ingest_qa"]["required_review_threshold_profile"] == rtc["profile"] and p["ingest_qa"]["require_review_threshold_map_match"] is True,\n'
+          if check_anchor not in v:
+              raise SystemExit("policy validator check anchor not found")
+          v = v.replace(check_anchor, check_insert, 1)
+          validator_path.write_text(v, encoding="utf-8")
+
+          # Mechanical validation before commit.
+          json.loads(policy_path.read_text(encoding="utf-8"))
+          compile(script_path.read_text(encoding="utf-8"), str(script_path), "exec")
+          compile(qa_path.read_text(encoding="utf-8"), str(qa_path), "exec")
+
+          # Verify every named production threshold is referenced by collector.
+          final_s = script_path.read_text(encoding="utf-8")
+          for name in thresholds:
+              if f'REVIEW_THRESHOLDS["{name}"]' not in final_s:
+                  raise SystemExit(f"threshold not referenced in collector: {name}")
+
+          print(json.dumps({"policy_version": policy["version"], "profile": profile, "thresholds": thresholds}, ensure_ascii=False, indent=2))
+          PY
+
+      - name: Run canonical policy validator logic
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('config/mailing_policy.json').read_text(encoding='utf-8'))
+          expected={"affordable_quality":75,"genre_fit":75,"big_discount":75,"popular_quality":82,"very_high_rating":90,"cheap_quality":80,"niche_fit":78,"recent_quality":78,"mainstream_quality":80,"strong_fit":78,"strong_niche_fit":78,"exceptional_discount":75,"recent_fit":78,"high_confidence_adjacent":88,"substantive_content":78}
+          assert p['version']=='1.12'
+          assert p['review_threshold_calibration']['profile']=='personal-calibrated-v1'
+          assert p['review_threshold_calibration']['thresholds']==expected
+          assert p['ingest_qa']['required_review_threshold_profile']=='personal-calibrated-v1'
+          assert p['ingest_qa']['require_review_threshold_map_match'] is True
+          print('calibrated policy invariants: PASS')
+          PY
+
+      - name: Commit calibrated thresholds
+        run: |
+          git config user.name "review-threshold-calibration-bot"
+          git config user.email "review-threshold-calibration-bot@users.noreply.github.com"
+          git add scripts/steam_production.py scripts/build_feed_ingest_validation.py config/mailing_policy.json .github/workflows/validate-mailing-policy.yml
+          git commit -m "Calibrate Steam review thresholds from user data"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then git rebase --abort || true; exit 1; fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*2))
+          done
+          exit 1
