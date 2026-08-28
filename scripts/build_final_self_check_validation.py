@@ -26,6 +26,11 @@ def sha(path):
     return subprocess.check_output(['git', 'rev-parse', f'HEAD:{path}'], text=True).strip()
 
 
+def ival(obj, key, default=-1):
+    value = obj.get(key)
+    return default if value is None else int(value)
+
+
 policy = load(POLICY)
 contract = load(CONTRACT)
 feed = load(FEED)
@@ -67,39 +72,39 @@ check('taste_cache_structurally_valid', taste_index.get('source_cache', {}).get(
 check('taste_model_is_v2', taste_index.get('taste_model_version') == 'taste-v2')
 check('taste_validation_current_mail_tree', taste_validation.get('bindings', {}).get('mailing_tree_sha') == mailing_tree_sha)
 check('taste_validation_complete', taste_validation.get('status') == 'complete' and taste_validation.get('complete_coverage') is True)
-check('taste_hits_plus_misses_cover_feed', int(taste_validation.get('hit_count') or 0) + int(taste_validation.get('miss_or_stale_count') or 0) == int(taste_validation.get('feed_candidate_count') or -1))
-check('taste_cache_consulted_before_semantic_eval', int(taste_validation.get('hit_count') or 0) == int(taste_validation.get('feed_candidate_count') or -1))
-check('taste_cache_hits_not_reevaluated', int(taste_validation.get('miss_or_stale_count') or -1) == 0)
-check('ledger_covers_all_candidates', ledger.get('status') == 'complete' and ledger.get('complete_ledger') is True and int(ledger.get('processed_count') or 0) == int(feed.get('item_count') or -1))
-check('ledger_non_ambiguous', int(ledger.get('ambiguous_count') or -1) == 0 and int(ledger.get('invalid_reason_count') or -1) == 0 and int(ledger.get('invalid_fit_count') or -1) == 0)
+check('taste_hits_plus_misses_cover_feed', ival(taste_validation, 'hit_count', 0) + ival(taste_validation, 'miss_or_stale_count', 0) == ival(taste_validation, 'feed_candidate_count'))
+check('taste_cache_consulted_before_semantic_eval', ival(taste_validation, 'hit_count', 0) == ival(taste_validation, 'feed_candidate_count'))
+check('taste_cache_hits_not_reevaluated', ival(taste_validation, 'miss_or_stale_count') == 0)
+check('ledger_covers_all_candidates', ledger.get('status') == 'complete' and ledger.get('complete_ledger') is True and ival(ledger, 'processed_count', 0) == ival(feed, 'item_count'))
+check('ledger_non_ambiguous', ival(ledger, 'ambiguous_count') == 0 and ival(ledger, 'invalid_reason_count') == 0 and ival(ledger, 'invalid_fit_count') == 0)
 check('taste_is_price_blind', policy['taste_deal_separation']['taste_verdict_is_price_blind'] is True and bool(policy['taste_cache']['fingerprint_excludes']))
 check('generic_or_deal_fields_not_taste_evidence', policy['personal_filter']['structured_taste_evaluation']['reviews_discount_price_never_break_tie'] is True and policy['taste_deal_separation']['deal_quality_can_never_raise_taste_fit'] is True)
 check('targeted_audit_same_threshold', policy['false_negative_audit']['audit_uses_same_evidence_contract_and_same_threshold'] is True)
 check('no_candidate_name_whitelists', policy['false_negative_audit']['no_candidate_name_whitelists'] is True and policy['false_negative_audit']['no_control_game_names_in_policy'] is True)
 check('recovery_and_checkpoint_valid', checkpoint.get('status') == 'complete' and checkpoint.get('checkpoint_complete') is True)
-check('changed_taste_chunks_checkpointed_or_none_changed', int(checkpoint.get('cache_changes_required') or 0) == 0 or int(checkpoint.get('github_writes_performed_by_checkpoint') or 0) > 0)
+check('changed_taste_chunks_checkpointed_or_none_changed', ival(checkpoint, 'cache_changes_required', 0) == 0 or ival(checkpoint, 'github_writes_performed_by_checkpoint', 0) > 0)
 check('recovery_absent_or_verified', checkpoint.get('checks', {}).get('recovery_artifact_absent') is True)
 
 # Content and family resolution.
-check('content_eligibility_applied', content.get('status') == 'complete' and content.get('complete_coverage') is True and int(content.get('unresolved_count') or -1) == 0)
-check('orphan_dlc_not_recommended', int(content.get('invalid_exclusion_code_count') or -1) == 0 and int(content.get('classified_count') or 0) == int(content.get('input_taste_include_count') or -1))
-check('one_primary_row_per_family', families.get('status') == 'complete' and families.get('complete_coverage') is True and int(families.get('primary_count') or -1) == int(families.get('family_count') or -2) and int(families.get('primary_duplicate_count') or -1) == 0)
-check('best_purchase_variant_resolution_complete', int(families.get('unresolved_count') or -1) == 0 and int(families.get('missing_assignment_count') or -1) == 0)
+check('content_eligibility_applied', content.get('status') == 'complete' and content.get('complete_coverage') is True and ival(content, 'unresolved_count') == 0)
+check('orphan_dlc_not_recommended', ival(content, 'invalid_exclusion_code_count') == 0 and ival(content, 'classified_count', 0) == ival(content, 'input_taste_include_count'))
+check('one_primary_row_per_family', families.get('status') == 'complete' and families.get('complete_coverage') is True and ival(families, 'primary_count') == ival(families, 'family_count') and ival(families, 'primary_duplicate_count') == 0)
+check('best_purchase_variant_resolution_complete', ival(families, 'unresolved_count') == 0 and ival(families, 'missing_assignment_count') == 0)
 
 # Store state after final taste.
-check('store_state_complete', store.get('status') == 'complete' and int(store.get('missing_count') or -1) == 0)
-check('current_snapshot_or_conditional_store_used', int(store.get('current_source_conflict_count') or -1) == 0 and int(store.get('live_store_calls_required') or -1) == int(store.get('live_store_calls_performed') or -2))
+check('store_state_complete', store.get('status') == 'complete' and ival(store, 'missing_count') == 0)
+check('current_snapshot_or_conditional_store_used', ival(store, 'current_source_conflict_count') == 0 and ival(store, 'live_store_calls_required') == ival(store, 'live_store_calls_performed'))
 check('taste_final_before_external_checks', store.get('bindings', {}).get('offer_family_blob_sha') == sha('data/cache/offer_family.validation.json'))
 
 # SteamDB cache before lookups; current run has no true misses.
 check('steamdb_cache_complete', steamdb.get('status') == 'complete' and steamdb.get('complete_coverage') is True)
-check('steamdb_actual_len_entries_used', int(steamdb.get('actual_entry_count') or -1) >= 0 and int(steamdb.get('metadata_entry_count') or -2) == int(steamdb.get('actual_entry_count') or -1))
-check('steamdb_cache_before_history_lookup', int(steamdb.get('true_lookup_miss_count') or -1) == 0 and int(steamdb.get('steamdb_lookup_count') or -1) == 0)
-check('negative_cache_respected', int(steamdb.get('negative_cache_hit_count') or -1) >= 0 and int(steamdb.get('true_lookup_miss_count') or -1) == 0)
+check('steamdb_actual_len_entries_used', ival(steamdb, 'actual_entry_count') >= 0 and ival(steamdb, 'metadata_entry_count') == ival(steamdb, 'actual_entry_count'))
+check('steamdb_cache_before_history_lookup', ival(steamdb, 'true_lookup_miss_count') == 0 and ival(steamdb, 'steamdb_lookup_count') == 0)
+check('negative_cache_respected', ival(steamdb, 'negative_cache_hit_count') >= 0 and ival(steamdb, 'true_lookup_miss_count') == 0)
 check('steamdb_not_discovery', policy['verification']['steamdb_usage'] == 'history_only_after_personal_selection')
 
 # Deal quality and deterministic order.
-check('deal_quality_complete', deal.get('status') == 'complete' and deal.get('complete_coverage') is True and int(deal.get('classified_count') or 0) == int(deal.get('input_primary_count') or -1))
+check('deal_quality_complete', deal.get('status') == 'complete' and deal.get('complete_coverage') is True and ival(deal, 'classified_count', 0) == ival(deal, 'input_primary_count'))
 check('historical_zero_not_paid_delta', all(r.get('delta_vs_paid_historical_minimum') is None for r in (deal.get('sorted_recommendations') or []) + (deal.get('price_exclusions') or []) if r.get('history_quality') == 'previously_free'))
 check('no_artificial_top_n', policy['delivery'].get('fixed_top_n') is None)
 check('deterministic_sort_required', policy['sorting']['required'] is True and policy['sorting']['do_not_preserve_feed_or_processing_order'] is True)
