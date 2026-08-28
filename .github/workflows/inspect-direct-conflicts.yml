@@ -1,0 +1,70 @@
+name: Inspect direct-conflict taste entries
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/inspect-direct-conflicts.yml"
+      - "data/cache/taste_fit.json"
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Extract direct-conflict entries
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+
+          src = Path('data/cache/taste_fit.json')
+          out = Path('data/cache/taste_direct_conflicts.report.json')
+          data = json.loads(src.read_text(encoding='utf-8'))
+          entries = data.get('entries', {})
+          selected = {}
+          for key, entry in entries.items():
+              if entry.get('reason_code') == 'exclude_direct_conflict':
+                  selected[key] = {
+                      'appid': entry.get('appid'),
+                      'verdict': entry.get('verdict'),
+                      'fit_level': entry.get('fit_level'),
+                      'reason_code': entry.get('reason_code'),
+                      'positive_evidence': entry.get('positive_evidence'),
+                      'negative_evidence': entry.get('negative_evidence')
+                  }
+
+          report = {
+              'schema_version': 1,
+              'source_cache_blob_sha': subprocess.check_output(
+                  ['git','rev-parse','HEAD:data/cache/taste_fit.json'], text=True
+              ).strip(),
+              'count': len(selected),
+              'entries': selected
+          }
+          out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(report, ensure_ascii=False, indent=2))
+          PY
+
+      - name: Commit report
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/taste_direct_conflicts.report.json
+          if git diff --cached --quiet; then
+            echo "Direct-conflict report already current"
+            exit 0
+          fi
+          git commit -m "Refresh direct-conflict taste report"
+          git pull --rebase origin main
+          git push origin HEAD:main
