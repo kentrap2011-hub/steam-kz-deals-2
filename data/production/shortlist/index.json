@@ -19,18 +19,20 @@
     "title"
   ],
   "country_code": "kz",
-  "item_count": 583,
+  "item_count": 591,
   "chunk_size": 50,
   "chunk_count": 12,
   "chunk_pattern": "data/production/shortlist/chunk_NNN.tsv",
-  "source_total": 16202,
+  "source_total": 16359,
   "source_complete": true,
   "source_coverage_ratio": 1.0,
-  "source_updated_at_utc": "2026-08-28T04:53:03.104079+00:00",
+  "source_updated_at_utc": "2026-08-28T18:43:32.214305+00:00",
   "needs_tuning": false,
   "review_selection_rule": "global_count_and_global_or_russian_rating",
   "review_count_basis": "global",
   "russian_review_count_cap": 500,
+  "russian_rating_comparison": "steam_display_whole_percent",
+  "review_policy_regression_guard": true,
   "review_fields": {
     "global": [
       "global_review_positive",
@@ -43,12 +45,12 @@
   },
   "reason_counts": {
     "mainstream_quality": 293,
-    "strong_fit": 315,
-    "very_high_rating": 179,
-    "high_confidence_adjacent": 46,
-    "exceptional_discount": 219,
-    "strong_niche_fit": 123,
-    "recent_fit": 53,
+    "strong_fit": 313,
+    "very_high_rating": 184,
+    "exceptional_discount": 214,
+    "high_confidence_adjacent": 47,
+    "strong_niche_fit": 124,
+    "recent_fit": 56,
     "substantive_content": 11
   }
 }
