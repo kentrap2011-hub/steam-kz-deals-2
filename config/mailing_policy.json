@@ -1,8 +1,8 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.8",
+  "version": "1.9",
   "status": "canonical",
-  "purpose": "Single source of truth for the personalized daily game-deals mailing.",
+  "purpose": "Personalized full daily Steam KZ deals mailing with stable price-blind taste verdicts.",
 
   "policy_loading": {
     "primary_repository": "kentrap2011-hub/steam-kz-deals-2",
@@ -10,9 +10,9 @@
     "primary_method": "github_connector_or_github_contents",
     "raw_fallback_url": "https://raw.githubusercontent.com/kentrap2011-hub/steam-kz-deals-2/main/config/mailing_policy.json",
     "web_cached_copy_is_not_authoritative": true,
-    "if_sources_disagree": "github_repository_copy_wins",
-    "do_not_start_ingest_before_canonical_policy_loaded": true,
-    "fail_if_canonical_policy_unavailable": true
+    "github_copy_wins_on_disagreement": true,
+    "load_before_any_ingest": true,
+    "fail_closed_if_unavailable": true
   },
 
   "delivery": {
@@ -29,12 +29,12 @@
     "canonical_path": "gaming_taste_live.json",
     "canonical_url": "https://raw.githubusercontent.com/kentrap2011-hub/stopgame-ratings-data/main/gaming_taste_live.json",
     "load_once_per_run": true,
-    "record_current_blob_sha": true,
+    "record_git_blob_sha": true,
     "historical_snapshot_forbidden_as_fallback": "gaming_taste_database_2026-08-12.json",
-    "ratings_optional_context": "ratings.json",
     "wishlist_optional_context": "steam_wishlist.json",
     "wishlist_is_discovery_source": false,
     "wishlist_is_taste_proof": false,
+    "wishlist_is_ownership_proof": false,
     "fail_if_canonical_profile_unavailable": true
   },
 
@@ -44,17 +44,15 @@
     "region": "Kazakhstan",
     "country_code": "kz",
     "manifest_path": "data/production/manifest.json",
-    "source_shortlist_index_path": "data/production/shortlist/index.json",
+    "source_index_path": "data/production/shortlist/index.json",
     "mailing_optimized_index_path": "data/production/mailing/index.json",
     "prefer_mailing_optimized_view": true,
     "safe_fallback_to_source_shortlist": true,
     "optimized_view_is_not_a_new_discovery_source": true,
-    "format_source": "chosen_fresh_index",
-    "chunk_pattern_source": "chosen_fresh_index",
-    "read_all_chunks": true,
     "production_feed_is_primary_discovery_source": true,
     "steamdb_for_discovery": false,
-    "web_search_may_replace_failed_ingest": false
+    "web_search_may_replace_failed_ingest": false,
+    "read_all_chunks": true
   },
 
   "ingest_qa": {
@@ -68,22 +66,21 @@
     "source_index_needs_tuning_must_be_false": true,
     "require_country_code_kz": true,
     "require_all_chunks": true,
-    "require_actual_chunk_count_equals_index_chunk_count": true,
-    "require_actual_data_rows_equals_item_count": true,
-    "source_tsv_chunks_have_header": false,
-    "mailing_tsv_chunks_have_header": false,
+    "require_actual_chunk_count_equals_index": true,
+    "require_actual_rows_equals_item_count": true,
+    "mailing_and_source_tsv_have_no_header": true,
     "optimized_view_must_match_source_item_count": true,
     "optimized_view_must_match_source_updated_at": true,
     "optimized_view_must_report_all_source_chunks_verified": true,
-    "optimized_view_mismatch_action": "fallback_to_source_shortlist",
-    "on_source_failure": "do_not_generate_any_mailing",
+    "optimized_mismatch_action": "fallback_to_source_shortlist",
+    "source_failure_action": "do_not_generate_any_mailing",
     "no_partial_freebies_or_upcoming_on_failure": true
   },
 
   "taste_deal_separation": {
     "required": true,
-    "taste_verdict_must_be_price_blind": true,
-    "fields_forbidden_as_positive_taste_evidence": [
+    "taste_verdict_is_price_blind": true,
+    "forbidden_as_positive_taste_evidence": [
       "discount_percent",
       "final_kzt",
       "global_review_positive",
@@ -95,96 +92,90 @@
       "mainstream_quality",
       "popular_quality",
       "cheap_quality",
+      "steamdb_history",
       "historical_minimum",
-      "sale_end_date",
-      "steamdb_history"
+      "sale_end_date"
     ],
-    "feed_recall_flags_may_trigger_audit_but_do_not_count_as_taste_evidence": [
-      "strong_fit",
-      "strong_niche_fit",
-      "recent_fit",
-      "high_confidence_adjacent"
-    ],
-    "quality_popularity_or_deal_value_can_never_raise_below_moderate_to_moderate": true,
-    "deal_quality_evaluated_only_after_taste_fit_and_family_resolution": true
+    "recall_only_feed_flags": ["strong_fit", "strong_niche_fit", "recent_fit", "high_confidence_adjacent"],
+    "recall_flags_can_trigger_audit_but_are_not_taste_evidence": true,
+    "core_fit_count_is_recall_context_not_positive_taste_evidence": true,
+    "deal_quality_can_never_raise_taste_fit": true,
+    "deal_quality_evaluated_only_after_final_taste_and_family_resolution": true
   },
 
   "personal_filter": {
     "minimum_interest_threshold": "moderate",
     "broad_filtering": true,
-    "do_not_limit_to_aaa": true,
-    "do_not_limit_to_action_adventure": true,
-    "do_not_limit_by_genre_popularity_or_age": true,
+    "do_not_limit_by_aaa_genre_popularity_or_age": true,
     "completed_game_is_not_exclusion_reason": true,
-    "strong_fit_is_not_final_taste_verdict": true,
     "allow_analogical_fit_from_profile": true,
-    "do_not_require_exact_title_or_exact_tag_match": true,
-    "no_automatic_include_floor_from_feed_signals": true,
-    "candidate_context_allowed_for_taste": [
-      "title",
-      "appid_or_exact_key",
-      "fit_tags",
-      "core_fit_count",
-      "release_date",
-      "confident_intrinsic_game_properties_known_without_external_lookup"
-    ],
+    "do_not_require_exact_title_match": true,
+    "no_automatic_include_from_feed_signals": true,
     "do_not_invent_unknown_game_properties": true,
-    "structured_taste_evaluation": {
-      "required_for_cache_miss": true,
-      "positive_evidence_sources": [
-        "direct_positive_same_series_or_close_mechanical_anchor_from_canonical_profile",
-        "durable_positive_pattern_from_canonical_profile",
-        "factor_importance_match_from_canonical_profile",
+
+    "evidence_contract": {
+      "every_positive_evidence_item_must_pair": [
+        "a_specific_candidate_property",
+        "a_specific_canonical_profile_anchor_or_durable_pattern"
+      ],
+      "generic_tags_that_cannot_count_alone": [
+        "Action", "Adventure", "RPG", "Singleplayer", "Story Rich", "Open World",
+        "Horror", "Exploration", "Third Person", "Fantasy", "Sci-fi", "Narrative", "Combat"
+      ],
+      "high_specificity_positive_types": [
+        "direct_positive_evidence_for_this_candidate_in_canonical_profile",
+        "positive_same_series_anchor_with_clear_mechanical_or_structural_continuity",
+        "high_confidence_intrinsic_mechanic_or_structure_of_candidate_mapped_to_a_canonical_positive_pattern"
+      ],
+      "supporting_positive_types": [
+        "second_distinct_intrinsic_mechanic_or_structure_mapped_to_another_canonical_positive_pattern",
+        "specific_non_generic_metadata_cluster_mapped_to_a_canonical_factor",
         "mastery_or_shared_play_match_when_intrinsically_relevant"
       ],
-      "negative_evidence_sources": [
+      "negative_types": [
         "direct_strong_negative_user_evidence",
-        "durable_negative_pattern_from_canonical_profile",
-        "known_specific_structure_conflicting_with_user_preferences"
+        "negative_same_series_anchor_when_formula_continuity_is_clear",
+        "known_specific_structure_conflicting_with_a_durable_negative_pattern"
       ],
-      "moderate_rule": "INCLUDE at moderate or above when there are at least two independent substantive positive taste signals and no direct strong negative evidence or known specific contradictory structure. One especially direct same-series or close-mechanical positive anchor may count as one signal but still needs a second independent positive signal.",
-      "below_moderate_rule": "EXCLUDE when positive evidence is weaker than the moderate rule, or concrete negative evidence clearly outweighs it.",
-      "borderline_rule": "If one substantive positive signal exists and the rest is genuinely uncertain, mark borderline_fit_needs_audit instead of guessing.",
-      "generic_tags_alone_are_insufficient": true,
-      "review_score_or_discount_never_breaks_a_taste_tie": true
+      "same_series_mixed_evidence_requires_candidate_specific_resolution": true,
+      "generic_tag_plus_generic_tag_is_not_two_independent_signals": true,
+      "one_feed_recall_flag_plus_one_profile_pattern_is_not_two_signals": true
     },
+
+    "structured_taste_evaluation": {
+      "taste_model_version": "taste-v2",
+      "required_for_cache_miss": true,
+      "include_moderate_if": "Either (A) at least 1 high-specificity positive evidence item plus at least 1 independent additional substantive positive item, or (B) at least 3 independent substantive specific positive items from distinct canonical factors. In both cases at least one positive item must concern gameplay/mechanics/structure rather than only theme, story premise or art, and there must be no direct strong negative user evidence or clearly dominant specific structural conflict.",
+      "direct_strong_negative_can_block": true,
+      "known_specific_structural_conflict_can_block": true,
+      "if_only_generic_metadata_or_vague_analogy": "below_moderate_fit",
+      "if_candidate_properties_are_unknown_and_no_direct_or_same_series_anchor": "below_moderate_fit",
+      "if_exactly_one_substantive_positive_and_no_clear_negative": "borderline_fit_needs_audit",
+      "audit_may_not_lower_the_same_include_threshold": true,
+      "reviews_discount_price_never_break_tie": true
+    },
+
     "unknown_is_not_automatic_include": true,
-    "below_moderate_fit_is_valid_exclusion": true,
     "exclusion_requires_specific_reason": true,
     "valid_exclusion_reason_codes": [
       "below_moderate_fit",
       "direct_strong_negative_user_evidence",
-      "sale_confirmed_inactive",
-      "price_clearly_unreasonable_even_after_soft_target_evaluation",
       "not_a_game_or_not_relevant_game_content",
       "ineligible_dlc_or_addon_without_relevant_base_context",
       "inferior_duplicate_variant_after_offer_family_resolution",
+      "sale_confirmed_inactive",
+      "price_clearly_unreasonable_after_soft_target_evaluation",
       "borderline_fit_needs_audit"
     ]
-  },
-
-  "content_eligibility": {
-    "required": true,
-    "dlc_is_not_independent_recommendation_by_default": true,
-    "dlc_or_chapter_include_only_if": [
-      "base_game_family_is_taste_include_in_same_run",
-      "canonical_profile_or_current_user_context_directly_supports_the_base_game",
-      "addon_is_effectively_standalone_game_like_content_and_itself_meets_taste_threshold"
-    ],
-    "do_not_assume_wishlist_means_ownership": true,
-    "cosmetic_soundtrack_artbook_and_non_game_addons_excluded": true,
-    "bundle_with_base_game_may_be_purchase_variant_of_included_family": true,
-    "franchise_bundle_requires_each_recommended_component_or_clear_bundle_value_context": true
   },
 
   "decision_ledger": {
     "required": true,
     "scope": "every_ingested_candidate",
     "allowed_decisions": ["INCLUDE", "EXCLUDE"],
-    "exclude_requires_reason": true,
-    "exclude_reason_must_use_specific_reason_code": true,
+    "exclude_requires_specific_reason_code": true,
     "include_requires_fit_level": true,
-    "require_included_plus_excluded_equals_processed_candidates": true,
+    "included_plus_excluded_must_equal_processed": true,
     "keep_internal_unless_debug_requested": true
   },
 
@@ -198,166 +189,134 @@
       "exclude_reason_is_missing_ambiguous_or_not_specific",
       "strong_fit_or_strong_niche_fit_recall_flag_conflicts_with_taste_based_exclusion",
       "core_fit_count_at_least_2_with_sparse_metadata_and_taste_based_exclusion",
-      "candidate_has_multiple_profile_analogies_but_first_pass_excluded_it",
-      "offer_family_would_disappear_despite_an_included_related_content_variant"
+      "candidate_has_multiple_grounded_profile_analogies_but_first_pass_excluded_it"
     ],
+    "audit_uses_same_evidence_contract_and_same_threshold": true,
     "recall_flags_are_not_positive_taste_evidence": true,
-    "do_not_audit_only_because": [
-      "very_high_rating",
-      "exceptional_discount",
-      "popularity",
-      "age_or_newness"
-    ],
-    "audit_rule": "Re-evaluate the candidate using only the canonical taste profile and price-blind candidate context. Apply personal_filter.structured_taste_evaluation exactly. Store, SteamDB, reviews, discount and price cannot affect the taste verdict.",
-    "direct_strong_negative_user_evidence_skips_audit_unless_contradictory_newer_user_evidence_exists": true,
+    "price_reviews_discount_store_steamdb_forbidden": true,
+    "direct_strong_negative_skips_audit_unless_newer_contradictory_user_evidence_exists": true,
     "no_candidate_name_whitelists": true,
     "no_control_game_names_in_policy": true
   },
 
+  "taste_cache": {
+    "path": "data/cache/taste_fit.json",
+    "schema_version": 1,
+    "purpose": "derived verdict cache only; never user evidence and never a second taste profile",
+    "taste_model_version": "taste-v2",
+    "keying": "exact production candidate key",
+    "profile_binding": "canonical gaming_taste_live.json Git blob SHA must match exactly",
+    "fingerprint_fields": [
+      "key",
+      "appid",
+      "normalized_title_for_taste",
+      "sorted_fit_tags",
+      "core_fit_count",
+      "release_date"
+    ],
+    "fingerprint_excludes": [
+      "discount_percent", "final_kzt", "review_scores", "review_counts",
+      "feed_reason_flags", "historical_price", "sale_end_date"
+    ],
+    "required_entry_fields": [
+      "key", "appid", "profile_blob_sha", "taste_model_version", "taste_fingerprint",
+      "verdict", "fit_level", "reason_code", "positive_evidence", "negative_evidence",
+      "evaluated_at_utc"
+    ],
+    "cache_hit_requires": ["exact_key", "profile_blob_sha", "taste_model_version", "taste_fingerprint"],
+    "cache_hits_are_final_and_not_semantically_re_evaluated": true,
+    "profile_sha_change_invalidates_old_generation": true,
+    "do_not_cache_borderline_before_audit": true,
+    "entry_count_must_equal_len_entries": true,
+
+    "mandatory_checkpoint": {
+      "required": true,
+      "when": "immediately_after_all_taste_cache_misses_have_final_post_audit_verdicts",
+      "before": ["content_eligibility", "offer_family_resolution", "Steam_Store_lookup", "SteamDB_lookup", "deal_quality", "sorting"],
+      "if_cache_changed_attempt_exactly_one_github_write_before_continuing": true,
+      "first_warmup_run_must_not_defer_taste_cache_write_until_after_external_work": true,
+      "write_failure_is_warning_only": true,
+      "after_successful_write_continue_using_in_memory_verdicts": true
+    }
+  },
+
+  "content_eligibility": {
+    "required": true,
+    "dlc_is_not_independent_recommendation_by_default": true,
+    "dlc_or_chapter_include_only_if": [
+      "base_game_family_is_taste_include_in_same_run",
+      "canonical_profile_or_current_user_context_directly_supports_base_game",
+      "addon_is_effectively_standalone_game_like_content_and_itself_meets_taste_threshold"
+    ],
+    "wishlist_not_ownership": true,
+    "cosmetic_soundtrack_artbook_and_non_game_addons_excluded": true,
+    "bundle_with_base_game_may_be_purchase_variant_of_included_family": true
+  },
+
   "offer_family_resolution": {
     "required": true,
-    "group_related_offers_before_expensive_external_checks": true,
-    "families": [
-      "base_game",
-      "remaster_or_remake",
-      "deluxe_gold_complete_ultimate_definitive",
-      "substantive_dlc",
-      "season_or_expansion_pass",
-      "bundle",
-      "franchise_bundle",
-      "complete_the_set"
+    "group_before_expensive_external_checks": true,
+    "family_types": [
+      "base_game", "remaster_or_remake", "deluxe_gold_complete_ultimate_definitive",
+      "substantive_dlc", "season_or_expansion_pass", "bundle", "franchise_bundle", "complete_the_set"
     ],
-    "family_detection_rules": [
-      "rows_with_the_same_appid_but_different_App_or_Sub_keys_belong_to_the_same_purchase_family_when_content_relationship_is_clear",
-      "normalize_titles_by_removing_trademark_symbols_and_edition_suffixes_such_as_remastered_remake_deluxe_gold_complete_ultimate_definitive_full_package_goty_collection_bundle",
-      "rows_with_the_same_normalized_base_title_may_be_grouped_when_the_relationship_is_clear",
-      "do_not_merge_merely_because_titles_share_a_franchise_word"
-    ],
+    "same_appid_app_and_sub_may_be_purchase_family_when_relationship_clear": true,
+    "normalize_common_edition_suffixes": true,
+    "do_not_merge_only_because_of_shared_franchise_word": true,
     "sub_rows_are_purchase_variants_not_noise": true,
-    "compare_all_local_variants_in_an_included_family": true,
+    "compare_all_local_variants_in_included_family": true,
     "choose_best_purchase_variant": true,
     "best_variant_factors": [
-      "contains_the_recommended_base_content",
-      "substantive_extra_content",
-      "current_price",
-      "discount",
-      "historical_price_quality_when_available",
-      "small_incremental_cost_for_materially_more_content"
+      "contains_recommended_base_content", "substantive_extra_content", "current_price",
+      "discount", "historical_price_quality_if_available", "incremental_cost_for_more_content"
     ],
-    "prefer_complete_variant_when_incremental_cost_is_small_and_content_is_material": true,
-    "do_not_assume_base_game_is_best": true,
-    "do_not_drop_a_game_family_because_one_variant_is_weaker": true,
+    "prefer_complete_variant_when_small_increment_adds_material_content": true,
     "one_primary_output_row_per_purchase_family": true,
-    "primary_row_must_use_best_purchase_variant": true,
-    "mention_useful_alternative_variant_in_same_row_when_relevant": true,
-    "store_check_scope": "For a final INCLUDE family, use a live Store family check only when local production variants do not contain enough information to choose between materially competitive editions or bundles."
+    "primary_row_uses_best_purchase_variant": true,
+    "mention_useful_alternative_in_same_row_when_relevant": true
   },
 
   "pricing": {
     "target_rub": 500,
     "target_is_hard_cap": false,
-    "small_overage_allowed_if_still_good_value": true,
+    "small_overage_allowed_if_good_value": true,
     "user_visible_currency": "RUB",
     "show_foreign_currency_to_user": false,
-    "mark_converted_amounts_approximate": true,
-    "historical_zero_handling": {
-      "zero_is_free_promo_history_not_paid_minimum": true,
-      "do_not_use_zero_to_compute_paid_price_delta": true,
-      "do_not_force_wait_because_game_was_once_free": true,
-      "display_rule": "If confirmed historical minimum is 0 KZT, label it as previously_free instead of treating 0 as the comparable paid historical minimum. Use a confirmed lowest paid price if separately available; otherwise mark paid minimum unverified.",
-      "sort_rule": "previously_free alone does not make the current paid deal worse than an otherwise good paid offer"
+    "converted_amounts_are_approximate": true,
+    "historical_zero": {
+      "zero_means_previously_free_not_paid_minimum": true,
+      "do_not_compute_paid_delta_from_zero": true,
+      "do_not_force_wait_because_once_free": true,
+      "display_as_previously_free": true
     }
   },
 
   "verification": {
-    "production_feed_for_current_price_and_discount": true,
-    "production_snapshot_satisfies_current_state_when_qa_passes": true,
+    "fresh_production_snapshot_is_current_price_and_discount_source": true,
     "steam_store_live_check_mode": "conditional_only",
     "steam_store_live_check_triggers": [
-      "production_feed_conflicts_with_another_current_source",
-      "materially_competitive_bundle_or_edition_cannot_be_resolved_from_local_family_rows",
-      "sale_end_date_is_material_to_buy_now_or_wait_verdict_and_not_already_cached",
-      "one_final_promo_control_pass_requires_confirmation"
+      "current_source_conflict",
+      "materially_competitive_bundle_or_edition_unresolved_locally",
+      "sale_end_date_material_to_verdict_and_not_cached",
+      "one_final_promo_control_pass"
     ],
-    "do_not_query_store_only_to_repeat_price_or_discount_already_in_fresh_production_snapshot": true,
-    "sale_end_date_is_optional": true,
-    "if_sale_end_unknown": "show_unverified_or_omit_exact_date; do_not_make_a_store_lookup_only_to_fill_the_date",
-    "steam_store_wins_if_a_live_check_conflicts_with_feed": true,
-    "exclude_if_live_store_check_confirms_sale_ended": true,
+    "do_not_query_store_only_to_repeat_fresh_price_or_discount": true,
+    "sale_end_date_optional": true,
+    "live_store_wins_on_current_conflict": true,
+    "live_store_confirmed_ended_sale_excluded": true,
     "steamdb_usage": "history_only_after_personal_selection",
     "steamdb_region": "Kazakhstan",
-    "check_historical_minimum": true,
-    "if_history_check_unavailable_mark_unverified_instead_of_inventing": true,
     "taste_fit_must_be_final_before_external_checks": true
   },
 
   "external_cache": {
-    "enabled": true,
-    "cache_is_never_discovery_source": true,
     "load_each_cache_at_most_once_per_run": true,
-
-    "taste_fit": {
-      "path": "data/cache/taste_fit.json",
-      "schema_version": 1,
-      "purpose": "derived verdict cache only; never user evidence and never a second taste profile",
-      "taste_model_version": "taste-v1",
-      "keying": "exact production candidate key",
-      "profile_binding": "canonical gaming_taste_live.json Git blob SHA must match exactly",
-      "fingerprint_fields": [
-        "key",
-        "appid",
-        "normalized_title_for_taste",
-        "sorted_fit_tags",
-        "core_fit_count",
-        "release_date"
-      ],
-      "fingerprint_explicitly_excludes": [
-        "discount_percent",
-        "final_kzt",
-        "review_scores",
-        "review_counts",
-        "feed_reason_flags",
-        "historical_price",
-        "sale_end_date"
-      ],
-      "required_entry_fields": [
-        "key",
-        "appid",
-        "profile_blob_sha",
-        "taste_model_version",
-        "taste_fingerprint",
-        "verdict",
-        "fit_level",
-        "reason_code",
-        "positive_evidence_count",
-        "negative_evidence_count",
-        "evidence_summary",
-        "evaluated_at_utc"
-      ],
-      "reuse_rule": "Reuse the cached taste verdict without semantic re-evaluation only when exact key, current profile blob SHA, taste_model_version and taste fingerprint all match.",
-      "cache_miss_rule": "Run the structured price-blind taste evaluation and targeted audit if triggered, then cache the final taste verdict.",
-      "profile_sha_change_rule": "Treat every old entry as a miss. On write, replace the cache with entries evaluated against the new profile SHA rather than mixing profile generations.",
-      "do_not_cache_borderline_before_audit": true,
-      "write_back": "Merge final current-profile verdicts in memory and perform at most one GitHub update of data/cache/taste_fit.json per run when entries changed.",
-      "write_back_best_effort": true,
-      "write_failure_does_not_invalidate_mailing": true,
-      "entry_count_must_equal_len_entries": true
-    },
+    "cache_is_never_discovery_source": true,
 
     "store_state": {
       "path": "data/cache/store_state.json",
-      "producer": ".github/workflows/build-mailing-feed.yml",
-      "source": "same validated Steam Store Kazakhstan snapshot as production feed",
-      "required_for_mailing": false,
-      "validation": [
-        "country_code_is_kz",
-        "source_complete_true",
-        "source_coverage_ratio_at_least_0_99",
-        "source_needs_tuning_false",
-        "source_updated_at_matches_chosen_source_index",
-        "source_item_count_matches_source_index_item_count"
-      ],
-      "reuse_rule": "When valid, its current price, discount and active-discount state are equivalent to the already-loaded fresh production row. Do not make a live Store lookup merely to reconfirm those fields.",
+      "source": "same validated Steam KZ production snapshot",
+      "validate_against_chosen_source_index": true,
       "do_not_reread_per_candidate": true
     },
 
@@ -365,61 +324,56 @@
       "path": "data/cache/steamdb_history.json",
       "writer_schema_version": 2,
       "accept_legacy_schema_version_1": true,
-      "persistent_outside_production_directory": true,
       "currency": "KZT",
-      "keying": "exact Steam entity key such as App_123 or Sub_456",
-      "legacy_v1_rule": "An existing v1 entry with historical_min_kzt is read as confirmed_min when value > 0 and previously_free when value = 0.",
+      "keying": "exact App_/Sub_ key",
       "status_values": ["confirmed_min", "previously_free", "unavailable_exact_history"],
-      "confirmed_reuse_rule": "Reuse confirmed_min without a new SteamDB lookup when current verified KZT price is greater than or equal to the cached nonzero minimum.",
-      "previously_free_rule": "Reuse previously_free without re-querying solely because the value is zero; apply pricing.historical_zero_handling.",
-      "negative_cache_rule": {
-        "persist_only_when_source_was_reached_and_exact_history_was_confirmed_unavailable": true,
+      "legacy_v1_positive_value_is_confirmed_min": true,
+      "legacy_v1_zero_is_previously_free": true,
+      "confirmed_min_reuse_if_current_price_not_below_cached_min": true,
+      "previously_free_reuse_without_requery_only_for_zero": true,
+      "negative_cache": {
         "status": "unavailable_exact_history",
         "ttl_days": 14,
+        "persist_only_if_source_reached_and_exact_history_confirmed_unavailable": true,
         "unexpired_entry_skips_lookup": true,
-        "network_blocked_timeout_or_tool_failure_is_not_persisted_as_negative": true,
-        "display_as": "history_unverified"
+        "blocked_timeout_tool_failure_never_persisted_as_negative": true
       },
       "lookup_required_when": [
-        "entry_missing",
-        "entry_invalid",
-        "unavailable_exact_history_ttl_expired",
-        "current_verified_kzt_price_is_below_cached_nonzero_historical_min_kzt"
+        "entry_missing", "entry_invalid", "negative_ttl_expired", "current_price_below_cached_nonzero_min"
       ],
-      "new_lower_price_rule": "If current price is below a cached nonzero minimum, query SteamDB before calling it a new paid record; lower the cached minimum only when confirmed.",
-      "entry_count_rule": "Always compute actual_entry_count = len(entries) for runtime statistics and every write. Never trust stale metadata entry_count over the actual object.",
-      "metadata_mismatch_rule": "Use the actual count immediately and repair entry_count on the next permitted cache write; a metadata-only repair may use the same single write budget.",
-      "write_back": "Merge confirmed minima, previously_free and eligible unavailable_exact_history entries in memory and update the cache with at most one GitHub file write per run when there are changes.",
-      "write_back_best_effort": true,
-      "write_failure_does_not_invalidate_mailing": true,
-      "do_not_store_inferred_or_guessed_minima": true
+      "actual_runtime_entry_count_is_len_entries": true,
+      "never_trust_stale_metadata_entry_count": true,
+      "repair_metadata_on_next_permitted_write": true,
+      "at_most_one_github_write_per_run_if_changed": true,
+      "do_not_store_guessed_minima": true,
+      "write_failure_is_warning_only": true
     },
 
     "lookup_registry": {
       "required": true,
       "key": "provider_plus_exact_entity_key",
-      "store_success_failure_blocked_or_unavailable_results": true,
+      "record_success_failure_blocked_and_unavailable_first_attempt": true,
       "never_repeat_same_key_in_run": true,
-      "shared_across_family_resolution_verification_and_promo_control": true
-    },
-
-    "cache_failure_action": "do_not_fail_source_ingest; fall back to the minimum necessary evaluation or finalist lookup"
+      "shared_across_all_external_stages": true
+    }
   },
 
-  "runtime_optimization": {
-    "goal": "Minimize repeated semantic evaluation and network/tool calls without reducing feed completeness or recall.",
-    "stage_a": "Load canonical policy first, then canonical profile once and record its Git blob SHA. Load manifest, source index, validated mailing-optimized index and taste/store/SteamDB caches at most once. Read each chosen feed chunk exactly once.",
-    "stage_b": "For every candidate compute the price-blind taste fingerprint. Reuse valid taste-cache hits immediately. Only taste-cache misses receive structured semantic taste evaluation. Do not expose price, discount, reviews or SteamDB history to the taste decision.",
-    "stage_c": "Run targeted price-blind false-negative audit only for fresh uncached verdicts that meet audit conditions. Cached verdicts with matching profile/model/fingerprint are already final and are not re-audited.",
-    "stage_d": "Apply content eligibility and offer-family resolution after taste verdicts. Compare local App/Sub/edition/bundle variants and choose one primary purchase variant per included family.",
-    "stage_e": "Write changed current-profile taste verdicts with at most one GitHub update. Taste-cache write is best-effort and does not invalidate an otherwise correct mailing.",
-    "stage_f": "Treat validated production snapshot as current price/discount verification. Use live Store only for conditional triggers, never for every INCLUDE.",
-    "stage_g": "Consult SteamDB history cache for the selected exact purchase variant. Reuse confirmed and unexpired negative entries; query only true misses/expired negatives/new-lower-price cases.",
-    "stage_h": "Use one shared lookup_registry for all external Store/SteamDB calls and never repeat the same provider+exact-key lookup, including failed attempts.",
-    "stage_i": "Merge SteamDB cache changes and perform at most one GitHub write. Run at most one promo control pass using existing registry results.",
-    "mailing_chunk_target_size": 150,
-    "do_not_trade_completeness_for_speed": true
-  },
+  "runtime_pipeline": [
+    "1_load_canonical_policy",
+    "2_load_profile_once_and_record_blob_sha",
+    "3_validate_and_read_full_feed_once",
+    "4_load_taste_cache_once_and_reuse_exact_hits",
+    "5_semantic_price_blind_taste_evaluation_only_for_cache_misses",
+    "6_targeted_price_blind_audit_for_fresh_conflicts_only",
+    "7_MANDATORY_TASTE_CACHE_CHECKPOINT_WRITE_BEFORE_ANY_EXTERNAL_WORK",
+    "8_content_eligibility_and_offer_family_resolution",
+    "9_current_price_discount_from_validated_snapshot_and_conditional_store_only",
+    "10_steamdb_cache_then_true_history_misses_only",
+    "11_at_most_one_steamdb_cache_write",
+    "12_deal_quality_and_deterministic_sort",
+    "13_freebies_and_one_upcoming_event",
+    "14_final_self_check_then_publish"
+  ],
 
   "freebies": {
     "steam_feed_path": "data/production/freebies.tsv",
@@ -433,10 +387,9 @@
   "upcoming": {
     "enabled": true,
     "horizon_days": 60,
-    "include_relevant_sales_and_events": true,
     "max_items": 1,
     "selection": "nearest_relevant_event_only",
-    "omit_block_if_none_relevant": true,
+    "omit_if_none_relevant": true,
     "distinguish_confirmed_from_estimated_dates": true,
     "only_after_successful_main_ingest": true
   },
@@ -444,11 +397,10 @@
   "output_visibility": {
     "show_only_included_recommendations": true,
     "silent_exclusions": true,
-    "do_not_explain_why_rejected_games_or_freebies_were_omitted": true,
-    "do_not_list_not_fit_items": true,
+    "do_not_explain_rejected_games_or_freebies": true,
     "do_not_publish_internal_ledger": true,
-    "do_not_emit_candidate_names_in_progress_messages_before_final_verification": true,
-    "technical_debug_stats_only_when_explicitly_requested": true
+    "do_not_emit_candidate_names_in_progress_before_final_verification": true,
+    "technical_debug_stats_only_when_requested": true
   },
 
   "sorting": {
@@ -456,75 +408,55 @@
     "do_not_preserve_feed_or_processing_order": true,
     "purchase_decision_order": ["БРАТЬ СЕЙЧАС", "МОЖНО БРАТЬ", "ЛУЧШЕ ЖДАТЬ"],
     "within_decision_order": [
-      "taste_fit_desc",
-      "price_quality_vs_history_desc",
-      "best_variant_value_desc",
-      "discount_percent_desc",
-      "current_price_rub_asc",
-      "title_asc"
+      "taste_fit_desc", "price_quality_vs_history_desc", "best_variant_value_desc",
+      "discount_percent_desc", "current_price_rub_asc", "title_asc"
     ],
     "price_quality_order": ["record", "near_record", "good_vs_history", "previously_free", "unverified", "well_above_history"],
-    "do_not_sort_only_by_discount_absolute_price_popularity_or_genre": true,
-    "sorting_must_be_applied_after_final_verification_and_family_resolution": true
+    "apply_after_final_verification_and_family_resolution": true
   },
 
   "paid_output_fields": [
-    "title",
-    "best_edition_or_bundle",
-    "discount_percent",
-    "current_price_rub",
-    "historical_minimum_rub_kazakhstan_or_previously_free",
-    "delta_vs_paid_historical_minimum_if_available",
-    "record_or_near_record_status",
-    "sale_end_date_if_known",
-    "buy_now_or_wait",
-    "why_it_fits"
+    "title", "best_edition_or_bundle", "discount_percent", "current_price_rub",
+    "historical_minimum_rub_or_previously_free", "delta_vs_paid_historical_minimum_if_available",
+    "record_or_near_record_status", "sale_end_date_if_known", "buy_now_or_wait", "why_it_fits"
   ],
 
   "final_self_check": {
-    "policy_loaded_from_canonical_repository_before_ingest": true,
+    "policy_loaded_before_ingest": true,
     "profile_loaded_once_and_blob_sha_recorded": true,
     "production_qa_passed": true,
     "all_chosen_chunks_read": true,
     "rows_equal_item_count": true,
-    "optimized_view_if_used_matches_source": true,
-    "ledger_covers_every_processed_candidate": true,
-    "taste_verdicts_were_price_blind": true,
-    "deal_quality_never_promoted_taste_fit": true,
+    "ledger_covers_all_candidates": true,
+    "taste_verdicts_price_blind": true,
+    "generic_tags_feed_flags_reviews_and_deal_quality_not_counted_as_taste_evidence": true,
     "taste_cache_consulted_before_semantic_evaluation": true,
     "taste_cache_hits_not_re_evaluated": true,
-    "taste_cache_entries_match_profile_model_and_fingerprint": true,
-    "targeted_price_blind_false_negative_audit_completed": true,
+    "fresh_taste_verdicts_use_taste_v2_evidence_contract": true,
+    "targeted_audit_uses_same_threshold": true,
+    "taste_cache_checkpoint_attempted_before_content_family_and_external_work_if_cache_changed": true,
     "no_candidate_name_whitelists": true,
     "content_eligibility_applied": true,
-    "ineligible_orphan_dlc_not_recommended": true,
+    "orphan_dlc_not_recommended": true,
     "taste_fit_final_before_external_checks": true,
-    "offer_families_resolved_before_external_checks": true,
     "one_primary_row_per_purchase_family": true,
-    "primary_rows_use_best_purchase_variant": true,
-    "current_price_and_discount_verified_by_fresh_production_snapshot_or_conditional_live_store": true,
-    "steamdb_history_cache_consulted_before_each_history_lookup": true,
-    "steamdb_actual_entry_count_used_not_stale_metadata": true,
+    "primary_row_uses_best_purchase_variant": true,
+    "fresh_snapshot_or_conditional_store_used_for_current_state": true,
+    "steamdb_cache_consulted_before_history_lookup": true,
+    "steamdb_actual_len_entries_used": true,
     "unexpired_negative_history_cache_respected": true,
-    "historical_zero_not_used_as_paid_price_delta": true,
-    "lookup_registry_used_for_all_external_exact_key_calls": true,
+    "historical_zero_not_used_as_paid_delta": true,
+    "lookup_registry_used_for_all_external_calls": true,
     "no_duplicate_external_lookups": true,
     "deterministic_sort_applied": true,
     "no_artificial_top_n": true,
-    "completed_games_not_auto_excluded": true,
-    "still_active_deals_not_hidden_because_shown_yesterday": true,
-    "wishlist_not_used_for_discovery_or_taste_proof": true,
+    "completed_not_auto_excluded": true,
+    "still_active_relevant_deals_repeat_daily": true,
+    "wishlist_not_used_for_discovery_taste_or_ownership": true,
     "steamdb_not_used_for_discovery": true,
-    "all_user_visible_money_in_rub": true,
+    "all_visible_money_in_rub": true,
     "excluded_items_not_mentioned": true,
-    "upcoming_items_at_most_one": true,
-    "freebies_and_upcoming_only_after_successful_ingest": true
-  },
-
-  "maintenance": {
-    "taste_cache_write_attempted_once_if_changed": true,
-    "taste_cache_write_failure_is_warning_only": true,
-    "steamdb_cache_write_attempted_once_if_changed": true,
-    "steamdb_cache_write_failure_is_warning_only": true
+    "upcoming_at_most_one": true,
+    "freebies_and_upcoming_after_successful_ingest": true
   }
 }
