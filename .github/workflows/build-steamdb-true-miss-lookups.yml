@@ -1,0 +1,206 @@
+name: Build SteamDB true-miss lookups
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "config/steamdb_lookup_contract.json"
+      - "data/cache/steamdb_cache.validation.json"
+      - ".github/workflows/build-steamdb-true-miss-lookups.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: steamdb-true-miss-lookups
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Lookup each exact SteamDB miss once
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          import subprocess
+          from concurrent.futures import ThreadPoolExecutor, as_completed
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          import requests
+          from bs4 import BeautifulSoup
+
+          VALIDATION=Path('data/cache/steamdb_cache.validation.json')
+          OUT=Path('data/cache/steamdb_lookup.validation.json')
+          WORKERS=8
+
+          validation=json.loads(VALIDATION.read_text(encoding='utf-8'))
+          if validation.get('status')!='complete':
+              raise SystemExit('Stage-15 classification is not complete')
+          misses=validation.get('true_lookup_misses') or []
+          expected_keys=[x['key'] for x in misses]
+          if len(expected_keys)!=len(set(expected_keys)):
+              raise SystemExit('Duplicate true-miss key in stage 15')
+
+          headers={
+              'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140 Safari/537.36',
+              'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+              'Accept-Language':'en-US,en;q=0.9',
+          }
+
+          money_re=re.compile(r'(?<![\d])([0-9][0-9\s.,]*)\s*₸')
+
+          def parse_kzt_number(text):
+              s=text.replace('\xa0',' ').replace(' ','').replace(',','.')
+              try:
+                  value=float(s)
+                  return int(value) if value.is_integer() else value
+              except Exception:
+                  return None
+
+          def lookup(item):
+              key=item['key']
+              if key.startswith('App_'):
+                  kind='app'; steam_id=key.split('_',1)[1]
+              elif key.startswith('Sub_'):
+                  kind='sub'; steam_id=key.split('_',1)[1]
+              else:
+                  return {
+                      'key':key,'provider':'SteamDB','attempted':False,
+                      'result':'failure','failure_kind':'unsupported_key','persistable':False
+                  }
+              url=f'https://steamdb.info/{kind}/{steam_id}/'
+              registry_key=f'SteamDB:{key}'
+              started=datetime.now(timezone.utc).isoformat()
+              try:
+                  r=requests.get(url,headers=headers,timeout=25,allow_redirects=True)
+              except requests.Timeout:
+                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':None,'result':'blocked_or_failure','failure_kind':'timeout','persistable':False,'attempted_at_utc':started}
+              except Exception as exc:
+                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':None,'result':'blocked_or_failure','failure_kind':'network_or_tool_failure','error':str(exc)[:200],'persistable':False,'attempted_at_utc':started}
+
+              status=r.status_code
+              if status in (403,429) or status>=500:
+                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'blocked_or_failure','failure_kind':'blocked_or_http_failure','persistable':False,'attempted_at_utc':started}
+              if status==404:
+                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'unavailable_exact_history','persistable':True,'attempted_at_utc':started,'evidence':'exact SteamDB entity page returned 404'}
+              if status!=200:
+                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'blocked_or_failure','failure_kind':'unexpected_http_status','persistable':False,'attempted_at_utc':started}
+
+              soup=BeautifulSoup(r.text,'html.parser')
+              row=None
+              for tr in soup.find_all('tr'):
+                  txt=' '.join(tr.stripped_strings)
+                  if 'Kazakhstani Tenge' in txt:
+                      row=tr
+                      break
+              if row is None:
+                  page_text=' '.join(soup.stripped_strings)
+                  if 'Price history' in page_text or 'Compare all currencies' in page_text:
+                      return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'unavailable_exact_history','persistable':True,'attempted_at_utc':started,'evidence':'SteamDB price-history page reached but Kazakhstan row absent'}
+                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'blocked_or_failure','failure_kind':'unexpected_page_shape','persistable':False,'attempted_at_utc':started}
+
+              row_text=' '.join(row.stripped_strings)
+              amounts=[parse_kzt_number(m.group(1)) for m in money_re.finditer(row_text)]
+              amounts=[x for x in amounts if x is not None]
+              lower=row_text.lower()
+              if 'free' in lower and not amounts:
+                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'previously_free','historical_min_kzt':0,'persistable':True,'attempted_at_utc':started,'row_text':row_text[:500]}
+              if not amounts:
+                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'unavailable_exact_history','persistable':True,'attempted_at_utc':started,'evidence':'Kazakhstan row reached but exact KZT minimum absent','row_text':row_text[:500]}
+
+              # SteamDB currency row contains current KZT and lowest KZT; the last KZT amount is the lowest-recorded KZT value.
+              lowest=amounts[-1]
+              if lowest==0:
+                  result='previously_free'
+              else:
+                  result='confirmed_min'
+              return {
+                  'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,
+                  'url':url,'http_status':status,'result':result,'historical_min_kzt':lowest,
+                  'persistable':True,'attempted_at_utc':started,'row_text':row_text[:500]
+              }
+
+          results=[]
+          with ThreadPoolExecutor(max_workers=WORKERS) as pool:
+              futs={pool.submit(lookup,item):item['key'] for item in misses}
+              for fut in as_completed(futs):
+                  results.append(fut.result())
+
+          results=sorted(results,key=lambda x:x['key'])
+          registry_keys=[x.get('registry_key') for x in results if x.get('attempted')]
+          duplicate_registry=len(registry_keys)-len(set(registry_keys))
+          result_keys={x['key'] for x in results}
+          non_miss_keys=sorted(result_keys-set(expected_keys))
+          missing_result_keys=sorted(set(expected_keys)-result_keys)
+
+          confirmed=[x for x in results if x['result']=='confirmed_min']
+          free=[x for x in results if x['result']=='previously_free']
+          unavailable=[x for x in results if x['result']=='unavailable_exact_history']
+          failures=[x for x in results if x['result']=='blocked_or_failure' or x['result']=='failure']
+
+          complete=(
+              len(results)==len(expected_keys)
+              and duplicate_registry==0
+              and not non_miss_keys
+              and not missing_result_keys
+              and not failures
+          )
+
+          out={
+              'schema_version':1,
+              'purpose':'steamdb_true_miss_lookup_ledger',
+              'status':'complete' if complete else 'blocked_or_incomplete',
+              'bindings':{
+                  'steamdb_cache_classification_blob_sha':subprocess.check_output(['git','rev-parse','HEAD:data/cache/steamdb_cache.validation.json'],text=True).strip(),
+                  'lookup_contract_blob_sha':subprocess.check_output(['git','rev-parse','HEAD:config/steamdb_lookup_contract.json'],text=True).strip(),
+              },
+              'expected_true_miss_count':len(expected_keys),
+              'attempted_count':sum(1 for x in results if x.get('attempted')),
+              'confirmed_min_count':len(confirmed),
+              'previously_free_count':len(free),
+              'unavailable_exact_history_count':len(unavailable),
+              'blocked_or_failure_count':len(failures),
+              'duplicate_registry_count':duplicate_registry,
+              'non_miss_query_count':len(non_miss_keys),
+              'missing_result_count':len(missing_result_keys),
+              'lookup_registry':results,
+              'confirmed_min':confirmed,
+              'previously_free':free,
+              'unavailable_exact_history':unavailable,
+              'blocked_or_failures':failures,
+          }
+          OUT.write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print(json.dumps({k:out[k] for k in ['status','expected_true_miss_count','attempted_count','confirmed_min_count','previously_free_count','unavailable_exact_history_count','blocked_or_failure_count','duplicate_registry_count']},ensure_ascii=False,indent=2))
+          PY
+
+      - name: Commit lookup ledger
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/steamdb_lookup.validation.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Rebuild SteamDB true-miss lookup ledger"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then git rebase --abort || true; exit 1; fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*3))
+          done
+          exit 1
