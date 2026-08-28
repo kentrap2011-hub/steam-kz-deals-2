@@ -12,8 +12,10 @@ on:
     paths:
       - "config/content_eligibility_contract.json"
       - "config/offer_family_contract.json"
+      - "config/deal_quality_contract.json"
       - "config/mailing_policy.json"
       - "scripts/build_pre_ai_store_snapshot.py"
+      - "scripts/build_pre_ai_fx_snapshot.py"
       - "scripts/build_pre_ai_content_rules.py"
       - "scripts/build_pre_ai_family_graph.py"
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
@@ -46,6 +48,9 @@ jobs:
       - name: Build current Store snapshot and content metadata
         run: python scripts/build_pre_ai_store_snapshot.py
 
+      - name: Build deterministic FX snapshot
+        run: python scripts/build_pre_ai_fx_snapshot.py
+
       - name: Build mechanical content rules
         run: python scripts/build_pre_ai_content_rules.py
 
@@ -59,6 +64,7 @@ jobs:
           git add \
             data/production/pre_ai/store_snapshot.json \
             data/production/pre_ai/content_metadata.json \
+            data/production/pre_ai/fx_snapshot.json \
             data/production/pre_ai/content_rules.json \
             data/production/pre_ai/family_graph.json
           if git diff --cached --quiet; then
