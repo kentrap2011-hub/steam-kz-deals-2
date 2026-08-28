@@ -1,0 +1,61 @@
+{
+  "contract": "TASTE-CACHE-ENTRY-BINDING-V2",
+  "version": "1.0",
+  "status": "implementation_only",
+  "purpose": "Allow incremental mixed-generation derived taste caching without weakening exact cache-hit validity.",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "canonical_cache_path": "data/cache/taste_fit.json",
+    "canonical_profile_repository": "kentrap2011-hub/stopgame-ratings-data",
+    "canonical_profile_path": "gaming_taste_live.json",
+    "cache_is_derived_verdicts_only_not_user_evidence": true
+  },
+  "taste_semantics_policy_fields": [
+    "taste_profile",
+    "taste_deal_separation",
+    "personal_filter",
+    "false_negative_audit"
+  ],
+  "taste_semantics_digest": {
+    "algorithm": "sha256",
+    "serialization": "json ensure_ascii=false sort_keys=true separators comma_colon",
+    "purpose": "Invalidate cached decisions when actual taste-evaluation semantics change while ignoring unrelated render/cache plumbing changes."
+  },
+  "schema_v2_required_entry_fields": [
+    "key",
+    "appid",
+    "profile_blob_sha",
+    "taste_model_version",
+    "taste_semantics_sha256",
+    "taste_fingerprint",
+    "verdict",
+    "fit_level",
+    "reason_code",
+    "positive_evidence",
+    "negative_evidence",
+    "evaluated_at_utc"
+  ],
+  "cache_hit_requires_same_entry": [
+    "exact_key",
+    "exact_appid",
+    "exact_profile_blob_sha",
+    "exact_taste_model_version",
+    "exact_taste_semantics_sha256",
+    "exact_taste_fingerprint"
+  ],
+  "mixed_generation_rules": {
+    "different_profile_or_semantics_generations_may_coexist_in_one_canonical_cache": true,
+    "old_generation_entries_are_preserved_but_are_not_cache_hits_for_a_new_binding": true,
+    "new_validated_batches_replace_only_their_exact_keys": true,
+    "partial_refresh_becomes_reusable_immediately": true,
+    "never_upgrade_an_old_entry_binding_without_a_new_ai_verdict": true
+  },
+  "legacy_schema_v1_migration": {
+    "allowed": true,
+    "legacy_profile_binding_source": "taste_fit.json top-level profile_blob_sha",
+    "legacy_model_binding_source": "taste_fit.json top-level taste_model_version",
+    "legacy_semantics_binding_source": "data/cache/taste_fit.ledger_validation.json bindings.policy_blob_sha",
+    "historical_policy_must_be_readable_from_git_object_database": true,
+    "fail_closed_if_historical_policy_or_binding_cannot_be_proven": true
+  }
+}
