@@ -7,15 +7,37 @@ import urllib.request
 from collections import Counter
 from pathlib import Path
 
+from taste_cache_common import (
+    current_taste_semantics_digest,
+    legacy_v1_semantics_digest,
+    validate_verdict_shape,
+)
+
 FAMILIES = Path('data/production/pre_ai/family_graph.json')
 MAILING = Path('data/production/mailing/index.json')
 POLICY = Path('config/mailing_policy.json')
 FINGERPRINT_CONTRACT = Path('config/taste_fingerprint_contract.json')
 TASTE_INDEX = Path('data/cache/taste_fit.index.json')
 TASTE_CACHE = Path('data/cache/taste_fit.json')
-LEDGER_VALIDATION = Path('data/cache/taste_fit.ledger_validation.json')
-TASTE_VALIDATION = Path('data/cache/taste_fit.validation.json')
 OUT = Path('data/production/pre_ai/taste_projection.json')
+
+V1_FIELDS = [
+    'appid',
+    'taste_fingerprint',
+    'verdict',
+    'fit_level',
+    'reason_code',
+]
+V2_FIELDS = [
+    'appid',
+    'profile_blob_sha',
+    'taste_model_version',
+    'taste_semantics_sha256',
+    'taste_fingerprint',
+    'verdict',
+    'fit_level',
+    'reason_code',
+]
 
 
 def load(path):
@@ -89,24 +111,41 @@ def load_feed_fingerprints(index):
     return feed
 
 
-def policy_semantics_status(policy, ledger):
-    bound_sha = (ledger.get('bindings') or {}).get('policy_blob_sha')
-    semantic_keys = [
-        'taste_profile',
-        'taste_deal_separation',
-        'personal_filter',
-        'false_negative_audit',
-        'taste_cache',
-    ]
-    if not bound_sha:
-        return False, None, 'ledger_policy_binding_missing'
-    try:
-        raw = subprocess.check_output(['git', 'cat-file', 'blob', bound_sha])
-        old = json.loads(raw.decode('utf-8'))
-    except Exception:
-        return False, bound_sha, 'ledger_bound_policy_blob_unavailable'
-    equal = all(old.get(k) == policy.get(k) for k in semantic_keys)
-    return equal, bound_sha, 'equal' if equal else 'taste_semantics_changed'
+def decode_index_entry(index, key, cached, legacy_semantics):
+    schema = index.get('schema_version')
+    if schema == 1:
+        if index.get('entry_fields') != V1_FIELDS:
+            raise ValueError('Unexpected taste index v1 entry_fields')
+        if not isinstance(cached, list) or len(cached) != len(V1_FIELDS):
+            raise ValueError(f'Invalid taste index v1 shape for {key}')
+        appid, fp, verdict, fit_level, reason_code = cached
+        profile_sha = index.get('profile_blob_sha')
+        model = index.get('taste_model_version')
+        semantics = legacy_semantics
+    elif schema == 2:
+        if index.get('entry_fields') != V2_FIELDS:
+            raise ValueError('Unexpected taste index v2 entry_fields')
+        if index.get('profile_binding_mode') != 'per_entry_exact':
+            raise ValueError('Taste index v2 is not per_entry_exact')
+        if not isinstance(cached, list) or len(cached) != len(V2_FIELDS):
+            raise ValueError(f'Invalid taste index v2 shape for {key}')
+        appid, profile_sha, model, semantics, fp, verdict, fit_level, reason_code = cached
+    else:
+        raise ValueError(f'Unsupported taste index schema: {schema!r}')
+
+    validate_verdict_shape(verdict, fit_level, reason_code)
+    if not profile_sha or not model or not semantics or not fp:
+        raise ValueError(f'Incomplete taste cache binding for {key}')
+    return {
+        'appid': str(appid),
+        'profile_blob_sha': profile_sha,
+        'taste_model_version': model,
+        'taste_semantics_sha256': semantics,
+        'taste_fingerprint': fp,
+        'verdict': verdict,
+        'fit_level': fit_level,
+        'reason_code': reason_code,
+    }
 
 
 def main():
@@ -116,21 +155,17 @@ def main():
     policy = load(POLICY)
     fingerprint_contract = load(FINGERPRINT_CONTRACT)
     taste_index = load(TASTE_INDEX)
-    taste_cache = load(TASTE_CACHE)
-    ledger = load(LEDGER_VALIDATION)
-    validation = load(TASTE_VALIDATION)
 
     if families_doc.get('status') != 'complete' or not families_doc.get('complete_coverage_of_nonexcluded_candidates'):
         raise SystemExit('Pre-AI family graph incomplete')
     if fingerprint_contract.get('contract') != 'TASTE-FINGERPRINT-V1':
         raise SystemExit('Unexpected taste fingerprint contract')
-
-    canonical_fields = policy['taste_cache']['fingerprint_fields']
-    contract_fields = fingerprint_contract['input_fields_in_serialization_order']
-    if canonical_fields != contract_fields:
+    if policy['taste_cache']['fingerprint_fields'] != fingerprint_contract['input_fields_in_serialization_order']:
         raise SystemExit('Taste fingerprint contract differs from canonical policy')
 
     profile = current_profile(policy)
+    current_model = policy['personal_filter']['structured_taste_evaluation']['taste_model_version']
+    current_semantics = current_taste_semantics_digest()
     feed = load_feed_fingerprints(mailing)
     families = families_doc.get('families') or []
     subjects = [family['taste_subject_key'] for family in families]
@@ -141,36 +176,37 @@ def main():
     if not set(subjects) <= set(feed):
         raise SystemExit('Taste subject missing from current mailing feed')
 
-    current_model = policy['personal_filter']['structured_taste_evaluation']['taste_model_version']
-    index_model = taste_index.get('taste_model_version')
-    cache_profile_sha = taste_index.get('profile_blob_sha')
-    profile_match = profile['blob_sha'] == cache_profile_sha
-    model_match = current_model == index_model
-    semantics_equal, bound_policy_sha, semantics_reason = policy_semantics_status(policy, ledger)
-
     index_entries = taste_index.get('entries') or {}
     index_count_ok = int(taste_index.get('index_entry_count') or -1) == len(index_entries)
     index_source = taste_index.get('source_cache') or {}
     source_cache_blob_ok = index_source.get('blob_sha') == git_hash_object(TASTE_CACHE)
-    fingerprint_contract_blob_ok = (
-        (validation.get('bindings') or {}).get('fingerprint_contract_blob_sha')
-        == git_hash_object(FINGERPRINT_CONTRACT)
-    )
-    validation_complete = validation.get('status') == 'complete'
-    ledger_complete = ledger.get('status') == 'complete' and bool(ledger.get('complete_ledger'))
+    source_attestation_ok = all([
+        index_source.get('entry_count_matches_len_entries') is True,
+        index_source.get('required_entry_fields_complete') is True,
+        index_source.get('entry_count_actual') == len(index_entries),
+    ])
+    schema_supported = taste_index.get('schema_version') in {1, 2}
+    legacy_semantics = legacy_v1_semantics_digest() if taste_index.get('schema_version') == 1 else None
+
+    decoded_entries = {}
+    semantic_shape_ok = True
+    semantic_shape_error = None
+    if index_count_ok and source_cache_blob_ok and source_attestation_ok and schema_supported:
+        try:
+            for key, cached in index_entries.items():
+                decoded_entries[key] = decode_index_entry(taste_index, key, cached, legacy_semantics)
+        except (ValueError, RuntimeError) as exc:
+            semantic_shape_ok = False
+            semantic_shape_error = str(exc)
+    else:
+        semantic_shape_ok = False
+
     index_integrity_ok = all([
         index_count_ok,
         source_cache_blob_ok,
-        fingerprint_contract_blob_ok,
-        validation_complete,
-        ledger_complete,
-    ])
-
-    global_reuse_allowed = all([
-        index_integrity_ok,
-        profile_match,
-        model_match,
-        semantics_equal,
+        source_attestation_ok,
+        schema_supported,
+        semantic_shape_ok,
     ])
 
     rows = {}
@@ -178,26 +214,32 @@ def main():
     raw_overlap = 0
     fingerprint_matches = 0
     appid_matches = 0
+    profile_matches = 0
+    model_matches = 0
+    semantics_matches = 0
     safe_hits = 0
 
     for family in families:
         key = family['taste_subject_key']
         current = feed[key]
-        cached = index_entries.get(key)
+        cached = decoded_entries.get(key) if index_integrity_ok else None
         cache_presence = cached is not None
         if cache_presence:
             raw_overlap += 1
-            cached_appid, cached_fp, verdict, fit_level, reason_code = cached
-            appid_ok = str(cached_appid) == current['appid']
-            fp_ok = cached_fp == current['taste_fingerprint']
+            appid_ok = cached['appid'] == current['appid']
+            fp_ok = cached['taste_fingerprint'] == current['taste_fingerprint']
+            profile_ok = cached['profile_blob_sha'] == profile['blob_sha']
+            model_ok = cached['taste_model_version'] == current_model
+            semantics_ok = cached['taste_semantics_sha256'] == current_semantics
             appid_matches += int(appid_ok)
             fingerprint_matches += int(fp_ok)
+            profile_matches += int(profile_ok)
+            model_matches += int(model_ok)
+            semantics_matches += int(semantics_ok)
         else:
-            appid_ok = False
-            fp_ok = False
-            verdict = fit_level = reason_code = None
+            appid_ok = fp_ok = profile_ok = model_ok = semantics_ok = False
 
-        hit = bool(global_reuse_allowed and cache_presence and appid_ok and fp_ok)
+        hit = bool(index_integrity_ok and cache_presence and appid_ok and profile_ok and model_ok and semantics_ok and fp_ok)
         if hit:
             safe_hits += 1
             status = 'cache_hit'
@@ -205,17 +247,17 @@ def main():
         else:
             status = 'ai_required'
             if not index_integrity_ok:
-                ai_reason = 'taste_cache_integrity_not_current'
-            elif not profile_match:
-                ai_reason = 'canonical_profile_blob_changed'
-            elif not model_match:
-                ai_reason = 'taste_model_version_changed'
-            elif not semantics_equal:
-                ai_reason = 'taste_policy_semantics_changed_or_unverifiable'
+                ai_reason = 'taste_cache_index_integrity_invalid'
             elif not cache_presence:
                 ai_reason = 'taste_cache_key_missing'
             elif not appid_ok:
                 ai_reason = 'taste_cache_appid_mismatch'
+            elif not profile_ok:
+                ai_reason = 'canonical_profile_blob_changed_for_entry'
+            elif not model_ok:
+                ai_reason = 'taste_model_version_changed_for_entry'
+            elif not semantics_ok:
+                ai_reason = 'taste_policy_semantics_changed_for_entry'
             else:
                 ai_reason = 'taste_fingerprint_changed'
         status_counts[status] += 1
@@ -233,13 +275,16 @@ def main():
             'ai_required_reason': ai_reason,
             'cache_entry_present': cache_presence,
             'cache_appid_matches': appid_ok if cache_presence else None,
+            'cache_profile_matches': profile_ok if cache_presence else None,
+            'cache_model_matches': model_ok if cache_presence else None,
+            'cache_semantics_matches': semantics_ok if cache_presence else None,
             'cache_fingerprint_matches': fp_ok if cache_presence else None,
         }
         if hit:
             row['cached_taste'] = {
-                'verdict': verdict,
-                'fit_level': fit_level,
-                'reason_code': reason_code,
+                'verdict': cached['verdict'],
+                'fit_level': cached['fit_level'],
+                'reason_code': cached['reason_code'],
             }
         rows[key] = row
 
@@ -247,35 +292,37 @@ def main():
         raise SystemExit('Taste projection coverage mismatch')
 
     out = {
-        'schema_version': 1,
-        'purpose': 'pre_ai_safe_taste_cache_projection_and_ai_work_queue',
+        'schema_version': 2,
+        'purpose': 'pre_ai_safe_per_entry_taste_cache_projection_and_ai_work_queue',
         'status': 'complete',
         'source_mailing_updated_at_utc': mailing.get('source_updated_at_utc'),
         'taste_subject_count': len(subjects),
         'classified_count': len(rows),
         'complete_coverage': True,
         'current_profile': profile,
+        'current_binding': {
+            'taste_model_version': current_model,
+            'taste_semantics_sha256': current_semantics,
+            'policy_blob_sha': git_hash_object(POLICY),
+        },
         'cache_binding': {
-            'cache_profile_blob_sha': cache_profile_sha,
-            'profile_binding_matches': profile_match,
-            'cache_taste_model_version': index_model,
-            'current_taste_model_version': current_model,
-            'taste_model_matches': model_match,
-            'ledger_bound_policy_blob_sha': bound_policy_sha,
-            'current_policy_blob_sha': git_hash_object(POLICY),
-            'taste_semantics_equal_to_ledger_policy': semantics_equal,
-            'taste_semantics_check_reason': semantics_reason,
+            'index_schema_version': taste_index.get('schema_version'),
+            'profile_binding_mode': 'legacy_global_projected_per_entry' if taste_index.get('schema_version') == 1 else taste_index.get('profile_binding_mode'),
             'index_integrity_ok': index_integrity_ok,
             'index_entry_count_ok': index_count_ok,
             'index_source_cache_blob_matches': source_cache_blob_ok,
-            'fingerprint_contract_blob_matches_validation': fingerprint_contract_blob_ok,
-            'ledger_complete': ledger_complete,
-            'taste_validation_complete': validation_complete,
-            'global_cache_reuse_allowed': global_reuse_allowed,
+            'index_source_attestation_ok': source_attestation_ok,
+            'schema_supported': schema_supported,
+            'semantic_shape_ok': semantic_shape_ok,
+            'semantic_shape_error': semantic_shape_error,
+            'cache_reuse_is_per_entry_exact': True,
         },
         'raw_cache_overlap_count': raw_overlap,
         'raw_cache_miss_count': len(subjects) - raw_overlap,
         'raw_appid_match_count': appid_matches,
+        'raw_profile_match_count': profile_matches,
+        'raw_model_match_count': model_matches,
+        'raw_semantics_match_count': semantics_matches,
         'raw_fingerprint_match_count': fingerprint_matches,
         'raw_fingerprint_stale_count': raw_overlap - fingerprint_matches,
         'safe_cache_hit_count': safe_hits,
@@ -292,17 +339,18 @@ def main():
         'status': out['status'],
         'taste_subject_count': out['taste_subject_count'],
         'complete_coverage': out['complete_coverage'],
-        'current_profile_blob_sha': profile['blob_sha'],
-        'cache_profile_blob_sha': cache_profile_sha,
-        'profile_binding_matches': profile_match,
-        'taste_model_matches': model_match,
-        'taste_semantics_equal_to_ledger_policy': semantics_equal,
+        'index_schema_version': taste_index.get('schema_version'),
         'index_integrity_ok': index_integrity_ok,
+        'current_profile_blob_sha': profile['blob_sha'],
+        'current_taste_model_version': current_model,
+        'current_taste_semantics_sha256': current_semantics,
         'raw_cache_overlap_count': raw_overlap,
         'raw_cache_miss_count': len(subjects) - raw_overlap,
         'raw_appid_match_count': appid_matches,
+        'raw_profile_match_count': profile_matches,
+        'raw_model_match_count': model_matches,
+        'raw_semantics_match_count': semantics_matches,
         'raw_fingerprint_match_count': fingerprint_matches,
-        'raw_fingerprint_stale_count': raw_overlap - fingerprint_matches,
         'safe_cache_hit_count': safe_hits,
         'ai_required_count': len(subjects) - safe_hits,
         'external_calls': 1,
