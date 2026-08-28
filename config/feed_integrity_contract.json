@@ -1,8 +1,8 @@
 {
   "contract": "PRODUCTION-FEED-INTEGRITY-FAST-PATH",
-  "version": "1.0",
+  "version": "1.1",
   "status": "implementation_only",
-  "purpose": "Provide a content-addressed proof method for existing canonical ingest assertions so a consumer does not need to re-download every verbose chunk merely to re-prove row counts and exact-file identity already verified by the producer.",
+  "purpose": "Provide content-addressed proof methods for existing canonical ingest assertions so a consumer does not need to re-download every verbose chunk merely to re-prove row counts and exact-file identity already verified mechanically.",
   "authority": {
     "canonical_policy_path": "config/mailing_policy.json",
     "never_overrides_canonical_policy": true,
@@ -12,7 +12,7 @@
   "design_basis": [
     "OCI-style descriptors bind referenced content to digest and byte size.",
     "TUF-style target metadata records hashes and lengths so clients can validate exact target objects from compact metadata.",
-    "Git repository metadata exposes immutable blob SHA and size for files without downloading file contents."
+    "Git repository metadata exposes immutable blob and tree SHAs without downloading file contents."
   ],
   "producer": {
     "workflow": ".github/workflows/build-mailing-feed.yml",
@@ -62,15 +62,46 @@
     "never_accept_path_only_or_size_only_match": true,
     "sha_and_size_both_required": true
   },
+  "compact_runtime_validation": {
+    "enabled": true,
+    "generator_script": "scripts/build_feed_ingest_validation.py",
+    "generator_workflow": ".github/workflows/build-feed-ingest-validation.yml",
+    "artifact_path": "data/cache/feed_ingest.validation.json",
+    "generator_must_revalidate_locally": [
+      "canonical manifest and source index QA",
+      "exact manifest and source-index blob identities",
+      "exact source and mailing chunk path sets",
+      "every chunk blob SHA and byte size",
+      "every chunk row_count against producer attestation",
+      "source and mailing total row counts",
+      "lossless source-to-mailing projection assertion",
+      "source shortlist tree SHA and mailing tree SHA"
+    ],
+    "runtime_accept_only_if_all": [
+      "artifact status is complete",
+      "artifact contract_version is 1.1",
+      "artifact policy_blob_sha equals the already-loaded current canonical policy blob SHA",
+      "one current data/production directory metadata read shows manifest blob SHA equals artifact manifest_blob_sha",
+      "the same directory metadata read shows shortlist tree SHA equals artifact shortlist_tree_sha",
+      "the same directory metadata read shows mailing tree SHA equals artifact mailing_tree_sha",
+      "artifact item_count, source_item_count and both verified row totals are equal",
+      "artifact source_complete and manifest_complete are true",
+      "artifact source_coverage_ratio and manifest_coverage_ratio satisfy canonical thresholds",
+      "artifact needs_tuning and manifest_needs_tuning are false",
+      "artifact source_to_mailing_row_projection_lossless and all_source_rows_column_validated are true"
+    ],
+    "runtime_reads": "After canonical policy and diagnostic-runner bootstrap, stage 03 normally needs only the compact validation artifact plus one data/production directory metadata read. The full verbose path remains the fail-closed fallback.",
+    "stale_artifact_behavior": "Any manifest, shortlist-tree, or mailing-tree identity mismatch invalidates the artifact immediately; do not extrapolate or partially trust it."
+  },
   "diagnostic_stage_03": {
     "targeted_retest_dependencies": [
       "01_policy_bootstrap",
-      "diagnostic_runner_bootstrap",
-      "feed_integrity_contract"
+      "diagnostic_runner_bootstrap"
     ],
     "02_profile_load_required": false,
     "04_taste_cache_load_required": false,
     "stage_limit_seconds": 60,
-    "pass_requires": "all canonical ingest QA assertions proven either by direct read or by the exact content-addressed producer attestation fast path"
+    "preferred_runtime_path": "compact_runtime_validation",
+    "pass_requires": "all canonical ingest QA assertions proven either by compact exact-tree validation, direct content-addressed producer attestation, or direct canonical ingest"
   }
 }
