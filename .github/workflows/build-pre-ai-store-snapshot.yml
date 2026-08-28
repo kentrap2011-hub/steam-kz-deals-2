@@ -76,7 +76,7 @@ jobs:
       - name: Build strong and moderate deal scenarios
         run: python scripts/build_pre_ai_deal_scenarios.py
 
-      - name: Build compact ChatGPT payload
+      - name: Build split ChatGPT consumer bundle
         run: python scripts/build_pre_ai_chatgpt_payload.py
 
       - name: Commit atomic pre-AI payload
@@ -92,7 +92,9 @@ jobs:
             data/production/pre_ai/taste_projection.json \
             data/production/pre_ai/history_snapshot.json \
             data/production/pre_ai/deal_scenarios.json \
-            data/production/pre_ai/chatgpt_payload.json
+            data/production/pre_ai/chatgpt_payload.json \
+            data/production/pre_ai/chatgpt_taste_queue.jsonl \
+            data/production/pre_ai/chatgpt_purchase_context.jsonl
           if git diff --cached --quiet; then
             echo "Pre-AI deterministic payload already current"
             exit 0
