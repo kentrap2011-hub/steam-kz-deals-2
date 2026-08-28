@@ -1,0 +1,83 @@
+{
+  "contract": "FINAL-TASTE-LEDGER-V1",
+  "version": "1.0",
+  "status": "implementation_only",
+  "purpose": "Convert compact cache implementation reason codes into canonical decision-ledger reason codes and prove a final non-ambiguous price-blind taste state for every current candidate.",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "never_overrides_canonical_policy": true,
+    "canonical_valid_exclusion_reason_codes_are_read_from_policy": true,
+    "canonical_decisions_are_read_from_policy": true,
+    "taste_fit_remains_price_blind": true
+  },
+  "cache_reason_code_semantics": {
+    "include_strong": {
+      "decision": "INCLUDE",
+      "required_fit_level": "strong",
+      "canonical_exclusion_reason_code": null
+    },
+    "include_moderate": {
+      "decision": "INCLUDE",
+      "required_fit_level": "moderate",
+      "canonical_exclusion_reason_code": null
+    },
+    "exclude_insufficient": {
+      "decision": "EXCLUDE",
+      "required_fit_level": "below_moderate",
+      "canonical_exclusion_reason_code": "below_moderate_fit"
+    },
+    "exclude_audited_below": {
+      "decision": "EXCLUDE",
+      "required_fit_level": "below_moderate",
+      "canonical_exclusion_reason_code": "below_moderate_fit"
+    },
+    "exclude_direct_conflict": {
+      "decision": "EXCLUDE",
+      "required_fit_level": "below_moderate",
+      "canonical_exclusion_reason_code": "below_moderate_fit"
+    }
+  },
+  "mapping_rationale": {
+    "include_codes": "Implementation detail only; canonical ledger requires a valid fit level for INCLUDE and does not require an exclusion reason.",
+    "exclude_insufficient": "The candidate failed to establish moderate fit, which is canonically below_moderate_fit.",
+    "exclude_audited_below": "The targeted audit used the same threshold and left the candidate below moderate fit, so the canonical final reason is below_moderate_fit.",
+    "exclude_direct_conflict": "The conflict is the evidence explaining why the candidate remains below the minimum moderate threshold. below_moderate_fit is a canonical valid final exclusion code for both direct and structural conflicts; this mapping does not claim direct_strong_negative_user_evidence when that stronger evidence type is not uniformly true for every entry carrying the implementation code."
+  },
+  "producer": {
+    "workflow": ".github/workflows/build-taste-ledger-validation.yml",
+    "inputs": [
+      "config/mailing_policy.json",
+      "config/taste_ledger_contract.json",
+      "data/cache/taste_fit.index.json",
+      "data/cache/taste_fit.validation.json"
+    ],
+    "output": "data/cache/taste_fit.ledger_validation.json",
+    "must": [
+      "validate every compact cache entry",
+      "reject unknown implementation reason codes",
+      "reject verdict/fit-level combinations inconsistent with the implementation mapping",
+      "for every EXCLUDE map to a reason code currently present in canonical valid_exclusion_reason_codes",
+      "for every INCLUDE require a non-empty fit level",
+      "prove INCLUDE plus EXCLUDE equals processed",
+      "prove no ambiguous or borderline final state remains",
+      "bind the result to exact policy, mapping, taste-index and full-fingerprint-validation input blobs"
+    ]
+  },
+  "consumer_fast_path": {
+    "stage_10_fetch_only": "data/cache/taste_fit.ledger_validation.json",
+    "accept_only_if_all": [
+      "status is complete",
+      "policy_blob_sha equals stage 01 canonical policy SHA",
+      "taste_index_blob_sha equals stage 04 current compact taste-index SHA",
+      "taste_validation_blob_sha equals the exact stage 07 validation artifact SHA",
+      "taste_validation reports complete coverage for the same 583 current candidates",
+      "processed_count equals current feed count",
+      "included_count plus excluded_count equals processed_count",
+      "ambiguous_count is zero",
+      "invalid_reason_count is zero",
+      "invalid_fit_count is zero",
+      "complete_ledger is true"
+    ],
+    "if_any_check_fails": "FAIL_CLOSED; do not start downstream"
+  }
+}
