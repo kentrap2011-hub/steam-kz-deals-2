@@ -1,0 +1,88 @@
+name: One-shot app identity source fix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/patch-app-identity.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Patch canonical app identity handling
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/steam_production.py')
+          text = path.read_text(encoding='utf-8')
+
+          old = '''def parse_row(row):\n'''
+          new = '''def canonical_appid(item_key, raw_appid):\n    """\n    App_X is the canonical Steam app identity. Steam search rows may expose\n    a different data-ds-appid for collections/bundles, so never let that\n    auxiliary value overwrite an explicit App_X key. Sub_ rows keep the\n    representative appid because they do not have an app identity of their own.\n    """\n    if item_key.startswith("App_"):\n        canonical = item_key.split("_", 1)[1]\n        if not canonical.isdigit():\n            raise RuntimeError(\n                f"Malformed canonical app key: {item_key}"\n            )\n        return canonical\n\n    return raw_appid\n\n\ndef assert_app_identity_contract():\n    if canonical_appid("App_901735", "40960") != "901735":\n        raise AssertionError("App key identity regression")\n    if canonical_appid("App_40960", "40960") != "40960":\n        raise AssertionError("Ordinary app identity regression")\n    if canonical_appid("Sub_15407", "108710") != "108710":\n        raise AssertionError("Package representative appid regression")\n\n\nassert_app_identity_contract()\n\n\ndef parse_row(row):\n'''
+          if old not in text:
+              raise SystemExit('parse_row anchor not found')
+          text = text.replace(old, new, 1)
+
+          old = '''    appid = row.get("data-ds-appid")\n\n    if appid:\n        appid = appid.split(",")[0]\n\n    return {\n        "key": identity(row),\n        "appid": appid,\n'''
+          new = '''    item_key = identity(row)\n    raw_appid = row.get("data-ds-appid")\n\n    if raw_appid:\n        raw_appid = raw_appid.split(",")[0]\n\n    appid = canonical_appid(item_key, raw_appid)\n\n    if item_key.startswith("App_") and appid != item_key.split("_", 1)[1]:\n        raise RuntimeError(\n            f"App identity invariant failed: key={item_key} appid={appid}"\n        )\n\n    return {\n        "key": item_key,\n        "appid": appid,\n'''
+          if old not in text:
+              raise SystemExit('appid parse anchor not found')
+          text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Run targeted static regression
+        run: |
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          text = Path('scripts/steam_production.py').read_text(encoding='utf-8')
+          ast.parse(text)
+          required = [
+              'def canonical_appid(item_key, raw_appid):',
+              'canonical_appid("App_901735", "40960") != "901735"',
+              'appid = canonical_appid(item_key, raw_appid)',
+              'App identity invariant failed',
+          ]
+          missing = [x for x in required if x not in text]
+          if missing:
+              raise SystemExit(f'Missing regression markers: {missing}')
+          print('TARGETED_APP_IDENTITY_STATIC_REGRESSION=PASS')
+          PY
+
+      - name: Commit source fix
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add scripts/steam_production.py
+          if git diff --cached --quiet; then
+            echo "No source change"
+            exit 0
+          fi
+          git commit -m "Fix canonical Steam app identity"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
