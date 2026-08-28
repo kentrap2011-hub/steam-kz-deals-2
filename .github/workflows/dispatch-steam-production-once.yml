@@ -1,0 +1,20 @@
+name: Dispatch fresh Steam production once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/dispatch-steam-production-once.yml"
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch current-main production workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run steam-test.yml --repo "$GITHUB_REPOSITORY" --ref main
