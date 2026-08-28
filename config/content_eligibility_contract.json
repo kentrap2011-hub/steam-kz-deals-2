@@ -1,0 +1,53 @@
+{
+  "contract": "CONTENT-ELIGIBILITY-V1",
+  "version": "1.0",
+  "status": "implementation_only",
+  "purpose": "Apply the canonical DLC/addon/content eligibility rules after the mandatory taste checkpoint using cached Steam content metadata, without using price, discount, reviews or SteamDB as taste evidence.",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "never_overrides_canonical_policy": true,
+    "requires_checkpoint_before_execution": true,
+    "wishlist_is_not_ownership_proof": true
+  },
+  "metadata": {
+    "path": "data/cache/content_metadata.json",
+    "must_cover_every_current_taste_include": true,
+    "must_be_bound_to_current_mailing_tree_and_taste_index": true,
+    "app_type_source": "Steam Store appdetails",
+    "package_contents_source": "Steam Store packagedetails"
+  },
+  "rules": {
+    "game_app": "eligible",
+    "sub_package": "eligible_for_family_resolution only when at least one contained app or the feed representative app is taste-include in the same run; otherwise unresolved and fail closed",
+    "dlc_with_same_run_taste_include_base": "eligible_for_family_resolution unless obvious cosmetic/soundtrack/artbook/non-game addon",
+    "dlc_without_same_run_taste_include_base": "requires canonical-profile/current-user-context support for the base game or proof that the addon is effectively standalone game-like content; otherwise unresolved and fail closed",
+    "obvious_non_game_addon": "exclude",
+    "unknown_or_missing_steam_type": "unresolved and fail closed"
+  },
+  "obvious_non_game_title_patterns": [
+    "soundtrack",
+    "ost",
+    "artbook",
+    "art book",
+    "wallpaper",
+    "skin pack",
+    "costume pack",
+    "cosmetic pack",
+    "avatar pack",
+    "digital artwork",
+    "music pack",
+    "supporter pack"
+  ],
+  "diagnostic_stage_12": {
+    "producer_workflow": ".github/workflows/build-content-eligibility-validation.yml",
+    "output": "data/cache/content_eligibility.validation.json",
+    "pass_requires": [
+      "all 101 current taste includes are classified",
+      "eligible plus excluded equals 101",
+      "unresolved_count is zero",
+      "all exclusions use canonical content eligibility reason codes",
+      "no wishlist ownership inference",
+      "checkpoint proof is current and complete"
+    ]
+  }
+}
