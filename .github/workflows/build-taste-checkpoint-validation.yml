@@ -1,0 +1,116 @@
+name: Build mandatory taste checkpoint validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "config/mailing_policy.json"
+      - "config/taste_checkpoint_contract.json"
+      - "data/cache/taste_fit.index.json"
+      - "data/cache/taste_fit.validation.json"
+      - "data/cache/taste_fit.ledger_validation.json"
+      - ".github/workflows/build-taste-checkpoint-validation.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mandatory-taste-checkpoint-validation
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Prove mandatory taste checkpoint
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+
+          POLICY = Path('config/mailing_policy.json')
+          INDEX = Path('data/cache/taste_fit.index.json')
+          VALIDATION = Path('data/cache/taste_fit.validation.json')
+          LEDGER = Path('data/cache/taste_fit.ledger_validation.json')
+          RECOVERY = Path('taste_fit_checkpoint_prepared.json')
+          OUT = Path('data/cache/taste_fit.checkpoint_validation.json')
+
+          def sha(path):
+              return subprocess.check_output(['git','rev-parse',f'HEAD:{path}'], text=True).strip()
+
+          policy = json.loads(POLICY.read_text(encoding='utf-8'))
+          index = json.loads(INDEX.read_text(encoding='utf-8'))
+          validation = json.loads(VALIDATION.read_text(encoding='utf-8'))
+          ledger = json.loads(LEDGER.read_text(encoding='utf-8'))
+
+          cache_path = policy['taste_cache']['path']
+          cache_sha = sha(cache_path)
+          index_cache_sha = index['source_cache']['blob_sha']
+
+          checks = {
+              'policy_canonical': policy.get('status') == 'canonical',
+              'validation_complete': validation.get('status') == 'complete' and validation.get('complete_coverage') is True,
+              'zero_misses_or_stale': validation.get('miss_or_stale_count') == 0,
+              'ledger_complete': ledger.get('status') == 'complete' and ledger.get('complete_ledger') is True,
+              'ledger_bound_to_same_validation': ledger.get('bindings',{}).get('taste_validation_blob_sha') == sha('data/cache/taste_fit.validation.json'),
+              'ledger_bound_to_same_index': ledger.get('bindings',{}).get('taste_index_blob_sha') == sha('data/cache/taste_fit.index.json'),
+              'cache_blob_matches_index_attestation': cache_sha == index_cache_sha,
+              'recovery_artifact_absent': not RECOVERY.exists(),
+          }
+
+          complete = all(checks.values())
+          result = {
+              'schema_version': 1,
+              'purpose': 'mandatory_taste_checkpoint_proof',
+              'status': 'complete' if complete else 'invalid',
+              'bindings': {
+                  'policy_blob_sha': sha('config/mailing_policy.json'),
+                  'taste_cache_blob_sha': cache_sha,
+                  'taste_index_blob_sha': sha('data/cache/taste_fit.index.json'),
+                  'taste_validation_blob_sha': sha('data/cache/taste_fit.validation.json'),
+                  'ledger_validation_blob_sha': sha('data/cache/taste_fit.ledger_validation.json'),
+                  'profile_blob_sha': index.get('profile_blob_sha'),
+                  'taste_model_version': index.get('taste_model_version')
+              },
+              'cache_changes_required': 0 if complete else None,
+              'github_writes_required': 0 if complete else None,
+              'github_writes_performed_by_checkpoint': 0,
+              'checkpoint_complete': complete,
+              'checks': checks
+          }
+          OUT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(result, ensure_ascii=False, indent=2))
+          if not complete:
+              raise SystemExit('Mandatory taste checkpoint proof failed')
+          PY
+
+      - name: Commit checkpoint proof
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/taste_fit.checkpoint_validation.json
+          if git diff --cached --quiet; then
+            echo "Checkpoint proof already current"
+            exit 0
+          fi
+          git commit -m "Rebuild mandatory taste checkpoint proof"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
