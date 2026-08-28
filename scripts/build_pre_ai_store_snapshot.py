@@ -125,7 +125,12 @@ def fetch_batches(requested):
             )
         for (key, rid), store_item in zip(batch, returned):
             if 'appid' in rid:
-                identity_ok = int(store_item.get('appid') or 0) == rid['appid']
+                # StoreItem.id identifies the requested store entity. StoreItem.appid can
+                # point at underlying content for legacy/collection store pages.
+                identity_ok = (
+                    int(store_item.get('item_type') or 0) == 0
+                    and int(store_item.get('id') or 0) == rid['appid']
+                )
             else:
                 pid = rid['packageid']
                 identity_ok = (
