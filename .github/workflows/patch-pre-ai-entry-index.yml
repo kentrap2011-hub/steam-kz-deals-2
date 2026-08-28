@@ -1,0 +1,51 @@
+name: One-shot pre-AI entry-index switch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/patch-pre-ai-entry-index.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Switch only pre-AI taste index path
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/build_pre_ai_taste_projection.py')
+          text = p.read_text(encoding='utf-8')
+          old = "TASTE_INDEX = Path('data/cache/taste_fit.index.json')"
+          new = "TASTE_INDEX = Path('data/cache/taste_fit.entry_index.json')"
+          count = text.count(old)
+          if count != 1:
+              raise SystemExit(f'Expected exactly one legacy index path, found {count}')
+          p.write_text(text.replace(old, new), encoding='utf-8')
+          print('PRE_AI_ENTRY_INDEX_PATH_PATCH=PASS')
+          PY
+      - name: Targeted v2 consumer retest
+        run: |
+          python scripts/build_taste_cache_index.py
+          python scripts/build_pre_ai_taste_projection.py
+          python scripts/build_pre_ai_chatgpt_payload.py
+      - name: Commit source switch only
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add scripts/build_pre_ai_taste_projection.py
+          git diff --cached --check
+          git commit -m "Use per-entry taste index in pre-AI projection"
+          git push origin HEAD:main
