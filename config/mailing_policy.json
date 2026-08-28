@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.11",
+  "version": "1.12",
   "status": "canonical",
   "purpose": "Personalized full daily Steam KZ deals mailing with stable price-blind taste verdicts and resumable taste-cache checkpoints.",
   "policy_loading": {
@@ -73,7 +73,9 @@
     "required_review_count_basis": "global",
     "required_russian_review_count_cap": 500,
     "required_russian_rating_comparison": "steam_display_whole_percent",
-    "require_review_policy_regression_guard": true
+    "require_review_policy_regression_guard": true,
+    "required_review_threshold_profile": "personal-calibrated-v1",
+    "require_review_threshold_map_match": true
   },
   "taste_deal_separation": {
     "required": true,
@@ -535,5 +537,43 @@
     "excluded_items_not_mentioned": true,
     "upcoming_at_most_one": true,
     "freebies_and_upcoming_after_successful_ingest": true
+  },
+  "review_threshold_calibration": {
+    "profile": "personal-calibrated-v1",
+    "calibrated_at": "2026-08-28",
+    "calibration_repository": "kentrap2011-hub/stopgame-ratings-data",
+    "calibration_artifact": "steam_review_threshold_decision_table_2026-08-28.json",
+    "rated_games_total": 120,
+    "rated_games_exact_safe_for_calibration": 45,
+    "wishlist_games": 87,
+    "principle": "Steam review percentage is a quality/technical-risk guard and recall control, not a predictor of personal taste. Personal taste is decided later by the price-blind taste stage.",
+    "scale": {
+      "broad_recall": 75,
+      "personal_signal": 78,
+      "ordinary_quality_without_personal_signal": 80,
+      "mass_quality": 82,
+      "adjacent_without_normal_fit": 88,
+      "very_high_rating_discovery": 90
+    },
+    "thresholds": {
+      "affordable_quality": 75,
+      "genre_fit": 75,
+      "big_discount": 75,
+      "popular_quality": 82,
+      "very_high_rating": 90,
+      "cheap_quality": 80,
+      "niche_fit": 78,
+      "recent_quality": 78,
+      "mainstream_quality": 80,
+      "strong_fit": 78,
+      "strong_niche_fit": 78,
+      "exceptional_discount": 75,
+      "recent_fit": 78,
+      "high_confidence_adjacent": 88,
+      "substantive_content": 78
+    },
+    "russian_rating_uses_same_thresholds": true,
+    "russian_sample_rule_unchanged": "min(rule_global_minimum_count, 500)",
+    "global_review_count_baseline_unchanged": true
   }
 }

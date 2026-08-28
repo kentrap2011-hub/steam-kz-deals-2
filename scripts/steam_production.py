@@ -30,6 +30,28 @@ REVIEW_RETRIES = 5
 # обязан пройти исходный minimum_count конкретного правила.
 RUSSIAN_REVIEW_COUNT_CAP = 500
 
+# Calibrated on the user's own rated games + current Steam wishlist.
+# These percentages are quality/recall guards only; personal taste is
+# evaluated later by the price-blind taste stage.
+REVIEW_THRESHOLD_PROFILE = "personal-calibrated-v1"
+REVIEW_THRESHOLDS = {
+    "affordable_quality": 75,
+    "genre_fit": 75,
+    "big_discount": 75,
+    "popular_quality": 82,
+    "very_high_rating": 90,
+    "cheap_quality": 80,
+    "niche_fit": 78,
+    "recent_quality": 78,
+    "mainstream_quality": 80,
+    "strong_fit": 78,
+    "strong_niche_fit": 78,
+    "exceptional_discount": 75,
+    "recent_fit": 78,
+    "high_confidence_adjacent": 88,
+    "substantive_content": 78,
+}
+
 OUT = Path("data/production")
 SHORT = OUT / "shortlist"
 SHORT_CHUNK = 50
@@ -861,12 +883,12 @@ def assert_review_selection_contract():
         "russian_review_positive": 77.6,
         "russian_review_count": 574,
     }
-    if not review_passes(russian_rescue, 1500, 78):
+    if not review_passes(russian_rescue, 1500, REVIEW_THRESHOLDS["strong_fit"]):
         raise AssertionError("Russian review rescue regression: expected PASS")
 
     too_few_russian = dict(russian_rescue)
     too_few_russian["russian_review_count"] = 499
-    if review_passes(too_few_russian, 1500, 78):
+    if review_passes(too_few_russian, 1500, REVIEW_THRESHOLDS["strong_fit"]):
         raise AssertionError("Russian count cap regression: expected FAIL")
 
     global_rescue = {
@@ -875,7 +897,7 @@ def assert_review_selection_contract():
         "russian_review_positive": None,
         "russian_review_count": 0,
     }
-    if not review_passes(global_rescue, 1500, 78):
+    if not review_passes(global_rescue, 1500, REVIEW_THRESHOLDS["strong_fit"]):
         raise AssertionError("Global review path regression: expected PASS")
 
     global_count_too_low = {
@@ -884,7 +906,7 @@ def assert_review_selection_contract():
         "russian_review_positive": 99.0,
         "russian_review_count": 1000,
     }
-    if review_passes(global_count_too_low, 1500, 78):
+    if review_passes(global_count_too_low, 1500, REVIEW_THRESHOLDS["strong_fit"]):
         raise AssertionError("Global count baseline regression: expected FAIL")
 
 
@@ -907,7 +929,7 @@ def broad_reasons(item, today):
     if (
         price <= 3500
         and discount >= 40
-        and review_passes(item, 3000, 75)
+        and review_passes(item, 3000, REVIEW_THRESHOLDS["affordable_quality"])
     ):
         reasons.append("affordable_quality")
 
@@ -915,35 +937,35 @@ def broad_reasons(item, today):
         price <= 4500
         and discount >= 30
         and fit_tags
-        and review_passes(item, 1000, 72)
+        and review_passes(item, 1000, REVIEW_THRESHOLDS["genre_fit"])
     ):
         reasons.append("genre_fit")
 
     if (
         price <= 5000
         and discount >= 70
-        and review_passes(item, 1000, 72)
+        and review_passes(item, 1000, REVIEW_THRESHOLDS["big_discount"])
     ):
         reasons.append("big_discount")
 
     if (
         price <= 5000
         and discount >= 35
-        and review_passes(item, 20000, 80)
+        and review_passes(item, 20000, REVIEW_THRESHOLDS["popular_quality"])
     ):
         reasons.append("popular_quality")
 
     if (
         price <= 4500
         and discount >= 25
-        and review_passes(item, 3000, 90)
+        and review_passes(item, 3000, REVIEW_THRESHOLDS["very_high_rating"])
     ):
         reasons.append("very_high_rating")
 
     if (
         price <= 2000
         and discount >= 25
-        and review_passes(item, 1000, 80)
+        and review_passes(item, 1000, REVIEW_THRESHOLDS["cheap_quality"])
     ):
         reasons.append("cheap_quality")
 
@@ -951,7 +973,7 @@ def broad_reasons(item, today):
         fit_tags
         and price <= 2500
         and discount >= 40
-        and review_passes(item, 100, 88)
+        and review_passes(item, 100, REVIEW_THRESHOLDS["niche_fit"])
     ):
         reasons.append("niche_fit")
 
@@ -968,7 +990,7 @@ def broad_reasons(item, today):
             0 <= age_days <= 730
             and price <= 4500
             and discount >= 20
-            and review_passes(item, 500, 80)
+            and review_passes(item, 500, REVIEW_THRESHOLDS["recent_quality"])
         ):
             reasons.append("recent_quality")
 
@@ -996,7 +1018,7 @@ def refined_reasons(item):
     if (
         price <= 4500
         and discount >= 40
-        and review_passes(item, 5000, 80)
+        and review_passes(item, 5000, REVIEW_THRESHOLDS["mainstream_quality"])
     ):
         reasons.append("mainstream_quality")
 
@@ -1004,7 +1026,7 @@ def refined_reasons(item):
         price <= 4500
         and discount >= 35
         and len(core) >= 1
-        and review_passes(item, 1500, 78)
+        and review_passes(item, 1500, REVIEW_THRESHOLDS["strong_fit"])
     ):
         reasons.append("strong_fit")
 
@@ -1012,21 +1034,21 @@ def refined_reasons(item):
         price <= 2500
         and discount >= 40
         and len(core) >= 2
-        and review_passes(item, 300, 88)
+        and review_passes(item, 300, REVIEW_THRESHOLDS["strong_niche_fit"])
     ):
         reasons.append("strong_niche_fit")
 
     if (
         price <= 3500
         and discount >= 75
-        and review_passes(item, 3000, 78)
+        and review_passes(item, 3000, REVIEW_THRESHOLDS["exceptional_discount"])
     ):
         reasons.append("exceptional_discount")
 
     if (
         price <= 4000
         and discount >= 25
-        and review_passes(item, 3000, 92)
+        and review_passes(item, 3000, REVIEW_THRESHOLDS["very_high_rating"])
     ):
         reasons.append("very_high_rating")
 
@@ -1036,7 +1058,7 @@ def refined_reasons(item):
         and price <= 4000
         and discount >= 25
         and len(core) >= 1
-        and review_passes(item, 750, 82)
+        and review_passes(item, 750, REVIEW_THRESHOLDS["recent_fit"])
     ):
         reasons.append("recent_fit")
 
@@ -1044,7 +1066,7 @@ def refined_reasons(item):
         price <= 2500
         and discount >= 50
         and not core
-        and review_passes(item, 10000, 88)
+        and review_passes(item, 10000, REVIEW_THRESHOLDS["high_confidence_adjacent"])
     ):
         reasons.append(
             "high_confidence_adjacent"
@@ -1059,7 +1081,7 @@ def refined_reasons(item):
             len(core) >= 1
             or len(secondary) >= 2
         )
-        and review_passes(item, 100, 80)
+        and review_passes(item, 100, REVIEW_THRESHOLDS["substantive_content"])
     ):
         reasons.append("substantive_content")
 
@@ -1650,6 +1672,10 @@ manifest = {
         "steam_display_whole_percent",
     "review_policy_regression_guard":
         True,
+    "review_threshold_profile":
+        REVIEW_THRESHOLD_PROFILE,
+    "review_thresholds":
+        dict(REVIEW_THRESHOLDS),
     "global_review_language":
         "all",
     "russian_review_language":
@@ -1727,6 +1753,10 @@ index = {
         "steam_display_whole_percent",
     "review_policy_regression_guard":
         True,
+    "review_threshold_profile":
+        REVIEW_THRESHOLD_PROFILE,
+    "review_thresholds":
+        dict(REVIEW_THRESHOLDS),
     "review_fields": {
         "global": [
             "global_review_positive",

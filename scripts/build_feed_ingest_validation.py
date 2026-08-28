@@ -35,6 +35,7 @@ if contract.get('contract') != 'PRODUCTION-FEED-INTEGRITY-FAST-PATH' or contract
     raise SystemExit('Unexpected feed integrity contract')
 
 qa = policy['ingest_qa']
+threshold_policy = policy['review_threshold_calibration']
 att = mailing_index.get('integrity_attestation') or {}
 if att.get('proof_method') != 'content_addressed_producer_attestation':
     raise SystemExit('Producer integrity attestation absent')
@@ -54,6 +55,8 @@ checks = {
     'russian_review_count_cap': int(manifest.get('russian_review_count_cap') or -1) == int(qa['required_russian_review_count_cap']) and int(source_index.get('russian_review_count_cap') or -1) == int(qa['required_russian_review_count_cap']),
     'russian_rating_comparison': manifest.get('russian_rating_comparison') == qa['required_russian_rating_comparison'] and source_index.get('russian_rating_comparison') == qa['required_russian_rating_comparison'],
     'review_policy_regression_guard': manifest.get('review_policy_regression_guard') is qa['require_review_policy_regression_guard'] and source_index.get('review_policy_regression_guard') is qa['require_review_policy_regression_guard'],
+    'review_threshold_profile': manifest.get('review_threshold_profile') == qa['required_review_threshold_profile'] == threshold_policy['profile'] and source_index.get('review_threshold_profile') == threshold_policy['profile'],
+    'review_threshold_map': manifest.get('review_thresholds') == threshold_policy['thresholds'] and source_index.get('review_thresholds') == threshold_policy['thresholds'] and qa['require_review_threshold_map_match'] is True,
     'optimized_item_count_matches_source': int(mailing_index.get('item_count') or -1) == int(source_index.get('item_count') or -2),
     'optimized_source_count_matches_source': int(mailing_index.get('source_item_count') or -1) == int(source_index.get('item_count') or -2),
     'optimized_updated_at_matches_source': mailing_index.get('source_updated_at_utc') == source_index.get('source_updated_at_utc'),
