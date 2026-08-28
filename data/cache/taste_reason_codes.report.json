@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "source_index_blob_sha": "0784c399676607e64747845c7aa78cb67d6c9e7e",
+  "entry_count": 583,
+  "invalid_entry_shapes": 0,
+  "distinct_reason_codes": 5,
+  "reason_code_counts": {
+    "exclude_audited_below": 135,
+    "exclude_direct_conflict": 3,
+    "exclude_insufficient": 344,
+    "include_moderate": 65,
+    "include_strong": 36
+  },
+  "by_verdict": {
+    "EXCLUDE": {
+      "exclude_audited_below": 135,
+      "exclude_direct_conflict": 3,
+      "exclude_insufficient": 344
+    },
+    "INCLUDE": {
+      "include_moderate": 65,
+      "include_strong": 36
+    }
+  },
+  "by_fit_level": {
+    "below_moderate": {
+      "exclude_audited_below": 135,
+      "exclude_direct_conflict": 3,
+      "exclude_insufficient": 344
+    },
+    "moderate": {
+      "include_moderate": 65
+    },
+    "strong": {
+      "include_strong": 36
+    }
+  }
+}
