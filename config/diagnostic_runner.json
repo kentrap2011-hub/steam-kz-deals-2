@@ -1,8 +1,8 @@
 {
   "contract": "GAME-DEALS-DIAGNOSTIC-RUNNER",
-  "version": "1.0",
+  "version": "1.1",
   "status": "test_only",
-  "purpose": "Run the canonical mailing pipeline from the beginning, stage by stage, stopping at the first slow, erroneous, ambiguous, or policy-noncompliant stage so that the bottleneck can be analyzed and fixed before the next full restart.",
+  "purpose": "Run the canonical mailing pipeline stage by stage, stop at the first slow, erroneous, ambiguous, or policy-noncompliant stage, then retest only that failed stage and its strictly required prerequisites until it passes; after that, restart a full diagnostic run from stage 01.",
   "authority": {
     "canonical_policy_repository": "kentrap2011-hub/steam-kz-deals-2",
     "canonical_policy_path": "config/mailing_policy.json",
@@ -14,7 +14,7 @@
     "publish_only_when_all_diagnostic_stages_pass_and_canonical_final_self_check_passes": true
   },
   "execution": {
-    "restart_from_stage_1_on_every_run": true,
+    "full_run_starts_from_stage_1": true,
     "continue_automatically_after_stage_pass": true,
     "stop_at_first_non_pass_stage": true,
     "default_stage_soft_limit_seconds": 60,
@@ -31,7 +31,31 @@
     "successful_stages_must_be_safe_to_repeat": true,
     "preserve_canonical_checkpoint_and_write_order": true,
     "external_lookup_registry_still_required": true,
-    "no_duplicate_external_lookup_on_restart_within_same_run": true
+    "no_duplicate_external_lookup_on_restart_within_same_run": true,
+    "targeted_retest_mode": {
+      "enabled": true,
+      "trigger": "After a diagnostic run stops at a failed stage and that failure has been analyzed or a fix has been applied.",
+      "target_stage": "The exact failed stage that stopped the diagnostic run.",
+      "run_only_minimum_dependency_closure": true,
+      "dependency_rules": [
+        "Always load the canonical policy first and the diagnostic runner second before substantive retest work.",
+        "Run only prerequisites whose outputs or assertions are strictly required to execute and validate the target stage correctly.",
+        "Do not rerun an earlier stage merely because its numeric stage id is lower than the target stage.",
+        "Before the targeted retest begins, explicitly identify and report the prerequisite stage ids that are required for this target stage.",
+        "If a prerequisite is uncertain but may be required for correctness, treat it as required rather than silently skipping it.",
+        "Do not run any downstream stage after the target stage during targeted retest mode."
+      ],
+      "repeat_until_target_passes": true,
+      "on_target_fail": "Stop, report the exact failure, analyze or fix it, then retest the same target stage again with only its required prerequisites.",
+      "on_prerequisite_fail": "Stop immediately. The failing prerequisite becomes the active blocking stage and must itself be fixed and targeted-retested before returning to the original target stage.",
+      "on_target_pass": "Exit targeted retest mode and start a new full diagnostic run from stage 01. Do not continue directly to the next downstream stage.",
+      "production_publish_forbidden": true,
+      "full_run_is_only_path_to_final_self_check_and_publication": true,
+      "example": {
+        "failed_stage": "04_taste_cache_load",
+        "instruction": "Retest stage 04 plus only the prerequisites strictly needed by stage 04. Do not rerun unrelated stages such as stage 03 unless stage 04 actually requires their outputs. Once stage 04 passes, restart the complete diagnostic from stage 01."
+      }
+    }
   },
   "pass_contract": {
     "allowed_stage_terminal_statuses": [
@@ -53,6 +77,9 @@
   },
   "standard_stage_report": {
     "required_fields": [
+      "run_mode",
+      "target_stage_id",
+      "required_prerequisite_stage_ids",
       "stage_id",
       "stage_name",
       "status",
@@ -71,6 +98,10 @@
       "assertions_failed",
       "failure_reason",
       "next_stage_allowed"
+    ],
+    "run_mode_allowed_values": [
+      "FULL_RUN",
+      "TARGETED_RETEST"
     ],
     "candidate_names_in_progress": "forbidden unless necessary to explain the exact failing row in a requested debug report",
     "counts_must_be_exact_if_reported": true,
@@ -314,6 +345,9 @@
       "final_self_check": "FAIL",
       "ordinary_mailing_allowed": false,
       "must_report": [
+        "run_mode",
+        "target_stage_id",
+        "required_prerequisite_stage_ids",
         "first_failed_stage_id",
         "first_failed_stage_name",
         "failure_status",
