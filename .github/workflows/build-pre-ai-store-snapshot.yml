@@ -14,10 +14,12 @@ on:
       - "config/offer_family_contract.json"
       - "config/deal_quality_contract.json"
       - "config/mailing_policy.json"
+      - "data/cache/steamdb_history.json"
       - "scripts/build_pre_ai_store_snapshot.py"
       - "scripts/build_pre_ai_fx_snapshot.py"
       - "scripts/build_pre_ai_content_rules.py"
       - "scripts/build_pre_ai_family_graph.py"
+      - "scripts/build_pre_ai_history_snapshot.py"
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
 
 permissions:
@@ -57,6 +59,9 @@ jobs:
       - name: Build purchase-family graph
         run: python scripts/build_pre_ai_family_graph.py
 
+      - name: Build nonblocking history classification
+        run: python scripts/build_pre_ai_history_snapshot.py
+
       - name: Commit atomic pre-AI payload
         run: |
           git config user.name "steam-kz-bot"
@@ -66,7 +71,8 @@ jobs:
             data/production/pre_ai/content_metadata.json \
             data/production/pre_ai/fx_snapshot.json \
             data/production/pre_ai/content_rules.json \
-            data/production/pre_ai/family_graph.json
+            data/production/pre_ai/family_graph.json \
+            data/production/pre_ai/history_snapshot.json
           if git diff --cached --quiet; then
             echo "Pre-AI deterministic payload already current"
             exit 0
