@@ -1,0 +1,118 @@
+name: Recover prepared taste cache once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/recover-taste-cache-once.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: recover-taste-cache-once
+  cancel-in-progress: false
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Assemble and validate prepared cache
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          cat \
+            data/recovery/taste_fit_checkpoint_prepared.gz.b64.part001 \
+            data/recovery/taste_fit_checkpoint_prepared.gz.b64.part002 \
+            data/recovery/taste_fit_checkpoint_prepared.gz.b64.part003 \
+            data/recovery/taste_fit_checkpoint_prepared.gz.b64.part004 \
+            | base64 --decode | gzip --decompress --stdout > /tmp/taste_fit.json
+
+          ACTUAL_SHA="$(sha256sum /tmp/taste_fit.json | awk '{print $1}')"
+          EXPECTED_SHA="3a51f14e7ee97062cc26f023f6666ad01cc853df7a6f99111a54a437d64ffbcb"
+          test "$ACTUAL_SHA" = "$EXPECTED_SHA"
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          recovered_path = Path('/tmp/taste_fit.json')
+          current_path = Path('data/cache/taste_fit.json')
+          recovered = json.loads(recovered_path.read_text(encoding='utf-8'))
+          current = json.loads(current_path.read_text(encoding='utf-8'))
+
+          expected_profile = 'b0d11172aea762cb7274efe24d71734b2fc6b5b0'
+          required = {
+              'key', 'appid', 'profile_blob_sha', 'taste_model_version',
+              'taste_fingerprint', 'verdict', 'fit_level', 'reason_code',
+              'positive_evidence', 'negative_evidence', 'evaluated_at_utc'
+          }
+
+          assert recovered.get('schema_version') == 1
+          assert recovered.get('entry_count') == 583
+          assert len(recovered.get('entries', {})) == 583
+          assert recovered.get('profile_blob_sha') == expected_profile
+          assert recovered.get('taste_model_version') == 'taste-v2'
+
+          for key, entry in recovered['entries'].items():
+              assert entry.get('key') == key
+              assert required.issubset(entry)
+              assert entry.get('profile_blob_sha') == expected_profile
+              assert entry.get('taste_model_version') == 'taste-v2'
+              assert entry.get('verdict') in {'INCLUDE', 'EXCLUDE'}
+              assert entry.get('fit_level') != 'borderline'
+              assert entry.get('reason_code') != 'borderline_fit_needs_audit'
+
+          current_entries = current.get('entries', {})
+          if current_entries:
+              # Never overwrite a concurrently warmed cache with different verdicts.
+              assert current.get('profile_blob_sha') == expected_profile
+              assert current.get('taste_model_version') == 'taste-v2'
+              assert current.get('entry_count') == len(current_entries)
+              assert current_entries == recovered['entries']
+
+          print('PASS: prepared cache validated: 583/583')
+          PY
+
+          cp /tmp/taste_fit.json data/cache/taste_fit.json
+          rm -f \
+            data/recovery/taste_fit_checkpoint_prepared.gz.b64.part001 \
+            data/recovery/taste_fit_checkpoint_prepared.gz.b64.part002 \
+            data/recovery/taste_fit_checkpoint_prepared.gz.b64.part003 \
+            data/recovery/taste_fit_checkpoint_prepared.gz.b64.part004
+
+      - name: Commit recovered cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add -A data/cache/taste_fit.json data/recovery/
+          if git diff --cached --quiet; then
+            echo "Nothing to commit"
+            exit 0
+          fi
+          git commit -m "Recover prepared taste cache (583 entries)"
+
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "Rebase failed"
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
