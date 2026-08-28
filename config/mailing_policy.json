@@ -1,8 +1,8 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.9",
+  "version": "1.10",
   "status": "canonical",
-  "purpose": "Personalized full daily Steam KZ deals mailing with stable price-blind taste verdicts.",
+  "purpose": "Personalized full daily Steam KZ deals mailing with stable price-blind taste verdicts and resumable taste-cache checkpoints.",
 
   "policy_loading": {
     "primary_repository": "kentrap2011-hub/steam-kz-deals-2",
@@ -27,7 +27,6 @@
   "taste_profile": {
     "canonical_repository": "kentrap2011-hub/stopgame-ratings-data",
     "canonical_path": "gaming_taste_live.json",
-    "canonical_url": "https://raw.githubusercontent.com/kentrap2011-hub/stopgame-ratings-data/main/gaming_taste_live.json",
     "load_once_per_run": true,
     "record_git_blob_sha": true,
     "historical_snapshot_forbidden_as_fallback": "gaming_taste_database_2026-08-12.json",
@@ -229,14 +228,39 @@
     "do_not_cache_borderline_before_audit": true,
     "entry_count_must_equal_len_entries": true,
 
-    "mandatory_checkpoint": {
-      "required": true,
-      "when": "immediately_after_all_taste_cache_misses_have_final_post_audit_verdicts",
-      "before": ["content_eligibility", "offer_family_resolution", "Steam_Store_lookup", "SteamDB_lookup", "deal_quality", "sorting"],
-      "if_cache_changed_attempt_exactly_one_github_write_before_continuing": true,
-      "first_warmup_run_must_not_defer_taste_cache_write_until_after_external_work": true,
+    "checkpoint_strategy": {
+      "mode": "incremental_by_chosen_feed_chunk",
+      "required_on_cache_misses": true,
+      "process_chunks_in_source_order": true,
+      "checkpoint_after_each_chunk_final_post_audit_verdicts": true,
+      "merge_only_final_non_borderline_entries": true,
+      "checkpoint_before_advancing_to_next_chunk_when_cache_changed": true,
+      "checkpoint_before_content_family_store_steamdb_deal_quality_sorting": true,
+      "maximum_github_writes_per_run": "chosen_feed_chunk_count",
+      "steady_state_goal": "zero_or_one_write_when_few_or_no_misses",
       "write_failure_is_warning_only": true,
-      "after_successful_write_continue_using_in_memory_verdicts": true
+      "if_execution_budget_is_low_stop_after_successful_checkpoint_and_resume_next_run": true,
+      "never_discard_already_persisted_valid_chunk_verdicts": true
+    },
+
+    "recovery_artifact": {
+      "enabled": true,
+      "expected_name": "taste_fit_checkpoint_prepared.json",
+      "purpose": "recover final taste-v2 verdicts from an immediately prior interrupted run without repeating semantic evaluation",
+      "artifact_is_not_user_evidence": true,
+      "accept_only_if": [
+        "schema_version_matches",
+        "profile_blob_sha_matches_current_canonical_profile",
+        "taste_model_version_matches_current_policy",
+        "every_recovered_entry_key_exists_in_current_feed",
+        "every_recovered_entry_fingerprint_matches_current_price_blind_fingerprint",
+        "every_recovered_entry_is_final_non_borderline",
+        "artifact_entry_count_equals_len_entries"
+      ],
+      "full_artifact_fast_path": "If a valid recovery artifact covers every current feed candidate, write it to data/cache/taste_fit.json before any semantic re-evaluation, then treat all matching entries as cache hits.",
+      "partial_artifact_rule": "Merge only individually valid recovered entries, persist them as an incremental checkpoint, and semantically evaluate only remaining misses.",
+      "recovery_write_counts_against_checkpoint_write_budget": true,
+      "if_validation_fails": "ignore_artifact_and_use_normal_cache_miss_flow"
     }
   },
 
@@ -362,11 +386,11 @@
     "1_load_canonical_policy",
     "2_load_profile_once_and_record_blob_sha",
     "3_validate_and_read_full_feed_once",
-    "4_load_taste_cache_once_and_reuse_exact_hits",
-    "5_semantic_price_blind_taste_evaluation_only_for_cache_misses",
-    "6_targeted_price_blind_audit_for_fresh_conflicts_only",
-    "7_MANDATORY_TASTE_CACHE_CHECKPOINT_WRITE_BEFORE_ANY_EXTERNAL_WORK",
-    "8_content_eligibility_and_offer_family_resolution",
+    "4_load_taste_cache_once_and_validate_optional_recovery_artifact",
+    "5_if_full_valid_recovery_artifact_exists_checkpoint_it_before_semantic_work",
+    "6_process_taste_cache_misses_in_feed_chunk_order",
+    "7_after_each_chunk_finalize_targeted_audit_and_checkpoint_changed_final_verdicts",
+    "8_only_after_all_current_candidates_have_final_taste_verdicts_apply_content_eligibility_and_offer_family_resolution",
     "9_current_price_discount_from_validated_snapshot_and_conditional_store_only",
     "10_steamdb_cache_then_true_history_misses_only",
     "11_at_most_one_steamdb_cache_write",
@@ -434,7 +458,9 @@
     "taste_cache_hits_not_re_evaluated": true,
     "fresh_taste_verdicts_use_taste_v2_evidence_contract": true,
     "targeted_audit_uses_same_threshold": true,
-    "taste_cache_checkpoint_attempted_before_content_family_and_external_work_if_cache_changed": true,
+    "valid_recovery_artifact_entries_verified_before_reuse": true,
+    "each_changed_taste_chunk_checkpointed_before_advancing_or_external_work": true,
+    "already_persisted_valid_taste_verdicts_not_discarded_on_interruption": true,
     "no_candidate_name_whitelists": true,
     "content_eligibility_applied": true,
     "orphan_dlc_not_recommended": true,
