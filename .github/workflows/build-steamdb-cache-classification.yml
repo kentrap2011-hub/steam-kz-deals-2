@@ -2,6 +2,11 @@ name: Build SteamDB cache classification
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "Checkpoint SteamDB history"
+    types:
+      - completed
   push:
     branches: [main]
     paths:
@@ -21,6 +26,9 @@ concurrency:
 
 jobs:
   build:
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
