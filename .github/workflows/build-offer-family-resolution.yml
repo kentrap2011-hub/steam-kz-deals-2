@@ -1,0 +1,316 @@
+name: Build offer family resolution
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "config/mailing_policy.json"
+      - "config/offer_family_contract.json"
+      - "data/production/mailing/**"
+      - "data/cache/content_eligibility.validation.json"
+      - "data/cache/content_metadata.json"
+      - ".github/workflows/build-offer-family-resolution.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: offer-family-resolution
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Resolve purchase families and primary variants
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          import subprocess
+          import unicodedata
+          from collections import defaultdict
+          from pathlib import Path
+
+          POLICY=Path('config/mailing_policy.json')
+          CONTRACT=Path('config/offer_family_contract.json')
+          MAILING=Path('data/production/mailing/index.json')
+          ELIG=Path('data/cache/content_eligibility.validation.json')
+          META=Path('data/cache/content_metadata.json')
+          OUT=Path('data/cache/offer_family.validation.json')
+
+          def sha(path):
+              return subprocess.check_output(['git','rev-parse',f'HEAD:{path}'], text=True).strip()
+
+          policy=json.loads(POLICY.read_text(encoding='utf-8'))
+          contract=json.loads(CONTRACT.read_text(encoding='utf-8'))
+          mailing=json.loads(MAILING.read_text(encoding='utf-8'))
+          elig=json.loads(ELIG.read_text(encoding='utf-8'))
+          meta=json.loads(META.read_text(encoding='utf-8'))
+
+          if policy.get('status')!='canonical': raise SystemExit('Policy not canonical')
+          if contract.get('contract')!='OFFER-FAMILY-RESOLUTION-V1': raise SystemExit('Unexpected family contract')
+          if elig.get('status')!='complete' or not elig.get('complete_coverage'): raise SystemExit('Content eligibility incomplete')
+
+          eligible_keys={x['key'] for x in elig['eligible']}
+          excluded_keys={x['key'] for x in elig['excluded']}
+          if eligible_keys & excluded_keys: raise SystemExit('Eligibility overlap')
+
+          cols=mailing['columns']; ci={n:i for i,n in enumerate(cols)}
+          feed={}
+          for n in range(1,int(mailing['chunk_count'])+1):
+              p=Path(mailing['chunk_pattern'].replace('NNN',f'{n:03d}'))
+              for line in p.read_text(encoding='utf-8').splitlines():
+                  if not line.strip(): continue
+                  c=line.split('\t')
+                  if len(c)!=len(cols): raise SystemExit(f'Column mismatch in {p}')
+                  key=c[ci['key']]
+                  feed[key]={
+                      'key':key,
+                      'appid':c[ci['appid']],
+                      'title':c[ci['title']],
+                      'discount_percent':int(float(c[ci['discount_percent']])),
+                      'final_kzt':float(c[ci['final_kzt']]),
+                  }
+
+          metadata=meta['entries']
+          if not eligible_keys <= set(metadata): raise SystemExit('Metadata missing eligible keys')
+
+          app_key_by_appid={feed[k]['appid']:k for k in eligible_keys if k.startswith('App_') and k in feed}
+          game_keys={k for k in eligible_keys if metadata[k].get('entity_kind')=='app' and metadata[k].get('app_type')=='game'}
+          game_appids={feed[k]['appid'] for k in game_keys}
+          dlc_keys={k for k in eligible_keys if metadata[k].get('entity_kind')=='app' and metadata[k].get('app_type')=='dlc'}
+          sub_keys={k for k in eligible_keys if metadata[k].get('entity_kind')=='sub'}
+
+          # Each ordinary game starts as a distinct family. No franchise-name grouping.
+          family_of={}
+          families={}
+          for key in sorted(game_keys):
+              fid='game:'+feed[key]['appid']
+              families[fid]={'family_id':fid,'family_type':'base_game','members':[key],'relationship_evidence':['exact_game_appid:'+feed[key]['appid']]}
+              family_of[key]=fid
+
+          # Attach DLC by exact Steam fullgame_appid only.
+          unresolved=[]
+          for key in sorted(dlc_keys):
+              base_appid=str(metadata[key].get('fullgame_appid') or '')
+              base_key=app_key_by_appid.get(base_appid)
+              if base_key and base_key in family_of:
+                  fid=family_of[base_key]
+                  families[fid]['members'].append(key)
+                  families[fid]['relationship_evidence'].append(f'exact_dlc_fullgame:{key}->{base_appid}')
+                  family_of[key]=fid
+              else:
+                  unresolved.append({'key':key,'reason':'eligible_dlc_missing_included_base_family','base_appid':base_appid})
+
+          # Attach packages only when there is exactly one included base-game component.
+          # A package spanning multiple included base games stays a distinct bundle family.
+          for key in sorted(sub_keys):
+              apps=metadata[key].get('package_apps') or []
+              package_appids={str(a.get('appid')) for a in apps if isinstance(a,dict) and a.get('appid') is not None}
+              included_base_appids=sorted(package_appids & game_appids)
+              representative=str(feed[key].get('appid') or '')
+              if representative in game_appids and representative not in included_base_appids:
+                  included_base_appids.append(representative)
+                  included_base_appids=sorted(set(included_base_appids))
+
+              if len(included_base_appids)==1:
+                  base_key=app_key_by_appid[included_base_appids[0]]
+                  fid=family_of[base_key]
+                  families[fid]['members'].append(key)
+                  families[fid]['relationship_evidence'].append(f'exact_package_component:{key}->{included_base_appids[0]}')
+                  family_of[key]=fid
+              elif len(included_base_appids)>1:
+                  fid='bundle:'+key
+                  families[fid]={
+                      'family_id':fid,
+                      'family_type':'franchise_bundle',
+                      'members':[key],
+                      'relationship_evidence':['exact_package_multiple_included_bases:'+','.join(included_base_appids)],
+                      'included_base_appids':included_base_appids,
+                  }
+                  family_of[key]=fid
+              else:
+                  unresolved.append({'key':key,'reason':'eligible_package_has_no_included_base_component','package_appids':sorted(package_appids)})
+
+          # Strict edition-title normalization fallback. It is only allowed when titles normalize exactly
+          # after removing a known edition marker. Current data may have no such collision.
+          suffixes=contract['edition_suffixes']
+          marker_re=re.compile('|'.join(re.escape(x) for x in sorted(suffixes,key=len,reverse=True)), re.I)
+          def normalized(title):
+              x=unicodedata.normalize('NFKC',title or '').lower().replace('™','').replace('®','')
+              had=bool(marker_re.search(x))
+              x=marker_re.sub('',x)
+              x=re.sub(r'\b(edition|upgrade|pack)\b','',x,flags=re.I)
+              x=re.sub(r'[^a-z0-9]+',' ',x)
+              return ' '.join(x.split()),had
+
+          norm_groups=defaultdict(list)
+          for key in sorted(game_keys):
+              n,had=normalized(metadata[key].get('store_name') or feed[key]['title'])
+              if n:
+                  norm_groups[n].append((key,had))
+          # Only merge still-distinct base families when exact normalized title equality exists and at least one has marker.
+          for n,items in sorted(norm_groups.items()):
+              fids=sorted({family_of[k] for k,_ in items})
+              if len(fids)<=1 or not any(h for _,h in items):
+                  continue
+              target=fids[0]
+              for other in fids[1:]:
+                  if other==target or other not in families: continue
+                  moved=list(families[other]['members'])
+                  families[target]['members'].extend(moved)
+                  families[target]['relationship_evidence'].append('exact_normalized_edition_title:'+n)
+                  for k in moved: family_of[k]=target
+                  del families[other]
+              families[target]['family_type']='edition_family'
+
+          if unresolved:
+              # Persistable result below; unresolved prevents PASS.
+              pass
+
+          ratio=float(contract['primary_variant_selection']['small_increment_ratio'])
+          family_rows=[]
+          assigned=[]
+          primary_keys=[]
+
+          for fid in sorted(families):
+              fam=families[fid]
+              members=sorted(set(fam['members']))
+              fam['members']=members
+              assigned.extend(members)
+
+              base_candidates=[]
+              addon_members=[]
+              for key in members:
+                  m=metadata[key]
+                  if m.get('entity_kind')=='app' and m.get('app_type')=='dlc':
+                      addon_members.append(key)
+                  else:
+                      base_candidates.append(key)
+
+              if not base_candidates:
+                  unresolved.append({'family_id':fid,'reason':'family_has_no_base_containing_primary_candidate','members':members})
+                  continue
+
+              primary=None
+              selection_reason=None
+
+              if fam['family_type']=='franchise_bundle':
+                  primary=base_candidates[0]
+                  selection_reason='cross_game_bundle_is_own_family'
+              elif len(base_candidates)==1:
+                  primary=base_candidates[0]
+                  selection_reason='single_base_containing_candidate'
+              else:
+                  # Prefer a direct game app as the baseline if present.
+                  direct_games=[k for k in base_candidates if metadata[k].get('entity_kind')=='app' and metadata[k].get('app_type')=='game']
+                  direct_games=sorted(direct_games,key=lambda k:(feed[k]['final_kzt'],-feed[k]['discount_percent'],k))
+                  baseline=direct_games[0] if direct_games else min(base_candidates,key=lambda k:(feed[k]['final_kzt'],-feed[k]['discount_percent'],k))
+                  primary=baseline
+                  selection_reason='cheapest_base_containing_variant'
+
+                  # Exact package attached to one base: prefer when price is <= base, or small premium adds apps.
+                  package_candidates=[k for k in base_candidates if metadata[k].get('entity_kind')=='sub']
+                  for pk in sorted(package_candidates,key=lambda k:(feed[k]['final_kzt'],-feed[k]['discount_percent'],k)):
+                      p_price=feed[pk]['final_kzt']; b_price=feed[baseline]['final_kzt']
+                      package_apps=metadata[pk].get('package_apps') or []
+                      extra_count=max(0,len(package_apps)-1)
+                      if p_price <= b_price:
+                          primary=pk; selection_reason='package_not_more_expensive_than_base'
+                          break
+                      if b_price>0 and (p_price-b_price)/b_price <= ratio and extra_count>=1:
+                          primary=pk; selection_reason='small_increment_adds_package_content'
+                          break
+
+                  # For direct edition variants without package metadata, choose cheapest deterministically.
+                  if not package_candidates and len(base_candidates)>1:
+                      primary=min(base_candidates,key=lambda k:(feed[k]['final_kzt'],-feed[k]['discount_percent'],k))
+                      selection_reason='cheapest_local_edition_variant'
+
+              primary_keys.append(primary)
+              alternatives=[k for k in base_candidates if k!=primary]
+              fam_out={
+                  'family_id':fid,
+                  'family_type':fam['family_type'],
+                  'primary_key':primary,
+                  'primary_title':feed[primary]['title'],
+                  'primary_final_kzt':feed[primary]['final_kzt'],
+                  'primary_discount_percent':feed[primary]['discount_percent'],
+                  'primary_selection_reason':selection_reason,
+                  'alternative_purchase_keys':alternatives,
+                  'addon_keys':addon_members,
+                  'all_member_keys':members,
+                  'relationship_evidence':fam['relationship_evidence'],
+              }
+              if 'included_base_appids' in fam:
+                  fam_out['included_base_appids']=fam['included_base_appids']
+              family_rows.append(fam_out)
+
+          assigned_set=set(assigned)
+          duplicate_assignments=len(assigned)-len(assigned_set)
+          missing_assignments=sorted(eligible_keys-assigned_set)
+          extra_assignments=sorted(assigned_set-eligible_keys)
+          primary_duplicate_count=len(primary_keys)-len(set(primary_keys))
+
+          complete=(
+              not unresolved
+              and duplicate_assignments==0
+              and not missing_assignments
+              and not extra_assignments
+              and primary_duplicate_count==0
+              and assigned_set==eligible_keys
+              and all(f.get('primary_key') for f in family_rows)
+          )
+
+          result={
+              'schema_version':1,
+              'purpose':'offer_family_resolution_validation',
+              'status':'complete' if complete else 'invalid',
+              'bindings':{
+                  'policy_blob_sha':sha('config/mailing_policy.json'),
+                  'family_contract_blob_sha':sha('config/offer_family_contract.json'),
+                  'mailing_tree_sha':sha('data/production/mailing'),
+                  'content_eligibility_blob_sha':sha('data/cache/content_eligibility.validation.json'),
+                  'content_metadata_blob_sha':sha('data/cache/content_metadata.json'),
+              },
+              'input_eligible_count':len(eligible_keys),
+              'assigned_count':len(assigned_set),
+              'family_count':len(family_rows),
+              'primary_count':len(primary_keys),
+              'duplicate_assignment_count':duplicate_assignments,
+              'primary_duplicate_count':primary_duplicate_count,
+              'missing_assignment_count':len(missing_assignments),
+              'extra_assignment_count':len(extra_assignments),
+              'unresolved_count':len(unresolved),
+              'complete_coverage':assigned_set==eligible_keys and duplicate_assignments==0,
+              'families':family_rows,
+              'unresolved':unresolved,
+              'missing_assignments':missing_assignments,
+              'extra_assignments':extra_assignments,
+          }
+          OUT.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print(json.dumps({k:result[k] for k in ['status','input_eligible_count','assigned_count','family_count','primary_count','duplicate_assignment_count','missing_assignment_count','unresolved_count']},ensure_ascii=False,indent=2))
+          PY
+
+      - name: Commit family validation artifact
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/offer_family.validation.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Rebuild offer family resolution"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then git rebase --abort || true; exit 1; fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*3))
+          done
+          exit 1
