@@ -1,0 +1,67 @@
+name: Reschedule production source once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/reschedule-production-once.yml"
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  reschedule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Move production cron to 04:00 Samara
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('.github/workflows/steam-test.yml')
+          text = path.read_text(encoding='utf-8')
+          old = '    # 06:30 по Самаре (02:30 UTC)\n    - cron: "30 2 * * *"'
+          new = '    # 04:00 по Самаре (00:00 UTC)\n    - cron: "0 0 * * *"'
+
+          if old not in text:
+              raise SystemExit('Expected old production cron was not found; refusing blind edit.')
+
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+
+          rm .github/workflows/reschedule-production-once.yml
+
+      - name: Commit schedule change
+        shell: bash
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add .github/workflows/steam-test.yml .github/workflows/reschedule-production-once.yml
+          git commit -m "Move Steam KZ production build to 04:00 Samara"
+
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 5))
+          done
+
+          exit 1
+
+      - name: Start fresh production build now
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run steam-test.yml --repo "$GITHUB_REPOSITORY" --ref main
