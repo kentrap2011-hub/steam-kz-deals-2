@@ -455,6 +455,36 @@ def identity(row):
     ).split("?", 1)[0]
 
 
+def canonical_appid(item_key, raw_appid):
+    """
+    App_X is the canonical Steam app identity. Steam search rows may expose
+    a different data-ds-appid for collections/bundles, so never let that
+    auxiliary value overwrite an explicit App_X key. Sub_ rows keep the
+    representative appid because they do not have an app identity of their own.
+    """
+    if item_key.startswith("App_"):
+        canonical = item_key.split("_", 1)[1]
+        if not canonical.isdigit():
+            raise RuntimeError(
+                f"Malformed canonical app key: {item_key}"
+            )
+        return canonical
+
+    return raw_appid
+
+
+def assert_app_identity_contract():
+    if canonical_appid("App_901735", "40960") != "901735":
+        raise AssertionError("App key identity regression")
+    if canonical_appid("App_40960", "40960") != "40960":
+        raise AssertionError("Ordinary app identity regression")
+    if canonical_appid("Sub_15407", "108710") != "108710":
+        raise AssertionError("Package representative appid regression")
+
+
+assert_app_identity_contract()
+
+
 def parse_row(row):
     title_node = row.select_one("span.title")
 
@@ -530,13 +560,21 @@ def parse_row(row):
         else ""
     )
 
-    appid = row.get("data-ds-appid")
+    item_key = identity(row)
+    raw_appid = row.get("data-ds-appid")
 
-    if appid:
-        appid = appid.split(",")[0]
+    if raw_appid:
+        raw_appid = raw_appid.split(",")[0]
+
+    appid = canonical_appid(item_key, raw_appid)
+
+    if item_key.startswith("App_") and appid != item_key.split("_", 1)[1]:
+        raise RuntimeError(
+            f"App identity invariant failed: key={item_key} appid={appid}"
+        )
 
     return {
-        "key": identity(row),
+        "key": item_key,
         "appid": appid,
         "title": title,
         "discount_percent": discount,
