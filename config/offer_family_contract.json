@@ -1,0 +1,56 @@
+{
+  "contract": "OFFER-FAMILY-RESOLUTION-V1",
+  "version": "1.0",
+  "status": "implementation_only",
+  "purpose": "Resolve current content-eligible Steam rows into purchase families using exact Steam relationships first, then choose one local primary purchase variant per family before expensive external checks.",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "never_overrides_canonical_policy": true,
+    "shared_franchise_word_never_creates_a_family": true,
+    "current_price_and_discount_may_be_used_only_as_purchase_variant_factors_after_final_taste": true
+  },
+  "relationship_priority": [
+    "Steam DLC fullgame_appid attaches an addon to its exact included base-game family",
+    "Steam package with exactly one included base-game component attaches to that exact base-game family",
+    "Steam package with multiple included base-game components remains its own bundle/franchise-bundle purchase family rather than forcing unrelated base families to merge",
+    "exact normalized title equality after removing only common edition suffixes may group edition variants when an edition marker is actually present",
+    "otherwise each eligible game row starts its own purchase family"
+  ],
+  "edition_suffixes": [
+    "game of the year",
+    "goty",
+    "definitive edition",
+    "ultimate edition",
+    "complete edition",
+    "gold edition",
+    "deluxe edition",
+    "special edition"
+  ],
+  "primary_variant_selection": {
+    "dlc_or_addon_cannot_replace_base_as_primary": true,
+    "single_candidate": "candidate is primary",
+    "base_app_vs_single_base_package": "prefer the package when it is no more expensive than the base app, or when its incremental cost is at most 25 percent of the base-app price and it contains at least one additional Steam app; otherwise prefer the base app",
+    "edition_variants": "prefer the cheapest base-containing variant unless a more complete variant costs at most 25 percent more and has explicit additional package/app content",
+    "cross_game_bundle": "bundle is its own family and is its primary variant",
+    "tie_breakers": [
+      "more substantive contained content",
+      "lower current KZT price",
+      "higher discount percent",
+      "stable key ascending"
+    ],
+    "small_increment_ratio": 0.25
+  },
+  "diagnostic_stage_13": {
+    "producer_workflow": ".github/workflows/build-offer-family-resolution.yml",
+    "output": "data/cache/offer_family.validation.json",
+    "pass_requires": [
+      "every content-eligible row is assigned to exactly one purchase family",
+      "no content-ineligible row is assigned",
+      "each family has exactly one primary variant",
+      "DLC rows never become primary when their included base exists",
+      "all grouping relationships have exact mechanical evidence",
+      "no grouping is based only on shared franchise words",
+      "assigned row count equals stage 12 eligible count"
+    ]
+  }
+}
