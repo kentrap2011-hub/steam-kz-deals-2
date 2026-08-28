@@ -1,0 +1,230 @@
+name: Build Steam content metadata for taste includes
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "data/production/mailing/**"
+      - "data/cache/taste_fit.index.json"
+      - ".github/workflows/build-content-metadata.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: steam-content-metadata
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Fetch reusable content metadata for current taste includes
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          import threading
+          import time
+          from concurrent.futures import ThreadPoolExecutor, as_completed
+          from pathlib import Path
+
+          import requests
+
+          MAILING_INDEX = Path('data/production/mailing/index.json')
+          TASTE_INDEX = Path('data/cache/taste_fit.index.json')
+          OUT = Path('data/cache/content_metadata.json')
+          WORKERS = 5
+          RETRIES = 5
+
+          mailing = json.loads(MAILING_INDEX.read_text(encoding='utf-8'))
+          taste = json.loads(TASTE_INDEX.read_text(encoding='utf-8'))
+          taste_entries = taste['entries']
+          cols = mailing['columns']
+          ci = {name:i for i,name in enumerate(cols)}
+
+          feed = {}
+          for n in range(1, int(mailing['chunk_count']) + 1):
+              path = Path(mailing['chunk_pattern'].replace('NNN', f'{n:03d}'))
+              for line in path.read_text(encoding='utf-8').splitlines():
+                  if not line.strip():
+                      continue
+                  cells = line.split('\t')
+                  key = cells[ci['key']]
+                  feed[key] = {
+                      'key': key,
+                      'appid': cells[ci['appid']],
+                      'title': cells[ci['title']],
+                  }
+
+          included = []
+          for key, cached in taste_entries.items():
+              if cached[2] == 'INCLUDE':
+                  row = feed.get(key)
+                  if row is None:
+                      raise SystemExit(f'Included taste key missing from current feed: {key}')
+                  included.append(row)
+
+          old = {}
+          if OUT.exists():
+              try:
+                  previous = json.loads(OUT.read_text(encoding='utf-8'))
+                  if isinstance(previous.get('entries'), dict):
+                      old = previous['entries']
+              except Exception:
+                  old = {}
+
+          local = threading.local()
+          def session():
+              s = getattr(local, 'session', None)
+              if s is None:
+                  s = requests.Session()
+                  s.headers.update({
+                      'User-Agent': 'Mozilla/5.0 SteamKZContentMetadata/1.0',
+                      'Accept': 'application/json,text/plain,*/*',
+                      'Accept-Language': 'en-US,en;q=0.9',
+                  })
+                  local.session = s
+              return s
+
+          def fetch_json(url, params):
+              last = None
+              for attempt in range(RETRIES):
+                  try:
+                      r = session().get(url, params=params, timeout=30)
+                      if r.status_code == 429:
+                          wait = int(r.headers.get('Retry-After') or min(30, 2 ** (attempt + 1)))
+                          time.sleep(wait)
+                          continue
+                      r.raise_for_status()
+                      return r.json()
+                  except Exception as exc:
+                      last = exc
+                      if attempt + 1 < RETRIES:
+                          time.sleep(min(20, 2 ** attempt))
+              raise RuntimeError(str(last))
+
+          def fetch_one(row):
+              key = row['key']
+              appid = row['appid']
+              if key.startswith('App_'):
+                  data = fetch_json(
+                      'https://store.steampowered.com/api/appdetails',
+                      {'appids': appid, 'cc': 'kz', 'l': 'english'}
+                  )
+                  payload = data.get(str(appid)) or {}
+                  if not payload.get('success') or not isinstance(payload.get('data'), dict):
+                      raise RuntimeError(f'appdetails unavailable for {key}')
+                  d = payload['data']
+                  fullgame = d.get('fullgame') if isinstance(d.get('fullgame'), dict) else None
+                  return key, {
+                      'key': key,
+                      'entity_kind': 'app',
+                      'steam_id': str(appid),
+                      'store_name': d.get('name'),
+                      'app_type': d.get('type'),
+                      'fullgame_appid': str(fullgame.get('appid')) if fullgame and fullgame.get('appid') is not None else None,
+                      'fullgame_name': fullgame.get('name') if fullgame else None,
+                      'is_free': d.get('is_free'),
+                  }
+              if key.startswith('Sub_'):
+                  subid = key.split('_', 1)[1]
+                  data = fetch_json(
+                      'https://store.steampowered.com/api/packagedetails',
+                      {'packageids': subid, 'cc': 'kz', 'l': 'english'}
+                  )
+                  payload = data.get(str(subid)) or {}
+                  if not payload.get('success') or not isinstance(payload.get('data'), dict):
+                      raise RuntimeError(f'packagedetails unavailable for {key}')
+                  d = payload['data']
+                  apps = []
+                  for app in d.get('apps') or []:
+                      if isinstance(app, dict) and app.get('id') is not None:
+                          apps.append({'appid': str(app.get('id')), 'name': app.get('name')})
+                  return key, {
+                      'key': key,
+                      'entity_kind': 'sub',
+                      'steam_id': str(subid),
+                      'store_name': d.get('name'),
+                      'package_apps': apps,
+                  }
+              raise RuntimeError(f'Unsupported key kind: {key}')
+
+          entries = dict(old)
+          required_keys = {row['key'] for row in included}
+          missing = [row for row in included if row['key'] not in entries]
+
+          print(f'Current taste includes={len(included)} cached_metadata_hits={len(included)-len(missing)} metadata_misses={len(missing)}')
+
+          failures = []
+          if missing:
+              with ThreadPoolExecutor(max_workers=WORKERS) as pool:
+                  future_map = {pool.submit(fetch_one, row): row for row in missing}
+                  for fut in as_completed(future_map):
+                      row = future_map[fut]
+                      try:
+                          key, value = fut.result()
+                          entries[key] = value
+                          print('OK', key, value.get('app_type') or value.get('entity_kind'))
+                      except Exception as exc:
+                          failures.append({'key': row['key'], 'error': str(exc)})
+                          print('FAIL', row['key'], exc)
+
+          unresolved = sorted(required_keys - set(entries))
+          if failures or unresolved:
+              print('failures=', failures)
+              print('unresolved=', unresolved)
+              raise SystemExit('Content metadata is incomplete; refusing to persist partial current coverage')
+
+          current_entries = {key: entries[key] for key in sorted(required_keys)}
+          result = {
+              'schema_version': 1,
+              'purpose': 'reusable_steam_content_metadata_for_current_taste_includes',
+              'mailing_tree_sha': subprocess.check_output(['git','rev-parse','HEAD:data/production/mailing'], text=True).strip(),
+              'taste_index_blob_sha': subprocess.check_output(['git','rev-parse','HEAD:data/cache/taste_fit.index.json'], text=True).strip(),
+              'profile_blob_sha': taste.get('profile_blob_sha'),
+              'taste_model_version': taste.get('taste_model_version'),
+              'required_include_count': len(required_keys),
+              'entry_count': len(current_entries),
+              'entries': current_entries,
+          }
+          OUT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print(f'Content metadata complete: {len(current_entries)}/{len(required_keys)}')
+          PY
+
+      - name: Commit metadata cache
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/content_metadata.json
+          if git diff --cached --quiet; then
+            echo "Content metadata already current"
+            exit 0
+          fi
+          git commit -m "Refresh Steam content metadata cache"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
