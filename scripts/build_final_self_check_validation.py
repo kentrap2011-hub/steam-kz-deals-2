@@ -96,7 +96,7 @@ check('steamdb_cache_complete', steamdb.get('status') == 'complete' and steamdb.
 check('steamdb_actual_len_entries_used', int(steamdb.get('actual_entry_count') or -1) >= 0 and int(steamdb.get('metadata_entry_count') or -2) == int(steamdb.get('actual_entry_count') or -1))
 check('steamdb_cache_before_history_lookup', int(steamdb.get('true_lookup_miss_count') or -1) == 0 and int(steamdb.get('steamdb_lookup_count') or -1) == 0)
 check('negative_cache_respected', int(steamdb.get('negative_cache_hit_count') or -1) >= 0 and int(steamdb.get('true_lookup_miss_count') or -1) == 0)
-check('steamdb_not_discovery', policy['pricing']['steamdb_usage'] == 'history_only_after_personal_selection')
+check('steamdb_not_discovery', policy['verification']['steamdb_usage'] == 'history_only_after_personal_selection')
 
 # Deal quality and deterministic order.
 check('deal_quality_complete', deal.get('status') == 'complete' and deal.get('complete_coverage') is True and int(deal.get('classified_count') or 0) == int(deal.get('input_primary_count') or -1))
