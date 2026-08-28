@@ -1,9 +1,8 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.10",
+  "version": "1.11",
   "status": "canonical",
   "purpose": "Personalized full daily Steam KZ deals mailing with stable price-blind taste verdicts and resumable taste-cache checkpoints.",
-
   "policy_loading": {
     "primary_repository": "kentrap2011-hub/steam-kz-deals-2",
     "primary_path": "config/mailing_policy.json",
@@ -14,7 +13,6 @@
     "load_before_any_ingest": true,
     "fail_closed_if_unavailable": true
   },
-
   "delivery": {
     "mode": "full_daily_snapshot",
     "delta_only": false,
@@ -23,7 +21,6 @@
     "completed_games_auto_excluded": false,
     "completed_status_is_context_only": true
   },
-
   "taste_profile": {
     "canonical_repository": "kentrap2011-hub/stopgame-ratings-data",
     "canonical_path": "gaming_taste_live.json",
@@ -36,7 +33,6 @@
     "wishlist_is_ownership_proof": false,
     "fail_if_canonical_profile_unavailable": true
   },
-
   "paid_discovery": {
     "repository": "kentrap2011-hub/steam-kz-deals-2",
     "store": "Steam",
@@ -53,7 +49,6 @@
     "web_search_may_replace_failed_ingest": false,
     "read_all_chunks": true
   },
-
   "ingest_qa": {
     "fail_closed": true,
     "manifest_complete_required": true,
@@ -73,9 +68,13 @@
     "optimized_view_must_report_all_source_chunks_verified": true,
     "optimized_mismatch_action": "fallback_to_source_shortlist",
     "source_failure_action": "do_not_generate_any_mailing",
-    "no_partial_freebies_or_upcoming_on_failure": true
+    "no_partial_freebies_or_upcoming_on_failure": true,
+    "required_review_selection_rule": "global_count_and_global_or_russian_rating",
+    "required_review_count_basis": "global",
+    "required_russian_review_count_cap": 500,
+    "required_russian_rating_comparison": "steam_display_whole_percent",
+    "require_review_policy_regression_guard": true
   },
-
   "taste_deal_separation": {
     "required": true,
     "taste_verdict_is_price_blind": true,
@@ -95,13 +94,17 @@
       "historical_minimum",
       "sale_end_date"
     ],
-    "recall_only_feed_flags": ["strong_fit", "strong_niche_fit", "recent_fit", "high_confidence_adjacent"],
+    "recall_only_feed_flags": [
+      "strong_fit",
+      "strong_niche_fit",
+      "recent_fit",
+      "high_confidence_adjacent"
+    ],
     "recall_flags_can_trigger_audit_but_are_not_taste_evidence": true,
     "core_fit_count_is_recall_context_not_positive_taste_evidence": true,
     "deal_quality_can_never_raise_taste_fit": true,
     "deal_quality_evaluated_only_after_final_taste_and_family_resolution": true
   },
-
   "personal_filter": {
     "minimum_interest_threshold": "moderate",
     "broad_filtering": true,
@@ -111,15 +114,25 @@
     "do_not_require_exact_title_match": true,
     "no_automatic_include_from_feed_signals": true,
     "do_not_invent_unknown_game_properties": true,
-
     "evidence_contract": {
       "every_positive_evidence_item_must_pair": [
         "a_specific_candidate_property",
         "a_specific_canonical_profile_anchor_or_durable_pattern"
       ],
       "generic_tags_that_cannot_count_alone": [
-        "Action", "Adventure", "RPG", "Singleplayer", "Story Rich", "Open World",
-        "Horror", "Exploration", "Third Person", "Fantasy", "Sci-fi", "Narrative", "Combat"
+        "Action",
+        "Adventure",
+        "RPG",
+        "Singleplayer",
+        "Story Rich",
+        "Open World",
+        "Horror",
+        "Exploration",
+        "Third Person",
+        "Fantasy",
+        "Sci-fi",
+        "Narrative",
+        "Combat"
       ],
       "high_specificity_positive_types": [
         "direct_positive_evidence_for_this_candidate_in_canonical_profile",
@@ -140,7 +153,6 @@
       "generic_tag_plus_generic_tag_is_not_two_independent_signals": true,
       "one_feed_recall_flag_plus_one_profile_pattern_is_not_two_signals": true
     },
-
     "structured_taste_evaluation": {
       "taste_model_version": "taste-v2",
       "required_for_cache_miss": true,
@@ -153,7 +165,6 @@
       "audit_may_not_lower_the_same_include_threshold": true,
       "reviews_discount_price_never_break_tie": true
     },
-
     "unknown_is_not_automatic_include": true,
     "exclusion_requires_specific_reason": true,
     "valid_exclusion_reason_codes": [
@@ -167,17 +178,18 @@
       "borderline_fit_needs_audit"
     ]
   },
-
   "decision_ledger": {
     "required": true,
     "scope": "every_ingested_candidate",
-    "allowed_decisions": ["INCLUDE", "EXCLUDE"],
+    "allowed_decisions": [
+      "INCLUDE",
+      "EXCLUDE"
+    ],
     "exclude_requires_specific_reason_code": true,
     "include_requires_fit_level": true,
     "included_plus_excluded_must_equal_processed": true,
     "keep_internal_unless_debug_requested": true
   },
-
   "false_negative_audit": {
     "required": true,
     "mode": "targeted_price_blind_taste_audit",
@@ -197,7 +209,6 @@
     "no_candidate_name_whitelists": true,
     "no_control_game_names_in_policy": true
   },
-
   "taste_cache": {
     "path": "data/cache/taste_fit.json",
     "schema_version": 1,
@@ -214,20 +225,37 @@
       "release_date"
     ],
     "fingerprint_excludes": [
-      "discount_percent", "final_kzt", "review_scores", "review_counts",
-      "feed_reason_flags", "historical_price", "sale_end_date"
+      "discount_percent",
+      "final_kzt",
+      "review_scores",
+      "review_counts",
+      "feed_reason_flags",
+      "historical_price",
+      "sale_end_date"
     ],
     "required_entry_fields": [
-      "key", "appid", "profile_blob_sha", "taste_model_version", "taste_fingerprint",
-      "verdict", "fit_level", "reason_code", "positive_evidence", "negative_evidence",
+      "key",
+      "appid",
+      "profile_blob_sha",
+      "taste_model_version",
+      "taste_fingerprint",
+      "verdict",
+      "fit_level",
+      "reason_code",
+      "positive_evidence",
+      "negative_evidence",
       "evaluated_at_utc"
     ],
-    "cache_hit_requires": ["exact_key", "profile_blob_sha", "taste_model_version", "taste_fingerprint"],
+    "cache_hit_requires": [
+      "exact_key",
+      "profile_blob_sha",
+      "taste_model_version",
+      "taste_fingerprint"
+    ],
     "cache_hits_are_final_and_not_semantically_re_evaluated": true,
     "profile_sha_change_invalidates_old_generation": true,
     "do_not_cache_borderline_before_audit": true,
     "entry_count_must_equal_len_entries": true,
-
     "checkpoint_strategy": {
       "mode": "incremental_by_chosen_feed_chunk",
       "required_on_cache_misses": true,
@@ -242,7 +270,6 @@
       "if_execution_budget_is_low_stop_after_successful_checkpoint_and_resume_next_run": true,
       "never_discard_already_persisted_valid_chunk_verdicts": true
     },
-
     "recovery_artifact": {
       "enabled": true,
       "expected_name": "taste_fit_checkpoint_prepared.json",
@@ -263,7 +290,6 @@
       "if_validation_fails": "ignore_artifact_and_use_normal_cache_miss_flow"
     }
   },
-
   "content_eligibility": {
     "required": true,
     "dlc_is_not_independent_recommendation_by_default": true,
@@ -276,13 +302,18 @@
     "cosmetic_soundtrack_artbook_and_non_game_addons_excluded": true,
     "bundle_with_base_game_may_be_purchase_variant_of_included_family": true
   },
-
   "offer_family_resolution": {
     "required": true,
     "group_before_expensive_external_checks": true,
     "family_types": [
-      "base_game", "remaster_or_remake", "deluxe_gold_complete_ultimate_definitive",
-      "substantive_dlc", "season_or_expansion_pass", "bundle", "franchise_bundle", "complete_the_set"
+      "base_game",
+      "remaster_or_remake",
+      "deluxe_gold_complete_ultimate_definitive",
+      "substantive_dlc",
+      "season_or_expansion_pass",
+      "bundle",
+      "franchise_bundle",
+      "complete_the_set"
     ],
     "same_appid_app_and_sub_may_be_purchase_family_when_relationship_clear": true,
     "normalize_common_edition_suffixes": true,
@@ -291,15 +322,18 @@
     "compare_all_local_variants_in_included_family": true,
     "choose_best_purchase_variant": true,
     "best_variant_factors": [
-      "contains_recommended_base_content", "substantive_extra_content", "current_price",
-      "discount", "historical_price_quality_if_available", "incremental_cost_for_more_content"
+      "contains_recommended_base_content",
+      "substantive_extra_content",
+      "current_price",
+      "discount",
+      "historical_price_quality_if_available",
+      "incremental_cost_for_more_content"
     ],
     "prefer_complete_variant_when_small_increment_adds_material_content": true,
     "one_primary_output_row_per_purchase_family": true,
     "primary_row_uses_best_purchase_variant": true,
     "mention_useful_alternative_in_same_row_when_relevant": true
   },
-
   "pricing": {
     "target_rub": 500,
     "target_is_hard_cap": false,
@@ -314,7 +348,6 @@
       "display_as_previously_free": true
     }
   },
-
   "verification": {
     "fresh_production_snapshot_is_current_price_and_discount_source": true,
     "steam_store_live_check_mode": "conditional_only",
@@ -332,25 +365,26 @@
     "steamdb_region": "Kazakhstan",
     "taste_fit_must_be_final_before_external_checks": true
   },
-
   "external_cache": {
     "load_each_cache_at_most_once_per_run": true,
     "cache_is_never_discovery_source": true,
-
     "store_state": {
       "path": "data/cache/store_state.json",
       "source": "same validated Steam KZ production snapshot",
       "validate_against_chosen_source_index": true,
       "do_not_reread_per_candidate": true
     },
-
     "steamdb_history": {
       "path": "data/cache/steamdb_history.json",
       "writer_schema_version": 2,
       "accept_legacy_schema_version_1": true,
       "currency": "KZT",
       "keying": "exact App_/Sub_ key",
-      "status_values": ["confirmed_min", "previously_free", "unavailable_exact_history"],
+      "status_values": [
+        "confirmed_min",
+        "previously_free",
+        "unavailable_exact_history"
+      ],
       "legacy_v1_positive_value_is_confirmed_min": true,
       "legacy_v1_zero_is_previously_free": true,
       "confirmed_min_reuse_if_current_price_not_below_cached_min": true,
@@ -363,7 +397,10 @@
         "blocked_timeout_tool_failure_never_persisted_as_negative": true
       },
       "lookup_required_when": [
-        "entry_missing", "entry_invalid", "negative_ttl_expired", "current_price_below_cached_nonzero_min"
+        "entry_missing",
+        "entry_invalid",
+        "negative_ttl_expired",
+        "current_price_below_cached_nonzero_min"
       ],
       "actual_runtime_entry_count_is_len_entries": true,
       "never_trust_stale_metadata_entry_count": true,
@@ -372,7 +409,6 @@
       "do_not_store_guessed_minima": true,
       "write_failure_is_warning_only": true
     },
-
     "lookup_registry": {
       "required": true,
       "key": "provider_plus_exact_entity_key",
@@ -381,7 +417,6 @@
       "shared_across_all_external_stages": true
     }
   },
-
   "runtime_pipeline": [
     "1_load_canonical_policy",
     "2_load_profile_once_and_record_blob_sha",
@@ -398,7 +433,6 @@
     "13_freebies_and_one_upcoming_event",
     "14_final_self_check_then_publish"
   ],
-
   "freebies": {
     "steam_feed_path": "data/production/freebies.tsv",
     "check_epic_gog_and_other_major_legal_pc_stores": true,
@@ -407,7 +441,6 @@
     "only_after_successful_main_ingest": true,
     "silently_omit_rejected_freebies": true
   },
-
   "upcoming": {
     "enabled": true,
     "horizon_days": 60,
@@ -417,7 +450,6 @@
     "distinguish_confirmed_from_estimated_dates": true,
     "only_after_successful_main_ingest": true
   },
-
   "output_visibility": {
     "show_only_included_recommendations": true,
     "silent_exclusions": true,
@@ -426,25 +458,44 @@
     "do_not_emit_candidate_names_in_progress_before_final_verification": true,
     "technical_debug_stats_only_when_requested": true
   },
-
   "sorting": {
     "required": true,
     "do_not_preserve_feed_or_processing_order": true,
-    "purchase_decision_order": ["БРАТЬ СЕЙЧАС", "МОЖНО БРАТЬ", "ЛУЧШЕ ЖДАТЬ"],
-    "within_decision_order": [
-      "taste_fit_desc", "price_quality_vs_history_desc", "best_variant_value_desc",
-      "discount_percent_desc", "current_price_rub_asc", "title_asc"
+    "purchase_decision_order": [
+      "БРАТЬ СЕЙЧАС",
+      "МОЖНО БРАТЬ",
+      "ЛУЧШЕ ЖДАТЬ"
     ],
-    "price_quality_order": ["record", "near_record", "good_vs_history", "previously_free", "unverified", "well_above_history"],
+    "within_decision_order": [
+      "taste_fit_desc",
+      "price_quality_vs_history_desc",
+      "best_variant_value_desc",
+      "discount_percent_desc",
+      "current_price_rub_asc",
+      "title_asc"
+    ],
+    "price_quality_order": [
+      "record",
+      "near_record",
+      "good_vs_history",
+      "previously_free",
+      "unverified",
+      "well_above_history"
+    ],
     "apply_after_final_verification_and_family_resolution": true
   },
-
   "paid_output_fields": [
-    "title", "best_edition_or_bundle", "discount_percent", "current_price_rub",
-    "historical_minimum_rub_or_previously_free", "delta_vs_paid_historical_minimum_if_available",
-    "record_or_near_record_status", "sale_end_date_if_known", "buy_now_or_wait", "why_it_fits"
+    "title",
+    "best_edition_or_bundle",
+    "discount_percent",
+    "current_price_rub",
+    "historical_minimum_rub_or_previously_free",
+    "delta_vs_paid_historical_minimum_if_available",
+    "record_or_near_record_status",
+    "sale_end_date_if_known",
+    "buy_now_or_wait",
+    "why_it_fits"
   ],
-
   "final_self_check": {
     "policy_loaded_before_ingest": true,
     "profile_loaded_once_and_blob_sha_recorded": true,

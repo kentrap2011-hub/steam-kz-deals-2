@@ -1,0 +1,1828 @@
+import json
+import re
+import shutil
+import threading
+import time
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timezone
+from pathlib import Path
+
+import requests
+from bs4 import BeautifulSoup
+
+
+URL = "https://store.steampowered.com/search/results/"
+REVIEW_URL = (
+    "https://store.steampowered.com/appreviews/{appid}"
+)
+
+PAGE_SIZE = 50
+REQUEST_DELAY = 0.9
+
+# Запросы рейтингов делаем только для игр, которые
+# структурно могут пройти shortlist.
+REVIEW_WORKERS = 8
+REVIEW_RETRIES = 5
+
+# Для русскоязычного рейтинга не требуем тысячи
+# русских отзывов. Но мировой total_reviews всё равно
+# обязан пройти исходный minimum_count конкретного правила.
+RUSSIAN_REVIEW_COUNT_CAP = 500
+
+OUT = Path("data/production")
+SHORT = OUT / "shortlist"
+SHORT_CHUNK = 50
+
+
+FIT_TAGS = {
+    19: "Action",
+    21: "Adventure",
+    122: "RPG",
+    4182: "Singleplayer",
+    1742: "Story Rich",
+    4106: "Action-Adventure",
+    1697: "Third Person",
+    6426: "Choices Matter",
+    1695: "Open World",
+    3834: "Exploration",
+    3993: "Combat",
+    4145: "Cinematic",
+    4231: "Action RPG",
+    5608: "Emotional",
+    4604: "Dark Fantasy",
+    5716: "Mystery",
+    1687: "Stealth",
+    4434: "JRPG",
+    5613: "Detective",
+    4115: "Cyberpunk",
+    3955: "Character Action",
+    1671: "Superhero",
+    1647: "Western",
+    5708: "Remake",
+    6378: "Crime",
+    7702: "Narrative",
+    1646: "Hack and Slash",
+    29482: "Souls-like",
+    3978: "Survival Horror",
+    1667: "Horror",
+    3942: "Sci-fi",
+    1684: "Fantasy",
+}
+
+SOFTWARE_TAGS = {
+    87, 8013, 84, 872, 784, 1027, 809,
+    13906, 1445, 5432, 5407, 603297,
+}
+
+GAME_TAGS = set(FIT_TAGS) | {
+    9, 599, 699, 701, 1774, 1625,
+    1716, 3959, 1666, 1752, 1743, 1770,
+}
+
+CORE = {
+    "Story Rich",
+    "Action-Adventure",
+    "Third Person",
+    "Choices Matter",
+    "Open World",
+    "Cinematic",
+    "Action RPG",
+    "Emotional",
+    "Dark Fantasy",
+    "Mystery",
+    "Stealth",
+    "JRPG",
+    "Detective",
+    "Cyberpunk",
+    "Character Action",
+    "Superhero",
+    "Western",
+    "Remake",
+    "Crime",
+    "Narrative",
+    "Hack and Slash",
+    "Souls-like",
+    "Survival Horror",
+    "Horror",
+    "Sci-fi",
+    "Fantasy",
+}
+
+SECONDARY = {
+    "Action",
+    "Adventure",
+    "RPG",
+    "Singleplayer",
+    "Exploration",
+    "Combat",
+}
+
+EXTRA_RE = re.compile(
+    r"\b("
+    r"soundtrack|ost|art\s*book|artbook|wallpapers?|"
+    r"skin\s*pack|costume\s*pack|cosmetic\s*pack|"
+    r"avatar\s*pack|digital\s*artwork|digital\s*artbook|"
+    r"music\s*pack|supporter\s*pack"
+    r")\b",
+    re.I,
+)
+
+CONTENT_RE = re.compile(
+    r"\b("
+    r"expansion|season\s*pass|story\s*(?:pack|dlc)|"
+    r"episode|chapter|campaign"
+    r")\b",
+    re.I,
+)
+
+# Это старый рейтинг, который Steam отдаёт прямо
+# в поисковой выдаче. Теперь он используется только
+# для диагностики парсинга, НЕ для отбора игр.
+REVIEW_RE = re.compile(
+    r"(\d{1,3})%\s+of\s+the\s+"
+    r"([\d,]+)\s+user reviews",
+    re.I,
+)
+
+
+session = requests.Session()
+
+session.headers.update({
+    "User-Agent": (
+        "Mozilla/5.0 "
+        "(Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 "
+        "Chrome/140 Safari/537.36"
+    ),
+    "Accept": "application/json,text/plain,*/*",
+    "Accept-Language": "en-US,en;q=0.9",
+})
+
+session.cookies.update({
+    "birthtime": "568022401",
+    "lastagecheckage": "1-January-1988",
+    "wants_mature_content": "1",
+})
+
+
+review_thread_local = threading.local()
+
+
+def get_review_session():
+    review_session = getattr(
+        review_thread_local,
+        "session",
+        None,
+    )
+
+    if review_session is None:
+        review_session = requests.Session()
+        review_session.headers.update({
+            "User-Agent": (
+                "Mozilla/5.0 "
+                "(Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 "
+                "Chrome/140 Safari/537.36"
+            ),
+            "Accept": "application/json,text/plain,*/*",
+            "Accept-Language": "en-US,en;q=0.9",
+        })
+        review_session.cookies.update({
+            "birthtime": "568022401",
+            "lastagecheckage": "1-January-1988",
+            "wants_mature_content": "1",
+        })
+        review_thread_local.session = review_session
+
+    return review_session
+
+
+def to_int(value):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def parse_list(value):
+    try:
+        parsed = json.loads(value or "[]")
+        if isinstance(parsed, list):
+            return parsed
+    except Exception:
+        pass
+    return []
+
+
+def parse_release(text):
+    try:
+        return datetime.strptime(
+            text.strip(),
+            "%d %b, %Y",
+        ).date()
+    except Exception:
+        return None
+
+
+def get_page(start, sort_by):
+    params = {
+        "query": "",
+        "start": start,
+        "count": PAGE_SIZE,
+        "specials": 1,
+        "cc": "kz",
+        "l": "english",
+        "infinite": 1,
+        "ignore_preferences": 1,
+        "sort_by": sort_by,
+    }
+
+    last_error = None
+
+    for attempt in range(8):
+        try:
+            response = session.get(
+                URL,
+                params=params,
+                timeout=40,
+            )
+
+            if response.status_code == 429:
+                retry_after = to_int(
+                    response.headers.get("Retry-After")
+                )
+                wait = (
+                    retry_after
+                    or min(90, 3 * (2 ** attempt))
+                )
+                print(
+                    "429",
+                    "start=", start,
+                    "sort=", sort_by,
+                    "wait=", wait,
+                )
+                time.sleep(wait)
+                continue
+
+            response.raise_for_status()
+            return response.json()
+
+        except Exception as exc:
+            last_error = exc
+            wait = min(90, 3 * (2 ** attempt))
+            print(
+                "retry",
+                "start=", start,
+                "sort=", sort_by,
+                "error=", exc,
+                "wait=", wait,
+            )
+            time.sleep(wait)
+
+    raise RuntimeError(
+        f"failed start={start} sort={sort_by}: "
+        f"{last_error}"
+    )
+
+
+def get_review_summary(appid, language):
+    """
+    Возвращает рейтинг Steam Reviews для одного языка.
+
+    language="all"      -> мировой рейтинг.
+    language="russian"  -> русскоязычные отзывы.
+
+    purchase_type="all" -> учитываем все обзоры,
+    а не только покупки непосредственно в Steam.
+
+    filter_offtopic_activity=1 -> Steam исключает
+    периоды review bombing так же, как делает по умолчанию.
+    """
+    params = {
+        "json": 1,
+        "filter": "all",
+        "language": language,
+        "day_range": 365,
+        "cursor": "*",
+        "review_type": "all",
+        "purchase_type": "all",
+        "num_per_page": 20,
+        "filter_offtopic_activity": 1,
+    }
+
+    last_error = None
+
+    for attempt in range(REVIEW_RETRIES):
+        try:
+            response = get_review_session().get(
+                REVIEW_URL.format(appid=appid),
+                params=params,
+                timeout=30,
+            )
+
+            if response.status_code == 429:
+                retry_after = to_int(
+                    response.headers.get("Retry-After")
+                )
+                wait = (
+                    retry_after
+                    or min(30, 2 ** (attempt + 1))
+                )
+                time.sleep(wait)
+                continue
+
+            response.raise_for_status()
+            data = response.json()
+
+            if data.get("success") != 1:
+                raise RuntimeError(
+                    "Steam reviews API returned "
+                    f"success={data.get('success')}"
+                )
+
+            summary = data.get("query_summary") or {}
+
+            total = to_int(
+                summary.get("total_reviews")
+            )
+            positive = to_int(
+                summary.get("total_positive")
+            )
+
+            if total is None:
+                total = 0
+
+            if positive is None:
+                positive = 0
+
+            if total <= 0:
+                return {
+                    "ok": True,
+                    "positive": None,
+                    "count": 0,
+                }
+
+            percent = round(
+                positive * 100.0 / total,
+                2,
+            )
+
+            return {
+                "ok": True,
+                "positive": percent,
+                "count": total,
+            }
+
+        except Exception as exc:
+            last_error = exc
+
+            if attempt + 1 < REVIEW_RETRIES:
+                time.sleep(
+                    min(20, 2 ** attempt)
+                )
+
+    print(
+        "review API failed:",
+        "appid=", appid,
+        "language=", language,
+        "error=", last_error,
+    )
+
+    return {
+        "ok": False,
+        "positive": None,
+        "count": 0,
+    }
+
+
+def get_review_pair(appid):
+    global_review = get_review_summary(
+        appid,
+        "all",
+    )
+    russian_review = get_review_summary(
+        appid,
+        "russian",
+    )
+
+    return {
+        "appid": appid,
+        "global": global_review,
+        "russian": russian_review,
+    }
+
+
+def identity(row):
+    item_key = (
+        row.get("data-ds-itemkey")
+        or ""
+    ).strip()
+
+    if item_key:
+        return item_key
+
+    appid = row.get("data-ds-appid")
+
+    if appid:
+        return "App_" + appid.split(",")[0]
+
+    return (
+        row.get("href")
+        or ""
+    ).split("?", 1)[0]
+
+
+def parse_row(row):
+    title_node = row.select_one("span.title")
+
+    if not title_node:
+        return None
+
+    title = title_node.get_text(" ", strip=True)
+
+    block = row.select_one(".discount_block")
+    wrapper = row.select_one(
+        ".search_price_discount_combined"
+    )
+
+    discount = (
+        to_int(block.get("data-discount"))
+        if block
+        else None
+    )
+
+    final_minor = (
+        to_int(block.get("data-price-final"))
+        if block
+        else None
+    )
+
+    if final_minor is None and wrapper:
+        final_minor = to_int(
+            wrapper.get("data-price-final")
+        )
+
+    tag_ids = [
+        to_int(value)
+        for value in parse_list(
+            row.get("data-ds-tagids")
+        )
+    ]
+
+    tag_ids = [
+        value
+        for value in tag_ids
+        if value is not None
+    ]
+
+    review = row.select_one(
+        ".search_review_summary"
+    )
+
+    search_positive = None
+    search_review_count = None
+
+    if review:
+        tooltip = (
+            review.get("data-tooltip-html")
+            or ""
+        )
+        match = REVIEW_RE.search(tooltip)
+
+        if match:
+            search_positive = int(
+                match.group(1)
+            )
+            search_review_count = int(
+                match.group(2).replace(",", "")
+            )
+
+    release_node = row.select_one(
+        ".search_released"
+    )
+
+    release_text = (
+        release_node.get_text(" ", strip=True)
+        if release_node
+        else ""
+    )
+
+    appid = row.get("data-ds-appid")
+
+    if appid:
+        appid = appid.split(",")[0]
+
+    return {
+        "key": identity(row),
+        "appid": appid,
+        "title": title,
+        "discount_percent": discount,
+        "final_minor": final_minor,
+        "final_kzt": (
+            final_minor / 100
+            if final_minor is not None
+            else None
+        ),
+
+        # Только диагностические данные
+        # из поисковой выдачи Steam.
+        "search_review_positive":
+            search_positive,
+        "search_review_count":
+            search_review_count,
+
+        # Настоящие рейтинги будут заполнены
+        # позже через Steam Reviews API.
+        "global_review_positive": None,
+        "global_review_count": 0,
+        "russian_review_positive": None,
+        "russian_review_count": 0,
+
+        "tag_ids": tag_ids,
+        "release_date": release_text,
+        "url": (
+            row.get("href")
+            or ""
+        ).strip(),
+    }
+
+
+def collect(sort_by):
+    start = 0
+    catalog = {}
+
+    rows_seen = 0
+    duplicate_rows = 0
+    requests_made = 0
+
+    total = None
+    reached_end = False
+    seen_pages = set()
+
+    while True:
+        data = get_page(start, sort_by)
+        requests_made += 1
+
+        current_total = to_int(
+            data.get("total_count")
+        )
+
+        if current_total is not None:
+            total = current_total
+
+        soup = BeautifulSoup(
+            data.get("results_html", ""),
+            "html.parser",
+        )
+
+        rows = soup.select(
+            "a.search_result_row"
+        )
+
+        rows_seen += len(rows)
+
+        print(
+            f"{sort_by}: "
+            f"start={start} "
+            f"rows={len(rows)} "
+            f"total={total} "
+            f"unique={len(catalog)}"
+        )
+
+        if not rows:
+            reached_end = True
+            break
+
+        page_keys = []
+
+        for row in rows:
+            item = parse_row(row)
+
+            if not item:
+                continue
+
+            key = item["key"]
+            page_keys.append(key)
+
+            if key in catalog:
+                duplicate_rows += 1
+
+            catalog[key] = item
+
+        signature = tuple(page_keys)
+
+        if signature in seen_pages:
+            raise RuntimeError(
+                "Steam repeated a page: "
+                f"start={start} sort={sort_by}"
+            )
+
+        seen_pages.add(signature)
+        start += PAGE_SIZE
+
+        if len(rows) < PAGE_SIZE:
+            reached_end = True
+            break
+
+        if total is not None and start >= total:
+            reached_end = True
+            break
+
+        time.sleep(REQUEST_DELAY)
+
+    return {
+        "catalog": catalog,
+        "rows_seen": rows_seen,
+        "duplicate_rows": duplicate_rows,
+        "requests_made": requests_made,
+        "total": total,
+        "reached_end": reached_end,
+    }
+
+
+def base_item_info(item):
+    """
+    Общая проверка мусора + вычисление fit_tags.
+    Рейтинг здесь не участвует.
+    """
+    discount = item["discount_percent"]
+    price = item["final_kzt"]
+
+    if (
+        discount is None
+        or discount <= 0
+        or price is None
+        or price <= 0
+    ):
+        return None
+
+    title = item["title"]
+    tags = set(item["tag_ids"])
+
+    if EXTRA_RE.search(title):
+        return None
+
+    if (
+        tags & SOFTWARE_TAGS
+        and not tags & GAME_TAGS
+    ):
+        return None
+
+    fit_tags = [
+        FIT_TAGS[tag]
+        for tag in item["tag_ids"]
+        if tag in FIT_TAGS
+    ]
+
+    return {
+        "fit_tags": fit_tags,
+        "tags": tags,
+    }
+
+
+def needs_review_enrichment(item, today):
+    """
+    Проверяем только цену/скидку/теги/возраст.
+    Если при хорошем рейтинге игра теоретически
+    могла бы пройти broad shortlist, тогда и только
+    тогда запрашиваем мировой + русский рейтинг.
+    """
+    base = base_item_info(item)
+
+    if not base:
+        return False
+
+    appid = item.get("appid")
+
+    if (
+        not appid
+        or not str(appid).isdigit()
+    ):
+        return False
+
+    price = item["final_kzt"]
+    discount = item["discount_percent"]
+    fit_tags = base["fit_tags"]
+
+    if (
+        price <= 3500
+        and discount >= 40
+    ):
+        return True
+
+    if (
+        price <= 4500
+        and discount >= 30
+        and fit_tags
+    ):
+        return True
+
+    if (
+        price <= 5000
+        and discount >= 70
+    ):
+        return True
+
+    if (
+        price <= 5000
+        and discount >= 35
+    ):
+        return True
+
+    if (
+        price <= 4500
+        and discount >= 25
+    ):
+        return True
+
+    if (
+        price <= 2000
+        and discount >= 25
+    ):
+        return True
+
+    if (
+        fit_tags
+        and price <= 2500
+        and discount >= 40
+    ):
+        return True
+
+    release_date = parse_release(
+        item["release_date"]
+    )
+
+    if release_date:
+        age_days = (
+            today - release_date
+        ).days
+
+        if (
+            0 <= age_days <= 730
+            and price <= 4500
+            and discount >= 20
+        ):
+            return True
+
+    if (
+        CONTENT_RE.search(item["title"])
+        and fit_tags
+        and price <= 3500
+        and discount >= 50
+    ):
+        return True
+
+    return False
+
+
+def review_passes(
+    item,
+    minimum_count,
+    minimum_positive,
+):
+    """
+    Количество отзывов остаётся МИРОВЫМ критерием:
+    global_review_count должен пройти исходный
+    minimum_count конкретного правила.
+
+    После этого качество может подтвердить:
+      1) мировой рейтинг;
+      ИЛИ
+      2) русскоязычный рейтинг.
+
+    Для русского рейтинга нужна собственная
+    достаточная выборка: исходный minimum_count,
+    но не более 500 отзывов.
+
+    Примеры:
+      rule >= 100 reviews -> Russian тоже >= 100
+      rule >= 300 reviews -> Russian тоже >= 300
+      rule >= 1500 reviews -> Russian >= 500
+      rule >= 20000 reviews -> Russian >= 500,
+        НО global_count всё равно должен быть >= 20000.
+    """
+    global_positive = item.get(
+        "global_review_positive"
+    )
+    global_count = (
+        item.get("global_review_count")
+        or 0
+    )
+
+    russian_positive = item.get(
+        "russian_review_positive"
+    )
+    russian_count = (
+        item.get("russian_review_count")
+        or 0
+    )
+
+    # Не ослабляем критерий известности / размера
+    # общей выборки конкретного правила.
+    if global_count < minimum_count:
+        return False
+
+    global_rating_ok = (
+        global_positive is not None
+        and global_positive >= minimum_positive
+    )
+
+    russian_minimum_count = min(
+        minimum_count,
+        RUSSIAN_REVIEW_COUNT_CAP,
+    )
+
+    # Steam displays language-specific review percentages as whole numbers.
+    # Compare Russian quality using the same displayed-percent semantics so a
+    # 77.5..77.99% API value is treated as the 78% users actually see.
+    russian_display_positive = (
+        int(russian_positive + 0.5)
+        if russian_positive is not None
+        else None
+    )
+
+    russian_rating_ok = (
+        russian_display_positive is not None
+        and russian_count >= russian_minimum_count
+        and russian_display_positive >= minimum_positive
+    )
+
+    return global_rating_ok or russian_rating_ok
+
+
+def assert_review_selection_contract():
+    # Regression guard for the canonical rule:
+    # global review count is the baseline; quality can pass by global OR
+    # Russian rating; Russian own sample requirement is capped at 500.
+    russian_rescue = {
+        "global_review_positive": 72.6,
+        "global_review_count": 4657,
+        "russian_review_positive": 77.6,
+        "russian_review_count": 574,
+    }
+    if not review_passes(russian_rescue, 1500, 78):
+        raise AssertionError("Russian review rescue regression: expected PASS")
+
+    too_few_russian = dict(russian_rescue)
+    too_few_russian["russian_review_count"] = 499
+    if review_passes(too_few_russian, 1500, 78):
+        raise AssertionError("Russian count cap regression: expected FAIL")
+
+    global_rescue = {
+        "global_review_positive": 80.0,
+        "global_review_count": 5000,
+        "russian_review_positive": None,
+        "russian_review_count": 0,
+    }
+    if not review_passes(global_rescue, 1500, 78):
+        raise AssertionError("Global review path regression: expected PASS")
+
+    global_count_too_low = {
+        "global_review_positive": 70.0,
+        "global_review_count": 1499,
+        "russian_review_positive": 99.0,
+        "russian_review_count": 1000,
+    }
+    if review_passes(global_count_too_low, 1500, 78):
+        raise AssertionError("Global count baseline regression: expected FAIL")
+
+
+assert_review_selection_contract()
+
+
+def broad_reasons(item, today):
+    base = base_item_info(item)
+
+    if not base:
+        return [], []
+
+    price = item["final_kzt"]
+    discount = item["discount_percent"]
+    title = item["title"]
+    fit_tags = base["fit_tags"]
+
+    reasons = []
+
+    if (
+        price <= 3500
+        and discount >= 40
+        and review_passes(item, 3000, 75)
+    ):
+        reasons.append("affordable_quality")
+
+    if (
+        price <= 4500
+        and discount >= 30
+        and fit_tags
+        and review_passes(item, 1000, 72)
+    ):
+        reasons.append("genre_fit")
+
+    if (
+        price <= 5000
+        and discount >= 70
+        and review_passes(item, 1000, 72)
+    ):
+        reasons.append("big_discount")
+
+    if (
+        price <= 5000
+        and discount >= 35
+        and review_passes(item, 20000, 80)
+    ):
+        reasons.append("popular_quality")
+
+    if (
+        price <= 4500
+        and discount >= 25
+        and review_passes(item, 3000, 90)
+    ):
+        reasons.append("very_high_rating")
+
+    if (
+        price <= 2000
+        and discount >= 25
+        and review_passes(item, 1000, 80)
+    ):
+        reasons.append("cheap_quality")
+
+    if (
+        fit_tags
+        and price <= 2500
+        and discount >= 40
+        and review_passes(item, 100, 88)
+    ):
+        reasons.append("niche_fit")
+
+    release_date = parse_release(
+        item["release_date"]
+    )
+
+    if release_date:
+        age_days = (
+            today - release_date
+        ).days
+
+        if (
+            0 <= age_days <= 730
+            and price <= 4500
+            and discount >= 20
+            and review_passes(item, 500, 80)
+        ):
+            reasons.append("recent_quality")
+
+    if (
+        CONTENT_RE.search(title)
+        and fit_tags
+        and price <= 3500
+        and discount >= 50
+    ):
+        reasons.append("substantive_content")
+
+    return reasons, fit_tags
+
+
+def refined_reasons(item):
+    price = item["final_kzt"]
+    discount = item["discount_percent"]
+
+    fit_tags = set(item["fit_tags"])
+    core = fit_tags & CORE
+    secondary = fit_tags & SECONDARY
+
+    reasons = []
+
+    if (
+        price <= 4500
+        and discount >= 40
+        and review_passes(item, 5000, 80)
+    ):
+        reasons.append("mainstream_quality")
+
+    if (
+        price <= 4500
+        and discount >= 35
+        and len(core) >= 1
+        and review_passes(item, 1500, 78)
+    ):
+        reasons.append("strong_fit")
+
+    if (
+        price <= 2500
+        and discount >= 40
+        and len(core) >= 2
+        and review_passes(item, 300, 88)
+    ):
+        reasons.append("strong_niche_fit")
+
+    if (
+        price <= 3500
+        and discount >= 75
+        and review_passes(item, 3000, 78)
+    ):
+        reasons.append("exceptional_discount")
+
+    if (
+        price <= 4000
+        and discount >= 25
+        and review_passes(item, 3000, 92)
+    ):
+        reasons.append("very_high_rating")
+
+    if (
+        "recent_quality"
+        in item["broad_reasons"]
+        and price <= 4000
+        and discount >= 25
+        and len(core) >= 1
+        and review_passes(item, 750, 82)
+    ):
+        reasons.append("recent_fit")
+
+    if (
+        price <= 2500
+        and discount >= 50
+        and not core
+        and review_passes(item, 10000, 88)
+    ):
+        reasons.append(
+            "high_confidence_adjacent"
+        )
+
+    if (
+        "substantive_content"
+        in item["broad_reasons"]
+        and price <= 3000
+        and discount >= 50
+        and (
+            len(core) >= 1
+            or len(secondary) >= 2
+        )
+        and review_passes(item, 100, 80)
+    ):
+        reasons.append("substantive_content")
+
+    return reasons, len(core)
+
+
+started = datetime.now(timezone.utc)
+
+first = collect("Name_ASC")
+catalog = dict(first["catalog"])
+
+first_total = first["total"] or 0
+second = None
+
+if (
+    first_total
+    and len(catalog) != first_total
+):
+    print(
+        "First pass is not exact:",
+        len(catalog),
+        "/",
+        first_total,
+        "Running Name_DESC recovery pass.",
+    )
+
+    second = collect("Name_DESC")
+    catalog.update(second["catalog"])
+
+totals = []
+
+if first["total"] is not None:
+    totals.append(first["total"])
+
+if second and second["total"] is not None:
+    totals.append(second["total"])
+
+reported_total = (
+    max(totals)
+    if totals
+    else None
+)
+
+rows_seen = first["rows_seen"]
+duplicate_rows = first["duplicate_rows"]
+requests_made = first["requests_made"]
+reached_end = first["reached_end"]
+
+if second:
+    rows_seen += second["rows_seen"]
+    duplicate_rows += second["duplicate_rows"]
+    requests_made += second["requests_made"]
+    reached_end = (
+        reached_end
+        and second["reached_end"]
+    )
+
+items = sorted(
+    catalog.values(),
+    key=lambda item: (
+        item["title"].casefold(),
+        item["key"],
+    ),
+)
+
+coverage = (
+    len(items) / reported_total
+    if reported_total
+    else None
+)
+
+complete = bool(
+    reported_total
+    and reached_end
+    and len(items) == reported_total
+)
+
+# Сохраняем старую проверку того, что Steam Search
+# вообще продолжает отдавать блоки отзывов.
+items_with_search_review_data = sum(
+    item["search_review_count"] is not None
+    for item in items
+)
+
+search_review_coverage = (
+    items_with_search_review_data / len(items)
+    if items
+    else 0
+)
+
+items_with_tags = sum(
+    bool(item["tag_ids"])
+    for item in items
+)
+
+tag_coverage = (
+    items_with_tags / len(items)
+    if items
+    else 0
+)
+
+today = datetime.now(timezone.utc).date()
+
+# -------------------------------------------------
+# НОВЫЙ ЭТАП:
+# получаем Global + Russian reviews только для
+# структурно подходящих кандидатов.
+# -------------------------------------------------
+review_candidate_items = [
+    item
+    for item in items
+    if needs_review_enrichment(
+        item,
+        today,
+    )
+]
+
+review_appids = sorted({
+    str(item["appid"])
+    for item in review_candidate_items
+    if item.get("appid")
+    and str(item["appid"]).isdigit()
+})
+
+print(
+    "Review enrichment candidates:",
+    len(review_candidate_items),
+    "items /",
+    len(review_appids),
+    "unique appids",
+)
+
+review_cache = {}
+review_api_failed_requests = 0
+
+if review_appids:
+    with ThreadPoolExecutor(
+        max_workers=REVIEW_WORKERS
+    ) as executor:
+        futures = {
+            executor.submit(
+                get_review_pair,
+                appid,
+            ): appid
+            for appid in review_appids
+        }
+
+        completed_reviews = 0
+
+        for future in as_completed(futures):
+            appid = futures[future]
+
+            try:
+                result = future.result()
+            except Exception as exc:
+                print(
+                    "review worker failed:",
+                    appid,
+                    exc,
+                )
+                result = {
+                    "appid": appid,
+                    "global": {
+                        "ok": False,
+                        "positive": None,
+                        "count": 0,
+                    },
+                    "russian": {
+                        "ok": False,
+                        "positive": None,
+                        "count": 0,
+                    },
+                }
+
+            review_cache[appid] = result
+
+            if not result["global"]["ok"]:
+                review_api_failed_requests += 1
+
+            if not result["russian"]["ok"]:
+                review_api_failed_requests += 1
+
+            completed_reviews += 1
+
+            if (
+                completed_reviews % 100 == 0
+                or completed_reviews
+                == len(review_appids)
+            ):
+                print(
+                    "Review enrichment:",
+                    completed_reviews,
+                    "/",
+                    len(review_appids),
+                )
+
+for item in items:
+    appid = (
+        str(item["appid"])
+        if item.get("appid")
+        else None
+    )
+
+    result = (
+        review_cache.get(appid)
+        if appid
+        else None
+    )
+
+    if not result:
+        continue
+
+    item["global_review_positive"] = (
+        result["global"]["positive"]
+    )
+    item["global_review_count"] = (
+        result["global"]["count"]
+    )
+
+    item["russian_review_positive"] = (
+        result["russian"]["positive"]
+    )
+    item["russian_review_count"] = (
+        result["russian"]["count"]
+    )
+
+total_review_api_requests = (
+    len(review_appids) * 2
+)
+
+review_api_failure_rate = (
+    review_api_failed_requests
+    / total_review_api_requests
+    if total_review_api_requests
+    else 0
+)
+
+global_review_appids = sum(
+    1
+    for appid in review_appids
+    if (
+        review_cache.get(appid, {})
+        .get("global", {})
+        .get("ok")
+    )
+)
+
+russian_review_appids = sum(
+    1
+    for appid in review_appids
+    if (
+        review_cache.get(appid, {})
+        .get("russian", {})
+        .get("ok")
+    )
+)
+
+broad = []
+broad_reason_counts = Counter()
+
+excluded_extra = 0
+excluded_software = 0
+
+for item in items:
+    tags = set(item["tag_ids"])
+
+    if EXTRA_RE.search(item["title"]):
+        excluded_extra += 1
+
+    elif (
+        tags & SOFTWARE_TAGS
+        and not tags & GAME_TAGS
+    ):
+        excluded_software += 1
+
+    reasons, fit_tags = broad_reasons(
+        item,
+        today,
+    )
+
+    if not reasons:
+        continue
+
+    broad_reason_counts.update(reasons)
+
+    broad.append({
+        "key": item["key"],
+        "appid": item["appid"],
+        "title": item["title"],
+        "discount_percent":
+            item["discount_percent"],
+        "final_kzt": item["final_kzt"],
+
+        # Старые названия оставлены для
+        # совместимости. Теперь это GLOBAL.
+        "review_positive":
+            item["global_review_positive"],
+        "review_count":
+            item["global_review_count"],
+
+        "global_review_positive":
+            item["global_review_positive"],
+        "global_review_count":
+            item["global_review_count"],
+        "russian_review_positive":
+            item["russian_review_positive"],
+        "russian_review_count":
+            item["russian_review_count"],
+
+        "fit_tags": fit_tags,
+        "release_date":
+            item["release_date"],
+        "broad_reasons": reasons,
+    })
+
+selected = []
+refined_reason_counts = Counter()
+
+for item in broad:
+    reasons, core_fit_count = (
+        refined_reasons(item)
+    )
+
+    if not reasons:
+        continue
+
+    refined_reason_counts.update(reasons)
+
+    selected.append({
+        "key": item["key"],
+        "appid": item["appid"],
+        "discount_percent":
+            item["discount_percent"],
+        "final_kzt":
+            item["final_kzt"],
+
+        # Для обратной совместимости:
+        # review_* = мировой рейтинг.
+        "review_positive":
+            item["global_review_positive"],
+        "review_count":
+            item["global_review_count"],
+
+        "global_review_positive":
+            item["global_review_positive"],
+        "global_review_count":
+            item["global_review_count"],
+        "russian_review_positive":
+            item["russian_review_positive"],
+        "russian_review_count":
+            item["russian_review_count"],
+
+        "core_fit_count":
+            core_fit_count,
+        "reasons":
+            reasons,
+        "fit_tags":
+            item["fit_tags"],
+        "release_date":
+            item["release_date"],
+        "title":
+            item["title"],
+    })
+
+# Только сортировка. Никакого top-N.
+selected.sort(
+    key=lambda item: (
+        -len(item["reasons"]),
+        -item["core_fit_count"],
+        -item["discount_percent"],
+        item["final_kzt"],
+        item["title"].casefold(),
+    )
+)
+
+free_items = [
+    item
+    for item in items
+    if (
+        item["discount_percent"] is not None
+        and item["discount_percent"] > 0
+        and item["final_minor"] == 0
+    )
+]
+
+finished = datetime.now(timezone.utc)
+
+# Если полный обход или парсинг сломался,
+# workflow завершается ошибкой ДО удаления
+# предыдущего рабочего production feed.
+if not complete:
+    raise SystemExit(
+        "Full Steam traversal completeness "
+        f"check failed: unique={len(items)} "
+        f"reported={reported_total}"
+    )
+
+if tag_coverage < 0.85:
+    raise SystemExit(
+        "Steam tag parsing coverage too low: "
+        f"{tag_coverage:.3f}"
+    )
+
+if search_review_coverage < 0.40:
+    raise SystemExit(
+        "Steam search review parsing coverage "
+        f"too low: {search_review_coverage:.3f}"
+    )
+
+# Если Reviews API массово сломался,
+# не перезаписываем рабочий production feed.
+if (
+    total_review_api_requests
+    and review_api_failed_requests > 20
+    and review_api_failure_rate > 0.05
+):
+    raise SystemExit(
+        "Steam reviews API failure rate too high: "
+        f"{review_api_failed_requests}/"
+        f"{total_review_api_requests} "
+        f"({review_api_failure_rate:.3%})"
+    )
+
+if not broad:
+    raise SystemExit("Broad shortlist is empty")
+
+if not selected:
+    raise SystemExit(
+        "Production shortlist is empty"
+    )
+
+if OUT.exists():
+    shutil.rmtree(OUT)
+
+SHORT.mkdir(
+    parents=True,
+    exist_ok=True,
+)
+
+columns = [
+    "key",
+    "appid",
+    "discount_percent",
+    "final_kzt",
+
+    # Старые два поля = мировой рейтинг.
+    "review_positive",
+    "review_count",
+
+    # Явные поля, чтобы рассылка видела
+    # оба источника рейтинга.
+    "global_review_positive",
+    "global_review_count",
+    "russian_review_positive",
+    "russian_review_count",
+
+    "core_fit_count",
+    "reasons",
+    "fit_tags",
+    "release_date",
+    "title",
+]
+
+
+def clean(value):
+    if value is None:
+        return ""
+
+    if isinstance(value, list):
+        value = "|".join(map(str, value))
+
+    return (
+        str(value)
+        .replace("\t", " ")
+        .replace("\r", " ")
+        .replace("\n", " ")
+    )
+
+
+for chunk_number, start in enumerate(
+    range(
+        0,
+        len(selected),
+        SHORT_CHUNK,
+    ),
+    start=1,
+):
+    subset = selected[
+        start:start + SHORT_CHUNK
+    ]
+
+    lines = []
+
+    for item in subset:
+        lines.append(
+            "\t".join(
+                clean(item[column])
+                for column in columns
+            )
+        )
+
+    (
+        SHORT
+        / f"chunk_{chunk_number:03d}.tsv"
+    ).write_text(
+        "\n".join(lines) + "\n",
+        encoding="utf-8",
+    )
+
+chunk_count = (
+    len(selected)
+    + SHORT_CHUNK
+    - 1
+) // SHORT_CHUNK
+
+manifest = {
+    "collector_version": 7,
+    "source": "Steam Store",
+    "country_code": "kz",
+    "region": "Kazakhstan",
+    "started_at_utc":
+        started.isoformat(),
+    "updated_at_utc":
+        finished.isoformat(),
+    "page_size": PAGE_SIZE,
+    "steam_total_reported":
+        reported_total,
+    "unique_items":
+        len(items),
+    "rows_seen":
+        rows_seen,
+    "duplicate_rows_seen":
+        duplicate_rows,
+    "requests_made":
+        requests_made,
+    "recovery_pass_used":
+        second is not None,
+    "coverage_ratio": (
+        round(coverage, 6)
+        if coverage is not None
+        else None
+    ),
+    "complete": complete,
+
+    # Старые названия сохранены, чтобы
+    # текущая QA-логика рассылки не сломалась.
+    # Они относятся к диагностическому рейтингу
+    # из Steam Search.
+    "items_with_review_data":
+        items_with_search_review_data,
+    "review_coverage": round(
+        search_review_coverage,
+        6,
+    ),
+
+    "items_with_search_review_data":
+        items_with_search_review_data,
+    "search_review_coverage": round(
+        search_review_coverage,
+        6,
+    ),
+
+    # Новая диагностика Reviews API.
+    "review_candidate_items":
+        len(review_candidate_items),
+    "review_candidate_appids":
+        len(review_appids),
+    "review_api_requests":
+        total_review_api_requests,
+    "review_api_failed_requests":
+        review_api_failed_requests,
+    "review_api_failure_rate": round(
+        review_api_failure_rate,
+        6,
+    ),
+    "global_review_appids_ok":
+        global_review_appids,
+    "russian_review_appids_ok":
+        russian_review_appids,
+
+    "review_selection_rule":
+        "global_count_and_global_or_russian_rating",
+    "review_count_basis":
+        "global",
+    "russian_review_count_cap":
+        RUSSIAN_REVIEW_COUNT_CAP,
+    "russian_rating_comparison":
+        "steam_display_whole_percent",
+    "review_policy_regression_guard":
+        True,
+    "global_review_language":
+        "all",
+    "russian_review_language":
+        "russian",
+    "review_purchase_type":
+        "all",
+
+    "items_with_tags":
+        items_with_tags,
+    "tag_coverage": round(
+        tag_coverage,
+        6,
+    ),
+    "excluded_obvious_extras":
+        excluded_extra,
+    "excluded_software_only":
+        excluded_software,
+    "broad_shortlist_items":
+        len(broad),
+    "shortlist_items":
+        len(selected),
+    "shortlist_chunk_size":
+        SHORT_CHUNK,
+    "shortlist_chunk_count":
+        chunk_count,
+    "free_items":
+        len(free_items),
+    "needs_tuning":
+        len(selected) > 800,
+    "broad_reason_counts":
+        dict(broad_reason_counts),
+    "reason_counts":
+        dict(refined_reason_counts),
+}
+
+(OUT / "manifest.json").write_text(
+    json.dumps(
+        manifest,
+        ensure_ascii=False,
+        indent=2,
+    ),
+    encoding="utf-8",
+)
+
+index = {
+    "version": 7,
+    "format": "tsv",
+    "columns": columns,
+    "country_code": "kz",
+    "item_count": len(selected),
+    "chunk_size": SHORT_CHUNK,
+    "chunk_count": chunk_count,
+    "chunk_pattern":
+        "data/production/shortlist/"
+        "chunk_NNN.tsv",
+    "source_total": reported_total,
+    "source_complete": complete,
+    "source_coverage_ratio": (
+        round(coverage, 6)
+        if coverage is not None
+        else None
+    ),
+    "source_updated_at_utc":
+        finished.isoformat(),
+    "needs_tuning":
+        len(selected) > 800,
+
+    "review_selection_rule":
+        "global_count_and_global_or_russian_rating",
+    "review_count_basis":
+        "global",
+    "russian_review_count_cap":
+        RUSSIAN_REVIEW_COUNT_CAP,
+    "russian_rating_comparison":
+        "steam_display_whole_percent",
+    "review_policy_regression_guard":
+        True,
+    "review_fields": {
+        "global": [
+            "global_review_positive",
+            "global_review_count",
+        ],
+        "russian": [
+            "russian_review_positive",
+            "russian_review_count",
+        ],
+    },
+
+    "reason_counts":
+        dict(refined_reason_counts),
+}
+
+(
+    SHORT / "index.json"
+).write_text(
+    json.dumps(
+        index,
+        ensure_ascii=False,
+        indent=2,
+    ),
+    encoding="utf-8",
+)
+
+# Freebies оставляем совместимыми со старым
+# форматом. Для бесплатных позиций отдельный
+# Reviews API не нужен для платного shortlist.
+free_columns = [
+    "key",
+    "appid",
+    "discount_percent",
+    "review_positive",
+    "review_count",
+    "fit_tags",
+    "title",
+]
+
+free_lines = []
+
+for item in free_items:
+    fit_tags = [
+        FIT_TAGS[tag]
+        for tag in item["tag_ids"]
+        if tag in FIT_TAGS
+    ]
+
+    free_row = {
+        "key": item["key"],
+        "appid": item["appid"],
+        "discount_percent":
+            item["discount_percent"],
+        "review_positive":
+            item["search_review_positive"],
+        "review_count":
+            item["search_review_count"],
+        "fit_tags": fit_tags,
+        "title": item["title"],
+    }
+
+    free_lines.append(
+        "\t".join(
+            clean(free_row[column])
+            for column in free_columns
+        )
+    )
+
+(OUT / "freebies.tsv").write_text(
+    (
+        "\n".join(free_lines) + "\n"
+        if free_lines
+        else ""
+    ),
+    encoding="utf-8",
+)
+
+(OUT / "freebies_index.json").write_text(
+    json.dumps(
+        {
+            "format": "tsv",
+            "columns": free_columns,
+            "item_count": len(free_items),
+            "source_updated_at_utc":
+                finished.isoformat(),
+        },
+        ensure_ascii=False,
+        indent=2,
+    ),
+    encoding="utf-8",
+)
+
+print(
+    json.dumps(
+        manifest,
+        ensure_ascii=False,
+        indent=2,
+    )
+)
