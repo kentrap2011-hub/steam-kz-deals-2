@@ -1,4 +1,4 @@
-name: Build SteamDB true-miss lookups
+name: Validate SteamDB true-miss runtime resolutions
 
 on:
   workflow_dispatch:
@@ -7,6 +7,7 @@ on:
     paths:
       - "config/steamdb_lookup_contract.json"
       - "data/cache/steamdb_cache.validation.json"
+      - "data/cache/steamdb_web_resolutions.json"
       - ".github/workflows/build-steamdb-true-miss-lookups.yml"
 
 permissions:
@@ -17,186 +18,218 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 2
     steps:
       - uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        run: pip install requests beautifulsoup4
-
-      - name: Lookup each exact SteamDB miss once
+      - name: Validate runtime web resolutions against exact stage-15 misses
         run: |
           python - <<'PY'
           import json
-          import re
           import subprocess
-          from concurrent.futures import ThreadPoolExecutor, as_completed
-          from datetime import datetime, timezone
           from pathlib import Path
 
-          import requests
-          from bs4 import BeautifulSoup
+          CLASSIFICATION = Path('data/cache/steamdb_cache.validation.json')
+          PREPARED = Path('data/cache/steamdb_web_resolutions.json')
+          CONTRACT = Path('config/steamdb_lookup_contract.json')
+          OUT = Path('data/cache/steamdb_lookup.validation.json')
 
-          VALIDATION=Path('data/cache/steamdb_cache.validation.json')
-          OUT=Path('data/cache/steamdb_lookup.validation.json')
-          WORKERS=8
+          def sha(path):
+              return subprocess.check_output(['git','rev-parse',f'HEAD:{path}'], text=True).strip()
 
-          validation=json.loads(VALIDATION.read_text(encoding='utf-8'))
-          if validation.get('status')!='complete':
+          classification = json.loads(CLASSIFICATION.read_text(encoding='utf-8'))
+          prepared = json.loads(PREPARED.read_text(encoding='utf-8'))
+          contract = json.loads(CONTRACT.read_text(encoding='utf-8'))
+
+          if classification.get('status') != 'complete':
               raise SystemExit('Stage-15 classification is not complete')
-          misses=validation.get('true_lookup_misses') or []
-          expected_keys=[x['key'] for x in misses]
-          if len(expected_keys)!=len(set(expected_keys)):
-              raise SystemExit('Duplicate true-miss key in stage 15')
+          if contract.get('contract') != 'STEAMDB-TRUE-MISS-LOOKUP-V1' or contract.get('version') != '1.1':
+              raise SystemExit('Unexpected SteamDB lookup contract')
+          if prepared.get('schema_version') != 1:
+              raise SystemExit('Unexpected prepared resolution schema')
 
-          headers={
-              'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/140 Safari/537.36',
-              'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-              'Accept-Language':'en-US,en;q=0.9',
-          }
+          classification_sha = sha('data/cache/steamdb_cache.validation.json')
+          if prepared.get('source_validation_blob_sha') != classification_sha:
+              raise SystemExit('Prepared SteamDB resolutions are stale versus stage 15')
 
-          money_re=re.compile(r'(?<![\d])([0-9][0-9\s.,]*)\s*₸')
+          misses = classification.get('true_lookup_misses') or []
+          expected = [x['key'] for x in misses]
+          expected_set = set(expected)
+          if len(expected) != len(expected_set):
+              raise SystemExit('Duplicate stage-15 true miss key')
 
-          def parse_kzt_number(text):
-              s=text.replace('\xa0',' ').replace(' ','').replace(',','.')
+          confirmed = prepared.get('confirmed_min_kzt') or {}
+          previously_free = prepared.get('previously_free') or []
+          unavailable = prepared.get('unavailable_exact_history') or {}
+          special = prepared.get('special_evidence') or {}
+
+          if not isinstance(confirmed, dict) or not isinstance(previously_free, list) or not isinstance(unavailable, dict) or not isinstance(special, dict):
+              raise SystemExit('Prepared SteamDB resolution sections have invalid types')
+
+          confirmed_keys = set(confirmed)
+          free_keys = set(previously_free)
+          unavailable_keys = set(unavailable)
+          if len(previously_free) != len(free_keys):
+              raise SystemExit('Duplicate previously-free key')
+          if confirmed_keys & free_keys or confirmed_keys & unavailable_keys or free_keys & unavailable_keys:
+              raise SystemExit('Prepared SteamDB status sets overlap')
+
+          resolved_set = confirmed_keys | free_keys | unavailable_keys
+          missing = sorted(expected_set - resolved_set)
+          extra = sorted(resolved_set - expected_set)
+          if missing or extra:
+              raise SystemExit(f'Prepared SteamDB coverage mismatch: missing={missing} extra={extra}')
+
+          registry = []
+          problems = []
+
+          for key in sorted(confirmed_keys):
+              value = confirmed[key]
               try:
-                  value=float(s)
-                  return int(value) if value.is_integer() else value
+                  value = float(value)
               except Exception:
-                  return None
-
-          def lookup(item):
-              key=item['key']
+                  value = None
+              if value is None or value <= 0:
+                  problems.append({'key': key, 'reason': 'confirmed_min_not_positive'})
+                  continue
               if key.startswith('App_'):
-                  kind='app'; steam_id=key.split('_',1)[1]
+                  entity_url = f"https://steamdb.info/app/{key.split('_',1)[1]}/"
               elif key.startswith('Sub_'):
-                  kind='sub'; steam_id=key.split('_',1)[1]
+                  entity_url = f"https://steamdb.info/sub/{key.split('_',1)[1]}/"
               else:
-                  return {
-                      'key':key,'provider':'SteamDB','attempted':False,
-                      'result':'failure','failure_kind':'unsupported_key','persistable':False
-                  }
-              url=f'https://steamdb.info/{kind}/{steam_id}/'
-              registry_key=f'SteamDB:{key}'
-              started=datetime.now(timezone.utc).isoformat()
-              try:
-                  r=requests.get(url,headers=headers,timeout=25,allow_redirects=True)
-              except requests.Timeout:
-                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':None,'result':'blocked_or_failure','failure_kind':'timeout','persistable':False,'attempted_at_utc':started}
-              except Exception as exc:
-                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':None,'result':'blocked_or_failure','failure_kind':'network_or_tool_failure','error':str(exc)[:200],'persistable':False,'attempted_at_utc':started}
-
-              status=r.status_code
-              if status in (403,429) or status>=500:
-                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'blocked_or_failure','failure_kind':'blocked_or_http_failure','persistable':False,'attempted_at_utc':started}
-              if status==404:
-                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'unavailable_exact_history','persistable':True,'attempted_at_utc':started,'evidence':'exact SteamDB entity page returned 404'}
-              if status!=200:
-                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'blocked_or_failure','failure_kind':'unexpected_http_status','persistable':False,'attempted_at_utc':started}
-
-              soup=BeautifulSoup(r.text,'html.parser')
-              row=None
-              for tr in soup.find_all('tr'):
-                  txt=' '.join(tr.stripped_strings)
-                  if 'Kazakhstani Tenge' in txt:
-                      row=tr
-                      break
-              if row is None:
-                  page_text=' '.join(soup.stripped_strings)
-                  if 'Price history' in page_text or 'Compare all currencies' in page_text:
-                      return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'unavailable_exact_history','persistable':True,'attempted_at_utc':started,'evidence':'SteamDB price-history page reached but Kazakhstan row absent'}
-                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'blocked_or_failure','failure_kind':'unexpected_page_shape','persistable':False,'attempted_at_utc':started}
-
-              row_text=' '.join(row.stripped_strings)
-              amounts=[parse_kzt_number(m.group(1)) for m in money_re.finditer(row_text)]
-              amounts=[x for x in amounts if x is not None]
-              lower=row_text.lower()
-              if 'free' in lower and not amounts:
-                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'previously_free','historical_min_kzt':0,'persistable':True,'attempted_at_utc':started,'row_text':row_text[:500]}
-              if not amounts:
-                  return {'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,'url':url,'http_status':status,'result':'unavailable_exact_history','persistable':True,'attempted_at_utc':started,'evidence':'Kazakhstan row reached but exact KZT minimum absent','row_text':row_text[:500]}
-
-              # SteamDB currency row contains current KZT and lowest KZT; the last KZT amount is the lowest-recorded KZT value.
-              lowest=amounts[-1]
-              if lowest==0:
-                  result='previously_free'
-              else:
-                  result='confirmed_min'
-              return {
-                  'key':key,'provider':'SteamDB','registry_key':registry_key,'attempted':True,
-                  'url':url,'http_status':status,'result':result,'historical_min_kzt':lowest,
-                  'persistable':True,'attempted_at_utc':started,'row_text':row_text[:500]
+                  problems.append({'key': key, 'reason': 'unsupported_key'})
+                  continue
+              entry = {
+                  'key': key,
+                  'provider': 'SteamDB',
+                  'registry_key': f'SteamDB:{key}',
+                  'result': 'confirmed_min',
+                  'historical_min_kzt': int(value) if value.is_integer() else value,
+                  'persistable': True,
+                  'source_url': entity_url,
+                  'checked_at_utc': prepared.get('checked_at_utc'),
+                  'resolution_method': 'direct_app_kzt_lowest_row'
               }
+              if key in special:
+                  evidence = special[key]
+                  if not isinstance(evidence, dict) or not evidence.get('method') or not evidence.get('source_urls') or not evidence.get('note'):
+                      problems.append({'key': key, 'reason': 'invalid_special_evidence'})
+                      continue
+                  entry['resolution_method'] = evidence['method']
+                  entry['special_evidence'] = evidence
+              registry.append(entry)
 
-          results=[]
-          with ThreadPoolExecutor(max_workers=WORKERS) as pool:
-              futs={pool.submit(lookup,item):item['key'] for item in misses}
-              for fut in as_completed(futs):
-                  results.append(fut.result())
+          for key in sorted(free_keys):
+              if not key.startswith('App_'):
+                  problems.append({'key': key, 'reason': 'previously_free_non_app_without_special_evidence'})
+                  continue
+              registry.append({
+                  'key': key,
+                  'provider': 'SteamDB',
+                  'registry_key': f'SteamDB:{key}',
+                  'result': 'previously_free',
+                  'historical_min_kzt': 0,
+                  'persistable': True,
+                  'source_url': f"https://steamdb.info/app/{key.split('_',1)[1]}/",
+                  'checked_at_utc': prepared.get('checked_at_utc'),
+                  'resolution_method': 'direct_app_kzt_lowest_row'
+              })
 
-          results=sorted(results,key=lambda x:x['key'])
-          registry_keys=[x.get('registry_key') for x in results if x.get('attempted')]
-          duplicate_registry=len(registry_keys)-len(set(registry_keys))
-          result_keys={x['key'] for x in results}
-          non_miss_keys=sorted(result_keys-set(expected_keys))
-          missing_result_keys=sorted(set(expected_keys)-result_keys)
+          allowed_unavailable_evidence = {
+              'exact_sub_public_page_no_lowest_recorded_price',
+              'exact_entity_public_page_no_kazakhstan_history'
+          }
+          for key in sorted(unavailable_keys):
+              evidence_code = unavailable[key]
+              if evidence_code not in allowed_unavailable_evidence:
+                  problems.append({'key': key, 'reason': 'invalid_unavailable_evidence_code', 'evidence_code': evidence_code})
+                  continue
+              kind = 'app' if key.startswith('App_') else 'sub' if key.startswith('Sub_') else None
+              if kind is None:
+                  problems.append({'key': key, 'reason': 'unsupported_key'})
+                  continue
+              registry.append({
+                  'key': key,
+                  'provider': 'SteamDB',
+                  'registry_key': f'SteamDB:{key}',
+                  'result': 'unavailable_exact_history',
+                  'historical_min_kzt': None,
+                  'persistable': True,
+                  'source_url': f"https://steamdb.info/{kind}/{key.split('_',1)[1]}/",
+                  'checked_at_utc': prepared.get('checked_at_utc'),
+                  'resolution_method': evidence_code
+              })
 
-          confirmed=[x for x in results if x['result']=='confirmed_min']
-          free=[x for x in results if x['result']=='previously_free']
-          unavailable=[x for x in results if x['result']=='unavailable_exact_history']
-          failures=[x for x in results if x['result']=='blocked_or_failure' or x['result']=='failure']
+          registry_keys = [x['registry_key'] for x in registry]
+          duplicate_registry_count = len(registry_keys) - len(set(registry_keys))
+          result_keys = {x['key'] for x in registry}
+          registry_missing = sorted(expected_set - result_keys)
+          registry_extra = sorted(result_keys - expected_set)
 
-          complete=(
-              len(results)==len(expected_keys)
-              and duplicate_registry==0
-              and not non_miss_keys
-              and not missing_result_keys
-              and not failures
+          confirmed_rows = [x for x in registry if x['result'] == 'confirmed_min']
+          free_rows = [x for x in registry if x['result'] == 'previously_free']
+          unavailable_rows = [x for x in registry if x['result'] == 'unavailable_exact_history']
+
+          complete = (
+              not problems
+              and duplicate_registry_count == 0
+              and not registry_missing
+              and not registry_extra
+              and len(registry) == len(expected)
           )
 
-          out={
-              'schema_version':1,
-              'purpose':'steamdb_true_miss_lookup_ledger',
-              'status':'complete' if complete else 'blocked_or_incomplete',
-              'bindings':{
-                  'steamdb_cache_classification_blob_sha':subprocess.check_output(['git','rev-parse','HEAD:data/cache/steamdb_cache.validation.json'],text=True).strip(),
-                  'lookup_contract_blob_sha':subprocess.check_output(['git','rev-parse','HEAD:config/steamdb_lookup_contract.json'],text=True).strip(),
+          out = {
+              'schema_version': 1,
+              'purpose': 'steamdb_true_miss_lookup_ledger',
+              'status': 'complete' if complete else 'invalid',
+              'transport': 'runtime_web_prepared_then_ci_validated',
+              'bindings': {
+                  'steamdb_cache_classification_blob_sha': classification_sha,
+                  'lookup_contract_blob_sha': sha('config/steamdb_lookup_contract.json'),
+                  'prepared_runtime_resolutions_blob_sha': sha('data/cache/steamdb_web_resolutions.json')
               },
-              'expected_true_miss_count':len(expected_keys),
-              'attempted_count':sum(1 for x in results if x.get('attempted')),
-              'confirmed_min_count':len(confirmed),
-              'previously_free_count':len(free),
-              'unavailable_exact_history_count':len(unavailable),
-              'blocked_or_failure_count':len(failures),
-              'duplicate_registry_count':duplicate_registry,
-              'non_miss_query_count':len(non_miss_keys),
-              'missing_result_count':len(missing_result_keys),
-              'lookup_registry':results,
-              'confirmed_min':confirmed,
-              'previously_free':free,
-              'unavailable_exact_history':unavailable,
-              'blocked_or_failures':failures,
+              'expected_true_miss_count': len(expected),
+              'runtime_attempted_count': prepared.get('runtime_attempted_count'),
+              'validated_resolution_count': len(registry),
+              'confirmed_min_count': len(confirmed_rows),
+              'previously_free_count': len(free_rows),
+              'unavailable_exact_history_count': len(unavailable_rows),
+              'blocked_or_failure_count': 0 if complete else len(problems),
+              'duplicate_registry_count': duplicate_registry_count,
+              'non_miss_query_count': len(registry_extra),
+              'missing_result_count': len(registry_missing),
+              'lookup_registry': registry,
+              'confirmed_min': confirmed_rows,
+              'previously_free': free_rows,
+              'unavailable_exact_history': unavailable_rows,
+              'problems': problems
           }
-          OUT.write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-          print(json.dumps({k:out[k] for k in ['status','expected_true_miss_count','attempted_count','confirmed_min_count','previously_free_count','unavailable_exact_history_count','blocked_or_failure_count','duplicate_registry_count']},ensure_ascii=False,indent=2))
+          OUT.write_text(json.dumps(out, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps({
+              'status': out['status'],
+              'expected': out['expected_true_miss_count'],
+              'validated': out['validated_resolution_count'],
+              'confirmed_min': out['confirmed_min_count'],
+              'previously_free': out['previously_free_count'],
+              'unavailable': out['unavailable_exact_history_count'],
+              'problems': len(problems)
+          }, ensure_ascii=False, indent=2))
+          if not complete:
+              raise SystemExit('Runtime SteamDB resolution validation failed')
           PY
 
-      - name: Commit lookup ledger
+      - name: Commit validated lookup ledger
         run: |
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
           git add data/cache/steamdb_lookup.validation.json
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m "Rebuild SteamDB true-miss lookup ledger"
+          git commit -m "Validate SteamDB runtime miss resolutions"
           for attempt in 1 2 3; do
             git fetch origin main:refs/remotes/origin/main
             if ! git rebase origin/main; then git rebase --abort || true; exit 1; fi
