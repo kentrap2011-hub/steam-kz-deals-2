@@ -1,0 +1,47 @@
+name: One-shot app key identity diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-app-key-identity.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Measure key/appid identity violations
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          idx=json.loads(Path('data/production/mailing/index.json').read_text(encoding='utf-8'))
+          cols=idx['columns']; ci={n:i for i,n in enumerate(cols)}
+          rows=[]; app_rows=0; sub_rows=0
+          for n in range(1,int(idx['chunk_count'])+1):
+              p=Path(idx['chunk_pattern'].replace('NNN',f'{n:03d}'))
+              for line in p.read_text(encoding='utf-8').splitlines():
+                  if not line.strip(): continue
+                  c=line.split('\t'); key=c[ci['key']]; appid=c[ci['appid']]
+                  if key.startswith('App_'):
+                      app_rows+=1
+                      canonical=key.split('_',1)[1]
+                      if appid != canonical:
+                          rows.append({'key':key,'appid_column':appid,'canonical_appid':canonical,'title':c[ci['title']],'discount_percent':c[ci['discount_percent']],'final_kzt':c[ci['final_kzt']]})
+                  elif key.startswith('Sub_'):
+                      sub_rows+=1
+          out={'item_count':idx['item_count'],'app_rows':app_rows,'sub_rows':sub_rows,'app_key_appid_mismatch_count':len(rows),'mismatches':rows}
+          print('APP_IDENTITY_DIAGNOSTIC='+json.dumps(out,ensure_ascii=False))
+          if not rows:
+              raise SystemExit('Expected to reproduce current identity violation but found none')
+          PY
