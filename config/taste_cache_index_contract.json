@@ -1,0 +1,71 @@
+{
+  "contract": "TASTE-CACHE-INDEX-FAST-PATH",
+  "version": "1.0",
+  "status": "implementation_only",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "never_overrides_canonical_policy": true,
+    "canonical_cache_path": "data/cache/taste_fit.json",
+    "index_path": "data/cache/taste_fit.index.json",
+    "canonical_cache_remains_authoritative": true
+  },
+  "purpose": "Provide a compact, cryptographically bound projection of the canonical taste cache so structural validation and mechanical cache-hit checks do not require loading verbose evidence for every cached entry.",
+  "trust_model": {
+    "index_is_derived_not_authoritative": true,
+    "accept_index_only_if_all": [
+      "index source_cache.path equals canonical cache path",
+      "index source_cache.blob_sha equals current Git blob SHA of canonical cache",
+      "index source_cache.size_bytes equals current repository size of canonical cache",
+      "index source_cache.entry_count_declared equals index source_cache.entry_count_actual",
+      "index source_cache.entry_count_matches_len_entries is true",
+      "index source_cache.required_entry_fields_complete is true",
+      "index index_entry_count equals len(index.entries)",
+      "index index_entry_count equals source_cache.entry_count_actual",
+      "index profile_blob_sha equals current canonical profile Git blob SHA",
+      "index taste_model_version equals canonical policy taste model version"
+    ],
+    "if_any_check_fails": "INDEX_INVALID_FAIL_CLOSED_OR_FALLBACK_TO_FULL_CANONICAL_CACHE_VALIDATION",
+    "index_never_proves_candidate_fingerprint_match_by_itself": true,
+    "candidate_cache_hit_still_requires_current_feed_fingerprint_comparison": true
+  },
+  "generation": {
+    "generator_workflow": ".github/workflows/build-taste-cache-index.yml",
+    "parse_full_canonical_cache": true,
+    "verify_entry_count_equals_len_entries_before_emitting_index": true,
+    "verify_required_entry_fields_before_emitting_index": true,
+    "bind_to_exact_git_blob_sha": true,
+    "bind_to_exact_size_bytes": true,
+    "deterministic_when_source_cache_is_unchanged": true,
+    "regenerate_after_every_canonical_cache_change": true,
+    "stale_index_is_safe_because_blob_sha_mismatch_invalidates_it": true
+  },
+  "compact_entry_projection": {
+    "fields": [
+      "appid",
+      "taste_fingerprint",
+      "verdict",
+      "fit_level",
+      "reason_code"
+    ],
+    "excluded_verbose_fields": [
+      "positive_evidence",
+      "negative_evidence",
+      "evaluated_at_utc"
+    ],
+    "global_bindings": [
+      "profile_blob_sha",
+      "taste_model_version"
+    ]
+  },
+  "diagnostic_usage": {
+    "stage_04": "May validate canonical taste-cache structure through a valid bound index without loading verbose canonical entries.",
+    "stage_07": "May use compact index entries for exact-key/profile/model/fingerprint mechanical comparison against current price-blind feed fingerprints.",
+    "semantic_re_evaluation_of_confirmed_hits": false,
+    "full_cache_load_when": [
+      "index is absent or invalid and fallback is attempted",
+      "a true cache miss must be merged and persisted",
+      "specific verbose evidence is needed for debugging",
+      "canonical cache rewrite is required"
+    ]
+  }
+}
