@@ -1,0 +1,71 @@
+{
+  "contract": "FULL-TASTE-FINGERPRINT-VALIDATION",
+  "version": "1.0",
+  "status": "implementation_only",
+  "purpose": "Move the deterministic 583-candidate fingerprint comparison into CI and publish a small content-addressed result that can be verified quickly by the diagnostic consumer.",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "fingerprint_contract_path": "config/taste_fingerprint_contract.json",
+    "taste_cache_index_contract_path": "config/taste_cache_index_contract.json",
+    "never_overrides_canonical_policy": true,
+    "semantic_taste_evaluation_forbidden": true,
+    "price_or_deal_fields_forbidden_from_fingerprint": true
+  },
+  "producer": {
+    "workflow": ".github/workflows/build-taste-validation.yml",
+    "inputs": [
+      "data/production/mailing/index.json",
+      "every current mailing chunk",
+      "data/cache/taste_fit.index.json",
+      "config/taste_fingerprint_contract.json"
+    ],
+    "output": "data/cache/taste_fit.validation.json",
+    "must": [
+      "parse every current mailing row",
+      "compute every current price-blind taste fingerprint using the exact implementation contract",
+      "validate taste index structural shape and actual len(entries)",
+      "classify every feed candidate as exact cache hit or miss/stale",
+      "never extrapolate from samples",
+      "record exact counts and only non-hit details",
+      "bind result to exact Git tree/blob identities of all deterministic inputs"
+    ]
+  },
+  "cache_hit_rule": {
+    "requires": [
+      "exact candidate key exists in compact taste index",
+      "taste index profile_blob_sha equals the profile SHA already proven current by stage 04",
+      "taste index taste_model_version equals canonical policy model version",
+      "cached taste_fingerprint equals freshly computed current feed fingerprint"
+    ],
+    "confirmed_hit_is_final_and_not_semantically_re_evaluated": true
+  },
+  "consumer_accept_only_if_all": [
+    "validation status is complete",
+    "current data/production/mailing Git tree SHA equals validation mailing_tree_sha",
+    "current data/cache/taste_fit.index.json blob SHA equals validation taste_index_blob_sha",
+    "current config/taste_fingerprint_contract.json blob SHA equals validation fingerprint_contract_blob_sha",
+    "validation profile_blob_sha equals current canonical profile SHA proven by stage 02/04",
+    "validation taste_model_version equals canonical policy taste model version",
+    "validation feed_candidate_count equals current mailing item_count",
+    "validation processed_count equals feed_candidate_count",
+    "validation hit_count plus miss_or_stale_count equals feed_candidate_count",
+    "validation complete_coverage is true"
+  ],
+  "failure_behavior": {
+    "stale_or_mismatched_attestation": "invalid; do not use counts; targeted retest must wait for/rebuild current validation artifact or fall back to direct full mechanical validation",
+    "workflow_or_parse_failure": "fail closed",
+    "no_semantic_fallback_inside_stage_07": true
+  },
+  "diagnostic_stage_07": {
+    "stage_limit_seconds": 60,
+    "targeted_retest_dependencies": [
+      "01_policy_bootstrap",
+      "02_profile_load",
+      "03_feed_ingest_qa proof or exact current mailing tree identity",
+      "04_taste_cache_load",
+      "06_fingerprint_schema_test",
+      "taste_validation_contract"
+    ],
+    "output_needed_for_stage_08": "non_hits list only; confirmed hits are not semantically reevaluated"
+  }
+}
