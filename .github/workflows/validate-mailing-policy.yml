@@ -29,54 +29,51 @@ jobs:
           p = json.loads(Path("config/mailing_policy.json").read_text(encoding="utf-8"))
           sep = p["taste_deal_separation"]
           pf = p["personal_filter"]
-          ev = pf["evidence_contract"]
           st = pf["structured_taste_evaluation"]
           tc = p["taste_cache"]
-          cp = tc["mandatory_checkpoint"]
+          cp = tc["checkpoint_strategy"]
+          ra = tc["recovery_artifact"]
           sh = p["external_cache"]["steamdb_history"]
           reg = p["external_cache"]["lookup_registry"]
 
           checks = {
               "contract": p.get("contract") == "GAME-DEALS-MAILING",
               "canonical": p.get("status") == "canonical",
-              "version": p.get("version") == "1.9",
+              "version": p.get("version") == "1.10",
               "policy_first": p["policy_loading"]["load_before_any_ingest"] is True,
               "fail_closed": p["policy_loading"]["fail_closed_if_unavailable"] is True,
               "full_snapshot": p["delivery"]["mode"] == "full_daily_snapshot",
               "not_delta": p["delivery"]["delta_only"] is False,
-              "repeat_active": p["delivery"]["repeat_still_active_relevant_deals_each_day"] is True,
               "no_topn": p["delivery"]["fixed_top_n"] is None,
+              "repeat_active": p["delivery"]["repeat_still_active_relevant_deals_each_day"] is True,
               "completed_not_excluded": p["delivery"]["completed_games_auto_excluded"] is False,
               "wishlist_not_discovery": p["taste_profile"]["wishlist_is_discovery_source"] is False,
               "wishlist_not_taste": p["taste_profile"]["wishlist_is_taste_proof"] is False,
               "wishlist_not_ownership": p["taste_profile"]["wishlist_is_ownership_proof"] is False,
               "production_primary": p["paid_discovery"]["production_feed_is_primary_discovery_source"] is True,
               "steamdb_not_discovery": p["paid_discovery"]["steamdb_for_discovery"] is False,
-              "read_all_chunks": p["paid_discovery"]["read_all_chunks"] is True,
+              "all_chunks": p["paid_discovery"]["read_all_chunks"] is True,
               "qa_fail_closed": p["ingest_qa"]["fail_closed"] is True,
-              "coverage": p["ingest_qa"]["minimum_coverage_ratio"] >= 0.99,
+              "max_age_18": p["ingest_qa"]["maximum_snapshot_age_hours"] == 18,
               "price_blind": sep["taste_verdict_is_price_blind"] is True,
               "deal_never_raises_taste": sep["deal_quality_can_never_raise_taste_fit"] is True,
-              "core_not_evidence": sep["core_fit_count_is_recall_context_not_positive_taste_evidence"] is True,
-              "discount_forbidden": "discount_percent" in sep["forbidden_as_positive_taste_evidence"],
-              "reviews_forbidden": "global_review_positive" in sep["forbidden_as_positive_taste_evidence"],
               "recall_not_evidence": sep["recall_flags_can_trigger_audit_but_are_not_taste_evidence"] is True,
-              "no_auto_include": pf["no_automatic_include_from_feed_signals"] is True,
+              "core_not_evidence": sep["core_fit_count_is_recall_context_not_positive_taste_evidence"] is True,
               "taste_v2": st["taste_model_version"] == "taste-v2",
-              "generic_tags_insufficient": "Action" in ev["generic_tags_that_cannot_count_alone"],
-              "same_series_continuity": "positive_same_series_anchor_with_clear_mechanical_or_structural_continuity" in ev["high_specificity_positive_types"],
-              "gameplay_required": "gameplay/mechanics/structure" in st["include_moderate_if"],
-              "unknown_excluded": st["if_candidate_properties_are_unknown_and_no_direct_or_same_series_anchor"] == "below_moderate_fit",
               "audit_same_threshold": p["false_negative_audit"]["audit_uses_same_evidence_contract_and_same_threshold"] is True,
-              "audit_price_blind": p["false_negative_audit"]["price_reviews_discount_store_steamdb_forbidden"] is True,
               "no_whitelist": p["false_negative_audit"]["no_candidate_name_whitelists"] is True,
-              "taste_cache_v2": tc["taste_model_version"] == "taste-v2",
-              "taste_cache_profile_bound": "blob SHA" in tc["profile_binding"],
-              "taste_cache_price_blind": "discount_percent" in tc["fingerprint_excludes"],
-              "checkpoint_required": cp["required"] is True,
-              "checkpoint_before_external": "SteamDB_lookup" in cp["before"] and "Steam_Store_lookup" in cp["before"],
-              "checkpoint_before_family": "offer_family_resolution" in cp["before"],
-              "checkpoint_one_write": cp["if_cache_changed_attempt_exactly_one_github_write_before_continuing"] is True,
+              "cache_v2": tc["taste_model_version"] == "taste-v2",
+              "incremental_checkpoint": cp["mode"] == "incremental_by_chosen_feed_chunk",
+              "checkpoint_each_chunk": cp["checkpoint_after_each_chunk_final_post_audit_verdicts"] is True,
+              "checkpoint_before_next_chunk": cp["checkpoint_before_advancing_to_next_chunk_when_cache_changed"] is True,
+              "checkpoint_before_external": cp["checkpoint_before_content_family_store_steamdb_deal_quality_sorting"] is True,
+              "checkpoint_stop_safe": cp["if_execution_budget_is_low_stop_after_successful_checkpoint_and_resume_next_run"] is True,
+              "recovery_enabled": ra["enabled"] is True,
+              "recovery_name": ra["expected_name"] == "taste_fit_checkpoint_prepared.json",
+              "recovery_not_evidence": ra["artifact_is_not_user_evidence"] is True,
+              "recovery_profile_bound": "profile_blob_sha_matches_current_canonical_profile" in ra["accept_only_if"],
+              "recovery_fingerprint_bound": "every_recovered_entry_fingerprint_matches_current_price_blind_fingerprint" in ra["accept_only_if"],
+              "full_recovery_fast_path": "write it to data/cache/taste_fit.json" in ra["full_artifact_fast_path"],
               "dlc_gate": p["content_eligibility"]["dlc_is_not_independent_recommendation_by_default"] is True,
               "family_required": p["offer_family_resolution"]["required"] is True,
               "one_row_family": p["offer_family_resolution"]["one_primary_output_row_per_purchase_family"] is True,
