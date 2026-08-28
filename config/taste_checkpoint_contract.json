@@ -1,0 +1,48 @@
+{
+  "contract": "MANDATORY-TASTE-CHECKPOINT-V1",
+  "version": "1.0",
+  "status": "implementation_only",
+  "purpose": "Provide an explicit machine-verifiable proof that the canonical taste checkpoint requirement has been satisfied before any downstream content, Store or SteamDB stage begins.",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "never_overrides_canonical_policy": true,
+    "canonical_cache_path": "data/cache/taste_fit.json",
+    "checkpoint_order_is_unchanged": true
+  },
+  "zero_write_fast_path": {
+    "allowed_only_if_all": [
+      "full fingerprint validation is complete for every current candidate",
+      "miss_or_stale_count is zero",
+      "final taste ledger is complete and bound to the same taste index and fingerprint validation",
+      "no recovery artifact is present that requires a merge",
+      "no semantic miss evaluation occurred because there were no misses",
+      "no false-negative audit change occurred because there were no fresh exclusions to audit",
+      "the canonical taste cache blob is exactly the blob attested by the current compact taste index"
+    ],
+    "meaning": "There are provably zero new or changed final non-borderline taste entries to persist, so zero GitHub writes is a completed mandatory checkpoint rather than a skipped checkpoint."
+  },
+  "producer": {
+    "workflow": ".github/workflows/build-taste-checkpoint-validation.yml",
+    "inputs": [
+      "config/mailing_policy.json",
+      "data/cache/taste_fit.index.json",
+      "data/cache/taste_fit.validation.json",
+      "data/cache/taste_fit.ledger_validation.json"
+    ],
+    "output": "data/cache/taste_fit.checkpoint_validation.json"
+  },
+  "consumer_fast_path": {
+    "stage_11_fetch_only": "data/cache/taste_fit.checkpoint_validation.json",
+    "accept_only_if_all": [
+      "status is complete",
+      "policy_blob_sha equals stage 01 policy SHA",
+      "taste_index_blob_sha equals stage 04 taste index SHA",
+      "taste_validation_blob_sha equals stage 07 validation SHA",
+      "ledger_validation_blob_sha equals stage 10 ledger validation SHA",
+      "cache_changes_required is zero",
+      "github_writes_required is zero",
+      "checkpoint_complete is true"
+    ],
+    "if_any_check_fails": "FAIL_CLOSED; downstream is forbidden"
+  }
+}
