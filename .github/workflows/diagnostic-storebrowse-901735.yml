@@ -1,0 +1,31 @@
+name: Diagnostic StoreBrowse identity 901735
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-storebrowse-901735.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Inspect StoreBrowse identities
+        run: |
+          python - <<'PY'
+          import json, urllib.parse, urllib.request
+          ids=[{'appid':901735},{'appid':40960},{'appid':40950}]
+          payload={'ids':ids,'context':{'language':'english','country_code':'KZ','steam_realm':1},'data_request':{'include_all_purchase_options':True,'include_basic_info':True,'include_included_items':True}}
+          url='https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json='+urllib.parse.quote(json.dumps(payload,separators=(',',':')))
+          req=urllib.request.Request(url,headers={'User-Agent':'steam-kz-deals/1.0','Accept':'application/json'})
+          data=json.loads(urllib.request.urlopen(req,timeout=25).read().decode())
+          items=(data.get('response') or {}).get('store_items') or []
+          print('count',len(items))
+          for requested,item in zip(ids,items):
+              print(json.dumps({'requested':requested,'id':item.get('id'),'appid':item.get('appid'),'name':item.get('name'),'type':item.get('type'),'purchase_packageids':[o.get('packageid') for o in item.get('purchase_options') or []],'included_appids':item.get('included_appids'),'related_items':item.get('related_items')},ensure_ascii=False,sort_keys=True))
+          PY
