@@ -1,0 +1,222 @@
+name: Checkpoint SteamDB history
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "config/steamdb_checkpoint_contract.json"
+      - "data/cache/steamdb_lookup.validation.json"
+      - ".github/workflows/checkpoint-steamdb-history.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: steamdb-history-checkpoint
+  cancel-in-progress: true
+
+jobs:
+  checkpoint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Merge validated lookup results and migrate cache to schema 2
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          POLICY = Path('config/mailing_policy.json')
+          CONTRACT = Path('config/steamdb_checkpoint_contract.json')
+          LOOKUP = Path('data/cache/steamdb_lookup.validation.json')
+          CACHE = Path('data/cache/steamdb_history.json')
+
+          policy = json.loads(POLICY.read_text(encoding='utf-8'))
+          contract = json.loads(CONTRACT.read_text(encoding='utf-8'))
+          lookup = json.loads(LOOKUP.read_text(encoding='utf-8'))
+          old = json.loads(CACHE.read_text(encoding='utf-8'))
+
+          if policy.get('status') != 'canonical':
+              raise SystemExit('Policy is not canonical')
+          expected_schema = int(policy['external_cache']['steamdb_history']['writer_schema_version'])
+          if expected_schema != 2 or contract.get('contract') != 'STEAMDB-CACHE-CHECKPOINT-V1':
+              raise SystemExit('Unexpected SteamDB checkpoint contract/schema')
+          if lookup.get('status') != 'complete':
+              raise SystemExit('Stage-16 lookup validation is not complete')
+          if int(lookup.get('blocked_or_failure_count') or 0) != 0:
+              raise SystemExit('Stage-16 contains blocked/failure results')
+
+          old_entries = old.get('entries')
+          if not isinstance(old_entries, dict):
+              raise SystemExit('Existing SteamDB cache entries are malformed')
+
+          migrated = {}
+          old_schema = int(old.get('schema_version') or 0)
+          if old_schema not in (1, 2):
+              raise SystemExit(f'Unsupported existing SteamDB cache schema: {old_schema}')
+
+          for key, entry in old_entries.items():
+              if not isinstance(entry, dict):
+                  raise SystemExit(f'Existing entry {key} is not an object')
+              if not (key.startswith('App_') or key.startswith('Sub_')):
+                  raise SystemExit(f'Invalid exact cache key: {key}')
+              steam_type = 'app' if key.startswith('App_') else 'sub'
+              steam_id = key.split('_', 1)[1]
+
+              if old_schema == 1 or 'status' not in entry:
+                  try:
+                      value = float(entry.get('historical_min_kzt'))
+                  except Exception:
+                      raise SystemExit(f'Invalid legacy historical minimum for {key}')
+                  if value < 0:
+                      raise SystemExit(f'Negative legacy historical minimum for {key}')
+                  if value == 0:
+                      status = 'previously_free'
+                      stored_value = 0
+                  else:
+                      status = 'confirmed_min'
+                      stored_value = int(value) if value.is_integer() else value
+                  migrated[key] = {
+                      'key': key,
+                      'steam_type': entry.get('steam_type') or steam_type,
+                      'steam_id': str(entry.get('steam_id') or steam_id),
+                      'status': status,
+                      'historical_min_kzt': stored_value,
+                      'checked_at_utc': entry.get('checked_at_utc'),
+                      'source': 'SteamDB'
+                  }
+              else:
+                  status = entry.get('status')
+                  if status not in ('confirmed_min', 'previously_free', 'unavailable_exact_history'):
+                      raise SystemExit(f'Invalid schema-2 status for {key}: {status!r}')
+                  new_entry = {
+                      'key': key,
+                      'steam_type': entry.get('steam_type') or steam_type,
+                      'steam_id': str(entry.get('steam_id') or steam_id),
+                      'status': status,
+                      'checked_at_utc': entry.get('checked_at_utc'),
+                      'source': 'SteamDB'
+                  }
+                  if status == 'confirmed_min':
+                      value = entry.get('historical_min_kzt')
+                      if not isinstance(value, (int, float)) or value <= 0:
+                          raise SystemExit(f'Invalid confirmed minimum for {key}')
+                      new_entry['historical_min_kzt'] = value
+                  elif status == 'previously_free':
+                      new_entry['historical_min_kzt'] = 0
+                  else:
+                      new_entry['historical_min_kzt'] = None
+                      if entry.get('unavailable_reason'):
+                          new_entry['unavailable_reason'] = entry.get('unavailable_reason')
+                  migrated[key] = new_entry
+
+          registry = lookup.get('lookup_registry')
+          if not isinstance(registry, list):
+              raise SystemExit('Stage-16 lookup registry is malformed')
+          registry_keys = []
+          for item in registry:
+              if not isinstance(item, dict):
+                  raise SystemExit('Stage-16 registry item is malformed')
+              key = item.get('key')
+              status = item.get('result')
+              if not key or not (key.startswith('App_') or key.startswith('Sub_')):
+                  raise SystemExit(f'Invalid Stage-16 exact key: {key!r}')
+              if item.get('persistable') is not True:
+                  raise SystemExit(f'Non-persistable Stage-16 result reached checkpoint: {key}')
+              if status not in ('confirmed_min', 'previously_free', 'unavailable_exact_history'):
+                  raise SystemExit(f'Invalid Stage-16 status for {key}: {status!r}')
+              registry_keys.append(key)
+
+              steam_type = 'app' if key.startswith('App_') else 'sub'
+              steam_id = key.split('_', 1)[1]
+              new_entry = {
+                  'key': key,
+                  'steam_type': steam_type,
+                  'steam_id': steam_id,
+                  'status': status,
+                  'checked_at_utc': item.get('checked_at_utc'),
+                  'source': 'SteamDB'
+              }
+              if status == 'confirmed_min':
+                  value = item.get('historical_min_kzt')
+                  if not isinstance(value, (int, float)) or value <= 0:
+                      raise SystemExit(f'Invalid exact Stage-16 minimum for {key}')
+                  new_entry['historical_min_kzt'] = value
+              elif status == 'previously_free':
+                  if item.get('historical_min_kzt') not in (0, 0.0):
+                      raise SystemExit(f'Previously-free Stage-16 result is not zero for {key}')
+                  new_entry['historical_min_kzt'] = 0
+              else:
+                  new_entry['historical_min_kzt'] = None
+                  new_entry['unavailable_reason'] = item.get('resolution_method')
+
+              if item.get('source_url'):
+                  new_entry['source_url'] = item.get('source_url')
+              if item.get('resolution_method'):
+                  new_entry['resolution_method'] = item.get('resolution_method')
+              migrated[key] = new_entry
+
+          if len(registry_keys) != len(set(registry_keys)):
+              raise SystemExit('Duplicate Stage-16 registry key')
+          if len(registry_keys) != int(lookup.get('expected_true_miss_count') or -1):
+              raise SystemExit('Stage-16 registry count does not equal expected true misses')
+
+          for key in registry_keys:
+              if key not in migrated:
+                  raise SystemExit(f'Checkpoint lost Stage-16 key {key}')
+
+          updated_at = datetime.now(timezone.utc).isoformat()
+          result = {
+              'schema_version': 2,
+              'purpose': 'persistent_kazakhstan_price_history_cache_for_mailing',
+              'source': 'SteamDB',
+              'country_code': 'kz',
+              'currency': 'KZT',
+              'updated_at_utc': updated_at,
+              'entry_count': len(migrated),
+              'entries': dict(sorted(migrated.items()))
+          }
+          if result['entry_count'] != len(result['entries']):
+              raise SystemExit('SteamDB result metadata count mismatch')
+
+          CACHE.write_text(json.dumps(result, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
+          print(json.dumps({
+              'old_schema': old_schema,
+              'old_actual_entries': len(old_entries),
+              'stage16_registry': len(registry_keys),
+              'new_schema': 2,
+              'new_actual_entries': len(migrated)
+          }, ensure_ascii=False, indent=2))
+          PY
+
+      - name: Commit SteamDB cache exactly once if changed
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/steamdb_history.json
+          if git diff --cached --quiet; then
+            echo "SteamDB history already current; zero cache writes"
+            exit 0
+          fi
+          git commit -m "Checkpoint SteamDB history cache"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo "SteamDB history checkpoint pushed in one cache commit"
+              exit 0
+            fi
+            sleep $((attempt*3))
+          done
+          echo "SteamDB cache write failed after push retries"
+          exit 1
