@@ -1,14 +1,22 @@
 {
   "contract": "STEAMDB-TRUE-MISS-LOOKUP-V1",
-  "version": "1.0",
+  "version": "1.1",
   "status": "implementation_only",
-  "purpose": "Resolve only stage-15 true SteamDB history misses with one exact source attempt per provider/entity key and publish a compact lookup ledger for stage 16.",
+  "purpose": "Resolve only stage-15 true SteamDB history misses through the ChatGPT runtime web path, because direct GitHub Actions requests to SteamDB are systematically blocked with HTTP 403, then validate the prepared result in CI.",
   "authority": {
     "canonical_policy_path": "config/mailing_policy.json",
     "never_overrides_canonical_policy": true,
     "steamdb_is_history_only": true,
     "lookup_only_stage_15_true_misses": true,
-    "no_retry_same_provider_entity_key_within_one_run": true
+    "no_retry_same_provider_entity_key_within_one_runtime_run": true,
+    "do_not_store_guessed_minima": true
+  },
+  "transport": {
+    "primary_lookup_executor": "ChatGPT runtime web fetch/search",
+    "github_actions_direct_scraping_disabled": true,
+    "reason": "A controlled test on 2026-08-28 attempted all 51 stage-15 misses from GitHub Actions and SteamDB returned HTTP 403 for all 51, while the runtime web path could read the SteamDB price-history pages and exact Kazakhstan rows.",
+    "prepared_runtime_artifact": "data/cache/steamdb_web_resolutions.json",
+    "ci_validator_workflow": ".github/workflows/build-steamdb-true-miss-lookups.yml"
   },
   "source": {
     "provider": "SteamDB",
@@ -17,22 +25,33 @@
     "region_row": "Kazakhstani Tenge",
     "currency": "KZT"
   },
-  "result_rules": {
-    "http_200_with_kazakhstani_tenge_row_and_nonzero_lowest": "confirmed_min",
-    "http_200_with_kazakhstani_tenge_row_showing_free_or_zero_lowest": "previously_free",
-    "http_200_or_404_where_exact_entity_history_is reached but Kazakhstan exact history is absent": "unavailable_exact_history",
+  "runtime_result_rules": {
+    "direct_app_kzt_row_with_nonzero_lowest_recorded_price": "confirmed_min",
+    "direct_app_kzt_row_with_zero_lowest_recorded_price": "previously_free",
+    "exact_sub_page_reached_but_public_table_has_current_and_suggested_prices_without_lowest_recorded_price": "unavailable_exact_history",
+    "app_page_temporarily_unreadable": "May use exact SteamDB purchase-package relationship only when the app identity, exact active package relationship and a KZT lowest price for the same purchase content are all independently proven from SteamDB; otherwise blocked_or_failure.",
     "403_429_timeout_network_or_5xx": "blocked_or_failure; never persist as negative cache"
   },
+  "prepared_artifact_contract": {
+    "must_bind_to_exact_stage_15_validation_blob_sha": true,
+    "must_cover_exactly_all_stage_15_true_miss_keys": true,
+    "allowed_statuses": ["confirmed_min", "previously_free", "unavailable_exact_history"],
+    "confirmed_min_requires_positive_exact_kzt": true,
+    "previously_free_requires_zero": true,
+    "unavailable_exact_history_requires_source_reached_evidence_code": true,
+    "special_relationship_resolution_requires_explicit_evidence_object": true
+  },
   "diagnostic_stage_16": {
-    "producer_workflow": ".github/workflows/build-steamdb-true-miss-lookups.yml",
     "output": "data/cache/steamdb_lookup.validation.json",
     "pass_requires": [
-      "every stage-15 true miss has exactly one registry entry",
-      "no non-miss key is queried",
-      "no duplicate provider/entity key is attempted",
-      "confirmed minima are exact KZT values from the Kazakhstan row",
-      "blocked or tool failures are separate from unavailable exact history",
-      "all true misses are resolved without blocked/failure for PASS"
-    ]
+      "every stage-15 true miss has exactly one prepared runtime resolution",
+      "no non-miss key is present",
+      "no duplicate provider/entity key exists",
+      "confirmed minima are exact KZT values read from SteamDB evidence, never currency-converted estimates",
+      "previously-free and unavailable-exact-history are distinct statuses",
+      "all special relationship-derived values have explicit SteamDB relationship evidence",
+      "blocked_or_failure count is zero"
+    ],
+    "after_targeted_pass": "restart full diagnostic from stage 01"
   }
 }
