@@ -1,0 +1,79 @@
+name: Build per-entry taste cache index
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "data/cache/taste_fit.json"
+      - "config/taste_cache_entry_contract.json"
+      - "config/taste_fingerprint_contract.json"
+      - "config/taste_ledger_contract.json"
+      - "config/mailing_policy.json"
+      - "scripts/taste_cache_common.py"
+      - "scripts/build_taste_cache_index.py"
+      - ".github/workflows/build-taste-entry-index.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: per-entry-taste-cache-index
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build per-entry index
+        run: python scripts/build_taste_cache_index.py
+      - name: Validate v2 index shape
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('data/cache/taste_fit.entry_index.json')
+          doc = json.loads(p.read_text(encoding='utf-8'))
+          if doc.get('schema_version') != 2:
+              raise SystemExit('per-entry index is not schema v2')
+          if doc.get('profile_binding_mode') != 'per_entry_exact':
+              raise SystemExit('per-entry binding mode missing')
+          if doc.get('index_entry_count') != len(doc.get('entries') or {}):
+              raise SystemExit('per-entry index count mismatch')
+          if doc['entry_fields'] != [
+              'appid','profile_blob_sha','taste_model_version','taste_semantics_sha256',
+              'taste_fingerprint','verdict','fit_level','reason_code'
+          ]:
+              raise SystemExit('unexpected per-entry compact shape')
+          print(f"PER_ENTRY_INDEX_V2=PASS entries={doc['index_entry_count']}")
+          PY
+      - name: Commit per-entry index
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/taste_fit.entry_index.json
+          if git diff --cached --quiet; then
+            echo "Per-entry taste index already current"
+            exit 0
+          fi
+          git commit -m "Refresh per-entry taste cache index"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
