@@ -1,0 +1,76 @@
+{
+  "contract": "PRODUCTION-FEED-INTEGRITY-FAST-PATH",
+  "version": "1.0",
+  "status": "implementation_only",
+  "purpose": "Provide a content-addressed proof method for existing canonical ingest assertions so a consumer does not need to re-download every verbose chunk merely to re-prove row counts and exact-file identity already verified by the producer.",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "never_overrides_canonical_policy": true,
+    "does_not_change_candidate_set_or_ingest_thresholds": true,
+    "does_not_relax_fail_closed_behavior": true
+  },
+  "design_basis": [
+    "OCI-style descriptors bind referenced content to digest and byte size.",
+    "TUF-style target metadata records hashes and lengths so clients can validate exact target objects from compact metadata.",
+    "Git repository metadata exposes immutable blob SHA and size for files without downloading file contents."
+  ],
+  "producer": {
+    "workflow": ".github/workflows/build-mailing-feed.yml",
+    "must_directly_read_and_validate": [
+      "data/production/manifest.json",
+      "data/production/shortlist/index.json",
+      "every source shortlist chunk",
+      "every generated mailing chunk"
+    ],
+    "must_verify": [
+      "source chunk count equals source index",
+      "source row count equals source item_count",
+      "every source row has the indexed column count",
+      "mailing projection preserves one row per source row",
+      "mailing chunk count equals generated descriptor count",
+      "mailing row count equals source item_count"
+    ],
+    "descriptor_fields": [
+      "path",
+      "git_blob_sha",
+      "sha256",
+      "size_bytes",
+      "row_count for chunk files"
+    ],
+    "attestation_location": "data/production/mailing/index.json integrity_attestation"
+  },
+  "consumer_fast_path": {
+    "allowed_only_if_all": [
+      "mailing index contains integrity_attestation with proof_method content_addressed_producer_attestation",
+      "current Git blob SHA and size of source manifest exactly match attested descriptor",
+      "current Git blob SHA and size of source index exactly match attested descriptor",
+      "the exact current source chunk path set equals the attested source chunk path set",
+      "every current source chunk Git blob SHA and size exactly match its attested descriptor",
+      "the exact current mailing chunk path set equals the attested mailing chunk path set",
+      "every current mailing chunk Git blob SHA and size exactly match its attested descriptor",
+      "attested source chunk count equals canonical source index count copied into mailing index",
+      "attested mailing chunk count equals mailing index chunk_count",
+      "attested source_rows_verified equals source_item_count",
+      "attested mailing_rows_verified equals item_count",
+      "source_to_mailing_row_projection_lossless is true",
+      "all_source_rows_column_validated is true",
+      "canonical manifest/index QA values copied into mailing index satisfy canonical thresholds"
+    ],
+    "proof_semantics": "When all exact blob identities match, the producer's direct validation applies to the same immutable bytes currently in the repository. The consumer is verifying identity of already-read exact content, not assuming similarity from filenames or counts.",
+    "if_any_check_fails": "FAST_PATH_INVALID; fall back to direct canonical ingest if feasible, otherwise fail closed.",
+    "never_extrapolate_unchecked_blob": true,
+    "never_accept_path_only_or_size_only_match": true,
+    "sha_and_size_both_required": true
+  },
+  "diagnostic_stage_03": {
+    "targeted_retest_dependencies": [
+      "01_policy_bootstrap",
+      "diagnostic_runner_bootstrap",
+      "feed_integrity_contract"
+    ],
+    "02_profile_load_required": false,
+    "04_taste_cache_load_required": false,
+    "stage_limit_seconds": 60,
+    "pass_requires": "all canonical ingest QA assertions proven either by direct read or by the exact content-addressed producer attestation fast path"
+  }
+}
