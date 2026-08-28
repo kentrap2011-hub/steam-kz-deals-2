@@ -29,63 +29,70 @@ jobs:
           p = json.loads(Path("config/mailing_policy.json").read_text(encoding="utf-8"))
           sep = p["taste_deal_separation"]
           pf = p["personal_filter"]
-          tc = p["external_cache"]["taste_fit"]
+          ev = pf["evidence_contract"]
+          st = pf["structured_taste_evaluation"]
+          tc = p["taste_cache"]
+          cp = tc["mandatory_checkpoint"]
           sh = p["external_cache"]["steamdb_history"]
           reg = p["external_cache"]["lookup_registry"]
 
           checks = {
               "contract": p.get("contract") == "GAME-DEALS-MAILING",
               "canonical": p.get("status") == "canonical",
-              "version_1_8": p.get("version") == "1.8",
-              "policy_before_ingest": p["policy_loading"]["do_not_start_ingest_before_canonical_policy_loaded"] is True,
+              "version": p.get("version") == "1.9",
+              "policy_first": p["policy_loading"]["load_before_any_ingest"] is True,
+              "fail_closed": p["policy_loading"]["fail_closed_if_unavailable"] is True,
               "full_snapshot": p["delivery"]["mode"] == "full_daily_snapshot",
               "not_delta": p["delivery"]["delta_only"] is False,
+              "repeat_active": p["delivery"]["repeat_still_active_relevant_deals_each_day"] is True,
               "no_topn": p["delivery"]["fixed_top_n"] is None,
               "completed_not_excluded": p["delivery"]["completed_games_auto_excluded"] is False,
               "wishlist_not_discovery": p["taste_profile"]["wishlist_is_discovery_source"] is False,
               "wishlist_not_taste": p["taste_profile"]["wishlist_is_taste_proof"] is False,
+              "wishlist_not_ownership": p["taste_profile"]["wishlist_is_ownership_proof"] is False,
               "production_primary": p["paid_discovery"]["production_feed_is_primary_discovery_source"] is True,
               "steamdb_not_discovery": p["paid_discovery"]["steamdb_for_discovery"] is False,
-              "all_chunks": p["paid_discovery"]["read_all_chunks"] is True,
+              "read_all_chunks": p["paid_discovery"]["read_all_chunks"] is True,
               "qa_fail_closed": p["ingest_qa"]["fail_closed"] is True,
-              "price_blind_taste": sep["taste_verdict_must_be_price_blind"] is True,
-              "deal_never_raises_taste": sep["quality_popularity_or_deal_value_can_never_raise_below_moderate_to_moderate"] is True,
-              "reviews_forbidden_taste": "global_review_positive" in sep["fields_forbidden_as_positive_taste_evidence"],
-              "discount_forbidden_taste": "discount_percent" in sep["fields_forbidden_as_positive_taste_evidence"],
-              "no_auto_floor": pf["no_automatic_include_floor_from_feed_signals"] is True,
-              "structured_taste": pf["structured_taste_evaluation"]["required_for_cache_miss"] is True,
-              "generic_tags_insufficient": pf["structured_taste_evaluation"]["generic_tags_alone_are_insufficient"] is True,
-              "targeted_price_blind_audit": p["false_negative_audit"]["mode"] == "targeted_price_blind_taste_audit",
-              "audit_no_external": p["false_negative_audit"]["external_lookups_during_audit"] is False,
-              "recall_not_evidence": p["false_negative_audit"]["recall_flags_are_not_positive_taste_evidence"] is True,
-              "no_name_whitelist": p["false_negative_audit"]["no_candidate_name_whitelists"] is True,
-              "dlc_gate": p["content_eligibility"]["dlc_is_not_independent_recommendation_by_default"] is True,
-              "wishlist_not_ownership": p["content_eligibility"]["do_not_assume_wishlist_means_ownership"] is True,
-              "family_resolution": p["offer_family_resolution"]["required"] is True,
-              "one_row_family": p["offer_family_resolution"]["one_primary_output_row_per_purchase_family"] is True,
-              "best_variant": p["offer_family_resolution"]["primary_row_must_use_best_purchase_variant"] is True,
-              "taste_cache_path": tc["path"] == "data/cache/taste_fit.json",
-              "taste_cache_not_profile": "never a second taste profile" in tc["purpose"],
+              "coverage": p["ingest_qa"]["minimum_coverage_ratio"] >= 0.99,
+              "price_blind": sep["taste_verdict_is_price_blind"] is True,
+              "deal_never_raises_taste": sep["deal_quality_can_never_raise_taste_fit"] is True,
+              "core_not_evidence": sep["core_fit_count_is_recall_context_not_positive_taste_evidence"] is True,
+              "discount_forbidden": "discount_percent" in sep["forbidden_as_positive_taste_evidence"],
+              "reviews_forbidden": "global_review_positive" in sep["forbidden_as_positive_taste_evidence"],
+              "recall_not_evidence": sep["recall_flags_can_trigger_audit_but_are_not_taste_evidence"] is True,
+              "no_auto_include": pf["no_automatic_include_from_feed_signals"] is True,
+              "taste_v2": st["taste_model_version"] == "taste-v2",
+              "generic_tags_insufficient": "Action" in ev["generic_tags_that_cannot_count_alone"],
+              "same_series_continuity": "positive_same_series_anchor_with_clear_mechanical_or_structural_continuity" in ev["high_specificity_positive_types"],
+              "gameplay_required": "gameplay/mechanics/structure" in st["include_moderate_if"],
+              "unknown_excluded": st["if_candidate_properties_are_unknown_and_no_direct_or_same_series_anchor"] == "below_moderate_fit",
+              "audit_same_threshold": p["false_negative_audit"]["audit_uses_same_evidence_contract_and_same_threshold"] is True,
+              "audit_price_blind": p["false_negative_audit"]["price_reviews_discount_store_steamdb_forbidden"] is True,
+              "no_whitelist": p["false_negative_audit"]["no_candidate_name_whitelists"] is True,
+              "taste_cache_v2": tc["taste_model_version"] == "taste-v2",
               "taste_cache_profile_bound": "blob SHA" in tc["profile_binding"],
-              "taste_cache_excludes_discount": "discount_percent" in tc["fingerprint_explicitly_excludes"],
-              "taste_cache_single_write": "at most one GitHub update" in tc["write_back"],
-              "taste_cache_count": tc["entry_count_must_equal_len_entries"] is True,
+              "taste_cache_price_blind": "discount_percent" in tc["fingerprint_excludes"],
+              "checkpoint_required": cp["required"] is True,
+              "checkpoint_before_external": "SteamDB_lookup" in cp["before"] and "Steam_Store_lookup" in cp["before"],
+              "checkpoint_before_family": "offer_family_resolution" in cp["before"],
+              "checkpoint_one_write": cp["if_cache_changed_attempt_exactly_one_github_write_before_continuing"] is True,
+              "dlc_gate": p["content_eligibility"]["dlc_is_not_independent_recommendation_by_default"] is True,
+              "family_required": p["offer_family_resolution"]["required"] is True,
+              "one_row_family": p["offer_family_resolution"]["one_primary_output_row_per_purchase_family"] is True,
+              "zero_free": p["pricing"]["historical_zero"]["zero_means_previously_free_not_paid_minimum"] is True,
+              "store_conditional": p["verification"]["steam_store_live_check_mode"] == "conditional_only",
               "steamdb_v2": sh["writer_schema_version"] == 2,
               "steamdb_legacy": sh["accept_legacy_schema_version_1"] is True,
-              "steamdb_negative_ttl": sh["negative_cache_rule"]["ttl_days"] >= 1,
-              "steamdb_no_failed_negative": sh["negative_cache_rule"]["network_blocked_timeout_or_tool_failure_is_not_persisted_as_negative"] is True,
-              "steamdb_actual_count": "len(entries)" in sh["entry_count_rule"],
-              "zero_not_paid_min": p["pricing"]["historical_zero_handling"]["zero_is_free_promo_history_not_paid_minimum"] is True,
+              "negative_ttl": sh["negative_cache"]["ttl_days"] == 14,
+              "actual_count": sh["actual_runtime_entry_count_is_len_entries"] is True,
               "lookup_registry": reg["required"] is True and reg["never_repeat_same_key_in_run"] is True,
-              "store_conditional": p["verification"]["steam_store_live_check_mode"] == "conditional_only",
               "sort_required": p["sorting"]["required"] is True,
-              "not_feed_order": p["sorting"]["do_not_preserve_feed_or_processing_order"] is True,
               "silent_exclusions": p["output_visibility"]["silent_exclusions"] is True,
               "one_upcoming": p["upcoming"]["max_items"] == 1,
-              "no_speed_completeness_loss": p["runtime_optimization"]["do_not_trade_completeness_for_speed"] is True,
           }
 
-          failed = [name for name, ok in checks.items() if not ok]
+          failed = [k for k, v in checks.items() if not v]
           if failed:
               raise SystemExit("Mailing policy invariant failure: " + ", ".join(failed))
           print(f"OK: {len(checks)} locked mailing invariants validated")
