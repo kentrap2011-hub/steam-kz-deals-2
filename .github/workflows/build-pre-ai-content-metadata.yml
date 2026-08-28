@@ -1,0 +1,56 @@
+name: Build pre-AI content metadata
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "Build pre-AI Store snapshot"
+    types:
+      - completed
+  push:
+    branches: [main]
+    paths:
+      - "data/production/mailing/**"
+      - "data/cache/content_metadata.json"
+      - "scripts/build_pre_ai_content_metadata.py"
+      - ".github/workflows/build-pre-ai-content-metadata.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pre-ai-content-metadata
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Build metadata for all pre-AI candidates
+        run: python scripts/build_pre_ai_content_metadata.py
+      - name: Commit pre-AI content metadata
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/production/pre_ai/content_metadata.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Refresh pre-AI content metadata"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then git rebase --abort || true; exit 1; fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          exit 1
