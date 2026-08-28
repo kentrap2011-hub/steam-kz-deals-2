@@ -1,0 +1,206 @@
+name: Build Store state validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "config/mailing_policy.json"
+      - "config/store_state_validation_contract.json"
+      - "data/production/mailing/**"
+      - "data/cache/store_state.json"
+      - "data/cache/offer_family.validation.json"
+      - ".github/workflows/build-store-state-validation.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: store-state-validation
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Validate reusable Store state against current snapshot
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+
+          POLICY=Path('config/mailing_policy.json')
+          CONTRACT=Path('config/store_state_validation_contract.json')
+          MAILING=Path('data/production/mailing/index.json')
+          STORE=Path('data/cache/store_state.json')
+          FAMILIES=Path('data/cache/offer_family.validation.json')
+          OUT=Path('data/cache/store_state.validation.json')
+
+          def sha(path):
+              return subprocess.check_output(['git','rev-parse',f'HEAD:{path}'],text=True).strip()
+
+          policy=json.loads(POLICY.read_text(encoding='utf-8'))
+          contract=json.loads(CONTRACT.read_text(encoding='utf-8'))
+          mailing=json.loads(MAILING.read_text(encoding='utf-8'))
+          store=json.loads(STORE.read_text(encoding='utf-8'))
+          families=json.loads(FAMILIES.read_text(encoding='utf-8'))
+
+          if policy.get('status')!='canonical': raise SystemExit('Policy not canonical')
+          if contract.get('contract')!='STORE-STATE-RESOLUTION-V1': raise SystemExit('Unexpected Store contract')
+          if families.get('status')!='complete' or not families.get('complete_coverage'): raise SystemExit('Family resolution incomplete')
+
+          entries=store.get('entries')
+          if not isinstance(entries,dict): raise SystemExit('Store cache entries malformed')
+
+          header_checks={
+              'schema_version': store.get('schema_version')==1,
+              'country_code_kz': store.get('country_code')=='kz',
+              'not_discovery_source': store.get('discovery_source') is False,
+              'entry_count_actual': store.get('entry_count')==len(entries),
+              'source_item_count': store.get('source_item_count')==mailing.get('source_item_count')==mailing.get('item_count'),
+              'source_updated_at': store.get('source_updated_at_utc')==mailing.get('source_updated_at_utc'),
+              'source_complete': store.get('source_complete') is True,
+              'source_coverage': float(store.get('source_coverage_ratio') or 0)>=float(policy['ingest_qa']['minimum_source_index_coverage_ratio']),
+              'source_needs_tuning': store.get('source_needs_tuning') is False,
+          }
+
+          cols=mailing['columns']; ci={n:i for i,n in enumerate(cols)}
+          feed={}
+          for n in range(1,int(mailing['chunk_count'])+1):
+              p=Path(mailing['chunk_pattern'].replace('NNN',f'{n:03d}'))
+              for line in p.read_text(encoding='utf-8').splitlines():
+                  if not line.strip(): continue
+                  c=line.split('\t')
+                  if len(c)!=len(cols): raise SystemExit(f'Column mismatch in {p}')
+                  key=c[ci['key']]
+                  feed[key]={
+                      'appid':c[ci['appid']],
+                      'title':c[ci['title']],
+                      'discount_percent':int(float(c[ci['discount_percent']])),
+                      'final_kzt':float(c[ci['final_kzt']]),
+                  }
+
+          member_keys=[]; primary_keys=[]
+          for fam in families['families']:
+              member_keys.extend(fam['all_member_keys'])
+              primary_keys.append(fam['primary_key'])
+          member_keys=sorted(set(member_keys)); primary_keys=sorted(set(primary_keys))
+
+          missing=[]; conflicts=[]; inactive_primaries=[]
+          for key in member_keys:
+              cached=entries.get(key); current=feed.get(key)
+              if cached is None or current is None:
+                  missing.append(key); continue
+              if (
+                  str(cached.get('appid') or '')!=str(current['appid'] or '')
+                  or cached.get('discount_percent')!=current['discount_percent']
+                  or float(cached.get('final_kzt') or 0)!=float(current['final_kzt'])
+              ):
+                  conflicts.append({
+                      'key':key,
+                      'cache_discount':cached.get('discount_percent'),
+                      'feed_discount':current['discount_percent'],
+                      'cache_final_kzt':cached.get('final_kzt'),
+                      'feed_final_kzt':current['final_kzt'],
+                  })
+
+          for key in primary_keys:
+              cached=entries.get(key)
+              if not cached or cached.get('active_discount') is not True or not cached.get('discount_percent') or float(cached.get('final_kzt') or 0)<=0:
+                  inactive_primaries.append(key)
+
+          current_state=[]
+          for fam in families['families']:
+              key=fam['primary_key']; cached=entries.get(key)
+              if cached:
+                  current_state.append({
+                      'family_id':fam['family_id'],
+                      'primary_key':key,
+                      'title':cached.get('title'),
+                      'discount_percent':cached.get('discount_percent'),
+                      'final_kzt':cached.get('final_kzt'),
+                      'active_discount':cached.get('active_discount'),
+                  })
+
+          unresolved_local_competition = int(families.get('unresolved_count') or 0)
+          canonical_trigger_counts={
+              'current_source_conflict':len(conflicts),
+              'materially_competitive_bundle_or_edition_unresolved_locally':unresolved_local_competition,
+              'sale_end_date_material_to_verdict_and_not_cached':0,
+          }
+          live_calls_required=sum(canonical_trigger_counts.values())
+          # This producer does not make live Store calls. A non-zero trigger forces diagnostic failure.
+          live_calls_performed=0
+
+          complete=(
+              all(header_checks.values())
+              and not missing
+              and not conflicts
+              and not inactive_primaries
+              and unresolved_local_competition==0
+              and live_calls_required==0
+              and len(current_state)==len(primary_keys)==families['family_count']
+          )
+
+          result={
+              'schema_version':1,
+              'purpose':'current_store_state_validation',
+              'status':'complete' if complete else 'live_store_required_or_invalid',
+              'bindings':{
+                  'policy_blob_sha':sha('config/mailing_policy.json'),
+                  'store_contract_blob_sha':sha('config/store_state_validation_contract.json'),
+                  'mailing_tree_sha':sha('data/production/mailing'),
+                  'mailing_index_blob_sha':sha('data/production/mailing/index.json'),
+                  'store_cache_blob_sha':sha('data/cache/store_state.json'),
+                  'offer_family_blob_sha':sha('data/cache/offer_family.validation.json'),
+              },
+              'store_cache_entry_count':len(entries),
+              'family_member_count':len(member_keys),
+              'family_count':families['family_count'],
+              'primary_count':len(primary_keys),
+              'store_cache_hits':len(member_keys)-len(missing),
+              'primary_store_cache_hits':len(primary_keys)-sum(1 for k in primary_keys if k in missing),
+              'missing_count':len(missing),
+              'current_source_conflict_count':len(conflicts),
+              'inactive_primary_count':len(inactive_primaries),
+              'canonical_live_trigger_counts':canonical_trigger_counts,
+              'live_store_calls_required':live_calls_required,
+              'live_store_calls_performed':live_calls_performed,
+              'header_checks':header_checks,
+              'current_state':current_state,
+              'missing':missing,
+              'conflicts':conflicts,
+              'inactive_primaries':inactive_primaries,
+          }
+          OUT.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print(json.dumps({
+              'status':result['status'],
+              'store_cache_entries':len(entries),
+              'member_hits':result['store_cache_hits'],
+              'primary_hits':result['primary_store_cache_hits'],
+              'conflicts':len(conflicts),
+              'live_calls_required':live_calls_required,
+          },ensure_ascii=False,indent=2))
+          PY
+
+      - name: Commit Store validation artifact
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/store_state.validation.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Rebuild Store state validation"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then git rebase --abort || true; exit 1; fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*3))
+          done
+          exit 1
