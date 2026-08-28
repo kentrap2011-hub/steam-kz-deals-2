@@ -1,0 +1,90 @@
+name: One-shot per-entry taste index v2 diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-taste-entry-index-v2.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build v2 index from real legacy cache
+        run: |
+          python scripts/build_taste_cache_index.py
+          python - <<'PY'
+          import hashlib
+          import json
+          import urllib.request
+          from pathlib import Path
+          import sys
+          sys.path.insert(0, 'scripts')
+          from taste_cache_common import current_taste_semantics_digest
+
+          idx = json.loads(Path('data/cache/taste_fit.index.json').read_text(encoding='utf-8'))
+          if idx['schema_version'] != 2:
+              raise SystemExit('index schema is not v2')
+          if idx['index_entry_count'] != 583:
+              raise SystemExit(f"unexpected real cache count {idx['index_entry_count']}")
+          if len(idx['profile_binding_counts']) != 1:
+              raise SystemExit('legacy cache should have one profile generation')
+          if len(idx['taste_model_counts']) != 1:
+              raise SystemExit('legacy cache should have one model generation')
+          if len(idx['taste_semantics_counts']) != 1:
+              raise SystemExit('legacy cache should have one semantics generation')
+
+          req = urllib.request.Request(
+              'https://raw.githubusercontent.com/kentrap2011-hub/stopgame-ratings-data/main/gaming_taste_live.json',
+              headers={'User-Agent':'steam-kz-deals/1.0'},
+          )
+          with urllib.request.urlopen(req, timeout=15) as resp:
+              raw = resp.read()
+          current_profile = hashlib.sha1(f'blob {len(raw)}\0'.encode('ascii') + raw).hexdigest()
+          current_model = 'taste-v2'
+          current_semantics = current_taste_semantics_digest()
+
+          rows = idx['entries']
+          current_hits_before = [
+              k for k,v in rows.items()
+              if v[1] == current_profile and v[2] == current_model and v[3] == current_semantics
+          ]
+          if current_hits_before:
+              raise SystemExit(f'legacy cache unexpectedly current: {current_hits_before[:5]}')
+
+          # Synthetic one-entry refresh: change only the three generation bindings.
+          probe_key = 'App_241930'
+          probe = list(rows[probe_key])
+          probe[1] = current_profile
+          probe[2] = current_model
+          probe[3] = current_semantics
+          simulated = dict(rows)
+          simulated[probe_key] = probe
+          current_hits_after = [
+              k for k,v in simulated.items()
+              if v[1] == current_profile and v[2] == current_model and v[3] == current_semantics
+          ]
+          if current_hits_after != [probe_key]:
+              raise SystemExit(f'per-entry isolation failed: {current_hits_after[:10]}')
+
+          print(json.dumps({
+              'legacy_index_entry_count': idx['index_entry_count'],
+              'legacy_profile_binding_counts': idx['profile_binding_counts'],
+              'legacy_model_counts': idx['taste_model_counts'],
+              'legacy_semantics_counts': idx['taste_semantics_counts'],
+              'current_profile_blob_sha': current_profile,
+              'current_semantics_sha256': current_semantics,
+              'current_hits_before_synthetic_refresh': len(current_hits_before),
+              'current_hits_after_one_synthetic_refresh': len(current_hits_after),
+              'only_current_hit': current_hits_after[0],
+              'per_entry_isolation': 'PASS'
+          }, ensure_ascii=False, indent=2))
+          PY
