@@ -1,6 +1,6 @@
 {
   "contract": "TASTE-CACHE-INDEX-FAST-PATH",
-  "version": "1.0",
+  "version": "1.1",
   "status": "implementation_only",
   "authority": {
     "canonical_policy_path": "config/mailing_policy.json",
@@ -12,17 +12,23 @@
   "purpose": "Provide a compact, cryptographically bound projection of the canonical taste cache so structural validation and mechanical cache-hit checks do not require loading verbose evidence for every cached entry.",
   "trust_model": {
     "index_is_derived_not_authoritative": true,
-    "accept_index_only_if_all": [
+    "stage_04_header_fast_path_accept_only_if_all": [
       "index source_cache.path equals canonical cache path",
       "index source_cache.blob_sha equals current Git blob SHA of canonical cache",
       "index source_cache.size_bytes equals current repository size of canonical cache",
       "index source_cache.entry_count_declared equals index source_cache.entry_count_actual",
       "index source_cache.entry_count_matches_len_entries is true",
       "index source_cache.required_entry_fields_complete is true",
-      "index index_entry_count equals len(index.entries)",
       "index index_entry_count equals source_cache.entry_count_actual",
       "index profile_blob_sha equals current canonical profile Git blob SHA",
       "index taste_model_version equals canonical policy taste model version"
+    ],
+    "stage_04_attestation_basis": "The generator parses the full canonical cache, computes len(entries), verifies declared entry_count and every required entry field, and only then emits the index bound to the exact source Git blob SHA and byte size. A matching source blob therefore makes those structural assertions applicable to that exact immutable cache object.",
+    "stage_07_full_index_accept_only_if_all": [
+      "all stage_04 header fast-path checks pass",
+      "index index_entry_count equals actual len(index.entries) after the compact index is loaded",
+      "every compact map key is an exact candidate key representation",
+      "every compact entry has exactly the declared entry_fields shape"
     ],
     "if_any_check_fails": "INDEX_INVALID_FAIL_CLOSED_OR_FALLBACK_TO_FULL_CANONICAL_CACHE_VALIDATION",
     "index_never_proves_candidate_fingerprint_match_by_itself": true,
@@ -33,6 +39,9 @@
     "parse_full_canonical_cache": true,
     "verify_entry_count_equals_len_entries_before_emitting_index": true,
     "verify_required_entry_fields_before_emitting_index": true,
+    "verify_entry_key_matches_map_key_before_emitting_index": true,
+    "verify_entry_profile_sha_matches_cache_generation": true,
+    "verify_entry_model_version_matches_cache_generation": true,
     "bind_to_exact_git_blob_sha": true,
     "bind_to_exact_size_bytes": true,
     "deterministic_when_source_cache_is_unchanged": true,
@@ -58,8 +67,8 @@
     ]
   },
   "diagnostic_usage": {
-    "stage_04": "May validate canonical taste-cache structure through a valid bound index without loading verbose canonical entries.",
-    "stage_07": "May use compact index entries for exact-key/profile/model/fingerprint mechanical comparison against current price-blind feed fingerprints.",
+    "stage_04": "Read only repository metadata for the canonical cache plus the compact index header. A valid exact source-blob binding may carry forward the generator's structural attestation without loading verbose canonical entries or the full compact entry map.",
+    "stage_07": "Load the compact index entries, verify its actual entry count and shape, then use them for exact-key/profile/model/fingerprint mechanical comparison against current price-blind feed fingerprints.",
     "semantic_re_evaluation_of_confirmed_hits": false,
     "full_cache_load_when": [
       "index is absent or invalid and fallback is attempted",
