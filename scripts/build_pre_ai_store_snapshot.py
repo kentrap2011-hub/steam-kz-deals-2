@@ -7,10 +7,30 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 MAILING_INDEX = Path('data/production/mailing/index.json')
+OLD_METADATA = Path('data/cache/content_metadata.json')
 OUT_DIR = Path('data/production/pre_ai')
-OUT = OUT_DIR / 'store_snapshot.json'
+STORE_OUT = OUT_DIR / 'store_snapshot.json'
+METADATA_OUT = OUT_DIR / 'content_metadata.json'
 BATCH_SIZE = 100
 DISPLAY_TZ = ZoneInfo('Europe/Berlin')
+
+APP_TYPE = {
+    0: 'game',
+    1: 'demo',
+    2: 'mod',
+    3: 'movie',
+    4: 'dlc',
+    5: 'guide',
+    6: 'software',
+    7: 'video',
+    8: 'series',
+    9: 'episode',
+    10: 'hardware',
+    11: 'music',
+    12: 'beta',
+    13: 'tool',
+    14: 'advertising',
+}
 
 
 def final_kzt(option):
@@ -81,7 +101,11 @@ def fetch_batches(requested):
                 'country_code': 'KZ',
                 'steam_realm': 1,
             },
-            'data_request': {'include_all_purchase_options': True},
+            'data_request': {
+                'include_all_purchase_options': True,
+                'include_basic_info': True,
+                'include_included_items': True,
+            },
         }
         url = (
             'https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json='
@@ -105,7 +129,7 @@ def fetch_batches(requested):
             else:
                 pid = rid['packageid']
                 identity_ok = (
-                    int(store_item.get('packageid') or 0) == pid
+                    int(store_item.get('id') or store_item.get('packageid') or 0) == pid
                     or any(
                         int(option.get('packageid') or 0) == pid
                         for option in (store_item.get('purchase_options') or [])
@@ -125,7 +149,10 @@ def choose_option(key, row, store_item):
         if len(exact) == 1:
             return exact[0], 'exact_packageid'
         if len(exact) > 1:
-            exact.sort(key=lambda o: (final_kzt(o) if final_kzt(o) is not None else float('inf'), -int(o.get('discount_pct') or 0)))
+            exact.sort(key=lambda o: (
+                final_kzt(o) if final_kzt(o) is not None else float('inf'),
+                -int(o.get('discount_pct') or 0),
+            ))
             return exact[0], 'exact_packageid_lowest_price'
         raise SystemExit(f'No exact package purchase option for {key}')
 
@@ -136,7 +163,10 @@ def choose_option(key, row, store_item):
         and abs(final_kzt(o) - row['source_final_kzt']) < 0.011
     ]
     if exact:
-        exact.sort(key=lambda o: (int(o.get('packageid') or 0), str(o.get('purchase_option_name') or '')))
+        exact.sort(key=lambda o: (
+            int(o.get('packageid') or 0),
+            str(o.get('purchase_option_name') or ''),
+        ))
         return exact[0], 'exact_source_deal'
 
     discounted = [
@@ -144,10 +174,140 @@ def choose_option(key, row, store_item):
         if int(o.get('discount_pct') or 0) > 0 and final_kzt(o) is not None
     ]
     if discounted:
-        discounted.sort(key=lambda o: (final_kzt(o), -int(o.get('discount_pct') or 0), int(o.get('packageid') or 0)))
+        discounted.sort(key=lambda o: (
+            final_kzt(o),
+            -int(o.get('discount_pct') or 0),
+            int(o.get('packageid') or 0),
+        ))
         return discounted[0], 'current_lowest_discounted_option_after_source_change'
 
     raise SystemExit(f'No active discounted purchase option for {key}')
+
+
+def included_app_name_map(store_item):
+    result = {}
+    included = store_item.get('included_items') or {}
+    for app in included.get('included_apps') or []:
+        if not isinstance(app, dict):
+            continue
+        appid = app.get('appid') or app.get('id')
+        if appid is None:
+            continue
+        result[str(appid)] = app.get('name')
+    return result
+
+
+def metadata_entry(key, row, store_item):
+    store_name = store_item.get('name') or row['title']
+    if key.startswith('Sub_'):
+        subid = key.split('_', 1)[1]
+        appids = [str(x) for x in (store_item.get('included_appids') or [])]
+        if not appids:
+            included = store_item.get('included_items') or {}
+            appids = [
+                str(app.get('appid') or app.get('id'))
+                for app in (included.get('included_apps') or [])
+                if isinstance(app, dict) and (app.get('appid') is not None or app.get('id') is not None)
+            ]
+        appids = sorted(set(appids), key=lambda x: int(x))
+        names = included_app_name_map(store_item)
+        return {
+            'key': key,
+            'entity_kind': 'sub',
+            'steam_id': str(subid),
+            'store_name': store_name,
+            'package_apps': [
+                {'appid': appid, 'name': names.get(appid)}
+                for appid in appids
+            ],
+            'metadata_source': 'IStoreBrowseService/GetItems',
+        }
+
+    type_number = int(store_item.get('type') or 0)
+    app_type = APP_TYPE.get(type_number, f'unknown:{type_number}')
+    related = store_item.get('related_items') or {}
+    parent_appid = related.get('parent_appid')
+    return {
+        'key': key,
+        'entity_kind': 'app',
+        'steam_id': str(row['appid']),
+        'store_name': store_name,
+        'app_type': app_type,
+        'fullgame_appid': str(parent_appid) if parent_appid is not None else None,
+        'fullgame_name': None,
+        'metadata_source': 'IStoreBrowseService/GetItems',
+    }
+
+
+def compare_with_control(metadata_entries):
+    if not OLD_METADATA.exists():
+        return {
+            'control_available': False,
+            'comparable_count': 0,
+            'match_count': 0,
+            'mismatch_count': 0,
+            'match_ratio': None,
+        }
+    old = json.loads(OLD_METADATA.read_text(encoding='utf-8'))
+    controls = old.get('entries') or {}
+    comparable = 0
+    mismatches = []
+
+    for key, expected in controls.items():
+        got = metadata_entries.get(key)
+        if not isinstance(expected, dict) or not isinstance(got, dict):
+            continue
+        if expected.get('entity_kind') == 'app' and got.get('entity_kind') == 'app':
+            comparable += 1
+            expected_parent = str(expected.get('fullgame_appid') or '') or None
+            got_parent = str(got.get('fullgame_appid') or '') or None
+            ok = (
+                expected.get('app_type') == got.get('app_type')
+                and (
+                    expected.get('app_type') != 'dlc'
+                    or expected_parent == got_parent
+                )
+            )
+            if not ok:
+                mismatches.append({
+                    'key': key,
+                    'expected_type': expected.get('app_type'),
+                    'got_type': got.get('app_type'),
+                    'expected_parent': expected_parent,
+                    'got_parent': got_parent,
+                })
+        elif expected.get('entity_kind') == 'sub' and got.get('entity_kind') == 'sub':
+            comparable += 1
+            expected_ids = sorted(
+                str(app.get('appid'))
+                for app in (expected.get('package_apps') or [])
+                if isinstance(app, dict) and app.get('appid') is not None
+            )
+            got_ids = sorted(
+                str(app.get('appid'))
+                for app in (got.get('package_apps') or [])
+                if isinstance(app, dict) and app.get('appid') is not None
+            )
+            if expected_ids != got_ids:
+                mismatches.append({
+                    'key': key,
+                    'expected_appids': expected_ids,
+                    'got_appids': got_ids,
+                })
+
+    if mismatches:
+        raise SystemExit(
+            'StoreBrowse metadata differs from validated control: '
+            + json.dumps(mismatches[:20], ensure_ascii=False)
+        )
+    return {
+        'control_available': True,
+        'control_entry_count': len(controls),
+        'comparable_count': comparable,
+        'match_count': comparable,
+        'mismatch_count': 0,
+        'match_ratio': 1.0 if comparable else None,
+    }
 
 
 def main():
@@ -157,10 +317,12 @@ def main():
     paired, request_count = fetch_batches(requested)
     observed = datetime.now(timezone.utc)
 
-    entries = {}
+    store_entries = {}
+    metadata_entries = {}
     changed = []
     sale_end_unknown = []
     selection_counts = {}
+    type_counts = {}
 
     for key, store_item in paired:
         row = feed[key]
@@ -193,7 +355,7 @@ def main():
         if deal_changed:
             changed.append(key)
 
-        entries[key] = {
+        store_entries[key] = {
             'key': key,
             'appid': row['appid'] or None,
             'title': row['title'],
@@ -212,13 +374,24 @@ def main():
             'changed_since_discovery_snapshot': deal_changed,
         }
 
+        meta = metadata_entry(key, row, store_item)
+        metadata_entries[key] = meta
+        label = meta.get('app_type') if meta.get('entity_kind') == 'app' else 'package'
+        type_counts[label or 'unknown'] = type_counts.get(label or 'unknown', 0) + 1
+
     if sale_end_unknown:
         raise SystemExit(f'Missing sale end for active discounts: {sale_end_unknown[:20]}')
-    if len(entries) != len(feed):
-        raise SystemExit(f'Pre-AI Store snapshot incomplete: entries={len(entries)} source={len(feed)}')
+    if len(store_entries) != len(feed) or len(metadata_entries) != len(feed):
+        raise SystemExit(
+            'Pre-AI Store/metadata snapshot incomplete: '
+            f'store={len(store_entries)} metadata={len(metadata_entries)} source={len(feed)}'
+        )
 
-    out = {
-        'schema_version': 1,
+    control = compare_with_control(metadata_entries)
+    elapsed = round(time.monotonic() - started, 3)
+
+    store_out = {
+        'schema_version': 2,
         'purpose': 'pre_ai_current_store_snapshot',
         'status': 'complete',
         'authoritative_for': ['current_price_kzt', 'discount_percent', 'discount_end'],
@@ -227,28 +400,52 @@ def main():
         'observed_at_utc': observed.isoformat(),
         'display_timezone': 'Europe/Berlin',
         'source_item_count': len(feed),
-        'entry_count': len(entries),
+        'entry_count': len(store_entries),
         'request_count': request_count,
         'batch_size': BATCH_SIZE,
-        'sale_end_known_count': len(entries),
+        'sale_end_known_count': len(store_entries),
         'sale_end_unknown_count': 0,
         'sale_end_coverage_ratio': 1.0,
         'changed_since_discovery_count': len(changed),
         'changed_since_discovery_keys': sorted(changed),
         'selection_method_counts': selection_counts,
-        'elapsed_seconds': round(time.monotonic() - started, 3),
-        'entries': entries,
+        'shared_storebrowse_pass_includes_content_metadata': True,
+        'elapsed_seconds_shared_pass': elapsed,
+        'entries': store_entries,
     }
+    metadata_out = {
+        'schema_version': 1,
+        'purpose': 'pre_ai_content_metadata_for_all_candidates',
+        'status': 'complete',
+        'source_path': 'data/production/mailing/index.json',
+        'source_updated_at_utc': index.get('source_updated_at_utc'),
+        'observed_at_utc': observed.isoformat(),
+        'source_item_count': len(feed),
+        'entry_count': len(metadata_entries),
+        'complete_coverage': True,
+        'network_source': 'IStoreBrowseService/GetItems',
+        'network_request_count_shared_with_store_snapshot': request_count,
+        'additional_network_requests_beyond_store_snapshot': 0,
+        'type_counts': type_counts,
+        'validated_control_comparison': control,
+        'elapsed_seconds_shared_pass': elapsed,
+        'entries': metadata_entries,
+    }
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(out, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
+    STORE_OUT.write_text(json.dumps(store_out, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
+    METADATA_OUT.write_text(json.dumps(metadata_out, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
     print(json.dumps({
-        'status': out['status'],
-        'entries': out['entry_count'],
-        'requests': out['request_count'],
-        'sale_end_coverage': out['sale_end_coverage_ratio'],
-        'changed_since_discovery': out['changed_since_discovery_count'],
-        'selection_methods': out['selection_method_counts'],
-        'elapsed_seconds': out['elapsed_seconds'],
+        'status': 'complete',
+        'source': len(feed),
+        'store_entries': len(store_entries),
+        'metadata_entries': len(metadata_entries),
+        'requests_shared': request_count,
+        'sale_end_coverage': 1.0,
+        'changed_since_discovery': len(changed),
+        'metadata_types': type_counts,
+        'control_comparison': control,
+        'elapsed_seconds_shared_pass': elapsed,
     }, ensure_ascii=False, indent=2))
 
 
