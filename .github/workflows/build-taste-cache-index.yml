@@ -1,0 +1,187 @@
+name: Build taste cache index
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "data/cache/taste_fit.json"
+      - "config/taste_cache_index_contract.json"
+      - ".github/workflows/build-taste-cache-index.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: taste-cache-index
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Validate canonical cache and build compact index
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          SOURCE = Path("data/cache/taste_fit.json")
+          OUT = Path("data/cache/taste_fit.index.json")
+
+          required_entry_fields = [
+              "key",
+              "appid",
+              "profile_blob_sha",
+              "taste_model_version",
+              "taste_fingerprint",
+              "verdict",
+              "fit_level",
+              "reason_code",
+              "positive_evidence",
+              "negative_evidence",
+              "evaluated_at_utc",
+          ]
+
+          source_bytes = SOURCE.read_bytes()
+          cache = json.loads(source_bytes.decode("utf-8"))
+
+          if cache.get("schema_version") != 1:
+              raise SystemExit(f"Unexpected taste cache schema_version: {cache.get('schema_version')!r}")
+
+          entries = cache.get("entries")
+          if not isinstance(entries, dict):
+              raise SystemExit("taste_fit.json entries must be an object")
+
+          declared = cache.get("entry_count")
+          if not isinstance(declared, int):
+              raise SystemExit(f"taste_fit.json entry_count must be int, got {declared!r}")
+
+          actual = len(entries)
+          if declared != actual:
+              raise SystemExit(f"taste cache entry_count mismatch: declared={declared} actual={actual}")
+
+          profile_sha = cache.get("profile_blob_sha")
+          model_version = cache.get("taste_model_version")
+          if not profile_sha or not model_version:
+              raise SystemExit("taste cache is missing profile_blob_sha or taste_model_version")
+
+          compact_entries = {}
+          for map_key, entry in entries.items():
+              if not isinstance(entry, dict):
+                  raise SystemExit(f"Entry {map_key!r} must be an object")
+
+              missing = [field for field in required_entry_fields if field not in entry]
+              if missing:
+                  raise SystemExit(f"Entry {map_key!r} missing required fields: {missing}")
+
+              if entry["key"] != map_key:
+                  raise SystemExit(f"Entry key mismatch: map key={map_key!r} entry.key={entry['key']!r}")
+
+              if entry["profile_blob_sha"] != profile_sha:
+                  raise SystemExit(f"Entry {map_key!r} profile SHA differs from cache generation")
+
+              if entry["taste_model_version"] != model_version:
+                  raise SystemExit(f"Entry {map_key!r} model version differs from cache generation")
+
+              compact_entries[map_key] = [
+                  entry["appid"],
+                  entry["taste_fingerprint"],
+                  entry["verdict"],
+                  entry["fit_level"],
+                  entry["reason_code"],
+              ]
+
+          canonical_compact = json.dumps(
+              compact_entries,
+              ensure_ascii=False,
+              sort_keys=True,
+              separators=(",", ":"),
+          ).encode("utf-8")
+          entries_digest = hashlib.sha256(canonical_compact).hexdigest()
+
+          git_header = f"blob {len(source_bytes)}\0".encode("ascii")
+          source_blob_sha = hashlib.sha1(git_header + source_bytes).hexdigest()
+
+          index = {
+              "schema_version": 1,
+              "purpose": "compact_verified_projection_of_taste_fit_cache",
+              "source_cache": {
+                  "path": "data/cache/taste_fit.json",
+                  "blob_sha": source_blob_sha,
+                  "size_bytes": len(source_bytes),
+                  "entry_count_declared": declared,
+                  "entry_count_actual": actual,
+                  "entry_count_matches_len_entries": True,
+                  "required_entry_fields_complete": True,
+              },
+              "profile_blob_sha": profile_sha,
+              "taste_model_version": model_version,
+              "source_updated_at_utc": cache.get("updated_at_utc"),
+              "entry_fields": [
+                  "appid",
+                  "taste_fingerprint",
+                  "verdict",
+                  "fit_level",
+                  "reason_code",
+              ],
+              "index_entry_count": len(compact_entries),
+              "entries_digest_sha256": entries_digest,
+              "entries": compact_entries,
+          }
+
+          OUT.parent.mkdir(parents=True, exist_ok=True)
+          OUT.write_text(
+              json.dumps(index, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+
+          print(
+              "Taste cache index built: "
+              f"source_sha={source_blob_sha} size={len(source_bytes)} "
+              f"declared={declared} actual={actual} indexed={len(compact_entries)}"
+          )
+          PY
+
+      - name: Commit taste cache index
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/taste_fit.index.json
+          if git diff --cached --quiet; then
+            echo "Taste cache index already current"
+            exit 0
+          fi
+
+          git commit -m "Rebuild taste cache index"
+
+          for attempt in 1 2 3; do
+            echo "Push attempt ${attempt}/3"
+            git fetch origin main:refs/remotes/origin/main
+
+            if ! git rebase origin/main; then
+              echo "Rebase failed; aborting."
+              git rebase --abort || true
+              exit 1
+            fi
+
+            if git push origin HEAD:main; then
+              echo "Taste cache index pushed successfully."
+              exit 0
+            fi
+
+            echo "main changed again before push; retrying..."
+            sleep $((attempt * 3))
+          done
+
+          echo "Push failed after 3 attempts."
+          exit 1
