@@ -1,0 +1,79 @@
+{
+  "contract": "TASTE-FINGERPRINT-V1",
+  "version": "1.0",
+  "status": "implementation_only",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "never_overrides_canonical_policy": true,
+    "canonical_fingerprint_fields_must_match_policy_exactly": true,
+    "canonical_fingerprint_excludes_must_remain_excluded": true
+  },
+  "purpose": "Make the existing taste fingerprint generation deterministic and reproducible without reverse engineering the current cache on every run.",
+  "compatibility": {
+    "algorithm_changes_existing_fingerprints": false,
+    "verified_against_existing_taste_fit_cache": true,
+    "verified_sample_count": 5,
+    "verified_sample_types": [
+      "unicode_compatibility_title",
+      "ordinary_title",
+      "multi_tag_sorting",
+      "empty_tag_list",
+      "mixed_appid_and_integer_fields"
+    ]
+  },
+  "input_fields_in_serialization_order": [
+    "key",
+    "appid",
+    "normalized_title_for_taste",
+    "sorted_fit_tags",
+    "core_fit_count",
+    "release_date"
+  ],
+  "normalization": {
+    "key": "exact feed key string",
+    "appid": "string; preserve the feed appid text",
+    "normalized_title_for_taste": "Unicode NFKC normalization of feed title, then lowercase using Python str.lower(); do not trim or otherwise rewrite after NFKC unless the source title itself has already been parsed as the exact TSV field",
+    "sorted_fit_tags": "split the exact fit_tags TSV field on |; if empty use []; sort resulting strings in ascending Python lexicographic order; do not lowercase tags",
+    "core_fit_count": "integer parsed from the exact feed field",
+    "release_date": "exact feed release_date string; empty remains empty string"
+  },
+  "serialization": {
+    "shape": "JSON object",
+    "property_order": [
+      "key",
+      "appid",
+      "normalized_title_for_taste",
+      "sorted_fit_tags",
+      "core_fit_count",
+      "release_date"
+    ],
+    "ensure_ascii": false,
+    "separators": [",", ":"],
+    "whitespace_between_tokens": false,
+    "sort_object_keys": false,
+    "encoding": "UTF-8"
+  },
+  "digest": {
+    "algorithm": "SHA-256",
+    "input": "exact serialized UTF-8 bytes",
+    "output": "lowercase hexadecimal digest"
+  },
+  "forbidden_inputs": [
+    "discount_percent",
+    "final_kzt",
+    "global_review_positive",
+    "global_review_count",
+    "russian_review_positive",
+    "russian_review_count",
+    "reasons",
+    "feed_reason_flags",
+    "historical_price",
+    "steamdb_history",
+    "sale_end_date"
+  ],
+  "reference_python": "payload={'key':key,'appid':str(appid),'normalized_title_for_taste':unicodedata.normalize('NFKC',title).lower(),'sorted_fit_tags':sorted([] if fit_tags=='' else fit_tags.split('|')),'core_fit_count':int(core_fit_count),'release_date':release_date}; raw=json.dumps(payload,ensure_ascii=False,separators=(',',':')); fingerprint=hashlib.sha256(raw.encode('utf-8')).hexdigest()",
+  "diagnostic_usage": {
+    "stage_06": "Validate that this implementation contract exactly matches the canonical policy field allowlist/excludelist and reproduce several known cache fingerprints mechanically. Once validated, later runs use this contract directly rather than rediscovering serialization rules.",
+    "stage_07": "Use this exact algorithm for all current feed candidate fingerprints before comparing to compact cache-index fingerprints."
+  }
+}
