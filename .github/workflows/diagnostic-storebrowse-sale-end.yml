@@ -50,7 +50,7 @@ jobs:
               elif x['key'].startswith('Sub_'):
                   requested.append((x['key'],{'packageid':int(x['key'].split('_',1)[1])}))
 
-          started=time.monotonic(); paired=[]; request_count=0; order_identity_errors=[]
+          started=time.monotonic(); paired=[]; request_count=0; identity_errors=[]
           for start in range(0,len(requested),100):
               batch=requested[start:start+100]
               payload={
@@ -64,63 +64,59 @@ jobs:
                   data=json.loads(r.read().decode('utf-8'))
               request_count+=1
               returned=(data.get('response') or {}).get('store_items') or []
-              if len(returned)!=len(batch):
-                  raise SystemExit(f'Batch cardinality mismatch requested={len(batch)} returned={len(returned)}')
+              if len(returned)!=len(batch): raise SystemExit(f'Batch cardinality mismatch requested={len(batch)} returned={len(returned)}')
               for (key,rid),si in zip(batch,returned):
-                  ok=False
                   if 'appid' in rid:
                       ok=int(si.get('appid') or 0)==rid['appid']
                   else:
                       pid=rid['packageid']
                       ok=(int(si.get('packageid') or 0)==pid) or any(int(o.get('packageid') or 0)==pid for o in (si.get('purchase_options') or []))
-                  if not ok:
-                      order_identity_errors.append({'requested_key':key,'request_id':rid,'returned_appid':si.get('appid'),'returned_packageid':si.get('packageid')})
+                  if not ok: identity_errors.append({'key':key,'rid':rid,'appid':si.get('appid'),'packageid':si.get('packageid')})
                   paired.append((key,si))
 
-          option_count=0; active_discount_rows=0; known_end=0; unknown_end=[]; mismatches=[]; missing_option=[]
+          def final_kzt(option):
+              value=option.get('final_price_in_cents')
+              if value is None: return None
+              return float(value)/100.0
+
+          active_rows=0; known_end=0; unknown_end=[]; mismatches=[]; missing=[]; selection_methods={}
           for key,si in paired:
-              opts=si.get('purchase_options') or []
-              option_count += len(opts)
-              chosen=None
+              row=feed[key]; opts=si.get('purchase_options') or []; chosen=None; method=None
               if key.startswith('Sub_'):
                   pid=int(key.split('_',1)[1])
                   chosen=next((o for o in opts if int(o.get('packageid') or 0)==pid),None)
+                  method='exact_packageid' if chosen else None
+              else:
+                  exact=[o for o in opts if int(o.get('discount_pct') or 0)==row['discount_percent'] and final_kzt(o) is not None and abs(final_kzt(o)-row['final_kzt'])<0.011]
+                  if exact:
+                      chosen=sorted(exact,key=lambda o:(int(o.get('packageid') or 0),str(o.get('purchase_option_name') or '')))[0]; method='exact_feed_price_and_discount'
               if chosen is None:
-                  discounted=[o for o in opts if int(o.get('discount_pct') or 0)>0]
-                  chosen=(discounted or opts or [None])[0]
-              if not chosen:
-                  missing_option.append(key); continue
+                  discounted=[o for o in opts if int(o.get('discount_pct') or 0)>0 and final_kzt(o) is not None]
+                  if discounted:
+                      chosen=min(discounted,key=lambda o:(final_kzt(o),-int(o.get('discount_pct') or 0),int(o.get('packageid') or 0))); method='fallback_lowest_discounted_option'
+              if chosen is None:
+                  missing.append(key); continue
+              selection_methods[method]=selection_methods.get(method,0)+1
+              discount=int(chosen.get('discount_pct') or 0); price=final_kzt(chosen)
               active=chosen.get('active_discounts') or []
-              end_values=sorted({int(d.get('discount_end_date') or 0) for d in active if int(d.get('discount_end_date') or 0)>0})
-              if int(chosen.get('discount_pct') or 0)>0:
-                  active_discount_rows+=1
-                  if end_values: known_end+=1
-                  else: unknown_end.append({'key':key,'title':feed[key]['title'],'discount_percent':feed[key]['discount_percent']})
-              api_discount=int(chosen.get('discount_pct') or 0)
-              if api_discount and api_discount != feed[key]['discount_percent']:
-                  mismatches.append({'key':key,'title':feed[key]['title'],'feed_discount':feed[key]['discount_percent'],'api_discount':api_discount})
+              ends=sorted({int(d.get('discount_end_date') or 0) for d in active if int(d.get('discount_end_date') or 0)>0})
+              if discount>0:
+                  active_rows+=1
+                  if ends: known_end+=1
+                  else: unknown_end.append(key)
+              if discount!=row['discount_percent'] or price is None or abs(price-row['final_kzt'])>=0.011:
+                  mismatches.append({'key':key,'title':row['title'],'feed_discount':row['discount_percent'],'store_discount':discount,'feed_kzt':row['final_kzt'],'store_kzt':price,'method':method})
 
-          elapsed=time.monotonic()-started
           summary={
-              'source_rows':len(feed),
-              'requestable_ids':len(requested),
-              'requests':request_count,
-              'paired_rows':len(paired),
-              'order_identity_error_count':len(order_identity_errors),
-              'missing_purchase_option_count':len(missing_option),
-              'purchase_options_seen':option_count,
-              'active_discount_rows_with_selected_option':active_discount_rows,
-              'sale_end_known':known_end,
-              'sale_end_unknown':len(unknown_end),
-              'sale_end_coverage':round(known_end/active_discount_rows,4) if active_discount_rows else None,
-              'discount_mismatch_count':len(mismatches),
-              'elapsed_seconds':round(elapsed,3),
-              'order_identity_error_examples':order_identity_errors[:20],
-              'unknown_end_examples':unknown_end[:20],
-              'discount_mismatch_examples':mismatches[:20],
+              'source_rows':len(feed),'requests':request_count,'paired_rows':len(paired),
+              'identity_error_count':len(identity_errors),'missing_purchase_option_count':len(missing),
+              'active_discount_rows':active_rows,'sale_end_known':known_end,'sale_end_unknown':len(unknown_end),
+              'sale_end_coverage':round(known_end/active_rows,4) if active_rows else None,
+              'deal_mismatch_count':len(mismatches),'selection_methods':selection_methods,
+              'elapsed_seconds':round(time.monotonic()-started,3),'mismatch_examples':mismatches[:20],
               'observed_at_utc':datetime.now(timezone.utc).isoformat(),
           }
           print('STOREBROWSE_DIAGNOSTIC='+json.dumps(summary,ensure_ascii=False))
-          if len(paired)!=len(feed) or order_identity_errors or unknown_end or mismatches:
-              raise SystemExit('StoreBrowse diagnostic did not prove complete exact mapping')
+          if len(paired)!=len(feed) or identity_errors or missing or unknown_end or mismatches:
+              raise SystemExit('StoreBrowse exact-deal mapping not fully proven')
           PY
