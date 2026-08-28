@@ -1,0 +1,73 @@
+{
+  "contract": "FREEBIES-UPCOMING-RENDER-V1",
+  "version": "1.0",
+  "status": "implementation_only",
+  "purpose": "Keep diagnostic stage 19 bounded, deterministic where possible, and personally filtered without turning free price into taste evidence.",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "never_overrides_canonical_policy": true,
+    "stage_id": "19_freebies_upcoming_and_render",
+    "stage_limit_seconds": 60,
+    "main_ingest_must_already_be_successful": true,
+    "deal_quality_stage_must_already_be_complete": true
+  },
+  "freebies": {
+    "steam_discovery_source": "data/production/freebies.tsv",
+    "steam_web_rediscovery_forbidden": true,
+    "external_store_scope": ["Epic Games Store", "GOG", "other major legal PC stores with no-subscription permanent giveaways"],
+    "subscription_benefits_are_not_freebies_without_explicit_user_subscription_context": true,
+    "free_weekends_are_not_keep_forever_freebies": true,
+    "external_discovery_strategy": "Use one bounded web-search batch. Prefer a fresh cross-store giveaway index that states store, keep-forever status, subscription requirement, and last-check time. Do not open a large catalogue page when the search result already proves the active no-subscription offers and store counts.",
+    "freshness_hours": 24,
+    "personal_filter": {
+      "minimum_fit": "moderate",
+      "price_zero_is_never_positive_taste_evidence": true,
+      "use_same_canonical_taste_evidence_threshold": true,
+      "direct_or_same-series_evidence_may_be_reused_from_canonical_profile": true,
+      "candidate-specific intrinsic mechanics_from_fresh_source_may_support_analogical_fit": true,
+      "generic_genre_tags_or_vague_store_copy_alone_are_insufficient": true,
+      "unknown_or_insufficient_candidate_is_silently_omitted": true
+    }
+  },
+  "upcoming": {
+    "max_items": 1,
+    "horizon_days": 60,
+    "query_strategy": "Use one bounded current web search for upcoming gaming showcases/events inside the horizon.",
+    "confirmed_date_required_for_confirmed_label": true,
+    "estimated_date_must_be_labeled_estimated": true,
+    "relevance_requires": "At least one concrete event feature, announced title, franchise, developer, gameplay focus, or structural theme that maps to a specific canonical positive profile anchor. Being a generic gaming event is not sufficient by itself.",
+    "selection": "nearest chronologically among events whose relevance is proven",
+    "omit_if_none_proven_relevant": true
+  },
+  "runtime_budget": {
+    "preferred_target_operations": [
+      "one GitHub read for Steam freebies",
+      "one web-search batch for external no-subscription giveaways and upcoming events",
+      "local personal filtering and render"
+    ],
+    "large_page_open_is_not_normal_path": true,
+    "do_not_start_large_page_open_after_elapsed_seconds": 40,
+    "stop_before_new_external_call_if_elapsed_seconds_at_least": 50,
+    "unknown_after_budget_exhausted_is_failure_not_pass": true
+  },
+  "render": {
+    "input_paid_rows": "data/cache/deal_quality.validation.json sorted_recommendations",
+    "show_only_included_paid_recommendations": true,
+    "show_only_personally_included_freebies": true,
+    "show_at_most_one_upcoming_event": true,
+    "publish_forbidden_in_diagnostic_mode": true,
+    "internal_exclusions_silent": true
+  },
+  "diagnostic_stage_19": {
+    "pass_requires": [
+      "Steam freebie feed checked exactly once",
+      "Epic and GOG no-subscription giveaway state checked",
+      "subscription-only benefits are not silently treated as universal freebies",
+      "every shown freebie meets canonical moderate taste threshold independent of price",
+      "upcoming event is either one nearest proven-relevant event or explicitly omitted because none was proven relevant",
+      "render contains only included paid recommendations and included freebies",
+      "no publication occurs"
+    ],
+    "on_target_pass": "restart full diagnostic from stage 01"
+  }
+}
