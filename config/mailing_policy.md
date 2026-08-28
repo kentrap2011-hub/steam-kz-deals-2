@@ -1,110 +1,59 @@
-# GAME-DEALS-MAILING v1.8
+# GAME-DEALS-MAILING v1.9
 
-Этот файл — человекочитаемое описание `config/mailing_policy.json`. Канонический источник правил — JSON; при любом расхождении приоритет у JSON.
+`config/mailing_policy.json` — единственный канонический источник. Этот файл только краткое человекочитаемое описание.
 
-## Базовые инварианты
+## Что исправляет v1.9
 
-- Выпуск — полный ежедневный snapshot, не delta и не TOP-N.
-- Все активные подходящие скидки повторяются ежедневно, пока действуют.
-- Пройденная игра не исключается автоматически.
-- Discovery платных игр — только полный production-feed Steam Kazakhstan.
-- Все выбранные chunks читаются полностью; QA fail-closed.
-- Wishlist не используется как discovery, доказательство вкуса или доказательство владения.
-- SteamDB не используется для discovery.
-- Пользовательские суммы выводятся только в рублях.
-- Около 500 ₽ — мягкий ориентир, не жёсткий потолок.
+### 1. Taste fit стал строже
 
-## Главное изменение v1.8: вкус отделён от выгодности
+В v1.8 цена и скидка уже были отделены от вкуса, но semantic threshold оказался слишком мягким: generic tags позволяли получить слишком много положительных «аналогий».
 
-Taste verdict формируется **до** оценки сделки и не видит:
+В v1.9 действует `taste-v2`:
 
-- цену и скидку;
-- глобальный/русский review score и число отзывов;
-- исторический минимум;
-- дату окончания акции;
-- SteamDB;
-- commercial feed-флаги вроде `exceptional_discount` и `very_high_rating`.
+- цена, скидка, reviews, popularity, SteamDB и историческая цена полностью запрещены в taste verdict;
+- `strong_fit`, `strong_niche_fit`, `recent_fit`, `high_confidence_adjacent` — только recall/audit flags, не taste evidence;
+- `core_fit_count` — recall context, не положительный taste evidence;
+- generic tags (`Action`, `Adventure`, `RPG`, `Singleplayer`, `Story Rich`, `Open World`, `Horror`, `Exploration` и т.п.) сами по себе не считаются содержательными сигналами;
+- каждое положительное evidence должно связывать **конкретное свойство игры** с **конкретным якорем/устойчивым паттерном канонического профиля**;
+- для `moderate+` нужен либо минимум один high-specificity механический/структурный якорь + независимый второй содержательный плюс, либо минимум три независимых specific signal из разных факторов профиля;
+- хотя бы один плюс обязательно должен относиться к gameplay/mechanics/structure, а не только к теме, сюжету или визуалу;
+- неизвестные свойства игры нельзя придумывать;
+- audit использует тот же порог и не может его снижать.
 
-`strong_fit`, `strong_niche_fit`, `recent_fit` и похожие feed-флаги могут только отправить спорный EXCLUDE на targeted audit. Они не являются доказательством вкуса и сами не повышают кандидата до `moderate`.
+Никаких whitelist конкретных игр и control-game names в policy нет.
 
-Для нового кандидата нужен структурированный price-blind разбор по `gaming_taste_live.json`. Порог `moderate`: минимум два независимых содержательных положительных сигнала из канонического профиля и отсутствие прямого сильного отрицательного сигнала/известного конкретного конфликта структуры игры.
-
-## Persistent taste-cache
+### 2. Taste-cache теперь имеет ранний обязательный checkpoint
 
 Файл: `data/cache/taste_fit.json`.
 
-Это **не второй профиль вкуса и не пользовательское evidence**. Это только кэш уже вычисленного verdict.
-
-Cache hit разрешён, только если одновременно совпадают:
+Cache hit возможен только при совпадении:
 
 - exact production key;
-- Git blob SHA текущего `gaming_taste_live.json`;
-- `taste_model_version`;
-- price-blind fingerprint кандидата.
+- Git blob SHA `gaming_taste_live.json`;
+- `taste_model_version` (`taste-v2`);
+- price-blind fingerprint.
 
-Fingerprint включает identity/title/tags/core-fit/release-date и специально **не включает** цену, скидку, отзывы, feed reason flags или SteamDB.
+Главное новое правило: после того как все taste-cache misses получили окончательные post-audit verdict, pipeline **обязан сразу записать изменённый taste-cache одним GitHub write** — ещё до content eligibility, family resolution, Store, SteamDB, deal-quality и sorting.
 
-Если профиль изменился, старые verdict не переиспользуются. За один run taste-cache обновляется максимум одним GitHub write. Ошибка maintenance-write не ломает корректную рассылку.
+Это сделано специально, чтобы длинный внешний этап больше не мог уничтожить уже выполненную работу по 597 кандидатам при timeout.
 
-## Targeted false-negative audit
+### 3. Остальные правила сохранены
 
-Audit остаётся локальным и price-blind. Store, SteamDB, reviews, цена и скидка в нём запрещены.
-
-Перепроверяются только конфликтные EXCLUDE: borderline, неясная причина, конфликт recall-флагов с taste verdict, сильные профильные аналогии, sparse metadata при заметном core-fit и риск исчезновения релевантной family.
-
-Никаких whitelist конкретных игр и никаких control-game names в policy нет.
-
-## DLC, editions и bundles
-
-DLC/Chapter не рекомендуется самостоятельно по умолчанию. Он может попасть в выпуск, если:
-
-- base-game family сама прошла taste filter;
-- канонический профиль/актуальный пользовательский контекст прямо поддерживает базовую игру;
-- либо addon фактически является самостоятельным game-like продуктом и сам проходит threshold.
-
-Cosmetic/soundtrack/artbook не выводятся. Wishlist не считается владением.
-
-Для включённой family сравниваются локальные App/Sub/edition/bundle варианты. В выпуске одна основная строка на purchase family с лучшим вариантом покупки; полезная альтернатива может быть указана в той же строке.
-
-## Store и SteamDB cache
-
-`data/cache/store_state.json` строится из того же валидного production snapshot. Поэтому текущая цена/скидка не перепроверяются live Store для каждой игры. Live Store — только по conditional triggers.
-
-`data/cache/steamdb_history.json` с v1.8 пишется как schema v2, но старый v1 читается совместимо.
-
-Поддерживаются статусы:
-
-- `confirmed_min`;
-- `previously_free`;
-- `unavailable_exact_history`.
-
-Если SteamDB был успешно достигнут, но exact history действительно недоступна, это можно сохранить как negative-cache на 14 дней. Network/tool failure как negative-cache не сохраняется.
-
-`entry_count` всегда считается как фактический `len(entries)`; stale metadata не используется для статистики и исправляется на следующем разрешённом write.
-
-Нулевой historical minimum означает `previously_free`, а не обычный paid minimum и сам по себе не переводит игру в «ждать».
-
-## Runtime pipeline
-
-1. Сначала canonical policy.
-2. Один раз canonical taste profile + его blob SHA.
-3. QA полного production-feed и чтение всех chunks.
-4. Для каждого кандидата price-blind fingerprint и проверка taste-cache.
-5. Semantic taste evaluation только для cache misses.
-6. Targeted price-blind audit только для свежих конфликтных verdict.
-7. Content eligibility + offer-family resolution.
-8. Максимум один write taste-cache при изменениях.
-9. Current price/discount из fresh production snapshot; Store только условно.
-10. SteamDB cache сначала; lookup только для настоящих misses/expired negatives/new-low cases.
-11. Единый `provider + exact key` registry запрещает повторные внешние lookup.
-12. Максимум один SteamDB cache write при изменениях.
-13. Финальная сортировка: `БРАТЬ СЕЙЧАС` → `МОЖНО БРАТЬ` → `ЛУЧШЕ ЖДАТЬ`, затем taste fit и качество цены.
-
-## Пользовательский вывод
-
-- Показываются только INCLUDE.
-- EXCLUDE и причины их отсутствия не перечисляются.
-- В progress-сообщениях нельзя заранее называть кандидатов, которые потом могут быть исключены.
-- Freebies проходят тот же minimum taste threshold.
-- Upcoming — максимум одно ближайшее релевантное событие.
-- Internal ledger показывается только по явному debug-запросу.
+- полный daily snapshot, не delta и не TOP-N;
+- весь production-feed Steam Kazakhstan читается полностью;
+- completed не является auto-exclude;
+- wishlist не discovery, не taste proof и не ownership proof;
+- DLC/chapter не рекомендуется самостоятельно по умолчанию;
+- одна итоговая строка на purchase family с лучшим App/Sub/edition/bundle вариантом;
+- свежий production snapshot подтверждает current price/discount;
+- Store live только условно;
+- SteamDB только history после персонального отбора;
+- SteamDB legacy cache v1 читается, writer v2 поддерживает `confirmed_min`, `previously_free`, `unavailable_exact_history`;
+- negative history cache TTL — 14 дней только для реально подтверждённо отсутствующей exact history;
+- blocked/timeout/tool failure не записываются как negative-cache;
+- runtime SteamDB cache count всегда `len(entries)`;
+- historical 0 = `previously_free`, не платный минимум;
+- единый provider+exact-key registry запрещает повторные Store/SteamDB lookup;
+- исключённые позиции пользователю не показываются;
+- upcoming — максимум одно ближайшее релевантное событие;
+- финальная сортировка: `БРАТЬ СЕЙЧАС` → `МОЖНО БРАТЬ` → `ЛУЧШЕ ЖДАТЬ`.
