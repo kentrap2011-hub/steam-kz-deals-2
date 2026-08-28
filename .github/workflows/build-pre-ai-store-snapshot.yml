@@ -38,19 +38,21 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Build current pre-AI Store snapshot
+      - name: Build current pre-AI Store snapshot and content metadata
         run: python scripts/build_pre_ai_store_snapshot.py
 
-      - name: Commit pre-AI Store snapshot
+      - name: Commit pre-AI Store snapshot and content metadata
         run: |
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git add data/production/pre_ai/store_snapshot.json
+          git add \
+            data/production/pre_ai/store_snapshot.json \
+            data/production/pre_ai/content_metadata.json
           if git diff --cached --quiet; then
-            echo "Pre-AI Store snapshot already current"
+            echo "Pre-AI Store and metadata snapshots already current"
             exit 0
           fi
-          git commit -m "Refresh pre-AI Store snapshot"
+          git commit -m "Refresh pre-AI Store and content metadata"
           for attempt in 1 2 3; do
             git fetch origin main:refs/remotes/origin/main
             if ! git rebase origin/main; then
