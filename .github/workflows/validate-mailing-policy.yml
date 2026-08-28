@@ -35,11 +35,29 @@ jobs:
           ra = tc["recovery_artifact"]
           sh = p["external_cache"]["steamdb_history"]
           reg = p["external_cache"]["lookup_registry"]
+          rtc = p["review_threshold_calibration"]
+          expected_review_thresholds = {
+              "affordable_quality": 75,
+              "genre_fit": 75,
+              "big_discount": 75,
+              "popular_quality": 82,
+              "very_high_rating": 90,
+              "cheap_quality": 80,
+              "niche_fit": 78,
+              "recent_quality": 78,
+              "mainstream_quality": 80,
+              "strong_fit": 78,
+              "strong_niche_fit": 78,
+              "exceptional_discount": 75,
+              "recent_fit": 78,
+              "high_confidence_adjacent": 88,
+              "substantive_content": 78,
+          }
 
           checks = {
               "contract": p.get("contract") == "GAME-DEALS-MAILING",
               "canonical": p.get("status") == "canonical",
-              "version": p.get("version") == "1.10",
+              "version": p.get("version") == "1.12",
               "policy_first": p["policy_loading"]["load_before_any_ingest"] is True,
               "fail_closed": p["policy_loading"]["fail_closed_if_unavailable"] is True,
               "full_snapshot": p["delivery"]["mode"] == "full_daily_snapshot",
@@ -55,6 +73,9 @@ jobs:
               "all_chunks": p["paid_discovery"]["read_all_chunks"] is True,
               "qa_fail_closed": p["ingest_qa"]["fail_closed"] is True,
               "max_age_18": p["ingest_qa"]["maximum_snapshot_age_hours"] == 18,
+              "review_threshold_profile": rtc["profile"] == "personal-calibrated-v1",
+              "review_thresholds": rtc["thresholds"] == expected_review_thresholds,
+              "review_threshold_qa_binding": p["ingest_qa"]["required_review_threshold_profile"] == rtc["profile"] and p["ingest_qa"]["require_review_threshold_map_match"] is True,
               "price_blind": sep["taste_verdict_is_price_blind"] is True,
               "deal_never_raises_taste": sep["deal_quality_can_never_raise_taste_fit"] is True,
               "recall_not_evidence": sep["recall_flags_can_trigger_audit_but_are_not_taste_evidence"] is True,
