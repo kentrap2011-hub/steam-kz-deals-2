@@ -1,0 +1,306 @@
+name: Build full taste fingerprint validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "data/production/mailing/**"
+      - "data/cache/taste_fit.index.json"
+      - "config/taste_fingerprint_contract.json"
+      - ".github/workflows/build-taste-validation.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: full-taste-fingerprint-validation
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Validate all current feed fingerprints against compact taste cache
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          import subprocess
+          import unicodedata
+          from pathlib import Path
+
+          MAILING_INDEX = Path("data/production/mailing/index.json")
+          TASTE_INDEX = Path("data/cache/taste_fit.index.json")
+          FP_CONTRACT = Path("config/taste_fingerprint_contract.json")
+          OUT = Path("data/cache/taste_fit.validation.json")
+
+          EXPECTED_FP_FIELDS = [
+              "key",
+              "appid",
+              "normalized_title_for_taste",
+              "sorted_fit_tags",
+              "core_fit_count",
+              "release_date",
+          ]
+          EXPECTED_COMPACT_FIELDS = [
+              "appid",
+              "taste_fingerprint",
+              "verdict",
+              "fit_level",
+              "reason_code",
+          ]
+
+          def git_object_sha(spec: str) -> str:
+              return subprocess.check_output(
+                  ["git", "rev-parse", spec], text=True
+              ).strip()
+
+          def fingerprint(key, appid, core_fit_count, fit_tags, release_date, title):
+              payload = {
+                  "key": key,
+                  "appid": str(appid),
+                  "normalized_title_for_taste": unicodedata.normalize("NFKC", title).lower(),
+                  "sorted_fit_tags": sorted([] if fit_tags == "" else fit_tags.split("|")),
+                  "core_fit_count": int(core_fit_count),
+                  "release_date": release_date,
+              }
+              raw = json.dumps(
+                  payload,
+                  ensure_ascii=False,
+                  separators=(",", ":"),
+              ).encode("utf-8")
+              return hashlib.sha256(raw).hexdigest()
+
+          fp_contract = json.loads(FP_CONTRACT.read_text(encoding="utf-8"))
+          if fp_contract.get("contract") != "TASTE-FINGERPRINT-V1":
+              raise SystemExit("Unexpected fingerprint implementation contract")
+          if fp_contract.get("input_fields_in_serialization_order") != EXPECTED_FP_FIELDS:
+              raise SystemExit("Fingerprint field order/allowlist changed; update validator explicitly")
+
+          mailing = json.loads(MAILING_INDEX.read_text(encoding="utf-8"))
+          taste = json.loads(TASTE_INDEX.read_text(encoding="utf-8"))
+
+          if mailing.get("format") != "tsv" or mailing.get("has_header") is not False:
+              raise SystemExit("Unexpected mailing format/header")
+          if taste.get("schema_version") != 1:
+              raise SystemExit("Unexpected taste index schema")
+          if taste.get("entry_fields") != EXPECTED_COMPACT_FIELDS:
+              raise SystemExit("Unexpected compact taste entry shape declaration")
+
+          taste_entries = taste.get("entries")
+          if not isinstance(taste_entries, dict):
+              raise SystemExit("taste index entries must be an object")
+          if taste.get("index_entry_count") != len(taste_entries):
+              raise SystemExit(
+                  f"taste index entry count mismatch: declared={taste.get('index_entry_count')} actual={len(taste_entries)}"
+              )
+
+          columns = list(mailing["columns"])
+          col = {name: i for i, name in enumerate(columns)}
+          required_columns = {
+              "key", "appid", "core_fit_count", "fit_tags", "release_date", "title"
+          }
+          missing_columns = required_columns - set(columns)
+          if missing_columns:
+              raise SystemExit(f"Mailing feed missing fingerprint columns: {sorted(missing_columns)}")
+
+          expected_chunks = int(mailing["chunk_count"])
+          expected_rows = int(mailing["item_count"])
+          pattern = mailing["chunk_pattern"]
+
+          processed = 0
+          hit_count = 0
+          include_hit_count = 0
+          exclude_hit_count = 0
+          non_hits = []
+          feed_keys = []
+
+          for number in range(1, expected_chunks + 1):
+              rel = pattern.replace("NNN", f"{number:03d}")
+              path = Path(rel)
+              if not path.exists():
+                  raise SystemExit(f"Missing mailing chunk: {rel}")
+
+              lines = [
+                  line for line in path.read_text(encoding="utf-8").splitlines()
+                  if line.strip()
+              ]
+              for line in lines:
+                  cells = line.split("\t")
+                  if len(cells) != len(columns):
+                      raise SystemExit(
+                          f"Column mismatch in {rel}: got={len(cells)} expected={len(columns)}"
+                      )
+
+                  key = cells[col["key"]]
+                  appid = cells[col["appid"]]
+                  current_fp = fingerprint(
+                      key=key,
+                      appid=appid,
+                      core_fit_count=cells[col["core_fit_count"]],
+                      fit_tags=cells[col["fit_tags"]],
+                      release_date=cells[col["release_date"]],
+                      title=cells[col["title"]],
+                  )
+                  processed += 1
+                  feed_keys.append(key)
+
+                  cached = taste_entries.get(key)
+                  if cached is None:
+                      non_hits.append({
+                          "key": key,
+                          "appid": appid,
+                          "reason": "missing_cache_key",
+                          "current_fingerprint": current_fp,
+                      })
+                      continue
+
+                  if not isinstance(cached, list) or len(cached) != len(EXPECTED_COMPACT_FIELDS):
+                      non_hits.append({
+                          "key": key,
+                          "appid": appid,
+                          "reason": "invalid_cache_entry_shape",
+                          "current_fingerprint": current_fp,
+                      })
+                      continue
+
+                  cached_appid, cached_fp, verdict, fit_level, reason_code = cached
+                  if cached_fp != current_fp:
+                      non_hits.append({
+                          "key": key,
+                          "appid": appid,
+                          "reason": "fingerprint_mismatch",
+                          "current_fingerprint": current_fp,
+                          "cached_fingerprint": cached_fp,
+                      })
+                      continue
+
+                  hit_count += 1
+                  if verdict == "INCLUDE":
+                      include_hit_count += 1
+                  elif verdict == "EXCLUDE":
+                      exclude_hit_count += 1
+                  else:
+                      raise SystemExit(f"Unexpected cached verdict for {key}: {verdict!r}")
+
+          if processed != expected_rows:
+              raise SystemExit(
+                  f"Feed row mismatch during fingerprint validation: processed={processed} expected={expected_rows}"
+              )
+
+          miss_or_stale_count = len(non_hits)
+          if hit_count + miss_or_stale_count != processed:
+              raise SystemExit("Fingerprint classification does not cover all processed candidates")
+
+          extra_cache_keys = sorted(set(taste_entries) - set(feed_keys))
+          keys_digest = hashlib.sha256(
+              json.dumps(feed_keys, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+          ).hexdigest()
+
+          result = {
+              "schema_version": 1,
+              "purpose": "full_mechanical_taste_fingerprint_validation",
+              "status": "complete",
+              "bindings": {
+                  "mailing_tree_sha": git_object_sha("HEAD:data/production/mailing"),
+                  "mailing_index_blob_sha": git_object_sha("HEAD:data/production/mailing/index.json"),
+                  "taste_index_blob_sha": git_object_sha("HEAD:data/cache/taste_fit.index.json"),
+                  "fingerprint_contract_blob_sha": git_object_sha("HEAD:config/taste_fingerprint_contract.json"),
+                  "profile_blob_sha": taste.get("profile_blob_sha"),
+                  "taste_model_version": taste.get("taste_model_version"),
+              },
+              "feed_candidate_count": expected_rows,
+              "processed_count": processed,
+              "hit_count": hit_count,
+              "miss_or_stale_count": miss_or_stale_count,
+              "include_hit_count": include_hit_count,
+              "exclude_hit_count": exclude_hit_count,
+              "extra_cache_key_count": len(extra_cache_keys),
+              "complete_coverage": (
+                  processed == expected_rows
+                  and hit_count + miss_or_stale_count == expected_rows
+              ),
+              "feed_keys_digest_sha256": keys_digest,
+              "non_hits": non_hits,
+          }
+
+          OUT.parent.mkdir(parents=True, exist_ok=True)
+          OUT.write_text(
+              json.dumps(result, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+
+          print(
+              f"Taste validation complete: processed={processed} hits={hit_count} "
+              f"non_hits={miss_or_stale_count} extras={len(extra_cache_keys)}"
+          )
+          PY
+
+      - name: Commit validation artifact
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/taste_fit.validation.json
+          if git diff --cached --quiet; then
+            echo "Taste validation artifact already current"
+            exit 0
+          fi
+
+          git commit -m "Rebuild full taste fingerprint validation"
+
+          for attempt in 1 2 3; do
+            echo "Push attempt ${attempt}/3"
+            git fetch origin main:refs/remotes/origin/main
+
+            if ! git rebase origin/main; then
+              echo "Rebase failed; aborting."
+              git rebase --abort || true
+              exit 1
+            fi
+
+            python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+
+          validation = json.loads(Path("data/cache/taste_fit.validation.json").read_text(encoding="utf-8"))
+          bindings = validation["bindings"]
+
+          def sha(spec):
+              return subprocess.check_output(["git", "rev-parse", spec], text=True).strip()
+
+          current = {
+              "mailing_tree_sha": sha("HEAD:data/production/mailing"),
+              "mailing_index_blob_sha": sha("HEAD:data/production/mailing/index.json"),
+              "taste_index_blob_sha": sha("HEAD:data/cache/taste_fit.index.json"),
+              "fingerprint_contract_blob_sha": sha("HEAD:config/taste_fingerprint_contract.json"),
+          }
+          for key, value in current.items():
+              if bindings.get(key) != value:
+                  raise SystemExit(
+                      f"Validation artifact became stale during rebase: {key} "
+                      f"artifact={bindings.get(key)} current={value}"
+                  )
+          print("Validation bindings still current after rebase")
+          PY
+
+            if git push origin HEAD:main; then
+              echo "Taste validation artifact pushed successfully."
+              exit 0
+            fi
+
+            echo "main changed again before push; retrying..."
+            sleep $((attempt * 3))
+          done
+
+          echo "Push failed after 3 attempts."
+          exit 1
