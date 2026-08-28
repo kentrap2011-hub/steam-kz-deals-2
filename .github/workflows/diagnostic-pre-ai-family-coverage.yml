@@ -1,0 +1,61 @@
+name: One-shot pre-AI family coverage diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-pre-ai-family-coverage.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Capture resolve locals on coverage failure
+        run: |
+          python - <<'PY'
+          import importlib.util, json, sys
+          from pathlib import Path
+
+          spec=importlib.util.spec_from_file_location('fam','scripts/build_pre_ai_family_graph.py')
+          fam=importlib.util.module_from_spec(spec); spec.loader.exec_module(fam)
+          mailing=fam.load(fam.MAILING); feed=fam.load_feed(mailing)
+          store=fam.load(fam.STORE)['entries']; meta=fam.load(fam.META)['entries']; rules=fam.load(fam.RULES)['rules']; contract=fam.load(fam.CONTRACT)
+          allowed={k for k,r in rules.items() if r.get('mechanical_action') in {'keep_for_ai','keep_for_ai_then_resolve_condition'}}
+          snap={}
+          def trace(frame,event,arg):
+              if frame.f_code.co_name=='resolve' and event=='exception' and arg[0] is SystemExit:
+                  loc=frame.f_locals
+                  assigned=set(loc.get('assigned') or [])
+                  family_of=set((loc.get('family_of') or {}).keys())
+                  members={x for f in (loc.get('families') or {}).values() for x in (f.get('members') or [])}
+                  snap.update({
+                    'allowed_count':len(loc.get('allowed_keys') or []),
+                    'assigned_count':len(assigned),
+                    'family_of_count':len(family_of),
+                    'members_count':len(members),
+                    'missing_from_assigned':sorted((loc.get('allowed_keys') or set())-assigned),
+                    'extra_in_assigned':sorted(assigned-(loc.get('allowed_keys') or set())),
+                    'missing_from_family_of':sorted((loc.get('allowed_keys') or set())-family_of),
+                    'missing_from_family_members':sorted((loc.get('allowed_keys') or set())-members),
+                  })
+              return trace
+          sys.settrace(trace)
+          try:
+              fam.resolve(allowed,feed,store,meta,rules,contract)
+          except SystemExit as e:
+              sys.settrace(None)
+              print('FAMILY_COVERAGE_DIAGNOSTIC='+json.dumps({'error':str(e),**snap},ensure_ascii=False))
+              raise
+          finally:
+              sys.settrace(None)
+          PY
