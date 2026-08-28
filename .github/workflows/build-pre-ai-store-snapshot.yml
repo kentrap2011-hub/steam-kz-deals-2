@@ -14,11 +14,17 @@ on:
       - "config/offer_family_contract.json"
       - "config/deal_quality_contract.json"
       - "config/mailing_policy.json"
+      - "config/taste_fingerprint_contract.json"
       - "data/cache/steamdb_history.json"
+      - "data/cache/taste_fit.json"
+      - "data/cache/taste_fit.index.json"
+      - "data/cache/taste_fit.validation.json"
+      - "data/cache/taste_fit.ledger_validation.json"
       - "scripts/build_pre_ai_store_snapshot.py"
       - "scripts/build_pre_ai_fx_snapshot.py"
       - "scripts/build_pre_ai_content_rules.py"
       - "scripts/build_pre_ai_family_graph.py"
+      - "scripts/build_pre_ai_taste_projection.py"
       - "scripts/build_pre_ai_history_snapshot.py"
       - "scripts/build_pre_ai_deal_scenarios.py"
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
@@ -60,6 +66,9 @@ jobs:
       - name: Build purchase-family graph
         run: python scripts/build_pre_ai_family_graph.py
 
+      - name: Build safe taste-cache projection
+        run: python scripts/build_pre_ai_taste_projection.py
+
       - name: Build nonblocking history classification
         run: python scripts/build_pre_ai_history_snapshot.py
 
@@ -76,6 +85,7 @@ jobs:
             data/production/pre_ai/fx_snapshot.json \
             data/production/pre_ai/content_rules.json \
             data/production/pre_ai/family_graph.json \
+            data/production/pre_ai/taste_projection.json \
             data/production/pre_ai/history_snapshot.json \
             data/production/pre_ai/deal_scenarios.json
           if git diff --cached --quiet; then
