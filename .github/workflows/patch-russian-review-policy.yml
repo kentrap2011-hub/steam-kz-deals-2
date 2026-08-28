@@ -40,14 +40,14 @@ jobs:
               raise SystemExit('review_passes anchor not found')
           collector = collector.replace(old, new, 1)
 
-          old_meta = '''        "russian_review_count_cap":\n            RUSSIAN_REVIEW_COUNT_CAP,\n        "global_review_language":\n            "all",\n'''
-          new_meta = '''        "russian_review_count_cap":\n            RUSSIAN_REVIEW_COUNT_CAP,\n        "russian_rating_comparison":\n            "steam_display_whole_percent",\n        "review_policy_regression_guard":\n            True,\n        "global_review_language":\n            "all",\n'''
+          old_meta = '''    "russian_review_count_cap":\n        RUSSIAN_REVIEW_COUNT_CAP,\n    "global_review_language":\n        "all",\n'''
+          new_meta = '''    "russian_review_count_cap":\n        RUSSIAN_REVIEW_COUNT_CAP,\n    "russian_rating_comparison":\n        "steam_display_whole_percent",\n    "review_policy_regression_guard":\n        True,\n    "global_review_language":\n        "all",\n'''
           if collector.count(old_meta) != 1:
               raise SystemExit(f'manifest metadata anchor count={collector.count(old_meta)}')
           collector = collector.replace(old_meta, new_meta, 1)
 
-          old_index = '''        "russian_review_count_cap":\n            RUSSIAN_REVIEW_COUNT_CAP,\n        "review_fields": {\n'''
-          new_index = '''        "russian_review_count_cap":\n            RUSSIAN_REVIEW_COUNT_CAP,\n        "russian_rating_comparison":\n            "steam_display_whole_percent",\n        "review_policy_regression_guard":\n            True,\n        "review_fields": {\n'''
+          old_index = '''    "russian_review_count_cap":\n        RUSSIAN_REVIEW_COUNT_CAP,\n    "review_fields": {\n'''
+          new_index = '''    "russian_review_count_cap":\n        RUSSIAN_REVIEW_COUNT_CAP,\n    "russian_rating_comparison":\n        "steam_display_whole_percent",\n    "review_policy_regression_guard":\n        True,\n    "review_fields": {\n'''
           if collector.count(old_index) != 1:
               raise SystemExit(f'index metadata anchor count={collector.count(old_index)}')
           collector = collector.replace(old_index, new_index, 1)
