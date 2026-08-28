@@ -1,0 +1,67 @@
+name: One-shot post-fix app identity diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-app-identity-postfix.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify canonical app identity on fresh production feed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          idx=json.loads(Path('data/production/mailing/index.json').read_text(encoding='utf-8'))
+          ci={n:i for i,n in enumerate(idx['columns'])}
+          mismatches=[]
+          stronghold=[]
+          rows=0
+          for n in range(1,int(idx['chunk_count'])+1):
+              p=Path(idx['chunk_pattern'].replace('NNN',f'{n:03d}'))
+              for line in p.read_text(encoding='utf-8').splitlines():
+                  if not line.strip():
+                      continue
+                  rows += 1
+                  c=line.split('\t')
+                  key=c[ci['key']]
+                  appid=c[ci['appid']]
+                  title=c[ci['title']]
+                  if key.startswith('App_'):
+                      canonical=key.split('_',1)[1]
+                      if appid != canonical:
+                          mismatches.append({'key':key,'appid':appid,'canonical':canonical,'title':title})
+                  if key == 'App_901735' or title == 'The Stronghold Collection':
+                      stronghold.append({'key':key,'appid':appid,'title':title})
+
+          out={
+              'index_item_count':idx['item_count'],
+              'rows_scanned':rows,
+              'mismatch_count':len(mismatches),
+              'mismatches':mismatches,
+              'stronghold_rows':stronghold,
+          }
+          print('POSTFIX_APP_IDENTITY='+json.dumps(out,ensure_ascii=False))
+          if rows != idx['item_count']:
+              raise SystemExit('Row count mismatch')
+          if mismatches:
+              raise SystemExit('App identity mismatches remain')
+          expected={'key':'App_901735','appid':'901735','title':'The Stronghold Collection'}
+          if expected not in stronghold:
+              raise SystemExit(f'Stronghold canonical row missing or wrong: {stronghold}')
+          print('POSTFIX_APP_IDENTITY=PASS')
+          PY
