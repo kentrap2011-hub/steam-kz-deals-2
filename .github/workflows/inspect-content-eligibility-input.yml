@@ -1,0 +1,104 @@
+name: Inspect content eligibility inputs
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/inspect-content-eligibility-input.yml"
+      - "data/production/mailing/**"
+      - "data/cache/taste_fit.index.json"
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Build included-content inventory
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          import subprocess
+          from collections import Counter
+          from pathlib import Path
+
+          mailing = json.loads(Path('data/production/mailing/index.json').read_text(encoding='utf-8'))
+          taste = json.loads(Path('data/cache/taste_fit.index.json').read_text(encoding='utf-8'))
+          cols = mailing['columns']
+          ci = {name:i for i,name in enumerate(cols)}
+          taste_entries = taste['entries']
+
+          extra_re = re.compile(r'\b(soundtrack|ost|art\s*book|artbook|wallpapers?|skin\s*pack|costume\s*pack|cosmetic\s*pack|avatar\s*pack|digital\s*artwork|digital\s*artbook|music\s*pack|supporter\s*pack)\b', re.I)
+          content_re = re.compile(r'\b(expansion|season\s*pass|story\s*(?:pack|dlc)|episode|chapter|campaign|dlc)\b', re.I)
+          edition_re = re.compile(r'\b(deluxe|gold|complete|ultimate|definitive|goty|game of the year|bundle|collection|edition)\b', re.I)
+
+          rows=[]
+          counts=Counter()
+          for n in range(1, int(mailing['chunk_count'])+1):
+              path=Path(mailing['chunk_pattern'].replace('NNN', f'{n:03d}'))
+              for line in path.read_text(encoding='utf-8').splitlines():
+                  if not line.strip():
+                      continue
+                  cells=line.split('\t')
+                  key=cells[ci['key']]
+                  cached=taste_entries.get(key)
+                  if not cached or cached[2] != 'INCLUDE':
+                      continue
+                  title=cells[ci['title']]
+                  flags=[]
+                  if key.startswith('Sub_'):
+                      flags.append('sub_purchase_variant')
+                  if extra_re.search(title):
+                      flags.append('obvious_non_game_extra')
+                  if content_re.search(title):
+                      flags.append('possible_dlc_or_substantive_addon')
+                  if edition_re.search(title):
+                      flags.append('possible_edition_or_bundle')
+                  for f in flags:
+                      counts[f]+=1
+                  if not flags:
+                      counts['no_title_flag']+=1
+                  rows.append({
+                      'key':key,
+                      'appid':cells[ci['appid']],
+                      'title':title,
+                      'fit_level':cached[3],
+                      'cache_reason_code':cached[4],
+                      'feed_reasons':cells[ci['reasons']].split('|') if cells[ci['reasons']] else [],
+                      'fit_tags':cells[ci['fit_tags']].split('|') if cells[ci['fit_tags']] else [],
+                      'flags':flags,
+                  })
+
+          out={
+              'schema_version':1,
+              'mailing_tree_sha':subprocess.check_output(['git','rev-parse','HEAD:data/production/mailing'],text=True).strip(),
+              'taste_index_blob_sha':subprocess.check_output(['git','rev-parse','HEAD:data/cache/taste_fit.index.json'],text=True).strip(),
+              'included_count':len(rows),
+              'flag_counts':dict(sorted(counts.items())),
+              'flagged_rows':[r for r in rows if r['flags']],
+              'all_rows':rows,
+          }
+          Path('data/cache/content_eligibility_input.report.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print('included',len(rows),'flag_counts',dict(counts))
+          PY
+
+      - name: Commit report
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/content_eligibility_input.report.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Refresh content eligibility input report"
+          git pull --rebase origin main
+          git push origin HEAD:main
