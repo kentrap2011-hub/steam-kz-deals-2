@@ -310,7 +310,7 @@ def main():
         'source_mailing_updated_at_utc': source_stamp,
         'profile_binding': {
             'canonical_profile_blob_sha': taste_doc['current_profile']['blob_sha'],
-            'taste_model_version': taste_doc['cache_binding']['current_taste_model_version'],
+            'taste_model_version': taste_doc['current_binding']['taste_model_version'],
         },
         'wishlist_binding': {
             'blob_sha': wishlist['blob_sha'],
