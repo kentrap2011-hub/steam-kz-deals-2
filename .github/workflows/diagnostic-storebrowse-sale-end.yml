@@ -43,18 +43,18 @@ jobs:
                       'final_kzt':float(c[ci['final_kzt']]),
                   }
 
-          ids=[]
+          requested=[]
           for x in feed.values():
               if x['key'].startswith('App_') and x['appid']:
-                  ids.append({'appid':int(x['appid'])})
+                  requested.append((x['key'],{'appid':int(x['appid'])}))
               elif x['key'].startswith('Sub_'):
-                  ids.append({'packageid':int(x['key'].split('_',1)[1])})
+                  requested.append((x['key'],{'packageid':int(x['key'].split('_',1)[1])}))
 
-          started=time.monotonic(); items=[]; request_count=0
-          for start in range(0,len(ids),100):
-              batch=ids[start:start+100]
+          started=time.monotonic(); paired=[]; request_count=0; order_identity_errors=[]
+          for start in range(0,len(requested),100):
+              batch=requested[start:start+100]
               payload={
-                  'ids':batch,
+                  'ids':[x[1] for x in batch],
                   'context':{'language':'english','country_code':'KZ','steam_realm':1},
                   'data_request':{'include_all_purchase_options':True},
               }
@@ -63,30 +63,33 @@ jobs:
               with urllib.request.urlopen(req,timeout=25) as r:
                   data=json.loads(r.read().decode('utf-8'))
               request_count+=1
-              items.extend((data.get('response') or {}).get('store_items') or [])
+              returned=(data.get('response') or {}).get('store_items') or []
+              if len(returned)!=len(batch):
+                  raise SystemExit(f'Batch cardinality mismatch requested={len(batch)} returned={len(returned)}')
+              for (key,rid),si in zip(batch,returned):
+                  ok=False
+                  if 'appid' in rid:
+                      ok=int(si.get('appid') or 0)==rid['appid']
+                  else:
+                      pid=rid['packageid']
+                      ok=(int(si.get('packageid') or 0)==pid) or any(int(o.get('packageid') or 0)==pid for o in (si.get('purchase_options') or []))
+                  if not ok:
+                      order_identity_errors.append({'requested_key':key,'request_id':rid,'returned_appid':si.get('appid'),'returned_packageid':si.get('packageid')})
+                  paired.append((key,si))
 
-          def item_key(si):
-              if si.get('appid'): return 'App_'+str(si['appid'])
-              if si.get('packageid'): return 'Sub_'+str(si['packageid'])
-              if si.get('bundleid'): return 'Bundle_'+str(si['bundleid'])
-              return None
-
-          matched={}; option_count=0; active_discount_rows=0; known_end=0; unknown_end=[]; mismatches=[]
-          for si in items:
-              key=item_key(si)
-              if not key or key not in feed: continue
-              matched[key]=si
+          option_count=0; active_discount_rows=0; known_end=0; unknown_end=[]; mismatches=[]; missing_option=[]
+          for key,si in paired:
               opts=si.get('purchase_options') or []
               option_count += len(opts)
-              # Prefer purchase option whose id corresponds to the requested package for Sub_, otherwise best/first discounted option.
               chosen=None
               if key.startswith('Sub_'):
                   pid=int(key.split('_',1)[1])
-                  chosen=next((o for o in opts if o.get('packageid')==pid),None)
+                  chosen=next((o for o in opts if int(o.get('packageid') or 0)==pid),None)
               if chosen is None:
                   discounted=[o for o in opts if int(o.get('discount_pct') or 0)>0]
                   chosen=(discounted or opts or [None])[0]
-              if not chosen: continue
+              if not chosen:
+                  missing_option.append(key); continue
               active=chosen.get('active_discounts') or []
               end_values=sorted({int(d.get('discount_end_date') or 0) for d in active if int(d.get('discount_end_date') or 0)>0})
               if int(chosen.get('discount_pct') or 0)>0:
@@ -100,10 +103,11 @@ jobs:
           elapsed=time.monotonic()-started
           summary={
               'source_rows':len(feed),
-              'requestable_ids':len(ids),
+              'requestable_ids':len(requested),
               'requests':request_count,
-              'store_items_returned':len(items),
-              'matched_rows':len(matched),
+              'paired_rows':len(paired),
+              'order_identity_error_count':len(order_identity_errors),
+              'missing_purchase_option_count':len(missing_option),
               'purchase_options_seen':option_count,
               'active_discount_rows_with_selected_option':active_discount_rows,
               'sale_end_known':known_end,
@@ -111,9 +115,12 @@ jobs:
               'sale_end_coverage':round(known_end/active_discount_rows,4) if active_discount_rows else None,
               'discount_mismatch_count':len(mismatches),
               'elapsed_seconds':round(elapsed,3),
+              'order_identity_error_examples':order_identity_errors[:20],
               'unknown_end_examples':unknown_end[:20],
               'discount_mismatch_examples':mismatches[:20],
               'observed_at_utc':datetime.now(timezone.utc).isoformat(),
           }
           print('STOREBROWSE_DIAGNOSTIC='+json.dumps(summary,ensure_ascii=False))
+          if len(paired)!=len(feed) or order_identity_errors or unknown_end or mismatches:
+              raise SystemExit('StoreBrowse diagnostic did not prove complete exact mapping')
           PY
