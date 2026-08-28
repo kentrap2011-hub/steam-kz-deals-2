@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "purpose": "canonical_final_price_blind_taste_ledger_validation",
+  "status": "complete",
+  "bindings": {
+    "policy_blob_sha": "bbadfa1739a268dac7df0a1b6a714d1c9b002f0f",
+    "ledger_contract_blob_sha": "bad7394bbfed56d10cd0ce3c65e655acb426bdb2",
+    "taste_index_blob_sha": "0784c399676607e64747845c7aa78cb67d6c9e7e",
+    "taste_validation_blob_sha": "0a21f42de02b161ff39530b500a0be74e80f4548",
+    "profile_blob_sha": "b0d11172aea762cb7274efe24d71734b2fc6b5b0",
+    "taste_model_version": "taste-v2"
+  },
+  "processed_count": 583,
+  "included_count": 101,
+  "excluded_count": 482,
+  "ambiguous_count": 0,
+  "invalid_reason_count": 0,
+  "invalid_fit_count": 0,
+  "complete_ledger": true,
+  "canonical_exclusion_reason_counts": {
+    "below_moderate_fit": 482
+  },
+  "ledger_digest_sha256": "abd12d1620433c3f1538964b36b49c3b8e785083bdb7bde5c9941f62c6b078fa",
+  "problems": {
+    "ambiguous": [],
+    "invalid_reason": [],
+    "invalid_fit": [],
+    "unknown_cache_reason_code": []
+  }
+}
