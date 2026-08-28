@@ -1,4 +1,4 @@
-name: Build pre-AI Store snapshot
+name: Build pre-AI deterministic payload
 
 on:
   workflow_dispatch:
@@ -10,15 +10,18 @@ on:
   push:
     branches: [main]
     paths:
-      - "data/production/mailing/**"
+      - "config/content_eligibility_contract.json"
+      - "config/offer_family_contract.json"
       - "scripts/build_pre_ai_store_snapshot.py"
+      - "scripts/build_pre_ai_content_rules.py"
+      - "scripts/build_pre_ai_family_graph.py"
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
 
 permissions:
   contents: write
 
 concurrency:
-  group: pre-ai-store-snapshot
+  group: pre-ai-deterministic-payload
   cancel-in-progress: true
 
 jobs:
@@ -27,7 +30,7 @@ jobs:
       github.event_name != 'workflow_run' ||
       github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,21 +41,29 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Build current pre-AI Store snapshot and content metadata
+      - name: Build current Store snapshot and content metadata
         run: python scripts/build_pre_ai_store_snapshot.py
 
-      - name: Commit pre-AI Store snapshot and content metadata
+      - name: Build mechanical content rules
+        run: python scripts/build_pre_ai_content_rules.py
+
+      - name: Build purchase-family graph
+        run: python scripts/build_pre_ai_family_graph.py
+
+      - name: Commit atomic pre-AI payload
         run: |
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
           git add \
             data/production/pre_ai/store_snapshot.json \
-            data/production/pre_ai/content_metadata.json
+            data/production/pre_ai/content_metadata.json \
+            data/production/pre_ai/content_rules.json \
+            data/production/pre_ai/family_graph.json
           if git diff --cached --quiet; then
-            echo "Pre-AI Store and metadata snapshots already current"
+            echo "Pre-AI deterministic payload already current"
             exit 0
           fi
-          git commit -m "Refresh pre-AI Store and content metadata"
+          git commit -m "Refresh atomic pre-AI payload"
           for attempt in 1 2 3; do
             git fetch origin main:refs/remotes/origin/main
             if ! git rebase origin/main; then
