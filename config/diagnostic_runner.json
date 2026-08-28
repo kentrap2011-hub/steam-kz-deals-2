@@ -1,0 +1,334 @@
+{
+  "contract": "GAME-DEALS-DIAGNOSTIC-RUNNER",
+  "version": "1.0",
+  "status": "test_only",
+  "purpose": "Run the canonical mailing pipeline from the beginning, stage by stage, stopping at the first slow, erroneous, ambiguous, or policy-noncompliant stage so that the bottleneck can be analyzed and fixed before the next full restart.",
+  "authority": {
+    "canonical_policy_repository": "kentrap2011-hub/steam-kz-deals-2",
+    "canonical_policy_path": "config/mailing_policy.json",
+    "canonical_policy_must_be_loaded_first": true,
+    "diagnostic_runner_must_be_loaded_second": true,
+    "diagnostic_runner_never_overrides_canonical_policy": true,
+    "if_conflict": "canonical_policy_wins",
+    "ordinary_mailing_publish_allowed_in_diagnostic_mode": false,
+    "publish_only_when_all_diagnostic_stages_pass_and_canonical_final_self_check_passes": true
+  },
+  "execution": {
+    "restart_from_stage_1_on_every_run": true,
+    "continue_automatically_after_stage_pass": true,
+    "stop_at_first_non_pass_stage": true,
+    "default_stage_soft_limit_seconds": 60,
+    "slow_stage_status": "FAIL_TIMEOUT",
+    "error_stage_status": "FAIL_ERROR",
+    "ambiguous_stage_status": "FAIL_AMBIGUOUS",
+    "policy_violation_status": "FAIL_POLICY",
+    "unknown_or_unproven_condition_is_not_pass": true,
+    "never_extrapolate_unchecked_items": true,
+    "never_start_downstream_after_failure": true,
+    "on_time_limit": "Stop as soon as safely possible; do not start another candidate, lookup, chunk, or sub-operation after the limit is known to be exceeded. Report processed and remaining counts.",
+    "stage_specific_limit_may_be_raised_only_after_analysis": true,
+    "stage_specific_limit_change_requires_explicit_reason": true,
+    "successful_stages_must_be_safe_to_repeat": true,
+    "preserve_canonical_checkpoint_and_write_order": true,
+    "external_lookup_registry_still_required": true,
+    "no_duplicate_external_lookup_on_restart_within_same_run": true
+  },
+  "pass_contract": {
+    "allowed_stage_terminal_statuses": [
+      "PASS",
+      "FAIL_TIMEOUT",
+      "FAIL_ERROR",
+      "FAIL_AMBIGUOUS",
+      "FAIL_POLICY",
+      "NOT_RUN"
+    ],
+    "pass_requires": [
+      "all_required assertions for the stage are proven",
+      "stage result is internally consistent",
+      "elapsed time does not exceed the active stage limit",
+      "no unresolved ambiguity remains",
+      "no canonical policy rule was bypassed"
+    ],
+    "fail_closed": true
+  },
+  "standard_stage_report": {
+    "required_fields": [
+      "stage_id",
+      "stage_name",
+      "status",
+      "elapsed_seconds",
+      "limit_seconds",
+      "input_count",
+      "processed_count",
+      "output_count",
+      "remaining_count",
+      "external_calls_attempted",
+      "external_calls_succeeded",
+      "external_calls_failed",
+      "github_reads",
+      "github_writes",
+      "assertions_checked",
+      "assertions_failed",
+      "failure_reason",
+      "next_stage_allowed"
+    ],
+    "candidate_names_in_progress": "forbidden unless necessary to explain the exact failing row in a requested debug report",
+    "counts_must_be_exact_if_reported": true,
+    "unknown_count_must_be_null_not_guessed": true
+  },
+  "stages": [
+    {
+      "id": "01_policy_bootstrap",
+      "name": "Canonical policy bootstrap",
+      "limit_seconds": 60,
+      "requirements": [
+        "config/mailing_policy.json is the first substantive repository content loaded for the run",
+        "policy status is canonical",
+        "policy structure is readable",
+        "record exact policy version and blob SHA"
+      ]
+    },
+    {
+      "id": "02_profile_load",
+      "name": "Canonical taste profile load",
+      "limit_seconds": 60,
+      "requirements": [
+        "load gaming_taste_live.json exactly once",
+        "record exact Git blob SHA",
+        "do not use historical snapshot as fallback",
+        "wishlist is context only and not taste proof"
+      ]
+    },
+    {
+      "id": "03_feed_ingest_qa",
+      "name": "Production feed ingest and QA",
+      "limit_seconds": 60,
+      "requirements": [
+        "validate production manifest and chosen source index",
+        "prefer mailing optimized view only when canonical ingest QA allows it",
+        "read every chosen chunk",
+        "prove actual chunk count equals index",
+        "prove actual rows equal item_count",
+        "prove optimized/source lossless invariants when optimized view is chosen"
+      ]
+    },
+    {
+      "id": "04_taste_cache_load",
+      "name": "Taste cache load and structural validation",
+      "limit_seconds": 60,
+      "requirements": [
+        "load data/cache/taste_fit.json at most once",
+        "validate schema and entry_count against len(entries)",
+        "record current profile SHA and taste model version",
+        "do not classify any entry as hit until exact cache-hit requirements are proven"
+      ]
+    },
+    {
+      "id": "05_recovery_artifact_validation",
+      "name": "Optional recovery artifact validation",
+      "limit_seconds": 60,
+      "requirements": [
+        "validate recovery artifact only if present",
+        "apply canonical full or partial recovery rules exactly",
+        "invalid artifact is ignored rather than guessed valid",
+        "no semantic reevaluation of valid recovered final entries"
+      ]
+    },
+    {
+      "id": "06_fingerprint_schema_test",
+      "name": "Price-blind fingerprint schema test",
+      "limit_seconds": 60,
+      "requirements": [
+        "reconstruct fingerprint using only canonical fingerprint_fields",
+        "prove excluded price/review/feed/deal/history fields are absent",
+        "normalization and sorting are deterministic"
+      ]
+    },
+    {
+      "id": "07_full_fingerprint_validation",
+      "name": "Full taste-cache fingerprint validation",
+      "limit_seconds": 60,
+      "requirements": [
+        "mechanically validate every current feed candidate",
+        "cache hit requires exact key + exact profile SHA + exact taste model version + exact taste fingerprint",
+        "classify every candidate as hit or miss/stale without extrapolation",
+        "hits + misses_or_stale equals full feed count"
+      ]
+    },
+    {
+      "id": "08_semantic_taste_misses",
+      "name": "Semantic taste evaluation for true misses only",
+      "limit_seconds": 60,
+      "requirements": [
+        "never semantically reevaluate confirmed hits",
+        "process misses in canonical feed chunk order",
+        "use taste-v2 evidence contract",
+        "taste evidence remains price-blind",
+        "track exact evaluated count"
+      ]
+    },
+    {
+      "id": "09_targeted_false_negative_audit",
+      "name": "Targeted price-blind false-negative audit",
+      "limit_seconds": 60,
+      "requirements": [
+        "audit only canonical audit triggers",
+        "same evidence threshold as first pass",
+        "no external lookups",
+        "record exact EXCLUDE to INCLUDE changes"
+      ]
+    },
+    {
+      "id": "10_taste_finalization",
+      "name": "Final price-blind taste ledger",
+      "limit_seconds": 60,
+      "requirements": [
+        "every ingested candidate has final INCLUDE or EXCLUDE",
+        "include has fit level",
+        "exclude has specific canonical reason code",
+        "included + excluded equals processed",
+        "all current candidates have final non-ambiguous taste state before downstream"
+      ]
+    },
+    {
+      "id": "11_mandatory_taste_checkpoint",
+      "name": "Mandatory taste checkpoint",
+      "limit_seconds": 60,
+      "requirements": [
+        "follow canonical incremental checkpoint strategy",
+        "persist changed final non-borderline entries before downstream",
+        "zero writes is valid only when there are provably zero required cache changes",
+        "checkpoint status is explicitly proven before content/store/SteamDB stages"
+      ]
+    },
+    {
+      "id": "12_content_eligibility",
+      "name": "Content eligibility and DLC/addon filtering",
+      "limit_seconds": 60,
+      "requirements": [
+        "apply canonical DLC/chapter eligibility",
+        "exclude cosmetic/soundtrack/artbook/non-game addons",
+        "wishlist is not ownership proof",
+        "record exact eligible and excluded counts"
+      ]
+    },
+    {
+      "id": "13_offer_family_resolution",
+      "name": "Purchase-family resolution",
+      "limit_seconds": 60,
+      "requirements": [
+        "group before expensive external checks",
+        "do not merge merely by shared franchise word",
+        "compare local variants within included family",
+        "prepare one primary output row per family"
+      ]
+    },
+    {
+      "id": "14_store_cache_and_conditional_store",
+      "name": "Current-state resolution from snapshot/store cache and conditional Store",
+      "limit_seconds": 60,
+      "requirements": [
+        "load store_state at most once",
+        "validated production snapshot remains primary current price/discount source",
+        "live Store only on canonical triggers",
+        "lookup registry prevents duplicates",
+        "record cache hits and live calls separately"
+      ]
+    },
+    {
+      "id": "15_steamdb_cache_classification",
+      "name": "SteamDB cache load and mechanical classification",
+      "limit_seconds": 60,
+      "requirements": [
+        "load steamdb_history at most once",
+        "use actual len(entries), not stale metadata entry_count",
+        "classify confirmed_min, previously_free, valid negative cache, and true lookup misses",
+        "do not perform SteamDB lookup in this stage"
+      ]
+    },
+    {
+      "id": "16_steamdb_true_misses",
+      "name": "SteamDB lookups for true history misses only",
+      "limit_seconds": 60,
+      "requirements": [
+        "lookup only canonical true misses",
+        "never repeat exact provider/entity key in run",
+        "do not persist timeout/tool failure as negative history",
+        "track confirmed minima, previously free, unavailable exact history, and blocked/failures separately"
+      ]
+    },
+    {
+      "id": "17_steamdb_checkpoint",
+      "name": "SteamDB cache checkpoint",
+      "limit_seconds": 60,
+      "requirements": [
+        "at most one GitHub write if changed",
+        "repair metadata on permitted write",
+        "do not store guessed minima",
+        "write failure follows canonical warning-only behavior"
+      ]
+    },
+    {
+      "id": "18_deal_quality_and_sort",
+      "name": "Deal quality and deterministic sort",
+      "limit_seconds": 60,
+      "requirements": [
+        "taste is already final and cannot be raised by deal quality",
+        "historical zero is not used as paid minimum delta",
+        "apply canonical purchase decision order and within-decision sort",
+        "no artificial top-N"
+      ]
+    },
+    {
+      "id": "19_freebies_upcoming_and_render",
+      "name": "Freebies, upcoming event, and mailing render",
+      "limit_seconds": 60,
+      "requirements": [
+        "freebies use personal filter and only run after successful main ingest",
+        "upcoming has at most one relevant event within canonical horizon",
+        "render only included recommendations",
+        "do not publish yet"
+      ]
+    },
+    {
+      "id": "20_final_self_check",
+      "name": "Canonical final self-check",
+      "limit_seconds": 60,
+      "requirements": [
+        "verify every canonical final_self_check assertion",
+        "verify all diagnostic stages 01 through 19 are PASS",
+        "verify complete downstream ledger",
+        "only PASS here permits production publication"
+      ]
+    }
+  ],
+  "final_diagnostic_report": {
+    "always_required": true,
+    "on_success": {
+      "final_self_check": "PASS",
+      "ordinary_mailing_allowed": true,
+      "include_stage_table": true,
+      "include_total_elapsed_seconds": true
+    },
+    "on_failure": {
+      "final_self_check": "FAIL",
+      "ordinary_mailing_allowed": false,
+      "must_report": [
+        "first_failed_stage_id",
+        "first_failed_stage_name",
+        "failure_status",
+        "failure_reason",
+        "elapsed_seconds_at_failed_stage",
+        "active_stage_limit_seconds",
+        "input_count",
+        "processed_count",
+        "remaining_count",
+        "external_calls_attempted",
+        "external_calls_succeeded",
+        "external_calls_failed",
+        "github_writes_completed_before_stop",
+        "downstream_stages_not_run"
+      ]
+    }
+  }
+}
