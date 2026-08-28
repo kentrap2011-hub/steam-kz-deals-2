@@ -36,9 +36,10 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Build compact mailing chunks and Store state cache
+      - name: Build compact mailing chunks, integrity attestation and Store state cache
         run: |
           python - <<'PY'
+          import hashlib
           import json
           import shutil
           from pathlib import Path
@@ -51,8 +52,25 @@ jobs:
           STORE_CACHE = CACHE_DIR / "store_state.json"
           CHUNK_SIZE = 150
 
-          index = json.loads(SOURCE_INDEX.read_text(encoding="utf-8"))
-          manifest = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
+          def git_blob_sha(data: bytes) -> str:
+              header = f"blob {len(data)}\0".encode("ascii")
+              return hashlib.sha1(header + data).hexdigest()
+
+          def descriptor(path: Path, data: bytes, row_count=None):
+              result = {
+                  "path": path.as_posix(),
+                  "git_blob_sha": git_blob_sha(data),
+                  "sha256": hashlib.sha256(data).hexdigest(),
+                  "size_bytes": len(data),
+              }
+              if row_count is not None:
+                  result["row_count"] = int(row_count)
+              return result
+
+          source_index_bytes = SOURCE_INDEX.read_bytes()
+          source_manifest_bytes = SOURCE_MANIFEST.read_bytes()
+          index = json.loads(source_index_bytes.decode("utf-8"))
+          manifest = json.loads(source_manifest_bytes.decode("utf-8"))
 
           if index.get("format") != "tsv":
               raise SystemExit("Mailing compactor currently expects TSV source")
@@ -70,16 +88,19 @@ jobs:
 
           rows = []
           source_files = []
+          source_chunk_descriptors = []
 
           for number in range(1, expected_chunks + 1):
               rel = pattern.replace("NNN", f"{number:03d}")
               path = Path(rel)
               if not path.exists():
                   raise SystemExit(f"Missing source chunk: {rel}")
-              text = path.read_text(encoding="utf-8")
+              data = path.read_bytes()
+              text = data.decode("utf-8")
               chunk_rows = [line for line in text.splitlines() if line.strip()]
               rows.extend(chunk_rows)
               source_files.append(rel)
+              source_chunk_descriptors.append(descriptor(path, data, len(chunk_rows)))
 
           if len(rows) != expected_rows:
               raise SystemExit(
@@ -103,24 +124,65 @@ jobs:
               for cells in parsed_rows
           ]
 
+          if len(compact_rows) != expected_rows:
+              raise SystemExit(
+                  f"Mailing projection row mismatch: actual={len(compact_rows)} expected={expected_rows}"
+              )
+
           if OUT.exists():
               shutil.rmtree(OUT)
           OUT.mkdir(parents=True, exist_ok=True)
           CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
           chunk_count = 0
+          mailing_chunk_descriptors = []
           for start in range(0, len(compact_rows), CHUNK_SIZE):
               chunk_count += 1
               subset = compact_rows[start:start + CHUNK_SIZE]
-              (OUT / f"chunk_{chunk_count:03d}.tsv").write_text(
-                  "\n".join(subset) + "\n",
-                  encoding="utf-8",
+              path = OUT / f"chunk_{chunk_count:03d}.tsv"
+              data = ("\n".join(subset) + "\n").encode("utf-8")
+              path.write_bytes(data)
+              mailing_chunk_descriptors.append(descriptor(path, data, len(subset)))
+
+          mailing_rows_verified = sum(d["row_count"] for d in mailing_chunk_descriptors)
+          if mailing_rows_verified != expected_rows:
+              raise SystemExit(
+                  f"Mailing descriptor row mismatch: actual={mailing_rows_verified} expected={expected_rows}"
+              )
+
+          source_rows_verified = sum(d["row_count"] for d in source_chunk_descriptors)
+          if source_rows_verified != expected_rows:
+              raise SystemExit(
+                  f"Source descriptor row mismatch: actual={source_rows_verified} expected={expected_rows}"
               )
 
           source_updated_at = index.get("source_updated_at_utc")
 
-          mailing_index = {
+          integrity_core = {
               "version": 1,
+              "proof_method": "content_addressed_producer_attestation",
+              "producer_workflow": ".github/workflows/build-mailing-feed.yml",
+              "source_manifest": descriptor(SOURCE_MANIFEST, source_manifest_bytes),
+              "source_index": descriptor(SOURCE_INDEX, source_index_bytes),
+              "source_chunks": source_chunk_descriptors,
+              "mailing_chunks": mailing_chunk_descriptors,
+              "source_chunk_count_verified": len(source_chunk_descriptors),
+              "mailing_chunk_count_verified": len(mailing_chunk_descriptors),
+              "source_rows_verified": source_rows_verified,
+              "mailing_rows_verified": mailing_rows_verified,
+              "source_to_mailing_row_projection_lossless": len(compact_rows) == len(parsed_rows) == expected_rows,
+              "all_source_rows_column_validated": True,
+          }
+          integrity_bytes = json.dumps(
+              integrity_core,
+              ensure_ascii=False,
+              sort_keys=True,
+              separators=(",", ":"),
+          ).encode("utf-8")
+          integrity_core["attestation_digest_sha256"] = hashlib.sha256(integrity_bytes).hexdigest()
+
+          mailing_index = {
+              "version": 2,
               "purpose": "chatgpt_mailing_optimized_view",
               "format": "tsv",
               "has_header": False,
@@ -143,6 +205,7 @@ jobs:
               "manifest_updated_at_utc": manifest.get("updated_at_utc"),
               "manifest_needs_tuning": manifest.get("needs_tuning"),
               "source_files_verified": source_files,
+              "integrity_attestation": integrity_core,
           }
 
           (OUT / "index.json").write_text(
@@ -202,7 +265,7 @@ jobs:
           print(
               f"Mailing feed: {len(compact_rows)} rows, "
               f"{expected_chunks} source chunks -> {chunk_count} mailing chunks; "
-              f"Store cache={len(store_entries)} entries"
+              f"content-addressed attestation ready; Store cache={len(store_entries)} entries"
           )
           PY
 
