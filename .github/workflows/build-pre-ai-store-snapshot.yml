@@ -12,6 +12,7 @@ on:
     paths:
       - "config/content_eligibility_contract.json"
       - "config/offer_family_contract.json"
+      - "config/mailing_policy.json"
       - "scripts/build_pre_ai_store_snapshot.py"
       - "scripts/build_pre_ai_content_rules.py"
       - "scripts/build_pre_ai_family_graph.py"
@@ -28,7 +29,8 @@ jobs:
   build:
     if: >
       github.event_name != 'workflow_run' ||
-      github.event.workflow_run.conclusion == 'success'
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
