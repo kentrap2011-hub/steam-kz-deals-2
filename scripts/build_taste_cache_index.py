@@ -13,7 +13,7 @@ from taste_cache_common import (
 )
 
 SOURCE = Path('data/cache/taste_fit.json')
-OUT = Path('data/cache/taste_fit.index.json')
+OUT = Path('data/cache/taste_fit.entry_index.json')
 
 
 def main():
@@ -117,6 +117,7 @@ def main():
 
     print(json.dumps({
         'status': 'complete',
+        'output': str(OUT),
         'source_cache_schema': schema,
         'entry_count': len(compact),
         'profile_generation_count': len(profile_counts),
