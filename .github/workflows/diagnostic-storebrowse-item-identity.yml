@@ -1,0 +1,64 @@
+name: Diagnostic StoreBrowse item identity
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-storebrowse-item-identity.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compare requested ID with StoreBrowse identity fields
+        run: |
+          python - <<'PY'
+          import json, urllib.parse, urllib.request
+
+          ids = [901735, 40960]
+          payload = {
+              'ids': [{'appid': appid} for appid in ids],
+              'context': {'language': 'english', 'country_code': 'KZ', 'steam_realm': 1},
+              'data_request': {
+                  'include_all_purchase_options': True,
+                  'include_basic_info': True,
+                  'include_included_items': True,
+              },
+          }
+          url = 'https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json=' + urllib.parse.quote(json.dumps(payload, separators=(',', ':')))
+          req = urllib.request.Request(url, headers={'User-Agent': 'steam-kz-deals/identity-diagnostic', 'Accept': 'application/json'})
+          with urllib.request.urlopen(req, timeout=25) as response:
+              data = json.loads(response.read().decode('utf-8'))
+          items = (data.get('response') or {}).get('store_items') or []
+          print('requested_count=', len(ids))
+          print('returned_count=', len(items))
+          for requested, item in zip(ids, items):
+              print(json.dumps({
+                  'requested_appid': requested,
+                  'item_type': item.get('item_type'),
+                  'id': item.get('id'),
+                  'appid': item.get('appid'),
+                  'name': item.get('name'),
+                  'store_url_path': item.get('store_url_path'),
+                  'included_appids': item.get('included_appids'),
+                  'purchase_options': [
+                      {
+                          'packageid': option.get('packageid'),
+                          'name': option.get('purchase_option_name'),
+                          'discount_pct': option.get('discount_pct'),
+                          'final_price_in_cents': option.get('final_price_in_cents'),
+                      }
+                      for option in (item.get('purchase_options') or [])
+                  ],
+              }, ensure_ascii=False, sort_keys=True))
+          if len(items) != len(ids):
+              raise SystemExit('cardinality mismatch')
+          PY
