@@ -1,5 +1,5 @@
 name: Build pre-AI deterministic payload
-# production trigger after consumer binding fix
+# atomic pre-AI chain includes per-entry taste index
 
 on:
   workflow_dispatch:
@@ -16,11 +16,16 @@ on:
       - "config/deal_quality_contract.json"
       - "config/mailing_policy.json"
       - "config/taste_fingerprint_contract.json"
+      - "config/taste_cache_entry_contract.json"
+      - "config/taste_ledger_contract.json"
       - "data/cache/steamdb_history.json"
       - "data/cache/taste_fit.json"
+      - "data/cache/taste_fit.entry_index.json"
       - "data/cache/taste_fit.index.json"
       - "data/cache/taste_fit.validation.json"
       - "data/cache/taste_fit.ledger_validation.json"
+      - "scripts/taste_cache_common.py"
+      - "scripts/build_taste_cache_index.py"
       - "scripts/build_pre_ai_store_snapshot.py"
       - "scripts/build_pre_ai_fx_snapshot.py"
       - "scripts/build_pre_ai_content_rules.py"
@@ -56,6 +61,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Build per-entry taste cache index
+        run: python scripts/build_taste_cache_index.py
+
       - name: Build current Store snapshot and content metadata
         run: python scripts/build_pre_ai_store_snapshot.py
 
@@ -85,6 +93,7 @@ jobs:
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
           git add \
+            data/cache/taste_fit.entry_index.json \
             data/production/pre_ai/store_snapshot.json \
             data/production/pre_ai/content_metadata.json \
             data/production/pre_ai/fx_snapshot.json \
