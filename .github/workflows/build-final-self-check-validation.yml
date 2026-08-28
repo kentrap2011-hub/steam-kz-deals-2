@@ -1,0 +1,57 @@
+name: Build compact final self-check validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "config/mailing_policy.json"
+      - "config/final_self_check_contract.json"
+      - "config/freebies_upcoming_contract.json"
+      - "data/cache/feed_ingest.validation.json"
+      - "data/cache/taste_fit.index.json"
+      - "data/cache/taste_fit.validation.json"
+      - "data/cache/taste_fit.ledger_validation.json"
+      - "data/cache/taste_fit.checkpoint_validation.json"
+      - "data/cache/content_eligibility.validation.json"
+      - "data/cache/offer_family.validation.json"
+      - "data/cache/store_state.validation.json"
+      - "data/cache/steamdb_cache.validation.json"
+      - "data/cache/deal_quality.validation.json"
+      - "scripts/build_final_self_check_validation.py"
+      - ".github/workflows/build-final-self-check-validation.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: compact-final-self-check-validation
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Build mechanical final self-check proof
+        run: python scripts/build_final_self_check_validation.py
+
+      - name: Commit compact validation artifact
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/final_self_check.validation.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Refresh compact final self-check validation"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then git rebase --abort || true; exit 1; fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*3))
+          done
+          exit 1
