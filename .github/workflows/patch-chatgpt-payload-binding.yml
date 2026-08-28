@@ -1,0 +1,50 @@
+name: One-shot ChatGPT payload binding fix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/patch-chatgpt-payload-binding.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Patch only consumer binding path
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/build_pre_ai_chatgpt_payload.py')
+          text = p.read_text(encoding='utf-8')
+          old = "taste_doc['cache_binding']['current_taste_model_version']"
+          new = "taste_doc['current_binding']['taste_model_version']"
+          count = text.count(old)
+          if count != 1:
+              raise SystemExit(f'Expected exactly one old binding reference, found {count}')
+          p.write_text(text.replace(old, new), encoding='utf-8')
+          print('PATCH_BINDING_REFERENCE=PASS')
+          PY
+      - name: Targeted retest taste projection plus consumer bundle
+        run: |
+          python scripts/build_pre_ai_taste_projection.py
+          python scripts/build_pre_ai_chatgpt_payload.py
+      - name: Commit source fix only
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add scripts/build_pre_ai_chatgpt_payload.py
+          git diff --cached --check
+          git commit -m "Fix ChatGPT payload taste binding"
+          git push origin HEAD:main
