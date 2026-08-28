@@ -1,0 +1,31 @@
+{
+  "contract": "STEAMDB-CACHE-CLASSIFICATION-V1",
+  "version": "1.0",
+  "status": "implementation_only",
+  "purpose": "Mechanically classify SteamDB history cache coverage for the final stage-13 primary purchase variants before any new SteamDB lookup.",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "never_overrides_canonical_policy": true,
+    "steamdb_is_history_only_not_discovery": true,
+    "no_external_lookup_in_stage_15": true
+  },
+  "classification": {
+    "legacy_schema_1_positive_historical_min_kzt": "confirmed_min",
+    "legacy_schema_1_zero_historical_min_kzt": "previously_free",
+    "confirmed_min_reuse": "cache hit only when current price is not below cached nonzero minimum",
+    "previously_free_reuse": "cache hit for zero history without requery solely because of zero",
+    "schema_2_unavailable_exact_history": "negative_cache_hit only while checked_at_utc plus canonical TTL has not expired",
+    "missing_invalid_expired_or_current_below_cached_min": "true_lookup_miss"
+  },
+  "diagnostic_stage_15": {
+    "producer_workflow": ".github/workflows/build-steamdb-cache-classification.yml",
+    "output": "data/cache/steamdb_cache.validation.json",
+    "pass_requires": [
+      "actual len(entries) is used",
+      "every current primary key is classified exactly once",
+      "confirmed_min, previously_free, valid negative-cache hits, and true lookup misses are counted separately",
+      "zero SteamDB lookups occur in this stage",
+      "classification count equals stage 13 family count"
+    ]
+  }
+}
