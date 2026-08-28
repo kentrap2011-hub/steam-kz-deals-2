@@ -1,0 +1,36 @@
+{
+  "contract": "FINAL-SELF-CHECK-FAST-PATH",
+  "version": "1.0",
+  "status": "implementation_only",
+  "purpose": "Mechanically pre-prove stable canonical final_self_check assertions from content-addressed validation artifacts so diagnostic stage 20 only has to verify current runtime-only assertions.",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "never_overrides_canonical_policy": true,
+    "diagnostic_stage": "20_final_self_check",
+    "stage_limit_seconds": 60,
+    "fail_closed": true
+  },
+  "artifact_path": "data/cache/final_self_check.validation.json",
+  "mechanical_inputs": [
+    "data/cache/feed_ingest.validation.json",
+    "data/cache/taste_fit.index.json",
+    "data/cache/taste_fit.validation.json",
+    "data/cache/taste_fit.ledger_validation.json",
+    "data/cache/taste_fit.checkpoint_validation.json",
+    "data/cache/content_eligibility.validation.json",
+    "data/cache/offer_family.validation.json",
+    "data/cache/store_state.validation.json",
+    "data/cache/steamdb_cache.validation.json",
+    "data/cache/deal_quality.validation.json",
+    "config/freebies_upcoming_contract.json"
+  ],
+  "runtime_only_assertions": [
+    "current_profile_blob_sha_equals_mechanical_profile_binding",
+    "all_diagnostic_stages_01_through_19_passed_in_this_full_run",
+    "stage19_external_lookup_registry_has_no_duplicate_key",
+    "stage19_render_contains_only_included_paid_rows_and_personally_included_freebies",
+    "stage19_upcoming_count_is_at_most_one",
+    "stage19_ran_only_after_successful_main_ingest"
+  ],
+  "pass_semantics": "Stage 20 passes only when this artifact is current and complete and every runtime-only assertion is independently true in the current full diagnostic run."
+}
