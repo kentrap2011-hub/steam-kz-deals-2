@@ -1,32 +1,17 @@
-name: Build pre-AI content rules
+name: Build pre-AI content rules (manual)
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows:
-      - "Build pre-AI Store snapshot"
-    types:
-      - completed
-  push:
-    branches: [main]
-    paths:
-      - "config/content_eligibility_contract.json"
-      - "data/production/pre_ai/content_metadata.json"
-      - "scripts/build_pre_ai_content_rules.py"
-      - ".github/workflows/build-pre-ai-content-rules.yml"
 
 permissions:
   contents: write
 
 concurrency:
-  group: pre-ai-content-rules
+  group: pre-ai-content-rules-manual
   cancel-in-progress: true
 
 jobs:
   build:
-    if: >
-      github.event_name != 'workflow_run' ||
-      github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
