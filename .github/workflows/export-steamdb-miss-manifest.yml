@@ -1,0 +1,47 @@
+name: Export SteamDB miss manifest
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "data/cache/steamdb_cache.validation.json"
+      - ".github/workflows/export-steamdb-miss-manifest.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Export compact manifest
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          src=json.loads(Path('data/cache/steamdb_cache.validation.json').read_text(encoding='utf-8'))
+          misses=src.get('true_lookup_misses') or []
+          out={
+            'schema_version':1,
+            'source_validation_blob_sha':subprocess.check_output(['git','rev-parse','HEAD:data/cache/steamdb_cache.validation.json'],text=True).strip(),
+            'count':len(misses),
+            'misses':misses
+          }
+          Path('data/cache/steamdb_miss_manifest.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print('misses',len(misses))
+          PY
+      - name: Commit manifest
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/steamdb_miss_manifest.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Refresh SteamDB miss manifest"
+          git pull --rebase origin main
+          git push origin HEAD:main
