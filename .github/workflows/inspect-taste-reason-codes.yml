@@ -1,0 +1,83 @@
+name: Inspect taste reason codes
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/inspect-taste-reason-codes.yml"
+      - "data/cache/taste_fit.index.json"
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Build reason-code inventory
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter, defaultdict
+          from pathlib import Path
+
+          src = Path('data/cache/taste_fit.index.json')
+          out = Path('data/cache/taste_reason_codes.report.json')
+          data = json.loads(src.read_text(encoding='utf-8'))
+          entries = data['entries']
+
+          reason_counts = Counter()
+          verdict_reason_counts = defaultdict(Counter)
+          fit_reason_counts = defaultdict(Counter)
+          invalid_shapes = 0
+
+          for key, value in entries.items():
+              if not isinstance(value, list) or len(value) != 5:
+                  invalid_shapes += 1
+                  continue
+              appid, fingerprint, verdict, fit_level, reason_code = value
+              reason_counts[reason_code] += 1
+              verdict_reason_counts[verdict][reason_code] += 1
+              fit_reason_counts[fit_level][reason_code] += 1
+
+          report = {
+              'schema_version': 1,
+              'source_index_blob_sha': __import__('subprocess').check_output(
+                  ['git','rev-parse','HEAD:data/cache/taste_fit.index.json'], text=True
+              ).strip(),
+              'entry_count': len(entries),
+              'invalid_entry_shapes': invalid_shapes,
+              'distinct_reason_codes': len(reason_counts),
+              'reason_code_counts': dict(sorted(reason_counts.items())),
+              'by_verdict': {
+                  verdict: dict(sorted(counter.items()))
+                  for verdict, counter in sorted(verdict_reason_counts.items())
+              },
+              'by_fit_level': {
+                  fit: dict(sorted(counter.items()))
+                  for fit, counter in sorted(fit_reason_counts.items())
+              },
+          }
+          out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(report, ensure_ascii=False, indent=2))
+          PY
+
+      - name: Commit report
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/taste_reason_codes.report.json
+          if git diff --cached --quiet; then
+            echo "Reason-code report already current"
+            exit 0
+          fi
+          git commit -m "Refresh taste reason-code inventory"
+          git pull --rebase origin main
+          git push origin HEAD:main
