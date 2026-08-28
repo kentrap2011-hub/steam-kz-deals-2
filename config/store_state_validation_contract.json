@@ -1,0 +1,42 @@
+{
+  "contract": "STORE-STATE-RESOLUTION-V1",
+  "version": "1.0",
+  "status": "implementation_only",
+  "purpose": "Validate the reusable Store state cache against the exact current production snapshot and resolve current price/discount for every content-eligible family member without unnecessary live Store calls.",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "never_overrides_canonical_policy": true,
+    "fresh_production_snapshot_remains_primary_current_source": true,
+    "store_cache_is_not_discovery_source": true
+  },
+  "cache_validation": {
+    "path": "data/cache/store_state.json",
+    "must_match_current_mailing_source_updated_at": true,
+    "must_match_current_source_item_count": true,
+    "entry_count_must_equal_actual_len_entries": true,
+    "every_used_entry_must_match_current_mailing_price_and_discount": true
+  },
+  "live_store": {
+    "default_calls": 0,
+    "allowed_only_on_canonical_triggers": true,
+    "triggers_evaluated_here": [
+      "current_source_conflict",
+      "materially_competitive_bundle_or_edition_unresolved_locally",
+      "sale_end_date_material_to_verdict_and_not_cached"
+    ],
+    "final_promo_control_pass": "may be performed at final promotion verification if materially needed; it is not a reason to repeat every fresh snapshot value in stage 14"
+  },
+  "diagnostic_stage_14": {
+    "producer_workflow": ".github/workflows/build-store-state-validation.yml",
+    "output": "data/cache/store_state.validation.json",
+    "pass_requires": [
+      "Store cache structure is valid",
+      "Store cache exactly matches the chosen fresh snapshot identity",
+      "every stage 13 family member has a cache hit",
+      "every primary has current active discounted state",
+      "price/discount conflicts versus the validated mailing snapshot are zero",
+      "unresolved local family competition is zero",
+      "live Store calls are zero unless a canonical trigger is actually present"
+    ]
+  }
+}
