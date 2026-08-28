@@ -1,5 +1,4 @@
-# trigger existing one-shot workflow
-name: One-shot patch Russian review recall policy
+name: One-shot extract collector and harden Russian review policy
 
 on:
   push:
@@ -19,78 +18,91 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Patch collector and canonical QA
+      - name: Extract collector and apply one policy fix
         run: |
           python - <<'PY'
           import json
+          import textwrap
           from pathlib import Path
 
-          workflow = Path('.github/workflows/steam-test.yml')
-          text = workflow.read_text(encoding='utf-8')
+          workflow_path = Path('.github/workflows/steam-test.yml')
+          workflow = workflow_path.read_text(encoding='utf-8')
+          start_marker = "          cat > /tmp/steam_production.py <<'PY'\n"
+          end_marker = "\n          PY\n\n          python /tmp/steam_production.py"
+          if start_marker not in workflow or end_marker not in workflow:
+              raise SystemExit('collector extraction markers not found')
+          embedded = workflow.split(start_marker, 1)[1].split(end_marker, 1)[0]
+          collector = textwrap.dedent(embedded)
 
-          old = '''              russian_rating_ok = (\n                  russian_positive is not None\n                  and russian_count >= russian_minimum_count\n                  and russian_positive >= minimum_positive\n              )\n\n              return global_rating_ok or russian_rating_ok\n'''
-          new = '''              # Steam показывает языковой рейтинг целым процентом.\n              # Сравниваем русский рейтинг в тех же display-семантиках,\n              # чтобы 77.5..77.99% не превращались в false negative,\n              # когда Steam показывает пользователю 78%.\n              russian_display_positive = (\n                  int(russian_positive + 0.5)\n                  if russian_positive is not None\n                  else None\n              )\n\n              russian_rating_ok = (\n                  russian_display_positive is not None\n                  and russian_count >= russian_minimum_count\n                  and russian_display_positive >= minimum_positive\n              )\n\n              return global_rating_ok or russian_rating_ok\n\n\n          def assert_review_selection_contract():\n              # Regression guard: мировой объём остаётся базовым,\n              # а качество может подтвердить мировой ИЛИ русский рейтинг.\n              # Для русского источника действует cap 500 по числу отзывов.\n              russian_rescue = {\n                  "global_review_positive": 72.6,\n                  "global_review_count": 4657,\n                  "russian_review_positive": 77.6,\n                  "russian_review_count": 574,\n              }\n              if not review_passes(russian_rescue, 1500, 78):\n                  raise AssertionError(\n                      "Russian review rescue regression: expected PASS"\n                  )\n\n              too_few_russian = dict(russian_rescue)\n              too_few_russian["russian_review_count"] = 499\n              if review_passes(too_few_russian, 1500, 78):\n                  raise AssertionError(\n                      "Russian count cap regression: expected FAIL"\n                  )\n\n              global_rescue = {\n                  "global_review_positive": 80.0,\n                  "global_review_count": 5000,\n                  "russian_review_positive": None,\n                  "russian_review_count": 0,\n              }\n              if not review_passes(global_rescue, 1500, 78):\n                  raise AssertionError(\n                      "Global review path regression: expected PASS"\n                  )\n\n              global_count_too_low = {\n                  "global_review_positive": 70.0,\n                  "global_review_count": 1499,\n                  "russian_review_positive": 99.0,\n                  "russian_review_count": 1000,\n              }\n              if review_passes(global_count_too_low, 1500, 78):\n                  raise AssertionError(\n                      "Global count baseline regression: expected FAIL"\n                  )\n\n\n          assert_review_selection_contract()\n'''
-          if old not in text:
+          old = '''    russian_rating_ok = (\n        russian_positive is not None\n        and russian_count >= russian_minimum_count\n        and russian_positive >= minimum_positive\n    )\n\n    return global_rating_ok or russian_rating_ok\n'''
+          new = '''    # Steam displays language-specific review percentages as whole numbers.\n    # Compare Russian quality using the same displayed-percent semantics so a\n    # 77.5..77.99% API value is treated as the 78% users actually see.\n    russian_display_positive = (\n        int(russian_positive + 0.5)\n        if russian_positive is not None\n        else None\n    )\n\n    russian_rating_ok = (\n        russian_display_positive is not None\n        and russian_count >= russian_minimum_count\n        and russian_display_positive >= minimum_positive\n    )\n\n    return global_rating_ok or russian_rating_ok\n\n\ndef assert_review_selection_contract():\n    # Regression guard for the canonical rule:\n    # global review count is the baseline; quality can pass by global OR\n    # Russian rating; Russian own sample requirement is capped at 500.\n    russian_rescue = {\n        "global_review_positive": 72.6,\n        "global_review_count": 4657,\n        "russian_review_positive": 77.6,\n        "russian_review_count": 574,\n    }\n    if not review_passes(russian_rescue, 1500, 78):\n        raise AssertionError("Russian review rescue regression: expected PASS")\n\n    too_few_russian = dict(russian_rescue)\n    too_few_russian["russian_review_count"] = 499\n    if review_passes(too_few_russian, 1500, 78):\n        raise AssertionError("Russian count cap regression: expected FAIL")\n\n    global_rescue = {\n        "global_review_positive": 80.0,\n        "global_review_count": 5000,\n        "russian_review_positive": None,\n        "russian_review_count": 0,\n    }\n    if not review_passes(global_rescue, 1500, 78):\n        raise AssertionError("Global review path regression: expected PASS")\n\n    global_count_too_low = {\n        "global_review_positive": 70.0,\n        "global_review_count": 1499,\n        "russian_review_positive": 99.0,\n        "russian_review_count": 1000,\n    }\n    if review_passes(global_count_too_low, 1500, 78):\n        raise AssertionError("Global count baseline regression: expected FAIL")\n\n\nassert_review_selection_contract()\n'''
+          if old not in collector:
               raise SystemExit('review_passes anchor not found')
-          text = text.replace(old, new, 1)
+          collector = collector.replace(old, new, 1)
 
-          old_meta = '''              "russian_review_count_cap":\n                  RUSSIAN_REVIEW_COUNT_CAP,\n              "global_review_language":\n                  "all",\n'''
-          new_meta = '''              "russian_review_count_cap":\n                  RUSSIAN_REVIEW_COUNT_CAP,\n              "russian_rating_comparison":\n                  "steam_display_whole_percent",\n              "review_policy_regression_guard":\n                  True,\n              "global_review_language":\n                  "all",\n'''
-          if text.count(old_meta) != 1:
-              raise SystemExit(f'manifest metadata anchor count={text.count(old_meta)}')
-          text = text.replace(old_meta, new_meta, 1)
+          old_meta = '''        "russian_review_count_cap":\n            RUSSIAN_REVIEW_COUNT_CAP,\n        "global_review_language":\n            "all",\n'''
+          new_meta = '''        "russian_review_count_cap":\n            RUSSIAN_REVIEW_COUNT_CAP,\n        "russian_rating_comparison":\n            "steam_display_whole_percent",\n        "review_policy_regression_guard":\n            True,\n        "global_review_language":\n            "all",\n'''
+          if collector.count(old_meta) != 1:
+              raise SystemExit(f'manifest metadata anchor count={collector.count(old_meta)}')
+          collector = collector.replace(old_meta, new_meta, 1)
 
-          old_index = '''              "russian_review_count_cap":\n                  RUSSIAN_REVIEW_COUNT_CAP,\n              "review_fields": {\n'''
-          new_index = '''              "russian_review_count_cap":\n                  RUSSIAN_REVIEW_COUNT_CAP,\n              "russian_rating_comparison":\n                  "steam_display_whole_percent",\n              "review_policy_regression_guard":\n                  True,\n              "review_fields": {\n'''
-          if text.count(old_index) != 1:
-              raise SystemExit(f'index metadata anchor count={text.count(old_index)}')
-          text = text.replace(old_index, new_index, 1)
-          workflow.write_text(text, encoding='utf-8')
+          old_index = '''        "russian_review_count_cap":\n            RUSSIAN_REVIEW_COUNT_CAP,\n        "review_fields": {\n'''
+          new_index = '''        "russian_review_count_cap":\n            RUSSIAN_REVIEW_COUNT_CAP,\n        "russian_rating_comparison":\n            "steam_display_whole_percent",\n        "review_policy_regression_guard":\n            True,\n        "review_fields": {\n'''
+          if collector.count(old_index) != 1:
+              raise SystemExit(f'index metadata anchor count={collector.count(old_index)}')
+          collector = collector.replace(old_index, new_index, 1)
+
+          scripts = Path('scripts')
+          scripts.mkdir(exist_ok=True)
+          Path('scripts/steam_production.py').write_text(collector, encoding='utf-8')
 
           policy_path = Path('config/mailing_policy.json')
           policy = json.loads(policy_path.read_text(encoding='utf-8'))
+          policy['version'] = '1.11'
           qa = policy['ingest_qa']
           qa['required_review_selection_rule'] = 'global_count_and_global_or_russian_rating'
           qa['required_review_count_basis'] = 'global'
           qa['required_russian_review_count_cap'] = 500
           qa['required_russian_rating_comparison'] = 'steam_display_whole_percent'
           qa['require_review_policy_regression_guard'] = True
-          policy_path.write_text(
-              json.dumps(policy, ensure_ascii=False, indent=2) + '\n',
-              encoding='utf-8',
-          )
+          policy_path.write_text(json.dumps(policy, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
           validation = Path('scripts/build_feed_ingest_validation.py')
           vtext = validation.read_text(encoding='utf-8')
           anchor = "    'mailing_has_no_header': mailing_index.get('has_header') is False,\n"
-          insert = anchor + "    'review_selection_rule': manifest.get('review_selection_rule') == qa['required_review_selection_rule'] and source_index.get('review_selection_rule') == qa['required_review_selection_rule'],\n    'review_count_basis': manifest.get('review_count_basis') == qa['required_review_count_basis'] and source_index.get('review_count_basis') == qa['required_review_count_basis'],\n    'russian_review_count_cap': int(manifest.get('russian_review_count_cap') or -1) == int(qa['required_russian_review_count_cap']) and int(source_index.get('russian_review_count_cap') or -1) == int(qa['required_russian_review_count_cap']),\n    'russian_rating_comparison': manifest.get('russian_rating_comparison') == qa['required_russian_rating_comparison'] and source_index.get('russian_rating_comparison') == qa['required_russian_rating_comparison'],\n    'review_policy_regression_guard': manifest.get('review_policy_regression_guard') is qa['require_review_policy_regression_guard'] and source_index.get('review_policy_regression_guard') is qa['require_review_policy_regression_guard'],\n"
+          additions = (
+              "    'review_selection_rule': manifest.get('review_selection_rule') == qa['required_review_selection_rule'] and source_index.get('review_selection_rule') == qa['required_review_selection_rule'],\n"
+              "    'review_count_basis': manifest.get('review_count_basis') == qa['required_review_count_basis'] and source_index.get('review_count_basis') == qa['required_review_count_basis'],\n"
+              "    'russian_review_count_cap': int(manifest.get('russian_review_count_cap') or -1) == int(qa['required_russian_review_count_cap']) and int(source_index.get('russian_review_count_cap') or -1) == int(qa['required_russian_review_count_cap']),\n"
+              "    'russian_rating_comparison': manifest.get('russian_rating_comparison') == qa['required_russian_rating_comparison'] and source_index.get('russian_rating_comparison') == qa['required_russian_rating_comparison'],\n"
+              "    'review_policy_regression_guard': manifest.get('review_policy_regression_guard') is qa['require_review_policy_regression_guard'] and source_index.get('review_policy_regression_guard') is qa['require_review_policy_regression_guard'],\n"
+          )
           if anchor not in vtext:
               raise SystemExit('feed QA anchor not found')
-          vtext = vtext.replace(anchor, insert, 1)
+          vtext = vtext.replace(anchor, anchor + additions, 1)
           validation.write_text(vtext, encoding='utf-8')
 
-          # Static sanity check of the intended threshold semantics.
-          def review_passes(global_positive, global_count, russian_positive, russian_count, minimum_count, minimum_positive):
-              if global_count < minimum_count:
-                  return False
-              global_ok = global_positive is not None and global_positive >= minimum_positive
-              russian_min = min(minimum_count, 500)
-              russian_display = int(russian_positive + 0.5) if russian_positive is not None else None
-              russian_ok = russian_display is not None and russian_count >= russian_min and russian_display >= minimum_positive
-              return global_ok or russian_ok
+          compile(collector, 'scripts/steam_production.py', 'exec')
 
-          assert review_passes(72.6, 4657, 77.6, 574, 1500, 78)
-          assert not review_passes(72.6, 4657, 77.6, 499, 1500, 78)
-          assert not review_passes(70.0, 1499, 99.0, 1000, 1500, 78)
-          print('Russian review recall policy patch sanity checks: PASS')
+          def check(gp, gc, rp, rc, mc, mp):
+              if gc < mc:
+                  return False
+              global_ok = gp is not None and gp >= mp
+              russian_min = min(mc, 500)
+              display = int(rp + 0.5) if rp is not None else None
+              russian_ok = display is not None and rc >= russian_min and display >= mp
+              return global_ok or russian_ok
+          assert check(72.6, 4657, 77.6, 574, 1500, 78)
+          assert not check(72.6, 4657, 77.6, 499, 1500, 78)
+          assert not check(70.0, 1499, 99.0, 1000, 1500, 78)
+          print('collector extraction + Russian review policy checks: PASS')
           PY
 
-      - name: Remove one-shot workflow and commit patch
+      - name: Commit non-workflow patch files
         run: |
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git rm .github/workflows/patch-russian-review-policy.yml
-          git add .github/workflows/steam-test.yml config/mailing_policy.json scripts/build_feed_ingest_validation.py
+          git add scripts/steam_production.py config/mailing_policy.json scripts/build_feed_ingest_validation.py
           git commit -m "Harden Russian review recall policy"
           for attempt in 1 2 3; do
             git fetch origin main:refs/remotes/origin/main
