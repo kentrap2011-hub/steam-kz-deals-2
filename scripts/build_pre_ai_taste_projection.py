@@ -17,7 +17,7 @@ FAMILIES = Path('data/production/pre_ai/family_graph.json')
 MAILING = Path('data/production/mailing/index.json')
 POLICY = Path('config/mailing_policy.json')
 FINGERPRINT_CONTRACT = Path('config/taste_fingerprint_contract.json')
-TASTE_INDEX = Path('data/cache/taste_fit.index.json')
+TASTE_INDEX = Path('data/cache/taste_fit.entry_index.json')
 TASTE_CACHE = Path('data/cache/taste_fit.json')
 OUT = Path('data/production/pre_ai/taste_projection.json')
 
