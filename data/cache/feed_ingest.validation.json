@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "purpose": "compact_runtime_proof_of_canonical_feed_ingest_qa",
+  "status": "complete",
+  "contract_version": "1.1",
+  "bindings": {
+    "policy_blob_sha": "bbadfa1739a268dac7df0a1b6a714d1c9b002f0f",
+    "feed_integrity_contract_blob_sha": "dbfb3cff47a8e0ca6f26203d8e1efe9ff58684f7",
+    "manifest_blob_sha": "35eff25f2f1d18e789b080786240a2fc697a736b",
+    "source_index_blob_sha": "55cbe6ee85fbf982eb358f2340991c2088022631",
+    "mailing_index_blob_sha": "ab6209fbf1023166eb5ab04cbf19de94a0917dad",
+    "shortlist_tree_sha": "6a6effab7f352d878f56571c0059cd55c47b8f5d",
+    "mailing_tree_sha": "800b674420cfca8dc33ebe302e0c67f0668c7576"
+  },
+  "country_code": "kz",
+  "item_count": 583,
+  "source_item_count": 583,
+  "source_chunk_count": 12,
+  "mailing_chunk_count": 4,
+  "source_rows_verified": 583,
+  "mailing_rows_verified": 583,
+  "manifest_complete": true,
+  "manifest_coverage_ratio": 1.0,
+  "manifest_needs_tuning": false,
+  "source_complete": true,
+  "source_coverage_ratio": 1.0,
+  "needs_tuning": false,
+  "source_to_mailing_row_projection_lossless": true,
+  "all_source_rows_column_validated": true,
+  "canonical_qa_checks": {
+    "manifest_complete": true,
+    "manifest_coverage": true,
+    "manifest_needs_tuning": true,
+    "source_complete": true,
+    "source_coverage": true,
+    "source_needs_tuning": true,
+    "country_code_kz": true,
+    "mailing_has_no_header": true,
+    "optimized_item_count_matches_source": true,
+    "optimized_source_count_matches_source": true,
+    "optimized_updated_at_matches_source": true,
+    "optimized_reports_all_source_chunks": true
+  },
+  "attestation_checks": {
+    "source_chunk_count_verified": true,
+    "mailing_chunk_count_verified": true,
+    "source_rows_verified": true,
+    "mailing_rows_verified": true,
+    "projection_lossless": true,
+    "source_columns_validated": true
+  }
+}
