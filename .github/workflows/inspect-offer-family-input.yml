@@ -1,0 +1,112 @@
+name: Inspect offer family relationships
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/inspect-offer-family-input.yml"
+      - "data/cache/content_eligibility.validation.json"
+      - "data/cache/content_metadata.json"
+      - "data/production/mailing/**"
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Build exact relationship inventory
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          import subprocess
+          import unicodedata
+          from collections import defaultdict
+          from pathlib import Path
+
+          elig = json.loads(Path('data/cache/content_eligibility.validation.json').read_text(encoding='utf-8'))
+          meta = json.loads(Path('data/cache/content_metadata.json').read_text(encoding='utf-8'))
+          mailing = json.loads(Path('data/production/mailing/index.json').read_text(encoding='utf-8'))
+          if elig.get('status') != 'complete':
+              raise SystemExit('content eligibility is not complete')
+
+          cols = mailing['columns']; ci={n:i for i,n in enumerate(cols)}
+          feed={}
+          for n in range(1,int(mailing['chunk_count'])+1):
+              p=Path(mailing['chunk_pattern'].replace('NNN',f'{n:03d}'))
+              for line in p.read_text(encoding='utf-8').splitlines():
+                  if not line.strip(): continue
+                  c=line.split('\t'); key=c[ci['key']]
+                  feed[key]={
+                      'key':key,'appid':c[ci['appid']],'title':c[ci['title']],
+                      'discount_percent':int(float(c[ci['discount_percent']])),
+                      'final_kzt':float(c[ci['final_kzt']]),
+                  }
+
+          eligible_keys={x['key'] for x in elig['eligible']}
+          app_key_by_appid={feed[k]['appid']:k for k in eligible_keys if k.startswith('App_') and k in feed}
+
+          suffix_re=re.compile(r'\s*[-:–—]?\s*(game of the year|goty|definitive|ultimate|complete|gold|deluxe|special)\s+(edition|upgrade|pack)?\s*$',re.I)
+          edition_word_re=re.compile(r'\b(game of the year|goty|definitive edition|ultimate edition|complete edition|gold edition|deluxe edition|special edition)\b',re.I)
+          def norm(title):
+              x=unicodedata.normalize('NFKC',title or '').lower()
+              x=x.replace('™','').replace('®','')
+              x=edition_word_re.sub('',x)
+              x=suffix_re.sub('',x)
+              x=re.sub(r'[^a-z0-9]+',' ',x)
+              return ' '.join(x.split())
+
+          rows=[]
+          exact_links=[]
+          norm_groups=defaultdict(list)
+          for key in sorted(eligible_keys):
+              f=feed[key]; m=meta['entries'][key]
+              r={**f,
+                 'entity_kind':m.get('entity_kind'),
+                 'app_type':m.get('app_type'),
+                 'store_name':m.get('store_name'),
+                 'normalized_base_title':norm(m.get('store_name') or f['title']),
+                 'fullgame_appid':m.get('fullgame_appid'),
+                 'fullgame_name':m.get('fullgame_name'),
+                 'package_apps':m.get('package_apps') or []}
+              rows.append(r); norm_groups[r['normalized_base_title']].append(key)
+              if m.get('app_type')=='dlc' and m.get('fullgame_appid'):
+                  exact_links.append({'type':'dlc_to_base','child_key':key,'base_appid':str(m['fullgame_appid']),'base_key':app_key_by_appid.get(str(m['fullgame_appid'])),'base_name':m.get('fullgame_name')})
+              if m.get('entity_kind')=='sub':
+                  package_appids=[str(a.get('appid')) for a in (m.get('package_apps') or []) if isinstance(a,dict) and a.get('appid') is not None]
+                  exact_links.append({'type':'sub_package','sub_key':key,'representative_appid':f['appid'],'representative_key':app_key_by_appid.get(f['appid']),'package_appids':package_appids,'included_component_keys':[app_key_by_appid[a] for a in package_appids if a in app_key_by_appid]})
+
+          report={
+              'schema_version':1,
+              'bindings':{
+                  'content_eligibility_blob_sha':subprocess.check_output(['git','rev-parse','HEAD:data/cache/content_eligibility.validation.json'],text=True).strip(),
+                  'content_metadata_blob_sha':subprocess.check_output(['git','rev-parse','HEAD:data/cache/content_metadata.json'],text=True).strip(),
+                  'mailing_tree_sha':subprocess.check_output(['git','rev-parse','HEAD:data/production/mailing'],text=True).strip(),
+              },
+              'eligible_count':len(rows),
+              'exact_links':exact_links,
+              'normalized_title_collisions':{k:v for k,v in sorted(norm_groups.items()) if k and len(v)>1},
+              'rows':rows,
+          }
+          Path('data/cache/offer_family_input.report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print(json.dumps({'eligible':len(rows),'exact_links':exact_links,'title_collisions':report['normalized_title_collisions']},ensure_ascii=False,indent=2))
+          PY
+
+      - name: Commit report
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/offer_family_input.report.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Refresh offer family input report"
+          git pull --rebase origin main
+          git push origin HEAD:main
