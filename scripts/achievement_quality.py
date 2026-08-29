@@ -94,8 +94,8 @@ STORY_PATTERNS = [
     r'\b(?:complete|finish|clear) (?:the )?(?:prologue|epilogue|chapter|act|episode|mission|level|stage|game|campaign)\b',
     r'\b(?:complete|finish|clear) (?:chapter|act|episode|mission|level|stage)\s*[0-9ivx]+\b',
     r'\b(?:beat|finish|complete) the game\b',
-    r'\bdefeat (?:the )?[a-z0-9][a-z0-9 '\-:]+$',
-    r'\bbeat (?:the )?[a-z0-9][a-z0-9 '\-:]+$',
+    r"\bdefeat (?:the )?[a-z0-9][a-z0-9 '\-:]+$",
+    r"\bbeat (?:the )?[a-z0-9][a-z0-9 '\-:]+$",
     r'\breach (?:the )?(?:ending|finale|credits)\b',
 ]
 
