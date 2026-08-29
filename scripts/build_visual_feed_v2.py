@@ -1,4 +1,5 @@
 import json
+import re
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -84,8 +85,11 @@ def offer_from_store(key, store_entries, history_entries, rate):
     }
 
 
+def has_russian_text(value):
+    return bool(value and re.search(r'[А-Яа-яЁё]', str(value)))
+
+
 def storebrowse_media(appids):
-    """Fetch Russian description and screenshots in batches from the same public Steam StoreBrowse service."""
     ids = sorted({str(x) for x in appids if str(x).isdigit()}, key=int)
     result = {}
     for start in range(0, len(ids), 100):
@@ -142,7 +146,7 @@ def storebrowse_media(appids):
             result[appid] = {
                 'screenshots': shots,
                 'header_image': header,
-                'short_description_ru': desc,
+                'short_description_ru': desc if has_russian_text(desc) else None,
             }
     return result
 
@@ -261,10 +265,8 @@ def main():
                 break
         game['screenshots'] = screenshots
         game['header_image'] = header
-        game['summary'] = summary or 'Краткое описание на русском пока недоступно.'
+        game['summary'] = summary or 'Русское краткое описание для этой игры пока не подготовлено.'
 
-    # Only the qualitative bucket and wishlist are approved ranking signals here.
-    # Inside an equal group use a neutral stable title order; never make a lower price look like a stronger recommendation.
     visible.sort(key=lambda x: (
         int(x.get('priority_bucket') or 99),
         -int(bool(x.get('wishlist'))),
