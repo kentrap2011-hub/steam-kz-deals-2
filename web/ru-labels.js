@@ -20,20 +20,19 @@ if(fitNode){
   translateFitLabel();
 }
 
-// Use Steam's own custom scheme. Do not auto-fallback to the browser:
-// a delayed browser fallback can steal focus even when Steam starts opening.
+// Steam Mobile has its own URL scheme on Android. Prefer it there;
+// do not auto-fallback to Chrome because that can mask a successful app launch.
 openSteam=function(steamUrl,webUrl){
   if(!steamUrl&&!webUrl)return;
+  if(/Android/i.test(navigator.userAgent)&&webUrl){
+    location.href=`steammobile://openurl/${webUrl}`;
+    return;
+  }
   if(steamUrl){
     location.href=steamUrl;
     return;
   }
   if(webUrl){
-    const appMatch=webUrl.match(/\/app\/(\d+)/);
-    if(appMatch){
-      location.href=`steam://store/${appMatch[1]}`;
-      return;
-    }
     location.href=`steam://openurl/${webUrl}`;
   }
 };
