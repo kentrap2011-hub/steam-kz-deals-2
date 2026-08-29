@@ -20,24 +20,22 @@ if(fitNode){
   translateFitLabel();
 }
 
-// Chrome on Android: explicitly target the installed Steam package for store URLs.
-// The web page is only a fallback when the app cannot be opened.
+// Use Steam's own custom scheme. Do not auto-fallback to the browser:
+// a delayed browser fallback can steal focus even when Steam starts opening.
 openSteam=function(steamUrl,webUrl){
-  if(!webUrl&&!steamUrl)return;
-  if(/Android/i.test(navigator.userAgent)&&webUrl){
-    try{
-      const u=new URL(webUrl);
-      const hostAndPath=`${u.host}${u.pathname}${u.search}${u.hash}`;
-      const fallback=encodeURIComponent(webUrl);
-      location.href=`intent://${hostAndPath}#Intent;scheme=https;package=com.valvesoftware.android.steam.community;S.browser_fallback_url=${fallback};end`;
-      return;
-    }catch{}
-  }
-  if(webUrl){
-    location.href=`steam://openurl/${webUrl}`;
+  if(!steamUrl&&!webUrl)return;
+  if(steamUrl){
+    location.href=steamUrl;
     return;
   }
-  location.href=steamUrl;
+  if(webUrl){
+    const appMatch=webUrl.match(/\/app\/(\d+)/);
+    if(appMatch){
+      location.href=`steam://store/${appMatch[1]}`;
+      return;
+    }
+    location.href=`steam://openurl/${webUrl}`;
+  }
 };
 
 const titleNode=document.getElementById('title');
