@@ -11,6 +11,8 @@ on:
     paths:
       - "scripts/steam_production.py"
       - "scripts/steam_production_cached.py"
+      - "scripts/production_output_ownership.py"
+      - "scripts/test_production_output_ownership.py"
       - ".github/workflows/steam-test.yml"
 
   schedule:
@@ -44,8 +46,26 @@ jobs:
       - name: Install dependencies
         run: pip install requests beautifulsoup4
 
+      - name: Regression test production output ownership
+        run: python scripts/test_production_output_ownership.py
+
       - name: Collect full Steam KZ catalog and build production shortlist
         run: python scripts/steam_production_cached.py
+
+      - name: Verify collector touched only owned production paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          allowed='^data/production/(manifest\.json|freebies\.tsv|freebies_index\.json|shortlist/)'
+
+          foreign_tracked="$(git diff --name-only -- data/production | grep -Ev "$allowed" || true)"
+          foreign_untracked="$(git ls-files --others --exclude-standard -- data/production | grep -Ev "$allowed" || true)"
+
+          if [[ -n "$foreign_tracked" || -n "$foreign_untracked" ]]; then
+            echo "Steam collector modified production artifacts owned by another stage."
+            printf '%s\n' "$foreign_tracked" "$foreign_untracked"
+            exit 1
+          fi
 
       - name: Commit production feed and review cache
         shell: bash
@@ -53,7 +73,13 @@ jobs:
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
 
-          git add -A data/production/
+          # Stage only the Steam collector's own outputs. Never stage
+          # downstream mailing/pre_ai/daily_ready artifacts from this workflow.
+          git add -A -- \
+            data/production/shortlist \
+            data/production/manifest.json \
+            data/production/freebies.tsv \
+            data/production/freebies_index.json
           git add data/cache/steam_review_http_cache.json
 
           if git diff --cached --quiet; then
