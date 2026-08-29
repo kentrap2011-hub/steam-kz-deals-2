@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.16",
+  "version": "1.17",
   "status": "canonical",
   "purpose": "Personalized daily Steam KZ deal data preparation with stable price-blind taste verdicts, taste-first eligibility, one nightly commercial snapshot, and resumable taste-cache checkpoints.",
   "policy_loading": {
@@ -627,5 +627,24 @@
     "conceptual_weight_deal": 0.4,
     "weak_non_symbolic_deal_within_budget_may_remain_low_priority_or_wait": true,
     "commercial_rules_are_excluded_from_taste_cache_semantics": true
+  },
+  "final_ranking_context": {
+    "wishlist": {
+      "source": "steam_wishlist.json",
+      "role": "strong_bounded_priority_bonus_after_all_eligibility_and_purchase_gates",
+      "apply_only_during_final_sorting": true,
+      "never_used_for_discovery": true,
+      "never_used_as_taste_evidence": true,
+      "never_changes_taste_fit": true,
+      "never_proves_ownership": true,
+      "never_causes_inclusion_by_itself": true,
+      "cannot_rescue_below_moderate_taste": true,
+      "cannot_override_symbolic_discount_exclusion": true,
+      "cannot_override_budget_ceiling": true,
+      "cannot_automatically_beat_materially_better_taste_plus_deal_candidate": true,
+      "priority_effect": "meaningful_boost_among_already_eligible_candidates",
+      "fixed_numeric_bonus": null,
+      "numeric_bonus_must_not_be_invented_without_user_agreement": true
+    }
   }
 }

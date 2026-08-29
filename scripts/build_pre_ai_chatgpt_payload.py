@@ -342,6 +342,9 @@ def main():
             'known_sale_end_at_or_before_consumer_time_is_inactive': True,
             'current_offer_state_must_not_be_reused_past_known_sale_end': True,
             'wishlist_is_context_only': True,
+            'wishlist_applies_only_during_final_sorting': True,
+            'wishlist_never_causes_inclusion_or_changes_taste_fit': True,
+            'wishlist_is_strong_but_bounded_priority_bonus': True,
             'reviews_and_discovery_flags_are_not_positive_taste_proof': True,
         },
         'files': {
