@@ -19,6 +19,7 @@ POLICY = Path('config/mailing_policy.json')
 FINGERPRINT_CONTRACT = Path('config/taste_fingerprint_contract.json')
 TASTE_INDEX = Path('data/cache/taste_fit.entry_index.json')
 TASTE_CACHE = Path('data/cache/taste_fit.json')
+TASTE_OVERLAY = Path('data/cache/taste_fit.entry_overlay.json')
 OUT = Path('data/production/pre_ai/taste_projection.json')
 
 V1_FIELDS = [
@@ -179,11 +180,15 @@ def main():
     index_entries = taste_index.get('entries') or {}
     index_count_ok = int(taste_index.get('index_entry_count') or -1) == len(index_entries)
     index_source = taste_index.get('source_cache') or {}
+    index_overlay = taste_index.get('source_overlay') or {}
     source_cache_blob_ok = index_source.get('blob_sha') == git_hash_object(TASTE_CACHE)
+    source_overlay_blob_ok = index_overlay.get('blob_sha') == git_hash_object(TASTE_OVERLAY)
     source_attestation_ok = all([
         index_source.get('entry_count_matches_len_entries') is True,
         index_source.get('required_entry_fields_complete') is True,
-        index_source.get('entry_count_actual') == len(index_entries),
+        index_overlay.get('entry_count_matches_len_entries') is True,
+        index_overlay.get('required_entry_fields_complete') is True,
+        taste_index.get('merge_policy') == 'overlay_exact_key_wins',
     ])
     schema_supported = taste_index.get('schema_version') in {1, 2}
     legacy_semantics = legacy_v1_semantics_digest() if taste_index.get('schema_version') == 1 else None
@@ -204,6 +209,7 @@ def main():
     index_integrity_ok = all([
         index_count_ok,
         source_cache_blob_ok,
+        source_overlay_blob_ok,
         source_attestation_ok,
         schema_supported,
         semantic_shape_ok,
@@ -311,6 +317,7 @@ def main():
             'index_integrity_ok': index_integrity_ok,
             'index_entry_count_ok': index_count_ok,
             'index_source_cache_blob_matches': source_cache_blob_ok,
+            'index_source_overlay_blob_matches': source_overlay_blob_ok,
             'index_source_attestation_ok': source_attestation_ok,
             'schema_supported': schema_supported,
             'semantic_shape_ok': semantic_shape_ok,
