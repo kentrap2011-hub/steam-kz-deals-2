@@ -71,13 +71,18 @@ def current_production_readiness():
     return source_key, payload
 
 
-def existing_source_key():
+def existing_identity():
     if not OUT.exists():
-        return None
+        return None, None
     try:
-        return load_json(OUT).get('source_mailing_updated_at_utc')
+        current = load_json(OUT)
+        contract = current.get('production_contract') or {}
+        return (
+            current.get('source_mailing_updated_at_utc'),
+            contract.get('visual_builder_blob_sha'),
+        )
     except Exception:
-        return None
+        return None, None
 
 
 def main():
@@ -90,9 +95,11 @@ def main():
         )
         return
 
+    builder_sha = git_sha('scripts/build_visual_feed_v2.py')
+    current_source, current_builder = existing_identity()
     force = os.environ.get('FORCE_VISUAL_BUILD') == '1'
-    if not force and existing_source_key() == source_key:
-        print(f'VISUAL_DAILY_BUILD=SKIP source={source_key}')
+    if not force and current_source == source_key and current_builder == builder_sha:
+        print(f'VISUAL_DAILY_BUILD=SKIP source={source_key} builder={builder_sha}')
         return
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
@@ -101,10 +108,11 @@ def main():
 
     ready = load_json(OUT)
     ready['production_contract'] = {
-        'schema_version': 2,
+        'schema_version': 3,
         'mode': 'daily_precomputed_read_only_for_ui',
         'heavy_calculation_allowed_in_ui': False,
         'external_lookup_allowed_in_ui': False,
+        'visual_builder_blob_sha': builder_sha,
         'source_chatgpt_payload_blob_sha': git_sha('data/production/pre_ai/chatgpt_payload.json'),
         'source_purchase_context_blob_sha': git_sha('data/production/pre_ai/chatgpt_purchase_context.jsonl'),
         'source_taste_queue_blob_sha': git_sha('data/production/pre_ai/chatgpt_taste_queue.jsonl'),
@@ -116,7 +124,10 @@ def main():
         'taste_model_version': (payload.get('profile_binding') or {}).get('taste_model_version'),
     }
     OUT.write_text(json.dumps(ready, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
-    print(f'VISUAL_DAILY_BUILD=BUILT source={source_key} items={ready.get("item_count")} force={force}')
+    print(
+        f'VISUAL_DAILY_BUILD=BUILT source={source_key} items={ready.get("item_count")} '
+        f'builder={builder_sha} force={force}'
+    )
 
 
 if __name__ == '__main__':
