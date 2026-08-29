@@ -7,7 +7,7 @@
     "canonical_profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
     "taste_model_version": "taste-v2",
     "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-    "content_metadata_blob_sha": "048536f17f1c1daf28f9334f20980af3db38601b"
+    "content_metadata_blob_sha": "2acda717c87a55fb28e576a730c02aa6cd3112f1"
   },
   "wishlist_binding": {
     "blob_sha": "0b5b6b9d32d051ad838b6c758e1d6d2a37b09251",
@@ -35,6 +35,8 @@
     "chatgpt_must_fix_taste_verdict_before_reading_matching_purchase_context": true,
     "chatgpt_must_not_recalculate_prices_history_or_deal_gates": true,
     "chatgpt_selects_precomputed_deal_scenario_from_final_taste_fit": true,
+    "qualitative_60_40_priority_bucket_is_precomputed": true,
+    "smaller_priority_bucket_means_higher_purchase_priority": true,
     "every_visible_paid_recommendation_requires_sale_end": false,
     "missing_sale_end_does_not_exclude_candidate": true,
     "known_sale_end_at_or_before_consumer_time_is_inactive": true,
@@ -49,18 +51,18 @@
     "taste_queue_jsonl": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
     "purchase_context_jsonl": "data/production/pre_ai/chatgpt_purchase_context.jsonl",
     "line_alignment": "taste_queue line N == purchase_context line N for 1..ai_queue_count",
-    "ready_context_start_line": 1
+    "ready_context_start_line": 7
   },
   "source_family_count": 619,
   "candidate_description_known_count": 619,
   "candidate_description_missing_count": 0,
   "candidate_description_coverage": 1.0,
-  "ai_queue_count": 0,
+  "ai_queue_count": 6,
   "ready_without_ai_count": 319,
-  "purchase_context_line_count": 319,
-  "deterministically_excluded_without_ai_count": 300,
+  "purchase_context_line_count": 325,
+  "deterministically_excluded_without_ai_count": 294,
   "deterministic_exclusion_counts": {
-    "deal_excludes_even_if_strong": 29,
+    "deal_excludes_even_if_strong": 23,
     "deal_excludes_for_valid_cached_fit": 9,
     "valid_cached_taste_below_moderate": 262
   },
@@ -68,7 +70,7 @@
   "sale_end_coverage": 1.0,
   "sale_end_missing_count": 0,
   "sale_end_missing_primary_keys": [],
-  "source_pre_ai_artifact_bytes": 2263129,
+  "source_pre_ai_artifact_bytes": 2285874,
   "deterministically_excluded_primary_keys": [
     "Sub_49358",
     "Sub_648168",
@@ -90,7 +92,6 @@
     "App_1070330",
     "App_1076200",
     "App_108710",
-    "App_1088850",
     "App_1089980",
     "App_1102130",
     "App_1114220",
@@ -112,7 +113,6 @@
     "App_1273400",
     "App_1282200",
     "App_1283410",
-    "App_1286990",
     "App_1290000",
     "App_1291340",
     "App_1295920",
@@ -145,7 +145,6 @@
     "App_1508740",
     "App_1508750",
     "App_1532200",
-    "App_1546400",
     "App_1555110",
     "App_1556980",
     "App_1562420",
@@ -204,7 +203,6 @@
     "App_2181930",
     "App_2183650",
     "App_218640",
-    "App_220440",
     "App_2213120",
     "App_22180",
     "App_222420",
@@ -272,7 +270,6 @@
     "App_3145620",
     "App_322450",
     "App_3232610",
-    "App_329050",
     "App_3339880",
     "App_3352690",
     "App_3379650",
@@ -322,7 +319,6 @@
     "App_57300",
     "App_587620",
     "App_597220",
-    "App_601150",
     "App_602960",
     "App_615610",
     "App_6220",
@@ -371,5 +367,5 @@
     "App_967250",
     "App_978300"
   ],
-  "elapsed_seconds": 0.074
+  "elapsed_seconds": 0.129
 }
