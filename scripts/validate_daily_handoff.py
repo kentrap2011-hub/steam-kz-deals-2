@@ -1,7 +1,7 @@
 import argparse
 import hashlib
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -47,13 +47,26 @@ def validate_input(now):
     return contract, payload, source
 
 
+def validate_manifest_shape(contract, manifest):
+    spec = contract["daily_ready_manifest"]
+    missing = [field for field in spec["required_fields"] if field not in manifest]
+    if missing:
+        raise SystemExit(f"daily_ready manifest missing required fields: {', '.join(missing)}")
+    if manifest.get("schema_version") != spec["schema_version_value"]:
+        raise SystemExit("daily_ready manifest schema_version mismatch")
+    if manifest.get("status") != spec["status_complete_value"]:
+        raise SystemExit("daily_ready manifest status is not complete")
+    digest = manifest.get("ready_text_sha256")
+    if not isinstance(digest, str) or len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
+        raise SystemExit("daily_ready ready_text_sha256 is not lowercase SHA-256 hex")
+
+
 def validate_ready(now):
     contract, payload, source = validate_input(now)
     if not READY_JSON.exists() or not READY_MD.exists():
         raise SystemExit("daily_ready latest.json/latest.md are not both present")
     manifest = load(READY_JSON)
-    if manifest.get("status") != "complete":
-        raise SystemExit("daily_ready manifest status is not complete")
+    validate_manifest_shape(contract, manifest)
     expected_source = payload[contract["night_input_freshness"]["source_timestamp_field"]]
     if manifest.get("source_mailing_updated_at_utc") != expected_source:
         raise SystemExit("daily_ready is bound to a different commercial snapshot")
@@ -67,7 +80,7 @@ def validate_ready(now):
     prepared = parse_utc(manifest.get("prepared_at_utc", ""), "prepared_at_utc")
     if prepared < source:
         raise SystemExit("daily_ready was prepared before its source snapshot")
-    if prepared > now + __import__('datetime').timedelta(minutes=15):
+    if prepared > now + timedelta(minutes=15):
         raise SystemExit("prepared_at_utc is unexpectedly in the future")
     text = READY_MD.read_bytes()
     if not text.strip():
