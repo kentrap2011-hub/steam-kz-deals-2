@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0e1117">
+  <title>Игры со скидками</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topline">
+        <div>
+          <h1>Игры со скидками</h1>
+          <div id="freshness" class="muted small"></div>
+        </div>
+        <button id="searchBtn" class="icon-btn" type="button" aria-label="Поиск">⌕</button>
+      </div>
+
+      <div id="stats" class="stats" aria-label="Статистика"></div>
+
+      <nav class="tabs" aria-label="Разделы">
+        <button class="tab active" data-tab="feed" type="button">Лента <span id="feedCount"></span></button>
+        <button class="tab" data-tab="liked" type="button">♡ Интересно <span id="likedCount"></span></button>
+        <button class="tab" data-tab="final" type="button">🏆 Финал <span id="finalCount"></span></button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="feedView">
+        <div class="position-row"><span id="position"></span><span id="seenInfo"></span></div>
+        <article id="gameCard" class="game-card hidden">
+          <div id="gallery" class="gallery">
+            <div id="galleryBg" class="gallery-bg"></div>
+            <img id="shot" class="shot" alt="">
+            <div class="gallery-shade"></div>
+            <div class="gallery-top">
+              <div class="badges"><span id="newBadge" class="badge">🆕 Новая</span><span id="repeatBadge" class="badge hidden"></span></div>
+              <span id="galleryCount" class="gallery-count"></span>
+            </div>
+            <div class="gallery-bottom">
+              <div id="dots" class="dots"></div>
+              <div class="pricebox">
+                <div id="price" class="price"></div>
+                <div class="price-lines"><span id="oldPrice"></span><span id="discount"></span></div>
+                <div id="histPrice" class="history-price"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="content">
+            <div id="decision" class="decision-pill"></div>
+            <h2 id="title"></h2>
+            <div id="deadline" class="deadline"></div>
+
+            <section class="info-section">
+              <div class="label">ЗА 20 СЕКУНД</div>
+              <div id="summary" class="panel"></div>
+            </section>
+
+            <section id="gameplaySection" class="info-section hidden">
+              <div class="label">ЧТО ТЫ БУДЕШЬ ДЕЛАТЬ</div>
+              <ul id="gameplay" class="compact-list"></ul>
+            </section>
+
+            <div class="two-col">
+              <section class="info-box">
+                <div class="label">✓ ПОЧЕМУ МОЖЕТ ЗАЙТИ</div>
+                <div id="whyFit"></div>
+              </section>
+              <section class="info-box">
+                <div class="label">⚠ РИСК</div>
+                <div id="risks"></div>
+              </section>
+            </div>
+
+            <section class="info-section">
+              <div class="label">ВАРИАНТЫ ПОКУПКИ</div>
+              <div id="offers" class="offers"></div>
+            </section>
+
+            <div class="chips"><span id="fit" class="chip"></span><span id="wishlist" class="chip hidden">★ В wishlist</span></div>
+
+            <div class="actions">
+              <button id="steamBtn" class="btn primary" type="button">Открыть в Steam</button>
+              <button id="likeBtn" class="btn" type="button">♡ Интересно</button>
+              <button id="finalBtn" class="btn final" type="button">🏆 В финал</button>
+            </div>
+          </div>
+        </article>
+
+        <div id="emptyFeed" class="empty hidden">Активных игр в этой очереди сейчас нет.</div>
+        <div class="swipe-help"><span><b>← свайп</b><br>в конец очереди</span><span><b>свайп →</b><br>♡ интересно</span></div>
+      </section>
+
+      <section id="likedView" class="hidden list-view"><h2>Интересно</h2><div id="likedList" class="game-list"></div></section>
+      <section id="finalView" class="hidden list-view"><h2>Финал месяца</h2><div id="finalList" class="game-list"></div></section>
+    </main>
+  </div>
+
+  <dialog id="searchDialog" class="search-dialog">
+    <form method="dialog" class="search-head">
+      <input id="searchInput" type="search" placeholder="Название игры" autocomplete="off">
+      <button type="submit" class="icon-btn">×</button>
+    </form>
+    <div id="searchResults" class="search-results"></div>
+  </dialog>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
