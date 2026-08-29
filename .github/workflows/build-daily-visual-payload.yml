@@ -45,18 +45,48 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Build canonical visual payload when production is ready
-        id: build
+      - name: Require resolved SteamDB history before replacing daily visual
+        id: history
         shell: bash
         run: |
           set -euo pipefail
-          # Pushes are limited above to calculation/workflow files, so they are
-          # intentional development changes and must rebuild even on the same
-          # daily source snapshot. Normal workflow_run production keeps identity
-          # checks and does not rebuild unnecessarily.
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" || "${{ github.event_name }}" == "push" ]]; then
-            export FORCE_VISUAL_BUILD=1
-          fi
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('data/production/pre_ai/history_snapshot.json')
+          if not path.exists():
+              print('HISTORY_READY=false reason=missing_snapshot')
+              with open('/tmp/history-ready', 'w', encoding='utf-8') as fh:
+                  fh.write('false\n')
+              raise SystemExit(0)
+
+          data = json.loads(path.read_text(encoding='utf-8'))
+          counts = data.get('cache_status_counts') or {}
+          missing = int(counts.get('missing') or 0)
+          complete = data.get('status') == 'complete' and data.get('complete_coverage') is True
+          ready = complete and missing == 0
+          print(
+              f'HISTORY_READY={str(ready).lower()} '
+              f'missing={missing} complete_coverage={data.get("complete_coverage")} '
+              f'primary_count={data.get("primary_count")}'
+          )
+          with open('/tmp/history-ready', 'w', encoding='utf-8') as fh:
+              fh.write(('true' if ready else 'false') + '\n')
+          PY
+          echo "ready=$(cat /tmp/history-ready)" >> "$GITHUB_OUTPUT"
+
+      - name: Build canonical visual payload when production is ready
+        id: build
+        if: steps.history.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Every invocation of this workflow represents a confirmed producer/input
+          # transition (or an explicit development/manual run). Rebuild even when
+          # source_mailing_updated_at_utc is unchanged so a post-SteamDB checkpoint
+          # history snapshot cannot be skipped as the same daily source identity.
+          export FORCE_VISUAL_BUILD=1
           python scripts/build_daily_visual_payload.py | tee /tmp/visual-build.log
           if grep -q 'VISUAL_DAILY_BUILD=BUILT' /tmp/visual-build.log; then
             echo "built=true" >> "$GITHUB_OUTPUT"
