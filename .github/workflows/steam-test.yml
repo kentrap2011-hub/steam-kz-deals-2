@@ -4,8 +4,9 @@ on:
   workflow_dispatch:
 
   schedule:
-    # 06:30 по Самаре (02:30 UTC); canonical app-identity production trigger
-    - cron: "30 2 * * *"
+    # Один суточный коммерческий снимок. 00:10 по Самаре (20:10 UTC предыдущего дня),
+    # чтобы полный GitHub-пайплайн успел закончиться до ночной AI-подготовки в 01:00.
+    - cron: "10 20 * * *"
 
   push:
     branches: [main]
