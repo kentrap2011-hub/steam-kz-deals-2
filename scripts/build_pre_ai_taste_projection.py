@@ -8,12 +8,15 @@ from collections import Counter
 from pathlib import Path
 
 from taste_cache_common import (
+    CANDIDATE_CONTEXT_CONTRACT,
+    candidate_context_digest,
     current_taste_semantics_digest,
     legacy_v1_semantics_digest,
     validate_verdict_shape,
 )
 
 FAMILIES = Path('data/production/pre_ai/family_graph.json')
+CONTENT_METADATA = Path('data/production/pre_ai/content_metadata.json')
 MAILING = Path('data/production/mailing/index.json')
 POLICY = Path('config/mailing_policy.json')
 FINGERPRINT_CONTRACT = Path('config/taste_fingerprint_contract.json')
@@ -29,11 +32,22 @@ V1_FIELDS = [
     'fit_level',
     'reason_code',
 ]
-V2_FIELDS = [
+V2_LEGACY_FIELDS = [
     'appid',
     'profile_blob_sha',
     'taste_model_version',
     'taste_semantics_sha256',
+    'taste_fingerprint',
+    'verdict',
+    'fit_level',
+    'reason_code',
+]
+V2_CONTEXT_FIELDS = [
+    'appid',
+    'profile_blob_sha',
+    'taste_model_version',
+    'taste_semantics_sha256',
+    'candidate_context_sha256',
     'taste_fingerprint',
     'verdict',
     'fit_level',
@@ -114,8 +128,9 @@ def load_feed_fingerprints(index):
 
 def decode_index_entry(index, key, cached, legacy_semantics):
     schema = index.get('schema_version')
+    fields = index.get('entry_fields')
     if schema == 1:
-        if index.get('entry_fields') != V1_FIELDS:
+        if fields != V1_FIELDS:
             raise ValueError('Unexpected taste index v1 entry_fields')
         if not isinstance(cached, list) or len(cached) != len(V1_FIELDS):
             raise ValueError(f'Invalid taste index v1 shape for {key}')
@@ -123,25 +138,36 @@ def decode_index_entry(index, key, cached, legacy_semantics):
         profile_sha = index.get('profile_blob_sha')
         model = index.get('taste_model_version')
         semantics = legacy_semantics
-    elif schema == 2:
-        if index.get('entry_fields') != V2_FIELDS:
-            raise ValueError('Unexpected taste index v2 entry_fields')
+        context_sha = None
+    elif schema == 2 and fields == V2_LEGACY_FIELDS:
         if index.get('profile_binding_mode') != 'per_entry_exact':
             raise ValueError('Taste index v2 is not per_entry_exact')
-        if not isinstance(cached, list) or len(cached) != len(V2_FIELDS):
-            raise ValueError(f'Invalid taste index v2 shape for {key}')
+        if not isinstance(cached, list) or len(cached) != len(V2_LEGACY_FIELDS):
+            raise ValueError(f'Invalid legacy taste index v2 shape for {key}')
         appid, profile_sha, model, semantics, fp, verdict, fit_level, reason_code = cached
+        context_sha = None
+    elif schema == 2 and fields == V2_CONTEXT_FIELDS:
+        if index.get('profile_binding_mode') != 'per_entry_exact':
+            raise ValueError('Taste index v2 is not per_entry_exact')
+        if index.get('candidate_context_binding_mode') != 'per_entry_exact_nullable_for_legacy':
+            raise ValueError('Taste index v2 candidate context binding mode is unexpected')
+        if not isinstance(cached, list) or len(cached) != len(V2_CONTEXT_FIELDS):
+            raise ValueError(f'Invalid context-aware taste index v2 shape for {key}')
+        appid, profile_sha, model, semantics, context_sha, fp, verdict, fit_level, reason_code = cached
     else:
-        raise ValueError(f'Unsupported taste index schema: {schema!r}')
+        raise ValueError(f'Unsupported taste index schema/fields: schema={schema!r} fields={fields!r}')
 
     validate_verdict_shape(verdict, fit_level, reason_code)
     if not profile_sha or not model or not semantics or not fp:
         raise ValueError(f'Incomplete taste cache binding for {key}')
+    if context_sha is not None and (not isinstance(context_sha, str) or len(context_sha) != 64):
+        raise ValueError(f'Invalid candidate context binding for {key}')
     return {
         'appid': str(appid),
         'profile_blob_sha': profile_sha,
         'taste_model_version': model,
         'taste_semantics_sha256': semantics,
+        'candidate_context_sha256': context_sha,
         'taste_fingerprint': fp,
         'verdict': verdict,
         'fit_level': fit_level,
@@ -152,15 +178,23 @@ def decode_index_entry(index, key, cached, legacy_semantics):
 def main():
     started = time.monotonic()
     families_doc = load(FAMILIES)
+    metadata_doc = load(CONTENT_METADATA)
     mailing = load(MAILING)
     policy = load(POLICY)
     fingerprint_contract = load(FINGERPRINT_CONTRACT)
+    context_contract = load(CANDIDATE_CONTEXT_CONTRACT)
     taste_index = load(TASTE_INDEX)
 
     if families_doc.get('status') != 'complete' or not families_doc.get('complete_coverage_of_nonexcluded_candidates'):
         raise SystemExit('Pre-AI family graph incomplete')
+    if metadata_doc.get('status') != 'complete' or not metadata_doc.get('complete_coverage'):
+        raise SystemExit('Pre-AI content metadata incomplete')
+    if metadata_doc.get('source_updated_at_utc') != mailing.get('source_updated_at_utc'):
+        raise SystemExit('Content metadata stale versus current mailing feed')
     if fingerprint_contract.get('contract') != 'TASTE-FINGERPRINT-V1':
         raise SystemExit('Unexpected taste fingerprint contract')
+    if context_contract.get('contract') != 'TASTE-CANDIDATE-CONTEXT-V1':
+        raise SystemExit('Unexpected taste candidate context contract')
     if policy['taste_cache']['fingerprint_fields'] != fingerprint_contract['input_fields_in_serialization_order']:
         raise SystemExit('Taste fingerprint contract differs from canonical policy')
 
@@ -168,6 +202,7 @@ def main():
     current_model = policy['personal_filter']['structured_taste_evaluation']['taste_model_version']
     current_semantics = current_taste_semantics_digest()
     feed = load_feed_fingerprints(mailing)
+    metadata = metadata_doc.get('entries') or {}
     families = families_doc.get('families') or []
     subjects = [family['taste_subject_key'] for family in families]
     if len(subjects) != int(families_doc.get('taste_subject_count') or -1):
@@ -176,6 +211,30 @@ def main():
         raise SystemExit('Duplicate taste subject key')
     if not set(subjects) <= set(feed):
         raise SystemExit('Taste subject missing from current mailing feed')
+    if not set(subjects) <= set(metadata):
+        raise SystemExit('Taste subject missing from current content metadata')
+
+    current_context = {}
+    description_known_count = 0
+    bundle_subject_count = 0
+    for key in subjects:
+        meta = metadata[key]
+        short_description = meta.get('short_description') or ''
+        bundle_members = meta.get('package_apps') or [] if meta.get('entity_kind') == 'sub' else []
+        digest, projected = candidate_context_digest(
+            feed[key]['taste_fingerprint'],
+            short_description,
+            bundle_members,
+        )
+        if projected['normalized_short_description']:
+            description_known_count += 1
+        if bundle_members:
+            bundle_subject_count += 1
+        current_context[key] = {
+            'candidate_context_sha256': digest,
+            'short_description': short_description or None,
+            'bundle_members': bundle_members,
+        }
 
     index_entries = taste_index.get('entries') or {}
     index_count_ok = int(taste_index.get('index_entry_count') or -1) == len(index_entries)
@@ -196,7 +255,7 @@ def main():
     decoded_entries = {}
     semantic_shape_ok = True
     semantic_shape_error = None
-    if index_count_ok and source_cache_blob_ok and source_attestation_ok and schema_supported:
+    if index_count_ok and source_cache_blob_ok and source_overlay_blob_ok and source_attestation_ok and schema_supported:
         try:
             for key, cached in index_entries.items():
                 decoded_entries[key] = decode_index_entry(taste_index, key, cached, legacy_semantics)
@@ -219,6 +278,8 @@ def main():
     status_counts = Counter()
     raw_overlap = 0
     fingerprint_matches = 0
+    context_matches = 0
+    context_bound_entries = 0
     appid_matches = 0
     profile_matches = 0
     model_matches = 0
@@ -228,6 +289,7 @@ def main():
     for family in families:
         key = family['taste_subject_key']
         current = feed[key]
+        context = current_context[key]
         cached = decoded_entries.get(key) if index_integrity_ok else None
         cache_presence = cached is not None
         if cache_presence:
@@ -237,15 +299,29 @@ def main():
             profile_ok = cached['profile_blob_sha'] == profile['blob_sha']
             model_ok = cached['taste_model_version'] == current_model
             semantics_ok = cached['taste_semantics_sha256'] == current_semantics
+            cached_context = cached.get('candidate_context_sha256')
+            context_bound = bool(cached_context)
+            context_ok = context_bound and cached_context == context['candidate_context_sha256']
             appid_matches += int(appid_ok)
             fingerprint_matches += int(fp_ok)
             profile_matches += int(profile_ok)
             model_matches += int(model_ok)
             semantics_matches += int(semantics_ok)
+            context_bound_entries += int(context_bound)
+            context_matches += int(context_ok)
         else:
-            appid_ok = fp_ok = profile_ok = model_ok = semantics_ok = False
+            appid_ok = fp_ok = profile_ok = model_ok = semantics_ok = context_bound = context_ok = False
 
-        hit = bool(index_integrity_ok and cache_presence and appid_ok and profile_ok and model_ok and semantics_ok and fp_ok)
+        hit = bool(
+            index_integrity_ok
+            and cache_presence
+            and appid_ok
+            and profile_ok
+            and model_ok
+            and semantics_ok
+            and fp_ok
+            and context_ok
+        )
         if hit:
             safe_hits += 1
             status = 'cache_hit'
@@ -264,8 +340,12 @@ def main():
                 ai_reason = 'taste_model_version_changed_for_entry'
             elif not semantics_ok:
                 ai_reason = 'taste_policy_semantics_changed_for_entry'
-            else:
+            elif not fp_ok:
                 ai_reason = 'taste_fingerprint_changed'
+            elif not context_bound:
+                ai_reason = 'candidate_context_binding_missing_for_entry'
+            else:
+                ai_reason = 'candidate_context_changed_for_entry'
         status_counts[status] += 1
 
         row = {
@@ -274,6 +354,9 @@ def main():
             'taste_subject_title': current['title'],
             'appid': current['appid'],
             'taste_fingerprint': current['taste_fingerprint'],
+            'candidate_context_sha256': context['candidate_context_sha256'],
+            'short_description': context['short_description'],
+            'bundle_members': context['bundle_members'],
             'fit_tags': current['fit_tags'],
             'core_fit_count': current['core_fit_count'],
             'release_date': current['release_date'],
@@ -285,6 +368,8 @@ def main():
             'cache_model_matches': model_ok if cache_presence else None,
             'cache_semantics_matches': semantics_ok if cache_presence else None,
             'cache_fingerprint_matches': fp_ok if cache_presence else None,
+            'cache_candidate_context_bound': context_bound if cache_presence else None,
+            'cache_candidate_context_matches': context_ok if cache_presence else None,
         }
         if hit:
             row['cached_taste'] = {
@@ -298,8 +383,8 @@ def main():
         raise SystemExit('Taste projection coverage mismatch')
 
     out = {
-        'schema_version': 2,
-        'purpose': 'pre_ai_safe_per_entry_taste_cache_projection_and_ai_work_queue',
+        'schema_version': 3,
+        'purpose': 'pre_ai_safe_context_bound_per_entry_taste_cache_projection_and_ai_work_queue',
         'status': 'complete',
         'source_mailing_updated_at_utc': mailing.get('source_updated_at_utc'),
         'taste_subject_count': len(subjects),
@@ -309,11 +394,21 @@ def main():
         'current_binding': {
             'taste_model_version': current_model,
             'taste_semantics_sha256': current_semantics,
+            'candidate_context_contract_blob_sha': git_hash_object(CANDIDATE_CONTEXT_CONTRACT),
+            'content_metadata_blob_sha': git_hash_object(CONTENT_METADATA),
             'policy_blob_sha': git_hash_object(POLICY),
+        },
+        'candidate_context': {
+            'binding_required_for_cache_hit': True,
+            'description_known_count': description_known_count,
+            'description_missing_count': len(subjects) - description_known_count,
+            'description_coverage': round(description_known_count / len(subjects), 6) if subjects else 1.0,
+            'bundle_subject_count': bundle_subject_count,
         },
         'cache_binding': {
             'index_schema_version': taste_index.get('schema_version'),
             'profile_binding_mode': 'legacy_global_projected_per_entry' if taste_index.get('schema_version') == 1 else taste_index.get('profile_binding_mode'),
+            'candidate_context_binding_mode': taste_index.get('candidate_context_binding_mode'),
             'index_integrity_ok': index_integrity_ok,
             'index_entry_count_ok': index_count_ok,
             'index_source_cache_blob_matches': source_cache_blob_ok,
@@ -331,6 +426,8 @@ def main():
         'raw_model_match_count': model_matches,
         'raw_semantics_match_count': semantics_matches,
         'raw_fingerprint_match_count': fingerprint_matches,
+        'raw_candidate_context_bound_count': context_bound_entries,
+        'raw_candidate_context_match_count': context_matches,
         'raw_fingerprint_stale_count': raw_overlap - fingerprint_matches,
         'safe_cache_hit_count': safe_hits,
         'ai_required_count': len(subjects) - safe_hits,
@@ -348,6 +445,8 @@ def main():
         'complete_coverage': out['complete_coverage'],
         'index_schema_version': taste_index.get('schema_version'),
         'index_integrity_ok': index_integrity_ok,
+        'description_known_count': description_known_count,
+        'description_missing_count': len(subjects) - description_known_count,
         'current_profile_blob_sha': profile['blob_sha'],
         'current_taste_model_version': current_model,
         'current_taste_semantics_sha256': current_semantics,
@@ -358,6 +457,8 @@ def main():
         'raw_model_match_count': model_matches,
         'raw_semantics_match_count': semantics_matches,
         'raw_fingerprint_match_count': fingerprint_matches,
+        'raw_candidate_context_bound_count': context_bound_entries,
+        'raw_candidate_context_match_count': context_matches,
         'safe_cache_hit_count': safe_hits,
         'ai_required_count': len(subjects) - safe_hits,
         'external_calls': 1,
