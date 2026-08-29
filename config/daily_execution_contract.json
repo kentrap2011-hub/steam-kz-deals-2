@@ -1,0 +1,54 @@
+{
+  "contract": "DAILY-MAILING-EXECUTION-V1",
+  "status": "canonical",
+  "timezone": "Europe/Samara",
+  "commercial_refresh": {
+    "maximum_frequency": "once_per_day",
+    "github_collection_local_time": "00:10",
+    "network_refreshes_during_day_for_delivery": false,
+    "rule": "Treat the completed nightly GitHub snapshot as the commercial state for the whole delivery day. Do not fetch fresher price/discount/review/history/store data again for the 08:00 delivery."
+  },
+  "known_expiry_guard": {
+    "requires_network": false,
+    "rule": "A known sale_end_utc is a local logical expiry bound. If it is already past at delivery time, suppress that stored offer without fetching new information. Taste cache remains valid."
+  },
+  "night_preparation": {
+    "local_time": "01:00",
+    "owner": "ChatGPT scheduled task",
+    "responsibilities": [
+      "consume the completed nightly pre-AI payload",
+      "finish any required price-blind taste verdicts and persist them through taste inbox/checkpoint",
+      "consume precomputed purchase context and deal scenarios",
+      "form the complete user-facing mailing text",
+      "write data/production/daily_ready/latest.md",
+      "write data/production/daily_ready/latest.json",
+      "on failure write data/production/daily_ready/preparation_status.json without replacing the last successful complete artifact"
+    ]
+  },
+  "morning_delivery": {
+    "local_time": "08:00",
+    "owner": "ChatGPT scheduled task",
+    "target": "near-instant delivery",
+    "allowed_work": [
+      "read latest.json",
+      "read latest.md",
+      "verify intended_delivery_local_date",
+      "apply known expiry timestamps locally without network",
+      "display prepared text"
+    ],
+    "forbidden_work": [
+      "taste re-evaluation",
+      "Steam or web refresh",
+      "SteamDB refresh",
+      "review refresh",
+      "price or discount refresh",
+      "history refresh",
+      "deal scenario recalculation"
+    ]
+  },
+  "artifacts": {
+    "ready_text": "data/production/daily_ready/latest.md",
+    "ready_manifest": "data/production/daily_ready/latest.json",
+    "failure_status": "data/production/daily_ready/preparation_status.json"
+  }
+}
