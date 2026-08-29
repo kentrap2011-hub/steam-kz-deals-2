@@ -5,9 +5,8 @@ on:
     branches: [main]
     paths:
       - 'web/**'
-      - 'scripts/build_visual_feed.py'
+      - 'scripts/build_visual_feed_v2.py'
       - 'data/production/pre_ai/chatgpt_purchase_context.jsonl'
-      - 'data/production/pre_ai/content_metadata.json'
       - 'data/production/pre_ai/store_snapshot.json'
       - 'data/production/pre_ai/family_graph.json'
       - 'data/production/pre_ai/history_snapshot.json'
@@ -37,7 +36,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Build current visual feed
-        run: python scripts/build_visual_feed.py
+        run: python scripts/build_visual_feed_v2.py
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
