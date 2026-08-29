@@ -17,13 +17,16 @@
   box.open=true;
   box.innerHTML=`
     <summary>Тест открытия в приложении Steam</summary>
-    <div class="steam-test-note">После каждого способа вернись сюда. Для способа 1 обязательно попробуй его два раза подряд: у Steam Mobile есть известный баг, когда первый переход только открывает приложение, а второй уже открывает игру.</div>
+    <div class="steam-test-note">Способы 1–5 уже проверены. Новые тесты 6–8 используют официальный короткий домен Steam s.team, который Android также связывает с приложением Steam.</div>
     <div class="steam-test-grid">
       <button class="btn" type="button" data-steam-test="mobile">1 · Steam Mobile</button>
       <button class="btn" type="button" data-steam-test="component">2 · Прямо в Steam</button>
       <button class="btn" type="button" data-steam-test="openurl">3 · Steam openurl</button>
       <button class="btn" type="button" data-steam-test="app">4 · Steam app</button>
       <button class="btn" type="button" data-steam-test="storeapp">5 · Steam store/app</button>
+      <button class="btn" type="button" data-steam-test="steamshort">6 · s.team</button>
+      <button class="btn" type="button" data-steam-test="steamshortintent">7 · s.team → Steam</button>
+      <button class="btn" type="button" data-steam-test="steamshortmobile">8 · s.team внутри Steam</button>
     </div>`;
   steamBtn.parentElement.insertAdjacentElement('afterend',box);
 
@@ -34,7 +37,7 @@
     const m=web.match(/store\.steampowered\.com\/app\/(\d+)/i);
     const appid=(g.base_appids||[])[0]||(m&&m[1]);
     if(!appid)return null;
-    return {appid:String(appid),web:`https://store.steampowered.com/app/${appid}`};
+    return {appid:String(appid),web:`https://store.steampowered.com/app/${appid}`,short:`https://s.team/a/${appid}`};
   }
 
   box.addEventListener('click',e=>{
@@ -46,5 +49,8 @@
     if(kind==='openurl') location.href=`steam://openurl/${t.web}`;
     if(kind==='app') location.href=`steam://app/${t.appid}`;
     if(kind==='storeapp') location.href=`steam://store/app/${t.appid}`;
+    if(kind==='steamshort') location.href=t.short;
+    if(kind==='steamshortintent') location.href=`intent://s.team/a/${t.appid}#Intent;scheme=https;package=com.valvesoftware.android.steam.community;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end`;
+    if(kind==='steamshortmobile') location.href=`steammobile://openurl/${t.short}`;
   });
 })();
