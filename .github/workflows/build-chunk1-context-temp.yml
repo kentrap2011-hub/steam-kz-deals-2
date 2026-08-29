@@ -1,0 +1,58 @@
+name: Build temporary chunk1 taste context
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/build-chunk1-context-temp.yml"
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Build compact context
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          keys=[]
+          for line in Path('data/production/mailing/chunk_001.tsv').read_text(encoding='utf-8').splitlines():
+              if line.strip(): keys.append(line.split('\t',1)[0])
+          wanted=set(keys)
+          q={}
+          for line in Path('data/production/pre_ai/chatgpt_taste_queue.jsonl').read_text(encoding='utf-8').splitlines():
+              if not line.strip(): continue
+              row=json.loads(line); k=row['taste_subject_key']
+              if k in wanted:
+                  q[k]={
+                    'key':k,
+                    'title':row.get('title'),
+                    'short_description':row.get('short_description'),
+                    'bundle_members':row.get('bundle_members') or [],
+                    'fit_tags':row.get('fit_tags') or [],
+                    'core_fit_count':row.get('core_fit_count'),
+                    'feed_reason_flags':row.get('feed_reason_flags') or [],
+                    'taste_fingerprint':row.get('taste_fingerprint'),
+                    'candidate_context_sha256':row.get('candidate_context_sha256')
+                  }
+          overlay=json.loads(Path('data/cache/taste_fit.entry_overlay.json').read_text(encoding='utf-8')).get('entries',{})
+          out=[]
+          for k in keys:
+              if k in q: out.append(q[k])
+              elif k in overlay: out.append({'key':k,'exact_overlay_hit':True,'taste_fingerprint':overlay[k].get('taste_fingerprint')})
+              else: out.append({'key':k,'missing_context':True})
+          p=Path('data/production/pre_ai/chunk1_taste_context.jsonl')
+          p.write_text('\n'.join(json.dumps(x,ensure_ascii=False,separators=(',',':')) for x in out)+'\n',encoding='utf-8')
+          print('rows',len(out),'queue_rows',len(q),'overlay_only',sum(1 for x in out if x.get('exact_overlay_hit')),'missing',sum(1 for x in out if x.get('missing_context')))
+          PY
+      - name: Commit context
+        run: |
+          git config user.name steam-kz-bot
+          git config user.email steam-kz-bot@users.noreply.github.com
+          git add data/production/pre_ai/chunk1_taste_context.jsonl
+          git commit -m 'Build temporary chunk1 taste context' || exit 0
+          git push origin HEAD:main
