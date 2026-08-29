@@ -20,12 +20,18 @@ if(fitNode){
   translateFitLabel();
 }
 
-// Steam Mobile has its own URL scheme on Android. Prefer it there;
-// do not auto-fallback to Chrome because that can mask a successful app launch.
+// Steam Mobile is sensitive to the exact external game URL format.
+// For game/package pages use the shortest canonical URL ending in the numeric ID.
 openSteam=function(steamUrl,webUrl){
   if(!steamUrl&&!webUrl)return;
   if(/Android/i.test(navigator.userAgent)&&webUrl){
-    location.href=`steammobile://openurl/${webUrl}`;
+    let target=webUrl;
+    const appMatch=webUrl.match(/store\.steampowered\.com\/app\/(\d+)/i);
+    const subMatch=webUrl.match(/store\.steampowered\.com\/sub\/(\d+)/i);
+    if(appMatch) target=`https://store.steampowered.com/app/${appMatch[1]}`;
+    else if(subMatch) target=`https://store.steampowered.com/sub/${subMatch[1]}`;
+    else target=webUrl.replace(/\/+$/,'');
+    location.href=`steammobile://openurl/${target}`;
     return;
   }
   if(steamUrl){
