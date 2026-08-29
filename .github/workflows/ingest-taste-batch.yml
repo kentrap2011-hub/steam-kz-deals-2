@@ -1,0 +1,63 @@
+name: Ingest context-bound taste batch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/ai_inbox/taste/*.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pre-ai-deterministic-payload
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate, ingest and rebuild taste consumers atomically
+        run: python scripts/process_taste_inbox.py
+
+      - name: Commit processed taste batch and synchronized consumer state
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add -A \
+            data/ai_inbox/taste \
+            data/cache/taste_fit.entry_overlay.json \
+            data/cache/taste_fit.entry_index.json \
+            data/cache/taste_ingest_receipts \
+            data/production/pre_ai/taste_projection.json \
+            data/production/pre_ai/chatgpt_payload.json \
+            data/production/pre_ai/chatgpt_taste_queue.jsonl \
+            data/production/pre_ai/chatgpt_purchase_context.jsonl
+          git diff --cached --check
+          changed="$(git diff --cached --name-only)"
+          echo "$changed"
+          test -n "$changed"
+          git commit -m "Ingest context-bound taste batch"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
