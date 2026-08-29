@@ -1,0 +1,85 @@
+name: Targeted Steam appdetails batching diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-appdetails-batching.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Measure appdetails batching on the exact 31 gaps
+        run: |
+          python - <<'PY'
+          import json
+          import time
+          import urllib.parse
+          import urllib.request
+          from pathlib import Path
+
+          projection = json.loads(Path('data/production/pre_ai/taste_projection.json').read_text(encoding='utf-8'))
+          missing_apps = [
+              row for row in projection['entries'].values()
+              if row['taste_subject_key'].startswith('App_') and not row.get('short_description')
+          ]
+          appids = [str(row['appid']) for row in missing_apps]
+          if len(appids) != 31:
+              raise SystemExit(f'Unexpected missing app count: {len(appids)}')
+
+          def request_batch(ids):
+              params = urllib.parse.urlencode({'appids': ','.join(ids), 'cc': 'kz', 'l': 'english'})
+              url = 'https://store.steampowered.com/api/appdetails?' + params
+              req = urllib.request.Request(url, headers={'User-Agent': 'steam-kz-deals/1.0'})
+              started = time.monotonic()
+              with urllib.request.urlopen(req, timeout=15) as resp:
+                  doc = json.loads(resp.read().decode('utf-8'))
+              elapsed = round(time.monotonic() - started, 3)
+              known = []
+              for appid in ids:
+                  node = doc.get(appid) or {}
+                  data = node.get('data') or {}
+                  desc = data.get('short_description')
+                  if node.get('success') is True and isinstance(desc, str) and desc.strip():
+                      known.append(appid)
+              return {'requested': len(ids), 'returned_keys': len(doc), 'known': len(known), 'elapsed_seconds': elapsed, 'known_ids': known}
+
+          results = {}
+          results['single_batch_31'] = request_batch(appids)
+          if results['single_batch_31']['known'] != 31:
+              for size in (16, 8):
+                  total_known = 0
+                  elapsed = 0.0
+                  request_count = 0
+                  returned_keys = 0
+                  for start in range(0, len(appids), size):
+                      part = request_batch(appids[start:start+size])
+                      total_known += part['known']
+                      elapsed += part['elapsed_seconds']
+                      request_count += 1
+                      returned_keys += part['returned_keys']
+                  results[f'batch_size_{size}'] = {
+                      'request_count': request_count,
+                      'known': total_known,
+                      'returned_keys_total': returned_keys,
+                      'elapsed_seconds_sum': round(elapsed, 3),
+                  }
+
+          print(json.dumps({'missing_app_count': len(appids), 'results': results}, ensure_ascii=False, indent=2))
+          if results['single_batch_31']['known'] == 31:
+              print('APPDETAILS_BATCHING=ONE_REQUEST_PASS')
+          else:
+              best = [v for k,v in results.items() if k.startswith('batch_size_') and v['known'] == 31]
+              if not best:
+                  raise SystemExit('No tested batching strategy achieved full coverage')
+              print('APPDETAILS_BATCHING=MULTI_REQUEST_PASS')
+          PY
