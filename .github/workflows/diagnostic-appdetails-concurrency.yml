@@ -1,0 +1,81 @@
+name: Targeted Steam appdetails concurrency diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-appdetails-concurrency.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Measure 8-worker appdetails fallback on exact gaps
+        run: |
+          python - <<'PY'
+          import concurrent.futures
+          import json
+          import time
+          import urllib.parse
+          import urllib.request
+          from pathlib import Path
+
+          projection = json.loads(Path('data/production/pre_ai/taste_projection.json').read_text(encoding='utf-8'))
+          rows = [
+              row for row in projection['entries'].values()
+              if row['taste_subject_key'].startswith('App_') and not row.get('short_description')
+          ]
+          if len(rows) != 31:
+              raise SystemExit(f'Unexpected missing app count: {len(rows)}')
+
+          def fetch(row):
+              appid = str(row['appid'])
+              params = urllib.parse.urlencode({'appids': appid, 'cc': 'kz', 'l': 'english'})
+              req = urllib.request.Request('https://store.steampowered.com/api/appdetails?' + params, headers={'User-Agent': 'steam-kz-deals/1.0'})
+              started = time.monotonic()
+              try:
+                  with urllib.request.urlopen(req, timeout=12) as resp:
+                      doc = json.loads(resp.read().decode('utf-8'))
+                  node = doc.get(appid) or {}
+                  value = (node.get('data') or {}).get('short_description')
+                  known = node.get('success') is True and isinstance(value, str) and bool(value.strip())
+                  return {
+                      'key': row['taste_subject_key'], 'appid': appid,
+                      'known': known, 'error': None,
+                      'elapsed_seconds': round(time.monotonic() - started, 3),
+                  }
+              except Exception as exc:
+                  return {
+                      'key': row['taste_subject_key'], 'appid': appid,
+                      'known': False, 'error': f'{type(exc).__name__}: {exc}',
+                      'elapsed_seconds': round(time.monotonic() - started, 3),
+                  }
+
+          started = time.monotonic()
+          with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
+              results = list(pool.map(fetch, rows))
+          wall = round(time.monotonic() - started, 3)
+          known = sum(int(r['known']) for r in results)
+          errors = [r for r in results if r['error']]
+          result = {
+              'request_count': len(results),
+              'max_workers': 8,
+              'known_count': known,
+              'error_count': len(errors),
+              'wall_seconds': wall,
+              'slowest_request_seconds': max(r['elapsed_seconds'] for r in results),
+              'errors': errors,
+          }
+          print(json.dumps(result, ensure_ascii=False, indent=2))
+          if known != 31 or errors:
+              raise SystemExit('Concurrent appdetails fallback did not preserve full coverage')
+          print('APPDETAILS_CONCURRENCY_8=PASS')
+          PY
