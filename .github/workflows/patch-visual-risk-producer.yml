@@ -24,98 +24,61 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Replace risk derivation only
+      - name: Upgrade only the existing risk fallback block
         run: |
           python - <<'PY'
-          import re
           from pathlib import Path
 
           path = Path('scripts/build_visual_feed_v2.py')
           text = path.read_text(encoding='utf-8')
 
-          replacement = r'''def risk_from_negative(evidence):
-              text = str(evidence or '').lower()
-              if any(k in text for k in ['backtrack', 'бэктрек', 'возвращ', 'already visited']):
-                  return 'Есть риск заметного бэктрекинга по уже знакомым местам — именно такое повторение у тебя быстро снижает интерес.'
-              if any(k in text for k in ['repet', 'grind', 'loop', 'повтор', 'гринд', 'цикл', 'рутин']):
-                  return 'Есть риск, что повторяющийся цикл начнёт доминировать над новыми ситуациями, а однообразное повторение у тебя часто снижает интерес.'
-              if any(k in text for k in ['dialogue', 'reading', 'passive', 'диалог', 'чтени', 'пассив']):
-                  return 'Заметная доля времени может уходить на диалоги, чтение или пассивные эпизоды; если активного геймплея окажется мало, интерес может просесть.'
-              if any(k in text for k in ['lost', 'unclear', 'directionless', 'потерян', 'неясн', 'направлен']):
-                  return 'Есть риск потерять направление и не понимать следующий полезный шаг — загадочность тебе нравится только пока цель остаётся читаемой.'
-              if any(k in text for k in ['slow', 'meditative', 'медлен', 'медитатив']):
-                  return 'Темп может быть слишком медленным: если между значимыми событиями и новыми игровыми ситуациями будет много пауз, интерес может просесть.'
-              if any(k in text for k in ['hard', 'difficulty', 'punish', 'сложн', 'наказ']):
-                  return 'Сложность может быть жёсткой; тебе она подходит лучше, когда быстро становится понятной и ощущается как обучаемое мастерство, а не как повтор ради повтора.'
-              if any(k in text for k in ['management', 'micromanagement', 'менедж', 'микроменедж']):
-                  return 'Менеджмент может перейти в рутину или микроконтроль; для тебя это риск, если системная работа начнёт вытеснять новые игровые ситуации.'
-              return None
+          old = """    if not risks and any(k in text for k in ['craft', 'farming', 'management', 'production chains', 'survival simulation']):
+              risks.append('Есть заметная доля менеджмента или сбора ресурсов; если рутина начнёт доминировать над новыми ситуациями, игра может утомить.')
+          if not risks and ('sandbox' in text or ('open world' in text and not any(k in text for k in ['mystery', 'quest', 'mission', 'objective']))):
+              risks.append('Есть риск недостатка направления: тебе открытый мир лучше заходит, когда в нём постоянно понятны причины что-то исследовать или делать.')
+          if not risks and release_date:
+              m = re.search(r'(19|20)\\d{2}', str(release_date))
+              if m and int(m.group(0)) <= 2011:
+                  risks.append('Возраст игры может ощущаться в управлении и интерфейсе сильнее, чем в современных проектах.')
+          if not risks:
+              risks.append('Явный конфликт с твоим профилем пока не подтверждён; этот риск нужно уточнить при более подробном разборе игры, а не выдумывать его.')
+          return risks[:2]
+          """
+          old = old.replace('          ', '', 1)
+          old = '\n'.join(line[10:] if line.startswith('          ') else line for line in old.splitlines()) + '\n'
 
+          new = """    if not risks and any(k in text for k in ['craft', 'crafting', 'farming', 'management', 'city builder', 'city-building', 'tycoon', 'production chains', 'survival simulation']):
+              risks.append('Есть заметный слой менеджмента, ресурсов или повторяющихся хозяйственных действий; если рутина начнёт доминировать над новыми ситуациями, игра может утомить.')
+          if not risks and any(k in text for k in ['real time strategy', 'real-time strategy', 'rts', 'grand strategy', '4x', 'strategy']):
+              risks.append('Стратегический слой может требовать много планирования и микроконтроля; если темп станет слишком системным и однообразным, это может утомить сильнее, чем более непосредственный геймплей.')
+          if not risks and any(k in text for k in ['turn-based', 'turn based']):
+              risks.append('Пошаговый темп может ощущаться медленнее привычного тебе активного геймплея, особенно если похожие бои начнут повторяться.')
+          if not risks and any(k in text for k in ['metroidvania', 'backtracking', 'backtrack']):
+              risks.append('Структура предполагает возвращение в уже знакомые зоны после получения новых возможностей; если бэктрекинга окажется много, повторение может утомить.')
+          if not risks and any(k in text for k in ['stealth']):
+              risks.append('Стелс может превращаться в ожидание и повторные попытки после ошибки; это станет минусом, если повторов будет больше, чем новых ситуаций.')
+          if not risks and any(k in text for k in ['platformer', 'platforming']):
+              risks.append('Платформинг может потребовать повторных попыток на одних и тех же участках; это станет минусом, если повторы начнут перевешивать ощущение движения и прогресса.')
+          if not risks and any(k in text for k in ['puzzle', 'puzzler']):
+              risks.append('Головоломки могут заметно тормозить темп, если игра надолго оставляет без понятного следующего шага; ты хуже переносишь загадку, когда она превращается в потерянность.')
+          if not risks and any(k in text for k in ['detective', 'investigation', 'mystery']):
+              risks.append('Расследование может включать много разговоров и повторного обхода знакомых мест; если продвижение между важными открытиями станет редким, темп может просесть.')
+          if not risks and ('sandbox' in text or 'open world' in text or 'exploration' in text):
+              risks.append('Исследование может растянуться или потерять направление; тебе открытый мир лучше заходит, когда постоянно есть понятные причины идти в новую точку.')
+          if not risks and release_date:
+              m = re.search(r'(19|20)\\d{2}', str(release_date))
+              if m and int(m.group(0)) <= 2011:
+                  risks.append('Возраст игры может ощущаться в управлении и интерфейсе сильнее, чем в современных проектах.')
+          if not risks:
+              risks.append('По доступным подтверждённым данным конкретный персональный минус не выявлен; лучше оставить честную неопределённость, чем приписывать игре несуществующий недостаток.')
+          return risks[:2]
+          """
+          new = new.replace('          ', '', 1)
+          new = '\n'.join(line[10:] if line.startswith('          ') else line for line in new.splitlines()) + '\n'
 
-          def derive_risks(negative_evidence, tags, description, release_date, practical, fit=None, decision=None):
-              risks = []
-              for ev in negative_evidence or []:
-                  r = risk_from_negative(ev)
-                  if r and r not in risks:
-                      risks.append(r)
-
-              text = (' '.join(tags or []) + ' ' + str(description or '')).lower()
-
-              if practical.get('windows_status') == 'legacy':
-                  risks.append('Steam указывает только старые версии Windows; на современной Windows может понадобиться дополнительная настройка или исправления.')
-              if practical.get('steam_achievements') is False:
-                  risks.append('В Steam нет достижений — для тебя это дополнительный минус по сравнению с похожей игрой с ачивками.')
-
-              if not risks and any(k in text for k in ['metroidvania', 'backtracking', 'backtrack']):
-                  risks.append('Структура предполагает возвращение в уже знакомые зоны после получения новых возможностей; если бэктрекинга окажется много, повторение может утомить.')
-              if not risks and any(k in text for k in ['roguelike', 'rogue-lite', 'roguelite', 'procedural', 'endless']):
-                  risks.append('Структура опирается на повторные забеги или процедурное повторение, а однообразные повторы для тебя часто становятся минусом.')
-              if not risks and any(k in text for k in ['visual novel', 'dialogue-focused', 'dialogue heavy', 'point & click', 'point-and-click']):
-                  risks.append('Здесь может быть много диалогов, чтения и сравнительно пассивных эпизодов; если активного геймплея окажется мало, интерес может просесть.')
-              if not risks and any(k in text for k in ['management', 'city builder', 'city-building', 'tycoon', 'farming', 'crafting', 'production chain', 'survival simulation']):
-                  risks.append('Есть заметный слой менеджмента, ресурсов или повторяющихся хозяйственных действий; если рутина начнёт доминировать над новыми ситуациями, игра может утомить.')
-              if not risks and any(k in text for k in ['real time strategy', 'real-time strategy', 'rts', 'grand strategy', '4x', 'strategy', 'тактическ', 'стратег']):
-                  risks.append('Стратегический слой может требовать много планирования и микроконтроля; если темп станет слишком системным и однообразным, это может утомить сильнее, чем более непосредственный геймплей.')
-              if not risks and any(k in text for k in ['turn-based', 'turn based', 'пошаг']):
-                  risks.append('Пошаговый темп может ощущаться медленнее привычного тебе активного геймплея, особенно если похожие бои начнут повторяться.')
-              if not risks and any(k in text for k in ['stealth', 'скрытн', 'прятаться', 'hide']):
-                  risks.append('Стелс может превращаться в ожидание и повторные попытки после ошибки; для тебя это риск, если проб и повторов станет больше, чем новых ситуаций.')
-              if not risks and any(k in text for k in ['platformer', 'platforming', 'платформ']):
-                  risks.append('Платформинг может потребовать повторных попыток на одних и тех же участках; это станет минусом, если повторы начнут перевешивать ощущение движения и прогресса.')
-              if not risks and any(k in text for k in ['puzzle', 'puzzler', 'головолом']):
-                  risks.append('Головоломки могут заметно тормозить темп, если игра надолго оставляет без понятного следующего шага; ты хуже переносишь загадку, когда она превращается в потерянность.')
-              if not risks and any(k in text for k in ['detective', 'investigation', 'mystery', 'расследован', 'детектив']):
-                  risks.append('Расследование может включать много разговоров и повторного обхода знакомых мест; если продвижение между важными открытиями станет редким, темп может просесть.')
-              if not risks and any(k in text for k in ['open world', 'sandbox', 'exploration', 'открытый мир', 'исследован']):
-                  risks.append('Исследование может растянуться или потерять направление; тебе открытый мир лучше заходит, когда постоянно есть понятные причины идти в новую точку.')
-
-              if not risks and release_date:
-                  m = re.search(r'(19|20)\d{2}', str(release_date))
-                  if m and int(m.group(0)) <= 2011:
-                      risks.append('Возраст игры может ощущаться в управлении и интерфейсе сильнее, чем в современных проектах.')
-
-              if not risks and decision == 'ЛУЧШЕ ЖДАТЬ':
-                  risks.append('Сама игра прошла отбор, но текущая покупка не считается оптимальной — коммерческий verdict для этого предложения: «ЛУЧШЕ ЖДАТЬ».')
-              if not risks and fit == 'moderate':
-                  risks.append('Попадание во вкус умеренное, а не сильное: игра прошла порог отбора, но вероятность, что отдельные её особенности не зайдут, выше, чем у strong-fit кандидатов.')
-              if not risks:
-                  risks.append('По доступным подтверждённым данным конкретный персональный минус не выявлен; здесь лучше оставить честную неопределённость, чем приписывать игре несуществующий недостаток.')
-              return risks[:2]
-          '''
-          replacement = re.sub(r'^          ', '', replacement, flags=re.M)
-
-          pattern = r'def risk_from_negative\(evidence\):.*?\n\ndef windows_rank\(status\):'
-          new_text, count = re.subn(pattern, lambda _: replacement + '\n\ndef windows_rank(status):', text, count=1, flags=re.S)
-          if count != 1:
-              raise SystemExit(f'Expected exactly one risk function block, replaced={count}')
-
-          old_call = "derive_risks(taste_entry.get('negative_evidence') or [], tags, description, projection.get('release_date'), practical)"
-          new_call = "derive_risks(taste_entry.get('negative_evidence') or [], tags, description, projection.get('release_date'), practical, fit, scenario.get('purchase_decision'))"
-          if new_text.count(old_call) != 1:
-              raise SystemExit(f'Expected exactly one derive_risks call, found={new_text.count(old_call)}')
-          new_text = new_text.replace(old_call, new_call)
-
-          path.write_text(new_text, encoding='utf-8')
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected exactly one old risk fallback block, found={text.count(old)}')
+          path.write_text(text.replace(old, new), encoding='utf-8')
           print('VISUAL_RISK_PRODUCER_PATCH=PASS')
           PY
 
@@ -129,9 +92,5 @@ jobs:
           git config user.email "steam-kz-bot@users.noreply.github.com"
           git add scripts/build_visual_feed_v2.py
           git diff --cached --check
-          if git diff --cached --quiet; then
-            echo "Producer already upgraded"
-            exit 0
-          fi
           git commit -m "Improve concrete visual risk derivation"
           git push origin HEAD:main
