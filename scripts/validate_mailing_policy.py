@@ -4,11 +4,15 @@ from pathlib import Path
 from taste_cache_common import taste_semantics_digest
 
 POLICY = Path('config/mailing_policy.json')
+CACHE_ENTRY_CONTRACT = Path('config/taste_cache_entry_contract.json')
+TASTE_PROJECTION_SCRIPT = Path('scripts/build_pre_ai_taste_projection.py')
 EXPECTED_TASTE_SEMANTICS = '28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b'
 
 
 def main():
     p = json.loads(POLICY.read_text(encoding='utf-8'))
+    cache_contract = json.loads(CACHE_ENTRY_CONTRACT.read_text(encoding='utf-8'))
+    projection_source = TASTE_PROJECTION_SCRIPT.read_text(encoding='utf-8')
     sep = p['taste_deal_separation']
     deal = p['deal_selection']
     pricing = p['pricing']
@@ -40,6 +44,9 @@ def main():
         'high_confidence_adjacent': 88,
         'substantive_content': 78,
     }
+
+    cache_hit_requirements = set(cache_contract.get('cache_hit_requires_same_entry') or [])
+    mixed_generation = cache_contract.get('mixed_generation_rules') or {}
 
     checks = {
         'contract': p.get('contract') == 'GAME-DEALS-MAILING',
@@ -104,6 +111,12 @@ def main():
         'cache_v2': tc['taste_model_version'] == 'taste-v2',
         'taste_cache_has_no_commercial_state': tc['commercial_state_not_stored_in_taste_cache'] is True,
         'sale_expiry_keeps_taste_verdict': tc['sale_expiry_does_not_invalidate_taste_verdict'] is True,
+        'cache_contract_v2': cache_contract.get('contract') == 'TASTE-CACHE-ENTRY-BINDING-V2',
+        'cache_requires_exact_profile_blob': 'exact_profile_blob_sha' in cache_hit_requirements,
+        'old_profile_entries_not_hits': mixed_generation.get('old_generation_entries_are_preserved_but_are_not_cache_hits_for_a_new_binding') is True,
+        'never_rebind_old_entry_without_ai': mixed_generation.get('never_upgrade_an_old_entry_binding_without_a_new_ai_verdict') is True,
+        'projection_compares_exact_profile_blob': "profile_ok = cached['profile_blob_sha'] == profile['blob_sha']" in projection_source,
+        'projection_requeues_profile_change': "canonical_profile_blob_changed_for_entry" in projection_source,
         'incremental_checkpoint': cp['mode'] == 'incremental_by_chosen_feed_chunk',
         'checkpoint_each_chunk': cp['checkpoint_after_each_chunk_final_post_audit_verdicts'] is True,
         'checkpoint_before_next_chunk': cp['checkpoint_before_advancing_to_next_chunk_when_cache_changed'] is True,
