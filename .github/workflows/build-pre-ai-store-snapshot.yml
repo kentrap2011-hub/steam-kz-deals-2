@@ -1,5 +1,5 @@
 name: Build pre-AI deterministic payload
-# production trigger: Store short-description metadata preservation
+# production trigger: context-bound price-blind taste input
 
 on:
   workflow_dispatch:
@@ -16,6 +16,7 @@ on:
       - "config/deal_quality_contract.json"
       - "config/mailing_policy.json"
       - "config/taste_fingerprint_contract.json"
+      - "config/taste_candidate_context_contract.json"
       - "config/taste_cache_entry_contract.json"
       - "config/taste_ledger_contract.json"
       - "data/cache/steamdb_history.json"
