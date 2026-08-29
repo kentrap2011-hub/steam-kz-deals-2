@@ -1,11 +1,13 @@
 import hashlib
 import json
+import re
 import subprocess
 import unicodedata
 from pathlib import Path
 
 ENTRY_CONTRACT = Path('config/taste_cache_entry_contract.json')
 FINGERPRINT_CONTRACT = Path('config/taste_fingerprint_contract.json')
+CANDIDATE_CONTEXT_CONTRACT = Path('config/taste_candidate_context_contract.json')
 LEDGER_CONTRACT = Path('config/taste_ledger_contract.json')
 POLICY = Path('config/mailing_policy.json')
 LEGACY_LEDGER = Path('data/cache/taste_fit.ledger_validation.json')
@@ -57,6 +59,40 @@ def legacy_v1_semantics_digest():
 
 def normalize_title(title):
     return unicodedata.normalize('NFKC', str(title)).lower()
+
+
+def normalize_context_text(value):
+    normalized = unicodedata.normalize('NFKC', str(value or '')).strip()
+    return re.sub(r'\s+', ' ', normalized)
+
+
+def normalize_bundle_member_name(value):
+    return normalize_context_text(value).casefold()
+
+
+def candidate_context_digest(taste_fingerprint_value, short_description, bundle_members):
+    contract = load_json(CANDIDATE_CONTEXT_CONTRACT)
+    if contract.get('contract') != 'TASTE-CANDIDATE-CONTEXT-V1':
+        raise RuntimeError('Unexpected candidate context contract')
+
+    projected_members = []
+    for member in bundle_members or []:
+        appid = str(member.get('appid') or '')
+        if not appid.isdigit():
+            raise ValueError(f'Invalid bundle member appid: {appid!r}')
+        projected_members.append({
+            'appid': appid,
+            'normalized_name': normalize_bundle_member_name(member.get('name')),
+        })
+    projected_members.sort(key=lambda x: (int(x['appid']), x['normalized_name']))
+
+    payload = {
+        'taste_fingerprint': str(taste_fingerprint_value),
+        'normalized_short_description': normalize_context_text(short_description),
+        'sorted_bundle_members': projected_members,
+    }
+    raw = json.dumps(payload, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+    return hashlib.sha256(raw).hexdigest(), payload
 
 
 def taste_fingerprint(key, appid, title, fit_tags, core_fit_count, release_date):
