@@ -1,11 +1,13 @@
 {
-  "schema_version": 2,
-  "purpose": "chatgpt_consumer_bundle_with_strict_price_blind_taste_phase",
+  "schema_version": 3,
+  "purpose": "chatgpt_consumer_bundle_with_context_bound_strict_price_blind_taste_phase",
   "status": "complete",
   "source_mailing_updated_at_utc": "2026-08-28T22:27:10.839220+00:00",
   "profile_binding": {
     "canonical_profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-    "taste_model_version": "taste-v2"
+    "taste_model_version": "taste-v2",
+    "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+    "content_metadata_blob_sha": "34f90e917f10d4f06105057465e5fd4609d499fb"
   },
   "wishlist_binding": {
     "blob_sha": "0b5b6b9d32d051ad838b6c758e1d6d2a37b09251",
@@ -19,6 +21,8 @@
   "contract": {
     "minimum_taste_fit": "moderate",
     "taste_phase_is_strictly_price_blind": true,
+    "candidate_context_digest_required_for_persisted_taste_verdict": true,
+    "steam_short_description_is_price_blind_candidate_evidence_not_profile_evidence": true,
     "taste_queue_forbids": [
       "price",
       "discount",
@@ -42,6 +46,9 @@
     "ready_context_start_line": null
   },
   "source_family_count": 619,
+  "candidate_description_known_count": 585,
+  "candidate_description_missing_count": 34,
+  "candidate_description_coverage": 0.945073,
   "ai_queue_count": 557,
   "ready_without_ai_count": 0,
   "purchase_context_line_count": 557,
@@ -116,5 +123,5 @@
     "App_858810",
     "App_934700"
   ],
-  "elapsed_seconds": 0.226
+  "elapsed_seconds": 0.102
 }
