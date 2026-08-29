@@ -339,6 +339,8 @@ def main():
             'chatgpt_selects_precomputed_deal_scenario_from_final_taste_fit': True,
             'every_visible_paid_recommendation_requires_sale_end': False,
             'missing_sale_end_does_not_exclude_candidate': True,
+            'known_sale_end_at_or_before_consumer_time_is_inactive': True,
+            'current_offer_state_must_not_be_reused_past_known_sale_end': True,
             'wishlist_is_context_only': True,
             'reviews_and_discovery_flags_are_not_positive_taste_proof': True,
         },

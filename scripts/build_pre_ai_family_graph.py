@@ -310,7 +310,7 @@ def compare_control(feed, store, meta, rules, contract):
     }
     available = {
         key for key in old_keys
-        if key in feed and key in rules and rules[key].get('mechanical_action') != 'exclude_before_ai_output'
+        if key in feed and key in store and key in rules and rules[key].get('mechanical_action') != 'exclude_before_ai_output'
     }
     complete_old = [
         family for family in old_families
@@ -383,13 +383,23 @@ def main():
     store = store_doc.get('entries') or {}
     meta = meta_doc.get('entries') or {}
     rules = rules_doc.get('rules') or {}
-    if set(feed) != set(store) or set(feed) != set(meta) or set(feed) != set(rules):
-        raise SystemExit('Pre-AI prerequisite keysets differ')
+    if set(feed) != set(meta) or set(feed) != set(rules):
+        raise SystemExit('Pre-AI metadata/rules keysets differ from mailing feed')
+    if not set(store) <= set(feed):
+        raise SystemExit('Pre-AI Store snapshot contains keys outside mailing feed')
+    inactive_entries = store_doc.get('inactive_entries') or {}
+    if set(inactive_entries) != (set(feed) - set(store)):
+        raise SystemExit('Pre-AI Store active/inactive partition mismatch')
+    if store_doc.get('classification_complete') is not True or int(store_doc.get('classified_source_candidate_count') or -1) != len(feed):
+        raise SystemExit('Pre-AI Store source-candidate classification incomplete')
 
-    allowed = {
+    mechanically_allowed = {
         key for key, rule in rules.items()
         if rule.get('mechanical_action') in {'keep_for_ai', 'keep_for_ai_then_resolve_condition'}
     }
+    allowed = mechanically_allowed & set(store)
+    inactive_eligible = mechanically_allowed - set(store)
+    mechanically_excluded = set(feed) - mechanically_allowed
     excluded = set(feed) - allowed
     families = resolve(allowed, feed, store, meta, rules, contract)
     control = compare_control(feed, store, meta, rules, contract)
@@ -405,7 +415,10 @@ def main():
         'source_path': 'data/production/mailing/index.json',
         'source_updated_at_utc': source_stamp,
         'source_item_count': len(feed),
-        'mechanically_excluded_count': len(excluded),
+        'mechanically_excluded_count': len(mechanically_excluded),
+        'inactive_paid_offer_count': len(inactive_eligible),
+        'inactive_paid_offer_keys': sorted(inactive_eligible),
+        'excluded_before_family_total_count': len(excluded),
         'family_candidate_item_count': len(allowed),
         'assigned_item_count': len(assigned),
         'family_count': len(families),
@@ -422,6 +435,8 @@ def main():
         'status': out['status'],
         'source': out['source_item_count'],
         'mechanically_excluded': out['mechanically_excluded_count'],
+        'inactive_paid_offers': out['inactive_paid_offer_count'],
+        'excluded_before_family_total': out['excluded_before_family_total_count'],
         'family_candidates': out['family_candidate_item_count'],
         'families': out['family_count'],
         'taste_subjects': out['taste_subject_count'],

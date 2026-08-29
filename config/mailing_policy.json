@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.12",
+  "version": "1.13",
   "status": "canonical",
   "purpose": "Personalized full daily Steam KZ deals mailing with stable price-blind taste verdicts and resumable taste-cache checkpoints.",
   "policy_loading": {
@@ -290,7 +290,9 @@
       "partial_artifact_rule": "Merge only individually valid recovered entries, persist them as an incremental checkpoint, and semantically evaluate only remaining misses.",
       "recovery_write_counts_against_checkpoint_write_budget": true,
       "if_validation_fails": "ignore_artifact_and_use_normal_cache_miss_flow"
-    }
+    },
+    "commercial_state_not_stored_in_taste_cache": true,
+    "sale_expiry_does_not_invalidate_taste_verdict": true
   },
   "content_eligibility": {
     "required": true,
@@ -365,7 +367,10 @@
     "live_store_confirmed_ended_sale_excluded": true,
     "steamdb_usage": "history_only_after_personal_selection",
     "steamdb_region": "Kazakhstan",
-    "taste_fit_must_be_final_before_external_checks": true
+    "taste_fit_must_be_final_before_external_checks": true,
+    "known_sale_end_at_or_before_consumer_time_means_inactive": true,
+    "current_offer_state_must_not_be_reused_past_known_sale_end": true,
+    "expired_offer_action": "exclude_current_offer_but_keep_valid_price_blind_taste_cache_entry"
   },
   "external_cache": {
     "load_each_cache_at_most_once_per_run": true,

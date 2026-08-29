@@ -159,7 +159,7 @@ def choose_option(key, row, store_item):
                 -int(o.get('discount_pct') or 0),
             ))
             return exact[0], 'exact_packageid_lowest_price'
-        raise SystemExit(f'No exact package purchase option for {key}')
+        return None, 'no_exact_package_purchase_option'
 
     exact = [
         o for o in options
@@ -186,7 +186,7 @@ def choose_option(key, row, store_item):
         ))
         return discounted[0], 'current_lowest_discounted_option_after_source_change'
 
-    raise SystemExit(f'No active discounted purchase option for {key}')
+    return None, 'no_active_discounted_purchase_option'
 
 
 def included_app_name_map(store_item):
@@ -331,29 +331,80 @@ def main():
     selection_counts = {}
     type_counts = {}
 
+    inactive_entries = {}
+    observed_epoch = int(observed.timestamp())
+
     for key, store_item in paired:
         row = feed[key]
+
+        # Content identity/metadata remains complete even when the paid offer has ended.
+        meta = metadata_entry(key, row, store_item)
+        metadata_entries[key] = meta
+        label = meta.get('app_type') if meta.get('entity_kind') == 'app' else 'package'
+        type_counts[label or 'unknown'] = type_counts.get(label or 'unknown', 0) + 1
+
         option, selection_method = choose_option(key, row, store_item)
         selection_counts[selection_method] = selection_counts.get(selection_method, 0) + 1
+        if option is None:
+            inactive_entries[key] = {
+                'key': key,
+                'appid': row['appid'] or None,
+                'title': row['title'],
+                'reason': selection_method,
+                'source_discount_percent': row['source_discount_percent'],
+                'source_final_kzt': row['source_final_kzt'],
+            }
+            continue
 
         discount = int(option.get('discount_pct') or 0)
         current = final_kzt(option)
         original = original_kzt(option)
         if discount <= 0 or current is None or current <= 0:
-            raise SystemExit(f'Selected StoreBrowse option is not an active paid discount for {key}')
+            inactive_entries[key] = {
+                'key': key,
+                'appid': row['appid'] or None,
+                'title': row['title'],
+                'reason': 'observed_option_is_not_an_active_paid_discount',
+                'observed_discount_percent': discount,
+                'observed_final_kzt': current,
+                'source_discount_percent': row['source_discount_percent'],
+                'source_final_kzt': row['source_final_kzt'],
+            }
+            continue
+        if original is None or original < current:
+            raise SystemExit(f'Invalid original price for current discounted option {key}')
 
         end_values = sorted({
             int(d.get('discount_end_date') or 0)
             for d in (option.get('active_discounts') or [])
             if int(d.get('discount_end_date') or 0) > 0
         })
-        if not end_values:
-            sale_end_unknown.append(key)
+        # A live endpoint can briefly expose a just-expired option. Never carry it
+        # forward merely because discount_pct has not yet refreshed.
+        if end_values and min(end_values) <= observed_epoch:
+            inactive_entries[key] = {
+                'key': key,
+                'appid': row['appid'] or None,
+                'title': row['title'],
+                'reason': 'known_discount_end_not_after_store_observation',
+                'observed_discount_percent': discount,
+                'observed_final_kzt': current,
+                'observed_discount_end_epoch': min(end_values),
+                'source_discount_percent': row['source_discount_percent'],
+                'source_final_kzt': row['source_final_kzt'],
+            }
             continue
-        # If stacked active discounts exist, the earliest ending component can change the current final price.
-        end_epoch = min(end_values)
-        end_utc = datetime.fromtimestamp(end_epoch, tz=timezone.utc)
-        end_local = end_utc.astimezone(DISPLAY_TZ)
+
+        if end_values:
+            # If stacked active discounts exist, the earliest ending component can change the current final price.
+            end_epoch = min(end_values)
+            end_utc = datetime.fromtimestamp(end_epoch, tz=timezone.utc)
+            end_local = end_utc.astimezone(DISPLAY_TZ)
+        else:
+            sale_end_unknown.append(key)
+            end_epoch = None
+            end_utc = None
+            end_local = None
 
         deal_changed = (
             discount != row['source_discount_percent']
@@ -373,50 +424,58 @@ def main():
             'final_kzt': current,
             'original_kzt': original,
             'discount_end_epoch': end_epoch,
-            'discount_end_utc': end_utc.isoformat(),
-            'discount_end_europe_berlin': end_local.isoformat(),
-            'discount_end_date_europe_berlin': end_local.date().isoformat(),
+            'discount_end_utc': end_utc.isoformat() if end_utc else None,
+            'discount_end_europe_berlin': end_local.isoformat() if end_local else None,
+            'discount_end_date_europe_berlin': end_local.date().isoformat() if end_local else None,
             'source_discount_percent': row['source_discount_percent'],
             'source_final_kzt': row['source_final_kzt'],
             'changed_since_discovery_snapshot': deal_changed,
         }
 
-        meta = metadata_entry(key, row, store_item)
-        metadata_entries[key] = meta
-        label = meta.get('app_type') if meta.get('entity_kind') == 'app' else 'package'
-        type_counts[label or 'unknown'] = type_counts.get(label or 'unknown', 0) + 1
-
-    if sale_end_unknown:
-        raise SystemExit(f'Missing sale end for active discounts: {sale_end_unknown[:20]}')
-    if len(store_entries) != len(feed) or len(metadata_entries) != len(feed):
+    if len(store_entries) + len(inactive_entries) != len(feed):
         raise SystemExit(
-            'Pre-AI Store/metadata snapshot incomplete: '
-            f'store={len(store_entries)} metadata={len(metadata_entries)} source={len(feed)}'
+            'Pre-AI Store classification incomplete: '
+            f'active={len(store_entries)} inactive={len(inactive_entries)} source={len(feed)}'
+        )
+    if len(metadata_entries) != len(feed):
+        raise SystemExit(
+            'Pre-AI metadata snapshot incomplete: '
+            f'metadata={len(metadata_entries)} source={len(feed)}'
         )
 
     control = compare_with_control(metadata_entries)
     elapsed = round(time.monotonic() - started, 3)
 
+    sale_end_known_count = len(store_entries) - len(sale_end_unknown)
+    sale_end_coverage = (sale_end_known_count / len(store_entries)) if store_entries else 1.0
     store_out = {
-        'schema_version': 2,
+        'schema_version': 3,
         'purpose': 'pre_ai_current_store_snapshot',
         'status': 'complete',
-        'authoritative_for': ['current_price_kzt', 'discount_percent', 'discount_end'],
+        'authoritative_for': ['current_active_paid_offer_state', 'current_price_kzt', 'discount_percent', 'discount_end'],
         'discovery_source_path': 'data/production/mailing/index.json',
         'discovery_source_updated_at_utc': index.get('source_updated_at_utc'),
         'observed_at_utc': observed.isoformat(),
         'display_timezone': 'Europe/Berlin',
         'source_item_count': len(feed),
+        'classified_source_candidate_count': len(store_entries) + len(inactive_entries),
+        'classification_complete': len(store_entries) + len(inactive_entries) == len(feed),
         'entry_count': len(store_entries),
+        'active_paid_discount_count': len(store_entries),
+        'inactive_source_candidate_count': len(inactive_entries),
+        'inactive_source_candidate_keys': sorted(inactive_entries),
+        'inactive_entries': inactive_entries,
         'request_count': request_count,
         'batch_size': BATCH_SIZE,
-        'sale_end_known_count': len(store_entries),
-        'sale_end_unknown_count': 0,
-        'sale_end_coverage_ratio': 1.0,
+        'sale_end_known_count': sale_end_known_count,
+        'sale_end_unknown_count': len(sale_end_unknown),
+        'sale_end_unknown_keys': sorted(sale_end_unknown),
+        'sale_end_coverage_ratio': round(sale_end_coverage, 4),
         'changed_since_discovery_count': len(changed),
         'changed_since_discovery_keys': sorted(changed),
         'selection_method_counts': selection_counts,
         'shared_storebrowse_pass_includes_content_metadata': True,
+        'expired_or_inactive_source_candidates_are_not_current_entries': True,
         'elapsed_seconds_shared_pass': elapsed,
         'entries': store_entries,
     }
@@ -445,10 +504,13 @@ def main():
     print(json.dumps({
         'status': 'complete',
         'source': len(feed),
-        'store_entries': len(store_entries),
+        'classified': len(store_entries) + len(inactive_entries),
+        'active_paid_discounts': len(store_entries),
+        'inactive_source_candidates': len(inactive_entries),
         'metadata_entries': len(metadata_entries),
         'requests_shared': request_count,
-        'sale_end_coverage': 1.0,
+        'sale_end_coverage': round(sale_end_coverage, 4),
+        'sale_end_unknown': len(sale_end_unknown),
         'changed_since_discovery': len(changed),
         'metadata_types': type_counts,
         'control_comparison': control,
