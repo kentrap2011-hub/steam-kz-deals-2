@@ -1,41 +1,77 @@
 {
-  "contract": "DAILY-MAILING-EXECUTION-V1",
+  "contract": "DAILY-VISUAL-EXECUTION-V2",
   "status": "canonical",
   "timezone": "Europe/Samara",
   "commercial_refresh": {
     "maximum_frequency": "once_per_day",
     "github_collection_local_time": "00:10",
-    "network_refreshes_during_day_for_delivery": false,
-    "rule": "Treat the completed nightly GitHub snapshot as the commercial state for the whole delivery day. Do not fetch fresher price/discount/review/history/store data again for the 08:00 delivery."
+    "network_refreshes_during_day_for_visualization": false,
+    "rule": "Treat the completed nightly GitHub snapshot as the commercial state for the whole day. Do not fetch fresher price, discount, review, history, Store or SteamDB data when the user opens or refreshes the visualization."
   },
   "night_input_freshness": {
     "source_timestamp_field": "source_mailing_updated_at_utc",
     "maximum_age_hours_at_preparation": 18,
     "fail_closed_if_missing_or_unparseable": true,
     "fail_closed_if_older_than_maximum": true,
-    "stale_action": "write preparation_status.json and do not replace the last successful daily_ready artifact",
-    "rule": "The 01:00 preparation may consume only a complete pre-AI payload whose source_mailing_updated_at_utc is present, parseable and no more than 18 hours old at preparation time. This turns current-cycle freshness into a deterministic check and prevents silent reuse of yesterday's commercial snapshot after a failed nightly GitHub chain."
+    "stale_action": "do not replace the last successful daily visual payload",
+    "rule": "The 01:00 preparation may consume only a complete pre-AI payload whose source_mailing_updated_at_utc is present, parseable and no more than 18 hours old at preparation time. This prevents silent reuse of an old commercial snapshot after a failed nightly GitHub chain."
   },
   "known_expiry_guard": {
     "requires_network": false,
-    "rule": "A known sale_end_utc is a local logical expiry bound. If it is already past at delivery time, suppress that stored offer without fetching new information. Taste cache remains valid."
+    "apply_during_night_preparation_only": true,
+    "rule": "Known sale_end_utc values may be applied while producing the daily snapshot. Opening or refreshing the visualization during the day must not perform a new semantic or commercial recalculation."
   },
   "night_preparation": {
     "local_time": "01:00",
     "owner": "ChatGPT scheduled task",
     "responsibilities": [
       "consume the completed nightly pre-AI payload",
-      "verify source_mailing_updated_at_utc is present, parseable and no more than 18 hours old; otherwise fail closed without replacing the last successful ready artifact",
+      "verify source_mailing_updated_at_utc is present, parseable and no more than 18 hours old; otherwise fail closed without replacing the last successful daily visual payload",
       "finish any required price-blind taste verdicts and persist them through taste inbox/checkpoint",
+      "wait until the current production contract is complete and the AI taste queue is closed",
       "consume precomputed purchase context and deal scenarios",
-      "sort eligible paid candidates by precomputed final_priority_bucket ascending; within the same bucket prefer wishlist, then stronger history value, larger discount, lower price, then title",
-      "form the complete user-facing mailing text",
-      "write data/production/daily_ready/latest.md",
-      "write data/production/daily_ready/latest.json exactly to the daily_ready_manifest schema",
-      "on failure write data/production/daily_ready/preparation_status.json without replacing the last successful complete artifact"
+      "produce all user-facing semantic fields including eligibility, offer-family choice, deal verdict, reasons, risks and strict priority_rank",
+      "build and persist data/production/visual/current.json through the daily visual producer",
+      "allow the read-only Pages deploy to publish that prepared payload",
+      "on failure do not replace the last successful complete visual payload"
     ]
   },
+  "visualization_consumption": {
+    "mode": "pull_on_demand",
+    "scheduled_delivery": false,
+    "user_behavior": "The user opens the visualization at any convenient time during the day and sees the already prepared frozen daily snapshot.",
+    "source_artifact": "data/production/visual/current.json",
+    "allowed_work": [
+      "read the prepared visual payload",
+      "render prepared fields",
+      "manage local UI state such as tabs, gallery, cursor, progress and explicit manual queue changes"
+    ],
+    "forbidden_work": [
+      "taste re-evaluation",
+      "Steam or web refresh",
+      "SteamDB refresh",
+      "review refresh",
+      "price or discount refresh",
+      "history refresh",
+      "deal scenario recalculation",
+      "risk calculation",
+      "reason calculation",
+      "priority or ranking calculation",
+      "eligibility or offer-family recalculation"
+    ],
+    "rule": "Opening or refreshing the visualization is read-only with respect to daily semantics and external commercial data."
+  },
+  "morning_delivery": {
+    "enabled": false,
+    "deprecated": true,
+    "local_time": null,
+    "previous_local_time": "08:00",
+    "owner": null,
+    "rule": "The separate 08:00 mailing/delivery is abolished. Do not schedule, recreate or attempt a morning push delivery; the visualization replaces it."
+  },
   "daily_ready_manifest": {
+    "deprecated": true,
+    "not_part_of_current_user_delivery": true,
     "schema_version": 1,
     "required_fields": [
       "schema_version",
@@ -47,41 +83,18 @@
     ],
     "schema_version_value": 1,
     "status_complete_value": "complete",
-    "source_binding_rule": "source_mailing_updated_at_utc must exactly equal the source_mailing_updated_at_utc from the pre-AI payload used to prepare the mailing",
-    "delivery_date_rule": "intended_delivery_local_date is YYYY-MM-DD in Europe/Samara for the morning delivery this artifact is intended for",
-    "prepared_at_rule": "prepared_at_utc is timezone-aware ISO-8601 UTC, not earlier than the source snapshot and not materially in the future",
-    "text_integrity_rule": "ready_text_sha256 is lowercase SHA-256 hex of the exact bytes stored in latest.md",
+    "source_binding_rule": "legacy compatibility only",
+    "delivery_date_rule": "legacy compatibility only",
+    "prepared_at_rule": "legacy compatibility only",
+    "text_integrity_rule": "legacy compatibility only",
     "validation_workflow": ".github/workflows/validate-daily-handoff.yml",
-    "fail_closed": true
-  },
-  "morning_delivery": {
-    "local_time": "08:00",
-    "owner": "ChatGPT scheduled task",
-    "target": "near-instant delivery",
-    "allowed_work": [
-      "read latest.json",
-      "read latest.md",
-      "verify daily_ready_manifest schema_version/status/required fields",
-      "verify intended_delivery_local_date in Europe/Samara",
-      "verify ready_text_sha256 against exact latest.md bytes",
-      "apply known expiry timestamps locally without network",
-      "display prepared text"
-    ],
-    "forbidden_work": [
-      "read pre-AI payload to redo source validation",
-      "taste re-evaluation",
-      "Steam or web refresh",
-      "SteamDB refresh",
-      "review refresh",
-      "price or discount refresh",
-      "history refresh",
-      "deal scenario recalculation"
-    ],
-    "trust_model": "Source-snapshot binding is validated after the night write by the deterministic GitHub handoff guard. Morning independently checks manifest schema, local delivery date and text hash, then renders the prepared text."
+    "fail_closed": true,
+    "rule": "This block is retained only so the old handoff validator and historical artifacts remain understandable. It must not be used to recreate an 08:00 delivery."
   },
   "artifacts": {
-    "ready_text": "data/production/daily_ready/latest.md",
-    "ready_manifest": "data/production/daily_ready/latest.json",
-    "failure_status": "data/production/daily_ready/preparation_status.json"
+    "canonical_visual_payload": "data/production/visual/current.json",
+    "legacy_ready_text": "data/production/daily_ready/latest.md",
+    "legacy_ready_manifest": "data/production/daily_ready/latest.json",
+    "legacy_failure_status": "data/production/daily_ready/preparation_status.json"
   }
 }
