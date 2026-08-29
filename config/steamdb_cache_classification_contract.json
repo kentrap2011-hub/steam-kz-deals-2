@@ -1,13 +1,21 @@
 {
   "contract": "STEAMDB-CACHE-CLASSIFICATION-V1",
-  "version": "1.0",
+  "version": "1.1",
   "status": "implementation_only",
-  "purpose": "Mechanically classify SteamDB history cache coverage for the final stage-13 primary purchase variants before any new SteamDB lookup.",
+  "purpose": "Mechanically classify SteamDB history cache coverage for every current primary purchase variant in the completed pre-AI family graph before any new SteamDB lookup.",
   "authority": {
     "canonical_policy_path": "config/mailing_policy.json",
     "never_overrides_canonical_policy": true,
     "steamdb_is_history_only_not_discovery": true,
     "no_external_lookup_in_stage_15": true
+  },
+  "sources": {
+    "family_universe": "data/production/pre_ai/family_graph.json",
+    "current_store_state": "data/production/pre_ai/store_snapshot.json",
+    "persistent_history_cache": "data/cache/steamdb_history.json",
+    "family_graph_must_be_complete": true,
+    "store_snapshot_must_be_complete": true,
+    "every_family_primary_must_exist_in_store_snapshot": true
   },
   "classification": {
     "legacy_schema_1_positive_historical_min_kzt": "confirmed_min",
@@ -22,10 +30,10 @@
     "output": "data/cache/steamdb_cache.validation.json",
     "pass_requires": [
       "actual len(entries) is used",
-      "every current primary key is classified exactly once",
+      "every current pre-AI family primary key is classified exactly once",
       "confirmed_min, previously_free, valid negative-cache hits, and true lookup misses are counted separately",
       "zero SteamDB lookups occur in this stage",
-      "classification count equals stage 13 family count"
+      "classification count equals current completed pre-AI family count"
     ]
   }
 }
