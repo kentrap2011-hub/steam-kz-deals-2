@@ -2,6 +2,7 @@ import json
 import re
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -11,14 +12,13 @@ STORE_SNAPSHOT = ROOT / 'data/production/pre_ai/store_snapshot.json'
 FAMILY_GRAPH = ROOT / 'data/production/pre_ai/family_graph.json'
 HISTORY_SNAPSHOT = ROOT / 'data/production/pre_ai/history_snapshot.json'
 TASTE_CACHE = ROOT / 'data/cache/taste_fit.json'
+TASTE_PROJECTION = ROOT / 'data/production/pre_ai/taste_projection.json'
 CHATGPT_PAYLOAD = ROOT / 'data/production/pre_ai/chatgpt_payload.json'
 OUT = ROOT / 'web/data/current.json'
 
 
-def load_json(path, default=None):
-    if not path.exists():
-        return {} if default is None else default
-    return json.loads(path.read_text(encoding='utf-8'))
+def load_json(path):
+    return json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
 
 
 def load_jsonl(path):
@@ -89,6 +89,10 @@ def has_russian_text(value):
     return bool(value and re.search(r'[А-Яа-яЁё]', str(value)))
 
 
+def strip_html(value):
+    return re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', str(value or ''))).strip()
+
+
 def storebrowse_media(appids):
     ids = sorted({str(x) for x in appids if str(x).isdigit()}, key=int)
     result = {}
@@ -96,82 +100,189 @@ def storebrowse_media(appids):
         batch = ids[start:start + 100]
         payload = {
             'ids': [{'appid': int(appid)} for appid in batch],
-            'context': {
-                'language': 'russian',
-                'country_code': 'KZ',
-                'steam_realm': 1,
-            },
-            'data_request': {
-                'include_basic_info': True,
-                'include_assets': True,
-                'include_screenshots': True,
-            },
+            'context': {'language': 'russian', 'country_code': 'KZ', 'steam_realm': 1},
+            'data_request': {'include_basic_info': True, 'include_assets': True, 'include_screenshots': True},
         }
-        url = (
-            'https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json='
-            + urllib.parse.quote(json.dumps(payload, separators=(',', ':')))
-        )
-        req = urllib.request.Request(
-            url,
-            headers={'User-Agent': 'steam-kz-deals-visual/2.0', 'Accept': 'application/json'},
-        )
+        url = 'https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json=' + urllib.parse.quote(json.dumps(payload, separators=(',', ':')))
+        req = urllib.request.Request(url, headers={'User-Agent': 'steam-kz-deals-visual/3.0', 'Accept': 'application/json'})
         try:
             with urllib.request.urlopen(req, timeout=30) as response:
                 data = json.loads(response.read().decode('utf-8'))
         except Exception as exc:
             print(f'visual media batch failed: {type(exc).__name__}: {exc}')
             continue
-        returned = (data.get('response') or {}).get('store_items') or []
-        for store_item in returned:
+        for store_item in (data.get('response') or {}).get('store_items') or []:
             appid = str(store_item.get('appid') or store_item.get('id') or '')
             if not appid:
                 continue
             shots = []
-            ss = store_item.get('screenshots') or {}
-            for shot in ss.get('all_ages_screenshots') or []:
+            for shot in ((store_item.get('screenshots') or {}).get('all_ages_screenshots') or []):
                 filename = str(shot.get('filename') or '').strip()
-                if not filename:
-                    continue
-                full = f'https://shared.fastly.steamstatic.com/store_item_assets/{filename}'
-                if full not in shots:
-                    shots.append(full)
+                if filename:
+                    img = f'https://shared.fastly.steamstatic.com/store_item_assets/{filename}'
+                    if img not in shots:
+                        shots.append(img)
                 if len(shots) >= 5:
                     break
             assets = store_item.get('assets') or {}
-            header = None
             header_file = str(assets.get('header') or '').strip()
-            if header_file:
-                header = f'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/{appid}/{header_file}'
+            header = f'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/{appid}/{header_file}' if header_file else None
             desc = str((store_item.get('basic_info') or {}).get('short_description') or '').strip() or None
-            result[appid] = {
-                'screenshots': shots,
-                'header_image': header,
-                'short_description_ru': desc if has_russian_text(desc) else None,
-            }
+            result[appid] = {'screenshots': shots, 'header_image': header, 'short_description_ru': desc if has_russian_text(desc) else None}
     return result
+
+
+def classify_windows(requirements):
+    text = strip_html(requirements).lower()
+    if not text:
+        return 'unknown'
+    if re.search(r'windows\s*(10|11)|win\s*(10|11)', text):
+        return 'modern'
+    if re.search(r'windows\s*(7|8|8\.1)|win\s*(7|8)', text):
+        return 'older_but_plausible'
+    if re.search(r'windows\s*(xp|vista|2000)|win\s*(xp|vista)', text):
+        return 'legacy'
+    return 'unknown'
+
+
+def fetch_appdetails(appid):
+    url = f'https://store.steampowered.com/api/appdetails?appids={appid}&cc=kz&l=russian'
+    req = urllib.request.Request(url, headers={'User-Agent': 'steam-kz-deals-visual/3.0', 'Accept': 'application/json'})
+    try:
+        with urllib.request.urlopen(req, timeout=20) as response:
+            payload = json.loads(response.read().decode('utf-8'))
+        wrapper = payload.get(str(appid)) or {}
+        data = wrapper.get('data') if wrapper.get('success') else None
+        if not isinstance(data, dict):
+            raise ValueError('missing appdetails')
+        total = (data.get('achievements') or {}).get('total')
+        categories = data.get('categories') or []
+        achievements = int(total) > 0 if total is not None else any(int(c.get('id') or -1) == 22 or 'achievement' in str(c.get('description') or '').lower() for c in categories)
+        reqs = data.get('pc_requirements') or {}
+        if isinstance(reqs, list):
+            reqs = {}
+        recommendation = reqs.get('recommended') or reqs.get('minimum') or ''
+        return str(appid), {
+            'steam_achievements': achievements,
+            'achievement_total': int(total) if total is not None else None,
+            'windows_status': classify_windows(recommendation),
+        }
+    except Exception:
+        return str(appid), {'steam_achievements': None, 'achievement_total': None, 'windows_status': 'unknown'}
+
+
+def practical_facts(appids):
+    ids = sorted({str(x) for x in appids if str(x).isdigit()}, key=int)
+    result = {}
+    with ThreadPoolExecutor(max_workers=12) as pool:
+        futures = [pool.submit(fetch_appdetails, appid) for appid in ids]
+        for future in as_completed(futures):
+            appid, facts = future.result()
+            result[appid] = facts
+    return result
+
+
+def reason_ru(evidence, tags, description):
+    text = str(evidence or '').lower()
+    if '2.5d platformer' in text and 'first-person' in text:
+        return 'Игра чередует 2.5D-платформинг и эпизоды от первого лица — тебе обычно лучше заходят игры, которые меняют формат и игровые ситуации, а не повторяют один цикл.'
+    if any(k in text for k in ['traversal', 'movement', 'parkour', 'flight', 'glide', 'levitation']):
+        return 'Передвижение здесь — важная часть самого удовольствия от игры, а тебе особенно нравятся игры, где движение и контроль персонажа интересны сами по себе.'
+    if any(k in text for k in ['progression', 'upgrade', 'abilities', 'new abilities', 'unlock']):
+        return 'Есть заметное развитие возможностей персонажа с понятным игровым эффектом — это совпадает с твоей любовью к ясному и полезному прогрессу.'
+    if any(k in text for k in ['mystery', 'investigation', 'detective', 'clue']):
+        return 'В центре есть конкретная тайна или расследование, которое направляет исследование — тебе загадки лучше заходят, когда понятно, что именно нужно выяснить.'
+    if any(k in text for k in ['different', 'alternat', 'multiple', 'varied', 'changes of format', 'changes of situation']):
+        return 'Игра регулярно меняет ситуации или способ взаимодействия, поэтому меньше риска застрять в одном повторяющемся цикле — это сильный плюс для твоего профиля.'
+    if any(k in text for k in ['clear objective', 'clear goal', 'purpose', 'escape premise']):
+        return 'У игровых задач есть понятная общая цель, поэтому исследование и отдельные механики не ощущаются бесцельными.'
+    if any(k in text for k in ['choices', 'consequences', 'decision']):
+        return 'Решения заметно влияют на происходящее, а тебе обычно интереснее игры, где действия меняют ситуацию, а не служат только декорацией.'
+
+    joined = (' '.join(tags or []) + ' ' + str(description or '')).lower()
+    if 'detective' in joined or 'mystery' in joined:
+        return 'Основной игровой интерес связан с расследованием и поиском ответов — это хорошо совпадает с твоей любовью к направленным загадкам.'
+    if 'choices matter' in joined:
+        return 'Здесь важны решения и их последствия, поэтому ситуации могут развиваться по-разному, а не идти по полностью однообразному сценарию.'
+    if 'platform' in joined or 'parkour' in joined:
+        return 'Заметная часть игры построена вокруг активного передвижения и платформинга, а выразительное движение для тебя само по себе является плюсом.'
+    if 'puzzle' in joined:
+        return 'Головоломки дают конкретные задачи и понятные точки прогресса, что обычно лучше соответствует твоему вкусу, чем бесцельное исследование.'
+    if 'exploration' in joined:
+        return 'Исследование здесь связано с открытиями и продвижением, а тебе важнее плотность причин исследовать, чем просто большой мир.'
+    if 'combat' in joined or 'action' in joined:
+        return 'В игре заметную роль играет непосредственное управление и действие, а не только чтение или наблюдение — это соответствует твоему предпочтению активного геймплея.'
+    return 'Игра прошла строгий вкусовой отбор, но конкретное русское объяснение этого совпадения ещё нужно доработать после утверждения оформления.'
+
+
+def risk_from_negative(evidence):
+    text = str(evidence or '').lower()
+    if 'backtrack' in text:
+        return 'Есть риск заметного бэктрекинга по уже знакомым местам — именно такое повторение у тебя уже вызывало усталость в других играх.'
+    if any(k in text for k in ['repet', 'grind', 'loop']):
+        return 'Есть риск, что повторяющийся цикл начнёт доминировать над новыми ситуациями, а однообразное повторение у тебя часто снижает интерес.'
+    if any(k in text for k in ['dialogue', 'reading', 'passive']):
+        return 'Заметная доля времени может уходить на диалоги или пассивные эпизоды; если активного геймплея окажется мало, интерес может просесть.'
+    if any(k in text for k in ['hard', 'difficulty', 'punish']):
+        return 'Сложность может быть жёсткой; тебе она подходит лучше, когда быстро становится понятной и ощущается как обучаемое мастерство.'
+    return None
+
+
+def derive_risks(negative_evidence, tags, description, release_date, practical):
+    risks = []
+    for ev in negative_evidence or []:
+        r = risk_from_negative(ev)
+        if r and r not in risks:
+            risks.append(r)
+    text = (' '.join(tags or []) + ' ' + str(description or '')).lower()
+    if practical.get('windows_status') == 'legacy':
+        risks.append('Steam указывает только старые версии Windows; на современной Windows может понадобиться дополнительная настройка или исправления.')
+    if practical.get('steam_achievements') is False:
+        risks.append('В Steam нет достижений — для тебя это дополнительный минус по сравнению с похожей игрой с ачивками.')
+    if not risks and any(k in text for k in ['roguelike', 'rogue-lite', 'roguelite', 'procedural', 'endless']):
+        risks.append('Структура опирается на повторные забеги или процедурное повторение, а однообразные повторы для тебя часто становятся минусом.')
+    if not risks and any(k in text for k in ['dialogue-focused', 'visual novel', 'point & click', 'point-and-click']):
+        risks.append('Здесь может быть много диалогов и сравнительно пассивных эпизодов; если активного геймплея окажется мало, интерес может просесть.')
+    if not risks and any(k in text for k in ['craft', 'farming', 'management', 'production chains', 'survival simulation']):
+        risks.append('Есть заметная доля менеджмента или сбора ресурсов; если рутина начнёт доминировать над новыми ситуациями, игра может утомить.')
+    if not risks and ('sandbox' in text or ('open world' in text and not any(k in text for k in ['mystery', 'quest', 'mission', 'objective']))):
+        risks.append('Есть риск недостатка направления: тебе открытый мир лучше заходит, когда в нём постоянно понятны причины что-то исследовать или делать.')
+    if not risks and release_date:
+        m = re.search(r'(19|20)\d{2}', str(release_date))
+        if m and int(m.group(0)) <= 2011:
+            risks.append('Возраст игры может ощущаться в управлении и интерфейсе сильнее, чем в современных проектах.')
+    if not risks:
+        risks.append('Явный конфликт с твоим профилем пока не подтверждён; этот риск нужно уточнить при более подробном разборе игры, а не выдумывать его.')
+    return risks[:2]
+
+
+def windows_rank(status):
+    return 2 if status == 'legacy' else 0
+
+
+def achievements_rank(value):
+    return 0 if value is True else (1 if value is None else 2)
 
 
 def main():
     rows = load_jsonl(PURCHASE_CONTEXT)
-    store_obj = load_json(STORE_SNAPSHOT)
-    store_entries = store_obj.get('entries') or {}
+    store_entries = load_json(STORE_SNAPSHOT).get('entries') or {}
     family_obj = load_json(FAMILY_GRAPH)
     families = family_obj.get('families') or []
     family_by_id = {x.get('family_id'): x for x in families if isinstance(x, dict)}
-    history_obj = load_json(HISTORY_SNAPSHOT)
-    history_entries = history_obj.get('entries') or {}
+    history_entries = load_json(HISTORY_SNAPSHOT).get('entries') or {}
     taste_entries = cache_entries(load_json(TASTE_CACHE))
+    projection_entries = load_json(TASTE_PROJECTION).get('entries') or {}
     payload = load_json(CHATGPT_PAYLOAD)
-    rate = ((payload.get('fx_binding') or {}).get('kzt_per_rub'))
+    rate = (payload.get('fx_binding') or {}).get('kzt_per_rub')
 
     family_base_map = {}
     for fam in families:
-        if not isinstance(fam, dict):
-            continue
-        for appid in fam.get('base_appids') or []:
-            family_base_map.setdefault(str(appid), []).append(fam)
+        if isinstance(fam, dict):
+            for appid in fam.get('base_appids') or []:
+                family_base_map.setdefault(str(appid), []).append(fam)
 
-    visible = []
+    prepared = []
     wanted_appids = set()
     for row in rows:
         fit = get_fit(row, taste_entries)
@@ -185,7 +296,13 @@ def main():
         fam = family_by_id.get(family_id) or {}
         base_appids = [str(x) for x in ((row.get('semantic_condition') or {}).get('base_appids') or fam.get('base_appids') or [])]
         wanted_appids.update(x for x in base_appids if x.isdigit())
+        prepared.append((row, fit, scenario, purchase, family_id, fam, base_appids))
 
+    media = storebrowse_media(wanted_appids)
+    facts = practical_facts(wanted_appids)
+    visible = []
+
+    for row, fit, scenario, purchase, family_id, fam, base_appids in prepared:
         main_key = purchase.get('key')
         offers = []
         seen_offer_keys = set()
@@ -218,6 +335,41 @@ def main():
             }
             offers.insert(0, primary_offer)
 
+        screenshots, header, summary = [], None, None
+        for appid in base_appids:
+            m = media.get(appid) or {}
+            header = header or m.get('header_image')
+            summary = summary or m.get('short_description_ru')
+            for url in m.get('screenshots') or []:
+                if url not in screenshots:
+                    screenshots.append(url)
+                if len(screenshots) >= 5:
+                    break
+
+        taste_key = row.get('taste_subject_key')
+        taste_entry = taste_entries.get(taste_key) if isinstance(taste_entries, dict) else {}
+        projection = projection_entries.get(taste_key) if isinstance(projection_entries, dict) else {}
+        taste_entry = taste_entry if isinstance(taste_entry, dict) else {}
+        projection = projection if isinstance(projection, dict) else {}
+        tags = projection.get('fit_tags') or []
+        description = projection.get('short_description') or ''
+        reasons = []
+        for ev in (taste_entry.get('positive_evidence') or [])[:2]:
+            translated = reason_ru(ev, tags, description)
+            if translated not in reasons:
+                reasons.append(translated)
+        if not reasons:
+            reasons.append(reason_ru(None, tags, description))
+
+        base_facts = [facts.get(appid) or {} for appid in base_appids]
+        statuses = [x.get('windows_status') for x in base_facts]
+        windows_status = 'legacy' if 'legacy' in statuses else ('modern' if 'modern' in statuses else ('older_but_plausible' if 'older_but_plausible' in statuses else 'unknown'))
+        achievement_values = [x.get('steam_achievements') for x in base_facts if x.get('steam_achievements') is not None]
+        steam_achievements = True if True in achievement_values else (False if achievement_values and all(x is False for x in achievement_values) else None)
+        achievement_total = next((x.get('achievement_total') for x in base_facts if x.get('achievement_total') is not None), None)
+        practical = {'windows_status': windows_status, 'steam_achievements': steam_achievements, 'achievement_total': achievement_total}
+        risks = derive_risks(taste_entry.get('negative_evidence') or [], tags, description, projection.get('release_date'), practical)
+
         visible.append({
             'id': family_id,
             'family_type': row.get('family_type'),
@@ -233,48 +385,32 @@ def main():
             'historical_minimum_rub': primary_offer.get('historical_minimum_rub'),
             'previously_free': primary_offer.get('previously_free'),
             'sale_end_utc': primary_offer.get('sale_end_utc'),
-            'summary': None,
+            'summary': summary or 'Русское краткое описание для этой игры пока не подготовлено.',
             'gameplay_points': [],
-            'why_fit': [
-                'Сильное соответствие твоему игровому профилю.' if fit == 'strong'
-                else 'Умеренное соответствие твоему игровому профилю.'
-            ],
-            'risks': [],
+            'why_fit': reasons[:2],
+            'risks': risks,
+            'practical': practical,
             'offers': offers,
+            'screenshots': screenshots,
+            'header_image': header,
             'steam_url': primary_offer.get('steam_url') or (f'steam://store/{base_appids[0]}' if base_appids else None),
             'web_url': primary_offer.get('web_url') or (f'https://store.steampowered.com/app/{base_appids[0]}/' if base_appids else None),
         })
 
-    media = storebrowse_media(wanted_appids)
-    for game in visible:
-        screenshots = []
-        header = None
-        summary = None
-        for appid in game['base_appids']:
-            m = media.get(appid) or {}
-            if not header:
-                header = m.get('header_image')
-            if not summary:
-                summary = m.get('short_description_ru')
-            for url in m.get('screenshots') or []:
-                if url not in screenshots:
-                    screenshots.append(url)
-                if len(screenshots) >= 5:
-                    break
-            if len(screenshots) >= 5 and summary and header:
-                break
-        game['screenshots'] = screenshots
-        game['header_image'] = header
-        game['summary'] = summary or 'Русское краткое описание для этой игры пока не подготовлено.'
-
     visible.sort(key=lambda x: (
         int(x.get('priority_bucket') or 99),
+        windows_rank((x.get('practical') or {}).get('windows_status')),
+        achievements_rank((x.get('practical') or {}).get('steam_achievements')),
         -int(bool(x.get('wishlist'))),
+        -int(x.get('discount_percent') or 0),
+        int(x.get('current_price_rub') or 999999),
         (x.get('title') or '').casefold(),
     ))
+    for index, game in enumerate(visible, 1):
+        game['priority_rank'] = index
 
     output = {
-        'schema_version': 2,
+        'schema_version': 3,
         'status': 'complete',
         'generated_at_utc': datetime.now(timezone.utc).isoformat(),
         'source_mailing_updated_at_utc': payload.get('source_mailing_updated_at_utc'),
@@ -283,7 +419,7 @@ def main():
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(output, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
-    print(f'visual items: {len(visible)}; media items: {len(media)}')
+    print(f'visual items: {len(visible)}; media items: {len(media)}; practical facts: {len(facts)}')
 
 
 if __name__ == '__main__':
