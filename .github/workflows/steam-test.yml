@@ -8,12 +8,6 @@ on:
     # чтобы полный GitHub-пайплайн успел закончиться до ночной AI-подготовки в 01:00.
     - cron: "10 20 * * *"
 
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/steam-test.yml"
-      - "scripts/steam_production.py"
-
 permissions:
   contents: write
 
