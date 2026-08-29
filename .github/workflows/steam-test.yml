@@ -3,6 +3,16 @@ name: Steam KZ production shortlist
 on:
   workflow_dispatch:
 
+  # Разработческие изменения самого сборщика проверяем автоматически.
+  # Обычные production/data-коммиты этот тяжёлый workflow не запускают.
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/steam_production.py"
+      - "scripts/steam_production_cached.py"
+      - ".github/workflows/steam-test.yml"
+
   schedule:
     # Один суточный коммерческий снимок. 00:10 по Самаре (20:10 UTC предыдущего дня),
     # чтобы полный GitHub-пайплайн успел закончиться до ночной AI-подготовки в 01:00.
@@ -35,15 +45,16 @@ jobs:
         run: pip install requests beautifulsoup4
 
       - name: Collect full Steam KZ catalog and build production shortlist
-        run: python scripts/steam_production.py
+        run: python scripts/steam_production_cached.py
 
-      - name: Commit production feed
+      - name: Commit production feed and review cache
         shell: bash
         run: |
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
 
           git add -A data/production/
+          git add data/cache/steam_review_http_cache.json
 
           if git diff --cached --quiet; then
             echo "No production feed changes"
