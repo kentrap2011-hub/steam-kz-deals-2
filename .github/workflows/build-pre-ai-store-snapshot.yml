@@ -2,12 +2,14 @@ name: Build pre-AI deterministic payload
 # production trigger: verify transactional taste inbox state
 # expiry guard refresh: classify ended offers before family/taste work
 # final ranking refresh: rebuild consumer payload after qualitative 60/40 logic change
+# SteamDB checkpoint trigger: rebuild history/deal/consumer artifacts after runtime history persistence
 
 on:
   workflow_dispatch:
   workflow_run:
     workflows:
       - "Build mailing-optimized feed"
+      - "Checkpoint SteamDB history"
     types:
       - completed
   push:
