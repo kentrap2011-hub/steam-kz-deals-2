@@ -1,0 +1,50 @@
+name: Targeted AI pilot direct-anchor diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-ai-pilot-direct-anchors.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compare first 25 AI subjects with canonical profile cards
+        run: |
+          python - <<'PY'
+          import json
+          import urllib.request
+          from pathlib import Path
+
+          queue = [json.loads(line) for line in Path('data/production/pre_ai/chatgpt_taste_queue.jsonl').read_text(encoding='utf-8').splitlines() if line.strip()][:25]
+          url='https://raw.githubusercontent.com/kentrap2011-hub/stopgame-ratings-data/main/gaming_taste_live.json'
+          req=urllib.request.Request(url,headers={'User-Agent':'steam-kz-deals/1.0'})
+          with urllib.request.urlopen(req,timeout=15) as resp:
+              profile=json.loads(resp.read().decode('utf-8'))
+          cards=profile.get('stopgame_cards') or []
+          by_title={str(card.get('title') or '').casefold():card for card in cards}
+          rows=[]
+          for item in queue:
+              title=item['title']
+              direct=by_title.get(title.casefold())
+              rows.append({
+                  'key':item['taste_subject_key'],
+                  'title':title,
+                  'direct_profile_card':direct,
+              })
+          print(json.dumps({
+              'pilot_count':len(rows),
+              'direct_match_count':sum(r['direct_profile_card'] is not None for r in rows),
+              'rows':rows,
+          },ensure_ascii=False,indent=2))
+          print('AI_PILOT_DIRECT_ANCHOR_DIAGNOSTIC=PASS')
+          PY
