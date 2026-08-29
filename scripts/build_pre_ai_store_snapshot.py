@@ -221,6 +221,7 @@ def metadata_entry(key, row, store_item):
             'entity_kind': 'sub',
             'steam_id': str(subid),
             'store_name': store_name,
+            'short_description': str((store_item.get('basic_info') or {}).get('short_description') or '').strip() or None,
             'package_apps': [
                 {'appid': appid, 'name': names.get(appid)}
                 for appid in appids
@@ -237,6 +238,7 @@ def metadata_entry(key, row, store_item):
         'entity_kind': 'app',
         'steam_id': str(row['appid']),
         'store_name': store_name,
+        'short_description': str((store_item.get('basic_info') or {}).get('short_description') or '').strip() or None,
         'app_type': app_type,
         'fullgame_appid': str(parent_appid) if parent_appid is not None else None,
         'fullgame_name': None,
