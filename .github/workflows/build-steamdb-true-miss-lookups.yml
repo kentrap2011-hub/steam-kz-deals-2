@@ -6,9 +6,7 @@ on:
     branches: [main]
     paths:
       - "config/steamdb_lookup_contract.json"
-      - "data/cache/steamdb_cache.validation.json"
       - "data/cache/steamdb_web_resolutions.json"
-      - ".github/workflows/build-steamdb-true-miss-lookups.yml"
 
 permissions:
   contents: write
@@ -40,7 +38,7 @@ jobs:
           OUT = Path('data/cache/steamdb_lookup.validation.json')
 
           def sha(path):
-              return subprocess.check_output(['git','rev-parse',f'HEAD:{path}'], text=True).strip()
+              return subprocess.check_output(['git', 'rev-parse', f'HEAD:{path}'], text=True).strip()
 
           classification = json.loads(CLASSIFICATION.read_text(encoding='utf-8'))
           prepared = json.loads(PREPARED.read_text(encoding='utf-8'))
@@ -89,18 +87,17 @@ jobs:
           problems = []
 
           for key in sorted(confirmed_keys):
-              value = confirmed[key]
               try:
-                  value = float(value)
+                  value = float(confirmed[key])
               except Exception:
                   value = None
               if value is None or value <= 0:
                   problems.append({'key': key, 'reason': 'confirmed_min_not_positive'})
                   continue
               if key.startswith('App_'):
-                  entity_url = f"https://steamdb.info/app/{key.split('_',1)[1]}/"
+                  entity_url = f"https://steamdb.info/app/{key.split('_', 1)[1]}/"
               elif key.startswith('Sub_'):
-                  entity_url = f"https://steamdb.info/sub/{key.split('_',1)[1]}/"
+                  entity_url = f"https://steamdb.info/sub/{key.split('_', 1)[1]}/"
               else:
                   problems.append({'key': key, 'reason': 'unsupported_key'})
                   continue
@@ -135,7 +132,7 @@ jobs:
                   'result': 'previously_free',
                   'historical_min_kzt': 0,
                   'persistable': True,
-                  'source_url': f"https://steamdb.info/app/{key.split('_',1)[1]}/",
+                  'source_url': f"https://steamdb.info/app/{key.split('_', 1)[1]}/",
                   'checked_at_utc': prepared.get('checked_at_utc'),
                   'resolution_method': 'direct_app_kzt_lowest_row'
               })
@@ -160,7 +157,7 @@ jobs:
                   'result': 'unavailable_exact_history',
                   'historical_min_kzt': None,
                   'persistable': True,
-                  'source_url': f"https://steamdb.info/{kind}/{key.split('_',1)[1]}/",
+                  'source_url': f"https://steamdb.info/{kind}/{key.split('_', 1)[1]}/",
                   'checked_at_utc': prepared.get('checked_at_utc'),
                   'resolution_method': evidence_code
               })
@@ -170,10 +167,6 @@ jobs:
           result_keys = {x['key'] for x in registry}
           registry_missing = sorted(expected_set - result_keys)
           registry_extra = sorted(result_keys - expected_set)
-
-          confirmed_rows = [x for x in registry if x['result'] == 'confirmed_min']
-          free_rows = [x for x in registry if x['result'] == 'previously_free']
-          unavailable_rows = [x for x in registry if x['result'] == 'unavailable_exact_history']
 
           complete = (
               not problems
@@ -196,17 +189,17 @@ jobs:
               'expected_true_miss_count': len(expected),
               'runtime_attempted_count': prepared.get('runtime_attempted_count'),
               'validated_resolution_count': len(registry),
-              'confirmed_min_count': len(confirmed_rows),
-              'previously_free_count': len(free_rows),
-              'unavailable_exact_history_count': len(unavailable_rows),
+              'confirmed_min_count': sum(1 for x in registry if x['result'] == 'confirmed_min'),
+              'previously_free_count': sum(1 for x in registry if x['result'] == 'previously_free'),
+              'unavailable_exact_history_count': sum(1 for x in registry if x['result'] == 'unavailable_exact_history'),
               'blocked_or_failure_count': 0 if complete else len(problems),
               'duplicate_registry_count': duplicate_registry_count,
               'non_miss_query_count': len(registry_extra),
               'missing_result_count': len(registry_missing),
               'lookup_registry': registry,
-              'confirmed_min': confirmed_rows,
-              'previously_free': free_rows,
-              'unavailable_exact_history': unavailable_rows,
+              'confirmed_min': [x for x in registry if x['result'] == 'confirmed_min'],
+              'previously_free': [x for x in registry if x['result'] == 'previously_free'],
+              'unavailable_exact_history': [x for x in registry if x['result'] == 'unavailable_exact_history'],
               'problems': problems
           }
           OUT.write_text(json.dumps(out, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
