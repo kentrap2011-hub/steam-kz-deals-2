@@ -50,7 +50,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          # Pushes are limited above to calculation/workflow files, so they are
+          # intentional development changes and must rebuild even on the same
+          # daily source snapshot. Normal workflow_run production keeps identity
+          # checks and does not rebuild unnecessarily.
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" || "${{ github.event_name }}" == "push" ]]; then
             export FORCE_VISUAL_BUILD=1
           fi
           python scripts/build_daily_visual_payload.py | tee /tmp/visual-build.log
