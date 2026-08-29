@@ -60,39 +60,10 @@ jobs:
             echo "built=false" >> "$GITHUB_OUTPUT"
           fi
 
-      # One-time recovery guard for the payload that was refined after the
-      # next nightly source had already started but before its AI queue closed.
-      # Remove this step after the safe snapshot has been restored once.
-      - name: Restore last safe visual snapshot if current payload was cross-mixed
-        id: repair
-        if: steps.build.outputs.built != 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY' > /tmp/repair-decision
-          import json
-          from pathlib import Path
-
-          current = json.loads(Path('data/production/visual/current.json').read_text(encoding='utf-8'))
-          payload = json.loads(Path('data/production/pre_ai/chatgpt_payload.json').read_text(encoding='utf-8'))
-          contract = current.get('production_contract') or {}
-          mixed = bool(
-              contract.get('ranking_refiner_blob_sha')
-              and int(payload.get('ai_queue_count') or 0) > 0
-              and current.get('source_mailing_updated_at_utc') != payload.get('source_mailing_updated_at_utc')
-          )
-          print('true' if mixed else 'false')
-          PY
-          repair="$(cat /tmp/repair-decision)"
-          echo "repaired=$repair" >> "$GITHUB_OUTPUT"
-          if [[ "$repair" == "true" ]]; then
-            git show ec3e5cc730f5b2481cadac7fa3b4c6f7f179151e:data/production/visual/current.json > data/production/visual/current.json
-            git show ec3e5cc730f5b2481cadac7fa3b4c6f7f179151e:data/production/visual/ranking_review.jsonl > data/production/visual/ranking_review.jsonl
-            echo "Restored last safe completed visual snapshot"
-          else
-            echo "No cross-mixed visual payload detected"
-          fi
-
+      # The refiner is allowed to touch a payload only in the same job that
+      # has just built that payload from the checked-out source snapshot.
+      # WAIT/SKIP therefore cannot re-rank an older visual payload with newer
+      # partially-produced pre-AI files.
       - name: Refine personal risks and ranking
         if: steps.build.outputs.built == 'true'
         env:
@@ -165,7 +136,7 @@ jobs:
           PY
 
       - name: Commit canonical payload and review export
-        if: steps.build.outputs.built == 'true' || steps.repair.outputs.repaired == 'true'
+        if: steps.build.outputs.built == 'true'
         run: |
           set -euo pipefail
           git config user.name "steam-kz-bot"
