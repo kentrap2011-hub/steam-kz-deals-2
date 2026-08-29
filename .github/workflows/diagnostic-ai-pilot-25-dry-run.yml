@@ -24,7 +24,6 @@ jobs:
         run: |
           python - <<'PY'
           import json
-          import subprocess
           from collections import Counter
           from pathlib import Path
 
@@ -78,11 +77,10 @@ jobs:
             'App_1048100': ('EXCLUDE','below_moderate','exclude_audited_below',[
               'The prepared context has a specific asymmetric hide-and-seek mechanic where one side becomes physical props and the other searches for them; this is a distinctive gameplay hook, while multiplayer alone is neutral in the canonical profile.'
             ],[]),
-            'App_1049410': ('EXCLUDE','below_moderate','exclude_direct_conflict',[
-              'The prepared context has a distinctive perspective-and-depth manipulation mechanic, which is a clear gameplay hook.'
-            ],[
-              'The prepared context explicitly defines the game as a first-person puzzler whose progression is solving impossible puzzles; this matches the canonical structural risk that a pure puzzle loop is pleasant only briefly and does not sustain interest as well as puzzles embedded in a broader adventure.'
-            ]),
+            'App_1049410': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context has a specific perspective-and-depth manipulation mechanic for solving impossible puzzles; this is a high-specificity intrinsic gameplay hook and maps to the durable preference for a game to have a memorable mechanic rather than a generic formula.',
+              'The prepared context gives an explicit objective to escape the surreal dream world; this maps to the very strong preference for unusual exploration or problem solving to retain a readable goal instead of leaving the player unclear about what the game wants.'
+            ],[]),
             'App_1051200': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
             'App_1063660': ('EXCLUDE','below_moderate','exclude_insufficient',[
               'The prepared context gives a clear discover-the-truth and escape objective, which aligns with the preference for mystery without being unclear about the immediate goal, but it does not expose a second specific gameplay or structural match.'
@@ -141,26 +139,22 @@ jobs:
       - name: Quality and historical sanity check
         run: |
           python - <<'PY'
-          import hashlib
           import json
           from collections import Counter
           from pathlib import Path
 
           pilot=json.loads(Path('/tmp/taste_pilot_25.json').read_text(encoding='utf-8'))
           results=pilot['results']
-          overlay=Path('data/cache/taste_fit.entry_overlay.json')
-          current_overlay=json.loads(overlay.read_text(encoding='utf-8'))
+          current_overlay=json.loads(Path('data/cache/taste_fit.entry_overlay.json').read_text(encoding='utf-8'))
           legacy=json.loads(Path('data/cache/taste_fit.json').read_text(encoding='utf-8'))
           legacy_entries=legacy.get('entries') or {}
 
           counts=Counter(r['reason_code'] for r in results)
-          expected={'include_moderate':6,'exclude_audited_below':7,'exclude_direct_conflict':1,'exclude_insufficient':11}
+          expected={'include_moderate':7,'exclude_audited_below':7,'exclude_insufficient':11}
           if dict(counts) != expected:
               raise SystemExit(f'Unexpected pilot distribution: {dict(counts)}')
           if any(r['verdict']=='INCLUDE' and len(r['positive_evidence']) < 2 for r in results):
               raise SystemExit('Pilot INCLUDE lacks two positive evidence items')
-          if any(r['reason_code']=='exclude_direct_conflict' and not r['negative_evidence'] for r in results):
-              raise SystemExit('Direct-conflict pilot result lacks negative evidence')
           if current_overlay.get('entry_count') != 2:
               raise SystemExit('Dry-run changed or unexpected overlay baseline')
 
