@@ -13,8 +13,8 @@ on:
       - "config/mailing_policy.json"
       - "config/steamdb_cache_classification_contract.json"
       - "data/cache/steamdb_history.json"
-      - "data/cache/store_state.validation.json"
-      - "data/cache/offer_family.validation.json"
+      - "data/production/pre_ai/family_graph.json"
+      - "data/production/pre_ai/store_snapshot.json"
       - ".github/workflows/build-steamdb-cache-classification.yml"
 
 permissions:
@@ -37,7 +37,7 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Classify SteamDB cache for current primaries
+      - name: Classify SteamDB cache for current pre-AI primaries
         run: |
           python - <<'PY'
           import json
@@ -48,15 +48,16 @@ jobs:
           POLICY=Path('config/mailing_policy.json')
           CONTRACT=Path('config/steamdb_cache_classification_contract.json')
           HISTORY=Path('data/cache/steamdb_history.json')
-          STORE=Path('data/cache/store_state.validation.json')
-          FAMILIES=Path('data/cache/offer_family.validation.json')
+          STORE=Path('data/production/pre_ai/store_snapshot.json')
+          FAMILIES=Path('data/production/pre_ai/family_graph.json')
           OUT=Path('data/cache/steamdb_cache.validation.json')
 
           def sha(path):
               return subprocess.check_output(['git','rev-parse',f'HEAD:{path}'],text=True).strip()
 
           def parse_dt(text):
-              if not text: return None
+              if not text:
+                  return None
               try:
                   return datetime.fromisoformat(str(text).replace('Z','+00:00'))
               except Exception:
@@ -68,22 +69,55 @@ jobs:
           store=json.loads(STORE.read_text(encoding='utf-8'))
           fam=json.loads(FAMILIES.read_text(encoding='utf-8'))
 
-          if policy.get('status')!='canonical': raise SystemExit('Policy not canonical')
-          if contract.get('contract')!='STEAMDB-CACHE-CLASSIFICATION-V1': raise SystemExit('Unexpected SteamDB classification contract')
-          if store.get('status')!='complete': raise SystemExit('Store state incomplete')
-          if fam.get('status')!='complete': raise SystemExit('Offer family incomplete')
+          if policy.get('status')!='canonical':
+              raise SystemExit('Policy not canonical')
+          if contract.get('contract')!='STEAMDB-CACHE-CLASSIFICATION-V1' or contract.get('version')!='1.1':
+              raise SystemExit('Unexpected SteamDB classification contract')
+          if store.get('status')!='complete':
+              raise SystemExit('Pre-AI store snapshot incomplete')
+          if fam.get('status')!='complete':
+              raise SystemExit('Pre-AI family graph incomplete')
 
           entries=hist.get('entries')
-          if not isinstance(entries,dict): raise SystemExit('SteamDB entries malformed')
+          if not isinstance(entries,dict):
+              raise SystemExit('SteamDB entries malformed')
           actual_entry_count=len(entries)
           schema=int(hist.get('schema_version') or 0)
           accepted={1, int(policy['external_cache']['steamdb_history']['writer_schema_version'])}
-          if schema not in accepted: raise SystemExit(f'Unsupported SteamDB cache schema {schema}')
+          if schema not in accepted:
+              raise SystemExit(f'Unsupported SteamDB cache schema {schema}')
 
-          current_by_key={x['primary_key']:x for x in store['current_state']}
-          primary_keys=[f['primary_key'] for f in fam['families']]
-          if len(primary_keys)!=len(set(primary_keys)): raise SystemExit('Duplicate primary keys')
-          if set(primary_keys)!=set(current_by_key): raise SystemExit('Store/family primary key mismatch')
+          store_entries=store.get('entries')
+          families=fam.get('families')
+          if not isinstance(store_entries,dict):
+              raise SystemExit('Pre-AI store entries malformed')
+          if not isinstance(families,list):
+              raise SystemExit('Pre-AI family list malformed')
+          if int(fam.get('family_count') or -1)!=len(families):
+              raise SystemExit('Pre-AI family metadata count mismatch')
+
+          primary_keys=[]
+          current_by_key={}
+          for family in families:
+              if not isinstance(family,dict):
+                  raise SystemExit('Pre-AI family row malformed')
+              key=family.get('primary_key')
+              if not key:
+                  raise SystemExit('Pre-AI family missing primary key')
+              primary_keys.append(key)
+              current=store_entries.get(key)
+              if not isinstance(current,dict):
+                  raise SystemExit(f'Current primary missing from pre-AI store snapshot: {key}')
+              try:
+                  current_kzt=float(current.get('final_kzt'))
+              except Exception:
+                  raise SystemExit(f'Invalid current price for {key}')
+              if current_kzt<=0:
+                  raise SystemExit(f'Non-positive current price for {key}')
+              current_by_key[key]={'final_kzt':current_kzt}
+
+          if len(primary_keys)!=len(set(primary_keys)):
+              raise SystemExit('Duplicate current pre-AI primary keys')
 
           ttl_days=int(policy['external_cache']['steamdb_history']['negative_cache']['ttl_days'])
           now=datetime.now(timezone.utc)
@@ -123,10 +157,14 @@ jobs:
               status=entry.get('status')
               if status=='confirmed_min':
                   value=entry.get('historical_min_kzt')
-                  try: value=float(value)
-                  except Exception: value=None
+                  try:
+                      value=float(value)
+                  except Exception:
+                      value=None
                   if value is None or value<=0:
-                      misses.append({'key':key,'reason':'entry_invalid','current_kzt':current}); invalid.append({'key':key,'reason':'invalid_confirmed_min'}); continue
+                      misses.append({'key':key,'reason':'entry_invalid','current_kzt':current})
+                      invalid.append({'key':key,'reason':'invalid_confirmed_min'})
+                      continue
                   if current<value:
                       misses.append({'key':key,'reason':'current_price_below_cached_min','current_kzt':current,'cached_min_kzt':value})
                   else:
@@ -140,7 +178,8 @@ jobs:
                   else:
                       misses.append({'key':key,'reason':'negative_ttl_expired','current_kzt':current,'checked_at_utc':entry.get('checked_at_utc')})
               else:
-                  misses.append({'key':key,'reason':'entry_invalid','current_kzt':current,'status':status}); invalid.append({'key':key,'reason':'unknown_status','status':status})
+                  misses.append({'key':key,'reason':'entry_invalid','current_kzt':current,'status':status})
+                  invalid.append({'key':key,'reason':'unknown_status','status':status})
 
           total=len(confirmed)+len(free)+len(negative)+len(misses)
           complete=(total==len(primary_keys) and len({x['key'] for x in confirmed+free+negative+misses})==len(primary_keys))
@@ -152,8 +191,8 @@ jobs:
                   'policy_blob_sha':sha('config/mailing_policy.json'),
                   'classification_contract_blob_sha':sha('config/steamdb_cache_classification_contract.json'),
                   'steamdb_cache_blob_sha':sha('data/cache/steamdb_history.json'),
-                  'store_state_validation_blob_sha':sha('data/cache/store_state.validation.json'),
-                  'offer_family_blob_sha':sha('data/cache/offer_family.validation.json'),
+                  'pre_ai_store_snapshot_blob_sha':sha('data/production/pre_ai/store_snapshot.json'),
+                  'pre_ai_family_graph_blob_sha':sha('data/production/pre_ai/family_graph.json'),
               },
               'cache_schema_version':schema,
               'metadata_entry_count':hist.get('entry_count'),
