@@ -1,6 +1,5 @@
 import json
 import re
-import shutil
 import threading
 import time
 from collections import Counter
@@ -10,6 +9,8 @@ from pathlib import Path
 
 import requests
 from bs4 import BeautifulSoup
+
+from production_output_ownership import reset_steam_collector_outputs
 
 
 URL = "https://store.steampowered.com/search/results/"
@@ -1551,8 +1552,10 @@ if not selected:
         "Production shortlist is empty"
     )
 
-if OUT.exists():
-    shutil.rmtree(OUT)
+# Replace only artifacts owned by this collector.  Downstream production
+# state (mailing/pre_ai/daily_ready) remains available until its own producer
+# atomically replaces it.
+reset_steam_collector_outputs(OUT)
 
 SHORT.mkdir(
     parents=True,
