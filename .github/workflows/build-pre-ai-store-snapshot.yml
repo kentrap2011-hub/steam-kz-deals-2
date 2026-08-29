@@ -1,5 +1,5 @@
 name: Build pre-AI deterministic payload
-# production trigger: audited 25-row taste pilot persisted
+# production trigger: integrate current canonical taste cache atomically
 
 on:
   workflow_dispatch:
@@ -44,7 +44,7 @@ permissions:
 
 concurrency:
   group: pre-ai-deterministic-payload
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
