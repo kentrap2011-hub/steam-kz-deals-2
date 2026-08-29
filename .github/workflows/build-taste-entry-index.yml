@@ -6,8 +6,10 @@ on:
     branches: [main]
     paths:
       - "data/cache/taste_fit.json"
+      - "data/cache/taste_fit.entry_overlay.json"
       - "config/taste_cache_entry_contract.json"
       - "config/taste_fingerprint_contract.json"
+      - "config/taste_candidate_context_contract.json"
       - "config/taste_ledger_contract.json"
       - "config/mailing_policy.json"
       - "scripts/taste_cache_common.py"
@@ -48,12 +50,17 @@ jobs:
               raise SystemExit('per-entry binding mode missing')
           if doc.get('index_entry_count') != len(doc.get('entries') or {}):
               raise SystemExit('per-entry index count mismatch')
-          if doc['entry_fields'] != [
+          legacy = [
               'appid','profile_blob_sha','taste_model_version','taste_semantics_sha256',
               'taste_fingerprint','verdict','fit_level','reason_code'
-          ]:
+          ]
+          context_bound = [
+              'appid','profile_blob_sha','taste_model_version','taste_semantics_sha256',
+              'candidate_context_sha256','taste_fingerprint','verdict','fit_level','reason_code'
+          ]
+          if doc['entry_fields'] not in (legacy, context_bound):
               raise SystemExit('unexpected per-entry compact shape')
-          print(f"PER_ENTRY_INDEX_V2=PASS entries={doc['index_entry_count']}")
+          print(f"PER_ENTRY_INDEX_V2=PASS entries={doc['index_entry_count']} fields={len(doc['entry_fields'])}")
           PY
       - name: Commit per-entry index
         run: |
