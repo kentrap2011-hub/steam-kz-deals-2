@@ -1,0 +1,117 @@
+name: Targeted missing taste-description diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-missing-taste-descriptions.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Measure deterministic fallback coverage for description gaps
+        run: |
+          python - <<'PY'
+          import json
+          import time
+          import urllib.parse
+          import urllib.request
+          from pathlib import Path
+
+          projection = json.loads(Path('data/production/pre_ai/taste_projection.json').read_text(encoding='utf-8'))
+          metadata = json.loads(Path('data/production/pre_ai/content_metadata.json').read_text(encoding='utf-8'))['entries']
+          rows = projection['entries']
+          missing = [row for row in rows.values() if not row.get('short_description')]
+          apps = [row for row in missing if row['taste_subject_key'].startswith('App_')]
+          bundles = [row for row in missing if row['taste_subject_key'].startswith('Sub_')]
+          if len(missing) != 34 or len(apps) != 31 or len(bundles) != 3:
+              raise SystemExit(f'Unexpected current description gap shape: total={len(missing)} apps={len(apps)} bundles={len(bundles)}')
+
+          bundle_results = []
+          bundle_fillable = 0
+          for row in bundles:
+              member_descriptions = []
+              for member in row.get('bundle_members') or []:
+                  key = f"App_{member['appid']}"
+                  desc = (metadata.get(key) or {}).get('short_description')
+                  if desc:
+                      member_descriptions.append({'appid': member['appid'], 'name': member['name'], 'short_description': desc})
+              fillable = bool(member_descriptions)
+              bundle_fillable += int(fillable)
+              bundle_results.append({
+                  'key': row['taste_subject_key'],
+                  'title': row['taste_subject_title'],
+                  'member_count': len(row.get('bundle_members') or []),
+                  'member_description_count': len(member_descriptions),
+                  'fillable_from_existing_metadata': fillable,
+              })
+
+          app_results = []
+          appdetails_known = 0
+          failures = []
+          started = time.monotonic()
+          for index, row in enumerate(apps, start=1):
+              appid = row['appid']
+              params = urllib.parse.urlencode({'appids': appid, 'cc': 'kz', 'l': 'english'})
+              url = 'https://store.steampowered.com/api/appdetails?' + params
+              req = urllib.request.Request(url, headers={'User-Agent': 'steam-kz-deals/1.0'})
+              description = None
+              success = False
+              error = None
+              try:
+                  with urllib.request.urlopen(req, timeout=12) as resp:
+                      doc = json.loads(resp.read().decode('utf-8'))
+                  node = doc.get(str(appid)) or {}
+                  success = node.get('success') is True
+                  data = node.get('data') or {}
+                  value = data.get('short_description')
+                  if isinstance(value, str) and value.strip():
+                      description = value.strip()
+              except Exception as exc:
+                  error = f'{type(exc).__name__}: {exc}'
+                  failures.append({'appid': appid, 'error': error})
+              appdetails_known += int(bool(description))
+              app_results.append({
+                  'key': row['taste_subject_key'],
+                  'appid': appid,
+                  'title': row['taste_subject_title'],
+                  'success': success,
+                  'short_description_known': bool(description),
+                  'short_description': description,
+                  'error': error,
+              })
+              if index < len(apps):
+                  time.sleep(0.08)
+
+          elapsed = round(time.monotonic() - started, 3)
+          total_fillable = bundle_fillable + appdetails_known
+          remaining = len(missing) - total_fillable
+          result = {
+              'status': 'complete',
+              'baseline_missing_total': len(missing),
+              'missing_app_subjects': len(apps),
+              'missing_bundle_subjects': len(bundles),
+              'bundle_fillable_from_existing_metadata': bundle_fillable,
+              'appdetails_description_known': appdetails_known,
+              'appdetails_failures': len(failures),
+              'total_mechanically_fillable': total_fillable,
+              'remaining_without_description_after_fallback': remaining,
+              'additional_network_requests': len(apps),
+              'elapsed_seconds_appdetails': elapsed,
+              'bundle_results': bundle_results,
+              'app_results': app_results,
+          }
+          print(json.dumps(result, ensure_ascii=False, indent=2))
+          if failures:
+              raise SystemExit(f'Appdetails fallback had request failures: {failures[:5]}')
+          print('MISSING_TASTE_DESCRIPTION_DIAGNOSTIC=PASS')
+          PY
