@@ -31,9 +31,28 @@
       "sort eligible paid candidates by precomputed final_priority_bucket ascending; within the same bucket prefer wishlist, then stronger history value, larger discount, lower price, then title",
       "form the complete user-facing mailing text",
       "write data/production/daily_ready/latest.md",
-      "write data/production/daily_ready/latest.json",
+      "write data/production/daily_ready/latest.json exactly to the daily_ready_manifest schema",
       "on failure write data/production/daily_ready/preparation_status.json without replacing the last successful complete artifact"
     ]
+  },
+  "daily_ready_manifest": {
+    "schema_version": 1,
+    "required_fields": [
+      "schema_version",
+      "status",
+      "source_mailing_updated_at_utc",
+      "intended_delivery_local_date",
+      "prepared_at_utc",
+      "ready_text_sha256"
+    ],
+    "schema_version_value": 1,
+    "status_complete_value": "complete",
+    "source_binding_rule": "source_mailing_updated_at_utc must exactly equal the source_mailing_updated_at_utc from the pre-AI payload used to prepare the mailing",
+    "delivery_date_rule": "intended_delivery_local_date is YYYY-MM-DD in Europe/Samara for the morning delivery this artifact is intended for",
+    "prepared_at_rule": "prepared_at_utc is timezone-aware ISO-8601 UTC, not earlier than the source snapshot and not materially in the future",
+    "text_integrity_rule": "ready_text_sha256 is lowercase SHA-256 hex of the exact bytes stored in latest.md",
+    "validation_workflow": ".github/workflows/validate-daily-handoff.yml",
+    "fail_closed": true
   },
   "morning_delivery": {
     "local_time": "08:00",
@@ -42,11 +61,14 @@
     "allowed_work": [
       "read latest.json",
       "read latest.md",
-      "verify intended_delivery_local_date",
+      "verify daily_ready_manifest schema_version/status/required fields",
+      "verify intended_delivery_local_date in Europe/Samara",
+      "verify ready_text_sha256 against exact latest.md bytes",
       "apply known expiry timestamps locally without network",
       "display prepared text"
     ],
     "forbidden_work": [
+      "read pre-AI payload to redo source validation",
       "taste re-evaluation",
       "Steam or web refresh",
       "SteamDB refresh",
@@ -54,7 +76,8 @@
       "price or discount refresh",
       "history refresh",
       "deal scenario recalculation"
-    ]
+    ],
+    "trust_model": "Source-snapshot binding is validated after the night write by the deterministic GitHub handoff guard. Morning independently checks manifest schema, local delivery date and text hash, then renders the prepared text."
   },
   "artifacts": {
     "ready_text": "data/production/daily_ready/latest.md",
