@@ -28,6 +28,9 @@ jobs:
         run: |
           python scripts/validate_mailing_policy.py
           python scripts/build_pre_ai_deal_scenarios.py
+          # Boundary validation regenerates this production artifact only for the test.
+          # The normal pre-AI workflow will rebuild and commit it after the logic patch lands.
+          git restore data/production/pre_ai/deal_scenarios.json
       - name: Commit patched ranking logic
         run: |
           git config user.name "steam-kz-bot"
