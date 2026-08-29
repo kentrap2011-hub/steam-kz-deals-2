@@ -5,23 +5,29 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
-USER_AGENT = 'steam-kz-deals-achievements/1.0'
+USER_AGENT = 'steam-kz-deals-achievements/1.1'
 
+# The order matters: a constrained/challenge version of an otherwise ordinary
+# action must beat generic story/grind wording.
 CHALLENGE_PATTERNS = [
     r'\bwithout (?:getting )?hit\b',
-    r'\bwithout taking damage\b',
+    r'\bwithout taking (?:any )?damage\b',
+    r'\bwithout dying\b',
+    r'\bwithout killing\b',
+    r'\bwithout using\b',
+    r'\bwithout (?:any )?upgrades\b',
     r'\bno[- ]?hit\b',
     r'\bno[- ]?death\b',
-    r'\bwithout dying\b',
+    r'\bno upgrades\b',
     r'\bone life\b',
     r'\bpacifist\b',
+    r'\bpermadeath\b',
+    r'\biron ?man\b',
     r'\bspeed ?run\b',
-    r'\bunder \d+ (?:minute|minutes|hour|hours|second|seconds)\b',
-    r'\bwithin \d+ (?:minute|minutes|hour|hours|second|seconds)\b',
-    r'\bexpert\b',
-    r'\bhardest\b',
-    r'\bnightmare\b',
-    r'\binsane\b',
+    r'\bunder \d+ (?:second|seconds|minute|minutes|hour|hours)\b',
+    r'\bwithin \d+ (?:second|seconds|minute|minutes|hour|hours)\b',
+    r'\b(?:complete|finish|beat) .+ on (?:hard|very hard|expert|master|nightmare|insane|legendary|ultra)\b',
+    r'\b(?:hardest|nightmare|insane|legendary) difficulty\b',
     r'\bs[- ]?rank\b',
     r'\ba[- ]?rank\b',
     r'\bperfect\b',
@@ -30,17 +36,18 @@ CHALLENGE_PATTERNS = [
     r'\bng\+\b',
     r'\buse only\b',
     r'\busing only\b',
-    r'\bwithout using\b',
-    r'\bwithout (?:any )?upgrades\b',
-    r'\bno upgrades\b',
-    r'\bwithout killing\b',
+    r'\bwith only\b',
+    r'\bwithout .+ ability\b',
+    r'\bwithout .+ weapon\b',
 ]
 
 MASTERY_PATTERNS = [
     r'\bparr(?:y|ies|ied)\b',
+    r'\bdeflect\b',
     r'\bcombo\b',
     r'\bcounter\b',
     r'\bdodge\b',
+    r'\bheadshot\b',
     r'\bdefeat .+ with\b',
     r'\bkill .+ with\b',
     r'\bcomplete .+ with\b',
@@ -54,6 +61,18 @@ MASTERY_PATTERNS = [
     r'\bchain\b',
 ]
 
+GRIND_PATTERNS = [
+    r'\b(?:kill|defeat|collect|obtain|earn|win|play|complete|perform|use|craft|open)\s+(\d{3,})\b',
+    r'\b(\d{3,})\s+(?:kills|enemies|matches|games|items|coins|collectibles|times|objects|points)\b',
+    r'\bplay for \d+ hours\b',
+    r'\breach level (?:5\d|[6-9]\d|\d{3,})\b',
+    r'\bmax(?:imum)? level\b',
+    r'\bbuy everything\b',
+    r'\bcomplete all (?:activities|challenges|events|locations|objectives)\b',
+    r'\bclear (?:every|all) (?:area|areas|location|locations|region|regions)\b',
+    r'\b100% (?:the )?(?:map|game|completion)\b',
+]
+
 OPTIONAL_PATTERNS = [
     r'\bsecret\b',
     r'\bhidden\b',
@@ -63,25 +82,21 @@ OPTIONAL_PATTERNS = [
     r'\bcollect all\b',
     r'\bcollect every\b',
     r'\ball endings\b',
+    r'\bevery ending\b',
     r'\balternate ending\b',
     r'\bside quest\b',
+    r'\bside mission\b',
     r'\boptional\b',
+    r'\beaster egg\b',
 ]
 
 STORY_PATTERNS = [
-    r'\bcomplete (?:chapter|act|episode|mission|level|stage|game|campaign)\b',
-    r'\bfinish (?:chapter|act|episode|mission|level|stage|game|campaign)\b',
-    r'\bdefeat (?:the )?[a-z0-9 \-]+$',
-    r'\bbeat (?:the )?[a-z0-9 \-]+$',
-]
-
-GRIND_PATTERNS = [
-    r'\b(?:kill|defeat|collect|obtain|earn|win|play|complete|perform|use)\s+(\d{3,})\b',
-    r'\b(\d{3,})\s+(?:kills|enemies|matches|games|items|coins|collectibles|times)\b',
-    r'\bplay for \d+ hours\b',
-    r'\breach level (?:5\d|[6-9]\d|\d{3,})\b',
-    r'\bmax(?:imum)? level\b',
-    r'\bbuy everything\b',
+    r'\b(?:complete|finish|clear) (?:the )?(?:prologue|epilogue|chapter|act|episode|mission|level|stage|game|campaign)\b',
+    r'\b(?:complete|finish|clear) (?:chapter|act|episode|mission|level|stage)\s*[0-9ivx]+\b',
+    r'\b(?:beat|finish|complete) the game\b',
+    r'\bdefeat (?:the )?[a-z0-9][a-z0-9 '\-:]+$',
+    r'\bbeat (?:the )?[a-z0-9][a-z0-9 '\-:]+$',
+    r'\breach (?:the )?(?:ending|finale|credits)\b',
 ]
 
 
@@ -113,48 +128,71 @@ def classify_achievement(name, description):
     text = f'{name} {description}'.strip().lower()
     if not text:
         return None
-    if _matches(GRIND_PATTERNS, text):
-        return 2
+
     if _matches(CHALLENGE_PATTERNS, text):
         return 5
     if _matches(MASTERY_PATTERNS, text):
         return 4
+    if _matches(GRIND_PATTERNS, text):
+        return 2
     if _matches(OPTIONAL_PATTERNS, text):
         return 3
     if _matches(STORY_PATTERNS, text):
         return 1
-    return 3 if description else None
+
+    # Unknown wording is deliberately not treated as 3/5. 3/5 means that an
+    # explicit meaningful optional goal/secret was actually detected.
+    return None
+
+
+def _threshold(total_visible, fraction, minimum=2):
+    return max(minimum, math.ceil(max(total_visible, 1) * fraction))
 
 
 def rate_achievement_set(pairs):
     ratings = [classify_achievement(name, desc) for name, desc in pairs]
     ratings = [x for x in ratings if x is not None]
-    if not ratings:
-        return None, {'assessed': 0, 'total_visible': len(pairs), 'counts': {}}
-
     counts = {score: ratings.count(score) for score in range(1, 6)}
-    n = len(ratings)
+    total_visible = len(pairs)
+    assessed = len(ratings)
 
-    # Canonical user profile:
-    # 5 = new play styles/challenges; 4 = deeper mechanic use;
-    # 3 = meaningful optional goals/secrets; 2 = grind/collectathon;
-    # 1 = mostly automatic/story progression.
-    if counts[5] >= max(2, math.ceil(n * 0.08)):
-        quality = 5
-    elif counts[5] + counts[4] >= max(2, math.ceil(n * 0.15)):
-        quality = 4
-    elif counts[5] + counts[4] + counts[3] >= max(2, math.ceil(n * 0.20)):
-        quality = 3
-    elif counts[2] >= max(2, math.ceil(n * 0.25)):
-        quality = 2
-    else:
-        quality = 1
-
-    return quality, {
-        'assessed': n,
-        'total_visible': len(pairs),
+    evidence = {
+        'assessed': assessed,
+        'total_visible': total_visible,
+        'coverage_percent': int(round(100 * assessed / total_visible)) if total_visible else 0,
         'counts': {str(k): v for k, v in counts.items() if v},
     }
+    if not ratings:
+        return None, evidence
+
+    # Canonical user profile, applied as transparent qualitative tiers:
+    # 5 = a meaningful challenge/restriction layer exists;
+    # 4 = meaningful mastery/deeper-mechanics layer exists;
+    # 3 = meaningful optional goals/secrets;
+    # 2 = grind/cleanup is the main detected extra-achievement layer;
+    # 1 = detected set is mostly ordinary progression/story milestones.
+    challenge_needed = 1 if total_visible <= 15 else _threshold(total_visible, 0.05)
+    mastery_needed = 1 if total_visible <= 12 else _threshold(total_visible, 0.08)
+    optional_needed = 1 if total_visible <= 10 else _threshold(total_visible, 0.10)
+
+    if counts[5] >= challenge_needed:
+        quality = 5
+    elif counts[5] + counts[4] >= mastery_needed:
+        quality = 4
+    elif counts[5] + counts[4] + counts[3] >= optional_needed:
+        quality = 3
+    elif counts[2] and counts[2] >= max(counts[1], counts[3] + counts[4] + counts[5]):
+        quality = 2
+    elif counts[1] and counts[1] >= counts[2] + counts[3] + counts[4] + counts[5]:
+        quality = 1
+    elif counts[2] > counts[1]:
+        quality = 2
+    elif counts[1] > 0:
+        quality = 1
+    else:
+        quality = None
+
+    return quality, evidence
 
 
 def fetch_achievement_quality(appid, timeout=15):
@@ -228,8 +266,12 @@ def enrich_visual_items(items):
             practical['achievement_quality_source'] = 'steam_global_achievement_descriptions_unavailable'
             continue
 
-        quality = int(round(sum(row['achievement_quality'] for row in assessed) / len(assessed)))
-        practical['achievement_quality'] = max(1, min(5, quality))
+        # A bundle/family can have several base games. The most interesting
+        # achievement set is a real reason to prefer the purchase, so keep the
+        # best confirmed quality instead of diluting it with a simple mean.
+        best = max(assessed, key=lambda row: int(row['achievement_quality']))
+        practical['achievement_quality'] = int(best['achievement_quality'])
         practical['achievement_quality_source'] = 'steam_global_achievement_descriptions'
         practical['achievement_quality_assessed_games'] = len(assessed)
+        practical['achievement_quality_evidence'] = best.get('achievement_quality_evidence') or {}
     return items
