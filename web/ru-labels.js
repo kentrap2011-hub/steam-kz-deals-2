@@ -20,30 +20,14 @@ if(fitNode){
   translateFitLabel();
 }
 
-// Android/Chrome: deliver the canonical Steam Store URL directly to the
-// Steam package via ACTION_VIEW. No browser fallback: if Steam cannot handle
-// the intent we want that failure to be visible instead of silently opening Chrome.
+// On this Android/Steam Mobile combination deep-links launch Steam but do not
+// reliably navigate to the requested game. Prefer the exact Store page instead.
 openSteam=function(steamUrl,webUrl){
-  if(!steamUrl&&!webUrl)return;
-  if(/Android/i.test(navigator.userAgent)&&webUrl){
-    const appMatch=webUrl.match(/store\.steampowered\.com\/app\/(\d+)/i);
-    const subMatch=webUrl.match(/store\.steampowered\.com\/sub\/(\d+)/i);
-    if(appMatch){
-      location.href=`intent://store.steampowered.com/app/${appMatch[1]}#Intent;scheme=https;package=com.valvesoftware.android.steam.community;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end`;
-      return;
-    }
-    if(subMatch){
-      location.href=`intent://store.steampowered.com/sub/${subMatch[1]}#Intent;scheme=https;package=com.valvesoftware.android.steam.community;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end`;
-      return;
-    }
-  }
-  if(steamUrl){
-    location.href=steamUrl;
+  if(webUrl){
+    location.href=webUrl;
     return;
   }
-  if(webUrl){
-    location.href=`steam://openurl/${webUrl}`;
-  }
+  if(steamUrl) location.href=steamUrl;
 };
 
 const titleNode=document.getElementById('title');
