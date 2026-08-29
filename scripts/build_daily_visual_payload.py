@@ -1,6 +1,7 @@
 import json
 import os
 import subprocess
+from collections import Counter
 from pathlib import Path
 
 import achievement_quality
@@ -60,6 +61,18 @@ def achievement_quality_rank(practical):
     if isinstance(quality, int) and 1 <= quality <= 5:
         return 5 - quality
     return 5
+
+
+def achievement_quality_distribution(items):
+    counts = Counter()
+    for game in items or []:
+        practical = game.get('practical') or {}
+        quality = practical.get('achievement_quality')
+        if quality in {0, 1, 2, 3, 4, 5}:
+            counts[str(quality)] += 1
+        else:
+            counts['unknown'] += 1
+    return {key: counts.get(key, 0) for key in ['5', '4', '3', '2', '1', '0', 'unknown']}
 
 
 def current_production_readiness():
@@ -193,6 +206,7 @@ def main():
 
     ready = load_json(OUT)
     ready['items'] = achievement_quality.enrich_visual_items(ready.get('items') or [])
+    distribution = achievement_quality_distribution(ready.get('items') or [])
     ready = apply_canonical_priority_order(ready)
     ready['production_contract'] = {
         'schema_version': 3,
@@ -218,10 +232,12 @@ def main():
             '2': 'mostly_grind_or_collectathon',
             '1': 'mostly_automatic_story_progression',
         },
+        'achievement_quality_distribution': distribution,
     }
     OUT.write_text(json.dumps(ready, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print(
         f'VISUAL_DAILY_BUILD=BUILT source={source_key} items={ready.get("item_count")} '
+        f'achievement_quality_distribution={json.dumps(distribution, separators=(",", ":"))} '
         f'builder={builder_sha} daily_builder={daily_builder_sha} '
         f'achievement_builder={achievement_builder_sha} force={force}'
     )
