@@ -1,0 +1,120 @@
+name: Build daily visual payload
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "Build compact final self-check validation"
+    types:
+      - completed
+  push:
+    branches: [main]
+    paths:
+      - "scripts/build_daily_visual_payload.py"
+      - "scripts/build_visual_feed_v2.py"
+      - ".github/workflows/build-daily-visual-payload.yml"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: daily-visual-payload
+  cancel-in-progress: true
+
+jobs:
+  build-and-publish:
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build ready visual payload once per production snapshot
+        id: build
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "push" || "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            export FORCE_VISUAL_BUILD=1
+          fi
+          python scripts/build_daily_visual_payload.py | tee /tmp/visual-build.log
+          if grep -q 'VISUAL_DAILY_BUILD=BUILT' /tmp/visual-build.log; then
+            echo "built=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "built=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit canonical ready payload
+        if: steps.build.outputs.built == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/production/visual/current.json
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo "No visual payload changes"
+            exit 0
+          fi
+          git commit -m "Refresh daily visual payload"
+
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              break
+            fi
+            if [[ "$attempt" == "3" ]]; then
+              exit 1
+            fi
+            sleep $((attempt * 3))
+          done
+
+      - name: Refresh checkout after payload commit
+        if: steps.build.outputs.built == 'true'
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Stage ready payload for static UI
+        if: steps.build.outputs.built == 'true'
+        run: |
+          mkdir -p web/data
+          cp data/production/visual/current.json web/data/current.json
+
+      - name: Configure Pages
+        if: steps.build.outputs.built == 'true'
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload Pages artifact
+        if: steps.build.outputs.built == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+      - name: Deploy to GitHub Pages
+        if: steps.build.outputs.built == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4
