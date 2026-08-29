@@ -1,4 +1,5 @@
 name: Migrate mailing policy 1.16
+# trigger taste/deal semantic separation
 
 on:
   push:
@@ -31,9 +32,6 @@ jobs:
           p = json.loads(pth.read_text(encoding='utf-8'))
           p['version'] = '1.16'
 
-          # IMPORTANT: this object is part of the taste-cache semantic digest.
-          # Keep it identical to the last validated taste-v2 generation. Commercial
-          # policy belongs outside it so budget/discount edits never invalidate taste.
           p['taste_deal_separation'] = {
               'required': True,
               'taste_verdict_is_price_blind': True,
