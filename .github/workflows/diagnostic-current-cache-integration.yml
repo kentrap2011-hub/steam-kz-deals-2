@@ -1,0 +1,74 @@
+name: One-shot current taste cache integration diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-current-cache-integration.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rebuild current cache projection only
+        run: |
+          python scripts/build_taste_cache_index.py
+          python scripts/build_pre_ai_taste_projection.py
+          python scripts/build_pre_ai_chatgpt_payload.py
+      - name: Measure integration
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          cache=json.loads(Path('data/cache/taste_fit.json').read_text(encoding='utf-8'))
+          overlay=json.loads(Path('data/cache/taste_fit.entry_overlay.json').read_text(encoding='utf-8'))
+          idx=json.loads(Path('data/cache/taste_fit.entry_index.json').read_text(encoding='utf-8'))
+          proj=json.loads(Path('data/production/pre_ai/taste_projection.json').read_text(encoding='utf-8'))
+          manifest=json.loads(Path('data/production/pre_ai/chatgpt_payload.json').read_text(encoding='utf-8'))
+          family=json.loads(Path('data/production/pre_ai/family_graph.json').read_text(encoding='utf-8'))
+
+          family_keys=set((family.get('taste_subjects') or {}).keys()) if isinstance(family.get('taste_subjects'),dict) else set()
+          if not family_keys:
+              family_keys=set((family.get('families') or {}).get(k,{}).get('taste_subject_key') for k in (family.get('families') or {}))
+              family_keys.discard(None)
+          cache_keys=set((cache.get('entries') or {}).keys())
+          overlay_keys=set((overlay.get('entries') or {}).keys())
+          overlap=sorted(cache_keys & family_keys)
+          overlay_overlap=sorted(overlay_keys & family_keys)
+
+          out={
+            'cache_schema':cache.get('schema_version'),
+            'canonical_cache_entries':len(cache_keys),
+            'overlay_entries':len(overlay_keys),
+            'family_taste_subjects':proj.get('taste_subject_count'),
+            'canonical_cache_family_key_overlap':len(overlap),
+            'overlay_family_key_overlap':len(overlay_overlap),
+            'merged_index_entries':idx.get('index_entry_count'),
+            'context_bound_index_entries':idx.get('candidate_context_bound_count'),
+            'safe_cache_hits':proj.get('safe_cache_hit_count'),
+            'ai_required':proj.get('ai_required_count'),
+            'ai_queue':manifest.get('ai_queue_count'),
+            'ready_without_ai':manifest.get('ready_without_ai_count'),
+            'taste_excluded_without_ai':manifest.get('deterministic_exclusion_counts',{}).get('valid_cached_taste_below_moderate',0),
+            'sale_end_coverage':manifest.get('mandatory_sale_end_coverage'),
+            'sample_canonical_overlap':overlap[:20],
+          }
+          print(json.dumps(out,ensure_ascii=False,indent=2))
+          if cache.get('entry_count') != 150:
+              raise SystemExit(f"Expected current canonical checkpoint to contain 150 entries, got {cache.get('entry_count')}")
+          if idx.get('source_cache',{}).get('entry_count_actual') != 150:
+              raise SystemExit('Rebuilt index did not consume all 150 canonical cache entries')
+          if not proj.get('complete_coverage') or manifest.get('mandatory_sale_end_coverage') != 1.0:
+              raise SystemExit('Targeted rebuild lost coverage')
+          print('CURRENT_CACHE_INTEGRATION_DIAGNOSTIC=PASS')
+          PY
