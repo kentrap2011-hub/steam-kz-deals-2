@@ -14,6 +14,7 @@ on:
       - "scripts/build_daily_visual_payload.py"
       - "scripts/build_visual_feed_v2.py"
       - "scripts/achievement_quality.py"
+      - "scripts/refine_visual_ranking.py"
       - ".github/workflows/build-daily-visual-payload.yml"
 
 permissions:
@@ -59,6 +60,14 @@ jobs:
             echo "built=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Refine personal risks and ranking
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/refine_visual_ranking.py
+
       - name: Build ranking review export
         shell: bash
         run: |
@@ -74,22 +83,35 @@ jobs:
           rows = []
           for game in sorted(data.get('items') or [], key=lambda g: int(g.get('priority_rank') or 999999)):
               practical = game.get('practical') or {}
+              direct = game.get('direct_user_evidence') or {}
               row = {
                   'rank': game.get('priority_rank'),
+                  'taste_rank': game.get('taste_rank'),
                   'id': game.get('id'),
                   'title': game.get('title'),
+                  'source_fit': game.get('source_fit'),
                   'fit': game.get('fit'),
+                  'fit_adjustment_reason': game.get('fit_adjustment_reason'),
+                  'taste_confidence': game.get('taste_confidence'),
+                  'direct_user_rating': direct.get('rating'),
+                  'direct_user_evidence_level': direct.get('level'),
                   'decision': game.get('decision'),
                   'priority_bucket': game.get('priority_bucket'),
                   'strengths': game.get('why_fit') or [],
                   'gameplay_points': game.get('gameplay_points') or [],
                   'weaknesses_risks': game.get('risks') or [],
+                  'risk_codes': game.get('risk_codes') or [],
                   'risk_level': game.get('risk_level'),
                   'risk_penalty': game.get('risk_penalty'),
                   'windows_status': practical.get('windows_status'),
+                  'legacy_windows_requirement_label': practical.get('legacy_windows_requirement_label'),
+                  'modern_windows_friction': practical.get('modern_windows_friction'),
                   'steam_achievements': practical.get('steam_achievements'),
                   'achievement_total': practical.get('achievement_total'),
                   'achievement_quality': practical.get('achievement_quality'),
+                  'achievement_quality_evidence': practical.get('achievement_quality_evidence'),
+                  'estimated_duration_hours': game.get('estimated_duration_hours'),
+                  'duration_preference_band': game.get('duration_preference_band'),
                   'wishlist': bool(game.get('wishlist')),
                   'current_price_rub': game.get('current_price_rub'),
                   'original_price_rub': game.get('original_price_rub'),
