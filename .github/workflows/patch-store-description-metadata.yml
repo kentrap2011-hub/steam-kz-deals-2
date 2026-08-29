@@ -1,0 +1,104 @@
+name: One-shot Store description metadata patch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/patch-store-description-metadata.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Add same-pass short description to metadata only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('scripts/build_pre_ai_store_snapshot.py')
+          text=p.read_text(encoding='utf-8')
+          old_sub="""        return {
+            'key': key,
+            'entity_kind': 'sub',
+            'steam_id': str(subid),
+            'store_name': store_name,
+            'package_apps': ["""
+          new_sub="""        return {
+            'key': key,
+            'entity_kind': 'sub',
+            'steam_id': str(subid),
+            'store_name': store_name,
+            'short_description': str((store_item.get('basic_info') or {}).get('short_description') or '').strip() or None,
+            'package_apps': ["""
+          old_app="""    return {
+        'key': key,
+        'entity_kind': 'app',
+        'steam_id': str(row['appid']),
+        'store_name': store_name,
+        'app_type': app_type,"""
+          new_app="""    return {
+        'key': key,
+        'entity_kind': 'app',
+        'steam_id': str(row['appid']),
+        'store_name': store_name,
+        'short_description': str((store_item.get('basic_info') or {}).get('short_description') or '').strip() or None,
+        'app_type': app_type,"""
+          for old,new,label in [(old_sub,new_sub,'sub'),(old_app,new_app,'app')]:
+              count=text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label} patch fragment count={count}')
+              text=text.replace(old,new)
+          p.write_text(text,encoding='utf-8')
+          print('STORE_DESCRIPTION_METADATA_PATCH=PASS')
+          PY
+      - name: Targeted metadata retest
+        run: |
+          python scripts/build_pre_ai_store_snapshot.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          doc=json.loads(Path('data/production/pre_ai/content_metadata.json').read_text(encoding='utf-8'))
+          entries=doc['entries']
+          apps=[x for x in entries.values() if x.get('entity_kind')=='app']
+          subs=[x for x in entries.values() if x.get('entity_kind')=='sub']
+          app_known=sum(bool(x.get('short_description')) for x in apps)
+          sub_known=sum(bool(x.get('short_description')) for x in subs)
+          control=doc['control_comparison']
+          result={
+              'entry_count':len(entries),
+              'app_count':len(apps),
+              'app_description_known':app_known,
+              'sub_count':len(subs),
+              'sub_description_known':sub_known,
+              'control_match_count':control.get('match_count'),
+              'control_mismatch_count':control.get('mismatch_count'),
+          }
+          print(json.dumps(result,indent=2))
+          if len(entries) != 657:
+              raise SystemExit('Unexpected current metadata count')
+          if app_known != 614:
+              raise SystemExit(f'Description coverage changed from measured control: {app_known} != 614')
+          if control.get('mismatch_count') != 0 or control.get('match_count') != 91:
+              raise SystemExit('Metadata control changed')
+          print('STORE_DESCRIPTION_METADATA_TARGETED=PASS')
+          PY
+      - name: Commit source patch only
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git restore data/production/pre_ai || true
+          git add scripts/build_pre_ai_store_snapshot.py
+          git diff --cached --check
+          git commit -m "Preserve Store short descriptions in pre-AI metadata"
+          git push origin HEAD:main
