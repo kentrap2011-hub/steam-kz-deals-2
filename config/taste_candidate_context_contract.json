@@ -1,0 +1,51 @@
+{
+  "contract": "TASTE-CANDIDATE-CONTEXT-V1",
+  "version": "1.0",
+  "status": "implementation_only",
+  "purpose": "Bind each AI taste verdict to the exact price-blind candidate information that ChatGPT was allowed to use, without changing the legacy taste fingerprint or fallback pipeline.",
+  "authority": {
+    "canonical_policy_path": "config/mailing_policy.json",
+    "legacy_fingerprint_contract_path": "config/taste_fingerprint_contract.json",
+    "content_metadata_path": "data/production/pre_ai/content_metadata.json",
+    "never_overrides_canonical_policy": true,
+    "taste_remains_price_blind": true
+  },
+  "serialization": {
+    "fields_in_order": [
+      "taste_fingerprint",
+      "normalized_short_description",
+      "sorted_bundle_members"
+    ],
+    "short_description_normalization": "NFKC + trim + collapse whitespace",
+    "bundle_member_projection": [
+      "appid",
+      "normalized_name"
+    ],
+    "bundle_member_sort": "appid_numeric_then_normalized_name",
+    "json_encoding": "UTF-8, ensure_ascii=false, compact separators",
+    "digest": "sha256"
+  },
+  "price_blind_excludes": [
+    "discount_percent",
+    "current_price",
+    "original_price",
+    "review_scores",
+    "review_counts",
+    "wishlist",
+    "feed_reason_flags",
+    "historical_price",
+    "sale_end_date",
+    "deal_quality"
+  ],
+  "cache_hit_requires": [
+    "legacy taste fingerprint exact match",
+    "candidate_context_sha256 exact match",
+    "profile blob SHA exact match",
+    "taste model version exact match",
+    "taste semantics SHA exact match",
+    "appid exact match"
+  ],
+  "legacy_entries_without_context_digest": "not_a_hit_in_context_aware_pre_ai_path",
+  "missing_short_description": "serialize as empty string; do not invent candidate properties",
+  "bundle_context": "serialize deterministic package member appid/name projection even when package short description is unavailable"
+}
