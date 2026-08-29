@@ -1,0 +1,38 @@
+name: AI pilot legacy-difference evidence diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-ai-pilot-legacy-differences.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Print exact historical evidence for the five pilot disagreements
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          keys=['Sub_648168','App_1040420','App_1049410','App_1067540','App_107200']
+          legacy=json.loads(Path('data/cache/taste_fit.json').read_text(encoding='utf-8'))
+          entries=legacy.get('entries') or {}
+          result={key:entries.get(key) for key in keys}
+          print(json.dumps({
+              'legacy_profile_blob_sha':legacy.get('profile_blob_sha'),
+              'legacy_taste_model_version':legacy.get('taste_model_version'),
+              'entries':result,
+          },ensure_ascii=False,indent=2))
+          if any(result[key] is None for key in keys):
+              raise SystemExit('Expected legacy disagreement key missing')
+          print('AI_PILOT_LEGACY_DIFFERENCE_DIAGNOSTIC=PASS')
+          PY
