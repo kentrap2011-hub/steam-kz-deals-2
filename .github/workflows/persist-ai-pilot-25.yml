@@ -1,0 +1,268 @@
+name: One-shot 25-row AI taste pilot persistence
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/persist-ai-pilot-25.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  persist:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build exact audited 25-result input and expected downstream counts
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          queue = [json.loads(line) for line in Path('data/production/pre_ai/chatgpt_taste_queue.jsonl').read_text(encoding='utf-8').splitlines() if line.strip()]
+          context_rows = [json.loads(line) for line in Path('data/production/pre_ai/chatgpt_purchase_context.jsonl').read_text(encoding='utf-8').splitlines() if line.strip()]
+          projection = json.loads(Path('data/production/pre_ai/taste_projection.json').read_text(encoding='utf-8'))
+          manifest = json.loads(Path('data/production/pre_ai/chatgpt_payload.json').read_text(encoding='utf-8'))
+          overlay = json.loads(Path('data/cache/taste_fit.entry_overlay.json').read_text(encoding='utf-8'))
+
+          expected_keys = [
+              'Sub_12467','Sub_49358','Sub_648168','App_1011670','App_1016770',
+              'App_1016930','App_1023690','App_1025960','App_1033950','App_1037020',
+              'App_1040230','App_1040420','App_1041920','App_1046790','App_1047220',
+              'App_1048100','App_1049410','App_1051200','App_1063660','App_1067540',
+              'App_10680','App_1069160','App_1069740','App_1070330','App_107200',
+          ]
+          pilot_queue = queue[:25]
+          if [row['taste_subject_key'] for row in pilot_queue] != expected_keys:
+              raise SystemExit('Current first 25 AI rows differ from the audited pilot')
+          if manifest.get('ai_queue_count') != 556 or len(queue) != 556:
+              raise SystemExit(f"Unexpected pre-persist AI queue baseline: manifest={manifest.get('ai_queue_count')} actual={len(queue)}")
+          if manifest.get('ready_without_ai_count') != 1 or manifest.get('deterministically_excluded_without_ai_count') != 62:
+              raise SystemExit('Unexpected pre-persist consumer partition baseline')
+          if projection.get('safe_cache_hit_count') != 1 or projection.get('ai_required_count') != 618:
+              raise SystemExit('Unexpected pre-persist taste projection baseline')
+          if overlay.get('entry_count') != 2 or len(overlay.get('entries') or {}) != 2:
+              raise SystemExit('Unexpected overlay baseline; expected exactly two entries')
+          if any(key in (overlay.get('entries') or {}) for key in expected_keys):
+              raise SystemExit('One or more pilot keys are already present in overlay')
+          if any(row.get('work_required') != ['evaluate_taste_fit'] for row in pilot_queue):
+              bad=[(row['taste_subject_key'],row.get('work_required')) for row in pilot_queue if row.get('work_required') != ['evaluate_taste_fit']]
+              raise SystemExit(f'Pilot contains non-taste AI work: {bad}')
+
+          decisions = {
+            'Sub_12467': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context is specifically about racing built around destructive collisions and track objects breaking; the canonical profile directly records that the racing itself in Need for Speed: Underground 2 was enjoyable.',
+              'The prepared context names distinct carnage formats including Deathmatch derby, Carnage Race and Head-on races; this maps to the durable preference for varied situations instead of one unchanged formula repeating.'
+            ],[]),
+            'Sub_49358': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'Sub_648168': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context gives a concrete progression-like activity in conquering Fortresses and commanding a personal orc army; this maps to the durable preference for progression with a clear goal and visible effect.'
+            ],[]),
+            'App_1011670': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context explicitly requires players to work together with machinery, gadgets and physics to complete deliveries; this maps to the durable positive pattern for shared play when interaction is substantive rather than multiplayer existing by itself.'
+            ],[]),
+            'App_1016770': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context gives several concrete interrogation approaches such as manipulation, threats or torture toward one clear objective; this maps to the durable preference for natural alternative ways to solve an understandable task.',
+              'The prepared context alternates between interrogating suspects and managing the team and its reputation; this maps to the very strong preference for the experience to change format rather than expose one loop and repeat it unchanged.'
+            ],[]),
+            'App_1016930': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context makes puzzle solving part of a broader time-travel adventure; this maps to the canonical distinction where puzzles inside an adventure are a stronger fit than an isolated puzzle-only loop.',
+              'The old lantern is a specific gameplay device that reveals another time and enables travel to the past; this is a distinctive intrinsic mechanic and matches the durable preference for a memorable gameplay hook rather than a generic formula.'
+            ],[]),
+            'App_1023690': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_1025960': ('EXCLUDE','below_moderate','exclude_insufficient',[
+              'The prepared context establishes a mystery with trapped contestants whose trust changes as events unfold; this maps to the durable attraction to a mystery worth uncovering.'
+            ],[]),
+            'App_1033950': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_1037020': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context explicitly describes fast-paced free-moving platforming; this maps to the very strong durable preference for movement itself to be enjoyable and expressive.'
+            ],[]),
+            'App_1040230': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context explicitly uses procedural gameplay and story elements to create a different adventure on each run; this maps to the durable preference for changing situations rather than repetition without development.'
+            ],[]),
+            'App_1040420': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context alternates a night phase of artifact-driven nightmare runs with a day phase of city exploration and relationship building; this maps to the very strong preference for changing formats and situations over a single repeated loop.',
+              'The prepared context says relationships unlock the power of dreams, giving a concrete progression action with a visible gameplay effect; this maps to the durable preference for progression whose purpose and result are understandable.'
+            ],[]),
+            'App_1041920': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_1046790': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context identifies time manipulation as the core of a story-driven puzzle game; this is a specific intrinsic mechanic and a memorable hook, but the available context does not establish an independent second gameplay or structural match required for moderate fit.'
+            ],[]),
+            'App_1047220': ('EXCLUDE','below_moderate','exclude_insufficient',[
+              'The prepared context gives a concrete mystery to solve, which maps to the durable attraction to mystery, but it does not expose enough gameplay or structure to establish moderate fit.'
+            ],[]),
+            'App_1048100': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context has a specific asymmetric hide-and-seek mechanic where one side becomes physical props and the other searches for them; this is a distinctive gameplay hook, while multiplayer alone is neutral in the canonical profile.'
+            ],[]),
+            'App_1049410': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context has a specific perspective-and-depth manipulation mechanic for solving impossible puzzles; this is a high-specificity intrinsic gameplay hook and maps to the durable preference for a game to have a memorable mechanic rather than a generic formula.',
+              'The prepared context gives an explicit objective to escape the surreal dream world; this maps to the very strong preference for unusual exploration or problem solving to retain a readable goal instead of leaving the player unclear about what the game wants.'
+            ],[]),
+            'App_1051200': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_1063660': ('EXCLUDE','below_moderate','exclude_insufficient',[
+              'The prepared context gives a clear discover-the-truth and escape objective, which aligns with the preference for mystery without being unclear about the immediate goal, but it does not expose a second specific gameplay or structural match.'
+            ],[]),
+            'App_1067540': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context embeds puzzle solving inside exploration of a larger adventure world; this maps directly to the canonical preference for puzzles as part of an adventure rather than a puzzle-only loop.',
+              'The prepared context gives hidden legends, forgotten monsters and a tale to uncover while naming concrete activities such as exploring, collecting curiosities and solving puzzles; this maps to the durable preference for mystery and exploration with a readable activity vector instead of being lost without a next step.'
+            ],[]),
+            'App_10680': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_1069160': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context explicitly includes tactical turn-based combat; this maps to the durable positive signal for compact situations where understanding the problem and choosing an approach matters, but the available context does not establish a second independent specific positive at the moderate threshold.'
+            ],[]),
+            'App_1069740': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_1070330': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_107200': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context says the generated galaxy is populated with factions, enemies, missions and items; this maps to the durable preference for an explorable world to contain concrete reasons to engage with it rather than being large but empty.',
+              'The prepared context explicitly generates a different galaxy to provide a unique experience on each playthrough; this maps to the very strong preference for changing situations and variety instead of an unchanged formula repeating.'
+            ],[]),
+          }
+
+          results=[]
+          for row in pilot_queue:
+              verdict, fit, reason, positive, negative = decisions[row['taste_subject_key']]
+              results.append({
+                  'key': row['taste_subject_key'],
+                  'appid': row['appid'],
+                  'taste_fingerprint': row['taste_fingerprint'],
+                  'candidate_context_sha256': row['candidate_context_sha256'],
+                  'verdict': verdict,
+                  'fit_level': fit,
+                  'reason_code': reason,
+                  'positive_evidence': positive,
+                  'negative_evidence': negative,
+              })
+
+          bindings={
+              'profile_blob_sha': projection['current_profile']['blob_sha'],
+              'taste_model_version': projection['current_binding']['taste_model_version'],
+              'taste_semantics_sha256': projection['current_binding']['taste_semantics_sha256'],
+              'source_mailing_updated_at_utc': projection['source_mailing_updated_at_utc'],
+          }
+          Path('/tmp/taste_pilot_25.json').write_text(json.dumps({'schema_version':1,'bindings':bindings,'results':results},ensure_ascii=False,indent=2),encoding='utf-8')
+
+          include_keys={r['key'] for r in results if r['verdict']=='INCLUDE'}
+          if len(include_keys) != 7:
+              raise SystemExit(f'Unexpected INCLUDE count: {len(include_keys)}')
+          pilot_context = context_rows[:25]
+          if len(pilot_context) != 25:
+              raise SystemExit('Purchase context lacks first 25 aligned rows')
+          if any(work['family_id'] != ctx['family_id'] or work['taste_subject_key'] != ctx['taste_subject_key'] for work,ctx in zip(pilot_queue,pilot_context)):
+              raise SystemExit('Taste queue and purchase context are not line-aligned for pilot')
+
+          moderate_include=0
+          moderate_exclude=0
+          moderate_by_key={}
+          for work,ctx in zip(pilot_queue,pilot_context):
+              key=work['taste_subject_key']
+              if key not in include_keys:
+                  continue
+              disposition=ctx['deal_if_moderate']['disposition']
+              moderate_by_key[key]=disposition
+              if disposition=='INCLUDE':
+                  moderate_include += 1
+              elif disposition=='EXCLUDE':
+                  moderate_exclude += 1
+              else:
+                  raise SystemExit(f'Unexpected moderate disposition for {key}: {disposition}')
+          if moderate_include + moderate_exclude != 7:
+              raise SystemExit('Moderate pilot disposition accounting mismatch')
+
+          expected={
+              'overlay_count':27,
+              'safe_cache_hits':26,
+              'ai_required':593,
+              'ai_queue':531,
+              'ready_without_ai':1 + moderate_include,
+              'deterministically_excluded_without_ai':62 + 18 + moderate_exclude,
+              'moderate_include_count':moderate_include,
+              'moderate_exclude_count':moderate_exclude,
+              'moderate_by_key':moderate_by_key,
+          }
+          Path('/tmp/pilot_expected.json').write_text(json.dumps(expected,ensure_ascii=False,indent=2),encoding='utf-8')
+          print(json.dumps({'preflight':'PASS','expected':expected},ensure_ascii=False,indent=2))
+          PY
+
+      - name: Persist exact pilot through canonical ingest
+        run: python scripts/ingest_taste_results.py --input /tmp/taste_pilot_25.json
+
+      - name: Rebuild targeted taste consumers
+        run: |
+          python scripts/build_taste_cache_index.py
+          python scripts/build_pre_ai_taste_projection.py
+          python scripts/build_pre_ai_chatgpt_payload.py
+
+      - name: Prove exact targeted downstream effect
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          expected=json.loads(Path('/tmp/pilot_expected.json').read_text(encoding='utf-8'))
+          pilot=json.loads(Path('/tmp/taste_pilot_25.json').read_text(encoding='utf-8'))
+          overlay=json.loads(Path('data/cache/taste_fit.entry_overlay.json').read_text(encoding='utf-8'))
+          index=json.loads(Path('data/cache/taste_fit.entry_index.json').read_text(encoding='utf-8'))
+          projection=json.loads(Path('data/production/pre_ai/taste_projection.json').read_text(encoding='utf-8'))
+          manifest=json.loads(Path('data/production/pre_ai/chatgpt_payload.json').read_text(encoding='utf-8'))
+          queue=[json.loads(line) for line in Path('data/production/pre_ai/chatgpt_taste_queue.jsonl').read_text(encoding='utf-8').splitlines() if line.strip()]
+
+          pilot_keys={r['key'] for r in pilot['results']}
+          overlay_entries=overlay.get('entries') or {}
+          current_queue_keys={r['taste_subject_key'] for r in queue}
+          checks={
+              'overlay_2_to_27': overlay.get('entry_count')==expected['overlay_count'] and len(overlay_entries)==expected['overlay_count'],
+              'all_25_persisted': pilot_keys <= set(overlay_entries),
+              'all_25_exact_context': all(overlay_entries[r['key']].get('candidate_context_sha256')==r['candidate_context_sha256'] for r in pilot['results']),
+              'index_26_context_bound': index.get('candidate_context_bound_count')==26,
+              'safe_hits_1_to_26': projection.get('safe_cache_hit_count')==expected['safe_cache_hits'],
+              'ai_required_618_to_593': projection.get('ai_required_count')==expected['ai_required'],
+              'all_25_projection_hits': all(projection['entries'][key].get('status')=='cache_hit' for key in pilot_keys),
+              'ai_queue_556_to_531': manifest.get('ai_queue_count')==expected['ai_queue'] and len(queue)==expected['ai_queue'],
+              'all_25_removed_from_queue': not (pilot_keys & current_queue_keys),
+              'ready_matches_precomputed_moderate': manifest.get('ready_without_ai_count')==expected['ready_without_ai'],
+              'excludes_match_precomputed_moderate': manifest.get('deterministically_excluded_without_ai_count')==expected['deterministically_excluded_without_ai'],
+              'partition_complete': manifest.get('complete_family_partition') is True,
+              'sale_end_unchanged': manifest.get('mandatory_sale_end_coverage')==1.0,
+          }
+          failed=[name for name,ok in checks.items() if not ok]
+          print(json.dumps({
+              'checks':checks,
+              'expected':expected,
+              'actual':{
+                  'overlay_count':overlay.get('entry_count'),
+                  'candidate_context_bound_count':index.get('candidate_context_bound_count'),
+                  'safe_cache_hit_count':projection.get('safe_cache_hit_count'),
+                  'ai_required_count':projection.get('ai_required_count'),
+                  'ai_queue_count':manifest.get('ai_queue_count'),
+                  'ready_without_ai_count':manifest.get('ready_without_ai_count'),
+                  'deterministically_excluded_without_ai_count':manifest.get('deterministically_excluded_without_ai_count'),
+                  'mandatory_sale_end_coverage':manifest.get('mandatory_sale_end_coverage'),
+              }
+          },ensure_ascii=False,indent=2))
+          if failed:
+              raise SystemExit(f'AI pilot persistence targeted proof failed: {failed}')
+          print('AI_TASTE_PILOT_25_PERSISTENCE_TARGETED=PASS')
+          PY
+
+      - name: Commit overlay only
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git restore data/cache/taste_fit.entry_index.json data/production/pre_ai || true
+          git add data/cache/taste_fit.entry_overlay.json
+          git diff --cached --check
+          test "$(git diff --cached --name-only)" = "data/cache/taste_fit.entry_overlay.json"
+          git commit -m "Persist audited 25-row taste pilot"
+          git push origin HEAD:main
