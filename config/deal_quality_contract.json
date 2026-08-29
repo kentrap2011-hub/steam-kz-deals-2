@@ -1,6 +1,6 @@
 {
   "contract": "DEAL-QUALITY-AND-SORT-V1",
-  "version": "1.2",
+  "version": "1.3",
   "status": "implementation_only",
   "purpose": "Keep taste as the eligibility base while respecting the user's limited monthly budget: 500 RUB is the normal target, 750 RUB is the absolute ceiling, and the highest overage band is reserved for exceptionally strong fit plus a very large discount.",
   "authority": {
@@ -28,7 +28,7 @@
       "absolute_ceiling_rub": 750,
       "rules": [
         "price <= 500 RUB is within the normal budget target after the symbolic-discount gate",
-        "500 < price <= 650 RUB is allowed only when the deal has strong value support from price history",
+        "500 < price <= 650 RUB remains eligible for strong taste; weak history becomes ЛУЧШЕ ЖДАТЬ instead of disappearing",
         "650 < price <= 750 RUB is allowed only for strong taste fit, discount >= 75%, and record or near-record history when exact history is available",
         "price > 750 RUB is always excluded regardless of taste or discount"
       ]
@@ -37,7 +37,7 @@
       "absolute_ceiling_rub": 550,
       "rules": [
         "price <= 500 RUB is within the normal budget target after the symbolic-discount gate",
-        "500 < price <= 550 RUB is allowed only for record or near-record value",
+        "500 < price <= 550 RUB remains eligible for moderate taste; weak history becomes ЛУЧШЕ ЖДАТЬ instead of disappearing",
         "price > 550 RUB is excluded for moderate taste fit"
       ]
     },
@@ -68,7 +68,21 @@
     "conceptual_weight_deal": 0.4,
     "strong_discount_cannot_promote_below_moderate_taste": true,
     "budget_ceiling_overrides_other_positive_signals": true,
-    "visual_presentation_and_final_display_shape_are_deferred": true
+    "visual_presentation_and_final_display_shape_are_deferred": true,
+    "ranking_method": "explicit_qualitative_60_40_matrix_no_hidden_numeric_score",
+    "qualitative_priority_buckets": {
+      "strong": {
+        "БРАТЬ СЕЙЧАС": 1,
+        "МОЖНО БРАТЬ": 2,
+        "ЛУЧШЕ ЖДАТЬ": 4
+      },
+      "moderate": {
+        "БРАТЬ СЕЙЧАС": 3,
+        "МОЖНО БРАТЬ": 5,
+        "ЛУЧШЕ ЖДАТЬ": 6
+      }
+    },
+    "wishlist_role": "tie_breaker_within_priority_bucket_only"
   },
   "fx": {
     "base": "RUB",

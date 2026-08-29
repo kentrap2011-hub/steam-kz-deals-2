@@ -19,6 +19,7 @@
       "consume the completed nightly pre-AI payload",
       "finish any required price-blind taste verdicts and persist them through taste inbox/checkpoint",
       "consume precomputed purchase context and deal scenarios",
+      "sort eligible paid candidates by precomputed final_priority_bucket ascending; within the same bucket prefer wishlist, then stronger history value, larger discount, lower price, then title",
       "form the complete user-facing mailing text",
       "write data/production/daily_ready/latest.md",
       "write data/production/daily_ready/latest.json",

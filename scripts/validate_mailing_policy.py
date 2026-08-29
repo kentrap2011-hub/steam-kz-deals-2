@@ -51,7 +51,7 @@ def main():
     checks = {
         'contract': p.get('contract') == 'GAME-DEALS-MAILING',
         'canonical': p.get('status') == 'canonical',
-        'version': p.get('version') == '1.17',
+        'version': p.get('version') == '1.18',
         'policy_first': p['policy_loading']['load_before_any_ingest'] is True,
         'fail_closed': p['policy_loading']['fail_closed_if_unavailable'] is True,
         'full_snapshot': p['delivery']['mode'] == 'full_daily_snapshot',
@@ -107,6 +107,9 @@ def main():
         'taste_weight': sorting['conceptual_weight_taste'] == 0.6,
         'deal_weight': sorting['conceptual_weight_deal'] == 0.4,
         'budget_before_ranking': sorting['absolute_budget_ceiling_applied_before_ranking'] is True,
+        'qualitative_ranking_method': sorting['ranking_method'] == 'explicit_qualitative_60_40_matrix_no_hidden_numeric_score',
+        'qualitative_bucket_count': len(sorting['qualitative_priority_buckets']) == 6,
+        'strong_standard_weak_deal_waits': deal['weak_non_symbolic_deal_within_standard_fit_band_remains_visible_as_wait_or_low_priority'] is True,
         'presentation_deferred': p['presentation_strategy']['status'] == 'deferred_until_data_optimization_complete',
         'wishlist_final_sort_only': p['final_ranking_context']['wishlist']['apply_only_during_final_sorting'] is True,
         'wishlist_not_inclusion': p['final_ranking_context']['wishlist']['never_causes_inclusion_by_itself'] is True,

@@ -46,9 +46,9 @@ def build_gate(contract):
             if price_rub > strong_absolute + 1e-12:
                 return False, strong_absolute, 'strong_absolute_budget_ceiling'
             if price_rub <= strong_standard + 1e-12:
-                if quality in {'record', 'near_record', 'good_vs_history'} | missing_history:
-                    return True, strong_standard, 'strong_standard_overage_with_value_support_or_missing_history'
-                return False, strong_standard, 'strong_standard_overage_known_weak_history'
+                if quality == 'well_above_history':
+                    return True, strong_standard, 'strong_standard_overage_known_weak_history_wait'
+                return True, strong_standard, 'strong_standard_overage_with_value_support_or_missing_history'
 
             # The 650..750 band is intentionally exceptional: strong taste + huge discount.
             if discount_percent < exceptional_discount:
@@ -60,9 +60,9 @@ def build_gate(contract):
         if fit == 'moderate':
             if price_rub > moderate_absolute + 1e-12:
                 return False, moderate_absolute, 'moderate_absolute_budget_ceiling'
-            if quality in {'record', 'near_record'} | missing_history:
-                return True, moderate_absolute, 'moderate_small_overage_record_or_missing_history'
-            return False, moderate_absolute, 'moderate_small_overage_known_history_not_near_record'
+            if quality == 'well_above_history':
+                return True, moderate_absolute, 'moderate_small_overage_known_weak_history_wait'
+            return True, moderate_absolute, 'moderate_small_overage_allowed'
 
         raise SystemExit(f'Unsupported taste fit scenario: {fit}')
 
@@ -89,6 +89,7 @@ def assert_boundary_contract(gate, t):
         (gate('strong', base, 'unverified', sm + 1)[0], True, 'base target survives'),
         (gate('strong', ss, 'good_vs_history', sm + 1)[0], True, 'strong standard good history'),
         (gate('strong', ss, 'unverified', sm + 1)[0], True, 'strong standard missing history nonblocking'),
+        (gate('strong', ss, 'well_above_history', sm + 1)[0], True, 'strong standard weak history remains wait'),
         (gate('strong', ss + 0.01, 'record', ed - 1)[0], False, 'high band requires exceptional discount'),
         (gate('strong', ss + 0.01, 'record', ed)[0], True, 'high band exceptional discount record'),
         (gate('strong', ss + 0.01, 'unverified', ed)[0], True, 'high band missing history nonblocking'),
@@ -97,6 +98,7 @@ def assert_boundary_contract(gate, t):
         (gate('moderate', base, 'unverified', sm + 1)[0], True, 'moderate base target'),
         (gate('moderate', ma, 'near_record', sm + 1)[0], True, 'moderate overage near record'),
         (gate('moderate', ma, 'unverified', sm + 1)[0], True, 'moderate missing history nonblocking'),
+        (gate('moderate', ma, 'well_above_history', sm + 1)[0], True, 'moderate weak history remains wait'),
         (gate('moderate', ma + 0.01, 'record', 95)[0], False, 'moderate absolute ceiling'),
     ]
     failures = [name for got, expected, name in checks if got != expected]
@@ -120,12 +122,13 @@ def main():
         raise SystemExit('Pre-AI FX snapshot incomplete')
     if history_doc.get('status') != 'complete' or not history_doc.get('complete_coverage'):
         raise SystemExit('Pre-AI history snapshot incomplete')
-    if contract.get('contract') != 'DEAL-QUALITY-AND-SORT-V1' or contract.get('version') != '1.2':
+    if contract.get('contract') != 'DEAL-QUALITY-AND-SORT-V1' or contract.get('version') != '1.3':
         raise SystemExit('Unexpected deal quality contract')
 
     gate, thresholds = build_gate(contract)
     assert_boundary_contract(gate, thresholds)
     purchase_decisions = contract.get('purchase_decision') or {}
+    priority_buckets = (contract.get('final_ranking_principles') or {}).get('qualitative_priority_buckets') or {}
 
     families = family_doc.get('families') or []
     store = store_doc.get('entries') or {}
@@ -173,6 +176,10 @@ def main():
             }
             if allowed:
                 scenario['purchase_decision'] = decision_label
+                try:
+                    scenario['priority_bucket'] = int(priority_buckets[fit][decision_label])
+                except Exception as exc:
+                    raise SystemExit(f'Missing qualitative priority bucket for {fit}/{decision_label}: {exc}')
             else:
                 if reason == 'symbolic_discount_at_or_below_user_threshold':
                     scenario['exclusion_reason_code'] = 'symbolic_discount_not_worth_mailing_attention'
@@ -207,6 +214,7 @@ def main():
         'moderate_disposition_counts': dict(sorted(moderate_counts.items())),
         'gate_reason_counts': dict(sorted(reason_counts.items())),
         'absolute_user_budget_ceiling_rub': thresholds['strong_absolute_ceiling_rub'],
+        'qualitative_priority_buckets': priority_buckets,
         'entries': entries,
         'elapsed_seconds': round(time.monotonic() - started, 3),
     }

@@ -92,6 +92,7 @@ def compact_scenario(scenario):
     }
     if scenario['final_disposition'] == 'INCLUDE':
         out['purchase_decision'] = scenario['purchase_decision']
+        out['priority_bucket'] = int(scenario['priority_bucket'])
     else:
         out['exclusion_reason_code'] = scenario['exclusion_reason_code']
     return out
@@ -262,6 +263,7 @@ def main():
             else:
                 context['resolved_taste_fit'] = fit
                 context['final_purchase_decision'] = selected['purchase_decision']
+                context['final_priority_bucket'] = int(selected['priority_bucket'])
                 ready_context.append(context)
             continue
 
@@ -337,6 +339,8 @@ def main():
             'chatgpt_must_fix_taste_verdict_before_reading_matching_purchase_context': True,
             'chatgpt_must_not_recalculate_prices_history_or_deal_gates': True,
             'chatgpt_selects_precomputed_deal_scenario_from_final_taste_fit': True,
+            'qualitative_60_40_priority_bucket_is_precomputed': True,
+            'smaller_priority_bucket_means_higher_purchase_priority': True,
             'every_visible_paid_recommendation_requires_sale_end': False,
             'missing_sale_end_does_not_exclude_candidate': True,
             'known_sale_end_at_or_before_consumer_time_is_inactive': True,

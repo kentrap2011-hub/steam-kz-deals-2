@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.17",
+  "version": "1.18",
   "status": "canonical",
   "purpose": "Personalized daily Steam KZ deal data preparation with stable price-blind taste verdicts, taste-first eligibility, one nightly commercial snapshot, and resumable taste-cache checkpoints.",
   "policy_loading": {
@@ -355,7 +355,7 @@
     "symbolic_discount_is_early_exclusion": true,
     "no_absolute_price_exclusion_for_moderate_or_strong_taste": false,
     "expensive_game_may_remain_if_taste_fit_and_discount_are_meaningful": false,
-    "weak_but_non_symbolic_deal_remains_available_for_wait_or_low_priority": "only_while_within_fit_scaled_budget_ceiling",
+    "weak_but_non_symbolic_deal_remains_available_for_wait_or_low_priority": "within_standard_fit_budget_band",
     "absolute_max_rub": 750,
     "strong_fit_standard_overage_ceiling_rub": 650,
     "moderate_fit_absolute_ceiling_rub": 550,
@@ -509,8 +509,53 @@
     "conceptual_weight_deal": 0.4,
     "do_not_invent_numeric_taste_score_until_separately_agreed": true,
     "visual_presentation_redesign_deferred": true,
-    "weak_non_symbolic_deal_should_rank_low_or_wait_not_disappear": true,
-    "absolute_budget_ceiling_applied_before_ranking": true
+    "weak_non_symbolic_deal_should_rank_low_or_wait_not_disappear": "within_standard_fit_budget_band",
+    "absolute_budget_ceiling_applied_before_ranking": true,
+    "ranking_method": "explicit_qualitative_60_40_matrix_no_hidden_numeric_score",
+    "purchase_decision_order_is_not_primary_sort": true,
+    "qualitative_priority_buckets": [
+      {
+        "bucket": 1,
+        "taste_fit": "strong",
+        "purchase_decision": "БРАТЬ СЕЙЧАС"
+      },
+      {
+        "bucket": 2,
+        "taste_fit": "strong",
+        "purchase_decision": "МОЖНО БРАТЬ"
+      },
+      {
+        "bucket": 3,
+        "taste_fit": "moderate",
+        "purchase_decision": "БРАТЬ СЕЙЧАС"
+      },
+      {
+        "bucket": 4,
+        "taste_fit": "strong",
+        "purchase_decision": "ЛУЧШЕ ЖДАТЬ"
+      },
+      {
+        "bucket": 5,
+        "taste_fit": "moderate",
+        "purchase_decision": "МОЖНО БРАТЬ"
+      },
+      {
+        "bucket": 6,
+        "taste_fit": "moderate",
+        "purchase_decision": "ЛУЧШЕ ЖДАТЬ"
+      }
+    ],
+    "primary_order": [
+      "priority_bucket_asc"
+    ],
+    "within_priority_bucket_order": [
+      "wishlist_desc",
+      "price_quality_vs_history_desc",
+      "best_variant_value_desc",
+      "discount_percent_desc",
+      "current_price_rub_asc",
+      "title_asc"
+    ]
   },
   "paid_output_fields": [
     "title",
@@ -562,7 +607,8 @@
     "all_visible_money_in_rub": true,
     "excluded_items_not_mentioned": true,
     "upcoming_at_most_one": true,
-    "freebies_and_upcoming_after_successful_ingest": true
+    "freebies_and_upcoming_after_successful_ingest": true,
+    "qualitative_60_40_priority_bucket_applied": true
   },
   "review_threshold_calibration": {
     "profile": "personal-calibrated-v1",
@@ -626,7 +672,11 @@
     "conceptual_weight_taste": 0.6,
     "conceptual_weight_deal": 0.4,
     "weak_non_symbolic_deal_within_budget_may_remain_low_priority_or_wait": true,
-    "commercial_rules_are_excluded_from_taste_cache_semantics": true
+    "commercial_rules_are_excluded_from_taste_cache_semantics": true,
+    "weak_non_symbolic_deal_within_standard_fit_band_remains_visible_as_wait_or_low_priority": true,
+    "strong_standard_fit_band_max_rub": 650,
+    "moderate_standard_fit_band_max_rub": 550,
+    "high_overage_650_to_750_requires_strong_taste_and_exceptional_discount": true
   },
   "final_ranking_context": {
     "wishlist": {
