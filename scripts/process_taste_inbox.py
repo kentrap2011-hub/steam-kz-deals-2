@@ -29,6 +29,28 @@ def rebuild_taste_consumers():
     run('python', 'scripts/build_pre_ai_chatgpt_payload.py')
 
 
+def sale_end_state_is_consistent(manifest):
+    family_count = manifest.get('source_family_count')
+    coverage = manifest.get('sale_end_coverage')
+    missing_count = manifest.get('sale_end_missing_count')
+    missing_keys = manifest.get('sale_end_missing_primary_keys')
+    if not isinstance(family_count, int) or family_count < 0:
+        return False
+    if not isinstance(missing_count, int) or missing_count < 0:
+        return False
+    if not isinstance(missing_keys, list) or len(missing_keys) != missing_count:
+        return False
+    if len(set(missing_keys)) != len(missing_keys):
+        return False
+    if family_count == 0:
+        expected_coverage = 1.0
+    else:
+        if missing_count > family_count:
+            return False
+        expected_coverage = round((family_count - missing_count) / family_count, 4)
+    return coverage == expected_coverage
+
+
 def main():
     inbox_files = sorted(INBOX_DIR.glob('*.json')) if INBOX_DIR.exists() else []
     if not inbox_files:
@@ -100,7 +122,8 @@ def main():
     checks = {
         'projection_complete': after_projection.get('complete_coverage') is True,
         'family_partition_complete': after_manifest.get('complete_family_partition') is True,
-        'sale_end_complete': after_manifest.get('mandatory_sale_end_coverage') == 1.0,
+        'sale_end_state_consistent': sale_end_state_is_consistent(after_manifest),
+        'missing_sale_end_is_nonblocking': (after_manifest.get('contract') or {}).get('missing_sale_end_does_not_exclude_candidate') is True,
         'safe_hits_increment_exact': after_projection.get('safe_cache_hit_count') == expected_safe_hits,
         'ai_required_decrement_exact': after_projection.get('ai_required_count') == expected_ai_required,
         'ai_queue_decrement_exact': after_manifest.get('ai_queue_count') == expected_ai_queue,
@@ -136,7 +159,8 @@ def main():
             'ai_queue_count': after_manifest.get('ai_queue_count'),
             'ready_without_ai_count': after_manifest.get('ready_without_ai_count'),
             'deterministically_excluded_without_ai_count': after_manifest.get('deterministically_excluded_without_ai_count'),
-            'mandatory_sale_end_coverage': after_manifest.get('mandatory_sale_end_coverage'),
+            'sale_end_coverage': after_manifest.get('sale_end_coverage'),
+            'sale_end_missing_count': after_manifest.get('sale_end_missing_count'),
         },
         'checks': checks,
     }
