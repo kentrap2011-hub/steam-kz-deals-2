@@ -12,8 +12,26 @@ PURCHASE_CONTEXT = ROOT / 'data/production/pre_ai/chatgpt_purchase_context.jsonl
 OUT = ROOT / 'data/production/visual/current.json'
 
 
+HISTORY_QUALITY_ORDER = {
+    'record': 0,
+    'near_record': 1,
+    'good_vs_history': 2,
+    'previously_free': 3,
+    'unverified': 4,
+    'well_above_history': 5,
+}
+
+
 def load_json(path: Path):
     return json.loads(path.read_text(encoding='utf-8'))
+
+
+def load_jsonl(path: Path):
+    return [
+        json.loads(line)
+        for line in path.read_text(encoding='utf-8').splitlines()
+        if line.strip()
+    ]
 
 
 def nonempty_line_count(path: Path):
@@ -73,16 +91,46 @@ def current_production_readiness():
 
 def existing_identity():
     if not OUT.exists():
-        return None, None
+        return None, None, None
     try:
         current = load_json(OUT)
         contract = current.get('production_contract') or {}
         return (
             current.get('source_mailing_updated_at_utc'),
             contract.get('visual_builder_blob_sha'),
+            contract.get('daily_visual_builder_blob_sha'),
         )
     except Exception:
-        return None, None
+        return None, None, None
+
+
+def apply_canonical_priority_order(ready):
+    context_by_family = {
+        str(row.get('family_id')): row
+        for row in load_jsonl(PURCHASE_CONTEXT)
+        if row.get('family_id')
+    }
+
+    def key(game):
+        row = context_by_family.get(str(game.get('id'))) or {}
+        history = row.get('history') or {}
+        history_quality = history.get('quality') or 'unverified'
+        return (
+            int(game.get('priority_bucket') or 99),
+            -int(bool(game.get('wishlist'))),
+            HISTORY_QUALITY_ORDER.get(history_quality, 99),
+            -int(game.get('discount_percent') or 0),
+            int(game.get('current_price_rub') or 999999),
+            (game.get('title') or '').casefold(),
+        )
+
+    items = ready.get('items') or []
+    items.sort(key=key)
+    for index, game in enumerate(items, 1):
+        game['priority_rank'] = index
+    ready['items'] = items
+    ready['item_count'] = len(items)
+    return ready
 
 
 def main():
@@ -96,23 +144,33 @@ def main():
         return
 
     builder_sha = git_sha('scripts/build_visual_feed_v2.py')
-    current_source, current_builder = existing_identity()
+    daily_builder_sha = git_sha('scripts/build_daily_visual_payload.py')
+    current_source, current_builder, current_daily_builder = existing_identity()
     force = os.environ.get('FORCE_VISUAL_BUILD') == '1'
-    if not force and current_source == source_key and current_builder == builder_sha:
-        print(f'VISUAL_DAILY_BUILD=SKIP source={source_key} builder={builder_sha}')
+    if (
+        not force
+        and current_source == source_key
+        and current_builder == builder_sha
+        and current_daily_builder == daily_builder_sha
+    ):
+        print(
+            f'VISUAL_DAILY_BUILD=SKIP source={source_key} '
+            f'builder={builder_sha} daily_builder={daily_builder_sha}'
+        )
         return
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     visual_builder.OUT = OUT
     visual_builder.main()
 
-    ready = load_json(OUT)
+    ready = apply_canonical_priority_order(load_json(OUT))
     ready['production_contract'] = {
         'schema_version': 3,
         'mode': 'daily_precomputed_read_only_for_ui',
         'heavy_calculation_allowed_in_ui': False,
         'external_lookup_allowed_in_ui': False,
         'visual_builder_blob_sha': builder_sha,
+        'daily_visual_builder_blob_sha': daily_builder_sha,
         'source_chatgpt_payload_blob_sha': git_sha('data/production/pre_ai/chatgpt_payload.json'),
         'source_purchase_context_blob_sha': git_sha('data/production/pre_ai/chatgpt_purchase_context.jsonl'),
         'source_taste_queue_blob_sha': git_sha('data/production/pre_ai/chatgpt_taste_queue.jsonl'),
@@ -126,7 +184,7 @@ def main():
     OUT.write_text(json.dumps(ready, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print(
         f'VISUAL_DAILY_BUILD=BUILT source={source_key} items={ready.get("item_count")} '
-        f'builder={builder_sha} force={force}'
+        f'builder={builder_sha} daily_builder={daily_builder_sha} force={force}'
     )
 
 
