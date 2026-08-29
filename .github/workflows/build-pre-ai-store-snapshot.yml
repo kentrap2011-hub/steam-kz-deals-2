@@ -1,5 +1,5 @@
 name: Build pre-AI deterministic payload
-# atomic pre-AI chain includes per-entry taste index
+# atomic pre-AI chain includes per-entry taste index and overlay
 
 on:
   workflow_dispatch:
@@ -20,12 +20,14 @@ on:
       - "config/taste_ledger_contract.json"
       - "data/cache/steamdb_history.json"
       - "data/cache/taste_fit.json"
+      - "data/cache/taste_fit.entry_overlay.json"
       - "data/cache/taste_fit.entry_index.json"
       - "data/cache/taste_fit.index.json"
       - "data/cache/taste_fit.validation.json"
       - "data/cache/taste_fit.ledger_validation.json"
       - "scripts/taste_cache_common.py"
       - "scripts/build_taste_cache_index.py"
+      - "scripts/ingest_taste_results.py"
       - "scripts/build_pre_ai_store_snapshot.py"
       - "scripts/build_pre_ai_fx_snapshot.py"
       - "scripts/build_pre_ai_content_rules.py"
