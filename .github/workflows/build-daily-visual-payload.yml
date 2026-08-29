@@ -59,16 +59,63 @@ jobs:
             echo "built=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Commit canonical ready payload
-        if: steps.build.outputs.built == 'true'
+      - name: Build ranking review export
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          src = Path('data/production/visual/current.json')
+          out = Path('data/production/visual/ranking_review.jsonl')
+          data = json.loads(src.read_text(encoding='utf-8'))
+
+          rows = []
+          for game in sorted(data.get('items') or [], key=lambda g: int(g.get('priority_rank') or 999999)):
+              practical = game.get('practical') or {}
+              row = {
+                  'rank': game.get('priority_rank'),
+                  'id': game.get('id'),
+                  'title': game.get('title'),
+                  'fit': game.get('fit'),
+                  'decision': game.get('decision'),
+                  'priority_bucket': game.get('priority_bucket'),
+                  'strengths': game.get('why_fit') or [],
+                  'gameplay_points': game.get('gameplay_points') or [],
+                  'weaknesses_risks': game.get('risks') or [],
+                  'risk_level': game.get('risk_level'),
+                  'risk_penalty': game.get('risk_penalty'),
+                  'windows_status': practical.get('windows_status'),
+                  'steam_achievements': practical.get('steam_achievements'),
+                  'achievement_total': practical.get('achievement_total'),
+                  'achievement_quality': practical.get('achievement_quality'),
+                  'wishlist': bool(game.get('wishlist')),
+                  'current_price_rub': game.get('current_price_rub'),
+                  'original_price_rub': game.get('original_price_rub'),
+                  'discount_percent': game.get('discount_percent'),
+                  'historical_minimum_rub': game.get('historical_minimum_rub'),
+                  'history_quality': game.get('history_quality'),
+                  'previously_free': bool(game.get('previously_free')),
+                  'sale_end_utc': game.get('sale_end_utc'),
+                  'summary': game.get('summary'),
+                  'steam_web_url': game.get('web_url'),
+              }
+              rows.append(json.dumps(row, ensure_ascii=False, separators=(',', ':')))
+
+          out.write_text('\n'.join(rows) + '\n', encoding='utf-8')
+          print(f'RANKING_REVIEW_ROWS={len(rows)}')
+          PY
+
+      - name: Commit canonical payload and review export
         run: |
           set -euo pipefail
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git add data/production/visual/current.json
+          git add data/production/visual/current.json data/production/visual/ranking_review.jsonl
           git diff --cached --check
           if git diff --cached --quiet; then
-            echo "No visual payload changes"
+            echo "No visual payload or review changes"
             exit 0
           fi
           git commit -m "Refresh daily visual payload"
