@@ -2,7 +2,7 @@
   "schema_version": 1,
   "purpose": "incremental_per_entry_taste_verdict_overlay",
   "entry_schema_version": 2,
-  "entry_count": 1,
+  "entry_count": 2,
   "entries": {
     "App_241930": {
       "key": "App_241930",
@@ -20,6 +20,24 @@
       ],
       "negative_evidence": [],
       "evaluated_at_utc": "2026-08-29T00:06:08+00:00"
+    },
+    "App_1042490": {
+      "key": "App_1042490",
+      "appid": "1042490",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v2",
+      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "candidate_context_sha256": "e8bf2cef4e4b24b583016b2594a4961f2e275edf56e8b847210a65692998b74f",
+      "taste_fingerprint": "604b070f39d5f43cc4fb700100b3e5b53ad3024afacc74167ba5d86fad69e381",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "The prepared Steam context explicitly describes an adventure puzzle game with a concrete search objective; this matches the canonical profile signal that puzzles work best when they are embedded inside an adventure rather than forming an isolated repetitive puzzle loop.",
+        "The prepared Steam context explicitly centers uncovering forbidden secrets and a mystery while the goal remains finding the missing husband; this matches the canonical profile preference for mystery and discoverable secrets without being left unclear about the immediate objective."
+      ],
+      "negative_evidence": [],
+      "evaluated_at_utc": "2026-08-29T00:27:33+00:00"
     }
   }
 }
