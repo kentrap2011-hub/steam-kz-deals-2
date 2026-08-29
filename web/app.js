@@ -1,5 +1,6 @@
 const DATA_URL='data/current.json';
 const STORAGE_KEY='steam-deals-visual-state-v1';
+const QUEUE_VERSION=3;
 let data={items:[],source_mailing_updated_at_utc:null};
 let items=[];
 let byId=new Map();
@@ -15,8 +16,8 @@ const card=$('gameCard');
 const gallery=$('gallery');
 
 function loadState(){
-  try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{games:{},queue:{source:null,ids:[]}}}
-  catch{return {games:{},queue:{source:null,ids:[]}}}
+  try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{games:{},queue:{source:null,ids:[],cursor:0,version:QUEUE_VERSION}}}
+  catch{return {games:{},queue:{source:null,ids:[],cursor:0,version:QUEUE_VERSION}}}
 }
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function rec(id){
@@ -49,27 +50,18 @@ function buildQueue(){
   const source=data.source_mailing_updated_at_utc||'unknown';
   const activeIds=new Set(items.map(x=>x.id));
   for(const id of activeIds) rec(id);
-  if(state.queue?.source===source){
-    let q=(state.queue.ids||[]).filter(id=>activeIds.has(id));
-    const missing=items.map(x=>x.id).filter(id=>!q.includes(id));
-    q.push(...missing);
-    state.queue={source,ids:q};saveState();return;
+  if(state.queue?.source!==source||state.queue?.version!==QUEUE_VERSION){
+    state.queue={source,ids:items.map(x=>x.id),cursor:0,version:QUEUE_VERSION};
+    saveState();return;
   }
-  const orderIndex=new Map(items.map((x,i)=>[x.id,i]));
-  const score=id=>{
-    const r=rec(id);
-    if(isNew(id))return [0,orderIndex.get(id)];
-    if(r.status==='final')return [1,orderIndex.get(id)];
-    if(r.status==='liked')return [2,orderIndex.get(id)];
-    if((r.seen||0)===0)return [3,orderIndex.get(id)];
-    return [4,r.seen||0,orderIndex.get(id)];
-  };
-  const q=items.map(x=>x.id).sort((a,b)=>{
-    const A=score(a),B=score(b);for(let i=0;i<Math.max(A.length,B.length);i++){const av=A[i]??0,bv=B[i]??0;if(av!==bv)return av-bv}return 0;
-  });
-  state.queue={source,ids:q};saveState();
+  let q=(state.queue.ids||[]).filter(id=>activeIds.has(id));
+  const missing=items.map(x=>x.id).filter(id=>!q.includes(id));
+  q.push(...missing);
+  const cursor=Math.max(0,Math.min(Number(state.queue.cursor)||0,Math.max(0,q.length-1)));
+  state.queue={source,ids:q,cursor,version:QUEUE_VERSION};saveState();
 }
-function currentGame(){return byId.get(state.queue.ids[0])}
+function currentIndex(){return Math.max(0,Math.min(Number(state.queue.cursor)||0,Math.max(0,state.queue.ids.length-1)))}
+function currentGame(){return byId.get(state.queue.ids[currentIndex()])}
 function queueCount(){return state.queue.ids.filter(id=>byId.has(id)).length}
 function counts(){
   let liked=0,final=0,newCount=0,repeat=0,unseen=0;
@@ -88,7 +80,7 @@ function renderTabs(){
 }
 function shotUrls(g){const arr=(g.screenshots||[]).filter(Boolean);if(!arr.length&&g.header_image)arr.push(g.header_image);return arr}
 function preloadNearby(){
-  state.queue.ids.slice(0,3).forEach(id=>{const g=byId.get(id);if(!g)return;shotUrls(g).forEach(u=>{const im=new Image();im.decoding='async';im.src=u})});
+  const i=currentIndex();state.queue.ids.slice(i,Math.min(state.queue.ids.length,i+3)).forEach(id=>{const g=byId.get(id);if(!g)return;shotUrls(g).forEach(u=>{const im=new Image();im.decoding='async';im.src=u})});
 }
 function setShot(g,index){
   const urls=shotUrls(g);currentShot=urls.length?((index%urls.length)+urls.length)%urls.length:0;
@@ -111,8 +103,8 @@ function renderOffers(g){
   }).join('')||'<div class="muted small">Дополнительных вариантов сейчас нет.</div>';
 }
 function renderFeed(){
-  const g=currentGame();
-  $('emptyFeed').classList.toggle('hidden',!!g);card.classList.toggle('hidden',!g);$('position').textContent=g?`Сейчас: 1 из ${queueCount()}`:'';$('seenInfo').textContent=g?(rec(g.id).seen?`Показана раньше: ${rec(g.id).seen}×`:'Первый показ'):'';
+  const g=currentGame();const pos=currentIndex();
+  $('emptyFeed').classList.toggle('hidden',!!g);card.classList.toggle('hidden',!g);$('position').textContent=g?`Приоритет: ${pos+1} из ${queueCount()}`:'';$('seenInfo').textContent=g?(rec(g.id).seen?`Показана раньше: ${rec(g.id).seen}×`:'Первый показ'):'';
   if(!g)return;
   currentShot=0;setShot(g,0);preloadNearby();
   const r=rec(g.id);$('newBadge').classList.toggle('hidden',!isNew(g.id));$('repeatBadge').classList.toggle('hidden',!(r.seen>0));$('repeatBadge').textContent=r.seen?`🔁 Показ №${r.seen+1}`:'';
@@ -120,8 +112,10 @@ function renderFeed(){
   $('histPrice').textContent=g.previously_free?'Ранее была бесплатной':`Ист. минимум: ${g.historical_minimum_rub==null?'нет данных':fmtRub(g.historical_minimum_rub)}`;
   $('deadline').textContent=deadlineText(g.sale_end_utc);$('summary').textContent=g.summary||'Краткое описание пока недоступно.';
   const gp=(g.gameplay_points||[]).filter(Boolean);$('gameplaySection').classList.toggle('hidden',!gp.length);$('gameplay').innerHTML=gp.map(x=>`<li>${escapeHtml(x)}</li>`).join('');
-  textList($('whyFit'),g.why_fit,'Персональная причина пока не подготовлена.');textList($('risks'),g.risks,'Явный риск пока не зафиксирован.');
-  $('fit').textContent=`Taste-fit: ${g.fit==='strong'?'сильный':'умеренный'}`;$('wishlist').classList.toggle('hidden',!g.wishlist);renderOffers(g);
+  textList($('whyFit'),g.why_fit,'Персональная причина пока не подготовлена.');textList($('risks'),g.risks,'Риск пока не подготовлен.');
+  $('fit').textContent=`Соответствие вкусу: ${g.fit==='strong'?'сильное':'умеренное'}`;$('wishlist').classList.toggle('hidden',!g.wishlist);renderOffers(g);
+  $('likeBtn').textContent=r.status==='liked'?'♡ Уже интересно':'♡ Интересно';
+  $('finalBtn').textContent=r.status==='final'?'🏆 Уже в финале':'🏆 В финал';
 }
 function miniCard(g,status){
   const img=shotUrls(g)[0]||'';return `<div class="list-card"><img src="${escapeHtml(img)}" alt=""><div><div class="list-title">${escapeHtml(g.title)}</div><div class="list-meta">${fmtRub(g.current_price_rub)} · −${g.discount_percent}% · ${escapeHtml(deadlineText(g.sale_end_utc))}</div><div class="list-actions">${status==='liked'?`<button class="small-btn" data-to-final="${escapeHtml(g.id)}" type="button">🏆 В финал</button>`:''}<button class="small-btn" data-focus="${escapeHtml(g.id)}" type="button">Показать в ленте</button></div></div></div>`;
@@ -132,16 +126,22 @@ function renderLists(){
   $('finalList').innerHTML=finals.length?finals.map(g=>miniCard(g,'final')).join(''):'<div class="empty">Пока пусто.</div>';
 }
 function render(){renderTabs();renderStats();renderFeed();renderLists();saveState()}
-function moveCurrent(kind){
-  const g=currentGame();if(!g)return;const r=rec(g.id);r.seen=(r.seen||0)+1;r.last_seen=new Date().toISOString();state.queue.ids.shift();
-  if(kind==='skip'){state.queue.ids.push(g.id);notify(`${g.title} → в конец`)}
+function markSeen(g){if(!g)return;const r=rec(g.id);r.seen=(r.seen||0)+1;r.last_seen=new Date().toISOString()}
+function navigate(delta){
+  const g=currentGame();const old=currentIndex();const next=Math.max(0,Math.min(state.queue.ids.length-1,old+delta));if(next===old)return;
+  markSeen(g);state.queue.cursor=next;saveState();render();window.scrollTo({top:0,behavior:'smooth'});
+}
+function markCurrent(kind){
+  const g=currentGame();if(!g)return;const r=rec(g.id);
   if(kind==='liked'){r.status='liked';notify(`${g.title} → интересно ♡`)}
   if(kind==='final'){r.status='final';notify(`${g.title} → финал 🏆`)}
-  saveState();render();window.scrollTo({top:0,behavior:'smooth'});
+  saveState();render();
 }
-function animateMove(kind){card.classList.add(kind==='liked'?'out-right':'out-left');setTimeout(()=>{card.classList.remove('out-left','out-right');moveCurrent(kind)},170)}
+function sendCurrentToEnd(){
+  const g=currentGame();if(!g)return;const i=currentIndex();state.queue.ids.splice(i,1);state.queue.ids.push(g.id);state.queue.cursor=Math.min(i,state.queue.ids.length-1);markSeen(g);saveState();notify(`${g.title} → в конец очереди`);render();window.scrollTo({top:0,behavior:'smooth'});
+}
 function focusGame(id){
-  if(!byId.has(id))return;state.queue.ids=state.queue.ids.filter(x=>x!==id);state.queue.ids.unshift(id);currentTab='feed';$('searchDialog').open&&$('searchDialog').close();render();window.scrollTo({top:0,behavior:'smooth'});
+  const idx=state.queue.ids.indexOf(id);if(idx<0)return;state.queue.cursor=idx;currentTab='feed';$('searchDialog').open&&$('searchDialog').close();render();window.scrollTo({top:0,behavior:'smooth'});
 }
 function openSteam(steamUrl,webUrl){
   if(!webUrl&&!steamUrl)return;
@@ -161,7 +161,7 @@ async function init(){
 }
 
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{currentTab=b.dataset.tab;render()}));
-$('likeBtn').addEventListener('click',()=>animateMove('liked'));$('finalBtn').addEventListener('click',()=>animateMove('final'));
+$('likeBtn').addEventListener('click',()=>markCurrent('liked'));$('finalBtn').addEventListener('click',()=>markCurrent('final'));$('endBtn').addEventListener('click',sendCurrentToEnd);
 $('steamBtn').addEventListener('click',()=>{const g=currentGame();if(g)openSteam(g.steam_url,g.web_url)});
 $('searchBtn').addEventListener('click',()=>{$('searchDialog').showModal();$('searchInput').value='';searchRender();setTimeout(()=>$('searchInput').focus(),50)});$('searchInput').addEventListener('input',searchRender);
 
@@ -176,8 +176,8 @@ gallery.addEventListener('pointerdown',e=>{galleryPointer={id:e.pointerId,x:e.cl
 gallery.addEventListener('pointerup',e=>{if(!galleryPointer||galleryPointer.id!==e.pointerId)return;const dx=e.clientX-galleryPointer.x,dy=e.clientY-galleryPointer.y;galleryPointer=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.2){const g=currentGame();if(g)setShot(g,currentShot+(dx<0?1:-1))}});gallery.addEventListener('pointercancel',()=>galleryPointer=null);
 
 card.addEventListener('pointerdown',e=>{if(e.target.closest('.gallery,button,a,input'))return;cardPointer={id:e.pointerId,x:e.clientX,y:e.clientY,dx:0,drag:false}});
-card.addEventListener('pointermove',e=>{if(!cardPointer||cardPointer.id!==e.pointerId)return;const dx=e.clientX-cardPointer.x,dy=e.clientY-cardPointer.y;cardPointer.dx=dx;if(!cardPointer.drag&&Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)*1.25){cardPointer.drag=true;card.classList.add('dragging')}if(cardPointer.drag){const lim=Math.max(-120,Math.min(120,dx));card.style.transform=`translateX(${lim}px) rotate(${lim/45}deg)`;card.style.opacity=String(1-Math.min(.35,Math.abs(lim)/380))}});
-function endCard(e){if(!cardPointer||cardPointer.id!==e.pointerId)return;const {dx,drag}=cardPointer;cardPointer=null;card.classList.remove('dragging');card.style.transform='';card.style.opacity='';if(drag&&Math.abs(dx)>75)animateMove(dx>0?'liked':'skip')}
+card.addEventListener('pointermove',e=>{if(!cardPointer||cardPointer.id!==e.pointerId)return;const dx=e.clientX-cardPointer.x,dy=e.clientY-cardPointer.y;cardPointer.dx=dx;if(!cardPointer.drag&&Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)*1.25){cardPointer.drag=true;card.classList.add('dragging')}if(cardPointer.drag){const lim=Math.max(-90,Math.min(90,dx));card.style.transform=`translateX(${lim}px)`;card.style.opacity=String(1-Math.min(.18,Math.abs(lim)/500))}});
+function endCard(e){if(!cardPointer||cardPointer.id!==e.pointerId)return;const {dx,drag}=cardPointer;cardPointer=null;card.classList.remove('dragging');card.style.transform='';card.style.opacity='';if(drag&&Math.abs(dx)>70)navigate(dx<0?1:-1)}
 card.addEventListener('pointerup',endCard);card.addEventListener('pointercancel',()=>{cardPointer=null;card.classList.remove('dragging');card.style.transform='';card.style.opacity='' });
 
 init();
