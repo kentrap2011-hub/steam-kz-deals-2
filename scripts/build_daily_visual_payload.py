@@ -21,6 +21,13 @@ HISTORY_QUALITY_ORDER = {
     'well_above_history': 5,
 }
 
+WINDOWS_ORDER = {
+    'modern': 0,
+    'unknown': 1,
+    'older_but_plausible': 3,
+    'legacy': 4,
+}
+
 
 def load_json(path: Path):
     return json.loads(path.read_text(encoding='utf-8'))
@@ -40,6 +47,10 @@ def nonempty_line_count(path: Path):
 
 def git_sha(path: str):
     return subprocess.check_output(['git', 'rev-parse', f'HEAD:{path}'], text=True).strip()
+
+
+def achievements_rank(value):
+    return 0 if value is True else (1 if value is None else 2)
 
 
 def current_production_readiness():
@@ -115,8 +126,12 @@ def apply_canonical_priority_order(ready):
         row = context_by_family.get(str(game.get('id'))) or {}
         history = row.get('history') or {}
         history_quality = history.get('quality') or 'unverified'
+        practical = game.get('practical') or {}
+        windows_status = practical.get('windows_status') or 'unknown'
         return (
             int(game.get('priority_bucket') or 99),
+            WINDOWS_ORDER.get(windows_status, 1),
+            achievements_rank(practical.get('steam_achievements')),
             -int(bool(game.get('wishlist'))),
             HISTORY_QUALITY_ORDER.get(history_quality, 99),
             -int(game.get('discount_percent') or 0),
