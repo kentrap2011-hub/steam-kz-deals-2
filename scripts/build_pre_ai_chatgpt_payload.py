@@ -251,6 +251,9 @@ def main():
                     'appid': taste_row['appid'],
                     'title': taste_row['taste_subject_title'],
                     'taste_fingerprint': taste_row['taste_fingerprint'],
+                    'candidate_context_sha256': taste_row['candidate_context_sha256'],
+                    'short_description': taste_row.get('short_description'),
+                    'bundle_members': taste_row.get('bundle_members') or [],
                     'resolved_taste_fit': fit,
                     'work_required': work,
                     'semantic_condition': semantic_condition,
@@ -273,6 +276,9 @@ def main():
             'appid': taste_row['appid'],
             'title': taste_row['taste_subject_title'],
             'taste_fingerprint': taste_row['taste_fingerprint'],
+            'candidate_context_sha256': taste_row['candidate_context_sha256'],
+            'short_description': taste_row.get('short_description'),
+            'bundle_members': taste_row.get('bundle_members') or [],
             'fit_tags': taste_row['fit_tags'],
             'core_fit_count': taste_row['core_fit_count'],
             'release_date': taste_row['release_date'],
@@ -304,13 +310,15 @@ def main():
 
     source_bytes = sum(path.stat().st_size for path in PREREQUISITES)
     manifest = {
-        'schema_version': 2,
-        'purpose': 'chatgpt_consumer_bundle_with_strict_price_blind_taste_phase',
+        'schema_version': 3,
+        'purpose': 'chatgpt_consumer_bundle_with_context_bound_strict_price_blind_taste_phase',
         'status': 'complete',
         'source_mailing_updated_at_utc': source_stamp,
         'profile_binding': {
             'canonical_profile_blob_sha': taste_doc['current_profile']['blob_sha'],
             'taste_model_version': taste_doc['current_binding']['taste_model_version'],
+            'candidate_context_contract_blob_sha': taste_doc['current_binding']['candidate_context_contract_blob_sha'],
+            'content_metadata_blob_sha': taste_doc['current_binding']['content_metadata_blob_sha'],
         },
         'wishlist_binding': {
             'blob_sha': wishlist['blob_sha'],
@@ -324,6 +332,8 @@ def main():
         'contract': {
             'minimum_taste_fit': 'moderate',
             'taste_phase_is_strictly_price_blind': True,
+            'candidate_context_digest_required_for_persisted_taste_verdict': True,
+            'steam_short_description_is_price_blind_candidate_evidence_not_profile_evidence': True,
             'taste_queue_forbids': ['price', 'discount', 'history', 'reviews', 'wishlist', 'popularity', 'deal_quality'],
             'chatgpt_must_fix_taste_verdict_before_reading_matching_purchase_context': True,
             'chatgpt_must_not_recalculate_prices_history_or_deal_gates': True,
@@ -339,6 +349,9 @@ def main():
             'ready_context_start_line': len(ai_queue) + 1 if ready_context else None,
         },
         'source_family_count': len(families),
+        'candidate_description_known_count': taste_doc['candidate_context']['description_known_count'],
+        'candidate_description_missing_count': taste_doc['candidate_context']['description_missing_count'],
+        'candidate_description_coverage': taste_doc['candidate_context']['description_coverage'],
         'ai_queue_count': len(ai_queue),
         'ready_without_ai_count': len(ready_context),
         'purchase_context_line_count': len(purchase_context),
