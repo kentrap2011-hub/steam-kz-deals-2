@@ -17,24 +17,19 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: daily-visual-payload
   cancel-in-progress: true
 
 jobs:
-  build-and-publish:
+  build:
     if: >
       github.event_name != 'workflow_run' ||
       (github.event.workflow_run.conclusion == 'success' &&
        github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     timeout-minutes: 8
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout current main
@@ -48,12 +43,12 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Build ready visual payload once per production snapshot
+      - name: Build canonical visual payload when production is ready
         id: build
         shell: bash
         run: |
           set -euo pipefail
-          if [[ "${{ github.event_name }}" == "push" || "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             export FORCE_VISUAL_BUILD=1
           fi
           python scripts/build_daily_visual_payload.py | tee /tmp/visual-build.log
@@ -84,39 +79,8 @@ jobs:
               exit 1
             fi
             if git push origin HEAD:main; then
-              break
-            fi
-            if [[ "$attempt" == "3" ]]; then
-              exit 1
+              exit 0
             fi
             sleep $((attempt * 3))
           done
-
-      - name: Refresh checkout after payload commit
-        if: steps.build.outputs.built == 'true'
-        run: |
-          git fetch origin main
-          git reset --hard origin/main
-
-      - name: Stage ready payload for static UI
-        if: steps.build.outputs.built == 'true'
-        run: |
-          mkdir -p web/data
-          cp data/production/visual/current.json web/data/current.json
-
-      - name: Configure Pages
-        if: steps.build.outputs.built == 'true'
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
-      - name: Upload Pages artifact
-        if: steps.build.outputs.built == 'true'
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: web
-
-      - name: Deploy to GitHub Pages
-        if: steps.build.outputs.built == 'true'
-        id: deployment
-        uses: actions/deploy-pages@v4
+          exit 1
