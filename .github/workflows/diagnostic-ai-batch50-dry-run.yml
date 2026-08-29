@@ -1,0 +1,244 @@
+name: 50-row AI taste batch dry-run
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-ai-batch50-dry-run.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build exact audited 50-result AI input
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          queue=[json.loads(line) for line in Path('data/production/pre_ai/chatgpt_taste_queue.jsonl').read_text(encoding='utf-8').splitlines() if line.strip()][:50]
+          if len(queue)!=50:
+              raise SystemExit(f'Expected 50 current AI rows, got {len(queue)}')
+          projection=json.loads(Path('data/production/pre_ai/taste_projection.json').read_text(encoding='utf-8'))
+
+          D={
+          'App_1076200':('EXCLUDE','below_moderate','exclude_audited_below',[
+            'The prepared context gives a concrete two-hero team-building and combo system, which maps to the durable preference for learning systems and making meaningful tactical combinations, but the available context does not establish a second independent fit signal.'
+          ],[]),
+          'App_108710':('EXCLUDE','below_moderate','exclude_insufficient',[
+            'The prepared context gives a clear mystery to unravel and a concrete rescue objective, which matches the attraction to mystery without being directionless, but it exposes too little of the actual gameplay structure to establish moderate fit.'
+          ],[]),
+          'App_1088790':('INCLUDE','moderate','include_moderate',[
+            'The prepared context centers balancing competing civilian and military priorities while responding to an insurgency; this is a concrete tradeoff-driven problem-solving structure and maps to the durable tactical problem-solving preference.',
+            'The prepared context gives one explicit success condition—stabilise a war-torn country—so the complex strategic choices retain a readable objective instead of becoming opaque management for its own sake.'
+          ],[]),
+          'App_1089980':('EXCLUDE','below_moderate','exclude_audited_below',[
+            'The prepared context makes choosing different paths and even failure itself part of the core experience; this is a distinctive intrinsic hook, but the available context does not establish another independent structural or mechanical match.'
+          ],[]),
+          'App_1092140':('INCLUDE','moderate','include_moderate',[
+            'The prepared context explicitly identifies stealth as a core mechanic; the canonical profile directly records stealth as something the user enjoyed in Manhunt when it supported the game fantasy.',
+            'The prepared context gives the clear objective of escaping the house while procedural generation changes the house every new game; this combines readable direction with meaningful variation rather than an unchanged repeated layout.'
+          ],[]),
+          'App_1102130':('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+          'App_1105670':('INCLUDE','moderate','include_moderate',[
+            'The prepared context has a tactical squad-defense phase at night, directly matching the durable preference for compact situations where understanding the threat and choosing a plan matters.',
+            'The game alternates night combat with rebuilding defenses by day, giving a concrete change of activity and context instead of exposing one loop and repeating it unchanged.'
+          ],[]),
+          'App_1110100':('INCLUDE','moderate','include_moderate',[
+            'The prepared context is explicitly a fighting game, and the canonical profile has strong positive history with Tekken 3 and Ultimate Mortal Kombat 3 rather than a generic dislike of the genre.',
+            'The prepared context explicitly frames the system as easy to learn but hard to master, matching the durable positive signal for mechanical mastery and improvement through understanding and execution.'
+          ],[]),
+          'App_1114220':('INCLUDE','moderate','include_moderate',[
+            'The prepared context explicitly includes building the character, giving a concrete progression vector rather than progression being inferred from the RPG label alone.',
+            'The open world is tied to exploration and completing quests, providing at least a concrete activity vector and reasons to engage with the world rather than size alone being the selling point.'
+          ],[]),
+          'App_11190':('EXCLUDE','below_moderate','exclude_insufficient',[
+            'The prepared context establishes a concrete investigation against Jack the Ripper, matching the durable attraction to mystery and investigation, but it exposes too little gameplay or structure for a second independent fit signal.'
+          ],[]),
+          'App_1119710':('EXCLUDE','below_moderate','exclude_insufficient',[
+            'The prepared context centers discovering family memories and small secrets, which maps to the attraction to uncovering hidden information, but no concrete gameplay structure is exposed strongly enough for moderate fit.'
+          ],[]),
+          'App_1119730':('INCLUDE','moderate','include_moderate',[
+            'The prepared context gives several materially different activities—building, farming, hunting and trading—matching the critical preference for the experience to change activity rather than stay on one unchanged loop.',
+            'All of those activities feed one readable progression goal: turning a rundown homestead into the most prosperous ranch in the valley, matching the preference for progression with an understandable purpose and effect.'
+          ],[]),
+          'App_1122680':('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+          'App_1122690':('EXCLUDE','below_moderate','exclude_audited_below',[
+            'The prepared context follows three separate playable characters whose worlds collide, giving a concrete multi-perspective structural hook that may create variation, but the available context does not expose a second independent gameplay match.'
+          ],[]),
+          'App_1122720':('INCLUDE','strong','include_strong',[
+            'The prepared context is built around high-speed movement across motorcycles and skateboarding, directly matching the very strong durable preference for movement itself to be enjoyable and expressive.',
+            'The same context switches between riding, dance battling, shooting and swordplay, directly matching the critical preference for changing formats and situations rather than one unchanged formula.'
+          ],[]),
+          'App_1135230':('INCLUDE','moderate','include_moderate',[
+            'The prepared context gives weapons, skills and game-changing relics that can be combined into synergies, providing a concrete system to learn and build around rather than a generic action label.',
+            'Building those synergies and choosing weapon/skill combinations maps to the durable mastery and tactical-combination preferences, with visible changes to how the character performs.'
+          ],[]),
+          'App_1137300':('INCLUDE','moderate','include_moderate',[
+            'The prepared context gives a concrete investigation of the mystery surrounding Sherlock’s mother, matching the strong attraction to mysteries worth actively uncovering.',
+            'The objective is explicit—investigate her death while navigating the island—so exploration is attached to a readable purpose rather than leaving the player unclear about what the game wants.'
+          ],[]),
+          'App_1140170':('EXCLUDE','below_moderate','exclude_insufficient',[
+            'The prepared context gives mysteries of the Spirit Realm to uncover inside an action-adventure, which is directionally positive, but it does not expose another specific mechanical or structural match at the moderate threshold.'
+          ],[]),
+          'App_1144030':('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+          'App_1144400':('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+          'App_1146970':('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+          'App_1154810':('INCLUDE','moderate','include_moderate',[
+            'The prepared context gives a distinctive intrinsic combat hook—using office junk as weaponry—rather than relying only on a generic dungeon-crawler label.',
+            'The dungeons are explicitly procedural, so the context supports changing situations between runs; this maps to the preference for variation over an unchanged repeated route, even though roguelite structure remains only a neutral genre label.'
+          ],[]),
+          'App_115800':('INCLUDE','moderate','include_moderate',[
+            'The prepared context makes flying through and exploring the open skies a central activity, directly matching the very strong durable preference for movement itself to be enjoyable.',
+            'Picking up friends and carrying them through exploration is a second concrete interaction layered onto the traversal rather than movement being the only exposed mechanic.'
+          ],[]),
+          'App_1160220':('INCLUDE','strong','include_strong',[
+            'The prepared context explicitly asks the player to gather evidence and interrogate suspects to solve a murder, strongly matching the durable preference for mystery plus active problem solving rather than passive story consumption.',
+            'The player may accuse anyone but must prove the case in trial, creating a clear goal with freedom of hypothesis constrained by evidence; this maps directly to the preference for natural alternative approaches to a readable task.'
+          ],[]),
+          'App_1166290':('INCLUDE','moderate','include_moderate',[
+            'The prepared context gives repeated concrete life-or-death decisions with consequences the player must bear, making choice materially connected to outcomes rather than choice existing only as a label.',
+            'The mystery of the protagonist’s incarnation supplies a second explicit discovery thread, matching the attraction to mysteries that have a readable question to answer.'
+          ],[]),
+          'App_1171320':('EXCLUDE','below_moderate','exclude_insufficient',[
+            'The prepared context supplies a clear mystery to solve, but it exposes no second specific gameplay or structural signal strong enough to reach moderate fit.'
+          ],[]),
+          'App_1178490':('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+          'App_1184790':('EXCLUDE','below_moderate','exclude_insufficient',[
+            'The prepared context explicitly asks the player to uncover the facility’s secrets while surviving anomalies, matching the mystery signal, but it does not expose enough concrete gameplay structure for moderate fit.'
+          ],[]),
+          'App_1186640':('EXCLUDE','below_moderate','exclude_audited_below',[
+            'The prepared context explicitly identifies a 3D platformer adventure, which is directionally compatible with the strong movement preference, but it does not establish that traversal itself is a distinctive or expressive mechanic nor provide a second independent fit signal.'
+          ],[]),
+          'App_1189290':('INCLUDE','moderate','include_moderate',[
+            'The prepared context explicitly includes leveling skills, giving a concrete progression system with visible character growth rather than relying on the RPG tag alone.',
+            'It also promises varied monsters plus an explorable world populated by NPC dialogue and a story to uncover, providing multiple concrete reasons to engage with the world instead of open-world size alone.'
+          ],[]),
+          'App_1207650':('INCLUDE','moderate','include_moderate',[
+            'The prepared context centers decisions across reform, corruption, recession and international conflict, giving genuinely different problem domains rather than a single repeated decision type.',
+            'Those choices all feed one readable role and objective—guiding Sordland as president—matching the preference for complex decisions to remain attached to an understandable purpose.'
+          ],[]),
+          'App_12130':('INCLUDE','moderate','include_moderate',[
+            'The canonical profile directly records that the user enjoyed Manhunt’s atmosphere and specifically enjoyed its stealth.',
+            'The canonical profile also directly records enjoyment of the intrigue and anticipation around discovering what was happening and where events would lead.'
+          ],[
+            'The canonical profile directly notes that Manhunt becomes repetitive over time and that its formula does not develop much, limiting the rating to 3.5/5.'
+          ]),
+          'App_12150':('INCLUDE','moderate','include_moderate',[
+            'The canonical profile directly records a 3.5/5 rating for Max Payne 2 and that it was very enjoyable when first played.',
+            'The canonical profile directly says its mechanics may even be slightly better than the first game, providing direct positive mechanical evidence rather than an analogy.'
+          ],[
+            'The canonical profile says the first Max Payne now feels stronger in story and stylistic originality, which caps confidence but does not overturn the positive direct experience.'
+          ]),
+          'App_1218210':('INCLUDE','moderate','include_moderate',[
+            'The prepared context gives catching and training more than 100 creatures, a concrete progression and collection system with an understandable growth vector.',
+            'It also explicitly calls the battles strategic and turn-based while the adventure spans six diverse regions, combining tactical problem solving with varied exploration rather than a single static activity.'
+          ],[]),
+          'App_1220010':('EXCLUDE','below_moderate','exclude_insufficient',[
+            'The prepared context gives a clear objective—lead a revolutionary group to overthrow an authoritarian regime—but exposes too little of the actual decision or combat structure for a second independent fit signal.'
+          ],[]),
+          'App_1221250':('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+          'App_1230140':('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+          'App_1234190':('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+          'App_12360':('INCLUDE','moderate','include_moderate',[
+            'The prepared context centers destructive high-adrenaline racing; the canonical profile directly records that the racing itself in Need for Speed: Underground 2 was enjoyable.',
+            'The context names materially different carnage formats—Deathmatch derby, Carnage Race and Head-on races—matching the durable preference for varied situations rather than one unchanged race formula.'
+          ],[]),
+          'App_1241510':('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+          'App_1243220':('INCLUDE','moderate','include_moderate',[
+            'The prepared context explicitly frames completing missions through being tricky and using skills while escaping police, which is compatible with the direct positive stealth history in Manhunt rather than relying on the Stealth tag alone.',
+            'The objective is concrete—complete missions and escape pursuit—matching the strong preference for stealth or unusual problem solving to retain a readable goal.'
+          ],[]),
+          'App_1249040':('INCLUDE','strong','include_strong',[
+            'The prepared context explicitly combines a 2.5D platformer with first-person play, directly matching the critical preference for an experience to change format instead of exposing one unchanged interaction loop.',
+            'Both formats serve a concrete escape objective, while platforming supplies movement-focused play; this combines the strong movement signal with the equally strong preference for readable goals.'
+          ],[]),
+          'App_1252830':('INCLUDE','moderate','include_moderate',[
+            'The prepared context embeds riddles inside a broader cinematic adventure, matching the canonical distinction that puzzles work better when they are part of an adventure rather than an isolated puzzle loop.',
+            'The player also evades traps and pursuers on a clearly stated route toward freedom, providing varied tasks with a readable objective instead of pure puzzle repetition.'
+          ],[]),
+          'App_1255650':('INCLUDE','moderate','include_moderate',[
+            'The prepared context is explicitly about building an overpowered character through mods, upgrades and a rune system, giving a clear progression vector with visible effects.',
+            'Mixing, matching and experimenting with those systems maps directly to the durable mastery preference: understanding combinations changes how the character performs rather than progress being opaque.'
+          ],[]),
+          'App_1257410':('INCLUDE','moderate','include_moderate',[
+            'The prepared context gives a clear exploration-and-escape objective inside a mansion, aligning mystery/horror with the strong preference not to be left unclear about what the game wants.',
+            'It explicitly asks the player to use different tools and wits to overcome challenges and occasionally shifts into waking from nightmares, providing active problem solving plus some change of situation.'
+          ],[]),
+          'App_1266030':('INCLUDE','moderate','include_moderate',[
+            'The prepared context centers managing scarce resources while balancing safety and morale, a concrete tradeoff-driven problem-solving structure that maps to the tactical decision preference.',
+            'The expedition has an explicit survival direction—take charge and push through The Pale Beyond—so the hard decisions remain attached to a readable objective.'
+          ],[]),
+          'App_1269640':('INCLUDE','moderate','include_moderate',[
+            'The prepared context explicitly centers uncovering hidden truths, directly matching the durable attraction to mystery and secrets worth discovering.',
+            'Collecting words that change the course of fate is a specific intrinsic mechanic with a visible consequence, matching the preference for a memorable hook rather than generic adventure structure.'
+          ],[]),
+          'App_1272320':('INCLUDE','moderate','include_moderate',[
+            'The prepared context gives building a town and defenses plus raising armies, providing a concrete progression loop whose purpose is visible in the defenses and forces created.',
+            'Those systems are then tested against massive enemy hordes, creating a clear tactical survival problem where preparation and plan selection have a direct outcome.'
+          ],[]),
+          'App_1273400':('EXCLUDE','below_moderate','exclude_audited_below',[
+            'The prepared context gives a readable progression goal—build a construction business from scratch into a successful enterprise—but does not expose a second independent gameplay or structural fit signal.'
+          ],[]),
+          'App_1273560':('INCLUDE','strong','include_strong',[
+            'The prepared context makes high-speed on-foot racing the core activity, directly matching the very strong durable preference for movement itself to be enjoyable and the positive history with racing.',
+            'Deadly obstacles and brutal abilities turn traversal into active execution rather than passive speed, adding a second concrete mastery/action layer to the movement hook.'
+          ],[]),
+          }
+
+          keys=[row['taste_subject_key'] for row in queue]
+          if set(D)!=set(keys):
+              raise SystemExit(f'Decision key mismatch missing={set(keys)-set(D)} extra={set(D)-set(keys)}')
+          results=[]
+          for row in queue:
+              verdict,fit,reason,pos,neg=D[row['taste_subject_key']]
+              results.append({'key':row['taste_subject_key'],'appid':row['appid'],'taste_fingerprint':row['taste_fingerprint'],'candidate_context_sha256':row['candidate_context_sha256'],'verdict':verdict,'fit_level':fit,'reason_code':reason,'positive_evidence':pos,'negative_evidence':neg})
+          bindings={'profile_blob_sha':projection['current_profile']['blob_sha'],'taste_model_version':projection['current_binding']['taste_model_version'],'taste_semantics_sha256':projection['current_binding']['taste_semantics_sha256'],'source_mailing_updated_at_utc':projection['source_mailing_updated_at_utc']}
+          Path('/tmp/taste_batch50.json').write_text(json.dumps({'schema_version':1,'bindings':bindings,'results':results},ensure_ascii=False,indent=2),encoding='utf-8')
+          dist=Counter((r['verdict'],r['fit_level'],r['reason_code']) for r in results)
+          print(json.dumps({'distribution':{'|'.join(k):v for k,v in sorted(dist.items())}},ensure_ascii=False,indent=2))
+          PY
+
+      - name: Canonical ingest dry-run
+        run: python scripts/ingest_taste_results.py --input /tmp/taste_batch50.json --dry-run
+
+      - name: Quality and legacy sanity check
+        run: |
+          python - <<'PY'
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          doc=json.loads(Path('/tmp/taste_batch50.json').read_text(encoding='utf-8'))
+          results=doc['results']
+          overlay=json.loads(Path('data/cache/taste_fit.entry_overlay.json').read_text(encoding='utf-8'))
+          legacy=json.loads(Path('data/cache/taste_fit.json').read_text(encoding='utf-8'))
+          old=legacy.get('entries') or {}
+          reasons=Counter(r['reason_code'] for r in results)
+          expected={'include_strong':4,'include_moderate':24,'exclude_audited_below':5,'exclude_insufficient':17}
+          if dict(reasons)!=expected:
+              raise SystemExit(f'Unexpected batch50 distribution: {dict(reasons)}')
+          if overlay.get('entry_count')!=27:
+              raise SystemExit('Dry-run changed or unexpected overlay baseline')
+          if any(r['verdict']=='INCLUDE' and len(r['positive_evidence'])<2 for r in results):
+              raise SystemExit('INCLUDE result lacks two explicit positive evidence items')
+          overlaps=[]
+          for r in results:
+              o=old.get(r['key'])
+              if o:
+                  overlaps.append({'key':r['key'],'new_verdict':r['verdict'],'new_fit':r['fit_level'],'old_verdict':o.get('verdict'),'old_fit':o.get('fit_level'),'old_reason':o.get('reason_code'),'same_verdict':r['verdict']==o.get('verdict'),'same_fit':r['fit_level']==o.get('fit_level')})
+          differences=[x for x in overlaps if not x['same_verdict'] or not x['same_fit']]
+          print(json.dumps({'batch_count':len(results),'reason_distribution':dict(sorted(reasons.items())),'legacy_overlap_count':len(overlaps),'legacy_same_verdict_count':sum(x['same_verdict'] for x in overlaps),'legacy_same_fit_count':sum(x['same_fit'] for x in overlaps),'legacy_difference_count':len(differences),'legacy_differences':differences,'overlay_entry_count_after_dry_run':overlay['entry_count']},ensure_ascii=False,indent=2))
+          print('AI_TASTE_BATCH50_DRY_RUN=PASS')
+          PY
