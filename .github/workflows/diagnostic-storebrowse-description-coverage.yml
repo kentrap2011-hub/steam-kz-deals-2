@@ -1,0 +1,82 @@
+name: One-shot StoreBrowse description coverage diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-storebrowse-description-coverage.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Measure same-pass short-description coverage
+        run: |
+          python - <<'PY'
+          import json, sys
+          from collections import Counter
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          import build_pre_ai_store_snapshot as store_builder
+
+          index, feed = store_builder.load_feed()
+          paired, requests = store_builder.fetch_batches(store_builder.requested_ids(feed))
+          desc = {}
+          kinds = Counter()
+          missing = []
+          package_probe = []
+          for key, item in paired:
+              text = str((item.get('basic_info') or {}).get('short_description') or '').strip()
+              desc[key] = text
+              kind = 'sub' if key.startswith('Sub_') else 'app'
+              kinds[f'{kind}:known' if text else f'{kind}:missing'] += 1
+              if not text:
+                  missing.append(key)
+              if key.startswith('Sub_'):
+                  included = item.get('included_items') or {}
+                  package_probe.append({
+                      'key': key,
+                      'package_description': text,
+                      'included_app_count': len(included.get('included_apps') or []),
+                      'included_app_samples': [
+                          {
+                              'appid': x.get('appid') or x.get('id'),
+                              'name': x.get('name'),
+                              'short_description': (x.get('basic_info') or {}).get('short_description'),
+                              'keys': sorted(x.keys()),
+                          }
+                          for x in (included.get('included_apps') or [])[:3]
+                          if isinstance(x, dict)
+                      ],
+                  })
+
+          families = json.loads(Path('data/production/pre_ai/family_graph.json').read_text(encoding='utf-8'))['families']
+          subjects = [x['taste_subject_key'] for x in families]
+          subject_known = [k for k in subjects if desc.get(k)]
+          subject_missing = [k for k in subjects if not desc.get(k)]
+          app_subjects = [k for k in subjects if k.startswith('App_')]
+          sub_subjects = [k for k in subjects if k.startswith('Sub_')]
+
+          print(json.dumps({
+              'source_item_count': len(feed),
+              'requests': requests,
+              'source_description_counts': dict(sorted(kinds.items())),
+              'source_description_coverage': round((len(feed)-len(missing))/len(feed), 6),
+              'taste_subject_count': len(subjects),
+              'taste_subject_description_known': len(subject_known),
+              'taste_subject_description_missing': len(subject_missing),
+              'taste_subject_description_coverage': round(len(subject_known)/len(subjects), 6),
+              'app_taste_subject_count': len(app_subjects),
+              'app_taste_subject_description_known': sum(bool(desc.get(k)) for k in app_subjects),
+              'sub_taste_subject_count': len(sub_subjects),
+              'sub_taste_subject_description_known': sum(bool(desc.get(k)) for k in sub_subjects),
+              'missing_taste_subject_examples': subject_missing[:30],
+              'package_probe': package_probe,
+          }, ensure_ascii=False, indent=2))
+          PY
