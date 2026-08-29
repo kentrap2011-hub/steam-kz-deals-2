@@ -1,0 +1,190 @@
+name: 25-row AI taste pilot dry-run
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-ai-pilot-25-dry-run.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build exact 25-result AI pilot input
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          from collections import Counter
+          from pathlib import Path
+
+          queue = [json.loads(line) for line in Path('data/production/pre_ai/chatgpt_taste_queue.jsonl').read_text(encoding='utf-8').splitlines() if line.strip()][:25]
+          if len(queue) != 25:
+              raise SystemExit(f'Pilot queue length mismatch: {len(queue)}')
+          projection = json.loads(Path('data/production/pre_ai/taste_projection.json').read_text(encoding='utf-8'))
+
+          decisions = {
+            'Sub_12467': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context is specifically about racing built around destructive collisions and track objects breaking; the canonical profile directly records that the racing itself in Need for Speed: Underground 2 was enjoyable.',
+              'The prepared context names distinct carnage formats including Deathmatch derby, Carnage Race and Head-on races; this maps to the durable preference for varied situations instead of one unchanged formula repeating.'
+            ],[]),
+            'Sub_49358': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'Sub_648168': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context gives a concrete progression-like activity in conquering Fortresses and commanding a personal orc army; this maps to the durable preference for progression with a clear goal and visible effect.'
+            ],[]),
+            'App_1011670': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context explicitly requires players to work together with machinery, gadgets and physics to complete deliveries; this maps to the durable positive pattern for shared play when interaction is substantive rather than multiplayer existing by itself.'
+            ],[]),
+            'App_1016770': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context gives several concrete interrogation approaches such as manipulation, threats or torture toward one clear objective; this maps to the durable preference for natural alternative ways to solve an understandable task.',
+              'The prepared context alternates between interrogating suspects and managing the team and its reputation; this maps to the very strong preference for the experience to change format rather than expose one loop and repeat it unchanged.'
+            ],[]),
+            'App_1016930': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context makes puzzle solving part of a broader time-travel adventure; this maps to the canonical distinction where puzzles inside an adventure are a stronger fit than an isolated puzzle-only loop.',
+              'The old lantern is a specific gameplay device that reveals another time and enables travel to the past; this is a distinctive intrinsic mechanic and matches the durable preference for a memorable gameplay hook rather than a generic formula.'
+            ],[]),
+            'App_1023690': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_1025960': ('EXCLUDE','below_moderate','exclude_insufficient',[
+              'The prepared context establishes a mystery with trapped contestants whose trust changes as events unfold; this maps to the durable attraction to a mystery worth uncovering.'
+            ],[]),
+            'App_1033950': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_1037020': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context explicitly describes fast-paced free-moving platforming; this maps to the very strong durable preference for movement itself to be enjoyable and expressive.'
+            ],[]),
+            'App_1040230': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context explicitly uses procedural gameplay and story elements to create a different adventure on each run; this maps to the durable preference for changing situations rather than repetition without development.'
+            ],[]),
+            'App_1040420': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context alternates a night phase of artifact-driven nightmare runs with a day phase of city exploration and relationship building; this maps to the very strong preference for changing formats and situations over a single repeated loop.',
+              'The prepared context says relationships unlock the power of dreams, giving a concrete progression action with a visible gameplay effect; this maps to the durable preference for progression whose purpose and result are understandable.'
+            ],[]),
+            'App_1041920': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_1046790': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context identifies time manipulation as the core of a story-driven puzzle game; this is a specific intrinsic mechanic and a memorable hook, but the available context does not establish an independent second gameplay or structural match required for moderate fit.'
+            ],[]),
+            'App_1047220': ('EXCLUDE','below_moderate','exclude_insufficient',[
+              'The prepared context gives a concrete mystery to solve, which maps to the durable attraction to mystery, but it does not expose enough gameplay or structure to establish moderate fit.'
+            ],[]),
+            'App_1048100': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context has a specific asymmetric hide-and-seek mechanic where one side becomes physical props and the other searches for them; this is a distinctive gameplay hook, while multiplayer alone is neutral in the canonical profile.'
+            ],[]),
+            'App_1049410': ('EXCLUDE','below_moderate','exclude_direct_conflict',[
+              'The prepared context has a distinctive perspective-and-depth manipulation mechanic, which is a clear gameplay hook.'
+            ],[
+              'The prepared context explicitly defines the game as a first-person puzzler whose progression is solving impossible puzzles; this matches the canonical structural risk that a pure puzzle loop is pleasant only briefly and does not sustain interest as well as puzzles embedded in a broader adventure.'
+            ]),
+            'App_1051200': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_1063660': ('EXCLUDE','below_moderate','exclude_insufficient',[
+              'The prepared context gives a clear discover-the-truth and escape objective, which aligns with the preference for mystery without being unclear about the immediate goal, but it does not expose a second specific gameplay or structural match.'
+            ],[]),
+            'App_1067540': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context embeds puzzle solving inside exploration of a larger adventure world; this maps directly to the canonical preference for puzzles as part of an adventure rather than a puzzle-only loop.',
+              'The prepared context gives hidden legends, forgotten monsters and a tale to uncover while naming concrete activities such as exploring, collecting curiosities and solving puzzles; this maps to the durable preference for mystery and exploration with a readable activity vector instead of being lost without a next step.'
+            ],[]),
+            'App_10680': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_1069160': ('EXCLUDE','below_moderate','exclude_audited_below',[
+              'The prepared context explicitly includes tactical turn-based combat; this maps to the durable positive signal for compact situations where understanding the problem and choosing an approach matters, but the available context does not establish a second independent specific positive at the moderate threshold.'
+            ],[]),
+            'App_1069740': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_1070330': ('EXCLUDE','below_moderate','exclude_insufficient',[],[]),
+            'App_107200': ('INCLUDE','moderate','include_moderate',[
+              'The prepared context says the generated galaxy is populated with factions, enemies, missions and items; this maps to the durable preference for an explorable world to contain concrete reasons to engage with it rather than being large but empty.',
+              'The prepared context explicitly generates a different galaxy to provide a unique experience on each playthrough; this maps to the very strong preference for changing situations and variety instead of an unchanged formula repeating.'
+            ],[]),
+          }
+
+          queue_keys = [row['taste_subject_key'] for row in queue]
+          if set(decisions) != set(queue_keys):
+              raise SystemExit(f'Decision/queue key mismatch: missing={set(queue_keys)-set(decisions)} extra={set(decisions)-set(queue_keys)}')
+
+          results=[]
+          for row in queue:
+              verdict, fit, reason, positive, negative = decisions[row['taste_subject_key']]
+              results.append({
+                  'key': row['taste_subject_key'],
+                  'appid': row['appid'],
+                  'taste_fingerprint': row['taste_fingerprint'],
+                  'candidate_context_sha256': row['candidate_context_sha256'],
+                  'verdict': verdict,
+                  'fit_level': fit,
+                  'reason_code': reason,
+                  'positive_evidence': positive,
+                  'negative_evidence': negative,
+              })
+
+          bindings={
+              'profile_blob_sha': projection['current_profile']['blob_sha'],
+              'taste_model_version': projection['current_binding']['taste_model_version'],
+              'taste_semantics_sha256': projection['current_binding']['taste_semantics_sha256'],
+              'source_mailing_updated_at_utc': projection['source_mailing_updated_at_utc'],
+          }
+          doc={'schema_version':1,'bindings':bindings,'results':results}
+          Path('/tmp/taste_pilot_25.json').write_text(json.dumps(doc,ensure_ascii=False,indent=2),encoding='utf-8')
+
+          counts=Counter((r['verdict'],r['fit_level'],r['reason_code']) for r in results)
+          print(json.dumps({'bindings':bindings,'distribution':{'|'.join(k):v for k,v in sorted(counts.items())}},ensure_ascii=False,indent=2))
+          PY
+
+      - name: Canonical ingest dry-run
+        run: python scripts/ingest_taste_results.py --input /tmp/taste_pilot_25.json --dry-run
+
+      - name: Quality and historical sanity check
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from collections import Counter
+          from pathlib import Path
+
+          pilot=json.loads(Path('/tmp/taste_pilot_25.json').read_text(encoding='utf-8'))
+          results=pilot['results']
+          overlay=Path('data/cache/taste_fit.entry_overlay.json')
+          current_overlay=json.loads(overlay.read_text(encoding='utf-8'))
+          legacy=json.loads(Path('data/cache/taste_fit.json').read_text(encoding='utf-8'))
+          legacy_entries=legacy.get('entries') or {}
+
+          counts=Counter(r['reason_code'] for r in results)
+          expected={'include_moderate':6,'exclude_audited_below':7,'exclude_direct_conflict':1,'exclude_insufficient':11}
+          if dict(counts) != expected:
+              raise SystemExit(f'Unexpected pilot distribution: {dict(counts)}')
+          if any(r['verdict']=='INCLUDE' and len(r['positive_evidence']) < 2 for r in results):
+              raise SystemExit('Pilot INCLUDE lacks two positive evidence items')
+          if any(r['reason_code']=='exclude_direct_conflict' and not r['negative_evidence'] for r in results):
+              raise SystemExit('Direct-conflict pilot result lacks negative evidence')
+          if current_overlay.get('entry_count') != 2:
+              raise SystemExit('Dry-run changed or unexpected overlay baseline')
+
+          historical=[]
+          for r in results:
+              old=legacy_entries.get(r['key'])
+              if old:
+                  historical.append({
+                      'key':r['key'],
+                      'new_verdict':r['verdict'],
+                      'new_fit':r['fit_level'],
+                      'old_verdict':old.get('verdict'),
+                      'old_fit':old.get('fit_level'),
+                      'same_verdict':r['verdict']==old.get('verdict'),
+                      'same_fit':r['fit_level']==old.get('fit_level'),
+                  })
+          print(json.dumps({
+              'pilot_count':len(results),
+              'reason_distribution':dict(sorted(counts.items())),
+              'legacy_overlap_count':len(historical),
+              'legacy_same_verdict_count':sum(x['same_verdict'] for x in historical),
+              'legacy_same_fit_count':sum(x['same_fit'] for x in historical),
+              'legacy_differences':[x for x in historical if not x['same_verdict'] or not x['same_fit']],
+              'overlay_entry_count_after_dry_run':current_overlay['entry_count'],
+          },ensure_ascii=False,indent=2))
+          print('AI_TASTE_PILOT_25_DRY_RUN=PASS')
+          PY
