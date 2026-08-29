@@ -1,0 +1,108 @@
+name: One-shot taste ingest contract diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-taste-ingest-contract.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build current empty-overlay state
+        run: |
+          python scripts/build_taste_cache_index.py
+          python scripts/build_pre_ai_taste_projection.py
+          python scripts/build_pre_ai_chatgpt_payload.py
+      - name: Prove accept and reject cases without persistence
+        run: |
+          python - <<'PY'
+          import copy
+          import json
+          import subprocess
+          from pathlib import Path
+
+          queue_line = next(line for line in Path('data/production/pre_ai/chatgpt_taste_queue.jsonl').read_text(encoding='utf-8').splitlines() if line.strip())
+          row = json.loads(queue_line)
+          projection = json.loads(Path('data/production/pre_ai/taste_projection.json').read_text(encoding='utf-8'))
+          bindings = {
+              'profile_blob_sha': projection['current_profile']['blob_sha'],
+              'taste_model_version': projection['current_binding']['taste_model_version'],
+              'taste_semantics_sha256': projection['current_binding']['taste_semantics_sha256'],
+              'source_mailing_updated_at_utc': projection['source_mailing_updated_at_utc'],
+          }
+          base = {
+              'schema_version': 1,
+              'bindings': bindings,
+              'results': [{
+                  'key': row['taste_subject_key'],
+                  'appid': row['appid'],
+                  'taste_fingerprint': row['taste_fingerprint'],
+                  'verdict': 'EXCLUDE',
+                  'fit_level': 'below_moderate',
+                  'reason_code': 'exclude_insufficient',
+                  'positive_evidence': [],
+                  'negative_evidence': [],
+              }],
+          }
+
+          def run_case(name, doc, should_pass):
+              path = Path(f'/tmp/{name}.json')
+              path.write_text(json.dumps(doc, ensure_ascii=False), encoding='utf-8')
+              cp = subprocess.run(
+                  ['python','scripts/ingest_taste_results.py','--input',str(path),'--dry-run'],
+                  text=True, capture_output=True,
+              )
+              ok = cp.returncode == 0
+              print(json.dumps({'case':name,'should_pass':should_pass,'passed':ok,'stdout':cp.stdout.strip(),'stderr':cp.stderr.strip()}, ensure_ascii=False))
+              if ok != should_pass:
+                  raise SystemExit(f'Unexpected ingest result for {name}')
+
+          run_case('valid_final_result', base, True)
+
+          bad = copy.deepcopy(base)
+          bad['bindings']['profile_blob_sha'] = '0' * 40
+          run_case('reject_wrong_profile', bad, False)
+
+          bad = copy.deepcopy(base)
+          bad['bindings']['taste_model_version'] = 'wrong-model'
+          run_case('reject_wrong_model', bad, False)
+
+          bad = copy.deepcopy(base)
+          bad['bindings']['taste_semantics_sha256'] = '0' * 64
+          run_case('reject_wrong_semantics', bad, False)
+
+          bad = copy.deepcopy(base)
+          bad['results'][0]['taste_fingerprint'] = '0' * 64
+          run_case('reject_wrong_fingerprint', bad, False)
+
+          bad = copy.deepcopy(base)
+          bad['results'][0]['reason_code'] = 'include_moderate'
+          run_case('reject_verdict_reason_mismatch', bad, False)
+
+          bad = copy.deepcopy(base)
+          bad['results'][0]['unexpected_price'] = 100
+          run_case('reject_unexpected_result_field', bad, False)
+
+          bad = copy.deepcopy(base)
+          bad['results'][0].update({
+              'verdict':'INCLUDE','fit_level':'moderate','reason_code':'include_moderate',
+              'positive_evidence':['specific mechanic matches a durable profile pattern','great discount price makes it attractive'],
+          })
+          run_case('reject_price_contaminated_evidence', bad, False)
+
+          overlay = json.loads(Path('data/cache/taste_fit.entry_overlay.json').read_text(encoding='utf-8'))
+          if overlay['entry_count'] != 0:
+              raise SystemExit('Dry-run diagnostic modified overlay')
+          print('TASTE_INGEST_CONTRACT_DIAGNOSTIC=PASS')
+          PY
