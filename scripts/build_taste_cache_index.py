@@ -23,6 +23,7 @@ def compact_entry(entry):
         entry['profile_blob_sha'],
         entry['taste_model_version'],
         entry['taste_semantics_sha256'],
+        entry.get('candidate_context_sha256'),
         entry['taste_fingerprint'],
         entry['verdict'],
         entry['fit_level'],
@@ -91,10 +92,16 @@ def main():
     profile_counts = Counter()
     model_counts = Counter()
     semantics_counts = Counter()
+    context_bound_count = 0
+    context_unbound_count = 0
     for key, entry in merged_entries.items():
         profile_counts[entry['profile_blob_sha']] += 1
         model_counts[entry['taste_model_version']] += 1
         semantics_counts[entry['taste_semantics_sha256']] += 1
+        if entry.get('candidate_context_sha256'):
+            context_bound_count += 1
+        else:
+            context_unbound_count += 1
         compact[key] = compact_entry(entry)
 
     canonical_compact = json.dumps(
@@ -108,6 +115,7 @@ def main():
         'schema_version': 2,
         'purpose': 'compact_verified_per_entry_projection_of_legacy_cache_plus_incremental_overlay',
         'profile_binding_mode': 'per_entry_exact',
+        'candidate_context_binding_mode': 'per_entry_exact_nullable_for_legacy',
         'source_cache': {
             'path': str(SOURCE),
             'blob_sha': git_blob_sha_path(SOURCE),
@@ -138,12 +146,15 @@ def main():
             'profile_blob_sha',
             'taste_model_version',
             'taste_semantics_sha256',
+            'candidate_context_sha256',
             'taste_fingerprint',
             'verdict',
             'fit_level',
             'reason_code',
         ],
         'index_entry_count': len(compact),
+        'candidate_context_bound_count': context_bound_count,
+        'candidate_context_unbound_count': context_unbound_count,
         'entries_digest_sha256': hashlib.sha256(canonical_compact).hexdigest(),
         'profile_binding_counts': dict(sorted(profile_counts.items())),
         'taste_model_counts': dict(sorted(model_counts.items())),
@@ -163,6 +174,8 @@ def main():
         'overlay_replace_count': overlay_replace_count,
         'overlay_new_count': overlay_new_count,
         'merged_entry_count': len(compact),
+        'candidate_context_bound_count': context_bound_count,
+        'candidate_context_unbound_count': context_unbound_count,
         'profile_generation_count': len(profile_counts),
         'model_generation_count': len(model_counts),
         'semantics_generation_count': len(semantics_counts),
