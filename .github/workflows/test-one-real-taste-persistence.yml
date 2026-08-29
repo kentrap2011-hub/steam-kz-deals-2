@@ -1,0 +1,143 @@
+name: One-shot real taste persistence test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/test-one-real-taste-persistence.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Rebuild current pre-ingest consumer state
+        run: |
+          python scripts/build_taste_cache_index.py
+          python scripts/build_pre_ai_taste_projection.py
+          python scripts/build_pre_ai_chatgpt_payload.py
+
+      - name: Assert exact precondition and create one genuine result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          TARGET = 'App_241930'
+          FP = '669a546f1f68d0ada70b42d735d71d9a6374b7c59f9373be586851f499d42c75'
+          overlay = json.loads(Path('data/cache/taste_fit.entry_overlay.json').read_text(encoding='utf-8'))
+          taste = json.loads(Path('data/production/pre_ai/taste_projection.json').read_text(encoding='utf-8'))
+          manifest = json.loads(Path('data/production/pre_ai/chatgpt_payload.json').read_text(encoding='utf-8'))
+          queue = [json.loads(x) for x in Path('data/production/pre_ai/chatgpt_taste_queue.jsonl').read_text(encoding='utf-8').splitlines() if x.strip()]
+          by_key = {x['taste_subject_key']: x for x in queue}
+
+          if overlay['entry_count'] != 0:
+              raise SystemExit(f'Expected empty overlay before one-entry proof, got {overlay["entry_count"]}')
+          if taste['safe_cache_hit_count'] != 0 or taste['ai_required_count'] != 619:
+              raise SystemExit('Unexpected pre-ingest taste projection baseline')
+          if manifest['ai_queue_count'] != 557 or manifest['ready_without_ai_count'] != 0:
+              raise SystemExit('Unexpected pre-ingest consumer baseline')
+          row = by_key.get(TARGET)
+          if row is None:
+              raise SystemExit(f'{TARGET} is not in current AI queue')
+          if str(row['appid']) != '241930' or row['taste_fingerprint'] != FP:
+              raise SystemExit('Target identity/fingerprint changed')
+          if row['title'] != 'Middle-earth™: Shadow of Mordor™':
+              raise SystemExit(f'Unexpected target title: {row["title"]!r}')
+
+          result = {
+              'schema_version': 1,
+              'bindings': {
+                  'profile_blob_sha': taste['current_profile']['blob_sha'],
+                  'taste_model_version': taste['current_binding']['taste_model_version'],
+                  'taste_semantics_sha256': taste['current_binding']['taste_semantics_sha256'],
+                  'source_mailing_updated_at_utc': taste['source_mailing_updated_at_utc'],
+              },
+              'results': [{
+                  'key': TARGET,
+                  'appid': '241930',
+                  'taste_fingerprint': FP,
+                  'verdict': 'INCLUDE',
+                  'fit_level': 'strong',
+                  'reason_code': 'include_strong',
+                  'positive_evidence': [
+                      "Nemesis-system rivals evolve through repeated encounters and make enemies and relationships change in response to play => directly matches the current profile's critical preference for development and meaningful variation rather than a static repeated loop",
+                      "Traversal plus responsive melee and stealth action keeps movement, direct control and execution central => directly matches the current profile's strong movement, control and mastery signals"
+                  ],
+                  'negative_evidence': []
+              }]
+          }
+          Path('/tmp/one-real-result.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print('ONE_REAL_TASTE_PRECONDITION=PASS')
+          PY
+
+      - name: Persist through validated ingest only
+        run: python scripts/ingest_taste_results.py --input /tmp/one-real-result.json
+
+      - name: Rebuild and prove exactly one reusable hit
+        run: |
+          python scripts/build_taste_cache_index.py
+          python scripts/build_pre_ai_taste_projection.py
+          python scripts/build_pre_ai_chatgpt_payload.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          TARGET='App_241930'
+          overlay=json.loads(Path('data/cache/taste_fit.entry_overlay.json').read_text(encoding='utf-8'))
+          idx=json.loads(Path('data/cache/taste_fit.entry_index.json').read_text(encoding='utf-8'))
+          taste=json.loads(Path('data/production/pre_ai/taste_projection.json').read_text(encoding='utf-8'))
+          manifest=json.loads(Path('data/production/pre_ai/chatgpt_payload.json').read_text(encoding='utf-8'))
+
+          checks = {
+              'overlay_count_1': overlay['entry_count'] == 1 and set(overlay['entries']) == {TARGET},
+              'merged_index_count_583': idx['index_entry_count'] == 583,
+              'overlay_replaces_one': idx['source_overlay']['replace_existing_key_count'] == 1 and idx['source_overlay']['new_key_count'] == 0,
+              'index_integrity': taste['cache_binding']['index_integrity_ok'] is True,
+              'one_safe_hit': taste['safe_cache_hit_count'] == 1,
+              'ai_required_618': taste['ai_required_count'] == 618,
+              'target_hit_strong': taste['entries'][TARGET]['status'] == 'cache_hit' and taste['entries'][TARGET]['cached_taste']['fit_level'] == 'strong',
+              'queue_drops_one': manifest['ai_queue_count'] == 556,
+              'ready_increases_one': manifest['ready_without_ai_count'] == 1,
+              'deterministic_excludes_unchanged': manifest['deterministically_excluded_without_ai_count'] == 62,
+              'partition_unchanged': manifest['source_family_count'] == 619 and manifest['complete_family_partition'] is True,
+              'sale_end_unchanged': manifest['mandatory_sale_end_coverage'] == 1.0,
+          }
+          failed=[k for k,v in checks.items() if not v]
+          print(json.dumps({
+              'checks': checks,
+              'overlay_entry_count': overlay['entry_count'],
+              'safe_cache_hit_count': taste['safe_cache_hit_count'],
+              'ai_required_count': taste['ai_required_count'],
+              'ai_queue_count': manifest['ai_queue_count'],
+              'ready_without_ai_count': manifest['ready_without_ai_count'],
+              'deterministically_excluded_without_ai_count': manifest['deterministically_excluded_without_ai_count'],
+              'mandatory_sale_end_coverage': manifest['mandatory_sale_end_coverage'],
+          }, ensure_ascii=False, indent=2))
+          if failed:
+              raise SystemExit(f'One-entry persistence proof failed: {failed}')
+          print('ONE_REAL_TASTE_PERSISTENCE=PASS')
+          PY
+
+      - name: Commit overlay only
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git restore data/cache/taste_fit.entry_index.json data/production/pre_ai || true
+          git add data/cache/taste_fit.entry_overlay.json
+          git diff --cached --check
+          test "$(git diff --cached --name-only)" = "data/cache/taste_fit.entry_overlay.json"
+          git commit -m "Persist first current-profile taste verdict"
+          git push origin HEAD:main
