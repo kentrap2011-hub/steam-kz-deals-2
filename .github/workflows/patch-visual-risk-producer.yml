@@ -105,7 +105,7 @@ jobs:
           replacement = re.sub(r'^          ', '', replacement, flags=re.M)
 
           pattern = r'def risk_from_negative\(evidence\):.*?\n\ndef windows_rank\(status\):'
-          new_text, count = re.subn(pattern, replacement + '\n\ndef windows_rank(status):', text, count=1, flags=re.S)
+          new_text, count = re.subn(pattern, lambda _: replacement + '\n\ndef windows_rank(status):', text, count=1, flags=re.S)
           if count != 1:
               raise SystemExit(f'Expected exactly one risk function block, replaced={count}')
 
