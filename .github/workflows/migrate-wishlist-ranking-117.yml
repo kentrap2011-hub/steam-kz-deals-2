@@ -1,0 +1,133 @@
+name: Migrate wishlist ranking policy 1.17
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/migrate-wishlist-ranking-117.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Add wishlist final-ranking rule
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from scripts.taste_cache_common import taste_semantics_digest
+
+          EXPECTED = '28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b'
+
+          pth = Path('config/mailing_policy.json')
+          p = json.loads(pth.read_text(encoding='utf-8'))
+          before = taste_semantics_digest(p)
+          if before != EXPECTED:
+              raise SystemExit(f'Unexpected taste semantics before wishlist migration: {before}')
+          p['version'] = '1.17'
+          p['final_ranking_context'] = {
+              'wishlist': {
+                  'source': 'steam_wishlist.json',
+                  'role': 'strong_bounded_priority_bonus_after_all_eligibility_and_purchase_gates',
+                  'apply_only_during_final_sorting': True,
+                  'never_used_for_discovery': True,
+                  'never_used_as_taste_evidence': True,
+                  'never_changes_taste_fit': True,
+                  'never_proves_ownership': True,
+                  'never_causes_inclusion_by_itself': True,
+                  'cannot_rescue_below_moderate_taste': True,
+                  'cannot_override_symbolic_discount_exclusion': True,
+                  'cannot_override_budget_ceiling': True,
+                  'cannot_automatically_beat_materially_better_taste_plus_deal_candidate': True,
+                  'priority_effect': 'meaningful_boost_among_already_eligible_candidates',
+                  'fixed_numeric_bonus': None,
+                  'numeric_bonus_must_not_be_invented_without_user_agreement': True
+              }
+          }
+          after = taste_semantics_digest(p)
+          if after != EXPECTED:
+              raise SystemExit(f'Wishlist ranking policy unexpectedly changed taste semantics: {after}')
+          pth.write_text(json.dumps(p, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          rules = Path('PROJECT_RULES.md')
+          text = rules.read_text(encoding='utf-8')
+          marker = '## Нельзя терять игры из-за неполных данных\n'
+          addition = '''## Wishlist Steam при финальной сортировке\n\nWishlist используется только после того, как игра уже прошла обычный отбор по вкусу и коммерческим правилам. Нахождение игры в wishlist само по себе не является доказательством вкусового соответствия, не добавляет игру в кандидаты и не позволяет обойти минимальный вкусовой порог, символическую скидку или бюджетный потолок.\n\nСреди уже допустимых кандидатов wishlist даёт заметный бонус к приоритету, потому что пользователь заранее проявил интерес к этой игре. Этот бонус должен быть сильным, но ограниченным: игра из wishlist с явно слабее сочетанием вкуса и текущей выгоды не обязана стоять выше гораздо лучшей покупки вне wishlist. Особенно wishlist не должен автоматически поднимать игру с незначительной скидкой в самый верх.\n\nWishlist подключается только на этапе конечной сортировки/распределения. Точную числовую прибавку не придумывать без отдельного согласования с пользователем.\n\n'''
+          if addition not in text:
+              if marker not in text:
+                  raise SystemExit('PROJECT_RULES wishlist insertion marker not found')
+              text = text.replace(marker, addition + marker)
+          rules.write_text(text, encoding='utf-8')
+
+          payload = Path('scripts/build_pre_ai_chatgpt_payload.py')
+          src = payload.read_text(encoding='utf-8')
+          needle = "            'wishlist_is_context_only': True,\n"
+          replacement = (
+              "            'wishlist_is_context_only': True,\n"
+              "            'wishlist_applies_only_during_final_sorting': True,\n"
+              "            'wishlist_never_causes_inclusion_or_changes_taste_fit': True,\n"
+              "            'wishlist_is_strong_but_bounded_priority_bonus': True,\n"
+          )
+          if needle not in src:
+              raise SystemExit('Payload wishlist contract marker not found')
+          if "'wishlist_applies_only_during_final_sorting': True" not in src:
+              src = src.replace(needle, replacement)
+          payload.write_text(src, encoding='utf-8')
+
+          validator = Path('scripts/validate_mailing_policy.py')
+          src = validator.read_text(encoding='utf-8')
+          src = src.replace("'version': p.get('version') == '1.16',", "'version': p.get('version') == '1.17',")
+          anchor = "        'presentation_deferred': p['presentation_strategy']['status'] == 'deferred_until_data_optimization_complete',\n"
+          extra = (
+              "        'wishlist_final_sort_only': p['final_ranking_context']['wishlist']['apply_only_during_final_sorting'] is True,\n"
+              "        'wishlist_not_inclusion': p['final_ranking_context']['wishlist']['never_causes_inclusion_by_itself'] is True,\n"
+              "        'wishlist_not_taste': p['final_ranking_context']['wishlist']['never_changes_taste_fit'] is True,\n"
+              "        'wishlist_budget_bounded': p['final_ranking_context']['wishlist']['cannot_override_budget_ceiling'] is True,\n"
+              "        'wishlist_symbolic_discount_bounded': p['final_ranking_context']['wishlist']['cannot_override_symbolic_discount_exclusion'] is True,\n"
+              "        'wishlist_no_invented_numeric_bonus': p['final_ranking_context']['wishlist']['numeric_bonus_must_not_be_invented_without_user_agreement'] is True,\n"
+          )
+          if anchor not in src:
+              raise SystemExit('Validator wishlist insertion marker not found')
+          if "'wishlist_final_sort_only'" not in src:
+              src = src.replace(anchor, anchor + extra)
+          validator.write_text(src, encoding='utf-8')
+          PY
+
+      - name: Validate
+        run: |
+          python -m py_compile scripts/build_pre_ai_chatgpt_payload.py scripts/validate_mailing_policy.py
+          python scripts/validate_mailing_policy.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from scripts.taste_cache_common import taste_semantics_digest
+          p=json.loads(Path('config/mailing_policy.json').read_text(encoding='utf-8'))
+          assert p['version']=='1.17'
+          assert p['final_ranking_context']['wishlist']['apply_only_during_final_sorting'] is True
+          assert p['final_ranking_context']['wishlist']['never_causes_inclusion_by_itself'] is True
+          assert taste_semantics_digest(p)=='28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b'
+          print('WISHLIST_FINAL_RANKING_POLICY=PASS')
+          PY
+
+      - name: Commit
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add config/mailing_policy.json PROJECT_RULES.md scripts/build_pre_ai_chatgpt_payload.py scripts/validate_mailing_policy.py
+          git diff --cached --check
+          git commit -m "Use wishlist only as bounded final ranking bonus"
+          git fetch origin main:refs/remotes/origin/main
+          git rebase origin/main
+          git push origin HEAD:main
