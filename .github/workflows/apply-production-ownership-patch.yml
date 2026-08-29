@@ -26,12 +26,12 @@ jobs:
         run: python scripts/apply_production_ownership_patch.py
       - name: Run ownership regression test
         run: python scripts/test_production_output_ownership.py
-      - name: Sanity-check collector no longer deletes production root
+      - name: Sanity-check prepared collector patch
         run: |
           ! grep -F "shutil.rmtree(OUT)" scripts/steam_production.py
           grep -F "reset_steam_collector_outputs(OUT)" scripts/steam_production.py
           grep -F "git add -A --" .github/workflows/steam-test.yml
-      - name: Commit reliability fix
+      - name: Commit code and invariant changes
         run: |
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
@@ -39,8 +39,18 @@ jobs:
             PROJECT_RULES.md \
             scripts/steam_production.py \
             scripts/production_output_ownership.py \
-            scripts/test_production_output_ownership.py \
-            .github/workflows/steam-test.yml
+            scripts/test_production_output_ownership.py
+
+          # The GitHub Actions token cannot update workflow files.  The
+          # prepared steam-test.yml change is applied separately by the
+          # connected GitHub client after this commit succeeds.
+          git restore .github/workflows/steam-test.yml
+
+          if git diff --cached --quiet; then
+            echo "No code changes to commit"
+            exit 0
+          fi
+
           git commit -m "Isolate Steam collector production ownership"
           for attempt in 1 2 3; do
             git fetch origin main:refs/remotes/origin/main
