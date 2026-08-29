@@ -1,0 +1,54 @@
+name: 50-row AI batch direct-anchor diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-ai-batch50-direct-anchors.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compare current first 50 AI rows with canonical profile cards
+        run: |
+          python - <<'PY'
+          import json
+          import urllib.request
+          from pathlib import Path
+
+          queue=[json.loads(line) for line in Path('data/production/pre_ai/chatgpt_taste_queue.jsonl').read_text(encoding='utf-8').splitlines() if line.strip()][:50]
+          if len(queue)!=50:
+              raise SystemExit(f'Expected 50 AI rows, got {len(queue)}')
+          url='https://raw.githubusercontent.com/kentrap2011-hub/stopgame-ratings-data/main/gaming_taste_live.json'
+          req=urllib.request.Request(url,headers={'User-Agent':'steam-kz-deals/1.0'})
+          with urllib.request.urlopen(req,timeout=15) as resp:
+              profile=json.loads(resp.read().decode('utf-8'))
+          cards=profile.get('stopgame_cards') or []
+          by_title={str(card.get('title') or '').casefold():card for card in cards}
+          matches=[]
+          for row in queue:
+              card=by_title.get(row['title'].casefold())
+              if card is not None:
+                  matches.append({
+                      'key':row['taste_subject_key'],
+                      'title':row['title'],
+                      'rating':card.get('rating'),
+                      'what_liked':card.get('what_liked'),
+                      'what_disliked':card.get('what_disliked'),
+                      'why_this_rating':card.get('why_this_rating'),
+                      'separate_remarks':card.get('separate_remarks'),
+                      'discussion_confidence':card.get('discussion_confidence'),
+                      'evidence_type':card.get('evidence_type'),
+                  })
+          print(json.dumps({'batch_count':50,'direct_match_count':len(matches),'matches':matches},ensure_ascii=False,indent=2))
+          print('AI_BATCH50_DIRECT_ANCHORS=PASS')
+          PY
