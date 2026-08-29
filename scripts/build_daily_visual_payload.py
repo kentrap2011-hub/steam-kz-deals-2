@@ -25,7 +25,7 @@ WINDOWS_ORDER = {
     'modern': 0,
     'unknown': 1,
     'older_but_plausible': 3,
-    'legacy': 4,
+    'legacy': 3,
 }
 
 
