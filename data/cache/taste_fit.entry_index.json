@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "purpose": "compact_verified_per_entry_projection_of_taste_fit_cache",
+  "purpose": "compact_verified_per_entry_projection_of_legacy_cache_plus_incremental_overlay",
   "profile_binding_mode": "per_entry_exact",
   "source_cache": {
     "path": "data/cache/taste_fit.json",
@@ -13,6 +13,20 @@
     "required_entry_fields_complete": true,
     "legacy_schema_v1_semantics_binding_derived": true
   },
+  "source_overlay": {
+    "path": "data/cache/taste_fit.entry_overlay.json",
+    "blob_sha": "379afc0c3c70ff7c2fbdf95907f7b88e35821a55",
+    "size_bytes": 152,
+    "schema_version": 1,
+    "entry_schema_version": 2,
+    "entry_count_declared": 0,
+    "entry_count_actual": 0,
+    "entry_count_matches_len_entries": true,
+    "required_entry_fields_complete": true,
+    "replace_existing_key_count": 0,
+    "new_key_count": 0
+  },
+  "merge_policy": "overlay_exact_key_wins",
   "entry_fields": [
     "appid",
     "profile_blob_sha",
