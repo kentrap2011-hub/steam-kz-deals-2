@@ -2,6 +2,11 @@ name: Export SteamDB miss manifest
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "Build SteamDB cache classification"
+    types:
+      - completed
   push:
     branches: [main]
     paths:
@@ -11,8 +16,15 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: steamdb-miss-manifest-export
+  cancel-in-progress: true
+
 jobs:
   export:
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
@@ -26,7 +38,11 @@ jobs:
           import json, subprocess
           from pathlib import Path
           src=json.loads(Path('data/cache/steamdb_cache.validation.json').read_text(encoding='utf-8'))
+          if src.get('status') != 'complete':
+              raise SystemExit('SteamDB cache classification is not complete')
           misses=src.get('true_lookup_misses') or []
+          if len(misses) != int(src.get('true_lookup_miss_count') or 0):
+              raise SystemExit('SteamDB true-miss metadata count mismatch')
           out={
             'schema_version':1,
             'source_validation_blob_sha':subprocess.check_output(['git','rev-parse','HEAD:data/cache/steamdb_cache.validation.json'],text=True).strip(),
@@ -43,5 +59,10 @@ jobs:
           git add data/cache/steamdb_miss_manifest.json
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "Refresh SteamDB miss manifest"
-          git pull --rebase origin main
-          git push origin HEAD:main
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then git rebase --abort || true; exit 1; fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt*3))
+          done
+          exit 1
