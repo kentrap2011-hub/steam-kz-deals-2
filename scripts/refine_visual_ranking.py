@@ -9,6 +9,7 @@ from pathlib import Path
 ROOT = Path('.')
 OUT = ROOT / 'data/production/visual/current.json'
 TASTE_CACHE = ROOT / 'data/cache/taste_fit.json'
+TASTE_OVERLAY = ROOT / 'data/cache/taste_fit.entry_overlay.json'
 TASTE_PROJECTION = ROOT / 'data/production/pre_ai/taste_projection.json'
 PURCHASE_CONTEXT = ROOT / 'data/production/pre_ai/chatgpt_purchase_context.jsonl'
 PAYLOAD = ROOT / 'data/production/pre_ai/chatgpt_payload.json'
@@ -42,6 +43,13 @@ def cache_entries(obj):
     if isinstance(entries, list):
         return {str(x.get('key')): x for x in entries if isinstance(x, dict) and x.get('key')}
     return {}
+
+
+def effective_taste_entries():
+    merged = dict(cache_entries(load_json(TASTE_CACHE)))
+    if TASTE_OVERLAY.exists():
+        merged.update(cache_entries(load_json(TASTE_OVERLAY)))
+    return merged
 
 
 def git_sha(path: str):
@@ -254,7 +262,7 @@ def structural_risks(projection, practical):
             1,
             'Если головоломки станут однотипными или надолго остановят темп, сильная сторона игры может превратиться в минус.',
         )
-    if any(x in joined for x in ['detective', 'investigation', 'mystery']):
+    if any(x in joined for x in ['detective', 'investigation', 'interrogation', 'clue', 'evidence']):
         add_risk(
             risks,
             'reading_investigation',
@@ -482,7 +490,7 @@ def main():
 
     ready = load_json(OUT)
     payload = load_json(PAYLOAD)
-    taste_entries = cache_entries(load_json(TASTE_CACHE)) if TASTE_CACHE.exists() else {}
+    taste_entries = effective_taste_entries()
     projections = (load_json(TASTE_PROJECTION).get('entries') or {}) if TASTE_PROJECTION.exists() else {}
     contexts = {str(x.get('family_id')): x for x in load_jsonl(PURCHASE_CONTEXT) if x.get('family_id')}
 
@@ -568,6 +576,7 @@ def main():
     contract['backtracking_rule'] = 'location reuse itself is neutral; penalize unchanged repetition without new gameplay value'
     contract['duration_rule'] = 'very weak late tiebreak only; medium duration preferred over very short or very long games when otherwise equal'
     contract['fit_adjustment_rule'] = 'direct user evidence overrides inference; serious confirmed personal conflicts can cap strong to moderate'
+    contract['taste_evidence_merge_rule'] = 'legacy base plus incremental overlay; overlay exact key wins'
     contract['refinement_stats'] = {
         'fit_changes': fit_changes,
         'removed_after_fit_change_and_commercial_recheck': removed,
