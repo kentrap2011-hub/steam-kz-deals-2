@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "batch_id": "20c73835f70bdfbf1b78",
+  "processed_at_utc": "2026-08-29T10:09:25+00:00",
+  "source_mailing_updated_at_utc": "2026-08-29T02:58:09.081832+00:00",
+  "input_files": [
+    "batch_20260829_06.json"
+  ],
+  "result_count": 25,
+  "keys": [
+    "App_2163330",
+    "App_216910",
+    "App_218640",
+    "App_220820",
+    "App_22120",
+    "App_2213120",
+    "App_222420",
+    "App_222440",
+    "App_2238040",
+    "App_2239150",
+    "App_2242760",
+    "App_224480",
+    "App_2248760",
+    "App_2249160",
+    "App_224960",
+    "App_224980",
+    "App_225300",
+    "App_225320",
+    "App_22600",
+    "App_2276930",
+    "App_2289750",
+    "App_2296990",
+    "App_230190",
+    "App_2303350",
+    "App_2306590"
+  ],
+  "baseline": {
+    "safe_cache_hit_count": 323,
+    "ai_required_count": 296,
+    "ai_queue_count": 267
+  },
+  "after": {
+    "safe_cache_hit_count": 348,
+    "ai_required_count": 271,
+    "ai_queue_count": 242,
+    "ready_without_ai_count": 180,
+    "deterministically_excluded_without_ai_count": 197,
+    "sale_end_coverage": 1.0,
+    "sale_end_missing_count": 0
+  },
+  "checks": {
+    "projection_complete": true,
+    "family_partition_complete": true,
+    "sale_end_state_consistent": true,
+    "missing_sale_end_is_nonblocking": true,
+    "safe_hits_increment_exact": true,
+    "ai_required_decrement_exact": true,
+    "ai_queue_decrement_exact": true,
+    "queue_file_count_exact": true,
+    "all_ingested_keys_removed_from_queue": true,
+    "all_ingested_keys_are_cache_hits": true
+  }
+}
