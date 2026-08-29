@@ -2,7 +2,7 @@
   "schema_version": 1,
   "purpose": "incremental_per_entry_taste_verdict_overlay",
   "entry_schema_version": 2,
-  "entry_count": 27,
+  "entry_count": 28,
   "entries": {
     "App_241930": {
       "key": "App_241930",
@@ -454,6 +454,24 @@
       ],
       "negative_evidence": [],
       "evaluated_at_utc": "2026-08-29T00:46:45+00:00"
+    },
+    "App_1122720": {
+      "key": "App_1122720",
+      "appid": "1122720",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v2",
+      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "candidate_context_sha256": "3de41edc04d95b2b62ab856c82706fe9310ff22fbe90685dd80c0ec08f6e67de",
+      "taste_fingerprint": "cdeb82acfae6e0a316a143136cab7ddda3201982654854c589eb9cbd53be1ed0",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "The prepared candidate context explicitly rotates through motorcycles, skateboarding, dance battles, laser shooting and swordplay in one arcade game; this matches the canonical preference for changing gameplay context and meaningful variation rather than one unchanged loop repeating.",
+        "The prepared candidate context explicitly frames the action as a very fast 200-mph arcade experience; this aligns with durable positive evidence around kinetic movement-heavy play such as Prince of Persia parkour and BloodRayne jumping and movement."
+      ],
+      "negative_evidence": [],
+      "evaluated_at_utc": "2026-08-29T06:11:38+00:00"
     }
   }
 }
