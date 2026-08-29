@@ -1,0 +1,73 @@
+name: Patch expired offer handling v2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/patch-expired-offer-handling-v2.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Reuse validated patch body
+        run: |
+          python - <<'PY'
+          import textwrap
+          from pathlib import Path
+          src = Path('.github/workflows/patch-expired-offer-handling.yml').read_text(encoding='utf-8')
+          marker = "          python - <<'PY'\n"
+          start = src.index(marker) + len(marker)
+          end = src.index("\n          PY\n", start)
+          code = textwrap.dedent(src[start:end])
+          exec(compile(code, 'expired_offer_patch', 'exec'), {})
+          PY
+
+      - name: Keep workflow validator for separate privileged update
+        run: git checkout HEAD -- .github/workflows/validate-mailing-policy.yml
+
+      - name: Syntax checks
+        run: |
+          python -m py_compile scripts/build_pre_ai_store_snapshot.py scripts/build_pre_ai_family_graph.py scripts/build_pre_ai_chatgpt_payload.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('config/mailing_policy.json').read_text(encoding='utf-8'))
+          assert p['version']=='1.13'
+          assert p['taste_cache']['commercial_state_not_stored_in_taste_cache'] is True
+          assert p['verification']['known_sale_end_at_or_before_consumer_time_means_inactive'] is True
+          print('EXPIRED_OFFER_PATCH_V2=PASS')
+          PY
+
+      - name: Commit patch
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add scripts/build_pre_ai_store_snapshot.py scripts/build_pre_ai_family_graph.py scripts/build_pre_ai_chatgpt_payload.py config/mailing_policy.json PROJECT_RULES.md
+          git diff --cached --check
+          git commit -m "Expire stale offers without discarding taste cache"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 2))
+          done
+          exit 1
