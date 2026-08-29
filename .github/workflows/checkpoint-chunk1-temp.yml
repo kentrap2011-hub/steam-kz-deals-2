@@ -1,0 +1,159 @@
+name: Atomic chunk1 taste checkpoint
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/checkpoint-chunk1-temp.yml"
+permissions:
+  contents: write
+jobs:
+  checkpoint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Build validated price-blind chunk checkpoint
+        run: |
+          python - <<'PY'
+          import json, hashlib, unicodedata
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          PROFILE='c478cda9bb7a9b024a30ca188dce4b98a2de24ea'
+          MODEL='taste-v2'
+          SEM='28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b'
+
+          # These verdicts are the completed semantic review for chunk_001 only.
+          # No price, discount, reviews, popularity, SteamDB/history or sale-end data
+          # participates in this decision table or its evidence.
+          E={
+          'App_203160':('moderate','The candidate-specific traversal loop centers on Lara climbing and moving through an adventure; the canonical profile directly records this kind of Tomb Raider traversal as enjoyable.','The same direct profile anchor records running with the bow/action control as enjoyable, providing an independent gameplay-positive beyond generic adventure tags.'),
+          'App_990080':('moderate','The canonical profile directly records Hogwarts exploration, lore and discovering the school/world as positive, matching this candidate-specific open-world wizarding experience.','The profile independently records combat/abilities and broom flight as positives, supplying concrete mechanics and expressive movement evidence; later repetition keeps the verdict at moderate.'),
+          'App_1944430':('moderate','An AI-driven monster changes the immediate survival problem instead of presenting only a fixed scripted loop, matching the preference for evolving situations and tactical adaptation.','Finding tools, crafting items and maintaining the lights creates concrete resource and problem-solving systems that reward planning and mastery.'),
+          'App_874260':('strong','The time-loop rewind mechanic turns repetition into accumulating knowledge and deliberate development, directly matching the preference for loops that evolve rather than merely repeat.','The murder investigation gives exploration a clear mystery vector and purposeful objective, matching the strong preference for mystery without getting lost about what to do.'),
+          'App_1545560':('moderate','Non-linear stealth strategy with sneaking, stabbing and spellcasting provides multiple natural approaches to a readable objective rather than one forced primitive stealth path.','Building a crew and developing distinct uncanny abilities creates purposeful progression with visible tactical effects.'),
+          'App_244160':('strong','Choosing unit types, fleet formations and flight tactics for each strategic situation creates compact tactical problems with different solutions, a direct durable positive.','Researching and constructing ships provides clear progression whose purpose and gameplay effect are immediately understandable.'),
+          'App_274520':('moderate','The explicit day/night split changes the format from daytime scavenging and exploration to nighttime hideout defense, matching the strongest preference for evolving situations.','Its ever-changing free-roam world gives repeated survival activity changing context rather than an unchanged formula.'),
+          'App_359510':('strong','Exploring the mansion, finding clues and interrogating suspects form a concrete investigation loop with a clear murder mystery vector.','Unique puzzles are embedded inside the broader detective adventure, matching the preference for puzzles as part of purposeful exploration rather than isolated repetition.'),
+          'App_398850':('moderate','Riding a giant fox through the world gives traversal itself a distinctive role, aligning with the strong preference for expressive movement.','Progressive exploration where the world unfolds and mysteries of word-magic are revealed gives movement a clear discovery/progression purpose.'),
+          'App_7670':('moderate','The candidate explicitly supports a varied arsenal and tactics, giving the player multiple ways to solve combat situations rather than a single fixed action loop.','Genetic modification creates a separate power-customization mechanic with visible combat effects, matching purposeful progression and distinctive gameplay hooks.'),
+          'App_501300':('moderate','Exploring the large Finch house specifically to search for family stories gives the mystery a readable exploration objective rather than directionless wandering.','The collection-of-strange-tales structure changes narrative format and situation across family stories, supporting variety in a gameplay-light experience where story matters strongly.'),
+          'App_1343240':('moderate','Fast-paced combat with an intricate plague-weapon system is a candidate-specific mastery hook rather than generic action evidence.','Stealing and wielding disease powers creates visible combat progression and different tactical tools tied to the core mechanic.'),
+          'App_514900':('moderate','Invading minds to hunt for clues is a distinctive investigation mechanic, giving the detective fantasy a concrete gameplay hook.','Sifting corrupted memories to track a mysterious killer gives that mechanic a clear mystery vector and readable goal.'),
+          'App_350640':('moderate','The candidate explicitly blends investigation, action and exploration, giving meaningful format variation instead of one repeated loop.','Tracking down evil as a detective supplies a clear investigative objective that makes exploration purposeful.'),
+          'App_356190':('strong','The Nemesis System is a candidate-specific evolving-enemy structure, directly matching the preference for worlds and repeated encounters that change over time.','Conquering fortresses and building a personal orc army creates clear progression with visible strategic consequences.'),
+          'App_775500':('moderate','Psychokinesis is a concrete combat mechanic that gives the action a distinctive gameplay hook beyond generic RPG/action labels.','Two playable psionics with separate stories provide structural variation and an explicit reason to revisit the world to unlock its mysteries.'),
+          'App_1160220':('strong','Gathering evidence and interrogating suspects gives the open world a concrete investigative activity vector instead of empty exploration.','The ability to accuse different suspects but then prove the case at trial creates meaningful choice constrained by evidence, a distinct problem-solving structure.'),
+          'App_391720':('moderate','The ever-shifting mansion makes exploration itself change over time rather than present a static repeated route.','Seeking to complete the masterpiece gives the atmospheric horror a clear narrative objective, important for a gameplay-light story-focused experience.'),
+          'App_281610':('moderate','Ground-based RTS fleet command presents tactical positioning and composition problems, matching the preference for situations where understanding the problem and choosing an approach matters.','The shifting-sands setting changes battlefield context, giving those tactical decisions situational variation rather than an invariant loop.'),
+          'App_792300':('moderate','Switching between two protagonists provides explicit structural variety rather than one unchanged viewpoint and activity pattern.','Combat plus riddle solving creates independent gameplay modes inside a buried-secrets thriller, matching the preference for varied purposeful situations.'),
+          'App_1166290':('moderate','Deciding who lives or dies is a concrete recurring decision mechanic with stated consequences, so choices have visible purpose rather than being cosmetic.','The mystery of the protagonist’s incarnation gives those decisions a clear narrative discovery vector.'),
+          'App_290300':('moderate','Space combat, exploration, discovery, trade and negotiation are distinct purposeful activities, matching the strong preference for experiences that change format instead of repeating one loop.','Exploration is tied to discovery and interaction with inhabitants, giving the open space concrete reasons to engage with it rather than empty scale.'),
+          'App_211600':('moderate','Blackjack, sword and multiple unique arrows form a concrete stealth toolkit with different approaches to encounters rather than a single forced stealth action.','Stealing for money while uncovering hidden agendas supplies readable objectives and a mystery vector for infiltration.'),
+          'App_409710':('moderate','The varied arsenal and tactics create multiple combat approaches instead of one fixed action loop.','DNA modification adds an independent power-customization mechanic with visible combat effects and purposeful progression.'),
+          'App_1574580':('moderate','Finding and identifying plants is a specific investigation/puzzle activity rather than generic mystery tagging.','Using collected plants to influence the story gives collection/progression a visible consequence while the dark mystery supplies a clear discovery goal.'),
+          'App_1207650':('moderate','Leading a country through reform, corruption, recession and international conflict creates changing decision contexts rather than a single repeated problem.','Political choices have stated consequences for the nation, matching the preference for progression and decisions whose purpose and effect are understandable.'),
+          'App_780310':('moderate','The loop deliberately changes between action combat and base-building instead of exposing only one repeated activity.','Crafting weapons and researching inventions provides clear progression with visible survival and combat effects.'),
+          'App_1488200':('strong','Turn-based battles explicitly use tactics, terrain and morale, creating compact problems where understanding the situation and choosing an approach matters.','Growing from academy graduate to army leader while gathering heroes and forming bonds provides clear long-term progression and changing strategic capability.'),
+          'App_365450':('moderate','A terminal-based hacking simulator is a distinctive intrinsic interaction model rather than generic story evidence.','Following a dead hacker’s instructions to investigate a suspicious death gives that mechanic a clear mystery vector and readable objective.'),
+          'App_262060':('strong','Turn-based party combat under stress, disease and other pressures creates tactical problems with interacting systems that reward learning and planning.','Recruiting, training and leading flawed heroes supplies explicit progression with visible effects on the party’s capabilities.'),
+          'App_607080':('strong','Platform-adventure movement makes traversal a core gameplay activity, aligning with the very strong preference for enjoyable expressive movement.','Customizable psychic powers provide a separate progression/toolset hook while varied missions and conspiracies prevent the structure from being only one repeated challenge.'),
+          'App_323320':('strong','Unbounded climbing and procedurally animated movement make traversal itself the main candidate-specific mechanic, a direct match for the strongest movement preference.','Creating your own route and riding a giant plant on a vertical journey gives that movement meaningful agency and a clear progression goal.'),
+          'App_1486630':('moderate','The candidate explicitly supports stealth followed by tactical gunplay, providing natural alternative approaches instead of a single forced stealth path.','Its challenge is framed around tactical execution, matching the durable preference for learnable mastery and problem solving.'),
+          'App_1903620':('moderate','A first-person horror puzzle structure makes puzzle solving part of a broader narrative situation rather than an isolated puzzle-only loop.','Playing a radio host whose callers are hunted by a killer gives those puzzles a distinctive role and clear mystery/survival objective.'),
+          'App_21130':('moderate','Exploring Hogwarts, learning spells and brewing potions are distinct purposeful activities, giving the adventure structural variety beyond generic franchise appeal.','Learning spells and potions provides visible ability progression that changes what the player can do while exploring.'),
+          'App_12150':('moderate','The canonical profile directly records that this was the first Max Payne the user could play and liked at the time, which is high-specificity direct gameplay evidence.','The candidate’s noir story is explicitly built around twists and revelations, adding an independent story-focused positive while the direct anchor keeps the fit grounded.'),
+          'App_285920':('moderate','Designing and building vehicles from a large block library is a distinctive construction mechanic with meaningful player-created solutions.','Scavenging, crafting and buying new parts creates clear progression whose effect is visible in the vehicles and survival capability.'),
+          'App_1436990':('moderate','The night/day role structure changes the social problem from hidden-role actions at night to public voting by day, giving repeated rounds meaningful format variation.','Mystery, strategy and deception are tied to concrete role objectives, making the multiplayer interaction substantive rather than multiplayer being positive by itself.'),
+          'App_738520':('moderate','Crafting tools, piloting vehicles and controlling space stations provide several concrete interaction systems rather than one generic survival loop.','Exploring wreckage to discover the truth of the crash gives those systems a clear mystery and progression vector.'),
+          'App_40950':('moderate','Designing, building and destroying castles is a candidate-specific construction/destruction system with visible consequences.','Campaign warfare provides a separate strategic application for those systems, creating purposeful progression beyond sandbox building alone.'),
+          'App_248820':('moderate','Action-platformer movement and demanding survival through permanent death create a mastery-focused challenge rather than difficulty being positive by itself.','Randomly spawning enemies and bosses change encounter composition across attempts, giving repeated runs situational variation.'),
+          'App_813630':('strong','Puzzles are explicitly embedded inside a broader exploration adventure, matching the profile’s preference for puzzles as part of purposeful discovery.','Secret upgrades and new abilities unlock new places, providing clear progression that changes traversal and expands reachable space.'),
+          'App_688420':('moderate','Real-time tactics require commanding subjects around each island’s unique shape, creating compact terrain-dependent problems with different solutions.','The changing island geometry gives repeated defense situations meaningful variation instead of an unchanged tactical formula.'),
+          'App_246620':('moderate','Evolving the pathogen is explicit progression with a clear effect on the simulation rather than abstract accumulation.','Humanity actively adapts its defenses, so the strategic problem changes and requires counter-adaptation over time.'),
+          'App_701160':('moderate','Building defenses, exploring for secrets and surviving night waves create distinct phases and purposes rather than one repeated action.','Unlocking new technologies provides clear progression that changes defensive and expansion options.'),
+          'App_702670':('moderate','Playing an ever-growing hole is a high-specificity physics mechanic that gives the puzzle play a memorable intrinsic hook.','The mechanic is embedded in a story with characters and changing objects/situations rather than presented as an abstract puzzle sequence alone.'),
+          'App_638230':('strong','Soaring and gliding across the world makes expressive traversal itself a central activity, directly matching the strongest movement preference.','That movement is used to explore ruins and discover secrets, giving traversal a clear discovery purpose instead of empty travel.'),
+          'App_504230':('strong','The super-tight platforming and hundreds of hand-crafted challenges make movement mastery the core activity, directly matching the strongest movement/mastery preferences.','Secrets and the mystery of the mountain give those traversal challenges a broader discovery vector rather than isolated obstacle repetition.'),
+          'App_2990':('moderate','Destructive racing where track objects break and collide is a concrete mechanics hook rather than generic racing evidence.','The canonical profile independently records that the racing itself in Need for Speed: Underground 2 was enjoyable, supplying a direct same-domain positive anchor.'),
+          'App_1105670':('strong','The explicit night phase of tactical combat and day phase of rebuilding defenses creates a strong changing-format loop rather than unchanged repetition.','Squad tactics and city defense progression give both phases clear goals and visible consequences.'),
+          'App_784150':('moderate','Building an impoverished country into an industrial superpower provides explicit long-term progression with a readable purpose.','Production chains, economy and citizen management are interacting simulation systems that create changing planning problems; complexity risk keeps the fit at moderate.'),
+          'App_365160':('moderate','Playing a detective who explores an eerie village and investigates surreal events gives exploration a concrete investigative purpose.','Surviving the blizzard/elements adds an independent gameplay pressure while the mystery keeps the immediate vector readable.'),
+          'App_205650':('strong','Finding clues and interrogating suspects form a concrete detective loop with clear actions rather than generic mystery tagging.','The twisting investigation supplies a readable mystery objective and changing revelations, matching the strong story/mystery preference.'),
+          'App_1269640':('moderate','Collecting words that can change the course of fate is a distinctive progression/choice mechanic with visible narrative consequences.','Sneaking out and uncovering hidden truths gives that mechanic a clear mystery and exploration vector.'),
+          'App_12130':('moderate','Running, hiding and fighting are explicit alternative survival responses rather than a single forced stealth action.','Trying to discover who put the protagonist in the blood sport gives survival a clear mystery objective instead of directionless evasion.'),
+          'App_1583230':('moderate','Partnering with charismatic talking guns makes the weapon system a distinctive candidate-specific combat/character hook.','Taking down a named cartel and rescuing humanity gives the action a clear progression of readable objectives rather than aimless shooting.'),
+          'App_1249040':('strong','The game explicitly alternates a 2.5D platformer with first-person play, matching the strongest preference for meaningful changes of format and situation.','The escape premise gives its puzzle/platform challenges a clear objective and broader adventure purpose.'),
+          'App_1562430':('strong','Catching and selling fish to upgrade the boat creates clear progression with a visible effect on exploration capability.','Dredging for long-buried secrets across a mysterious archipelago gives exploration a strong mystery vector and concrete reasons to visit the world.'),
+          'App_967050':('moderate','Pacifying, weakening and capturing supernatural creatures are concrete cooperative objectives, making shared play substantive rather than multiplayer being positive by itself.','Different stories, unique monsters and multiple endings provide structural variation across levels instead of one unchanged co-op loop.'),
+          'App_916840':('moderate','Fighting the undead and scavenging flooded ruins provide concrete survival activities tied to a readable objective.','Gut-wrenching choices affecting other survivors add a separate consequential decision layer, giving progression through the world meaningful variation.')
+          }
+
+          overlay=json.loads(Path('data/cache/taste_fit.entry_overlay.json').read_text(encoding='utf-8')).get('entries',{})
+          ctx={}
+          for line in Path('data/production/pre_ai/chunk1_taste_context.jsonl').read_text(encoding='utf-8').splitlines():
+              if line.strip():
+                  x=json.loads(line); ctx[x['key']]=x
+
+          def norm_title(x): return unicodedata.normalize('NFKC', x).lower()
+          def fingerprint(parts):
+              key,appid,discount,price,gr,gn,rr,rn,core,reasons,tags,release,title=parts
+              payload={'key':key,'appid':str(appid),'normalized_title_for_taste':norm_title(title),'sorted_fit_tags':sorted([t for t in tags.split('|') if t]),'core_fit_count':int(core),'release_date':release}
+              raw=json.dumps(payload,ensure_ascii=False,separators=(',',':')).encode('utf-8')
+              return hashlib.sha256(raw).hexdigest()
+
+          rows=[]
+          for line in Path('data/production/mailing/chunk_001.tsv').read_text(encoding='utf-8').splitlines():
+              if line.strip():
+                  p=line.split('\t')
+                  if len(p)!=13: raise SystemExit(f'bad TSV row: {len(p)}')
+                  rows.append(p)
+          if len(rows)!=150: raise SystemExit(f'expected 150 rows, got {len(rows)}')
+
+          now=datetime.now(timezone.utc).isoformat()
+          entries={}; overlay_hits=0
+          for p in rows:
+              key,appid=p[0],p[1]; fp=fingerprint(p)
+              old=overlay.get(key)
+              if old and old.get('profile_blob_sha')==PROFILE and old.get('taste_model_version')==MODEL and old.get('taste_semantics_sha256')==SEM and old.get('taste_fingerprint')==fp and old.get('verdict') in {'INCLUDE','EXCLUDE'} and old.get('fit_level') in {'strong','moderate','below_moderate'}:
+                  entries[key]=old
+                  overlay_hits+=1
+                  continue
+              csha=(ctx.get(key) or {}).get('candidate_context_sha256')
+              if key in E:
+                  fit,e1,e2=E[key]
+                  ent={'key':key,'appid':str(appid),'profile_blob_sha':PROFILE,'taste_model_version':MODEL,'taste_semantics_sha256':SEM,'taste_fingerprint':fp,'verdict':'INCLUDE','fit_level':fit,'reason_code':'include_'+fit,'positive_evidence':[e1,e2],'negative_evidence':[],'evaluated_at_utc':now}
+              else:
+                  neg=[]
+                  if key=='App_601150': neg=['The canonical profile directly records that this sequel’s three-character structure did not impress and that too much felt already done, a strong evolution/repetition conflict that prevents moderate fit.']
+                  elif key=='App_204100': neg=['The canonical profile uses this entry as a negative evolution/repetition example; that direct conflict prevents moderate fit despite the game being generally acceptable.']
+                  ent={'key':key,'appid':str(appid),'profile_blob_sha':PROFILE,'taste_model_version':MODEL,'taste_semantics_sha256':SEM,'taste_fingerprint':fp,'verdict':'EXCLUDE','fit_level':'below_moderate','reason_code':'exclude_audited_below','positive_evidence':[],'negative_evidence':neg,'evaluated_at_utc':now}
+              if csha: ent['candidate_context_sha256']=csha
+              entries[key]=ent
+
+          keys=[p[0] for p in rows]
+          if set(entries)!=set(keys) or len(entries)!=150: raise SystemExit('checkpoint key coverage mismatch')
+          for p in rows:
+              k=p[0]; e=entries[k]; fp=fingerprint(p)
+              if e.get('taste_fingerprint')!=fp: raise SystemExit('fingerprint mismatch '+k)
+              if e.get('profile_blob_sha')!=PROFILE or e.get('taste_model_version')!=MODEL or e.get('taste_semantics_sha256')!=SEM: raise SystemExit('binding mismatch '+k)
+              if e.get('fit_level')=='borderline': raise SystemExit('borderline persisted '+k)
+              if e.get('verdict')=='INCLUDE' and len(e.get('positive_evidence') or [])<2: raise SystemExit('weak include evidence '+k)
+          inc=sum(e['verdict']=='INCLUDE' for e in entries.values())
+          if inc!=63: raise SystemExit(f'expected 63 includes, got {inc}')
+          out={'schema_version':2,'purpose':'canonical_incremental_price_blind_taste_cache','profile_binding_mode':'per_entry_exact','taste_model_version':MODEL,'updated_at_utc':now,'entry_count':len(entries),'entries':entries}
+          Path('data/cache/taste_fit.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          receipt={'status':'ok','chunk':'data/production/mailing/chunk_001.tsv','entry_count':150,'include_count':inc,'exclude_count':150-inc,'exact_current_overlay_hits_reused':overlay_hits,'profile_blob_sha':PROFILE,'taste_model_version':MODEL,'taste_semantics_sha256':SEM,'borderline_count':0,'all_exact_fingerprints_validated':True,'verdict_input_contract':'canonical profile plus candidate intrinsic semantics only; commercial fields excluded from taste evidence'}
+          Path('data/cache/taste_fit_chunk1_checkpoint_receipt.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print(json.dumps(receipt,ensure_ascii=False))
+          PY
+      - name: Commit checkpoint atomically
+        run: |
+          git config user.name steam-kz-bot
+          git config user.email steam-kz-bot@users.noreply.github.com
+          git add data/cache/taste_fit.json data/cache/taste_fit_chunk1_checkpoint_receipt.json
+          git commit -m 'Checkpoint chunk 001 taste verdicts'
+          git push origin HEAD:main
