@@ -18,6 +18,7 @@ ALLOWED_RESULT_FIELDS = {
     'key',
     'appid',
     'taste_fingerprint',
+    'candidate_context_sha256',
     'verdict',
     'fit_level',
     'reason_code',
@@ -122,6 +123,11 @@ def validate_input(doc, queue_by_key, projection):
             raise ValueError(f'Appid mismatch for {key}')
         if result['taste_fingerprint'] != queue_row['taste_fingerprint']:
             raise ValueError(f'Taste fingerprint mismatch for {key}')
+        context_sha = result['candidate_context_sha256']
+        if not isinstance(context_sha, str) or len(context_sha) != 64:
+            raise ValueError(f'Invalid candidate_context_sha256 for {key}')
+        if context_sha != queue_row.get('candidate_context_sha256'):
+            raise ValueError(f'Candidate context mismatch for {key}')
 
         validate_verdict_shape(result['verdict'], result['fit_level'], result['reason_code'])
         validate_evidence_list('positive_evidence', result['positive_evidence'])
@@ -143,6 +149,7 @@ def build_entry(result, bindings, evaluated_at):
         'profile_blob_sha': bindings['profile_blob_sha'],
         'taste_model_version': bindings['taste_model_version'],
         'taste_semantics_sha256': bindings['taste_semantics_sha256'],
+        'candidate_context_sha256': result['candidate_context_sha256'],
         'taste_fingerprint': result['taste_fingerprint'],
         'verdict': result['verdict'],
         'fit_level': result['fit_level'],
@@ -223,6 +230,7 @@ def main():
         'profile_blob_sha': bindings['profile_blob_sha'],
         'taste_model_version': bindings['taste_model_version'],
         'taste_semantics_sha256': bindings['taste_semantics_sha256'],
+        'candidate_context_required': True,
     }, ensure_ascii=False, indent=2))
 
 
