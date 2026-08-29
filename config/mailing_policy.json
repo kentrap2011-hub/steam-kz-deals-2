@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.14",
+  "version": "1.15",
   "status": "canonical",
   "purpose": "Personalized daily Steam KZ deal data preparation with stable price-blind taste verdicts, taste-first eligibility, one nightly commercial snapshot, and resumable taste-cache checkpoints.",
   "policy_loading": {
@@ -108,8 +108,10 @@
     "deal_quality_evaluated_only_after_final_taste_and_family_resolution": true,
     "taste_is_primary_eligibility_filter": true,
     "minimum_taste_fit_cannot_be_rescued_by_discount": true,
-    "symbolic_discount_only_early_commercial_exclusion": true,
-    "non_symbolic_deal_weakness_changes_priority_or_wait_status_not_taste_fit": true
+    "symbolic_discount_only_early_commercial_exclusion": false,
+    "non_symbolic_deal_weakness_changes_priority_or_wait_status_not_taste_fit": true,
+    "budget_ceiling_is_also_early_commercial_exclusion": true,
+    "discount_never_overrides_absolute_budget_ceiling": true
   },
   "personal_filter": {
     "minimum_interest_threshold": "moderate",
@@ -359,9 +361,15 @@
     },
     "symbolic_discount_max_percent_inclusive": 5,
     "symbolic_discount_is_early_exclusion": true,
-    "no_absolute_price_exclusion_for_moderate_or_strong_taste": true,
-    "expensive_game_may_remain_if_taste_fit_and_discount_are_meaningful": true,
-    "weak_but_non_symbolic_deal_remains_available_for_wait_or_low_priority": true
+    "no_absolute_price_exclusion_for_moderate_or_strong_taste": false,
+    "expensive_game_may_remain_if_taste_fit_and_discount_are_meaningful": false,
+    "weak_but_non_symbolic_deal_remains_available_for_wait_or_low_priority": "only_while_within_fit_scaled_budget_ceiling",
+    "absolute_max_rub": 750,
+    "strong_fit_standard_overage_ceiling_rub": 650,
+    "moderate_fit_absolute_ceiling_rub": 550,
+    "exceptional_discount_min_percent_for_high_overage": 75,
+    "high_overage_requires_strong_taste": true,
+    "price_above_absolute_max_is_excluded_regardless_of_discount": true
   },
   "verification": {
     "fresh_production_snapshot_is_current_price_and_discount_source": true,
@@ -509,7 +517,8 @@
     "conceptual_weight_deal": 0.4,
     "do_not_invent_numeric_taste_score_until_separately_agreed": true,
     "visual_presentation_redesign_deferred": true,
-    "weak_non_symbolic_deal_should_rank_low_or_wait_not_disappear": true
+    "weak_non_symbolic_deal_should_rank_low_or_wait_not_disappear": true,
+    "absolute_budget_ceiling_applied_before_ranking": true
   },
   "paid_output_fields": [
     "title",
