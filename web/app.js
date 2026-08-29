@@ -1,6 +1,6 @@
 const DATA_URL='data/current.json';
 const STORAGE_KEY='steam-deals-visual-state-v1';
-const QUEUE_VERSION=3;
+const QUEUE_VERSION=4;
 let data={items:[],source_mailing_updated_at_utc:null};
 let items=[];
 let byId=new Map();
@@ -16,8 +16,8 @@ const card=$('gameCard');
 const gallery=$('gallery');
 
 function loadState(){
-  try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{games:{},queue:{source:null,ids:[],cursor:0,version:QUEUE_VERSION}}}
-  catch{return {games:{},queue:{source:null,ids:[],cursor:0,version:QUEUE_VERSION}}}
+  try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{games:{},queue:{source:null,signature:null,ids:[],cursor:0,version:QUEUE_VERSION}}}
+  catch{return {games:{},queue:{source:null,signature:null,ids:[],cursor:0,version:QUEUE_VERSION}}}
 }
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function rec(id){
@@ -46,19 +46,40 @@ function sourceLabel(){
   const d=new Date(data.source_mailing_updated_at_utc);
   return `Данные: ${new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}).format(d)}`;
 }
+function rankingSignature(){return items.map(g=>`${g.id}:${g.priority_rank??''}`).join('|')}
+function canonicalQueueIds(){
+  const normal=[],manual=[];
+  for(const g of items){
+    const r=rec(g.id);
+    if(r.manual_end_at)manual.push(g.id);else normal.push(g.id);
+  }
+  manual.sort((a,b)=>(Number(rec(a).manual_end_at)||0)-(Number(rec(b).manual_end_at)||0));
+  return [...normal,...manual];
+}
 function buildQueue(){
   const source=data.source_mailing_updated_at_utc||'unknown';
+  const signature=rankingSignature();
   const activeIds=new Set(items.map(x=>x.id));
   for(const id of activeIds) rec(id);
-  if(state.queue?.source!==source||state.queue?.version!==QUEUE_VERSION){
-    state.queue={source,ids:items.map(x=>x.id),cursor:0,version:QUEUE_VERSION};
+  const oldIds=state.queue?.ids||[];
+  const oldCursor=Math.max(0,Math.min(Number(state.queue?.cursor)||0,Math.max(0,oldIds.length-1)));
+  const currentId=oldIds[oldCursor]||null;
+  if(state.queue?.source!==source||state.queue?.version!==QUEUE_VERSION||state.queue?.signature!==signature){
+    const ids=canonicalQueueIds();
+    const found=currentId?ids.indexOf(currentId):-1;
+    state.queue={source,signature,ids,cursor:found>=0?found:0,version:QUEUE_VERSION};
     saveState();return;
   }
-  let q=(state.queue.ids||[]).filter(id=>activeIds.has(id));
-  const missing=items.map(x=>x.id).filter(id=>!q.includes(id));
-  q.push(...missing);
+  let q=oldIds.filter(id=>activeIds.has(id));
+  const present=new Set(q);
+  const canonical=canonicalQueueIds();
+  const missingNormal=canonical.filter(id=>!present.has(id)&&!rec(id).manual_end_at);
+  const missingManual=canonical.filter(id=>!present.has(id)&&rec(id).manual_end_at);
+  const existingNormal=q.filter(id=>!rec(id).manual_end_at);
+  const existingManual=q.filter(id=>rec(id).manual_end_at);
+  q=[...existingNormal,...missingNormal,...existingManual,...missingManual];
   const cursor=Math.max(0,Math.min(Number(state.queue.cursor)||0,Math.max(0,q.length-1)));
-  state.queue={source,ids:q,cursor,version:QUEUE_VERSION};saveState();
+  state.queue={source,signature,ids:q,cursor,version:QUEUE_VERSION};saveState();
 }
 function currentIndex(){return Math.max(0,Math.min(Number(state.queue.cursor)||0,Math.max(0,state.queue.ids.length-1)))}
 function currentGame(){return byId.get(state.queue.ids[currentIndex()])}
@@ -138,7 +159,7 @@ function markCurrent(kind){
   saveState();render();
 }
 function sendCurrentToEnd(){
-  const g=currentGame();if(!g)return;const i=currentIndex();state.queue.ids.splice(i,1);state.queue.ids.push(g.id);state.queue.cursor=Math.min(i,state.queue.ids.length-1);markSeen(g);saveState();notify(`${g.title} → в конец очереди`);render();window.scrollTo({top:0,behavior:'smooth'});
+  const g=currentGame();if(!g)return;const i=currentIndex();const r=rec(g.id);r.manual_end_at=Date.now();state.queue.ids.splice(i,1);state.queue.ids.push(g.id);state.queue.cursor=Math.min(i,state.queue.ids.length-1);markSeen(g);saveState();notify(`${g.title} → в конец очереди`);render();window.scrollTo({top:0,behavior:'smooth'});
 }
 function focusGame(id){
   const idx=state.queue.ids.indexOf(id);if(idx<0)return;state.queue.cursor=idx;currentTab='feed';$('searchDialog').open&&$('searchDialog').close();render();window.scrollTo({top:0,behavior:'smooth'});
