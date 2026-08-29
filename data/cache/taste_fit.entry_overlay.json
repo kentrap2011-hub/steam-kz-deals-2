@@ -2,7 +2,7 @@
   "schema_version": 1,
   "purpose": "incremental_per_entry_taste_verdict_overlay",
   "entry_schema_version": 2,
-  "entry_count": 466,
+  "entry_count": 472,
   "entries": {
     "App_241930": {
       "key": "App_241930",
@@ -8511,6 +8511,114 @@
         "The user has already completed this specific game and explicitly does not want to replay it, which is a direct conflict with recommending it as a current game choice."
       ],
       "evaluated_at_utc": "2026-08-29T11:00:27+00:00"
+    },
+    "App_1049280": {
+      "key": "App_1049280",
+      "appid": "1049280",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v2",
+      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "candidate_context_sha256": "7ea17750331593acc08e3ccceddbc953d73156337082b081d05a7c025b5554d3",
+      "taste_fingerprint": "2e8a9916f71ecf4641ccd9b6ead7bea7cd824572fac7a367fa42686111ab024d",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Несколько разных способов решать маленькие истории персонажей дают вариативность внутри самих игровых задач — это совпадает с устойчивым предпочтением к меняющимся ситуациям вместо одного быстро исчерпывающегося цикла.",
+        "Исследование привязано к конкретным локальным историям и помощи встреченным персонажам — это даёт понятные причины взаимодействовать с миром, что лучше соответствует предпочтению к исследованию с целью, а не к потерянности."
+      ],
+      "negative_evidence": [
+        "Свободное перемещение «как захочется» может стать минусом, если игра недостаточно ясно подсказывает следующий полезный шаг; потерянность и неясная цель устойчиво раздражают пользователя."
+      ],
+      "evaluated_at_utc": "2026-08-29T15:03:07+00:00"
+    },
+    "App_1206060": {
+      "key": "App_1206060",
+      "appid": "1206060",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v2",
+      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "candidate_context_sha256": "3987c2670fd693ef448fc4f61522e3c5e68c44ecee952efc404b61cdfd7eca60",
+      "taste_fingerprint": "b27c3363b37e53b935245f29109974344acc8e50353a311518442621e7e25bd5",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
+      "positive_evidence": [],
+      "negative_evidence": [
+        "Доступный контекст подтверждает кошмарную хоррор-тему и общую цель, но не описывает конкретную игровую механику, структуру развития или второй независимый содержательный сигнал, необходимый для порога moderate."
+      ],
+      "evaluated_at_utc": "2026-08-29T15:03:07+00:00"
+    },
+    "App_207690": {
+      "key": "App_207690",
+      "appid": "207690",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v2",
+      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "candidate_context_sha256": "bcd7cc9a575d6f472a54859ca2f01023f92f46da07ec66329f92c70595b31f11",
+      "taste_fingerprint": "2fea6e63a886272ff732da9f8bf54fec6da18abdaade1f6d7e57dd93ce992ff0",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
+      "positive_evidence": [],
+      "negative_evidence": [
+        "Контекст сообщает юмористическую приключенческую направленность, а Exploration и Story Rich являются слишком общими тегами; конкретная механика и структура игрового опыта для уверенного moderate не установлены."
+      ],
+      "evaluated_at_utc": "2026-08-29T15:03:07+00:00"
+    },
+    "App_40700": {
+      "key": "App_40700",
+      "appid": "40700",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v2",
+      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "candidate_context_sha256": "1f6120368f80326d07a828d3ceb76f6943d9a9aa48038ca87c2bd8e99cfb6376",
+      "taste_fingerprint": "13072bc37c2e6dc5797d69716d0215d81d04ae60a4d11871b38c496480f6cabe",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
+      "positive_evidence": [],
+      "negative_evidence": [
+        "Доступное описание даёт понятную сюжетную цель спасения персонажа, но не подтверждает конкретные игровые механики, развитие формулы или достаточный набор независимых структурных сигналов для moderate."
+      ],
+      "evaluated_at_utc": "2026-08-29T15:03:07+00:00"
+    },
+    "App_695330": {
+      "key": "App_695330",
+      "appid": "695330",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v2",
+      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "candidate_context_sha256": "73e7848f016025aab42cd416b3ec0de7f5a64557a4e02f968788425e74c89791",
+      "taste_fingerprint": "5f045bf8cb189e900494e3ab428407ce0dcee017a2a707a05516e699f2ea6bda",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Поездки, запись наблюдений и сбор воспоминаний дают исследованию конкретные действия и понятный результат — это соответствует предпочтению к миру, где есть причины исследовать, а не просто большое пространство.",
+        "У исследования есть явная сквозная цель до катаклизма и тайна окружающего мира, которую нужно распутывать — это совпадает с любовью к загадочности, когда понятно, что именно пытаешься выяснить."
+      ],
+      "negative_evidence": [
+        "Игра прямо описана как медитативное исследование; медленный темп и большая доля наблюдения могут снизить интерес, если активных игровых изменений окажется мало."
+      ],
+      "evaluated_at_utc": "2026-08-29T15:03:07+00:00"
+    },
+    "App_956030": {
+      "key": "App_956030",
+      "appid": "956030",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v2",
+      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "candidate_context_sha256": "19612fd5ef96d730279e0e114028fdefdb3f2d1a9350baf2c7dc42145d998398",
+      "taste_fingerprint": "b3e0966e38a230628c8a6e5dea1584d86bd9e3c539c4cd9680673ea5a2b5af13",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
+      "positive_evidence": [],
+      "negative_evidence": [
+        "Описание подтверждает необычный таинственный мир и постепенное продвижение вглубь, но не раскрывает конкретную игровую механику и независимый второй структурный плюс, поэтому строгий порог moderate не доказан."
+      ],
+      "evaluated_at_utc": "2026-08-29T15:03:07+00:00"
     }
   }
 }

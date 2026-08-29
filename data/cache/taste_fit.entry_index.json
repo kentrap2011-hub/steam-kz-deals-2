@@ -16,16 +16,16 @@
   },
   "source_overlay": {
     "path": "data/cache/taste_fit.entry_overlay.json",
-    "blob_sha": "fe93ba36d511a8223aecc0ad58cae84f0b154373",
-    "size_bytes": 483577,
+    "blob_sha": "fc40d0d83eb0f958fd0fe026eebf99e79ac1e260",
+    "size_bytes": 491718,
     "schema_version": 1,
     "entry_schema_version": 2,
-    "entry_count_declared": 466,
-    "entry_count_actual": 466,
+    "entry_count_declared": 472,
+    "entry_count_actual": 472,
     "entry_count_matches_len_entries": true,
     "required_entry_fields_complete": true,
     "replace_existing_key_count": 11,
-    "new_key_count": 455
+    "new_key_count": 461
   },
   "merge_policy": "overlay_exact_key_wins",
   "entry_fields": [
@@ -39,18 +39,18 @@
     "fit_level",
     "reason_code"
   ],
-  "index_entry_count": 605,
-  "candidate_context_bound_count": 596,
+  "index_entry_count": 611,
+  "candidate_context_bound_count": 602,
   "candidate_context_unbound_count": 9,
-  "entries_digest_sha256": "4b47a79c97b9bd97d04cbfbd933278b9cdb3fc4052e6f080a4aa772dd76927ba",
+  "entries_digest_sha256": "78acd1a556f556c022fe491ff44effd320c1a6cdfbcf34cb2c34ae0aa2b379ff",
   "profile_binding_counts": {
-    "c478cda9bb7a9b024a30ca188dce4b98a2de24ea": 605
+    "c478cda9bb7a9b024a30ca188dce4b98a2de24ea": 611
   },
   "taste_model_counts": {
-    "taste-v2": 605
+    "taste-v2": 611
   },
   "taste_semantics_counts": {
-    "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b": 605
+    "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b": 611
   },
   "source_updated_at_utc": "2026-08-29T04:22:11.847802+00:00",
   "entries": {
@@ -6708,6 +6708,72 @@
       "INCLUDE",
       "strong",
       "include_strong"
+    ],
+    "App_1049280": [
+      "1049280",
+      "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste-v2",
+      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "7ea17750331593acc08e3ccceddbc953d73156337082b081d05a7c025b5554d3",
+      "2e8a9916f71ecf4641ccd9b6ead7bea7cd824572fac7a367fa42686111ab024d",
+      "INCLUDE",
+      "moderate",
+      "include_moderate"
+    ],
+    "App_1206060": [
+      "1206060",
+      "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste-v2",
+      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "3987c2670fd693ef448fc4f61522e3c5e68c44ecee952efc404b61cdfd7eca60",
+      "b27c3363b37e53b935245f29109974344acc8e50353a311518442621e7e25bd5",
+      "EXCLUDE",
+      "below_moderate",
+      "exclude_insufficient"
+    ],
+    "App_207690": [
+      "207690",
+      "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste-v2",
+      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "bcd7cc9a575d6f472a54859ca2f01023f92f46da07ec66329f92c70595b31f11",
+      "2fea6e63a886272ff732da9f8bf54fec6da18abdaade1f6d7e57dd93ce992ff0",
+      "EXCLUDE",
+      "below_moderate",
+      "exclude_insufficient"
+    ],
+    "App_40700": [
+      "40700",
+      "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste-v2",
+      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "1f6120368f80326d07a828d3ceb76f6943d9a9aa48038ca87c2bd8e99cfb6376",
+      "13072bc37c2e6dc5797d69716d0215d81d04ae60a4d11871b38c496480f6cabe",
+      "EXCLUDE",
+      "below_moderate",
+      "exclude_insufficient"
+    ],
+    "App_695330": [
+      "695330",
+      "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste-v2",
+      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "73e7848f016025aab42cd416b3ec0de7f5a64557a4e02f968788425e74c89791",
+      "5f045bf8cb189e900494e3ab428407ce0dcee017a2a707a05516e699f2ea6bda",
+      "INCLUDE",
+      "moderate",
+      "include_moderate"
+    ],
+    "App_956030": [
+      "956030",
+      "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste-v2",
+      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "19612fd5ef96d730279e0e114028fdefdb3f2d1a9350baf2c7dc42145d998398",
+      "b3e0966e38a230628c8a6e5dea1584d86bd9e3c539c4cd9680673ea5a2b5af13",
+      "EXCLUDE",
+      "below_moderate",
+      "exclude_insufficient"
     ]
   }
 }
