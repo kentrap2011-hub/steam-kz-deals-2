@@ -7,7 +7,7 @@
     "canonical_profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
     "taste_model_version": "taste-v2",
     "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-    "content_metadata_blob_sha": "847ce15dabb153b9a04be3c1273c1b867d9f8fff"
+    "content_metadata_blob_sha": "079c528bc38069c9f03fff37b0aa5031163fec12"
   },
   "wishlist_binding": {
     "blob_sha": "0b5b6b9d32d051ad838b6c758e1d6d2a37b09251",
@@ -37,6 +37,8 @@
     "chatgpt_selects_precomputed_deal_scenario_from_final_taste_fit": true,
     "every_visible_paid_recommendation_requires_sale_end": false,
     "missing_sale_end_does_not_exclude_candidate": true,
+    "known_sale_end_at_or_before_consumer_time_is_inactive": true,
+    "current_offer_state_must_not_be_reused_past_known_sale_end": true,
     "wishlist_is_context_only": true,
     "reviews_and_discovery_flags_are_not_positive_taste_proof": true
   },
@@ -62,7 +64,7 @@
   "sale_end_coverage": 1.0,
   "sale_end_missing_count": 0,
   "sale_end_missing_primary_keys": [],
-  "source_pre_ai_artifact_bytes": 2204262,
+  "source_pre_ai_artifact_bytes": 2204689,
   "deterministically_excluded_primary_keys": [
     "Sub_49358",
     "Sub_648168",
@@ -231,5 +233,5 @@
     "App_963000",
     "App_978300"
   ],
-  "elapsed_seconds": 0.084
+  "elapsed_seconds": 0.128
 }
