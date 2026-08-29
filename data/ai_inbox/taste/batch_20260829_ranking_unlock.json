@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "bindings": {
+    "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+    "taste_model_version": "taste-v2",
+    "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+    "source_mailing_updated_at_utc": "2026-08-29T02:58:09.081832+00:00"
+  },
+  "results": [
+    {
+      "key": "App_1088850",
+      "appid": "1088850",
+      "taste_fingerprint": "97137f7af58d6f2aecfb4252b9fdb2731c820563184a5897b2e421ca1b0c91cf",
+      "candidate_context_sha256": "7bc367196511a676dc552b28fdc44cbc2df8795d28b3cf4f1338769adc3148c1",
+      "verdict": "INCLUDE",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
+      "positive_evidence": [
+        "Story-rich action-adventure directly combines narrative focus with active third-person-style superhero action, both central profile positives.",
+        "Choices Matter and the focus on leading a distinctive team provide character interaction and player-directed narrative context rather than a purely repetitive combat loop.",
+        "The cosmic road-trip framing promises changing situations and locations, supporting the profile preference for evolution and variety."
+      ],
+      "negative_evidence": []
+    },
+    {
+      "key": "App_1286990",
+      "appid": "1286990",
+      "taste_fingerprint": "7bf7b46d9b70675676f1c48eed0f651a6f97ce665ee76f14fdf13c3893a09b23",
+      "candidate_context_sha256": "7bc5b55a58ce9cba81bbd022080170fafb058f632e482ed62be8de7ac7325df3",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Classic survival-horror structure is a direct genre match and supplies readable tension, danger, and progression through hostile spaces.",
+        "Resource scavenging and complex puzzles add independent decision-making and problem-solving beyond combat, giving the loop meaningful variation.",
+        "The concrete objective of navigating the trenches provides a clearer discovery vector than directionless exploration."
+      ],
+      "negative_evidence": [
+        "The supplied context gives limited evidence about character depth or broader mechanical evolution, so the fit is kept at moderate rather than strong."
+      ]
+    },
+    {
+      "key": "App_1546400",
+      "appid": "1546400",
+      "taste_fingerprint": "6a6ff231503a443340ce7e0b0c52769f13bdbee9a5d7505472c366f33fc08d98",
+      "candidate_context_sha256": "b1406cf63a5b72b917f040150be5d6a3883ffa7829f5b57d17680d9e6cbf030e",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_audited_below",
+      "positive_evidence": [
+        "One-to-four-player play is a genuine social-play positive for the profile.",
+        "Destructible cityscapes give the combat a strong spectacle hook."
+      ],
+      "negative_evidence": [
+        "The supplied context is centered almost entirely on arena fighting and does not establish progression, narrative purpose, or meaningful evolution of the loop.",
+        "The social-play positive and spectacle hook are not enough independent substantive matches to clear the moderate threshold."
+      ]
+    },
+    {
+      "key": "App_220440",
+      "appid": "220440",
+      "taste_fingerprint": "42974764d1d74d0ddece700610aa84b724f898db192ea2c19de50d407fc5d051",
+      "candidate_context_sha256": "672d94e3a6c5e430a55160e759cf7abf43fd390cd728068b985dc283142debad",
+      "verdict": "INCLUDE",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
+      "positive_evidence": [
+        "Stylish hack-and-slash action is a high-specificity match for the profile's strong preference for mechanical mastery and expressive combat.",
+        "Third-person action matches a repeatedly successful control and combat format in the profile.",
+        "An explicit origin-story retelling adds narrative and character context rather than presenting combat as an isolated arcade loop."
+      ],
+      "negative_evidence": []
+    },
+    {
+      "key": "App_329050",
+      "appid": "329050",
+      "taste_fingerprint": "9396c7b2d1435b47748636cbe09bba34690ddff2f3a47dee6b56429ab1b12c9b",
+      "candidate_context_sha256": "185cfaab9bb3045a65e1682ea54473a263f0a4446d27d7736bd54f535a18c989",
+      "verdict": "INCLUDE",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
+      "positive_evidence": [
+        "Character-action and hack-and-slash combat are direct matches for the profile's unusually strong mechanical-mastery preference.",
+        "Multiple playable characters provide materially different combat expression instead of a single unchanged loop.",
+        "Additional game modes add structural variety, directly addressing the profile's sensitivity to repetition without evolution."
+      ],
+      "negative_evidence": []
+    },
+    {
+      "key": "App_601150",
+      "appid": "601150",
+      "taste_fingerprint": "f1764d0ab3ec38ed4f910bb970629c32f1202f5892cbdc467bdcc75d969dc1ff",
+      "candidate_context_sha256": "da4934de1334c525b3e619e749d6f825a22c2a53ee9e67007a59e292bcef39dc",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_direct_conflict",
+      "positive_evidence": [
+        "Character-action and hack-and-slash mechanics are intrinsically a strong match for the profile's mechanical-mastery preference.",
+        "Third-person stylish combat is a format that otherwise aligns well with the profile."
+      ],
+      "negative_evidence": [
+        "The user has already completed this specific game and explicitly does not want to replay it, which is a direct conflict with recommending it as a current game choice."
+      ]
+    }
+  ]
+}
