@@ -5,7 +5,7 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
-USER_AGENT = 'steam-kz-deals-achievements/1.1'
+USER_AGENT = 'steam-kz-deals-achievements/1.2'
 
 # The order matters: a constrained/challenge version of an otherwise ordinary
 # action must beat generic story/grind wording.
@@ -155,43 +155,76 @@ def rate_achievement_set(pairs):
     counts = {score: ratings.count(score) for score in range(1, 6)}
     total_visible = len(pairs)
     assessed = len(ratings)
+    meaningful = counts[3] + counts[4] + counts[5]
+    deep = counts[4] + counts[5]
+    challenge = counts[5]
+    grind = counts[2]
+    story = counts[1]
 
     evidence = {
         'assessed': assessed,
         'total_visible': total_visible,
         'coverage_percent': int(round(100 * assessed / total_visible)) if total_visible else 0,
         'counts': {str(k): v for k, v in counts.items() if v},
+        'meaningful_percent_total': int(round(100 * meaningful / total_visible)) if total_visible else 0,
+        'challenge_percent_total': int(round(100 * challenge / total_visible)) if total_visible else 0,
+        'grind_percent_total': int(round(100 * grind / total_visible)) if total_visible else 0,
     }
     if not ratings:
         return None, evidence
 
-    # Canonical user profile, applied as transparent qualitative tiers:
-    # 5 = a meaningful challenge/restriction layer exists;
-    # 4 = meaningful mastery/deeper-mechanics layer exists;
-    # 3 = meaningful optional goals/secrets;
-    # 2 = grind/cleanup is the main detected extra-achievement layer;
-    # 1 = detected set is mostly ordinary progression/story milestones.
-    challenge_needed = 1 if total_visible <= 15 else _threshold(total_visible, 0.05)
-    mastery_needed = 1 if total_visible <= 12 else _threshold(total_visible, 0.08)
-    optional_needed = 1 if total_visible <= 10 else _threshold(total_visible, 0.10)
+    # Rate the whole road to 100%, not the single best-looking achievement.
+    # One challenge achievement can be a positive signal, but cannot by itself
+    # turn a mostly ordinary/grindy set into 5/5.
+    challenge_needed = 1 if total_visible <= 8 else _threshold(total_visible, 0.08)
+    deep_needed = 1 if total_visible <= 6 else _threshold(total_visible, 0.08)
+    meaningful_for_5 = 2 if total_visible <= 8 else _threshold(total_visible, 0.20, minimum=3)
+    meaningful_for_4 = 2 if total_visible <= 8 else _threshold(total_visible, 0.15, minimum=3)
+    meaningful_for_3 = 1 if total_visible <= 6 else _threshold(total_visible, 0.12, minimum=2)
 
-    if counts[5] >= challenge_needed:
+    grind_dominates = grind >= 2 and grind >= meaningful and grind > story
+    story_dominates = story >= 2 and story >= meaningful + grind
+
+    if (
+        challenge >= challenge_needed
+        and meaningful >= meaningful_for_5
+        and meaningful >= grind
+        and meaningful / max(total_visible, 1) >= 0.20
+    ):
         quality = 5
-    elif counts[5] + counts[4] >= mastery_needed:
+        dominant_layer = 'challenge_with_meaningful_set_support'
+    elif (
+        deep >= deep_needed
+        and meaningful >= meaningful_for_4
+        and meaningful > grind
+        and meaningful / max(total_visible, 1) >= 0.15
+    ):
         quality = 4
-    elif counts[5] + counts[4] + counts[3] >= optional_needed:
+        dominant_layer = 'mastery_with_meaningful_set_support'
+    elif grind_dominates:
+        quality = 2
+        dominant_layer = 'grind_cleanup'
+    elif (
+        meaningful >= meaningful_for_3
+        and meaningful >= grind
+        and meaningful / max(total_visible, 1) >= 0.12
+    ):
         quality = 3
-    elif counts[2] and counts[2] >= max(counts[1], counts[3] + counts[4] + counts[5]):
-        quality = 2
-    elif counts[1] and counts[1] >= counts[2] + counts[3] + counts[4] + counts[5]:
+        dominant_layer = 'meaningful_optional_goals'
+    elif story_dominates:
         quality = 1
-    elif counts[2] > counts[1]:
+        dominant_layer = 'ordinary_story_progression'
+    elif grind > meaningful:
         quality = 2
-    elif counts[1] > 0:
+        dominant_layer = 'grind_cleanup'
+    elif story > 0 and meaningful == 0:
         quality = 1
+        dominant_layer = 'ordinary_story_progression'
     else:
         quality = None
+        dominant_layer = 'insufficient_whole_set_signal'
 
+    evidence['dominant_layer'] = dominant_layer
     return quality, evidence
 
 
@@ -266,9 +299,9 @@ def enrich_visual_items(items):
             practical['achievement_quality_source'] = 'steam_global_achievement_descriptions_unavailable'
             continue
 
-        # A bundle/family can have several base games. The most interesting
-        # achievement set is a real reason to prefer the purchase, so keep the
-        # best confirmed quality instead of diluting it with a simple mean.
+        # A bundle/family can have several base games. Keep the best confirmed
+        # set as the purchase-family achievement signal instead of averaging
+        # unrelated games together.
         best = max(assessed, key=lambda row: int(row['achievement_quality']))
         practical['achievement_quality'] = int(best['achievement_quality'])
         practical['achievement_quality_source'] = 'steam_global_achievement_descriptions'
