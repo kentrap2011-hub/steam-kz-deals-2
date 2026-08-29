@@ -12,6 +12,7 @@ STORE_SNAPSHOT = ROOT / 'data/production/pre_ai/store_snapshot.json'
 FAMILY_GRAPH = ROOT / 'data/production/pre_ai/family_graph.json'
 HISTORY_SNAPSHOT = ROOT / 'data/production/pre_ai/history_snapshot.json'
 TASTE_CACHE = ROOT / 'data/cache/taste_fit.json'
+TASTE_OVERLAY = ROOT / 'data/cache/taste_fit.entry_overlay.json'
 TASTE_PROJECTION = ROOT / 'data/production/pre_ai/taste_projection.json'
 CHATGPT_PAYLOAD = ROOT / 'data/production/pre_ai/chatgpt_payload.json'
 OUT = ROOT / 'web/data/current.json'
@@ -32,6 +33,12 @@ def cache_entries(obj):
     if isinstance(entries, list):
         return {str(x.get('key')): x for x in entries if isinstance(x, dict) and x.get('key')}
     return {}
+
+
+def effective_taste_entries():
+    merged = dict(cache_entries(load_json(TASTE_CACHE)))
+    merged.update(cache_entries(load_json(TASTE_OVERLAY)))
+    return merged
 
 
 def get_fit(row, taste_entries):
@@ -186,12 +193,16 @@ def reason_ru(evidence, tags, description):
     text = str(evidence or '').lower()
     if '2.5d platformer' in text and 'first-person' in text:
         return 'Игра чередует 2.5D-платформинг и эпизоды от первого лица — тебе обычно лучше заходят игры, которые меняют формат и игровые ситуации, а не повторяют один цикл.'
-    if any(k in text for k in ['traversal', 'movement', 'parkour', 'flight', 'glide', 'levitation']):
+    if any(k in text for k in ['tactical', 'tactics', 'formation', 'strategic situation', 'different solutions', 'army composition', 'unit types']):
+        return 'Игра регулярно ставит понятные тактические задачи, где можно выбирать подход и улучшать исполнение — это хорошо совпадает с твоей любовью к анализу ситуации и освоению игровых систем.'
+    if any(k in text for k in ['traversal', 'movement', 'parkour', 'glide', 'levitation', 'climb', 'climbing', 'flying']):
         return 'Передвижение здесь — важная часть самого удовольствия от игры, а тебе особенно нравятся игры, где движение и контроль персонажа интересны сами по себе.'
     if any(k in text for k in ['progression', 'upgrade', 'abilities', 'new abilities', 'unlock']):
         return 'Есть заметное развитие возможностей персонажа с понятным игровым эффектом — это совпадает с твоей любовью к ясному и полезному прогрессу.'
-    if any(k in text for k in ['mystery', 'investigation', 'detective', 'clue']):
-        return 'В центре есть конкретная тайна или расследование, которое направляет исследование — тебе загадки лучше заходят, когда понятно, что именно нужно выяснить.'
+    if any(k in text for k in ['investigation', 'detective', 'clue', 'interrogat']):
+        return 'В центре есть конкретное расследование и понятный вопрос, на который нужно найти ответ — тебе такие загадки лучше заходят, когда направление поиска остаётся ясным.'
+    if any(k in text for k in ['mystery', 'secret', 'unravel']):
+        return 'В игре есть конкретная тайна, которая даёт исследованию и продвижению понятный смысл — это хорошо совпадает с твоей любовью к направленным загадкам.'
     if any(k in text for k in ['different', 'alternat', 'multiple', 'varied', 'changes of format', 'changes of situation']):
         return 'Игра регулярно меняет ситуации или способ взаимодействия, поэтому меньше риска застрять в одном повторяющемся цикле — это сильный плюс для твоего профиля.'
     if any(k in text for k in ['clear objective', 'clear goal', 'purpose', 'escape premise']):
@@ -200,12 +211,14 @@ def reason_ru(evidence, tags, description):
         return 'Решения заметно влияют на происходящее, а тебе обычно интереснее игры, где действия меняют ситуацию, а не служат только декорацией.'
 
     joined = (' '.join(tags or []) + ' ' + str(description or '')).lower()
-    if 'detective' in joined or 'mystery' in joined:
+    if 'detective' in joined or 'investigation' in joined:
         return 'Основной игровой интерес связан с расследованием и поиском ответов — это хорошо совпадает с твоей любовью к направленным загадкам.'
+    if 'mystery' in joined:
+        return 'В игре есть конкретная тайна, которая направляет исследование и даёт ему понятную цель — это хорошо совпадает с твоим вкусом.'
     if 'choices matter' in joined:
         return 'Здесь важны решения и их последствия, поэтому ситуации могут развиваться по-разному, а не идти по полностью однообразному сценарию.'
-    if 'platform' in joined or 'parkour' in joined:
-        return 'Заметная часть игры построена вокруг активного передвижения и платформинга, а выразительное движение для тебя само по себе является плюсом.'
+    if any(k in joined for k in ['platform', 'parkour', 'climb', 'climbing']):
+        return 'Заметная часть игры построена вокруг активного передвижения, а выразительное движение для тебя само по себе является плюсом.'
     if 'puzzle' in joined:
         return 'Головоломки дают конкретные задачи и понятные точки прогресса, что обычно лучше соответствует твоему вкусу, чем бесцельное исследование.'
     if 'exploration' in joined:
@@ -271,7 +284,7 @@ def main():
     families = family_obj.get('families') or []
     family_by_id = {x.get('family_id'): x for x in families if isinstance(x, dict)}
     history_entries = load_json(HISTORY_SNAPSHOT).get('entries') or {}
-    taste_entries = cache_entries(load_json(TASTE_CACHE))
+    taste_entries = effective_taste_entries()
     projection_entries = load_json(TASTE_PROJECTION).get('entries') or {}
     payload = load_json(CHATGPT_PAYLOAD)
     rate = (payload.get('fx_binding') or {}).get('kzt_per_rub')
