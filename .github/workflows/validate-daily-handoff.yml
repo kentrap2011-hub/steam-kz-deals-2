@@ -1,0 +1,38 @@
+name: Validate daily mailing handoff
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "data/production/daily_ready/**"
+      - "scripts/validate_daily_handoff.py"
+      - "scripts/test_daily_handoff_guard.py"
+      - "config/daily_execution_contract.json"
+      - ".github/workflows/validate-daily-handoff.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Regression tests
+        run: python scripts/test_daily_handoff_guard.py
+      - name: Validate current pre-AI input freshness
+        run: python scripts/validate_daily_handoff.py input
+      - name: Validate ready artifact when present
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -e data/production/daily_ready/latest.json || -e data/production/daily_ready/latest.md ]]; then
+            python scripts/validate_daily_handoff.py ready
+          else
+            echo "No daily_ready artifact yet; input contract only was validated."
+          fi
