@@ -8,6 +8,14 @@
     "network_refreshes_during_day_for_delivery": false,
     "rule": "Treat the completed nightly GitHub snapshot as the commercial state for the whole delivery day. Do not fetch fresher price/discount/review/history/store data again for the 08:00 delivery."
   },
+  "night_input_freshness": {
+    "source_timestamp_field": "source_mailing_updated_at_utc",
+    "maximum_age_hours_at_preparation": 18,
+    "fail_closed_if_missing_or_unparseable": true,
+    "fail_closed_if_older_than_maximum": true,
+    "stale_action": "write preparation_status.json and do not replace the last successful daily_ready artifact",
+    "rule": "The 01:00 preparation may consume only a complete pre-AI payload whose source_mailing_updated_at_utc is present, parseable and no more than 18 hours old at preparation time. This turns current-cycle freshness into a deterministic check and prevents silent reuse of yesterday's commercial snapshot after a failed nightly GitHub chain."
+  },
   "known_expiry_guard": {
     "requires_network": false,
     "rule": "A known sale_end_utc is a local logical expiry bound. If it is already past at delivery time, suppress that stored offer without fetching new information. Taste cache remains valid."
@@ -17,6 +25,7 @@
     "owner": "ChatGPT scheduled task",
     "responsibilities": [
       "consume the completed nightly pre-AI payload",
+      "verify source_mailing_updated_at_utc is present, parseable and no more than 18 hours old; otherwise fail closed without replacing the last successful ready artifact",
       "finish any required price-blind taste verdicts and persist them through taste inbox/checkpoint",
       "consume precomputed purchase context and deal scenarios",
       "sort eligible paid candidates by precomputed final_priority_bucket ascending; within the same bucket prefer wishlist, then stronger history value, larger discount, lower price, then title",
