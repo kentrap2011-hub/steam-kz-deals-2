@@ -1,0 +1,75 @@
+name: Targeted AI taste batch sizing diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-ai-batch-sizing.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Measure current AI queue batch shapes
+        run: |
+          python - <<'PY'
+          import json
+          import math
+          import statistics
+          from pathlib import Path
+
+          path = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
+          raw_lines = [line for line in path.read_text(encoding='utf-8').splitlines() if line.strip()]
+          rows = [json.loads(line) for line in raw_lines]
+          if len(rows) != 556:
+              raise SystemExit(f'Unexpected current AI queue count: {len(rows)}')
+          sizes = [len((line + '\n').encode('utf-8')) for line in raw_lines]
+          desc_lengths = [len((row.get('short_description') or '').encode('utf-8')) for row in rows]
+          source_counts = {}
+          for row in rows:
+              source = row.get('description_source') or 'not_exposed_in_queue'
+              source_counts[source] = source_counts.get(source, 0) + 1
+
+          batches = {}
+          for batch_size in (25, 50, 75, 100):
+              groups = [sizes[i:i+batch_size] for i in range(0, len(sizes), batch_size)]
+              byte_sizes = [sum(group) for group in groups]
+              batches[str(batch_size)] = {
+                  'batch_count': len(groups),
+                  'largest_batch_bytes': max(byte_sizes),
+                  'mean_batch_bytes': round(statistics.mean(byte_sizes), 1),
+                  'last_batch_rows': len(groups[-1]),
+              }
+
+          result = {
+              'queue_count': len(rows),
+              'queue_bytes': sum(sizes),
+              'row_bytes': {
+                  'min': min(sizes),
+                  'median': int(statistics.median(sizes)),
+                  'p95': sorted(sizes)[math.ceil(len(sizes) * 0.95) - 1],
+                  'max': max(sizes),
+                  'mean': round(statistics.mean(sizes), 1),
+              },
+              'description_bytes': {
+                  'min': min(desc_lengths),
+                  'median': int(statistics.median(desc_lengths)),
+                  'p95': sorted(desc_lengths)[math.ceil(len(desc_lengths) * 0.95) - 1],
+                  'max': max(desc_lengths),
+                  'mean': round(statistics.mean(desc_lengths), 1),
+              },
+              'rows_without_description': sum(not bool(row.get('short_description')) for row in rows),
+              'hypothetical_batches': batches,
+              'ingest_hard_cap_rows': 100,
+          }
+          print(json.dumps(result, ensure_ascii=False, indent=2))
+          print('AI_TASTE_BATCH_SIZING_DIAGNOSTIC=PASS')
+          PY
