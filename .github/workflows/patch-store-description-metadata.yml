@@ -28,7 +28,7 @@ jobs:
         run: python scripts/build_pre_ai_store_snapshot.py
       - name: Check measured description coverage
         run: >-
-          python -c "import json; from pathlib import Path; d=json.loads(Path('data/production/pre_ai/content_metadata.json').read_text()); e=d['entries']; a=[x for x in e.values() if x.get('entity_kind')=='app']; s=[x for x in e.values() if x.get('entity_kind')=='sub']; ak=sum(bool(x.get('short_description')) for x in a); c=d['control_comparison']; print({'entries':len(e),'app_description_known':ak,'sub_description_known':sum(bool(x.get('short_description')) for x in s),'control_match':c.get('match_count'),'control_mismatch':c.get('mismatch_count')}); assert len(e)==657; assert ak==614; assert c.get('match_count')==91 and c.get('mismatch_count')==0; print('STORE_DESCRIPTION_METADATA_TARGETED=PASS')"
+          python -c "import json; from pathlib import Path; d=json.loads(Path('data/production/pre_ai/content_metadata.json').read_text()); e=d['entries']; a=[x for x in e.values() if x.get('entity_kind')=='app']; s=[x for x in e.values() if x.get('entity_kind')=='sub']; ak=sum(bool(x.get('short_description')) for x in a); c=d['validated_control_comparison']; print({'entries':len(e),'app_description_known':ak,'sub_description_known':sum(bool(x.get('short_description')) for x in s),'control_match':c.get('match_count'),'control_mismatch':c.get('mismatch_count')}); assert len(e)==657; assert ak==614; assert c.get('match_count')==91 and c.get('mismatch_count')==0; print('STORE_DESCRIPTION_METADATA_TARGETED=PASS')"
       - name: Commit source patch only
         run: |
           git config user.name "steam-kz-bot"
