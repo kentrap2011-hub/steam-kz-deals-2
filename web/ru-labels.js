@@ -20,19 +20,22 @@ if(fitNode){
   translateFitLabel();
 }
 
-// Steam Mobile is sensitive to the exact external game URL format.
-// For game/package pages use the shortest canonical URL ending in the numeric ID.
+// Android/Chrome: deliver the canonical Steam Store URL directly to the
+// Steam package via ACTION_VIEW. No browser fallback: if Steam cannot handle
+// the intent we want that failure to be visible instead of silently opening Chrome.
 openSteam=function(steamUrl,webUrl){
   if(!steamUrl&&!webUrl)return;
   if(/Android/i.test(navigator.userAgent)&&webUrl){
-    let target=webUrl;
     const appMatch=webUrl.match(/store\.steampowered\.com\/app\/(\d+)/i);
     const subMatch=webUrl.match(/store\.steampowered\.com\/sub\/(\d+)/i);
-    if(appMatch) target=`https://store.steampowered.com/app/${appMatch[1]}`;
-    else if(subMatch) target=`https://store.steampowered.com/sub/${subMatch[1]}`;
-    else target=webUrl.replace(/\/+$/,'');
-    location.href=`steammobile://openurl/${target}`;
-    return;
+    if(appMatch){
+      location.href=`intent://store.steampowered.com/app/${appMatch[1]}#Intent;scheme=https;package=com.valvesoftware.android.steam.community;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end`;
+      return;
+    }
+    if(subMatch){
+      location.href=`intent://store.steampowered.com/sub/${subMatch[1]}#Intent;scheme=https;package=com.valvesoftware.android.steam.community;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end`;
+      return;
+    }
   }
   if(steamUrl){
     location.href=steamUrl;
