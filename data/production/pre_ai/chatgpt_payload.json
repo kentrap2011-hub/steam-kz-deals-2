@@ -13,8 +13,8 @@
     "is_context_only_not_taste_proof": true
   },
   "fx_binding": {
-    "kzt_per_rub": 5.394266,
-    "provider_updated_at_utc": "2026-08-29T00:02:31+00:00"
+    "kzt_per_rub": 5.399737,
+    "provider_updated_at_utc": "2026-08-28T00:02:31+00:00"
   },
   "contract": {
     "minimum_taste_fit": "moderate",
@@ -39,11 +39,11 @@
     "taste_queue_jsonl": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
     "purchase_context_jsonl": "data/production/pre_ai/chatgpt_purchase_context.jsonl",
     "line_alignment": "taste_queue line N == purchase_context line N for 1..ai_queue_count",
-    "ready_context_start_line": 557
+    "ready_context_start_line": null
   },
   "source_family_count": 619,
-  "ai_queue_count": 556,
-  "ready_without_ai_count": 1,
+  "ai_queue_count": 557,
+  "ready_without_ai_count": 0,
   "purchase_context_line_count": 557,
   "deterministically_excluded_without_ai_count": 62,
   "deterministic_exclusion_counts": {
@@ -51,7 +51,7 @@
   },
   "complete_family_partition": true,
   "mandatory_sale_end_coverage": 1.0,
-  "source_pre_ai_artifact_bytes": 1873345,
+  "source_pre_ai_artifact_bytes": 1871714,
   "deterministically_excluded_primary_keys": [
     "App_1088850",
     "App_1121640",
@@ -116,5 +116,5 @@
     "App_858810",
     "App_934700"
   ],
-  "elapsed_seconds": 0.187
+  "elapsed_seconds": 0.118
 }
