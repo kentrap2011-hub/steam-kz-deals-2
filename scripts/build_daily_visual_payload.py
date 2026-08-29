@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 from pathlib import Path
 
@@ -71,7 +72,8 @@ def existing_source_key():
 
 def main():
     source_key, final_check = assert_ready()
-    if existing_source_key() == source_key:
+    force = os.environ.get('FORCE_VISUAL_BUILD') == '1'
+    if not force and existing_source_key() == source_key:
         print(f'VISUAL_DAILY_BUILD=SKIP source={source_key}')
         return
 
@@ -89,7 +91,7 @@ def main():
         'source_final_self_check_status': final_check.get('status'),
     }
     OUT.write_text(json.dumps(ready, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
-    print(f'VISUAL_DAILY_BUILD=BUILT source={source_key} items={ready.get("item_count")}')
+    print(f'VISUAL_DAILY_BUILD=BUILT source={source_key} items={ready.get("item_count")} force={force}')
 
 
 if __name__ == '__main__':
