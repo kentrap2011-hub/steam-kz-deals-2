@@ -1,0 +1,97 @@
+name: Candidate-context binding targeted diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnostic-candidate-context-binding.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build current Store metadata
+        run: python scripts/build_pre_ai_store_snapshot.py
+      - name: Build context-aware per-entry index
+        run: python scripts/build_taste_cache_index.py
+      - name: Build family prerequisites
+        run: |
+          python scripts/build_pre_ai_content_rules.py
+          python scripts/build_pre_ai_family_graph.py
+      - name: Build context-aware taste projection
+        run: python scripts/build_pre_ai_taste_projection.py
+      - name: Patch ChatGPT consumer source
+        run: python scripts/patch_chatgpt_candidate_context_once.py
+      - name: Build remaining deterministic prerequisites and consumer bundle
+        run: |
+          python scripts/build_pre_ai_fx_snapshot.py
+          python scripts/build_pre_ai_history_snapshot.py
+          python scripts/build_pre_ai_deal_scenarios.py
+          python scripts/build_pre_ai_chatgpt_payload.py
+      - name: Prove context invalidation and queue shape
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          metadata=json.loads(Path('data/production/pre_ai/content_metadata.json').read_text(encoding='utf-8'))
+          idx=json.loads(Path('data/cache/taste_fit.entry_index.json').read_text(encoding='utf-8'))
+          taste=json.loads(Path('data/production/pre_ai/taste_projection.json').read_text(encoding='utf-8'))
+          manifest=json.loads(Path('data/production/pre_ai/chatgpt_payload.json').read_text(encoding='utf-8'))
+          queue=[json.loads(x) for x in Path('data/production/pre_ai/chatgpt_taste_queue.jsonl').read_text(encoding='utf-8').splitlines() if x.strip()]
+          by_key={x['taste_subject_key']:x for x in queue}
+          app_entries=[x for x in metadata['entries'].values() if x.get('entity_kind')=='app']
+
+          checks={
+              'metadata_app_descriptions_614': sum(bool(x.get('short_description')) for x in app_entries)==614,
+              'index_context_field_present': 'candidate_context_sha256' in idx['entry_fields'],
+              'index_existing_entries_unbound': idx['candidate_context_bound_count']==0 and idx['candidate_context_unbound_count']==583,
+              'projection_complete': taste['complete_coverage'] is True and taste['taste_subject_count']==619,
+              'subject_description_coverage': taste['candidate_context']['description_known_count']==585 and taste['candidate_context']['description_missing_count']==34,
+              'old_overlay_correctly_invalidated': taste['safe_cache_hit_count']==0 and taste['ai_required_count']==619,
+              'old_overlay_context_missing': taste['entries']['App_241930']['ai_required_reason']=='candidate_context_binding_missing_for_entry',
+              'queue_returns_to_557': manifest['ai_queue_count']==557 and manifest['ready_without_ai_count']==0,
+              'deterministic_excludes_unchanged': manifest['deterministically_excluded_without_ai_count']==62,
+              'sale_end_unchanged': manifest['mandatory_sale_end_coverage']==1.0,
+              'target_in_queue': 'App_241930' in by_key,
+              'target_context_digest_present': len(by_key['App_241930'].get('candidate_context_sha256') or '')==64,
+              'target_description_present': bool(by_key['App_241930'].get('short_description')),
+              'taste_queue_still_price_blind': all(not any(k in row for k in ['price','discount_percent','reviews','wishlist','history','deal_if_strong','deal_if_moderate']) for row in queue),
+          }
+          failed=[k for k,v in checks.items() if not v]
+          print(json.dumps({
+              'checks':checks,
+              'description_known_count':taste['candidate_context']['description_known_count'],
+              'safe_cache_hit_count':taste['safe_cache_hit_count'],
+              'ai_required_count':taste['ai_required_count'],
+              'ai_queue_count':manifest['ai_queue_count'],
+              'ready_without_ai_count':manifest['ready_without_ai_count'],
+              'target_context_sha':by_key['App_241930'].get('candidate_context_sha256'),
+              'target_short_description':by_key['App_241930'].get('short_description'),
+          },ensure_ascii=False,indent=2))
+          if failed:
+              raise SystemExit(f'Candidate-context binding proof failed: {failed}')
+          print('CANDIDATE_CONTEXT_BINDING_TARGETED=PASS')
+          PY
+      - name: Commit consumer source only
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git restore data/cache/taste_fit.entry_index.json data/production/pre_ai || true
+          git add scripts/build_pre_ai_chatgpt_payload.py
+          git diff --cached --check
+          test "$(git diff --cached --name-only)" = "scripts/build_pre_ai_chatgpt_payload.py"
+          git commit -m "Expose context-bound price-blind taste queue"
+          git push origin HEAD:main
