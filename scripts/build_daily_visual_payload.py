@@ -3,6 +3,7 @@ import os
 import subprocess
 from pathlib import Path
 
+import achievement_quality
 import build_visual_feed_v2 as visual_builder
 
 ROOT = Path('.')
@@ -49,8 +50,16 @@ def git_sha(path: str):
     return subprocess.check_output(['git', 'rev-parse', f'HEAD:{path}'], text=True).strip()
 
 
-def achievements_rank(value):
-    return 0 if value is True else (1 if value is None else 2)
+def achievement_quality_rank(practical):
+    has_achievements = practical.get('steam_achievements')
+    if has_achievements is False:
+        return 7
+    if has_achievements is not True:
+        return 6
+    quality = practical.get('achievement_quality')
+    if isinstance(quality, int) and 1 <= quality <= 5:
+        return 5 - quality
+    return 5
 
 
 def current_production_readiness():
@@ -102,7 +111,7 @@ def current_production_readiness():
 
 def existing_identity():
     if not OUT.exists():
-        return None, None, None
+        return None, None, None, None
     try:
         current = load_json(OUT)
         contract = current.get('production_contract') or {}
@@ -110,9 +119,10 @@ def existing_identity():
             current.get('source_mailing_updated_at_utc'),
             contract.get('visual_builder_blob_sha'),
             contract.get('daily_visual_builder_blob_sha'),
+            contract.get('achievement_quality_builder_blob_sha'),
         )
     except Exception:
-        return None, None, None
+        return None, None, None, None
 
 
 def apply_canonical_priority_order(ready):
@@ -131,7 +141,7 @@ def apply_canonical_priority_order(ready):
         return (
             int(game.get('priority_bucket') or 99),
             WINDOWS_ORDER.get(windows_status, 1),
-            achievements_rank(practical.get('steam_achievements')),
+            achievement_quality_rank(practical),
             -int(bool(game.get('wishlist'))),
             HISTORY_QUALITY_ORDER.get(history_quality, 99),
             -int(game.get('discount_percent') or 0),
@@ -160,17 +170,20 @@ def main():
 
     builder_sha = git_sha('scripts/build_visual_feed_v2.py')
     daily_builder_sha = git_sha('scripts/build_daily_visual_payload.py')
-    current_source, current_builder, current_daily_builder = existing_identity()
+    achievement_builder_sha = git_sha('scripts/achievement_quality.py')
+    current_source, current_builder, current_daily_builder, current_achievement_builder = existing_identity()
     force = os.environ.get('FORCE_VISUAL_BUILD') == '1'
     if (
         not force
         and current_source == source_key
         and current_builder == builder_sha
         and current_daily_builder == daily_builder_sha
+        and current_achievement_builder == achievement_builder_sha
     ):
         print(
             f'VISUAL_DAILY_BUILD=SKIP source={source_key} '
-            f'builder={builder_sha} daily_builder={daily_builder_sha}'
+            f'builder={builder_sha} daily_builder={daily_builder_sha} '
+            f'achievement_builder={achievement_builder_sha}'
         )
         return
 
@@ -178,7 +191,9 @@ def main():
     visual_builder.OUT = OUT
     visual_builder.main()
 
-    ready = apply_canonical_priority_order(load_json(OUT))
+    ready = load_json(OUT)
+    ready['items'] = achievement_quality.enrich_visual_items(ready.get('items') or [])
+    ready = apply_canonical_priority_order(ready)
     ready['production_contract'] = {
         'schema_version': 3,
         'mode': 'daily_precomputed_read_only_for_ui',
@@ -186,6 +201,7 @@ def main():
         'external_lookup_allowed_in_ui': False,
         'visual_builder_blob_sha': builder_sha,
         'daily_visual_builder_blob_sha': daily_builder_sha,
+        'achievement_quality_builder_blob_sha': achievement_builder_sha,
         'source_chatgpt_payload_blob_sha': git_sha('data/production/pre_ai/chatgpt_payload.json'),
         'source_purchase_context_blob_sha': git_sha('data/production/pre_ai/chatgpt_purchase_context.jsonl'),
         'source_taste_queue_blob_sha': git_sha('data/production/pre_ai/chatgpt_taste_queue.jsonl'),
@@ -195,11 +211,19 @@ def main():
         'complete_family_partition': payload.get('complete_family_partition'),
         'canonical_profile_blob_sha': (payload.get('profile_binding') or {}).get('canonical_profile_blob_sha'),
         'taste_model_version': (payload.get('profile_binding') or {}).get('taste_model_version'),
+        'achievement_profile_scale': {
+            '5': 'new_play_styles_or_challenges',
+            '4': 'deeper_mechanic_use',
+            '3': 'meaningful_optional_goals_or_secrets',
+            '2': 'mostly_grind_or_collectathon',
+            '1': 'mostly_automatic_story_progression',
+        },
     }
     OUT.write_text(json.dumps(ready, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print(
         f'VISUAL_DAILY_BUILD=BUILT source={source_key} items={ready.get("item_count")} '
-        f'builder={builder_sha} daily_builder={daily_builder_sha} force={force}'
+        f'builder={builder_sha} daily_builder={daily_builder_sha} '
+        f'achievement_builder={achievement_builder_sha} force={force}'
     )
 
 
