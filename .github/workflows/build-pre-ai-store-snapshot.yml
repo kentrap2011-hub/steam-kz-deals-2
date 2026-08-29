@@ -31,6 +31,7 @@ on:
       - "scripts/build_taste_cache_index.py"
       - "scripts/ingest_taste_results.py"
       - "scripts/build_pre_ai_store_snapshot.py"
+      - "scripts/test_expired_offer_guard.py"
       - "scripts/build_pre_ai_fx_snapshot.py"
       - "scripts/build_pre_ai_content_rules.py"
       - "scripts/build_pre_ai_family_graph.py"
@@ -64,6 +65,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Regression test expired offer guard
+        run: python scripts/test_expired_offer_guard.py
 
       - name: Build per-entry taste cache index
         run: python scripts/build_taste_cache_index.py
