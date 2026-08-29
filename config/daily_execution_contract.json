@@ -2,6 +2,15 @@
   "contract": "DAILY-VISUAL-EXECUTION-V2",
   "status": "canonical",
   "timezone": "Europe/Samara",
+  "execution_invariants": {
+    "daily_required_scope_must_not_be_intentionally_spread_across_multiple_days": true,
+    "per_day_item_quota_allowed": false,
+    "batching_semantics": "Internal checkpointing only within the same required production cycle; a batch size is never a daily throughput limit unless a future canonical contract explicitly says so.",
+    "partial_backlog_is_not_normal_success": true,
+    "temporary_handoff_or_legacy_task_must_not_override_this_contract": true,
+    "separate_recurring_stage_requires_explicit_canonical_contract": true,
+    "rule": "The nightly production is one daily production cycle. GitHub performs the deterministic work it can and ChatGPT completes the remaining required semantic/external work for that same cycle. Do not convert checkpoint sizes, legacy task limits, or temporary handoff notes into a per-day game quota."
+  },
   "commercial_refresh": {
     "maximum_frequency": "once_per_day",
     "github_collection_local_time": "00:10",
