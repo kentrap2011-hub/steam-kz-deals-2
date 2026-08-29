@@ -1,8 +1,8 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.13",
+  "version": "1.14",
   "status": "canonical",
-  "purpose": "Personalized full daily Steam KZ deals mailing with stable price-blind taste verdicts and resumable taste-cache checkpoints.",
+  "purpose": "Personalized daily Steam KZ deal data preparation with stable price-blind taste verdicts, taste-first eligibility, one nightly commercial snapshot, and resumable taste-cache checkpoints.",
   "policy_loading": {
     "primary_repository": "kentrap2011-hub/steam-kz-deals-2",
     "primary_path": "config/mailing_policy.json",
@@ -105,7 +105,11 @@
     "recall_flags_can_trigger_audit_but_are_not_taste_evidence": true,
     "core_fit_count_is_recall_context_not_positive_taste_evidence": true,
     "deal_quality_can_never_raise_taste_fit": true,
-    "deal_quality_evaluated_only_after_final_taste_and_family_resolution": true
+    "deal_quality_evaluated_only_after_final_taste_and_family_resolution": true,
+    "taste_is_primary_eligibility_filter": true,
+    "minimum_taste_fit_cannot_be_rescued_by_discount": true,
+    "symbolic_discount_only_early_commercial_exclusion": true,
+    "non_symbolic_deal_weakness_changes_priority_or_wait_status_not_taste_fit": true
   },
   "personal_filter": {
     "minimum_interest_threshold": "moderate",
@@ -177,8 +181,10 @@
       "inferior_duplicate_variant_after_offer_family_resolution",
       "sale_confirmed_inactive",
       "price_clearly_unreasonable_after_soft_target_evaluation",
-      "borderline_fit_needs_audit"
-    ]
+      "borderline_fit_needs_audit",
+      "symbolic_discount_not_worth_mailing_attention"
+    ],
+    "deal_discount_cannot_upgrade_below_moderate_taste": true
   },
   "decision_ledger": {
     "required": true,
@@ -350,7 +356,12 @@
       "do_not_compute_paid_delta_from_zero": true,
       "do_not_force_wait_because_once_free": true,
       "display_as_previously_free": true
-    }
+    },
+    "symbolic_discount_max_percent_inclusive": 5,
+    "symbolic_discount_is_early_exclusion": true,
+    "no_absolute_price_exclusion_for_moderate_or_strong_taste": true,
+    "expensive_game_may_remain_if_taste_fit_and_discount_are_meaningful": true,
+    "weak_but_non_symbolic_deal_remains_available_for_wait_or_low_priority": true
   },
   "verification": {
     "fresh_production_snapshot_is_current_price_and_discount_source": true,
@@ -370,7 +381,10 @@
     "taste_fit_must_be_final_before_external_checks": true,
     "known_sale_end_at_or_before_consumer_time_means_inactive": true,
     "current_offer_state_must_not_be_reused_past_known_sale_end": true,
-    "expired_offer_action": "exclude_current_offer_but_keep_valid_price_blind_taste_cache_entry"
+    "expired_offer_action": "exclude_current_offer_but_keep_valid_price_blind_taste_cache_entry",
+    "commercial_refresh_frequency": "once_per_day_nightly",
+    "no_network_refresh_for_morning_delivery": true,
+    "known_sale_end_may_be_applied_locally_without_network": true
   },
   "external_cache": {
     "load_each_cache_at_most_once_per_run": true,
@@ -489,7 +503,13 @@
       "unverified",
       "well_above_history"
     ],
-    "apply_after_final_verification_and_family_resolution": true
+    "apply_after_final_verification_and_family_resolution": true,
+    "taste_is_primary": true,
+    "conceptual_weight_taste": 0.6,
+    "conceptual_weight_deal": 0.4,
+    "do_not_invent_numeric_taste_score_until_separately_agreed": true,
+    "visual_presentation_redesign_deferred": true,
+    "weak_non_symbolic_deal_should_rank_low_or_wait_not_disappear": true
   },
   "paid_output_fields": [
     "title",
@@ -580,5 +600,11 @@
     "russian_rating_uses_same_thresholds": true,
     "russian_sample_rule_unchanged": "min(rule_global_minimum_count, 500)",
     "global_review_count_baseline_unchanged": true
+  },
+  "presentation_strategy": {
+    "status": "deferred_until_data_optimization_complete",
+    "do_not_optimize_current_visual_mailing_format_now": true,
+    "user_will_define_future_presentation_after_data_pipeline_optimization": true,
+    "current_format_may_be_replaced_entirely": true
   }
 }
