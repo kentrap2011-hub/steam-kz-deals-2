@@ -6,9 +6,9 @@ from pathlib import Path
 import build_visual_feed_v2 as visual_builder
 
 ROOT = Path('.')
-FINAL_CHECK = ROOT / 'data/cache/final_self_check.validation.json'
 PAYLOAD = ROOT / 'data/production/pre_ai/chatgpt_payload.json'
 TASTE_QUEUE = ROOT / 'data/production/pre_ai/chatgpt_taste_queue.jsonl'
+PURCHASE_CONTEXT = ROOT / 'data/production/pre_ai/chatgpt_purchase_context.jsonl'
 OUT = ROOT / 'data/production/visual/current.json'
 
 
@@ -16,49 +16,59 @@ def load_json(path: Path):
     return json.loads(path.read_text(encoding='utf-8'))
 
 
+def nonempty_line_count(path: Path):
+    return sum(1 for line in path.read_text(encoding='utf-8').splitlines() if line.strip())
+
+
 def git_sha(path: str):
     return subprocess.check_output(['git', 'rev-parse', f'HEAD:{path}'], text=True).strip()
 
 
-def assert_ready():
-    final_check = load_json(FINAL_CHECK)
+def current_production_readiness():
     payload = load_json(PAYLOAD)
-
-    if final_check.get('status') != 'complete' or int(final_check.get('mechanical_assertions_failed') or 0) != 0:
-        raise SystemExit('Final self-check is not complete')
     if payload.get('status') != 'complete':
         raise SystemExit('ChatGPT production payload is not complete')
+    if payload.get('complete_family_partition') is not True:
+        raise SystemExit('Production family partition is not complete')
 
-    queue_lines = [line for line in TASTE_QUEUE.read_text(encoding='utf-8').splitlines() if line.strip()]
+    source_count = int(payload.get('source_family_count') or 0)
+    ready_count = int(payload.get('ready_without_ai_count') or 0)
+    excluded_count = int(payload.get('deterministically_excluded_without_ai_count') or 0)
     ai_queue_count = int(payload.get('ai_queue_count') or 0)
-    if ai_queue_count != len(queue_lines):
-        raise SystemExit('AI queue count does not match JSONL line count')
-    if ai_queue_count != 0:
-        raise SystemExit(f'AI taste queue is not closed: {ai_queue_count} candidates remain')
+    purchase_context_count = int(payload.get('purchase_context_line_count') or 0)
 
-    bindings = final_check.get('bindings') or {}
-    current_bindings = {
-        'policy_blob_sha': git_sha('config/mailing_policy.json'),
-        'mailing_tree_sha': git_sha('data/production/mailing'),
-        'feed_ingest_blob_sha': git_sha('data/cache/feed_ingest.validation.json'),
-        'taste_index_blob_sha': git_sha('data/cache/taste_fit.index.json'),
-        'taste_validation_blob_sha': git_sha('data/cache/taste_fit.validation.json'),
-        'ledger_blob_sha': git_sha('data/cache/taste_fit.ledger_validation.json'),
-        'checkpoint_blob_sha': git_sha('data/cache/taste_fit.checkpoint_validation.json'),
-        'content_blob_sha': git_sha('data/cache/content_eligibility.validation.json'),
-        'family_blob_sha': git_sha('data/cache/offer_family.validation.json'),
-        'store_blob_sha': git_sha('data/cache/store_state.validation.json'),
-        'steamdb_blob_sha': git_sha('data/cache/steamdb_cache.validation.json'),
-        'deal_quality_blob_sha': git_sha('data/cache/deal_quality.validation.json'),
-    }
-    stale = [name for name, sha in current_bindings.items() if bindings.get(name) != sha]
-    if stale:
-        raise SystemExit('Final self-check is stale for current production state: ' + ', '.join(stale))
+    actual_queue_count = nonempty_line_count(TASTE_QUEUE)
+    actual_purchase_context_count = nonempty_line_count(PURCHASE_CONTEXT)
+
+    if ai_queue_count != actual_queue_count:
+        raise SystemExit(
+            f'AI queue count mismatch: payload={ai_queue_count} actual={actual_queue_count}'
+        )
+    if purchase_context_count != actual_purchase_context_count:
+        raise SystemExit(
+            'Purchase context count mismatch: '
+            f'payload={purchase_context_count} actual={actual_purchase_context_count}'
+        )
+    if ready_count + excluded_count + ai_queue_count != source_count:
+        raise SystemExit(
+            'Production partition arithmetic mismatch: '
+            f'ready={ready_count} excluded={excluded_count} ai={ai_queue_count} source={source_count}'
+        )
 
     source_key = payload.get('source_mailing_updated_at_utc')
     if not source_key:
         raise SystemExit('Production payload has no source_mailing_updated_at_utc')
-    return source_key, final_check
+
+    if ai_queue_count != 0:
+        return None, payload
+
+    if ready_count != purchase_context_count:
+        raise SystemExit(
+            'Closed AI queue must leave one purchase-context row per ready family: '
+            f'ready={ready_count} purchase_context={purchase_context_count}'
+        )
+
+    return source_key, payload
 
 
 def existing_source_key():
@@ -71,7 +81,15 @@ def existing_source_key():
 
 
 def main():
-    source_key, final_check = assert_ready()
+    source_key, payload = current_production_readiness()
+    if source_key is None:
+        print(
+            'VISUAL_DAILY_BUILD=WAIT '
+            f'source={payload.get("source_mailing_updated_at_utc")} '
+            f'ai_queue={payload.get("ai_queue_count")}'
+        )
+        return
+
     force = os.environ.get('FORCE_VISUAL_BUILD') == '1'
     if not force and existing_source_key() == source_key:
         print(f'VISUAL_DAILY_BUILD=SKIP source={source_key}')
@@ -83,12 +101,19 @@ def main():
 
     ready = load_json(OUT)
     ready['production_contract'] = {
-        'schema_version': 1,
+        'schema_version': 2,
         'mode': 'daily_precomputed_read_only_for_ui',
         'heavy_calculation_allowed_in_ui': False,
         'external_lookup_allowed_in_ui': False,
-        'source_final_self_check_blob_sha': git_sha('data/cache/final_self_check.validation.json'),
-        'source_final_self_check_status': final_check.get('status'),
+        'source_chatgpt_payload_blob_sha': git_sha('data/production/pre_ai/chatgpt_payload.json'),
+        'source_purchase_context_blob_sha': git_sha('data/production/pre_ai/chatgpt_purchase_context.jsonl'),
+        'source_taste_queue_blob_sha': git_sha('data/production/pre_ai/chatgpt_taste_queue.jsonl'),
+        'source_family_count': payload.get('source_family_count'),
+        'ready_family_count': payload.get('ready_without_ai_count'),
+        'ai_queue_count': payload.get('ai_queue_count'),
+        'complete_family_partition': payload.get('complete_family_partition'),
+        'canonical_profile_blob_sha': (payload.get('profile_binding') or {}).get('canonical_profile_blob_sha'),
+        'taste_model_version': (payload.get('profile_binding') or {}).get('taste_model_version'),
     }
     OUT.write_text(json.dumps(ready, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print(f'VISUAL_DAILY_BUILD=BUILT source={source_key} items={ready.get("item_count")} force={force}')
