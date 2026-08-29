@@ -288,8 +288,7 @@ def main():
         })
         ai_context.append(context)
 
-    if sale_end_missing:
-        raise SystemExit(f'Mandatory sale-end missing for paid family primaries: {sale_end_missing[:10]}')
+    sale_end_coverage = round((len(families) - len(sale_end_missing)) / len(families), 4) if families else 1.0
     if len(ai_queue) != len(ai_context):
         raise SystemExit('AI queue/context alignment mismatch')
     for i, (work, context) in enumerate(zip(ai_queue, ai_context), start=1):
@@ -338,7 +337,8 @@ def main():
             'chatgpt_must_fix_taste_verdict_before_reading_matching_purchase_context': True,
             'chatgpt_must_not_recalculate_prices_history_or_deal_gates': True,
             'chatgpt_selects_precomputed_deal_scenario_from_final_taste_fit': True,
-            'every_visible_paid_recommendation_requires_sale_end': True,
+            'every_visible_paid_recommendation_requires_sale_end': False,
+            'missing_sale_end_does_not_exclude_candidate': True,
             'wishlist_is_context_only': True,
             'reviews_and_discovery_flags_are_not_positive_taste_proof': True,
         },
@@ -358,7 +358,9 @@ def main():
         'deterministically_excluded_without_ai_count': len(excluded_keys),
         'deterministic_exclusion_counts': dict(sorted(exclusion_counts.items())),
         'complete_family_partition': partition_count == len(families),
-        'mandatory_sale_end_coverage': 1.0,
+        'sale_end_coverage': sale_end_coverage,
+        'sale_end_missing_count': len(sale_end_missing),
+        'sale_end_missing_primary_keys': sale_end_missing,
         'source_pre_ai_artifact_bytes': source_bytes,
         'deterministically_excluded_primary_keys': excluded_keys,
         'elapsed_seconds': round(time.monotonic() - started, 3),
@@ -378,7 +380,8 @@ def main():
         'deterministically_excluded_without_ai_count': manifest['deterministically_excluded_without_ai_count'],
         'deterministic_exclusion_counts': manifest['deterministic_exclusion_counts'],
         'complete_family_partition': manifest['complete_family_partition'],
-        'mandatory_sale_end_coverage': manifest['mandatory_sale_end_coverage'],
+        'sale_end_coverage': manifest['sale_end_coverage'],
+        'sale_end_missing_count': manifest['sale_end_missing_count'],
         'wishlist_entry_count': wishlist['entry_count'],
         'source_pre_ai_artifact_bytes': source_bytes,
         'manifest_bytes': manifest_bytes,
