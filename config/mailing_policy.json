@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.15",
+  "version": "1.16",
   "status": "canonical",
   "purpose": "Personalized daily Steam KZ deal data preparation with stable price-blind taste verdicts, taste-first eligibility, one nightly commercial snapshot, and resumable taste-cache checkpoints.",
   "policy_loading": {
@@ -105,13 +105,7 @@
     "recall_flags_can_trigger_audit_but_are_not_taste_evidence": true,
     "core_fit_count_is_recall_context_not_positive_taste_evidence": true,
     "deal_quality_can_never_raise_taste_fit": true,
-    "deal_quality_evaluated_only_after_final_taste_and_family_resolution": true,
-    "taste_is_primary_eligibility_filter": true,
-    "minimum_taste_fit_cannot_be_rescued_by_discount": true,
-    "symbolic_discount_only_early_commercial_exclusion": false,
-    "non_symbolic_deal_weakness_changes_priority_or_wait_status_not_taste_fit": true,
-    "budget_ceiling_is_also_early_commercial_exclusion": true,
-    "discount_never_overrides_absolute_budget_ceiling": true
+    "deal_quality_evaluated_only_after_final_taste_and_family_resolution": true
   },
   "personal_filter": {
     "minimum_interest_threshold": "moderate",
@@ -183,10 +177,8 @@
       "inferior_duplicate_variant_after_offer_family_resolution",
       "sale_confirmed_inactive",
       "price_clearly_unreasonable_after_soft_target_evaluation",
-      "borderline_fit_needs_audit",
-      "symbolic_discount_not_worth_mailing_attention"
-    ],
-    "deal_discount_cannot_upgrade_below_moderate_taste": true
+      "borderline_fit_needs_audit"
+    ]
   },
   "decision_ledger": {
     "required": true,
@@ -615,5 +607,25 @@
     "do_not_optimize_current_visual_mailing_format_now": true,
     "user_will_define_future_presentation_after_data_pipeline_optimization": true,
     "current_format_may_be_replaced_entirely": true
+  },
+  "deal_selection": {
+    "status": "canonical",
+    "taste_is_primary_eligibility_filter": true,
+    "minimum_taste_fit": "moderate",
+    "discount_can_never_raise_taste_fit": true,
+    "below_moderate_taste_cannot_be_rescued_by_discount": true,
+    "symbolic_discount_max_percent_inclusive": 5,
+    "symbolic_discount_is_early_commercial_exclusion": true,
+    "normal_target_rub": 500,
+    "strong_standard_overage_ceiling_rub": 650,
+    "strong_absolute_ceiling_rub": 750,
+    "moderate_absolute_ceiling_rub": 550,
+    "exceptional_discount_min_percent_for_high_overage": 75,
+    "high_overage_requires_strong_taste": true,
+    "price_above_750_excluded_regardless_of_taste_or_discount": true,
+    "conceptual_weight_taste": 0.6,
+    "conceptual_weight_deal": 0.4,
+    "weak_non_symbolic_deal_within_budget_may_remain_low_priority_or_wait": true,
+    "commercial_rules_are_excluded_from_taste_cache_semantics": true
   }
 }
