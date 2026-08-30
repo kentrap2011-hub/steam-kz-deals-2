@@ -389,6 +389,7 @@ def main():
             'title': purchase.get('title'),
             'base_appids': base_appids,
             'fit': fit,
+            'taste_factors': taste_entry.get('taste_factors'),
             'decision': scenario.get('purchase_decision'),
             'priority_bucket': scenario.get('priority_bucket'),
             'wishlist': bool((row.get('context_only') or {}).get('wishlist')),
