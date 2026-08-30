@@ -2,6 +2,7 @@ from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
 
+import build_final_visual_payload
 import priority_ranking
 
 EXPECTED_ORDER = [
@@ -58,6 +59,7 @@ def titles(rows):
 
 
 def main():
+    assert callable(build_final_visual_payload.main)
     assert priority_ranking.load_final_priority_order() == EXPECTED_ORDER
 
     # Expiring today/tomorrow overrides every automatic recommendation factor.
@@ -68,6 +70,14 @@ def main():
 
     # Within the same expiry urgency, the qualitative taste+deal bucket remains first.
     assert titles(ranked([game('bucket2', priority_bucket=2), game('bucket1', priority_bucket=1)])) == ['bucket1', 'bucket2']
+
+    # Medium/low heuristic risks are descriptive context only at this early layer;
+    # only high/serious risk is allowed to demote before wishlist/commercial value.
+    medium = game('a-medium', risk_level='medium')
+    low = game('b-low', risk_level='low')
+    assert priority_ranking.practical_risk_rank(medium) == priority_ranking.practical_risk_rank(low) == 0
+    high = game('a-high', risk_level='high')
+    assert titles(ranked([high, low])) == ['b-low', 'a-high']
 
     # A bare legacy Steam requirement label is neutral without confirmed modern-Windows friction.
     bare_legacy = game('a-bare-legacy', practical={'legacy_windows_requirement_label': 'legacy', 'modern_windows_friction': 'unknown'})
