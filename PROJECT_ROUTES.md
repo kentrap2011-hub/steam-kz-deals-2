@@ -54,10 +54,10 @@
 
 **Сначала открыть:**
 1. `config/final_ranking_policy.json` — канонический источник весов и production ranking contract.
-2. `PROJECT_DECISIONS.md` → `RANK-001..RANK-011`, `UI-001`, `UI-002`.
+2. `PROJECT_DECISIONS.md` → `RANK-001..RANK-011`, `UI-001`.
 3. `scripts/priority_ranking.py` — config-driven scorer.
 4. `scripts/validate_priority_ranking.py` — regression guard production ranking.
-5. `web/app.js` — только local queue/view overrides поверх готового payload.
+5. `web/app.js` — local queue/view overrides поверх готового payload.
 6. ownership: `config/execution_ownership_contract.json`.
 
 ### Production ranking
@@ -142,7 +142,7 @@ Production validator проверяет:
 - risk/wishlist/achievements/duration weights;
 - `manual_end_at` UI invariant.
 
-Для local UI режима обязательные инварианты:
+Для local UI режима обязательные implementation-инварианты:
 - default `urgency_first=false`;
 - off-mode сортирует automatic items по `total_score`;
 - on-mode использует готовый `priority_rank`;
