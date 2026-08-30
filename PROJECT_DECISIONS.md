@@ -20,22 +20,22 @@
 ## RANK-001 — Только одна финальная формула `priority_rank`
 
 **Дата:** 2026-08-30  
-**Статус:** approved, implementation in progress
+**Статус:** implemented in production path; regression verified, full payload rebuild pending external history gate
 
 **Решение:** pipeline может иметь несколько стадий enrichment/refinement, но итоговый `priority_rank` должен вычисляться одной канонической policy-driven формулой только после завершения всех refinement-факторов.
 
 **Почему:** исторически `build_daily_visual_payload.py` уже сортировал игры, после чего добавленный позднее `refine_visual_ranking.py` уточнял fit/риски/практические признаки и сортировал второй раз другой формулой. Сам путь `builder → refiner` был намеренным, потому что после refinement порядок действительно нужно пересчитать. Ошибка состояла не в двух стадиях, а в двух независимых источниках правил сортировки, которые со временем разошлись.
 
-**Не делать:** не удалять полезный refinement только ради «одной сортировки» и не оставлять две полные sort-key функции в разных scripts.
+**Не делать:** не удалять полезный refinement только ради «одной сортировки» и не оставлять две полные sort-key функции в production path.
 
-**Основные места:** `config/mailing_policy.json -> sorting`, `scripts/priority_ranking.py`, `scripts/refine_visual_ranking.py`, `.github/workflows/build-daily-visual-payload.yml`.
+**Основные места:** `config/final_ranking_policy.json`, `scripts/build_final_visual_payload.py`, `scripts/priority_ranking.py`, `.github/workflows/build-daily-visual-payload.yml`.
 
 ---
 
 ## RANK-002 — Срочность окончания скидки выше автоматического качества рекомендации
 
 **Дата:** 2026-08-30  
-**Статус:** approved, implementation in progress
+**Статус:** implemented and regression verified
 
 **Решение:** среди уже прошедших taste/commercial eligibility игр самый верхний автоматический слой сортировки: `скидка заканчивается сегодня → завтра → позже/срок неизвестен`.
 
@@ -43,14 +43,14 @@
 
 **Граница:** срочность не спасает игру ниже taste threshold, символическую скидку, превышение бюджета или уже закончившуюся акцию. Неизвестная дата не штрафуется — просто не получает подтверждённого срочного приоритета.
 
-**Основные места:** `PROJECT_RULES.md`, `config/mailing_policy.json -> sorting`, `scripts/priority_ranking.py`.
+**Основные места:** `PROJECT_RULES.md`, `config/final_ranking_policy.json`, `scripts/priority_ranking.py`, `scripts/validate_priority_ranking.py`.
 
 ---
 
 ## RANK-003 — `priority_bucket` остаётся главным качественным слоем после срочности
 
 **Дата:** 2026-08-30  
-**Статус:** approved, implementation in progress
+**Статус:** implemented and regression verified
 
 **Решение:** после expiry urgency идёт качественный `priority_bucket`, реализующий согласованную матрицу примерно 60% taste / 40% deal.
 
@@ -58,42 +58,44 @@
 
 **Не делать:** не заменять bucket скрытым числовым score без отдельного согласования.
 
-**Основные места:** `PROJECT_RULES.md`, `config/mailing_policy.json -> sorting.qualitative_priority_buckets`.
+**Основные места:** `PROJECT_RULES.md`, `config/final_ranking_policy.json`, `config/mailing_policy.json -> sorting.qualitative_priority_buckets`.
 
 ---
 
 ## RANK-004 — Прямую оценку пользователя не учитывать второй раз после `priority_bucket`
 
 **Дата:** 2026-08-30  
-**Статус:** approved, implementation in progress
+**Статус:** implemented and regression verified
 
 **Решение:** direct user evidence может корректировать `fit`, после чего пересчитывается коммерческая ветка и `priority_bucket`; отдельного следующего слоя `direct_user_evidence` в final sort быть не должно.
 
 **Почему:** иначе один и тот же вкусовой сигнал учитывается дважды: сначала меняет fit/bucket, затем ещё раз двигает игру внутри bucket.
 
-**Основные места:** `scripts/refine_visual_ranking.py` (`apply_fit_adjustment`, `apply_commercial_branch`), final sort в `scripts/priority_ranking.py`.
+**Основные места:** `scripts/refine_visual_ranking.py` (`apply_fit_adjustment`, `apply_commercial_branch`), final sort в `scripts/priority_ranking.py`, contract `config/final_ranking_policy.json`.
 
 ---
 
 ## RANK-005 — Подтверждённые персональные/Windows-риски раньше wishlist и цены
 
 **Дата:** 2026-08-30  
-**Статус:** approved, implementation in progress
+**Статус:** partially implemented; ranking behavior verified, confirmed Windows fact acquisition still missing
 
-**Решение:** внутри одинаковой expiry urgency и `priority_bucket` сначала учитывать серьёзные подтверждённые персональные и практические риски, включая реальные проблемы запуска на современной Windows.
+**Решение:** внутри одинаковой expiry urgency и `priority_bucket` сначала учитывать **серьёзные подтверждённые** персональные и практические риски, включая реальные проблемы запуска на современной Windows. Средние/слабые эвристические риски остаются описательными и сами по себе не должны обгонять wishlist/коммерческую выгоду.
 
 **Почему:** хорошая скидка мало полезна, если у игры есть подтверждённая проблема, которая существенно ухудшит сам опыт или потребует заметных ручных исправлений.
 
 **Windows-уточнение:** строка Steam с XP/7/8 сама по себе не является доказательством проблемы — у старых игр требования часто просто не обновлялись. Такая строка только запускает/мотивирует дополнительную проверку. Понижение допустимо лишь при подтверждённой фактической ориентации ниже Windows 10, необходимости патчей/compatibility mode/ручных fixes или известных проблемах современной Windows.
 
-**Основные места:** `PROJECT_RULES.md -> Практическая пригодность покупки`, `scripts/refine_visual_ranking.py`, `scripts/priority_ranking.py`.
+**Текущая техническая граница:** production ranking уже нейтрализует одну только legacy Steam label и умеет понизить `known_fix_required`, `confirmed_pre_windows_10_target`, `serious_problem`. Но на 2026-08-30 отдельный канонический автоматический источник, который надёжно получает эти подтверждённые Windows-факты, ещё не реализован. Старый `build_visual_feed_v2.py` умеет только классифицировать строку Steam system requirements, чего недостаточно по этому решению.
+
+**Основные места:** `PROJECT_RULES.md -> Практическая пригодность покупки`, `config/final_ranking_policy.json`, `scripts/refine_visual_ranking.py`, `scripts/priority_ranking.py`, `scripts/validate_priority_ranking.py`.
 
 ---
 
 ## RANK-006 — Wishlist важен, но ограничен
 
 **Дата:** 2026-08-30  
-**Статус:** approved, implementation in progress
+**Статус:** implemented and regression verified
 
 **Решение:** после bucket и серьёзных рисков wishlist даёт заметный приоритет уже допустимому кандидату.
 
@@ -101,14 +103,14 @@
 
 **Не делать:** wishlist не должен сам включать игру в список и не должен вытягивать существенно худший taste+deal вариант выше более сильного кандидата из другой группы.
 
-**Основные места:** `PROJECT_RULES.md -> Wishlist Steam при финальной сортировке`, `config/mailing_policy.json`, `scripts/priority_ranking.py`.
+**Основные места:** `PROJECT_RULES.md -> Wishlist Steam при финальной сортировке`, `config/final_ranking_policy.json`, `scripts/priority_ranking.py`.
 
 ---
 
 ## RANK-007 — Размер скидки важнее качества относительно исторического минимума
 
 **Дата:** 2026-08-30  
-**Статус:** approved, implementation in progress
+**Статус:** implemented and regression verified
 
 **Решение:** внутри одинаковых expiry/bucket/risk/wishlist условий сначала сравнивать `discount_percent`, и только потом `price_quality_vs_history`.
 
@@ -116,27 +118,27 @@
 
 **Сознательно отвергнуто:** порядок `history_quality → discount_percent`.
 
-**Основные места:** `config/mailing_policy.json -> sorting.final_priority_order`, `scripts/priority_ranking.py`, regression validation.
+**Основные места:** `config/final_ranking_policy.json`, `scripts/priority_ranking.py`, `scripts/validate_priority_ranking.py`.
 
 ---
 
 ## RANK-008 — Достижения и длительность только поздние различители близких кандидатов
 
 **Дата:** 2026-08-30  
-**Статус:** approved, implementation in progress
+**Статус:** implemented and regression verified
 
 **Решение:** после скидки, истории и текущей цены учитывать achievement quality; duration — ещё позже как самый слабый tie-break перед title.
 
 **Почему:** наличие/качество Steam Achievements важно пользователю, но не должно обгонять существенно более выгодную покупку. Длительность ещё менее фундаментальна и нужна только для очень близких вариантов.
 
-**Основные места:** `PROJECT_RULES.md -> Практическая пригодность покупки`, `scripts/priority_ranking.py`.
+**Основные места:** `PROJECT_RULES.md -> Практическая пригодность покупки`, `config/final_ranking_policy.json`, `scripts/priority_ranking.py`.
 
 ---
 
 ## UI-001 — «В конец очереди» абсолютнее любой автоматической сортировки
 
 **Дата:** 2026-08-30  
-**Статус:** approved; behavior already present, regression guard required
+**Статус:** implemented; existing behavior regression protected
 
 **Решение:** явное локальное действие пользователя `В конец очереди` всегда накладывается поверх production `priority_rank`. Даже игра со скидкой, заканчивающейся сегодня, остаётся в конце, если пользователь её туда отправил.
 
@@ -144,4 +146,4 @@
 
 **Не делать:** не записывать `manual_end_at` в production ranking и не позволять новому суточному payload автоматически отменять локальное перемещение.
 
-**Основные места:** `web/app.js` (`manual_end_at`, `canonicalQueueIds`, `sendCurrentToEnd`), `PROJECT_RULES.md`.
+**Основные места:** `web/app.js` (`manual_end_at`, `canonicalQueueIds`, `sendCurrentToEnd`), `PROJECT_RULES.md`, `scripts/validate_priority_ranking.py`.
