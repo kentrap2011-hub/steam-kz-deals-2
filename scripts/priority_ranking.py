@@ -106,6 +106,37 @@ def practical_risk_rank(game):
     return max(personal, windows)
 
 
+def build_risk_status(game):
+    risk_codes = [str(code) for code in (game.get('risk_codes') or []) if code]
+    serious_rank = practical_risk_rank(game)
+    if serious_rank > 0:
+        return {
+            'code': 'serious_risk',
+            'label': 'Серьёзный риск — влияет на сортировку',
+            'affects_early_priority': True,
+            'serious_rank': serious_rank,
+            'risk_level': game.get('risk_level') or 'unknown',
+            'has_described_risk': bool(risk_codes),
+        }
+    if risk_codes:
+        return {
+            'code': 'descriptive_risk',
+            'label': 'Есть риск — но он не считается серьёзным',
+            'affects_early_priority': False,
+            'serious_rank': 0,
+            'risk_level': game.get('risk_level') or 'unknown',
+            'has_described_risk': True,
+        }
+    return {
+        'code': 'no_confirmed_risk',
+        'label': 'Подтверждённых персональных рисков не найдено',
+        'affects_early_priority': False,
+        'serious_rank': 0,
+        'risk_level': game.get('risk_level') or 'low',
+        'has_described_risk': False,
+    }
+
+
 def achievement_rank(game):
     practical = game.get('practical') or {}
     if practical.get('steam_achievements') is False:
@@ -147,12 +178,16 @@ def factor_display_value(name, game, now):
         urgency = sale_expiry_urgency(game, now)[1]
         return URGENCY_LABELS.get(urgency, urgency)
     if name == 'priority_bucket_asc':
-        bucket = int(game.get('priority_bucket') or 99)
+        group = int(game.get('priority_bucket') or 99)
         decision = str(game.get('decision') or '').strip()
-        return f'группа {bucket}' + (f' · {decision}' if decision else '')
+        return f'группа {group}' + (f' · {decision}' if decision else '')
     if name == 'practical_or_personal_risk_asc':
         practical = game.get('practical') or {}
-        rank = practical_risk_rank(game)
+        status = game.get('risk_status') or build_risk_status(game)
+        if status.get('code') == 'descriptive_risk':
+            return 'обычный риск есть · серьёзного штрафа нет'
+        if status.get('code') == 'no_confirmed_risk':
+            return 'подтверждённых рисков не найдено'
         parts = []
         if (game.get('risk_level') or 'unknown') == 'high':
             parts.append('высокий персональный риск')
@@ -161,9 +196,7 @@ def factor_display_value(name, game, now):
             parts.append(WINDOWS_FRICTION_LABELS[windows])
         if parts:
             return ' · '.join(parts)
-        if rank == 0:
-            return 'нет серьёзного подтверждённого штрафа'
-        return f'штраф риска {rank}'
+        return f'серьёзный штраф риска {int(status.get("serious_rank") or practical_risk_rank(game))}'
     if name == 'wishlist_desc':
         return 'да' if game.get('wishlist') else 'нет'
     if name == 'discount_percent_desc':
@@ -270,6 +303,7 @@ def apply_final_priority_order(items, now=None, policy_path=POLICY):
         game['sale_expiry_urgency'] = urgency_label
         game['sale_expiry_urgency_rank'] = urgency_rank
         game['practical_or_personal_risk_rank'] = practical_risk_rank(game)
+        game['risk_status'] = build_risk_status(game)
     items.sort(key=lambda game: sort_key(game, order, now))
     for index, game in enumerate(items, 1):
         game['priority_rank'] = index
