@@ -68,7 +68,7 @@
 **Что ищем:** где формируется автоматический порядок игр в `data/production/visual/current.json`, почему конкретная игра должна быть выше/ниже другой и где пользовательское локальное состояние может этот порядок переопределить.
 
 **Последняя проверка:** 2026-08-30  
-**Проверено относительно commit:** `c7715d0587ca99eb380a9fedefce923b89dca1a1` (`Use single canonical final ranking producer`)
+**Проверено относительно commit:** `9e064fd65358de5dabf53f1c4879613020207ef7` (`Refresh daily visual payload` после добавления ranking diagnostics)
 
 **Сначала открыть:**
 1. `config/final_ranking_policy.json` — канонический машинный контракт именно финального `priority_rank`.
@@ -83,9 +83,12 @@
 2. После history readiness workflow запускает **один** production entrypoint: `scripts/build_final_visual_payload.py`.
 3. Этот producer выполняет enrichment/refinement, переиспользуя проверенные helper-функции из `build_daily_visual_payload.py` и `refine_visual_ranking.py`, но **не запускает их старые `main()` и старые независимые final sort-key**.
 4. После полного refinement producer вызывает `scripts/priority_ranking.py` → `apply_final_priority_order()`.
-5. `priority_ranking.py` читает порядок только из `config/final_ranking_policy.json` и один раз присваивает `priority_rank`.
-6. Итог: `data/production/visual/current.json`; компактный аудит: `data/production/visual/ranking_review.jsonl`.
-7. UI читает готовый порядок. `web/app.js` может поверх него применить только явный локальный override `manual_end_at` («В конец очереди»).
+5. `priority_ranking.py` читает порядок только из `config/final_ranking_policy.json`, один раз присваивает `priority_rank` и одновременно формирует готовую producer-owned диагностику:
+   - `priority_factors` — все canonical факторы в точном canonical порядке с `id`, русской подписью, человекочитаемым `value` и фактическим `sort_value`;
+   - `priority_vs_next` — следующая игра в production-порядке и **первый canonical фактор**, на котором текущая игра выигрывает у неё.
+6. Итог: `data/production/visual/current.json`; компактный аудит: `data/production/visual/ranking_review.jsonl`. Оба артефакта содержат `priority_factors` и `priority_vs_next`.
+7. UI читает готовый порядок и готовую диагностику. `web/app.js::renderPriority()` **только отображает** `priority_factors` / `priority_vs_next` и не должен реконструировать sort key или заново решать, почему игры стоят в таком порядке.
+8. `web/app.js` может поверх production-порядка применить только явный локальный override `manual_end_at` («В конец очереди»).
 
 **Текущий автоматический порядок:**
 `sale expiry today/tomorrow → priority_bucket → serious confirmed personal/Windows risk → wishlist → discount % → history quality → current price → achievement quality → duration → title`.
@@ -115,15 +118,18 @@
 - 70% `good_vs_history` выше 20% `record` при прочих равных;
 - коммерческие признаки раньше achievements;
 - direct evidence отсутствует как второй final factor;
-- UI `manual_end_at` остаётся абсолютным post-production override.
+- UI `manual_end_at` остаётся абсолютным post-production override;
+- `priority_factors` у каждой игры идут строго в canonical порядке и содержат готовые значения;
+- `priority_vs_next` правильно находит первый решающий фактор на контролируемой паре и отсутствует у последней игры.
 
-**Последняя фактическая CI-проверка:** GitHub Actions run `33297377251` (`Build daily visual payload`, commit `c7715d...`) завершился `success`; шаг `Validate canonical priority ranking contract` прошёл (`PRIORITY_RANKING_VALIDATION=PASS`). Полный producer был корректно пропущен history-gate, потому что текущий `history_snapshot` сообщил `missing=534`; это отдельное ранее отложенное состояние SteamDB, а не ошибка ranking validator.
+**Последняя фактическая CI-проверка:** GitHub Actions run `33312895688` (`Build daily visual payload`) завершился `success`. Validator прошёл, unified producer выполнил полный build, после чего bot commit `9e064fd65358de5dabf53f1c4879613020207ef7` обновил `data/production/visual/current.json` и `data/production/visual/ranking_review.jsonl` уже с producer-owned ranking diagnostics.
 
 **Открытая граница Windows:** sort-layer уже корректно принимает подтверждённый `modern_windows_friction`, но на 2026-08-30 не подтверждено наличие отдельного автоматического data-source, который надёжно получает такие факты помимо старой Steam system-requirements строки. Не считать Windows-часть E2E закрытой только потому, что sort key умеет обработать поле. Если этот источник отсутствует, его нужно проектировать отдельно по ownership contract.
 
-**Признак завершённости именно ranking-архитектуры:**
+**Признак завершённости именно ranking-архитектуры и диагностики:**
 - dedicated canonical contract существует;
 - production workflow имеет один final producer и одну final sort;
 - regression guard проходит;
 - старые dual-sort mains не участвуют в production;
-- после снятия внешнего history-gate следующий полный build должен записать в `current.json` contract `FINAL-PRIORITY-RANKING-V1` и новый `priority_factors`.
+- `current.json` содержит `FINAL-PRIORITY-RANKING-V1`, `priority_rank`, `priority_factors` и `priority_vs_next`;
+- UI показывает готовую producer-owned диагностику и не пересчитывает ranking на клиенте.
