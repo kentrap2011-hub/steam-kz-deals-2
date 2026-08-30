@@ -64,7 +64,7 @@ if inv.get("interactive_chat_is_production_executor") is not False:
 if inv.get("per_day_item_quota_allowed") is not False:
     fail("daily item quota must remain disabled")
 
-if steamdb.get("version") != "1.3":
+if steamdb.get("version") != "1.4":
     fail("unexpected SteamDB lookup contract version")
 if steamdb.get("ownership_contract") != "config/execution_ownership_contract.json":
     fail("SteamDB contract is not bound to ownership contract")
