@@ -27,6 +27,49 @@ WINDOWS_FRICTION_ORDER = {
     'serious_problem': 3,
 }
 
+FACTOR_LABELS = {
+    'sale_expiry_urgency_asc': 'Срочность скидки',
+    'priority_bucket_asc': 'Качественный bucket',
+    'practical_or_personal_risk_asc': 'Серьёзный подтверждённый риск',
+    'wishlist_desc': 'Вишлист Steam',
+    'discount_percent_desc': 'Размер скидки',
+    'price_quality_vs_history_desc': 'Цена относительно истории',
+    'current_price_rub_asc': 'Текущая цена',
+    'achievement_quality_desc': 'Достижения',
+    'duration_tiebreak_asc': 'Длительность',
+    'title_asc': 'Название (tie-break)',
+}
+
+HISTORY_QUALITY_LABELS = {
+    'record': 'исторический минимум',
+    'near_record': 'почти минимум',
+    'good_vs_history': 'хорошо относительно истории',
+    'previously_free': 'раньше была бесплатной',
+    'unverified': 'история не подтверждена',
+    'well_above_history': 'заметно выше исторического минимума',
+}
+
+URGENCY_LABELS = {
+    'today': 'заканчивается сегодня',
+    'tomorrow': 'заканчивается завтра',
+    'later_or_unknown': 'позже или срок неизвестен',
+}
+
+WINDOWS_FRICTION_LABELS = {
+    'known_fix_required': 'для современной Windows нужен подтверждённый фикс',
+    'confirmed_pre_windows_10_target': 'подтверждена ориентация на старую Windows',
+    'serious_problem': 'подтверждена серьёзная проблема на современной Windows',
+}
+
+DURATION_BAND_LABELS = {
+    'very_short': 'очень короткая',
+    'short': 'короткая',
+    'medium': 'средняя',
+    'long': 'длинная',
+    'very_long': 'очень длинная',
+    'unknown': 'неизвестна',
+}
+
 
 def parse_utc(value):
     if not value:
@@ -99,6 +142,63 @@ def factor_value(name, game, now):
     raise ValueError(f'Unsupported final ranking factor: {name}')
 
 
+def factor_display_value(name, game, now):
+    if name == 'sale_expiry_urgency_asc':
+        urgency = sale_expiry_urgency(game, now)[1]
+        return URGENCY_LABELS.get(urgency, urgency)
+    if name == 'priority_bucket_asc':
+        bucket = int(game.get('priority_bucket') or 99)
+        decision = str(game.get('decision') or '').strip()
+        return f'bucket {bucket}' + (f' · {decision}' if decision else '')
+    if name == 'practical_or_personal_risk_asc':
+        practical = game.get('practical') or {}
+        rank = practical_risk_rank(game)
+        parts = []
+        if (game.get('risk_level') or 'unknown') == 'high':
+            parts.append('высокий персональный риск')
+        windows = practical.get('modern_windows_friction') or 'unknown'
+        if windows in WINDOWS_FRICTION_LABELS:
+            parts.append(WINDOWS_FRICTION_LABELS[windows])
+        if parts:
+            return ' · '.join(parts)
+        if rank == 0:
+            return 'нет серьёзного подтверждённого штрафа'
+        return f'штраф риска {rank}'
+    if name == 'wishlist_desc':
+        return 'да' if game.get('wishlist') else 'нет'
+    if name == 'discount_percent_desc':
+        return f'−{int(game.get("discount_percent") or 0)}%'
+    if name == 'price_quality_vs_history_desc':
+        quality = game.get('history_quality') or 'unverified'
+        return HISTORY_QUALITY_LABELS.get(quality, str(quality))
+    if name == 'current_price_rub_asc':
+        value = game.get('current_price_rub')
+        return 'нет цены' if value is None else f'{int(value):,} ₽'.replace(',', ' ')
+    if name == 'achievement_quality_desc':
+        practical = game.get('practical') or {}
+        enabled = practical.get('steam_achievements')
+        quality = practical.get('achievement_quality')
+        if enabled is False:
+            return 'Steam-достижений нет'
+        if enabled is not True:
+            return 'нет подтверждённых данных'
+        if isinstance(quality, int) and 1 <= quality <= 5:
+            return f'есть · качество {quality}/5'
+        return 'есть · качество не оценено'
+    if name == 'duration_tiebreak_asc':
+        hours = game.get('estimated_duration_hours')
+        band = game.get('duration_preference_band') or 'unknown'
+        penalty = int(game.get('duration_tiebreak_penalty') or 0)
+        if isinstance(hours, (int, float)):
+            hours_text = f'{hours:g} ч'
+        else:
+            hours_text = 'оценки длительности нет'
+        return f'{hours_text} · {DURATION_BAND_LABELS.get(band, band)} · tie-break {penalty}'
+    if name == 'title_asc':
+        return str(game.get('title') or '')
+    raise ValueError(f'Unsupported final ranking factor: {name}')
+
+
 def load_final_priority_order(policy_path=POLICY):
     policy = json.loads(Path(policy_path).read_text(encoding='utf-8'))
     if policy.get('contract') != 'FINAL-PRIORITY-RANKING-V1' or policy.get('status') != 'canonical':
@@ -119,6 +219,49 @@ def sort_key(game, order, now):
     return tuple(factor_value(name, game, now) for name in order)
 
 
+def build_factor_diagnostics(game, order, now):
+    return [
+        {
+            'id': name,
+            'label': FACTOR_LABELS.get(name, name),
+            'value': factor_display_value(name, game, now),
+            'sort_value': factor_value(name, game, now),
+        }
+        for name in order
+    ]
+
+
+def first_deciding_factor(current, next_game, order, now):
+    for name in order:
+        current_value = factor_value(name, current, now)
+        next_value = factor_value(name, next_game, now)
+        if current_value != next_value:
+            label = FACTOR_LABELS.get(name, name)
+            current_display = factor_display_value(name, current, now)
+            next_display = factor_display_value(name, next_game, now)
+            return {
+                'next_game_id': next_game.get('id'),
+                'next_game_title': next_game.get('title'),
+                'deciding_factor_id': name,
+                'deciding_factor_label': label,
+                'current_value': current_display,
+                'next_value': next_display,
+                'explanation': (
+                    f'Первое различие со следующей игрой — «{label}»: '
+                    f'у этой «{current_display}», у следующей «{next_display}».'
+                ),
+            }
+    return {
+        'next_game_id': next_game.get('id'),
+        'next_game_title': next_game.get('title'),
+        'deciding_factor_id': None,
+        'deciding_factor_label': None,
+        'current_value': None,
+        'next_value': None,
+        'explanation': 'Все canonical ranking-факторы у двух игр совпали.',
+    }
+
+
 def apply_final_priority_order(items, now=None, policy_path=POLICY):
     now = now or datetime.now(timezone.utc)
     order = load_final_priority_order(policy_path)
@@ -130,4 +273,8 @@ def apply_final_priority_order(items, now=None, policy_path=POLICY):
     items.sort(key=lambda game: sort_key(game, order, now))
     for index, game in enumerate(items, 1):
         game['priority_rank'] = index
+        game['priority_factors'] = build_factor_diagnostics(game, order, now)
+    for index, game in enumerate(items):
+        next_game = items[index + 1] if index + 1 < len(items) else None
+        game['priority_vs_next'] = first_deciding_factor(game, next_game, order, now) if next_game else None
     return items, order
