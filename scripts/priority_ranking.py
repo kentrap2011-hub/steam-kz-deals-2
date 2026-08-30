@@ -29,7 +29,7 @@ WINDOWS_FRICTION_ORDER = {
 
 FACTOR_LABELS = {
     'sale_expiry_urgency_asc': 'Срочность скидки',
-    'priority_bucket_asc': 'Качественный bucket',
+    'priority_bucket_asc': 'Группа приоритета',
     'practical_or_personal_risk_asc': 'Серьёзный подтверждённый риск',
     'wishlist_desc': 'Вишлист Steam',
     'discount_percent_desc': 'Размер скидки',
@@ -37,7 +37,7 @@ FACTOR_LABELS = {
     'current_price_rub_asc': 'Текущая цена',
     'achievement_quality_desc': 'Достижения',
     'duration_tiebreak_asc': 'Длительность',
-    'title_asc': 'Название (tie-break)',
+    'title_asc': 'Название (последний критерий)',
 }
 
 HISTORY_QUALITY_LABELS = {
@@ -149,7 +149,7 @@ def factor_display_value(name, game, now):
     if name == 'priority_bucket_asc':
         bucket = int(game.get('priority_bucket') or 99)
         decision = str(game.get('decision') or '').strip()
-        return f'bucket {bucket}' + (f' · {decision}' if decision else '')
+        return f'группа {bucket}' + (f' · {decision}' if decision else '')
     if name == 'practical_or_personal_risk_asc':
         practical = game.get('practical') or {}
         rank = practical_risk_rank(game)
@@ -193,7 +193,7 @@ def factor_display_value(name, game, now):
             hours_text = f'{hours:g} ч'
         else:
             hours_text = 'оценки длительности нет'
-        return f'{hours_text} · {DURATION_BAND_LABELS.get(band, band)} · tie-break {penalty}'
+        return f'{hours_text} · {DURATION_BAND_LABELS.get(band, band)} · дополнительный критерий {penalty}'
     if name == 'title_asc':
         return str(game.get('title') or '')
     raise ValueError(f'Unsupported final ranking factor: {name}')
@@ -258,7 +258,7 @@ def first_deciding_factor(current, next_game, order, now):
         'deciding_factor_label': None,
         'current_value': None,
         'next_value': None,
-        'explanation': 'Все canonical ranking-факторы у двух игр совпали.',
+        'explanation': 'Все критерии итогового рейтинга у двух игр совпали.',
     }
 
 
