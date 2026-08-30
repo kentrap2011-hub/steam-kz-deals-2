@@ -1,0 +1,70 @@
+{
+  "contract": "TASTE-SEMANTIC-RESULT-V3",
+  "version": "1.0",
+  "status": "canonical",
+  "purpose": "Define the price-blind semantic output produced by the existing taste worker and persisted by GitHub. Normalized factors describe the candidate independently of configurable final-ranking weights.",
+  "ownership": {
+    "semantic_evaluation": "existing_scheduled_chatgpt_taste_worker",
+    "queue_scope_and_bindings": "github",
+    "validation_and_persistence": "github",
+    "final_weight_application": "github_final_ranking_producer"
+  },
+  "required_base_result_fields": [
+    "key",
+    "appid",
+    "taste_fingerprint",
+    "candidate_context_sha256",
+    "verdict",
+    "fit_level",
+    "reason_code",
+    "positive_evidence",
+    "negative_evidence"
+  ],
+  "normalized_factor_field": "taste_factors",
+  "normalized_factor_work_code": "evaluate_normalized_taste_factors",
+  "normalized_factor_value_range": [0, 100],
+  "normalized_factor_ids": [
+    "gameplay_mastery",
+    "development_variety",
+    "structure_pacing_direction",
+    "identity_hooks",
+    "breadth_of_match"
+  ],
+  "factor_semantics": {
+    "gameplay_mastery": "How strongly the candidate's intrinsic gameplay, controls, active decision making and learnable mastery match durable positive user patterns. Score candidate fit, not general game quality.",
+    "development_variety": "How strongly the candidate is expected to provide meaningful change, progression, varied situations or expanding possibilities rather than a static repetitive loop, relative to durable user preferences.",
+    "structure_pacing_direction": "How strongly the candidate provides a clear reason to continue, understandable objectives/direction and a pace/structure compatible with the user's preference for purposeful play rather than unclear or passive drift.",
+    "identity_hooks": "How strongly candidate-specific atmosphere, narrative premise, characters, tactical identity, movement fantasy, mystery or another distinctive hook maps to durable user interests when intrinsically relevant.",
+    "breadth_of_match": "Breadth of independent, specific, grounded positive matches across the canonical user profile after avoiding duplicate evidence. This is not a confidence score and must not count generic tags or feed recall flags as extra matches."
+  },
+  "scoring_rules": {
+    "price_blind": true,
+    "forbidden_inputs": [
+      "price",
+      "discount",
+      "wishlist",
+      "reviews",
+      "steamdb_history",
+      "historical_price",
+      "sale_end",
+      "deal_quality",
+      "commercial_priority"
+    ],
+    "factor_values_are_weight_independent": true,
+    "do_not_apply_final_ranking_max_points": true,
+    "negative_risks_are_not_subtracted_from_factor_values": true,
+    "negative_conflicts_remain_in_negative_evidence_and_are_scored_separately_downstream": true,
+    "generic_game_quality_is_not_a_positive_factor": true,
+    "unknown_candidate_property_must_not_be_invented": true,
+    "all_five_factors_are_required_when_work_code_is_present": true
+  },
+  "consumer": {
+    "ranking_policy": "config/final_ranking_policy.json",
+    "ranking_source_precedence": [
+      "direct_user_rating",
+      "normalized_taste_factors",
+      "legacy_coarse_fit"
+    ],
+    "changing_final_weights_must_not_require_semantic_reevaluation": true
+  }
+}
