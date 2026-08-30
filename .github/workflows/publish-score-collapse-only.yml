@@ -1,0 +1,67 @@
+name: Publish score collapse only
+
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-score-collapse-only.yml'
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Isolate first UI task and force fresh assets
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          app_path = Path('web/app.js')
+          app = app_path.read_text(encoding='utf-8')
+          wishlist_block = '''  if(row?.id==='wishlist'){
+            const status=points>0?'есть':'нет';
+            return `<span class="score-chip"><span>${label}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})} · ${status}</b></span>`;
+          }
+'''
+          if wishlist_block in app:
+              app = app.replace(wishlist_block, '', 1)
+          if 'data-score-toggle' not in app or 'score-details hidden' not in app:
+              raise SystemExit('collapsible score implementation missing')
+          app_path.write_text(app, encoding='utf-8')
+
+          index_path = Path('web/index.html')
+          index = index_path.read_text(encoding='utf-8')
+          # Keep the Chrome-icon task unpublished until the user chooses it.
+          index = index.replace('  <meta name="application-name" content="Игры со скидками">\n', '')
+          index = index.replace('  <link rel="icon" href="icon.svg" type="image/svg+xml">\n', '')
+          index = index.replace('  <link rel="manifest" href="manifest.webmanifest">\n', '')
+          index = index.replace('href="styles.css"', 'href="styles.css?v=score-collapse-1"')
+          index = index.replace('src="app.js"', 'src="app.js?v=score-collapse-1"')
+          index_path.write_text(index, encoding='utf-8')
+          PY
+
+      - name: Validate UI JavaScript
+        run: node --check web/app.js
+
+      - name: Commit isolated first task
+        shell: bash
+        run: |
+          git config user.name 'steam-kz-bot'
+          git config user.email 'steam-kz-bot@users.noreply.github.com'
+          git rm .github/workflows/publish-score-collapse-only.yml
+          git add web/app.js web/index.html
+          git commit -m 'Publish collapsible score UI only'
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Dispatch Pages deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-visual.yml --ref main
