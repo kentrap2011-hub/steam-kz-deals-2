@@ -1,0 +1,53 @@
+name: Migrate SteamDB recovery once
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/migrate-steamdb-recovery-once.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Convert legacy recovery evidence into one normal runtime submission
+        run: python scripts/migrate_steamdb_recovery_to_submission.py
+
+      - name: Derive GitHub-owned runtime state from submissions
+        run: python scripts/ingest_steamdb_runtime_submissions.py
+
+      - name: Commit migrated submission and derived state
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/inbox/steamdb_runtime data/cache/steamdb_runtime_state.json data/cache/steamdb_runtime_work.json
+          if [ -f data/cache/steamdb_web_resolutions.json ]; then
+            git add data/cache/steamdb_web_resolutions.json
+          fi
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Migrate SteamDB recovery into GitHub-owned runtime state"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep $((attempt * 3))
+          done
+          exit 1
