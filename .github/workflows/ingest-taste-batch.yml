@@ -28,6 +28,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Validate normalized taste factor contract
+        run: python scripts/validate_taste_v3_contract.py
+
       - name: Validate, ingest and rebuild taste consumers atomically
         run: python scripts/process_taste_inbox.py
 
