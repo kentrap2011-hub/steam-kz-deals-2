@@ -16,7 +16,9 @@ HISTORY_QUALITY_ORDER = {
     'well_above_history': 5,
 }
 
-RISK_LEVEL_ORDER = {'low': 0, 'unknown': 0, 'medium': 1, 'high': 2}
+# Only serious/high personal risks belong in this early layer. Medium/low heuristics
+# remain descriptive context and must not outrank wishlist/commercial value by themselves.
+RISK_LEVEL_ORDER = {'low': 0, 'unknown': 0, 'medium': 0, 'high': 2}
 WINDOWS_FRICTION_ORDER = {
     'likely_none': 0,
     'unknown': 0,
