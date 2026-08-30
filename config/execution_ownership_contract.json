@@ -1,0 +1,94 @@
+{
+  "contract": "PRODUCTION-EXECUTION-OWNERSHIP-V1",
+  "status": "canonical",
+  "purpose": "Define immutable responsibility boundaries between GitHub, scheduled ChatGPT runtime, and interactive user chats so implementation fixes cannot silently move control-plane logic between components.",
+  "precedence": {
+    "applies_to": [
+      "nightly production",
+      "SteamDB history resolution",
+      "semantic production stages",
+      "runtime retries and checkpoints",
+      "automation changes"
+    ],
+    "rule": "When deciding which component should perform a step, this ownership contract must be checked before temporary task state, automation prompts, workflow implementation details, logs, batch files, or prior chat conclusions."
+  },
+  "github_control_plane": {
+    "owner": "GitHub repository and GitHub Actions",
+    "responsibilities": [
+      "define canonical business and execution rules",
+      "collect every source GitHub can access directly",
+      "compute deterministic transformations",
+      "decide the exact current production scope",
+      "construct manifests and explicit runtime work inputs",
+      "decide ordering and identity of items requiring external runtime facts",
+      "own retry state and unresolved-item state",
+      "own checkpoint merge logic and completeness accounting",
+      "validate all returned runtime facts against the exact prepared scope",
+      "persist validated canonical caches",
+      "decide whether the production cycle is complete",
+      "rebuild downstream history, deal, semantic-input and visual artifacts",
+      "fail closed when required inputs are incomplete"
+    ],
+    "must_not_delegate": [
+      "business-rule decisions",
+      "scope selection",
+      "queue construction",
+      "daily quota or batch semantics",
+      "retry policy",
+      "completeness criteria",
+      "canonical cache merge logic",
+      "workflow orchestration logic"
+    ]
+  },
+  "scheduled_chatgpt_runtime_data_plane": {
+    "owner": "scheduled ChatGPT production task",
+    "role": "constrained external/semantic worker",
+    "responsibilities": [
+      "read canonical contracts and the explicit current work input prepared by GitHub",
+      "obtain facts that GitHub cannot obtain directly because of access or semantic limitations",
+      "return only the structured evidence/results required by the prepared input contract",
+      "perform required semantic judgments only where the canonical production contract explicitly assigns them to ChatGPT",
+      "persist or submit results only through the repository-defined runtime artifact interface"
+    ],
+    "forbidden": [
+      "invent or redefine production scope",
+      "choose a new queue independently of GitHub",
+      "turn a checkpoint size into a quota",
+      "create an independent recurring production stage without a canonical contract change",
+      "replace GitHub retry/completeness logic with conversational iteration",
+      "change business rules while executing a production run",
+      "treat an interactive chat as the production scheduler or backlog manager"
+    ],
+    "steamdb_specific_rule": "For SteamDB, ChatGPT may fetch exact external evidence for GitHub-prepared entity keys because GitHub Actions is blocked from SteamDB, but GitHub owns which keys are required, unresolved/retry state, completeness, validation, persistence into canonical history, and downstream orchestration."
+  },
+  "interactive_chat": {
+    "role": "developer/operator session, not a production execution engine",
+    "allowed": [
+      "diagnose architecture and workflow failures",
+      "change canonical contracts after verifying source-of-truth hierarchy",
+      "edit GitHub workflows/scripts/configuration",
+      "inspect bounded samples to verify an implementation",
+      "manually trigger or repair the canonical pipeline when supported"
+    ],
+    "forbidden": [
+      "manually process a large production backlog item by item as a substitute for repairing automation",
+      "create ad-hoc batch files that become a new production architecture without a canonical contract",
+      "continue manual data work after discovering that the intended automated component boundary is broken",
+      "declare a production defect fixed solely because partial manual data was accumulated"
+    ],
+    "sample_limit_rule": "Manual evidence checks are permitted only as bounded verification of implementation behavior. They must not become the normal mechanism for completing the production scope."
+  },
+  "architecture_change_gate": {
+    "required_before_writes": [
+      "identify the component whose responsibility is changing",
+      "name the canonical contract that authorizes that responsibility",
+      "verify the proposed change does not transfer a control-plane responsibility to ChatGPT or the interactive chat",
+      "verify the proposal does not create a new recurring stage, quota, queue, retry loop, or backlog manager without explicit canonical authorization"
+    ],
+    "user_correction_rule": "A user correction is a high-priority signal to re-check canonical architecture, not permission to immediately implement the literal wording. First reconcile the correction with current contracts; if the contracts are ambiguous or wrong, fix the contracts before implementation.",
+    "failure_rule": "If ownership is ambiguous, stop implementation changes and resolve the ownership contract first. Do not patch symptoms by moving work into the current chat."
+  },
+  "completion_definition": {
+    "rule": "A pipeline defect is fixed only when the intended owning component can perform the work automatically and the end-to-end validation succeeds. Manual backlog progress is evidence or temporary recovery data, not proof that the architecture is fixed."
+  }
+}
