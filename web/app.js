@@ -140,8 +140,10 @@ function renderOffers(g){
 function scoreComponentHtml(row){
   const points=Number(row?.points)||0;
   const sign=points>0?'+':'';
-  const max=row?.max_points!=null?`/${Number(row.max_points):g}`:'';
-  return `<div class="priority-factor"><span>${escapeHtml(row?.label||'Критерий')}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})}${max}</b></div>`;
+  const max=row?.max_points!=null?`/${Number(row.max_points).toLocaleString('ru-RU',{maximumFractionDigits:1})}`:'';
+  const label=escapeHtml(row?.label||(row?.id==='savings'?'Экономия по акции':'Критерий'));
+  const detail=row?.id==='savings'&&row?.value?` · ${escapeHtml(row.value)}`:'';
+  return `<div class="priority-factor"><span>${label}${detail}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})}${max}</b></div>`;
 }
 function renderPriority(g){
   const factors=Array.isArray(g.priority_factors)?g.priority_factors:[];
