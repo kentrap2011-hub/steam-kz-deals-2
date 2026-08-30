@@ -26,7 +26,8 @@ def game(title, **overrides):
         'risk_codes': [],
         'wishlist': False,
         'history_quality': 'record',
-        'discount_percent': 80,
+        'discount_percent': 70,
+        'original_price_rub': 1000,
         'current_price_rub': 300,
         'duration_tiebreak_penalty': 0,
         'duration_preference_band': 'unknown',
@@ -76,7 +77,7 @@ def main():
     assert model['personal']['wishlist']['max'] == 4
     assert model['personal']['achievements']['max'] == 3
     assert model['personal']['duration']['max'] == 3
-    assert model['purchase']['discount']['max'] == 20
+    assert model['purchase']['savings']['max'] == 20
     assert model['purchase']['price']['max'] == 12
     assert model['purchase']['history']['max'] == 8
 
@@ -122,9 +123,9 @@ def main():
         fit='moderate',
         source_fit='moderate',
         wishlist=False,
-        discount_percent=6,
-        history_quality='well_above_history',
+        original_price_rub=730,
         current_price_rub=700,
+        history_quality='well_above_history',
         practical={'steam_achievements': False, 'achievement_quality': None},
         duration_preference_band='extreme_length',
         risk_level='high',
@@ -135,9 +136,9 @@ def main():
         'later-high-score',
         taste_factors=perfect_factors,
         wishlist=True,
-        discount_percent=95,
-        history_quality='record',
+        original_price_rub=6050,
         current_price_rub=50,
+        history_quality='record',
         practical={'steam_achievements': True, 'achievement_quality': 5},
         duration_preference_band='preferred_medium',
         sale_end_utc='2026-09-05T18:00:00Z',
@@ -182,20 +183,58 @@ def main():
     assert component(no_ach, 'personal_components', 'achievements')['points'] == 0
     assert component(no_ach, 'personal_components', 'risk')['points'] == 0
 
-    # The approved purchase point tables are active.
-    cheap = ranked([game('cheap', current_price_rub=39)])[0]
-    normal_price = ranked([game('normal-price', current_price_rub=460)])[0]
+    # Current-price table stays separate from promotional savings.
+    cheap = ranked([game('cheap', original_price_rub=1000, current_price_rub=39)])[0]
+    normal_price = ranked([game('normal-price', original_price_rub=1000, current_price_rub=460)])[0]
     assert component(cheap, 'purchase_components', 'price')['points'] == 12
     assert component(normal_price, 'purchase_components', 'price')['points'] == 9
     assert component(cheap, 'purchase_components', 'price')['points'] - component(normal_price, 'purchase_components', 'price')['points'] == 3
 
-    new_game_record = ranked([game('new-game-record', discount_percent=20, history_quality='record')])[0]
-    old_game_discount = ranked([game('old-game-discount', discount_percent=70, history_quality='good_vs_history')])[0]
-    assert component(new_game_record, 'purchase_components', 'discount')['points'] == 3
+    # Discount value is absolute rubles saved, not the displayed percentage.
+    tiny_fifty_percent = ranked([game(
+        'tiny-50-percent',
+        original_price_rub=60,
+        current_price_rub=30,
+        discount_percent=50,
+    )])[0]
+    large_fifty_percent = ranked([game(
+        'large-50-percent',
+        original_price_rub=6000,
+        current_price_rub=3000,
+        discount_percent=50,
+    )])[0]
+    tiny_savings = component(tiny_fifty_percent, 'purchase_components', 'savings')
+    large_savings = component(large_fifty_percent, 'purchase_components', 'savings')
+    assert tiny_savings['savings_rub'] == 30
+    assert tiny_savings['points'] == 0
+    assert large_savings['savings_rub'] == 3000
+    assert large_savings['points'] == 19
+
+    # Percentage itself cannot change V2 score when actual prices are identical.
+    percent_a = ranked([game('percent-a', original_price_rub=1000, current_price_rub=500, discount_percent=10)])[0]
+    percent_b = ranked([game('percent-b', original_price_rub=1000, current_price_rub=500, discount_percent=90)])[0]
+    assert percent_a['total_score'] == percent_b['total_score']
+    assert component(percent_a, 'purchase_components', 'savings')['points'] == 10
+    assert component(percent_b, 'purchase_components', 'savings')['points'] == 10
+
+    # A short-history technical record must not overpower a much larger real saving.
+    new_game_record = ranked([game(
+        'new-game-record',
+        original_price_rub=500,
+        current_price_rub=400,
+        history_quality='record',
+    )])[0]
+    old_game_big_saving = ranked([game(
+        'old-game-big-saving',
+        original_price_rub=1400,
+        current_price_rub=400,
+        history_quality='good_vs_history',
+    )])[0]
+    assert component(new_game_record, 'purchase_components', 'savings')['points'] == 3
     assert component(new_game_record, 'purchase_components', 'history')['points'] == 8
-    assert component(old_game_discount, 'purchase_components', 'discount')['points'] == 16
-    assert component(old_game_discount, 'purchase_components', 'history')['points'] == 5
-    assert old_game_discount['purchase_score'] > new_game_record['purchase_score']
+    assert component(old_game_big_saving, 'purchase_components', 'savings')['points'] == 14
+    assert component(old_game_big_saving, 'purchase_components', 'history')['points'] == 5
+    assert old_game_big_saving['purchase_score'] > new_game_record['purchase_score']
 
     unverified = ranked([game('unverified', history_quality='unverified')])[0]
     previously_free = ranked([game('previously-free', history_quality='previously_free')])[0]
@@ -204,8 +243,8 @@ def main():
     assert component(previously_free, 'purchase_components', 'history')['points'] == 2
     assert component(weak_history, 'purchase_components', 'history')['points'] == 0
 
-    # Regression for the High On Life / Seraph's Last Stand structure: cheap price alone is only a small benefit;
-    # wishlist plus no serious risk can outweigh it under the visible score.
+    # Regression for the High On Life / Seraph's Last Stand structure: a tiny cheap-game saving and serious
+    # personal risk should not beat a wishlist candidate with a materially larger real saving.
     cheap_high_risk = game(
         'cheap-high-risk',
         fit='moderate',
@@ -213,9 +252,9 @@ def main():
         risk_level='high',
         risk_codes=['unchanged_repetition'],
         wishlist=False,
-        discount_percent=30,
-        history_quality='good_vs_history',
+        original_price_rub=55,
         current_price_rub=39,
+        history_quality='good_vs_history',
     )
     interesting_wait = game(
         'interesting-wishlist-wait',
@@ -224,9 +263,9 @@ def main():
         risk_level='low',
         risk_codes=[],
         wishlist=True,
-        discount_percent=65,
-        history_quality='well_above_history',
+        original_price_rub=1350,
         current_price_rub=460,
+        history_quality='well_above_history',
     )
     risk_pair = ranked([cheap_high_risk, interesting_wait])
     assert titles(risk_pair) == ['interesting-wishlist-wait', 'cheap-high-risk']
@@ -235,20 +274,20 @@ def main():
 
     # Central-config tuning proof: changing only JSON changes the score; no Python or taste re-evaluation is needed.
     tuned = deepcopy(policy)
-    tuned['score_model']['purchase']['discount']['bands'] = deepcopy(
-        tuned['score_model']['purchase']['discount']['bands']
+    tuned['score_model']['purchase']['savings']['bands'] = deepcopy(
+        tuned['score_model']['purchase']['savings']['bands']
     )
-    for band in tuned['score_model']['purchase']['discount']['bands']:
-        if band['min'] <= 70 <= band['max']:
-            band['points'] = 10
+    for band in tuned['score_model']['purchase']['savings']['bands']:
+        if band['min'] <= 700 <= band['max']:
+            band['points'] = 4
     with tempfile.NamedTemporaryFile('w', suffix='.json', encoding='utf-8', delete=False) as fh:
         json.dump(tuned, fh, ensure_ascii=False)
         tuned_path = Path(fh.name)
     try:
-        before = ranked([game('weight-test', discount_percent=70)])[0]
-        after = ranked([game('weight-test', discount_percent=70)], policy_path=tuned_path)[0]
-        assert component(before, 'purchase_components', 'discount')['points'] == 16
-        assert component(after, 'purchase_components', 'discount')['points'] == 10
+        before = ranked([game('weight-test', original_price_rub=1000, current_price_rub=300)])[0]
+        after = ranked([game('weight-test', original_price_rub=1000, current_price_rub=300)], policy_path=tuned_path)[0]
+        assert component(before, 'purchase_components', 'savings')['points'] == 10
+        assert component(after, 'purchase_components', 'savings')['points'] == 4
         assert before['total_score'] - after['total_score'] == 6
         assert component(before, 'personal_components', 'taste')['points'] == component(after, 'personal_components', 'taste')['points']
     finally:
@@ -272,6 +311,7 @@ def main():
         "r.manual_end_at=Date.now();",
         "state.queue.ids.push(g.id);",
         "g.risk_status",
+        "Экономия по акции",
     ]
     for fragment in required_ui_fragments:
         assert fragment in app, f'missing UI invariant: {fragment}'
