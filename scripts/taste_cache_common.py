@@ -12,6 +12,14 @@ LEDGER_CONTRACT = Path('config/taste_ledger_contract.json')
 POLICY = Path('config/mailing_policy.json')
 LEGACY_LEDGER = Path('data/cache/taste_fit.ledger_validation.json')
 
+TASTE_FACTOR_IDS = (
+    'gameplay_mastery',
+    'development_variety',
+    'structure_pacing_direction',
+    'identity_hooks',
+    'breadth_of_match',
+)
+
 
 def load_json(path):
     return json.loads(Path(path).read_text(encoding='utf-8'))
@@ -131,13 +139,34 @@ def validate_verdict_shape(verdict, fit_level, reason_code):
     return spec
 
 
+def validate_taste_factors(factors):
+    if not isinstance(factors, dict):
+        raise ValueError('taste_factors must be an object')
+    expected = set(TASTE_FACTOR_IDS)
+    actual = set(factors)
+    missing = expected - actual
+    extra = actual - expected
+    if missing or extra:
+        raise ValueError(
+            f'taste_factors must contain exactly {list(TASTE_FACTOR_IDS)!r}; '
+            f'missing={sorted(missing)!r} extra={sorted(extra)!r}'
+        )
+    for factor_id in TASTE_FACTOR_IDS:
+        value = factors[factor_id]
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise ValueError(f'taste_factors.{factor_id} must be numeric')
+        if not 0 <= float(value) <= 100:
+            raise ValueError(f'taste_factors.{factor_id} must be within 0..100')
+    return True
+
+
 def schema_v2_entry_from_legacy(entry, legacy_semantics_sha):
     out = dict(entry)
     out['taste_semantics_sha256'] = legacy_semantics_sha
     return out
 
 
-def validate_cache_entry(entry, map_key, required_fields):
+def validate_cache_entry(entry, map_key, required_fields, require_taste_factors=False):
     if not isinstance(entry, dict):
         raise ValueError(f'Entry {map_key!r} must be an object')
     missing = [field for field in required_fields if field not in entry]
@@ -150,4 +179,8 @@ def validate_cache_entry(entry, map_key, required_fields):
     if not isinstance(entry['positive_evidence'], list) or not isinstance(entry['negative_evidence'], list):
         raise ValueError(f'Entry {map_key!r} evidence fields must be arrays')
     validate_verdict_shape(entry['verdict'], entry['fit_level'], entry['reason_code'])
+    if 'taste_factors' in entry:
+        validate_taste_factors(entry['taste_factors'])
+    elif require_taste_factors:
+        raise ValueError(f'Entry {map_key!r} missing required taste_factors')
     return True
