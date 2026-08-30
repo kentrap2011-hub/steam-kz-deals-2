@@ -102,7 +102,7 @@ jobs:
           PY
           echo "ready=$(cat /tmp/history-ready)" >> "$GITHUB_OUTPUT"
 
-      - name: Build and refine canonical visual payload once
+      - name: Build and refresh canonical visual payload once
         id: build
         if: steps.history.outputs.ready == 'true'
         env:
@@ -114,18 +114,16 @@ jobs:
           # priority_rank exactly once from config/final_ranking_policy.json.
           export FORCE_VISUAL_BUILD=1
           python scripts/build_final_visual_payload.py | tee /tmp/visual-build.log
-          if grep -q 'VISUAL_FINAL_BUILD=BUILT' /tmp/visual-build.log; then
+          # StoreBrowse can return stale screenshot metadata for storefront aliases
+          # (for example App_901735 resolving assets through app 40960). Refresh those
+          # aliases from Steam appdetails before deciding whether there is anything to commit.
+          python scripts/normalize_visual_media_urls.py | tee /tmp/media-refresh.log
+          if grep -q 'VISUAL_FINAL_BUILD=BUILT' /tmp/visual-build.log || \
+             grep -Eq 'VISUAL_MEDIA_ITEMS_CHANGED=[1-9][0-9]*' /tmp/media-refresh.log; then
             echo "built=true" >> "$GITHUB_OUTPUT"
           else
             echo "built=false" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Normalize Steam media CDN URLs
-        if: steps.build.outputs.built == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/normalize_visual_media_urls.py
 
       - name: Build ranking review export
         if: steps.build.outputs.built == 'true'
