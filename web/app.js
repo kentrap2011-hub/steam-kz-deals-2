@@ -124,17 +124,32 @@ function renderOffers(g){
     return `<div class="offer"><div class="offer-top"><div class="offer-title">${escapeHtml(o.title||g.title)}${i===0?' · основной':''}</div><div class="offer-price">${fmtRub(o.current_price_rub)}</div></div><div class="offer-meta">${old} · −${o.discount_percent}% · ${hist}</div><div class="offer-actions"><button class="offer-link" type="button" data-open-web="${escapeHtml(o.web_url||'')}" data-open-steam="${escapeHtml(o.steam_url||'')}">Открыть вариант в Steam</button></div></div>`;
   }).join('')||'<div class="muted small">Дополнительных вариантов сейчас нет.</div>';
 }
+function renderPriority(g){
+  const factors=Array.isArray(g.priority_factors)?g.priority_factors:[];
+  const section=$('prioritySection');
+  section.classList.toggle('hidden',!factors.length);
+  if(!factors.length){$('priorityWhy').textContent='';$('priorityFactors').innerHTML='';return}
+  const vs=g.priority_vs_next||null;
+  const rank=Number(g.priority_rank)||null;
+  const parts=[];
+  if(rank)parts.push(`Production-позиция: №${rank}.`);
+  if(vs&&vs.next_game_title&&vs.explanation)parts.push(`Следующая — «${vs.next_game_title}». ${vs.explanation}`);
+  else if(rank)parts.push('Это последняя игра в текущем production-порядке.');
+  $('priorityWhy').textContent=parts.join(' ');
+  const deciding=vs&&vs.deciding_factor_id;
+  $('priorityFactors').innerHTML=factors.map(f=>`<div class="priority-factor ${f.id===deciding?'deciding':''}"><span>${escapeHtml(f.label||f.id||'Фактор')}</span><b>${escapeHtml(f.value??'—')}</b></div>`).join('');
+}
 function renderFeed(){
   const g=currentGame();const pos=currentIndex();
   $('emptyFeed').classList.toggle('hidden',!!g);card.classList.toggle('hidden',!g);$('position').textContent=g?`Приоритет: ${pos+1} из ${queueCount()}`:'';$('seenInfo').textContent=g?(rec(g.id).seen?`Показана раньше: ${rec(g.id).seen}×`:'Первый показ'):'';$('startBtn').classList.toggle('hidden',!g||pos===0);
-  if(!g)return;
+  if(!g){$('prioritySection').classList.add('hidden');return}
   currentShot=0;setShot(g,0);preloadNearby();
   const r=rec(g.id);$('newBadge').classList.toggle('hidden',!isNew(g.id));$('repeatBadge').classList.toggle('hidden',!(r.seen>0));$('repeatBadge').textContent=r.seen?`🔁 Показ №${r.seen+1}`:'';
   $('title').textContent=g.title;$('decision').textContent=g.decision||'';$('price').textContent=fmtRub(g.current_price_rub);$('oldPrice').textContent=fmtRub(g.original_price_rub);$('discount').textContent=`−${g.discount_percent}%`;
   $('histPrice').textContent=g.previously_free?'Ранее была бесплатной':`Ист. минимум: ${g.historical_minimum_rub==null?'нет данных':fmtRub(g.historical_minimum_rub)}`;
   $('deadline').textContent=deadlineText(g.sale_end_utc);$('summary').textContent=g.summary||'Краткое описание пока недоступно.';
   const gp=(g.gameplay_points||[]).filter(Boolean);$('gameplaySection').classList.toggle('hidden',!gp.length);$('gameplay').innerHTML=gp.map(x=>`<li>${escapeHtml(x)}</li>`).join('');
-  textList($('whyFit'),g.why_fit,'Персональная причина пока не подготовлена.');textList($('risks'),g.risks,'Риск пока не подготовлен.');
+  textList($('whyFit'),g.why_fit,'Персональная причина пока не подготовлена.');textList($('risks'),g.risks,'Риск пока не подготовлен.');renderPriority(g);
   $('fit').textContent=`Соответствие вкусу: ${g.fit==='strong'?'сильное':'умеренное'}`;$('wishlist').classList.toggle('hidden',!g.wishlist);renderOffers(g);
   $('likeBtn').textContent=r.status==='liked'?'♡ Уже интересно':'♡ Интересно';
   $('finalBtn').textContent=r.status==='final'?'🏆 Уже в финале':'🏆 В финал';
