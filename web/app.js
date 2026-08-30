@@ -1,6 +1,6 @@
 const DATA_URL='data/current.json';
 const STORAGE_KEY='steam-deals-visual-state-v1';
-const QUEUE_VERSION=4;
+const QUEUE_VERSION=5;
 let data={items:[],source_mailing_updated_at_utc:null};
 let items=[];
 let byId=new Map();
@@ -15,9 +15,16 @@ const $=id=>document.getElementById(id);
 const card=$('gameCard');
 const gallery=$('gallery');
 
+function defaultState(){return {games:{},settings:{urgency_first:false},queue:{source:null,signature:null,ids:[],cursor:0,version:QUEUE_VERSION}}}
 function loadState(){
-  try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{games:{},queue:{source:null,signature:null,ids:[],cursor:0,version:QUEUE_VERSION}}}
-  catch{return {games:{},queue:{source:null,signature:null,ids:[],cursor:0,version:QUEUE_VERSION}}}
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY))||defaultState();
+    if(!saved.games||typeof saved.games!=='object')saved.games={};
+    if(!saved.settings||typeof saved.settings!=='object')saved.settings={};
+    if(typeof saved.settings.urgency_first!=='boolean')saved.settings.urgency_first=false;
+    if(!saved.queue||typeof saved.queue!=='object')saved.queue={source:null,signature:null,ids:[],cursor:0,version:QUEUE_VERSION};
+    return saved;
+  }catch{return defaultState()}
 }
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function rec(id){
@@ -46,10 +53,25 @@ function sourceLabel(){
   const d=new Date(data.source_mailing_updated_at_utc);
   return `Данные: ${new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}).format(d)}`;
 }
-function rankingSignature(){return items.map(g=>`${g.id}:${g.priority_rank??''}`).join('|')}
+function urgencyFirstEnabled(){return !!state.settings?.urgency_first}
+function scoreOf(g){const n=Number(g?.total_score);return Number.isFinite(n)?n:-Infinity}
+function titleCompare(a,b){return String(a?.title||'').localeCompare(String(b?.title||''),'ru',{sensitivity:'base'})}
+function automaticOrderGames(){
+  const ordered=[...items];
+  if(urgencyFirstEnabled()){
+    return ordered.sort((a,b)=>{
+      const ar=Number(a.priority_rank),br=Number(b.priority_rank);
+      if(Number.isFinite(ar)&&Number.isFinite(br)&&ar!==br)return ar-br;
+      const scoreDiff=scoreOf(b)-scoreOf(a);if(scoreDiff)return scoreDiff;
+      return titleCompare(a,b);
+    });
+  }
+  return ordered.sort((a,b)=>{const scoreDiff=scoreOf(b)-scoreOf(a);return scoreDiff||titleCompare(a,b)});
+}
+function rankingSignature(){return `urgency:${urgencyFirstEnabled()?1:0}|`+items.map(g=>`${g.id}:${g.priority_rank??''}:${g.total_score??''}`).join('|')}
 function canonicalQueueIds(){
   const normal=[],manual=[];
-  for(const g of items){
+  for(const g of automaticOrderGames()){
     const r=rec(g.id);
     if(r.manual_end_at)manual.push(g.id);else normal.push(g.id);
   }
@@ -99,6 +121,13 @@ function renderStats(){
 function renderTabs(){
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===currentTab));
   $('feedView').classList.toggle('hidden',currentTab!=='feed');$('wishlistView').classList.toggle('hidden',currentTab!=='wishlist');$('likedView').classList.toggle('hidden',currentTab!=='liked');$('finalView').classList.toggle('hidden',currentTab!=='final');
+}
+function renderQueueMode(){
+  const btn=$('urgencyBtn');if(!btn)return;
+  const on=urgencyFirstEnabled();
+  btn.textContent=on?'✓ Срочные':'⏱ Срочные';
+  btn.setAttribute('aria-pressed',String(on));
+  btn.title=on?'Срочные игры сейчас подняты вверх. Нажми, чтобы вернуться к порядку по баллам.':'Нажми, чтобы поднять игры, скидка на которые заканчивается сегодня или завтра.';
 }
 function shotUrls(g){const arr=(g.screenshots||[]).filter(Boolean);if(!arr.length&&g.header_image)arr.push(g.header_image);return arr}
 function preloadNearby(){
@@ -151,22 +180,32 @@ function renderPriority(g){
   const section=$('prioritySection');
   section.classList.toggle('hidden',!factors.length&&!score);
   if(!factors.length&&!score){$('priorityWhy').textContent='';$('priorityFactors').innerHTML='';return}
+  const urgencyMode=urgencyFirstEnabled();
   const vs=g.priority_vs_next||null;
   const rank=Number(g.priority_rank)||null;
+  const localRank=queuePosition(g.id);
   const parts=[];
-  if(rank)parts.push(`Позиция в общем рейтинге: №${rank}.`);
-  if(vs&&vs.next_game_title&&vs.explanation)parts.push(`Следующая — «${vs.next_game_title}». ${vs.explanation}`);
-  else if(rank)parts.push('Это последняя игра в текущем общем рейтинге.');
+  if(localRank)parts.push(`Позиция в текущей очереди: №${localRank}.`);
+  if(rec(g.id).manual_end_at){
+    parts.push('Игра вручную отправлена в конец очереди.');
+  }else if(urgencyMode){
+    parts.push('Режим: срочные игры впереди.');
+    if(rank&&rank!==localRank)parts.push(`Канонический рейтинг со срочностью: №${rank}.`);
+    if(vs&&vs.next_game_title&&vs.explanation)parts.push(`Следующая по каноническому рейтингу — «${vs.next_game_title}». ${vs.explanation}`);
+  }else{
+    parts.push('Режим: порядок по итоговому баллу; срочность сейчас не меняет очередь.');
+  }
   $('priorityWhy').textContent=parts.join(' ');
 
-  const deciding=vs&&vs.deciding_factor_id;
+  const deciding=urgencyMode&&vs&&vs.deciding_factor_id;
   const urgency=factors.find(f=>f.id==='sale_expiry_urgency_asc');
   let html='';
   if(urgency){
-    html+=`<div class="priority-factor ${urgency.id===deciding?'deciding':''}"><span>${escapeHtml(urgency.label||'Срочность скидки')}</span><b>${escapeHtml(urgency.value??'—')} · вне баллов</b></div>`;
+    const urgencyNote=urgencyMode?'влияет на текущий порядок':'сейчас не влияет на порядок';
+    html+=`<div class="priority-factor ${deciding==='sale_expiry_urgency_asc'?'deciding':''}"><span>${escapeHtml(urgency.label||'Срочность скидки')}</span><b>${escapeHtml(urgency.value??'—')} · ${urgencyNote}</b></div>`;
   }
   if(score){
-    html+=`<div class="priority-factor ${deciding==='total_score_desc'?'deciding':''}"><span>Итоговый балл</span><b>${Number(score.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.total_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div>`;
+    html+=`<div class="priority-factor ${!urgencyMode||deciding==='total_score_desc'?'deciding':''}"><span>Итоговый балл</span><b>${Number(score.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.total_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div>`;
     if(score.precision?.label)html+=`<div class="muted small">Точность вкусовой части: ${escapeHtml(score.precision.label)}${score.precision.is_coarse_legacy?' — детализируем по мере обновления старых оценок.':''}</div>`;
     html+=`<div class="priority-factor"><span>${escapeHtml(score.personal_label||'Насколько подходит тебе')}</span><b>${Number(score.personal_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.personal_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div>`;
     html+=(score.personal_components||[]).map(scoreComponentHtml).join('');
@@ -194,9 +233,9 @@ function renderFeed(){
 }
 function listPositionText(g){
   const q=queuePosition(g.id),p=Number(g.priority_rank)||null;
-  if(q&&p&&q!==p)return `№${q} в ленте · общий рейтинг №${p}`;
+  if(q&&p&&q!==p)return `№${q} в ленте · рейтинг со срочностью №${p}`;
   if(q)return `№${q} в ленте`;
-  if(p)return `общий рейтинг №${p}`;
+  if(p)return `рейтинг со срочностью №${p}`;
   return 'Позиция неизвестна';
 }
 function miniCard(g,status){
@@ -211,7 +250,7 @@ function renderLists(){
   $('likedList').innerHTML=liked.length?liked.map(g=>miniCard(g,'liked')).join(''):'<div class="empty">Пока пусто.</div>';
   $('finalList').innerHTML=finals.length?finals.map(g=>miniCard(g,'final')).join(''):'<div class="empty">Пока пусто.</div>';
 }
-function render(){renderTabs();renderStats();renderFeed();renderLists();saveState()}
+function render(){renderTabs();renderStats();renderQueueMode();renderFeed();renderLists();saveState()}
 function markSeen(g){if(!g)return;const r=rec(g.id);r.seen=(r.seen||0)+1;r.last_seen=new Date().toISOString()}
 function navigate(delta){
   const g=currentGame();const old=currentIndex();const next=Math.max(0,Math.min(state.queue.ids.length-1,old+delta));if(next===old)return;
@@ -225,6 +264,13 @@ function markCurrent(kind){
 }
 function sendCurrentToEnd(){
   const g=currentGame();if(!g)return;const i=currentIndex();const r=rec(g.id);r.manual_end_at=Date.now();state.queue.ids.splice(i,1);state.queue.ids.push(g.id);state.queue.cursor=Math.min(i,state.queue.ids.length-1);markSeen(g);saveState();notify(`${g.title} → в конец очереди`);render();window.scrollTo({top:0,behavior:'smooth'});
+}
+function toggleUrgencyFirst(){
+  state.settings.urgency_first=!urgencyFirstEnabled();
+  buildQueue();
+  saveState();
+  render();
+  notify(urgencyFirstEnabled()?'Срочные игры подняты вверх':'Срочность отключена — порядок по баллам');
 }
 function focusGame(id){
   const idx=state.queue.ids.indexOf(id);if(idx<0)return;state.queue.cursor=idx;currentTab='feed';$('searchDialog').open&&$('searchDialog').close();render();window.scrollTo({top:0,behavior:'smooth'});
@@ -250,7 +296,7 @@ async function init(){
 }
 
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{currentTab=b.dataset.tab;render()}));
-$('likeBtn').addEventListener('click',()=>markCurrent('liked'));$('finalBtn').addEventListener('click',()=>markCurrent('final'));$('endBtn').addEventListener('click',sendCurrentToEnd);$('startBtn').addEventListener('click',goToStart);
+$('likeBtn').addEventListener('click',()=>markCurrent('liked'));$('finalBtn').addEventListener('click',()=>markCurrent('final'));$('endBtn').addEventListener('click',sendCurrentToEnd);$('startBtn').addEventListener('click',goToStart);$('urgencyBtn').addEventListener('click',toggleUrgencyFirst);
 $('steamBtn').addEventListener('click',()=>{const g=currentGame();if(g)openSteam(g.steam_url,g.web_url)});
 $('searchBtn').addEventListener('click',()=>{$('searchDialog').showModal();$('searchInput').value='';searchRender();setTimeout(()=>$('searchInput').focus(),50)});$('searchInput').addEventListener('input',searchRender);
 
