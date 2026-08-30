@@ -11,10 +11,15 @@ on:
   push:
     branches: [main]
     paths:
+      - "scripts/build_final_visual_payload.py"
       - "scripts/build_daily_visual_payload.py"
       - "scripts/build_visual_feed_v2.py"
       - "scripts/achievement_quality.py"
       - "scripts/refine_visual_ranking.py"
+      - "scripts/priority_ranking.py"
+      - "scripts/validate_priority_ranking.py"
+      - "config/final_ranking_policy.json"
+      - "web/app.js"
       - ".github/workflows/build-daily-visual-payload.yml"
 
 permissions:
@@ -44,6 +49,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Validate canonical priority ranking contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_priority_ranking.py
 
       - name: Require resolved SteamDB history before replacing daily visual
         id: history
@@ -76,36 +87,23 @@ jobs:
           PY
           echo "ready=$(cat /tmp/history-ready)" >> "$GITHUB_OUTPUT"
 
-      - name: Build canonical visual payload when production is ready
+      - name: Build and refine canonical visual payload once
         id: build
         if: steps.history.outputs.ready == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          # Every invocation of this workflow represents a confirmed producer/input
-          # transition (or an explicit development/manual run). Rebuild even when
-          # source_mailing_updated_at_utc is unchanged so a post-SteamDB checkpoint
-          # history snapshot cannot be skipped as the same daily source identity.
-          export FORCE_VISUAL_BUILD=1
-          python scripts/build_daily_visual_payload.py | tee /tmp/visual-build.log
-          if grep -q 'VISUAL_DAILY_BUILD=BUILT' /tmp/visual-build.log; then
-            echo "built=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "built=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      # The refiner is allowed to touch a payload only in the same job that
-      # has just built that payload from the checked-out source snapshot.
-      # WAIT/SKIP therefore cannot re-rank an older visual payload with newer
-      # partially-produced pre-AI files.
-      - name: Refine personal risks and ranking
-        if: steps.build.outputs.built == 'true'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/refine_visual_ranking.py
+          # The unified producer performs all enrichment/refinement first and assigns
+          # priority_rank exactly once from config/final_ranking_policy.json.
+          export FORCE_VISUAL_BUILD=1
+          python scripts/build_final_visual_payload.py | tee /tmp/visual-build.log
+          if grep -q 'VISUAL_FINAL_BUILD=BUILT' /tmp/visual-build.log; then
+            echo "built=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "built=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build ranking review export
         if: steps.build.outputs.built == 'true'
@@ -129,6 +127,8 @@ jobs:
                   'taste_rank': game.get('taste_rank'),
                   'id': game.get('id'),
                   'title': game.get('title'),
+                  'sale_expiry_urgency': game.get('sale_expiry_urgency'),
+                  'sale_expiry_urgency_rank': game.get('sale_expiry_urgency_rank'),
                   'source_fit': game.get('source_fit'),
                   'fit': game.get('fit'),
                   'fit_adjustment_reason': game.get('fit_adjustment_reason'),
@@ -137,6 +137,7 @@ jobs:
                   'direct_user_evidence_level': direct.get('level'),
                   'decision': game.get('decision'),
                   'priority_bucket': game.get('priority_bucket'),
+                  'practical_or_personal_risk_rank': game.get('practical_or_personal_risk_rank'),
                   'strengths': game.get('why_fit') or [],
                   'gameplay_points': game.get('gameplay_points') or [],
                   'weaknesses_risks': game.get('risks') or [],
