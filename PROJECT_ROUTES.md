@@ -10,6 +10,7 @@
 - Если во время задачи пришлось заметно разбираться, «где это вообще находится» или «кто это запускает», найденный путь нужно сохранить или уточнить здесь до завершения подзадачи.
 - Маршрут должен отвечать минимум на вопросы: где вход, кто владелец, чем запускается, какие state/validation-файлы смотреть, куда сохраняется результат, кто потребляет его дальше и по какому признаку работа завершена.
 - Не дублировать здесь бизнес-правила и архитектурные контракты: давать ссылки на канонические файлы.
+- Если вопрос не только «где?», но и «почему это правило именно такое?», до чтения Git history открыть соответствующую запись в `PROJECT_DECISIONS.md`.
 - У каждого маршрута хранить дату последней проверки и commit/ref, относительно которого структура была проверена. Если реальная структура изменилась, маршрут обновить по ходу этой же работы.
 
 ---
@@ -64,42 +65,65 @@
 
 ## Финальная сортировка / priority rank витрины
 
-**Что ищем:** где формируется единый порядок игр в `data/production/visual/current.json` и почему конкретная игра стоит выше/ниже другой.
+**Что ищем:** где формируется автоматический порядок игр в `data/production/visual/current.json`, почему конкретная игра должна быть выше/ниже другой и где пользовательское локальное состояние может этот порядок переопределить.
 
 **Последняя проверка:** 2026-08-30  
-**Проверено относительно commit:** `77fd58ced040f7fd9ff2b2df5b055d85b351ccb6` (`main` на момент фиксации маршрута)
+**Проверено относительно commit:** `c7715d0587ca99eb380a9fedefce923b89dca1a1` (`Use single canonical final ranking producer`)
 
-**Канонические правила:**
-- `PROJECT_RULES.md` → разделы «Как выбирать платные игры», «Wishlist Steam при финальной сортировке», «Практическая пригодность покупки»;
-- `config/mailing_policy.json` → `sorting`;
-- ownership: `config/execution_ownership_contract.json`.
+**Сначала открыть:**
+1. `config/final_ranking_policy.json` — канонический машинный контракт именно финального `priority_rank`.
+2. `PROJECT_DECISIONS.md` → `RANK-001..RANK-008`, `UI-001` — почему порядок именно такой и какие альтернативы сознательно отвергнуты.
+3. `PROJECT_RULES.md` → «Как выбирать платные игры», «Wishlist Steam при финальной сортировке», «Практическая пригодность покупки».
+4. ownership: `config/execution_ownership_contract.json`.
 
-**Быстрая точка входа:**
-1. Для вопроса «почему такой порядок?» сначала открыть `config/mailing_policy.json` → `sorting` и релевантные три раздела `PROJECT_RULES.md`.
-2. Фактический production-путь запускает `.github/workflows/build-daily-visual-payload.yml`.
-3. Первая сортировка находится в `scripts/build_daily_visual_payload.py` → `apply_canonical_priority_order()`.
-4. После неё тот же workflow всегда запускает `scripts/refine_visual_ranking.py`; его `main_sort_key()` выполняет **финальную повторную сортировку** и заново присваивает `priority_rank`.
-5. Итог смотреть в `data/production/visual/current.json`; компактный файл для анализа порядка — `data/production/visual/ranking_review.jsonl`.
+**Важно про старую policy:** старые массивы `sorting` внутри `config/mailing_policy.json` исторически отстали от фактической логики. Для финального `priority_rank` они больше не являются источником истины; dedicated contract `config/final_ranking_policy.json` имеет явный precedence. Если меняется final ranking, менять dedicated contract + rationale/tests, а не создавать новую независимую sort-key рядом.
 
-**Текущий фактический финальный ключ (`refine_visual_ranking.py`):**
-`priority_bucket → direct_user_evidence → personal_risk_level → achievement_quality → wishlist → history_quality → discount → price → duration_tiebreak → title`.
+**Фактический production-путь:**
+1. `.github/workflows/build-daily-visual-payload.yml` сначала запускает `scripts/validate_priority_ranking.py`.
+2. После history readiness workflow запускает **один** production entrypoint: `scripts/build_final_visual_payload.py`.
+3. Этот producer выполняет enrichment/refinement, переиспользуя проверенные helper-функции из `build_daily_visual_payload.py` и `refine_visual_ranking.py`, но **не запускает их старые `main()` и старые независимые final sort-key**.
+4. После полного refinement producer вызывает `scripts/priority_ranking.py` → `apply_final_priority_order()`.
+5. `priority_ranking.py` читает порядок только из `config/final_ranking_policy.json` и один раз присваивает `priority_rank`.
+6. Итог: `data/production/visual/current.json`; компактный аудит: `data/production/visual/ranking_review.jsonl`.
+7. UI читает готовый порядок. `web/app.js` может поверх него применить только явный локальный override `manual_end_at` («В конец очереди»).
 
-**Что зафиксировано правилами:**
-- `priority_bucket` реализует качественную матрицу 60/40 taste+deal и является базовым первым уровнем;
-- wishlist — заметный, но ограниченный дополнительный приоритет после основного taste/commercial отбора;
-- совместимость и достижения влияют на финальный приоритет, но достижения должны преимущественно различать близких кандидатов;
-- не придумывать скрытый числовой score без отдельного согласования.
+**Текущий автоматический порядок:**
+`sale expiry today/tomorrow → priority_bucket → serious confirmed personal/Windows risk → wishlist → discount % → history quality → current price → achievement quality → duration → title`.
 
-**Известное текущее расхождение:**
-- сортировка реализована в двух местах, и refiner перезаписывает `priority_rank`, рассчитанный `build_daily_visual_payload.py`;
-- `config/mailing_policy.json` для порядка внутри bucket сейчас задаёт `wishlist → history_quality → best_variant_value → discount → price → title`, а фактический refiner ставит direct evidence / risk / achievement quality раньше wishlist и истории;
-- поэтому код и каноническая policy сейчас не являются одной и той же спецификацией;
-- отдельно уже установлено, что achievement quality может влиять сильнее wishlist/коммерческой выгодности, хотя долговечные пользовательские правила описывают достижения как фактор при прочих близких условиях.
+Точные machine factor IDs смотреть в `config/final_ranking_policy.json`.
 
-**Важно:** точный новый порядок факторов внутри одного `priority_bucket` на момент этой записи ещё не согласован. Не исправлять его догадкой. Сначала восстановить/согласовать канонический порядок, затем оставить один production source of sorting truth и добавить regression-проверку против повторного расхождения policy ↔ code.
+**Ключевые причины, которые нельзя потерять:**
+- expiry сегодня/завтра выше автоматического качества, чтобы пользователь не пропустил заканчивающуюся сделку;
+- `priority_bucket` остаётся основной qualitative taste+deal матрицей после срочности;
+- direct user evidence не сортирует второй раз: оно уже может изменить fit, commercial branch и bucket;
+- в ранний risk-layer попадают только серьёзные подтверждённые риски; средние/слабые эвристики сами по себе не должны обгонять wishlist/выгоду;
+- Steam XP/7/8 label без внешнего подтверждения нейтрален;
+- wishlist заметен, но ограничен;
+- **discount идёт раньше history quality**, потому что у новой игры обычные −20% могут быть record только из-за короткой истории цены;
+- achievements — поздний фактор близких кандидатов; duration ещё слабее;
+- локальное «В конец очереди» абсолютнее любой автоматической срочности и не меняет production `priority_rank`.
 
-**Признак завершения будущего исправления:**
-- одна каноническая спецификация порядка;
-- production использует её без второй независимой сортировки;
-- `priority_rank` в `current.json` соответствует ей;
-- автоматическая validation/regression-проверка падает, если implementation и policy снова расходятся.
+Полные объяснения и rejected alternatives: `PROJECT_DECISIONS.md`.
+
+**Regression guard:** `scripts/validate_priority_ranking.py` проверяет:
+- точный порядок факторов из canonical contract;
+- today → tomorrow → later/unknown;
+- bucket precedence после одинаковой срочности;
+- голая legacy Steam label нейтральна;
+- confirmed Windows friction понижает;
+- wishlist precedence;
+- 70% `good_vs_history` выше 20% `record` при прочих равных;
+- коммерческие признаки раньше achievements;
+- direct evidence отсутствует как второй final factor;
+- UI `manual_end_at` остаётся абсолютным post-production override.
+
+**Последняя фактическая CI-проверка:** GitHub Actions run `33297377251` (`Build daily visual payload`, commit `c7715d...`) завершился `success`; шаг `Validate canonical priority ranking contract` прошёл (`PRIORITY_RANKING_VALIDATION=PASS`). Полный producer был корректно пропущен history-gate, потому что текущий `history_snapshot` сообщил `missing=534`; это отдельное ранее отложенное состояние SteamDB, а не ошибка ranking validator.
+
+**Открытая граница Windows:** sort-layer уже корректно принимает подтверждённый `modern_windows_friction`, но на 2026-08-30 не подтверждено наличие отдельного автоматического data-source, который надёжно получает такие факты помимо старой Steam system-requirements строки. Не считать Windows-часть E2E закрытой только потому, что sort key умеет обработать поле. Если этот источник отсутствует, его нужно проектировать отдельно по ownership contract.
+
+**Признак завершённости именно ranking-архитектуры:**
+- dedicated canonical contract существует;
+- production workflow имеет один final producer и одну final sort;
+- regression guard проходит;
+- старые dual-sort mains не участвуют в production;
+- после снятия внешнего history-gate следующий полный build должен записать в `current.json` contract `FINAL-PRIORITY-RANKING-V1` и новый `priority_factors`.
