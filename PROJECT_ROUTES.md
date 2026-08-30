@@ -68,11 +68,11 @@
 **Что ищем:** где формируется автоматический порядок игр в `data/production/visual/current.json`, почему конкретная игра должна быть выше/ниже другой и где пользовательское локальное состояние может этот порядок переопределить.
 
 **Последняя проверка:** 2026-08-30  
-**Проверено относительно commit:** `9e064fd65358de5dabf53f1c4879613020207ef7` (`Refresh daily visual payload` после добавления ranking diagnostics)
+**Проверено относительно commit:** `c1139b28b2abd1799e9f9073d5105283effd68a8` (`Refresh daily visual payload` после serious-risk precedence и bounded ranking lookup)
 
 **Сначала открыть:**
 1. `config/final_ranking_policy.json` — канонический машинный контракт именно финального `priority_rank`.
-2. `PROJECT_DECISIONS.md` → `RANK-001..RANK-008`, `UI-001` — почему порядок именно такой и какие альтернативы сознательно отвергнуты.
+2. `PROJECT_DECISIONS.md` → `RANK-001..RANK-009`, `UI-001` — почему порядок именно такой и какие альтернативы сознательно отвергнуты.
 3. `PROJECT_RULES.md` → «Как выбирать платные игры», «Wishlist Steam при финальной сортировке», «Практическая пригодность покупки».
 4. ownership: `config/execution_ownership_contract.json`.
 
@@ -86,43 +86,56 @@
 5. `priority_ranking.py` читает порядок только из `config/final_ranking_policy.json`, один раз присваивает `priority_rank` и одновременно формирует готовую producer-owned диагностику:
    - `priority_factors` — все canonical факторы в точном canonical порядке с `id`, русской подписью, человекочитаемым `value` и фактическим `sort_value`;
    - `priority_vs_next` — следующая игра в production-порядке и **первый canonical фактор**, на котором текущая игра выигрывает у неё.
-6. Итог: `data/production/visual/current.json`; компактный аудит: `data/production/visual/ranking_review.jsonl`. Оба артефакта содержат `priority_factors` и `priority_vs_next`.
-7. UI читает готовый порядок и готовую диагностику. `web/app.js::renderPriority()` **только отображает** `priority_factors` / `priority_vs_next` и не должен реконструировать sort key или заново решать, почему игры стоят в таком порядке.
-8. `web/app.js` может поверх production-порядка применить только явный локальный override `manual_end_at` («В конец очереди»).
+6. Итог: `data/production/visual/current.json`; полный аудит: `data/production/visual/ranking_review.jsonl`. Оба артефакта содержат `priority_factors` и `priority_vs_next`.
+7. Для точечной диагностики конкретной игры **не читать большой `ranking_review.jsonl` целиком**. Использовать `data/production/visual/ranking_lookup/<первая-буква>.json`, который строит `scripts/build_ranking_lookup.py`. Например, `High On Life` → `ranking_lookup/h.json`, `Seraph's Last Stand` → `ranking_lookup/s.json`. `_manifest.json` показывает количество элементов по bucket-файлам.
+8. UI читает готовый порядок и готовую диагностику. `web/app.js::renderPriority()` **только отображает** `priority_factors` / `priority_vs_next` и не должен реконструировать sort key или заново решать, почему игры стоят в таком порядке.
+9. `web/app.js` может поверх production-порядка применить только явный локальный override `manual_end_at` («В конец очереди»).
 
 **Текущий автоматический порядок:**
-`sale expiry today/tomorrow → priority_bucket → serious confirmed personal/Windows risk → wishlist → discount % → history quality → current price → achievement quality → duration → title`.
+`sale expiry today/tomorrow → serious confirmed personal/Windows risk → priority_bucket → wishlist → discount % → history quality → current price → achievement quality → duration → title`.
 
 Точные machine factor IDs смотреть в `config/final_ranking_policy.json`.
 
 **Ключевые причины, которые нельзя потерять:**
 - expiry сегодня/завтра выше автоматического качества, чтобы пользователь не пропустил заканчивающуюся сделку;
-- `priority_bucket` остаётся основной qualitative taste+deal матрицей после срочности;
+- серьёзный подтверждённый персональный/практический риск идёт **раньше** смешанной taste+deal группы, чтобы дешёвая формально выгодная игра с сильным личным конфликтом не поднималась выше заметно более безопасного кандидата;
+- ранний risk-layer использует только действительно серьёзные подтверждённые риски; средние/слабые эвристики остаются нейтральными на этом уровне;
+- `priority_bucket` после срочности и серьёзного риска остаётся основной qualitative taste+deal матрицей;
 - direct user evidence не сортирует второй раз: оно уже может изменить fit, commercial branch и bucket;
-- в ранний risk-layer попадают только серьёзные подтверждённые риски; средние/слабые эвристики сами по себе не должны обгонять wishlist/выгоду;
 - Steam XP/7/8 label без внешнего подтверждения нейтрален;
-- wishlist заметен, но ограничен;
+- wishlist заметен, но ограничен и сам по себе не является доказательством taste fit;
 - **discount идёт раньше history quality**, потому что у новой игры обычные −20% могут быть record только из-за короткой истории цены;
+- низкая цена, новизна или короткая история сами по себе **не получают штраф**: проблема решается precedence реальных факторов, а не искусственным порогом;
 - achievements — поздний фактор близких кандидатов; duration ещё слабее;
 - локальное «В конец очереди» абсолютнее любой автоматической срочности и не меняет production `priority_rank`.
+
+**Проверенный пример `High On Life` / `Seraph's Last Stand`:**
+- `High On Life`: rank `274`, taste_rank `248`, `priority_group=6`, serious risk `0`, wishlist `true`, скидка `65%`, history `well_above_history`, цена `460 ₽`;
+- `Seraph's Last Stand`: rank `347`, taste_rank `344`, `priority_group=5`, serious risk `2` / `risk_level=high`, wishlist `false`, скидка `30%`, history `good_vs_history`, цена `39 ₽`;
+- то есть историческая цена не была корневой причиной старой ошибки. Более ранняя коммерческая группа Seraph раньше могла выиграть до того, как учитывался её высокий персональный риск. После `RANK-009` серьёзный риск сравнивается раньше группы, поэтому High On Life корректно оказывается выше, несмотря на более дорогую и менее выгодную по истории текущую цену.
+
+**Граница более тонкой «интересности»:** текущий semantic taste слой даёт в основном `strong/moderate`, а `taste_rank` в refiner не является независимой точной шкалой интересности — он также учитывает риск/ачивки/длительность. Поэтому не использовать `taste_rank` как новый скрытый final factor только ради отдельных примеров. Если независимый taste-review покажет, что системе системно не хватает градации «насколько интересно» внутри одного fit-класса, сначала улучшить upstream taste evidence/model и только затем согласованно менять canonical ranking contract.
 
 Полные объяснения и rejected alternatives: `PROJECT_DECISIONS.md`.
 
 **Regression guard:** `scripts/validate_priority_ranking.py` проверяет:
 - точный порядок факторов из canonical contract;
 - today → tomorrow → later/unknown;
-- bucket precedence после одинаковой срочности;
+- serious confirmed risk precedence перед `priority_bucket`;
+- контрольную пару структуры `High On Life` / `Seraph's Last Stand`: более дешёвая игра с лучшей коммерческой группой, но высоким подтверждённым риском должна быть ниже безопасного кандидата;
+- средний/низкий риск не получает раннего штрафа;
 - голая legacy Steam label нейтральна;
 - confirmed Windows friction понижает;
-- wishlist precedence;
+- wishlist precedence внутри одинаковых более ранних факторов;
 - 70% `good_vs_history` выше 20% `record` при прочих равных;
 - коммерческие признаки раньше achievements;
 - direct evidence отсутствует как второй final factor;
+- пользовательские подписи ranking diagnostics не содержат `Production`, `bucket` или `tie-break`;
 - UI `manual_end_at` остаётся абсолютным post-production override;
 - `priority_factors` у каждой игры идут строго в canonical порядке и содержат готовые значения;
 - `priority_vs_next` правильно находит первый решающий фактор на контролируемой паре и отсутствует у последней игры.
 
-**Последняя фактическая CI-проверка:** GitHub Actions run `33312895688` (`Build daily visual payload`) завершился `success`. Validator прошёл, unified producer выполнил полный build, после чего bot commit `9e064fd65358de5dabf53f1c4879613020207ef7` обновил `data/production/visual/current.json` и `data/production/visual/ranking_review.jsonl` уже с producer-owned ranking diagnostics.
+**Последняя фактическая CI-проверка:** GitHub Actions run `33315164035` (`Build daily visual payload`) завершился `success`. Unified producer пересобрал production, bot commit `c1139b28b2abd1799e9f9073d5105283effd68a8` обновил `current.json`, `ranking_review.jsonl` и bounded `ranking_lookup/*`. Реальный результат пары после rebuild: High On Life `274` < Seraph's Last Stand `347`.
 
 **Открытая граница Windows:** sort-layer уже корректно принимает подтверждённый `modern_windows_friction`, но на 2026-08-30 не подтверждено наличие отдельного автоматического data-source, который надёжно получает такие факты помимо старой Steam system-requirements строки. Не считать Windows-часть E2E закрытой только потому, что sort key умеет обработать поле. Если этот источник отсутствует, его нужно проектировать отдельно по ownership contract.
 
@@ -132,4 +145,5 @@
 - regression guard проходит;
 - старые dual-sort mains не участвуют в production;
 - `current.json` содержит `FINAL-PRIORITY-RANKING-V1`, `priority_rank`, `priority_factors` и `priority_vs_next`;
+- точечная диагностика конкретных игр доступна через bounded `ranking_lookup/<bucket>.json` без чтения большого audit JSONL;
 - UI показывает готовую producer-owned диагностику и не пересчитывает ranking на клиенте.
