@@ -9,8 +9,8 @@ EXPECTED_ORDER = [
     'priority_bucket_asc',
     'practical_or_personal_risk_asc',
     'wishlist_desc',
-    'price_quality_vs_history_desc',
     'discount_percent_desc',
+    'price_quality_vs_history_desc',
     'current_price_rub_asc',
     'achievement_quality_desc',
     'duration_tiebreak_asc',
@@ -78,10 +78,16 @@ def main():
     confirmed_old = game('a-confirmed-old', practical={'modern_windows_friction': 'confirmed_pre_windows_10_target'})
     assert titles(ranked([confirmed_old, normal])) == ['b-normal', 'a-confirmed-old']
 
-    # Wishlist is meaningful inside the same bucket/risk layer and comes before history quality.
-    wishlist = game('wishlist', wishlist=True, history_quality='well_above_history')
-    record = game('record', wishlist=False, history_quality='record')
-    assert titles(ranked([record, wishlist])) == ['wishlist', 'record']
+    # Wishlist is meaningful inside the same bucket/risk layer and comes before commercial tie-breaks.
+    wishlist = game('wishlist', wishlist=True, discount_percent=20, history_quality='well_above_history')
+    stronger_deal = game('stronger-deal', wishlist=False, discount_percent=90, history_quality='record')
+    assert titles(ranked([stronger_deal, wishlist])) == ['wishlist', 'stronger-deal']
+
+    # Discount comes before historical-minimum quality: a short price history must not make a routine
+    # new-game 20% record beat a genuinely strong old-game discount.
+    new_game_record = game('new-game-record', discount_percent=20, history_quality='record')
+    old_game_strong_discount = game('old-game-strong-discount', discount_percent=70, history_quality='good_vs_history')
+    assert titles(ranked([new_game_record, old_game_strong_discount])) == ['old-game-strong-discount', 'new-game-record']
 
     # Commercial value precedes achievements: achievements are a late close-candidate factor.
     cheap_no_ach = game('cheap-no-ach', current_price_rub=200, practical={'steam_achievements': False, 'achievement_quality': None})
