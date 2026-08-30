@@ -4,23 +4,73 @@
   "status": "waiting_for_runtime",
   "source_validation_blob_sha": "f95f5647d7f1b1b37842c9a033101ab94ae0b724",
   "expected_count": 9,
-  "resolved_count": 0,
-  "unresolved_count": 9,
-  "submission_file_count": 0,
-  "submission_event_count": 0,
-  "resolved": {},
+  "resolved_count": 5,
+  "unresolved_count": 4,
+  "submission_file_count": 1,
+  "submission_event_count": 9,
+  "resolved": {
+    "App_2530470": {
+      "status": "confirmed_min",
+      "historical_min_kzt": 3500,
+      "special_evidence": null
+    },
+    "App_2533600": {
+      "status": "confirmed_min",
+      "historical_min_kzt": 2600,
+      "special_evidence": null
+    },
+    "App_2736020": {
+      "status": "confirmed_min",
+      "historical_min_kzt": 725,
+      "special_evidence": null
+    },
+    "App_3209480": {
+      "status": "confirmed_min",
+      "historical_min_kzt": 900,
+      "special_evidence": null
+    },
+    "App_399670": {
+      "status": "confirmed_min",
+      "historical_min_kzt": 162,
+      "special_evidence": null
+    }
+  },
   "unresolved_keys": [
     "App_1282200",
     "App_225320",
-    "App_2530470",
-    "App_2533600",
-    "App_2736020",
-    "App_3209480",
-    "App_399670",
     "App_630060",
     "App_901735"
   ],
-  "transient_failure_history": {},
+  "transient_failure_history": {
+    "App_1282200": [
+      {
+        "submission": "data/inbox/steamdb_runtime/2026-08-30T205809Z.json",
+        "submitted_at_utc": "2026-08-30T20:58:09Z",
+        "failure_code": "steamdb_http_429_too_many_requests"
+      }
+    ],
+    "App_225320": [
+      {
+        "submission": "data/inbox/steamdb_runtime/2026-08-30T205809Z.json",
+        "submitted_at_utc": "2026-08-30T20:58:09Z",
+        "failure_code": "steamdb_http_429_too_many_requests"
+      }
+    ],
+    "App_630060": [
+      {
+        "submission": "data/inbox/steamdb_runtime/2026-08-30T205809Z.json",
+        "submitted_at_utc": "2026-08-30T20:58:09Z",
+        "failure_code": "steamdb_runtime_disabled_error"
+      }
+    ],
+    "App_901735": [
+      {
+        "submission": "data/inbox/steamdb_runtime/2026-08-30T205809Z.json",
+        "submitted_at_utc": "2026-08-30T20:58:09Z",
+        "failure_code": "steamdb_runtime_disabled_error"
+      }
+    ]
+  },
   "conflicts": [],
-  "derived_at_utc": "2026-08-30T07:32:18.869023Z"
+  "derived_at_utc": "2026-08-30T20:59:14.923656Z"
 }
