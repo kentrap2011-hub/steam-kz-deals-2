@@ -43,10 +43,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Derive canonical runtime state and work input from submissions
+      - name: Derive canonical runtime state, retry work and prepared resolved subset
         run: python scripts/ingest_steamdb_runtime_submissions.py
 
-      - name: Commit GitHub-derived runtime state
+      - name: Commit GitHub-derived runtime state and prepared resolved subset
         run: |
           set -euo pipefail
           git config user.name "steam-kz-bot"
@@ -73,17 +73,20 @@ jobs:
             done
           fi
 
-      - name: Dispatch final SteamDB validation only when GitHub state is complete
+      - name: Dispatch SteamDB validation whenever resolved facts exist
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          status=$(python - <<'PY'
+          read -r status resolved_count <<EOF
+          $(python - <<'PY'
           import json
-          print(json.load(open('data/cache/steamdb_runtime_state.json', encoding='utf-8'))['status'])
+          state = json.load(open('data/cache/steamdb_runtime_state.json', encoding='utf-8'))
+          print(state.get('status'), int(state.get('resolved_count') or 0))
           PY
           )
-          echo "runtime_status=$status"
-          if [ "$status" = "complete" ]; then
+          EOF
+          echo "runtime_status=$status resolved_count=$resolved_count"
+          if [ "$status" != "invalid" ] && [ "$resolved_count" -gt 0 ]; then
             gh workflow run build-steamdb-true-miss-lookups.yml --ref main
           fi
