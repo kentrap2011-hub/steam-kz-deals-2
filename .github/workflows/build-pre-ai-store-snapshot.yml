@@ -3,6 +3,7 @@ name: Build pre-AI deterministic payload
 # expiry guard refresh: classify ended offers before family/taste work
 # final ranking refresh: rebuild consumer payload after qualitative 60/40 logic change
 # SteamDB checkpoint trigger: rebuild history/deal/consumer artifacts after runtime history persistence
+# SteamDB history may be partial: unresolved keys are classified as unverified and do not block this deterministic payload.
 
 on:
   workflow_dispatch:
