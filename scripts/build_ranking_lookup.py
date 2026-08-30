@@ -1,5 +1,4 @@
 import json
-import re
 import shutil
 from collections import defaultdict
 from pathlib import Path
@@ -23,21 +22,43 @@ def bucket_for(title):
     return '_'
 
 
+def component_points(game, section, component_id):
+    score = game.get('score_breakdown') or {}
+    for row in score.get(section) or []:
+        if row.get('id') == component_id:
+            return row.get('points')
+    return None
+
+
 def compact_row(game):
+    score = game.get('score_breakdown') or {}
+    precision = score.get('precision') or {}
     return {
         'rank': game.get('priority_rank'),
-        'taste_rank': game.get('taste_rank'),
+        'total_score': game.get('total_score'),
+        'personal_score': game.get('personal_score'),
+        'purchase_score': game.get('purchase_score'),
+        'score_precision': precision.get('code'),
+        'taste_points': component_points(game, 'personal_components', 'taste'),
+        'wishlist_points': component_points(game, 'personal_components', 'wishlist'),
+        'achievement_points': component_points(game, 'personal_components', 'achievements'),
+        'duration_points': component_points(game, 'personal_components', 'duration'),
+        'risk_points': component_points(game, 'personal_components', 'risk'),
+        'savings_rub': game.get('savings_rub'),
+        'savings_points': component_points(game, 'purchase_components', 'savings'),
+        'price_points': component_points(game, 'purchase_components', 'price'),
+        'history_points': component_points(game, 'purchase_components', 'history'),
         'fit': game.get('fit'),
         'decision': game.get('decision'),
-        'priority_group': game.get('priority_bucket'),
-        'serious_risk_rank': game.get('practical_or_personal_risk_rank'),
         'risk_level': game.get('risk_level'),
         'risk_status': game.get('risk_status'),
         'risk_codes': game.get('risk_codes') or [],
         'wishlist': bool(game.get('wishlist')),
         'discount_percent': game.get('discount_percent'),
         'history_quality': game.get('history_quality'),
+        'original_price_rub': game.get('original_price_rub'),
         'current_price_rub': game.get('current_price_rub'),
+        'sale_expiry_urgency': game.get('sale_expiry_urgency'),
     }
 
 
@@ -65,11 +86,12 @@ def main():
         counts[bucket] = len(rows)
 
     manifest = {
-        'schema_version': 2,
+        'schema_version': 3,
         'source': str(SOURCE),
         'bucket_rule': 'first case-folded title character; a-z, 0-9, or _',
         'item_count': sum(counts.values()),
         'bucket_counts': counts,
+        'ranking_contract': data.get('ranking_contract'),
     }
     MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(f'RANKING_LOOKUP_ITEMS={manifest["item_count"]}')
