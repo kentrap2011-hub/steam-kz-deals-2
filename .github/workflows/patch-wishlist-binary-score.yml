@@ -1,0 +1,52 @@
+name: Patch binary wishlist score
+
+on:
+  push:
+    paths:
+      - '.github/workflows/patch-wishlist-binary-score.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Render wishlist as binary score factor
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('web/app.js')
+          text = path.read_text(encoding='utf-8')
+          anchor = "  const detail=row?.id==='savings'&&row?.value?` · ${escapeHtml(row.value)}`:'';\n"
+          block = """  if(row?.id==='wishlist'){
+    const status=points>0?'есть':'нет';
+    return `<span class=\"score-chip\"><span>${label}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})} · ${status}</b></span>`;
+  }
+"""
+          if block not in text:
+              if anchor not in text:
+                  raise SystemExit('scoreComponentHtml anchor not found')
+              text = text.replace(anchor, anchor + block, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Validate JavaScript
+        run: node --check web/app.js
+
+      - name: Commit patch and remove helper
+        shell: bash
+        run: |
+          git config user.name 'steam-kz-bot'
+          git config user.email 'steam-kz-bot@users.noreply.github.com'
+          git rm .github/workflows/patch-wishlist-binary-score.yml
+          git add web/app.js
+          git commit -m 'Render wishlist score as binary factor'
+          git pull --rebase origin main
+          git push origin HEAD:main
