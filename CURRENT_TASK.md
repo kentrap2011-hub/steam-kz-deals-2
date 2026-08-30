@@ -1,7 +1,0 @@
-# CURRENT_TASK
-
-status: complete
-started_at: 2026-08-30 Europe/Berlin
-current_task: Устранить причину каскадных архитектурных ошибок: формализовать ownership GitHub/ChatGPT/interactive chat, убрать manual SteamDB recovery из production и сделать нарушения машинно проверяемыми.
-last_progress: Добавлен canonical config/execution_ownership_contract.json и обязательный architecture preflight в CHAT_CONTEXT.md. daily_execution_contract и steamdb_lookup_contract v1.3 закрепляют GitHub как control plane, scheduled ChatGPT как constrained data-plane worker, interactive chat как developer/operator session. Добавлен machine CI guard validate_execution_ownership; первый run поймал реальную скрытую зависимость production от manual recovery artifacts, после чего deprecated assembler workflow/script удалены. Реализованы GitHub-owned SteamDB submission inbox, runtime_state и runtime_work; 529 доказательных recovery-результатов одноразово мигрированы через submission interface, временная миграция удалена. GitHub сам вычислил 5 unresolved retry. Nightly Production Runtime обновлён: читает только GitHub-derived steamdb_runtime_work.json и сдаёт structured submissions. Последний Validate execution ownership run 33284369682 завершён success.
-next_step: Архитектурная guardrail-задача завершена. Оригинальная SteamDB history-задача остаётся отдельной production-задачей: scheduled runtime должен вернуть evidence для 5 GitHub-derived retry keys, после чего GitHub ingestion/validation/checkpoint/downstream должны закрыть цикл.
