@@ -125,7 +125,7 @@ function renderOffers(g){
 }
 function renderFeed(){
   const g=currentGame();const pos=currentIndex();
-  $('emptyFeed').classList.toggle('hidden',!!g);card.classList.toggle('hidden',!g);$('position').textContent=g?`Приоритет: ${pos+1} из ${queueCount()}`:'';$('seenInfo').textContent=g?(rec(g.id).seen?`Показана раньше: ${rec(g.id).seen}×`:'Первый показ'):'';
+  $('emptyFeed').classList.toggle('hidden',!!g);card.classList.toggle('hidden',!g);$('position').textContent=g?`Приоритет: ${pos+1} из ${queueCount()}`:'';$('seenInfo').textContent=g?(rec(g.id).seen?`Показана раньше: ${rec(g.id).seen}×`:'Первый показ'):'';$('startBtn').classList.toggle('hidden',!g||pos===0);
   if(!g)return;
   currentShot=0;setShot(g,0);preloadNearby();
   const r=rec(g.id);$('newBadge').classList.toggle('hidden',!isNew(g.id));$('repeatBadge').classList.toggle('hidden',!(r.seen>0));$('repeatBadge').textContent=r.seen?`🔁 Показ №${r.seen+1}`:'';
@@ -164,6 +164,9 @@ function sendCurrentToEnd(){
 function focusGame(id){
   const idx=state.queue.ids.indexOf(id);if(idx<0)return;state.queue.cursor=idx;currentTab='feed';$('searchDialog').open&&$('searchDialog').close();render();window.scrollTo({top:0,behavior:'smooth'});
 }
+function goToStart(){
+  if(!state.queue.ids.length||currentIndex()===0)return;state.queue.cursor=0;currentTab='feed';saveState();render();window.scrollTo({top:0,behavior:'smooth'});
+}
 function openSteam(steamUrl,webUrl){
   if(!webUrl&&!steamUrl)return;
   if(!steamUrl){location.href=webUrl;return}
@@ -182,7 +185,7 @@ async function init(){
 }
 
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{currentTab=b.dataset.tab;render()}));
-$('likeBtn').addEventListener('click',()=>markCurrent('liked'));$('finalBtn').addEventListener('click',()=>markCurrent('final'));$('endBtn').addEventListener('click',sendCurrentToEnd);
+$('likeBtn').addEventListener('click',()=>markCurrent('liked'));$('finalBtn').addEventListener('click',()=>markCurrent('final'));$('endBtn').addEventListener('click',sendCurrentToEnd);$('startBtn').addEventListener('click',goToStart);
 $('steamBtn').addEventListener('click',()=>{const g=currentGame();if(g)openSteam(g.steam_url,g.web_url)});
 $('searchBtn').addEventListener('click',()=>{$('searchDialog').showModal();$('searchInput').value='';searchRender();setTimeout(()=>$('searchInput').focus(),50)});$('searchInput').addEventListener('input',searchRender);
 
