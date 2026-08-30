@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "purpose": "incremental_per_entry_taste_verdict_overlay",
-  "entry_schema_version": 2,
+  "entry_schema_version": 3,
   "entry_count": 511,
   "entries": {
     "App_241930": {
@@ -3677,18 +3677,28 @@
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
       "taste_model_version": "taste-v2",
       "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
-      "candidate_context_sha256": "667159e1c28f5e7295982757f8a6ff098e0375b8a0890cce3984aa75f2093000",
+      "candidate_context_sha256": "3965b445f6caffc801360d8cf27b59ed0d2da5b716bca9f6e422185e0023ce8f",
       "taste_fingerprint": "44f09d1613256b18bfabe6bf3c683d3d01dd38aa5fdd84c75ded07ceac5d0ebf",
       "verdict": "INCLUDE",
       "fit_level": "moderate",
       "reason_code": "include_moderate",
       "positive_evidence": [
-        "Buying, repairing, modifying and selling cars creates several linked activity loops rather than one repetitive shop interaction.",
-        "Growing the car-sales business provides explicit visible progression and a clear economic goal.",
-        "Driving purchased cars adds a direct vehicle-control activity on top of management."
+        "Negotiating with sellers and judging each vehicle's condition and value creates active decision-making, matching the durable preference for purposeful problem solving where choices have understandable consequences.",
+        "Repairing, repainting and customizing a vehicle before reselling it gives visible progression with a clear effect, matching the strong preference for upgrades whose purpose and result are easy to understand.",
+        "Moving from a small office toward a larger dealership while alternating acquisition, driving, repair and customization maps to the very strong preference for an experience that develops and varies instead of staying static."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:09:24+00:00"
+      "negative_evidence": [
+        "The description does not establish deep mechanical mastery, tactical challenge or a strong narrative or character hook, so those dimensions should not be assumed.",
+        "The buy-improve-resell loop may become repetitive if later dealership growth does not introduce materially new situations, which conflicts with the durable dislike of repetition without development."
+      ],
+      "evaluated_at_utc": "2026-08-30T19:43:59+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 58,
+        "development_variety": 74,
+        "structure_pacing_direction": 82,
+        "identity_hooks": 46,
+        "breadth_of_match": 68
+      }
     },
     "App_2249160": {
       "key": "App_2249160",
