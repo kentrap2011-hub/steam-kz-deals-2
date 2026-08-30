@@ -1,92 +1,190 @@
 {
-  "contract": "FINAL-PRIORITY-RANKING-V1",
+  "contract": "FINAL-PRIORITY-RANKING-V2",
   "status": "canonical",
   "updated_at": "2026-08-30",
-  "purpose": "Single machine-readable source of truth for the final automatic priority_rank after all visual enrichment and refinement are complete.",
+  "purpose": "Single machine-readable source of truth for the transparent 0-100 final automatic priority_rank after all visual enrichment and refinement are complete. Every numeric weight, threshold and point table used by final scoring lives here so tuning does not require code changes.",
   "precedence": {
-    "rule": "This contract is authoritative for final priority_rank. Any older sorting arrays in config/mailing_policy.json are legacy documentation and must not be used by production ranking code.",
+    "rule": "This contract is authoritative for final priority_rank and score_breakdown. Older sorting arrays and qualitative priority buckets remain eligibility/explanation context only and must not be used as an independent final sort layer.",
     "rationale_log": "PROJECT_DECISIONS.md",
     "decision_ids": [
       "RANK-001",
       "RANK-002",
-      "RANK-003",
       "RANK-004",
       "RANK-005",
       "RANK-006",
       "RANK-007",
       "RANK-008",
       "RANK-009",
+      "RANK-010",
       "UI-001"
     ]
   },
   "eligibility_boundary": {
     "apply_only_after_taste_and_commercial_eligibility": true,
+    "score_cannot_rescue_ineligible_candidate": true,
     "sale_urgency_cannot_rescue_ineligible_candidate": true,
     "unknown_sale_end_is_not_penalized": true
   },
   "automatic_final_priority_order": [
     "sale_expiry_urgency_asc",
-    "practical_or_personal_risk_asc",
-    "priority_bucket_asc",
-    "wishlist_desc",
-    "discount_percent_desc",
-    "price_quality_vs_history_desc",
-    "current_price_rub_asc",
-    "achievement_quality_desc",
-    "duration_tiebreak_asc",
+    "total_score_desc",
     "title_asc"
   ],
-  "factor_rules": {
-    "sale_expiry_urgency_asc": {
-      "order": ["today", "tomorrow", "later_or_unknown"],
-      "reason": "Prevent the user from missing a still-relevant deal before it expires."
+  "score_model": {
+    "total_max": 100,
+    "round_digits": 1,
+    "urgency_is_outside_score": true,
+    "personal": {
+      "label": "Насколько подходит тебе",
+      "max": 60,
+      "taste": {
+        "label": "Игра сама по себе",
+        "max": 50,
+        "direct_user_rating_multiplier": 10,
+        "normalized_scale_max": 100,
+        "normalized_factor_weights": {
+          "gameplay_mastery": {
+            "label": "Геймплей, управление и мастерство",
+            "max_points": 18
+          },
+          "development_variety": {
+            "label": "Развитие и разнообразие",
+            "max_points": 12
+          },
+          "structure_pacing_direction": {
+            "label": "Структура, темп и понятный вектор",
+            "max_points": 8
+          },
+          "identity_hooks": {
+            "label": "Персональные крючки и идентичность",
+            "max_points": 8
+          },
+          "breadth_of_match": {
+            "label": "Ширина подтверждённого совпадения",
+            "max_points": 4
+          }
+        },
+        "legacy_coarse_fit_points": {
+          "strong": 42,
+          "moderate": 34
+        },
+        "legacy_coarse_fit_label": "Грубая оценка по старым данным",
+        "source_precedence": [
+          "direct_user_rating",
+          "normalized_taste_factors",
+          "legacy_coarse_fit"
+        ]
+      },
+      "wishlist": {
+        "label": "Вишлист Steam",
+        "max": 4,
+        "present_points": 4,
+        "absent_points": 0
+      },
+      "achievements": {
+        "label": "Достижения",
+        "max": 3,
+        "quality_points": {
+          "5": 3,
+          "4": 2.5,
+          "3": 2,
+          "2": 1,
+          "1": 0.5
+        },
+        "present_quality_unknown_points": 1.5,
+        "status_unknown_points": 1.5,
+        "absent_points": 0
+      },
+      "duration": {
+        "label": "Продолжительность",
+        "max": 3,
+        "band_points": {
+          "preferred_medium": 3,
+          "slightly_short_or_long": 2,
+          "very_short_or_long": 1,
+          "extreme_length": 0,
+          "unknown": 2
+        }
+      },
+      "risk": {
+        "label": "Риск",
+        "max_penalty": 12,
+        "no_confirmed_risk_penalty": 0,
+        "descriptive_low_penalty": 1,
+        "descriptive_medium_penalty": 3,
+        "serious_personal_penalty": 10,
+        "confirmed_windows_penalty": 12,
+        "achievement_only_risk_codes_ignored": [
+          "no_steam_achievements"
+        ],
+        "confirmed_windows_values": [
+          "confirmed_pre_windows_10_target",
+          "known_fix_required",
+          "serious_problem"
+        ],
+        "combine_rule": "strongest_only"
+      }
     },
-    "practical_or_personal_risk_asc": {
-      "reason": "Confirmed serious personal experience conflicts or modern-Windows friction must be considered before the mixed taste/deal bucket, so a commercially attractive cheap deal cannot outrank a safer candidate merely because its purchase verdict is better.",
-      "medium_and_low_personal_heuristics_are_neutral_here": true,
-      "legacy_steam_windows_requirement_label_alone_is_neutral": true,
-      "confirmed_windows_penalty_values": [
-        "confirmed_pre_windows_10_target",
-        "known_fix_required",
-        "serious_problem"
-      ]
-    },
-    "priority_bucket_asc": {
-      "reason": "After urgency and serious confirmed risk, preserve the qualitative taste/deal matrix as the main combined quality layer."
-    },
-    "wishlist_desc": {
-      "reason": "Wishlist is a meaningful but bounded explicit-interest signal after eligibility, major risks, and the qualitative taste/deal bucket."
-    },
-    "discount_percent_desc": {
-      "reason": "Discount size precedes historical-minimum quality because a new game's routine first discount may automatically be its record due only to short price history."
-    },
-    "price_quality_vs_history_desc": {
-      "order": [
-        "record",
-        "near_record",
-        "good_vs_history",
-        "previously_free",
-        "unverified",
-        "well_above_history"
-      ],
-      "reason": "Historical quality remains useful context after the current discount strength is considered."
-    },
-    "current_price_rub_asc": {
-      "reason": "Prefer cheaper otherwise equivalent purchases inside the already enforced budget rules."
-    },
-    "achievement_quality_desc": {
-      "reason": "Achievements are important mainly for close candidates and must not outrank materially better commercial value."
-    },
-    "duration_tiebreak_asc": {
-      "reason": "Duration is only a very late weak preference tiebreaker."
-    },
-    "title_asc": {
-      "reason": "Deterministic final tiebreak only."
+    "purchase": {
+      "label": "Выгодность покупки",
+      "max": 40,
+      "discount": {
+        "label": "Размер скидки",
+        "max": 20,
+        "bands": [
+          {"min": 6, "max": 14, "points": 1},
+          {"min": 15, "max": 24, "points": 3},
+          {"min": 25, "max": 34, "points": 5},
+          {"min": 35, "max": 44, "points": 7},
+          {"min": 45, "max": 54, "points": 10},
+          {"min": 55, "max": 64, "points": 13},
+          {"min": 65, "max": 74, "points": 16},
+          {"min": 75, "max": 84, "points": 18},
+          {"min": 85, "max": 94, "points": 19},
+          {"min": 95, "max": 100, "points": 20}
+        ]
+      },
+      "price": {
+        "label": "Текущая цена",
+        "max": 12,
+        "bands": [
+          {"min": 0, "max": 100, "points": 12},
+          {"min": 101, "max": 250, "points": 11},
+          {"min": 251, "max": 400, "points": 10},
+          {"min": 401, "max": 500, "points": 9},
+          {"min": 501, "max": 550, "points": 7},
+          {"min": 551, "max": 650, "points": 4},
+          {"min": 651, "max": 750, "points": 1}
+        ],
+        "unknown_points": 0
+      },
+      "history": {
+        "label": "История цены",
+        "max": 8,
+        "quality_points": {
+          "record": 8,
+          "near_record": 7,
+          "good_vs_history": 5,
+          "unverified": 3,
+          "previously_free": 2,
+          "well_above_history": 0
+        }
+      }
     }
   },
-  "direct_user_evidence": {
-    "separate_final_sort_factor": false,
-    "reason": "Direct user evidence already adjusts fit and therefore priority_bucket upstream; sorting by it again would double-count taste."
+  "taste_factor_contract": {
+    "price_blind": true,
+    "normalized_values_are_weight_independent": true,
+    "normalized_value_range": [0, 100],
+    "changing_final_weights_must_not_require_ai_reevaluation": true,
+    "legacy_entries_without_factor_vector_may_use_explicit_coarse_fallback": true,
+    "legacy_fallback_must_be_visible_to_user": true
+  },
+  "non_score_fields": {
+    "priority_bucket": "eligibility/explanation context only; not a V2 final ranking factor",
+    "purchase_decision": "explanation label only; do not double-count price/history through it",
+    "direct_user_evidence": "used as the strongest taste-score source when an exact rating exists; do not add a second bonus",
+    "sale_expiry_urgency": "absolute display-priority layer outside 0-100"
   },
   "ui_override": {
     "manual_end_of_queue_has_absolute_precedence": true,
