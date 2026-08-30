@@ -10,6 +10,12 @@ ROOT = Path('.')
 OUT = ROOT / 'data/production/visual/current.json'
 
 
+def normalize_media_url(value):
+    if isinstance(value, str) and value.startswith('https://shared.fastly.steamstatic.com/'):
+        return 'https://shared.akamai.steamstatic.com/' + value[len('https://shared.fastly.steamstatic.com/'):]
+    return value
+
+
 def refresh_existing_media():
     if not OUT.exists():
         return 0, 0
@@ -33,8 +39,9 @@ def refresh_existing_media():
         header = None
         for appid in game.get('base_appids') or []:
             m = media.get(str(appid)) or {}
-            header = header or m.get('header_image')
+            header = header or normalize_media_url(m.get('header_image'))
             for url in m.get('screenshots') or []:
+                url = normalize_media_url(url)
                 if url not in screenshots:
                     screenshots.append(url)
 
