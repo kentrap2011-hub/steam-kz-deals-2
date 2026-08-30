@@ -1,0 +1,95 @@
+{
+  "contract": "FINAL-PRIORITY-RANKING-V1",
+  "status": "canonical",
+  "updated_at": "2026-08-30",
+  "purpose": "Single machine-readable source of truth for the final automatic priority_rank after all visual enrichment and refinement are complete.",
+  "precedence": {
+    "rule": "This contract is authoritative for final priority_rank. Any older sorting arrays in config/mailing_policy.json are legacy documentation and must not be used by production ranking code.",
+    "rationale_log": "PROJECT_DECISIONS.md",
+    "decision_ids": [
+      "RANK-001",
+      "RANK-002",
+      "RANK-003",
+      "RANK-004",
+      "RANK-005",
+      "RANK-006",
+      "RANK-007",
+      "RANK-008",
+      "UI-001"
+    ]
+  },
+  "eligibility_boundary": {
+    "apply_only_after_taste_and_commercial_eligibility": true,
+    "sale_urgency_cannot_rescue_ineligible_candidate": true,
+    "unknown_sale_end_is_not_penalized": true
+  },
+  "automatic_final_priority_order": [
+    "sale_expiry_urgency_asc",
+    "priority_bucket_asc",
+    "practical_or_personal_risk_asc",
+    "wishlist_desc",
+    "discount_percent_desc",
+    "price_quality_vs_history_desc",
+    "current_price_rub_asc",
+    "achievement_quality_desc",
+    "duration_tiebreak_asc",
+    "title_asc"
+  ],
+  "factor_rules": {
+    "sale_expiry_urgency_asc": {
+      "order": ["today", "tomorrow", "later_or_unknown"],
+      "reason": "Prevent the user from missing a still-relevant deal before it expires."
+    },
+    "priority_bucket_asc": {
+      "reason": "Preserve the qualitative taste/deal matrix as the main quality layer after urgency."
+    },
+    "practical_or_personal_risk_asc": {
+      "reason": "Confirmed serious experience or modern-Windows friction should lower otherwise comparable purchases.",
+      "legacy_steam_windows_requirement_label_alone_is_neutral": true,
+      "confirmed_windows_penalty_values": [
+        "confirmed_pre_windows_10_target",
+        "known_fix_required",
+        "serious_problem"
+      ]
+    },
+    "wishlist_desc": {
+      "reason": "Wishlist is a meaningful but bounded explicit-interest signal after eligibility and major risks."
+    },
+    "discount_percent_desc": {
+      "reason": "Discount size precedes historical-minimum quality because a new game's routine first discount may automatically be its record due only to short price history."
+    },
+    "price_quality_vs_history_desc": {
+      "order": [
+        "record",
+        "near_record",
+        "good_vs_history",
+        "previously_free",
+        "unverified",
+        "well_above_history"
+      ],
+      "reason": "Historical quality remains useful context after the current discount strength is considered."
+    },
+    "current_price_rub_asc": {
+      "reason": "Prefer cheaper otherwise equivalent purchases inside the already enforced budget rules."
+    },
+    "achievement_quality_desc": {
+      "reason": "Achievements are important mainly for close candidates and must not outrank materially better commercial value."
+    },
+    "duration_tiebreak_asc": {
+      "reason": "Duration is only a very late weak preference tiebreaker."
+    },
+    "title_asc": {
+      "reason": "Deterministic final tiebreak only."
+    }
+  },
+  "direct_user_evidence": {
+    "separate_final_sort_factor": false,
+    "reason": "Direct user evidence already adjusts fit and therefore priority_bucket upstream; sorting by it again would double-count taste."
+  },
+  "ui_override": {
+    "manual_end_of_queue_has_absolute_precedence": true,
+    "stored_locally": true,
+    "production_priority_rank_must_not_be_mutated_by_ui": true,
+    "reason": "An explicit user queue decision overrides every automatic priority, including a deal expiring today."
+  }
+}
