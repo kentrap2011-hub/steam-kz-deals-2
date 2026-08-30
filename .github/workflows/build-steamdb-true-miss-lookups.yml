@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - "config/steamdb_lookup_contract.json"
+      - "config/execution_ownership_contract.json"
       - "data/cache/steamdb_web_resolutions.json"
 
 permissions:
@@ -35,6 +36,7 @@ jobs:
           CLASSIFICATION = Path('data/cache/steamdb_cache.validation.json')
           PREPARED = Path('data/cache/steamdb_web_resolutions.json')
           CONTRACT = Path('config/steamdb_lookup_contract.json')
+          OWNERSHIP = Path('config/execution_ownership_contract.json')
           OUT = Path('data/cache/steamdb_lookup.validation.json')
 
           def sha(path):
@@ -43,13 +45,26 @@ jobs:
           classification = json.loads(CLASSIFICATION.read_text(encoding='utf-8'))
           prepared = json.loads(PREPARED.read_text(encoding='utf-8'))
           contract = json.loads(CONTRACT.read_text(encoding='utf-8'))
+          ownership = json.loads(OWNERSHIP.read_text(encoding='utf-8'))
 
           if classification.get('status') != 'complete':
               raise SystemExit('Stage-15 classification is not complete')
-          if contract.get('contract') != 'STEAMDB-TRUE-MISS-LOOKUP-V1' or contract.get('version') != '1.1':
+          if contract.get('contract') != 'STEAMDB-TRUE-MISS-LOOKUP-V1' or contract.get('version') != '1.2':
               raise SystemExit('Unexpected SteamDB lookup contract')
+          if ownership.get('contract') != 'PRODUCTION-EXECUTION-OWNERSHIP-V1' or ownership.get('status') != 'canonical':
+              raise SystemExit('Unexpected production execution ownership contract')
           if prepared.get('schema_version') != 1:
               raise SystemExit('Unexpected prepared resolution schema')
+
+          steamdb_ownership = contract.get('ownership') or {}
+          github_ownership = (steamdb_ownership.get('github_control_plane') or {}).get('owns') or []
+          runtime_forbidden = (steamdb_ownership.get('scheduled_chatgpt_data_plane') or {}).get('must_not_own') or []
+          required_github = {'exact true-miss manifest and ordering', 'unresolved/retry state', 'completeness accounting', 'prepared-result validation', 'canonical steamdb_history persistence', 'downstream rebuild orchestration'}
+          required_runtime_forbidden = {'scope discovery', 'queue construction', 'retry policy', 'backlog management', 'daily quota or batch semantics', 'canonical cache merge', 'completion decision'}
+          if not required_github.issubset(set(github_ownership)):
+              raise SystemExit('SteamDB contract no longer gives GitHub the required control-plane ownership')
+          if not required_runtime_forbidden.issubset(set(runtime_forbidden)):
+              raise SystemExit('SteamDB contract no longer constrains ChatGPT runtime ownership')
 
           classification_sha = sha('data/cache/steamdb_cache.validation.json')
           if prepared.get('source_validation_blob_sha') != classification_sha:
@@ -184,6 +199,7 @@ jobs:
               'bindings': {
                   'steamdb_cache_classification_blob_sha': classification_sha,
                   'lookup_contract_blob_sha': sha('config/steamdb_lookup_contract.json'),
+                  'ownership_contract_blob_sha': sha('config/execution_ownership_contract.json'),
                   'prepared_runtime_resolutions_blob_sha': sha('data/cache/steamdb_web_resolutions.json')
               },
               'expected_true_miss_count': len(expected),
