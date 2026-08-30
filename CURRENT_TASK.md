@@ -1,7 +1,7 @@
 # CURRENT_TASK
 
 status: in_progress
-started_at: 2026-08-30 07:18 Europe/Berlin
-current_task: Закрыть 5 оставшихся SteamDB history retry через GitHub-owned production pipeline без ручной обработки в interactive chat.
-last_progress: GitHub-derived `data/cache/steamdb_runtime_work.json` содержит 5 retry из 534; 529 уже resolved. Архитектурный ownership подтверждён: GitHub владеет scope/retry/validation/persistence/downstream, interactive chat не обрабатывает backlog вручную. Для этого участка создан и проверен быстрый маршрут в `PROJECT_ROUTES.md`; `CHAT_CONTEXT.md` теперь обязывает будущие чаты сначала проверять карту маршрутов перед широким поиском. Выяснено также, что 529 результатов были перенесены через recovery migration, поэтому их наличие не подтверждает работоспособность текущего GitHub → runtime handoff.
-next_step: По маршруту `PROJECT_ROUTES.md` найти точный штатный триггер GitHub → external runtime для 5 GitHub-derived retry, запустить/починить именно этот handoff, затем проверить `unresolved_count == 0`, validation/checkpoint `steamdb_history` и успешный downstream rebuild.
+started_at: 2026-08-30 Europe/Berlin
+current_task: Создать постоянный backlog проекта и перенести туда незавершённую SteamDB history-задачу.
+last_progress: Пользователь решил не добивать сейчас 5 оставшихся SteamDB retry: исторический минимум уже заполнен для большинства игр, а есть более приоритетные проблемы.
+next_step: Создать BACKLOG.md с отложенной SteamDB history-задачей, затем удалить CURRENT_TASK.md после завершения этой организационной подзадачи.
