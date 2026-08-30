@@ -1,7 +1,7 @@
 {
   "Ravenous Devils": {
-    "rank": 69,
-    "taste_rank": 263,
+    "rank": 70,
+    "taste_rank": 262,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -11,9 +11,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -22,8 +24,8 @@
     "current_price_rub": 140
   },
   "Razortron 2000": {
-    "rank": 348,
-    "taste_rank": 335,
+    "rank": 322,
+    "taste_rank": 334,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -31,11 +33,13 @@
     "risk_level": "high",
     "risk_status": {
       "code": "serious_risk",
-      "label": "Серьёзный риск — влияет на сортировку",
-      "affects_early_priority": true,
+      "label": "Серьёзный риск — влияет на рейтинг",
+      "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 2,
       "risk_level": "high",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 10.0
     },
     "risk_codes": [
       "unchanged_repetition"
@@ -46,8 +50,8 @@
     "current_price_rub": 28
   },
   "Rebel Galaxy": {
-    "rank": 295,
-    "taste_rank": 305,
+    "rank": 298,
+    "taste_rank": 304,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -55,11 +59,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness"
@@ -70,8 +76,8 @@
     "current_price_rub": 215
   },
   "Rebel Inc: Escalation": {
-    "rank": 168,
-    "taste_rank": 170,
+    "rank": 189,
+    "taste_rank": 171,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -81,9 +87,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -92,8 +100,8 @@
     "current_price_rub": 161
   },
   "Revenge Of The Colon": {
-    "rank": 57,
-    "taste_rank": 264,
+    "rank": 46,
+    "taste_rank": 263,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -103,9 +111,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -114,7 +124,7 @@
     "current_price_rub": 183
   },
   "Ring Runner: Flight of the Sages": {
-    "rank": 38,
+    "rank": 17,
     "taste_rank": 16,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -125,9 +135,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -136,8 +148,8 @@
     "current_price_rub": 39
   },
   "Risk of Rain (2013)": {
-    "rank": 151,
-    "taste_rank": 154,
+    "rank": 132,
+    "taste_rank": 155,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -145,11 +157,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "platform_repetition"
@@ -160,7 +174,7 @@
     "current_price_rub": 69
   },
   "Risk of Rain 2": {
-    "rank": 96,
+    "rank": 95,
     "taste_rank": 23,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -171,9 +185,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -182,8 +198,8 @@
     "current_price_rub": 202
   },
   "Risk of Rain Returns": {
-    "rank": 192,
-    "taste_rank": 265,
+    "rank": 273,
+    "taste_rank": 264,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -193,9 +209,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -204,7 +222,7 @@
     "current_price_rub": 380
   },
   "Road Redemption": {
-    "rank": 79,
+    "rank": 77,
     "taste_rank": 24,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -215,9 +233,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -226,7 +246,7 @@
     "current_price_rub": 74
   },
   "Rogue Heroes: Ruins of Tasos": {
-    "rank": 41,
+    "rank": 21,
     "taste_rank": 47,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -237,9 +257,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -248,8 +270,8 @@
     "current_price_rub": 192
   },
   "ROUNDS": {
-    "rank": 329,
-    "taste_rank": 266,
+    "rank": 323,
+    "taste_rank": 265,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -259,9 +281,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -270,8 +294,8 @@
     "current_price_rub": 130
   },
   "Röki": {
-    "rank": 145,
-    "taste_rank": 155,
+    "rank": 133,
+    "taste_rank": 156,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -279,11 +303,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "puzzle_pacing"

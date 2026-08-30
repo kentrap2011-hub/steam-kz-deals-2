@@ -1,6 +1,6 @@
 {
   "Tangle Tower": {
-    "rank": 220,
+    "rank": 158,
     "taste_rank": 52,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -9,11 +9,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "puzzle_pacing",
@@ -25,7 +27,7 @@
     "current_price_rub": 193
   },
   "Tannenberg": {
-    "rank": 294,
+    "rank": 258,
     "taste_rank": 200,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -36,9 +38,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -47,7 +51,7 @@
     "current_price_rub": 193
   },
   "Teenage Mutant Ninja Turtles: Splintered Fate": {
-    "rank": 233,
+    "rank": 159,
     "taste_rank": 94,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -58,9 +62,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -69,8 +75,8 @@
     "current_price_rub": 384
   },
   "TerraTech": {
-    "rank": 265,
-    "taste_rank": 303,
+    "rank": 216,
+    "taste_rank": 302,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -78,11 +84,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness"
@@ -93,8 +101,8 @@
     "current_price_rub": 153
   },
   "The Artful Escape": {
-    "rank": 162,
-    "taste_rank": 172,
+    "rank": 146,
+    "taste_rank": 277,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -104,9 +112,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -115,8 +125,8 @@
     "current_price_rub": 229
   },
   "The Beast Inside": {
-    "rank": 283,
-    "taste_rank": 158,
+    "rank": 233,
+    "taste_rank": 159,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -126,9 +136,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -137,7 +149,7 @@
     "current_price_rub": 119
   },
   "The Black Grimoire: Cursebreaker": {
-    "rank": 184,
+    "rank": 229,
     "taste_rank": 278,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -148,9 +160,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -158,33 +172,9 @@
     "history_quality": "record",
     "current_price_rub": 304
   },
-  "The Case Book of Arne": {
-    "rank": 4,
-    "taste_rank": 279,
-    "fit": "moderate",
-    "decision": "ЛУЧШЕ ЖДАТЬ",
-    "priority_group": 6,
-    "serious_risk_rank": 0,
-    "risk_level": "low",
-    "risk_status": {
-      "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
-      "affects_early_priority": false,
-      "serious_rank": 0,
-      "risk_level": "low",
-      "has_described_risk": true
-    },
-    "risk_codes": [
-      "reading_investigation"
-    ],
-    "wishlist": false,
-    "discount_percent": 40,
-    "history_quality": "well_above_history",
-    "current_price_rub": 344
-  },
   "The Chrono Jotter": {
-    "rank": 169,
-    "taste_rank": 280,
+    "rank": 190,
+    "taste_rank": 279,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -192,11 +182,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "reading_investigation"
@@ -207,8 +199,8 @@
     "current_price_rub": 190
   },
   "The Daedalic Armageddon Bundle": {
-    "rank": 250,
-    "taste_rank": 146,
+    "rank": 173,
+    "taste_rank": 147,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -218,9 +210,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -229,7 +223,7 @@
     "current_price_rub": 120
   },
   "The Dark Eye: Chains of Satinav": {
-    "rank": 141,
+    "rank": 117,
     "taste_rank": 201,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -240,9 +234,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -251,7 +247,7 @@
     "current_price_rub": 49
   },
   "The Dark Eye: Memoria": {
-    "rank": 138,
+    "rank": 130,
     "taste_rank": 173,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -262,9 +258,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -273,7 +271,7 @@
     "current_price_rub": 49
   },
   "The Dungeon Of Naheulbeuk: The Amulet Of Chaos": {
-    "rank": 80,
+    "rank": 81,
     "taste_rank": 25,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -284,9 +282,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -295,8 +295,8 @@
     "current_price_rub": 122
   },
   "The Escape: Together": {
-    "rank": 328,
-    "taste_rank": 281,
+    "rank": 324,
+    "taste_rank": 280,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -306,9 +306,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -317,8 +319,8 @@
     "current_price_rub": 111
   },
   "The Forest Quartet": {
-    "rank": 288,
-    "taste_rank": 282,
+    "rank": 275,
+    "taste_rank": 281,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -326,11 +328,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "puzzle_pacing"
@@ -341,7 +345,7 @@
     "current_price_rub": 107
   },
   "The Forgotten City": {
-    "rank": 91,
+    "rank": 96,
     "taste_rank": 26,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -352,9 +356,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -363,7 +369,7 @@
     "current_price_rub": 382
   },
   "The Great Perhaps": {
-    "rank": 13,
+    "rank": 16,
     "taste_rank": 202,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -372,11 +378,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "puzzle_pacing"
@@ -388,7 +396,7 @@
   },
   "The Infected": {
     "rank": 351,
-    "taste_rank": 346,
+    "taste_rank": 345,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -396,11 +404,13 @@
     "risk_level": "high",
     "risk_status": {
       "code": "serious_risk",
-      "label": "Серьёзный риск — влияет на сортировку",
-      "affects_early_priority": true,
+      "label": "Серьёзный риск — влияет на рейтинг",
+      "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 2,
       "risk_level": "high",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 10.0
     },
     "risk_codes": [
       "directionlessness"
@@ -411,7 +421,7 @@
     "current_price_rub": 518
   },
   "The Jackbox Party Pack 3": {
-    "rank": 327,
+    "rank": 332,
     "taste_rank": 203,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -422,9 +432,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -433,7 +445,7 @@
     "current_price_rub": 534
   },
   "The Jackbox Party Pack 4": {
-    "rank": 319,
+    "rank": 310,
     "taste_rank": 174,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -444,9 +456,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -455,8 +469,8 @@
     "current_price_rub": 415
   },
   "THE KING OF FIGHTERS XIV STEAM EDITION": {
-    "rank": 149,
-    "taste_rank": 147,
+    "rank": 118,
+    "taste_rank": 148,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -466,9 +480,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -477,7 +493,7 @@
     "current_price_rub": 197
   },
   "The Last Spell": {
-    "rank": 232,
+    "rank": 160,
     "taste_rank": 53,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -488,9 +504,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -499,7 +517,7 @@
     "current_price_rub": 296
   },
   "The Night of the Rabbit": {
-    "rank": 279,
+    "rank": 230,
     "taste_rank": 204,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -510,9 +528,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -521,8 +541,8 @@
     "current_price_rub": 72
   },
   "The Pale Beyond": {
-    "rank": 154,
-    "taste_rank": 283,
+    "rank": 147,
+    "taste_rank": 282,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -532,9 +552,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -543,8 +565,8 @@
     "current_price_rub": 193
   },
   "The Riftbreaker": {
-    "rank": 174,
-    "taste_rank": 163,
+    "rank": 206,
+    "taste_rank": 164,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -554,9 +576,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -565,7 +589,7 @@
     "current_price_rub": 422
   },
   "The Stronghold Collection": {
-    "rank": 12,
+    "rank": 7,
     "taste_rank": 54,
     "fit": "strong",
     "decision": "МОЖНО БРАТЬ",
@@ -574,11 +598,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "old_design_friction"
@@ -589,7 +615,7 @@
     "current_price_rub": 92
   },
   "The Survivalists": {
-    "rank": 222,
+    "rank": 191,
     "taste_rank": 115,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -598,11 +624,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "exploration_direction"
@@ -613,7 +641,7 @@
     "current_price_rub": 244
   },
   "The Testament of Sherlock Holmes": {
-    "rank": 36,
+    "rank": 23,
     "taste_rank": 55,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -622,11 +650,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "reading_investigation"
@@ -637,8 +667,8 @@
     "current_price_rub": 102
   },
   "The Tiny Bang Story": {
-    "rank": 54,
-    "taste_rank": 297,
+    "rank": 52,
+    "taste_rank": 296,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -646,11 +676,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "no_steam_achievements",
@@ -662,7 +694,7 @@
     "current_price_rub": 56
   },
   "The Walking Dead: Saints & Sinners": {
-    "rank": 193,
+    "rank": 286,
     "taste_rank": 205,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -673,9 +705,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -684,8 +718,8 @@
     "current_price_rub": 435
   },
   "The Whispered World Special Edition": {
-    "rank": 136,
-    "taste_rank": 148,
+    "rank": 105,
+    "taste_rank": 149,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -695,9 +729,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -706,7 +742,7 @@
     "current_price_rub": 49
   },
   "The Wild Eight": {
-    "rank": 76,
+    "rank": 78,
     "taste_rank": 18,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -717,9 +753,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -728,8 +766,8 @@
     "current_price_rub": 128
   },
   "Thief Gold (1999)": {
-    "rank": 301,
-    "taste_rank": 298,
+    "rank": 265,
+    "taste_rank": 297,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -737,11 +775,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": -0.0
     },
     "risk_codes": [
       "no_steam_achievements"
@@ -752,7 +792,7 @@
     "current_price_rub": 97
   },
   "Thief II: The Metal Age": {
-    "rank": 224,
+    "rank": 151,
     "taste_rank": 97,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -761,11 +801,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": -0.0
     },
     "risk_codes": [
       "no_steam_achievements"
@@ -776,7 +818,7 @@
     "current_price_rub": 97
   },
   "Thief: Deadly Shadows": {
-    "rank": 216,
+    "rank": 161,
     "taste_rank": 98,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -785,11 +827,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "no_steam_achievements",
@@ -801,8 +845,8 @@
     "current_price_rub": 100
   },
   "Thymesia": {
-    "rank": 58,
-    "taste_rank": 284,
+    "rank": 50,
+    "taste_rank": 283,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -812,9 +856,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -823,7 +869,7 @@
     "current_price_rub": 369
   },
   "Tiny Terry's Turbo Trip": {
-    "rank": 127,
+    "rank": 259,
     "taste_rank": 121,
     "fit": "strong",
     "decision": "МОЖНО БРАТЬ",
@@ -832,11 +878,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness"
@@ -847,8 +895,8 @@
     "current_price_rub": 445
   },
   "Tomb Raider Game of the Year": {
-    "rank": 256,
-    "taste_rank": 149,
+    "rank": 204,
+    "taste_rank": 150,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -858,9 +906,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -869,7 +919,7 @@
     "current_price_rub": 167
   },
   "Tomb Raider I (1996)": {
-    "rank": 244,
+    "rank": 278,
     "taste_rank": 99,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -878,11 +928,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": -0.0
     },
     "risk_codes": [
       "no_steam_achievements"
@@ -893,8 +945,8 @@
     "current_price_rub": 195
   },
   "Tomb Raider III (1998)": {
-    "rank": 272,
-    "taste_rank": 299,
+    "rank": 320,
+    "taste_rank": 298,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -902,11 +954,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "no_steam_achievements",
@@ -918,7 +972,7 @@
     "current_price_rub": 195
   },
   "Totally Accurate Battle Simulator": {
-    "rank": 240,
+    "rank": 174,
     "taste_rank": 10,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -929,9 +983,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -940,8 +996,8 @@
     "current_price_rub": 284
   },
   "Tower Unite": {
-    "rank": 73,
-    "taste_rank": 333,
+    "rank": 72,
+    "taste_rank": 332,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -949,11 +1005,13 @@
     "risk_level": "high",
     "risk_status": {
       "code": "serious_risk",
-      "label": "Серьёзный риск — влияет на сортировку",
-      "affects_early_priority": true,
+      "label": "Серьёзный риск — влияет на рейтинг",
+      "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 2,
       "risk_level": "high",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 10.0
     },
     "risk_codes": [
       "directionlessness"
@@ -964,7 +1022,7 @@
     "current_price_rub": 434
   },
   "TowerFall Ascension": {
-    "rank": 217,
+    "rank": 119,
     "taste_rank": 3,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -975,9 +1033,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -986,7 +1046,7 @@
     "current_price_rub": 152
   },
   "Train Valley 2": {
-    "rank": 74,
+    "rank": 73,
     "taste_rank": 19,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -997,9 +1057,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -1019,9 +1081,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,

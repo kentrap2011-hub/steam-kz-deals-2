@@ -1,7 +1,7 @@
 {
   "Kenshi": {
     "rank": 326,
-    "taste_rank": 295,
+    "taste_rank": 294,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -9,11 +9,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": -0.0
     },
     "risk_codes": [
       "no_steam_achievements"
@@ -24,8 +26,8 @@
     "current_price_rub": 445
   },
   "Killer Frequency": {
-    "rank": 24,
-    "taste_rank": 251,
+    "rank": 26,
+    "taste_rank": 250,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -33,11 +35,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "puzzle_pacing"
@@ -48,8 +52,8 @@
     "current_price_rub": 237
   },
   "Kingdom Two Crowns": {
-    "rank": 293,
-    "taste_rank": 308,
+    "rank": 301,
+    "taste_rank": 307,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -57,11 +61,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "exploration_direction"
@@ -72,8 +78,8 @@
     "current_price_rub": 193
   },
   "Kona": {
-    "rank": 14,
-    "taste_rank": 139,
+    "rank": 10,
+    "taste_rank": 140,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -81,11 +87,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "reading_investigation"
@@ -96,7 +104,7 @@
     "current_price_rub": 44
   },
   "KUNKUN Defender": {
-    "rank": 98,
+    "rank": 97,
     "taste_rank": 78,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -107,9 +115,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -118,7 +128,7 @@
     "current_price_rub": 66
   },
   "KUNKUN Defender 2": {
-    "rank": 92,
+    "rank": 84,
     "taste_rank": 79,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -129,9 +139,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,

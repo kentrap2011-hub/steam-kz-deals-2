@@ -1,6 +1,6 @@
 {
   ">observer_": {
-    "rank": 143,
+    "rank": 109,
     "taste_rank": 130,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -9,11 +9,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "reading_investigation"
@@ -24,8 +26,8 @@
     "current_price_rub": 72
   },
   "你已经猜到结局了吗": {
-    "rank": 65,
-    "taste_rank": 293,
+    "rank": 67,
+    "taste_rank": 292,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -33,11 +35,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "reading_investigation"
@@ -48,7 +52,7 @@
     "current_price_rub": 213
   },
   "永远消失的幻想乡 ～ The Disappearing of Gensokyo": {
-    "rank": 18,
+    "rank": 11,
     "taste_rank": 212,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -59,9 +63,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -70,8 +76,8 @@
     "current_price_rub": 54
   },
   "港詭實錄ParanormalHK": {
-    "rank": 191,
-    "taste_rank": 294,
+    "rank": 277,
+    "taste_rank": 293,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -81,9 +87,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -92,8 +100,8 @@
     "current_price_rub": 283
   },
   "灵墟": {
-    "rank": 70,
-    "taste_rank": 349,
+    "rank": 62,
+    "taste_rank": 348,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -101,11 +109,13 @@
     "risk_level": "high",
     "risk_status": {
       "code": "serious_risk",
-      "label": "Серьёзный риск — влияет на сортировку",
-      "affects_early_priority": true,
+      "label": "Серьёзный риск — влияет на рейтинг",
+      "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 2,
       "risk_level": "high",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 10.0
     },
     "risk_codes": [
       "directionlessness"

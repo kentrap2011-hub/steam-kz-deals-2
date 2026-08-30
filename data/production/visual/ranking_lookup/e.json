@@ -1,6 +1,6 @@
 {
   "Easy Delivery Co.": {
-    "rank": 114,
+    "rank": 218,
     "taste_rank": 69,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -11,9 +11,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -22,8 +24,8 @@
     "current_price_rub": 389
   },
   "Echoes of the Plum Grove": {
-    "rank": 345,
-    "taste_rank": 340,
+    "rank": 343,
+    "taste_rank": 339,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -31,11 +33,13 @@
     "risk_level": "high",
     "risk_status": {
       "code": "serious_risk",
-      "label": "Серьёзный риск — влияет на сортировку",
-      "affects_early_priority": true,
+      "label": "Серьёзный риск — влияет на рейтинг",
+      "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 2,
       "risk_level": "high",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 10.0
     },
     "risk_codes": [
       "directionlessness"
@@ -46,7 +50,7 @@
     "current_price_rub": 482
   },
   "Eclipsium": {
-    "rank": 200,
+    "rank": 308,
     "taste_rank": 236,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -57,9 +61,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -68,8 +74,8 @@
     "current_price_rub": 434
   },
   "Elite Dangerous": {
-    "rank": 349,
-    "taste_rank": 350,
+    "rank": 341,
+    "taste_rank": 349,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -77,11 +83,13 @@
     "risk_level": "high",
     "risk_status": {
       "code": "serious_risk",
-      "label": "Серьёзный риск — влияет на сортировку",
-      "affects_early_priority": true,
+      "label": "Серьёзный риск — влияет на рейтинг",
+      "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 2,
       "risk_level": "high",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 10.0
     },
     "risk_codes": [
       "directionlessness",
@@ -93,8 +101,8 @@
     "current_price_rub": 289
   },
   "Ember Knights": {
-    "rank": 185,
-    "taste_rank": 237,
+    "rank": 208,
+    "taste_rank": 134,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -104,9 +112,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -115,7 +125,7 @@
     "current_price_rub": 385
   },
   "Emily Wants to Play Too": {
-    "rank": 45,
+    "rank": 48,
     "taste_rank": 35,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -124,11 +134,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "reading_investigation"
@@ -139,7 +151,7 @@
     "current_price_rub": 213
   },
   "Empires of the Undergrowth": {
-    "rank": 95,
+    "rank": 91,
     "taste_rank": 7,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -150,9 +162,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -161,8 +175,8 @@
     "current_price_rub": 328
   },
   "Endzone - A World Apart": {
-    "rank": 251,
-    "taste_rank": 313,
+    "rank": 197,
+    "taste_rank": 312,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -170,11 +184,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "management_routine"
@@ -185,8 +201,8 @@
     "current_price_rub": 87
   },
   "Epistory - Typing Chronicles": {
-    "rank": 302,
-    "taste_rank": 162,
+    "rank": 264,
+    "taste_rank": 163,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -196,9 +212,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -207,7 +225,7 @@
     "current_price_rub": 120
   },
   "Equinox: Homecoming": {
-    "rank": 117,
+    "rank": 299,
     "taste_rank": 70,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -218,9 +236,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -229,7 +249,7 @@
     "current_price_rub": 570
   },
   "Exit From": {
-    "rank": 278,
+    "rank": 219,
     "taste_rank": 184,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -240,9 +260,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,

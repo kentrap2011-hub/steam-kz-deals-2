@@ -1,6 +1,6 @@
 {
   "Hacknet": {
-    "rank": 285,
+    "rank": 221,
     "taste_rank": 186,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -11,9 +11,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -22,7 +24,7 @@
     "current_price_rub": 81
   },
   "Hand Simulator": {
-    "rank": 61,
+    "rank": 60,
     "taste_rank": 187,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -33,9 +35,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -44,7 +48,7 @@
     "current_price_rub": 82
   },
   "Hand Simulator: Survival": {
-    "rank": 62,
+    "rank": 61,
     "taste_rank": 188,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -55,9 +59,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -66,7 +72,7 @@
     "current_price_rub": 82
   },
   "Haste": {
-    "rank": 113,
+    "rank": 289,
     "taste_rank": 74,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -77,9 +83,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -89,7 +97,7 @@
   },
   "Have a Nice Death": {
     "rank": 30,
-    "taste_rank": 247,
+    "taste_rank": 246,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -99,9 +107,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -110,8 +120,8 @@
     "current_price_rub": 370
   },
   "He is Coming": {
-    "rank": 271,
-    "taste_rank": 322,
+    "rank": 317,
+    "taste_rank": 321,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -119,11 +129,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "low_active_gameplay"
@@ -134,8 +146,8 @@
     "current_price_rub": 361
   },
   "Hellslave": {
-    "rank": 258,
-    "taste_rank": 323,
+    "rank": 253,
+    "taste_rank": 322,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -143,11 +155,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "exploration_direction"
@@ -158,8 +172,8 @@
     "current_price_rub": 225
   },
   "Heroes of Hammerwatch": {
-    "rank": 153,
-    "taste_rank": 316,
+    "rank": 184,
+    "taste_rank": 315,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -167,11 +181,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "exploration_direction"
@@ -182,8 +198,8 @@
     "current_price_rub": 152
   },
   "High On Life": {
-    "rank": 274,
-    "taste_rank": 248,
+    "rank": 254,
+    "taste_rank": 247,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -193,9 +209,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": true,
@@ -204,8 +222,8 @@
     "current_price_rub": 460
   },
   "HighFleet": {
-    "rank": 340,
-    "taste_rank": 342,
+    "rank": 333,
+    "taste_rank": 341,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -213,11 +231,13 @@
     "risk_level": "high",
     "risk_status": {
       "code": "serious_risk",
-      "label": "Серьёзный риск — влияет на сортировку",
-      "affects_early_priority": true,
+      "label": "Серьёзный риск — влияет на рейтинг",
+      "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 2,
       "risk_level": "high",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 10.0
     },
     "risk_codes": [
       "directionlessness",
@@ -229,7 +249,7 @@
     "current_price_rub": 361
   },
   "Hogwarts Legacy": {
-    "rank": 146,
+    "rank": 185,
     "taste_rank": 127,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -238,11 +258,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness"
@@ -253,7 +275,7 @@
     "current_price_rub": 426
   },
   "Hollowbody": {
-    "rank": 10,
+    "rank": 49,
     "taste_rank": 75,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -262,11 +284,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "puzzle_pacing"
@@ -277,7 +301,7 @@
     "current_price_rub": 542
   },
   "Homeworld Remastered Collection": {
-    "rank": 77,
+    "rank": 75,
     "taste_rank": 38,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -288,9 +312,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -299,8 +325,8 @@
     "current_price_rub": 82
   },
   "Homeworld: Deserts of Kharak": {
-    "rank": 282,
-    "taste_rank": 138,
+    "rank": 222,
+    "taste_rank": 139,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -310,9 +336,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,

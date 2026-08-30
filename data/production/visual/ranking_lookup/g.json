@@ -1,7 +1,7 @@
 {
   "Game Corp DX": {
-    "rank": 49,
-    "taste_rank": 315,
+    "rank": 39,
+    "taste_rank": 314,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -9,11 +9,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "management_routine"
@@ -24,7 +26,7 @@
     "current_price_rub": 41
   },
   "Game Dev Tycoon": {
-    "rank": 241,
+    "rank": 252,
     "taste_rank": 107,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -33,11 +35,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "management_routine"
@@ -48,8 +52,8 @@
     "current_price_rub": 163
   },
   "Gang Beasts": {
-    "rank": 324,
-    "taste_rank": 166,
+    "rank": 321,
+    "taste_rank": 167,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -59,9 +63,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -70,8 +76,8 @@
     "current_price_rub": 408
   },
   "Gas Guzzlers Extreme Gold Pack": {
-    "rank": 263,
-    "taste_rank": 137,
+    "rank": 198,
+    "taste_rank": 138,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -81,9 +87,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -92,8 +100,8 @@
     "current_price_rub": 163
   },
   "Gedonia 2": {
-    "rank": 71,
-    "taste_rank": 341,
+    "rank": 69,
+    "taste_rank": 340,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -101,11 +109,13 @@
     "risk_level": "high",
     "risk_status": {
       "code": "serious_risk",
-      "label": "Серьёзный риск — влияет на сортировку",
-      "affects_early_priority": true,
+      "label": "Серьёзный риск — влияет на рейтинг",
+      "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 2,
       "risk_level": "high",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 10.0
     },
     "risk_codes": [
       "directionlessness"
@@ -116,8 +126,8 @@
     "current_price_rub": 380
   },
   "Geometry Arena": {
-    "rank": 158,
-    "taste_rank": 244,
+    "rank": 125,
+    "taste_rank": 243,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -127,9 +137,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -138,7 +150,7 @@
     "current_price_rub": 81
   },
   "Gibbon: Beyond the Trees": {
-    "rank": 246,
+    "rank": 271,
     "taste_rank": 72,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -149,9 +161,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -160,8 +174,8 @@
     "current_price_rub": 367
   },
   "Going Under": {
-    "rank": 55,
-    "taste_rank": 245,
+    "rank": 43,
+    "taste_rank": 244,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -171,9 +185,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -182,7 +198,7 @@
     "current_price_rub": 185
   },
   "Golf With Your Friends": {
-    "rank": 15,
+    "rank": 9,
     "taste_rank": 185,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -193,9 +209,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -204,8 +222,8 @@
     "current_price_rub": 69
   },
   "Greak: Memories of Azur": {
-    "rank": 299,
-    "taste_rank": 246,
+    "rank": 280,
+    "taste_rank": 245,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -213,11 +231,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "platform_repetition",
@@ -229,7 +249,7 @@
     "current_price_rub": 252
   },
   "Green Hell": {
-    "rank": 207,
+    "rank": 169,
     "taste_rank": 108,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -238,11 +258,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness"
@@ -253,7 +275,7 @@
     "current_price_rub": 131
   },
   "Gremlins, Inc.": {
-    "rank": 43,
+    "rank": 19,
     "taste_rank": 36,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -264,9 +286,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -275,7 +299,7 @@
     "current_price_rub": 232
   },
   "Grow Home": {
-    "rank": 85,
+    "rank": 74,
     "taste_rank": 37,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -286,9 +310,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -297,7 +323,7 @@
     "current_price_rub": 73
   },
   "Grow Up": {
-    "rank": 86,
+    "rank": 90,
     "taste_rank": 100,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -306,11 +332,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness"
@@ -321,7 +349,7 @@
     "current_price_rub": 91
   },
   "Grunn": {
-    "rank": 116,
+    "rank": 242,
     "taste_rank": 73,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -332,9 +360,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,

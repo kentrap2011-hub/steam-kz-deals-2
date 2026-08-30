@@ -1,7 +1,7 @@
 {
   "Maid of Sker": {
-    "rank": 304,
-    "taste_rank": 153,
+    "rank": 246,
+    "taste_rank": 154,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -11,9 +11,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -22,7 +24,7 @@
     "current_price_rub": 153
   },
   "Manhunt": {
-    "rank": 178,
+    "rank": 194,
     "taste_rank": 125,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -31,11 +33,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "no_steam_achievements",
@@ -47,7 +51,7 @@
     "current_price_rub": 120
   },
   "Marvel's Guardians of the Galaxy": {
-    "rank": 203,
+    "rank": 99,
     "taste_rank": 8,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -58,9 +62,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": true,
@@ -69,7 +75,7 @@
     "current_price_rub": 500
   },
   "Max Payne 2: The Fall of Max Payne": {
-    "rank": 130,
+    "rank": 102,
     "taste_rank": 126,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -78,11 +84,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "no_steam_achievements",
@@ -94,7 +102,7 @@
     "current_price_rub": 86
   },
   "Mega Man 11": {
-    "rank": 81,
+    "rank": 85,
     "taste_rank": 39,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -103,11 +111,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "platform_repetition"
@@ -118,8 +128,8 @@
     "current_price_rub": 303
   },
   "Megaquarium": {
-    "rank": 317,
-    "taste_rank": 304,
+    "rank": 316,
+    "taste_rank": 303,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -127,11 +137,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "management_routine"
@@ -142,8 +154,8 @@
     "current_price_rub": 391
   },
   "Microsoft Flight Simulator X: Steam Edition": {
-    "rank": 289,
-    "taste_rank": 331,
+    "rank": 306,
+    "taste_rank": 330,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -151,11 +163,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness",
@@ -167,8 +181,8 @@
     "current_price_rub": 122
   },
   "Middle-earth™: Shadow of Mordor™": {
-    "rank": 297,
-    "taste_rank": 317,
+    "rank": 290,
+    "taste_rank": 316,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -176,11 +190,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness"
@@ -191,7 +207,7 @@
     "current_price_rub": 248
   },
   "Middle-earth™: Shadow of War™": {
-    "rank": 209,
+    "rank": 170,
     "taste_rank": 111,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -200,11 +216,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness"
@@ -215,8 +233,8 @@
     "current_price_rub": 246
   },
   "Mindcop": {
-    "rank": 152,
-    "taste_rank": 254,
+    "rank": 156,
+    "taste_rank": 253,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -224,11 +242,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "puzzle_pacing",
@@ -240,8 +260,8 @@
     "current_price_rub": 137
   },
   "Mondealy": {
-    "rank": 50,
-    "taste_rank": 255,
+    "rank": 44,
+    "taste_rank": 254,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -251,9 +271,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -262,8 +284,8 @@
     "current_price_rub": 134
   },
   "Moonstone Island": {
-    "rank": 163,
-    "taste_rank": 326,
+    "rank": 187,
+    "taste_rank": 325,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -271,11 +293,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness"
@@ -286,7 +310,7 @@
     "current_price_rub": 241
   },
   "Moss VR": {
-    "rank": 248,
+    "rank": 291,
     "taste_rank": 40,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -295,11 +319,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "platform_repetition",
@@ -311,7 +337,7 @@
     "current_price_rub": 482
   },
   "Mundaun": {
-    "rank": 94,
+    "rank": 100,
     "taste_rank": 41,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -320,11 +346,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "puzzle_pacing"

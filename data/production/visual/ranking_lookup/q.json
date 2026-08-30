@@ -1,6 +1,6 @@
 {
   "Quod: Episode 1": {
-    "rank": 214,
+    "rank": 142,
     "taste_rank": 87,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -9,11 +9,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "puzzle_pacing"

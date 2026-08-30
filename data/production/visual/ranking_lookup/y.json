@@ -1,6 +1,6 @@
 {
   "Yet Another Zombie Defense HD": {
-    "rank": 119,
+    "rank": 108,
     "taste_rank": 20,
     "fit": "strong",
     "decision": "МОЖНО БРАТЬ",
@@ -11,9 +11,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -23,7 +25,7 @@
   },
   "Yet Another Zombie Survivors": {
     "rank": 350,
-    "taste_rank": 348,
+    "taste_rank": 347,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -31,11 +33,13 @@
     "risk_level": "high",
     "risk_status": {
       "code": "serious_risk",
-      "label": "Серьёзный риск — влияет на сортировку",
-      "affects_early_priority": true,
+      "label": "Серьёзный риск — влияет на рейтинг",
+      "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 2,
       "risk_level": "high",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 10.0
     },
     "risk_codes": [
       "unchanged_repetition"
@@ -46,7 +50,7 @@
     "current_price_rub": 494
   },
   "Youtubers Life": {
-    "rank": 333,
+    "rank": 336,
     "taste_rank": 211,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -57,9 +61,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,

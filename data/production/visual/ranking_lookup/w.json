@@ -1,7 +1,7 @@
 {
   "War for the Overworld": {
-    "rank": 300,
-    "taste_rank": 302,
+    "rank": 297,
+    "taste_rank": 301,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -9,11 +9,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "management_routine"
@@ -24,7 +26,7 @@
     "current_price_rub": 282
   },
   "Warlord: Britannia": {
-    "rank": 8,
+    "rank": 32,
     "taste_rank": 122,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -33,11 +35,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness"
@@ -48,8 +52,8 @@
     "current_price_rub": 246
   },
   "Warpips": {
-    "rank": 148,
-    "taste_rank": 289,
+    "rank": 131,
+    "taste_rank": 288,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -59,9 +63,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -70,7 +76,7 @@
     "current_price_rub": 125
   },
   "Warstone TD": {
-    "rank": 284,
+    "rank": 231,
     "taste_rank": 208,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -81,9 +87,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -92,8 +100,8 @@
     "current_price_rub": 67
   },
   "We Are The Dwarves": {
-    "rank": 281,
-    "taste_rank": 165,
+    "rank": 247,
+    "taste_rank": 166,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -103,9 +111,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -114,7 +124,7 @@
     "current_price_rub": 103
   },
   "We Need To Go Deeper": {
-    "rank": 56,
+    "rank": 47,
     "taste_rank": 209,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -125,9 +135,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -136,8 +148,8 @@
     "current_price_rub": 116
   },
   "We Were Here Expeditions: The FriendShip": {
-    "rank": 189,
-    "taste_rank": 290,
+    "rank": 276,
+    "taste_rank": 289,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -145,11 +157,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "puzzle_pacing"
@@ -160,7 +174,7 @@
     "current_price_rub": 111
   },
   "What Remains of Edith Finch": {
-    "rank": 306,
+    "rank": 261,
     "taste_rank": 210,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -171,9 +185,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -183,6 +199,30 @@
   },
   "Wild Woods": {
     "rank": 176,
+    "taste_rank": 290,
+    "fit": "moderate",
+    "decision": "БРАТЬ СЕЙЧАС",
+    "priority_group": 3,
+    "serious_risk_rank": 0,
+    "risk_level": "low",
+    "risk_status": {
+      "code": "no_confirmed_risk",
+      "label": "Подтверждённых персональных рисков не найдено",
+      "affects_early_priority": false,
+      "affects_score": false,
+      "serious_rank": 0,
+      "risk_level": "low",
+      "has_described_risk": false,
+      "score_penalty": -0.0
+    },
+    "risk_codes": [],
+    "wishlist": false,
+    "discount_percent": 67,
+    "history_quality": "record",
+    "current_price_rub": 226
+  },
+  "Wolfstride": {
+    "rank": 148,
     "taste_rank": 291,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -193,31 +233,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
-    },
-    "risk_codes": [],
-    "wishlist": false,
-    "discount_percent": 67,
-    "history_quality": "record",
-    "current_price_rub": 226
-  },
-  "Wolfstride": {
-    "rank": 161,
-    "taste_rank": 292,
-    "fit": "moderate",
-    "decision": "БРАТЬ СЕЙЧАС",
-    "priority_group": 3,
-    "serious_risk_rank": 0,
-    "risk_level": "low",
-    "risk_status": {
-      "code": "no_confirmed_risk",
-      "label": "Подтверждённых персональных рисков не найдено",
-      "affects_early_priority": false,
-      "serious_rank": 0,
-      "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -226,8 +246,8 @@
     "current_price_rub": 190
   },
   "Workers & Resources: Soviet Republic": {
-    "rank": 164,
-    "taste_rank": 319,
+    "rank": 205,
+    "taste_rank": 318,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -235,11 +255,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "management_routine"

@@ -1,6 +1,6 @@
 {
   "Jalopy": {
-    "rank": 39,
+    "rank": 27,
     "taste_rank": 109,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -9,11 +9,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness"
@@ -24,7 +26,7 @@
     "current_price_rub": 96
   },
   "Journey": {
-    "rank": 227,
+    "rank": 178,
     "taste_rank": 101,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -33,11 +35,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "exploration_direction"
@@ -48,8 +52,8 @@
     "current_price_rub": 183
   },
   "Journey to Incrementalia": {
-    "rank": 269,
-    "taste_rank": 324,
+    "rank": 313,
+    "taste_rank": 323,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -57,11 +61,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "low_active_gameplay"
@@ -72,7 +78,7 @@
     "current_price_rub": 139
   },
   "Jusant": {
-    "rank": 102,
+    "rank": 139,
     "taste_rank": 77,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -81,11 +87,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "puzzle_pacing"

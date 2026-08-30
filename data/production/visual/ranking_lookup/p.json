@@ -1,6 +1,6 @@
 {
   "Pacify": {
-    "rank": 32,
+    "rank": 36,
     "taste_rank": 195,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -11,9 +11,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -22,8 +24,8 @@
     "current_price_rub": 122
   },
   "PANELKI": {
-    "rank": 254,
-    "taste_rank": 328,
+    "rank": 202,
+    "taste_rank": 327,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -31,11 +33,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "directionlessness"
@@ -46,8 +50,8 @@
     "current_price_rub": 47
   },
   "Paper Dolls 2 纸人贰": {
-    "rank": 313,
-    "taste_rank": 259,
+    "rank": 293,
+    "taste_rank": 258,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -55,11 +59,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "reading_investigation"
@@ -70,7 +76,7 @@
     "current_price_rub": 128
   },
   "Paradise Killer": {
-    "rank": 121,
+    "rank": 101,
     "taste_rank": 85,
     "fit": "strong",
     "decision": "МОЖНО БРАТЬ",
@@ -79,11 +85,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "reading_investigation"
@@ -94,7 +102,7 @@
     "current_price_rub": 241
   },
   "Partisans 1941": {
-    "rank": 83,
+    "rank": 80,
     "taste_rank": 86,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -105,9 +113,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -116,7 +126,7 @@
     "current_price_rub": 208
   },
   "Penumbra: Black Plague Gold Edition": {
-    "rank": 225,
+    "rank": 179,
     "taste_rank": 96,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -125,11 +135,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "no_steam_achievements",
@@ -143,8 +155,8 @@
     "current_price_rub": 134
   },
   "Perfect Heist 2": {
-    "rank": 181,
-    "taste_rank": 260,
+    "rank": 212,
+    "taste_rank": 259,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -154,9 +166,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -165,8 +179,8 @@
     "current_price_rub": 137
   },
   "Picklock": {
-    "rank": 280,
-    "taste_rank": 261,
+    "rank": 226,
+    "taste_rank": 260,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -176,9 +190,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -187,7 +203,7 @@
     "current_price_rub": 96
   },
   "Pilgrims": {
-    "rank": 287,
+    "rank": 243,
     "taste_rank": 196,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -198,9 +214,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -209,7 +227,7 @@
     "current_price_rub": 66
   },
   "PixARK": {
-    "rank": 120,
+    "rank": 94,
     "taste_rank": 45,
     "fit": "strong",
     "decision": "МОЖНО БРАТЬ",
@@ -220,9 +238,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -231,8 +251,8 @@
     "current_price_rub": 241
   },
   "Plague Inc: Evolved": {
-    "rank": 291,
-    "taste_rank": 141,
+    "rank": 244,
+    "taste_rank": 142,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -242,9 +262,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -253,7 +275,7 @@
     "current_price_rub": 152
   },
   "Planes, Bullets and Vodka": {
-    "rank": 276,
+    "rank": 227,
     "taste_rank": 197,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -264,9 +286,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -275,7 +299,7 @@
     "current_price_rub": 28
   },
   "Police Stories": {
-    "rank": 82,
+    "rank": 76,
     "taste_rank": 9,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -286,9 +310,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -297,8 +323,8 @@
     "current_price_rub": 145
   },
   "Power Rangers: Battle for the Grid": {
-    "rank": 23,
-    "taste_rank": 142,
+    "rank": 15,
+    "taste_rank": 143,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -308,9 +334,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -319,8 +347,8 @@
     "current_price_rub": 193
   },
   "Predator: Hunting Grounds": {
-    "rank": 26,
-    "taste_rank": 262,
+    "rank": 20,
+    "taste_rank": 261,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -330,9 +358,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -341,8 +371,8 @@
     "current_price_rub": 241
   },
   "Predynastic Egypt": {
-    "rank": 303,
-    "taste_rank": 301,
+    "rank": 282,
+    "taste_rank": 300,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -350,11 +380,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "management_routine"
@@ -365,8 +397,8 @@
     "current_price_rub": 134
   },
   "Project Hospital": {
-    "rank": 267,
-    "taste_rank": 309,
+    "rank": 283,
+    "taste_rank": 308,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -374,11 +406,13 @@
     "risk_level": "medium",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "medium",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 3.0
     },
     "risk_codes": [
       "management_routine"
@@ -389,7 +423,7 @@
     "current_price_rub": 278
   },
   "Psychonauts 2": {
-    "rank": 212,
+    "rank": 141,
     "taste_rank": 46,
     "fit": "strong",
     "decision": "ЛУЧШЕ ЖДАТЬ",
@@ -398,11 +432,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "platform_repetition"

@@ -1,7 +1,7 @@
 {
   "I, Zombie": {
     "rank": 334,
-    "taste_rank": 167,
+    "taste_rank": 168,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -11,9 +11,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -22,7 +24,7 @@
     "current_price_rub": 67
   },
   "Interrogation: You will be deceived": {
-    "rank": 133,
+    "rank": 126,
     "taste_rank": 189,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -31,11 +33,13 @@
     "risk_level": "low",
     "risk_status": {
       "code": "descriptive_risk",
-      "label": "Есть риск — но он не считается серьёзным",
+      "label": "Есть риск — учитывается как небольшой штраф, если это не только отсутствие достижений",
       "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 1.0
     },
     "risk_codes": [
       "reading_investigation"
@@ -46,8 +50,8 @@
     "current_price_rub": 40
   },
   "Intravenous": {
-    "rank": 262,
-    "taste_rank": 249,
+    "rank": 223,
+    "taste_rank": 248,
     "fit": "moderate",
     "decision": "МОЖНО БРАТЬ",
     "priority_group": 5,
@@ -57,9 +61,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -68,7 +74,7 @@
     "current_price_rub": 182
   },
   "Intravenous 2": {
-    "rank": 110,
+    "rank": 199,
     "taste_rank": 76,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -79,9 +85,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -90,7 +98,7 @@
     "current_price_rub": 530
   },
   "Iratus: Lord of the Dead": {
-    "rank": 78,
+    "rank": 82,
     "taste_rank": 14,
     "fit": "strong",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -101,9 +109,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -112,8 +122,8 @@
     "current_price_rub": 130
   },
   "Island Notes": {
-    "rank": 343,
-    "taste_rank": 343,
+    "rank": 344,
+    "taste_rank": 342,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -121,11 +131,13 @@
     "risk_level": "high",
     "risk_status": {
       "code": "serious_risk",
-      "label": "Серьёзный риск — влияет на сортировку",
-      "affects_early_priority": true,
+      "label": "Серьёзный риск — влияет на рейтинг",
+      "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 2,
       "risk_level": "high",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 10.0
     },
     "risk_codes": [
       "directionlessness"
@@ -136,8 +148,8 @@
     "current_price_rub": 434
   },
   "Isonzo": {
-    "rank": 157,
-    "taste_rank": 250,
+    "rank": 155,
+    "taste_rank": 249,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -147,9 +159,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
@@ -158,8 +172,8 @@
     "current_price_rub": 282
   },
   "IXION": {
-    "rank": 175,
-    "taste_rank": 168,
+    "rank": 210,
+    "taste_rank": 169,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
     "priority_group": 3,
@@ -169,9 +183,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,

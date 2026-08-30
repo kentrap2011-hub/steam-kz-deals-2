@@ -1,7 +1,7 @@
 {
   "Vampire Survivors": {
-    "rank": 352,
-    "taste_rank": 347,
+    "rank": 349,
+    "taste_rank": 346,
     "fit": "moderate",
     "decision": "ЛУЧШЕ ЖДАТЬ",
     "priority_group": 6,
@@ -9,11 +9,13 @@
     "risk_level": "high",
     "risk_status": {
       "code": "serious_risk",
-      "label": "Серьёзный риск — влияет на сортировку",
-      "affects_early_priority": true,
+      "label": "Серьёзный риск — влияет на рейтинг",
+      "affects_early_priority": false,
+      "affects_score": true,
       "serious_rank": 2,
       "risk_level": "high",
-      "has_described_risk": true
+      "has_described_risk": true,
+      "score_penalty": 10.0
     },
     "risk_codes": [
       "unchanged_repetition"
@@ -24,7 +26,55 @@
     "current_price_rub": 180
   },
   "Vanity Fair: The Pursuit": {
-    "rank": 34,
+    "rank": 51,
+    "taste_rank": 286,
+    "fit": "moderate",
+    "decision": "БРАТЬ СЕЙЧАС",
+    "priority_group": 3,
+    "serious_risk_rank": 0,
+    "risk_level": "low",
+    "risk_status": {
+      "code": "no_confirmed_risk",
+      "label": "Подтверждённых персональных рисков не найдено",
+      "affects_early_priority": false,
+      "affects_score": false,
+      "serious_rank": 0,
+      "risk_level": "low",
+      "has_described_risk": false,
+      "score_penalty": -0.0
+    },
+    "risk_codes": [],
+    "wishlist": false,
+    "discount_percent": 50,
+    "history_quality": "record",
+    "current_price_rub": 269
+  },
+  "Verdun": {
+    "rank": 266,
+    "taste_rank": 165,
+    "fit": "moderate",
+    "decision": "ЛУЧШЕ ЖДАТЬ",
+    "priority_group": 6,
+    "serious_risk_rank": 0,
+    "risk_level": "low",
+    "risk_status": {
+      "code": "no_confirmed_risk",
+      "label": "Подтверждённых персональных рисков не найдено",
+      "affects_early_priority": false,
+      "affects_score": false,
+      "serious_rank": 0,
+      "risk_level": "low",
+      "has_described_risk": false,
+      "score_penalty": -0.0
+    },
+    "risk_codes": [],
+    "wishlist": false,
+    "discount_percent": 80,
+    "history_quality": "well_above_history",
+    "current_price_rub": 193
+  },
+  "Voidigo": {
+    "rank": 260,
     "taste_rank": 287,
     "fit": "moderate",
     "decision": "БРАТЬ СЕЙЧАС",
@@ -35,53 +85,11 @@
       "code": "no_confirmed_risk",
       "label": "Подтверждённых персональных рисков не найдено",
       "affects_early_priority": false,
+      "affects_score": false,
       "serious_rank": 0,
       "risk_level": "low",
-      "has_described_risk": false
-    },
-    "risk_codes": [],
-    "wishlist": false,
-    "discount_percent": 50,
-    "history_quality": "record",
-    "current_price_rub": 269
-  },
-  "Verdun": {
-    "rank": 292,
-    "taste_rank": 164,
-    "fit": "moderate",
-    "decision": "ЛУЧШЕ ЖДАТЬ",
-    "priority_group": 6,
-    "serious_risk_rank": 0,
-    "risk_level": "low",
-    "risk_status": {
-      "code": "no_confirmed_risk",
-      "label": "Подтверждённых персональных рисков не найдено",
-      "affects_early_priority": false,
-      "serious_rank": 0,
-      "risk_level": "low",
-      "has_described_risk": false
-    },
-    "risk_codes": [],
-    "wishlist": false,
-    "discount_percent": 80,
-    "history_quality": "well_above_history",
-    "current_price_rub": 193
-  },
-  "Voidigo": {
-    "rank": 190,
-    "taste_rank": 288,
-    "fit": "moderate",
-    "decision": "БРАТЬ СЕЙЧАС",
-    "priority_group": 3,
-    "serious_risk_rank": 0,
-    "risk_level": "low",
-    "risk_status": {
-      "code": "no_confirmed_risk",
-      "label": "Подтверждённых персональных рисков не найдено",
-      "affects_early_priority": false,
-      "serious_rank": 0,
-      "risk_level": "low",
-      "has_described_risk": false
+      "has_described_risk": false,
+      "score_penalty": -0.0
     },
     "risk_codes": [],
     "wishlist": false,
