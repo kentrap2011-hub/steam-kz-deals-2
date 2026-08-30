@@ -84,20 +84,21 @@ function buildQueue(){
 function currentIndex(){return Math.max(0,Math.min(Number(state.queue.cursor)||0,Math.max(0,state.queue.ids.length-1)))}
 function currentGame(){return byId.get(state.queue.ids[currentIndex()])}
 function queueCount(){return state.queue.ids.filter(id=>byId.has(id)).length}
+function queuePosition(id){const i=state.queue.ids.indexOf(id);return i>=0?i+1:null}
 function counts(){
-  let liked=0,final=0,newCount=0,repeat=0,unseen=0;
-  for(const g of items){const r=rec(g.id);if(r.status==='liked')liked++;if(r.status==='final')final++;if(isNew(g.id))newCount++;if((r.seen||0)>0)repeat++;else unseen++}
-  return {liked,final,newCount,repeat,unseen};
+  let liked=0,final=0,wishlist=0,newCount=0,repeat=0,unseen=0;
+  for(const g of items){const r=rec(g.id);if(r.status==='liked')liked++;if(r.status==='final')final++;if(g.wishlist)wishlist++;if(isNew(g.id))newCount++;if((r.seen||0)>0)repeat++;else unseen++}
+  return {liked,final,wishlist,newCount,repeat,unseen};
 }
 function renderStats(){
   const c=counts();
   $('stats').innerHTML=`<div class="stat"><b>${c.newCount}</b><span>🆕 новые</span></div><div class="stat"><b>${c.unseen}</b><span>не смотрел</span></div><div class="stat"><b>${c.liked}</b><span>♡ интересно</span></div><div class="stat"><b>${c.repeat}</b><span>🔁 видел</span></div>`;
-  $('feedCount').textContent=`(${queueCount()})`;$('likedCount').textContent=c.liked?`(${c.liked})`:'';$('finalCount').textContent=c.final?`(${c.final})`:'';
+  $('feedCount').textContent=`(${queueCount()})`;$('wishlistCount').textContent=c.wishlist?`(${c.wishlist})`:'';$('likedCount').textContent=c.liked?`(${c.liked})`:'';$('finalCount').textContent=c.final?`(${c.final})`:'';
   $('freshness').textContent=sourceLabel();
 }
 function renderTabs(){
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===currentTab));
-  $('feedView').classList.toggle('hidden',currentTab!=='feed');$('likedView').classList.toggle('hidden',currentTab!=='liked');$('finalView').classList.toggle('hidden',currentTab!=='final');
+  $('feedView').classList.toggle('hidden',currentTab!=='feed');$('wishlistView').classList.toggle('hidden',currentTab!=='wishlist');$('likedView').classList.toggle('hidden',currentTab!=='liked');$('finalView').classList.toggle('hidden',currentTab!=='final');
 }
 function shotUrls(g){const arr=(g.screenshots||[]).filter(Boolean);if(!arr.length&&g.header_image)arr.push(g.header_image);return arr}
 function preloadNearby(){
@@ -138,11 +139,21 @@ function renderFeed(){
   $('likeBtn').textContent=r.status==='liked'?'♡ Уже интересно':'♡ Интересно';
   $('finalBtn').textContent=r.status==='final'?'🏆 Уже в финале':'🏆 В финал';
 }
+function listPositionText(g){
+  const q=queuePosition(g.id),p=Number(g.priority_rank)||null;
+  if(q&&p&&q!==p)return `№${q} в ленте · production №${p}`;
+  if(q)return `№${q} в ленте`;
+  if(p)return `production №${p}`;
+  return 'Позиция неизвестна';
+}
 function miniCard(g,status){
-  const img=shotUrls(g)[0]||'';return `<div class="list-card"><img src="${escapeHtml(img)}" alt=""><div><div class="list-title">${escapeHtml(g.title)}</div><div class="list-meta">${fmtRub(g.current_price_rub)} · −${g.discount_percent}% · ${escapeHtml(deadlineText(g.sale_end_utc))}</div><div class="list-actions">${status==='liked'?`<button class="small-btn" data-to-final="${escapeHtml(g.id)}" type="button">🏆 В финал</button>`:''}<button class="small-btn" data-focus="${escapeHtml(g.id)}" type="button">Показать в ленте</button></div></div></div>`;
+  const img=shotUrls(g)[0]||'';
+  const place=status==='wishlist'?`★ В желаемом · ${listPositionText(g)} · `:'';
+  return `<div class="list-card"><img src="${escapeHtml(img)}" alt=""><div><div class="list-title">${escapeHtml(g.title)}</div><div class="list-meta">${place}${fmtRub(g.current_price_rub)} · −${g.discount_percent}% · ${escapeHtml(deadlineText(g.sale_end_utc))}</div><div class="list-actions">${status==='liked'?`<button class="small-btn" data-to-final="${escapeHtml(g.id)}" type="button">🏆 В финал</button>`:''}<button class="small-btn" data-focus="${escapeHtml(g.id)}" type="button">Показать в ленте</button></div></div></div>`;
 }
 function renderLists(){
-  const liked=items.filter(g=>rec(g.id).status==='liked'),finals=items.filter(g=>rec(g.id).status==='final');
+  const wishlist=items.filter(g=>g.wishlist),liked=items.filter(g=>rec(g.id).status==='liked'),finals=items.filter(g=>rec(g.id).status==='final');
+  $('wishlistList').innerHTML=wishlist.length?wishlist.map(g=>miniCard(g,'wishlist')).join(''):'<div class="empty">В текущем списке нет игр из вишлиста.</div>';
   $('likedList').innerHTML=liked.length?liked.map(g=>miniCard(g,'liked')).join(''):'<div class="empty">Пока пусто.</div>';
   $('finalList').innerHTML=finals.length?finals.map(g=>miniCard(g,'final')).join(''):'<div class="empty">Пока пусто.</div>';
 }
