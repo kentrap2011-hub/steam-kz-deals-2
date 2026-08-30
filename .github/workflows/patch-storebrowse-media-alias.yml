@@ -102,7 +102,7 @@ jobs:
 
           backlog_path = Path('BACKLOG.md')
           backlog = backlog_path.read_text(encoding='utf-8')
-          title = 'Media: карточки без скриншотов / The Stronghold Collection'
+          title = 'Media: устранить карточки без скриншотов'
           pattern = rf'\n### {re.escape(title)}\n.*?(?=\n### |\Z)'
           backlog, count = re.subn(pattern, '\n', backlog, count=1, flags=re.S)
           if count != 1:
