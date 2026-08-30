@@ -10,9 +10,75 @@ ROOT = Path('.')
 OUT = ROOT / 'data/production/visual/current.json'
 
 
+def refresh_existing_media():
+    if not OUT.exists():
+        return 0, 0
+
+    ready = base_builder.load_json(OUT)
+    items = ready.get('items') or []
+    wanted_appids = set()
+    for game in items:
+        for appid in game.get('base_appids') or []:
+            appid = str(appid)
+            if appid.isdigit():
+                wanted_appids.add(appid)
+
+    if not wanted_appids:
+        return 0, 0
+
+    media = base_builder.visual_builder.storebrowse_media(wanted_appids)
+    touched = 0
+    for game in items:
+        screenshots = []
+        header = None
+        for appid in game.get('base_appids') or []:
+            m = media.get(str(appid)) or {}
+            header = header or m.get('header_image')
+            for url in m.get('screenshots') or []:
+                if url not in screenshots:
+                    screenshots.append(url)
+
+        changed = False
+        if screenshots and screenshots != (game.get('screenshots') or []):
+            game['screenshots'] = screenshots
+            changed = True
+        if header and header != game.get('header_image'):
+            game['header_image'] = header
+            changed = True
+        if changed:
+            touched += 1
+
+    if not touched:
+        return 0, len(media)
+
+    with_screenshots = sum(bool(game.get('screenshots')) for game in items)
+    with_any_image = sum(bool(game.get('screenshots') or game.get('header_image')) for game in items)
+    ready['media_coverage'] = {
+        'visible_item_count': len(items),
+        'with_screenshots': with_screenshots,
+        'with_any_image': with_any_image,
+        'without_any_image': len(items) - with_any_image,
+        'coverage_percent': round((with_any_image / len(items)) * 100, 1) if items else 100.0,
+    }
+    contract = ready.setdefault('production_contract', {})
+    contract['visual_builder_blob_sha'] = base_builder.git_sha('scripts/build_visual_feed_v2.py')
+    contract['final_visual_producer_blob_sha'] = base_builder.git_sha('scripts/build_final_visual_payload.py')
+
+    OUT.write_text(json.dumps(ready, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+    return touched, len(media)
+
+
 def main():
     source_key, payload = base_builder.current_production_readiness()
     if source_key is None:
+        if os.environ.get('FORCE_VISUAL_BUILD') == '1':
+            refreshed, media_keys = refresh_existing_media()
+            if refreshed:
+                print(
+                    f'VISUAL_FINAL_BUILD=BUILT mode=media_only items_refreshed={refreshed} '
+                    f'media_keys={media_keys} ai_queue={payload.get("ai_queue_count")}'
+                )
+                return
         print(
             f'VISUAL_FINAL_BUILD=WAIT source={payload.get("source_mailing_updated_at_utc")} '
             f'ai_queue={payload.get("ai_queue_count")}'
