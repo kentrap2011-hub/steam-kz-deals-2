@@ -59,3 +59,47 @@
 **Важная архитектурная граница:** GitHub владеет очередью, retry-state, completeness, validation, persistence и downstream. Прямой SteamDB lookup из GitHub Actions отключён, потому что SteamDB систематически отвечает GitHub Actions HTTP 403; внешний lookup выполняется ограниченным runtime-worker, а интерактивный чат не должен вручную обрабатывать production backlog.
 
 **Текущее состояние на 2026-08-30:** `data/cache/steamdb_runtime_work.json` = 534 ожидаемых, 529 resolved, 5 unresolved retry (`runtime_web_internal_error`).
+
+---
+
+## Финальная сортировка / priority rank витрины
+
+**Что ищем:** где формируется единый порядок игр в `data/production/visual/current.json` и почему конкретная игра стоит выше/ниже другой.
+
+**Последняя проверка:** 2026-08-30  
+**Проверено относительно commit:** `77fd58ced040f7fd9ff2b2df5b055d85b351ccb6` (`main` на момент фиксации маршрута)
+
+**Канонические правила:**
+- `PROJECT_RULES.md` → разделы «Как выбирать платные игры», «Wishlist Steam при финальной сортировке», «Практическая пригодность покупки»;
+- `config/mailing_policy.json` → `sorting`;
+- ownership: `config/execution_ownership_contract.json`.
+
+**Быстрая точка входа:**
+1. Для вопроса «почему такой порядок?» сначала открыть `config/mailing_policy.json` → `sorting` и релевантные три раздела `PROJECT_RULES.md`.
+2. Фактический production-путь запускает `.github/workflows/build-daily-visual-payload.yml`.
+3. Первая сортировка находится в `scripts/build_daily_visual_payload.py` → `apply_canonical_priority_order()`.
+4. После неё тот же workflow всегда запускает `scripts/refine_visual_ranking.py`; его `main_sort_key()` выполняет **финальную повторную сортировку** и заново присваивает `priority_rank`.
+5. Итог смотреть в `data/production/visual/current.json`; компактный файл для анализа порядка — `data/production/visual/ranking_review.jsonl`.
+
+**Текущий фактический финальный ключ (`refine_visual_ranking.py`):**
+`priority_bucket → direct_user_evidence → personal_risk_level → achievement_quality → wishlist → history_quality → discount → price → duration_tiebreak → title`.
+
+**Что зафиксировано правилами:**
+- `priority_bucket` реализует качественную матрицу 60/40 taste+deal и является базовым первым уровнем;
+- wishlist — заметный, но ограниченный дополнительный приоритет после основного taste/commercial отбора;
+- совместимость и достижения влияют на финальный приоритет, но достижения должны преимущественно различать близких кандидатов;
+- не придумывать скрытый числовой score без отдельного согласования.
+
+**Известное текущее расхождение:**
+- сортировка реализована в двух местах, и refiner перезаписывает `priority_rank`, рассчитанный `build_daily_visual_payload.py`;
+- `config/mailing_policy.json` для порядка внутри bucket сейчас задаёт `wishlist → history_quality → best_variant_value → discount → price → title`, а фактический refiner ставит direct evidence / risk / achievement quality раньше wishlist и истории;
+- поэтому код и каноническая policy сейчас не являются одной и той же спецификацией;
+- отдельно уже установлено, что achievement quality может влиять сильнее wishlist/коммерческой выгодности, хотя долговечные пользовательские правила описывают достижения как фактор при прочих близких условиях.
+
+**Важно:** точный новый порядок факторов внутри одного `priority_bucket` на момент этой записи ещё не согласован. Не исправлять его догадкой. Сначала восстановить/согласовать канонический порядок, затем оставить один production source of sorting truth и добавить regression-проверку против повторного расхождения policy ↔ code.
+
+**Признак завершения будущего исправления:**
+- одна каноническая спецификация порядка;
+- production использует её без второй независимой сортировки;
+- `priority_rank` в `current.json` соответствует ей;
+- автоматическая validation/regression-проверка падает, если implementation и policy снова расходятся.
