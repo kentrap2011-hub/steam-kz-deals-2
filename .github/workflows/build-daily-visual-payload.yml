@@ -14,6 +14,7 @@ on:
       - "scripts/build_final_visual_payload.py"
       - "scripts/build_daily_visual_payload.py"
       - "scripts/build_visual_feed_v2.py"
+      - "scripts/normalize_visual_media_urls.py"
       - "scripts/achievement_quality.py"
       - "scripts/refine_visual_ranking.py"
       - "scripts/priority_ranking.py"
@@ -118,6 +119,13 @@ jobs:
           else
             echo "built=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Normalize Steam media CDN URLs
+        if: steps.build.outputs.built == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/normalize_visual_media_urls.py
 
       - name: Build ranking review export
         if: steps.build.outputs.built == 'true'
