@@ -15,6 +15,7 @@
       "RANK-006",
       "RANK-007",
       "RANK-008",
+      "RANK-009",
       "UI-001"
     ]
   },
@@ -25,8 +26,8 @@
   },
   "automatic_final_priority_order": [
     "sale_expiry_urgency_asc",
-    "priority_bucket_asc",
     "practical_or_personal_risk_asc",
+    "priority_bucket_asc",
     "wishlist_desc",
     "discount_percent_desc",
     "price_quality_vs_history_desc",
@@ -40,11 +41,9 @@
       "order": ["today", "tomorrow", "later_or_unknown"],
       "reason": "Prevent the user from missing a still-relevant deal before it expires."
     },
-    "priority_bucket_asc": {
-      "reason": "Preserve the qualitative taste/deal matrix as the main quality layer after urgency."
-    },
     "practical_or_personal_risk_asc": {
-      "reason": "Confirmed serious experience or modern-Windows friction should lower otherwise comparable purchases.",
+      "reason": "Confirmed serious personal experience conflicts or modern-Windows friction must be considered before the mixed taste/deal bucket, so a commercially attractive cheap deal cannot outrank a safer candidate merely because its purchase verdict is better.",
+      "medium_and_low_personal_heuristics_are_neutral_here": true,
       "legacy_steam_windows_requirement_label_alone_is_neutral": true,
       "confirmed_windows_penalty_values": [
         "confirmed_pre_windows_10_target",
@@ -52,8 +51,11 @@
         "serious_problem"
       ]
     },
+    "priority_bucket_asc": {
+      "reason": "After urgency and serious confirmed risk, preserve the qualitative taste/deal matrix as the main combined quality layer."
+    },
     "wishlist_desc": {
-      "reason": "Wishlist is a meaningful but bounded explicit-interest signal after eligibility and major risks."
+      "reason": "Wishlist is a meaningful but bounded explicit-interest signal after eligibility, major risks, and the qualitative taste/deal bucket."
     },
     "discount_percent_desc": {
       "reason": "Discount size precedes historical-minimum quality because a new game's routine first discount may automatically be its record due only to short price history."
