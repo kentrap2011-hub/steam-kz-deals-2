@@ -1,8 +1,8 @@
 {
   "contract": "STEAMDB-TRUE-MISS-LOOKUP-V1",
-  "version": "1.3",
+  "version": "1.4",
   "status": "implementation_only",
-  "purpose": "Resolve only GitHub-prepared stage-15 true SteamDB history misses through the scheduled ChatGPT runtime web path because direct GitHub Actions requests to SteamDB are systematically blocked with HTTP 403, while keeping scope, ordering, unresolved/retry state, completeness, validation and canonical persistence in GitHub.",
+  "purpose": "Resolve only GitHub-prepared stage-15 true SteamDB history misses through the scheduled ChatGPT runtime web path because direct GitHub Actions requests to SteamDB are systematically blocked with HTTP 403, while keeping scope, ordering, unresolved/retry state, completeness, validation and canonical persistence in GitHub. Valid confirmed facts may be persisted before the whole current scope is complete; unresolved keys remain GitHub-owned retries.",
   "ownership_contract": "config/execution_ownership_contract.json",
   "authority": {
     "canonical_policy_path": "config/mailing_policy.json",
@@ -25,7 +25,7 @@
         "canonical steamdb_history persistence",
         "downstream rebuild orchestration"
       ],
-      "rule": "GitHub decides exactly which SteamDB entity keys require evidence, exposes only the current unresolved work input to ChatGPT, ingests returned facts and decides whether the stage is complete."
+      "rule": "GitHub decides exactly which SteamDB entity keys require evidence, exposes only the current unresolved work input to ChatGPT, ingests returned facts, persists validated facts and decides whether the stage is complete."
     },
     "scheduled_chatgpt_data_plane": {
       "owns": [
@@ -53,11 +53,13 @@
   "execution_scope": {
     "per_day_item_quota_allowed": false,
     "batch_size_semantics": "checkpoint_only_not_daily_quota",
-    "must_complete_all_required_stage_15_items_for_the_current_prepared_artifact": true,
-    "partial_subset_is_not_a_valid_completed_prepared_artifact": true,
+    "must_complete_all_required_stage_15_items_for_stage_completion": true,
+    "partial_subset_is_not_a_valid_completed_stage": true,
+    "verified_partial_results_must_be_persistable_before_stage_completion": true,
+    "partial_prepared_artifact_is_allowed": true,
     "legacy_or_temporary_runtime_limits_cannot_override_this_contract": true,
     "runtime_progress_or_manual_batch_files_are_canonical_scope": false,
-    "rule": "The GitHub-prepared current scope is one production stage. ChatGPT may submit partial evidence because external access can fail, but only GitHub derives unresolved/retry state and completeness from submissions. Partial evidence is not a completed stage."
+    "rule": "The GitHub-prepared current scope is one production stage. ChatGPT may submit partial evidence because external access can fail. GitHub derives unresolved/retry state and completeness from submissions. A partial subset never means the stage is complete, but every non-conflicting validated fact in that subset may be checkpointed immediately while unresolved keys remain pending retries."
   },
   "transport": {
     "control_plane": "GitHub repository and GitHub Actions",
@@ -111,8 +113,10 @@
     "unresolved_items_are_manifest_order_minus_resolved_keys": true,
     "github_alone_decides_complete": true,
     "complete_requires_zero_unresolved_and_zero_conflicts": true,
-    "on_complete_emit_prepared_runtime_artifact": true,
-    "on_incomplete_do_not_emit_or_replace_prepared_runtime_artifact": true
+    "on_nonconflicting_resolved_count_above_zero_emit_or_replace_prepared_runtime_artifact": true,
+    "prepared_runtime_artifact_contains_only_current_resolved_keys": true,
+    "on_incomplete_keep_unresolved_keys_in_runtime_work_input": true,
+    "partial_persistence_does_not_change_completion_status": true
   },
   "source": {
     "provider": "SteamDB",
@@ -129,27 +133,36 @@
     "403_429_timeout_network_or_5xx": "blocked_or_failure; never persist as negative cache"
   },
   "prepared_artifact_contract": {
-    "must_be_emitted_by_github_ingestion_only_after_complete_runtime_state": true,
+    "must_be_emitted_by_github_ingestion_for_any_nonconflicting_resolved_subset": true,
     "must_bind_to_exact_stage_15_validation_blob_sha": true,
-    "must_cover_exactly_all_stage_15_true_miss_keys": true,
+    "must_cover_exactly_current_github_runtime_resolved_keys": true,
+    "may_be_strict_subset_of_stage_15_true_miss_keys": true,
+    "must_carry_expected_resolved_and_unresolved_counts": true,
+    "allowed_scope_statuses": ["partial", "complete"],
     "allowed_statuses": ["confirmed_min", "previously_free", "unavailable_exact_history"],
     "confirmed_min_requires_positive_exact_kzt": true,
     "previously_free_requires_zero": true,
     "unavailable_exact_history_requires_source_reached_evidence_code": true,
     "special_relationship_resolution_requires_explicit_evidence_object": true,
-    "blocked_or_failure_must_not_be_persisted_as_final_resolution": true
+    "blocked_or_failure_must_not_be_persisted_as_final_resolution": true,
+    "unresolved_keys_must_not_be_encoded_as_negative_cache": true
   },
   "diagnostic_stage_16": {
     "output": "data/cache/steamdb_lookup.validation.json",
+    "valid_statuses": ["partial", "complete"],
     "pass_requires": [
-      "every stage-15 true miss has exactly one prepared runtime resolution",
+      "every prepared resolved key has exactly one valid runtime resolution",
+      "prepared resolved keys exactly equal the resolved-key set in GitHub runtime state",
+      "current unresolved keys remain explicitly accounted for and are not written as negative results",
       "no non-miss key is present",
       "no duplicate provider/entity key exists",
       "confirmed minima are exact KZT values read from SteamDB evidence, never currency-converted estimates",
       "previously-free and unavailable-exact-history are distinct statuses",
       "all special relationship-derived values have explicit SteamDB relationship evidence",
-      "blocked_or_failure count is zero"
+      "validated registry contains no blocked_or_failure result"
     ],
-    "after_targeted_pass": "restart full diagnostic from stage 01"
+    "complete_status_requires_zero_unresolved": true,
+    "partial_status_requires_one_or_more_unresolved": true,
+    "after_targeted_pass": "restart downstream deterministic stages with all newly checkpointed facts; unresolved retries continue independently"
   }
 }
