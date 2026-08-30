@@ -132,9 +132,9 @@ function renderPriority(g){
   const vs=g.priority_vs_next||null;
   const rank=Number(g.priority_rank)||null;
   const parts=[];
-  if(rank)parts.push(`Production-позиция: №${rank}.`);
+  if(rank)parts.push(`Позиция в общем рейтинге: №${rank}.`);
   if(vs&&vs.next_game_title&&vs.explanation)parts.push(`Следующая — «${vs.next_game_title}». ${vs.explanation}`);
-  else if(rank)parts.push('Это последняя игра в текущем production-порядке.');
+  else if(rank)parts.push('Это последняя игра в текущем общем рейтинге.');
   $('priorityWhy').textContent=parts.join(' ');
   const deciding=vs&&vs.deciding_factor_id;
   $('priorityFactors').innerHTML=factors.map(f=>`<div class="priority-factor ${f.id===deciding?'deciding':''}"><span>${escapeHtml(f.label||f.id||'Фактор')}</span><b>${escapeHtml(f.value??'—')}</b></div>`).join('');
@@ -156,9 +156,9 @@ function renderFeed(){
 }
 function listPositionText(g){
   const q=queuePosition(g.id),p=Number(g.priority_rank)||null;
-  if(q&&p&&q!==p)return `№${q} в ленте · production №${p}`;
+  if(q&&p&&q!==p)return `№${q} в ленте · общий рейтинг №${p}`;
   if(q)return `№${q} в ленте`;
-  if(p)return `production №${p}`;
+  if(p)return `общий рейтинг №${p}`;
   return 'Позиция неизвестна';
 }
 function miniCard(g,status){
