@@ -1,6 +1,6 @@
 # GAME-DEALS-MAILING v1.9
 
-`config/mailing_policy.json` — канонический источник правил отбора и production. `config/daily_execution_contract.json` — канонический источник расписания и способа получения результата. Этот файл — только краткое человекочитаемое описание.
+`config/mailing_policy.json` — канонический источник общих правил отбора и production. `config/final_ranking_policy.json` — специализированный канонический контракт финального `priority_rank` и имеет приоритет над историческими sorting-массивами общего policy. `config/daily_execution_contract.json` — канонический источник расписания и способа получения результата. Этот файл — только краткое человекочитаемое описание.
 
 ## Текущая модель выполнения
 
@@ -64,4 +64,4 @@ Cache hit возможен только при совпадении:
 - единый provider+exact-key registry запрещает повторные Store/SteamDB lookup;
 - исключённые позиции пользователю не показываются;
 - upcoming — максимум одно ближайшее релевантное событие;
-- финальная сортировка: `БРАТЬ СЕЙЧАС` → `МОЖНО БРАТЬ` → `ЛУЧШЕ ЖДАТЬ`.
+- финальный автоматический `priority_rank` задаётся только `config/final_ranking_policy.json` и рассчитывается один раз после refinement; rationale см. `PROJECT_DECISIONS.md`.
