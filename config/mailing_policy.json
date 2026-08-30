@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.18",
+  "version": "1.19",
   "status": "canonical",
   "purpose": "Personalized daily Steam KZ deal data preparation with stable price-blind taste verdicts, taste-first eligibility, one nightly commercial snapshot, and resumable taste-cache checkpoints.",
   "policy_loading": {
@@ -156,7 +156,7 @@
       "one_feed_recall_flag_plus_one_profile_pattern_is_not_two_signals": true
     },
     "structured_taste_evaluation": {
-      "taste_model_version": "taste-v2",
+      "taste_model_version": "taste-v3",
       "required_for_cache_miss": true,
       "include_moderate_if": "Either (A) at least 1 high-specificity positive evidence item plus at least 1 independent additional substantive positive item, or (B) at least 3 independent substantive specific positive items from distinct canonical factors. In both cases at least one positive item must concern gameplay/mechanics/structure rather than only theme, story premise or art, and there must be no direct strong negative user evidence or clearly dominant specific structural conflict.",
       "direct_strong_negative_can_block": true,
@@ -215,7 +215,7 @@
     "path": "data/cache/taste_fit.json",
     "schema_version": 1,
     "purpose": "derived verdict cache only; never user evidence and never a second taste profile",
-    "taste_model_version": "taste-v2",
+    "taste_model_version": "taste-v3",
     "keying": "exact production candidate key",
     "profile_binding": "canonical gaming_taste_live.json Git blob SHA must match exactly",
     "fingerprint_fields": [
@@ -275,7 +275,7 @@
     "recovery_artifact": {
       "enabled": true,
       "expected_name": "taste_fit_checkpoint_prepared.json",
-      "purpose": "recover final taste-v2 verdicts from an immediately prior interrupted run without repeating semantic evaluation",
+      "purpose": "recover final verdicts for the current taste model from an immediately prior interrupted run without repeating semantic evaluation",
       "artifact_is_not_user_evidence": true,
       "accept_only_if": [
         "schema_version_matches",
@@ -695,6 +695,48 @@
       "priority_effect": "meaningful_boost_among_already_eligible_candidates",
       "fixed_numeric_bonus": null,
       "numeric_bonus_must_not_be_invented_without_user_agreement": true
+    }
+  },
+  "taste_factor_semantics": {
+    "contract": "TASTE-SEMANTIC-RESULT-V3",
+    "normalized_factor_value_range": [
+      0,
+      100
+    ],
+    "normalized_factor_ids": [
+      "gameplay_mastery",
+      "development_variety",
+      "structure_pacing_direction",
+      "identity_hooks",
+      "breadth_of_match"
+    ],
+    "factor_semantics": {
+      "gameplay_mastery": "How strongly the candidate's intrinsic gameplay, controls, active decision making and learnable mastery match durable positive user patterns. Score candidate fit, not general game quality.",
+      "development_variety": "How strongly the candidate is expected to provide meaningful change, progression, varied situations or expanding possibilities rather than a static repetitive loop, relative to durable user preferences.",
+      "structure_pacing_direction": "How strongly the candidate provides a clear reason to continue, understandable objectives/direction and a pace/structure compatible with the user's preference for purposeful play rather than unclear or passive drift.",
+      "identity_hooks": "How strongly candidate-specific atmosphere, narrative premise, characters, tactical identity, movement fantasy, mystery or another distinctive hook maps to durable user interests when intrinsically relevant.",
+      "breadth_of_match": "Breadth of independent, specific, grounded positive matches across the canonical user profile after avoiding duplicate evidence. This is not a confidence score and must not count generic tags or feed recall flags as extra matches."
+    },
+    "scoring_rules": {
+      "price_blind": true,
+      "forbidden_inputs": [
+        "price",
+        "discount",
+        "wishlist",
+        "reviews",
+        "steamdb_history",
+        "historical_price",
+        "sale_end",
+        "deal_quality",
+        "commercial_priority"
+      ],
+      "factor_values_are_weight_independent": true,
+      "do_not_apply_final_ranking_max_points": true,
+      "negative_risks_are_not_subtracted_from_factor_values": true,
+      "negative_conflicts_remain_in_negative_evidence_and_are_scored_separately_downstream": true,
+      "generic_game_quality_is_not_a_positive_factor": true,
+      "unknown_candidate_property_must_not_be_invented": true,
+      "all_five_factors_are_required_when_work_code_is_present": true
     }
   }
 }

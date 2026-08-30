@@ -6,7 +6,7 @@ from taste_cache_common import taste_semantics_digest
 POLICY = Path('config/mailing_policy.json')
 CACHE_ENTRY_CONTRACT = Path('config/taste_cache_entry_contract.json')
 TASTE_PROJECTION_SCRIPT = Path('scripts/build_pre_ai_taste_projection.py')
-EXPECTED_TASTE_SEMANTICS = '28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b'
+EXPECTED_TASTE_SEMANTICS = '0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828'
 
 
 def main():
@@ -51,7 +51,7 @@ def main():
     checks = {
         'contract': p.get('contract') == 'GAME-DEALS-MAILING',
         'canonical': p.get('status') == 'canonical',
-        'version': p.get('version') == '1.18',
+        'version': p.get('version') == '1.19',
         'policy_first': p['policy_loading']['load_before_any_ingest'] is True,
         'fail_closed': p['policy_loading']['fail_closed_if_unavailable'] is True,
         'full_snapshot': p['delivery']['mode'] == 'full_daily_snapshot',
@@ -75,7 +75,9 @@ def main():
         'recall_not_evidence': sep['recall_flags_can_trigger_audit_but_are_not_taste_evidence'] is True,
         'core_not_evidence': sep['core_fit_count_is_recall_context_not_positive_taste_evidence'] is True,
         'taste_semantics_stable': taste_semantics_digest(p) == EXPECTED_TASTE_SEMANTICS,
-        'taste_v2': st['taste_model_version'] == 'taste-v2',
+        'taste_factor_semantics_v3': (p.get('taste_factor_semantics') or {}).get('contract') == 'TASTE-SEMANTIC-RESULT-V3',
+        'taste_factor_ids_bound': (p.get('taste_factor_semantics') or {}).get('normalized_factor_ids') == list(__import__('taste_cache_common').TASTE_FACTOR_IDS),
+        'taste_v3': st['taste_model_version'] == 'taste-v3',
         'audit_same_threshold': p['false_negative_audit']['audit_uses_same_evidence_contract_and_same_threshold'] is True,
         'no_whitelist': p['false_negative_audit']['no_candidate_name_whitelists'] is True,
         'deal_policy_canonical': deal['status'] == 'canonical',
@@ -117,13 +119,13 @@ def main():
         'wishlist_budget_bounded': p['final_ranking_context']['wishlist']['cannot_override_budget_ceiling'] is True,
         'wishlist_symbolic_discount_bounded': p['final_ranking_context']['wishlist']['cannot_override_symbolic_discount_exclusion'] is True,
         'wishlist_no_invented_numeric_bonus': p['final_ranking_context']['wishlist']['numeric_bonus_must_not_be_invented_without_user_agreement'] is True,
-        'cache_v2': tc['taste_model_version'] == 'taste-v2',
+        'cache_v3': tc['taste_model_version'] == 'taste-v3',
         'taste_cache_has_no_commercial_state': tc['commercial_state_not_stored_in_taste_cache'] is True,
         'sale_expiry_keeps_taste_verdict': tc['sale_expiry_does_not_invalidate_taste_verdict'] is True,
-        'cache_contract_v2': cache_contract.get('contract') == 'TASTE-CACHE-ENTRY-BINDING-V2',
+        'cache_contract_v3': cache_contract.get('contract') == 'TASTE-CACHE-ENTRY-BINDING-V3',
         'cache_requires_exact_profile_blob': 'exact_profile_blob_sha' in cache_hit_requirements,
         'old_profile_entries_not_hits': mixed_generation.get('old_generation_entries_are_preserved_but_are_not_cache_hits_for_a_new_binding') is True,
-        'never_rebind_old_entry_without_ai': mixed_generation.get('never_upgrade_an_old_entry_binding_without_a_new_ai_verdict') is True,
+        'never_rebind_old_entry_without_ai': mixed_generation.get('never_upgrade_an_old_entry_binding_or_add_factors_without_a_new_ai_verdict') is True,
         'projection_compares_exact_profile_blob': "profile_ok = cached['profile_blob_sha'] == profile['blob_sha']" in projection_source,
         'projection_requeues_profile_change': "canonical_profile_blob_changed_for_entry" in projection_source,
         'incremental_checkpoint': cp['mode'] == 'incremental_by_chosen_feed_chunk',
