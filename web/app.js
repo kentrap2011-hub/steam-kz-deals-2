@@ -116,6 +116,19 @@ function textList(el,values,empty){
   const arr=(values||[]).filter(Boolean);el.innerHTML=arr.length?arr.map(x=>`<div>${escapeHtml(x)}</div>`).join('<br>'):`<span class="muted">${escapeHtml(empty)}</span>`;
 }
 function escapeHtml(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function renderRisk(g){
+  const status=g.risk_status;
+  const el=$('riskStatus');
+  if(status&&status.label){
+    const allowed=status.code==='serious_risk'?'serious':(status.code==='descriptive_risk'?'descriptive':'none');
+    el.textContent=status.label;
+    el.className=`risk-status ${allowed}`;
+  }else{
+    el.textContent='';
+    el.className='risk-status hidden';
+  }
+  textList($('risks'),g.risks,'Риск пока не подготовлен.');
+}
 function renderOffers(g){
   const offers=(g.offers||[]).filter(o=>o.current_price_rub!=null);
   $('offers').innerHTML=offers.map((o,i)=>{
@@ -149,7 +162,7 @@ function renderFeed(){
   $('histPrice').textContent=g.previously_free?'Ранее была бесплатной':`Ист. минимум: ${g.historical_minimum_rub==null?'нет данных':fmtRub(g.historical_minimum_rub)}`;
   $('deadline').textContent=deadlineText(g.sale_end_utc);$('summary').textContent=g.summary||'Краткое описание пока недоступно.';
   const gp=(g.gameplay_points||[]).filter(Boolean);$('gameplaySection').classList.toggle('hidden',!gp.length);$('gameplay').innerHTML=gp.map(x=>`<li>${escapeHtml(x)}</li>`).join('');
-  textList($('whyFit'),g.why_fit,'Персональная причина пока не подготовлена.');textList($('risks'),g.risks,'Риск пока не подготовлен.');renderPriority(g);
+  textList($('whyFit'),g.why_fit,'Персональная причина пока не подготовлена.');renderRisk(g);renderPriority(g);
   $('fit').textContent=`Соответствие вкусу: ${g.fit==='strong'?'сильное':'умеренное'}`;$('wishlist').classList.toggle('hidden',!g.wishlist);renderOffers(g);
   $('likeBtn').textContent=r.status==='liked'?'♡ Уже интересно':'♡ Интересно';
   $('finalBtn').textContent=r.status==='final'?'🏆 Уже в финале':'🏆 В финал';
