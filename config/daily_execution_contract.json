@@ -2,6 +2,7 @@
   "contract": "DAILY-VISUAL-EXECUTION-V2",
   "status": "canonical",
   "timezone": "Europe/Samara",
+  "ownership_contract": "config/execution_ownership_contract.json",
   "execution_invariants": {
     "daily_required_scope_must_not_be_intentionally_spread_across_multiple_days": true,
     "per_day_item_quota_allowed": false,
@@ -9,7 +10,10 @@
     "partial_backlog_is_not_normal_success": true,
     "temporary_handoff_or_legacy_task_must_not_override_this_contract": true,
     "separate_recurring_stage_requires_explicit_canonical_contract": true,
-    "rule": "The nightly production is one daily production cycle. GitHub performs the deterministic work it can and ChatGPT completes the remaining required semantic/external work for that same cycle. Do not convert checkpoint sizes, legacy task limits, or temporary handoff notes into a per-day game quota."
+    "github_owns_control_plane": true,
+    "interactive_chat_is_production_executor": false,
+    "user_correction_requires_architecture_recheck_before_implementation": true,
+    "rule": "The nightly production is one daily production cycle. GitHub owns the control plane, scope, queue/manifests, retry/completeness logic, deterministic processing and downstream orchestration. Scheduled ChatGPT performs only the explicit external/semantic data-plane work assigned by canonical contracts. Interactive user chats are for development/diagnosis and must not become manual production backlog processors. Do not convert checkpoint sizes, legacy task limits, temporary handoff notes or user corrections into architectural changes without canonical contract reconciliation."
   },
   "commercial_refresh": {
     "maximum_frequency": "once_per_day",
@@ -32,12 +36,16 @@
   },
   "night_preparation": {
     "local_time": "01:00",
-    "owner": "ChatGPT scheduled task",
+    "control_plane_owner": "GitHub repository and GitHub Actions",
+    "external_semantic_worker": "ChatGPT scheduled task",
     "responsibilities": [
-      "consume the completed nightly pre-AI payload",
+      "GitHub prepares the exact current production scope and explicit ChatGPT work inputs",
+      "ChatGPT consumes only the completed GitHub-prepared inputs assigned to it by canonical contracts",
       "verify source_mailing_updated_at_utc is present, parseable and no more than 18 hours old; otherwise fail closed without replacing the last successful daily visual payload",
-      "finish any required price-blind taste verdicts and persist them through taste inbox/checkpoint",
-      "wait until the current production contract is complete and the AI taste queue is closed",
+      "finish any required price-blind taste verdicts and persist them through the repository-defined taste inbox/checkpoint interface",
+      "obtain required external facts that GitHub cannot access directly, only for exact GitHub-prepared entity keys",
+      "return structured runtime/semantic results through repository-defined artifact interfaces without redefining scope, queue, retry policy or completeness",
+      "GitHub validates and persists returned facts, closes the current production contract and rebuilds downstream artifacts",
       "consume precomputed purchase context and deal scenarios",
       "produce all user-facing semantic fields including eligibility, offer-family choice, deal verdict, reasons, risks and strict priority_rank",
       "build and persist data/production/visual/current.json through the daily visual producer",
