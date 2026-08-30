@@ -148,6 +148,7 @@ jobs:
                   'weaknesses_risks': game.get('risks') or [],
                   'risk_codes': game.get('risk_codes') or [],
                   'risk_level': game.get('risk_level'),
+                  'risk_status': game.get('risk_status'),
                   'risk_penalty': game.get('risk_penalty'),
                   'windows_status': practical.get('windows_status'),
                   'legacy_windows_requirement_label': practical.get('legacy_windows_requirement_label'),
@@ -188,7 +189,7 @@ jobs:
           set -euo pipefail
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git add -A data/production/visual/current.json data/production/visual/ranking_review.jsonl data/production/visual/ranking_lookup.json data/production/visual/ranking_lookup
+          git add -A data/production/visual/current.json data/production/visual/ranking_review.jsonl data/production/visual/ranking_lookup
           git diff --cached --check
           if git diff --cached --quiet; then
             echo "No visual payload or review changes"
