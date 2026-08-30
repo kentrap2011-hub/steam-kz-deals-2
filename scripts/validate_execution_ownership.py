@@ -64,7 +64,7 @@ if inv.get("interactive_chat_is_production_executor") is not False:
 if inv.get("per_day_item_quota_allowed") is not False:
     fail("daily item quota must remain disabled")
 
-if steamdb.get("version") != "1.2":
+if steamdb.get("version") != "1.3":
     fail("unexpected SteamDB lookup contract version")
 if steamdb.get("ownership_contract") != "config/execution_ownership_contract.json":
     fail("SteamDB contract is not bound to ownership contract")
@@ -73,6 +73,24 @@ if (steam_owner.get("interactive_chat") or {}).get("production_backlog_processin
     fail("SteamDB contract allows interactive backlog processing")
 if (steamdb.get("execution_scope") or {}).get("runtime_progress_or_manual_batch_files_are_canonical_scope") is not False:
     fail("manual runtime progress/batches must remain noncanonical")
+transport = steamdb.get("transport") or {}
+required_transport = {
+    "stage_scope_manifest": "data/cache/steamdb_miss_manifest.json",
+    "github_derived_runtime_state": "data/cache/steamdb_runtime_state.json",
+    "github_derived_runtime_work_input": "data/cache/steamdb_runtime_work.json",
+    "runtime_submission_glob": "data/inbox/steamdb_runtime/*.json",
+    "prepared_runtime_artifact": "data/cache/steamdb_web_resolutions.json",
+    "ingestion_workflow": ".github/workflows/ingest-steamdb-runtime-submissions.yml",
+}
+for key, value in required_transport.items():
+    if transport.get(key) != value:
+        fail(f"SteamDB transport mismatch for {key}")
+work_contract = steamdb.get("runtime_work_input_contract") or {}
+if work_contract.get("produced_only_by_github") is not True or work_contract.get("chatgpt_must_not_recompute_unresolved_set") is not True:
+    fail("SteamDB runtime work input is not GitHub-owned")
+state_contract = steamdb.get("github_runtime_state_contract") or {}
+if state_contract.get("github_alone_decides_complete") is not True:
+    fail("SteamDB completeness is not GitHub-owned")
 
 required_context_markers = [
     "config/execution_ownership_contract.json",
@@ -83,6 +101,13 @@ required_context_markers = [
 for marker in required_context_markers:
     if marker not in chat_context:
         fail(f"CHAT_CONTEXT.md missing required guardrail: {marker}")
+
+if not (ROOT / ".github/workflows/ingest-steamdb-runtime-submissions.yml").exists():
+    fail("GitHub-owned SteamDB ingestion workflow is missing")
+if not (ROOT / "scripts/ingest_steamdb_runtime_submissions.py").exists():
+    fail("GitHub-owned SteamDB ingestion script is missing")
+if (ROOT / ".github/workflows/assemble-steamdb-runtime-resolutions.yml").exists():
+    fail("deprecated manual SteamDB assembler workflow still exists")
 
 workflow_dir = ROOT / ".github" / "workflows"
 for path in workflow_dir.glob("*.yml"):
