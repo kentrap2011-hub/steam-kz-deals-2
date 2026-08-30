@@ -18,6 +18,7 @@ on:
       - "scripts/refine_visual_ranking.py"
       - "scripts/priority_ranking.py"
       - "scripts/validate_priority_ranking.py"
+      - "scripts/build_ranking_lookup.py"
       - "config/final_ranking_policy.json"
       - "web/app.js"
       - ".github/workflows/build-daily-visual-payload.yml"
@@ -118,11 +119,9 @@ jobs:
 
           src = Path('data/production/visual/current.json')
           out = Path('data/production/visual/ranking_review.jsonl')
-          lookup_out = Path('data/production/visual/ranking_lookup.json')
           data = json.loads(src.read_text(encoding='utf-8'))
 
           rows = []
-          lookup = {}
           for game in sorted(data.get('items') or [], key=lambda g: int(g.get('priority_rank') or 999999)):
               practical = game.get('practical') or {}
               direct = game.get('direct_user_evidence') or {}
@@ -171,25 +170,17 @@ jobs:
                   'steam_web_url': game.get('web_url'),
               }
               rows.append(json.dumps(row, ensure_ascii=False, separators=(',', ':')))
-              lookup[str(game.get('title') or game.get('id') or '')] = {
-                  'rank': game.get('priority_rank'),
-                  'taste_rank': game.get('taste_rank'),
-                  'fit': game.get('fit'),
-                  'decision': game.get('decision'),
-                  'priority_group': game.get('priority_bucket'),
-                  'serious_risk_rank': game.get('practical_or_personal_risk_rank'),
-                  'risk_level': game.get('risk_level'),
-                  'wishlist': bool(game.get('wishlist')),
-                  'discount_percent': game.get('discount_percent'),
-                  'history_quality': game.get('history_quality'),
-                  'current_price_rub': game.get('current_price_rub'),
-              }
 
           out.write_text('\n'.join(rows) + '\n', encoding='utf-8')
-          lookup_out.write_text(json.dumps(lookup, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
           print(f'RANKING_REVIEW_ROWS={len(rows)}')
-          print(f'RANKING_LOOKUP_ROWS={len(lookup)}')
           PY
+
+      - name: Build bounded ranking lookup
+        if: steps.build.outputs.built == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_ranking_lookup.py
 
       - name: Commit canonical payload and review export
         if: steps.build.outputs.built == 'true'
@@ -197,7 +188,7 @@ jobs:
           set -euo pipefail
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git add data/production/visual/current.json data/production/visual/ranking_review.jsonl data/production/visual/ranking_lookup.json
+          git add -A data/production/visual/current.json data/production/visual/ranking_review.jsonl data/production/visual/ranking_lookup.json data/production/visual/ranking_lookup
           git diff --cached --check
           if git diff --cached --quiet; then
             echo "No visual payload or review changes"
