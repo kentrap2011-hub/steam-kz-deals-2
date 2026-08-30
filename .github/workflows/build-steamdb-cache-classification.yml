@@ -1,4 +1,7 @@
 name: Build SteamDB cache classification
+# The persistent SteamDB cache may contain a validated partial subset from an
+# incomplete runtime scope. Absent keys remain true misses/retries; they do not
+# invalidate already-persisted successful facts or block downstream history use.
 
 on:
   workflow_dispatch:
