@@ -1,0 +1,89 @@
+name: Ingest SteamDB runtime submissions
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "Export SteamDB miss manifest"
+    types:
+      - completed
+  push:
+    branches: [main]
+    paths:
+      - "data/inbox/steamdb_runtime/**"
+      - "data/cache/steamdb_miss_manifest.json"
+      - "config/steamdb_lookup_contract.json"
+      - "config/execution_ownership_contract.json"
+      - "scripts/ingest_steamdb_runtime_submissions.py"
+      - ".github/workflows/ingest-steamdb-runtime-submissions.yml"
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: ingest-steamdb-runtime-submissions
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    if: >
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Derive canonical runtime state and work input from submissions
+        run: python scripts/ingest_steamdb_runtime_submissions.py
+
+      - name: Commit GitHub-derived runtime state
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/steamdb_runtime_state.json data/cache/steamdb_runtime_work.json
+          if [ -f data/cache/steamdb_web_resolutions.json ]; then
+            git add data/cache/steamdb_web_resolutions.json
+          fi
+          if git diff --cached --quiet; then
+            echo "Runtime state already current"
+          else
+            git commit -m "Ingest SteamDB runtime submissions"
+            for attempt in 1 2 3; do
+              git fetch origin main:refs/remotes/origin/main
+              if ! git rebase origin/main; then
+                git rebase --abort || true
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                break
+              fi
+              if [ "$attempt" = "3" ]; then exit 1; fi
+              sleep $((attempt * 3))
+            done
+          fi
+
+      - name: Dispatch final SteamDB validation only when GitHub state is complete
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          status=$(python - <<'PY'
+          import json
+          print(json.load(open('data/cache/steamdb_runtime_state.json', encoding='utf-8'))['status'])
+          PY
+          )
+          echo "runtime_status=$status"
+          if [ "$status" = "complete" ]; then
+            gh workflow run build-steamdb-true-miss-lookups.yml --ref main
+          fi
