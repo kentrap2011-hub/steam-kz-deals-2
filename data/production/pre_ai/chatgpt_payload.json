@@ -2,12 +2,12 @@
   "schema_version": 3,
   "purpose": "chatgpt_consumer_bundle_with_context_bound_strict_price_blind_taste_phase",
   "status": "complete",
-  "source_mailing_updated_at_utc": "2026-08-29T20:29:25.848927+00:00",
+  "source_mailing_updated_at_utc": "2026-08-30T20:37:43.818127+00:00",
   "profile_binding": {
     "canonical_profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
     "taste_model_version": "taste-v3",
     "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-    "content_metadata_blob_sha": "f1af3ec4f445e35be7cfa434dde5a37fb93d88f0"
+    "content_metadata_blob_sha": "edd67da84c1c5b376eac7258a825c9a26f96b0da"
   },
   "wishlist_binding": {
     "blob_sha": "0b5b6b9d32d051ad838b6c758e1d6d2a37b09251",
@@ -56,22 +56,22 @@
     "line_alignment": "taste_queue line N == purchase_context line N for 1..ai_queue_count",
     "ready_context_start_line": null
   },
-  "source_family_count": 655,
-  "candidate_description_known_count": 655,
+  "source_family_count": 659,
+  "candidate_description_known_count": 659,
   "candidate_description_missing_count": 0,
   "candidate_description_coverage": 1.0,
-  "ai_queue_count": 624,
+  "ai_queue_count": 634,
   "ready_without_ai_count": 0,
-  "purchase_context_line_count": 624,
-  "deterministically_excluded_without_ai_count": 31,
+  "purchase_context_line_count": 634,
+  "deterministically_excluded_without_ai_count": 25,
   "deterministic_exclusion_counts": {
-    "deal_excludes_even_if_strong": 31
+    "deal_excludes_even_if_strong": 25
   },
   "complete_family_partition": true,
   "sale_end_coverage": 1.0,
   "sale_end_missing_count": 0,
   "sale_end_missing_primary_keys": [],
-  "source_pre_ai_artifact_bytes": 2401760,
+  "source_pre_ai_artifact_bytes": 2411227,
   "deterministically_excluded_primary_keys": [
     "App_1121640",
     "App_1245560",
@@ -83,18 +83,12 @@
     "App_1763250",
     "App_1796790",
     "App_1804010",
-    "App_1868140",
-    "App_1887400",
     "App_2096600",
     "App_2096610",
     "App_214490",
     "App_2183650",
     "App_2305640",
-    "App_2362090",
-    "App_2478970",
-    "App_2525380",
     "App_3232610",
-    "App_381210",
     "App_538030",
     "App_550320",
     "App_587620",
@@ -105,5 +99,5 @@
     "App_761600",
     "App_802880"
   ],
-  "elapsed_seconds": 0.173
+  "elapsed_seconds": 0.158
 }
