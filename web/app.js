@@ -169,10 +169,17 @@ function renderOffers(g){
 function scoreComponentHtml(row){
   const points=Number(row?.points)||0;
   const sign=points>0?'+':'';
-  const max=row?.max_points!=null?`/${Number(row.max_points).toLocaleString('ru-RU',{maximumFractionDigits:1})}`:'';
   const label=escapeHtml(row?.label||(row?.id==='savings'?'Экономия по акции':'Критерий'));
   const detail=row?.id==='savings'&&row?.value?` · ${escapeHtml(row.value)}`:'';
-  return `<div class="priority-factor"><span>${label}${detail}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})}${max}</b></div>`;
+  if(row?.id==='wishlist'){
+    const status=points>0?'есть':'нет';
+    return `<span class="score-chip"><span>${label}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})} · ${status}</b></span>`;
+  }
+  const max=row?.max_points!=null?`/${Number(row.max_points).toLocaleString('ru-RU',{maximumFractionDigits:1})}`:'';
+  return `<span class="score-chip"><span>${label}${detail}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})}${max}</b></span>`;
+}
+function scoreGroupHtml(label,points,max,components){
+  return `<div class="score-group"><div class="score-group-head"><span>${escapeHtml(label)}</span><b>${Number(points).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div><div class="score-components">${(components||[]).map(scoreComponentHtml).join('')}</div></div>`;
 }
 function renderPriority(g){
   const factors=Array.isArray(g.priority_factors)?g.priority_factors:[];
@@ -205,13 +212,12 @@ function renderPriority(g){
     html+=`<div class="priority-factor ${deciding==='sale_expiry_urgency_asc'?'deciding':''}"><span>${escapeHtml(urgency.label||'Срочность скидки')}</span><b>${escapeHtml(urgency.value??'—')} · ${urgencyNote}</b></div>`;
   }
   if(score){
-    html+=`<div class="priority-factor ${!urgencyMode||deciding==='total_score_desc'?'deciding':''}"><span>Итоговый балл</span><b>${Number(score.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.total_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div>`;
-    if(score.precision?.label)html+=`<div class="muted small">Точность вкусовой части: ${escapeHtml(score.precision.label)}${score.precision.is_coarse_legacy?' — детализируем по мере обновления старых оценок.':''}</div>`;
-    html+=`<div class="priority-factor"><span>${escapeHtml(score.personal_label||'Насколько подходит тебе')}</span><b>${Number(score.personal_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.personal_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div>`;
-    html+=(score.personal_components||[]).map(scoreComponentHtml).join('');
-    html+=`<div class="priority-factor"><span>${escapeHtml(score.purchase_label||'Выгодность покупки')}</span><b>${Number(score.purchase_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.purchase_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div>`;
-    html+=(score.purchase_components||[]).map(scoreComponentHtml).join('');
-  }else{
+  html+=`<button class="priority-factor score-total ${!urgencyMode||deciding==='total_score_desc'?'deciding':''}" type="button" data-score-toggle aria-expanded="false" title="Показать детализацию итогового балла"><span>Итоговый балл</span><b>${Number(score.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.total_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></button>`;
+  let details='';
+  if(score.precision?.label)details+=`<div class="muted small score-precision">Точность вкусовой части: ${escapeHtml(score.precision.label)}${score.precision.is_coarse_legacy?' — детализируем по мере обновления старых оценок.':''}</div>`;
+  details+=`<div class="score-groups">${scoreGroupHtml(score.personal_label||'Насколько подходит тебе',score.personal_score,score.personal_max,score.personal_components)}${scoreGroupHtml(score.purchase_label||'Выгодность покупки',score.purchase_score,score.purchase_max,score.purchase_components)}</div>`;
+  html+=`<div class="score-details hidden" data-score-details>${details}</div>`;
+}else{
     html+=factors.filter(f=>f.id!=='sale_expiry_urgency_asc').map(f=>`<div class="priority-factor ${f.id===deciding?'deciding':''}"><span>${escapeHtml(f.label||f.id||'Фактор')}</span><b>${escapeHtml(f.value??'—')}</b></div>`).join('');
   }
   $('priorityFactors').innerHTML=html;
@@ -301,6 +307,12 @@ $('steamBtn').addEventListener('click',()=>{const g=currentGame();if(g)openSteam
 $('searchBtn').addEventListener('click',()=>{$('searchDialog').showModal();$('searchInput').value='';searchRender();setTimeout(()=>$('searchInput').focus(),50)});$('searchInput').addEventListener('input',searchRender);
 
 document.addEventListener('click',e=>{
+  const scoreToggle=e.target.closest('[data-score-toggle]');
+  if(scoreToggle){
+    const details=scoreToggle.parentElement?.querySelector('[data-score-details]');
+    if(details){const expanded=scoreToggle.getAttribute('aria-expanded')==='true';scoreToggle.setAttribute('aria-expanded',String(!expanded));scoreToggle.title=expanded?'Показать детализацию итогового балла':'Свернуть детализацию итогового балла';details.classList.toggle('hidden',expanded)}
+    return;
+  }
   const o=e.target.closest('[data-open-web]');if(o){openSteam(o.dataset.openSteam||null,o.dataset.openWeb||null);return}
   const f=e.target.closest('[data-focus]');if(f){focusGame(f.dataset.focus);return}
   const sf=e.target.closest('[data-search-focus]');if(sf){focusGame(sf.dataset.searchFocus);return}
