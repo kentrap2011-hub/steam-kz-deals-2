@@ -1,8 +1,8 @@
 {
   "contract": "STEAMDB-CACHE-CHECKPOINT-V1",
-  "version": "1.0",
+  "version": "1.1",
   "status": "implementation_only",
-  "purpose": "Merge the validated stage-16 SteamDB lookup ledger into the persistent history cache exactly once, migrate legacy schema 1 entries to canonical writer schema 2, and repair metadata without inventing historical values.",
+  "purpose": "Merge every validated persistable SteamDB lookup result into the persistent history cache even when the current lookup scope is still partial, migrate legacy schema 1 entries to canonical writer schema 2, and repair metadata without inventing historical values. Unresolved keys remain outside the cache and continue through GitHub-owned retry state.",
   "authority": {
     "canonical_policy_path": "config/mailing_policy.json",
     "never_overrides_canonical_policy": true,
@@ -22,14 +22,19 @@
     "previously_free": "persist status previously_free with historical_min_kzt 0",
     "unavailable_exact_history": "persist status unavailable_exact_history only when stage 16 marks the result persistable and source-reached evidence is present",
     "blocked_or_failure": "never persist",
+    "unresolved": "never persist or invent a negative cache entry; leave the key in GitHub-owned retry state",
     "guessed_or_converted_minimum": "never persist",
     "existing_and_new_key": "validated stage-16 result replaces the previous entry for that exact key",
+    "partial_registry": "merge every validated registry entry even when validated_resolution_count is smaller than expected_true_miss_count",
     "entry_count": "must equal actual len(entries) after merge"
   },
   "checkpoint_validation": {
-    "lookup_validation_must_be_complete": true,
+    "accepted_lookup_validation_statuses": ["partial", "complete"],
     "lookup_validation_must_have_zero_blocked_or_failure": true,
     "every_lookup_registry_entry_must_be_persistable": true,
+    "lookup_registry_count_must_equal_validated_resolution_count": true,
+    "validated_plus_missing_must_equal_expected_true_miss_count": true,
+    "registry_may_be_strict_subset_of_expected_true_misses": true,
     "expected_added_or_replaced_keys_must_equal_stage_16_registry_keys": true,
     "result_schema_version_must_equal_2": true,
     "result_entry_count_must_equal_len_entries": true
@@ -37,9 +42,10 @@
   "diagnostic_stage_17": {
     "producer_workflow": ".github/workflows/checkpoint-steamdb-history.yml",
     "pass_requires": [
-      "stage 16 validation status is complete",
+      "stage 16 validation status is partial or complete",
       "cache is written at most once if changed",
-      "all 51 stage-16 resolutions are represented in schema-2 cache",
+      "all validated stage-16 resolutions are represented in schema-2 cache",
+      "unresolved keys are not written as guessed, blocked or negative-cache results",
       "legacy entries are migrated without changing their historical values",
       "metadata entry_count equals actual len(entries)",
       "no guessed minima are stored"
