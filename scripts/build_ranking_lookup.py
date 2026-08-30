@@ -32,6 +32,8 @@ def compact_row(game):
         'priority_group': game.get('priority_bucket'),
         'serious_risk_rank': game.get('practical_or_personal_risk_rank'),
         'risk_level': game.get('risk_level'),
+        'risk_status': game.get('risk_status'),
+        'risk_codes': game.get('risk_codes') or [],
         'wishlist': bool(game.get('wishlist')),
         'discount_percent': game.get('discount_percent'),
         'history_quality': game.get('history_quality'),
@@ -63,7 +65,7 @@ def main():
         counts[bucket] = len(rows)
 
     manifest = {
-        'schema_version': 1,
+        'schema_version': 2,
         'source': str(SOURCE),
         'bucket_rule': 'first case-folded title character; a-z, 0-9, or _',
         'item_count': sum(counts.values()),
