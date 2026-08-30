@@ -140,6 +140,8 @@ jobs:
                   'decision': game.get('decision'),
                   'priority_bucket': game.get('priority_bucket'),
                   'practical_or_personal_risk_rank': game.get('practical_or_personal_risk_rank'),
+                  'priority_factors': game.get('priority_factors') or [],
+                  'priority_vs_next': game.get('priority_vs_next'),
                   'strengths': game.get('why_fit') or [],
                   'gameplay_points': game.get('gameplay_points') or [],
                   'weaknesses_risks': game.get('risks') or [],
