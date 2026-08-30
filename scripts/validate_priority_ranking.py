@@ -27,6 +27,7 @@ def game(title, **overrides):
         'title': title,
         'priority_bucket': 1,
         'risk_level': 'low',
+        'risk_codes': [],
         'wishlist': False,
         'history_quality': 'record',
         'discount_percent': 80,
@@ -64,26 +65,39 @@ def main():
     assert priority_ranking.load_final_priority_order() == EXPECTED_ORDER
 
     # Expiring today/tomorrow overrides every automatic recommendation factor.
-    urgent_today = game('today', priority_bucket=6, risk_level='high', sale_end_utc='2026-08-30T18:00:00Z')
+    urgent_today = game('today', priority_bucket=6, risk_level='high', risk_codes=['unchanged_repetition'], sale_end_utc='2026-08-30T18:00:00Z')
     urgent_tomorrow = game('tomorrow', priority_bucket=1, sale_end_utc='2026-08-31T18:00:00Z')
     later = game('later', priority_bucket=1, sale_end_utc='2026-09-05T18:00:00Z')
     assert titles(ranked([later, urgent_tomorrow, urgent_today])) == ['today', 'tomorrow', 'later']
 
-    # Medium/low heuristic risks are descriptive context only at this early layer;
-    # only high/serious risk may demote before the mixed taste+deal bucket.
-    medium = game('a-medium', risk_level='medium')
+    # Risk status is explicit producer-owned data: no risk / descriptive risk / serious ranking risk.
+    no_risk = ranked([game('no-risk')])[0]
+    assert (no_risk.get('risk_status') or {}).get('code') == 'no_confirmed_risk'
+    assert (no_risk.get('risk_status') or {}).get('affects_early_priority') is False
+
+    medium = game('a-medium', risk_level='medium', risk_codes=['exploration_direction'])
     low = game('b-low', risk_level='low')
+    medium_ranked = ranked([medium])[0]
     assert priority_ranking.practical_risk_rank(medium) == priority_ranking.practical_risk_rank(low) == 0
-    high = game('a-high', risk_level='high')
+    assert (medium_ranked.get('risk_status') or {}).get('code') == 'descriptive_risk'
+    assert (medium_ranked.get('risk_status') or {}).get('affects_early_priority') is False
+    medium_risk_factor = next(f for f in medium_ranked['priority_factors'] if f['id'] == 'practical_or_personal_risk_asc')
+    assert medium_risk_factor['value'] == 'обычный риск есть · серьёзного штрафа нет'
+
+    high = game('a-high', risk_level='high', risk_codes=['unchanged_repetition'])
+    high_ranked = ranked([high])[0]
+    assert (high_ranked.get('risk_status') or {}).get('code') == 'serious_risk'
+    assert (high_ranked.get('risk_status') or {}).get('affects_early_priority') is True
     assert titles(ranked([high, low])) == ['b-low', 'a-high']
 
     # Regression for the Seraph's Last Stand / High On Life structure: a very cheap candidate
-    # with a commercially better bucket must not beat a clearly safer wishlist candidate merely
+    # with a commercially better group must not beat a clearly safer wishlist candidate merely
     # because its current price is close to historical lows.
     cheap_high_risk = game(
         'cheap-high-risk',
         priority_bucket=5,
         risk_level='high',
+        risk_codes=['unchanged_repetition'],
         wishlist=False,
         discount_percent=30,
         history_quality='good_vs_history',
@@ -102,19 +116,21 @@ def main():
     assert titles(risk_pair) == ['interesting-wishlist-wait', 'cheap-high-risk']
     assert (risk_pair[0].get('priority_vs_next') or {}).get('deciding_factor_id') == 'practical_or_personal_risk_asc'
 
-    # With the same urgency and serious-risk layer, the qualitative taste+deal bucket remains first.
-    assert titles(ranked([game('bucket2', priority_bucket=2), game('bucket1', priority_bucket=1)])) == ['bucket1', 'bucket2']
+    # With the same urgency and serious-risk layer, the qualitative taste+deal group remains first.
+    assert titles(ranked([game('group2', priority_bucket=2), game('group1', priority_bucket=1)])) == ['group1', 'group2']
 
     # A bare legacy Steam requirement label is neutral without confirmed modern-Windows friction.
     bare_legacy = game('a-bare-legacy', practical={'legacy_windows_requirement_label': 'legacy', 'modern_windows_friction': 'unknown'})
     normal = game('b-normal', practical={'modern_windows_friction': 'likely_none'})
     assert priority_ranking.practical_risk_rank(bare_legacy) == priority_ranking.practical_risk_rank(normal) == 0
 
-    # Confirmed pre-Windows-10 targeting/fixes must demote the otherwise equal candidate.
+    # Confirmed pre-Windows-10 targeting/fixes must demote the otherwise equal candidate and be serious even in synthetic data without risk_codes.
     confirmed_old = game('a-confirmed-old', practical={'modern_windows_friction': 'confirmed_pre_windows_10_target'})
+    confirmed_old_ranked = ranked([confirmed_old])[0]
+    assert (confirmed_old_ranked.get('risk_status') or {}).get('code') == 'serious_risk'
     assert titles(ranked([confirmed_old, normal])) == ['b-normal', 'a-confirmed-old']
 
-    # Wishlist is meaningful inside the same bucket/risk layer and comes before commercial tie-breaks.
+    # Wishlist is meaningful inside the same group/risk layer and comes before commercial tie-breaks.
     wishlist = game('wishlist', wishlist=True, discount_percent=20, history_quality='well_above_history')
     stronger_deal = game('stronger-deal', wishlist=False, discount_percent=90, history_quality='record')
     wishlist_pair = ranked([stronger_deal, wishlist])
@@ -124,6 +140,7 @@ def main():
     for row in wishlist_pair:
         assert [factor['id'] for factor in row.get('priority_factors') or []] == EXPECTED_ORDER
         assert all('label' in factor and 'value' in factor and 'sort_value' in factor for factor in row['priority_factors'])
+        assert isinstance(row.get('risk_status'), dict) and row['risk_status'].get('label')
         visible_text = ' '.join(f"{factor.get('label', '')} {factor.get('value', '')}" for factor in row['priority_factors']).casefold()
         assert 'bucket' not in visible_text
         assert 'tie-break' not in visible_text
@@ -145,7 +162,7 @@ def main():
     expensive_best_ach = game('expensive-best-ach', current_price_rub=400, practical={'steam_achievements': True, 'achievement_quality': 5})
     assert titles(ranked([expensive_best_ach, cheap_no_ach])) == ['cheap-no-ach', 'expensive-best-ach']
 
-    # Direct user evidence is intentionally not a separate final factor; it already changes fit/bucket upstream.
+    # Direct user evidence is intentionally not a separate final factor; it already changes fit/group upstream.
     assert not any('direct_user' in factor for factor in EXPECTED_ORDER)
 
     # UI manual end-of-queue override must stay above automatic priority, including expiry urgency.
@@ -155,9 +172,10 @@ def main():
         "return [...normal,...manual];",
         "r.manual_end_at=Date.now();",
         "state.queue.ids.push(g.id);",
+        "g.risk_status",
     ]
     for fragment in required_ui_fragments:
-        assert fragment in app, f'missing manual queue override invariant: {fragment}'
+        assert fragment in app, f'missing UI invariant: {fragment}'
 
     print('PRIORITY_RANKING_VALIDATION=PASS')
 
