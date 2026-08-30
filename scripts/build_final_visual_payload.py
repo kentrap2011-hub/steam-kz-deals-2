@@ -109,6 +109,15 @@ def main():
 
     ready['items'] = refined
     ready['item_count'] = len(refined)
+    with_screenshots = sum(bool(game.get('screenshots')) for game in refined)
+    with_any_image = sum(bool(game.get('screenshots') or game.get('header_image')) for game in refined)
+    ready['media_coverage'] = {
+        'visible_item_count': len(refined),
+        'with_screenshots': with_screenshots,
+        'with_any_image': with_any_image,
+        'without_any_image': len(refined) - with_any_image,
+        'coverage_percent': round((with_any_image / len(refined)) * 100, 1) if refined else 100.0,
+    }
     contract = ready.setdefault('production_contract', {})
     contract.clear()
     contract.update({

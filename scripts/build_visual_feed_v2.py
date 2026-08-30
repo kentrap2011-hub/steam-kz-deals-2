@@ -118,9 +118,15 @@ def storebrowse_media(appids):
         except Exception as exc:
             print(f'visual media batch failed: {type(exc).__name__}: {exc}')
             continue
+        requested_ids = set(batch)
         for store_item in (data.get('response') or {}).get('store_items') or []:
-            appid = str(store_item.get('appid') or store_item.get('id') or '')
-            if not appid:
+            # StoreBrowse may resolve a requested storefront app to another internal
+            # appid for its assets. `id` preserves the requested storefront identity;
+            # `appid` is still the correct path component for the returned assets.
+            request_id = str(store_item.get('id') or '').strip()
+            asset_appid = str(store_item.get('appid') or request_id).strip()
+            result_key = request_id if request_id in requested_ids else asset_appid
+            if not result_key or not asset_appid:
                 continue
             shots = []
             for shot in ((store_item.get('screenshots') or {}).get('all_ages_screenshots') or []):
@@ -133,9 +139,13 @@ def storebrowse_media(appids):
                     break
             assets = store_item.get('assets') or {}
             header_file = str(assets.get('header') or '').strip()
-            header = f'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/{appid}/{header_file}' if header_file else None
+            header = f'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/{asset_appid}/{header_file}' if header_file else None
             desc = str((store_item.get('basic_info') or {}).get('short_description') or '').strip() or None
-            result[appid] = {'screenshots': shots, 'header_image': header, 'short_description_ru': desc if has_russian_text(desc) else None}
+            result[result_key] = {
+                'screenshots': shots,
+                'header_image': header,
+                'short_description_ru': desc if has_russian_text(desc) else None,
+            }
     return result
 
 
