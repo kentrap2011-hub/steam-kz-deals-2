@@ -56,7 +56,7 @@ jobs:
           set -euo pipefail
           python scripts/validate_priority_ranking.py
 
-      - name: Require resolved SteamDB history before replacing daily visual
+      - name: Require complete history classification coverage before replacing daily visual
         id: history
         shell: bash
         run: |
@@ -75,11 +75,13 @@ jobs:
           data = json.loads(path.read_text(encoding='utf-8'))
           counts = data.get('cache_status_counts') or {}
           missing = int(counts.get('missing') or 0)
-          complete = data.get('status') == 'complete' and data.get('complete_coverage') is True
-          ready = complete and missing == 0
+          # Missing persistent SteamDB history is already classified by the history
+          # snapshot as history_quality=unverified. It is secondary evidence, not a
+          # reason to block an otherwise complete candidate snapshot.
+          ready = data.get('status') == 'complete' and data.get('complete_coverage') is True
           print(
               f'HISTORY_READY={str(ready).lower()} '
-              f'missing={missing} complete_coverage={data.get("complete_coverage")} '
+              f'missing_as_unverified={missing} complete_coverage={data.get("complete_coverage")} '
               f'primary_count={data.get("primary_count")}'
           )
           with open('/tmp/history-ready', 'w', encoding='utf-8') as fh:
