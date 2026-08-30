@@ -54,10 +54,11 @@ jobs:
           if policy.get('status') != 'canonical':
               raise SystemExit('Policy is not canonical')
           expected_schema = int(policy['external_cache']['steamdb_history']['writer_schema_version'])
-          if expected_schema != 2 or contract.get('contract') != 'STEAMDB-CACHE-CHECKPOINT-V1':
+          if expected_schema != 2 or contract.get('contract') != 'STEAMDB-CACHE-CHECKPOINT-V1' or contract.get('version') != '1.1':
               raise SystemExit('Unexpected SteamDB checkpoint contract/schema')
-          if lookup.get('status') != 'complete':
-              raise SystemExit('Stage-16 lookup validation is not complete')
+          lookup_status = lookup.get('status')
+          if lookup_status not in ('partial', 'complete'):
+              raise SystemExit(f'Stage-16 lookup validation is not persistable: {lookup_status!r}')
           if int(lookup.get('blocked_or_failure_count') or 0) != 0:
               raise SystemExit('Stage-16 contains blocked/failure results')
 
@@ -173,8 +174,24 @@ jobs:
 
           if len(registry_keys) != len(set(registry_keys)):
               raise SystemExit('Duplicate Stage-16 registry key')
-          if len(registry_keys) != int(lookup.get('expected_true_miss_count') or -1):
-              raise SystemExit('Stage-16 registry count does not equal expected true misses')
+
+          validated_count = lookup.get('validated_resolution_count')
+          expected_count = lookup.get('expected_true_miss_count')
+          missing_count = lookup.get('missing_result_count')
+          if not isinstance(validated_count, int) or validated_count < 0:
+              raise SystemExit('Stage-16 validated_resolution_count is invalid')
+          if not isinstance(expected_count, int) or expected_count < 0:
+              raise SystemExit('Stage-16 expected_true_miss_count is invalid')
+          if not isinstance(missing_count, int) or missing_count < 0:
+              raise SystemExit('Stage-16 missing_result_count is invalid')
+          if len(registry_keys) != validated_count:
+              raise SystemExit('Stage-16 registry count does not equal validated resolution count')
+          if validated_count + missing_count != expected_count:
+              raise SystemExit('Stage-16 validated + missing counts do not cover the expected scope')
+          if lookup_status == 'complete' and missing_count != 0:
+              raise SystemExit('Complete Stage-16 ledger still has missing results')
+          if lookup_status == 'partial' and missing_count == 0:
+              raise SystemExit('Partial Stage-16 ledger has no unresolved results')
 
           for key in registry_keys:
               if key not in migrated:
@@ -196,9 +213,12 @@ jobs:
 
           CACHE.write_text(json.dumps(result, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
           print(json.dumps({
+              'lookup_status': lookup_status,
               'old_schema': old_schema,
               'old_actual_entries': len(old_entries),
+              'stage16_expected': expected_count,
               'stage16_registry': len(registry_keys),
+              'stage16_unresolved': missing_count,
               'new_schema': 2,
               'new_actual_entries': len(migrated)
           }, ensure_ascii=False, indent=2))
