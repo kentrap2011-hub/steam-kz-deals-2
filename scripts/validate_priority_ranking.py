@@ -7,8 +7,8 @@ import priority_ranking
 
 EXPECTED_ORDER = [
     'sale_expiry_urgency_asc',
-    'priority_bucket_asc',
     'practical_or_personal_risk_asc',
+    'priority_bucket_asc',
     'wishlist_desc',
     'discount_percent_desc',
     'price_quality_vs_history_desc',
@@ -64,21 +64,46 @@ def main():
     assert priority_ranking.load_final_priority_order() == EXPECTED_ORDER
 
     # Expiring today/tomorrow overrides every automatic recommendation factor.
-    urgent_today = game('today', priority_bucket=6, sale_end_utc='2026-08-30T18:00:00Z')
+    urgent_today = game('today', priority_bucket=6, risk_level='high', sale_end_utc='2026-08-30T18:00:00Z')
     urgent_tomorrow = game('tomorrow', priority_bucket=1, sale_end_utc='2026-08-31T18:00:00Z')
     later = game('later', priority_bucket=1, sale_end_utc='2026-09-05T18:00:00Z')
     assert titles(ranked([later, urgent_tomorrow, urgent_today])) == ['today', 'tomorrow', 'later']
 
-    # Within the same expiry urgency, the qualitative taste+deal bucket remains first.
-    assert titles(ranked([game('bucket2', priority_bucket=2), game('bucket1', priority_bucket=1)])) == ['bucket1', 'bucket2']
-
     # Medium/low heuristic risks are descriptive context only at this early layer;
-    # only high/serious risk is allowed to demote before wishlist/commercial value.
+    # only high/serious risk may demote before the mixed taste+deal bucket.
     medium = game('a-medium', risk_level='medium')
     low = game('b-low', risk_level='low')
     assert priority_ranking.practical_risk_rank(medium) == priority_ranking.practical_risk_rank(low) == 0
     high = game('a-high', risk_level='high')
     assert titles(ranked([high, low])) == ['b-low', 'a-high']
+
+    # Regression for the Seraph's Last Stand / High On Life structure: a very cheap candidate
+    # with a commercially better bucket must not beat a clearly safer wishlist candidate merely
+    # because its current price is close to historical lows.
+    cheap_high_risk = game(
+        'cheap-high-risk',
+        priority_bucket=5,
+        risk_level='high',
+        wishlist=False,
+        discount_percent=30,
+        history_quality='good_vs_history',
+        current_price_rub=39,
+    )
+    interesting_wait = game(
+        'interesting-wishlist-wait',
+        priority_bucket=6,
+        risk_level='low',
+        wishlist=True,
+        discount_percent=65,
+        history_quality='well_above_history',
+        current_price_rub=460,
+    )
+    risk_pair = ranked([cheap_high_risk, interesting_wait])
+    assert titles(risk_pair) == ['interesting-wishlist-wait', 'cheap-high-risk']
+    assert (risk_pair[0].get('priority_vs_next') or {}).get('deciding_factor_id') == 'practical_or_personal_risk_asc'
+
+    # With the same urgency and serious-risk layer, the qualitative taste+deal bucket remains first.
+    assert titles(ranked([game('bucket2', priority_bucket=2), game('bucket1', priority_bucket=1)])) == ['bucket1', 'bucket2']
 
     # A bare legacy Steam requirement label is neutral without confirmed modern-Windows friction.
     bare_legacy = game('a-bare-legacy', practical={'legacy_windows_requirement_label': 'legacy', 'modern_windows_friction': 'unknown'})
@@ -99,6 +124,9 @@ def main():
     for row in wishlist_pair:
         assert [factor['id'] for factor in row.get('priority_factors') or []] == EXPECTED_ORDER
         assert all('label' in factor and 'value' in factor and 'sort_value' in factor for factor in row['priority_factors'])
+        visible_text = ' '.join(f"{factor.get('label', '')} {factor.get('value', '')}" for factor in row['priority_factors']).casefold()
+        assert 'bucket' not in visible_text
+        assert 'tie-break' not in visible_text
     first_vs_next = wishlist_pair[0].get('priority_vs_next') or {}
     assert first_vs_next.get('next_game_id') == 'stronger-deal'
     assert first_vs_next.get('deciding_factor_id') == 'wishlist_desc'
