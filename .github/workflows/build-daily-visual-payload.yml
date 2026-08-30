@@ -18,8 +18,13 @@ on:
       - "scripts/refine_visual_ranking.py"
       - "scripts/priority_ranking.py"
       - "scripts/validate_priority_ranking.py"
+      - "scripts/validate_taste_v3_contract.py"
+      - "scripts/ingest_taste_results.py"
+      - "scripts/taste_cache_common.py"
       - "scripts/build_ranking_lookup.py"
       - "config/final_ranking_policy.json"
+      - "config/taste_result_contract.json"
+      - "config/taste_cache_entry_contract.json"
       - "web/app.js"
       - ".github/workflows/build-daily-visual-payload.yml"
 
@@ -50,6 +55,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Validate normalized taste factor contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_taste_v3_contract.py
 
       - name: Validate canonical priority ranking contract
         shell: bash
