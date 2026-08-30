@@ -147,3 +147,26 @@
 **Не делать:** не записывать `manual_end_at` в production ranking и не позволять новому суточному payload автоматически отменять локальное перемещение.
 
 **Основные места:** `web/app.js` (`manual_end_at`, `canonicalQueueIds`, `sendCurrentToEnd`), `PROJECT_RULES.md`, `scripts/validate_priority_ranking.py`.
+
+---
+
+## STEAMDB-001 — Полный scope должен завершаться целиком, но это не то же самое, что запрещать partial persistence
+
+**Дата:** 2026-08-30  
+**Статус:** rationale recovered; current implementation over-blocking confirmed; replacement behavior not yet approved
+
+**Исходное решение:** весь GitHub-подготовленный набор SteamDB true misses для текущего production cycle должен считаться одной стадией. Размер внешнего batch/checkpoint — только техническая деталь и никогда не означает суточную квоту или завершение стадии. Partial subset нельзя объявлять готовым completed artifact.
+
+**Почему это было введено:** прежняя архитектура рисковала превратить ограниченный runtime batch в фактическое правило «сегодня обработали N, остальное завтра». Это противоречило требованию пользователя, что один суточный production должен пытаться закрыть весь актуальный scope, а GitHub — владеть scope, retry-state и completeness. Поэтому `config/steamdb_lookup_contract.json` намеренно требует `must_complete_all_required_stage_15_items_for_the_current_prepared_artifact` и запрещает считать partial subset завершённым.
+
+**Что произошло при реализации:** `scripts/ingest_steamdb_runtime_submissions.py` выпускает `data/cache/steamdb_web_resolutions.json` только при `status == complete`, а checkpoint в `steamdb_history.json` требует полный stage-16 validation. В результате правильное правило «529/534 не означает, что стадия завершена» фактически превратилось в более сильное правило «529 уже подтверждённых результатов нельзя persist/checkpoint до завершения оставшихся 5».
+
+**Почему это важно различать:** завершённость стадии и сохранение уже проверенных фактов — разные свойства. Можно сохранить 529 подтверждённых фактов, продолжать считать stage incomplete и держать 5 ключей в retry. Запрет partial persistence не был исходной целью правила против daily quota.
+
+**Текущее проявление:** current runtime state содержит 529 resolved из 534 и ровно 5 unresolved (`App_1282200`, `App_225320`, `App_399670`, `App_630060`, `App_901735`). Все пять имеют по одному сохранённому transient failure `runtime_web_internal_error`, пришедшему из one-time recovery migration старого `steamdb_runtime_progress.json`. Это классифицированные transport/tool failures, а не подтверждение отсутствия исторической цены SteamDB. Нет сохранённого доказательства, что эти пять являются постоянными semantic/data failures или имеют одну общую проблему SteamDB.
+
+**Важная граница доказательств:** 529 resolved тоже были перенесены recovery migration. Наличие этих данных доказывает сохранённый прогресс прежнего runtime, но само по себе не доказывает, что новый GitHub → external runtime → GitHub handoff уже успешно выполнял свежий retry. Поэтому перед архитектурным изменением или ручными выводами про пять ключей нужно проверить именно текущий runtime handoff; интерактивный чат не должен заменять его ручным lookup backlog.
+
+**Сознательно не решено пока:** менять ли контракт на verified partial checkpoint + incomplete retry state. Это отдельное архитектурное решение пользователя. До согласования не ослаблять completeness молча.
+
+**Основные места:** `config/steamdb_lookup_contract.json`, `scripts/ingest_steamdb_runtime_submissions.py`, `scripts/validate_steamdb_runtime_resolutions.py`, `config/steamdb_checkpoint_contract.json`, `data/cache/steamdb_runtime_state.json`, `data/cache/steamdb_runtime_work.json`, `data/inbox/steamdb_runtime/recovery-migration-11ac4563c927.json`.
