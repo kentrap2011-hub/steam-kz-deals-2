@@ -27,7 +27,7 @@ state = json.loads(STATE.read_text(encoding="utf-8"))
 
 if classification.get("status") != "complete":
     die("Stage-15 classification is not complete")
-if contract.get("contract") != "STEAMDB-TRUE-MISS-LOOKUP-V1" or contract.get("version") != "1.3":
+if contract.get("contract") != "STEAMDB-TRUE-MISS-LOOKUP-V1" or contract.get("version") != "1.4":
     die("Unexpected SteamDB lookup contract")
 if ownership.get("contract") != "PRODUCTION-EXECUTION-OWNERSHIP-V1" or ownership.get("status") != "canonical":
     die("Unexpected production execution ownership contract")
@@ -35,8 +35,8 @@ if prepared.get("schema_version") != 1:
     die("Unexpected prepared resolution schema")
 if state.get("schema_version") != 1 or state.get("purpose") != "github_derived_steamdb_runtime_state":
     die("Unexpected GitHub-derived SteamDB runtime state")
-if state.get("status") != "complete" or state.get("unresolved_count") != 0 or state.get("conflicts"):
-    die("GitHub-derived SteamDB runtime state is not complete")
+if state.get("status") == "invalid" or state.get("conflicts"):
+    die("GitHub-derived SteamDB runtime state contains conflicts")
 
 steamdb_ownership = contract.get("ownership") or {}
 github_ownership = set((steamdb_ownership.get("github_control_plane") or {}).get("owns") or [])
@@ -78,6 +78,34 @@ expected_set = set(expected)
 if len(expected) != len(expected_set):
     die("Duplicate stage-15 true miss key")
 
+state_resolved = state.get("resolved") or {}
+state_resolved_keys = set(state_resolved)
+state_unresolved = state.get("unresolved_keys") or []
+state_unresolved_set = set(state_unresolved)
+if len(state_unresolved) != len(state_unresolved_set):
+    die("Duplicate unresolved key in GitHub runtime state")
+if state_resolved_keys & state_unresolved_set:
+    die("GitHub runtime state overlaps resolved and unresolved keys")
+if state_resolved_keys | state_unresolved_set != expected_set:
+    die("GitHub runtime state does not partition the exact stage-15 scope")
+if int(state.get("resolved_count") or 0) != len(state_resolved_keys):
+    die("GitHub runtime resolved_count mismatch")
+if int(state.get("unresolved_count") or 0) != len(state_unresolved_set):
+    die("GitHub runtime unresolved_count mismatch")
+
+expected_scope_status = "complete" if not state_unresolved else "partial"
+if prepared.get("scope_status") != expected_scope_status:
+    die("Prepared SteamDB scope_status does not match GitHub runtime completeness")
+if int(prepared.get("expected_count") or -1) != len(expected):
+    die("Prepared SteamDB expected_count mismatch")
+if int(prepared.get("resolved_count") or -1) != len(state_resolved_keys):
+    die("Prepared SteamDB resolved_count mismatch")
+if int(prepared.get("unresolved_count") or -1) != len(state_unresolved_set):
+    die("Prepared SteamDB unresolved_count mismatch")
+prepared_unresolved = prepared.get("unresolved_keys") or []
+if prepared_unresolved != state_unresolved:
+    die("Prepared SteamDB unresolved key list does not match GitHub runtime state")
+
 confirmed = prepared.get("confirmed_min_kzt") or {}
 previously_free = prepared.get("previously_free") or []
 unavailable = prepared.get("unavailable_exact_history") or {}
@@ -93,10 +121,22 @@ if len(previously_free) != len(free_keys):
 if confirmed_keys & free_keys or confirmed_keys & unavailable_keys or free_keys & unavailable_keys:
     die("Prepared SteamDB status sets overlap")
 resolved_set = confirmed_keys | free_keys | unavailable_keys
-missing = sorted(expected_set - resolved_set)
 extra = sorted(resolved_set - expected_set)
-if missing or extra:
-    die(f"Prepared SteamDB coverage mismatch: missing={missing} extra={extra}")
+if extra:
+    die(f"Prepared SteamDB contains non-scope keys: {extra}")
+if resolved_set != state_resolved_keys:
+    missing_from_prepared = sorted(state_resolved_keys - resolved_set)
+    unexpected_prepared = sorted(resolved_set - state_resolved_keys)
+    die(
+        "Prepared SteamDB resolved set differs from GitHub runtime state: "
+        f"missing={missing_from_prepared} unexpected={unexpected_prepared}"
+    )
+if not set(special).issubset(confirmed_keys):
+    die("Special evidence exists for a non-confirmed-min key")
+
+missing = [key for key in expected if key not in resolved_set]
+if missing != state_unresolved:
+    die("Prepared SteamDB missing set differs from GitHub unresolved order")
 
 registry = []
 problems = []
@@ -179,14 +219,15 @@ for key in sorted(unavailable_keys):
 registry_keys = [x["registry_key"] for x in registry]
 duplicate_registry_count = len(registry_keys) - len(set(registry_keys))
 result_keys = {x["key"] for x in registry}
-registry_missing = sorted(expected_set - result_keys)
-registry_extra = sorted(result_keys - expected_set)
-complete = not problems and duplicate_registry_count == 0 and not registry_missing and not registry_extra and len(registry) == len(expected)
+registry_missing = sorted(resolved_set - result_keys)
+registry_extra = sorted(result_keys - resolved_set)
+valid = not problems and duplicate_registry_count == 0 and not registry_missing and not registry_extra and len(registry) == len(resolved_set)
+validation_status = ("complete" if not missing else "partial") if valid else "invalid"
 
 out = {
     "schema_version": 1,
     "purpose": "steamdb_true_miss_lookup_ledger",
-    "status": "complete" if complete else "invalid",
+    "status": validation_status,
     "transport": "github_ingested_runtime_submissions_then_ci_validated",
     "bindings": {
         "steamdb_cache_classification_blob_sha": classification_sha,
@@ -198,13 +239,15 @@ out = {
     "expected_true_miss_count": len(expected),
     "runtime_attempted_count": prepared.get("runtime_attempted_count"),
     "validated_resolution_count": len(registry),
+    "unresolved_retry_count": len(missing),
     "confirmed_min_count": sum(1 for x in registry if x["result"] == "confirmed_min"),
     "previously_free_count": sum(1 for x in registry if x["result"] == "previously_free"),
     "unavailable_exact_history_count": sum(1 for x in registry if x["result"] == "unavailable_exact_history"),
-    "blocked_or_failure_count": 0 if complete else len(problems),
+    "blocked_or_failure_count": 0 if valid else len(problems),
     "duplicate_registry_count": duplicate_registry_count,
     "non_miss_query_count": len(registry_extra),
-    "missing_result_count": len(registry_missing),
+    "missing_result_count": len(missing),
+    "unresolved_keys": missing,
     "lookup_registry": registry,
     "confirmed_min": [x for x in registry if x["result"] == "confirmed_min"],
     "previously_free": [x for x in registry if x["result"] == "previously_free"],
@@ -216,10 +259,11 @@ print(json.dumps({
     "status": out["status"],
     "expected": out["expected_true_miss_count"],
     "validated": out["validated_resolution_count"],
+    "unresolved_retry": out["unresolved_retry_count"],
     "confirmed_min": out["confirmed_min_count"],
     "previously_free": out["previously_free_count"],
     "unavailable": out["unavailable_exact_history_count"],
     "problems": len(problems),
 }, ensure_ascii=False, indent=2))
-if not complete:
+if not valid:
     raise SystemExit("Runtime SteamDB resolution validation failed")
