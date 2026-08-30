@@ -32,7 +32,11 @@
       <section id="feedView">
         <div class="position-row">
           <span id="position"></span>
-          <span class="position-actions"><span id="seenInfo"></span><button id="startBtn" class="small-btn hidden" type="button">↑ К началу</button></span>
+          <span class="position-actions">
+            <span id="seenInfo"></span>
+            <button id="urgencyBtn" class="small-btn" type="button" aria-pressed="false" title="Поднять игры, скидка на которые заканчивается сегодня или завтра">⏱ Срочные</button>
+            <button id="startBtn" class="small-btn hidden" type="button">↑ К началу</button>
+          </span>
         </div>
         <article id="gameCard" class="game-card hidden">
           <div id="gallery" class="gallery">
