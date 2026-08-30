@@ -1,0 +1,76 @@
+name: Diagnose Stronghold media
+
+on:
+  push:
+    paths:
+      - '.github/workflows/diagnose-stronghold-media.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Diagnose current Stronghold media path
+        shell: bash
+        run: |
+          python - <<'PY'
+          import importlib.util
+          import json
+          from pathlib import Path
+
+          def load(path):
+              p = Path(path)
+              return json.loads(p.read_text(encoding='utf-8')) if p.exists() else None
+
+          def contains(obj, needle):
+              return needle.lower() in json.dumps(obj, ensure_ascii=False).lower()
+
+          family = load('data/production/pre_ai/family_graph.json') or {}
+          fam_hits = [x for x in (family.get('families') or []) if contains(x, '901735') or contains(x, 'stronghold')]
+          print('FAMILY_HITS=', json.dumps(fam_hits, ensure_ascii=False, indent=2)[:20000])
+
+          store = load('data/production/pre_ai/store_snapshot.json') or {}
+          store_hits = {k:v for k,v in (store.get('entries') or {}).items() if '901735' in str(k) or contains(v, '901735') or contains(v, 'stronghold')}
+          print('STORE_HITS=', json.dumps(store_hits, ensure_ascii=False, indent=2)[:20000])
+
+          pc_hits=[]
+          p=Path('data/production/pre_ai/chatgpt_purchase_context.jsonl')
+          if p.exists():
+              for line in p.read_text(encoding='utf-8').splitlines():
+                  if not line.strip(): continue
+                  row=json.loads(line)
+                  if contains(row,'901735') or contains(row,'stronghold'):
+                      pc_hits.append(row)
+          print('PURCHASE_CONTEXT_HITS=', json.dumps(pc_hits, ensure_ascii=False, indent=2)[:20000])
+
+          for path in ['data/production/pre_ai/collector.json','data/production/visual/current.json','web/data/current.json']:
+              obj=load(path)
+              hits=[]
+              if isinstance(obj,dict):
+                  rows=obj.get('games') or obj.get('items') or obj.get('entries') or []
+                  if isinstance(rows,dict): rows=list(rows.values())
+                  if isinstance(rows,list):
+                      hits=[x for x in rows if contains(x,'901735') or contains(x,'stronghold')]
+              print(path, 'HITS=', json.dumps(hits, ensure_ascii=False, indent=2)[:20000])
+
+          spec=importlib.util.spec_from_file_location('visual','scripts/build_visual_feed_v2.py')
+          mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+          live=mod.storebrowse_media(['901735'])
+          print('LIVE_STOREBROWSE_901735=', json.dumps(live, ensure_ascii=False, indent=2)[:20000])
+          PY
+
+      - name: Remove one-shot workflow
+        shell: bash
+        run: |
+          git config user.name 'steam-kz-bot'
+          git config user.email 'steam-kz-bot@users.noreply.github.com'
+          git rm .github/workflows/diagnose-stronghold-media.yml
+          git commit -m 'Remove Stronghold media diagnostic workflow'
+          git pull --rebase origin main
+          git push origin HEAD:main
