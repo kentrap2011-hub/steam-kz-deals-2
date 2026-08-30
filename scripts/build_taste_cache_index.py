@@ -33,9 +33,11 @@ def compact_entry(entry):
 
 def main():
     contract = load_json(ENTRY_CONTRACT)
-    if contract.get('contract') != 'TASTE-CACHE-ENTRY-BINDING-V2':
+    if contract.get('contract') not in {'TASTE-CACHE-ENTRY-BINDING-V2', 'TASTE-CACHE-ENTRY-BINDING-V3'}:
         raise SystemExit('Unexpected per-entry taste cache contract')
-    required_v2 = contract['schema_v2_required_entry_fields']
+    required_base = contract.get('base_required_entry_fields') or contract.get('schema_v2_required_entry_fields')
+    if not isinstance(required_base, list) or not required_base:
+        raise SystemExit('Taste cache contract has no base required entry fields')
 
     source_raw = SOURCE.read_bytes()
     cache = json.loads(source_raw.decode('utf-8'))
@@ -50,7 +52,7 @@ def main():
 
     overlay_raw = OVERLAY.read_bytes()
     overlay = json.loads(overlay_raw.decode('utf-8'))
-    if overlay.get('schema_version') != 1 or overlay.get('entry_schema_version') != 2:
+    if overlay.get('schema_version') != 1 or overlay.get('entry_schema_version') not in {2, 3}:
         raise SystemExit('Unexpected taste overlay schema')
     overlay_entries = overlay.get('entries')
     if not isinstance(overlay_entries, dict):
@@ -70,7 +72,7 @@ def main():
         else:
             entry = raw_entry
         try:
-            validate_cache_entry(entry, key, required_v2)
+            validate_cache_entry(entry, key, required_base)
         except ValueError as exc:
             raise SystemExit(str(exc)) from exc
         merged_entries[key] = entry
@@ -79,7 +81,7 @@ def main():
     overlay_new_count = 0
     for key, entry in overlay_entries.items():
         try:
-            validate_cache_entry(entry, key, required_v2)
+            validate_cache_entry(entry, key, required_base)
         except ValueError as exc:
             raise SystemExit(str(exc)) from exc
         if key in merged_entries:
@@ -94,6 +96,8 @@ def main():
     semantics_counts = Counter()
     context_bound_count = 0
     context_unbound_count = 0
+    taste_factors_present_count = 0
+    taste_factors_missing_count = 0
     for key, entry in merged_entries.items():
         profile_counts[entry['profile_blob_sha']] += 1
         model_counts[entry['taste_model_version']] += 1
@@ -102,6 +106,10 @@ def main():
             context_bound_count += 1
         else:
             context_unbound_count += 1
+        if entry.get('taste_factors') is not None:
+            taste_factors_present_count += 1
+        else:
+            taste_factors_missing_count += 1
         compact[key] = compact_entry(entry)
 
     canonical_compact = json.dumps(
@@ -155,6 +163,9 @@ def main():
         'index_entry_count': len(compact),
         'candidate_context_bound_count': context_bound_count,
         'candidate_context_unbound_count': context_unbound_count,
+        'taste_factors_present_count': taste_factors_present_count,
+        'taste_factors_missing_count': taste_factors_missing_count,
+        'taste_factors_coverage': round(taste_factors_present_count / len(compact), 4) if compact else 1.0,
         'entries_digest_sha256': hashlib.sha256(canonical_compact).hexdigest(),
         'profile_binding_counts': dict(sorted(profile_counts.items())),
         'taste_model_counts': dict(sorted(model_counts.items())),
@@ -176,6 +187,9 @@ def main():
         'merged_entry_count': len(compact),
         'candidate_context_bound_count': context_bound_count,
         'candidate_context_unbound_count': context_unbound_count,
+        'taste_factors_present_count': taste_factors_present_count,
+        'taste_factors_missing_count': taste_factors_missing_count,
+        'taste_factors_coverage': out['taste_factors_coverage'],
         'profile_generation_count': len(profile_counts),
         'model_generation_count': len(model_counts),
         'semantics_generation_count': len(semantics_counts),
