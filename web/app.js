@@ -171,10 +171,6 @@ function scoreComponentHtml(row){
   const sign=points>0?'+':'';
   const label=escapeHtml(row?.label||(row?.id==='savings'?'Экономия по акции':'Критерий'));
   const detail=row?.id==='savings'&&row?.value?` · ${escapeHtml(row.value)}`:'';
-  if(row?.id==='wishlist'){
-    const status=points>0?'есть':'нет';
-    return `<span class="score-chip"><span>${label}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})} · ${status}</b></span>`;
-  }
   const max=row?.max_points!=null?`/${Number(row.max_points).toLocaleString('ru-RU',{maximumFractionDigits:1})}`:'';
   return `<span class="score-chip"><span>${label}${detail}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})}${max}</b></span>`;
 }
