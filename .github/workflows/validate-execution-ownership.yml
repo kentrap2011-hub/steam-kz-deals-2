@@ -1,0 +1,36 @@
+name: Validate execution ownership
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "CHAT_CONTEXT.md"
+      - "config/execution_ownership_contract.json"
+      - "config/daily_execution_contract.json"
+      - "config/steamdb_lookup_contract.json"
+      - "scripts/validate_execution_ownership.py"
+      - ".github/workflows/*.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-execution-ownership
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate component ownership boundaries
+        run: python scripts/validate_execution_ownership.py
