@@ -180,12 +180,18 @@ work = {
 }
 WORK.write_text(json.dumps(work, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-if status == "complete":
+# Persistence is intentionally independent from stage completion. Every current,
+# non-conflicting resolved fact is prepared for validation/checkpoint immediately;
+# unresolved keys remain only in GitHub-owned retry state and are never encoded as
+# negative cache entries.
+if not conflicts and resolved:
     confirmed = {}
     previously_free = []
     unavailable = {}
     special = {}
     for key in expected:
+        if key not in resolved:
+            continue
         entry = resolved[key]
         if entry["status"] == "confirmed_min":
             confirmed[key] = entry["historical_min_kzt"]
@@ -197,7 +203,12 @@ if status == "complete":
             unavailable[key] = entry["evidence_code"]
     final = {
         "schema_version": 1,
+        "scope_status": "complete" if not unresolved else "partial",
         "source_validation_blob_sha": source_sha,
+        "expected_count": len(expected),
+        "resolved_count": len(resolved),
+        "unresolved_count": len(unresolved),
+        "unresolved_keys": unresolved,
         "runtime_attempted_count": len(set(resolved) | set(transient_history)),
         "checked_at_utc": latest_submitted_at or state["derived_at_utc"],
         "confirmed_min_kzt": confirmed,
@@ -214,6 +225,7 @@ print(json.dumps({
     "unresolved_count": len(unresolved),
     "conflict_count": len(conflicts),
     "submission_file_count": len(matching_submissions),
+    "prepared_scope_status": None if conflicts or not resolved else ("complete" if not unresolved else "partial"),
 }, ensure_ascii=False, indent=2))
 
 if conflicts:
