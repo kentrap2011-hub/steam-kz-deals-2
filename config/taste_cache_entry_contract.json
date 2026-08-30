@@ -15,13 +15,13 @@
     "taste_profile",
     "taste_deal_separation",
     "personal_filter",
-    "false_negative_audit",
-    "taste_factor_semantics"
+    "false_negative_audit"
   ],
   "taste_semantics_digest": {
     "algorithm": "sha256",
     "serialization": "json ensure_ascii=false sort_keys=true separators comma_colon",
-    "purpose": "Invalidate cached decisions when actual taste-evaluation semantics change while ignoring unrelated render/cache plumbing changes."
+    "purpose": "Invalidate cached decisions when actual taste-evaluation semantics change while ignoring unrelated render/cache plumbing changes.",
+    "migration_note": "During the single-entry V3 canary, keep the existing V2 semantic digest stable. Add taste_factor_semantics to this field list only together with the V3 model-version cutover after the canary succeeds."
   },
   "base_required_entry_fields": [
     "key",
