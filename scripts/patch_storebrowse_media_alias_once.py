@@ -1,4 +1,5 @@
 from pathlib import Path
+import importlib.util
 import re
 
 visual_path = Path('scripts/build_visual_feed_v2.py')
@@ -86,3 +87,19 @@ backlog, count = re.subn(pattern, '\n', backlog, count=1, flags=re.S)
 if count != 1:
     raise SystemExit('media backlog section not found exactly once')
 backlog_path.write_text(backlog, encoding='utf-8')
+
+spec = importlib.util.spec_from_file_location('visual_media_regression', visual_path)
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+media = module.storebrowse_media(['901735'])
+row = media.get('901735') or {}
+print(
+    'STRONGHOLD_MEDIA_REGRESSION=',
+    {
+        'keys': list(media),
+        'screenshots': len(row.get('screenshots') or []),
+        'header': bool(row.get('header_image')),
+    },
+)
+if not row.get('screenshots') or not row.get('header_image'):
+    raise SystemExit(f'Stronghold media regression failed: {media}')
