@@ -137,11 +137,18 @@ function renderOffers(g){
     return `<div class="offer"><div class="offer-top"><div class="offer-title">${escapeHtml(o.title||g.title)}${i===0?' · основной':''}</div><div class="offer-price">${fmtRub(o.current_price_rub)}</div></div><div class="offer-meta">${old} · −${o.discount_percent}% · ${hist}</div><div class="offer-actions"><button class="offer-link" type="button" data-open-web="${escapeHtml(o.web_url||'')}" data-open-steam="${escapeHtml(o.steam_url||'')}">Открыть вариант в Steam</button></div></div>`;
   }).join('')||'<div class="muted small">Дополнительных вариантов сейчас нет.</div>';
 }
+function scoreComponentHtml(row){
+  const points=Number(row?.points)||0;
+  const sign=points>0?'+':'';
+  const max=row?.max_points!=null?`/${Number(row.max_points):g}`:'';
+  return `<div class="priority-factor"><span>${escapeHtml(row?.label||'Критерий')}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})}${max}</b></div>`;
+}
 function renderPriority(g){
   const factors=Array.isArray(g.priority_factors)?g.priority_factors:[];
+  const score=g.score_breakdown||null;
   const section=$('prioritySection');
-  section.classList.toggle('hidden',!factors.length);
-  if(!factors.length){$('priorityWhy').textContent='';$('priorityFactors').innerHTML='';return}
+  section.classList.toggle('hidden',!factors.length&&!score);
+  if(!factors.length&&!score){$('priorityWhy').textContent='';$('priorityFactors').innerHTML='';return}
   const vs=g.priority_vs_next||null;
   const rank=Number(g.priority_rank)||null;
   const parts=[];
@@ -149,8 +156,24 @@ function renderPriority(g){
   if(vs&&vs.next_game_title&&vs.explanation)parts.push(`Следующая — «${vs.next_game_title}». ${vs.explanation}`);
   else if(rank)parts.push('Это последняя игра в текущем общем рейтинге.');
   $('priorityWhy').textContent=parts.join(' ');
+
   const deciding=vs&&vs.deciding_factor_id;
-  $('priorityFactors').innerHTML=factors.map(f=>`<div class="priority-factor ${f.id===deciding?'deciding':''}"><span>${escapeHtml(f.label||f.id||'Фактор')}</span><b>${escapeHtml(f.value??'—')}</b></div>`).join('');
+  const urgency=factors.find(f=>f.id==='sale_expiry_urgency_asc');
+  let html='';
+  if(urgency){
+    html+=`<div class="priority-factor ${urgency.id===deciding?'deciding':''}"><span>${escapeHtml(urgency.label||'Срочность скидки')}</span><b>${escapeHtml(urgency.value??'—')} · вне баллов</b></div>`;
+  }
+  if(score){
+    html+=`<div class="priority-factor ${deciding==='total_score_desc'?'deciding':''}"><span>Итоговый балл</span><b>${Number(score.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.total_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div>`;
+    if(score.precision?.label)html+=`<div class="muted small">Точность вкусовой части: ${escapeHtml(score.precision.label)}${score.precision.is_coarse_legacy?' — детализируем по мере обновления старых оценок.':''}</div>`;
+    html+=`<div class="priority-factor"><span>${escapeHtml(score.personal_label||'Насколько подходит тебе')}</span><b>${Number(score.personal_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.personal_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div>`;
+    html+=(score.personal_components||[]).map(scoreComponentHtml).join('');
+    html+=`<div class="priority-factor"><span>${escapeHtml(score.purchase_label||'Выгодность покупки')}</span><b>${Number(score.purchase_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.purchase_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div>`;
+    html+=(score.purchase_components||[]).map(scoreComponentHtml).join('');
+  }else{
+    html+=factors.filter(f=>f.id!=='sale_expiry_urgency_asc').map(f=>`<div class="priority-factor ${f.id===deciding?'deciding':''}"><span>${escapeHtml(f.label||f.id||'Фактор')}</span><b>${escapeHtml(f.value??'—')}</b></div>`).join('');
+  }
+  $('priorityFactors').innerHTML=html;
 }
 function renderFeed(){
   const g=currentGame();const pos=currentIndex();
@@ -177,7 +200,8 @@ function listPositionText(g){
 function miniCard(g,status){
   const img=shotUrls(g)[0]||'';
   const place=status==='wishlist'?`★ В желаемом · ${listPositionText(g)} · `:'';
-  return `<div class="list-card"><img src="${escapeHtml(img)}" alt=""><div><div class="list-title">${escapeHtml(g.title)}</div><div class="list-meta">${place}${fmtRub(g.current_price_rub)} · −${g.discount_percent}% · ${escapeHtml(deadlineText(g.sale_end_utc))}</div><div class="list-actions">${status==='liked'?`<button class="small-btn" data-to-final="${escapeHtml(g.id)}" type="button">🏆 В финал</button>`:''}<button class="small-btn" data-focus="${escapeHtml(g.id)}" type="button">Показать в ленте</button></div></div></div>`;
+  const score=g.total_score!=null?` · ${Number(g.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/100`:'';
+  return `<div class="list-card"><img src="${escapeHtml(img)}" alt=""><div><div class="list-title">${escapeHtml(g.title)}</div><div class="list-meta">${place}${fmtRub(g.current_price_rub)} · −${g.discount_percent}%${score} · ${escapeHtml(deadlineText(g.sale_end_utc))}</div><div class="list-actions">${status==='liked'?`<button class="small-btn" data-to-final="${escapeHtml(g.id)}" type="button">🏆 В финал</button>`:''}<button class="small-btn" data-focus="${escapeHtml(g.id)}" type="button">Показать в ленте</button></div></div></div>`;
 }
 function renderLists(){
   const wishlist=items.filter(g=>g.wishlist),liked=items.filter(g=>rec(g.id).status==='liked'),finals=items.filter(g=>rec(g.id).status==='final');
