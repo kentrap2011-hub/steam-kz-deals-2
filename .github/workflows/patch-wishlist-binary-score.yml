@@ -25,11 +25,13 @@ jobs:
           path = Path('web/app.js')
           text = path.read_text(encoding='utf-8')
           anchor = "  const detail=row?.id==='savings'&&row?.value?` · ${escapeHtml(row.value)}`:'';\n"
-          block = """  if(row?.id==='wishlist'){
-    const status=points>0?'есть':'нет';
-    return `<span class=\"score-chip\"><span>${label}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})} · ${status}</b></span>`;
-  }
-"""
+          block = "\n".join([
+              "  if(row?.id==='wishlist'){",
+              "    const status=points>0?'есть':'нет';",
+              "    return `<span class=\"score-chip\"><span>${label}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})} · ${status}</b></span>`;",
+              "  }",
+              "",
+          ])
           if block not in text:
               if anchor not in text:
                   raise SystemExit('scoreComponentHtml anchor not found')
