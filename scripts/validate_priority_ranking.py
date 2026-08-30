@@ -32,6 +32,7 @@ def game(title, **overrides):
         'discount_percent': 80,
         'current_price_rub': 300,
         'duration_tiebreak_penalty': 0,
+        'duration_preference_band': 'unknown',
         'sale_end_utc': '2026-09-05T12:00:00Z',
         'practical': {
             'modern_windows_friction': 'unknown',
@@ -91,7 +92,19 @@ def main():
     # Wishlist is meaningful inside the same bucket/risk layer and comes before commercial tie-breaks.
     wishlist = game('wishlist', wishlist=True, discount_percent=20, history_quality='well_above_history')
     stronger_deal = game('stronger-deal', wishlist=False, discount_percent=90, history_quality='record')
-    assert titles(ranked([stronger_deal, wishlist])) == ['wishlist', 'stronger-deal']
+    wishlist_pair = ranked([stronger_deal, wishlist])
+    assert titles(wishlist_pair) == ['wishlist', 'stronger-deal']
+
+    # Per-game diagnostics must be producer-owned and follow the exact canonical factor order.
+    for row in wishlist_pair:
+        assert [factor['id'] for factor in row.get('priority_factors') or []] == EXPECTED_ORDER
+        assert all('label' in factor and 'value' in factor and 'sort_value' in factor for factor in row['priority_factors'])
+    first_vs_next = wishlist_pair[0].get('priority_vs_next') or {}
+    assert first_vs_next.get('next_game_id') == 'stronger-deal'
+    assert first_vs_next.get('deciding_factor_id') == 'wishlist_desc'
+    assert first_vs_next.get('current_value') == 'да'
+    assert first_vs_next.get('next_value') == 'нет'
+    assert wishlist_pair[-1].get('priority_vs_next') is None
 
     # Discount comes before historical-minimum quality: a short price history must not make a routine
     # new-game 20% record beat a genuinely strong old-game discount.
