@@ -1,8 +1,8 @@
 {
   "contract": "STEAMDB-TRUE-MISS-LOOKUP-V1",
-  "version": "1.2",
+  "version": "1.3",
   "status": "implementation_only",
-  "purpose": "Resolve only GitHub-prepared stage-15 true SteamDB history misses through the scheduled ChatGPT runtime web path because direct GitHub Actions requests to SteamDB are systematically blocked with HTTP 403, while keeping all scope, queue, retry, completeness, validation and canonical persistence logic in GitHub.",
+  "purpose": "Resolve only GitHub-prepared stage-15 true SteamDB history misses through the scheduled ChatGPT runtime web path because direct GitHub Actions requests to SteamDB are systematically blocked with HTTP 403, while keeping scope, ordering, unresolved/retry state, completeness, validation and canonical persistence in GitHub.",
   "ownership_contract": "config/execution_ownership_contract.json",
   "authority": {
     "canonical_policy_path": "config/mailing_policy.json",
@@ -17,34 +17,37 @@
       "owns": [
         "stage-15 classification",
         "exact true-miss manifest and ordering",
+        "derived unresolved runtime work input",
         "unresolved/retry state",
+        "submission ingestion and conflict detection",
         "completeness accounting",
         "prepared-result validation",
         "canonical steamdb_history persistence",
         "downstream rebuild orchestration"
       ],
-      "rule": "GitHub decides exactly which SteamDB entity keys require evidence and whether the production stage is complete."
+      "rule": "GitHub decides exactly which SteamDB entity keys require evidence, exposes only the current unresolved work input to ChatGPT, ingests returned facts and decides whether the stage is complete."
     },
     "scheduled_chatgpt_data_plane": {
       "owns": [
-        "fetch exact public SteamDB evidence for the GitHub-prepared keys",
-        "return evidence-backed structured outcomes through the prepared runtime artifact interface"
+        "fetch exact public SteamDB evidence for keys in the current GitHub-prepared runtime work input",
+        "write structured runtime submission files containing only observed outcomes or transient failures"
       ],
       "must_not_own": [
         "scope discovery",
         "queue construction",
+        "ordering policy",
         "retry policy",
         "backlog management",
         "daily quota or batch semantics",
         "canonical cache merge",
         "completion decision"
       ],
-      "rule": "ChatGPT is an external fact-fetch worker for exact GitHub-prepared keys, not the SteamDB control plane."
+      "rule": "ChatGPT is an external fact-fetch worker. It consumes the current GitHub-derived unresolved work file and submits facts; it does not calculate what remains or when the stage is complete."
     },
     "interactive_chat": {
       "production_backlog_processing_allowed": false,
       "bounded_sample_verification_allowed": true,
-      "rule": "An interactive user chat must not manually walk a large SteamDB manifest as a substitute for repairing the scheduled GitHub↔ChatGPT production interface."
+      "rule": "An interactive user chat must not manually walk a large SteamDB manifest as a substitute for the scheduled GitHub↔ChatGPT production interface."
     }
   },
   "execution_scope": {
@@ -54,20 +57,62 @@
     "partial_subset_is_not_a_valid_completed_prepared_artifact": true,
     "legacy_or_temporary_runtime_limits_cannot_override_this_contract": true,
     "runtime_progress_or_manual_batch_files_are_canonical_scope": false,
-    "rule": "The GitHub-prepared current scope must be resolved as one production stage. Runtime batching may be used only as an implementation detail; it cannot redefine scope, quota, retry state or completion."
+    "rule": "The GitHub-prepared current scope is one production stage. ChatGPT may submit partial evidence because external access can fail, but only GitHub derives unresolved/retry state and completeness from submissions. Partial evidence is not a completed stage."
   },
   "transport": {
     "control_plane": "GitHub repository and GitHub Actions",
     "external_lookup_executor": "scheduled ChatGPT runtime web fetch/search",
     "github_actions_direct_scraping_disabled": true,
     "reason": "A controlled test on 2026-08-28 attempted all 51 stage-15 misses from GitHub Actions and SteamDB returned HTTP 403 for all 51, while the runtime web path could read the SteamDB price-history pages and exact Kazakhstan rows.",
-    "github_prepared_work_input": "data/cache/steamdb_miss_manifest.json",
+    "stage_scope_manifest": "data/cache/steamdb_miss_manifest.json",
+    "github_derived_runtime_state": "data/cache/steamdb_runtime_state.json",
+    "github_derived_runtime_work_input": "data/cache/steamdb_runtime_work.json",
+    "runtime_submission_glob": "data/inbox/steamdb_runtime/*.json",
     "prepared_runtime_artifact": "data/cache/steamdb_web_resolutions.json",
+    "ingestion_workflow": ".github/workflows/ingest-steamdb-runtime-submissions.yml",
     "ci_validator_workflow": ".github/workflows/build-steamdb-true-miss-lookups.yml",
     "noncanonical_recovery_artifacts": [
       "data/cache/steamdb_runtime_progress.json",
       "data/cache/steamdb_runtime_batches/**"
     ]
+  },
+  "runtime_work_input_contract": {
+    "schema_version": 1,
+    "produced_only_by_github": true,
+    "must_bind_to_exact_stage_15_validation_blob_sha": true,
+    "ordered_items_are_exact_current_unresolved_keys": true,
+    "chatgpt_must_not_recompute_unresolved_set": true,
+    "complete_state_has_empty_items": true
+  },
+  "runtime_submission_contract": {
+    "schema_version": 1,
+    "purpose": "steamdb_runtime_submission",
+    "producer": "scheduled ChatGPT runtime or explicit one-time recovery migration",
+    "must_bind_to_exact_stage_15_validation_blob_sha": true,
+    "keys_must_exist_in_bound_stage_scope": true,
+    "duplicate_key_within_one_submission_forbidden": true,
+    "allowed_statuses": [
+      "confirmed_min",
+      "previously_free",
+      "unavailable_exact_history",
+      "blocked_or_failure"
+    ],
+    "confirmed_min_requires_positive_exact_kzt": true,
+    "previously_free_requires_zero": true,
+    "unavailable_exact_history_requires_source_reached_evidence_code": true,
+    "blocked_or_failure_is_retry_evidence_only": true,
+    "blocked_or_failure_never_counts_as_resolution": true,
+    "conflicting_successful_outcomes_fail_closed": true
+  },
+  "github_runtime_state_contract": {
+    "derived_only_from_bound_manifest_and_bound_submissions": true,
+    "resolved_outcomes_are_immutable_unless_identical": true,
+    "transient_failure_history_is_diagnostic_not_resolution": true,
+    "unresolved_items_are_manifest_order_minus_resolved_keys": true,
+    "github_alone_decides_complete": true,
+    "complete_requires_zero_unresolved_and_zero_conflicts": true,
+    "on_complete_emit_prepared_runtime_artifact": true,
+    "on_incomplete_do_not_emit_or_replace_prepared_runtime_artifact": true
   },
   "source": {
     "provider": "SteamDB",
@@ -84,6 +129,7 @@
     "403_429_timeout_network_or_5xx": "blocked_or_failure; never persist as negative cache"
   },
   "prepared_artifact_contract": {
+    "must_be_emitted_by_github_ingestion_only_after_complete_runtime_state": true,
     "must_bind_to_exact_stage_15_validation_blob_sha": true,
     "must_cover_exactly_all_stage_15_true_miss_keys": true,
     "allowed_statuses": ["confirmed_min", "previously_free", "unavailable_exact_history"],
