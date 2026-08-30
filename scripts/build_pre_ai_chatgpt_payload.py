@@ -267,7 +267,7 @@ def main():
                 ready_context.append(context)
             continue
 
-        work = ['evaluate_taste_fit']
+        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors']
         if family.get('requires_ai_base_support'):
             work.append('resolve_base_support_condition')
         # Strictly price-blind AI input. Do not add prices, discount, reviews,
@@ -338,6 +338,9 @@ def main():
             'taste_queue_forbids': ['price', 'discount', 'history', 'reviews', 'wishlist', 'popularity', 'deal_quality'],
             'chatgpt_must_fix_taste_verdict_before_reading_matching_purchase_context': True,
             'chatgpt_must_not_recalculate_prices_history_or_deal_gates': True,
+            'normalized_taste_factors_required_for_new_taste_evaluation': True,
+            'normalized_taste_factor_contract': 'config/taste_result_contract.json',
+            'normalized_taste_factors_are_weight_independent': True,
             'chatgpt_selects_precomputed_deal_scenario_from_final_taste_fit': True,
             'qualitative_60_40_priority_bucket_is_precomputed': True,
             'smaller_priority_bucket_means_higher_purchase_priority': True,
