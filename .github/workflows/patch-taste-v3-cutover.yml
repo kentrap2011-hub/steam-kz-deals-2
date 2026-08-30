@@ -167,12 +167,18 @@ jobs:
               raise SystemExit('Cache binding did not cut over to taste-v3')
           if projection['current_binding']['taste_model_version'] != 'taste-v3':
               raise SystemExit('Taste projection is not bound to taste-v3')
-          if payload['bindings']['taste_model_version'] != 'taste-v3':
+          if payload['profile_binding']['taste_model_version'] != 'taste-v3':
               raise SystemExit('ChatGPT payload is not bound to taste-v3')
           if payload['ai_queue_count'] != len(rows):
               raise SystemExit(f"Queue count mismatch: payload={payload['ai_queue_count']} rows={len(rows)}")
-          if len(rows) < 500:
-              raise SystemExit(f'Expected mass migration backlog after V3 cutover, got only {len(rows)} rows')
+          if projection.get('ai_required_count', 0) < 500 or len(rows) < 500:
+              raise SystemExit(
+                  f"Expected mass migration backlog after V3 cutover, projection={projection.get('ai_required_count')} queue={len(rows)}"
+              )
+          if projection.get('raw_cache_overlap_count', 0) < 500:
+              raise SystemExit('Expected substantial V2 cache overlap to prove migration invalidation')
+          if projection.get('raw_model_match_count') != 0:
+              raise SystemExit(f"Expected V2 cache model bindings to be stale, model matches={projection.get('raw_model_match_count')}")
           missing_factor_work = [
               row['taste_subject_key'] for row in rows
               if 'evaluate_normalized_taste_factors' not in (row.get('work_required') or [])
@@ -187,7 +193,10 @@ jobs:
 
           print(json.dumps({
               'status': 'PASS',
+              'projection_ai_required_count': projection.get('ai_required_count'),
               'queue_count': len(rows),
+              'raw_cache_overlap_count': projection.get('raw_cache_overlap_count'),
+              'raw_model_match_count': projection.get('raw_model_match_count'),
               'ready_without_ai_count': payload.get('ready_without_ai_count'),
               'deterministically_excluded_without_ai_count': payload.get('deterministically_excluded_without_ai_count'),
               'ai_required_reasons': reasons,
