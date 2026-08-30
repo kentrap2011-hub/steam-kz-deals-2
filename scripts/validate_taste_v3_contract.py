@@ -1,6 +1,7 @@
 import json
 from copy import deepcopy
 
+import priority_ranking
 from ingest_taste_results import build_entry, validate_input
 from taste_cache_common import (
     ENTRY_CONTRACT,
@@ -84,6 +85,22 @@ def main():
     assert validate_cache_entry(entry, result['key'], required, require_taste_factors=True)
     assert entry['taste_factors'] == result['taste_factors']
 
+    # The semantic worker stores weight-independent 0..100 factors. GitHub owns the
+    # conversion to final points, so changing max_points never requires re-evaluation.
+    policy = priority_ranking.load_final_policy()
+    taste_cfg = policy['score_model']['personal']['taste']
+    scored = priority_ranking._taste_component(
+        {'fit': result['fit_level'], 'taste_factors': result['taste_factors']},
+        policy,
+    )
+    expected_points = round(sum(
+        result['taste_factors'][factor_id] / taste_cfg['normalized_scale_max'] * factor_cfg['max_points']
+        for factor_id, factor_cfg in taste_cfg['normalized_factor_weights'].items()
+    ), policy['score_model']['round_digits'])
+    assert scored['source'] == 'normalized_taste_factors'
+    assert scored['points'] == expected_points
+    assert len(scored['factor_breakdown']) == len(TASTE_FACTOR_IDS)
+
     missing_vector = deepcopy(doc)
     missing_vector['results'][0].pop('taste_factors')
     expect_value_error(
@@ -131,6 +148,7 @@ def main():
         'contract': 'TASTE-SEMANTIC-RESULT-V3',
         'factor_ids': list(TASTE_FACTOR_IDS),
         'valid_vector_persists': True,
+        'configured_score_points': scored['points'],
         'missing_vector_rejected_when_requested': True,
         'malformed_vector_rejected': True,
         'legacy_migration_fallback_preserved': True,
