@@ -1,7 +1,0 @@
-# CURRENT_TASK
-
-status: in_progress
-started_at: 2026-08-30 Europe/Berlin
-current_task: Закрыть фактическую доставку новой финальной сортировки в `data/production/visual/current.json` после перехода на nonblocking partial SteamDB history.
-last_progress: Основная реализация уже выполнена: canonical SteamDB lookup contract обновлён до `1.4` с verified partial persistence; ingest выпускает prepared resolved subset до полной completeness; partial ledger валидируется и checkpoint-ится без требования zero unresolved; `missing` history в visual workflow трактуется как `unverified` и больше не блокирует replacement; downstream pre-AI и `data/production/visual/current.json` были пересобраны. Пять unresolved SteamDB keys остаются GitHub-owned retry state и вручную не обрабатываются. При финальной проверке обнаружен оставшийся CI-дефект: `scripts/validate_execution_ownership.py` всё ещё жёстко требует SteamDB contract version `1.3`, хотя canonical `config/steamdb_lookup_contract.json` уже `1.4`; из-за этого `Validate execution ownership` на commit `7796fbf7...` завершился failure.
-next_step: Минимально обновить ownership validator на актуальную canonical SteamDB contract version `1.4`, проверить новый GitHub Actions run. Если ownership validation зелёный и production `current.json` остаётся фактически пересобранным после partial-history recovery, считать эту задачу завершённой и удалить `CURRENT_TASK.md`. Windows compatibility evidence-source остаётся отдельным последующим участком.
