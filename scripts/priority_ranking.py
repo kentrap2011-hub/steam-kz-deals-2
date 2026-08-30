@@ -126,7 +126,7 @@ def validate_score_policy(policy):
 
     purchase_component_max = sum(
         _as_number((purchase.get(name) or {}).get('max'), -1)
-        for name in ('discount', 'price', 'history')
+        for name in ('savings', 'price', 'history')
     )
     if purchase_component_max != purchase_max:
         raise ValueError('purchase component maxima must sum exactly to purchase.max')
@@ -139,7 +139,7 @@ def validate_score_policy(policy):
         if _as_number(points, -1) < 0 or _as_number(points) > taste_max:
             raise ValueError(f'legacy coarse fit points out of range for {fit}')
 
-    for name in ('discount', 'price'):
+    for name in ('savings', 'price'):
         component = purchase.get(name) or {}
         component_max = _as_number(component.get('max'), -1)
         bands = component.get('bands') or []
@@ -381,16 +381,20 @@ def _risk_component(game, policy):
     }
 
 
-def _discount_component(game, policy):
-    cfg = policy['score_model']['purchase']['discount']
-    value = game.get('discount_percent')
-    points = _band_points(value, cfg)
+def _savings_component(game, policy):
+    cfg = policy['score_model']['purchase']['savings']
+    original = _as_number(game.get('original_price_rub'), None)
+    current = _as_number(game.get('current_price_rub'), None)
+    savings = None if original is None or current is None else max(0.0, original - current)
+    points = _band_points(savings, cfg)
+    display = 'нет данных' if savings is None else f'{int(round(savings)):,} ₽'.replace(',', ' ')
     return {
-        'id': 'discount',
-        'label': cfg.get('label') or 'Размер скидки',
+        'id': 'savings',
+        'label': cfg.get('label') or 'Экономия по акции',
         'points': points,
         'max_points': _as_number(cfg.get('max')),
-        'value': f'−{int(value or 0)}%',
+        'value': display,
+        'savings_rub': savings,
     }
 
 
@@ -439,7 +443,7 @@ def build_score_breakdown(game, policy):
     personal_score = _round(_clamp(personal_raw, 0, _as_number(personal_cfg.get('max'))), digits)
 
     purchase_components = [
-        _discount_component(game, policy),
+        _savings_component(game, policy),
         _price_component(game, policy),
         _history_component(game, policy),
     ]
@@ -565,6 +569,10 @@ def apply_final_priority_order(items, now=None, policy_path=POLICY):
         game['total_score'] = game['score_breakdown']['total_score']
         game['personal_score'] = game['score_breakdown']['personal_score']
         game['purchase_score'] = game['score_breakdown']['purchase_score']
+        savings_component = next(
+            row for row in game['score_breakdown']['purchase_components'] if row['id'] == 'savings'
+        )
+        game['savings_rub'] = savings_component.get('savings_rub')
         risk_component = next(
             row for row in game['score_breakdown']['personal_components'] if row['id'] == 'risk'
         )
