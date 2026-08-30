@@ -4,7 +4,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 ROOT = Path('.')
-POLICY = ROOT / 'config/mailing_policy.json'
+POLICY = ROOT / 'config/final_ranking_policy.json'
 PRODUCTION_TIMEZONE = 'Europe/Samara'
 
 HISTORY_QUALITY_ORDER = {
@@ -82,10 +82,10 @@ def factor_value(name, game, now):
         return practical_risk_rank(game)
     if name == 'wishlist_desc':
         return -int(bool(game.get('wishlist')))
-    if name == 'price_quality_vs_history_desc':
-        return HISTORY_QUALITY_ORDER.get(game.get('history_quality') or 'unverified', 99)
     if name == 'discount_percent_desc':
         return -int(game.get('discount_percent') or 0)
+    if name == 'price_quality_vs_history_desc':
+        return HISTORY_QUALITY_ORDER.get(game.get('history_quality') or 'unverified', 99)
     if name == 'current_price_rub_asc':
         return int(game.get('current_price_rub') or 999999)
     if name == 'achievement_quality_desc':
@@ -99,12 +99,13 @@ def factor_value(name, game, now):
 
 def load_final_priority_order(policy_path=POLICY):
     policy = json.loads(Path(policy_path).read_text(encoding='utf-8'))
-    sorting = policy.get('sorting') or {}
-    order = sorting.get('final_priority_order')
+    if policy.get('contract') != 'FINAL-PRIORITY-RANKING-V1' or policy.get('status') != 'canonical':
+        raise ValueError('final ranking policy is not the canonical FINAL-PRIORITY-RANKING-V1 contract')
+    order = policy.get('automatic_final_priority_order')
     if not isinstance(order, list) or not order:
-        raise ValueError('mailing_policy.sorting.final_priority_order must be a non-empty list')
+        raise ValueError('final ranking policy automatic_final_priority_order must be a non-empty list')
     if len(order) != len(set(order)):
-        raise ValueError('mailing_policy.sorting.final_priority_order contains duplicate factors')
+        raise ValueError('final ranking policy contains duplicate factors')
     probe = {'title': 'probe'}
     now = datetime.now(timezone.utc)
     for name in order:
