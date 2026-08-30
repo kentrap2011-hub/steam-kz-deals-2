@@ -1,26 +1,42 @@
 {
-  "contract": "TASTE-CACHE-ENTRY-BINDING-V2",
+  "contract": "TASTE-CACHE-ENTRY-BINDING-V3",
   "version": "1.0",
-  "status": "implementation_only",
-  "purpose": "Allow incremental mixed-generation derived taste caching without weakening exact cache-hit validity.",
+  "status": "canonical",
+  "purpose": "Allow incremental mixed-generation derived taste caching while adding normalized price-blind taste factors without weakening exact cache-hit validity.",
   "authority": {
     "canonical_policy_path": "config/mailing_policy.json",
     "canonical_cache_path": "data/cache/taste_fit.json",
     "canonical_profile_repository": "kentrap2011-hub/stopgame-ratings-data",
     "canonical_profile_path": "gaming_taste_live.json",
+    "semantic_result_contract": "config/taste_result_contract.json",
     "cache_is_derived_verdicts_only_not_user_evidence": true
   },
   "taste_semantics_policy_fields": [
     "taste_profile",
     "taste_deal_separation",
     "personal_filter",
-    "false_negative_audit"
+    "false_negative_audit",
+    "taste_factor_semantics"
   ],
   "taste_semantics_digest": {
     "algorithm": "sha256",
     "serialization": "json ensure_ascii=false sort_keys=true separators comma_colon",
     "purpose": "Invalidate cached decisions when actual taste-evaluation semantics change while ignoring unrelated render/cache plumbing changes."
   },
+  "base_required_entry_fields": [
+    "key",
+    "appid",
+    "profile_blob_sha",
+    "taste_model_version",
+    "taste_semantics_sha256",
+    "taste_fingerprint",
+    "verdict",
+    "fit_level",
+    "reason_code",
+    "positive_evidence",
+    "negative_evidence",
+    "evaluated_at_utc"
+  ],
   "schema_v2_required_entry_fields": [
     "key",
     "appid",
@@ -35,6 +51,34 @@
     "negative_evidence",
     "evaluated_at_utc"
   ],
+  "schema_v3_required_entry_fields": [
+    "key",
+    "appid",
+    "profile_blob_sha",
+    "taste_model_version",
+    "taste_semantics_sha256",
+    "taste_fingerprint",
+    "verdict",
+    "fit_level",
+    "reason_code",
+    "positive_evidence",
+    "negative_evidence",
+    "taste_factors",
+    "evaluated_at_utc"
+  ],
+  "taste_factors": {
+    "required_for_v3_semantic_results": true,
+    "exact_keys": [
+      "gameplay_mastery",
+      "development_variety",
+      "structure_pacing_direction",
+      "identity_hooks",
+      "breadth_of_match"
+    ],
+    "value_range_inclusive": [0, 100],
+    "weight_independent": true,
+    "price_blind": true
+  },
   "cache_hit_requires_same_entry": [
     "exact_key",
     "exact_appid",
@@ -44,11 +88,18 @@
     "exact_taste_fingerprint"
   ],
   "mixed_generation_rules": {
-    "different_profile_or_semantics_generations_may_coexist_in_one_canonical_cache": true,
+    "different_profile_model_or_semantics_generations_may_coexist_in_one_canonical_cache": true,
+    "legacy_v2_entries_without_taste_factors_may_be_read_during_migration": true,
+    "legacy_v2_entries_without_taste_factors_are_not_v3_migration_complete": true,
     "old_generation_entries_are_preserved_but_are_not_cache_hits_for_a_new_binding": true,
     "new_validated_batches_replace_only_their_exact_keys": true,
     "partial_refresh_becomes_reusable_immediately": true,
-    "never_upgrade_an_old_entry_binding_without_a_new_ai_verdict": true
+    "never_upgrade_an_old_entry_binding_or_add_factors_without_a_new_ai_verdict": true
+  },
+  "overlay": {
+    "container_schema_version": 1,
+    "current_entry_schema_version": 3,
+    "mixed_v2_v3_rows_allowed_during_migration": true
   },
   "legacy_schema_v1_migration": {
     "allowed": true,
