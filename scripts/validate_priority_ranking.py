@@ -1,3 +1,5 @@
+import json
+import tempfile
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -7,14 +9,7 @@ import priority_ranking
 
 EXPECTED_ORDER = [
     'sale_expiry_urgency_asc',
-    'practical_or_personal_risk_asc',
-    'priority_bucket_asc',
-    'wishlist_desc',
-    'discount_percent_desc',
-    'price_quality_vs_history_desc',
-    'current_price_rub_asc',
-    'achievement_quality_desc',
-    'duration_tiebreak_asc',
+    'total_score_desc',
     'title_asc',
 ]
 
@@ -25,7 +20,8 @@ def game(title, **overrides):
     row = {
         'id': title,
         'title': title,
-        'priority_bucket': 1,
+        'fit': 'strong',
+        'source_fit': 'strong',
         'risk_level': 'low',
         'risk_codes': [],
         'wishlist': False,
@@ -34,7 +30,9 @@ def game(title, **overrides):
         'current_price_rub': 300,
         'duration_tiebreak_penalty': 0,
         'duration_preference_band': 'unknown',
+        'estimated_duration_hours': None,
         'sale_end_utc': '2026-09-05T12:00:00Z',
+        'direct_user_evidence': {'level': 'none'},
         'practical': {
             'modern_windows_friction': 'unknown',
             'steam_achievements': True,
@@ -49,9 +47,9 @@ def game(title, **overrides):
     return row
 
 
-def ranked(rows):
+def ranked(rows, policy_path=priority_ranking.POLICY):
     rows = deepcopy(rows)
-    rows, order = priority_ranking.apply_final_priority_order(rows, now=NOW)
+    rows, order = priority_ranking.apply_final_priority_order(rows, now=NOW, policy_path=policy_path)
     assert order == EXPECTED_ORDER, (order, EXPECTED_ORDER)
     return rows
 
@@ -60,42 +58,158 @@ def titles(rows):
     return [row['title'] for row in rows]
 
 
+def component(row, section, component_id):
+    return next(x for x in row['score_breakdown'][section] if x['id'] == component_id)
+
+
 def main():
     assert callable(build_final_visual_payload.main)
+    policy = priority_ranking.load_final_policy()
     assert priority_ranking.load_final_priority_order() == EXPECTED_ORDER
+    assert policy['contract'] == 'FINAL-PRIORITY-RANKING-V2'
 
-    # Expiring today/tomorrow overrides every automatic recommendation factor.
-    urgent_today = game('today', priority_bucket=6, risk_level='high', risk_codes=['unchanged_repetition'], sale_end_utc='2026-08-30T18:00:00Z')
-    urgent_tomorrow = game('tomorrow', priority_bucket=1, sale_end_utc='2026-08-31T18:00:00Z')
-    later = game('later', priority_bucket=1, sale_end_utc='2026-09-05T18:00:00Z')
-    assert titles(ranked([later, urgent_tomorrow, urgent_today])) == ['today', 'tomorrow', 'later']
+    model = policy['score_model']
+    assert model['total_max'] == 100
+    assert model['personal']['max'] == 60
+    assert model['purchase']['max'] == 40
+    assert sum(x['max_points'] for x in model['personal']['taste']['normalized_factor_weights'].values()) == 50
+    assert model['personal']['wishlist']['max'] == 4
+    assert model['personal']['achievements']['max'] == 3
+    assert model['personal']['duration']['max'] == 3
+    assert model['purchase']['discount']['max'] == 20
+    assert model['purchase']['price']['max'] == 12
+    assert model['purchase']['history']['max'] == 8
 
-    # Risk status is explicit producer-owned data: no risk / descriptive risk / serious ranking risk.
-    no_risk = ranked([game('no-risk')])[0]
-    assert (no_risk.get('risk_status') or {}).get('code') == 'no_confirmed_risk'
-    assert (no_risk.get('risk_status') or {}).get('affects_early_priority') is False
+    # Existing cache entries without a factor vector work immediately, but the score is explicitly coarse.
+    coarse = ranked([game('coarse')])[0]
+    assert coarse['score_breakdown']['precision']['code'] == 'legacy_coarse_fit'
+    assert coarse['score_breakdown']['precision']['is_coarse_legacy'] is True
+    assert component(coarse, 'personal_components', 'taste')['points'] == 42
 
-    medium = game('a-medium', risk_level='medium', risk_codes=['exploration_direction'])
-    low = game('b-low', risk_level='low')
-    medium_ranked = ranked([medium])[0]
-    assert priority_ranking.practical_risk_rank(medium) == priority_ranking.practical_risk_rank(low) == 0
-    assert (medium_ranked.get('risk_status') or {}).get('code') == 'descriptive_risk'
-    assert (medium_ranked.get('risk_status') or {}).get('affects_early_priority') is False
-    medium_risk_factor = next(f for f in medium_ranked['priority_factors'] if f['id'] == 'practical_or_personal_risk_asc')
-    assert medium_risk_factor['value'] == 'обычный риск есть · серьёзного штрафа нет'
+    moderate = ranked([game('moderate', fit='moderate', source_fit='moderate')])[0]
+    assert component(moderate, 'personal_components', 'taste')['points'] == 34
+    assert coarse['total_score'] > moderate['total_score']
 
-    high = game('a-high', risk_level='high', risk_codes=['unchanged_repetition'])
-    high_ranked = ranked([high])[0]
-    assert (high_ranked.get('risk_status') or {}).get('code') == 'serious_risk'
-    assert (high_ranked.get('risk_status') or {}).get('affects_early_priority') is True
-    assert titles(ranked([high, low])) == ['b-low', 'a-high']
+    # Exact user rating is the strongest taste-score source and is not double-counted.
+    direct = ranked([game('direct', direct_user_evidence={'level': 'positive', 'rating': 4.5})])[0]
+    direct_taste = component(direct, 'personal_components', 'taste')
+    assert direct_taste['source'] == 'direct_user_rating'
+    assert direct_taste['points'] == 45
 
-    # Regression for the Seraph's Last Stand / High On Life structure: a very cheap candidate
-    # with a commercially better group must not beat a clearly safer wishlist candidate merely
-    # because its current price is close to historical lows.
+    # New normalized semantic factors are weight-independent inputs; GitHub applies the configured maxima.
+    factor_ids = list(model['personal']['taste']['normalized_factor_weights'])
+    perfect_factors = {factor_id: 100 for factor_id in factor_ids}
+    detailed = ranked([game('detailed', taste_factors=perfect_factors)])[0]
+    detailed_taste = component(detailed, 'personal_components', 'taste')
+    assert detailed_taste['source'] == 'normalized_taste_factors'
+    assert detailed_taste['points'] == 50
+    assert sum(x['points'] for x in detailed_taste['factor_breakdown']) == 50
+
+    # Score breakdown is internally exact and bounded.
+    for row in (coarse, moderate, direct, detailed):
+        breakdown = row['score_breakdown']
+        personal_sum = sum(float(x['points']) for x in breakdown['personal_components'])
+        purchase_sum = sum(float(x['points']) for x in breakdown['purchase_components'])
+        assert breakdown['personal_score'] == max(0, min(60, round(personal_sum, 1)))
+        assert breakdown['purchase_score'] == max(0, min(40, round(purchase_sum, 1)))
+        assert breakdown['total_score'] == round(breakdown['personal_score'] + breakdown['purchase_score'], 1)
+        assert 0 <= breakdown['total_score'] <= 100
+        assert row['total_score'] == breakdown['total_score']
+
+    # Urgency remains outside 100 points and has absolute automatic precedence.
+    urgent_low = game(
+        'today-low-score',
+        fit='moderate',
+        source_fit='moderate',
+        wishlist=False,
+        discount_percent=6,
+        history_quality='well_above_history',
+        current_price_rub=700,
+        practical={'steam_achievements': False, 'achievement_quality': None},
+        duration_preference_band='extreme_length',
+        risk_level='high',
+        risk_codes=['unchanged_repetition'],
+        sale_end_utc='2026-08-30T18:00:00Z',
+    )
+    later_high = game(
+        'later-high-score',
+        taste_factors=perfect_factors,
+        wishlist=True,
+        discount_percent=95,
+        history_quality='record',
+        current_price_rub=50,
+        practical={'steam_achievements': True, 'achievement_quality': 5},
+        duration_preference_band='preferred_medium',
+        sale_end_utc='2026-09-05T18:00:00Z',
+    )
+    urgency_pair = ranked([later_high, urgent_low])
+    assert titles(urgency_pair) == ['today-low-score', 'later-high-score']
+    assert urgency_pair[0]['total_score'] < urgency_pair[1]['total_score']
+    assert (urgency_pair[0]['priority_vs_next'] or {}).get('deciding_factor_id') == 'sale_expiry_urgency_asc'
+
+    # Inside the same urgency, the visible total score is the real ordering rule.
+    same_urgency = ranked([moderate, coarse])
+    assert titles(same_urgency) == ['coarse', 'moderate']
+    assert (same_urgency[0]['priority_vs_next'] or {}).get('deciding_factor_id') == 'total_score_desc'
+
+    # Wishlist is exactly the configured bounded +4 bonus.
+    no_wishlist = ranked([game('no-wishlist')])[0]
+    wishlist = ranked([game('wishlist', wishlist=True)])[0]
+    assert component(no_wishlist, 'personal_components', 'wishlist')['points'] == 0
+    assert component(wishlist, 'personal_components', 'wishlist')['points'] == 4
+    assert wishlist['total_score'] - no_wishlist['total_score'] == 4
+
+    # Descriptive risks are small; serious personal and confirmed Windows risks use configured penalties.
+    low_risk = ranked([game('low-risk', risk_level='low', risk_codes=['old_design_friction'])])[0]
+    medium_risk = ranked([game('medium-risk', risk_level='medium', risk_codes=['management_routine'])])[0]
+    high_risk = ranked([game('high-risk', risk_level='high', risk_codes=['unchanged_repetition'])])[0]
+    windows_risk = ranked([game('windows-risk', practical={'modern_windows_friction': 'serious_problem'})])[0]
+    assert component(low_risk, 'personal_components', 'risk')['points'] == -1
+    assert component(medium_risk, 'personal_components', 'risk')['points'] == -3
+    assert component(high_risk, 'personal_components', 'risk')['points'] == -10
+    assert component(windows_risk, 'personal_components', 'risk')['points'] == -12
+    assert high_risk['risk_status']['code'] == 'serious_risk'
+    assert high_risk['risk_status']['affects_score'] is True
+    assert high_risk['risk_status']['score_penalty'] == 10
+
+    # Lack of achievements is already scored in its own component and must not be counted again as risk.
+    no_ach = ranked([game(
+        'no-ach',
+        risk_level='low',
+        risk_codes=['no_steam_achievements'],
+        practical={'steam_achievements': False, 'achievement_quality': None},
+    )])[0]
+    assert component(no_ach, 'personal_components', 'achievements')['points'] == 0
+    assert component(no_ach, 'personal_components', 'risk')['points'] == 0
+
+    # The approved purchase point tables are active.
+    cheap = ranked([game('cheap', current_price_rub=39)])[0]
+    normal_price = ranked([game('normal-price', current_price_rub=460)])[0]
+    assert component(cheap, 'purchase_components', 'price')['points'] == 12
+    assert component(normal_price, 'purchase_components', 'price')['points'] == 9
+    assert component(cheap, 'purchase_components', 'price')['points'] - component(normal_price, 'purchase_components', 'price')['points'] == 3
+
+    new_game_record = ranked([game('new-game-record', discount_percent=20, history_quality='record')])[0]
+    old_game_discount = ranked([game('old-game-discount', discount_percent=70, history_quality='good_vs_history')])[0]
+    assert component(new_game_record, 'purchase_components', 'discount')['points'] == 3
+    assert component(new_game_record, 'purchase_components', 'history')['points'] == 8
+    assert component(old_game_discount, 'purchase_components', 'discount')['points'] == 16
+    assert component(old_game_discount, 'purchase_components', 'history')['points'] == 5
+    assert old_game_discount['purchase_score'] > new_game_record['purchase_score']
+
+    unverified = ranked([game('unverified', history_quality='unverified')])[0]
+    previously_free = ranked([game('previously-free', history_quality='previously_free')])[0]
+    weak_history = ranked([game('weak-history', history_quality='well_above_history')])[0]
+    assert component(unverified, 'purchase_components', 'history')['points'] == 3
+    assert component(previously_free, 'purchase_components', 'history')['points'] == 2
+    assert component(weak_history, 'purchase_components', 'history')['points'] == 0
+
+    # Regression for the High On Life / Seraph's Last Stand structure: cheap price alone is only a small benefit;
+    # wishlist plus no serious risk can outweigh it under the visible score.
     cheap_high_risk = game(
         'cheap-high-risk',
-        priority_bucket=5,
+        fit='moderate',
+        source_fit='moderate',
         risk_level='high',
         risk_codes=['unchanged_repetition'],
         wishlist=False,
@@ -105,8 +219,10 @@ def main():
     )
     interesting_wait = game(
         'interesting-wishlist-wait',
-        priority_bucket=6,
+        fit='moderate',
+        source_fit='moderate',
         risk_level='low',
+        risk_codes=[],
         wishlist=True,
         discount_percent=65,
         history_quality='well_above_history',
@@ -114,58 +230,41 @@ def main():
     )
     risk_pair = ranked([cheap_high_risk, interesting_wait])
     assert titles(risk_pair) == ['interesting-wishlist-wait', 'cheap-high-risk']
-    assert (risk_pair[0].get('priority_vs_next') or {}).get('deciding_factor_id') == 'practical_or_personal_risk_asc'
+    assert risk_pair[0]['total_score'] > risk_pair[1]['total_score']
+    assert (risk_pair[0]['priority_vs_next'] or {}).get('deciding_factor_id') == 'total_score_desc'
 
-    # With the same urgency and serious-risk layer, the qualitative taste+deal group remains first.
-    assert titles(ranked([game('group2', priority_bucket=2), game('group1', priority_bucket=1)])) == ['group1', 'group2']
+    # Central-config tuning proof: changing only JSON changes the score; no Python or taste re-evaluation is needed.
+    tuned = deepcopy(policy)
+    tuned['score_model']['purchase']['discount']['bands'] = deepcopy(
+        tuned['score_model']['purchase']['discount']['bands']
+    )
+    for band in tuned['score_model']['purchase']['discount']['bands']:
+        if band['min'] <= 70 <= band['max']:
+            band['points'] = 10
+    with tempfile.NamedTemporaryFile('w', suffix='.json', encoding='utf-8', delete=False) as fh:
+        json.dump(tuned, fh, ensure_ascii=False)
+        tuned_path = Path(fh.name)
+    try:
+        before = ranked([game('weight-test', discount_percent=70)])[0]
+        after = ranked([game('weight-test', discount_percent=70)], policy_path=tuned_path)[0]
+        assert component(before, 'purchase_components', 'discount')['points'] == 16
+        assert component(after, 'purchase_components', 'discount')['points'] == 10
+        assert before['total_score'] - after['total_score'] == 6
+        assert component(before, 'personal_components', 'taste')['points'] == component(after, 'personal_components', 'taste')['points']
+    finally:
+        tuned_path.unlink(missing_ok=True)
 
-    # A bare legacy Steam requirement label is neutral without confirmed modern-Windows friction.
-    bare_legacy = game('a-bare-legacy', practical={'legacy_windows_requirement_label': 'legacy', 'modern_windows_friction': 'unknown'})
-    normal = game('b-normal', practical={'modern_windows_friction': 'likely_none'})
-    assert priority_ranking.practical_risk_rank(bare_legacy) == priority_ranking.practical_risk_rank(normal) == 0
-
-    # Confirmed pre-Windows-10 targeting/fixes must demote the otherwise equal candidate and be serious even in synthetic data without risk_codes.
-    confirmed_old = game('a-confirmed-old', practical={'modern_windows_friction': 'confirmed_pre_windows_10_target'})
-    confirmed_old_ranked = ranked([confirmed_old])[0]
-    assert (confirmed_old_ranked.get('risk_status') or {}).get('code') == 'serious_risk'
-    assert titles(ranked([confirmed_old, normal])) == ['b-normal', 'a-confirmed-old']
-
-    # Wishlist is meaningful inside the same group/risk layer and comes before commercial tie-breaks.
-    wishlist = game('wishlist', wishlist=True, discount_percent=20, history_quality='well_above_history')
-    stronger_deal = game('stronger-deal', wishlist=False, discount_percent=90, history_quality='record')
-    wishlist_pair = ranked([stronger_deal, wishlist])
-    assert titles(wishlist_pair) == ['wishlist', 'stronger-deal']
-
-    # Per-game diagnostics must be producer-owned and follow the exact canonical factor order.
-    for row in wishlist_pair:
+    # Per-game ranking diagnostics now contain only urgency, visible score and deterministic title fallback.
+    diagnostic_pair = ranked([game('B'), game('A', wishlist=True)])
+    for row in diagnostic_pair:
         assert [factor['id'] for factor in row.get('priority_factors') or []] == EXPECTED_ORDER
         assert all('label' in factor and 'value' in factor and 'sort_value' in factor for factor in row['priority_factors'])
-        assert isinstance(row.get('risk_status'), dict) and row['risk_status'].get('label')
         visible_text = ' '.join(f"{factor.get('label', '')} {factor.get('value', '')}" for factor in row['priority_factors']).casefold()
         assert 'bucket' not in visible_text
         assert 'tie-break' not in visible_text
-    first_vs_next = wishlist_pair[0].get('priority_vs_next') or {}
-    assert first_vs_next.get('next_game_id') == 'stronger-deal'
-    assert first_vs_next.get('deciding_factor_id') == 'wishlist_desc'
-    assert first_vs_next.get('current_value') == 'да'
-    assert first_vs_next.get('next_value') == 'нет'
-    assert wishlist_pair[-1].get('priority_vs_next') is None
+        assert 'production' not in visible_text
 
-    # Discount comes before historical-minimum quality: a short price history must not make a routine
-    # new-game 20% record beat a genuinely strong old-game discount.
-    new_game_record = game('new-game-record', discount_percent=20, history_quality='record')
-    old_game_strong_discount = game('old-game-strong-discount', discount_percent=70, history_quality='good_vs_history')
-    assert titles(ranked([new_game_record, old_game_strong_discount])) == ['old-game-strong-discount', 'new-game-record']
-
-    # Commercial value precedes achievements: achievements are a late close-candidate factor.
-    cheap_no_ach = game('cheap-no-ach', current_price_rub=200, practical={'steam_achievements': False, 'achievement_quality': None})
-    expensive_best_ach = game('expensive-best-ach', current_price_rub=400, practical={'steam_achievements': True, 'achievement_quality': 5})
-    assert titles(ranked([expensive_best_ach, cheap_no_ach])) == ['cheap-no-ach', 'expensive-best-ach']
-
-    # Direct user evidence is intentionally not a separate final factor; it already changes fit/group upstream.
-    assert not any('direct_user' in factor for factor in EXPECTED_ORDER)
-
-    # UI manual end-of-queue override must stay above automatic priority, including expiry urgency.
+    # UI manual end-of-queue override must stay above automatic priority.
     app = Path('web/app.js').read_text(encoding='utf-8')
     required_ui_fragments = [
         "if(r.manual_end_at)manual.push(g.id);else normal.push(g.id);",
