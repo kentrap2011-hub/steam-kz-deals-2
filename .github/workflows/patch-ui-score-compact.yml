@@ -55,15 +55,9 @@ jobs:
               raise SystemExit('scoreComponentHtml source block not found')
           app = app.replace(old_helpers, new_helpers, 1)
 
-          old_score = '''  if(score){
-            html+=`<div class="priority-factor ${!urgencyMode||deciding==='total_score_desc'?'deciding':''}"><span>Итоговый балл</span><b>${Number(score.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.total_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div>`;
-            if(score.precision?.label)html+=`<div class="muted small">Точность вкусовой части: ${escapeHtml(score.precision.label)}${score.precision.is_coarse_legacy?' — детализируем по мере обновления старых оценок.':''}</div>`;
-            html+=`<div class="priority-factor"><span>${escapeHtml(score.personal_label||'Насколько подходит тебе')}</span><b>${Number(score.personal_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.personal_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div>`;
-            html+=(score.personal_components||[]).map(scoreComponentHtml).join('');
-            html+=`<div class="priority-factor"><span>${escapeHtml(score.purchase_label||'Выгодность покупки')}</span><b>${Number(score.purchase_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.purchase_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></div>`;
-            html+=(score.purchase_components||[]).map(scoreComponentHtml).join('');
-          }else{
-          '''
+          render_start = app.index('function renderPriority(g){')
+          score_start = app.index('  if(score){', render_start)
+          score_end = app.index('  }else{', score_start) + len('  }else{\n')
           new_score = '''  if(score){
             html+=`<button class="priority-factor score-total ${!urgencyMode||deciding==='total_score_desc'?'deciding':''}" type="button" data-score-toggle aria-expanded="false" title="Показать детализацию итогового балла"><span>Итоговый балл</span><b>${Number(score.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.total_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></button>`;
             let details='';
@@ -72,9 +66,7 @@ jobs:
             html+=`<div class="score-details hidden" data-score-details>${details}</div>`;
           }else{
           '''
-          if old_score not in app:
-              raise SystemExit('renderPriority score block not found')
-          app = app.replace(old_score, new_score, 1)
+          app = app[:score_start] + new_score + app[score_end:]
 
           old_click = '''document.addEventListener('click',e=>{
             const o=e.target.closest('[data-open-web]');if(o){openSteam(o.dataset.openSteam||null,o.dataset.openWeb||null);return}
