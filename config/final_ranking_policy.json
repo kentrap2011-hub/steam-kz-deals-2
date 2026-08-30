@@ -12,10 +12,10 @@
       "RANK-004",
       "RANK-005",
       "RANK-006",
-      "RANK-007",
       "RANK-008",
       "RANK-009",
       "RANK-010",
+      "RANK-011",
       "UI-001"
     ]
   },
@@ -128,21 +128,25 @@
     "purchase": {
       "label": "Выгодность покупки",
       "max": 40,
-      "discount": {
-        "label": "Размер скидки",
+      "savings": {
+        "label": "Экономия по акции",
         "max": 20,
+        "calculation": "max(0, original_price_rub - current_price_rub)",
         "bands": [
-          {"min": 6, "max": 14, "points": 1},
-          {"min": 15, "max": 24, "points": 3},
-          {"min": 25, "max": 34, "points": 5},
-          {"min": 35, "max": 44, "points": 7},
-          {"min": 45, "max": 54, "points": 10},
-          {"min": 55, "max": 64, "points": 13},
-          {"min": 65, "max": 74, "points": 16},
-          {"min": 75, "max": 84, "points": 18},
-          {"min": 85, "max": 94, "points": 19},
-          {"min": 95, "max": 100, "points": 20}
-        ]
+          {"min": 0, "max": 49, "points": 0},
+          {"min": 50, "max": 99, "points": 1},
+          {"min": 100, "max": 199, "points": 3},
+          {"min": 200, "max": 349, "points": 5},
+          {"min": 350, "max": 499, "points": 7},
+          {"min": 500, "max": 749, "points": 10},
+          {"min": 750, "max": 999, "points": 12},
+          {"min": 1000, "max": 1499, "points": 14},
+          {"min": 1500, "max": 1999, "points": 16},
+          {"min": 2000, "max": 2999, "points": 18},
+          {"min": 3000, "max": 4999, "points": 19},
+          {"min": 5000, "max": 999999, "points": 20}
+        ],
+        "unknown_points": 0
       },
       "price": {
         "label": "Текущая цена",
@@ -181,6 +185,7 @@
     "legacy_fallback_must_be_visible_to_user": true
   },
   "non_score_fields": {
+    "discount_percent": "display/context only; V2 scores the absolute ruble saving instead",
     "priority_bucket": "eligibility/explanation context only; not a V2 final ranking factor",
     "purchase_decision": "explanation label only; do not double-count price/history through it",
     "direct_user_evidence": "used as the strongest taste-score source when an exact rating exists; do not add a second bonus",
