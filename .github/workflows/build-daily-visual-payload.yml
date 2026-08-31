@@ -14,6 +14,7 @@ on:
       - "scripts/build_final_visual_payload.py"
       - "scripts/build_daily_visual_payload.py"
       - "scripts/build_visual_feed_v2.py"
+      - "scripts/apply_fixed_package_purchase_options.py"
       - "scripts/normalize_visual_media_urls.py"
       - "scripts/achievement_quality.py"
       - "scripts/refine_visual_ranking.py"
@@ -114,11 +115,13 @@ jobs:
           # priority_rank exactly once from config/final_ranking_policy.json.
           export FORCE_VISUAL_BUILD=1
           python scripts/build_final_visual_payload.py | tee /tmp/visual-build.log
+          python scripts/apply_fixed_package_purchase_options.py | tee /tmp/package-options.log
           # StoreBrowse can return stale screenshot metadata for storefront aliases
           # (for example App_901735 resolving assets through app 40960). Refresh those
           # aliases from Steam appdetails before deciding whether there is anything to commit.
           python scripts/normalize_visual_media_urls.py | tee /tmp/media-refresh.log
           if grep -q 'VISUAL_FINAL_BUILD=BUILT' /tmp/visual-build.log || \
+             grep -q 'FIXED_PACKAGE_OPTIONS=APPLIED' /tmp/package-options.log || \
              grep -Eq 'VISUAL_MEDIA_ITEMS_CHANGED=[1-9][0-9]*' /tmp/media-refresh.log; then
             echo "built=true" >> "$GITHUB_OUTPUT"
           else
@@ -184,6 +187,7 @@ jobs:
                   'history_quality': game.get('history_quality'),
                   'previously_free': bool(game.get('previously_free')),
                   'sale_end_utc': game.get('sale_end_utc'),
+                  'better_purchase_option': game.get('better_purchase_option'),
                   'summary': game.get('summary'),
                   'steam_web_url': game.get('web_url'),
               }

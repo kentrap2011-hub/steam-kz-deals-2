@@ -18,6 +18,7 @@ on:
     paths:
       - "config/content_eligibility_contract.json"
       - "config/offer_family_contract.json"
+      - "config/fixed_package_purchase_option_contract.json"
       - "config/deal_quality_contract.json"
       - "config/mailing_policy.json"
       - "config/taste_fingerprint_contract.json"
@@ -35,6 +36,8 @@ on:
       - "scripts/build_taste_cache_index.py"
       - "scripts/ingest_taste_results.py"
       - "scripts/build_pre_ai_store_snapshot.py"
+      - "scripts/build_fixed_package_purchase_options.py"
+      - "scripts/test_fixed_package_purchase_options.py"
       - "scripts/test_expired_offer_guard.py"
       - "scripts/build_pre_ai_fx_snapshot.py"
       - "scripts/build_pre_ai_content_rules.py"
@@ -73,11 +76,17 @@ jobs:
       - name: Regression test expired offer guard
         run: python scripts/test_expired_offer_guard.py
 
+      - name: Regression test fixed package purchase options
+        run: python scripts/test_fixed_package_purchase_options.py
+
       - name: Build per-entry taste cache index
         run: python scripts/build_taste_cache_index.py
 
       - name: Build current Store snapshot and content metadata
         run: python scripts/build_pre_ai_store_snapshot.py
+
+      - name: Build fixed package purchase-only snapshot
+        run: python scripts/build_fixed_package_purchase_options.py
 
       - name: Build deterministic FX snapshot
         run: python scripts/build_pre_ai_fx_snapshot.py
@@ -108,6 +117,7 @@ jobs:
             data/cache/taste_fit.entry_index.json \
             data/production/pre_ai/store_snapshot.json \
             data/production/pre_ai/content_metadata.json \
+            data/production/pre_ai/fixed_package_options.json \
             data/production/pre_ai/fx_snapshot.json \
             data/production/pre_ai/content_rules.json \
             data/production/pre_ai/family_graph.json \
