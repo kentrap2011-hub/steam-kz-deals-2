@@ -115,6 +115,20 @@ Current next step:
 - проверить клиентское состояние изображения, ключи/кэш и гонки асинхронной загрузки при быстром перелистывании;
 - добавить regression-проверку как минимум для нескольких быстрых последовательных переходов.
 
+### E. Remove placeholder Russian game descriptions
+
+Статус: `planned`.
+
+Симптом:
+- для части игр в карточке вместо нормального текста показывается техническая заглушка вроде `Русское краткое описание для этой игры пока не подготовлено.`
+
+Требование:
+- карточка не должна показывать пользователю технические placeholder-тексты как будто это описание игры;
+- при наличии исходного Steam/producer description подготавливать нормальное краткое русское описание;
+- если автоматическое русское описание временно недоступно, использовать аккуратный fallback (например исходное описание с явным языковым статусом) либо скрывать блок, но не показывать внутреннюю заглушку;
+- добавить проверку production payload на известные placeholder-строки, чтобы такие карточки обнаруживались до deploy;
+- проверить все текущие visible games и устранить уже существующие заглушки.
+
 ## Overall Definition of done
 
 Active work now:
@@ -124,6 +138,7 @@ Planned backlog after that includes at least:
 - ranking/card explanation quality audit;
 - Russian-language ranking factor;
 - YouTube reviews for games;
-- stale/wrong game image on card swipe.
+- stale/wrong game image on card swipe;
+- missing/placeholder Russian game descriptions.
 
 `CURRENT_TASK.md` should clearly distinguish `in_progress` from `planned`; adding a future task must not automatically mark it active.
