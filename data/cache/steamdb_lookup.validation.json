@@ -7,27 +7,46 @@
     "steamdb_cache_classification_blob_sha": "f95f5647d7f1b1b37842c9a033101ab94ae0b724",
     "lookup_contract_blob_sha": "5f962be5da75660dd5d9560ac66f65ea11b40ec2",
     "ownership_contract_blob_sha": "f0b5f48756489965ec223a42f3b234f62ac4bae1",
-    "github_runtime_state_blob_sha": "1d080c46d87d8b028fb22aacbfe9e7023607480e",
-    "prepared_runtime_resolutions_blob_sha": "2bbc068c45594a3512f581485aff59c560a6bec7"
+    "github_runtime_state_blob_sha": "d457bb61168be25ad49e660d2f052c120ba33259",
+    "prepared_runtime_resolutions_blob_sha": "a3bf67bade14016521bdb321602ea21f6b17effa"
   },
   "expected_true_miss_count": 9,
   "runtime_attempted_count": 9,
-  "validated_resolution_count": 5,
-  "unresolved_retry_count": 4,
-  "confirmed_min_count": 5,
+  "validated_resolution_count": 8,
+  "unresolved_retry_count": 1,
+  "confirmed_min_count": 8,
   "previously_free_count": 0,
   "unavailable_exact_history_count": 0,
   "blocked_or_failure_count": 0,
   "duplicate_registry_count": 0,
   "non_miss_query_count": 0,
-  "missing_result_count": 4,
+  "missing_result_count": 1,
   "unresolved_keys": [
-    "App_1282200",
-    "App_225320",
-    "App_630060",
     "App_901735"
   ],
   "lookup_registry": [
+    {
+      "key": "App_1282200",
+      "provider": "SteamDB",
+      "registry_key": "SteamDB:App_1282200",
+      "result": "confirmed_min",
+      "historical_min_kzt": 360,
+      "persistable": true,
+      "source_url": "https://steamdb.info/app/1282200/",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
+      "resolution_method": "direct_app_kzt_lowest_row"
+    },
+    {
+      "key": "App_225320",
+      "provider": "SteamDB",
+      "registry_key": "SteamDB:App_225320",
+      "result": "confirmed_min",
+      "historical_min_kzt": 196,
+      "persistable": true,
+      "source_url": "https://steamdb.info/app/225320/",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
+      "resolution_method": "direct_app_kzt_lowest_row"
+    },
     {
       "key": "App_2530470",
       "provider": "SteamDB",
@@ -36,7 +55,7 @@
       "historical_min_kzt": 3500,
       "persistable": true,
       "source_url": "https://steamdb.info/app/2530470/",
-      "checked_at_utc": "2026-08-30T20:58:09Z",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
       "resolution_method": "direct_app_kzt_lowest_row"
     },
     {
@@ -47,7 +66,7 @@
       "historical_min_kzt": 2600,
       "persistable": true,
       "source_url": "https://steamdb.info/app/2533600/",
-      "checked_at_utc": "2026-08-30T20:58:09Z",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
       "resolution_method": "direct_app_kzt_lowest_row"
     },
     {
@@ -58,7 +77,7 @@
       "historical_min_kzt": 725,
       "persistable": true,
       "source_url": "https://steamdb.info/app/2736020/",
-      "checked_at_utc": "2026-08-30T20:58:09Z",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
       "resolution_method": "direct_app_kzt_lowest_row"
     },
     {
@@ -69,7 +88,7 @@
       "historical_min_kzt": 900,
       "persistable": true,
       "source_url": "https://steamdb.info/app/3209480/",
-      "checked_at_utc": "2026-08-30T20:58:09Z",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
       "resolution_method": "direct_app_kzt_lowest_row"
     },
     {
@@ -80,12 +99,45 @@
       "historical_min_kzt": 162,
       "persistable": true,
       "source_url": "https://steamdb.info/app/399670/",
-      "checked_at_utc": "2026-08-30T20:58:09Z",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
+      "resolution_method": "direct_app_kzt_lowest_row"
+    },
+    {
+      "key": "App_630060",
+      "provider": "SteamDB",
+      "registry_key": "SteamDB:App_630060",
+      "result": "confirmed_min",
+      "historical_min_kzt": 84,
+      "persistable": true,
+      "source_url": "https://steamdb.info/app/630060/",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
       "resolution_method": "direct_app_kzt_lowest_row"
     }
   ],
   "confirmed_min": [
     {
+      "key": "App_1282200",
+      "provider": "SteamDB",
+      "registry_key": "SteamDB:App_1282200",
+      "result": "confirmed_min",
+      "historical_min_kzt": 360,
+      "persistable": true,
+      "source_url": "https://steamdb.info/app/1282200/",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
+      "resolution_method": "direct_app_kzt_lowest_row"
+    },
+    {
+      "key": "App_225320",
+      "provider": "SteamDB",
+      "registry_key": "SteamDB:App_225320",
+      "result": "confirmed_min",
+      "historical_min_kzt": 196,
+      "persistable": true,
+      "source_url": "https://steamdb.info/app/225320/",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
+      "resolution_method": "direct_app_kzt_lowest_row"
+    },
+    {
       "key": "App_2530470",
       "provider": "SteamDB",
       "registry_key": "SteamDB:App_2530470",
@@ -93,7 +145,7 @@
       "historical_min_kzt": 3500,
       "persistable": true,
       "source_url": "https://steamdb.info/app/2530470/",
-      "checked_at_utc": "2026-08-30T20:58:09Z",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
       "resolution_method": "direct_app_kzt_lowest_row"
     },
     {
@@ -104,7 +156,7 @@
       "historical_min_kzt": 2600,
       "persistable": true,
       "source_url": "https://steamdb.info/app/2533600/",
-      "checked_at_utc": "2026-08-30T20:58:09Z",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
       "resolution_method": "direct_app_kzt_lowest_row"
     },
     {
@@ -115,7 +167,7 @@
       "historical_min_kzt": 725,
       "persistable": true,
       "source_url": "https://steamdb.info/app/2736020/",
-      "checked_at_utc": "2026-08-30T20:58:09Z",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
       "resolution_method": "direct_app_kzt_lowest_row"
     },
     {
@@ -126,7 +178,7 @@
       "historical_min_kzt": 900,
       "persistable": true,
       "source_url": "https://steamdb.info/app/3209480/",
-      "checked_at_utc": "2026-08-30T20:58:09Z",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
       "resolution_method": "direct_app_kzt_lowest_row"
     },
     {
@@ -137,7 +189,18 @@
       "historical_min_kzt": 162,
       "persistable": true,
       "source_url": "https://steamdb.info/app/399670/",
-      "checked_at_utc": "2026-08-30T20:58:09Z",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
+      "resolution_method": "direct_app_kzt_lowest_row"
+    },
+    {
+      "key": "App_630060",
+      "provider": "SteamDB",
+      "registry_key": "SteamDB:App_630060",
+      "result": "confirmed_min",
+      "historical_min_kzt": 84,
+      "persistable": true,
+      "source_url": "https://steamdb.info/app/630060/",
+      "checked_at_utc": "2026-08-31T06:22:00Z",
       "resolution_method": "direct_app_kzt_lowest_row"
     }
   ],
