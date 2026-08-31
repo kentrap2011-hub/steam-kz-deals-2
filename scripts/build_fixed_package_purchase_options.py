@@ -43,42 +43,76 @@ def load_current_appids():
     return index, sorted(appids)
 
 
-def fetch_items(ids):
+def fetch_raw_batch(batch):
+    payload = {
+        'ids': batch,
+        'context': {
+            'language': 'english',
+            'country_code': 'KZ',
+            'steam_realm': 1,
+        },
+        'data_request': {
+            'include_all_purchase_options': True,
+            'include_basic_info': True,
+            'include_included_items': True,
+        },
+    }
+    url = (
+        'https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json='
+        + urllib.parse.quote(json.dumps(payload, separators=(',', ':')))
+    )
+    req = urllib.request.Request(
+        url,
+        headers={'User-Agent': 'steam-kz-deals/1.0', 'Accept': 'application/json'},
+    )
+    with urllib.request.urlopen(req, timeout=25) as response:
+        data = json.loads(response.read().decode('utf-8'))
+    return (data.get('response') or {}).get('store_items') or []
+
+
+def fetch_app_items(appids):
     items = []
     request_count = 0
-    for start in range(0, len(ids), BATCH_SIZE):
-        batch = ids[start:start + BATCH_SIZE]
-        payload = {
-            'ids': batch,
-            'context': {
-                'language': 'english',
-                'country_code': 'KZ',
-                'steam_realm': 1,
-            },
-            'data_request': {
-                'include_all_purchase_options': True,
-                'include_basic_info': True,
-                'include_included_items': True,
-            },
-        }
-        url = (
-            'https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json='
-            + urllib.parse.quote(json.dumps(payload, separators=(',', ':')))
-        )
-        req = urllib.request.Request(
-            url,
-            headers={'User-Agent': 'steam-kz-deals/1.0', 'Accept': 'application/json'},
-        )
-        with urllib.request.urlopen(req, timeout=25) as response:
-            data = json.loads(response.read().decode('utf-8'))
+    for start in range(0, len(appids), BATCH_SIZE):
+        batch_appids = appids[start:start + BATCH_SIZE]
+        batch = [{'appid': appid} for appid in batch_appids]
+        returned = fetch_raw_batch(batch)
         request_count += 1
-        returned = (data.get('response') or {}).get('store_items') or []
         if len(returned) != len(batch):
             raise SystemExit(
-                f'StoreBrowse batch cardinality mismatch: requested={len(batch)} returned={len(returned)}'
+                f'StoreBrowse app batch cardinality mismatch: requested={len(batch)} returned={len(returned)}'
             )
         items.extend(returned)
     return items, request_count
+
+
+def packageid_for_returned_item(store_item, requested_ids):
+    direct = int(store_item.get('id') or store_item.get('packageid') or 0)
+    if direct in requested_ids:
+        return direct
+    option_ids = {
+        int(option.get('packageid') or 0)
+        for option in (store_item.get('purchase_options') or [])
+        if int(option.get('packageid') or 0) in requested_ids
+    }
+    if len(option_ids) == 1:
+        return next(iter(option_ids))
+    return None
+
+
+def fetch_package_items(package_ids):
+    by_id = {}
+    request_count = 0
+    for start in range(0, len(package_ids), BATCH_SIZE):
+        batch_ids = package_ids[start:start + BATCH_SIZE]
+        requested = set(batch_ids)
+        returned = fetch_raw_batch([{'packageid': pid} for pid in batch_ids])
+        request_count += 1
+        for store_item in returned:
+            pid = packageid_for_returned_item(store_item, requested)
+            if pid is not None and pid not in by_id:
+                by_id[pid] = store_item
+    return by_id, request_count
 
 
 def package_ids_from_app_items(appids, items):
@@ -188,24 +222,28 @@ def classify_package(pid, store_item, source_appids, current_appids, observed_ep
 def main():
     started = time.monotonic()
     index, appids = load_current_appids()
-    app_items, app_request_count = fetch_items([{'appid': appid} for appid in appids])
+    app_items, app_request_count = fetch_app_items(appids)
     sources = package_ids_from_app_items(appids, app_items)
 
     package_ids = sorted(sources)
-    package_items, package_request_count = fetch_items(
-        [{'packageid': pid} for pid in package_ids]
-    ) if package_ids else ([], 0)
+    package_items, package_request_count = (
+        fetch_package_items(package_ids) if package_ids else ({}, 0)
+    )
 
     observed = datetime.now(timezone.utc)
     observed_epoch = int(observed.timestamp())
     current_appids = set(appids)
     packages = {}
     classifications = {}
-    for pid, item in zip(package_ids, package_items):
+    for pid in package_ids:
+        key = f'Sub_{pid}'
+        item = package_items.get(pid)
+        if item is None:
+            classifications[key] = 'package_not_returned_by_storebrowse'
+            continue
         entry, reason = classify_package(
             pid, item, sources[pid], current_appids, observed_epoch
         )
-        key = f'Sub_{pid}'
         if entry is not None:
             packages[key] = entry
             classifications[key] = 'eligible_fixed_multi_candidate_package'
