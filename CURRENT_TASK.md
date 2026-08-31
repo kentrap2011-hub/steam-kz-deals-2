@@ -50,12 +50,13 @@ Recovery decision:
 
 ## Parallel subtask: Steam fixed-package purchase options
 
-Статус: in_progress_research_and_implementation
+Статус: implementation_ready_on_feature_branch
 Выбрано пользователем: 2026-08-31
 Исходная backlog-оценка: `L5 / T4 / I4`
+Feature branch: `purchase-options-fixed-packages-20260831`
 
 Цель:
-- если Steam Store Package (`Sub_`) содержит одну или несколько игр текущего результата и является объективно более выгодным фиксированным вариантом покупки, producer должен это вычислить и передать готовым полем в visual payload;
+- если Steam Store Package (`Sub_`) содержит несколько игр текущего результата и является объективно более выгодным фиксированным вариантом покупки, producer должен это вычислить и передать готовым полем в visual payload;
 - UI только отображает готовую рекомендацию покупки;
 - текущий Taste scope/model/queue не менять.
 
@@ -63,40 +64,50 @@ Architecture preflight:
 1. Purchase-option discovery/comparison — deterministic GitHub responsibility по `config/execution_ownership_contract.json`.
 2. Новая scheduled ChatGPT stage не нужна.
 3. Новую recurring queue/quota/retry-loop не создавать.
-4. Использовать уже существующие Steam KZ commercial snapshot + official Steam app/package metadata route.
-5. Разработка идёт на отдельной branch, пока scheduled Taste-run пишет checkpoints в `main`; до окончания Taste не запускать намеренно production rebuild на main этой подзадачей.
+4. Использовать уже существующий Steam KZ StoreBrowse route.
+5. Реализация изолирована на feature branch; до окончания Taste не запускать намеренно production rebuild на `main` этой подзадачей.
 
-Уже подтверждено:
-- `scripts/steam_production.py` получает текущие KZ цены и скидки App/Sub из Steam Search и сохраняет их в mailing feed;
-- `scripts/build_pre_ai_store_snapshot.py` уже вызывает StoreBrowse с `include_all_purchase_options=True`, то есть связанные package IDs приходят в том же ночном StoreBrowse pass, но сейчас не сохраняются как отдельные purchase-only варианты;
-- StoreBrowse package-object предоставляет `included_appids`, а purchase option — `packageid`, fixed KZ price и discount; отдельный массовый `packagedetails` route для discovery не нужен;
-- `.github/workflows/build-offer-family-resolution.yml` уже сравнивает base app с package, если package содержит ровно одну base game;
-- multi-game package сейчас намеренно становится отдельной `franchise_bundle` family и не прикрепляется как purchase alternative к входящим играм;
-- это объясняет текущий пробел: BioShock, BioShock 2 и BioShock Infinite есть как отдельные строки, но `BioShock: The Collection` (`Sub_127633`) отсутствует в mailing feed и поэтому current offer-family stage его не видит;
-- fixed `Sub_` package можно обрабатывать неперсонализированно; dynamic Steam `/bundle/` / Complete-the-Set нельзя считать фиксированной ценой без отдельной доказанной price semantics — для них пока fail closed.
+Подтверждённые факты:
+- `scripts/build_pre_ai_store_snapshot.py` уже использует StoreBrowse `include_all_purchase_options=True`; Steam storefront для BioShock одновременно предлагает `BioShock: The Collection`, то есть purchase alternative существует на самой app-page и не требует отдельного поискового feed;
+- StoreBrowse package-object предоставляет `included_appids`, а purchase option — `packageid`, current fixed KZ price и discount;
+- multi-game package сейчас не прикрепляется как purchase alternative к входящим game families, поэтому этот слой действительно отсутствовал;
+- fixed `Sub_` package можно сравнивать неперсонализированно; dynamic Steam `/bundle/` / Complete-the-Set остаются исключены fail-closed.
 
 Проверенный regression-кейс:
-- current snapshot: `BioShock` 662 KZT, `BioShock 2` 397 KZT, `BioShock Infinite` 975 KZT; сумма трёх отдельных base titles = 2034 KZT;
-- `BioShock: The Collection` = Steam Store Package `Sub_127633`; текущая KZ цена подтверждена как 1420 KZT, то есть на 614 KZT дешевле уже только этих трёх отдельных покупок и дополнительно содержит другой контент;
-- current `offer_family.validation.json` для BioShock families не содержит package alternative.
+- fixture: `BioShock` 662 KZT + `BioShock 2` 397 KZT + `BioShock Infinite` 975 KZT = 2034 KZT;
+- `BioShock: The Collection` = `Sub_127633`, fixture current KZ price 1420 KZT;
+- ожидаемая экономия = 614 KZT;
+- Steam app-page BioShock подтверждает наличие `BioShock: The Collection` как отдельного варианта покупки.
 
-Предпочтительный implementation direction:
-1. В существующем shared StoreBrowse pass сохранить все fixed purchase `packageid`, полученные через `include_all_purchase_options=True`, как purchase-only seeds; не добавлять их в candidate/Taste scope.
-2. Одним дополнительным batched StoreBrowse GetItems pass по уникальным `packageid` получить package `included_appids`, name и current fixed KZ price/discount.
-3. Хранить discovered package purchase options отдельно от canonical candidate `entries`, чтобы изменение не делало Taste evidence/bindings stale.
-4. В purchase layer построить reverse membership `appid -> fixed packages` и сравнивать package с replaceable standalone purchase cost входящих текущих game families.
-5. Рекомендовать package только если он покрывает минимум две разные current game-family и fixed package price строго ниже суммы сопоставимых standalone primary prices.
-6. Не считать неизвестную ценность/неизвестные standalone prices экономией; дополнительный контент можно отображать как bonus с нулевой расчётной стоимостью.
-7. Dynamic/personalized `Bundle_` не сравнивать с fixed Sub до отдельного canonical contract extension.
-8. Producer должен передать selected/better purchase option и объяснение в final visual payload; UI ничего не пересчитывает.
+Что уже реализовано на feature branch:
+- `config/fixed_package_purchase_option_contract.json` — явный контракт `FIXED-PACKAGE-PURCHASE-OPTION-V1`;
+- `scripts/build_fixed_package_purchase_options.py` — discovery fixed `Sub_` через StoreBrowse, current KZ price + membership, purchase-only artifact `data/production/pre_ai/fixed_package_options.json`;
+- unavailable/старые optional package IDs не блокируют production: классифицируются как `package_not_returned_by_storebrowse`;
+- `scripts/apply_fixed_package_purchase_options.py` — producer-side сравнение только по currently visible base-game families;
+- package рекомендуется только при покрытии минимум двух distinct visible game families и строгой экономии относительно суммы их standalone current prices;
+- неизвестный дополнительный контент получает расчётную ценность 0 и не может искусственно создать экономию;
+- лучший package выбирается по большей абсолютной экономии, затем меньшей цене, затем packageid;
+- результат пишется в `better_purchase_option` и одновременно добавляется как дополнительный `offers` entry с готовым русским объяснением;
+- dynamic `/bundle/` / Complete-the-Set не поддерживаются и не сравниваются;
+- `.github/workflows/build-pre-ai-store-snapshot.yml` строит purchase-only artifact и запускает regression test;
+- `.github/workflows/build-daily-visual-payload.yml` применяет готовое package enrichment после final visual build и до commit;
+- `scripts/test_fixed_package_purchase_options.py` содержит BioShock regression и negative-path проверки; локально базовая версия тестового набора прошла `6/6`, затем добавлены ещё discovery safety regressions;
+- compare `main...purchase-options-fixed-packages-20260831` подтверждает, что branch не меняет Taste/cache/semantic файлы: только два existing workflow, новый contract и три package scripts.
+
+Что осталось перед production:
+1. Дождаться завершения/стабилизации текущего Taste V3 ingest, чтобы не смешивать две production-миграции.
+2. Обновить feature branch относительно актуального `main` (сейчас branch намеренно diverged из-за новых Taste commits на main).
+3. Запустить штатный pre-AI build уже после интеграции и проверить реальный `fixed_package_options.json`, особенно наличие `Sub_127633`.
+4. Запустить обычный downstream visual build и проверить, что BioShock-карточки получают `better_purchase_option` и корректную цену/экономию.
+5. После production-validation синхронизировать `PROJECT_ROUTES.md` / `PROJECT_DECISIONS.md`.
 
 Definition of done для подзадачи:
 - fixed package discovery не зависит только от того, появился ли `Sub_` отдельной строкой Steam Search;
-- BioShock regression на `Sub_127633` проходит детерминированно на fixture/test;
-- package recommendation считается producer-side и не влияет на Taste verdict/factors;
+- BioShock regression на `Sub_127633` проходит детерминированно;
+- package recommendation считается producer-side и не влияет на Taste verdict/factors/ranking;
 - personalized/dynamic bundle path остаётся fail-closed;
-- `PROJECT_ROUTES.md` и, если появляется новое архитектурное правило, `PROJECT_DECISIONS.md` обновлены;
-- после окончания Taste изменение можно безопасно интегрировать в main и проверить обычным downstream rebuild.
+- production build подтверждает реальный artifact и visual field;
+- `PROJECT_ROUTES.md` / `PROJECT_DECISIONS.md` обновлены после production-validation.
 
 ---
 
@@ -110,7 +121,7 @@ Taste:
 Purchase options:
 - fixed Steam Store Packages могут быть обнаружены через app relationships даже при отсутствии package row в search feed;
 - выгодный fixed package доходит до карточки как готовый producer-owned purchase option;
-- BioShock regression подтверждён.
+- BioShock regression подтверждён в production.
 
 После фактического завершения обеих активных частей синхронизировать `PROJECT_ROUTES.md` / `PROJECT_DECISIONS.md`; `CURRENT_TASK.md` удалить только когда нет активной незакрытой части.
 
