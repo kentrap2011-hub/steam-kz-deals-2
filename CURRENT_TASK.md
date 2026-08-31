@@ -39,11 +39,16 @@ Recovery decision:
 - one-shot fail-closed repair менял только canonical serialization aliases и fingerprint только при доказанном полном совпадении key/appid/current candidate context; verdict/evidence/taste_factors не менялись;
 - repair run #2 успешно завершён;
 - canonical bot commit: `35c4670699d6266cc498848e8b663d4f0530818d` — `Repair and ingest current Taste V3 checkpoints`;
-- active Taste inbox после успешного transactional ingest очищен;
-- canonical `data/production/pre_ai/chatgpt_payload.json` теперь показывает `ai_queue_count=234`, `ready_without_ai_count=366`, `purchase_context_line_count=600`;
-- следующий шаг: один раз вручную запустить ту же существующую scheduled ChatGPT production task с тем же усиленным prompt; worker обязан прочитать current GitHub queue и увидеть `234`, а не старые `634`;
-- после второго run проверить exact bindings/submissions, ingestion и что canonical Taste queue стала `0`;
-- SteamDB остаётся отдельно unresolved: `App_901735`, retryable blocked/failure; это не блокирует Taste completion.
+- после первого восстановительного run canonical payload показывал `ai_queue_count=234`, `ready_without_ai_count=366`, `purchase_context_line_count=600`;
+- второй scheduled run прочитал current queue `234`, оценил `100` результатов и опубликовал пять checkpoint-файлов суммарно на `100` результатов;
+- первые четыре checkpoint второго run (`80` результатов) доказанно canonically ingested; authoritative queue пересобралась с `234` до `154`;
+- пятый checkpoint `data/ai_inbox/taste/2026-08-31T1250Z-005.json` содержит следующие `20` строк в canonical queue order и на момент последней проверки всё ещё находится в active inbox; его ingestion пока не доказан;
+- exact bindings второго run снова корректны и скопированы verbatim из current projection: profile `c478cda9bb7a9b024a30ca188dce4b98a2de24ea`, model `taste-v3`, semantics `0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`, source snapshot `2026-08-30T20:37:43.818127+00:00`;
+- второй run правильно остановился fail-closed на GitHub-ingestion synchronization barrier и не создавал replacement remaining queue;
+- НЕ запускать scheduled worker ещё раз, пока checkpoint `2026-08-31T1250Z-005.json` остаётся в canonical inbox: новый run упрётся в тот же барьер;
+- следующий шаг: после конкретного сигнала об ingestion проверить один раз, что пятый checkpoint исчез из inbox и authoritative queue стала `134`; если checkpoint вместо этого застрял/упал, сначала диагностировать ingest, не пропуская его;
+- только после доказанного ingestion пятого checkpoint один раз вручную запустить ту же scheduled task для оставшейся current GitHub-owned queue;
+- SteamDB остаётся отдельно unresolved: prepared `1`, resolved `0`, blocked/retryable `App_901735`; это не блокирует Taste completion.
 
 ---
 
@@ -72,11 +77,11 @@ Architecture preflight:
 - multi-game package сейчас не прикрепляется как purchase alternative к входящим game families, поэтому этот слой действительно отсутствовал;
 - fixed `Sub_` package можно сравнивать неперсонализированно; dynamic Steam `/bundle/` / Complete-the-Set остаются исключены fail-closed.
 
-Проверенный regression-кейс:
-- fixture: `BioShock` 662 KZT + `BioShock 2` 397 KZT + `BioShock Infinite` 975 KZT = 2034 KZT;
-- `BioShock: The Collection` = `Sub_127633`, fixture current KZ price 1420 KZT;
-- ожидаемая экономия = 614 KZT;
-- Steam app-page BioShock подтверждает наличие `BioShock: The Collection` как отдельного варианта покупки.
+Проверенный regression-кейс и live nuance:
+- исходный deterministic fixture: `BioShock` 662 KZT + `BioShock 2` 397 KZT + `BioShock Infinite` 975 KZT = 2034 KZT; `BioShock: The Collection` fixture price 1420 KZT; fixture savings 614 KZT;
+- read-only live StoreBrowse test обнаружил `Sub_127633`, но current Steam membership возвращает remastered appids `409710`, `409720` и `8870`, а не старые original appids `7670`, `8850`;
+- current `family_graph` считает originals и remasters отдельными game families, поэтому production logic не должна угадывать edition-equivalence (`original == remaster`);
+- durable rule: package coverage подтверждается только фактическими included appids / canonical family mapping; никаких heuristic substitution между оригиналом и ремастером.
 
 Что уже реализовано на feature branch:
 - `config/fixed_package_purchase_option_contract.json` — явный контракт `FIXED-PACKAGE-PURCHASE-OPTION-V1`;
@@ -94,15 +99,17 @@ Architecture preflight:
 - compare `main...purchase-options-fixed-packages-20260831` подтверждает, что branch не меняет Taste/cache/semantic файлы: только два existing workflow, новый contract и три package scripts.
 
 Что осталось перед production:
-1. Дождаться полного закрытия Taste V3 queue, чтобы не смешивать две production-миграции.
-2. Обновить feature branch относительно актуального `main`.
-3. Запустить штатный pre-AI build уже после интеграции и проверить реальный `fixed_package_options.json`, особенно наличие `Sub_127633`.
-4. Запустить обычный downstream visual build и проверить, что BioShock-карточки получают `better_purchase_option` и корректную цену/экономию.
-5. После production-validation синхронизировать `PROJECT_ROUTES.md` / `PROJECT_DECISIONS.md`.
+1. Исправить deterministic/live BioShock regression так, чтобы он проверял фактические package members и не подменял remaster original-appid'ом.
+2. Повторить read-only live test; если он зелёный, package implementation технически готова к интеграции.
+3. Дождаться полного закрытия Taste V3 queue, чтобы не смешивать две production-миграции.
+4. Обновить feature branch относительно актуального `main`.
+5. Запустить штатный pre-AI build уже после интеграции и проверить реальный `fixed_package_options.json`.
+6. Запустить обычный downstream visual build и проверить реальные `better_purchase_option` только для фактически покрытых current families.
+7. После production-validation синхронизировать `PROJECT_ROUTES.md` / `PROJECT_DECISIONS.md`.
 
 Definition of done для подзадачи:
 - fixed package discovery не зависит только от того, появился ли `Sub_` отдельной строкой Steam Search;
-- BioShock regression на `Sub_127633` проходит детерминированно;
+- BioShock regression соответствует фактическому Steam membership и проходит детерминированно/live без edition guessing;
 - package recommendation считается producer-side и не влияет на Taste verdict/factors/ranking;
 - personalized/dynamic bundle path остаётся fail-closed;
 - production build подтверждает реальный artifact и visual field;
