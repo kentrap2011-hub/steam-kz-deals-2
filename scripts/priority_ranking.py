@@ -82,6 +82,19 @@ def _clamp(value, low, high):
     return max(low, min(high, value))
 
 
+def _validate_bands(name, component):
+    component_max = _as_number(component.get('max'), -1)
+    bands = component.get('bands') or []
+    if not bands:
+        raise ValueError(f'{name} bands must be non-empty')
+    for band in bands:
+        if _as_number(band.get('min'), 1) > _as_number(band.get('max'), 0):
+            raise ValueError(f'{name} band min exceeds max')
+        points = _as_number(band.get('points'), -1)
+        if points < 0 or points > component_max:
+            raise ValueError(f'{name} band points out of range')
+
+
 def load_final_policy(policy_path=POLICY):
     policy = json.loads(Path(policy_path).read_text(encoding='utf-8'))
     if policy.get('contract') != 'FINAL-PRIORITY-RANKING-V2' or policy.get('status') != 'canonical':
@@ -124,12 +137,29 @@ def validate_score_policy(policy):
     if positive_personal_max != personal_max:
         raise ValueError('personal positive component maxima must sum exactly to personal.max')
 
-    purchase_component_max = sum(
+    standalone_max = sum(
         _as_number((purchase.get(name) or {}).get('max'), -1)
         for name in ('savings', 'price', 'history')
     )
-    if purchase_component_max != purchase_max:
-        raise ValueError('purchase component maxima must sum exactly to purchase.max')
+    if standalone_max != purchase_max:
+        raise ValueError('standalone purchase component maxima must sum exactly to purchase.max')
+
+    package_cfg = purchase.get('fixed_package') or {}
+    if purchase.get('route_selection') != 'take_the_higher_transparent_score_between_standalone_and_eligible_fixed_package; ties_keep_standalone':
+        raise ValueError('purchase.route_selection is not the canonical route rule')
+    package_max = _as_number(package_cfg.get('max'), -1)
+    package_component_max = sum(
+        _as_number((package_cfg.get(name) or {}).get('max'), -1)
+        for name in ('savings_percent_vs_standalone', 'effective_price_per_game', 'coverage')
+    )
+    if package_max != purchase_max or package_component_max != package_max:
+        raise ValueError('fixed-package route component maxima must sum exactly to purchase.max')
+    if _as_number(package_cfg.get('minimum_covered_visible_games'), 0) < 2:
+        raise ValueError('fixed-package route must require at least two visible games')
+    if _as_number(package_cfg.get('max_total_price_rub_for_score'), 0) <= 0:
+        raise ValueError('fixed-package route requires a positive practical price ceiling')
+    if package_cfg.get('requires_strict_savings_vs_current_standalone') is not True:
+        raise ValueError('fixed-package route must require strict savings against current standalone prices')
 
     scale_max = _as_number(taste.get('normalized_scale_max'), 0)
     if scale_max <= 0:
@@ -172,17 +202,18 @@ def validate_score_policy(policy):
         raise ValueError('new/unconfirmed achievement bonus must not exceed 1.5 points')
 
     for name in ('savings', 'price'):
-        component = purchase.get(name) or {}
-        component_max = _as_number(component.get('max'), -1)
-        bands = component.get('bands') or []
-        if not bands:
-            raise ValueError(f'{name} bands must be non-empty')
-        for band in bands:
-            if _as_number(band.get('min'), 1) > _as_number(band.get('max'), 0):
-                raise ValueError(f'{name} band min exceeds max')
-            points = _as_number(band.get('points'), -1)
-            if points < 0 or points > component_max:
-                raise ValueError(f'{name} band points out of range')
+        _validate_bands(name, purchase.get(name) or {})
+    _validate_bands('fixed_package.savings_percent_vs_standalone', package_cfg.get('savings_percent_vs_standalone') or {})
+    _validate_bands('fixed_package.effective_price_per_game', package_cfg.get('effective_price_per_game') or {})
+
+    coverage = package_cfg.get('coverage') or {}
+    expected_coverage_keys = {'2', '3', '4', '5_plus'}
+    if set(coverage.get('count_points') or {}) != expected_coverage_keys:
+        raise ValueError('fixed_package.coverage.count_points must contain 2, 3, 4 and 5_plus')
+    for key, points in (coverage.get('count_points') or {}).items():
+        numeric = _as_number(points, -1)
+        if numeric < 0 or numeric > _as_number(coverage.get('max'), -1):
+            raise ValueError(f'fixed_package.coverage count {key} points out of range')
 
     return True
 
@@ -468,6 +499,123 @@ def _history_component(game, policy):
     }
 
 
+def _package_coverage_points(count, cfg):
+    table = cfg.get('count_points') or {}
+    if count >= 5:
+        return _as_number(table.get('5_plus'))
+    return _as_number(table.get(str(int(count))), 0)
+
+
+def _fixed_package_route(game, policy):
+    cfg = policy['score_model']['purchase']['fixed_package']
+    rec = game.get('better_purchase_option')
+    if not isinstance(rec, dict):
+        return {
+            'available': False,
+            'eligible_for_score': False,
+            'score': None,
+            'status': 'not_available',
+            'components': [],
+        }
+
+    count = int(_as_number(rec.get('covered_visible_game_count'), 0))
+    package_price = _as_number(rec.get('package_price_rub'), None)
+    standalone_total = _as_number(rec.get('standalone_total_rub'), None)
+    savings_rub = _as_number(rec.get('savings_rub'), None)
+    savings_percent = _as_number(rec.get('savings_percent_vs_standalone'), None)
+    if savings_percent is None and standalone_total and savings_rub is not None:
+        savings_percent = (savings_rub / standalone_total) * 100.0
+    per_game = _as_number(rec.get('package_price_per_visible_game_rub'), None)
+    if per_game is None and package_price is not None and count > 0:
+        per_game = package_price / count
+
+    minimum_count = int(_as_number(cfg.get('minimum_covered_visible_games'), 2))
+    price_ceiling = _as_number(cfg.get('max_total_price_rub_for_score'), 0)
+    strict_saving = savings_rub is not None and savings_rub > 0
+
+    status = 'eligible'
+    eligible = True
+    if count < minimum_count:
+        status, eligible = 'too_few_visible_games', False
+    elif package_price is None or package_price <= 0:
+        status, eligible = 'missing_package_price', False
+    elif package_price > price_ceiling:
+        status, eligible = 'package_over_practical_price_ceiling', False
+    elif not strict_saving:
+        status, eligible = 'no_strict_saving_vs_standalone', False
+    elif savings_percent is None or per_game is None:
+        status, eligible = 'incomplete_package_economics', False
+
+    if not eligible:
+        return {
+            'available': True,
+            'eligible_for_score': False,
+            'score': None,
+            'status': status,
+            'components': [],
+            'package_key': rec.get('package_key'),
+            'package_title': rec.get('package_title'),
+            'package_price_rub': package_price,
+            'covered_visible_game_count': count,
+            'standalone_total_rub': standalone_total,
+            'savings_rub': savings_rub,
+            'savings_percent_vs_standalone': savings_percent,
+            'effective_price_per_game_rub': per_game,
+            'max_total_price_rub_for_score': price_ceiling,
+        }
+
+    savings_cfg = cfg['savings_percent_vs_standalone']
+    price_cfg = cfg['effective_price_per_game']
+    coverage_cfg = cfg['coverage']
+    savings_points = _band_points(savings_percent, savings_cfg)
+    price_points = _band_points(per_game, price_cfg)
+    coverage_points = _package_coverage_points(count, coverage_cfg)
+    components = [
+        {
+            'id': 'package_savings_percent',
+            'label': savings_cfg.get('label') or 'Экономия набора',
+            'points': savings_points,
+            'max_points': _as_number(savings_cfg.get('max')),
+            'value': f'{savings_percent:.1f}% · {int(round(savings_rub)):,} ₽'.replace(',', ' '),
+            'savings_percent_vs_standalone': savings_percent,
+            'savings_rub': savings_rub,
+        },
+        {
+            'id': 'package_effective_price',
+            'label': price_cfg.get('label') or 'Цена за одну игру в наборе',
+            'points': price_points,
+            'max_points': _as_number(price_cfg.get('max')),
+            'value': f'≈ {int(round(per_game)):,} ₽/игра'.replace(',', ' '),
+            'effective_price_per_game_rub': per_game,
+        },
+        {
+            'id': 'package_coverage',
+            'label': coverage_cfg.get('label') or 'Игр в наборе',
+            'points': coverage_points,
+            'max_points': _as_number(coverage_cfg.get('max')),
+            'value': f'{count} игры из текущего списка',
+            'covered_visible_game_count': count,
+        },
+    ]
+    score = _clamp(sum(_as_number(row.get('points')) for row in components), 0, _as_number(cfg.get('max')))
+    return {
+        'available': True,
+        'eligible_for_score': True,
+        'score': score,
+        'status': status,
+        'components': components,
+        'package_key': rec.get('package_key'),
+        'package_title': rec.get('package_title'),
+        'package_price_rub': package_price,
+        'covered_visible_game_count': count,
+        'standalone_total_rub': standalone_total,
+        'savings_rub': savings_rub,
+        'savings_percent_vs_standalone': savings_percent,
+        'effective_price_per_game_rub': per_game,
+        'max_total_price_rub_for_score': price_ceiling,
+    }
+
+
 def build_score_breakdown(game, policy):
     model = policy['score_model']
     digits = int(model.get('round_digits', 1))
@@ -485,13 +633,31 @@ def build_score_breakdown(game, policy):
     personal_raw = sum(_as_number(row.get('points')) for row in personal_components)
     personal_score = _round(_clamp(personal_raw, 0, _as_number(personal_cfg.get('max'))), digits)
 
-    purchase_components = [
+    standalone_components = [
         _savings_component(game, policy),
         _price_component(game, policy),
         _history_component(game, policy),
     ]
-    purchase_raw = sum(_as_number(row.get('points')) for row in purchase_components)
-    purchase_score = _round(_clamp(purchase_raw, 0, _as_number(purchase_cfg.get('max'))), digits)
+    standalone_raw = sum(_as_number(row.get('points')) for row in standalone_components)
+    standalone_score = _round(_clamp(standalone_raw, 0, _as_number(purchase_cfg.get('max'))), digits)
+
+    package_route = _fixed_package_route(game, policy)
+    package_score = package_route.get('score')
+    use_package = (
+        package_route.get('eligible_for_score') is True
+        and package_score is not None
+        and float(package_score) > float(standalone_score)
+    )
+    if use_package:
+        purchase_route = 'fixed_package'
+        purchase_route_label = (purchase_cfg.get('fixed_package') or {}).get('label') or 'Выгодный набор Steam'
+        purchase_components = package_route.get('components') or []
+        purchase_score = _round(_clamp(package_score, 0, _as_number(purchase_cfg.get('max'))), digits)
+    else:
+        purchase_route = 'standalone'
+        purchase_route_label = 'Покупка игры отдельно'
+        purchase_components = standalone_components
+        purchase_score = standalone_score
 
     total = _round(
         _clamp(personal_score + purchase_score, 0, _as_number(model.get('total_max'))),
@@ -502,6 +668,11 @@ def build_score_breakdown(game, policy):
         'label': taste['source_label'],
         'is_coarse_legacy': taste['source'] == 'legacy_coarse_fit',
     }
+    standalone_savings = next(row for row in standalone_components if row['id'] == 'savings')
+    package_delta = None
+    if package_score is not None:
+        package_delta = _round(float(package_score) - float(standalone_score), digits)
+
     return {
         'contract': policy['contract'],
         'total_score': total,
@@ -512,6 +683,14 @@ def build_score_breakdown(game, policy):
         'purchase_score': purchase_score,
         'purchase_max': _as_number(purchase_cfg.get('max')),
         'purchase_label': purchase_cfg.get('label') or 'Выгодность покупки',
+        'purchase_route': purchase_route,
+        'purchase_route_label': purchase_route_label,
+        'standalone_purchase_score': standalone_score,
+        'fixed_package_purchase_score': _round(package_score, digits) if package_score is not None else None,
+        'package_score_delta_vs_standalone': package_delta,
+        'package_route': package_route,
+        'standalone_purchase_components': standalone_components,
+        'standalone_savings_rub': standalone_savings.get('savings_rub'),
         'personal_components': personal_components,
         'purchase_components': purchase_components,
         'precision': precision,
@@ -609,15 +788,19 @@ def apply_final_priority_order(items, now=None, policy_path=POLICY):
         game['practical_or_personal_risk_rank'] = practical_risk_rank(game, policy)
         game['risk_status'] = build_risk_status(game, policy)
         game['score_breakdown'] = build_score_breakdown(game, policy)
-        game['total_score'] = game['score_breakdown']['total_score']
-        game['personal_score'] = game['score_breakdown']['personal_score']
-        game['purchase_score'] = game['score_breakdown']['purchase_score']
-        savings_component = next(
-            row for row in game['score_breakdown']['purchase_components'] if row['id'] == 'savings'
+        breakdown = game['score_breakdown']
+        game['total_score'] = breakdown['total_score']
+        game['personal_score'] = breakdown['personal_score']
+        game['purchase_score'] = breakdown['purchase_score']
+        game['purchase_route'] = breakdown['purchase_route']
+        game['package_value_points'] = (
+            max(0.0, _as_number(breakdown.get('package_score_delta_vs_standalone'), 0))
+            if breakdown.get('purchase_route') == 'fixed_package'
+            else 0.0
         )
-        game['savings_rub'] = savings_component.get('savings_rub')
+        game['savings_rub'] = breakdown.get('standalone_savings_rub')
         risk_component = next(
-            row for row in game['score_breakdown']['personal_components'] if row['id'] == 'risk'
+            row for row in breakdown['personal_components'] if row['id'] == 'risk'
         )
         game['risk_status']['score_penalty'] = -_as_number(risk_component.get('points'))
 
