@@ -1,7 +1,7 @@
 {
   "contract": "FINAL-PRIORITY-RANKING-V2",
   "status": "canonical",
-  "updated_at": "2026-08-30",
+  "updated_at": "2026-08-31",
   "purpose": "Single machine-readable source of truth for the transparent 0-100 final automatic priority_rank after all visual enrichment and refinement are complete. Every numeric weight, threshold and point table used by final scoring lives here so tuning does not require code changes.",
   "precedence": {
     "rule": "This contract is authoritative for final priority_rank and score_breakdown. Older sorting arrays and qualitative priority buckets remain eligibility/explanation context only and must not be used as an independent final sort layer.",
@@ -16,6 +16,7 @@
       "RANK-009",
       "RANK-010",
       "RANK-011",
+      "RANK-012",
       "UI-001"
     ]
   },
@@ -84,16 +85,28 @@
       "achievements": {
         "label": "Достижения",
         "max": 3,
-        "quality_points": {
+        "min": -6,
+        "played_confirmation": "numeric_direct_user_evidence_rating",
+        "played_quality_points": {
           "5": 3,
           "4": 2.5,
           "3": 2,
-          "2": 1,
-          "1": 0.5
+          "2": -2,
+          "1": -4
         },
-        "present_quality_unknown_points": 1.5,
-        "status_unknown_points": 1.5,
-        "absent_points": 0
+        "played_present_quality_unknown_points": 0,
+        "played_status_unknown_points": 0,
+        "played_absent_points": -6,
+        "new_or_unconfirmed_quality_points": {
+          "5": 1.5,
+          "4": 1.25,
+          "3": 1,
+          "2": 0.5,
+          "1": 0.25
+        },
+        "new_or_unconfirmed_present_quality_unknown_points": 0.75,
+        "new_or_unconfirmed_status_unknown_points": 0,
+        "new_or_unconfirmed_absent_points": 0
       },
       "duration": {
         "label": "Продолжительность",
@@ -188,7 +201,7 @@
     "discount_percent": "display/context only; V2 scores the absolute ruble saving instead",
     "priority_bucket": "eligibility/explanation context only; not a V2 final ranking factor",
     "purchase_decision": "explanation label only; do not double-count price/history through it",
-    "direct_user_evidence": "used as the strongest taste-score source when an exact rating exists; do not add a second bonus",
+    "direct_user_evidence": "used as the strongest taste-score source when an exact rating exists and as confirmed prior-play evidence for the context-sensitive achievement component; do not add another independent direct-rating bonus",
     "sale_expiry_urgency": "absolute display-priority layer outside 0-100"
   },
   "ui_override": {
