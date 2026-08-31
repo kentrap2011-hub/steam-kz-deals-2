@@ -10,29 +10,51 @@
 - final Taste ingest, downstream visual build и deploy подтверждены зелёными;
 - model binding: `taste-v3`, semantics `0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`.
 
-### Steam fixed-package purchase options
-Статус: `complete_production_validated`.
+## Активная работа
 
-Правило:
+### Steam fixed-package purchase options — visibility + ranking value
+Статус: `reopened_in_progress`.
+
+Почему переоткрыто:
+- предыдущая production-validation доказала только, что producer нашёл package options и записал их в visual payload;
+- пользователь фактически не видит наборы на странице, поэтому UI acceptance не была доказана;
+- старое правило `Taste/ranking не меняются` неверно для продукта: выгодный multi-game package должен повышать ценность покупки и итоговый рейтинг.
+
+Сохраняемые safety-инварианты:
 - только fixed Steam Store Package (`Sub_`);
 - >=2 currently visible base-game families;
 - покрытие только по actual included appids / canonical family membership;
 - original/remaster equivalence не угадывается;
-- package должен быть строго дешевле суммы standalone current KZT prices;
+- package должен быть строго дешевле суммы standalone current prices;
 - family считается один раз, unknown extra content value = 0;
-- dynamic/personalized Complete-the-Set `/bundle/` исключён fail-closed;
-- Taste/ranking не меняются, UI только отображает producer-owned `better_purchase_option` / package offer.
+- dynamic/personalized Complete-the-Set `/bundle/` исключён fail-closed.
 
-Production proof:
+Новые обязательные требования:
+1. На карточке выгодный набор показывается отдельным заметным producer-owned блоком, а не как неотличимый дополнительный offer.
+2. Блок показывает как минимум: название набора, package price, сколько видимых игр он покрывает, их названия, standalone total, абсолютную экономию и ориентировочную цену за одну покрытую игру.
+3. Есть явная кнопка открытия package в Steam.
+4. Выгодность package влияет на final purchase score / `total_score`, а значит и на automatic rank.
+5. Пример продуктового смысла: одна игра за ~150 ₽ хороша, но фиксированный набор примерно за 300 ₽ с 4 подходящими играми должен получить заметно более высокую оценку покупки, если сам package укладывается в practical purchase constraints.
+6. Package boost должен быть прозрачным отдельным компонентом `score_breakdown`, а не скрытой сортировкой.
+7. Нельзя повысить Taste: package влияет только на practical/purchase часть.
+8. Не допускать двойного счёта одной и той же выгоды; формула должна явно различать standalone economics и дополнительную multi-game value.
+9. Ranking review должен экспортировать package count/price/savings/value points, чтобы top-30 audit видел реальный driver.
+10. UI regression: fixture с `better_purchase_option` обязан рендерить заметный package block; ranking regression: при прочих равных выгодный 4-game package существенно выше standalone-only варианта.
+
+Предыдущий production proof (не является Definition of Done после reopening):
 - merge PR #1 -> main commit `1438d6531062cd884a42177b33151606fc5e5fe9`;
-- pre-AI run #65 / `33418890981` success, package regression success;
-- real `fixed_package_options.json`: 679 app candidates, 795 package ids discovered, 19 eligible fixed packages, classification complete;
-- visual run #110 / `33418941938` success: `items=445`, `qualifying_packages=7`, `touched_games=17`, `RANKING_REVIEW_ROWS=445`;
-- visual commit `5b3b9244e207fb11cd32de22ed866f04ee896df8`;
-- deploy run #149 / `33418983959` success;
-- durable fast route: `docs/fixed_package_purchase_options.md`.
+- pre-AI run #65 / `33418890981` success;
+- real `fixed_package_options.json`: 679 app candidates, 795 package ids discovered, 19 eligible fixed packages;
+- visual run #110 / `33418941938`: `qualifying_packages=7`, `touched_games=17`;
+- deploy run #149 / `33418983959` success.
 
-Diagnostic note: large generated JSON may be surfaced as empty by the GitHub connector. For this feature, bounded workflow logs and ranking-lookup counts are authoritative validation before attempting huge-file reads.
+Definition of done теперь:
+- реальный deployed page явно показывает package block хотя бы на одном production game с `better_purchase_option`;
+- package economics входят в transparent final score и реально меняют rank на regression + production data;
+- score остаётся в каноническом диапазоне и не повышает Taste;
+- ranking review показывает package driver;
+- downstream build/deploy зелёные после изменений;
+- docs/decision/routing синхронизированы только после этой пользовательской acceptance-границы.
 
 ## Не активная основная работа
 
@@ -86,4 +108,4 @@ Diagnostic note: large generated JSON may be surfaced as empty by the GitHub con
 
 ## Текущий статус работ
 
-Сейчас незавершённой `in_progress` задачи нет. Следующую плановую задачу начинать только после явного выбора пользователя; наличие пункта в backlog не означает, что он активен.
+Сейчас активна одна задача: fixed-package visibility + ranking value. Не закрывать её только по producer/log proof без проверки фактического UI и изменения рейтинга.
