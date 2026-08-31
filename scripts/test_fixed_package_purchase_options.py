@@ -41,7 +41,38 @@ def run(packages, families, items):
     return build_recommendations(artifact, graph, items, RATE)
 
 
-def test_bioshock_regression():
+def test_bioshock_collection_actual_member_regression():
+    # These KZT values are deterministic comparison fixtures, not a live-price assertion.
+    # The important regression is the current Steam package membership identity:
+    # BioShock Remastered (409710), BioShock 2 Remastered (409720), BioShock Infinite (8870).
+    families = [
+        family('game:409710', 409710, 662, 'BioShock Remastered'),
+        family('game:409720', 409720, 397, 'BioShock 2 Remastered'),
+        family('game:8870', 8870, 975, 'BioShock Infinite'),
+    ]
+    items = [
+        visible('game:409710', 'BioShock Remastered'),
+        visible('game:409720', 'BioShock 2 Remastered'),
+        visible('game:8870', 'BioShock Infinite'),
+    ]
+    packages = [
+        package(
+            127633,
+            1420,
+            [409710, 409720, 8870],
+            'BioShock: The Collection',
+        )
+    ]
+    recs, best = run(packages, families, items)
+    assert len(recs) == 1
+    rec = recs[0]
+    assert rec['standalone_total_kzt'] == 2034
+    assert rec['savings_kzt'] == 614
+    assert rec['covered_visible_game_count'] == 3
+    assert set(best) == {'game:409710', 'game:409720', 'game:8870'}
+
+
+def test_package_does_not_guess_original_remaster_equivalence():
     families = [
         family('game:7670', 7670, 662, 'BioShock'),
         family('game:8850', 8850, 397, 'BioShock 2'),
@@ -56,17 +87,13 @@ def test_bioshock_regression():
         package(
             127633,
             1420,
-            [7670, 8850, 8870, 409710, 409720],
+            [409710, 409720, 8870],
             'BioShock: The Collection',
         )
     ]
     recs, best = run(packages, families, items)
-    assert len(recs) == 1
-    rec = recs[0]
-    assert rec['standalone_total_kzt'] == 2034
-    assert rec['savings_kzt'] == 614
-    assert rec['covered_visible_game_count'] == 3
-    assert set(best) == {'game:7670', 'game:8850', 'game:8870'}
+    assert recs == []
+    assert best == {}
 
 
 def test_more_expensive_package_is_not_recommended():
@@ -148,7 +175,7 @@ def test_package_classification_requires_two_current_apps():
     item = {
         'id': 127633,
         'name': 'BioShock: The Collection',
-        'included_appids': [7670, 409710],
+        'included_appids': [409710, 409720, 8870],
         'purchase_options': [{
             'packageid': 127633,
             'final_price_in_cents': 142000,
@@ -160,8 +187,8 @@ def test_package_classification_requires_two_current_apps():
     entry, reason = classify_package(
         127633,
         item,
-        {7670},
-        {7670, 8850, 8870},
+        {409710},
+        {409710},
         1,
     )
     assert entry is None
@@ -170,7 +197,8 @@ def test_package_classification_requires_two_current_apps():
 
 def main():
     tests = [
-        test_bioshock_regression,
+        test_bioshock_collection_actual_member_regression,
+        test_package_does_not_guess_original_remaster_equivalence,
         test_more_expensive_package_is_not_recommended,
         test_single_visible_game_does_not_trigger_multi_game_advice,
         test_unknown_extra_content_adds_no_assumed_value,
