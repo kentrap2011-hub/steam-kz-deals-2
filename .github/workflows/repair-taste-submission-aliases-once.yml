@@ -1,0 +1,69 @@
+name: Repair current Taste V3 submission aliases once
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/repair-taste-submission-aliases-once.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pre-ai-deterministic-payload
+  cancel-in-progress: false
+
+jobs:
+  repair-and-ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Normalize only proven serialization aliases and dry-run canonical validator
+        run: python scripts/repair_taste_submission_aliases_once.py
+
+      - name: Run existing transactional Taste inbox processor
+        run: python scripts/process_taste_inbox.py
+
+      - name: Commit canonical ingest result
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add -A \
+            data/ai_inbox/taste \
+            data/cache/taste_fit.entry_overlay.json \
+            data/cache/taste_fit.entry_index.json \
+            data/cache/taste_ingest_receipts \
+            data/production/pre_ai/taste_projection.json \
+            data/production/pre_ai/chatgpt_payload.json \
+            data/production/pre_ai/chatgpt_taste_queue.jsonl \
+            data/production/pre_ai/chatgpt_purchase_context.jsonl
+          git diff --cached --check
+          changed="$(git diff --cached --name-only)"
+          echo "$changed"
+          test -n "$changed"
+          git commit -m "Repair and ingest current Taste V3 checkpoints"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
