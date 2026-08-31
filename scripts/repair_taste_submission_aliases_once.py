@@ -7,9 +7,31 @@ from taste_cache_common import candidate_context_digest
 
 PROJECTION = Path('data/production/pre_ai/taste_projection.json')
 QUEUE = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
-TARGET = Path('data/ai_inbox/taste/2026-08-31T1250Z-005.json')
-EXPECTED_RESULTS = 20
-EXPECTED_REPAIR_KEY = 'App_461620'
+TARGET = Path('data/ai_inbox/taste/2026-08-31T1407Z-001.json')
+EXPECTED_KEYS = [
+    'App_515570',
+    'App_520720',
+    'App_526160',
+    'App_531510',
+    'App_539470',
+    'App_539720',
+    'App_540840',
+    'App_544330',
+    'App_545040',
+    'App_55230',
+]
+EXPECTED_EXCLUDE_ALIAS_KEYS = {
+    'App_515570',
+    'App_520720',
+    'App_539720',
+    'App_545040',
+}
+BINDING_FIELDS = (
+    'profile_blob_sha',
+    'taste_model_version',
+    'taste_semantics_sha256',
+    'source_mailing_updated_at_utc',
+)
 
 
 def load(path):
@@ -61,69 +83,96 @@ def main():
     if not TARGET.exists():
         raise SystemExit(f'Missing expected pending checkpoint: {TARGET}')
     doc = load(TARGET)
+    before_doc = copy.deepcopy(doc)
+
     if doc.get('schema_version') != 1:
         raise SystemExit('Unexpected pending checkpoint schema_version')
-    if doc.get('bindings') != bindings:
-        raise SystemExit('Pending checkpoint bindings are no longer current; repair refused')
+    if doc.get('bindings') is not None:
+        raise SystemExit('Expected the known malformed checkpoint to have no nested bindings object')
 
-    results = doc.get('results')
-    if not isinstance(results, list) or len(results) != EXPECTED_RESULTS:
+    submitted_top_level_bindings = {field: doc.get(field) for field in BINDING_FIELDS}
+    if submitted_top_level_bindings != bindings:
         raise SystemExit(
-            f'Expected exactly {EXPECTED_RESULTS} pending results, '
-            f'got {len(results) if isinstance(results, list) else None}'
+            'Top-level binding values are not exactly the current canonical bindings; repair refused'
         )
 
-    changed = []
+    results = doc.get('results')
+    if not isinstance(results, list):
+        raise SystemExit('Pending checkpoint results must be a list')
+    keys = [row.get('key') if isinstance(row, dict) else None for row in results]
+    if keys != EXPECTED_KEYS:
+        raise SystemExit(f'Pending checkpoint key/order mismatch: {keys!r}')
+
+    serialization_changed_keys = set()
     for result in results:
-        if not isinstance(result, dict):
-            raise SystemExit('Pending checkpoint contains a non-object result')
-        key = result.get('key')
+        key = result['key']
         queue_row = queue_by_key.get(key)
         if queue_row is None:
             raise SystemExit(f'Pending key is not in current queue: {key}')
 
+        if str(result.get('appid')) != str(queue_row.get('appid')):
+            raise SystemExit(f'Appid mismatch for {key}')
+        if result.get('taste_fingerprint') != queue_row.get('taste_fingerprint'):
+            raise SystemExit(f'Taste fingerprint mismatch for {key}; this repair does not alter identity')
+        if result.get('candidate_context_sha256') != queue_row.get('candidate_context_sha256'):
+            raise SystemExit(f'Candidate context mismatch for {key}')
+        if result.get('candidate_context_sha256') != prove_current_queue_context(queue_row):
+            raise SystemExit(f'Canonical candidate-context proof failed for {key}')
+
         semantic_before = {
             field: copy.deepcopy(result.get(field))
-            for field in ('verdict', 'fit_level', 'reason_code', 'positive_evidence', 'negative_evidence', 'taste_factors')
+            for field in ('verdict', 'positive_evidence', 'negative_evidence', 'taste_factors')
         }
 
-        submitted_fp = result.get('taste_fingerprint')
-        current_fp = queue_row.get('taste_fingerprint')
-        if submitted_fp != current_fp:
-            if key != EXPECTED_REPAIR_KEY:
+        if key in EXPECTED_EXCLUDE_ALIAS_KEYS:
+            if result.get('verdict') != 'EXCLUDE':
+                raise SystemExit(f'Expected EXCLUDE for known alias row {key}')
+            if result.get('fit_level') != 'weak' or result.get('reason_code') != 'exclude_weak':
                 raise SystemExit(
-                    f'Unexpected fingerprint mismatch for {key}; one-shot repair only authorizes '
-                    f'{EXPECTED_REPAIR_KEY}'
+                    f'Unexpected noncanonical exclusion serialization for {key}: '
+                    f"fit={result.get('fit_level')!r} reason={result.get('reason_code')!r}"
                 )
-            if str(result.get('appid')) != str(queue_row.get('appid')):
-                raise SystemExit(f'Appid mismatch cannot be repaired for {key}')
-            input_context = result.get('candidate_context_sha256')
-            current_context = queue_row.get('candidate_context_sha256')
-            if input_context != current_context:
-                raise SystemExit(f'Candidate context mismatch cannot be repaired for {key}')
-            proven_context = prove_current_queue_context(queue_row)
-            if input_context != proven_context:
-                raise SystemExit(f'Canonical context proof failed for {key}')
-
-            result['taste_fingerprint'] = current_fp
-            changed.append({
-                'key': key,
-                'input_taste_fingerprint': submitted_fp,
-                'canonical_taste_fingerprint': current_fp,
-                'candidate_context_sha256': input_context,
-            })
+            result['fit_level'] = 'below_moderate'
+            result['reason_code'] = 'exclude_insufficient'
+            serialization_changed_keys.add(key)
+        else:
+            expected_pairs = {
+                ('INCLUDE', 'strong', 'include_strong'),
+                ('INCLUDE', 'moderate', 'include_moderate'),
+            }
+            actual = (result.get('verdict'), result.get('fit_level'), result.get('reason_code'))
+            if actual not in expected_pairs:
+                raise SystemExit(f'Unexpected serialization for non-alias row {key}: {actual!r}')
 
         semantic_after = {
             field: result.get(field)
-            for field in ('verdict', 'fit_level', 'reason_code', 'positive_evidence', 'negative_evidence', 'taste_factors')
+            for field in ('verdict', 'positive_evidence', 'negative_evidence', 'taste_factors')
         }
         if semantic_before != semantic_after:
-            raise SystemExit(f'Repair attempted to alter semantic content for {key}')
+            raise SystemExit(f'Repair attempted to alter verdict/evidence/factors for {key}')
 
-    if len(changed) != 1 or changed[0]['key'] != EXPECTED_REPAIR_KEY:
+    if serialization_changed_keys != EXPECTED_EXCLUDE_ALIAS_KEYS:
         raise SystemExit(
-            f'Expected exactly one proven repair for {EXPECTED_REPAIR_KEY}; got {changed!r}'
+            f'Expected exactly alias keys {sorted(EXPECTED_EXCLUDE_ALIAS_KEYS)}, '
+            f'got {sorted(serialization_changed_keys)}'
         )
+
+    doc['bindings'] = bindings
+    for field in BINDING_FIELDS:
+        doc.pop(field, None)
+
+    # Prove that the only envelope change is moving the exact four binding values into
+    # `bindings`, and the only result changes are the four explicit serialization aliases.
+    before_results = {row['key']: row for row in before_doc['results']}
+    after_results = {row['key']: row for row in doc['results']}
+    for key in EXPECTED_KEYS:
+        before = before_results[key]
+        after = after_results[key]
+        for field in before:
+            if field in {'fit_level', 'reason_code'} and key in EXPECTED_EXCLUDE_ALIAS_KEYS:
+                continue
+            if before.get(field) != after.get(field):
+                raise SystemExit(f'Unexpected changed field {field!r} for {key}')
 
     TARGET.write_text(
         json.dumps(doc, ensure_ascii=False, separators=(',', ':')) + '\n',
@@ -137,12 +186,13 @@ def main():
 
     print(json.dumps({
         'status': 'validated',
-        'scope': 'single_proven_identity_copy_error_only',
+        'scope': 'known_envelope_and_serialization_aliases_only',
         'file': TARGET.name,
         'result_count': len(results),
-        'repairs': changed,
-        'bindings_unchanged': True,
-        'semantic_content_unchanged': True,
+        'bindings_moved_into_nested_object': True,
+        'serialization_changed_keys': sorted(serialization_changed_keys),
+        'identity_unchanged_and_current_queue_proven': True,
+        'verdict_evidence_factors_unchanged': True,
         'canonical_dry_run': True,
     }, ensure_ascii=False, indent=2))
     print('TASTE_ALIAS_REPAIR=PASS')
