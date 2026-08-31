@@ -1,3 +1,7 @@
+from copy import deepcopy
+from pathlib import Path
+
+import priority_ranking
 from apply_fixed_package_purchase_options import build_recommendations
 from build_fixed_package_purchase_options import classify_package, packageid_for_returned_item
 
@@ -41,6 +45,49 @@ def run(packages, families, items):
     return build_recommendations(artifact, graph, items, RATE)
 
 
+def ranking_game(title, **overrides):
+    row = {
+        'id': f'game:{title}',
+        'title': title,
+        'fit': 'strong',
+        'source_fit': 'strong',
+        'risk_level': 'low',
+        'risk_codes': [],
+        'wishlist': False,
+        'history_quality': 'record',
+        'discount_percent': 50,
+        'original_price_rub': 300,
+        'current_price_rub': 150,
+        'duration_preference_band': 'unknown',
+        'estimated_duration_hours': None,
+        'sale_end_utc': '2026-09-05T12:00:00Z',
+        'direct_user_evidence': {'level': 'none'},
+        'practical': {
+            'modern_windows_friction': 'unknown',
+            'steam_achievements': True,
+            'achievement_quality': 3,
+        },
+    }
+    row.update(overrides)
+    return row
+
+
+def strong_four_game_package(price=300):
+    return {
+        'package_key': 'Sub_400',
+        'packageid': 400,
+        'package_title': 'Four Game Pack',
+        'package_price_rub': price,
+        'package_price_per_visible_game_rub': round(price / 4, 1),
+        'covered_visible_game_count': 4,
+        'covered_visible_titles': ['One', 'Two', 'Three', 'Four'],
+        'standalone_total_rub': 600,
+        'savings_rub': 600 - price,
+        'savings_percent_vs_standalone': round(((600 - price) / 600) * 100, 1),
+        'web_url': 'https://store.steampowered.com/sub/400/',
+    }
+
+
 def test_bioshock_collection_actual_member_regression():
     families = [
         family('game:409710', 409710, 662, 'BioShock Remastered'),
@@ -59,6 +106,7 @@ def test_bioshock_collection_actual_member_regression():
     assert rec['standalone_total_kzt'] == 2034
     assert rec['savings_kzt'] == 614
     assert rec['covered_visible_game_count'] == 3
+    assert rec['package_price_per_visible_game_rub'] == round(rec['package_price_rub'] / 3, 1)
     assert set(best) == {'game:409710', 'game:409720', 'game:8870'}
 
 
@@ -144,6 +192,56 @@ def test_package_classification_requires_two_current_apps():
     assert reason == 'fewer_than_two_current_app_candidates'
 
 
+def test_four_game_package_materially_improves_purchase_score_without_changing_taste():
+    standalone = ranking_game('Standalone')
+    bundled = ranking_game('Bundled', better_purchase_option=strong_four_game_package())
+    ranked, _ = priority_ranking.apply_final_priority_order([deepcopy(standalone), deepcopy(bundled)])
+    by_title = {row['title']: row for row in ranked}
+    solo = by_title['Standalone']
+    pack = by_title['Bundled']
+
+    assert solo['score_breakdown']['purchase_route'] == 'standalone'
+    assert solo['purchase_score'] == 22
+    assert pack['score_breakdown']['purchase_route'] == 'fixed_package'
+    assert pack['purchase_score'] == 40
+    assert pack['package_value_points'] == 18
+    assert pack['personal_score'] == solo['personal_score']
+    assert pack['total_score'] - solo['total_score'] == 18
+    assert [row['id'] for row in pack['score_breakdown']['purchase_components']] == [
+        'package_savings_percent',
+        'package_effective_price',
+        'package_coverage',
+    ]
+    assert ranked[0]['title'] == 'Bundled'
+
+
+def test_package_over_practical_price_ceiling_is_visible_but_does_not_boost_score():
+    row = ranking_game('Over budget', better_purchase_option=strong_four_game_package(price=800))
+    ranked, _ = priority_ranking.apply_final_priority_order([row])
+    game = ranked[0]
+    breakdown = game['score_breakdown']
+    assert breakdown['purchase_route'] == 'standalone'
+    assert breakdown['package_route']['available'] is True
+    assert breakdown['package_route']['eligible_for_score'] is False
+    assert breakdown['package_route']['status'] == 'package_over_practical_price_ceiling'
+    assert game['package_value_points'] == 0
+
+
+def test_ui_has_explicit_package_block_contract():
+    app = Path('web/app.js').read_text(encoding='utf-8')
+    required = [
+        'function renderPackageDeal(g)',
+        'better_purchase_option',
+        '🎁 Выгодный набор Steam',
+        'package_price_per_visible_game_rub',
+        'standalone_total_rub',
+        'savings_rub',
+        "purchase_route==='fixed_package'",
+    ]
+    for fragment in required:
+        assert fragment in app, f'missing package UI contract: {fragment}'
+
+
 def main():
     tests = [
         test_bioshock_collection_actual_member_regression,
@@ -155,6 +253,9 @@ def main():
         test_best_package_prefers_larger_absolute_savings,
         test_returned_package_can_be_matched_by_exact_option,
         test_package_classification_requires_two_current_apps,
+        test_four_game_package_materially_improves_purchase_score_without_changing_taste,
+        test_package_over_practical_price_ceiling_is_visible_but_does_not_boost_score,
+        test_ui_has_explicit_package_block_contract,
     ]
     for test in tests:
         test()

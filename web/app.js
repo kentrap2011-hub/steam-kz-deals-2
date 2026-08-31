@@ -158,19 +158,39 @@ function renderRisk(g){
   }
   textList($('risks'),g.risks,'Риск пока не подготовлен.');
 }
+function renderPackageDeal(g){
+  const p=g.better_purchase_option;
+  if(!p||p.package_price_rub==null)return '';
+  const count=Number(p.covered_visible_game_count)||0;
+  const perGame=p.package_price_per_visible_game_rub!=null?Number(p.package_price_per_visible_game_rub):(count?Number(p.package_price_rub)/count:null);
+  const standalone=p.standalone_total_rub;
+  const savings=p.savings_rub;
+  const savingsPct=p.savings_percent_vs_standalone;
+  const titles=(p.covered_visible_titles||[]).filter(Boolean).map(escapeHtml).join(', ');
+  const drivesRank=g.score_breakdown?.purchase_route==='fixed_package';
+  const rankNote=drivesRank?'Этот набор сейчас определяет балл выгодности покупки и поднимает игру в рейтинге.':'Набор выгоднее покупки этих игр по отдельности, но текущий балл покупки выше или равен у одиночного варианта.';
+  const economics=[
+    standalone!=null?`по отдельности ${fmtRub(standalone)}`:null,
+    savings!=null?`экономия ${fmtRub(savings)}`:null,
+    savingsPct!=null?`${Number(savingsPct).toLocaleString('ru-RU',{maximumFractionDigits:1})}% дешевле`:null,
+  ].filter(Boolean).join(' · ');
+  return `<div class="offer" data-package-highlight="true" style="border-width:2px"><div class="offer-top"><div class="offer-title"><b>🎁 Выгодный набор Steam</b><br>${escapeHtml(p.package_title||'Набор Steam')}</div><div class="offer-price">${fmtRub(p.package_price_rub)}</div></div><div class="offer-meta"><b>${count} игр${perGame!=null?` · ≈ ${fmtRub(perGame)} за игру`:''}</b></div>${economics?`<div class="offer-meta">${economics}</div>`:''}${titles?`<div class="offer-meta">В наборе из текущего списка: ${titles}</div>`:''}<div class="offer-meta"><b>${escapeHtml(rankNote)}</b></div><div class="offer-actions"><button class="offer-link" type="button" data-open-web="${escapeHtml(p.web_url||'')}" data-open-steam="">Открыть набор в Steam</button></div></div>`;
+}
 function renderOffers(g){
-  const offers=(g.offers||[]).filter(o=>o.current_price_rub!=null);
-  $('offers').innerHTML=offers.map((o,i)=>{
+  const packageHtml=renderPackageDeal(g);
+  const offers=(g.offers||[]).filter(o=>o.current_price_rub!=null&&o.offer_kind!=='fixed_multi_game_package');
+  const regularHtml=offers.map((o,i)=>{
     const hist=o.previously_free?'ранее бесплатно':(o.historical_minimum_rub!=null?`ист. минимум ${fmtRub(o.historical_minimum_rub)}`:'история не подтверждена');
     const old=`<span style="text-decoration:line-through">${fmtRub(o.original_price_rub)}</span>`;
     return `<div class="offer"><div class="offer-top"><div class="offer-title">${escapeHtml(o.title||g.title)}${i===0?' · основной':''}</div><div class="offer-price">${fmtRub(o.current_price_rub)}</div></div><div class="offer-meta">${old} · −${o.discount_percent}% · ${hist}</div><div class="offer-actions"><button class="offer-link" type="button" data-open-web="${escapeHtml(o.web_url||'')}" data-open-steam="${escapeHtml(o.steam_url||'')}">Открыть вариант в Steam</button></div></div>`;
-  }).join('')||'<div class="muted small">Дополнительных вариантов сейчас нет.</div>';
+  }).join('');
+  $('offers').innerHTML=packageHtml+regularHtml||'<div class="muted small">Дополнительных вариантов сейчас нет.</div>';
 }
 function scoreComponentHtml(row){
   const points=Number(row?.points)||0;
   const sign=points>0?'+':'';
   const label=escapeHtml(row?.label||(row?.id==='savings'?'Экономия по акции':'Критерий'));
-  const detail=row?.id==='savings'&&row?.value?` · ${escapeHtml(row.value)}`:'';
+  const detail=row?.value?` · ${escapeHtml(row.value)}`:'';
   if(row?.id==='wishlist'){
     const status=points>0?'есть':'нет';
     return `<span class="score-chip"><span>${label}</span><b>${sign}${points.toLocaleString('ru-RU',{maximumFractionDigits:1})} · ${status}</b></span>`;
@@ -215,6 +235,7 @@ function renderPriority(g){
   html+=`<button class="priority-factor score-total ${!urgencyMode||deciding==='total_score_desc'?'deciding':''}" type="button" data-score-toggle aria-expanded="false" title="Показать детализацию итогового балла"><span>Итоговый балл</span><b>${Number(score.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.total_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></button>`;
   let details='';
   if(score.precision?.label)details+=`<div class="muted small score-precision">Точность вкусовой части: ${escapeHtml(score.precision.label)}${score.precision.is_coarse_legacy?' — детализируем по мере обновления старых оценок.':''}</div>`;
+  if(score.purchase_route_label)details+=`<div class="muted small">Покупка для рейтинга: <b>${escapeHtml(score.purchase_route_label)}</b>${score.purchase_route==='fixed_package'&&score.package_score_delta_vs_standalone>0?` · +${Number(score.package_score_delta_vs_standalone).toLocaleString('ru-RU',{maximumFractionDigits:1})} балла против покупки игры отдельно`:''}</div>`;
   details+=`<div class="score-groups">${scoreGroupHtml(score.personal_label||'Насколько подходит тебе',score.personal_score,score.personal_max,score.personal_components)}${scoreGroupHtml(score.purchase_label||'Выгодность покупки',score.purchase_score,score.purchase_max,score.purchase_components)}</div>`;
   html+=`<div class="score-details hidden" data-score-details>${details}</div>`;
 }else{
@@ -228,7 +249,8 @@ function renderFeed(){
   if(!g){$('prioritySection').classList.add('hidden');return}
   currentShot=0;setShot(g,0);preloadNearby();
   const r=rec(g.id);$('newBadge').classList.toggle('hidden',!isNew(g.id));$('repeatBadge').classList.toggle('hidden',!(r.seen>0));$('repeatBadge').textContent=r.seen?`🔁 Показ №${r.seen+1}`:'';
-  $('title').textContent=g.title;$('decision').textContent=g.decision||'';$('price').textContent=fmtRub(g.current_price_rub);$('oldPrice').textContent=fmtRub(g.original_price_rub);$('discount').textContent=`−${g.discount_percent}%`;
+  const p=g.better_purchase_option;const packageBadge=p&&p.package_price_rub!=null?` · 🎁 ${Number(p.covered_visible_game_count)||0} игр за ${fmtRub(p.package_price_rub)}`:'';
+  $('title').textContent=g.title;$('decision').textContent=`${g.decision||''}${packageBadge}`;$('price').textContent=fmtRub(g.current_price_rub);$('oldPrice').textContent=fmtRub(g.original_price_rub);$('discount').textContent=`−${g.discount_percent}%`;
   $('histPrice').textContent=g.previously_free?'Ранее была бесплатной':`Ист. минимум: ${g.historical_minimum_rub==null?'нет данных':fmtRub(g.historical_minimum_rub)}`;
   $('deadline').textContent=deadlineText(g.sale_end_utc);$('summary').textContent=g.summary||'Краткое описание пока недоступно.';
   const gp=(g.gameplay_points||[]).filter(Boolean);$('gameplaySection').classList.toggle('hidden',!gp.length);$('gameplay').innerHTML=gp.map(x=>`<li>${escapeHtml(x)}</li>`).join('');
@@ -248,7 +270,8 @@ function miniCard(g,status){
   const img=shotUrls(g)[0]||'';
   const place=status==='wishlist'?`★ В желаемом · ${listPositionText(g)} · `:'';
   const score=g.total_score!=null?` · ${Number(g.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/100`:'';
-  return `<div class="list-card"><img src="${escapeHtml(img)}" alt=""><div><div class="list-title">${escapeHtml(g.title)}</div><div class="list-meta">${place}${fmtRub(g.current_price_rub)} · −${g.discount_percent}%${score} · ${escapeHtml(deadlineText(g.sale_end_utc))}</div><div class="list-actions">${status==='liked'?`<button class="small-btn" data-to-final="${escapeHtml(g.id)}" type="button">🏆 В финал</button>`:''}<button class="small-btn" data-focus="${escapeHtml(g.id)}" type="button">Показать в ленте</button></div></div></div>`;
+  const p=g.better_purchase_option;const packageText=p&&p.package_price_rub!=null?` · 🎁 ${Number(p.covered_visible_game_count)||0} игр за ${fmtRub(p.package_price_rub)}`:'';
+  return `<div class="list-card"><img src="${escapeHtml(img)}" alt=""><div><div class="list-title">${escapeHtml(g.title)}</div><div class="list-meta">${place}${fmtRub(g.current_price_rub)} · −${g.discount_percent}%${score}${packageText} · ${escapeHtml(deadlineText(g.sale_end_utc))}</div><div class="list-actions">${status==='liked'?`<button class="small-btn" data-to-final="${escapeHtml(g.id)}" type="button">🏆 В финал</button>`:''}<button class="small-btn" data-focus="${escapeHtml(g.id)}" type="button">Показать в ленте</button></div></div></div>`;
 }
 function renderLists(){
   const wishlist=items.filter(g=>g.wishlist),liked=items.filter(g=>rec(g.id).status==='liked'),finals=items.filter(g=>rec(g.id).status==='final');
@@ -293,7 +316,7 @@ function openSteam(steamUrl,webUrl){
 function searchRender(){
   const q=$('searchInput').value.trim().toLocaleLowerCase('ru-RU');
   const results=q?items.filter(g=>g.title.toLocaleLowerCase('ru-RU').includes(q)).slice(0,50):items.slice(0,30);
-  $('searchResults').innerHTML=results.length?results.map(g=>`<button class="search-item" type="button" data-search-focus="${escapeHtml(g.id)}"><b>${escapeHtml(g.title)}</b><span>${fmtRub(g.current_price_rub)} · −${g.discount_percent}% · ${g.decision||''}</span></button>`).join(''):'<div class="empty">В текущем активном списке такой игры нет.</div>';
+  $('searchResults').innerHTML=results.length?results.map(g=>{const p=g.better_purchase_option;const pkg=p&&p.package_price_rub!=null?` · 🎁 ${Number(p.covered_visible_game_count)||0} игр за ${fmtRub(p.package_price_rub)}`:'';return `<button class="search-item" type="button" data-search-focus="${escapeHtml(g.id)}"><b>${escapeHtml(g.title)}</b><span>${fmtRub(g.current_price_rub)} · −${g.discount_percent}%${pkg} · ${g.decision||''}</span></button>`}).join(''):'<div class="empty">В текущем активном списке такой игры нет.</div>';
 }
 
 async function init(){
