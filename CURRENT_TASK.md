@@ -1,19 +1,15 @@
 # CURRENT TASK
 
-## Taste score: детальные нормализованные факторы
+## Taste V3 migration: recover interrupted scheduled run
 
 Статус: in_progress
-Дата: 2026-08-30
-Подхвачено новым чатом: 2026-08-30 23:39 Europe/Samara
+Дата исходной задачи: 2026-08-30
 Последнее обновление handoff: 2026-08-31
 
 Цель:
-- заменить для активного production scope грубый `legacy_coarse_fit` (`strong/moderate`) детальными price-blind taste factors;
-- semantic worker возвращает 5 нормализованных значений `0..100`, независимых от текущих весов;
-- GitHub валидирует и хранит factor vector в canonical taste cache;
-- `priority_ranking.py` применяет веса только из `config/final_ranking_policy.json`;
-- изменение весов не требует новой AI-оценки уже детализированной игры;
-- миграция старого cache идёт через существующую taste queue, без новой recurring стадии.
+- завершить миграцию active production scope с `legacy_coarse_fit` на пять нормализованных price-blind taste factors `0..100`;
+- сохранить уже выполненную semantic работу и не переоценивать валидные результаты повторно;
+- использовать только существующий GitHub-owned queue/ingest/downstream pipeline, без нового recurring worker или ручной обработки большого backlog в interactive chat.
 
 Факторы:
 - `gameplay_mastery`
@@ -23,41 +19,37 @@
 - `breadth_of_match`
 
 Architecture preflight:
-1. GitHub остаётся владельцем scope, queue, binding validation, persistence и downstream rebuild по `config/execution_ownership_contract.json`.
-2. Existing scheduled ChatGPT taste worker остаётся constrained semantic data-plane и только расширяет уже разрешённый результат новым factor vector.
-3. Новая recurring stage/queue/retry логика не создаётся.
-4. Taste factors не содержат цену, скидку, wishlist, SteamDB/history или sale urgency.
-5. Миграция делается через model/semantics binding invalidation и существующую queue; interactive chat не становится массовым worker-ом.
+1. GitHub остаётся владельцем scope, queue, exact binding validation, persistence, completeness и downstream rebuild по `config/execution_ownership_contract.json`.
+2. Existing scheduled ChatGPT taste worker остаётся semantic data-plane по `config/taste_result_contract.json`.
+3. Interactive chat выполняет только bounded recovery/diagnosis и не становится массовым semantic worker.
+4. Новая recurring stage, новая очередь, новая квота или retry-loop не создаются.
+5. `config/daily_execution_contract.json` остаётся неизменным: один nightly production cycle, batching — только checkpointing.
 
 Последний подтверждённый прогресс:
-- V3 result/cache contracts, normalized-factor validation, ingestion, propagation в visual feed и ranking regression реализованы;
-- bounded end-to-end V3 canary успешно прошёл существующий ingest/downstream путь; commit `379b0d41e2df6c0a1f4ac7eb08e78078b9efe0c7` (`Ingest context-bound taste batch`) и следующий refresh `496ce639961c54627c485f4fbaadd24f0ff9220d`;
-- canonical V3 cutover завершён commit `89b0376b820926369714b748d2404c87dcd88405` (`Cut over taste evaluation to V3 factors`);
-- `config/mailing_policy.json` и taste-cache binding теперь используют `taste-v3`, normalized factor semantics входят в canonical semantic digest;
-- one-shot cutover workflow после успешного commit удалён и не является новой recurring стадией;
-- `data/production/pre_ai/chatgpt_payload.json` подтверждает `taste_model_version=taste-v3`;
-- текущая existing taste queue содержит 624 semantic evaluations; 31 candidate deterministic-excluded без AI; `ready_without_ai_count=0`;
-- все 624 queue rows требуют normalized taste factors через существующий semantic pipeline;
-- массовую очередь вручную в interactive chat не обрабатывать.
+- canonical Taste V3 cutover уже завершён; V3 result/cache contracts и ingest path существуют;
+- актуальный `data/production/pre_ai/chatgpt_payload.json` перед recovery содержит `ai_queue_count=634`, `ready_without_ai_count=0`, `deterministically_excluded_without_ai_count=25`;
+- scheduled worker опубликовал пять submission-файлов `data/ai_inbox/taste/2026-08-31T0630Z-001..005.json`, всего 500 результатов;
+- 134 строки текущего GitHub-owned taste scope остались без semantic result после runtime/tool limit;
+- в `001` подтверждён единственный известный binding typo: `App_1261040.taste_fingerprint` имеет лишнюю завершающую `a`; canonical queue содержит правильный fingerprint без неё;
+- для безопасного bounded recovery создан одноразовый workflow `.github/workflows/repair-interrupted-taste-v3.yml`: он срабатывает на это обновление `CURRENT_TASK.md`, исправляет только доказанный typo, валидирует `001` против текущей queue и удаляет сам себя;
+- изменение repaired submission должно штатно запустить существующий `.github/workflows/ingest-taste-batch.yml`, который атомарно валидирует и ingest-ит все пять inbox-файлов, пересобирает taste projection/payload/queue и удаляет обработанные submission-файлы;
+- SteamDB на отдельном маршруте сейчас имеет 8/9 resolved; `App_901735` остаётся единственным retry с `steamdb_runtime_disabled_error`. Это не переносить в ручной backlog interactive chat.
 
 Быстрое продолжение без повторного исследования:
-1. НЕ повторять canary и НЕ восстанавливать V3 cutover — он уже завершён в `main`.
-2. Сначала открыть раздел `PROJECT_ROUTES.md` → `Taste V3 / normalized factors`.
-3. Проверить только существующего owning scheduled semantic worker и факт появления новых V3 submissions/cache entries.
-4. Не опрашивать внешнюю автоматизацию в цикле: максимум 1–2 bounded state checks. Если нет нового события/результата, не ждать синхронно в interactive chat и не создавать второй worker.
-5. После появления worker output проверить ingest → taste cache → final producer и bounded `score_precision=normalized_taste_factors`.
-6. После фактической миграции active scope синхронизировать `PROJECT_ROUTES.md` + `PROJECT_DECISIONS.md`, затем удалить `CURRENT_TASK.md`.
+1. НЕ перечитывать большие submission JSON целиком и НЕ переоценивать первые 500 игр.
+2. Проверить один observable result: появился ли commit `Repair interrupted Taste V3 submission` и затем штатный `Ingest context-bound taste batch`.
+3. После ingest читать только `data/production/pre_ai/chatgpt_payload.json`, `data/production/pre_ai/taste_projection.json` и bounded cache/index diagnostics. Ожидаемая taste queue после успешного ingest первых 500 результатов — 134, если current scope/bindings не изменились.
+4. Если ingest fail-closed, открыть только конкретный failed run/job/log и исправить причину; не обходить exact binding validation.
+5. Оставшиеся semantic rows должен обработать существующий scheduled ChatGPT worker. Interactive chat не обрабатывает 134 строки вручную.
+6. После фактического закрытия очереди проверить downstream rebuild и `score_precision=normalized_taste_factors`, затем синхронизировать `PROJECT_ROUTES.md` + `PROJECT_DECISIONS.md` и удалить `CURRENT_TASK.md`.
 
-Следующий шаг:
-1. Подтвердить, что existing scheduled ChatGPT taste worker подхватывает V3 queue и пишет штатные submissions.
-2. После первых/очередных штатных submissions проверить, что factor vectors валидируются и сохраняются без ручного rebind.
-3. После завершения backlog запустить downstream rebuild и bounded production verification.
+Коммуникационный инвариант:
+- правило «ответ > 1 минуты → в этом же ответе разобрать причину задержки и сделать долговечное ускорение для будущих чатов» уже было в `CHAT_CONTEXT.md`; 2026-08-31 оно дополнительно поднято в начало `README.md` как **КРИТИЧЕСКИЙ ИНВАРИАНТ ЭФФЕКТИВНОСТИ**.
 
 Definition of done:
-- contracts/result validation/cache поддерживают factor vector;
-- current semantic worker contract/prompt требует factor vector;
-- старые active entries переоцениваются существующим pipeline;
-- final producer получает `taste_factors` и использует их вместо coarse fallback;
-- production rebuild проходит;
-- bounded проверка показывает детальный `score_precision=normalized_taste_factors` на активном scope или явно фиксирует только допустимые permanent-failure исключения;
+- известный typo `App_1261040` исправлен через bounded one-shot recovery;
+- первые 500 опубликованных V3 результатов приняты существующим GitHub ingest и не пересчитаны вручную;
+- оставшаяся GitHub-owned taste queue закрыта штатным scheduled semantic worker либо содержит только явно допустимые permanent-failure исключения;
+- final producer получает `taste_factors` и active scope использует `score_precision=normalized_taste_factors` там, где нет более сильного direct-user-rating источника;
+- production rebuild/validation проходит;
 - `PROJECT_ROUTES.md` и `PROJECT_DECISIONS.md` синхронизированы, затем `CURRENT_TASK.md` удалён.
