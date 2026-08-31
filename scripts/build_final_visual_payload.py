@@ -2,6 +2,7 @@ import json
 import os
 from pathlib import Path
 
+import apply_fixed_package_purchase_options as package_options
 import build_daily_visual_payload as base_builder
 import priority_ranking
 import refine_visual_ranking as refiner
@@ -173,6 +174,13 @@ def main():
             continue
         refined.append(game)
 
+    # Purchase-option enrichment belongs before the one canonical final ranking pass.
+    # This lets the ranking compare the economics of buying the game alone with the
+    # economics of a fixed multi-game package without inventing a second sort layer.
+    ready['items'] = refined
+    package_stats = package_options.apply_current_artifacts_to_visual(ready)
+    refined = ready.get('items') or []
+
     # taste_rank is diagnostic only. It is deliberately not the source of priority_rank.
     taste_sorted = sorted(refined, key=refiner.taste_sort_key)
     for index, game in enumerate(taste_sorted, 1):
@@ -194,7 +202,7 @@ def main():
     contract = ready.setdefault('production_contract', {})
     contract.clear()
     contract.update({
-        'schema_version': 6,
+        'schema_version': 7,
         'mode': 'daily_precomputed_read_only_for_ui',
         'heavy_calculation_allowed_in_ui': False,
         'external_lookup_allowed_in_ui': False,
@@ -204,6 +212,8 @@ def main():
         'ranking_helper_blob_sha': base_builder.git_sha('scripts/priority_ranking.py'),
         'ranking_policy_blob_sha': base_builder.git_sha('config/final_ranking_policy.json'),
         'refinement_helper_blob_sha': base_builder.git_sha('scripts/refine_visual_ranking.py'),
+        'fixed_package_helper_blob_sha': base_builder.git_sha('scripts/apply_fixed_package_purchase_options.py'),
+        'fixed_package_options_blob_sha': package_options.git_blob_sha(package_options.PACKAGE_OPTIONS),
         'source_chatgpt_payload_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_payload.json'),
         'source_purchase_context_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_purchase_context.jsonl'),
         'source_taste_queue_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_taste_queue.jsonl'),
@@ -216,9 +226,16 @@ def main():
         'complete_family_partition': payload.get('complete_family_partition'),
         'canonical_profile_blob_sha': (payload.get('profile_binding') or {}).get('canonical_profile_blob_sha'),
         'taste_model_version': (payload.get('profile_binding') or {}).get('taste_model_version'),
-        'ranking_stage': 'single_final_sort_after_all_refinement',
+        'ranking_stage': 'single_final_sort_after_all_refinement_and_purchase_option_enrichment',
         'priority_factors': final_priority_order,
-        'priority_ranking_contract': 'FINAL-PRIORITY-RANKING-V1',
+        'priority_ranking_contract': 'FINAL-PRIORITY-RANKING-V2',
+        'fixed_package_purchase_option_rule': (
+            'fixed Sub only; >=2 visible base-game families; strict current-price savings; '
+            'unknown extra content value=0; personalized bundles excluded; compare package and standalone '
+            'as transparent purchase routes before final ranking'
+        ),
+        'fixed_package_qualifying_count': package_stats.get('qualifying_package_count'),
+        'fixed_package_touched_game_count': package_stats.get('visible_game_count_with_better_package'),
         'direct_user_evidence_rule': 'adjusts fit/bucket upstream; not a second final sort factor',
         'windows_rule': 'legacy Steam XP/7/8 requirement label alone is neutral; only confirmed modern-Windows friction may penalize',
         'ui_manual_end_rule': 'local explicit end-of-queue override is applied by UI after production priority_rank',
@@ -247,6 +264,8 @@ def main():
         f'expired_removed={ready.get("expired_family_count_removed_at_build")} '
         f'fit_changes={fit_changes} removed={removed} '
         f'windows_labels_neutralized={windows_labels_neutralized} '
+        f'package_qualifying={package_stats.get("qualifying_package_count")} '
+        f'package_touched={package_stats.get("visible_game_count_with_better_package")} '
         f'force={os.environ.get("FORCE_VISUAL_BUILD") == "1"}'
     )
 
