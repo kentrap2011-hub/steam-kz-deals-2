@@ -2,7 +2,9 @@
 
 Последнее обновление: 2026-08-31
 
-## 1. Taste V3 migration
+## Что реально в работе сейчас
+
+### 1. Taste V3 migration
 
 Статус: `complete`.
 
@@ -16,23 +18,13 @@ Canonical completion proof:
 - final scheduled run started from authoritative queue `124`, evaluated all `124`, and published 7 checkpoints;
 - final checkpoint `007` ingest run #47 (`33404093378`) completed `success`;
 - active Taste inbox is empty / directory absent;
-- canonical `data/production/pre_ai/chatgpt_payload.json` now has `ai_queue_count=0`, `ready_without_ai_count=566`, `purchase_context_line_count=566`, `deterministically_excluded_without_ai_count=93`, `complete_family_partition=true`, `sale_end_coverage=1.0`;
-- downstream `Build daily visual payload` run #108 (`33404127331`) completed `success` after the final ingest;
-- subsequent `Deploy visual mailing` run #147 (`33404175193`) completed `success`;
-- Taste V3 Definition of Done is satisfied: queue exhausted, current-bound V3 results persisted, downstream visual/deploy succeeded.
+- canonical `data/production/pre_ai/chatgpt_payload.json` now has `ai_queue_count=0`;
+- downstream `Build daily visual payload` run #108 (`33404127331`) completed `success`;
+- subsequent `Deploy visual mailing` run #147 (`33404175193`) completed `success`.
 
-Historical recovery notes retained only as audit context:
-- permanent fail-closed identity mismatch diagnostics: commit `c0201333b86f0efad6a1ee57b35b022b48698031`;
-- one-shot repair workflow was used only for proven serialization/identity-copy errors and did not change verdict/evidence/taste_factors.
+### 2. Steam fixed-package purchase options
 
-SteamDB:
-- `App_901735` remains blocked/retryable;
-- exact Kazakhstan historical minimum is still unproven and must not be fabricated;
-- this is an independent low-priority tail and does not block package integration.
-
-## 2. Steam fixed-package purchase options
-
-Статус: `ready_for_final_integration`.
+Статус: `in_progress`.
 
 Old feature branch: `purchase-options-fixed-packages-20260831`.
 Current integration branch: `purchase-options-fixed-packages-integration-20260831`.
@@ -42,110 +34,80 @@ Goal:
 - UI remains display-only;
 - Taste and ranking semantics do not change.
 
-Already proven:
+Already done:
 - StoreBrowse discovery of fixed `Sub_` packages works;
 - producer-side comparison/enrichment implemented;
 - dynamic `/bundle/` / personalized Complete-the-Set excluded fail-closed;
 - unknown extra content value=0;
-- no original/remaster guessing: coverage only through actual included appids / canonical family membership;
-- BioShock live regression uses current package members `409710`, `409720`, `8870`;
-- corrected read-only live package test passed green;
-- fresh integration branch was created from then-current `main` with package contract, discovery producer, visual enrichment, regressions and minimal workflow integrations;
-- temporary live-test workflow is intentionally not part of production integration.
+- no original/remaster guessing;
+- corrected BioShock live regression passed green;
+- integration branch exists with package contract, discovery producer, visual enrichment, regressions and workflow integrations.
 
-Next steps:
-1. Refresh/recreate the integration branch from current `main` now that Taste is complete.
-2. Verify final diff contains only package files + minimal changes to the two production workflows.
-3. Integrate package feature into `main`.
-4. Run normal pre-AI build and inspect real `data/production/pre_ai/fixed_package_options.json`.
-5. Run downstream visual build and verify real `better_purchase_option` / package `offers` entries.
-6. After production validation, sync `PROJECT_ROUTES.md` / `PROJECT_DECISIONS.md`.
-7. Clean up obsolete temporary branches/workflows when safe.
+Current next step:
+1. Refresh/recreate integration branch from current `main` after Taste completion.
+2. Verify final diff contains only package files + minimal changes to two production workflows.
+3. Integrate into `main`.
+4. Run normal pre-AI build and inspect real `fixed_package_options.json`.
+5. Run downstream visual build and verify real `better_purchase_option` / package `offers`.
+6. Sync `PROJECT_ROUTES.md` / `PROJECT_DECISIONS.md` after production validation.
 
-## 3. Ranking and card explanation quality audit
+### 3. SteamDB tail
 
-Статус: `active_parallel`.
-Причина: пользователь при просмотре витрины видит случаи, когда игра стоит высоко, но карточка объясняет это одним слабым/узким плюсом вроде «удобное управление», иногда без единого минуса. По карточке непонятно, почему рекомендация действительно высокая: либо ranking скрывает важные причины, либо сама оценка может быть завышена.
+Статус: `blocked_low_priority`, не активная основная работа.
+- `App_901735` remains blocked/retryable;
+- exact Kazakhstan historical minimum is unproven and must not be fabricated;
+- does not block package integration.
 
-Цель:
-- проверить не только корректность численного ranking, но и качество semantic evaluation и объяснений на карточке;
-- высокая позиция должна быть либо реально обоснована несколькими сильными сигналами, либо карточка должна ясно показывать тот сильный сигнал/контекст, который её объясняет;
-- не придумывать минусы ради заполнения карточки: отсутствие минусов допустимо только если evidence действительно не содержит существенных рисков/конфликтов.
+## Запланировано, но ещё НЕ начато
 
-Аудит оценки:
-1. Взять репрезентативную выборку верхней части витрины (минимум top-30) + несколько игр возле границ priority buckets.
-2. Для каждой игры трассировать фактический путь до позиции: normalized Taste factors, personal score, purchase score, direct-user evidence, wishlist, deal/history/savings, risk/penalty, priority bucket и tie-breaks.
-3. Проверить, может ли top/high placement фактически получаться почти из одного узкого фактора (например controls/accessibility) при слабой поддержке остальных факторов.
-4. Если да — определить, это допустимый результат из-за другого сильного evidence/context или defect weighting/aggregation. Если высокий rank реально достигается одной слабой причиной, изменить ranking constraints/weights так, чтобы top placement требовал более широкой поддержки либо отдельного действительно сильного доказательства.
-5. Проверить consistency между `taste_factors`, verdict/fit, `why_fit`, risks и итоговым personal score: высокая factor-оценка должна иметь видимое evidence, а слабая/противоречивая evidence не должна превращаться в высокий персональный score без объяснимой причины.
+### A. Ranking and card explanation quality audit
 
-Аудит карточки/описаний:
-1. Для каждой top-игры сравнить фактические ranking drivers с тем, что пользователь видит в карточке.
-2. Карточка должна отвечать на вопрос «почему эта игра так высоко именно для меня», а не показывать случайный один плюс.
-3. Если несколько факторов реально внесли большой вклад, показать несколько конкретных причин или отдельный короткий блок `Почему высоко` / эквивалентное producer-owned explanation.
-4. Проверить, что `why_fit`/strengths не состоят из повторяющихся generic-фраз и не скрывают более сильные персональные причины.
-5. Проверить risks/minuses: если pipeline знает отрицательное evidence/risk, карточка не должна показывать пустой список; если отрицательного evidence действительно нет, не генерировать искусственный минус.
-6. Описание должно отражать ranking truth: UI не придумывает причины самостоятельно, producer передаёт готовое объяснение, связанное с реальными score drivers.
+Статус: `planned`.
 
-Проверки качества/регрессии:
-- top-ranked fixture не должен иметь необъяснимо высокий personal score при одном слабом factor без отдельного strong evidence;
-- если high rank объясняется wishlist/сильной выгодой/direct-user evidence, карточка должна явно показывать это как причину позиции;
-- если есть nonzero risk/negative evidence, пользователь должен видеть соответствующий meaningful risk/minus;
-- не требовать фиксированного количества плюсов/минусов: требовать полноту относительно фактического evidence;
-- ranking review export должен позволять одним row увидеть score components + отображаемые explanation fields для ручной сверки.
+Причина:
+- пользователь видит случаи, когда игра стоит высоко, но карточка объясняет это одним слабым/узким плюсом вроде «удобное управление», иногда без существенных минусов;
+- нужно отличить defect ranking от defect explanation.
 
-Definition of done:
-- ручной аудит top-30 не находит необъяснимых высоких позиций;
-- для каждой высокой позиции можно восстановить понятную цепочку `evidence -> factors/scores -> rank -> card explanation`;
-- карточка показывает основные причины высокой позиции и реальные существенные риски, если они есть;
-- один generic-плюс сам по себе не способен необъяснимо поднять игру в топ;
-- regression tests защищают score/explanation consistency;
-- изменения синхронизированы с ranking/explanation contracts и PROJECT_DECISIONS после проверки.
+План:
+- аудит минимум top-30 + несколько игр возле границ priority buckets;
+- трассировка `evidence -> Taste factors -> personal/purchase score -> rank -> card explanation`;
+- проверить, не может ли высокий rank получаться почти из одного слабого фактора;
+- проверить полноту `why_fit` и risks без выдумывания искусственных минусов;
+- при необходимости изменить ranking constraints/weights и producer-owned explanation;
+- добавить regression tests score/explanation consistency.
 
-## 4. Russian language availability as a ranking factor
+### B. Russian language availability as a ranking factor
 
-Статус: `active_parallel`.
-Причина: пользователь считает русский язык практическим требованием. Игра без русского языка не должна занимать высокую позицию только за счёт вкусового совпадения/скидки.
+Статус: `planned`.
 
 Требование:
-- для каждой игры проверять наличие русского языка как минимум в интерфейсе;
-- источник должен быть producer-owned и проверяемым (Steam supported languages / другой канонический источник), UI только отображает готовый статус;
-- наличие русского интерфейса считается выполнением минимального требования; озвучка не обязательна;
-- если русского языка нет совсем, это должен быть сильный отрицательный фактор в общем ranking, способный заметно опустить игру даже при хорошем Taste и выгодной цене;
-- если данные о языке неизвестны/неполны, не считать это автоматически «русского нет»: хранить отдельный `unknown/unverified` статус и не выдумывать наличие/отсутствие языка;
-- если русский есть частично, но интерфейс не подтверждён, хранить это отдельно и определить более мягкий/промежуточный penalty после аудита реальных данных.
+- проверять наличие русского языка как минимум в интерфейсе;
+- `yes/no/unknown` с проверяемым source/evidence;
+- полное отсутствие русского должно давать сильный practical/final-ranking penalty;
+- `unknown` не равно `no`;
+- отсутствие русского должно быть видно на карточке как значимый минус;
+- Taste semantics язык не меняет;
+- добавить regression tests и language fields в ranking review.
 
-План реализации:
-1. Найти уже существующие language-поля/источники в Store metadata и текущем visual payload; не добавлять второй параллельный источник без необходимости.
-2. Ввести канонический статус вроде `russian_interface: yes/no/unknown` + evidence/source provenance.
-3. Добавить практический penalty в общий ranking вне price-blind Taste: язык не должен менять Taste-факторы, но должен влиять на итоговую приоритетность покупки.
-4. Подобрать величину penalty на top-30/top-50 regression audit так, чтобы `no Russian` действительно сильно понижал место, но не создавал нелогичных скачков между соседними играми.
-5. На карточке явно показывать русский язык/его отсутствие; если отсутствие языка materially понизило игру, это должно быть видно как существенный минус/risk и как причина более низкой позиции.
-6. Добавить regression fixtures: одинаковые по остальным параметрам игры с русским интерфейсом и совсем без русского должны иметь заметно различающийся итоговый rank в пользу версии с русским.
+### C. YouTube reviews for games
 
-Definition of done:
-- каждая видимая игра имеет проверяемый language status или честный `unknown`;
-- полное отсутствие русского даёт сильный общий ranking penalty;
-- отсутствие русского отражается на карточке как значимый практический минус;
-- Taste остаётся price/language-independent semantic fit, а language penalty применяется на практическом/final-ranking слое;
-- ranking review export показывает language status и соответствующий penalty/driver для аудита.
+Статус: `planned`.
+
+Цель:
+- добавлять к играм полезные YouTube-ролики/обзоры, помогающие понять игру перед покупкой;
+- приоритет качественным русскоязычным роликам или роликам с подтверждённой русской аудиодорожкой;
+- не подставлять случайные, спойлерные или нерелевантные видео только ради наличия ссылки;
+- источник/выбор должен быть producer-owned, UI только отображает готовый результат;
+- перед внедрением определить критерии качества, актуальности, языка и fallback при отсутствии хорошего ролика.
 
 ## Overall Definition of done
 
-Taste: COMPLETE.
+Active work now:
+- package integration reaches production validation.
 
-Purchase options:
-- fixed `Sub_` discovery/comparison works in production;
-- package advice is producer-owned and UI display-only;
-- no edition guessing;
-- production artifact and visual field are validated.
+Planned backlog after that includes at least:
+- ranking/card explanation quality audit;
+- Russian-language ranking factor;
+- YouTube reviews for games.
 
-Ranking/explanation quality:
-- top recommendations are both numerically justified and visibly explainable from the card;
-- score drivers and displayed reasons stay consistent.
-
-Russian language:
-- all visible games have auditable Russian-language status;
-- no-Russian games receive a strong practical/final-ranking penalty and expose that reason to the user.
-
-`CURRENT_TASK.md` is removed only when package integration, ranking/explanation quality audit and Russian-language ranking task are complete and no active task remains.
+`CURRENT_TASK.md` should clearly distinguish `in_progress` from `planned`; adding a future task must not automatically mark it active.
