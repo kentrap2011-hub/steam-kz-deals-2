@@ -139,6 +139,38 @@ def validate_score_policy(policy):
         if _as_number(points, -1) < 0 or _as_number(points) > taste_max:
             raise ValueError(f'legacy coarse fit points out of range for {fit}')
 
+    achievements = personal.get('achievements') or {}
+    achievement_min = _as_number(achievements.get('min'), 1)
+    achievement_max = _as_number(achievements.get('max'), -1)
+    if achievement_min >= 0 or achievement_max <= 0 or achievement_min >= achievement_max:
+        raise ValueError('achievements must define a negative min and positive max')
+    if achievements.get('played_confirmation') != 'numeric_direct_user_evidence_rating':
+        raise ValueError('achievements played confirmation must use numeric direct_user_evidence rating')
+    expected_quality_keys = {'1', '2', '3', '4', '5'}
+    for table_name in ('played_quality_points', 'new_or_unconfirmed_quality_points'):
+        table = achievements.get(table_name) or {}
+        if set(table) != expected_quality_keys:
+            raise ValueError(f'{table_name} must contain exactly quality levels 1..5')
+        for quality, points in table.items():
+            numeric = _as_number(points, None)
+            if numeric is None or numeric < achievement_min or numeric > achievement_max:
+                raise ValueError(f'{table_name}[{quality}] points out of achievement range')
+    for field in (
+        'played_present_quality_unknown_points',
+        'played_status_unknown_points',
+        'played_absent_points',
+        'new_or_unconfirmed_present_quality_unknown_points',
+        'new_or_unconfirmed_status_unknown_points',
+        'new_or_unconfirmed_absent_points',
+    ):
+        numeric = _as_number(achievements.get(field), None)
+        if numeric is None or numeric < achievement_min or numeric > achievement_max:
+            raise ValueError(f'achievements.{field} points out of achievement range')
+    if _as_number(achievements.get('played_absent_points')) >= _as_number(achievements.get('new_or_unconfirmed_absent_points')):
+        raise ValueError('played game without achievements must score lower than a new/unconfirmed game without achievements')
+    if max(_as_number(v) for v in (achievements.get('new_or_unconfirmed_quality_points') or {}).values()) > 1.5:
+        raise ValueError('new/unconfirmed achievement bonus must not exceed 1.5 points')
+
     for name in ('savings', 'price'):
         component = purchase.get(name) or {}
         component_max = _as_number(component.get('max'), -1)
@@ -311,24 +343,35 @@ def _achievement_component(game, policy):
     practical = game.get('practical') or {}
     enabled = practical.get('steam_achievements')
     quality = practical.get('achievement_quality')
+    evidence = game.get('direct_user_evidence') or {}
+    rating = evidence.get('rating')
+    played = isinstance(rating, (int, float)) and not isinstance(rating, bool)
+
+    prefix = 'played' if played else 'new_or_unconfirmed'
+    quality_points = cfg.get(f'{prefix}_quality_points') or {}
     if enabled is False:
-        points = cfg.get('absent_points')
+        points = cfg.get(f'{prefix}_absent_points')
         value = 'Steam-достижений нет'
     elif enabled is not True:
-        points = cfg.get('status_unknown_points')
+        points = cfg.get(f'{prefix}_status_unknown_points')
         value = 'нет подтверждённых данных'
     elif isinstance(quality, int) and not isinstance(quality, bool) and 1 <= quality <= 5:
-        points = (cfg.get('quality_points') or {}).get(str(quality), 0)
+        points = quality_points.get(str(quality), 0)
         value = f'качество {quality}/5'
     else:
-        points = cfg.get('present_quality_unknown_points')
+        points = cfg.get(f'{prefix}_present_quality_unknown_points')
         value = 'есть, качество не оценено'
+
+    numeric_points = _as_number(points)
+    context_label = 'уже играл' if played else 'новая или не подтверждено, что играл'
     return {
         'id': 'achievements',
         'label': cfg.get('label') or 'Достижения',
-        'points': _as_number(points),
-        'max_points': _as_number(cfg.get('max')),
-        'value': value,
+        'points': numeric_points,
+        'max_points': _as_number(cfg.get('max')) if numeric_points >= 0 else None,
+        'min_points': _as_number(cfg.get('min')),
+        'played_confirmed': played,
+        'value': f'{value} · {context_label}',
     }
 
 
