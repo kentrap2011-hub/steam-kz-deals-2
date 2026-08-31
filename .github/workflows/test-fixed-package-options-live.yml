@@ -36,7 +36,7 @@ jobs:
       - name: Discover current fixed KZ packages read-only
         run: python scripts/build_fixed_package_purchase_options.py
 
-      - name: Validate live artifact and BioShock regression target
+      - name: Validate live artifact and BioShock package membership
         run: |
           python - <<'PY'
           import json
@@ -61,10 +61,15 @@ jobs:
               )
 
           included = {int(x) for x in package.get('included_appids') or []}
-          expected = {7670, 8850, 8870}
+          expected = {409710, 409720, 8870}
           missing = sorted(expected - included)
           if missing:
               raise SystemExit(f'LIVE_BIOSHOCK_MEMBERSHIP_MISMATCH missing={missing}')
+          if 7670 in included or 8850 in included:
+              raise SystemExit(
+                  'LIVE_BIOSHOCK_UNEXPECTED_ORIGINAL_APPID '
+                  f'included={sorted(included)}'
+              )
           if float(package.get('final_kzt') or 0) <= 0:
               raise SystemExit('LIVE_BIOSHOCK_PRICE_INVALID')
 
