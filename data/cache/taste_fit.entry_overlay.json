@@ -2,7 +2,7 @@
   "schema_version": 1,
   "purpose": "incremental_per_entry_taste_verdict_overlay",
   "entry_schema_version": 3,
-  "entry_count": 614,
+  "entry_count": 618,
   "entries": {
     "App_241930": {
       "key": "App_241930",
@@ -9775,96 +9775,136 @@
       "key": "App_558420",
       "appid": "558420",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "c534536689cca107bcefdb53305a6e49b38f630221589d49f7c36d9935db5c70",
       "taste_fingerprint": "29d7e1b50d09d64892138f7d95f3ccdbbef955e08442b2766009c4b114afa17b",
-      "verdict": "EXCLUDE",
-      "fit_level": "below_moderate",
-      "reason_code": "exclude_audited_below",
+      "verdict": "INCLUDE",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
       "positive_evidence": [
-        "Four experimental adventures promise structural variety and horror atmosphere, but the prepared context does not reveal the actual mechanics of any episode strongly enough to prove moderate fit."
+        "Four experimental adventures promise meaningful format changes instead of relying on one static horror loop.",
+        "The anthology structure can repeatedly provide fresh mystery hooks while keeping each episode purposeful and bounded.",
+        "Its retro experimental-horror presentation gives the game a recognizable identity beyond generic scares."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "Some episodes are deliberately interface-heavy, so immediate action and movement mastery are not the main attraction."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:27:19+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 62,
+        "development_variety": 91,
+        "structure_pacing_direction": 84,
+        "identity_hooks": 90,
+        "breadth_of_match": 84
+      }
     },
     "App_562360": {
       "key": "App_562360",
       "appid": "562360",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "66bb551959456761e0b4c15d4735e74f04074ea4bf17ae7e8cec5b71601f1c84",
       "taste_fingerprint": "250f256bec776a9d913da2204f16573629a0e055435da57936c5bfd00f738577",
-      "verdict": "INCLUDE",
-      "fit_level": "moderate",
-      "reason_code": "include_moderate",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
       "positive_evidence": [
-        "Flying through tunnels makes movement and avoidance execution the central skill.",
-        "Procedurally generated tunnels change the traversal context across runs instead of presenting an identical route.",
-        "Enemy-filled environments give flight control immediate survival consequences."
+        "Fast obstacle avoidance can reward reflexes and incremental execution skill."
       ],
       "negative_evidence": [
-        "The arcade structure has little demonstrated long-term progression, limiting the fit to moderate."
+        "The core premise is an arcade endurance loop through procedural tunnels, with little evidence of the sustained mechanical evolution or broader direction that usually keeps interest alive."
       ],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "evaluated_at_utc": "2026-08-31T14:27:19+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 72,
+        "development_variety": 35,
+        "structure_pacing_direction": 48,
+        "identity_hooks": 42,
+        "breadth_of_match": 39
+      }
     },
     "App_571260": {
       "key": "App_571260",
       "appid": "571260",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "da05db5a5be668381c1ff50d6f5602a9c1ed43e51ae4f44e76018f4c918bc04b",
       "taste_fingerprint": "3ac8570196e883ec78908a27c01608dd497f97534a132b6710ec9858c0c7d0ae",
       "verdict": "INCLUDE",
-      "fit_level": "moderate",
-      "reason_code": "include_moderate",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
       "positive_evidence": [
-        "The explicit three-on-three team battle system creates a candidate-specific composition and matchup layer beyond generic fighting.",
-        "Fifty-eight fighters provide substantial character and move-set variation.",
-        "The canonical profile has positive fighting-game history, making a mechanically varied team fighter directionally compatible with mastery-oriented play."
+        "A large roster of distinct fighters directly supports the proven enjoyment of learning characters, matchups and execution.",
+        "The three-character team format adds composition and switching decisions on top of individual fighting mastery.",
+        "Different fighter identities can keep repeated matches meaningfully varied rather than mechanically identical."
       ],
       "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "evaluated_at_utc": "2026-08-31T14:27:19+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 96,
+        "development_variety": 80,
+        "structure_pacing_direction": 79,
+        "identity_hooks": 82,
+        "breadth_of_match": 88
+      }
     },
     "App_593600": {
       "key": "App_593600",
       "appid": "593600",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "b49348dd64f198b031c9a9611b537e3a723a6e9be5c42e63813c3e4180825b2f",
       "taste_fingerprint": "8eaf6f188673626c50a06e3c31f8c945c12a214647b2f1402b185f7ce59388cc",
       "verdict": "INCLUDE",
-      "fit_level": "strong",
-      "reason_code": "include_strong",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Gathering, crafting, taming and base building create several linked progression systems and strong activity variety.",
-        "Survival provides a clear practical purpose for developing those systems.",
-        "Playing alone or with a tribe adds meaningful social variation while mysterious creatures and environments support exploration."
+        "Taming creatures, crafting and building provide visible progression and several different activity types rather than one repeated action.",
+        "Dinosaurs, mythical creatures and a voxel wilderness give exploration a specific fantasy hook that can support curiosity."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "The survival sandbox structure can diffuse direction into gathering and base maintenance, which is a risk when clear reasons to continue are weak."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:27:19+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 61,
+        "development_variety": 83,
+        "structure_pacing_direction": 54,
+        "identity_hooks": 75,
+        "breadth_of_match": 70
+      }
     },
     "App_597170": {
       "key": "App_597170",
       "appid": "597170",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "35ed15b346f9d7132d46c003b4021b1e2312558cb6579aa47fed5e117e8b255c",
       "taste_fingerprint": "c1e2d80e1751b523ff89c1e7ad41d09f94c0cfae6c363d4971a98d23c2e2faf5",
       "verdict": "INCLUDE",
-      "fit_level": "moderate",
-      "reason_code": "include_moderate",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
       "positive_evidence": [
-        "Body parts being sliceable creates a distinctive combat rule with readable physical consequences.",
-        "Surviving sinister arena trials provides a clear objective and changing encounter structure.",
-        "The robot-gladiator framing gives the execution-focused combat a strong game-fantasy identity."
+        "Arena combat built around directional strikes and avoiding dismemberment offers clear learnable execution and skill growth.",
+        "Survival trials provide concrete short-term goals and repeated opportunities to improve rather than passive progression.",
+        "Voxel body slicing gives combat a distinctive visual and mechanical identity likely to make encounters memorable."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "Arena repetition could eventually narrow the experience if later trials do not substantially change enemy combinations or tactical demands."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:27:19+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 93,
+        "development_variety": 76,
+        "structure_pacing_direction": 86,
+        "identity_hooks": 86,
+        "breadth_of_match": 86
+      }
     },
     "App_597180": {
       "key": "App_597180",
@@ -12511,19 +12551,29 @@
       "key": "App_562500",
       "appid": "562500",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "ce4bcd4de86a90e6237b946262809e5f268b08ebfdc1a820e63cb561cd6fad91",
       "taste_fingerprint": "6b72eefbe810f1b9725f1ac31a06bd02a9c2d339841a99c3e278aac3231370dc",
       "verdict": "INCLUDE",
       "fit_level": "moderate",
       "reason_code": "include_moderate",
       "positive_evidence": [
-        "Mixed strategy systems provide layered progression.",
-        "Defense placement and development reward tactical problem solving."
+        "Tower-defense decisions create compact tactical problems where enemy pressure can reward adapting placements and priorities.",
+        "RPG progression and city-building layers promise visible development beyond a single static defense pattern.",
+        "A stated storyline gives the campaign a clearer reason to advance than an endless score loop."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T22:07:38+00:00"
+      "negative_evidence": [
+        "Multiple management layers could become system-heavy if their purposes are not introduced clearly."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:27:19+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 78,
+        "development_variety": 82,
+        "structure_pacing_direction": 79,
+        "identity_hooks": 68,
+        "breadth_of_match": 82
+      }
     },
     "App_711660": {
       "key": "App_711660",
@@ -15268,6 +15318,115 @@
         "structure_pacing_direction": 70,
         "identity_hooks": 82,
         "breadth_of_match": 70
+      }
+    },
+    "App_552500": {
+      "key": "App_552500",
+      "appid": "552500",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "17dffc936ce34952a77590cb569121bacb8a67541dc3a4843f0c355432901057",
+      "taste_fingerprint": "2cca5945a932e4fc922b2be880f15885080783cda60e8c9640a2bf606dfd1432",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "First-person melee combat offers timing, positioning and execution that can reward learnable mechanical mastery.",
+        "Cooperative horde fighting can create meaningful shared roles and moment-to-moment teamwork rather than social play being merely incidental."
+      ],
+      "negative_evidence": [
+        "Repeated horde runs can become tiring if enemy encounters and build choices stop creating meaningfully different situations."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:27:19+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 86,
+        "development_variety": 66,
+        "structure_pacing_direction": 72,
+        "identity_hooks": 72,
+        "breadth_of_match": 76
+      }
+    },
+    "App_552590": {
+      "key": "App_552590",
+      "appid": "552590",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "6403680b5b08c3c8ec7b01eb5a60db3432de4471c53e35d3b5a419101bc38732",
+      "taste_fingerprint": "0d2bb94e3f940f63ccd9f20d151a749956c9055346e7f0424bf4a8b9b1dbe76f",
+      "verdict": "INCLUDE",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
+      "positive_evidence": [
+        "The murder mystery gives each loop a concrete investigative purpose and a reason to keep uncovering cause and effect.",
+        "Revisiting the same day changes meaning as new information opens different interventions, matching a preference for repetition that gains fresh context.",
+        "The masked-ball setting and occult premise provide a distinctive identity rather than a generic adventure framework."
+      ],
+      "negative_evidence": [
+        "The time-loop structure still revisits familiar spaces and could drag if new discoveries become too sparse."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:27:19+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 66,
+        "development_variety": 82,
+        "structure_pacing_direction": 88,
+        "identity_hooks": 91,
+        "breadth_of_match": 89
+      }
+    },
+    "App_557600": {
+      "key": "App_557600",
+      "appid": "557600",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "99adf788f44263d7a015f8a62190210fdf64cfd24f34aafd1a7f247f3e009349",
+      "taste_fingerprint": "1809de6b8dd6e02485b9fe42fe2dfb5d4a9484340baceacffa0c0905e68eefa0",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Its panel-manipulation puzzles ask for active insight and give compact, understandable problems to solve.",
+        "The hand-drawn visual construction is a strong candidate-specific artistic hook likely to make the experience memorable."
+      ],
+      "negative_evidence": [
+        "A primarily puzzle-driven loop has narrower gameplay breadth than adventures where puzzles are mixed with movement, combat or progression."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:27:19+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 65,
+        "development_variety": 68,
+        "structure_pacing_direction": 77,
+        "identity_hooks": 92,
+        "breadth_of_match": 69
+      }
+    },
+    "App_57300": {
+      "key": "App_57300",
+      "appid": "57300",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "9924d0dc19b2cb1ee87dd06705eb6ad21bf8b6ebc45fdaf8c40ef9ad4004f68a",
+      "taste_fingerprint": "e0c73a7e89391614f589e4f13b4134922562e64a5c6af6fb6967124a025b5f25",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Its emphasis on immersion and discovery aligns with the strong positive response to atmospheric mystery when there is something concrete to uncover.",
+        "The oppressive first-person horror identity is distinctive enough to provide a memorable experiential hook."
+      ],
+      "negative_evidence": [
+        "The vulnerable survival-horror format offers less direct combat mastery than the user's strongest gameplay patterns, and prolonged uncertainty can become frustrating if objectives feel opaque."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:27:19+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 48,
+        "development_variety": 62,
+        "structure_pacing_direction": 65,
+        "identity_hooks": 91,
+        "breadth_of_match": 68
       }
     }
   }
