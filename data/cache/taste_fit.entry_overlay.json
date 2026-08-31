@@ -2,7 +2,7 @@
   "schema_version": 1,
   "purpose": "incremental_per_entry_taste_verdict_overlay",
   "entry_schema_version": 3,
-  "entry_count": 619,
+  "entry_count": 622,
   "entries": {
     "App_241930": {
       "key": "App_241930",
@@ -10124,321 +10124,463 @@
       "key": "App_6220",
       "appid": "6220",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "a7086f74c39842a690a49ea69bf42d6324940b2de58662c40636dd117cca413e",
       "taste_fingerprint": "cf0ed80de205fb1c5efade5fd1bfac7de96fd2c950f959b3374267fda823cfef",
-      "verdict": "EXCLUDE",
-      "fit_level": "below_moderate",
-      "reason_code": "exclude_audited_below",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Aggressive racing makes vehicle control and speed a relevant movement hook, but the description exposes no independent progression, vehicle-building or structural-variation system."
+        "Aggressive racing rewards car control, route judgment and managing collisions under pressure.",
+        "Its exaggerated crashes and environmental destruction give the racing a memorable identity beyond clean circuit driving."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "The basic racing loop can become repetitive if later events do not add enough new conditions or vehicle development."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 82,
+        "development_variety": 65,
+        "structure_pacing_direction": 78,
+        "identity_hooks": 82,
+        "breadth_of_match": 73
+      }
     },
     "App_630060": {
       "key": "App_630060",
       "appid": "630060",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "c6809988b9dc7861930aa6b15f110f26462858787e53a3140d0ee3ee8c5babd3",
       "taste_fingerprint": "ec93e73a516670572e71824d3654e435cb4767f298bd542cef031220991eb0c9",
-      "verdict": "EXCLUDE",
-      "fit_level": "below_moderate",
-      "reason_code": "exclude_direct_conflict",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Eighteen endings and hidden secrets provide some consequence and discovery variety."
+        "Hidden secrets and multiple outcomes give the escape-room mystery more discovery targets than a single linear puzzle chain.",
+        "Humorous content mixed with horror and story can provide tonal variety and a more distinctive identity."
       ],
       "negative_evidence": [
-        "The candidate is primarily a chamber-escape puzzle game, making puzzle solving the central repeated loop rather than one component of a broader varied adventure."
+        "Chamber-escape puzzles can become frustrating if progression depends on obscure interactions or unclear next steps."
       ],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 61,
+        "development_variety": 76,
+        "structure_pacing_direction": 67,
+        "identity_hooks": 78,
+        "breadth_of_match": 71
+      }
     },
     "App_632360": {
       "key": "App_632360",
       "appid": "632360",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "03efc76adbb9e0e817c34b16f6dda22f1bba28a82f94b48c9f048adb2f02368e",
       "taste_fingerprint": "2c891a9a55989439e2eb1a8465af6ce886d75390b53f9d9944499fa95a62c2f1",
       "verdict": "INCLUDE",
       "fit_level": "strong",
       "reason_code": "include_strong",
       "positive_evidence": [
-        "Combining loot in surprising ways creates a strong build-synergy system where understanding combinations changes power dramatically.",
-        "Mastering distinct characters provides explicit execution and system-mastery progression.",
-        "Solo or cooperative escape from a chaotic alien planet gives repeated runs a clear objective and social variation."
+        "Distinct survivors reward learning different movement, attack patterns and combat decisions, creating substantial mastery depth.",
+        "Item combinations can transform a run and keep progression mechanically visible rather than merely numerical.",
+        "Escalating enemy pressure and cooperative play create changing tactical situations and opportunities for meaningful team roles."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "negative_evidence": [
+        "Roguelite repetition can become tiring when repeated early stages stop feeling meaningfully different."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 95,
+        "development_variety": 90,
+        "structure_pacing_direction": 82,
+        "identity_hooks": 81,
+        "breadth_of_match": 91
+      }
     },
     "App_633230": {
       "key": "App_633230",
       "appid": "633230",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "0ccc886d36372fa588aa04d097dd8899bbb9e72127e1cd8708a2cd95a33dccb4",
       "taste_fingerprint": "8edea87186e8f39cc0f7c850647e2d196795f9ad5da789f6e33d64cedfdd2e9c",
       "verdict": "INCLUDE",
       "fit_level": "moderate",
       "reason_code": "include_moderate",
       "positive_evidence": [
-        "Four-person teams make composition and coordination part of the core competitive objective.",
-        "Human opponents create changing tactical situations instead of a fixed scripted combat loop.",
-        "The explicit goal of leading the team to victory gives each match immediately readable purpose."
+        "Four-player team battles can reward role coordination, positioning and understanding how different ninja abilities interact.",
+        "A roster of techniques and team compositions gives competitive matches room for mastery rather than relying only on raw reflexes."
       ],
       "negative_evidence": [
-        "The description exposes little long-term development or candidate-specific combat depth, keeping the fit moderate."
+        "The online-match focus offers less campaign direction and long-form experiential evolution than the strongest action-adventure matches."
       ],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 86,
+        "development_variety": 68,
+        "structure_pacing_direction": 60,
+        "identity_hooks": 76,
+        "breadth_of_match": 69
+      }
     },
     "App_633460": {
       "key": "App_633460",
       "appid": "633460",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "9c54a23a71f0b97c04d8bd9ceeaf82401263046c73ddf07c26dfff643b3d14d1",
       "taste_fingerprint": "23e6c09c788f23ab24dea739e087d9dfb26ff069b8d840583f8f1e22542bc2ce",
       "verdict": "INCLUDE",
       "fit_level": "moderate",
       "reason_code": "include_moderate",
       "positive_evidence": [
-        "Sixty-four-player battles of maneuver make positioning and adaptation to human opponents central rather than reducing play to target shooting.",
-        "Rifle, sabre and gas-mask demands create distinct battlefield responses to different threats.",
-        "The Eastern Front setting gives the large battles a concrete historical tactical context."
+        "Large maneuver battles can reward map awareness, careful weapon handling and coordinated team positioning.",
+        "The Eastern Front setting and period equipment give the multiplayer combat a more specific identity than a generic arena shooter."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "negative_evidence": [
+        "Repeated competitive battles provide limited narrative progression and may rely on the same core military loop for long stretches."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 83,
+        "development_variety": 58,
+        "structure_pacing_direction": 69,
+        "identity_hooks": 67,
+        "breadth_of_match": 64
+      }
     },
     "App_651670": {
       "key": "App_651670",
       "appid": "651670",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "4f44e73363350618c630298372df88f4cfe7577b895a06b542635f2a6f705db1",
       "taste_fingerprint": "ae11fe299f35b3b47545725572bb8dc43b800a55d9d4ab05a993fe611a3aad1a",
       "verdict": "INCLUDE",
       "fit_level": "strong",
       "reason_code": "include_strong",
       "positive_evidence": [
-        "Outsmarting uniquely generated adversaries makes tactical problem solving an explicit core activity.",
-        "Rogue-lite generation changes the strategic context between attempts instead of repeating a fixed sequence.",
-        "Forging bonds between heroes adds team-development choices while ending the cycle provides a clear overarching objective."
+        "Turn-based battles emphasize reading enemy intentions and selecting a tactical answer, closely matching the preference for compact plan-test-adjust problems.",
+        "Generated adversaries and changing party relationships create run-to-run variation rather than a fully static campaign loop.",
+        "Hero bonds and the goal of breaking a repeating cycle give the strategy a character and narrative hook beyond pure optimization."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "negative_evidence": [
+        "Roguelite resets can still make repeated early encounters tiring if their tactical differences become too slight."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 91,
+        "development_variety": 88,
+        "structure_pacing_direction": 86,
+        "identity_hooks": 82,
+        "breadth_of_match": 90
+      }
     },
     "App_652190": {
       "key": "App_652190",
       "appid": "652190",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "2ef913b9f7fbc7fc2ce8ea6b506c1bc2f0cd153f3d791d5bd3d5cd415166c126",
       "taste_fingerprint": "ba2d14b7acb279f2f34cc5da9e1312db7eea03cdb81fdac25a9424f96fc4c37e",
       "verdict": "INCLUDE",
-      "fit_level": "strong",
-      "reason_code": "include_strong",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Stealth and strategy are explicitly required for survival, making reading situations and choosing responses central.",
-        "Different enemies impose unique games, giving encounters changing rules rather than one repeated chase pattern.",
-        "Survival supplies a clear immediate objective while horror atmosphere reinforces rather than replaces the mechanics."
+        "Different supernatural enemies use distinct survival rules, turning encounters into small pattern-recognition and strategy problems.",
+        "Stealth, horror and changing enemy games provide more mechanical variation than a single chase-focused horror loop."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "negative_evidence": [
+        "Repeated failures and jump-scare pressure can become tiring if figuring out the required rule is not clearly communicated."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 77,
+        "development_variety": 75,
+        "structure_pacing_direction": 68,
+        "identity_hooks": 76,
+        "breadth_of_match": 72
+      }
     },
     "App_656350": {
       "key": "App_656350",
       "appid": "656350",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "9e30e07a7d10bd48785742853fb7dca11369729a4d0daded0d387b36b4d5d894",
       "taste_fingerprint": "4e61425d05036a4e665a4b59d70e043737ca5c5e3339aefdd648c7a695b9e1a8",
       "verdict": "INCLUDE",
-      "fit_level": "moderate",
-      "reason_code": "include_moderate",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
       "positive_evidence": [
-        "Roguelike structure makes repeated descents develop through changing enemies and discoveries.",
-        "Powerful relics provide a capability-building layer with direct combat purpose.",
-        "Hidden secrets give exploration a discovery vector beyond simply clearing enemies."
+        "Real-time combat, dodging and weapon use support direct execution skill and visible improvement.",
+        "Relics, enemies, secrets and RPG progression continually alter the tools available during deeper runs.",
+        "Exploration gives the roguelike a concrete descent objective and discovery layer beyond simply chasing another score."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "negative_evidence": [
+        "Procedural runs still repeat foundational rooms and early progression, so variety must remain meaningful to avoid fatigue."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 88,
+        "development_variety": 86,
+        "structure_pacing_direction": 83,
+        "identity_hooks": 72,
+        "breadth_of_match": 85
+      }
     },
     "App_657200": {
       "key": "App_657200",
       "appid": "657200",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "14a4ce9fdf28ac3a59eb062d08d5a5b2b3164c7507caf50ad806704ade1e1521",
       "taste_fingerprint": "c86e0a5f2f7310e43df7b6def27bcc4f030f7fd3f8d0d1d50aeddfb05381c931",
       "verdict": "INCLUDE",
       "fit_level": "moderate",
       "reason_code": "include_moderate",
       "positive_evidence": [
-        "Weapon handling, fishing, chess, duels and other levels create unusually broad activity variety instead of one repeated mechanic.",
-        "Manual hand control makes ordinary tasks into a distinctive execution system that can reward learning.",
-        "Several activities are built for playing with friends, adding social variation to the mechanical challenges."
+        "The intentionally difficult hand controls create a rare form of execution mastery where improvement is immediately visible.",
+        "Weapons, fishing, chess, duels and other scenarios change the task frequently, giving shared play substantial situational variety."
       ],
       "negative_evidence": [
-        "Intentionally awkward simulation controls may create frustration, so the fit remains moderate."
+        "Deliberately awkward controls can cross from satisfying mastery into frustration, especially when precision failures repeat without new insight."
       ],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 85,
+        "development_variety": 88,
+        "structure_pacing_direction": 58,
+        "identity_hooks": 79,
+        "breadth_of_match": 76
+      }
     },
     "App_65790": {
       "key": "App_65790",
       "appid": "65790",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "584f188a6e10c075e4bd4962db1dcd6e5f1966b935dc45043a1eb816c2c58089",
       "taste_fingerprint": "56cd5b43e1a64dc73788b3d723a75f6941899a897d7bcfc5c7181cc67e1bbeb5",
       "verdict": "EXCLUDE",
       "fit_level": "below_moderate",
-      "reason_code": "exclude_insufficient",
+      "reason_code": "exclude_direct_conflict",
       "positive_evidence": [
-        "The military-simulation battlefield may support tactical play, but the description is about the remaster and historical product identity rather than candidate-specific mechanics, mission structure or progression."
+        "A demanding military simulation can offer substantial weapon, movement and tactical mastery."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "negative_evidence": [
+        "Its old-school simulation structure places a heavy burden on learning systems and battlefield procedures, conflicting with the strong negative pattern around overloaded or unclear entry points.",
+        "The broad military sandbox offers less of the distinctive story, movement fantasy or rapidly changing mission identity that helped strategy and action games overcome genre friction in the canonical profile."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 87,
+        "development_variety": 64,
+        "structure_pacing_direction": 48,
+        "identity_hooks": 53,
+        "breadth_of_match": 50
+      }
     },
     "App_673750": {
       "key": "App_673750",
       "appid": "673750",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "9a3a87b42f424a8697ac4612b821a06fc71ea7e7198b9ed6ce3a33985fd01e08",
       "taste_fingerprint": "02be6e58fa85e7af4abc60a6d2c4b5df8cfc4b0dccffa14c986509fd88fbe9c3",
       "verdict": "INCLUDE",
       "fit_level": "strong",
       "reason_code": "include_strong",
       "positive_evidence": [
-        "Physics-based platforming makes movement and body control the central skill, directly matching the traversal preference.",
-        "Beating levels, finding hidden carrots and racing the clock provide several clear objectives around the movement system.",
-        "Cooperative play makes coordination part of the physical challenge and adds strong social variation."
+        "Physics-based movement makes traversal itself a learnable challenge where better coordination produces obvious improvement.",
+        "Cooperative levels require partners to coordinate movement and recover from mistakes, creating meaningful shared play rather than passive company.",
+        "Level goals, hidden carrots and timed races vary the objective and give repeated movement challenges clear direction."
       ],
       "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 91,
+        "development_variety": 80,
+        "structure_pacing_direction": 86,
+        "identity_hooks": 80,
+        "breadth_of_match": 89
+      }
     },
     "App_674140": {
       "key": "App_674140",
       "appid": "674140",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "e5904b04b4b2e6f2a7bd2f4dcf575470d46ec5ee52dee0666e2c058419e54859",
       "taste_fingerprint": "bb254db19d88b7a9211159be91886f1cba897c67c0c0add9745178f8509b3eab",
       "verdict": "INCLUDE",
-      "fit_level": "moderate",
-      "reason_code": "include_moderate",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
       "positive_evidence": [
-        "Catching living snacks provides a candidate-specific collection interaction rather than generic island exploration.",
-        "Feeding captured creatures to friends gives collection a clear practical purpose.",
-        "The mysterious island framing provides a discovery vector around the unusual capture system."
+        "Discovering and catching different living snacks turns exploration into a series of concrete observation and capture problems.",
+        "The island mystery and unusual creatures give collecting a narrative reason rather than reducing it to a checklist.",
+        "Its bizarre food-creature concept and colorful presentation provide a strong candidate-specific identity."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "negative_evidence": [
+        "The lighter tone may reduce emotional weight compared with the user's strongest story-driven adventures."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 73,
+        "development_variety": 85,
+        "structure_pacing_direction": 84,
+        "identity_hooks": 96,
+        "breadth_of_match": 88
+      }
     },
     "App_674750": {
       "key": "App_674750",
       "appid": "674750",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "488b6cd9589c4d38eafa97b600ab032bb39a6c777c07ec2403f2b14288c77999",
       "taste_fingerprint": "dae4818214432c3f9339b81b87cc5f605bfdbe2b32a5de512209e94f4d7c9cc2",
       "verdict": "INCLUDE",
-      "fit_level": "strong",
-      "reason_code": "include_strong",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Building a base by day and defending it by night creates two complementary activity phases rather than one shooter loop.",
-        "Tower-defense construction gives shooting decisions a strategic preparation layer.",
-        "Up to four-player cooperation adds coordination while the survive-as-long-as-possible objective provides clear pressure."
+        "Alternating base construction and direct top-down shooting combines tactical planning with active execution.",
+        "Cooperative defense can create useful role division between building, covering lanes and dealing with immediate threats."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "negative_evidence": [
+        "The survival objective is explicitly endurance-based, so day-night cycles may become repetitive without enough new enemies, tools or tactical constraints."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 80,
+        "development_variety": 69,
+        "structure_pacing_direction": 70,
+        "identity_hooks": 58,
+        "breadth_of_match": 70
+      }
     },
     "App_674940": {
       "key": "App_674940",
       "appid": "674940",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "f1c13acc6cd4e2137409393ddf44e03d1f60760e1bd24557d69d8490228a91de",
       "taste_fingerprint": "0f65ff1dc2454e6076fb0aed455b3390843aa4cf7a98cbb691ca7b90439598bd",
       "verdict": "INCLUDE",
       "fit_level": "moderate",
       "reason_code": "include_moderate",
       "positive_evidence": [
-        "Physics-based fighting creates a distinctive execution layer beyond generic button-based combat.",
-        "Human couch or online opponents make every match situationally variable and provide a strong social-play amplifier."
+        "Physics-driven fights reward timing, spacing and adapting to unstable situations, giving repeated matches room for execution mastery.",
+        "Couch and online battles can generate the kind of active shared rivalry and memorable moments that strengthen simple mechanics."
       ],
       "negative_evidence": [
-        "The prepared context exposes no long-term progression or broader structural variety, keeping the fit moderate."
+        "There is little long-term progression or narrative direction, so sustained interest depends almost entirely on opponents and match variety."
       ],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 86,
+        "development_variety": 56,
+        "structure_pacing_direction": 62,
+        "identity_hooks": 69,
+        "breadth_of_match": 66
+      }
     },
     "App_677120": {
       "key": "App_677120",
       "appid": "677120",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "fd1f0ce03324d73d32098f70272f25906f17b4764b1e2be69a8c39a333ddcf9a",
       "taste_fingerprint": "790393377ec260757c42e0a0918e621c95aae601d811fb552a4cfec227ea7b5c",
       "verdict": "INCLUDE",
       "fit_level": "moderate",
       "reason_code": "include_moderate",
       "positive_evidence": [
-        "Procedurally generated levels change the exploration and combat context between roguelite runs.",
-        "Action-adventure combat keeps the repeated runs actively controlled rather than passive.",
-        "Playing solo or with three friends adds meaningful social variation to the procedural structure."
+        "Action combat and class play offer room for execution skill and learning enemy patterns.",
+        "Roguelite progression and cooperative runs provide visible development and opportunities for meaningful role coordination."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "negative_evidence": [
+        "Procedural levels can make repeated runs feel structurally similar if new abilities and enemy demands stop changing the experience."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 85,
+        "development_variety": 77,
+        "structure_pacing_direction": 74,
+        "identity_hooks": 64,
+        "breadth_of_match": 74
+      }
     },
     "App_683900": {
       "key": "App_683900",
       "appid": "683900",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "81ff938322dc31cd03d5a5449d56960624f632eba62544ea8874e7a77a92d7ea",
       "taste_fingerprint": "d8fe031abe5731e2cd88f03aef16887ec0b33a7ce5dacd86788918a7b41b13e3",
-      "verdict": "EXCLUDE",
-      "fit_level": "below_moderate",
-      "reason_code": "exclude_audited_below",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Creating amusement parks is a potentially meaningful construction system, but the description exposes no independent management objective, progression or challenge structure."
+        "Designing parks and rides creates visible cause-and-effect decisions and a strong sense of building something that develops over time.",
+        "Different park constraints and guest-management problems can keep optimization from being a single static loop."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "negative_evidence": [
+        "The classic management interface and simulation depth may require substantial system recall after long gaps between sessions."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 76,
+        "development_variety": 82,
+        "structure_pacing_direction": 73,
+        "identity_hooks": 65,
+        "breadth_of_match": 70
+      }
     },
     "App_684410": {
       "key": "App_684410",
       "appid": "684410",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "a134157aaf9715923de90bc0201c28e11c992cfa5ff3c9653db53f9a2397866e",
       "taste_fingerprint": "5fef927b75f1822685f16442bd1c692068a8029a9f89df742ea239b4e0a04fa9",
-      "verdict": "EXCLUDE",
-      "fit_level": "below_moderate",
-      "reason_code": "exclude_insufficient",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Merging Portal with bridge construction suggests a distinctive puzzle interaction, but the description does not actually expose the mechanics or any broader adventure structure beyond the puzzle concept."
+        "Bridge-building stages are clear local engineering puzzles with immediate feedback on whether a plan works.",
+        "Portal mechanics add recognizable spatial twists that can vary solutions beyond ordinary bridge construction."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:23:04+00:00"
+      "negative_evidence": [
+        "As a puzzle-first experience, it has less movement, character or narrative breadth than the user's strongest adventure matches."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 77,
+        "development_variety": 72,
+        "structure_pacing_direction": 89,
+        "identity_hooks": 81,
+        "breadth_of_match": 70
+      }
     },
     "App_6980": {
       "key": "App_6980",
@@ -15520,6 +15662,86 @@
         "structure_pacing_direction": 88,
         "identity_hooks": 96,
         "breadth_of_match": 94
+      }
+    },
+    "App_622650": {
+      "key": "App_622650",
+      "appid": "622650",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "b29525ce993ebce20bf165c58d405a0b3c92705b5547e1a8b4e7d180b81e5a6e",
+      "taste_fingerprint": "5dec0dbffd1077b72a7d587515add9e6046f35f3633964272a0801a953459772",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "The corrupted-cartoon setting is a highly recognizable horror identity with strong atmosphere and visual character.",
+        "Puzzle exploration inside a mystery gives a concrete reason to examine the environment rather than wander without purpose."
+      ],
+      "negative_evidence": [
+        "Combat and stealth are comparatively simple, so the experience relies more on atmosphere and mystery than deep mechanical mastery."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 55,
+        "development_variety": 67,
+        "structure_pacing_direction": 72,
+        "identity_hooks": 94,
+        "breadth_of_match": 72
+      }
+    },
+    "App_638230": {
+      "key": "App_638230",
+      "appid": "638230",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "5c2a49ae7686ba94eee9f11c2d46f65a22e797f598906c15b4cdbdb790bb3713",
+      "taste_fingerprint": "50f4bcf771dfe83568319bc393b4190b9a3af0ba982eae8702703d4bea1c6028",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Soaring and gliding make movement itself part of the pleasure, directly matching a durable positive pattern around expressive traversal.",
+        "Ancient ruins, visual storytelling and a mysterious destination provide a strong atmospheric identity and discovery hook."
+      ],
+      "negative_evidence": [
+        "The meditative structure offers little mechanical progression and can feel too passive if atmosphere alone does not sustain momentum."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 66,
+        "development_variety": 55,
+        "structure_pacing_direction": 65,
+        "identity_hooks": 95,
+        "breadth_of_match": 74
+      }
+    },
+    "App_688420": {
+      "key": "App_688420",
+      "appid": "688420",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "e8da459c3945588af9ca64eecf5d199c4dc54edca94147ad5f32c1ee7924ab4d",
+      "taste_fingerprint": "7edbbd5ec90bb225cf4abb6c6dd078d68cde17861babf875cc7da239afda521b",
+      "verdict": "INCLUDE",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
+      "positive_evidence": [
+        "Each island is a compact tactical problem where terrain, unit placement and enemy approach demand a readable plan.",
+        "Changing island geometry and unit development make repeated defenses meaningfully different instead of identical wave survival.",
+        "The desperate retreat across islands provides a clear campaign direction and stakes for each tactical decision."
+      ],
+      "negative_evidence": [],
+      "evaluated_at_utc": "2026-08-31T14:31:15+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 91,
+        "development_variety": 85,
+        "structure_pacing_direction": 92,
+        "identity_hooks": 78,
+        "breadth_of_match": 89
       }
     }
   }
