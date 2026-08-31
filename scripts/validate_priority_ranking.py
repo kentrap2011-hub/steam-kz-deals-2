@@ -76,6 +76,7 @@ def main():
     assert sum(x['max_points'] for x in model['personal']['taste']['normalized_factor_weights'].values()) == 50
     assert model['personal']['wishlist']['max'] == 4
     assert model['personal']['achievements']['max'] == 3
+    assert model['personal']['achievements']['min'] == -6
     assert model['personal']['duration']['max'] == 3
     assert model['purchase']['savings']['max'] == 20
     assert model['purchase']['price']['max'] == 12
@@ -160,6 +161,54 @@ def main():
     assert component(wishlist, 'personal_components', 'wishlist')['points'] == 4
     assert wishlist['total_score'] - no_wishlist['total_score'] == 4
 
+    # Achievement value depends on confirmed prior play. Numeric direct-user rating is the current canonical
+    # proof that the user has already played the game; unconfirmed/new games keep achievements a small bonus.
+    new_best_ach = ranked([game('new-best-ach', practical={'steam_achievements': True, 'achievement_quality': 5})])[0]
+    new_no_ach = ranked([game('new-no-ach', practical={'steam_achievements': False, 'achievement_quality': None})])[0]
+    new_unknown_ach = ranked([game('new-unknown-ach', practical={'steam_achievements': None, 'achievement_quality': None})])[0]
+    played_best_ach = ranked([game(
+        'played-best-ach',
+        direct_user_evidence={'level': 'positive', 'rating': 4},
+        practical={'steam_achievements': True, 'achievement_quality': 5},
+    )])[0]
+    played_quality_two = ranked([game(
+        'played-quality-two',
+        direct_user_evidence={'level': 'positive', 'rating': 4},
+        practical={'steam_achievements': True, 'achievement_quality': 2},
+    )])[0]
+    played_quality_one = ranked([game(
+        'played-quality-one',
+        direct_user_evidence={'level': 'positive', 'rating': 4},
+        practical={'steam_achievements': True, 'achievement_quality': 1},
+    )])[0]
+    played_no_ach = ranked([game(
+        'played-no-ach',
+        direct_user_evidence={'level': 'positive', 'rating': 4},
+        risk_codes=['no_steam_achievements'],
+        practical={'steam_achievements': False, 'achievement_quality': None},
+    )])[0]
+    played_unknown_ach = ranked([game(
+        'played-unknown-ach',
+        direct_user_evidence={'level': 'positive', 'rating': 4},
+        practical={'steam_achievements': None, 'achievement_quality': None},
+    )])[0]
+
+    assert component(new_best_ach, 'personal_components', 'achievements')['points'] == 1.5
+    assert component(new_best_ach, 'personal_components', 'achievements')['played_confirmed'] is False
+    assert component(new_no_ach, 'personal_components', 'achievements')['points'] == 0
+    assert component(new_unknown_ach, 'personal_components', 'achievements')['points'] == 0
+    assert new_best_ach['total_score'] - new_no_ach['total_score'] == 1.5
+
+    assert component(played_best_ach, 'personal_components', 'achievements')['points'] == 3
+    assert component(played_best_ach, 'personal_components', 'achievements')['played_confirmed'] is True
+    assert component(played_quality_two, 'personal_components', 'achievements')['points'] == -2
+    assert component(played_quality_one, 'personal_components', 'achievements')['points'] == -4
+    assert component(played_no_ach, 'personal_components', 'achievements')['points'] == -6
+    assert component(played_no_ach, 'personal_components', 'achievements')['max_points'] is None
+    assert component(played_unknown_ach, 'personal_components', 'achievements')['points'] == 0
+    assert played_best_ach['total_score'] - played_no_ach['total_score'] == 9
+    assert component(played_no_ach, 'personal_components', 'risk')['points'] == 0
+
     # Descriptive risks are small; serious personal and confirmed Windows risks use configured penalties.
     low_risk = ranked([game('low-risk', risk_level='low', risk_codes=['old_design_friction'])])[0]
     medium_risk = ranked([game('medium-risk', risk_level='medium', risk_codes=['management_routine'])])[0]
@@ -173,7 +222,7 @@ def main():
     assert high_risk['risk_status']['affects_score'] is True
     assert high_risk['risk_status']['score_penalty'] == 10
 
-    # Lack of achievements is already scored in its own component and must not be counted again as risk.
+    # Lack of achievements is scored only in the achievement component and must not be counted again as risk.
     no_ach = ranked([game(
         'no-ach',
         risk_level='low',
