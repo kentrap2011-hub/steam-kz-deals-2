@@ -1,0 +1,81 @@
+name: Test fixed Steam package options live
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - purchase-options-fixed-packages-20260831
+    paths:
+      - ".github/workflows/test-fixed-package-options-live.yml"
+      - "config/fixed_package_purchase_option_contract.json"
+      - "scripts/build_fixed_package_purchase_options.py"
+      - "scripts/apply_fixed_package_purchase_options.py"
+      - "scripts/test_fixed_package_purchase_options.py"
+
+permissions:
+  contents: read
+
+jobs:
+  live-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: purchase-options-fixed-packages-20260831
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run deterministic regressions
+        run: PYTHONPATH=scripts python scripts/test_fixed_package_purchase_options.py
+
+      - name: Discover current fixed KZ packages read-only
+        run: python scripts/build_fixed_package_purchase_options.py
+
+      - name: Validate live artifact and BioShock regression target
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('data/production/pre_ai/fixed_package_options.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          assert data['status'] == 'complete'
+          assert data['classification_complete'] is True
+          assert data['dynamic_bundle_ids_supported'] is False
+          assert data['personalized_complete_the_set_supported'] is False
+          assert data['discovered_packageid_count'] > 0
+
+          package = (data.get('packages') or {}).get('Sub_127633')
+          classification = (data.get('package_classifications') or {}).get('Sub_127633')
+          if package is None:
+              raise SystemExit(
+                  'LIVE_BIOSHOCK_PACKAGE_MISSING '
+                  f'classification={classification!r} '
+                  f'discovered={data["discovered_packageid_count"]} '
+                  f'eligible={data["eligible_package_count"]}'
+              )
+
+          included = {int(x) for x in package.get('included_appids') or []}
+          expected = {7670, 8850, 8870}
+          missing = sorted(expected - included)
+          if missing:
+              raise SystemExit(f'LIVE_BIOSHOCK_MEMBERSHIP_MISMATCH missing={missing}')
+          if float(package.get('final_kzt') or 0) <= 0:
+              raise SystemExit('LIVE_BIOSHOCK_PRICE_INVALID')
+
+          print(json.dumps({
+              'LIVE_FIXED_PACKAGE_TEST': 'PASS',
+              'discovered_packageids': data['discovered_packageid_count'],
+              'eligible_fixed_packages': data['eligible_package_count'],
+              'bioshock_package': package['key'],
+              'bioshock_title': package.get('title'),
+              'bioshock_final_kzt': package.get('final_kzt'),
+              'bioshock_discount_percent': package.get('discount_percent'),
+              'bioshock_included_appids': package.get('included_appids'),
+          }, ensure_ascii=False, indent=2))
+          PY
