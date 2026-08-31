@@ -100,6 +100,21 @@ Current next step:
 - источник/выбор должен быть producer-owned, UI только отображает готовый результат;
 - перед внедрением определить критерии качества, актуальности, языка и fallback при отсутствии хорошего ролика.
 
+### D. Fix stale/wrong game image when swiping cards
+
+Статус: `planned`.
+
+Симптом:
+- при перелистывании на следующую игру карточка уже показывает данные новой игры, но изображение часто остаётся от предыдущей;
+- правильная картинка появляется только после ручного обновления страницы.
+
+Требование:
+- при каждом переходе изображение должно сразу соответствовать текущей игре;
+- не должно быть состояния, где текст/цена/игра уже новые, а картинка ещё от предыдущей;
+- ручное обновление страницы не должно требоваться;
+- проверить клиентское состояние изображения, ключи/кэш и гонки асинхронной загрузки при быстром перелистывании;
+- добавить regression-проверку как минимум для нескольких быстрых последовательных переходов.
+
 ## Overall Definition of done
 
 Active work now:
@@ -108,6 +123,7 @@ Active work now:
 Planned backlog after that includes at least:
 - ranking/card explanation quality audit;
 - Russian-language ranking factor;
-- YouTube reviews for games.
+- YouTube reviews for games;
+- stale/wrong game image on card swipe.
 
 `CURRENT_TASK.md` should clearly distinguish `in_progress` from `planned`; adding a future task must not automatically mark it active.
