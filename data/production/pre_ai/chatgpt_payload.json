@@ -54,26 +54,26 @@
     "taste_queue_jsonl": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
     "purchase_context_jsonl": "data/production/pre_ai/chatgpt_purchase_context.jsonl",
     "line_alignment": "taste_queue line N == purchase_context line N for 1..ai_queue_count",
-    "ready_context_start_line": 135
+    "ready_context_start_line": 125
   },
   "source_family_count": 659,
   "candidate_description_known_count": 659,
   "candidate_description_missing_count": 0,
   "candidate_description_coverage": 1.0,
-  "ai_queue_count": 134,
-  "ready_without_ai_count": 450,
-  "purchase_context_line_count": 584,
-  "deterministically_excluded_without_ai_count": 75,
+  "ai_queue_count": 124,
+  "ready_without_ai_count": 456,
+  "purchase_context_line_count": 580,
+  "deterministically_excluded_without_ai_count": 79,
   "deterministic_exclusion_counts": {
     "deal_excludes_even_if_strong": 25,
     "deal_excludes_for_valid_cached_fit": 10,
-    "valid_cached_taste_below_moderate": 40
+    "valid_cached_taste_below_moderate": 44
   },
   "complete_family_partition": true,
   "sale_end_coverage": 1.0,
   "sale_end_missing_count": 0,
   "sale_end_missing_primary_keys": [],
-  "source_pre_ai_artifact_bytes": 2437702,
+  "source_pre_ai_artifact_bytes": 2438279,
   "deterministically_excluded_primary_keys": [
     "App_1023690",
     "App_1041920",
@@ -141,7 +141,11 @@
     "App_485040",
     "App_485980",
     "App_507010",
+    "App_515570",
+    "App_520720",
     "App_538030",
+    "App_539720",
+    "App_545040",
     "App_550320",
     "App_587620",
     "App_602960",
@@ -151,5 +155,5 @@
     "App_761600",
     "App_802880"
   ],
-  "elapsed_seconds": 0.088
+  "elapsed_seconds": 0.104
 }

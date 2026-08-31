@@ -2,7 +2,7 @@
   "schema_version": 1,
   "purpose": "incremental_per_entry_taste_verdict_overlay",
   "entry_schema_version": 3,
-  "entry_count": 613,
+  "entry_count": 614,
   "entries": {
     "App_241930": {
       "key": "App_241930",
@@ -9532,172 +9532,244 @@
       "key": "App_515570",
       "appid": "515570",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "04010cd8277badbd3199061290d5a0920b6b58b7fdb5adb629500a3332375855",
       "taste_fingerprint": "be12f79064eddfdd1e4f495cab8582a2c1ad29247896248cd5f17cf8e8e37f68",
       "verdict": "EXCLUDE",
       "fit_level": "below_moderate",
       "reason_code": "exclude_insufficient",
       "positive_evidence": [],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "The candidate context describes only another volume of a compact arcade action series, with no evidence of the evolving situations or expanding possibilities that are a durable preference.",
+        "Its sparse description provides no grounded candidate-specific hook beyond arcade action and cyberpunk styling, insufficient to offset the user's repeated fatigue with static repetitive loops."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:16:18+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 52,
+        "development_variety": 18,
+        "structure_pacing_direction": 40,
+        "identity_hooks": 42,
+        "breadth_of_match": 28
+      }
     },
     "App_520720": {
       "key": "App_520720",
       "appid": "520720",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "8da2c01fee4592574a8f4be729161e918ed5921855307db5dc832b633aca41ff",
       "taste_fingerprint": "0759504e61f197620eddb1850ac12eb251d47041e305cf6cc98b2c511a4c68d0",
       "verdict": "EXCLUDE",
       "fit_level": "below_moderate",
-      "reason_code": "exclude_direct_conflict",
+      "reason_code": "exclude_insufficient",
       "positive_evidence": [
-        "The remote island and fragmented narration can create strong atmosphere."
+        "The remote desolate island and fragmented-letter premise provide a distinctive atmospheric mystery hook that maps to the user's interest in atmosphere and mystery."
       ],
       "negative_evidence": [
-        "The prepared context centers moving forward through a narrated environment and exposes no active system, progression or meaningful task variety, conflicting with the preference for mechanically active play."
+        "The candidate is framed primarily as an immersive first-person journey rather than active systems-driven play, which is risky because low-gameplay experiences depend heavily on story strength for this profile.",
+        "The context gives little evidence of mechanical development, mastery, or varied situations, all durable high-priority preferences."
       ],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "evaluated_at_utc": "2026-08-31T14:16:18+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 18,
+        "development_variety": 25,
+        "structure_pacing_direction": 48,
+        "identity_hooks": 68,
+        "breadth_of_match": 38
+      }
     },
     "App_526160": {
       "key": "App_526160",
       "appid": "526160",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "f00236844decea6c4e72630df2ce9f08890938da535d5cef183b3154eed2d5f6",
       "taste_fingerprint": "2dbde5d0f8c868c8e0fb408c62d66c9e8dfcbff871aa621ec718b9d19cf065f1",
       "verdict": "INCLUDE",
-      "fit_level": "strong",
-      "reason_code": "include_strong",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Exploration, crafting and combat create several linked active survival loops rather than one repetitive resource task.",
-        "The mysterious Alaskan wilderness provides a concrete discovery vector around survival.",
-        "Co-op gives resource gathering and combat a meaningful coordination layer while survival supplies a clear objective."
+        "Exploration of a mysterious Alaskan wilderness gives a concrete mystery-and-exploration hook aligned with the user's preference for discovery when there is a clear survival vector.",
+        "Crafting weapons and fighting to survive provide active progression and practical goals rather than purely passive exploration."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "Open-world survival can become repetitive if exploration, crafting and combat stop introducing meaningful new situations; the candidate context does not establish how strongly the loop evolves."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:16:18+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 62,
+        "development_variety": 64,
+        "structure_pacing_direction": 66,
+        "identity_hooks": 70,
+        "breadth_of_match": 66
+      }
     },
     "App_531510": {
       "key": "App_531510",
       "appid": "531510",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "e26c9a47645a609024669cee793e9c6aa881f85955cadc34fa8616d4ae643cc8",
       "taste_fingerprint": "c3ebeab5b61eaa6a67a4aefe24003b66f2500f933f8b29059dea87212e80741b",
-      "verdict": "EXCLUDE",
-      "fit_level": "below_moderate",
-      "reason_code": "exclude_direct_conflict",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Dodging to music can reward movement timing and co-op adds social energy."
+        "Dodging a chaotic bullet-hell to musical beats is an active timing-and-movement challenge with clear room for learnable mastery, a very strong durable user signal.",
+        "The explicit co-op format can create shared challenge and coordination, matching the user's positive pattern for meaningful shared play rather than multiplayer as a checkbox."
       ],
       "negative_evidence": [
-        "The description explicitly reduces the core to avoiding shapes and dying repeatedly, with no demonstrated development or broader changing structure, directly matching the repetition risk."
+        "The description explicitly centers repeated dying, so long stretches of similar retries could become tiring if attempts do not provide enough meaningful variation."
       ],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "evaluated_at_utc": "2026-08-31T14:16:18+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 84,
+        "development_variety": 55,
+        "structure_pacing_direction": 76,
+        "identity_hooks": 74,
+        "breadth_of_match": 70
+      }
     },
     "App_539470": {
       "key": "App_539470",
       "appid": "539470",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "cfc471e8ee847aeb056a476feb6a51ce750947d265926d6b2640120eec1c0e72",
       "taste_fingerprint": "7449d4292089d64e4ec62ab2fb1fa4f00ad9d7b8d776e5d94febfaf7623f251b",
       "verdict": "INCLUDE",
       "fit_level": "strong",
       "reason_code": "include_strong",
       "positive_evidence": [
-        "The game explicitly emphasizes tactics and forces rapid situational decisions rather than pure shooting execution.",
-        "Neutralizing criminals, rescuing civilians and defusing bombs create multiple distinct mission objectives.",
-        "The rule that shooting first is not an option changes how encounters must be read and solved, while co-op adds coordination."
+        "The game explicitly emphasizes tactical split-second decisions with concrete objectives such as neutralizing criminals, rescuing civilians and defusing bombs, closely matching the user's strong preference for understandable local tactical problems.",
+        "The rule that shooting first is not an option creates meaningful constraints and asks the player to master an intended style, fitting the user's enjoyment of challenge through mechanics rather than raw difficulty.",
+        "Single-player or co-op support offers the possibility of shared tactical coordination, another established positive pattern when interaction creates decisions and roles."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "A mission-based tactical formula could become repetitive if scenarios fail to vary, though the candidate context itself emphasizes multiple objective types."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:16:18+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 88,
+        "development_variety": 76,
+        "structure_pacing_direction": 90,
+        "identity_hooks": 72,
+        "breadth_of_match": 86
+      }
     },
     "App_539720": {
       "key": "App_539720",
       "appid": "539720",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "298433a9d9aaca4ee2ec29acf3538b65575c70bf11a0780ed0dbf9eafcf7e3a1",
       "taste_fingerprint": "494be2c9cd272a2b89742b3e646edba778ecae8f1b1e45bc51844b538ffd77e0",
-      "verdict": "INCLUDE",
-      "fit_level": "moderate",
-      "reason_code": "include_moderate",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
       "positive_evidence": [
-        "Endless racing makes vehicle control and speed the active skill.",
-        "Unlocking new cars provides visible progression within the score-chasing loop.",
-        "Leaderboards create an external mastery target beyond simply surviving a run."
+        "High-score chasing and car unlocks provide clear short-term goals and some skill progression."
       ],
       "negative_evidence": [
-        "The endless high-score structure remains repetitive, limiting the fit to moderate."
+        "The candidate is explicitly an endless arcade racing loop centered on beating a high score, with little evidence of the meaningful evolution and varied situations the user strongly values.",
+        "Unlocking cars is mentioned, but the context does not establish the kind of consequential tuning or progression that the user enjoyed in Need for Speed Underground 2."
       ],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "evaluated_at_utc": "2026-08-31T14:16:18+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 62,
+        "development_variety": 30,
+        "structure_pacing_direction": 55,
+        "identity_hooks": 48,
+        "breadth_of_match": 38
+      }
     },
     "App_540840": {
       "key": "App_540840",
       "appid": "540840",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "3c3e82f0c298577fce102faf2f7db69f93dbddf895d9f8f0f9cc6077da82e24b",
       "taste_fingerprint": "e8da62b4785a43b18e69394c58bf9916f5df1ca673f38283b62a4ba534e231ec",
       "verdict": "INCLUDE",
-      "fit_level": "strong",
-      "reason_code": "include_strong",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Turn-based puzzles are embedded in a broader ruin-exploration adventure rather than presented as disconnected puzzle stages.",
-        "Discovering secrets gives exploration a clear investigation vector.",
-        "Deadly challenges and uncovering the Queen of Venom myth provide changing objectives and a larger mystery beyond each individual puzzle."
+        "Exploring ancient ruins, uncovering secrets and pursuing the Queen of Venom mystery gives the puzzle loop a clear adventure vector instead of presenting disconnected puzzles.",
+        "Deadly challenges and turn-based puzzle situations can support the user's enjoyment of understandable problems where success comes from finding the right approach."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "Pure puzzle loops tend to hold the user's attention only for limited periods, so fit depends on the adventure structure and secrets providing enough variation beyond repeated puzzle solving."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:16:18+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 66,
+        "development_variety": 58,
+        "structure_pacing_direction": 76,
+        "identity_hooks": 70,
+        "breadth_of_match": 66
+      }
     },
     "App_544330": {
       "key": "App_544330",
       "appid": "544330",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "d1831db3d90ea7443d9cc078716e0e7544eb0cbb09c73a51e59988d77c5ceb99",
       "taste_fingerprint": "9a53d1ebf86bbf08882d55e7e651e862bab77bbd9db37132091756b9d332c4d5",
       "verdict": "INCLUDE",
-      "fit_level": "strong",
-      "reason_code": "include_strong",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Slithering, coiling and climbing form a highly distinctive physics-based movement system, directly matching the strong traversal preference.",
-        "Puzzle platforming integrates reasoning into that movement rather than replacing the broader adventure with abstract puzzles.",
-        "Climbing to the top of Haven Tor provides a clear traversal objective and visible spatial progression."
+        "Its unusual slithering, coiling and climbing movement makes locomotion itself the central learnable mechanic, directly matching the user's very strong enjoyment of expressive movement systems.",
+        "The physics-based puzzle-platform structure gives that movement a concrete challenge context rather than making it purely cosmetic."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "The candidate context does not establish how much the movement and puzzle situations evolve over time, creating a repetition risk if the distinctive control scheme is the only major hook."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:16:18+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 82,
+        "development_variety": 54,
+        "structure_pacing_direction": 68,
+        "identity_hooks": 78,
+        "breadth_of_match": 70
+      }
     },
     "App_545040": {
       "key": "App_545040",
       "appid": "545040",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "b2670d9e195896447662747a848d71d44c71149ac9429a40abf5928f4f3aee68",
       "taste_fingerprint": "e569684175efe8dbb6529d10376507775048b794d794143cad5fbe7671f76c17",
-      "verdict": "INCLUDE",
-      "fit_level": "moderate",
-      "reason_code": "include_moderate",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
       "positive_evidence": [
-        "Swooping, gliding and backflipping make expressive flight traversal the central interaction, a direct movement fit.",
-        "Hidden paths accessible through bird movement give exploration a concrete discovery vector.",
-        "Multiplayer adds a social context to the traversal experience."
+        "Flight, swooping, gliding and backflips make movement a prominent source of intrinsic enjoyment, a strong match to the user's movement preference.",
+        "Picturesque mysterious locations and hidden paths provide an atmospheric exploration hook."
       ],
       "negative_evidence": [
-        "The relaxation-first sandbox structure offers little explicit progression or direction, keeping the fit moderate."
+        "The game is explicitly framed around relaxation and exploration on the player's own terms, with little evidence of clear objectives or a strong reason to continue; lack of direction is a durable risk for this profile.",
+        "The context provides little evidence of progression or expanding mechanics beyond free flight and discovery."
       ],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "evaluated_at_utc": "2026-08-31T14:16:18+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 68,
+        "development_variety": 38,
+        "structure_pacing_direction": 30,
+        "identity_hooks": 72,
+        "breadth_of_match": 56
+      }
     },
     "App_558420": {
       "key": "App_558420",
@@ -15169,6 +15241,33 @@
         "structure_pacing_direction": 82,
         "identity_hooks": 94,
         "breadth_of_match": 90
+      }
+    },
+    "App_55230": {
+      "key": "App_55230",
+      "appid": "55230",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "0e80ab0ffa6948d89f86f3aa2592a08c2933b6449e655f754f64bb5c87aa2112",
+      "taste_fingerprint": "3b5f42e94c847897642e5c7b562f9d870e3d30503cfe1311811aa7a895d40225",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "The candidate explicitly promises outlandish gameplay scenarios, which supports the user's strong preference for varied situations and memorable identity rather than a grey, interchangeable open-world experience.",
+        "Its exaggerated Third Street Saints-versus-Syndicate premise gives the open-world action a distinctive playful identity, closer to the user's preference for bright memorable hooks than generic realism."
+      ],
+      "negative_evidence": [
+        "The short candidate context does not establish whether the open world itself is dense with meaningful activities or whether the action systems continue developing, both important durability concerns for this profile."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:16:18+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 68,
+        "development_variety": 76,
+        "structure_pacing_direction": 70,
+        "identity_hooks": 82,
+        "breadth_of_match": 70
       }
     }
   }
