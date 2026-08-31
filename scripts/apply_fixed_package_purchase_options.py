@@ -84,23 +84,32 @@ def build_recommendations(package_artifact, family_graph, visible_items, kzt_per
 
         covered_titles = [row['title'] for row in covered]
         original_kzt = package.get('original_kzt')
+        package_price_rub = rub_display(package_price, kzt_per_rub)
+        standalone_total_rub = rub_display(standalone_total, kzt_per_rub)
+        savings_rub = rub_display(savings, kzt_per_rub)
+        count = len(covered)
         rec = {
             'package_key': package.get('key') or f"Sub_{package.get('packageid')}",
             'packageid': int(package.get('packageid') or 0),
             'package_title': package.get('title') or package.get('purchase_option_name') or 'Steam package',
             'package_price_kzt': round(float(package_price), 2),
-            'package_price_rub': rub_display(package_price, kzt_per_rub),
+            'package_price_rub': package_price_rub,
+            'package_price_per_visible_game_rub': (
+                round(float(package_price_rub) / count, 1)
+                if package_price_rub is not None and count > 0
+                else None
+            ),
             'package_original_kzt': round(float(original_kzt), 2) if original_kzt is not None else None,
             'package_original_rub': rub_display(original_kzt, kzt_per_rub),
             'discount_percent': int(package.get('discount_percent') or 0),
             'discount_end_utc': package.get('discount_end_utc'),
             'covered_visible_game_ids': [row['family_id'] for row in covered],
             'covered_visible_titles': covered_titles,
-            'covered_visible_game_count': len(covered),
+            'covered_visible_game_count': count,
             'standalone_total_kzt': round(standalone_total, 2),
-            'standalone_total_rub': rub_display(standalone_total, kzt_per_rub),
+            'standalone_total_rub': standalone_total_rub,
             'savings_kzt': round(savings, 2),
-            'savings_rub': rub_display(savings, kzt_per_rub),
+            'savings_rub': savings_rub,
             'savings_percent_vs_standalone': round((savings / standalone_total) * 100.0, 1),
             'requires_multi_game_intent': True,
             'comparison_scope': 'currently_visible_base_game_families_covered_by_package',
@@ -111,6 +120,8 @@ def build_recommendations(package_artifact, family_graph, visible_items, kzt_per
 
     recommendations.sort(key=lambda row: (
         -float(row['savings_kzt']),
+        -int(row['covered_visible_game_count']),
+        -float(row['savings_percent_vs_standalone']),
         float(row['package_price_kzt']),
         int(row['packageid']),
     ))
@@ -134,7 +145,7 @@ def offer_from_recommendation(rec):
     savings_rub = rec.get('savings_rub')
     savings_text = f'{savings_rub} ₽' if savings_rub is not None else f"{rec['savings_kzt']:.0f} KZT"
     title = (
-        f"Выгоднее вместе: {rec['package_title']} — "
+        f"Выгодный набор: {rec['package_title']} — "
         f"{rec['covered_visible_game_count']} игры из списка ({titles}), "
         f"экономия около {savings_text}"
     )
@@ -155,48 +166,29 @@ def offer_from_recommendation(rec):
     }
 
 
-def git_blob_sha(path):
-    try:
-        value = subprocess.check_output(
-            ['git', 'rev-parse', f'HEAD:{path.as_posix()}'],
-            text=True,
-            stderr=subprocess.DEVNULL,
-        ).strip()
-        return value or None
-    except Exception:
-        return None
-
-
-def main():
-    if not (PACKAGE_OPTIONS.exists() and FAMILY_GRAPH.exists() and FX_SNAPSHOT.exists() and VISUAL.exists()):
-        print('FIXED_PACKAGE_OPTIONS=SKIPPED reason=missing_required_artifact')
-        return
-
-    packages = load_json(PACKAGE_OPTIONS)
-    family_graph = load_json(FAMILY_GRAPH)
-    fx = load_json(FX_SNAPSHOT)
-    visual = load_json(VISUAL)
-
+def validate_source_binding(visual, packages, family_graph):
     source = visual.get('source_mailing_updated_at_utc')
     package_source = packages.get('source_mailing_updated_at_utc')
     family_source = family_graph.get('source_updated_at_utc')
     if not source or package_source != source or family_source != source:
-        print(
-            'FIXED_PACKAGE_OPTIONS=SKIPPED reason=source_mismatch '
+        raise ValueError(
+            'Fixed package source mismatch: '
             f'visual={source} packages={package_source} family={family_source}'
         )
-        return
 
-    rate = ((fx.get('fx') or {}).get('kzt_per_rub'))
-    if rate is None or float(rate) <= 0:
-        raise SystemExit('Fixed package enrichment requires positive kzt_per_rub')
+
+def apply_to_visual(visual, packages, family_graph, kzt_per_rub):
+    validate_source_binding(visual, packages, family_graph)
+    if kzt_per_rub is None or float(kzt_per_rub) <= 0:
+        raise ValueError('Fixed package enrichment requires positive kzt_per_rub')
 
     items = visual.get('items') or []
     recommendations, best_by_family = build_recommendations(
-        packages, family_graph, items, float(rate)
+        packages, family_graph, items, float(kzt_per_rub)
     )
 
     touched = 0
+    touched_ids = []
     for game in items:
         fid = str(game.get('id') or '')
         rec = best_by_family.get(fid)
@@ -219,34 +211,77 @@ def main():
         offers.append(offer_from_recommendation(rec))
         game['offers'] = offers
         touched += 1
+        touched_ids.append(fid)
 
-    visual['purchase_option_enrichment'] = {
-        'schema_version': 1,
+    stats = {
+        'schema_version': 2,
         'fixed_sub_only': True,
         'dynamic_bundle_supported': False,
         'personalized_complete_the_set_supported': False,
         'qualifying_package_count': len(recommendations),
         'visible_game_count_with_better_package': touched,
+        'visible_game_ids_with_better_package': touched_ids,
         'comparison_rule': (
             'recommend only a fixed Steam Sub package covering at least two currently visible '
             'base-game families when package price is strictly below the sum of those standalone '
             'family prices; unknown extra content contributes zero value'
         ),
+        'ranking_stage_requirement': 'package enrichment must happen before the single final ranking pass',
     }
+    visual['purchase_option_enrichment'] = stats
+    return stats
+
+
+def apply_current_artifacts_to_visual(visual):
+    missing = [
+        str(path)
+        for path in (PACKAGE_OPTIONS, FAMILY_GRAPH, FX_SNAPSHOT)
+        if not path.exists()
+    ]
+    if missing:
+        raise FileNotFoundError(f'Fixed package enrichment missing required artifacts: {missing}')
+    packages = load_json(PACKAGE_OPTIONS)
+    family_graph = load_json(FAMILY_GRAPH)
+    fx = load_json(FX_SNAPSHOT)
+    rate = ((fx.get('fx') or {}).get('kzt_per_rub'))
+    return apply_to_visual(visual, packages, family_graph, rate)
+
+
+def git_blob_sha(path):
+    try:
+        value = subprocess.check_output(
+            ['git', 'rev-parse', f'HEAD:{path.as_posix()}'],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+        return value or None
+    except Exception:
+        return None
+
+
+def attach_contract_fields(visual):
     contract = visual.setdefault('production_contract', {})
     contract['fixed_package_options_blob_sha'] = git_blob_sha(PACKAGE_OPTIONS)
     contract['fixed_package_purchase_option_rule'] = (
         'fixed Sub only; >=2 visible game families; strict current-price savings; '
-        'unknown extra content value=0; personalized bundles excluded'
+        'unknown extra content value=0; personalized bundles excluded; package enrichment before final ranking'
     )
 
+
+def main():
+    if not VISUAL.exists():
+        raise SystemExit('Fixed package enrichment requires an existing visual payload')
+    visual = load_json(VISUAL)
+    stats = apply_current_artifacts_to_visual(visual)
+    attach_contract_fields(visual)
     VISUAL.write_text(
         json.dumps(visual, ensure_ascii=False, separators=(',', ':')),
         encoding='utf-8',
     )
     print(
         'FIXED_PACKAGE_OPTIONS=APPLIED '
-        f'qualifying_packages={len(recommendations)} touched_games={touched}'
+        f"qualifying_packages={stats['qualifying_package_count']} "
+        f"touched_games={stats['visible_game_count_with_better_package']}"
     )
 
 
