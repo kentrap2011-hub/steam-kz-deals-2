@@ -16,7 +16,7 @@
 
 **Что ищем:** точный исторический минимум цены SteamDB для текущих primary offer keys.
 
-**Последняя проверка:** 2026-08-30
+**Последняя проверка:** 2026-08-31
 
 **Канонический контракт:**
 - `config/steamdb_lookup_contract.json`
@@ -39,7 +39,51 @@
 8. Checkpoint → `data/cache/steamdb_history.json`.
 9. Downstream → `scripts/build_pre_ai_history_snapshot.py` → `data/production/pre_ai/history_snapshot.json`.
 
-**Текущее состояние:** 534 ожидаемых ключа, 529 resolved, 5 unresolved retry (`runtime_web_internal_error`). Пользователь отдельно указал, что эти 5 retry сейчас низкоприоритетны.
+**Текущее состояние:** 9 ожидаемых ключей, 8 resolved, 1 unresolved retry — `App_901735`. Для него сохранены две transient ошибки `steamdb_runtime_disabled_error`; interactive chat не должен подменять runtime ручным lookup.
+
+---
+
+## Taste V3 / normalized factors
+
+**Что ищем:** текущий semantic scope Taste V3, exact bindings, inbox submissions, canonical ingest и downstream propagation пяти нормализованных price-blind факторов.
+
+**Последняя проверка:** 2026-08-31  
+**Проверенный recovery ref:** после commit `31a3f3e2b84185ab32cf0a4e5bbdf1776681331b`.
+
+**Канонические контракты:**
+- `config/taste_result_contract.json` — допустимый semantic result и exact binding requirements;
+- `config/taste_cache_entry_contract.json` — canonical cache entry;
+- `config/execution_ownership_contract.json` — GitHub владеет scope/queue/validation/persistence, scheduled ChatGPT только semantic data-plane;
+- `config/daily_execution_contract.json` — один nightly production cycle, batch не является суточной квотой.
+
+**Быстрая точка входа — читать в таком порядке:**
+1. `data/production/pre_ai/chatgpt_payload.json` — количество текущей AI queue и canonical model/profile binding.
+2. `data/production/pre_ai/taste_projection.json` — exact global binding, с которым обязан совпасть submission.
+3. `data/production/pre_ai/chatgpt_taste_queue.jsonl` — открывать только конкретный key/строку, а не весь файл без необходимости.
+4. `data/ai_inbox/taste/` — только список submission-файлов; полный большой JSON не читать, если достаточно metadata или точечного key.
+5. `.github/workflows/ingest-taste-batch.yml` → `scripts/process_taste_inbox.py` → `scripts/ingest_taste_results.py` — единственный штатный ingest path.
+6. После ingest проверять компактные `data/cache/taste_fit.entry_index.json`, `data/cache/taste_ingest_receipts/`, новый `chatgpt_payload.json` и только bounded downstream diagnostics.
+
+**Критический recovery-инвариант:**
+- submission с несовпадающим top-level `profile_blob_sha` / `taste_model_version` / `taste_semantics_sha256` / source binding нельзя «починить» простым переименованием полей;
+- сначала доказать, что semantic worker действительно выполнил **тот же** канонический semantic contract. Без такого доказательства exact binding validator должен остаться fail-closed;
+- механическое совпадение отдельных key/fingerprint/context не доказывает semantic equivalence всей оценки;
+- не обходить `ingest_taste_results.py` и не писать результаты напрямую в canonical cache.
+
+**Anti-stall / экономия контекста:**
+- для состояния очереди не считать строки вручную: брать `ai_queue_count` из `chatgpt_payload.json`;
+- для provenance сначала сравнить bindings одного submission с `taste_projection.json`, а не читать все 500 результатов;
+- при failed ingest открыть один конкретный run → job → log; не polling и не repository-wide search;
+- если требуется простая визуальная проверка существующей scheduled-задачи ChatGPT, сначала попросить пользователя открыть её настройки/текст prompt и прислать нужный фрагмент; не тратить контекст на обходные поиски, если пользователь может проверить это напрямую.
+
+**Текущее recovery-состояние:**
+- canonical pre-AI snapshot перед ingest: `ai_queue_count=634`;
+- опубликовано пять файлов `data/ai_inbox/taste/2026-08-31T0630Z-001..005.json`, по 100 результатов каждый;
+- все пять имеют одинаковую stale/noncanonical global binding: model `price_blind_taste_v3`, semantic digest `fc0e4846…`, source timestamp `2026-08-30T14:27:39Z`, тогда как текущая canonical projection использует `taste-v3` и другой semantic digest/source snapshot;
+- в `001` дополнительно подтверждён typo `App_1261040.taste_fingerprint`: лишняя завершающая `a`;
+- one-shot repair run `33372236792` корректно остановился fail-closed на global binding mismatch до commit/persistence; ошибочный helper затем удалён commit `31a3f3e2b84185ab32cf0a4e5bbdf1776681331b`;
+- эти 500 результатов **не считать ingested/canonical** и не relabel-ить без проверки provenance существующего scheduled semantic worker;
+- следующий шаг — проверить конфигурацию/инструкцию именно существующего scheduled worker и установить, почему он записал старую binding-метку. Если semantic contract реально был старым — результаты нужно переоценить штатным worker-ом; если contract был текущим, а ошибочна только serialization/binding metadata, эквивалентность нужно доказать до bounded migration.
 
 ---
 
