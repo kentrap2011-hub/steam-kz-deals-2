@@ -2,7 +2,7 @@
   "schema_version": 1,
   "purpose": "incremental_per_entry_taste_verdict_overlay",
   "entry_schema_version": 3,
-  "entry_count": 609,
+  "entry_count": 613,
   "entries": {
     "App_241930": {
       "key": "App_241930",
@@ -9083,244 +9083,352 @@
       "key": "App_431240",
       "appid": "431240",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "a907003e54b560aedc70caa5c2e45b4192f217e5cc6400e818613c7be9edbf5f",
       "taste_fingerprint": "e9f00a39ac4e313d7f5a8ffda78cdc04e313df6a6cfad1d6b679701ff07c4201",
       "verdict": "INCLUDE",
       "fit_level": "moderate",
       "reason_code": "include_moderate",
       "positive_evidence": [
-        "Mini-golf gives a direct aiming and execution skill with immediately readable outcomes.",
-        "Different courses provide changing spatial challenges rather than one identical hole pattern.",
-        "Simultaneous play with up to twelve people makes social competition a major source of situational variation."
+        "Simultaneous mini golf creates direct timing, aim and competitive interaction.",
+        "Unusual courses and large-group play can produce memorable shared situations."
       ],
       "negative_evidence": [
-        "The match-based golf loop has little long-term development in the prepared context, keeping the fit moderate."
+        "The main appeal is social, so solo play offers much less of the value relevant to the profile."
       ],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 68,
+        "development_variety": 62,
+        "structure_pacing_direction": 58,
+        "identity_hooks": 66,
+        "breadth_of_match": 64
+      }
     },
     "App_433170": {
       "key": "App_433170",
       "appid": "433170",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "4dbb8deb50ff8471e5515ab83937d5a78eee092c861daee824a247212adc97cd",
       "taste_fingerprint": "625115062d2a19483c17a0dce794b2b73ac97367e0fec0b8c89ffe7b52f5ef60",
       "verdict": "INCLUDE",
       "fit_level": "strong",
       "reason_code": "include_strong",
       "positive_evidence": [
-        "Agility is explicitly one of the tools for escape, giving traversal and physical movement a central gameplay role.",
-        "The unexplained kidnapping and mysterious island provide a clear discovery vector alongside survival.",
-        "Escaping the island is an immediately understandable overarching objective that gives exploration purpose."
+        "Agility and escape make movement a functional part of survival rather than mere traversal.",
+        "A mysterious Mediterranean island gives exploration a concrete escape objective and investigative hook."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "An open world can lose momentum if survival errands distract from the escape mystery."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 82,
+        "development_variety": 74,
+        "structure_pacing_direction": 82,
+        "identity_hooks": 78,
+        "breadth_of_match": 84
+      }
     },
     "App_433950": {
       "key": "App_433950",
       "appid": "433950",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "62381313b816d1e086fe8593d240f5aee367c3747d46c6944280946f44226f92",
       "taste_fingerprint": "de9f0ed394c5c0977d62aad53db72ee870662520fa2f358539f3df045e98aeb9",
-      "verdict": "EXCLUDE",
-      "fit_level": "below_moderate",
-      "reason_code": "exclude_direct_conflict",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Boosting, dodging and shooting can reward execution mastery."
+        "Boosting, dodging and shooting create a compact execution-based mastery loop.",
+        "Chasing high scores gives immediate feedback on improving control."
       ],
       "negative_evidence": [
-        "The candidate is explicitly an old-school high-score arcade loop with no demonstrated development or meaningful structural variation, directly matching the profile's repetition risk."
+        "The retro arcade structure is narrow and may become repetitive once movement and enemy patterns are learned."
       ],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 82,
+        "development_variety": 44,
+        "structure_pacing_direction": 52,
+        "identity_hooks": 62,
+        "breadth_of_match": 58
+      }
     },
     "App_434170": {
       "key": "App_434170",
       "appid": "434170",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "f89db08220c120b7351dcf8fe815e3aec0b29f82aa2cdf29f8495dc8cac92a50",
       "taste_fingerprint": "7bdcb36f8768324f703b979ad74ce3e84cf9dab2ae797995266929fa56790075",
       "verdict": "INCLUDE",
-      "fit_level": "moderate",
-      "reason_code": "include_moderate",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
       "positive_evidence": [
-        "Five substantially different party games create strong structural variety instead of asking players to repeat one mechanic.",
-        "Up to eight active players make social interaction a central part of the actual play experience.",
-        "Quiz, improvisation, drawing and deception formats create changing cognitive and social demands."
+        "Five very different party games create substantial variety within one social session.",
+        "Quizzes, bluffing and creative prompts can generate the shared jokes and memories the profile values."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "Its value depends on having a willing group, and the games provide little persistent progression."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 64,
+        "development_variety": 88,
+        "structure_pacing_direction": 60,
+        "identity_hooks": 84,
+        "breadth_of_match": 84
+      }
     },
     "App_434570": {
       "key": "App_434570",
       "appid": "434570",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "4f2413ef3540bf81c6ca03657f6cd61295d5be961e41ce3a5f2ecab9694974a0",
       "taste_fingerprint": "94116c9e4640d7d1b293b27c245b5fbd5f5fae5396d1da7209426c8c01c09a1c",
       "verdict": "INCLUDE",
       "fit_level": "moderate",
       "reason_code": "include_moderate",
       "positive_evidence": [
-        "Multiple maps and day/night levels change the combat environment rather than repeating one arena.",
-        "Twenty-five enemy types plus recurring minibosses and giant bosses provide changing combat problems over time.",
-        "Co-op makes coordination relevant to surviving the shooter encounters and therefore acts as a meaningful social amplifier."
+        "Cooperative shooting against changing enemy types and bosses can create shared tactical moments.",
+        "Day-night levels, multiple maps and boss intervals provide some structural variety."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "Horde shooting can settle into repetitive combat if enemies do not demand changing tactics."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 72,
+        "development_variety": 66,
+        "structure_pacing_direction": 62,
+        "identity_hooks": 64,
+        "breadth_of_match": 64
+      }
     },
     "App_440650": {
       "key": "App_440650",
       "appid": "440650",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "712786b2781aae808f69a4789ee466abc0d318bb62bb9e0f63a758160b4bc39f",
       "taste_fingerprint": "eb22921d60b111ec4ac16779fb3b282b1e3881c9627f725fdf7ab0adcdfdf8cd",
       "verdict": "INCLUDE",
-      "fit_level": "strong",
-      "reason_code": "include_strong",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Shaping a species through real genetics is a distinctive learnable system whose combinations directly affect survival.",
-        "Predators, climate change and disease create changing pressures that require adaptation rather than static optimization.",
-        "Roguelike and turn-based strategy elements give the genetics system consequential decisions and evolving survival goals."
+        "Genetics-based species design creates a distinctive system with meaningful strategic consequences.",
+        "Predators, climate and sickness force adaptation rather than one fixed solution."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "The simulation can become system-heavy and abstract, making goals less immediately readable."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 68,
+        "development_variety": 82,
+        "structure_pacing_direction": 62,
+        "identity_hooks": 76,
+        "breadth_of_match": 68
+      }
     },
     "App_440880": {
       "key": "App_440880",
       "appid": "440880",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "47a4ca2209bcff729588942b97bb91365f3988e89e02e743513a991e5604eda4",
       "taste_fingerprint": "84f250e1cc9d92f77ff2ee675961a703bd6fa9f61ab03d02b58915f3772ce0a8",
-      "verdict": "EXCLUDE",
-      "fit_level": "below_moderate",
-      "reason_code": "exclude_insufficient",
+      "verdict": "INCLUDE",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
       "positive_evidence": [
-        "The Zelda-and-Silent-Hill inspiration suggests exploration, horror and stealth, but inspirations and tags are not enough evidence of this candidate's actual mechanics or structure."
+        "Exploration, horror and stealth combine active tension with a mystery-oriented adventure structure.",
+        "Its Zelda-meets-Silent-Hill identity suggests a distinctive blend rather than generic horror."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "Stealth can become frustrating if repeated failures require replaying the same route."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 72,
+        "development_variety": 74,
+        "structure_pacing_direction": 78,
+        "identity_hooks": 86,
+        "breadth_of_match": 84
+      }
     },
     "App_446020": {
       "key": "App_446020",
       "appid": "446020",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "f3715455dccde94f050651bed6114e989318afb3c7c1c3ab33122d04384c2e7c",
       "taste_fingerprint": "13593ac405a0b8f6a4994dd09c68e31f19d5b3a9fe9aed1f485ae634e8dcb400",
       "verdict": "INCLUDE",
-      "fit_level": "strong",
-      "reason_code": "include_strong",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Driving an old car makes vehicle control and traversal a central activity.",
-        "Building, repairing and refueling the car create a concrete mechanical maintenance and progression system around the journey.",
-        "Travel through multiple Eastern European countries provides changing environments and a clear road-trip structure."
+        "Repairing and driving the car gives the road journey a tangible mechanical loop.",
+        "Travel across several Eastern European countries supplies a clear sense of forward movement and changing place."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "Maintenance tasks may become repetitive and the open road can feel sparse if discoveries are too infrequent."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 58,
+        "development_variety": 66,
+        "structure_pacing_direction": 72,
+        "identity_hooks": 78,
+        "breadth_of_match": 64
+      }
     },
     "App_461620": {
       "key": "App_461620",
       "appid": "461620",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "bcc2e111b878503362bc28a203891ccf4e8325233da2eb24071b1d124789835d",
       "taste_fingerprint": "77af33b74d20641bbd28abe4000ea59d9af7ce8f182482356c1aefdfdfc1fc91",
       "verdict": "INCLUDE",
       "fit_level": "moderate",
       "reason_code": "include_moderate",
       "positive_evidence": [
-        "Leading a population through successive historical hardships gives the strategy a sequence of changing problems rather than one static management state.",
-        "Progressing toward the unification of Lower and Upper Egypt provides an unusually clear long-term objective.",
-        "The historical progression itself visibly changes the civilization context over time."
+        "Guiding a civilization toward Egyptian unification supplies a concrete long-term objective.",
+        "Historical development gives strategic choices a strong thematic identity."
       ],
       "negative_evidence": [
-        "The description does not expose the specific management systems, preventing a strong rating."
+        "The management layer may be information-heavy and less engaging if progress is mostly abstract resource optimization."
       ],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 62,
+        "development_variety": 72,
+        "structure_pacing_direction": 78,
+        "identity_hooks": 74,
+        "breadth_of_match": 66
+      }
     },
     "App_463530": {
       "key": "App_463530",
       "appid": "463530",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "806c0be1715c56ff847aa6dcef647046ad8257b18ddb4614d3fba4a13641c492",
       "taste_fingerprint": "ad469b7709df7fe3a489a680b1f17623c1a7f2706e8f8c60c71a15a63c56d849",
       "verdict": "INCLUDE",
       "fit_level": "strong",
       "reason_code": "include_strong",
       "positive_evidence": [
-        "Building intricate nests and commanding ant swarms create two linked strategic systems with clear practical effects.",
-        "Pheromone-based tactics provide a candidate-specific rules system that rewards understanding and adaptation.",
-        "Evolving the colony to meet growing dangers gives explicit progression while changing insect threats prevent static optimization."
+        "Large-scale ant warfare and base building create clear tactical problems with visible consequences.",
+        "Nest design, pheromone tactics and evolution provide multiple layers of progression and adaptation."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "Managing swarms at scale may become visually or cognitively busy during larger battles."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 82,
+        "development_variety": 86,
+        "structure_pacing_direction": 82,
+        "identity_hooks": 84,
+        "breadth_of_match": 86
+      }
     },
     "App_485040": {
       "key": "App_485040",
       "appid": "485040",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "fe3560c9bef5345a6678777ca476114d5dac218f598da2d011f8f056edefa08b",
       "taste_fingerprint": "e601a186c31f0282f7580ce7922ef04efbaddd6e34ef692656ffe4aa84fe41ce",
       "verdict": "EXCLUDE",
       "fit_level": "below_moderate",
       "reason_code": "exclude_insufficient",
       "positive_evidence": [
-        "The coming-of-age medical story may provide character development, but the description exposes no substantive gameplay mechanic or consequence structure."
+        "Nursing-school relationships and adulthood provide a grounded character-focused premise."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "The visual-novel format offers little direct gameplay, so narrative quality must carry almost the entire experience.",
+        "The short description does not establish enough dramatic or character depth to prove moderate fit."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 14,
+        "development_variety": 34,
+        "structure_pacing_direction": 58,
+        "identity_hooks": 52,
+        "breadth_of_match": 34
+      }
     },
     "App_485980": {
       "key": "App_485980",
       "appid": "485980",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "d93b5048c229eba602db300e8de0afd77f676de2db7b900d41b4e84002f59887",
       "taste_fingerprint": "942b2c327e626416c8ae86f96828ba8c2b73bd03df228431c8676e0d7ff38dc5",
       "verdict": "EXCLUDE",
       "fit_level": "below_moderate",
       "reason_code": "exclude_insufficient",
       "positive_evidence": [
-        "A realistic real-time strategy game can support tactical problem solving, but the description contains no candidate-specific command, progression or mission structure beyond the broad RTS label."
+        "Real-time strategy can support tactical decision making and execution."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "The description offers almost no evidence of progression, variety or a distinctive gameplay hook beyond realism.",
+        "A true-story military frame alone does not establish enough personal narrative value for this profile."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 64,
+        "development_variety": 48,
+        "structure_pacing_direction": 54,
+        "identity_hooks": 46,
+        "breadth_of_match": 40
+      }
     },
     "App_493540": {
       "key": "App_493540",
       "appid": "493540",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "c634b7b160cf11eee933c63eb15d26971d08e6e6b365125d8415c927beaaa2ec",
       "taste_fingerprint": "380b1091395718bdbce9ba3651e2898dd1861a1735526cd11a8f842ecf7d5073",
-      "verdict": "EXCLUDE",
-      "fit_level": "below_moderate",
-      "reason_code": "exclude_audited_below",
+      "verdict": "INCLUDE",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
       "positive_evidence": [
-        "Exploring different sides of the mind provides changing surreal environments and the restore-courage mission gives a clear goal, but the description does not expose an independent action, puzzle or progression mechanic."
+        "Action-adventure interaction provides active play alongside the narrative.",
+        "Surreal mindscapes, music and humor create a highly distinctive artistic identity."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "If combat and puzzles remain simple, the experience may rely heavily on presentation rather than deep mastery."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 68,
+        "development_variety": 76,
+        "structure_pacing_direction": 80,
+        "identity_hooks": 90,
+        "breadth_of_match": 86
+      }
     },
     "App_495990": {
       "key": "App_495990",
@@ -9343,54 +9451,82 @@
       "key": "App_496300",
       "appid": "496300",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "a5c9a92c5510bfb411f1db0bf40955f74467726ce39e3501177423eff9d75eb8",
       "taste_fingerprint": "adbd6f2f80c84145d4bb86cf9af8abdcb433ff828e8577bc1fcdd0c652071307",
-      "verdict": "EXCLUDE",
-      "fit_level": "below_moderate",
-      "reason_code": "exclude_insufficient",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "The description claims simplicity with depth and added mystery, but does not expose the candidate's actual management, progression or exploration mechanics."
+        "Kingdom building offers visible progression while preserving a simple core loop.",
+        "New lands and mystery give exploration reasons beyond pure resource accumulation."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "The side-scrolling kingdom routine can become repetitive if expansion mostly repeats the same economic cycle."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 62,
+        "development_variety": 72,
+        "structure_pacing_direction": 66,
+        "identity_hooks": 72,
+        "breadth_of_match": 64
+      }
     },
     "App_507010": {
       "key": "App_507010",
       "appid": "507010",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "5937ec0126d96c84815f9d3a5f8ff8585a79e29bedea2e86d2ed07391eff19ec",
       "taste_fingerprint": "09e80ea89491e4f788b60f90b5c05bbf5e68cd277ab78f6ad3a6337151c7fa7b",
       "verdict": "EXCLUDE",
       "fit_level": "below_moderate",
-      "reason_code": "exclude_audited_below",
+      "reason_code": "exclude_insufficient",
       "positive_evidence": [
-        "Taking bullets to protect a target is a clear unusual action objective, but the description exposes no independent progression, mastery or meaningful variation system."
+        "The bodyguard premise and exaggerated political parody give the game a recognizable comedic hook."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "The description does not establish meaningful progression or varied mechanics beyond a physics-comedy setup.",
+        "A novelty action premise alone is unlikely to sustain interest after the joke is understood."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 48,
+        "development_variety": 34,
+        "structure_pacing_direction": 46,
+        "identity_hooks": 66,
+        "breadth_of_match": 34
+      }
     },
     "App_508440": {
       "key": "App_508440",
       "appid": "508440",
       "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste_model_version": "taste-v2",
-      "taste_semantics_sha256": "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "0dcaa30386d209fbe80771b588b6eaa511e32d5a05ad5f6a68aed98445d2c249",
       "taste_fingerprint": "0e55272e202dbac0b11aecf13e890961a806e4721e7d9205e9e3a1689040cd14",
       "verdict": "INCLUDE",
-      "fit_level": "strong",
-      "reason_code": "include_strong",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Building armies and watching physics-driven simulations creates a clear experimentation system where unit choices produce visible outcomes.",
-        "The unit creator expands the combination space and gives players a progression-like tool for devising new solutions.",
-        "Multiplayer opponents and units from many settings create changing tactical situations rather than one fixed battle puzzle."
+        "Watching physics-driven armies clash creates quick tactical experimentation with readable outcomes.",
+        "The unit creator adds creative variation beyond fixed scenarios."
       ],
-      "negative_evidence": [],
-      "evaluated_at_utc": "2026-08-29T10:20:20+00:00"
+      "negative_evidence": [
+        "A sandbox centered on simulation can become aimless without strong campaign goals, and optimal setups may encourage exhaustive experimentation."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 64,
+        "development_variety": 78,
+        "structure_pacing_direction": 52,
+        "identity_hooks": 80,
+        "breadth_of_match": 64
+      }
     },
     "App_515570": {
       "key": "App_515570",
@@ -14925,6 +15061,114 @@
         "structure_pacing_direction": 70,
         "identity_hooks": 80,
         "breadth_of_match": 64
+      }
+    },
+    "App_493720": {
+      "key": "App_493720",
+      "appid": "493720",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "7fce13169ebbf327138d9c227a717eeab2c9d092dac372e1c87bf91053041457",
+      "taste_fingerprint": "aca21fb176bfbf3e117a0e27b2ef40ba911aa3059d85897d7068741aa35d3cd1",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Exploring abandoned islands and machinery gives the mystery concrete things to investigate.",
+        "Secret passages and environmental puzzles provide purposeful interaction within the Jules Verne setting."
+      ],
+      "negative_evidence": [
+        "A Myst-like design has a known risk of unclear next steps and opaque puzzle logic."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 48,
+        "development_variety": 64,
+        "structure_pacing_direction": 54,
+        "identity_hooks": 82,
+        "breadth_of_match": 66
+      }
+    },
+    "App_501300": {
+      "key": "App_501300",
+      "appid": "501300",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "f389f6a8836834a9aad39d89c2b83c5c457fe51e8d031fcb0f2194320b62e3f0",
+      "taste_fingerprint": "5d1c8c29a42f4107df2bd7c2b1d854d4e19742b7d7ddd1b2be79438a8e6b7eef",
+      "verdict": "INCLUDE",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
+      "positive_evidence": [
+        "The family mystery gives every exploration vignette a clear narrative purpose.",
+        "A collection of distinct strange tales naturally changes format and context, reducing the risk of one repetitive gameplay loop."
+      ],
+      "negative_evidence": [
+        "Direct mechanical mastery is limited, so the experience depends heavily on the strength of its storytelling."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 42,
+        "development_variety": 88,
+        "structure_pacing_direction": 88,
+        "identity_hooks": 94,
+        "breadth_of_match": 92
+      }
+    },
+    "App_504230": {
+      "key": "App_504230",
+      "appid": "504230",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "7b21967aaf93092fa43116a28f03ec17cd514e3b5bfde1c93c6936f0bd385e50",
+      "taste_fingerprint": "8530f00c694acacd63e9015843b290c48b7e63fb948b58d3c2bace55bb60e622",
+      "verdict": "INCLUDE",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
+      "positive_evidence": [
+        "Tight platforming and hundreds of hand-crafted challenges directly support movement mastery and learning.",
+        "The climb has clear forward direction while secrets and the mountain mystery add reasons to explore."
+      ],
+      "negative_evidence": [
+        "Repeated attempts can become tiring at harder sections if progress stalls for too long."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 96,
+        "development_variety": 86,
+        "structure_pacing_direction": 92,
+        "identity_hooks": 88,
+        "breadth_of_match": 96
+      }
+    },
+    "App_514900": {
+      "key": "App_514900",
+      "appid": "514900",
+      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "aacd7fab94c09c8ddb755a8ef9bdb3cb4f333030f5c6d5f6225e14b87a09016d",
+      "taste_fingerprint": "625d829a997276981b1ab3410b888804d52d5767a26c2fd38af8d6762f84a060",
+      "verdict": "INCLUDE",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
+      "positive_evidence": [
+        "Cyberpunk detective work and hunting clues directly match the profile's interest in mystery with purpose.",
+        "Invading corrupted memories creates a distinctive mechanism for exploring story and character."
+      ],
+      "negative_evidence": [
+        "Psychological sequences may become passive if they rely more on spectacle than interaction."
+      ],
+      "evaluated_at_utc": "2026-08-31T14:01:46+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 60,
+        "development_variety": 78,
+        "structure_pacing_direction": 82,
+        "identity_hooks": 94,
+        "breadth_of_match": 90
       }
     }
   }
