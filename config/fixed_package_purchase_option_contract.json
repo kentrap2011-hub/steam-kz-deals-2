@@ -28,6 +28,8 @@
     "standalone_reference": "sum of current primary KZT prices for currently visible base-game families covered by the package",
     "unknown_extra_content_value_kzt": 0,
     "unknown_or_nonvisible_content_never_increases_computed_savings": true,
+    "edition_equivalence_guessing_allowed": false,
+    "package_coverage_requires_actual_included_appid_or_canonical_family_membership": true,
     "best_option_order": [
       "greater_absolute_savings_kzt",
       "lower_package_price_kzt",
@@ -43,9 +45,16 @@
   },
   "regression": {
     "bioshock_package_key": "Sub_127633",
-    "bioshock_standalone_current_kzt_fixture": 2034,
-    "bioshock_package_current_kzt_fixture": 1420,
-    "bioshock_expected_savings_kzt_fixture": 614,
+    "bioshock_live_member_appids": [409710, 409720, 8870],
+    "bioshock_live_member_titles": [
+      "BioShock Remastered",
+      "BioShock 2 Remastered",
+      "BioShock Infinite"
+    ],
+    "deterministic_price_fixture_is_not_live_price_authority": true,
+    "deterministic_standalone_total_kzt_fixture": 2034,
+    "deterministic_package_kzt_fixture": 1420,
+    "deterministic_expected_savings_kzt_fixture": 614,
     "test_script": "scripts/test_fixed_package_purchase_options.py"
   }
 }
