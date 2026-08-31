@@ -1,4 +1,5 @@
 from apply_fixed_package_purchase_options import build_recommendations
+from build_fixed_package_purchase_options import classify_package, packageid_for_returned_item
 
 
 RATE = 5.396789
@@ -133,6 +134,40 @@ def test_best_package_prefers_larger_absolute_savings():
     assert best['game:2']['packageid'] == 11
 
 
+def test_returned_package_can_be_matched_by_exact_option():
+    item = {
+        'id': 999999,
+        'purchase_options': [
+            {'packageid': 127633},
+        ],
+    }
+    assert packageid_for_returned_item(item, {127633}) == 127633
+
+
+def test_package_classification_requires_two_current_apps():
+    item = {
+        'id': 127633,
+        'name': 'BioShock: The Collection',
+        'included_appids': [7670, 409710],
+        'purchase_options': [{
+            'packageid': 127633,
+            'final_price_in_cents': 142000,
+            'original_price_in_cents': 710000,
+            'discount_pct': 80,
+            'active_discounts': [],
+        }],
+    }
+    entry, reason = classify_package(
+        127633,
+        item,
+        {7670},
+        {7670, 8850, 8870},
+        1,
+    )
+    assert entry is None
+    assert reason == 'fewer_than_two_current_app_candidates'
+
+
 def main():
     tests = [
         test_bioshock_regression,
@@ -141,6 +176,8 @@ def main():
         test_unknown_extra_content_adds_no_assumed_value,
         test_family_is_counted_once_when_multiple_appids_map_to_same_family,
         test_best_package_prefers_larger_absolute_savings,
+        test_returned_package_can_be_matched_by_exact_option,
+        test_package_classification_requires_two_current_apps,
     ]
     for test in tests:
         test()
