@@ -102,6 +102,34 @@ Definition of done:
 - regression tests защищают score/explanation consistency;
 - изменения синхронизированы с ranking/explanation contracts и PROJECT_DECISIONS после проверки.
 
+## 4. Russian language availability as a ranking factor
+
+Статус: `active_parallel`.
+Причина: пользователь считает русский язык практическим требованием. Игра без русского языка не должна занимать высокую позицию только за счёт вкусового совпадения/скидки.
+
+Требование:
+- для каждой игры проверять наличие русского языка как минимум в интерфейсе;
+- источник должен быть producer-owned и проверяемым (Steam supported languages / другой канонический источник), UI только отображает готовый статус;
+- наличие русского интерфейса считается выполнением минимального требования; озвучка не обязательна;
+- если русского языка нет совсем, это должен быть сильный отрицательный фактор в общем ranking, способный заметно опустить игру даже при хорошем Taste и выгодной цене;
+- если данные о языке неизвестны/неполны, не считать это автоматически «русского нет»: хранить отдельный `unknown/unverified` статус и не выдумывать наличие/отсутствие языка;
+- если русский есть частично, но интерфейс не подтверждён, хранить это отдельно и определить более мягкий/промежуточный penalty после аудита реальных данных.
+
+План реализации:
+1. Найти уже существующие language-поля/источники в Store metadata и текущем visual payload; не добавлять второй параллельный источник без необходимости.
+2. Ввести канонический статус вроде `russian_interface: yes/no/unknown` + evidence/source provenance.
+3. Добавить практический penalty в общий ranking вне price-blind Taste: язык не должен менять Taste-факторы, но должен влиять на итоговую приоритетность покупки.
+4. Подобрать величину penalty на top-30/top-50 regression audit так, чтобы `no Russian` действительно сильно понижал место, но не создавал нелогичных скачков между соседними играми.
+5. На карточке явно показывать русский язык/его отсутствие; если отсутствие языка materially понизило игру, это должно быть видно как существенный минус/risk и как причина более низкой позиции.
+6. Добавить regression fixtures: одинаковые по остальным параметрам игры с русским интерфейсом и совсем без русского должны иметь заметно различающийся итоговый rank в пользу версии с русским.
+
+Definition of done:
+- каждая видимая игра имеет проверяемый language status или честный `unknown`;
+- полное отсутствие русского даёт сильный общий ranking penalty;
+- отсутствие русского отражается на карточке как значимый практический минус;
+- Taste остаётся price/language-independent semantic fit, а language penalty применяется на практическом/final-ranking слое;
+- ranking review export показывает language status и соответствующий penalty/driver для аудита.
+
 ## Overall Definition of done
 
 Taste: COMPLETE.
@@ -116,4 +144,8 @@ Ranking/explanation quality:
 - top recommendations are both numerically justified and visibly explainable from the card;
 - score drivers and displayed reasons stay consistent.
 
-`CURRENT_TASK.md` is removed only when package integration and ranking/explanation quality audit are complete and no active task remains.
+Russian language:
+- all visible games have auditable Russian-language status;
+- no-Russian games receive a strong practical/final-ranking penalty and expose that reason to the user.
+
+`CURRENT_TASK.md` is removed only when package integration, ranking/explanation quality audit and Russian-language ranking task are complete and no active task remains.
