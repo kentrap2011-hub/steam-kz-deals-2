@@ -33,18 +33,17 @@ Recovery decision:
 
 Текущий Taste progress:
 - пользователь вручную запустил существующую scheduled-задачу с усиленным prompt;
-- run остановился по hard runtime/tool limit, а не из-за исчерпания очереди;
-- исходная current prepared queue этого run: `634`;
-- опубликовано `400` current-bound Taste V3 результатов в четырёх checkpoint-файлах по `100`: `2026-08-31T0955Z-001.json`, `2026-08-31T1006Z-002.json`, `2026-08-31T1020Z-003.json`, `2026-08-31T1034Z-004.json`;
-- exact bindings в опубликованных checkpoint: profile `c478cda9bb7a9b024a30ca188dce4b98a2de24ea`, model `taste-v3`, semantics `0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`, source snapshot `2026-08-30T20:37:43.818127+00:00`;
-- GitHub сверка после run подтверждает наличие всех четырёх файлов и правильные bindings как минимум у checkpoint 4;
-- ingestion на момент сверки ещё НЕ доказан: четыре файла всё ещё лежат в `data/ai_inbox/taste/`, latest `main` commit — checkpoint 4, bot commit `Ingest context-bound taste batch` после него отсутствует;
-- workflow `.github/workflows/ingest-taste-batch.yml` должен запускаться на push этих файлов и атомарно обновлять overlay/index/receipts/taste projection/chatgpt payload/queue/context;
-- canonical `chatgpt_payload.json` до ingestion всё ещё показывает `ai_queue_count=634`; это не означает, что опубликованные 400 потеряны, а означает, что canonical queue пока не пересобран;
-- если все 400 успешно пройдут ingestion без duplicate/binding/schema failure, ожидаемый semantic remainder будет `234`, но это число нельзя объявлять canonical до bot commit/rebuild;
-- SteamDB в том же run: current prepared count `1` (`App_901735`), resolved `0`, отправлен retryable `blocked_or_failure`; не считать SteamDB закрытым;
-- не polling-ить workflow; следующая проверка только после конкретного сигнала/нового commit либо перед следующим запуском semantic worker;
-- после ingestion проверить остаток queue, downstream build и `score_precision=normalized_taste_factors`.
+- первый run остановился по hard runtime/tool limit после публикации `400` результатов в четырёх checkpoint-файлах по `100`;
+- exact bindings этих checkpoint: profile `c478cda9bb7a9b024a30ca188dce4b98a2de24ea`, model `taste-v3`, semantics `0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`, source snapshot `2026-08-30T20:37:43.818127+00:00`;
+- штатный ingest сначала отклонил checkpoints из-за worker serialization aliases (`include_*_fit`, `weak`) и доказанных identity-copy ошибок отдельных `taste_fingerprint`;
+- one-shot fail-closed repair менял только canonical serialization aliases и fingerprint только при доказанном полном совпадении key/appid/current candidate context; verdict/evidence/taste_factors не менялись;
+- repair run #2 успешно завершён;
+- canonical bot commit: `35c4670699d6266cc498848e8b663d4f0530818d` — `Repair and ingest current Taste V3 checkpoints`;
+- active Taste inbox после успешного transactional ingest очищен;
+- canonical `data/production/pre_ai/chatgpt_payload.json` теперь показывает `ai_queue_count=234`, `ready_without_ai_count=366`, `purchase_context_line_count=600`;
+- следующий шаг: один раз вручную запустить ту же существующую scheduled ChatGPT production task с тем же усиленным prompt; worker обязан прочитать current GitHub queue и увидеть `234`, а не старые `634`;
+- после второго run проверить exact bindings/submissions, ingestion и что canonical Taste queue стала `0`;
+- SteamDB остаётся отдельно unresolved: `App_901735`, retryable blocked/failure; это не блокирует Taste completion.
 
 ---
 
@@ -95,8 +94,8 @@ Architecture preflight:
 - compare `main...purchase-options-fixed-packages-20260831` подтверждает, что branch не меняет Taste/cache/semantic файлы: только два existing workflow, новый contract и три package scripts.
 
 Что осталось перед production:
-1. Дождаться завершения/стабилизации текущего Taste V3 ingest, чтобы не смешивать две production-миграции.
-2. Обновить feature branch относительно актуального `main` (сейчас branch намеренно diverged из-за новых Taste commits на main).
+1. Дождаться полного закрытия Taste V3 queue, чтобы не смешивать две production-миграции.
+2. Обновить feature branch относительно актуального `main`.
 3. Запустить штатный pre-AI build уже после интеграции и проверить реальный `fixed_package_options.json`, особенно наличие `Sub_127633`.
 4. Запустить обычный downstream visual build и проверить, что BioShock-карточки получают `better_purchase_option` и корректную цену/экономию.
 5. После production-validation синхронизировать `PROJECT_ROUTES.md` / `PROJECT_DECISIONS.md`.
