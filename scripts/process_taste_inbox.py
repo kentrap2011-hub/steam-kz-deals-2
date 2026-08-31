@@ -20,7 +20,42 @@ def read_jsonl(path: Path):
 
 
 def run(*args):
-    subprocess.run(list(args), check=True)
+    try:
+        subprocess.run(list(args), check=True)
+    except subprocess.CalledProcessError:
+        if len(args) >= 4 and args[1] == 'scripts/ingest_taste_results.py' and '--input' in args:
+            input_path = Path(args[args.index('--input') + 1])
+            queue_by_key = {row['taste_subject_key']: row for row in read_jsonl(QUEUE)}
+            input_doc = load_json(input_path)
+            mismatches = []
+            for result in input_doc.get('results') or []:
+                key = result.get('key')
+                current = queue_by_key.get(key)
+                if current is None:
+                    continue
+                if (
+                    result.get('taste_fingerprint') != current.get('taste_fingerprint')
+                    or result.get('candidate_context_sha256') != current.get('candidate_context_sha256')
+                    or str(result.get('appid')) != str(current.get('appid'))
+                ):
+                    mismatches.append({
+                        'key': key,
+                        'input_appid': str(result.get('appid')),
+                        'current_appid': str(current.get('appid')),
+                        'input_taste_fingerprint': result.get('taste_fingerprint'),
+                        'current_taste_fingerprint': current.get('taste_fingerprint'),
+                        'input_candidate_context_sha256': result.get('candidate_context_sha256'),
+                        'current_candidate_context_sha256': current.get('candidate_context_sha256'),
+                        'current_title': current.get('title'),
+                        'current_fit_tags': current.get('fit_tags'),
+                        'current_core_fit_count': current.get('core_fit_count'),
+                        'current_release_date': current.get('release_date'),
+                    })
+            print(json.dumps({
+                'taste_ingest_runtime_identity_mismatches': mismatches,
+                'mismatch_count': len(mismatches),
+            }, ensure_ascii=False, indent=2))
+        raise
 
 
 def rebuild_taste_consumers():
