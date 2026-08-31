@@ -16,15 +16,15 @@
   },
   "source_overlay": {
     "path": "data/cache/taste_fit.entry_overlay.json",
-    "blob_sha": "d9241cd114505757ea028e320fdc41ecd1f0c7ba",
-    "size_bytes": 740786,
+    "blob_sha": "d738ff81af455872ad1cbd12be4c131d127e9a74",
+    "size_bytes": 753336,
     "schema_version": 1,
     "entry_schema_version": 3,
-    "entry_count_declared": 622,
-    "entry_count_actual": 622,
+    "entry_count_declared": 629,
+    "entry_count_actual": 629,
     "entry_count_matches_len_entries": true,
     "required_entry_fields_complete": true,
-    "replace_existing_key_count": 112,
+    "replace_existing_key_count": 119,
     "new_key_count": 510
   },
   "merge_policy": "overlay_exact_key_wins",
@@ -42,20 +42,20 @@
   "index_entry_count": 660,
   "candidate_context_bound_count": 651,
   "candidate_context_unbound_count": 9,
-  "taste_factors_present_count": 550,
-  "taste_factors_missing_count": 110,
-  "taste_factors_coverage": 0.8333,
-  "entries_digest_sha256": "5c329885f443eba73116d86efddaa6deafa3cd8f11b201316a20cbd7d2f5ec17",
+  "taste_factors_present_count": 570,
+  "taste_factors_missing_count": 90,
+  "taste_factors_coverage": 0.8636,
+  "entries_digest_sha256": "f1bd3379eb814ebde745db3dc5ef7b6f0b071de1cc06d28f2675b86e906a7cc8",
   "profile_binding_counts": {
     "c478cda9bb7a9b024a30ca188dce4b98a2de24ea": 660
   },
   "taste_model_counts": {
-    "taste-v2": 110,
-    "taste-v3": 550
+    "taste-v2": 90,
+    "taste-v3": 570
   },
   "taste_semantics_counts": {
-    "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828": 550,
-    "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b": 110
+    "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828": 570,
+    "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b": 90
   },
   "source_updated_at_utc": "2026-08-29T04:22:11.847802+00:00",
   "entries": {
@@ -447,13 +447,13 @@
     "App_750920": [
       "750920",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "4c206bfd1407dd91da92e28b2499d748b167d8b0af0a8e1ac0729ec76ff5ca82",
       "188af7e0fb5a56b284d754676df08ec7600ca474e4e1518b931d460cc91c76a5",
-      "EXCLUDE",
-      "below_moderate",
-      "exclude_audited_below"
+      "INCLUDE",
+      "strong",
+      "include_strong"
     ],
     "App_775500": [
       "775500",
@@ -513,13 +513,13 @@
     "App_743390": [
       "743390",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "afa35a34dcbfa0e347d77adcd407a80efe90c29086098c6ae954bd9686a0c6b8",
       "c1ae0de166f9d6c56719b4849712cbffc9ee4849e720d556516d9d21b9bc8706",
-      "EXCLUDE",
-      "below_moderate",
-      "exclude_audited_below"
+      "INCLUDE",
+      "moderate",
+      "include_moderate"
     ],
     "App_391720": [
       "391720",
@@ -689,13 +689,13 @@
     "App_757310": [
       "757310",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "0de58ae130ccff2a3532ff6289fedd335d63733d310e9d3b65c81152f7e3d2f9",
       "5185be50f176c3ecbbab9b073bf479e2f158cd09654cc64d2fd279a046db1bc8",
-      "EXCLUDE",
-      "below_moderate",
-      "exclude_audited_below"
+      "INCLUDE",
+      "moderate",
+      "include_moderate"
     ],
     "App_220440": [
       "220440",
@@ -887,13 +887,13 @@
     "App_7000": [
       "7000",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "0f7b397ba71955a10ad8c81f62114f88b64b192c4fb1dadd4f4ece8216c2a1fe",
       "8773222b3897d9887b8b785ce4d4396bff2f3fea0c7ad2beb97541563ac47be1",
-      "EXCLUDE",
-      "below_moderate",
-      "exclude_audited_below"
+      "INCLUDE",
+      "strong",
+      "include_strong"
     ],
     "App_365450": [
       "365450",
@@ -1118,8 +1118,8 @@
     "App_738520": [
       "738520",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "3282cf04316a1c8402a1296c28e43d56db0611a4b84f3569b5d5560a3910d872",
       "cf3a8daa3a1732bce0629cc109abfe17d05b957a31b575c8998534ce6659ee4f",
       "INCLUDE",
@@ -1217,8 +1217,8 @@
     "App_701160": [
       "701160",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "bc7e60a08bb4967472ac12c6f57603b1f8443ccbb1aabfcbab21bbda85fac448",
       "ecb16acc71d691cda377c2f4b628ce10e5e2678ab96b665ae88800e206e9b098",
       "INCLUDE",
@@ -1272,8 +1272,8 @@
     "App_702670": [
       "702670",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "7f8aebdbb2496d21c6e80c23bc1ed43381faf8771ca71e7ea9fb8b4e25e43440",
       "e65766edbcef2ef6ee359aa5a3e36b4d018c5a0eea68520988f18133457d51b1",
       "INCLUDE",
@@ -6123,19 +6123,19 @@
     "App_6980": [
       "6980",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "be1be19242d1b4ce00b8bf95ab2cd0bab8b3a22ddf8314b27b4f97aec95ebb4a",
       "57e1f6b2d37c45ab700d3ed50d267983c5d303cb5c0a22d8a2292dcbc20454c3",
       "INCLUDE",
-      "strong",
-      "include_strong"
+      "moderate",
+      "include_moderate"
     ],
     "App_711540": [
       "711540",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "0e65567852df141c4f77f5046820248d03b9de3e28846a29e4551862a2865359",
       "9f721e686b457edd3d310b80ebc4597a6a987c8139a5b22d8737b397d6db3b40",
       "INCLUDE",
@@ -6145,8 +6145,8 @@
     "App_720350": [
       "720350",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "a5ee3afb212ef5df04de7f071f89bead1a433015240195e85459eec81217a28d",
       "b155185a02b2ee2277e191023f1c6a04f131c66dc1a0723b98084ded7588c28a",
       "INCLUDE",
@@ -6156,30 +6156,30 @@
     "App_730390": [
       "730390",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "f6a2ee1649a073a6e7a1ec3dcb40bb3cfbf4f94071b4c58e4caffdd272aaaa74",
       "704096f0042bd7601b3e39b76c1a9337226cb12dbbd03f6f7ba8b35b98460243",
-      "EXCLUDE",
-      "below_moderate",
-      "exclude_insufficient"
+      "INCLUDE",
+      "strong",
+      "include_strong"
     ],
     "App_735290": [
       "735290",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "61c9af165d89ccd57b966b2e6027e4e762ab090944c77ffdc3b857f94ab400be",
       "4a3aa917285dbb86a7894a7f82115942b54055d728b28c146c609a338a677216",
-      "EXCLUDE",
-      "below_moderate",
-      "exclude_audited_below"
+      "INCLUDE",
+      "moderate",
+      "include_moderate"
     ],
     "App_742300": [
       "742300",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "4d113a37e9b5c8f5483f368d9a723d5acae876348c86246521e9491ed54975ec",
       "b36986a8f2993d68d6d2e2168708edbdc053ed5b5763d6c2d53a8a66c1d363f5",
       "INCLUDE",
@@ -6189,41 +6189,41 @@
     "App_747340": [
       "747340",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "99d20644a98a5f52eab78f00b12f66ab4596a196e60140580bb30d16d7e2ad01",
       "ddd2db73ea41b07280db695e9bc518a00c8ca9131cf9ea987307477633913b5c",
-      "EXCLUDE",
-      "below_moderate",
-      "exclude_insufficient"
+      "INCLUDE",
+      "moderate",
+      "include_moderate"
     ],
     "App_747360": [
       "747360",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "8625e05c6412a10887e4417707fa9aa5369a677487c8f3cadf7ea45bfca2358d",
       "4506bf79072b95af7c373e61d3bbeb651d19e8e670b1b6a8308c007c36b9c1c1",
-      "EXCLUDE",
-      "below_moderate",
-      "exclude_audited_below"
+      "INCLUDE",
+      "moderate",
+      "include_moderate"
     ],
     "App_754120": [
       "754120",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "1d57b56b0e5bde240e4fe2cd2fd47eb6f8e5fe06fefc9748777de26a3cbe9809",
       "b92d6d2918a2f0804e76a5747e9dd001b028f31a7a97b575487b1c2c2c1de792",
-      "EXCLUDE",
-      "below_moderate",
-      "exclude_audited_below"
+      "INCLUDE",
+      "moderate",
+      "include_moderate"
     ],
     "App_757320": [
       "757320",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "4b1728ea423004187a33303c98f67696f4aa5b643a3bedb2eebca38b2c4fdbc9",
       "750575304c9f9e40314afee3f370cb890c0d9755f8ff0d6c6324fa7d8e7c30f0",
       "INCLUDE",
@@ -6233,13 +6233,13 @@
     "App_758190": [
       "758190",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "3e62697001bb24ae127cd56e9edb3cbd44fcfec0d1341fa008b0385ae41e3adb",
       "48ce85090d22b82a663cc8677c8cc0fe2369228c5848f6db465c59444ade3bbc",
-      "INCLUDE",
-      "moderate",
-      "include_moderate"
+      "EXCLUDE",
+      "below_moderate",
+      "exclude_direct_conflict"
     ],
     "App_761460": [
       "761460",
@@ -6761,8 +6761,8 @@
     "App_695330": [
       "695330",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "73e7848f016025aab42cd416b3ec0de7f5a64557a4e02f968788425e74c89791",
       "5f045bf8cb189e900494e3ab428407ce0dcee017a2a707a05516e699f2ea6bda",
       "INCLUDE",
@@ -7168,8 +7168,8 @@
     "App_711660": [
       "711660",
       "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
-      "taste-v2",
-      "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "1afaac51f1f7fc698735299e35428aa45ccf359742c60761fb319336c93093b0",
       "00fed6ebb3dd8873f5809d7aac14e67ebb4f74349a0ddfe0a50cb25d8e9d0b1f",
       "INCLUDE",
