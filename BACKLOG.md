@@ -54,21 +54,23 @@
 
 ## Отложенные задачи
 
-### SteamDB history: закрыть оставшиеся retry и проверить штатный handoff
+### SteamDB history: закрыть оставшийся retry и проверить штатный handoff
 
 **Статус:** deferred_user_low_priority  
 **L:** `L3`  
 **T:** `T5`  
 **I:** `I2`  
 **Зафиксировано:** 2026-08-30  
-**Причина оценки:** локально требуется диагностика/починка штатного handoff, но полный результат зависит от внешнего scheduled runtime, retry, ingestion, validation, checkpoint и downstream rebuild. Основной history-сценарий уже работает для 529 из 534 ключей; пользователь отдельно подтвердил, что оставшиеся 5 retry сейчас не важны.
+**Актуализировано:** 2026-08-31  
+**Причина оценки:** основной history-сценарий работает; текущий GitHub runtime ledger валидировал 8 из 9 true-miss lookup, и только один ключ остаётся в retry. Полный результат всё ещё зависит от внешнего scheduled runtime и точного SteamDB KZ historical evidence.
 
 Что осталось:
-- GitHub-derived runtime work содержит 534 SteamDB history ключа: 529 resolved, 5 unresolved;
-- оставшиеся ключи: `App_1282200`, `App_225320`, `App_399670`, `App_630060`, `App_901735`;
-- последний известный failure для них: `runtime_web_internal_error`;
-- довести до рабочего состояния штатный GitHub → scheduled runtime handoff, не заменяя его ручным lookup;
-- после evidence GitHub должен сам выполнить ingestion/validation/checkpoint и downstream rebuild.
+- текущий GitHub-derived SteamDB runtime work: `expected_count=9`, `resolved_count=8`, `unresolved_count=1`;
+- единственный unresolved ключ: `App_901735`;
+- текущая причина: `entry_missing`, `retry=true`, `previous_failure_count=3`, последний failure `steamdb_exact_history_not_established`;
+- четыре ключа из прежнего списка проблемных (`App_1282200`, `App_225320`, `App_399670`, `App_630060`) уже имеют validated `confirmed_min` и больше не являются unresolved;
+- не заменять оставшийся retry догадкой или непроверенным historical minimum: точный Kazakhstan SteamDB history должен пройти существующий GitHub → scheduled runtime → ingestion/validation handoff;
+- после valid evidence GitHub должен сам выполнить ingestion/validation/checkpoint и downstream rebuild.
 
 ### Wishlist: хорошие скидки должны преодолевать слабое taste-попадание
 
