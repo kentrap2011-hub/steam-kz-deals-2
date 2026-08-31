@@ -1,0 +1,61 @@
+name: Validate package purchase value
+
+on:
+  pull_request:
+    paths:
+      - "config/final_ranking_policy.json"
+      - "config/fixed_package_purchase_option_contract.json"
+      - "scripts/apply_fixed_package_purchase_options.py"
+      - "scripts/build_final_visual_payload.py"
+      - "scripts/priority_ranking.py"
+      - "scripts/test_fixed_package_purchase_options.py"
+      - "scripts/validate_priority_ranking.py"
+      - "web/app.js"
+      - ".github/workflows/build-daily-visual-payload.yml"
+      - ".github/workflows/validate-package-purchase-value.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout proposed code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Compile changed Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            scripts/apply_fixed_package_purchase_options.py \
+            scripts/build_final_visual_payload.py \
+            scripts/priority_ranking.py \
+            scripts/test_fixed_package_purchase_options.py \
+            scripts/validate_priority_ranking.py
+
+      - name: Validate package discovery, purchase score, and UI contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/test_fixed_package_purchase_options.py
+
+      - name: Validate full priority ranking regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_priority_ranking.py
+
+      - name: Validate browser JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check web/app.js
