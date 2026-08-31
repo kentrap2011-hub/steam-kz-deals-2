@@ -4,11 +4,21 @@
   "status": "waiting_for_runtime",
   "source_validation_blob_sha": "f95f5647d7f1b1b37842c9a033101ab94ae0b724",
   "expected_count": 9,
-  "resolved_count": 5,
-  "unresolved_count": 4,
-  "submission_file_count": 1,
-  "submission_event_count": 9,
+  "resolved_count": 8,
+  "unresolved_count": 1,
+  "submission_file_count": 2,
+  "submission_event_count": 13,
   "resolved": {
+    "App_1282200": {
+      "status": "confirmed_min",
+      "historical_min_kzt": 360,
+      "special_evidence": null
+    },
+    "App_225320": {
+      "status": "confirmed_min",
+      "historical_min_kzt": 196,
+      "special_evidence": null
+    },
     "App_2530470": {
       "status": "confirmed_min",
       "historical_min_kzt": 3500,
@@ -33,12 +43,14 @@
       "status": "confirmed_min",
       "historical_min_kzt": 162,
       "special_evidence": null
+    },
+    "App_630060": {
+      "status": "confirmed_min",
+      "historical_min_kzt": 84,
+      "special_evidence": null
     }
   },
   "unresolved_keys": [
-    "App_1282200",
-    "App_225320",
-    "App_630060",
     "App_901735"
   ],
   "transient_failure_history": {
@@ -68,9 +80,14 @@
         "submission": "data/inbox/steamdb_runtime/2026-08-30T205809Z.json",
         "submitted_at_utc": "2026-08-30T20:58:09Z",
         "failure_code": "steamdb_runtime_disabled_error"
+      },
+      {
+        "submission": "data/inbox/steamdb_runtime/2026-08-31T0622Z.json",
+        "submitted_at_utc": "2026-08-31T06:22:00Z",
+        "failure_code": "steamdb_runtime_disabled_error"
       }
     ]
   },
   "conflicts": [],
-  "derived_at_utc": "2026-08-30T20:59:14.923656Z"
+  "derived_at_utc": "2026-08-31T06:24:25.408021Z"
 }
