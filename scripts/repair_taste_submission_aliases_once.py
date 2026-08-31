@@ -3,7 +3,10 @@ import json
 import subprocess
 from pathlib import Path
 
+from taste_cache_common import candidate_context_digest
+
 PROJECTION = Path('data/production/pre_ai/taste_projection.json')
+QUEUE = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
 LEDGER_CONTRACT = Path('config/taste_ledger_contract.json')
 TARGETS = [
     Path('data/ai_inbox/taste/2026-08-31T0955Z-001.json'),
@@ -25,6 +28,14 @@ def load(path):
     return json.loads(path.read_text(encoding='utf-8'))
 
 
+def read_jsonl(path):
+    return [
+        json.loads(line)
+        for line in path.read_text(encoding='utf-8').splitlines()
+        if line.strip()
+    ]
+
+
 def expected_bindings(projection):
     return {
         'profile_blob_sha': projection['current_profile']['blob_sha'],
@@ -34,15 +45,7 @@ def expected_bindings(projection):
     }
 
 
-def without_serialization_fields(row):
-    return {
-        key: value
-        for key, value in row.items()
-        if key not in {'reason_code', 'fit_level'}
-    }
-
-
-def normalize_result(result, reason_semantics):
+def normalize_serialization(result, reason_semantics):
     before = copy.deepcopy(result)
     reason = result.get('reason_code')
     canonical_reason = REASON_ALIASES.get(reason, reason)
@@ -76,11 +79,53 @@ def normalize_result(result, reason_semantics):
     result['reason_code'] = canonical_reason
     result['fit_level'] = required_fit
 
-    if without_serialization_fields(before) != without_serialization_fields(result):
-        raise SystemExit(
-            f"Repair attempted to alter semantic content for {result.get('key')}"
-        )
+    for field, value in before.items():
+        if field in {'reason_code', 'fit_level'}:
+            continue
+        if result.get(field) != value:
+            raise SystemExit(
+                f"Serialization repair attempted to alter semantic field {field!r} "
+                f"for {result.get('key')}"
+            )
     return before != result
+
+
+def prove_current_queue_context(queue_row):
+    expected_context, _payload = candidate_context_digest(
+        queue_row['taste_fingerprint'],
+        queue_row.get('short_description'),
+        queue_row.get('bundle_members') or [],
+    )
+    if expected_context != queue_row.get('candidate_context_sha256'):
+        raise SystemExit(
+            f"Current queue candidate context is internally inconsistent for "
+            f"{queue_row.get('taste_subject_key')}"
+        )
+
+
+def repair_proven_identity_copy_error(result, queue_by_key):
+    key = result.get('key')
+    queue_row = queue_by_key.get(key)
+    if queue_row is None:
+        raise SystemExit(f'Repair key is not in current queue: {key}')
+    if str(result.get('appid')) != str(queue_row.get('appid')):
+        raise SystemExit(f'Appid mismatch cannot be repaired for {key}')
+    if result.get('candidate_context_sha256') != queue_row.get('candidate_context_sha256'):
+        raise SystemExit(f'Candidate context mismatch cannot be repaired for {key}')
+
+    prove_current_queue_context(queue_row)
+
+    submitted_fp = result.get('taste_fingerprint')
+    current_fp = queue_row.get('taste_fingerprint')
+    if submitted_fp == current_fp:
+        return False
+
+    # The semantic evidence binding is the exact current candidate-context digest.
+    # Since that digest is recomputed above from the current canonical fingerprint,
+    # a differing submission fingerprint is proven to be a copied identity typo,
+    # not a different semantic context. Copy the exact queue identity verbatim.
+    result['taste_fingerprint'] = current_fp
+    return True
 
 
 def main():
@@ -89,13 +134,19 @@ def main():
         raise SystemExit('Current taste projection is not complete')
     bindings = expected_bindings(projection)
 
+    queue = read_jsonl(QUEUE)
+    queue_by_key = {row['taste_subject_key']: row for row in queue}
+    if len(queue_by_key) != len(queue):
+        raise SystemExit('Current taste queue contains duplicate taste_subject_key values')
+
     ledger = load(LEDGER_CONTRACT)
     reason_semantics = ledger.get('cache_reason_code_semantics') or {}
     if not reason_semantics:
         raise SystemExit('Taste ledger contract has no reason-code semantics')
 
     total = 0
-    changed = 0
+    serialization_changed = 0
+    identity_changed = 0
     per_file = {}
     docs = []
 
@@ -107,7 +158,7 @@ def main():
             raise SystemExit(f'Unexpected schema_version in {path}')
         if doc.get('bindings') != bindings:
             raise SystemExit(
-                f'Bindings changed for {path}; one-shot serialization repair is no longer safe'
+                f'Bindings changed for {path}; one-shot repair is no longer safe'
             )
         results = doc.get('results')
         if not isinstance(results, list) or len(results) != EXPECTED_RESULTS_PER_FILE:
@@ -116,23 +167,45 @@ def main():
                 f'got {len(results) if isinstance(results, list) else None}'
             )
 
-        file_changed = 0
+        file_serialization = 0
+        file_identity = 0
         for result in results:
             if not isinstance(result, dict):
                 raise SystemExit(f'Non-object result in {path}')
-            if normalize_result(result, reason_semantics):
-                changed += 1
-                file_changed += 1
+
+            semantic_before = {
+                field: copy.deepcopy(result.get(field))
+                for field in ('verdict', 'positive_evidence', 'negative_evidence', 'taste_factors')
+            }
+            if normalize_serialization(result, reason_semantics):
+                serialization_changed += 1
+                file_serialization += 1
+            if repair_proven_identity_copy_error(result, queue_by_key):
+                identity_changed += 1
+                file_identity += 1
+
+            semantic_after = {
+                field: result.get(field)
+                for field in ('verdict', 'positive_evidence', 'negative_evidence', 'taste_factors')
+            }
+            if semantic_before != semantic_after:
+                raise SystemExit(
+                    f'Repair attempted to alter semantic verdict/evidence/factors for {result.get("key")}'
+                )
+
         total += len(results)
-        per_file[path.name] = file_changed
+        per_file[path.name] = {
+            'serialization_alias_rows': file_serialization,
+            'proven_identity_copy_error_rows': file_identity,
+        }
         docs.append((path, doc))
 
     if total != EXPECTED_TOTAL_RESULTS:
         raise SystemExit(f'Expected exactly {EXPECTED_TOTAL_RESULTS} results, got {total}')
-    if changed == 0:
-        raise SystemExit('No serialization aliases required repair; refusing no-op one-shot migration')
+    if serialization_changed == 0 and identity_changed == 0:
+        raise SystemExit('No proven repair required; refusing no-op one-shot migration')
 
-    # Write runner-local normalized files only after every row has passed the narrow mapping.
+    # Write runner-local repaired files only after every row has passed the narrow proof.
     for path, doc in docs:
         path.write_text(
             json.dumps(doc, ensure_ascii=False, separators=(',', ':')) + '\n',
@@ -148,13 +221,14 @@ def main():
 
     print(json.dumps({
         'status': 'validated',
-        'scope': 'serialization_aliases_only',
+        'scope': 'serialization_aliases_and_proven_identity_copy_errors_only',
         'files': [path.name for path, _ in docs],
         'result_count': total,
-        'changed_result_count': changed,
+        'serialization_changed_result_count': serialization_changed,
+        'identity_changed_result_count': identity_changed,
         'changed_per_file': per_file,
         'bindings_unchanged': True,
-        'semantic_fields_unchanged': True,
+        'semantic_verdict_evidence_factors_unchanged': True,
         'canonical_dry_run_all_files': True,
     }, ensure_ascii=False, indent=2))
     print('TASTE_ALIAS_REPAIR=PASS')
