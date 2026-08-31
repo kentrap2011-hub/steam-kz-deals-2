@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "batch_id": "b3e08170e37d7a03f9fa",
+  "processed_at_utc": "2026-08-31T14:37:40+00:00",
+  "source_mailing_updated_at_utc": "2026-08-30T20:37:43.818127+00:00",
+  "input_files": [
+    "2026-08-31T1445Z-006.json"
+  ],
+  "result_count": 20,
+  "keys": [
+    "App_829590",
+    "App_833360",
+    "App_846110",
+    "App_846470",
+    "App_858710",
+    "App_858810",
+    "App_865360",
+    "App_865540",
+    "App_868360",
+    "App_870780",
+    "App_873190",
+    "App_874260",
+    "App_8850",
+    "App_8870",
+    "App_890720",
+    "App_893850",
+    "App_897450",
+    "App_901735",
+    "App_91600",
+    "App_916840"
+  ],
+  "baseline": {
+    "safe_cache_hit_count": 590,
+    "ai_required_count": 69,
+    "ai_queue_count": 44
+  },
+  "after": {
+    "safe_cache_hit_count": 610,
+    "ai_required_count": 49,
+    "ai_queue_count": 24,
+    "ready_without_ai_count": 544,
+    "deterministically_excluded_without_ai_count": 91,
+    "sale_end_coverage": 1.0,
+    "sale_end_missing_count": 0
+  },
+  "checks": {
+    "projection_complete": true,
+    "family_partition_complete": true,
+    "sale_end_state_consistent": true,
+    "missing_sale_end_is_nonblocking": true,
+    "safe_hits_increment_exact": true,
+    "ai_required_decrement_exact": true,
+    "ai_queue_decrement_exact": true,
+    "queue_file_count_exact": true,
+    "all_ingested_keys_removed_from_queue": true,
+    "all_ingested_keys_are_cache_hits": true
+  }
+}
