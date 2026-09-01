@@ -165,11 +165,38 @@ jobs:
           echo "PAID_ITEMS_AFTER=$(cat /tmp/paid-items-after.sha256)"
           test "$(cat /tmp/paid-items-before.sha256)" = "$(cat /tmp/paid-items-after.sha256)"
 
-      - name: Preserve existing mandatory Russian-description acceptance
+      - name: Prove mutation is giveaway sibling plus provenance only
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/validate_russian_descriptions.py data/production/visual/current.json
+          python - <<'PY'
+          import copy
+          import json
+          import subprocess
+          from pathlib import Path
+
+          path = 'data/production/visual/current.json'
+          before = json.loads(subprocess.check_output(['git', 'show', f'HEAD:{path}'], text=True))
+          after = json.loads(Path(path).read_text(encoding='utf-8'))
+          allowed_contract = {
+              'final_visual_producer_blob_sha',
+              'giveaway_visual_handoff_blob_sha',
+              'source_giveaway_snapshot_blob_sha',
+              'giveaway_visual_schema_version',
+          }
+
+          def stable_without_giveaway(data):
+              data = copy.deepcopy(data)
+              data.pop('giveaways', None)
+              contract = data.get('production_contract') or {}
+              for key in allowed_contract:
+                  contract.pop(key, None)
+              return data
+
+          if stable_without_giveaway(before) != stable_without_giveaway(after):
+              raise SystemExit('giveaway-only refresh changed non-giveaway production state')
+          print('GIVEAWAY_AUXILIARY_DIFF=PASS non_giveaway_state_unchanged=true')
+          PY
 
       - name: Commit canonical giveaway visual sibling
         shell: bash
@@ -354,14 +381,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # Semantic Taste may remain on the accepted snapshot while deterministic
-          # commercial state and duration cache are refreshed by GitHub-owned sources
-          # before package comparison and the canonical final ranking.
           export FORCE_VISUAL_BUILD=1
           python scripts/build_final_visual_payload.py | tee /tmp/visual-build.log
-          # StoreBrowse can return stale screenshot metadata for storefront aliases
-          # (for example App_901735 resolving assets through app 40960). Refresh those
-          # aliases from Steam appdetails before deciding whether there is anything to commit.
           python scripts/normalize_visual_media_urls.py | tee /tmp/media-refresh.log
           if grep -q 'VISUAL_FINAL_BUILD=BUILT' /tmp/visual-build.log || \
              grep -Eq 'VISUAL_MEDIA_ITEMS_CHANGED=[1-9][0-9]*' /tmp/media-refresh.log; then
