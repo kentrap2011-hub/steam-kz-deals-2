@@ -6,7 +6,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 
-from russian_description_quality import classify_description, resolve_description
+from russian_description_quality import classify_description
+from russian_description_translation_runtime import (
+    load_translation_cache,
+    resolve_description_for_appids as resolve_description_with_translation_cache,
+)
 
 ROOT = Path('.')
 PURCHASE_CONTEXT = ROOT / 'data/production/pre_ai/chatgpt_purchase_context.jsonl'
@@ -18,6 +22,7 @@ TASTE_CACHE = ROOT / 'data/cache/taste_fit.json'
 TASTE_OVERLAY = ROOT / 'data/cache/taste_fit.entry_overlay.json'
 TASTE_PROJECTION = ROOT / 'data/production/pre_ai/taste_projection.json'
 CHATGPT_PAYLOAD = ROOT / 'data/production/pre_ai/chatgpt_payload.json'
+TRANSLATION_CACHE = ROOT / 'data/cache/russian_description_translations.json'
 OUT = ROOT / 'web/data/current.json'
 
 
@@ -166,36 +171,13 @@ def load_content_metadata_by_appid():
     }
 
 
-def resolve_description_for_appids(appids, media, content_metadata_by_appid):
-    resolutions = []
-    for appid in [str(x) for x in appids]:
-        m = media.get(appid) or {}
-        metadata = content_metadata_by_appid.get(appid) or {}
-        resolution = resolve_description(
-            m.get('short_description_source'),
-            metadata.get('short_description'),
-        )
-        resolution['description_source_appid'] = appid
-        if resolution.get('description_source_locale') == 'english':
-            resolution['description_source_path'] = 'data/production/pre_ai/content_metadata.json'
-        elif resolution.get('description_source_locale') == 'russian':
-            resolution['description_source_path'] = 'IStoreBrowseService/GetItems(language=russian)'
-        else:
-            resolution['description_source_path'] = None
-        if resolution.get('description_status') == 'ready_ru':
-            return resolution
-        resolutions.append(resolution)
-
-    if not resolutions:
-        return resolve_description(None, None)
-
-    priority = {
-        'needs_translation': 0,
-        'needs_ru_rewrite': 1,
-        'technical_source': 2,
-        'missing_source': 3,
-    }
-    return min(resolutions, key=lambda row: priority.get(row.get('description_status'), 99))
+def resolve_description_for_appids(appids, media, content_metadata_by_appid, translation_cache):
+    return resolve_description_with_translation_cache(
+        appids,
+        media,
+        content_metadata_by_appid,
+        translation_cache,
+    )
 
 
 def classify_windows(requirements):
@@ -347,6 +329,7 @@ def main():
     taste_entries = effective_taste_entries()
     projection_entries = load_json(TASTE_PROJECTION).get('entries') or {}
     payload = load_json(CHATGPT_PAYLOAD)
+    translation_cache = load_translation_cache(TRANSLATION_CACHE)
     rate = (payload.get('fx_binding') or {}).get('kzt_per_rub')
 
     family_base_map = {}
@@ -418,10 +401,11 @@ def main():
                 if len(screenshots) >= 5:
                     break
 
-        description = resolve_description_for_appids(
+        description_resolution = resolve_description_for_appids(
             base_appids,
             media,
             content_metadata_by_appid,
+            translation_cache,
         )
 
         taste_key = row.get('taste_subject_key')
@@ -430,14 +414,14 @@ def main():
         taste_entry = taste_entry if isinstance(taste_entry, dict) else {}
         projection = projection if isinstance(projection, dict) else {}
         tags = projection.get('fit_tags') or []
-        description = projection.get('short_description') or ''
+        taste_description = projection.get('short_description') or ''
         reasons = []
         for ev in (taste_entry.get('positive_evidence') or [])[:2]:
-            translated = reason_ru(ev, tags, description)
+            translated = reason_ru(ev, tags, taste_description)
             if translated not in reasons:
                 reasons.append(translated)
         if not reasons:
-            reasons.append(reason_ru(None, tags, description))
+            reasons.append(reason_ru(None, tags, taste_description))
 
         base_facts = [facts.get(appid) or {} for appid in base_appids]
         statuses = [x.get('windows_status') for x in base_facts]
@@ -446,7 +430,7 @@ def main():
         steam_achievements = True if True in achievement_values else (False if achievement_values and all(x is False for x in achievement_values) else None)
         achievement_total = next((x.get('achievement_total') for x in base_facts if x.get('achievement_total') is not None), None)
         practical = {'windows_status': windows_status, 'steam_achievements': steam_achievements, 'achievement_total': achievement_total}
-        risks = derive_risks(taste_entry.get('negative_evidence') or [], tags, description, projection.get('release_date'), practical)
+        risks = derive_risks(taste_entry.get('negative_evidence') or [], tags, taste_description, projection.get('release_date'), practical)
 
         visible.append({
             'id': family_id,
@@ -464,13 +448,16 @@ def main():
             'historical_minimum_rub': primary_offer.get('historical_minimum_rub'),
             'previously_free': primary_offer.get('previously_free'),
             'sale_end_utc': primary_offer.get('sale_end_utc'),
-            'summary': description.get('summary'),
-            'description_status': description.get('description_status'),
-            'description_source_locale': description.get('description_source_locale'),
-            'description_source_quality': description.get('description_source_quality'),
-            'description_source_appid': description.get('description_source_appid'),
-            'description_source_path': description.get('description_source_path'),
-            'description_source_text': description.get('description_source_text'),
+            'summary': description_resolution.get('summary'),
+            'description_status': description_resolution.get('description_status'),
+            'description_source_locale': description_resolution.get('description_source_locale'),
+            'description_source_quality': description_resolution.get('description_source_quality'),
+            'description_source_appid': description_resolution.get('description_source_appid'),
+            'description_source_path': description_resolution.get('description_source_path'),
+            'description_source_text': description_resolution.get('description_source_text'),
+            'description_translation_request_id': description_resolution.get('description_translation_request_id'),
+            'description_translation_source_text_sha256': description_resolution.get('description_translation_source_text_sha256'),
+            'description_translation_source_version': description_resolution.get('description_translation_source_version'),
             'gameplay_points': [],
             'why_fit': reasons[:2],
             'risks': risks,
