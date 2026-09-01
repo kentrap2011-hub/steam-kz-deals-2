@@ -28,8 +28,8 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Бесплатные раздачи | Finish canonical production wiring/run for Tier-1 cross-platform giveaways | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_PRODUCTION_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-production-fix-01.md` | `active_or_ready` |
-| `ЧАТ 2` | Объяснения карточек | Implement game-specific positive reasons and consistent grounded risk rendering | `WORKER_TASK_CARD_EXPLANATION_IMPLEMENT_01.md` | `reviews/worker_reports/card-explanation-implement-01.md` | `ready_for_new_chat` |
+| `ЧАТ 1` | Бесплатные раздачи | Finish canonical production wiring/run for Tier-1 cross-platform giveaways | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_PRODUCTION_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-production-fix-01.md` | `awaiting_closeout_report` |
+| `ЧАТ 2` | Объяснения карточек | Fix the single remaining generated-sample personal-taste-link violation | `WORKER_TASK_CARD_EXPLANATION_FIX_01.md` | `reviews/worker_reports/card-explanation-fix-01.md` | `ready_to_continue_in_existing_chat` |
 
 ## Подготовлено, но НЕ назначено следующим
 
@@ -38,9 +38,9 @@
 
 ## Последние решения
 
-- `worker-efficiency-guardrails-01` — complete; the three proven reusable pitfalls are now durable and protocol hooks are in place. No follow-up required.
-- Chat 2 moves back to product work: card explanation implementation, based on the already completed quality audit. This is independent of Chat 1's giveaway production wiring.
-- `cross-platform-giveaway-implement-01` — `needs_fix`; Chat 1 is on its bounded production-wiring fix.
+- `card-explanation-implement-01` — implementation and focused behavioral tests are present, but real generated top-30 acceptance failed on exactly one card: `Middle-earth™: Shadow of Mordor™` positive explanation lacks an explicit personal-taste link. Direct bounded fix selected for Chat 2; do not repeat the audit or redesign the system.
+- `cross-platform-giveaway-production-fix-01` — user reports Chat 1 finished, but the mandatory report is still absent at its exact expected path and no alternate task-id report was found; keep Chat 1 pending closeout only.
+- `worker-efficiency-guardrails-01` — complete; no follow-up required.
 - `backlog-disposition-validator-01` — complete and validated in GitHub Actions.
 
 ## Выбор следующей работы
