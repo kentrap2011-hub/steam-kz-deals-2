@@ -86,6 +86,28 @@ def family_rows(family_graph, visible_items):
     return rows
 
 
+def visible_rows_without_price(visible_items):
+    rows = {}
+    for game in visible_items:
+        fid = str(game.get('id') or '')
+        if not fid:
+            continue
+        appids = {
+            str(value)
+            for value in (game.get('base_appids') or [])
+            if str(value).isdigit()
+        }
+        if not appids:
+            continue
+        rows[fid] = {
+            'family_id': fid,
+            'title': game.get('title') or fid,
+            'price_kzt': None,
+            'base_appids': appids,
+        }
+    return rows
+
+
 def build_coverage_index(visible, purchase_equivalence=None):
     purchase_equivalence = purchase_equivalence or {}
     appid_to_family = defaultdict(list)
@@ -113,96 +135,115 @@ def build_coverage_index(visible, purchase_equivalence=None):
     return appid_to_family
 
 
+def eligible_fixed_package(package):
+    if not isinstance(package, dict):
+        return False
+    if package.get('entity_kind') != 'sub':
+        return False
+    if package.get('fixed_price_semantics') is not True:
+        return False
+    if package.get('personalized_price') is not False:
+        return False
+    package_price = package.get('final_kzt')
+    return package_price is not None and float(package_price) > 0
+
+
+def coverage_for_package(package, visible, appid_to_family):
+    coverage_by_family = defaultdict(list)
+    for appid in package.get('included_appids') or []:
+        package_appid = str(appid)
+        for evidence in appid_to_family.get(package_appid, []):
+            fid = evidence['family_id']
+            if evidence not in coverage_by_family[fid]:
+                coverage_by_family[fid].append(evidence)
+    covered_ids = set(coverage_by_family)
+    if len(covered_ids) < 2:
+        return None, None
+    covered = [visible[fid] for fid in sorted(covered_ids)]
+    coverage_evidence = [
+        {
+            'family_id': row['family_id'],
+            'visible_title': row['title'],
+            'matches': coverage_by_family[row['family_id']],
+        }
+        for row in covered
+    ]
+    return covered, coverage_evidence
+
+
+def package_base_record(package, covered, coverage_evidence, kzt_per_rub):
+    package_price = float(package['final_kzt'])
+    original_kzt = package.get('original_kzt')
+    package_price_rub = rub_display(package_price, kzt_per_rub)
+    count = len(covered)
+    return {
+        'package_key': package.get('key') or f"Sub_{package.get('packageid')}",
+        'packageid': int(package.get('packageid') or 0),
+        'package_title': package.get('title') or package.get('purchase_option_name') or 'Steam package',
+        'package_price_kzt': round(package_price, 2),
+        'package_price_rub': package_price_rub,
+        'package_price_per_visible_game_rub': (
+            round(float(package_price_rub) / count, 1)
+            if package_price_rub is not None and count > 0
+            else None
+        ),
+        'package_original_kzt': round(float(original_kzt), 2) if original_kzt is not None else None,
+        'package_original_rub': rub_display(original_kzt, kzt_per_rub),
+        'discount_percent': int(package.get('discount_percent') or 0),
+        'discount_end_utc': package.get('discount_end_utc'),
+        'covered_visible_game_ids': [row['family_id'] for row in covered],
+        'covered_visible_titles': [row['title'] for row in covered],
+        'covered_visible_game_count': count,
+        'coverage_evidence': coverage_evidence,
+        'uses_verified_purchase_equivalence': any(
+            match.get('coverage_mode') == 'verified_purchase_equivalence'
+            for family in coverage_evidence
+            for match in family.get('matches') or []
+        ),
+        'requires_multi_game_intent': True,
+        'unknown_extra_content_value_assumed_kzt': 0,
+        'web_url': package.get('web_url'),
+    }
+
+
 def build_recommendations(package_artifact, family_graph, visible_items, kzt_per_rub, purchase_equivalence=None):
     visible = family_rows(family_graph, visible_items)
     appid_to_family = build_coverage_index(visible, purchase_equivalence)
 
     recommendations = []
     for package in (package_artifact.get('packages') or {}).values():
-        if not isinstance(package, dict):
+        if not eligible_fixed_package(package):
             continue
-        if package.get('entity_kind') != 'sub':
-            continue
-        if package.get('fixed_price_semantics') is not True:
-            continue
-        if package.get('personalized_price') is not False:
-            continue
-        package_price = package.get('final_kzt')
-        if package_price is None or float(package_price) <= 0:
+        covered, coverage_evidence = coverage_for_package(package, visible, appid_to_family)
+        if not covered:
             continue
 
-        coverage_by_family = defaultdict(list)
-        for appid in package.get('included_appids') or []:
-            package_appid = str(appid)
-            for evidence in appid_to_family.get(package_appid, []):
-                fid = evidence['family_id']
-                if evidence not in coverage_by_family[fid]:
-                    coverage_by_family[fid].append(evidence)
-        covered_ids = set(coverage_by_family)
-        if len(covered_ids) < 2:
-            continue
-
-        covered = [visible[fid] for fid in sorted(covered_ids)]
         standalone_total = sum(row['price_kzt'] for row in covered)
-        savings = standalone_total - float(package_price)
+        package_price = float(package['final_kzt'])
+        savings = standalone_total - package_price
         strict_savings = savings > 0.01
-
-        covered_titles = [row['title'] for row in covered]
-        original_kzt = package.get('original_kzt')
         package_price_rub = rub_display(package_price, kzt_per_rub)
         standalone_total_rub = rub_display(standalone_total, kzt_per_rub)
         savings_rub = rub_display(savings, kzt_per_rub)
-        count = len(covered)
-        coverage_evidence = []
-        for row in covered:
-            fid = row['family_id']
-            coverage_evidence.append({
-                'family_id': fid,
-                'visible_title': row['title'],
-                'matches': coverage_by_family[fid],
-            })
 
-        rec = {
-            'package_key': package.get('key') or f"Sub_{package.get('packageid')}",
-            'packageid': int(package.get('packageid') or 0),
-            'package_title': package.get('title') or package.get('purchase_option_name') or 'Steam package',
-            'package_price_kzt': round(float(package_price), 2),
-            'package_price_rub': package_price_rub,
-            'package_price_per_visible_game_rub': (
-                round(float(package_price_rub) / count, 1)
-                if package_price_rub is not None and count > 0
-                else None
-            ),
-            'package_original_kzt': round(float(original_kzt), 2) if original_kzt is not None else None,
-            'package_original_rub': rub_display(original_kzt, kzt_per_rub),
-            'discount_percent': int(package.get('discount_percent') or 0),
-            'discount_end_utc': package.get('discount_end_utc'),
-            'covered_visible_game_ids': [row['family_id'] for row in covered],
-            'covered_visible_titles': covered_titles,
-            'covered_visible_game_count': count,
-            'coverage_evidence': coverage_evidence,
-            'uses_verified_purchase_equivalence': any(
-                match.get('coverage_mode') == 'verified_purchase_equivalence'
-                for family in coverage_evidence
-                for match in family.get('matches') or []
-            ),
+        rec = package_base_record(package, covered, coverage_evidence, kzt_per_rub)
+        rec.update({
             'standalone_total_kzt': round(standalone_total, 2),
             'standalone_total_rub': standalone_total_rub,
             'savings_kzt': round(savings, 2),
             'savings_rub': savings_rub,
             'savings_percent_vs_standalone': round((savings / standalone_total) * 100.0, 1),
             'strict_current_price_savings': strict_savings,
-            'price_delta_vs_standalone_kzt': round(float(package_price) - standalone_total, 2),
+            'price_delta_vs_standalone_kzt': round(package_price - standalone_total, 2),
             'price_delta_vs_standalone_rub': (
                 None
                 if package_price_rub is None or standalone_total_rub is None
                 else package_price_rub - standalone_total_rub
             ),
-            'requires_multi_game_intent': True,
+            'comparison_source_aligned': True,
+            'ranking_comparison_unavailable_reason': None,
             'comparison_scope': 'currently_visible_base_game_families_covered_by_exact_or_verified_purchase_equivalence',
-            'unknown_extra_content_value_assumed_kzt': 0,
-            'web_url': package.get('web_url'),
-        }
+        })
         recommendations.append(rec)
 
     recommendations.sort(key=lambda row: (
@@ -221,6 +262,51 @@ def build_recommendations(package_artifact, family_graph, visible_items, kzt_per
     return recommendations, best_by_family
 
 
+def build_display_only_recommendations(package_artifact, visible_items, kzt_per_rub, purchase_equivalence=None):
+    """Build safe package membership info when visual and price snapshots differ.
+
+    We may use the current fixed package's own price and membership, plus explicit
+    purchase-equivalence evidence, but we deliberately withhold standalone comparison
+    and therefore make the package ineligible to improve ranking.
+    """
+    visible = visible_rows_without_price(visible_items)
+    appid_to_family = build_coverage_index(visible, purchase_equivalence)
+    recommendations = []
+
+    for package in (package_artifact.get('packages') or {}).values():
+        if not eligible_fixed_package(package):
+            continue
+        covered, coverage_evidence = coverage_for_package(package, visible, appid_to_family)
+        if not covered:
+            continue
+        rec = package_base_record(package, covered, coverage_evidence, kzt_per_rub)
+        rec.update({
+            'standalone_total_kzt': None,
+            'standalone_total_rub': None,
+            'savings_kzt': None,
+            'savings_rub': None,
+            'savings_percent_vs_standalone': None,
+            'strict_current_price_savings': False,
+            'price_delta_vs_standalone_kzt': None,
+            'price_delta_vs_standalone_rub': None,
+            'comparison_source_aligned': False,
+            'ranking_comparison_unavailable_reason': 'visual_and_package_sources_differ',
+            'comparison_scope': 'display_only_membership_coverage_until_visual_and_price_sources_align',
+        })
+        recommendations.append(rec)
+
+    recommendations.sort(key=lambda row: (
+        -int(row['covered_visible_game_count']),
+        float(row['package_price_kzt']),
+        int(row['packageid']),
+    ))
+    best_by_family = {}
+    for rec in recommendations:
+        for fid in rec['covered_visible_game_ids']:
+            best_by_family.setdefault(fid, rec)
+    return recommendations, best_by_family
+
+
 def compact_titles(titles, max_items=4):
     titles = [str(value) for value in titles if value]
     if len(titles) <= max_items:
@@ -232,9 +318,13 @@ def offer_from_recommendation(rec):
     titles = compact_titles(rec['covered_visible_titles'])
     savings_rub = rec.get('savings_rub')
     strict = rec.get('strict_current_price_savings') is True
+    source_aligned = rec.get('comparison_source_aligned') is not False
     if strict:
         economics = f"экономия около {savings_rub} ₽" if savings_rub is not None else f"экономия {rec['savings_kzt']:.0f} KZT"
         prefix = 'Выгодный набор'
+    elif not source_aligned:
+        economics = 'сравнение выгоды обновится после синхронизации цен'
+        prefix = 'Набор Steam'
     else:
         delta = rec.get('price_delta_vs_standalone_rub')
         economics = (
@@ -264,30 +354,39 @@ def offer_from_recommendation(rec):
     }
 
 
-def validate_source_binding(visual, packages, family_graph):
+def source_binding_status(visual, packages, family_graph):
     source = visual.get('source_mailing_updated_at_utc')
     package_source = packages.get('source_mailing_updated_at_utc')
     family_source = family_graph.get('source_updated_at_utc')
-    if not source or package_source != source or family_source != source:
-        raise ValueError(
-            'Fixed package source mismatch: '
-            f'visual={source} packages={package_source} family={family_source}'
-        )
+    return {
+        'aligned': bool(source and package_source == source and family_source == source),
+        'visual_source': source,
+        'package_source': package_source,
+        'family_source': family_source,
+    }
 
 
 def apply_to_visual(visual, packages, family_graph, kzt_per_rub, purchase_equivalence=None):
-    validate_source_binding(visual, packages, family_graph)
     if kzt_per_rub is None or float(kzt_per_rub) <= 0:
         raise ValueError('Fixed package enrichment requires positive kzt_per_rub')
 
     items = visual.get('items') or []
-    recommendations, best_by_family = build_recommendations(
-        packages,
-        family_graph,
-        items,
-        float(kzt_per_rub),
-        purchase_equivalence=purchase_equivalence,
-    )
+    binding = source_binding_status(visual, packages, family_graph)
+    if binding['aligned']:
+        recommendations, best_by_family = build_recommendations(
+            packages,
+            family_graph,
+            items,
+            float(kzt_per_rub),
+            purchase_equivalence=purchase_equivalence,
+        )
+    else:
+        recommendations, best_by_family = build_display_only_recommendations(
+            packages,
+            items,
+            float(kzt_per_rub),
+            purchase_equivalence=purchase_equivalence,
+        )
 
     touched = 0
     touched_ids = []
@@ -318,10 +417,15 @@ def apply_to_visual(visual, packages, family_graph, kzt_per_rub, purchase_equiva
     strict_count = sum(1 for row in recommendations if row.get('strict_current_price_savings') is True)
     equivalence_count = sum(1 for row in recommendations if row.get('uses_verified_purchase_equivalence') is True)
     stats = {
-        'schema_version': 3,
+        'schema_version': 4,
         'fixed_sub_only': True,
         'dynamic_bundle_supported': False,
         'personalized_complete_the_set_supported': False,
+        'source_binding_aligned': binding['aligned'],
+        'display_only_due_source_mismatch': not binding['aligned'],
+        'visual_source_mailing_updated_at_utc': binding['visual_source'],
+        'package_source_mailing_updated_at_utc': binding['package_source'],
+        'family_source_updated_at_utc': binding['family_source'],
         'qualifying_package_count': len(recommendations),
         'strict_savings_package_count': strict_count,
         'verified_equivalence_package_count': equivalence_count,
@@ -329,8 +433,9 @@ def apply_to_visual(visual, packages, family_graph, kzt_per_rub, purchase_equiva
         'visible_game_ids_with_better_package': touched_ids,
         'comparison_rule': (
             'show a fixed Steam Sub package when it covers at least two currently visible base-game '
-            'families by exact included appid or explicit verified purchase equivalence; ranking boost '
-            'remains fail-closed and requires the commercial package route to satisfy ranking policy'
+            'families by exact included appid or explicit verified purchase equivalence; when visual '
+            'and price sources differ, expose membership/package-price information only and withhold '
+            'standalone savings/ranking boost until sources align'
         ),
         'ranking_stage_requirement': 'package enrichment must happen before the single final ranking pass',
     }
@@ -379,7 +484,8 @@ def attach_contract_fields(visual):
     contract['fixed_package_purchase_option_rule'] = (
         'fixed Sub only; >=2 visible game families by exact appid or explicit verified purchase '
         'equivalence; personalized bundles excluded; display does not require strict savings; '
-        'ranking boost remains fail-closed; package enrichment before final ranking'
+        'source mismatch allows display-only membership but not savings/ranking claims; ranking boost '
+        'remains fail-closed; package enrichment before final ranking'
     )
 
 
@@ -398,7 +504,8 @@ def main():
         f"qualifying_packages={stats['qualifying_package_count']} "
         f"strict_savings_packages={stats['strict_savings_package_count']} "
         f"verified_equivalence_packages={stats['verified_equivalence_package_count']} "
-        f"touched_games={stats['visible_game_count_with_better_package']}"
+        f"touched_games={stats['visible_game_count_with_better_package']} "
+        f"source_aligned={stats['source_binding_aligned']}"
     )
 
 
