@@ -1,0 +1,83 @@
+name: One-shot Russian description pipeline patch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/patch-russian-description-pipeline.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: patch-russian-description-pipeline
+  cancel-in-progress: false
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Patch deterministic description producer and gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/patch_russian_description_pipeline_once.py
+
+      - name: Run targeted description regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/test_russian_description_quality.py
+          python -m py_compile \
+            scripts/russian_description_quality.py \
+            scripts/validate_russian_descriptions.py \
+            scripts/build_visual_feed_v2.py \
+            scripts/build_final_visual_payload.py
+
+      - name: Prove legacy current payload is rejected
+        shell: bash
+        run: |
+          set -euo pipefail
+          if python scripts/validate_russian_descriptions.py data/production/visual/current.json; then
+            echo "Expected current payload with legacy placeholders to fail the new gate"
+            exit 1
+          fi
+          echo "LEGACY_RUSSIAN_DESCRIPTION_GATE=EXPECTED_FAIL"
+
+      - name: Commit deterministic implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add \
+            scripts/build_visual_feed_v2.py \
+            scripts/build_final_visual_payload.py \
+            .github/workflows/build-daily-visual-payload.yml \
+            .github/workflows/deploy-visual.yml
+          git diff --cached --check
+          git commit -m "Enforce Russian description source quality"
+
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
