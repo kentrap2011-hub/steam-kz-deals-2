@@ -6,6 +6,7 @@ import apply_fixed_package_purchase_options as package_options
 import build_daily_visual_payload as base_builder
 import card_explanation_policy
 import duration_enrichment
+import giveaway_visual_handoff
 import priority_ranking
 import refine_visual_ranking as refiner
 
@@ -307,6 +308,7 @@ def refresh_existing_media():
         'without_any_image': len(items) - with_any_image,
         'coverage_percent': round((with_any_image / len(items)) * 100, 1) if items else 100.0,
     }
+    ready['giveaways'] = giveaway_visual_handoff.derive_from_path()
     contract = ready.setdefault('production_contract', {})
     contract['visual_builder_blob_sha'] = base_builder.git_sha('scripts/build_visual_feed_v2.py')
     contract['final_visual_producer_blob_sha'] = base_builder.git_sha('scripts/build_final_visual_payload.py')
@@ -315,6 +317,9 @@ def refresh_existing_media():
     contract['duration_source_distribution'] = duration_source_distribution(items)
     contract['duration_structured_refresh_touched_count'] = duration_touched
     contract['card_explanation_refresh_touched_count'] = explanation_touched
+    contract['giveaway_visual_handoff_blob_sha'] = base_builder.git_sha('scripts/giveaway_visual_handoff.py')
+    contract['source_giveaway_snapshot_blob_sha'] = base_builder.git_sha('data/production/giveaways/v1/current.json')
+    contract['giveaway_visual_schema_version'] = 1
 
     after = json.dumps(ready, ensure_ascii=False, separators=(',', ':'))
     if after == before:
@@ -437,6 +442,7 @@ def main():
         'without_any_image': len(refined) - with_any_image,
         'coverage_percent': round((with_any_image / len(refined)) * 100, 1) if refined else 100.0,
     }
+    ready['giveaways'] = giveaway_visual_handoff.derive_from_path()
     duration_distribution = duration_source_distribution(refined)
     contract = ready.setdefault('production_contract', {})
     contract.clear()
@@ -462,6 +468,9 @@ def main():
         'source_purchase_context_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_purchase_context.jsonl'),
         'source_taste_queue_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_taste_queue.jsonl'),
         'source_history_snapshot_blob_sha': base_builder.git_sha('data/production/pre_ai/history_snapshot.json'),
+        'giveaway_visual_handoff_blob_sha': base_builder.git_sha('scripts/giveaway_visual_handoff.py'),
+        'source_giveaway_snapshot_blob_sha': base_builder.git_sha('data/production/giveaways/v1/current.json'),
+        'giveaway_visual_schema_version': 1,
         'source_family_count': payload.get('source_family_count'),
         'ready_family_count_before_expiry_filter': payload.get('ready_without_ai_count'),
         'visible_family_count': len(refined),
@@ -525,6 +534,7 @@ def main():
         f'package_strict={package_stats.get("strict_savings_package_count")} '
         f'package_equivalence={package_stats.get("verified_equivalence_package_count")} '
         f'package_touched={package_stats.get("visible_game_count_with_better_package")} '
+        f'giveaways={ready.get("giveaways", {}).get("state")} '
         f'force={os.environ.get("FORCE_VISUAL_BUILD") == "1"}'
     )
 
