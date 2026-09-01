@@ -1,0 +1,31 @@
+{
+  "contract": "PURCHASE-EQUIVALENCE-OVERRIDES-V1",
+  "version": "1.0",
+  "status": "canonical",
+  "purpose": "Allow fixed-package purchase coverage to use explicitly verified directional substitutes without merging Taste families or guessing edition equivalence from titles.",
+  "rules": {
+    "direction": "visible_target_appid -> package_substitute_appids",
+    "affects_taste": false,
+    "affects_family_graph": false,
+    "title_or_franchise_guessing_allowed": false,
+    "remaster_keyword_guessing_allowed": false,
+    "only_explicit_entries_are_authoritative": true,
+    "exact_included_appid_still_preferred": true
+  },
+  "entries": {
+    "7670": {
+      "visible_title": "BioShock",
+      "package_substitute_appids": [409710],
+      "package_substitute_titles": ["BioShock Remastered"],
+      "relationship": "verified_remastered_purchase_substitute",
+      "evidence_note": "BioShock: The Collection includes BioShock Remastered; for purchase-option coverage this explicitly verified remastered edition may satisfy a visible BioShock purchase target. This does not merge Taste identities."
+    },
+    "8850": {
+      "visible_title": "BioShock 2",
+      "package_substitute_appids": [409720],
+      "package_substitute_titles": ["BioShock 2 Remastered"],
+      "relationship": "verified_remastered_purchase_substitute",
+      "evidence_note": "BioShock: The Collection includes BioShock 2 Remastered; for purchase-option coverage this explicitly verified remastered edition may satisfy a visible BioShock 2 purchase target. This does not merge Taste identities."
+    }
+  }
+}

@@ -1,15 +1,17 @@
 {
   "contract": "FIXED-PACKAGE-PURCHASE-OPTION-V1",
-  "version": "1.0",
+  "version": "1.1",
   "status": "implementation_only",
-  "purpose": "Recommend a fixed Steam Store Package as a purchase alternative when it is objectively cheaper than buying multiple currently visible base-game families separately, without changing Taste scope or ranking.",
+  "purpose": "Surface relevant fixed Steam Store Package purchase options across multiple currently visible base-game families and let the ranking policy score only commercially eligible package routes, without changing price-blind Taste semantics.",
   "authority": {
     "ownership_contract": "config/execution_ownership_contract.json",
     "offer_family_contract": "config/offer_family_contract.json",
+    "purchase_equivalence_contract": "config/purchase_equivalence_overrides.json",
+    "ranking_policy": "config/final_ranking_policy.json",
     "github_owns_discovery_and_comparison": true,
     "ui_is_display_only": true,
     "taste_scope_must_not_change": true,
-    "ranking_must_not_change": true
+    "ranking_integration_is_policy_owned": true
   },
   "discovery": {
     "network_source": "IStoreBrowseService/GetItems",
@@ -24,24 +26,38 @@
   "comparison": {
     "minimum_visible_base_game_family_count": 2,
     "count_distinct_families_once": true,
-    "require_strict_current_price_savings": true,
+    "visibility_requires_strict_current_price_savings": false,
+    "ranking_boost_requires_commercial_route_eligibility": true,
     "standalone_reference": "sum of current primary KZT prices for currently visible base-game families covered by the package",
     "unknown_extra_content_value_kzt": 0,
     "unknown_or_nonvisible_content_never_increases_computed_savings": true,
     "edition_equivalence_guessing_allowed": false,
-    "package_coverage_requires_actual_included_appid_or_canonical_family_membership": true,
+    "verified_directional_purchase_equivalence_allowed": true,
+    "verified_directional_purchase_equivalence_contract": "config/purchase_equivalence_overrides.json",
+    "package_coverage_requires": "actual included appid, canonical family membership, or explicit verified directional purchase equivalence",
     "best_option_order": [
+      "strict_current_price_savings_first",
       "greater_absolute_savings_kzt",
+      "greater_visible_family_count",
       "lower_package_price_kzt",
       "lower_packageid"
     ],
     "advice_is_conditional_on_multi_game_intent": true
   },
+  "display_semantics": {
+    "strict_savings_true_label": "Выгодный набор Steam",
+    "strict_savings_false_label": "Набор Steam",
+    "non_saving_package_may_be_visible": true,
+    "non_saving_package_must_not_claim_to_be_cheaper": true,
+    "verified_equivalence_may_be_explained_to_user": true
+  },
   "output": {
     "pre_ai_artifact": "data/production/pre_ai/fixed_package_options.json",
     "visual_field": "better_purchase_option",
+    "visual_field_note": "legacy field name retained for compatibility; presence means relevant package option, while strict_current_price_savings and score_breakdown.purchase_route determine whether it is actually cheaper / ranking-driving",
     "also_append_to_existing_offers": true,
-    "ranking_review_includes_better_purchase_option": true
+    "ranking_review_includes_better_purchase_option": true,
+    "coverage_evidence_required": true
   },
   "regression": {
     "bioshock_package_key": "Sub_127633",
@@ -51,10 +67,14 @@
       "BioShock 2 Remastered",
       "BioShock Infinite"
     ],
+    "bioshock_verified_purchase_equivalence": {
+      "7670": 409710,
+      "8850": 409720
+    },
+    "bioshock_current_scope_expectation": "When BioShock 2 (8850) and BioShock Infinite (8870) are visible, Sub_127633 must be surfaced using verified equivalence for 8850->409720 and exact coverage for 8870 even if strict standalone savings is not positive.",
     "deterministic_price_fixture_is_not_live_price_authority": true,
-    "deterministic_standalone_total_kzt_fixture": 2034,
+    "deterministic_three_remaster_family_standalone_total_kzt_fixture": 2034,
     "deterministic_package_kzt_fixture": 1420,
-    "deterministic_expected_savings_kzt_fixture": 614,
     "test_script": "scripts/test_fixed_package_purchase_options.py"
   }
 }

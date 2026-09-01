@@ -1,8 +1,9 @@
+import json
 from copy import deepcopy
 from pathlib import Path
 
 import priority_ranking
-from apply_fixed_package_purchase_options import build_recommendations
+from apply_fixed_package_purchase_options import build_recommendations, load_purchase_equivalence
 from build_fixed_package_purchase_options import classify_package, packageid_for_returned_item
 
 
@@ -39,10 +40,16 @@ def package(pid, price, appids, title='Package'):
     }
 
 
-def run(packages, families, items):
+def run(packages, families, items, equivalence=None):
     artifact = {'packages': {row['key']: row for row in packages}}
     graph = {'families': families}
-    return build_recommendations(artifact, graph, items, RATE)
+    return build_recommendations(
+        artifact,
+        graph,
+        items,
+        RATE,
+        purchase_equivalence=equivalence,
+    )
 
 
 def ranking_game(title, **overrides):
@@ -84,7 +91,23 @@ def strong_four_game_package(price=300):
         'standalone_total_rub': 600,
         'savings_rub': 600 - price,
         'savings_percent_vs_standalone': round(((600 - price) / 600) * 100, 1),
+        'strict_current_price_savings': price < 600,
         'web_url': 'https://store.steampowered.com/sub/400/',
+    }
+
+
+def bioshock_equivalence():
+    return {
+        '7670': {
+            'package_substitute_appids': {'409710'},
+            'relationship': 'verified_remastered_purchase_substitute',
+            'evidence_note': 'BioShock -> BioShock Remastered',
+        },
+        '8850': {
+            'package_substitute_appids': {'409720'},
+            'relationship': 'verified_remastered_purchase_substitute',
+            'evidence_note': 'BioShock 2 -> BioShock 2 Remastered',
+        },
     }
 
 
@@ -105,12 +128,14 @@ def test_bioshock_collection_actual_member_regression():
     rec = recs[0]
     assert rec['standalone_total_kzt'] == 2034
     assert rec['savings_kzt'] == 614
+    assert rec['strict_current_price_savings'] is True
     assert rec['covered_visible_game_count'] == 3
+    assert rec['uses_verified_purchase_equivalence'] is False
     assert rec['package_price_per_visible_game_rub'] == round(rec['package_price_rub'] / 3, 1)
     assert set(best) == {'game:409710', 'game:409720', 'game:8870'}
 
 
-def test_package_does_not_guess_original_remaster_equivalence():
+def test_package_does_not_guess_original_remaster_equivalence_without_explicit_override():
     families = [
         family('game:7670', 7670, 662, 'BioShock'),
         family('game:8850', 8850, 397, 'BioShock 2'),
@@ -123,12 +148,46 @@ def test_package_does_not_guess_original_remaster_equivalence():
     assert best == {}
 
 
-def test_more_expensive_package_is_not_recommended():
+def test_bioshock_collection_uses_explicit_directional_purchase_equivalence():
+    families = [
+        family('game:8850', 8850, 397, 'BioShock 2'),
+        family('game:8870', 8870, 975, 'BioShock Infinite'),
+    ]
+    items = [visible('game:8850', 'BioShock 2'), visible('game:8870', 'BioShock Infinite')]
+    packages = [package(127633, 1420, [409710, 409720, 8870], 'BioShock: The Collection')]
+    recs, best = run(packages, families, items, bioshock_equivalence())
+    assert len(recs) == 1
+    rec = recs[0]
+    assert rec['covered_visible_game_count'] == 2
+    assert set(rec['covered_visible_game_ids']) == {'game:8850', 'game:8870'}
+    assert rec['uses_verified_purchase_equivalence'] is True
+    assert rec['strict_current_price_savings'] is False
+    assert rec['savings_kzt'] == -48
+    assert set(best) == {'game:8850', 'game:8870'}
+
+    evidence = {row['family_id']: row['matches'] for row in rec['coverage_evidence']}
+    assert any(
+        row['coverage_mode'] == 'verified_purchase_equivalence'
+        and row['visible_appid'] == '8850'
+        and row['package_appid'] == '409720'
+        for row in evidence['game:8850']
+    )
+    assert any(
+        row['coverage_mode'] == 'exact_included_appid'
+        and row['visible_appid'] == '8870'
+        and row['package_appid'] == '8870'
+        for row in evidence['game:8870']
+    )
+
+
+def test_more_expensive_relevant_package_is_visible_as_information():
     families = [family('game:1', 1, 500, 'One'), family('game:2', 2, 500, 'Two')]
     items = [visible('game:1', 'One'), visible('game:2', 'Two')]
     recs, best = run([package(10, 1100, [1, 2])], families, items)
-    assert recs == []
-    assert best == {}
+    assert len(recs) == 1
+    assert recs[0]['strict_current_price_savings'] is False
+    assert recs[0]['savings_kzt'] == -100
+    assert set(best) == {'game:1', 'game:2'}
 
 
 def test_single_visible_game_does_not_trigger_multi_game_advice():
@@ -160,10 +219,10 @@ def test_family_is_counted_once_when_multiple_appids_map_to_same_family():
     assert recs[0]['savings_kzt'] == 200
 
 
-def test_best_package_prefers_larger_absolute_savings():
+def test_best_package_prefers_strict_savings_then_larger_absolute_savings():
     families = [family('game:1', 1, 500, 'One'), family('game:2', 2, 500, 'Two')]
     items = [visible('game:1', 'One'), visible('game:2', 'Two')]
-    recs, best = run([package(10, 800, [1, 2]), package(11, 700, [1, 2])], families, items)
+    recs, best = run([package(10, 1100, [1, 2]), package(11, 700, [1, 2])], families, items)
     assert len(recs) == 2
     assert best['game:1']['packageid'] == 11
     assert best['game:2']['packageid'] == 11
@@ -215,6 +274,24 @@ def test_four_game_package_materially_improves_purchase_score_without_changing_t
     assert ranked[0]['title'] == 'Bundled'
 
 
+def test_non_saving_package_stays_visible_but_does_not_boost_ranking():
+    option = strong_four_game_package(price=610)
+    option['standalone_total_rub'] = 600
+    option['savings_rub'] = -10
+    option['savings_percent_vs_standalone'] = -1.7
+    option['strict_current_price_savings'] = False
+    option['price_delta_vs_standalone_rub'] = 10
+    row = ranking_game('Relevant package', better_purchase_option=option)
+    ranked, _ = priority_ranking.apply_final_priority_order([row])
+    game = ranked[0]
+    breakdown = game['score_breakdown']
+    assert breakdown['purchase_route'] == 'standalone'
+    assert breakdown['package_route']['available'] is True
+    assert breakdown['package_route']['eligible_for_score'] is False
+    assert breakdown['package_route']['status'] == 'no_strict_saving_vs_standalone'
+    assert game['package_value_points'] == 0
+
+
 def test_package_over_practical_price_ceiling_is_visible_but_does_not_boost_score():
     row = ranking_game('Over budget', better_purchase_option=strong_four_game_package(price=800))
     ranked, _ = priority_ranking.apply_final_priority_order([row])
@@ -229,33 +306,102 @@ def test_package_over_practical_price_ceiling_is_visible_but_does_not_boost_scor
 
 def test_ui_has_explicit_package_block_contract():
     app = Path('web/app.js').read_text(encoding='utf-8')
-    required = [
+    override = Path('web/package-deal-ui.js').read_text(encoding='utf-8')
+    index = Path('web/index.html').read_text(encoding='utf-8')
+    required_app = [
         'function renderPackageDeal(g)',
         'better_purchase_option',
-        '🎁 Выгодный набор Steam',
         'package_price_per_visible_game_rub',
         'standalone_total_rub',
         'savings_rub',
         "purchase_route==='fixed_package'",
     ]
-    for fragment in required:
-        assert fragment in app, f'missing package UI contract: {fragment}'
+    for fragment in required_app:
+        assert fragment in app, f'missing base package UI contract: {fragment}'
+    required_override = [
+        'window.renderPackageDeal=function(g)',
+        "strict_current_price_savings",
+        "'🎁 Выгодный набор Steam':'🎁 Набор Steam'",
+        'verified_purchase_equivalence',
+        'не повышает рейтинг',
+    ]
+    for fragment in required_override:
+        assert fragment in override, f'missing package UI override contract: {fragment}'
+    assert 'package-deal-ui.js?v=purchase-equivalence-1' in index
+
+
+def test_canonical_purchase_equivalence_config_is_purchase_only():
+    eq = load_purchase_equivalence()
+    assert eq['7670']['package_substitute_appids'] == {'409710'}
+    assert eq['8850']['package_substitute_appids'] == {'409720'}
+
+
+def test_current_production_inputs_expose_bioshock_collection_for_visible_bioshock_cards():
+    package_path = Path('data/production/pre_ai/fixed_package_options.json')
+    family_path = Path('data/production/pre_ai/family_graph.json')
+    visual_path = Path('data/production/visual/current.json')
+    if not (package_path.exists() and family_path.exists() and visual_path.exists()):
+        return
+
+    packages = json.loads(package_path.read_text(encoding='utf-8'))
+    family_graph = json.loads(family_path.read_text(encoding='utf-8'))
+    visual = json.loads(visual_path.read_text(encoding='utf-8'))
+    visible_items = visual.get('items') or []
+    bioshock2 = next((row for row in visible_items if row.get('title') == 'BioShock® 2'), None)
+    infinite = next((row for row in visible_items if row.get('title') == 'BioShock Infinite'), None)
+    if not bioshock2 or not infinite:
+        raise AssertionError('Expected current production scope to contain BioShock® 2 and BioShock Infinite')
+
+    recs, best = build_recommendations(
+        packages,
+        family_graph,
+        visible_items,
+        RATE,
+        purchase_equivalence=load_purchase_equivalence(),
+    )
+    collection = next((row for row in recs if row.get('packageid') == 127633), None)
+    assert collection is not None, 'BioShock: The Collection must be a relevant current package option'
+    expected_ids = {str(bioshock2['id']), str(infinite['id'])}
+    assert expected_ids <= set(collection['covered_visible_game_ids'])
+    assert best[str(bioshock2['id'])]['packageid'] == 127633
+    assert best[str(infinite['id'])]['packageid'] == 127633
+
+    evidence = {
+        row['family_id']: row['matches']
+        for row in collection['coverage_evidence']
+    }
+    assert any(
+        match.get('coverage_mode') == 'verified_purchase_equivalence'
+        and match.get('visible_appid') == '8850'
+        and match.get('package_appid') == '409720'
+        for match in evidence[str(bioshock2['id'])]
+    )
+    assert any(
+        match.get('coverage_mode') == 'exact_included_appid'
+        and match.get('visible_appid') == '8870'
+        and match.get('package_appid') == '8870'
+        for match in evidence[str(infinite['id'])]
+    )
 
 
 def main():
     tests = [
         test_bioshock_collection_actual_member_regression,
-        test_package_does_not_guess_original_remaster_equivalence,
-        test_more_expensive_package_is_not_recommended,
+        test_package_does_not_guess_original_remaster_equivalence_without_explicit_override,
+        test_bioshock_collection_uses_explicit_directional_purchase_equivalence,
+        test_more_expensive_relevant_package_is_visible_as_information,
         test_single_visible_game_does_not_trigger_multi_game_advice,
         test_unknown_extra_content_adds_no_assumed_value,
         test_family_is_counted_once_when_multiple_appids_map_to_same_family,
-        test_best_package_prefers_larger_absolute_savings,
+        test_best_package_prefers_strict_savings_then_larger_absolute_savings,
         test_returned_package_can_be_matched_by_exact_option,
         test_package_classification_requires_two_current_apps,
         test_four_game_package_materially_improves_purchase_score_without_changing_taste,
+        test_non_saving_package_stays_visible_but_does_not_boost_ranking,
         test_package_over_practical_price_ceiling_is_visible_but_does_not_boost_score,
         test_ui_has_explicit_package_block_contract,
+        test_canonical_purchase_equivalence_config_is_purchase_only,
+        test_current_production_inputs_expose_bioshock_collection_for_visible_bioshock_cards,
     ]
     for test in tests:
         test()

@@ -5,12 +5,15 @@ on:
     paths:
       - "config/final_ranking_policy.json"
       - "config/fixed_package_purchase_option_contract.json"
+      - "config/purchase_equivalence_overrides.json"
       - "scripts/apply_fixed_package_purchase_options.py"
       - "scripts/build_final_visual_payload.py"
       - "scripts/priority_ranking.py"
       - "scripts/test_fixed_package_purchase_options.py"
       - "scripts/validate_priority_ranking.py"
       - "web/app.js"
+      - "web/package-deal-ui.js"
+      - "web/index.html"
       - ".github/workflows/build-daily-visual-payload.yml"
       - ".github/workflows/validate-package-purchase-value.yml"
   workflow_dispatch:
@@ -42,7 +45,7 @@ jobs:
             scripts/test_fixed_package_purchase_options.py \
             scripts/validate_priority_ranking.py
 
-      - name: Validate package discovery, purchase score, and UI contract
+      - name: Validate package discovery, equivalence, purchase score, and UI contract
         shell: bash
         run: |
           set -euo pipefail
@@ -59,3 +62,4 @@ jobs:
         run: |
           set -euo pipefail
           node --check web/app.js
+          node --check web/package-deal-ui.js
