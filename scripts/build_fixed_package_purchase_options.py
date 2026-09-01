@@ -9,6 +9,24 @@ MAILING_INDEX = Path('data/production/mailing/index.json')
 OUT = Path('data/production/pre_ai/fixed_package_options.json')
 BATCH_SIZE = 100
 
+APP_TYPE = {
+    0: 'game',
+    1: 'demo',
+    2: 'mod',
+    3: 'movie',
+    4: 'dlc',
+    5: 'guide',
+    6: 'software',
+    7: 'video',
+    8: 'series',
+    9: 'episode',
+    10: 'hardware',
+    11: 'music',
+    12: 'beta',
+    13: 'tool',
+    14: 'advertising',
+}
+
 
 def final_kzt(option):
     value = option.get('final_price_in_cents')
@@ -129,17 +147,44 @@ def package_ids_from_app_items(appids, items):
     return sources
 
 
+def nested_included_appids(store_item):
+    values = []
+    included = store_item.get('included_items') or {}
+    for app in included.get('included_apps') or []:
+        if not isinstance(app, dict):
+            continue
+        value = app.get('appid') if app.get('appid') is not None else app.get('id')
+        if value is not None and str(value).isdigit():
+            values.append(int(value))
+    return sorted(set(values))
+
+
 def included_appids(store_item):
+    """Legacy coverage membership used for package candidate discovery.
+
+    StoreBrowse's top-level included_appids has historically represented the base-game
+    coverage needed by this producer. Keep that behavior stable for package discovery;
+    full verified package contents are collected separately by all_included_appids().
+    """
     values = [int(x) for x in (store_item.get('included_appids') or []) if str(x).isdigit()]
     if not values:
-        included = store_item.get('included_items') or {}
-        for app in included.get('included_apps') or []:
-            if not isinstance(app, dict):
-                continue
-            value = app.get('appid') if app.get('appid') is not None else app.get('id')
-            if value is not None and str(value).isdigit():
-                values.append(int(value))
+        values = nested_included_appids(store_item)
     return sorted(set(values))
+
+
+def all_included_appids(store_item):
+    """Union every verified top-level included app exposed by StoreBrowse.
+
+    This deliberately differs from included_appids(): a non-empty top-level base-app list
+    must not suppress DLC/content present in included_items.included_apps.
+    """
+    values = {
+        int(x)
+        for x in (store_item.get('included_appids') or [])
+        if str(x).isdigit()
+    }
+    values.update(nested_included_appids(store_item))
+    return sorted(values)
 
 
 def exact_package_option(pid, store_item):
@@ -212,11 +257,125 @@ def classify_package(pid, store_item, source_appids, current_appids, observed_ep
         'discount_percent': discount,
         'discount_end_utc': end_utc,
         'included_appids': apps,
+        'all_included_appids': all_included_appids(store_item),
         'current_candidate_appids_in_package': relevant,
         'source_appids': sorted(source_appids),
         'web_url': f'https://store.steampowered.com/sub/{pid}/',
         'source': 'IStoreBrowseService/GetItems',
     }, None
+
+
+def content_type(store_item):
+    value = int(store_item.get('type') or 0)
+    return APP_TYPE.get(value, f'unknown:{value}')
+
+
+def candidate_single_app_purchase_options(appid, store_item):
+    rows = []
+    for option in store_item.get('purchase_options') or []:
+        pid = int(option.get('packageid') or 0)
+        price = final_kzt(option)
+        if pid <= 0 or price is None or price <= 0:
+            continue
+        rows.append((pid, price, option))
+    rows.sort(key=lambda row: (
+        row[1],
+        -int(row[2].get('discount_pct') or 0),
+        row[0],
+    ))
+    return rows
+
+
+def build_content_catalog(content_appids, content_items, purchase_route_packages):
+    if len(content_appids) != len(content_items):
+        raise SystemExit('Included-content StoreBrowse cardinality mismatch')
+    catalog = {}
+    for appid, item in zip(content_appids, content_items):
+        if int(item.get('item_type') or 0) != 0 or int(item.get('id') or 0) != appid:
+            raise SystemExit(f'Included-content identity mismatch for App_{appid}')
+        related = item.get('related_items') or {}
+        parent = related.get('parent_appid')
+        verified_option = None
+        for pid, price, option in candidate_single_app_purchase_options(appid, item):
+            route_item = purchase_route_packages.get(pid)
+            if route_item is None:
+                continue
+            # Count a monetary value only when Steam proves this fixed Sub acquires
+            # exactly this top-level app. That prevents a bundle/season-pack route
+            # from being counted independently for multiple included entitlements.
+            if set(all_included_appids(route_item)) != {appid}:
+                continue
+            verified_option = (pid, price, option)
+            break
+
+        if verified_option is None:
+            current = None
+            original = None
+            discount = None
+            route_pid = None
+            route_name = None
+            valuation_status = 'no_verified_single_app_purchase_route'
+        else:
+            route_pid, current, option = verified_option
+            original = original_kzt(option)
+            if original is None or original < current:
+                original = current
+            discount = int(option.get('discount_pct') or 0)
+            route_name = option.get('purchase_option_name')
+            valuation_status = 'verified_single_app_purchase_route'
+
+        catalog[appid] = {
+            'appid': str(appid),
+            'title': item.get('name') or f'App {appid}',
+            'app_type': content_type(item),
+            'parent_appid': str(parent) if parent is not None else None,
+            'current_standalone_kzt': current,
+            'original_standalone_kzt': original,
+            'standalone_discount_percent': discount,
+            'standalone_purchase_packageid': route_pid,
+            'standalone_purchase_option_name': route_name,
+            'valuation_status': valuation_status,
+            'source': 'IStoreBrowseService/GetItems',
+        }
+    return catalog
+
+
+def enrich_verified_included_content(packages, package_items):
+    content_appids = sorted({
+        appid
+        for package in packages.values()
+        for appid in (package.get('all_included_appids') or [])
+    })
+    if not content_appids:
+        return 0, 0, 0
+
+    content_items, content_request_count = fetch_app_items(content_appids)
+    route_package_ids = sorted({
+        int(option.get('packageid') or 0)
+        for item in content_items
+        for option in (item.get('purchase_options') or [])
+        if int(option.get('packageid') or 0) > 0 and final_kzt(option) is not None and final_kzt(option) > 0
+    })
+    route_packages, route_request_count = (
+        fetch_package_items(route_package_ids) if route_package_ids else ({}, 0)
+    )
+    catalog = build_content_catalog(content_appids, content_items, route_packages)
+
+    for key, package in packages.items():
+        pid = int(package.get('packageid') or 0)
+        original_item = package_items.get(pid) or {}
+        full_ids = all_included_appids(original_item)
+        package['all_included_appids'] = [str(value) for value in full_ids]
+        package['included_content'] = [catalog[value] for value in full_ids if value in catalog]
+        package['verified_included_content_count'] = len(package['included_content'])
+        package['verified_priced_included_content_count'] = sum(
+            1 for row in package['included_content']
+            if row.get('current_standalone_kzt') is not None
+        )
+        package['included_content_complete_for_all_included_appids'] = (
+            len(package['included_content']) == len(full_ids)
+        )
+    return content_request_count, route_request_count, len(content_appids)
 
 
 def main():
@@ -250,13 +409,20 @@ def main():
         else:
             classifications[key] = reason
 
+    content_request_count, content_route_request_count, included_content_app_count = (
+        enrich_verified_included_content(packages, package_items)
+        if packages else (0, 0, 0)
+    )
+
     out = {
-        'schema_version': 1,
+        'schema_version': 2,
         'purpose': 'pre_ai_purchase_only_fixed_package_options',
         'status': 'complete',
         'authoritative_for': [
             'fixed_sub_package_current_kzt_price',
             'fixed_sub_package_membership',
+            'fixed_sub_verified_top_level_included_content',
+            'verified_single_app_kzt_acquisition_price_for_included_content',
         ],
         'source_mailing_updated_at_utc': index.get('source_updated_at_utc'),
         'observed_at_utc': observed.isoformat(),
@@ -268,9 +434,13 @@ def main():
         'classification_complete': len(classifications) == len(package_ids),
         'app_discovery_request_count': app_request_count,
         'package_detail_request_count': package_request_count,
+        'included_content_app_count': included_content_app_count,
+        'included_content_detail_request_count': content_request_count,
+        'included_content_purchase_route_request_count': content_route_request_count,
         'batch_size': BATCH_SIZE,
         'dynamic_bundle_ids_supported': False,
         'personalized_complete_the_set_supported': False,
+        'verified_content_unpriced_value_assumed_kzt': 0,
         'package_classifications': classifications,
         'packages': packages,
         'elapsed_seconds': round(time.monotonic() - started, 3),
@@ -285,7 +455,11 @@ def main():
         'apps': len(appids),
         'packageids_discovered': len(package_ids),
         'eligible_fixed_packages': len(packages),
-        'requests': app_request_count + package_request_count,
+        'included_content_apps': included_content_app_count,
+        'requests': (
+            app_request_count + package_request_count
+            + content_request_count + content_route_request_count
+        ),
         'elapsed_seconds': out['elapsed_seconds'],
     }, ensure_ascii=False, indent=2))
 
