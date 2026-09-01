@@ -58,6 +58,26 @@
 
 ## Отложенные задачи
 
+### Trine 4 — выяснить, почему игра отсутствует в итоговом списке
+
+**Статус:** `ready_for_diagnosis`  
+**L:** `L3`  
+**T:** `T3`  
+**I:** `I3`  
+**Зафиксировано:** 2026-09-01
+
+Пользовательский вопрос:
+- почему `Trine 4` отсутствует в итоговом списке игр проекта.
+
+Что сделать:
+- сначала найти точный canonical identity игры в текущем production scope и не полагаться только на название;
+- проследить игру по штатному маршруту от source/catalog ingestion до финального visual feed и найти **первую точку, где она исчезает**;
+- проверить отдельно: наличие в исходном каталоге/регионе KZ, ownership/played/wishlist признаки, package/bundle identity, eligibility/taste filters, deal/history условия, ranking/cutoff и финальную сборку карточек;
+- не предполагать заранее, что причина в taste-score или цене;
+- определить, это единичная особенность `Trine 4` или системная ошибка, которая может скрывать и другие игры;
+- если причина системная, исправлять правило/маршрут и добавить regression; не добавлять `Trine 4` вручную как исключение;
+- после исправления выполнить штатный rebuild и проверить, должна ли игра фактически присутствовать в текущем итоговом списке по действующим правилам.
+
 ### Бесплатные раздачи игр на любых площадках — отдельный видимый блок
 
 **Статус:** `user_high_priority_next_slot`  
@@ -101,8 +121,7 @@
 - единственный unresolved ключ: `App_901735`;
 - текущая причина: `entry_missing`, `retry=true`, `previous_failure_count=3`, последний failure `steamdb_exact_history_not_established`;
 - четыре ключа из прежнего списка проблемных (`App_1282200`, `App_225320`, `App_399670`, `App_630060`) уже имеют validated `confirmed_min` и больше не являются unresolved;
-- не заменять оставшийся retry догадкой или непроверенным historical minimum: точный Kazakhstan SteamDB history должен пройти существующий GitHub → scheduled runtime → ingestion/validation handoff;
-- после valid evidence GitHub должен сам выполнить ingestion/validation/checkpoint и downstream rebuild.
+- не заменять оставшийся retry догадкой или непроверенным historical minimum: точный Kazakhstan SteamDB history должен пройти существующий GitHub → scheduled runtime → ingestion/validation/checkpoint и downstream rebuild.
 
 ### Wishlist: хорошие скидки должны преодолевать слабое taste-попадание
 
