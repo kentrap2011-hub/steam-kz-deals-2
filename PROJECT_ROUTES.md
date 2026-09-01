@@ -198,3 +198,44 @@ Production validator проверяет:
 - детальный taste-factor migration;
 - automatic Windows compatibility evidence-source;
 - оставшиеся SteamDB retry (пользователь отложил).
+
+---
+
+## Русские описания / semantic translation contract
+
+**Что ищем:** каноническую границу между GitHub-owned unresolved scope и scheduled ChatGPT как constrained semantic translation worker.
+
+**Последняя проверка:** 2026-09-01
+
+**Канонические контракты:**
+- `config/russian_description_translation_contract.json` — scope, immutable request identity, runtime reuse, retry/completeness ownership и reserved artifact paths;
+- `config/russian_description_translation_result_contract.json` — translation-specific worker result schema и strict echo/quality rules;
+- `config/russian_description_translation_cache_entry_contract.json` — GitHub-owned cache-entry binding и invalidation;
+- ownership: `config/execution_ownership_contract.json`;
+- nightly cycle: `config/daily_execution_contract.json`.
+
+**Быстрая точка входа:**
+1. Сначала читать `config/russian_description_translation_contract.json`.
+2. Для worker output — `config/russian_description_translation_result_contract.json`.
+3. Для cache reuse/invalidation — `config/russian_description_translation_cache_entry_contract.json`.
+4. Contract consistency/regression — `scripts/validate_russian_description_translation_contract.py`.
+5. Финальный existing quality gate остаётся `scripts/validate_russian_descriptions.py`; классификация текста — `scripts/russian_description_quality.py`.
+
+**Ключевые инварианты:**
+- GitHub владеет exact current scope, queue/order, retry, completeness, validation, cache merge и downstream rebuild;
+- scheduled ChatGPT только переводит exact immutable requests; новые игры и retry loop не выбирает;
+- используется существующий nightly scheduled ChatGPT runtime; отдельный recurring translation schedule запрещён;
+- Taste-specific result schema не переиспользуется;
+- semantic scope ограничен `needs_translation` / `needs_ru_rewrite` с source quality `non_ru` / `weak_ru`;
+- identity: `App_<appid>` + SHA-256 нормализованного source text; source hash одновременно является version binding;
+- stale/mismatched/unknown/placeholder/technical/non-Russian result не попадает в cache и остаётся unresolved;
+- unchanged source не переводится заново без причины; current direct `ready_ru` source имеет приоритет над cache;
+- interactive chat не переводит production catalog item-by-item и не заполняет cache вручную.
+
+**Reserved paths для следующего bounded IMPLEMENT:**
+- request work input: `data/production/pre_ai/chatgpt_ru_description_queue.jsonl`;
+- status manifest: `data/production/pre_ai/chatgpt_ru_description_status.json`;
+- runtime submissions: `data/ai_inbox/russian_descriptions/*.json`;
+- canonical cache: `data/cache/russian_description_translations.json`.
+
+**Текущее состояние:** contract/schema wiring завершён. Producer, runtime ingest и production cache population намеренно **не реализованы в этой contract-only задаче**; это следующий отдельный bounded IMPLEMENT согласно `WORKER_TASK_RU_TRANSLATION_CONTRACT_01.md`.
