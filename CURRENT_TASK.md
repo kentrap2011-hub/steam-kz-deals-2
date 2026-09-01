@@ -66,6 +66,17 @@
 - оставшиеся 3 queue rows — только отдельная downstream base-support работа, не Taste re-evaluation и не ingest blocker;
 - повторную semantic Taste evaluation 147 игр не запускать.
 
+### Package/UI pre-AI blocker fix
+Статус: `complete`.
+- worker task: `package-ui-blocker-fix-01`;
+- canonical pre-AI workflow был заблокирован stale static regression, который всё ещё ожидал старую форму `window.renderPackageDeal=function(g)`, старую score/rank-фразу и старый asset version, хотя compact purchase UI уже намеренно перешёл на IIFE + `root` exports и practical copy;
+- исправлен только owning regression check, без изменения UI implementation, package economics, purchase-route semantics, ranking, Taste, duration или translation logic;
+- fix commit: `c243dfe498abec27923bc7f229f34fc82b5c26f0`;
+- canonical pre-AI run `33518894933`, job `99892817550`: success; fixed-package tests `19 passed`, complete-content tests `6 passed`;
+- тот же run успешно прошёл translation contract/runtime validation (`9 tests`) и canonical Russian translation scope build;
+- production scope опубликован автоматически commit `529795ca74db15508e5178c29090b113f9cda23d`: `translation_queue_count=155`, `resolved_direct_ru_count=389`, `nontranslatable_blocker_count=26`;
+- report: `reviews/worker_reports/package-ui-blocker-fix-01.md`.
+
 ## Завершённые package-инварианты, которые сохраняются
 
 - только fixed Steam Store Package (`Sub_`);
@@ -114,16 +125,16 @@
 - producer-owned choice, UI display-only.
 
 ### E. Guarantee Russian game descriptions
-Статус: `contract_complete_implementation_pending`.
+Статус: `implementation_scope_published_runtime_acceptance_pending`.
 - worker task `ru-translation-contract-01`: `complete`;
+- worker task `ru-translation-implement-01`: repo-side implementation committed; report status `needs_fix` because production scope publication and scheduled-runtime round-trip had not yet been proven at closeout;
 - canonical contracts: `config/russian_description_translation_contract.json`, `config/russian_description_translation_result_contract.json`, `config/russian_description_translation_cache_entry_contract.json`;
-- contract commit: `e46f4433f379ca4e7310f95afc323c70410ac5dd`; route commit: `2727d0c5052a3a74a2a5c6df3a9855e0517d6425`;
 - exact request identity: `App_<appid>` + SHA-256 нормализованного source text; source hash является version binding, stale result/cache не должен прикрепляться после изменения текста;
 - GitHub владеет exact unresolved scope, queue/order, retry/completeness, validation, cache merge и downstream rebuild; scheduled ChatGPT — только constrained semantic translation worker;
 - existing nightly scheduled ChatGPT runtime переиспользуется; отдельный recurring translation scheduler запрещён; Taste-specific result schema не переиспользуется;
-- contract-only task намеренно НЕ реализовывал producer/ingest/runtime wiring, массовый перевод и production cache population;
-- contract validation run `33512506228`, job `99871394277`: success, включая ownership validation и translation contract validation;
-- следующий bounded IMPLEMENT: GitHub-owned translation scope producer + translation-specific scheduled result ingestion/cache persistence + downstream reuse, без ручного заполнения каталога.
+- package/UI blocker устранён `c243dfe498abec27923bc7f229f34fc82b5c26f0`; canonical pre-AI run `33518894933`, job `99892817550` успешно дошёл до translation stages;
+- current production translation scope/status теперь опубликованы GitHub-owned commit `529795ca74db15508e5178c29090b113f9cda23d`: 155 exact translation requests, 389 direct-RU resolutions, 26 nontranslatable blockers;
+- оставшийся bounded acceptance gap: доказать round-trip одного exact GitHub-prepared translation record через существующий scheduled ChatGPT runtime -> strict GitHub ingestion/cache -> visual rebuild; не создавать новый scheduler и не переводить каталог вручную.
 
 ### F. Redesign detailed score breakdown UI
 Статус: `in_progress`.
@@ -137,4 +148,4 @@
 
 ## Текущий статус работ
 
-Interactive-задача G / `compact-purchase-options-01` завершена. Taste ingestion blocker также закрыт canonical workflow; остались только 3 штатные downstream `resolve_base_support_condition` строки. E / `ru-translation-contract-01` завершена на contract/schema уровне и ждёт отдельного bounded IMPLEMENT producer/ingest/cache wiring; F / redesign detailed score breakdown UI продолжает выполняться параллельно. Fixed-package complete-content valuation и stale-image swipe bug остаются закрыты.
+`package-ui-blocker-fix-01` завершён: canonical pre-AI workflow снова проходит package regressions и публикует current Russian translation scope. E / Russian descriptions теперь ждёт только bounded scheduled-runtime round-trip acceptance; F / redesign detailed score breakdown UI сохраняется как отдельная параллельная работа. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
