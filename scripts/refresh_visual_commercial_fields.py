@@ -120,6 +120,7 @@ def refresh_visual_commercial_fields(
         if isinstance(row, dict) and row.get('family_id')
     }
     now = now or datetime.now(timezone.utc)
+    before_count = len(visual.get('items') or [])
 
     refreshed = []
     missing_families = []
@@ -153,6 +154,7 @@ def refresh_visual_commercial_fields(
         if primary is None:
             primary = offers[0]
         offers = [primary] + [row for row in offers if row is not primary]
+        primary_store = store_entries.get(primary.get('key')) or {}
 
         old_price = game.get('current_price_rub')
         old_offer_signature = [
@@ -172,6 +174,8 @@ def refresh_visual_commercial_fields(
         game['offers'] = offers
         game['current_price_rub'] = primary.get('current_price_rub')
         game['original_price_rub'] = primary.get('original_price_rub')
+        game['current_price_kzt'] = primary_store.get('final_kzt')
+        game['original_price_kzt'] = primary_store.get('original_kzt')
         game['discount_percent'] = primary.get('discount_percent')
         game['historical_minimum_rub'] = primary.get('historical_minimum_rub')
         game['previously_free'] = bool(primary.get('previously_free'))
@@ -196,7 +200,7 @@ def refresh_visual_commercial_fields(
         'semantic_source_preserved': visual.get('source_mailing_updated_at_utc'),
         'commercial_source_mailing_updated_at_utc': source,
         'store_observed_at_utc': store_snapshot.get('observed_at_utc'),
-        'visible_item_count_before_refresh': len(visual.get('items') or []) + len(removed_without_active_offer),
+        'visible_item_count_before_refresh': before_count,
         'visible_item_count_after_refresh': len(refreshed),
         'removed_without_active_offer_count': len(removed_without_active_offer),
         'removed_without_active_offer_ids': removed_without_active_offer,
