@@ -30,28 +30,26 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Русские описания | Fix pre-existing package/UI regression that blocks pre-AI workflow before translation acceptance | `WORKER_TASK_PACKAGE_UI_BLOCKER_FIX_01.md` | `reviews/worker_reports/package-ui-blocker-fix-01.md` | `ready_to_continue_in_existing_chat` |
-| `ЧАТ 2` | Объяснения карточек | Read-only audit of current “why fits / why may not fit” explanation quality on bounded top sample | `WORKER_TASK_CARD_EXPLANATION_AUDIT_01.md` | `reviews/worker_reports/card-explanation-audit-01.md` | `prepared_for_new_chat` |
+| `ЧАТ 1` | Русские описания | One-record real scheduled-runtime acceptance: GitHub queue -> ChatGPT -> ingestion/cache -> visual rebuild | `WORKER_TASK_RU_TRANSLATION_RUNTIME_ACCEPTANCE_01.md` | `reviews/worker_reports/ru-translation-runtime-acceptance-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 2` | Объяснения карточек | Read-only audit of current “why fits / why may not fit” explanation quality on bounded top sample | `WORKER_TASK_CARD_EXPLANATION_AUDIT_01.md` | `reviews/worker_reports/card-explanation-audit-01.md` | `prepared_or_active` |
 
 ## Worker chat lifecycle
 
-- `ЧАТ 1 — Русские описания`: `ru-translation-implement-01` report is saved with status `needs_fix`. Immediate next step is the narrow package/UI blocker fix because that regression stops the canonical pre-AI workflow before translation stages. Keep the same chat for this bounded follow-up.
-- Old `ЧАТ 2 — Длительность`: duration implementation state/report is durable in GitHub and waiting only on user-provisioned `IGDB_CLIENT_ID` / `IGDB_CLIENT_SECRET`. It does not need to occupy a worker slot. The old chat may be deleted if desired. When credentials are ready, duration connectivity acceptance can resume in a fresh Chat 2 or whichever slot is free.
-- New `ЧАТ 2 — Объяснения карточек`: independent read-only audit; no writes to shared visual/UI/runtime files except its report, so it may run in parallel with Chat 1.
+- `ЧАТ 1 — Русские описания`: package/UI blocker is complete. Canonical pre-AI workflow now publishes real translation scope successfully (155 pending translations in the verified run). Immediate next step is one real scheduled-runtime round-trip acceptance. Keep the same chat.
+- Old duration Chat 2 state remains durable and blocked only on user-provisioned `IGDB_CLIENT_ID` / `IGDB_CLIENT_SECRET`; it does not occupy an active slot.
+- `ЧАТ 2 — Объяснения карточек`: independent read-only audit, safe to run in parallel with Chat 1.
 
 ## Последние завершённые worker-этапы
 
-- `ru-translation-implement-01` — `needs_fix`; scope producer, ingestion, cache, resolver and workflow integration implemented. Remaining acceptance gaps: successful current production translation scope/status publication after final dedupe and end-to-end scheduled ChatGPT round-trip.
-- `duration-igdb-implement-01` — code complete but blocked on missing GitHub Secrets; durable state retained in report.
+- `package-ui-blocker-fix-01` — `complete`; stale static regression fixed, canonical pre-AI workflow run passed and produced real Russian translation queue/status. Verified run had `translation_queue_count=155`, `resolved_direct_ru_count=389`, `nontranslatable_blocker_count=26`.
+- `ru-translation-implement-01` — `needs_fix`; repo-side mechanics implemented; runtime round-trip remained unproven before blocker fix.
+- `duration-igdb-implement-01` — code complete but blocked on missing GitHub Secrets.
 - `ru-translation-contract-01` — `complete`.
-- `ru-description-source-recon-01` — `complete`.
-- `duration-contract-01` — `complete`.
 
 ## Ближайшие задачи
 
-1. `ЧАТ 1`: fix package/UI blocker, then translation runtime acceptance.
-2. `ЧАТ 2`: audit explanation quality in parallel.
-3. User provisions `IGDB_CLIENT_ID` and `IGDB_CLIENT_SECRET` when convenient; then resume duration connectivity acceptance in a fresh free slot.
-4. After both data-quality paths are fully live/rebuilt — user spot-check of visible cards.
-5. Russian language availability as ranking factor.
-6. YouTube later.
+1. `ЧАТ 1`: perform `ru-translation-runtime-acceptance-01` on exactly one deterministic current queue record through the existing scheduled ChatGPT runtime.
+2. `ЧАТ 2`: continue explanation-quality audit in parallel.
+3. User provisions IGDB secrets when convenient; then resume duration connectivity acceptance in a fresh free slot.
+4. If translation acceptance passes, let GitHub/scheduled runtime own the remaining production translation scope; do not manually process the 155 records in interactive chat.
+5. After data-quality paths are live/rebuilt — user spot-check of visible cards.
