@@ -12,25 +12,36 @@ def replace_once(path, old, new, label):
 
 replace_once(
     'scripts/build_visual_feed_v2.py',
-    "from pathlib import Path\n\nROOT = Path('.')",
-    "from pathlib import Path\n\nfrom russian_description_quality import classify_description, resolve_description\n\nROOT = Path('.')",
+    '''from pathlib import Path
+
+ROOT = Path('.')''',
+    '''from pathlib import Path
+
+from russian_description_quality import classify_description, resolve_description
+
+ROOT = Path('.')''',
     'visual import',
 )
 replace_once(
     'scripts/build_visual_feed_v2.py',
-    "STORE_SNAPSHOT = ROOT / 'data/production/pre_ai/store_snapshot.json'\nFAMILY_GRAPH = ROOT / 'data/production/pre_ai/family_graph.json'",
-    "STORE_SNAPSHOT = ROOT / 'data/production/pre_ai/store_snapshot.json'\nCONTENT_METADATA = ROOT / 'data/production/pre_ai/content_metadata.json'\nFAMILY_GRAPH = ROOT / 'data/production/pre_ai/family_graph.json'",
+    '''STORE_SNAPSHOT = ROOT / 'data/production/pre_ai/store_snapshot.json'
+FAMILY_GRAPH = ROOT / 'data/production/pre_ai/family_graph.json' ''',
+    '''STORE_SNAPSHOT = ROOT / 'data/production/pre_ai/store_snapshot.json'
+CONTENT_METADATA = ROOT / 'data/production/pre_ai/content_metadata.json'
+FAMILY_GRAPH = ROOT / 'data/production/pre_ai/family_graph.json' ''',
     'content metadata constant',
 )
 replace_once(
     'scripts/build_visual_feed_v2.py',
-    "def has_russian_text(value):\n    return bool(value and re.search(r'[А-Яа-яЁё]', str(value)))",
-    "def has_russian_text(value):\n    return classify_description(value) == 'good_ru'",
+    '''def has_russian_text(value):
+    return bool(value and re.search(r'[А-Яа-яЁё]', str(value)))''',
+    '''def has_russian_text(value):
+    return classify_description(value) == 'good_ru' ''',
     'Russian quality gate',
 )
 replace_once(
     'scripts/build_visual_feed_v2.py',
-    """            desc = str((store_item.get('basic_info') or {}).get('short_description') or '').strip() or None
+    '''            desc = str((store_item.get('basic_info') or {}).get('short_description') or '').strip() or None
             result[result_key] = {
                 'screenshots': shots,
                 'header_image': header,
@@ -39,8 +50,8 @@ replace_once(
     return result
 
 
-def classify_windows(requirements):""",
-    """            desc = str((store_item.get('basic_info') or {}).get('short_description') or '').strip() or None
+def classify_windows(requirements):''',
+    '''            desc = str((store_item.get('basic_info') or {}).get('short_description') or '').strip() or None
             desc_quality = classify_description(desc)
             result[result_key] = {
                 'screenshots': shots,
@@ -98,23 +109,23 @@ def resolve_description_for_appids(appids, media, content_metadata_by_appid):
     )
 
 
-def classify_windows(requirements):""",
+def classify_windows(requirements):''',
     'source preservation and resolver',
 )
 replace_once(
     'scripts/build_visual_feed_v2.py',
-    """    rows = load_jsonl(PURCHASE_CONTEXT)
+    '''    rows = load_jsonl(PURCHASE_CONTEXT)
     store_entries = load_json(STORE_SNAPSHOT).get('entries') or {}
-    family_obj = load_json(FAMILY_GRAPH)""",
-    """    rows = load_jsonl(PURCHASE_CONTEXT)
+    family_obj = load_json(FAMILY_GRAPH)''',
+    '''    rows = load_jsonl(PURCHASE_CONTEXT)
     store_entries = load_json(STORE_SNAPSHOT).get('entries') or {}
     content_metadata_by_appid = load_content_metadata_by_appid()
-    family_obj = load_json(FAMILY_GRAPH)""",
+    family_obj = load_json(FAMILY_GRAPH)''',
     'load persisted source metadata',
 )
 replace_once(
     'scripts/build_visual_feed_v2.py',
-    """        screenshots, header, summary = [], None, None
+    '''        screenshots, header, summary = [], None, None
         for appid in base_appids:
             m = media.get(appid) or {}
             header = header or m.get('header_image')
@@ -124,8 +135,8 @@ replace_once(
                     screenshots.append(url)
                 if len(screenshots) >= 5:
                     break
-""",
-    """        screenshots, header = [], None
+''',
+    '''        screenshots, header = [], None
         for appid in base_appids:
             m = media.get(appid) or {}
             header = header or m.get('header_image')
@@ -140,38 +151,38 @@ replace_once(
             media,
             content_metadata_by_appid,
         )
-""",
+''',
     'card description resolution',
 )
 replace_once(
     'scripts/build_visual_feed_v2.py',
-    """            'summary': summary or 'Русское краткое описание для этой игры пока не подготовлено.',
-            'gameplay_points': [],""",
-    """            'summary': description.get('summary'),
+    '''            'summary': summary or 'Русское краткое описание для этой игры пока не подготовлено.',
+            'gameplay_points': [],''',
+    '''            'summary': description.get('summary'),
             'description_status': description.get('description_status'),
             'description_source_locale': description.get('description_source_locale'),
             'description_source_quality': description.get('description_source_quality'),
             'description_source_appid': description.get('description_source_appid'),
             'description_source_path': description.get('description_source_path'),
             'description_source_text': description.get('description_source_text'),
-            'gameplay_points': [],""",
+            'gameplay_points': [],''',
     'remove published placeholder',
 )
 
 replace_once(
     'scripts/build_final_visual_payload.py',
-    """    media = base_builder.visual_builder.storebrowse_media(wanted_appids) if wanted_appids else {}
+    '''    media = base_builder.visual_builder.storebrowse_media(wanted_appids) if wanted_appids else {}
     touched = 0
-    for game in items:""",
-    """    media = base_builder.visual_builder.storebrowse_media(wanted_appids) if wanted_appids else {}
+    for game in items:''',
+    '''    media = base_builder.visual_builder.storebrowse_media(wanted_appids) if wanted_appids else {}
     content_metadata_by_appid = base_builder.visual_builder.load_content_metadata_by_appid()
     touched = 0
-    for game in items:""",
+    for game in items:''',
     'refresh source metadata load',
 )
 replace_once(
     'scripts/build_final_visual_payload.py',
-    """        changed = False
+    '''        changed = False
         if screenshots and screenshots != (game.get('screenshots') or []):
             game['screenshots'] = screenshots
             changed = True
@@ -180,8 +191,8 @@ replace_once(
             changed = True
         if changed:
             touched += 1
-""",
-    """        changed = False
+''',
+    '''        changed = False
         if screenshots and screenshots != (game.get('screenshots') or []):
             game['screenshots'] = screenshots
             changed = True
@@ -210,40 +221,40 @@ replace_once(
 
         if changed:
             touched += 1
-""",
+''',
     'deterministic refresh descriptions',
 )
 
 replace_once(
     '.github/workflows/build-daily-visual-payload.yml',
-    """      - "scripts/build_visual_feed_v2.py"
-      - "scripts/apply_fixed_package_purchase_options.py"""",
-    """      - "scripts/build_visual_feed_v2.py"
+    '''      - "scripts/build_visual_feed_v2.py"
+      - "scripts/apply_fixed_package_purchase_options.py"''',
+    '''      - "scripts/build_visual_feed_v2.py"
       - "scripts/russian_description_quality.py"
       - "scripts/test_russian_description_quality.py"
       - "scripts/validate_russian_descriptions.py"
-      - "scripts/apply_fixed_package_purchase_options.py"""",
+      - "scripts/apply_fixed_package_purchase_options.py"''',
     'visual workflow trigger paths',
 )
 replace_once(
     '.github/workflows/build-daily-visual-payload.yml',
-    """      - name: Require complete history classification coverage before replacing daily visual
-        id: history""",
-    """      - name: Validate Russian description quality rules
+    '''      - name: Require complete history classification coverage before replacing daily visual
+        id: history''',
+    '''      - name: Validate Russian description quality rules
         shell: bash
         run: |
           set -euo pipefail
           python scripts/test_russian_description_quality.py
 
       - name: Require complete history classification coverage before replacing daily visual
-        id: history""",
+        id: history''',
     'targeted description regression step',
 )
 replace_once(
     '.github/workflows/build-daily-visual-payload.yml',
-    """      - name: Build ranking review export
-        if: steps.build.outputs.built == 'true'""",
-    """      - name: Require meaningful Russian descriptions before canonical commit
+    '''      - name: Build ranking review export
+        if: steps.build.outputs.built == 'true' ''',
+    '''      - name: Require meaningful Russian descriptions before canonical commit
         if: steps.build.outputs.built == 'true'
         shell: bash
         run: |
@@ -251,32 +262,32 @@ replace_once(
           python scripts/validate_russian_descriptions.py data/production/visual/current.json
 
       - name: Build ranking review export
-        if: steps.build.outputs.built == 'true'""",
+        if: steps.build.outputs.built == 'true' ''',
     'pre-commit description validation',
 )
 
 replace_once(
     '.github/workflows/deploy-visual.yml',
-    """      - 'data/production/visual/current.json'
-      - '.github/workflows/deploy-visual.yml'""",
-    """      - 'data/production/visual/current.json'
+    '''      - 'data/production/visual/current.json'
+      - '.github/workflows/deploy-visual.yml' ''',
+    '''      - 'data/production/visual/current.json'
       - 'scripts/russian_description_quality.py'
       - 'scripts/validate_russian_descriptions.py'
-      - '.github/workflows/deploy-visual.yml'""",
+      - '.github/workflows/deploy-visual.yml' ''',
     'deploy trigger paths',
 )
 replace_once(
     '.github/workflows/deploy-visual.yml',
-    """      - name: Run UI regressions
-        shell: bash""",
-    """      - name: Require meaningful Russian descriptions
+    '''      - name: Run UI regressions
+        shell: bash''',
+    '''      - name: Require meaningful Russian descriptions
         shell: bash
         run: |
           set -euo pipefail
           python scripts/validate_russian_descriptions.py data/production/visual/current.json
 
       - name: Run UI regressions
-        shell: bash""",
+        shell: bash''',
     'deploy description validation',
 )
 
