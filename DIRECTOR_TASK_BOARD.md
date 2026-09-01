@@ -24,11 +24,12 @@
 
 | Задача | Report | Приоритет | Размер | Область | Параллельность | Проверка пользователем | Статус |
 |---|---|---|---|---|---|---|---|
-| Redesign detailed score breakdown UI | `reviews/worker_reports/detailed-score-ui-01.md` | высокий/средний | средний | мобильный UI `Детальной оценки` | не совмещать с другими переделками score UI | да, телефон | `active` |
+| Redesign detailed score breakdown UI | `reviews/worker_reports/detailed-score-ui-01.md` | высокий/средний | средний | мобильный UI `Детальной оценки` | не совмещать с другими переделками score UI | да, телефон | `awaiting_user_check` |
 | Russian descriptions — bounded audit 25–30 cards | `reviews/worker_reports/ru-description-audit-01.md` | высокий/средний как подготовка E | маленький recon | description data/source quality | безопасно с score UI; read-only | нет | `active` |
 
 ## Последние завершённые worker-этапы
 
+- `detailed-score-ui-01` — worker status `complete`, deploy success; ждёт только пользовательский spot-check на реальном телефоне перед окончательным закрытием и удалением worker-чата.
 - `compact-purchase-options-01` — `complete`; deploy success; пользовательская проверка на реальном телефоне пройдена. Worker-чат удалён пользователем.
 - `taste-ingest-blocker-fix-01` — `complete`; canonical ingestion workflow успешно принял 9 файлов / 147 Taste results и оставил только 3 штатные `resolve_base_support_condition` rows. Worker-чат удалён пользователем.
 - `taste-ingest-blocker-diagnosis-01` — завершённый recon, локализовавший proof mismatch.
@@ -65,7 +66,7 @@
 ## Предпочтительный продуктовый порядок
 
 1. Сделать способ покупки компактным и понятным. — завершено.
-2. Упростить и привести в порядок подробную оценку на карточке. — активно.
+2. Упростить и привести в порядок подробную оценку на карточке. — ждёт пользовательской проверки.
 3. Проверить качество причин `почему подходит / почему может не подойти` и исправить системные слабости.
 4. Обеспечить нормальные русские описания и понятную информацию о русском языке. — аудит масштаба активно.
 5. После стабилизации основной карточки добавлять вторичные функции, например YouTube-обзоры.
