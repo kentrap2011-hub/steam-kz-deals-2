@@ -29,7 +29,7 @@
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
 | `ЧАТ 1` | Бесплатные раздачи | Finish canonical production wiring/run for Tier-1 cross-platform giveaways | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_PRODUCTION_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-production-fix-01.md` | `awaiting_closeout_report` |
-| `ЧАТ 2` | Объяснения карточек | Fix the single remaining generated-sample personal-taste-link violation | `WORKER_TASK_CARD_EXPLANATION_FIX_01.md` | `reviews/worker_reports/card-explanation-fix-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 2` | Объяснения карточек | Fix the single remaining generated-sample personal-taste-link violation | `WORKER_TASK_CARD_EXPLANATION_FIX_01.md` | `reviews/worker_reports/card-explanation-fix-01.md` | `awaiting_closeout_report` |
 
 ## Подготовлено, но НЕ назначено следующим
 
@@ -38,8 +38,9 @@
 
 ## Последние решения
 
-- `card-explanation-implement-01` — implementation and focused behavioral tests are present, but real generated top-30 acceptance failed on exactly one card: `Middle-earth™: Shadow of Mordor™` positive explanation lacks an explicit personal-taste link. Direct bounded fix selected for Chat 2; do not repeat the audit or redesign the system.
-- `cross-platform-giveaway-production-fix-01` — user reports Chat 1 finished, but the mandatory report is still absent at its exact expected path and no alternate task-id report was found; keep Chat 1 pending closeout only.
+- User reports both current worker chats finished. Neither mandatory closeout report exists yet at its exact expected path, so both slots remain pending closeout only; no new implementation work is assigned until reports are saved.
+- `card-explanation-implement-01` — implementation and focused behavioral tests are present, but real generated top-30 acceptance failed on exactly one card; Chat 2 received a bounded acceptance fix task.
+- `cross-platform-giveaway-production-fix-01` — Chat 1 production integration follow-up; mandatory report still required.
 - `worker-efficiency-guardrails-01` — complete; no follow-up required.
 - `backlog-disposition-validator-01` — complete and validated in GitHub Actions.
 
