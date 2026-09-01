@@ -28,7 +28,7 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Бесплатные раздачи | Implement Tier-1 cross-platform giveaway data plane: hardened Steam + Epic KZ + GOG KZ | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_IMPLEMENT_01.md` | `reviews/worker_reports/cross-platform-giveaway-implement-01.md` | `awaiting_closeout_report` |
+| `ЧАТ 1` | Бесплатные раздачи | Finish canonical production wiring/run for Tier-1 cross-platform giveaways | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_PRODUCTION_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-production-fix-01.md` | `ready_to_continue_in_existing_chat` |
 | `ЧАТ 2` | Эффективность worker-чатов | Implement minimal durable worker pitfall guardrails from completed efficiency audit | `WORKER_TASK_WORKER_EFFICIENCY_GUARDRAILS_01.md` | `reviews/worker_reports/worker-efficiency-guardrails-01.md` | `ready_to_continue_in_existing_chat` |
 
 ## Подготовлено, но НЕ назначено следующим
@@ -39,10 +39,9 @@
 
 ## Последние решения
 
-- `worker-efficiency-audit-01` — complete. Audit of 17 recent worker reports found three reusable avoidable patterns worth persisting: outcome-vs-source-shape validation, GitHub Pages rerun trap after artifact upload, and architecture preflight before recommending IMPLEMENT across new source/runtime/workflow ownership boundaries.
-- Direct follow-up selected for Chat 2: one small operational-doc implementation only — `KNOWN_WORKER_PITFALLS.md` plus minimal `CHAT_PROTOCOL.md` / `DIRECTOR_PROTOCOL.md` hooks. No telemetry, quotas, dashboard, product/runtime changes or new CI are requested.
+- `cross-platform-giveaway-implement-01` — `needs_fix`: adapters/contract/producer/tests are implemented, but producer/tests are not yet wired into canonical GitHub production/validation and no live versioned giveaway snapshot exists. Direct bounded production-wiring fix selected for Chat 1.
+- `worker-efficiency-audit-01` — complete; Chat 2 is on its minimal operational-doc follow-up.
 - `backlog-disposition-validator-01` — complete and validated in GitHub Actions.
-- Chat 1 giveaway implementation has fresh implementation commits but is still missing its mandatory closeout report.
 
 ## Выбор следующей работы
 
