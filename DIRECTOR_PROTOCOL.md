@@ -108,6 +108,7 @@ Report должен быть компактным и содержать толь
 6. `Status` — `complete`, `blocked`, `needs_fix`, `needs_user_decision`.
 7. `Recommended next step` — один следующий шаг.
 8. Точные commit/run/artifact/file refs, достаточные для проверки вывода без переноса логов в директорский чат.
+9. `Efficiency / reusable lesson` — для обычной задачи `none`; только если выявлен переносимый route/pitfall candidate, короткий `<candidate/ref>`. Это одна строка, не narrative-секция и не обязательное эссе.
 
 Worker не должен складывать в report большие логи, большие JSON, полный diff или длинное исследование; они остаются в GitHub/Actions и указываются ссылками/refs.
 
