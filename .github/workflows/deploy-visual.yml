@@ -45,6 +45,7 @@ jobs:
           set -euo pipefail
           node web/image-swipe-sync.test.js
           node web/package-deal-ui.test.js
+          node web/score-details-ui.test.js
 
       - name: Stage precomputed visual payload
         shell: bash
