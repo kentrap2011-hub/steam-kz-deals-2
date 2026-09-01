@@ -17,11 +17,49 @@ def normalize_media_url(value):
     return value
 
 
+def apply_deterministic_purchase_refresh(ready):
+    """Reapply producer-owned purchase options and the one canonical ranking policy.
+
+    This path is intentionally price/Taste independent: it operates on an already
+    accepted visual snapshot and is safe while semantic Taste work is still queued.
+    """
+    package_stats = package_options.apply_current_artifacts_to_visual(ready)
+    ranked, final_priority_order = priority_ranking.apply_final_priority_order(
+        ready.get('items') or []
+    )
+    ready['items'] = ranked
+    ready['item_count'] = len(ranked)
+
+    contract = ready.setdefault('production_contract', {})
+    contract.update({
+        'ranking_helper_blob_sha': base_builder.git_sha('scripts/priority_ranking.py'),
+        'ranking_policy_blob_sha': base_builder.git_sha('config/final_ranking_policy.json'),
+        'fixed_package_helper_blob_sha': base_builder.git_sha('scripts/apply_fixed_package_purchase_options.py'),
+        'fixed_package_options_blob_sha': package_options.git_blob_sha(package_options.PACKAGE_OPTIONS),
+        'purchase_equivalence_blob_sha': package_options.git_blob_sha(package_options.PURCHASE_EQUIVALENCE),
+        'ranking_stage': 'single_canonical_sort_after_deterministic_purchase_option_refresh',
+        'priority_factors': final_priority_order,
+        'priority_ranking_contract': 'FINAL-PRIORITY-RANKING-V2',
+        'fixed_package_purchase_option_rule': (
+            'fixed Sub only; >=2 visible base-game families by exact appid or explicit verified '
+            'purchase equivalence; relevant package information may be displayed without strict '
+            'savings; ranking boost remains fail-closed and requires the commercial package route '
+            'to satisfy ranking policy; personalized bundles excluded'
+        ),
+        'fixed_package_qualifying_count': package_stats.get('qualifying_package_count'),
+        'fixed_package_strict_savings_count': package_stats.get('strict_savings_package_count'),
+        'fixed_package_verified_equivalence_count': package_stats.get('verified_equivalence_package_count'),
+        'fixed_package_touched_game_count': package_stats.get('visible_game_count_with_better_package'),
+    })
+    return package_stats, final_priority_order
+
+
 def refresh_existing_media():
     if not OUT.exists():
-        return 0, 0
+        return False, 0, 0, {}
 
-    ready = base_builder.load_json(OUT)
+    before = OUT.read_text(encoding='utf-8')
+    ready = json.loads(before)
     items = ready.get('items') or []
     wanted_appids = set()
     for game in items:
@@ -30,10 +68,7 @@ def refresh_existing_media():
             if appid.isdigit():
                 wanted_appids.add(appid)
 
-    if not wanted_appids:
-        return 0, 0
-
-    media = base_builder.visual_builder.storebrowse_media(wanted_appids)
+    media = base_builder.visual_builder.storebrowse_media(wanted_appids) if wanted_appids else {}
     touched = 0
     for game in items:
         screenshots = []
@@ -56,8 +91,10 @@ def refresh_existing_media():
         if changed:
             touched += 1
 
-    if not touched:
-        return 0, len(media)
+    # Even when there is no new semantic Taste result, package/equivalence/price logic
+    # is deterministic and must be allowed to refresh the current visual snapshot.
+    package_stats, _ = apply_deterministic_purchase_refresh(ready)
+    items = ready.get('items') or []
 
     with_screenshots = sum(bool(game.get('screenshots')) for game in items)
     with_any_image = sum(bool(game.get('screenshots') or game.get('header_image')) for game in items)
@@ -72,19 +109,28 @@ def refresh_existing_media():
     contract['visual_builder_blob_sha'] = base_builder.git_sha('scripts/build_visual_feed_v2.py')
     contract['final_visual_producer_blob_sha'] = base_builder.git_sha('scripts/build_final_visual_payload.py')
 
-    OUT.write_text(json.dumps(ready, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
-    return touched, len(media)
+    after = json.dumps(ready, ensure_ascii=False, separators=(',', ':'))
+    if after == before:
+        return False, touched, len(media), package_stats
+
+    OUT.write_text(after, encoding='utf-8')
+    return True, touched, len(media), package_stats
 
 
 def main():
     source_key, payload = base_builder.current_production_readiness()
     if source_key is None:
         if os.environ.get('FORCE_VISUAL_BUILD') == '1':
-            refreshed, media_keys = refresh_existing_media()
-            if refreshed:
+            changed, refreshed, media_keys, package_stats = refresh_existing_media()
+            if changed:
                 print(
-                    f'VISUAL_FINAL_BUILD=BUILT mode=media_only items_refreshed={refreshed} '
-                    f'media_keys={media_keys} ai_queue={payload.get("ai_queue_count")}'
+                    f'VISUAL_FINAL_BUILD=BUILT mode=deterministic_refresh '
+                    f'items_refreshed={refreshed} media_keys={media_keys} '
+                    f'package_qualifying={package_stats.get("qualifying_package_count")} '
+                    f'package_strict={package_stats.get("strict_savings_package_count")} '
+                    f'package_equivalence={package_stats.get("verified_equivalence_package_count")} '
+                    f'package_touched={package_stats.get("visible_game_count_with_better_package")} '
+                    f'ai_queue={payload.get("ai_queue_count")}'
                 )
                 return
         print(
@@ -214,6 +260,7 @@ def main():
         'refinement_helper_blob_sha': base_builder.git_sha('scripts/refine_visual_ranking.py'),
         'fixed_package_helper_blob_sha': base_builder.git_sha('scripts/apply_fixed_package_purchase_options.py'),
         'fixed_package_options_blob_sha': package_options.git_blob_sha(package_options.PACKAGE_OPTIONS),
+        'purchase_equivalence_blob_sha': package_options.git_blob_sha(package_options.PURCHASE_EQUIVALENCE),
         'source_chatgpt_payload_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_payload.json'),
         'source_purchase_context_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_purchase_context.jsonl'),
         'source_taste_queue_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_taste_queue.jsonl'),
@@ -230,11 +277,14 @@ def main():
         'priority_factors': final_priority_order,
         'priority_ranking_contract': 'FINAL-PRIORITY-RANKING-V2',
         'fixed_package_purchase_option_rule': (
-            'fixed Sub only; >=2 visible base-game families; strict current-price savings; '
-            'unknown extra content value=0; personalized bundles excluded; compare package and standalone '
-            'as transparent purchase routes before final ranking'
+            'fixed Sub only; >=2 visible base-game families by exact appid or explicit verified '
+            'purchase equivalence; relevant package information may be displayed without strict '
+            'savings; ranking boost remains fail-closed and requires the commercial package route '
+            'to satisfy ranking policy; personalized bundles excluded'
         ),
         'fixed_package_qualifying_count': package_stats.get('qualifying_package_count'),
+        'fixed_package_strict_savings_count': package_stats.get('strict_savings_package_count'),
+        'fixed_package_verified_equivalence_count': package_stats.get('verified_equivalence_package_count'),
         'fixed_package_touched_game_count': package_stats.get('visible_game_count_with_better_package'),
         'direct_user_evidence_rule': 'adjusts fit/bucket upstream; not a second final sort factor',
         'windows_rule': 'legacy Steam XP/7/8 requirement label alone is neutral; only confirmed modern-Windows friction may penalize',
@@ -265,6 +315,8 @@ def main():
         f'fit_changes={fit_changes} removed={removed} '
         f'windows_labels_neutralized={windows_labels_neutralized} '
         f'package_qualifying={package_stats.get("qualifying_package_count")} '
+        f'package_strict={package_stats.get("strict_savings_package_count")} '
+        f'package_equivalence={package_stats.get("verified_equivalence_package_count")} '
         f'package_touched={package_stats.get("visible_game_count_with_better_package")} '
         f'force={os.environ.get("FORCE_VISUAL_BUILD") == "1"}'
     )

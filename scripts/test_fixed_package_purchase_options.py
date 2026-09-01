@@ -2,6 +2,7 @@ import json
 from copy import deepcopy
 from pathlib import Path
 
+import build_final_visual_payload as final_visual
 import priority_ranking
 from apply_fixed_package_purchase_options import build_recommendations, load_purchase_equivalence
 from build_fixed_package_purchase_options import classify_package, packageid_for_returned_item
@@ -304,6 +305,46 @@ def test_package_over_practical_price_ceiling_is_visible_but_does_not_boost_scor
     assert game['package_value_points'] == 0
 
 
+def test_deterministic_refresh_reapplies_package_before_ranking():
+    ready = {
+        'items': [ranking_game('Standalone'), ranking_game('Bundled')],
+        'production_contract': {},
+    }
+    original_apply = final_visual.package_options.apply_current_artifacts_to_visual
+
+    def fake_package_refresh(payload):
+        for game in payload.get('items') or []:
+            if game.get('title') == 'Bundled':
+                game['better_purchase_option'] = strong_four_game_package()
+        return {
+            'qualifying_package_count': 1,
+            'strict_savings_package_count': 1,
+            'verified_equivalence_package_count': 0,
+            'visible_game_count_with_better_package': 1,
+        }
+
+    try:
+        final_visual.package_options.apply_current_artifacts_to_visual = fake_package_refresh
+        stats, order = final_visual.apply_deterministic_purchase_refresh(ready)
+    finally:
+        final_visual.package_options.apply_current_artifacts_to_visual = original_apply
+
+    by_title = {row['title']: row for row in ready['items']}
+    assert by_title['Standalone']['score_breakdown']['purchase_route'] == 'standalone'
+    assert by_title['Bundled']['score_breakdown']['purchase_route'] == 'fixed_package'
+    assert by_title['Bundled']['priority_rank'] == 1
+    assert stats['visible_game_count_with_better_package'] == 1
+    assert order == ['sale_expiry_urgency_asc', 'total_score_desc', 'title_asc']
+    assert ready['production_contract']['fixed_package_touched_game_count'] == 1
+
+
+def test_force_refresh_path_wires_deterministic_purchase_refresh():
+    source = Path('scripts/build_final_visual_payload.py').read_text(encoding='utf-8')
+    assert 'package_stats, _ = apply_deterministic_purchase_refresh(ready)' in source
+    assert 'mode=deterministic_refresh' in source
+    assert 'purchase_equivalence_blob_sha' in source
+
+
 def test_ui_has_explicit_package_block_contract():
     app = Path('web/app.js').read_text(encoding='utf-8')
     override = Path('web/package-deal-ui.js').read_text(encoding='utf-8')
@@ -399,6 +440,8 @@ def main():
         test_four_game_package_materially_improves_purchase_score_without_changing_taste,
         test_non_saving_package_stays_visible_but_does_not_boost_ranking,
         test_package_over_practical_price_ceiling_is_visible_but_does_not_boost_score,
+        test_deterministic_refresh_reapplies_package_before_ranking,
+        test_force_refresh_path_wires_deterministic_purchase_refresh,
         test_ui_has_explicit_package_block_contract,
         test_canonical_purchase_equivalence_config_is_purchase_only,
         test_current_production_inputs_expose_bioshock_collection_for_visible_bioshock_cards,
