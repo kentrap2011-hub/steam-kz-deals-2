@@ -4,50 +4,70 @@
 
 ## Завершено
 
-### Taste V3
+### Taste V3 migration
 Статус: `complete`.
-- canonical `ai_queue_count=0`;
-- final Taste ingest, downstream visual build и deploy подтверждены зелёными;
+- исходная миграция Taste V3 была завершена и production-validated;
 - model binding: `taste-v3`, semantics `0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`.
 
-## Активная работа
+Важно: это не означает, что текущий новый source snapshot уже полностью переоценён. Последний scheduled Taste run увидел authoritative queue `147`, но опубликовал `0`, потому что в `main` уже лежат 9 неингестированных submission-файлов с duplicate-key transactional hazard. Это отдельный GitHub-owned ingest/rebuild blocker; вручную строить «остаточную очередь» в ChatGPT нельзя.
 
-### Steam fixed-package purchase options — verified purchase equivalence / BioShock
-Статус: `reopened_in_progress`.
+### Steam fixed-package purchase options — BioShock + fresh commercial ranking
+Статус: `complete_production_validated`.
 
-Причина переоткрытия:
-- `BioShock: The Collection` содержит `BioShock Remastered` (`409710`), `BioShock 2 Remastered` (`409720`) и `BioShock Infinite` (`8870`);
-- текущая лента содержит `BioShock® 2` (`8850`) и `BioShock Infinite`, поэтому старый exact-appid coverage видит только Infinite и скрывает набор;
-- это не UI-баг, а отсутствие отдельной verified purchase-equivalence модели для случаев, когда fixed package содержит подтверждённую улучшенную версию видимой игры;
-- дополнительно старый producer полностью скрывает пакет, если он не строго дешевле суммы только видимых standalone игр, хотя релевантная информация о fixed package всё равно нужна пользователю.
+Итог:
+- fixed Steam `Sub_` package показывается, если покрывает >=2 visible base-game families по exact included appid или explicit verified purchase equivalence;
+- original/remaster не угадываются по названию/fuzzy matching и не сливаются в Taste family;
+- canonical purchase-only equivalence: `7670 -> 409710` (BioShock -> BioShock Remastered), `8850 -> 409720` (BioShock 2 -> BioShock 2 Remastered);
+- package может быть видимым даже если сейчас не дешевле покрываемых игр отдельно; в таком случае UI пишет `Набор Steam`, а не `Выгодный набор Steam`, и package не получает ranking boost;
+- Taste остаётся price-blind и не пересчитывается при изменении цены;
+- fresh commercial refresh независимо обновляет current offers, RUB/KZT price, discount, history quality и sale end из текущего GitHub-owned `store_snapshot + family_graph + history_snapshot`;
+- после commercial refresh выполняется package comparison, затем ровно один canonical final ranking pass;
+- старый semantic snapshot сохраняет fit/taste factors/explanations/risks; semantic source и commercial source хранятся отдельно;
+- semantic cards, которых больше нет в текущем complete family graph, удаляются из текущей витрины вместо сохранения stale цены.
 
-Архитектурное направление:
-- НЕ сливать original/remaster в одну Taste/family сущность;
-- НЕ угадывать equivalence по названию, словам `Remastered`, franchise или fuzzy similarity;
-- добавить отдельный producer-owned directional purchase-equivalence contract: видимая игра -> явно подтверждённые package appids, которые могут закрыть её покупку;
-- первая подтверждённая регрессия: `7670 -> 409710` (BioShock -> BioShock Remastered), `8850 -> 409720` (BioShock 2 -> BioShock 2 Remastered);
-- exact included appid остаётся приоритетным; verified equivalence используется только как дополнительное доказуемое purchase coverage;
-- package info показывать, когда fixed `Sub_` покрывает >=2 visible families по exact/verified coverage; наличие информации о наборе не должно требовать, чтобы пакет обязательно был дешевле суммы этих visible standalone цен;
-- ranking boost по-прежнему fail-closed: package-route влияет на score только когда проходит коммерческие условия ranking policy; просто наличие набора не повышает балл автоматически;
-- UI различает `Выгодный набор Steam` и просто `Набор Steam`, если strict standalone savings не подтверждены.
+Production proof:
+- verified purchase-equivalence merge: `6783029ffe783a3971adaf57d64fa7b6aa76ec8f`;
+- deterministic package refresh merge: `1aea1408aaf54810101bb296c547999e22f81503`;
+- safe stale-source display merge: `e4b8dbb124c41b3d2ac7c947bab5cc99696c752e`;
+- fresh commercial refresh merge: `5ba7ef744fb3fd706ae9e1bbf4e114f26278a561`;
+- stale-family follow-up merge: `9a5ff38ac564c66526c04db6dbb41b09d91f8474`;
+- visual run #130 / `33473546907`: success;
+- `commercial refresh tests: 3 passed`;
+- `fixed package purchase option tests: 19 passed`;
+- `PRIORITY_RANKING_VALIDATION=PASS`;
+- build completed with `ai_queue=147`, proving commercial/package ranking no longer waits for Taste completion;
+- final visual: `442` cards, `PACKAGE_VISIBLE_CARDS=19`, `PACKAGE_RANKING_DRIVERS=15`;
+- package diagnostics: `package_qualifying=8`, `package_strict=7`, `package_equivalence=1`, `package_touched=19`;
+- visual commit: `15db361d25bdb16693bc080f1bdbbb3b71235371`;
+- deploy #171 / `33473567370`: success;
+- actual Pages artifact `9787352509` inspected: BioShock Collection is present on both `BioShock® 2` and `BioShock Infinite` with source-aligned commercial comparison.
 
-Definition of done:
-- BioShock Collection появляется как package option минимум на текущих карточках `BioShock® 2` и `BioShock Infinite` при текущем production scope;
-- coverage audit показывает, что `BioShock® 2` покрыт именно через explicit verified equivalence `8850 -> 409720`, а Infinite — exact `8870`;
-- без equivalence-конфига старое угадывание original/remaster остаётся запрещено regression-тестом;
-- package info может быть visible без ranking boost, если strict commercial route не прошёл;
-- production build и deploy зелёные, конкретный BioShock regression проверен на deployed payload.
+Current BioShock production economics from deployed artifact:
+- `BioShock® 2`: 74 ₽;
+- `BioShock Infinite`: 182 ₽;
+- covered standalone total: 256 ₽;
+- `BioShock: The Collection`: 265 ₽;
+- current delta: package is 9 ₽ more expensive (`savings_rub=-9`, `-3.5%`), therefore `strict_current_price_savings=false` and both cards correctly keep `purchase_route=standalone`;
+- if future fresh prices make the package route better, the next deterministic commercial refresh will automatically recalculate package value and final rank without waiting for a new Taste evaluation.
 
-## Завершённые package-инварианты, которые сохраняются
-
-- только fixed Steam Store Package (`Sub_`);
-- dynamic/personalized Complete-the-Set `/bundle/` исключён fail-closed;
-- unknown extra content не получает выдуманную денежную ценность;
-- package не меняет Taste;
-- scorer сравнивает standalone и eligible package purchase routes прозрачно и без двойного счёта;
-- dedicated package UI и package-aware ranking уже production-validated до текущего reopening.
+Fast route:
+- `docs/fixed_package_purchase_options.md`;
+- `docs/RANK-013-fixed-package-purchase-route.md`;
+- `docs/RANK-014-commercial-freshness-independent-of-taste.md`;
+- `scripts/refresh_visual_commercial_fields.py`;
+- `scripts/apply_fixed_package_purchase_options.py`;
+- `scripts/build_final_visual_payload.py`;
+- `.github/workflows/build-daily-visual-payload.yml`.
 
 ## Не активная основная работа
+
+### Current Taste source ingestion
+Статус: `blocked_requires_github_ingestion_rebuild`, не выбран как текущая interactive-задача.
+- authoritative prepared queue: 147;
+- last scheduled run evaluated/published: 0/0;
+- blocker: 9 existing non-ingested Taste submissions and duplicate keys across inbox files;
+- canonical ingestion/downstream completion for this source is not proven;
+- GitHub-owned ingest/rebuild must resolve this before the scheduled semantic worker continues.
 
 ### SteamDB tail
 Статус: `blocked_low_priority`.
@@ -109,4 +129,4 @@ Definition of done:
 
 ## Текущий статус работ
 
-Сейчас активна одна задача: verified purchase equivalence / BioShock для fixed packages. Остальной backlog остаётся `planned`.
+Незавершённой `in_progress` interactive-задачи сейчас нет. Current Taste ingestion остаётся известным GitHub-owned blocker, но не должен тормозить fresh commercial/package ranking. Остальной backlog остаётся `planned`.
