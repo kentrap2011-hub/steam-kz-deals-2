@@ -1,0 +1,256 @@
+{
+  "contract": "DURATION-ENRICHMENT-V1",
+  "version": "1.0",
+  "status": "canonical",
+  "implementation_status": "provisioning_required",
+  "purpose": "Define the authoritative source, ownership, normalized schema, cache semantics, freshness, provisioning gates and final-ranking handoff for game completion-duration enrichment.",
+  "bindings": {
+    "ownership_contract": "config/execution_ownership_contract.json",
+    "daily_execution_contract": "config/daily_execution_contract.json",
+    "final_ranking_policy": "config/final_ranking_policy.json",
+    "provider_recon_report": "reviews/worker_reports/duration-provider-recon-01.md"
+  },
+  "authority": {
+    "primary_provider": "igdb",
+    "api_family": "IGDB API v4",
+    "api_base_url": "https://api.igdb.com/v4",
+    "duration_endpoint": "game_time_to_beats",
+    "identity_endpoint": "external_games",
+    "identity_source_endpoint": "external_game_sources",
+    "rawg_average_playtime_is_completion_duration": false,
+    "rawg_is_fallback_provider": false,
+    "howlongtobeat_scraping_or_unofficial_wrappers_authorized": false,
+    "howlongtobeat_authorization_exception": "Only a separately documented official API or explicit provider permission may authorize a future contract change."
+  },
+  "ownership": {
+    "collection_executor": "github_actions_direct",
+    "github_control_plane_owns": [
+      "exact current required Steam appid scope",
+      "missing/stale classification",
+      "identity mapping validation",
+      "provider rate pacing",
+      "retry state and retry policy",
+      "completeness accounting",
+      "deterministic normalization",
+      "cache validation and merge",
+      "freshness policy execution",
+      "downstream rebuild orchestration"
+    ],
+    "scheduled_chatgpt_primary_collection_allowed": false,
+    "interactive_chat_primary_collection_allowed": false,
+    "chat_owned_queue_allowed": false,
+    "daily_item_quota_allowed": false,
+    "separate_recurring_chatgpt_stage_allowed": false
+  },
+  "identity": {
+    "canonical_input": "steam_appid",
+    "canonical_key_format": "decimal_string",
+    "igdb_mapping": {
+      "external_game_field": "uid",
+      "source_reference_field": "external_game_source",
+      "provider_game_reference_field": "game",
+      "required_source_identity": "Steam",
+      "uid_must_equal_decimal_steam_appid": true,
+      "source_identity_must_be_resolved_from_current_external_game_source": true
+    },
+    "deprecated_fields_forbidden": [
+      "category"
+    ],
+    "legacy_numeric_steam_enum_must_not_be_hardcoded": true,
+    "title_only_mapping_allowed": false,
+    "fuzzy_mapping_allowed": false,
+    "ambiguous_mapping_fails_closed": true,
+    "missing_mapping_fails_closed": true
+  },
+  "provider_access": {
+    "transport": "https",
+    "authentication": "twitch_oauth2_client_credentials",
+    "credential_storage": "github_secrets_and_ephemeral_runtime_only",
+    "credentials_must_never_be_committed": true,
+    "oauth_token_refresh_owner": "github",
+    "provider_limits": {
+      "requests_per_second": 4,
+      "max_concurrent_requests": 8,
+      "limits_are_production_quota": false
+    }
+  },
+  "raw_provider_record": {
+    "schema_version": 1,
+    "required_fields": [
+      "provider",
+      "provider_schema",
+      "steam_appid",
+      "igdb_game_id",
+      "steam_external_game_uid",
+      "steam_external_game_source_id",
+      "hastily_seconds",
+      "normally_seconds",
+      "completely_seconds",
+      "count",
+      "fetched_at_utc"
+    ],
+    "optional_provider_fields": [
+      "created_at",
+      "updated_at",
+      "checksum"
+    ],
+    "provider_value": "igdb",
+    "provider_schema_value": "game_time_to_beats",
+    "preserve_raw_metrics": true,
+    "duration_fields_unit": "seconds",
+    "count_semantics": "provider_submission_count",
+    "numerical_confidence_threshold": null
+  },
+  "normalization": {
+    "selected_metric": "normally",
+    "input_unit": "seconds",
+    "output_field": "estimated_duration_hours",
+    "output_unit": "hours",
+    "conversion": "normally_seconds / 3600",
+    "conversion_divisor": 3600,
+    "rounding_required_in_canonical_cache": false,
+    "selected_metric_must_be_positive": true,
+    "preserve_selected_metric": true,
+    "preserve_raw_provider_record": true,
+    "missing_or_invalid_selected_metric_result": "unknown",
+    "zero_seconds_is_valid_duration": false
+  },
+  "canonical_cache": {
+    "path": "data/cache/duration_estimates.json",
+    "container_schema_version": 1,
+    "key": "steam_appid_decimal_string",
+    "created_by": "github_owned_duration_enrichment",
+    "population_in_this_contract_task": false,
+    "entry_schema": {
+      "required_fields": [
+        "steam_appid",
+        "status",
+        "provider",
+        "provider_schema",
+        "fetched_at_utc",
+        "refresh_after_utc"
+      ],
+      "confirmed_additional_required_fields": [
+        "igdb_game_id",
+        "steam_external_game_uid",
+        "steam_external_game_source_id",
+        "raw",
+        "selected_metric",
+        "estimated_duration_hours"
+      ],
+      "confirmed_status": "confirmed",
+      "durable_unresolved_statuses": [
+        "provider_row_missing",
+        "steam_mapping_missing",
+        "steam_mapping_ambiguous",
+        "invalid_values"
+      ],
+      "transient_error_statuses": [
+        "auth_failure",
+        "transport_failure"
+      ]
+    },
+    "merge_rules": {
+      "validated_confirmed_replaces_older_same_key": true,
+      "validated_durable_unresolved_may_replace_older_unresolved_same_key": true,
+      "transient_error_must_not_replace_confirmed": true,
+      "transient_error_is_not_durable_negative_cache": true,
+      "conflicting_or_ambiguous_identity_fails_closed": true,
+      "negative_or_error_state_must_never_encode_zero_hours": true,
+      "one_canonical_entry_per_steam_appid": true,
+      "durable_unresolved_must_not_replace_confirmed_without_explicit_invalidation": true
+    }
+  },
+  "freshness": {
+    "data_class": "long_lived",
+    "fetch_on_first_required_appearance_if_missing": true,
+    "refetch_all_known_rows_every_nightly_cycle": false,
+    "confirmed_soft_stale_after_days": 180,
+    "durable_unresolved_retry_after_days": 30,
+    "soft_stale_confirmed_value_remains_valid_during_transient_refresh_failure": true,
+    "provider_updated_at_and_checksum_are_preserved_for_change_detection": true,
+    "commercial_daily_freshness_does_not_apply": true
+  },
+  "negative_states": {
+    "provider_row_missing": "Provider was reached for a proven IGDB game identity but no valid game_time_to_beats row was available.",
+    "steam_mapping_missing": "No proven current IGDB External Game mapping from the Steam appid to an IGDB game exists.",
+    "steam_mapping_ambiguous": "More than one incompatible mapping candidate remains; title/fuzzy guessing is forbidden.",
+    "invalid_values": "Provider record or selected metric fails schema/value validation.",
+    "auth_failure": "OAuth credentials/token acquisition or authorization failed; retryable operational failure.",
+    "transport_failure": "Network/HTTP/provider transient failure; retryable operational failure.",
+    "all_negative_states_produce_zero_hours": false,
+    "all_unresolved_or_error_states_handoff": "unknown"
+  },
+  "final_handoff": {
+    "precedence": [
+      "validated_structured_igdb_normally",
+      "legacy_text_explicit_duration_phrase",
+      "unknown"
+    ],
+    "legacy_text_fallback": {
+      "enabled": true,
+      "role": "low_confidence_compatibility_fallback_only",
+      "allowed_only_when_no_validated_structured_duration": true,
+      "must_not_write_into_igdb_cache": true,
+      "must_not_override_structured_igdb": true,
+      "provenance_value": "legacy_text_explicit_duration_phrase"
+    },
+    "unknown_behavior": {
+      "duration_preference_band": "unknown",
+      "ranking_points": 2,
+      "ranking_max_points": 3,
+      "source_of_scoring_truth": "config/final_ranking_policy.json"
+    }
+  },
+  "schema_migration_guard": {
+    "required_current_identity_field": "external_game_source",
+    "deprecated_identity_field_forbidden": "category",
+    "hardcoded_legacy_steam_enum_forbidden": true,
+    "implementation_must_validate_current_external_game_source_is_steam": true
+  },
+  "provisioning_gates": {
+    "production_collection_enabled": false,
+    "credentials": {
+      "status": "provisioning_required",
+      "requirements": [
+        "Twitch/IGDB Client ID is available to GitHub Actions through GitHub Secrets.",
+        "Twitch/IGDB Client Secret is available to GitHub Actions through GitHub Secrets.",
+        "No secret or access token is committed to the repository."
+      ]
+    },
+    "licensing_attribution": {
+      "status": "provisioning_required",
+      "requirements": [
+        "Determine the project's actual commercial/monetization status without assuming it.",
+        "Verify current IGDB/Twitch terms applicable to that status.",
+        "Satisfy any applicable partnership and user-facing attribution obligations before production collection is enabled."
+      ]
+    },
+    "github_actions_connectivity": {
+      "status": "implementation_acceptance_required",
+      "requirements": [
+        "After credentials are provisioned, perform a bounded GitHub Actions OAuth/authenticated API connectivity check.",
+        "The connectivity check must not be replaced by an interactive-chat lookup."
+      ]
+    },
+    "enablement_rule": "Production collection must remain disabled until credentials and licensing/attribution gates are satisfied and GitHub Actions connectivity acceptance passes."
+  },
+  "implementation_boundaries": {
+    "api_client_implemented_by_this_contract": false,
+    "provider_calls_performed_by_this_contract": false,
+    "cache_population_performed_by_this_contract": false,
+    "final_builder_integration_performed_by_this_contract": false,
+    "scoring_math_changed_by_this_contract": false,
+    "unknown_2_of_3_changed_by_this_contract": false
+  },
+  "scope_and_completeness": {
+    "scope_source": "current_github_production_scope",
+    "github_derives_exact_required_steam_appids": true,
+    "full_catalog_prefill_required": false,
+    "github_owns_retry_state": true,
+    "github_owns_completeness_accounting": true,
+    "unresolved_duration_may_handoff_as_unknown": true,
+    "unresolved_duration_blocks_visual_production": false,
+    "rule": "Duration enrichment is a fail-soft ranking enrichment: GitHub owns the exact required scope and collection state, but a missing/unresolved duration may flow to the existing unknown scoring fallback instead of blocking the whole visual payload."
+  }
+}
