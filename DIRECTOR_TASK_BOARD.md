@@ -29,13 +29,13 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Русские описания | Implement GitHub-owned translation scope/result ingestion/cache/resolver against existing nightly ChatGPT runtime | `WORKER_TASK_RU_TRANSLATION_IMPLEMENT_01.md` | `reviews/worker_reports/ru-translation-implement-01.md` | `prepared_waiting_for_chat2_shared_files` |
-| `ЧАТ 2` | Длительность | Implement GitHub-direct IGDB duration collection/cache/final-builder path; stop cleanly if credentials absent | `WORKER_TASK_DURATION_IGDB_IMPLEMENT_01.md` | `reviews/worker_reports/duration-igdb-implement-01.md` | `active_in_existing_chat` |
+| `ЧАТ 1` | Русские описания | Implement GitHub-owned translation scope/result ingestion/cache/resolver against existing nightly ChatGPT runtime | `WORKER_TASK_RU_TRANSLATION_IMPLEMENT_01.md` | `reviews/worker_reports/ru-translation-implement-01.md` | `ready_to_start` |
+| `ЧАТ 2` | Длительность | IGDB implementation code complete; waiting only for IGDB/Twitch GitHub Secrets and live connectivity acceptance | `WORKER_TASK_DURATION_IGDB_IMPLEMENT_01.md` | `reviews/worker_reports/duration-igdb-implement-01.md` | `blocked_on_user_provisioning` |
 
 ## Worker chat lifecycle
 
-- `ЧАТ 1 — Русские описания`: translation contract is complete. Next implementation task is prepared but must not start overlapping writes while `ЧАТ 2` is still changing shared final-builder/daily-workflow files. Send it after `duration-igdb-implement-01` is durably finished, or only if worker confirms no shared-file overlap.
-- `ЧАТ 2 — Длительность`: implementation task is active in the existing chat. Do not delete it mid-task.
+- `ЧАТ 1 — Русские описания`: shared-file conflict is cleared because `duration-igdb-implement-01` has durably saved its code/report. Translation implementation may start now, but it must re-read current `main` and preserve merged duration changes.
+- `ЧАТ 2 — Длительность`: implementation code/report saved. Do not assign more code until user provisions `IGDB_CLIENT_ID` and `IGDB_CLIENT_SECRET`; then use the existing canonical workflow for bounded connectivity acceptance. The chat may be kept for that immediate follow-up.
 
 ## Отложено / superseded
 
@@ -44,6 +44,7 @@
 
 ## Последние завершённые worker-этапы
 
+- `duration-igdb-implement-01` — code complete but status `blocked` on missing GitHub Secrets. GitHub-owned IGDB collection/cache/final-builder path implemented and tested synthetically; production collection remains disabled. Expected secrets: `IGDB_CLIENT_ID`, `IGDB_CLIENT_SECRET`. Report `reviews/worker_reports/duration-igdb-implement-01.md`.
 - `ru-translation-contract-01` — `complete`; canonical translation request/result/cache contracts added, existing nightly scheduled ChatGPT runtime reused, GitHub remains control-plane owner. Report commit `09e7ca6b555c5e1c79bbebc62f0565f8542c7acf`.
 - `ru-description-source-recon-01` — `complete`; no broad second ready-Russian source; translation still needed for some unresolved descriptions.
 - `duration-contract-01` — `complete`; canonical `DURATION-ENRICHMENT-V1` chooses IGDB `game_time_to_beats`, GitHub-direct, unchanged `unknown = 2/3`.
@@ -56,9 +57,10 @@
 
 ## Ближайшие задачи
 
-1. Дождаться durable завершения `ЧАТ 2` IGDB implementation, потому что он уже меняет shared final-builder/daily-workflow files.
-2. Затем отправить `ЧАТ 1` `WORKER_TASK_RU_TRANSLATION_IMPLEMENT_01.md`.
-3. После обеих data-quality реализаций/rebuild — пользовательский spot-check карточек.
-4. Ranking/card explanation quality audit — bounded recon top-30.
-5. Russian language availability as ranking factor.
-6. YouTube later.
+1. Запустить `ЧАТ 1` с `WORKER_TASK_RU_TRANSLATION_IMPLEMENT_01.md`.
+2. Отдельно пользователь должен добавить `IGDB_CLIENT_ID` и `IGDB_CLIENT_SECRET` в GitHub Actions Secrets; после этого `ЧАТ 2` выполняет bounded connectivity/enablement follow-up.
+3. Учесть отдельный pre-existing package/UI regression, найденный workflow после green duration steps; не смешивать его с duration/translation tasks.
+4. После обеих data-quality реализаций/rebuild — пользовательский spot-check карточек.
+5. Ranking/card explanation quality audit — bounded recon top-30.
+6. Russian language availability as ranking factor.
+7. YouTube later.
