@@ -23,33 +23,41 @@
 15. Та же метка повторяется во всех follow-up сообщениях этому чату.
 16. Before introducing semantic translation, first check whether approved structured sources already provide ready Russian text. Translation is fallback, not assumed default.
 
-## Активно сейчас
+## Активно / подготовлено сейчас
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Русские описания | Recon ready-Russian structured sources before any translation architecture | `WORKER_TASK_RU_DESCRIPTION_SOURCE_RECON_01.md` | `reviews/worker_reports/ru-description-source-recon-01.md` | `ready_to_continue_in_existing_chat` |
-| `ЧАТ 2` | Длительность | Canonical IGDB duration-source/enrichment contract; GitHub-direct executor | `WORKER_TASK_DURATION_CONTRACT_01.md` | `reviews/worker_reports/duration-contract-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 1` | Русские описания | Compare GitHub-direct machine-translation APIs so ChatGPT translation can be avoided if feasible | `WORKER_TASK_RU_TRANSLATION_PROVIDER_RECON_01.md` | `reviews/worker_reports/ru-translation-provider-recon-01.md` | `prepared_for_new_chat` |
+| `ЧАТ 2` | Длительность | IGDB duration contract complete; implementation waits on credentials/licensing/attribution provisioning | `WORKER_TASK_DURATION_CONTRACT_01.md` | `reviews/worker_reports/duration-contract-01.md` | `awaiting_user_provisioning` |
+
+## Worker chat lifecycle
+
+- Old `ЧАТ 1 — Русские описания` reached maximum context after completing `ru-description-source-recon-01`. Report is saved and director decision made. **Old chat may be deleted.** Slot `ЧАТ 1` is reused by the new translation-provider recon chat.
+- Existing `ЧАТ 2 — Длительность` completed the contract task. No further worker action should be assigned until IGDB provisioning prerequisites are clarified. Its report is durable, so the chat may also be deleted if the user prefers; a future implementation can start in a fresh `ЧАТ 2`.
 
 ## Отложено / superseded for now
 
-- `WORKER_TASK_RU_TRANSLATION_CONTRACT_01.md` — **deferred**, not current. User correctly challenged the assumption that translation is needed before checking other ready-Russian sources. Revisit only if source recon proves a translation fallback is still necessary.
+- `WORKER_TASK_RU_TRANSLATION_CONTRACT_01.md` — deferred. Do not use unless provider recon shows a GitHub-direct translation API is unsuitable and a semantic ChatGPT fallback is still needed.
+- Wikimedia ready-Russian secondary source — technically feasible but not yet approved because coverage is incomplete and reused Wikipedia text requires CC BY-SA attribution/share-alike handling.
 
 ## Последние завершённые worker-этапы
 
+- `ru-description-source-recon-01` — `complete`; Steam RU remains primary. No broad second ready-Russian source was found. Wikimedia is a conditional subset only; translation remains necessary for some unresolved descriptions.
+- `duration-contract-01` — `complete`; canonical `DURATION-ENRICHMENT-V1` chooses IGDB `game_time_to_beats`, GitHub-direct executor, structured cache/freshness/error semantics, unchanged `unknown = 2/3`. Production remains `provisioning_required` until credentials/licensing/connectivity gates are satisfied.
 - `ru-description-implement-01` — deterministic producer/source-quality gate implemented. Legacy full payload has 132/442 invalid descriptions; manual translation was not performed.
-- `duration-provider-recon-01` — `complete`; primary recommendation IGDB `game_time_to_beats`, executor `GitHub-direct`; RAWG rejected as semantic mismatch and HLTB scraping rejected without official permission/API.
-- `duration-source-recon-01` — `complete`; no existing structured duration source/cache/runtime path.
-- `duration-data-diagnosis-01` — root cause proven: final visual duration currently depends on text extraction from descriptions/summaries; no manual per-game processing allowed.
-- `ru-description-audit-01` — `complete`; 15/30 sample needed real fix; root cause systemic producer/source handling.
+- `duration-provider-recon-01` — `complete`; IGDB primary recommendation.
+- `duration-source-recon-01` — `complete`; no previous structured duration source/cache/runtime path.
+- `duration-data-diagnosis-01` — root cause proven: duration previously depended on text extraction.
+- `ru-description-audit-01` — `complete`; 15/30 sample needed real fix.
 - `detailed-score-user-fixes-01` — `complete`; phone check passed.
 - `compact-purchase-options-01` — `complete`; phone check passed.
 - `taste-ingest-blocker-fix-01` — `complete`.
 
-## Ближайшие задачи после текущей пары
+## Ближайшие задачи
 
-1. После `ru-description-source-recon-01`: choose source precedence. If ready-Russian sources cover the gap adequately, implement GitHub-direct source enrichment. Only if gaps remain should a bounded translation contract be reconsidered.
-2. После `duration-contract-01`: bounded IMPLEMENT for GitHub-direct IGDB collection/cache/final-builder integration, gated on credentials/licensing/attribution/connectivity provisioning.
-3. После реализации и production rebuild двух data-quality paths — пользовательская выборочная проверка карточек.
+1. `ЧАТ 1`: translation-provider recon (DeepL / Google / Yandex, optionally Azure) to determine whether GitHub can translate directly without ChatGPT.
+2. `ЧАТ 2`: after user clarifies project commercial status and IGDB credentials can be provisioned, bounded IMPLEMENT for GitHub-direct IGDB collection/cache/final-builder integration.
+3. After both data-quality paths are implemented and rebuilt — user spot-check of visible cards.
 4. Ranking/card explanation quality audit — bounded recon top-30.
 5. Russian language availability as ranking factor — recon before implementation.
 6. YouTube reviews — later.
@@ -58,8 +66,8 @@
 
 1. Способ покупки — завершено.
 2. Детальная оценка — завершено.
-3. Русские описания — deterministic gate готов; source recon before translation.
-4. Duration coverage — IGDB выбран; canonical contract следующий.
+3. Русские описания — quality gate done; choose direct translation provider before any ChatGPT translation architecture.
+4. Duration coverage — contract done; awaiting IGDB provisioning then implementation.
 5. Качество причин `почему подходит / почему может не подойти`.
 6. Информация о русском языке и её влияние на ranking.
 7. Вторичные функции вроде YouTube — позже.
