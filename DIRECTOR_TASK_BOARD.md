@@ -26,32 +26,35 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Русские описания | Systemic producer/pipeline fix after 30-card audit | `WORKER_TASK_RU_DESCRIPTION_IMPLEMENT_01.md` | `reviews/worker_reports/ru-description-implement-01.md` | `active` |
-| `ЧАТ 2` | Длительность | Compare viable authoritative duration providers and executor class; no per-game lookup | `WORKER_TASK_DURATION_PROVIDER_RECON_01.md` | `reviews/worker_reports/duration-provider-recon-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 1` | Русские описания | Canonical contract for GitHub-owned translation scope + constrained scheduled ChatGPT translation worker | `WORKER_TASK_RU_TRANSLATION_CONTRACT_01.md` | `reviews/worker_reports/ru-translation-contract-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 2` | Длительность | Canonical IGDB duration-source/enrichment contract; GitHub-direct executor | `WORKER_TASK_DURATION_CONTRACT_01.md` | `reviews/worker_reports/duration-contract-01.md` | `ready_to_continue_in_existing_chat` |
 
 ## Последние завершённые worker-этапы
 
-- `duration-source-recon-01` — `complete`; no canonical structured duration source/cache/runtime path exists today. A canonical provider/source decision is required before IMPLEMENT. Report `reviews/worker_reports/duration-source-recon-01.md`.
+- `ru-description-implement-01` — deterministic producer/source-quality gate implemented. Legacy full payload has 132/442 invalid descriptions; manual translation was not performed. Remaining gap is canonical semantic translation ownership/interface. Status `needs_user_decision`, resolved by director choosing bounded GitHub-control-plane + scheduled ChatGPT translation contract next.
+- `duration-provider-recon-01` — `complete`; primary recommendation IGDB `game_time_to_beats`, executor `GitHub-direct`; RAWG rejected as semantic mismatch and HLTB scraping rejected without official permission/API. Contract required before implementation.
+- `duration-source-recon-01` — `complete`; no existing structured duration source/cache/runtime path.
 - `duration-data-diagnosis-01` — root cause proven: final visual duration currently depends on text extraction from descriptions/summaries; no manual per-game processing allowed.
-- `ru-description-audit-01` — `complete`; 15/30 sampled cards require a real description fix; root cause systemic producer/source handling.
+- `ru-description-audit-01` — `complete`; 15/30 sample needed real fix; root cause systemic producer/source handling.
 - `detailed-score-user-fixes-01` — `complete`; phone check passed.
 - `compact-purchase-options-01` — `complete`; phone check passed.
 - `taste-ingest-blocker-fix-01` — `complete`.
 
 ## Ближайшие задачи после текущей пары
 
-1. После `duration-provider-recon-01`: выбрать/утвердить authoritative duration provider and executor class, затем отдельный canonical CONTRACT task before IMPLEMENT.
-2. После `ru-description-implement-01`: проверить GitHub-owned full-catalog rebuild/translation path and user-visible result.
-3. Ranking and card explanation quality audit — bounded recon top-30.
-4. Russian language availability as ranking factor — recon before implementation.
-5. YouTube reviews — позже.
+1. После `ru-translation-contract-01`: bounded IMPLEMENT for GitHub-owned unresolved-description payload/cache/ingestion + scheduled ChatGPT translation result interface; no manual catalog translation.
+2. После `duration-contract-01`: bounded IMPLEMENT for GitHub-direct IGDB collection/cache/final-builder integration, gated on credentials/licensing/attribution/connectivity provisioning.
+3. После реализации и production rebuild двух data-quality paths — пользовательская выборочная проверка карточек.
+4. Ranking/card explanation quality audit — bounded recon top-30.
+5. Russian language availability as ranking factor — recon before implementation.
+6. YouTube reviews — later.
 
 ## Предпочтительный продуктовый порядок
 
 1. Способ покупки — завершено.
 2. Детальная оценка — завершено.
-3. Русские описания — systemic fix активно.
-4. Duration coverage — provider selection, затем contract, затем systemic implementation.
+3. Русские описания — deterministic gate готов; contract translation path следующий.
+4. Duration coverage — IGDB выбран; canonical contract следующий.
 5. Качество причин `почему подходит / почему может не подойти`.
 6. Информация о русском языке и её влияние на ranking.
 7. Вторичные функции вроде YouTube — позже.
