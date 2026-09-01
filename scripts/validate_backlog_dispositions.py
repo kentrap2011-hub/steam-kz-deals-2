@@ -292,7 +292,8 @@ def _added_markers(base: str, head: str) -> list[DispositionMarker]:
     markers: list[DispositionMarker] = []
     for line in diff.splitlines():
         if line.startswith("+++ b/"):
-            path = line[6:]
+            candidate = line[6:]
+            path = candidate if candidate.endswith(".md") and candidate != BACKLOG_PATH else None
             continue
         if not (path and line.startswith("+") and not line.startswith("+++")):
             continue
