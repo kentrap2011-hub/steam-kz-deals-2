@@ -1,6 +1,6 @@
 (function(root){
   const LABELS={
-    taste:'Вкус',
+    taste:'Совпадение с твоими вкусами',
     wishlist:'Вишлист',
     achievements:'Достижения',
     duration:'Длительность',
@@ -17,7 +17,7 @@
     slightly_short_or_long:'слегка вне привычной длительности',
     very_short_or_long:'заметно вне привычной длительности',
     extreme_length:'очень необычная длительность',
-    unknown:'длительность не подтверждена',
+    unknown:'нет подтверждённых данных; применяется стандартный балл для неизвестной длительности',
   };
 
   function escape(value){
@@ -53,7 +53,7 @@
       value=value
         .replace(/^strong\s*·\s*грубая оценка по старым данным$/i,'сильное совпадение · по старым данным')
         .replace(/^moderate\s*·\s*грубая оценка по старым данным$/i,'умеренное совпадение · по старым данным')
-        .replace(/детальная нормализованная оценка/gi,'по детальному профилю вкуса');
+        .replace(/детальная нормализованная оценка/gi,'оценка по твоим игровым предпочтениям');
     }
     if(row?.id==='achievements')value=value.replace(/новая или не подтверждено, что играл/gi,'нет подтверждения, что играл');
     if(row?.id==='package_coverage'&&row?.covered_visible_game_count!=null)return `${Number(row.covered_visible_game_count)} из текущего списка`;
@@ -62,8 +62,9 @@
       .replace(/\bslightly_short_or_long\b/g,DURATION_BANDS.slightly_short_or_long)
       .replace(/\bvery_short_or_long\b/g,DURATION_BANDS.very_short_or_long)
       .replace(/\bextreme_length\b/g,DURATION_BANDS.extreme_length)
+      .replace(/\bunknown\b/g,DURATION_BANDS.unknown)
       .replace(/\blegacy_coarse_fit\b/g,'оценка по старым данным')
-      .replace(/\bnormalized_taste_factors\b/g,'детальный профиль вкуса')
+      .replace(/\bnormalized_taste_factors\b/g,'оценка по твоим игровым предпочтениям')
       .replace(/\bfixed_package\b/g,'набор Steam')
       .replace(/\bstandalone\b/g,'игра отдельно');
   }
@@ -71,11 +72,18 @@
     const detail=componentDetail(row);
     return `<div class="score-row" data-score-component="${escape(row?.id||'unknown')}"><div class="score-row-copy"><span class="score-row-label">${escape(componentLabel(row))}</span>${detail?`<span class="score-row-detail">${escape(detail)}</span>`:''}</div><b class="score-row-points">${escape(pointsText(row))}</b></div>`;
   }
+  function precisionLabel(precision){
+    if(precision?.code==='normalized_taste_factors')return 'подробная оценка по твоим предпочтениям';
+    if(precision?.code==='direct_user_rating')return 'твоя прямая оценка';
+    if(precision?.code==='legacy_coarse_fit')return 'приближённая оценка по старым данным';
+    return precision?.label||'';
+  }
   function precisionHtml(score){
     const precision=score?.precision;
-    if(!precision?.label)return '';
+    const label=precisionLabel(precision);
+    if(!label)return '';
     const suffix=precision.is_coarse_legacy?' · уточняется по мере обновления данных':'';
-    return `<div class="score-note" data-score-precision="true">Данные вкуса: ${escape(precision.label)}${escape(suffix)}</div>`;
+    return `<div class="score-note" data-score-precision="true">Данные вкуса: ${escape(label)}${escape(suffix)}</div>`;
   }
   function purchaseDriverHtml(score){
     const route=score?.purchase_route;
@@ -113,10 +121,18 @@
     if(cue)cue.textContent=open?'свернуть':'подробнее';
     return true;
   }
+  function toggleScoreDetails(wrapper){
+    if(!wrapper)return false;
+    const button=wrapper.querySelector?.('[data-score-details-toggle]');
+    if(!button)return false;
+    const expanded=button.getAttribute('aria-expanded')==='true';
+    return setScoreDetailsExpanded(wrapper,!expanded);
+  }
 
   const baseRenderPriority=typeof root.renderPriority==='function'?root.renderPriority:null;
   root.renderDetailedScoreHtml=renderDetailedScoreHtml;
   root.setScoreDetailsExpanded=setScoreDetailsExpanded;
+  root.toggleScoreDetails=toggleScoreDetails;
   root.renderPriority=function(g){
     const factors=Array.isArray(g?.priority_factors)?g.priority_factors:[];
     const score=g?.score_breakdown||null;
@@ -167,8 +183,7 @@
       const button=event.target?.closest?.('[data-score-details-toggle]');
       if(!button)return;
       const wrapper=button.closest?.('[data-score-breakdown]');
-      const expanded=button.getAttribute('aria-expanded')==='true';
-      setScoreDetailsExpanded(wrapper,!expanded);
+      toggleScoreDetails(wrapper);
     });
   }
 })(typeof window!=='undefined'?window:globalThis);
