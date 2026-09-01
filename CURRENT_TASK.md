@@ -38,6 +38,19 @@
 - worker report: `reviews/worker_reports/image-swipe-01.md`;
 - финальная пользовательская проверка на реальном телефоне 2026-09-01: картинка больше не залипает при перелистывании.
 
+### Compact purchase options — best option first, full list on demand
+Статус: `complete`.
+- worker task: `compact-purchase-options-01`;
+- при нескольких вариантах покупки в свернутом состоянии показывается ровно один producer-selected primary route;
+- `score_breakdown.purchase_route = fixed_package` показывает пакет первым, иначе primary остаётся standalone; UI не пересчитывает ranking/цены и не переигрывает producer choice;
+- `Показать ещё N вариант/варианта/вариантов` раскрывает полный список, включая все regular offers и полный подтверждённый состав fixed package;
+- длинный package composition/economics скрыт в compact mobile state;
+- technical score/ranking phrasing заменён практическим объяснением того, какой способ покупки рекомендован и почему;
+- deterministic mobile regression проверяет collapsed/expanded states, полноту expanded package content, отсутствие score/rank terminology и producer-route invariance;
+- renderer: `fe8d99f2d202403f092cd072bb598c6f3fd969b4`; regression: `78ee55bc08a8833aac3a40cd768e836f88c96393`; styles: `fa83828df7db15afc7953a23c5821989038cd082`; asset wiring: `526107bf431cb7c861c11d868b12bf2555d33196`; deploy gate: `368224ca162f83b48cad32651fe42dde6d013c8a`;
+- deploy run `33489817719`, rerun job `99798942975`: success; `Run UI regressions` success; GitHub Pages deploy success; Pages artifact `9793337134`;
+- worker report: `reviews/worker_reports/compact-purchase-options-01.md`.
+
 ## Завершённые package-инварианты, которые сохраняются
 
 - только fixed Steam Store Package (`Sub_`);
@@ -112,18 +125,6 @@
 - ranking math не менять ради дизайна;
 - regression/snapshot на mobile viewport.
 
-### G. Compact purchase options — best option first, full list on demand
-Статус: `in_progress`.
-- worker task: `compact-purchase-options-01`;
-- в карточке по умолчанию показывать только самый выгодный/рекомендуемый способ покупки вместо длинного списка всех вариантов;
-- пользователь должен явно видеть, что есть другие варианты, и по нажатию раскрывать полный список;
-- после раскрытия должны оставаться доступны все подтверждённые варианты покупки и состав набора;
-- выбор «лучшего варианта» должен использовать уже рассчитанную producer-owned оценку/экономику, а UI не должен самостоятельно пересчитывать ranking или цены;
-- длинные package explanations и список standalone/DLC вариантов не должны занимать большую часть мобильного экрана в свернутом состоянии;
-- техническую фразу вроде `одиночный вариант сейчас получает не меньший балл покупки` убрать из пользовательского текста или заменить понятным объяснением практического смысла;
-- пользовательский текст должен отвечать на вопрос `что выгоднее купить и почему`, а не раскрывать внутреннюю терминологию score;
-- добавить mobile regression/snapshot для свернутого и раскрытого состояний.
-
 ## Текущий статус работ
 
-Текущая interactive-задача: G / `compact-purchase-options-01`. Fixed-package complete-content valuation и stale-image swipe bug завершены и закрыты. Current Taste ingestion остаётся отдельным GitHub-owned blocker и не изменяется этой UI-задачей.
+Interactive-задача G / `compact-purchase-options-01` завершена. Следующая planned-задача не начата. Fixed-package complete-content valuation и stale-image swipe bug остаются закрыты. Current Taste ingestion остаётся отдельным GitHub-owned blocker и этой UI-задачей не изменён.
