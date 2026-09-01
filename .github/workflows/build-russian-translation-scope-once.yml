@@ -1,0 +1,67 @@
+name: One-shot canonical Russian translation scope build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/build-russian-translation-scope-once.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-russian-translation-scope-once
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate translation runtime
+        run: |
+          set -euo pipefail
+          python scripts/validate_execution_ownership.py
+          python scripts/validate_russian_description_translation_contract.py
+          python scripts/test_russian_description_translation_runtime.py
+
+      - name: Build exact current translation scope
+        run: python scripts/build_russian_description_translation_queue.py
+
+      - name: Commit canonical queue status and typed payload
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add \
+            data/production/pre_ai/chatgpt_payload.json \
+            data/production/pre_ai/chatgpt_ru_description_queue.jsonl \
+            data/production/pre_ai/chatgpt_ru_description_status.json
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo "Russian translation scope already current"
+            exit 0
+          fi
+          git commit -m "Build canonical Russian description translation scope"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
