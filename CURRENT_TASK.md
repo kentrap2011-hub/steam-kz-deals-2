@@ -2,6 +2,26 @@
 
 Последнее обновление: 2026-09-01
 
+## Текущая интерактивная подзадача
+
+### Chat operating protocol hardening
+Статус: `in_progress`.
+Старт: 2026-09-01 08:42 Europe/Berlin.
+
+Цель:
+- вынести обязательные процедурные правила рабочего чата в короткий `CHAT_PROTOCOL.md`;
+- сделать `START / DURING / PRE-SEND` явными gates, а не правилами, которые нужно помнить среди большого контекста;
+- подключить protocol из `README.md` и `CHAT_CONTEXT.md`;
+- сохранить rationale в `PROJECT_DECISIONS.md`;
+- предложить cold-start проверку из нового чата.
+
+Последний подтверждённый прогресс:
+- подтверждено, что правило `>1 минуты` уже существовало в `README.md` и `CHAT_CONTEXT.md`, но было прочитано и всё равно пропущено в ответе;
+- отдельного короткого обязательного pre-send gate в корне проекта сейчас нет.
+
+Следующий шаг:
+- создать `CHAT_PROTOCOL.md`, обновить точки входа и decision log, затем повторно прочитать изменённые файлы.
+
 ## Завершено
 
 ### Taste V3 migration
@@ -132,4 +152,4 @@ Definition of done:
 
 ## Текущий статус работ
 
-Сейчас активна одна задача: verified complete-content valuation для fixed Steam packages. Current Taste ingestion остаётся отдельным GitHub-owned blocker и не должен тормозить коммерческий package refresh.
+Сейчас активна одна основная production-задача: verified complete-content valuation для fixed Steam packages. Поверх неё временно выполняется bounded interactive-подзадача по hardening правил рабочего чата. Current Taste ingestion остаётся отдельным GitHub-owned blocker и не должен тормозить коммерческий package refresh.
