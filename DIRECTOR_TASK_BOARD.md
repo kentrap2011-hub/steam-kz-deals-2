@@ -25,7 +25,12 @@
 | Задача | Report | Приоритет | Размер | Область | Параллельность | Проверка пользователем | Статус |
 |---|---|---|---|---|---|---|---|
 | Compact purchase options — лучший вариант сначала, остальные по нажатию | `reviews/worker_reports/compact-purchase-options-01.md` | высокий | средний | мобильный UI покупки | не совмещать с другими переделками карточки | да, телефон | `active` |
-| Taste ingestion blocker — диагностика 9 дублей | `reviews/worker_reports/taste-ingest-blocker-diagnosis-01.md` | высокий как blocker | маленький recon | GitHub ingestion / служебные данные | безопасно с UI | нет | `active` |
+| Taste ingestion blocker — точечное исправление финальной проверки после recon | `reviews/worker_reports/taste-ingest-blocker-fix-01.md` | высокий как blocker | маленький implement | GitHub ingestion / служебные данные | безопасно с UI | нет | `active` |
+
+## Последний завершённый recon
+
+- `taste-ingest-blocker-diagnosis-01` — `complete` как диагностика, итоговый статус проблемы `needs_fix`.
+- Установлено: 147 результатов уникальны; duplicate-key blocker отсутствует. Ошибка — слишком строгая финальная transactional proof, не учитывающая 3 законно retained rows для `resolve_base_support_condition`.
 
 ## Ближайшие задачи после текущей пары
 
