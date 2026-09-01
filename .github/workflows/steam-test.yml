@@ -3,7 +3,7 @@ name: Steam KZ production shortlist
 on:
   workflow_dispatch:
 
-  # Разработческие изменения самого сборщика проверяем автоматически.
+  # Разработческие изменения collectors/production validation проверяем автоматически.
   # Обычные production/data-коммиты этот тяжёлый workflow не запускают.
   push:
     branches:
@@ -13,6 +13,14 @@ on:
       - "scripts/steam_production_cached.py"
       - "scripts/production_output_ownership.py"
       - "scripts/test_production_output_ownership.py"
+      - "scripts/giveaway_core.py"
+      - "scripts/giveaway_http.py"
+      - "scripts/giveaway_steam.py"
+      - "scripts/giveaway_epic.py"
+      - "scripts/giveaway_gog.py"
+      - "scripts/giveaway_production.py"
+      - "scripts/test_giveaway_production.py"
+      - "config/cross_platform_giveaway_contract.json"
       - ".github/workflows/steam-test.yml"
 
   schedule:
@@ -49,10 +57,13 @@ jobs:
       - name: Regression test production output ownership
         run: python scripts/test_production_output_ownership.py
 
+      - name: Regression test cross-platform giveaways
+        run: python scripts/test_giveaway_production.py
+
       - name: Collect full Steam KZ catalog and build production shortlist
         run: python scripts/steam_production_cached.py
 
-      - name: Verify collector touched only owned production paths
+      - name: Verify Steam collector touched only owned production paths
         shell: bash
         run: |
           set -euo pipefail
@@ -67,19 +78,41 @@ jobs:
             exit 1
           fi
 
-      - name: Commit production feed and review cache
+      - name: Build canonical Steam Epic GOG KZ giveaways
+        run: python scripts/giveaway_production.py
+
+      - name: Validate canonical giveaway artifact contract
+        run: python scripts/giveaway_production.py --validate-only
+
+      - name: Verify production writers touched only owned paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          allowed='^data/production/(manifest\.json|freebies\.tsv|freebies_index\.json|shortlist/|giveaways/)'
+
+          foreign_tracked="$(git diff --name-only -- data/production | grep -Ev "$allowed" || true)"
+          foreign_untracked="$(git ls-files --others --exclude-standard -- data/production | grep -Ev "$allowed" || true)"
+
+          if [[ -n "$foreign_tracked" || -n "$foreign_untracked" ]]; then
+            echo "Production workflow modified artifacts outside collector/giveaway ownership."
+            printf '%s\n' "$foreign_tracked" "$foreign_untracked"
+            exit 1
+          fi
+
+      - name: Commit production feed, giveaways and review cache
         shell: bash
         run: |
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
 
-          # Stage only the Steam collector's own outputs. Never stage
-          # downstream mailing/pre_ai/daily_ready artifacts from this workflow.
+          # Each producer keeps its own path family; the workflow stages only
+          # the two explicitly-owned output sets plus the Steam review cache.
           git add -A -- \
             data/production/shortlist \
             data/production/manifest.json \
             data/production/freebies.tsv \
-            data/production/freebies_index.json
+            data/production/freebies_index.json \
+            data/production/giveaways
           git add data/cache/steam_review_http_cache.json
 
           if git diff --cached --quiet; then
@@ -87,7 +120,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Update Steam KZ production shortlist"
+          git commit -m "Update Steam KZ production and giveaways"
 
           # Пока длинный сборщик работает, main может успеть
           # продвинуться другим commit/workflow.
