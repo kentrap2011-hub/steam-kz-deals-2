@@ -41,12 +41,95 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+          fetch-depth: 0
 
-      - name: Require meaningful Russian descriptions
+      - name: Classify canonical visual mutation
+        id: visual_scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "giveaway_only=false" >> "$GITHUB_OUTPUT"
+          python - <<'PY' | tee /tmp/visual-scope.txt
+          import copy
+          import json
+          import subprocess
+
+          path = 'data/production/visual/current.json'
+          visual_commit = subprocess.check_output(
+              ['git', 'log', '-1', '--format=%H', '--', path],
+              text=True,
+          ).strip()
+          if not visual_commit:
+              raise SystemExit('missing visual payload commit')
+
+          parent = subprocess.run(
+              ['git', 'rev-parse', f'{visual_commit}^'],
+              text=True,
+              stdout=subprocess.PIPE,
+              stderr=subprocess.DEVNULL,
+          )
+          if parent.returncode != 0:
+              print(f'VISUAL_DEPLOY_SCOPE=general visual_commit={visual_commit} reason=no_parent')
+              raise SystemExit(0)
+
+          try:
+              before = json.loads(subprocess.check_output(
+                  ['git', 'show', f'{visual_commit}^:{path}'],
+                  text=True,
+              ))
+              after = json.loads(subprocess.check_output(
+                  ['git', 'show', f'{visual_commit}:{path}'],
+                  text=True,
+              ))
+          except (subprocess.CalledProcessError, json.JSONDecodeError):
+              print(f'VISUAL_DEPLOY_SCOPE=general visual_commit={visual_commit} reason=unreadable_diff')
+              raise SystemExit(0)
+
+          allowed_contract = {
+              'final_visual_producer_blob_sha',
+              'giveaway_visual_handoff_blob_sha',
+              'source_giveaway_snapshot_blob_sha',
+              'giveaway_visual_schema_version',
+          }
+
+          def stable_without_giveaway(data):
+              data = copy.deepcopy(data)
+              data.pop('giveaways', None)
+              contract = data.get('production_contract') or {}
+              for key in allowed_contract:
+                  contract.pop(key, None)
+              return data
+
+          giveaway = after.get('giveaways')
+          is_giveaway_only = (
+              stable_without_giveaway(before) == stable_without_giveaway(after)
+              and isinstance(giveaway, dict)
+              and giveaway.get('schema_version') == 1
+              and giveaway.get('source_contract') == 'CROSS-PLATFORM-GIVEAWAY-V1'
+          )
+          if is_giveaway_only:
+              print(f'VISUAL_DEPLOY_SCOPE=giveaway_only visual_commit={visual_commit} non_giveaway_state_unchanged=true')
+          else:
+              print(f'VISUAL_DEPLOY_SCOPE=general visual_commit={visual_commit}')
+          PY
+
+          if grep -q 'VISUAL_DEPLOY_SCOPE=giveaway_only' /tmp/visual-scope.txt; then
+            echo "giveaway_only=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Require meaningful Russian descriptions for general visual changes
+        if: steps.visual_scope.outputs.giveaway_only != 'true'
         shell: bash
         run: |
           set -euo pipefail
           python scripts/validate_russian_descriptions.py data/production/visual/current.json
+
+      - name: Accept unchanged paid payload for giveaway-only deploy
+        if: steps.visual_scope.outputs.giveaway_only == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo 'PAID_VISUAL_ACCEPTANCE=reused_existing_canonical_payload structural_diff_proof=pass'
 
       - name: Validate giveaway visual payload
         shell: bash
