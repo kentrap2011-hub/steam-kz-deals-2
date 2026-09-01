@@ -38,6 +38,7 @@ on:
       - "scripts/build_pre_ai_store_snapshot.py"
       - "scripts/build_fixed_package_purchase_options.py"
       - "scripts/test_fixed_package_purchase_options.py"
+      - "scripts/test_package_complete_content_value.py"
       - "scripts/test_expired_offer_guard.py"
       - "scripts/build_pre_ai_fx_snapshot.py"
       - "scripts/build_pre_ai_content_rules.py"
@@ -77,7 +78,9 @@ jobs:
         run: python scripts/test_expired_offer_guard.py
 
       - name: Regression test fixed package purchase options
-        run: python scripts/test_fixed_package_purchase_options.py
+        run: |
+          python scripts/test_fixed_package_purchase_options.py
+          python scripts/test_package_complete_content_value.py
 
       - name: Build per-entry taste cache index
         run: python scripts/build_taste_cache_index.py
