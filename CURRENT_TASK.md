@@ -1,6 +1,6 @@
 # CURRENT TASK
 
-Последнее обновление: 2026-08-31
+Последнее обновление: 2026-09-01
 
 ## Завершено
 
@@ -10,51 +10,39 @@
 - final Taste ingest, downstream visual build и deploy подтверждены зелёными;
 - model binding: `taste-v3`, semantics `0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`.
 
-## Активная работа
-
 ### Steam fixed-package purchase options — visibility + ranking value
-Статус: `reopened_in_progress`.
+Статус: `complete_production_validated`.
 
-Почему переоткрыто:
-- предыдущая production-validation доказала только, что producer нашёл package options и записал их в visual payload;
-- пользователь фактически не видит наборы на странице, поэтому UI acceptance не была доказана;
-- старое правило `Taste/ranking не меняются` неверно для продукта: выгодный multi-game package должен повышать ценность покупки и итоговый рейтинг.
-
-Сохраняемые safety-инварианты:
+Итоговое продуктовое правило:
 - только fixed Steam Store Package (`Sub_`);
-- >=2 currently visible base-game families;
-- покрытие только по actual included appids / canonical family membership;
+- package должен покрывать >=2 currently visible base-game families по actual included appids / canonical family membership;
 - original/remaster equivalence не угадывается;
-- package должен быть строго дешевле суммы standalone current prices;
-- family считается один раз, unknown extra content value = 0;
-- dynamic/personalized Complete-the-Set `/bundle/` исключён fail-closed.
+- package должен быть строго дешевле суммы current standalone prices; family считается один раз; unknown extra content value = 0;
+- dynamic/personalized Complete-the-Set `/bundle/` исключён fail-closed;
+- package не меняет Taste и влияет только на purchase/value часть финального score;
+- scorer независимо считает standalone purchase route и eligible fixed-package route, затем берёт более высокий прозрачный purchase score; при равенстве остаётся standalone, поэтому одна и та же выгода не считается дважды;
+- package route учитывает экономию против текущей покупки игр отдельно, эффективную цену за одну покрытую игру и количество покрытых visible games;
+- package total price выше practical ceiling из ranking policy не получает package-score;
+- карточка показывает отдельный заметный блок `🎁 Выгодный набор Steam` с названием, ценой, количеством/названиями игр, standalone total, экономией, ценой за игру и кнопкой открытия package в Steam.
 
-Новые обязательные требования:
-1. На карточке выгодный набор показывается отдельным заметным producer-owned блоком, а не как неотличимый дополнительный offer.
-2. Блок показывает как минимум: название набора, package price, сколько видимых игр он покрывает, их названия, standalone total, абсолютную экономию и ориентировочную цену за одну покрытую игру.
-3. Есть явная кнопка открытия package в Steam.
-4. Выгодность package влияет на final purchase score / `total_score`, а значит и на automatic rank.
-5. Пример продуктового смысла: одна игра за ~150 ₽ хороша, но фиксированный набор примерно за 300 ₽ с 4 подходящими играми должен получить заметно более высокую оценку покупки, если сам package укладывается в practical purchase constraints.
-6. Package boost должен быть прозрачным отдельным компонентом `score_breakdown`, а не скрытой сортировкой.
-7. Нельзя повысить Taste: package влияет только на practical/purchase часть.
-8. Не допускать двойного счёта одной и той же выгоды; формула должна явно различать standalone economics и дополнительную multi-game value.
-9. Ranking review должен экспортировать package count/price/savings/value points, чтобы top-30 audit видел реальный driver.
-10. UI regression: fixture с `better_purchase_option` обязан рендерить заметный package block; ranking regression: при прочих равных выгодный 4-game package существенно выше standalone-only варианта.
+Production proof после reopening:
+- implementation merge: `a86b0e793b445c5d1af54ac08ba00528be946f6e` (`Make fixed Steam packages visible and ranking-aware`);
+- visual run #111 / `33423352245` — success;
+- `PRIORITY_RANKING_VALIDATION=PASS`;
+- fixed-package regression: `12 passed`;
+- `package_qualifying=7`, `package_touched=17`;
+- `PACKAGE_VISIBLE_CARDS=17`, `PACKAGE_RANKING_DRIVERS=15`;
+- production examples: `FlatOut 2` purchase score `22 -> 36` (+14) через `Flatout Complete Pack` за ~272 ₽ / 3 игры; `The Night of the Rabbit` `22 -> 40` (+18) через `The Daedalic Armageddon Bundle` за ~120 ₽ / 7 игр;
+- package-aware visual commit: `66c00e9e389691be885123a9dd4e48663c41d5ad`;
+- downstream deploy #151 / `33423389598` — success на package-aware payload;
+- actual Pages artifact #151 (`9769779423`) проверен: в одном задеплоенном artifact одновременно присутствуют новый package UI и package-aware `data/current.json`;
+- более поздний visual run #113 / `33437077173` также сохранил package regressions зелёными и диагностировал те же `17` visible package cards / `15` package ranking drivers.
 
-Предыдущий production proof (не является Definition of Done после reopening):
-- merge PR #1 -> main commit `1438d6531062cd884a42177b33151606fc5e5fe9`;
-- pre-AI run #65 / `33418890981` success;
-- real `fixed_package_options.json`: 679 app candidates, 795 package ids discovered, 19 eligible fixed packages;
-- visual run #110 / `33418941938`: `qualifying_packages=7`, `touched_games=17`;
-- deploy run #149 / `33418983959` success.
+Быстрый маршрут и rationale:
+- `docs/fixed_package_purchase_options.md`;
+- `docs/RANK-013-fixed-package-purchase-route.md`.
 
-Definition of done теперь:
-- реальный deployed page явно показывает package block хотя бы на одном production game с `better_purchase_option`;
-- package economics входят в transparent final score и реально меняют rank на regression + production data;
-- score остаётся в каноническом диапазоне и не повышает Taste;
-- ranking review показывает package driver;
-- downstream build/deploy зелёные после изменений;
-- docs/decision/routing синхронизированы только после этой пользовательской acceptance-границы.
+Задачу не переоткрывать только из-за того, что конкретная просмотренная карточка не имеет package: package block появляется только у игр, для которых текущий fixed `Sub_` реально проходит условия. Если пользователь сообщает, что package не виден на игре, которая точно должна иметь `better_purchase_option`, проверять deployed artifact/current payload для этой конкретной игры.
 
 ## Не активная основная работа
 
@@ -108,4 +96,4 @@ Definition of done теперь:
 
 ## Текущий статус работ
 
-Сейчас активна одна задача: fixed-package visibility + ranking value. Не закрывать её только по producer/log proof без проверки фактического UI и изменения рейтинга.
+Сейчас незавершённой `in_progress` задачи нет. Следующую плановую задачу начинать только после явного выбора пользователя; наличие пункта в backlog не означает, что он активен.
