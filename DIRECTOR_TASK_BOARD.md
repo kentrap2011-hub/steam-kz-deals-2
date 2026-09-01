@@ -27,10 +27,11 @@
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
 | `ЧАТ 1` | Русские описания | Systemic producer/pipeline fix after 30-card audit | `WORKER_TASK_RU_DESCRIPTION_IMPLEMENT_01.md` | `reviews/worker_reports/ru-description-implement-01.md` | `ready_to_continue_in_existing_chat` |
-| `ЧАТ 2` | Длительность | Diagnose why visible recommendations get duration `unknown` | `WORKER_TASK_DURATION_DATA_DIAG_01.md` | `reviews/worker_reports/duration-data-diagnosis-01.md` | `finished_in_chat_report_missing` |
+| `ЧАТ 2` | Длительность | Find canonical structured duration source/path and owner; no per-game lookup | `WORKER_TASK_DURATION_SOURCE_RECON_01.md` | `reviews/worker_reports/duration-source-recon-01.md` | `ready_to_continue_in_existing_chat` |
 
 ## Последние завершённые worker-этапы
 
+- `duration-data-diagnosis-01` — `blocked` only because canonical structured source/path was not yet established. Root cause proven: final visual duration currently depends on text extraction from descriptions/summaries; manual per-game recount was stopped after user correction. Report `reviews/worker_reports/duration-data-diagnosis-01.md`.
 - `ru-description-audit-01` — `complete`; bounded sample 30 cards: 15/30 need a real description fix; root cause systemic producer/source handling, not UI. Report commit `99785d4860ce6cce3bf90f437419553cb6fed6d5`.
 - `detailed-score-user-fixes-01` — `complete`; пользовательская phone-проверка пройдена.
 - `compact-purchase-options-01` — `complete`; phone-проверка пройдена.
@@ -38,7 +39,7 @@
 
 ## Ближайшие задачи после текущей пары
 
-1. После сохранения `duration-data-diagnosis-01` решить bounded IMPLEMENT для duration pipeline. Никакого ручного заполнения длительностей.
+1. После `duration-source-recon-01`: если canonical source/path уже есть — bounded IMPLEMENT в GitHub-owned pipeline; если нет — сначала точный contract/user decision gap, без самодельной очереди.
 2. После `ru-description-implement-01` проверить, что full-catalog processing принадлежит GitHub pipeline; если нужен semantic translation runtime, GitHub готовит точный scope для canonical scheduled ChatGPT path.
 3. Ranking and card explanation quality audit — bounded recon top-30.
 4. Russian language availability as ranking factor — recon before implementation.
@@ -49,7 +50,7 @@
 1. Способ покупки — завершено.
 2. Детальная оценка — завершено.
 3. Русские описания — systemic fix следующий.
-4. Duration coverage — diagnosis должен быть корректно сохранён, затем systemic fix.
+4. Duration coverage — source/ownership recon, затем systemic fix.
 5. Качество причин `почему подходит / почему может не подойти`.
 6. Информация о русском языке и её влияние на ranking.
 7. Вторичные функции вроде YouTube — позже.
