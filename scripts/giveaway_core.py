@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 CONTRACT = "CROSS-PLATFORM-GIVEAWAY-V1"
 SCHEMA_VERSION = 1
@@ -24,14 +25,31 @@ CURRENT_PATH = VERSION_ROOT / "current.json"
 AUDIT_PATH = VERSION_ROOT / "audit.jsonl"
 INDEX_PATH = OUTPUT_ROOT / "index.json"
 
+UNVERIFIED_PRECHECK_REASONS = {
+    "PROMOTION_WINDOW_UNKNOWN",
+    "OWNERSHIP_SEMANTICS_UNKNOWN",
+    "KZ_REGION_UNKNOWN",
+    "CONTENT_TYPE_UNKNOWN",
+    "FINAL_PRICE_UNKNOWN",
+    "CLAIM_URL_UNKNOWN",
+    "SOURCE_SCHEMA_FAILURE",
+    "SOURCE_STALE",
+    "SOURCE_VALIDATION_FETCH_FAILED",
+    "SOURCE_ERROR",
+}
+
+
 class SourceError(RuntimeError):
     code = "SOURCE_ERROR"
+
 
 class SourceSchemaError(SourceError):
     code = "SOURCE_SCHEMA_FAILURE"
 
+
 class SourceFreshnessError(SourceError):
     code = "SOURCE_STALE"
+
 
 @dataclass
 class SourceCollection:
@@ -45,8 +63,10 @@ class SourceCollection:
     error_code: str | None = None
     error: str | None = None
 
+
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
+
 
 def iso_utc(value: datetime | None) -> str | None:
     if value is None:
@@ -54,6 +74,7 @@ def iso_utc(value: datetime | None) -> str | None:
     if value.tzinfo is None:
         value = value.replace(tzinfo=timezone.utc)
     return value.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+
 
 def parse_iso(value: Any) -> datetime | None:
     if not isinstance(value, str) or not value.strip():
@@ -68,6 +89,7 @@ def parse_iso(value: Any) -> datetime | None:
     if result.tzinfo is None:
         result = result.replace(tzinfo=timezone.utc)
     return result.astimezone(timezone.utc)
+
 
 def safe_number(value: Any) -> float | None:
     if value is None or isinstance(value, bool):
@@ -86,16 +108,19 @@ def safe_number(value: Any) -> float | None:
     except ValueError:
         return None
 
+
 def normalize_identity_text(value: str) -> str:
     value = unicodedata.normalize("NFKC", value or "").casefold()
     value = re.sub(r"[^\w]+", " ", value, flags=re.UNICODE)
     return " ".join(value.split())
+
 
 def source_offer_key(source_id: str, product_id: str, end_at: str | None, suffix: str | None = None) -> str:
     parts = [source_id, product_id, end_at or "window-unknown"]
     if suffix:
         parts.append(str(suffix))
     return ":".join(parts)
+
 
 def base_candidate(source_id: str, observed_at: datetime) -> dict[str, Any]:
     return {
@@ -131,6 +156,7 @@ def base_candidate(source_id: str, observed_at: datetime) -> dict[str, Any]:
         "classification_confidence": None,
     }
 
+
 def _classified(item: dict[str, Any], status: str, code: str, confidence: str = "high") -> dict[str, Any]:
     result = dict(item)
     result["classification_status"] = status
@@ -138,9 +164,31 @@ def _classified(item: dict[str, Any], status: str, code: str, confidence: str = 
     result["classification_confidence"] = confidence
     return result
 
+
+def _first_party_claim_url(source_id: str, value: Any) -> bool:
+    if not isinstance(value, str) or not value.strip():
+        return False
+    parsed = urlparse(value)
+    if parsed.scheme != "https":
+        return False
+    host = (parsed.hostname or "").casefold()
+    allowed = {
+        "steam": {"store.steampowered.com"},
+        "epic": {"store.epicgames.com"},
+        "gog": {"gog.com", "www.gog.com"},
+    }
+    return host in allowed.get(source_id, set())
+
+
 def classify_candidate(item: dict[str, Any], now: datetime) -> dict[str, Any]:
-    if item.get("precheck_reason"):
-        return _classified(item, "rejected", str(item["precheck_reason"]))
+    precheck = item.get("precheck_reason")
+    if precheck:
+        code = str(precheck)
+        status = "unverified" if code in UNVERIFIED_PRECHECK_REASONS else "rejected"
+        return _classified(item, status, code, "low" if status == "unverified" else "high")
+
+    if not item.get("source_offer_id") or not item.get("source_product_id") or not item.get("title"):
+        return _classified(item, "unverified", "SOURCE_SCHEMA_FAILURE", "low")
 
     content = (item.get("content_type") or "unknown").casefold()
     if content not in {"game", "complete_edition"}:
@@ -179,17 +227,22 @@ def classify_candidate(item: dict[str, Any], now: datetime) -> dict[str, Any]:
         return _classified(item, "rejected", "PROMOTION_EXPIRED")
     if start is None and not item.get("active_now_evidence"):
         return _classified(item, "unverified", "PROMOTION_WINDOW_UNKNOWN", "low")
-    if not item.get("claim_url"):
+    if not _first_party_claim_url(str(item.get("source_id") or ""), item.get("claim_url")):
         return _classified(item, "unverified", "CLAIM_URL_UNKNOWN", "low")
 
     result = dict(item)
     result["classification_status"] = "accepted"
     result["classification_reason_codes"] = [
-        "ACTIVE_WINDOW", "ZERO_PRICE", "PAID_BASE_OR_EXPLICIT_GIVEAWAY",
-        "PERMANENT_GRANT", "FULL_GAME", "KZ_AVAILABLE",
+        "ACTIVE_WINDOW",
+        "ZERO_PRICE",
+        "PAID_BASE_OR_EXPLICIT_GIVEAWAY",
+        "PERMANENT_GRANT",
+        "FULL_GAME",
+        "KZ_AVAILABLE",
     ]
     result["classification_confidence"] = "high"
     return result
+
 
 def safe_cross_store_identity(item: dict[str, Any]) -> tuple[str, str, dict[str, Any]]:
     title = normalize_identity_text(str(item.get("title") or ""))
@@ -202,14 +255,28 @@ def safe_cross_store_identity(item: dict[str, Any]) -> tuple[str, str, dict[str,
     product_id = str(item.get("source_product_id") or item.get("source_offer_id") or "unknown")
     return f"source-v1:{source_id}:{product_id}", "source_only", {"basis": "source_identity_only"}
 
+
 def group_accepted_offers(accepted: list[dict[str, Any]]) -> list[dict[str, Any]]:
     groups: dict[str, dict[str, Any]] = {}
     for offer in accepted:
         key, confidence, evidence = safe_cross_store_identity(offer)
         public = {name: offer.get(name) for name in (
-            "source_id", "source_offer_id", "source_product_id", "storefront", "title", "claim_url",
-            "promotion_start_utc", "promotion_end_utc", "observed_at_utc", "base_price", "final_price",
-            "currency", "discount_percent", "content_type", "region_status", "classification_reason_codes",
+            "source_id",
+            "source_offer_id",
+            "source_product_id",
+            "storefront",
+            "title",
+            "claim_url",
+            "promotion_start_utc",
+            "promotion_end_utc",
+            "observed_at_utc",
+            "base_price",
+            "final_price",
+            "currency",
+            "discount_percent",
+            "content_type",
+            "region_status",
+            "classification_reason_codes",
         )}
         group = groups.setdefault(key, {
             "canonical_game_key": key,
@@ -222,6 +289,7 @@ def group_accepted_offers(accepted: list[dict[str, Any]]) -> list[dict[str, Any]
     for group in groups.values():
         group["offers"].sort(key=lambda x: (str(x.get("source_id")), str(x.get("source_offer_id"))))
     return sorted(groups.values(), key=lambda x: (normalize_identity_text(str(x.get("title") or "")), x["canonical_game_key"]))
+
 
 def source_health_record(collection: SourceCollection, classified: list[dict[str, Any]]) -> dict[str, Any]:
     counts = {"accepted": 0, "rejected": 0, "unverified": 0}
@@ -244,6 +312,7 @@ def source_health_record(collection: SourceCollection, classified: list[dict[str
         "details": collection.details,
     }
 
+
 def build_snapshot(collections: dict[str, SourceCollection], now: datetime) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     classified_all: list[dict[str, Any]] = []
     health: dict[str, Any] = {}
@@ -254,7 +323,11 @@ def build_snapshot(collections: dict[str, SourceCollection], now: datetime) -> t
         health[source_id] = source_health_record(collection, classified)
 
     accepted = [item for item in classified_all if item.get("classification_status") == "accepted"]
-    accepted = [item for item in accepted if parse_iso(item.get("promotion_end_utc")) is not None and now < parse_iso(item.get("promotion_end_utc"))]
+    accepted = [
+        item
+        for item in accepted
+        if parse_iso(item.get("promotion_end_utc")) is not None and now < parse_iso(item.get("promotion_end_utc"))
+    ]
     complete = all(health[source_id]["complete"] for source_id in REQUIRED_SOURCES)
     groups = group_accepted_offers(accepted)
     snapshot = {
@@ -281,9 +354,11 @@ def build_snapshot(collections: dict[str, SourceCollection], now: datetime) -> t
     }
     return snapshot, classified_all
 
+
 def failed_collection(source_id: str, endpoint: str, now: datetime, exc: Exception) -> SourceCollection:
     code = exc.code if isinstance(exc, SourceError) else "SOURCE_ERROR"
     return SourceCollection(source_id, [], False, "failed", endpoint, iso_utc(now) or "", {}, code, str(exc))
+
 
 def write_snapshot(snapshot: dict[str, Any], audit: list[dict[str, Any]]) -> None:
     VERSION_ROOT.mkdir(parents=True, exist_ok=True)
@@ -306,6 +381,7 @@ def write_snapshot(snapshot: dict[str, Any], audit: list[dict[str, Any]]) -> Non
     }
     INDEX_PATH.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+
 def validate_existing_artifact(require_complete: bool) -> int:
     if not CURRENT_PATH.exists() or not INDEX_PATH.exists():
         return 2
@@ -318,6 +394,13 @@ def validate_existing_artifact(require_complete: bool) -> int:
     fresh_until = parse_iso(snapshot.get("fresh_until_utc"))
     if generated is None or fresh_until is None or fresh_until <= generated:
         return 2
+    if fresh_until <= utc_now():
+        return 4
+    for game in snapshot.get("games") or []:
+        for offer in game.get("offers") or []:
+            end = parse_iso(offer.get("promotion_end_utc"))
+            if end is None or end <= generated:
+                return 2
     if require_complete and snapshot.get("snapshot_status") != "complete":
         return 3
     return 0
