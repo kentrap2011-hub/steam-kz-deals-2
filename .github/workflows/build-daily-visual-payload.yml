@@ -17,6 +17,9 @@ on:
       - "scripts/card_explanation_policy.py"
       - "scripts/test_card_explanation_policy.py"
       - "scripts/validate_card_explanations.py"
+      - "scripts/giveaway_visual_handoff.py"
+      - "scripts/test_giveaway_visual_handoff.py"
+      - "scripts/validate_giveaway_visual_payload.py"
       - "scripts/duration_enrichment.py"
       - "scripts/test_duration_enrichment.py"
       - "scripts/validate_duration_enrichment_contract.py"
@@ -43,7 +46,11 @@ on:
       - "config/taste_result_contract.json"
       - "config/taste_cache_entry_contract.json"
       - "data/cache/duration_estimates.json"
+      - "data/production/giveaways/v1/current.json"
       - "web/app.js"
+      - "web/giveaway-ui.js"
+      - "web/giveaway-ui.test.js"
+      - "web/giveaway-ui.css"
       - "web/package-deal-ui.js"
       - "web/index.html"
       - ".github/workflows/build-daily-visual-payload.yml"
@@ -100,6 +107,12 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/test_card_explanation_policy.py
+
+      - name: Validate giveaway visual handoff
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/test_giveaway_visual_handoff.py
 
       - name: Check IGDB duration provisioning and connectivity
         id: duration_connectivity
@@ -226,6 +239,13 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/validate_card_explanations.py data/production/visual/current.json 30
+
+      - name: Validate generated giveaway visual field
+        if: steps.build.outputs.built == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_giveaway_visual_payload.py data/production/visual/current.json
 
       - name: Require meaningful Russian descriptions before canonical commit
         if: steps.build.outputs.built == 'true'
