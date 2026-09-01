@@ -30,12 +30,12 @@
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
 | `ЧАТ 1` | Русские описания | Canonical GitHub-owned translation contract with constrained scheduled ChatGPT fallback | `WORKER_TASK_RU_TRANSLATION_CONTRACT_01.md` | `reviews/worker_reports/ru-translation-contract-01.md` | `prepared_for_new_chat` |
-| `ЧАТ 2` | Длительность | Implement GitHub-direct IGDB duration collection/cache/final-builder path; stop cleanly if credentials absent | `WORKER_TASK_DURATION_IGDB_IMPLEMENT_01.md` | `reviews/worker_reports/duration-igdb-implement-01.md` | `prepared_for_new_chat` |
+| `ЧАТ 2` | Длительность | Implement GitHub-direct IGDB duration collection/cache/final-builder path; stop cleanly if credentials absent | `WORKER_TASK_DURATION_IGDB_IMPLEMENT_01.md` | `reviews/worker_reports/duration-igdb-implement-01.md` | `active_in_existing_chat` |
 
 ## Worker chat lifecycle
 
 - Old `ЧАТ 1 — Русские описания` reached maximum context; report saved; may be deleted. Slot `ЧАТ 1` is reused by a fresh translation-contract chat.
-- Old `ЧАТ 2 — Длительность` completed the contract task and may be deleted. Slot `ЧАТ 2` is reused by a fresh implementation chat.
+- `ЧАТ 2 — Длительность`: implementation task was sent to the existing chat rather than a fresh chat. This is acceptable; the task re-reads canonical GitHub state. Do **not** delete it mid-task. Switch to a fresh chat only if it reaches context limit or becomes confused/stale.
 
 ## Отложено / superseded
 
