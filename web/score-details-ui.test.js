@@ -35,7 +35,7 @@ assert.match(html,/data-score-section="personal"[^]*Подходит тебе[^]
 assert.match(html,/data-score-section="purchase"[^]*Выгодность покупки[^]*22\/40/);
 for(const row of [...score.personal_components,...score.purchase_components])assert.match(html,new RegExp(`data-score-component="${row.id}"`),`missing visible component ${row.id}`);
 assert.equal((html.match(/class="score-row"/g)||[]).length,8,'all previously visible score components must remain present exactly once');
-assert.match(text,/Вкус сильное совпадение · по старым данным \+42\/50/);
+assert.match(text,/Совпадение с твоими вкусами сильное совпадение · по старым данным \+42\/50/);
 assert.match(text,/Вишлист есть в желаемом \+4\/4/);
 assert.match(text,/Длительность 42 ч · заметно вне привычной длительности \+1\/3/);
 assert.match(text,/Выгодность считается по набору Steam · преимущество \+4 балла против покупки отдельно/);
@@ -53,21 +53,47 @@ const compactDecoratedBoxes=sectionCount;
 assert.equal(sectionCount,2);
 assert.ok(compactDecoratedBoxes<=legacyDecoratedBoxes*0.4,'bordered/decorated containers must be substantially reduced versus legacy group + pill structure');
 
+const normalizedScore={
+  ...score,
+  precision:{code:'normalized_taste_factors',label:'Детальная оценка по факторам',is_coarse_legacy:false},
+  personal_components:score.personal_components.map(row=>row.id==='taste'?{...row,points:43.2,value:'детальная нормализованная оценка'}:row),
+};
+const normalizedText=renderDetailedScoreHtml(normalizedScore).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+assert.match(normalizedText,/Совпадение с твоими вкусами ·? ?оценка по твоим игровым предпочтениям/,'normalized taste must be explained in plain language');
+assert.match(normalizedText,/Данные вкуса: подробная оценка по твоим предпочтениям/);
+assert.doesNotMatch(normalizedText,/по детальному профилю вкуса|детальная нормализованная оценка|Детальная оценка по факторам/,'internal taste terminology must not be visible');
+
+const unknownDurationScore={
+  ...score,
+  personal_score:46.5,
+  total_score:68.5,
+  personal_components:score.personal_components.map(row=>row.id==='duration'?{...row,points:2,max_points:3,value:'unknown'}:row),
+};
+const unknownDurationText=renderDetailedScoreHtml(unknownDurationScore).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+assert.match(unknownDurationText,/Длительность нет подтверждённых данных; применяется стандартный балл для неизвестной длительности \+2\/3/,'unknown duration must explain why the canonical default score is still positive');
+assert.doesNotMatch(unknownDurationText,/Длительность ·? ?длительность не подтверждена \+2\/3/,'old contradictory wording must be gone');
+assert.match(unknownDurationText,/68,5\/100/,'UI copy change must not alter total score');
+assert.match(unknownDurationText,/46,5\/60/,'UI copy change must not alter personal score');
+
 const attrs={'aria-expanded':'false'};
 const cue={textContent:'подробнее'};
 const button={title:'',setAttribute(k,v){attrs[k]=v;},getAttribute(k){return attrs[k];},querySelector(sel){return sel==='[data-score-cue]'?cue:null;}};
 const panel={hidden:true};
 const wrapper={querySelector(sel){if(sel==='[data-score-details-toggle]')return button;if(sel==='[data-score-details-panel]')return panel;return null;}};
-assert.equal(setScoreDetailsExpanded(wrapper,true),true);
-assert.equal(panel.hidden,false);
-assert.equal(attrs['aria-expanded'],'true');
-assert.equal(cue.textContent,'свернуть');
-assert.equal(setScoreDetailsExpanded(wrapper,false),true);
-assert.equal(panel.hidden,true);
-assert.equal(attrs['aria-expanded'],'false');
-assert.equal(cue.textContent,'подробнее');
+function assertDisclosure(expanded){
+  assert.equal(panel.hidden,!expanded);
+  assert.equal(attrs['aria-expanded'],String(expanded));
+  assert.equal(cue.textContent,expanded?'свернуть':'подробнее');
+}
+assertDisclosure(false);
+assert.equal(toggleScoreDetails(wrapper),true);assertDisclosure(true);
+assert.equal(toggleScoreDetails(wrapper),true);assertDisclosure(false);
+assert.equal(toggleScoreDetails(wrapper),true);assertDisclosure(true);
+assert.equal(toggleScoreDetails(wrapper),true);assertDisclosure(false);
+assert.equal(toggleScoreDetails(wrapper),true);assertDisclosure(true);
 
 const css=fs.readFileSync(path.join(__dirname,'score-details.css'),'utf8');
+assert.match(css,/\.score-details-compact\[hidden\]\{display:none!important\}/,'hidden attribute must win over the flex display rule in real browsers');
 assert.match(css,/\.score-row\{[^}]*grid-template-columns:minmax\(0,1fr\) auto/,'component rows must use compact two-column layout');
 assert.match(css,/\.score-row\{[^}]*padding:4px 0/,'base score rows must stay compact');
 assert.match(css,/@media\(max-width:430px\)[^]*\.score-row\{padding:3px 0\}/,'mobile score rows must tighten vertical padding');
