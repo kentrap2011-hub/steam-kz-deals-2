@@ -63,16 +63,23 @@ def main():
     ownership = load_json("config/execution_ownership_contract.json")
     daily = load_json("config/daily_execution_contract.json")
     ranking = load_json("config/final_ranking_policy.json")
+    cache_doc = load_json("data/cache/duration_estimates.json")
+    commercial_guard = (ROOT / "COMMERCIALIZATION_GUARD.md").read_text(encoding="utf-8")
 
     require(contract.get("contract") == "DURATION-ENRICHMENT-V1", "unexpected contract id")
     require(contract.get("version") == "1.0", "unexpected contract version")
     require(contract.get("status") == "canonical", "contract must be canonical")
-    require(contract.get("implementation_status") == "provisioning_required", "production must remain gated")
+    require(
+        contract.get("implementation_status") == "implemented_provisioning_required",
+        "duration implementation must remain provisioning-gated",
+    )
 
     bindings = contract.get("bindings") or {}
     require(bindings.get("ownership_contract") == "config/execution_ownership_contract.json", "ownership binding mismatch")
     require(bindings.get("daily_execution_contract") == "config/daily_execution_contract.json", "daily binding mismatch")
     require(bindings.get("final_ranking_policy") == "config/final_ranking_policy.json", "ranking binding mismatch")
+    require(bindings.get("commercialization_guard") == "COMMERCIALIZATION_GUARD.md", "commercialization guard binding mismatch")
+    require("personal / non-commercial" in commercial_guard, "commercialization guard must declare current non-commercial status")
 
     require(ownership.get("contract") == "PRODUCTION-EXECUTION-OWNERSHIP-V1", "unexpected ownership contract")
     control = set((ownership.get("github_control_plane") or {}).get("responsibilities") or [])
@@ -109,6 +116,7 @@ def main():
     require(owner.get("interactive_chat_primary_collection_allowed") is False, "interactive ChatGPT primary collection forbidden")
     require(owner.get("chat_owned_queue_allowed") is False, "chat-owned queue forbidden")
     require(owner.get("daily_item_quota_allowed") is False, "duration daily item quota forbidden")
+    require(owner.get("separate_recurring_chatgpt_stage_allowed") is False, "separate recurring ChatGPT duration stage forbidden")
 
     identity = contract.get("identity") or {}
     mapping = identity.get("igdb_mapping") or {}
@@ -124,6 +132,10 @@ def main():
     require(access.get("transport") == "https", "IGDB transport must be HTTPS")
     require(access.get("authentication") == "twitch_oauth2_client_credentials", "unexpected OAuth mode")
     require(access.get("credentials_must_never_be_committed") is True, "credentials must never be committed")
+    require(
+        access.get("github_secret_names") == ["IGDB_CLIENT_ID", "IGDB_CLIENT_SECRET"],
+        "canonical GitHub secret names mismatch",
+    )
     require(limits.get("requests_per_second") == 4, "IGDB rate limit must be 4 requests/second")
     require(limits.get("max_concurrent_requests") == 8, "IGDB max concurrent requests must be 8")
     require(limits.get("limits_are_production_quota") is False, "provider limits must not become production quotas")
@@ -142,7 +154,10 @@ def main():
 
     cache = contract.get("canonical_cache") or {}
     require(cache.get("path") == "data/cache/duration_estimates.json", "unexpected canonical cache path")
-    require(cache.get("population_in_this_contract_task") is False, "contract task must not populate cache")
+    require(cache.get("population_in_contract_task") is False, "contract task must not populate cache")
+    require(cache_doc.get("schema_version") == cache.get("container_schema_version"), "cache container schema mismatch")
+    require(cache_doc.get("contract") == contract.get("contract"), "cache contract binding mismatch")
+    require(isinstance(cache_doc.get("entries"), dict), "cache entries must be an object")
     schema = cache.get("entry_schema") or {}
     durable = set(schema.get("durable_unresolved_statuses") or [])
     transient = set(schema.get("transient_error_statuses") or [])
@@ -174,6 +189,7 @@ def main():
     require(freshness.get("refetch_all_known_rows_every_nightly_cycle") is False, "nightly full refetch forbidden")
     require(freshness.get("confirmed_soft_stale_after_days") == 180, "confirmed stale policy mismatch")
     require(freshness.get("durable_unresolved_retry_after_days") == 30, "unresolved retry freshness mismatch")
+    require(freshness.get("transient_retry_after_minutes") == 60, "transient retry freshness mismatch")
 
     handoff = contract.get("final_handoff") or {}
     require(
@@ -200,25 +216,53 @@ def main():
     require(migration.get("deprecated_identity_field_forbidden") == "category", "migration guard missing deprecated field")
     require(migration.get("hardcoded_legacy_steam_enum_forbidden") is True, "legacy enum hardcoding not forbidden")
 
+    implementation = contract.get("implementation") or {}
+    expected_paths = {
+        "collector": "scripts/duration_enrichment.py",
+        "regression_test": "scripts/test_duration_enrichment.py",
+        "contract_validator": "scripts/validate_duration_enrichment_contract.py",
+        "final_consumer": "scripts/build_final_visual_payload.py",
+        "workflow": ".github/workflows/build-daily-visual-payload.yml",
+        "canonical_cache": "data/cache/duration_estimates.json",
+        "scope_input": "data/production/pre_ai/chatgpt_purchase_context.jsonl",
+    }
+    for key, value in expected_paths.items():
+        require(implementation.get(key) == value, f"implementation path mismatch for {key}")
+        require((ROOT / value).exists(), f"implementation path does not exist: {value}")
+    require(implementation.get("scope_field") == "semantic_condition.base_appids", "duration scope field mismatch")
+    require(implementation.get("structured_multi_app_aggregation_defined") is False, "multi-app duration aggregation must remain undefined")
+
     gates = contract.get("provisioning_gates") or {}
     require(gates.get("production_collection_enabled") is False, "production collection enabled before provisioning")
-    require((gates.get("credentials") or {}).get("status") == "provisioning_required", "credential gate must be unresolved")
-    require((gates.get("licensing_attribution") or {}).get("status") == "provisioning_required", "licensing gate must be unresolved")
+    credentials = gates.get("credentials") or {}
+    require(credentials.get("status") == "provisioning_required", "credential gate must remain unresolved")
+    require(credentials.get("github_secret_names") == ["IGDB_CLIENT_ID", "IGDB_CLIENT_SECRET"], "credential gate secret names mismatch")
+    presence = credentials.get("last_presence_check") or {}
+    require(presence.get("result") == "missing_credentials", "latest GitHub Actions credential presence check must be recorded")
+    require(isinstance(presence.get("github_actions_run_id"), int), "credential presence check must bind a workflow run id")
+
+    licensing = gates.get("licensing_attribution") or {}
     require(
-        (gates.get("github_actions_connectivity") or {}).get("status") == "implementation_acceptance_required",
-        "GitHub Actions connectivity gate missing",
+        licensing.get("status") == "satisfied_for_current_personal_noncommercial_use",
+        "current personal/non-commercial licensing gate must be recorded as satisfied",
     )
+    require(licensing.get("project_status_source") == "COMMERCIALIZATION_GUARD.md", "licensing gate must bind commercialization guard")
+    require(licensing.get("future_commercialization_requires_new_review") is True, "future commercialization re-review guard missing")
+
+    connectivity = gates.get("github_actions_connectivity") or {}
+    require(connectivity.get("status") == "implementation_acceptance_required", "GitHub Actions connectivity gate missing")
+    require(connectivity.get("blocked_by") == "credentials", "connectivity gate must be blocked by credentials")
 
     boundaries = contract.get("implementation_boundaries") or {}
     for key in (
-        "api_client_implemented_by_this_contract",
-        "provider_calls_performed_by_this_contract",
-        "cache_population_performed_by_this_contract",
-        "final_builder_integration_performed_by_this_contract",
-        "scoring_math_changed_by_this_contract",
-        "unknown_2_of_3_changed_by_this_contract",
+        "api_client_implemented_by_contract_task",
+        "provider_calls_performed_by_contract_task",
+        "cache_population_performed_by_contract_task",
+        "final_builder_integration_performed_by_contract_task",
+        "scoring_math_changed_by_duration_implementation",
+        "unknown_2_of_3_changed_by_duration_implementation",
     ):
-        require(boundaries.get(key) is False, f"contract task crossed implementation boundary: {key}")
+        require(boundaries.get(key) is False, f"duration boundary violated: {key}")
 
     synthetic = {
         "provider": "igdb",
@@ -241,12 +285,16 @@ def main():
     print(json.dumps({
         "status": "PASS",
         "contract": contract["contract"],
+        "implementation_status": contract["implementation_status"],
         "provider": authority["primary_provider"],
         "executor": owner["collection_executor"],
         "cache_path": cache["path"],
         "selected_metric": norm["selected_metric"],
         "synthetic_normalized_hours": 10.0,
         "production_collection_enabled": gates["production_collection_enabled"],
+        "credentials_status": credentials["status"],
+        "licensing_status": licensing["status"],
+        "connectivity_status": connectivity["status"],
         "scoring_unknown_points": duration_cfg["band_points"]["unknown"],
     }, ensure_ascii=False, indent=2))
     print("DURATION_ENRICHMENT_CONTRACT_VALIDATION=PASS")
