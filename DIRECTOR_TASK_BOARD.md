@@ -25,6 +25,7 @@
 17. User decision 2026-09-01: when translation is required, prefer ChatGPT semantic translation over generic machine-translation APIs.
 18. Current project commercial status: personal/non-commercial. Before any future monetization read `COMMERCIALIZATION_GUARD.md` and re-audit provider rights/terms.
 19. Do not leave a worker slot idle solely because an unrelated track is waiting on user provisioning. Durable blocked state stays in GitHub; the slot may be reused for an independent task and later returned to the blocked track in a fresh chat.
+20. User priority override 2026-09-01: **Steam free-to-keep giveaways are the highest-priority next product task once either current worker slot becomes free.** They are time-limited and currently not separately visible, so delaying this work risks the user missing active giveaways. Start with bounded RECON; do not let explanation/ranking polish or secondary features take the next free slot first.
 
 ## Активно / подготовлено сейчас
 
@@ -38,6 +39,7 @@
 - `ЧАТ 1 — Русские описания`: package/UI blocker is complete. Canonical pre-AI workflow now publishes real translation scope successfully (155 pending translations in the verified run). Immediate next step is one real scheduled-runtime round-trip acceptance. Keep the same chat.
 - Old duration Chat 2 state remains durable and blocked only on user-provisioned `IGDB_CLIENT_ID` / `IGDB_CLIENT_SECRET`; it does not occupy an active slot.
 - `ЧАТ 2 — Объяснения карточек`: independent read-only audit, safe to run in parallel with Chat 1.
+- **Next freed worker slot:** assign Steam `free-to-keep` giveaway RECON from the high-priority backlog item before starting explanation fixes, ranking polish, Russian-language ranking, YouTube, or other secondary work.
 
 ## Последние завершённые worker-этапы
 
@@ -50,6 +52,7 @@
 
 1. `ЧАТ 1`: perform `ru-translation-runtime-acceptance-01` on exactly one deterministic current queue record through the existing scheduled ChatGPT runtime.
 2. `ЧАТ 2`: continue explanation-quality audit in parallel.
-3. User provisions IGDB secrets when convenient; then resume duration connectivity acceptance in a fresh free slot.
-4. If translation acceptance passes, let GitHub/scheduled runtime own the remaining production translation scope; do not manually process the 155 records in interactive chat.
-5. After data-quality paths are live/rebuilt — user spot-check of visible cards.
+3. **Первый освободившийся worker-слот:** Steam free-to-keep giveaways — bounded source/production-route RECON, затем отдельная реализация; отдельная видимость и регулярная GitHub-owned проверка важнее последующей полировки карточек.
+4. User provisions IGDB secrets when convenient; then resume duration connectivity acceptance in a fresh free slot, unless a currently active time-limited giveaway incident requires the slot first.
+5. If translation acceptance passes, let GitHub/scheduled runtime own the remaining production translation scope; do not manually process the queue in interactive chat.
+6. After the giveaway path and current data-quality paths are live/rebuilt — user spot-check of visible cards.
