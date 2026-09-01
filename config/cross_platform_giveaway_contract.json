@@ -1,0 +1,188 @@
+{
+  "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
+  "status": "canonical",
+  "schema_version": 1,
+  "country_code": "KZ",
+  "purpose": "Define the source-agnostic Tier-1 claim-to-keep giveaway data plane for Kazakhstan without changing paid ranking/Taste semantics.",
+  "ownership": {
+    "control_plane": "GitHub repository and GitHub Actions",
+    "canonical_writer": "scripts/giveaway_production.py",
+    "production_workflow": ".github/workflows/steam-test.yml",
+    "writer_rule": "Only the canonical giveaway producer may write data/production/giveaways/**. The existing Steam collector remains the sole writer of data/production/freebies.tsv and data/production/freebies_index.json.",
+    "steam_candidate_dependency": "The giveaway producer reads the existing Steam KZ freebies artifacts only as candidate discovery and never rewrites them.",
+    "scheduled_chatgpt_role": "none",
+    "new_recurring_chatgpt_schedule": false
+  },
+  "artifact_family": {
+    "index": "data/production/giveaways/index.json",
+    "current": "data/production/giveaways/v1/current.json",
+    "audit": "data/production/giveaways/v1/audit.jsonl",
+    "version_directory": "data/production/giveaways/v1/",
+    "single_writer": "scripts/giveaway_production.py"
+  },
+  "required_sources": [
+    "steam",
+    "epic",
+    "gog"
+  ],
+  "cadence": {
+    "owner": "existing GitHub-owned daily Steam KZ production workflow",
+    "new_schedule_added": false,
+    "snapshot_freshness_hours": 30,
+    "steam_candidate_max_age_hours": 36,
+    "rule": "A consumer must not treat a snapshot as fresh after fresh_until_utc. Offer promotion_end_utc remains an earlier hard expiry when applicable."
+  },
+  "normalized_offer_required_fields": [
+    "contract",
+    "schema_version",
+    "source_id",
+    "storefront",
+    "source_kind",
+    "source_offer_id",
+    "source_product_id",
+    "title",
+    "claim_url",
+    "promotion_start_utc",
+    "promotion_end_utc",
+    "observed_at_utc",
+    "promotion_type",
+    "ownership_semantics",
+    "active_now_evidence",
+    "explicit_giveaway_evidence",
+    "base_price",
+    "final_price",
+    "currency",
+    "discount_percent",
+    "region_status",
+    "region_evidence",
+    "content_type",
+    "requires_subscription",
+    "access_expires_after_claim",
+    "identity_publishers",
+    "source_provenance",
+    "classification_status",
+    "classification_reason_codes",
+    "classification_confidence"
+  ],
+  "accepted_offer_contract": {
+    "promotion_type": "claim_to_keep",
+    "ownership_semantics": "permanent_after_claim",
+    "allowed_content_type": [
+      "game",
+      "complete_edition"
+    ],
+    "region_status": "available",
+    "requires_subscription": false,
+    "access_expires_after_claim": false,
+    "final_price": 0,
+    "price_rule": "base_price > 0 OR explicit_giveaway_evidence == true",
+    "temporal_rule": "promotion_end_utc must be known and generated_at_utc must be before it; promotion_start_utc may be null only when current first-party source evidence independently proves the offer is active now",
+    "claim_url_rule": "direct first-party HTTPS store/claim URL is mandatory"
+  },
+  "classification_reason_codes": {
+    "accepted": [
+      "ACTIVE_WINDOW",
+      "ZERO_PRICE",
+      "PAID_BASE_OR_EXPLICIT_GIVEAWAY",
+      "PERMANENT_GRANT",
+      "FULL_GAME",
+      "KZ_AVAILABLE"
+    ],
+    "rejected": [
+      "PERMANENT_F2P",
+      "ACCESS_ONLY_FREE_WEEKEND",
+      "NON_GAME_CONTENT",
+      "REQUIRES_SUBSCRIPTION",
+      "KZ_UNAVAILABLE",
+      "NOT_ZERO_PRICE",
+      "UPCOMING_NOT_ACTIVE",
+      "PROMOTION_EXPIRED",
+      "MYSTERY_PLACEHOLDER"
+    ],
+    "unverified": [
+      "PROMOTION_WINDOW_UNKNOWN",
+      "OWNERSHIP_SEMANTICS_UNKNOWN",
+      "KZ_REGION_UNKNOWN",
+      "CONTENT_TYPE_UNKNOWN",
+      "FINAL_PRICE_UNKNOWN",
+      "CLAIM_URL_UNKNOWN"
+    ],
+    "source_health": [
+      "SOURCE_SCHEMA_FAILURE",
+      "SOURCE_STALE",
+      "SOURCE_VALIDATION_FETCH_FAILED",
+      "SOURCE_ERROR"
+    ]
+  },
+  "source_contracts": {
+    "steam": {
+      "candidate_discovery": [
+        "data/production/freebies.tsv",
+        "data/production/freebies_index.json",
+        "data/production/manifest.json"
+      ],
+      "full_crawl_added": false,
+      "first_party_validation": [
+        "Steam appdetails requested with cc=KZ",
+        "Steam app page requested with cc=KZ"
+      ],
+      "acceptance_extra": "0 price + positive discount is candidate-only. Publication additionally requires full-game type, KZ availability, paid base or explicit giveaway evidence, explicit permanent-claim evidence and a known future promotion deadline.",
+      "fail_closed": true
+    },
+    "epic": {
+      "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
+      "country_parameters": {
+        "country": "KZ",
+        "allowCountries": "KZ",
+        "locale": "en-US"
+      },
+      "api_stability": "undocumented_storefront_backend",
+      "strict_schema_guard": true,
+      "accepted_offer_type": "BASE_GAME",
+      "reject_upcoming_only": true,
+      "reject_mystery_placeholder": true,
+      "fail_closed": true
+    },
+    "gog": {
+      "endpoint": "https://catalog.gog.com/v1/catalog",
+      "country_parameter": "countryCode=KZ",
+      "candidate_filters": [
+        "discounted=eq:true",
+        "price=between:0,0",
+        "productType=in:game,pack"
+      ],
+      "candidate_page_limit": 5,
+      "temporal_validation": "first-party GOG product page must expose a parseable Offer ends on deadline for an accepted zero-price paid-base offer",
+      "api_stability": "undocumented_storefront_backend",
+      "strict_schema_guard": true,
+      "fail_closed": true
+    }
+  },
+  "dedup": {
+    "raw_identity": "source_offer_id is authoritative at normalized offer layer",
+    "title_only_merge_forbidden": true,
+    "cross_store_grouping": "Only exact normalized title plus exact normalized publisher-set equality may auto-group in V1; otherwise preserve source-specific game identity.",
+    "offer_preservation": "Grouping must retain every store-specific source_offer_id, deadline and claim URL."
+  },
+  "completeness": {
+    "overall_complete_rule": "snapshot_status=complete only when Steam, Epic and GOG source_health.complete are all true for the current run",
+    "required_source_failure_rule": "Persist an explicit incomplete snapshot; never reuse stale rows as current acceptance truth.",
+    "expired_offer_rule": "An offer whose promotion_end_utc is at or before generated_at_utc cannot appear in accepted games even if a stale source response still contains it."
+  },
+  "explicit_exclusions": [
+    "Amazon Luna / Prime subscription entitlements",
+    "itch.io generic free downloads",
+    "Fanatical/Humble finite-key/event-specific giveaways",
+    "publisher-direct irregular campaigns",
+    "aggregator-only accepted offers",
+    "demos/prologues/trials/betas/playtests/free weekends",
+    "DLC/add-ons/soundtracks/artbooks/tools/assets",
+    "permanent free-to-play"
+  ],
+  "ranking_boundary": {
+    "giveaways_are_separate_from_paid_monthly_choice": true,
+    "zero_price_must_not_improve_taste_fit": true,
+    "paid_ranking_modified": false,
+    "cross_store_taste_mapping_defined": false
+  }
+}
