@@ -1,0 +1,60 @@
+name: One-shot Russian translation visual patch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/patch-russian-translation-visual-once.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: patch-russian-translation-visual-once
+  cancel-in-progress: false
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Apply exact cache-aware visual patch
+        run: python scripts/patch_russian_translation_visual_once.py
+
+      - name: Run translation regressions
+        run: |
+          set -euo pipefail
+          python scripts/validate_russian_description_translation_contract.py
+          python scripts/test_russian_description_translation_runtime.py
+          python -m py_compile scripts/build_visual_feed_v2.py
+
+      - name: Commit visual resolver integration
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add scripts/build_visual_feed_v2.py
+          git diff --cached --check
+          git commit -m "Use validated Russian translation cache in visual resolver"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
