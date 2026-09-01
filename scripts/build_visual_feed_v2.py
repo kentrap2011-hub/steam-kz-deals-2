@@ -6,6 +6,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 
+from card_explanation_policy import positive_reasons
 from russian_description_quality import classify_description
 from russian_description_translation_runtime import (
     load_translation_cache,
@@ -415,13 +416,7 @@ def main():
         projection = projection if isinstance(projection, dict) else {}
         tags = projection.get('fit_tags') or []
         taste_description = projection.get('short_description') or ''
-        reasons = []
-        for ev in (taste_entry.get('positive_evidence') or [])[:2]:
-            translated = reason_ru(ev, tags, taste_description)
-            if translated not in reasons:
-                reasons.append(translated)
-        if not reasons:
-            reasons.append(reason_ru(None, tags, taste_description))
+        reasons, why_fit_provenance = positive_reasons(taste_entry.get('positive_evidence') or [])
 
         base_facts = [facts.get(appid) or {} for appid in base_appids]
         statuses = [x.get('windows_status') for x in base_facts]
@@ -460,6 +455,11 @@ def main():
             'description_translation_source_version': description_resolution.get('description_translation_source_version'),
             'gameplay_points': [],
             'why_fit': reasons[:2],
+            'why_fit_status': {
+                'has_described_fit': bool(reasons),
+                'grounding': 'grounded' if reasons else 'insufficient_evidence',
+            },
+            'why_fit_provenance': why_fit_provenance[:2],
             'risks': risks,
             'practical': practical,
             'offers': offers,
