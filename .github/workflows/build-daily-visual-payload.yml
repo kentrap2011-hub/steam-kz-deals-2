@@ -14,6 +14,9 @@ on:
       - "scripts/build_final_visual_payload.py"
       - "scripts/build_daily_visual_payload.py"
       - "scripts/build_visual_feed_v2.py"
+      - "scripts/duration_enrichment.py"
+      - "scripts/test_duration_enrichment.py"
+      - "scripts/validate_duration_enrichment_contract.py"
       - "scripts/russian_description_quality.py"
       - "scripts/test_russian_description_quality.py"
       - "scripts/validate_russian_descriptions.py"
@@ -30,11 +33,13 @@ on:
       - "scripts/ingest_taste_results.py"
       - "scripts/taste_cache_common.py"
       - "scripts/build_ranking_lookup.py"
+      - "config/duration_enrichment_contract.json"
       - "config/final_ranking_policy.json"
       - "config/fixed_package_purchase_option_contract.json"
       - "config/purchase_equivalence_overrides.json"
       - "config/taste_result_contract.json"
       - "config/taste_cache_entry_contract.json"
+      - "data/cache/duration_estimates.json"
       - "web/app.js"
       - "web/package-deal-ui.js"
       - "web/index.html"
@@ -80,6 +85,13 @@ jobs:
           set -euo pipefail
           python scripts/validate_priority_ranking.py
 
+      - name: Validate canonical duration enrichment contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_duration_enrichment_contract.py
+          python scripts/test_duration_enrichment.py
+
       - name: Validate fresh commercial refresh and fixed package ranking value
         shell: bash
         run: |
@@ -123,6 +135,59 @@ jobs:
           PY
           echo "ready=$(cat /tmp/history-ready)" >> "$GITHUB_OUTPUT"
 
+      - name: Check IGDB duration provisioning and connectivity
+        id: duration_connectivity
+        if: steps.history.outputs.ready == 'true'
+        env:
+          IGDB_CLIENT_ID: ${{ secrets.IGDB_CLIENT_ID }}
+          IGDB_CLIENT_SECRET: ${{ secrets.IGDB_CLIENT_SECRET }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          production_enabled=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          contract = json.loads(Path('config/duration_enrichment_contract.json').read_text(encoding='utf-8'))
+          print('true' if (contract.get('provisioning_gates') or {}).get('production_collection_enabled') else 'false')
+          PY
+          )
+          echo "production_enabled=$production_enabled" >> "$GITHUB_OUTPUT"
+
+          if [ -z "${IGDB_CLIENT_ID:-}" ] || [ -z "${IGDB_CLIENT_SECRET:-}" ]; then
+            echo "DURATION_IGDB_PROVISIONING=missing_credentials expected_secrets=IGDB_CLIENT_ID,IGDB_CLIENT_SECRET"
+            echo "status=missing_credentials" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$production_enabled" = "true" ]; then
+            echo "DURATION_IGDB_PROVISIONING=credentials_present production_collection_enabled=true"
+            echo "status=ready" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          python scripts/duration_enrichment.py --connectivity-only | tee /tmp/duration-connectivity.log
+          grep -q 'DURATION_IGDB_CONNECTIVITY=PASS' /tmp/duration-connectivity.log
+          echo "status=connectivity_pass" >> "$GITHUB_OUTPUT"
+
+      - name: Refresh missing or stale IGDB duration cache
+        id: duration
+        if: >
+          steps.history.outputs.ready == 'true' &&
+          steps.duration_connectivity.outputs.production_enabled == 'true' &&
+          steps.duration_connectivity.outputs.status != 'missing_credentials'
+        env:
+          IGDB_CLIENT_ID: ${{ secrets.IGDB_CLIENT_ID }}
+          IGDB_CLIENT_SECRET: ${{ secrets.IGDB_CLIENT_SECRET }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/duration_enrichment.py | tee /tmp/duration-enrichment.log
+          if grep -q 'DURATION_CACHE_CHANGED=true' /tmp/duration-enrichment.log; then
+            echo "cache_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "cache_changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Build and refresh canonical visual payload once
         id: build
         if: steps.history.outputs.ready == 'true'
@@ -132,8 +197,8 @@ jobs:
         run: |
           set -euo pipefail
           # Semantic Taste may remain on the accepted snapshot while deterministic
-          # commercial state is refreshed from the current GitHub-owned store/history
-          # source before package comparison and the canonical final ranking.
+          # commercial state and duration cache are refreshed by GitHub-owned sources
+          # before package comparison and the canonical final ranking.
           export FORCE_VISUAL_BUILD=1
           python scripts/build_final_visual_payload.py | tee /tmp/visual-build.log
           # StoreBrowse can return stale screenshot metadata for storefront aliases
@@ -209,6 +274,8 @@ jobs:
                   'achievement_quality': practical.get('achievement_quality'),
                   'achievement_quality_evidence': practical.get('achievement_quality_evidence'),
                   'estimated_duration_hours': game.get('estimated_duration_hours'),
+                  'duration_estimate_source': game.get('duration_estimate_source'),
+                  'duration_estimate_provenance': game.get('duration_estimate_provenance'),
                   'duration_preference_band': game.get('duration_preference_band'),
                   'wishlist': bool(game.get('wishlist')),
                   'current_price_rub': game.get('current_price_rub'),
@@ -270,16 +337,16 @@ jobs:
           set -euo pipefail
           python scripts/build_ranking_lookup.py
 
-      - name: Commit canonical payload and review export
-        if: steps.build.outputs.built == 'true'
+      - name: Commit canonical duration cache, payload and review export
+        if: steps.build.outputs.built == 'true' || steps.duration.outputs.cache_changed == 'true'
         run: |
           set -euo pipefail
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git add -A data/production/visual/current.json data/production/visual/ranking_review.jsonl data/production/visual/ranking_lookup
+          git add -A data/cache/duration_estimates.json data/production/visual/current.json data/production/visual/ranking_review.jsonl data/production/visual/ranking_lookup
           git diff --cached --check
           if git diff --cached --quiet; then
-            echo "No visual payload or review changes"
+            echo "No duration cache, visual payload or review changes"
             exit 0
           fi
           git commit -m "Refresh daily visual payload"
