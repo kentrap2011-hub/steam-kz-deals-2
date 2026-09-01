@@ -16,6 +16,13 @@
 ### Steam fixed-package purchase options — verified complete-content valuation
 Статус: `reopened_in_progress`.
 
+Последний worker progress:
+- `package-double-count-regression-01` выполнен в commit `b2680f5740d2a45ea23287c33b2263aafded9b9f`;
+- добавлен исполняемый Season Pass / constituent-content regression через реальный builder -> comparison path;
+- GitHub Actions run `33486496289`, job `99787681615`: fixed package tests `19 passed`, complete-content tests `6 passed`;
+- production code для этого regression менять не потребовалось;
+- основную fixed-package задачу пока не закрывать: следующий шаг — отдельный repeat acceptance.
+
 Причина переоткрытия:
 - production уже умеет показывать fixed `Sub_`, verified original/remaster purchase equivalence и пересчитывать коммерцию независимо от Taste;
 - однако текущая package-value модель сравнивает цену набора почти только с currently visible base-game families и присваивает нулевую ценность всем nonvisible/extra content;
