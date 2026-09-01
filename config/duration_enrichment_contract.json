@@ -2,12 +2,13 @@
   "contract": "DURATION-ENRICHMENT-V1",
   "version": "1.0",
   "status": "canonical",
-  "implementation_status": "provisioning_required",
+  "implementation_status": "implemented_provisioning_required",
   "purpose": "Define the authoritative source, ownership, normalized schema, cache semantics, freshness, provisioning gates and final-ranking handoff for game completion-duration enrichment.",
   "bindings": {
     "ownership_contract": "config/execution_ownership_contract.json",
     "daily_execution_contract": "config/daily_execution_contract.json",
     "final_ranking_policy": "config/final_ranking_policy.json",
+    "commercialization_guard": "COMMERCIALIZATION_GUARD.md",
     "provider_recon_report": "reviews/worker_reports/duration-provider-recon-01.md"
   },
   "authority": {
@@ -68,6 +69,10 @@
     "credential_storage": "github_secrets_and_ephemeral_runtime_only",
     "credentials_must_never_be_committed": true,
     "oauth_token_refresh_owner": "github",
+    "github_secret_names": [
+      "IGDB_CLIENT_ID",
+      "IGDB_CLIENT_SECRET"
+    ],
     "provider_limits": {
       "requests_per_second": 4,
       "max_concurrent_requests": 8,
@@ -120,7 +125,7 @@
     "container_schema_version": 1,
     "key": "steam_appid_decimal_string",
     "created_by": "github_owned_duration_enrichment",
-    "population_in_this_contract_task": false,
+    "population_in_contract_task": false,
     "entry_schema": {
       "required_fields": [
         "steam_appid",
@@ -167,6 +172,7 @@
     "refetch_all_known_rows_every_nightly_cycle": false,
     "confirmed_soft_stale_after_days": 180,
     "durable_unresolved_retry_after_days": 30,
+    "transient_retry_after_minutes": 60,
     "soft_stale_confirmed_value_remains_valid_during_transient_refresh_failure": true,
     "provider_updated_at_and_checksum_are_preserved_for_change_detection": true,
     "commercial_daily_freshness_does_not_apply": true
@@ -208,40 +214,67 @@
     "hardcoded_legacy_steam_enum_forbidden": true,
     "implementation_must_validate_current_external_game_source_is_steam": true
   },
+  "implementation": {
+    "collector": "scripts/duration_enrichment.py",
+    "regression_test": "scripts/test_duration_enrichment.py",
+    "contract_validator": "scripts/validate_duration_enrichment_contract.py",
+    "final_consumer": "scripts/build_final_visual_payload.py",
+    "workflow": ".github/workflows/build-daily-visual-payload.yml",
+    "canonical_cache": "data/cache/duration_estimates.json",
+    "scope_input": "data/production/pre_ai/chatgpt_purchase_context.jsonl",
+    "scope_field": "semantic_condition.base_appids",
+    "structured_multi_app_aggregation_defined": false,
+    "multi_app_behavior": "fail closed to compatibility fallback/unknown; do not invent sum/max/average semantics"
+  },
   "provisioning_gates": {
     "production_collection_enabled": false,
     "credentials": {
       "status": "provisioning_required",
+      "github_secret_names": [
+        "IGDB_CLIENT_ID",
+        "IGDB_CLIENT_SECRET"
+      ],
+      "last_presence_check": {
+        "github_actions_run_id": 33512993909,
+        "checked_at_utc": "2026-09-01T13:22:41Z",
+        "result": "missing_credentials"
+      },
       "requirements": [
-        "Twitch/IGDB Client ID is available to GitHub Actions through GitHub Secrets.",
-        "Twitch/IGDB Client Secret is available to GitHub Actions through GitHub Secrets.",
+        "Twitch/IGDB Client ID is available to GitHub Actions through GitHub Secret IGDB_CLIENT_ID.",
+        "Twitch/IGDB Client Secret is available to GitHub Actions through GitHub Secret IGDB_CLIENT_SECRET.",
         "No secret or access token is committed to the repository."
       ]
     },
     "licensing_attribution": {
-      "status": "provisioning_required",
+      "status": "satisfied_for_current_personal_noncommercial_use",
+      "reviewed_at_utc": "2026-09-01",
+      "project_status_source": "COMMERCIALIZATION_GUARD.md",
+      "provider_terms_source": "https://api-docs.igdb.com/",
+      "current_use_basis": "IGDB documentation states API use is free for non-commercial usage under the Twitch Developer Service Agreement.",
+      "attribution_review": "Current IGDB documentation describes user-facing attribution as part of the commercial partnership. No separate user-facing attribution requirement for the current personal/non-commercial use was identified in the reviewed IGDB documentation.",
+      "future_commercialization_requires_new_review": true,
       "requirements": [
-        "Determine the project's actual commercial/monetization status without assuming it.",
-        "Verify current IGDB/Twitch terms applicable to that status.",
-        "Satisfy any applicable partnership and user-facing attribution obligations before production collection is enabled."
+        "Current production use remains personal/non-commercial and subject to the Twitch Developer Service Agreement.",
+        "Before any monetization/commercial use, stop and re-review then-current IGDB/Twitch partnership, attribution, caching and redistribution terms under COMMERCIALIZATION_GUARD.md."
       ]
     },
     "github_actions_connectivity": {
       "status": "implementation_acceptance_required",
+      "blocked_by": "credentials",
       "requirements": [
-        "After credentials are provisioned, perform a bounded GitHub Actions OAuth/authenticated API connectivity check.",
+        "After credentials are provisioned, perform a bounded GitHub Actions OAuth/authenticated IGDB connectivity check.",
         "The connectivity check must not be replaced by an interactive-chat lookup."
       ]
     },
-    "enablement_rule": "Production collection must remain disabled until credentials and licensing/attribution gates are satisfied and GitHub Actions connectivity acceptance passes."
+    "enablement_rule": "Production collection must remain disabled until credentials are provisioned, current-use licensing/attribution remains satisfied, and GitHub Actions connectivity acceptance passes."
   },
   "implementation_boundaries": {
-    "api_client_implemented_by_this_contract": false,
-    "provider_calls_performed_by_this_contract": false,
-    "cache_population_performed_by_this_contract": false,
-    "final_builder_integration_performed_by_this_contract": false,
-    "scoring_math_changed_by_this_contract": false,
-    "unknown_2_of_3_changed_by_this_contract": false
+    "api_client_implemented_by_contract_task": false,
+    "provider_calls_performed_by_contract_task": false,
+    "cache_population_performed_by_contract_task": false,
+    "final_builder_integration_performed_by_contract_task": false,
+    "scoring_math_changed_by_duration_implementation": false,
+    "unknown_2_of_3_changed_by_duration_implementation": false
   },
   "scope_and_completeness": {
     "scope_source": "current_github_production_scope",
