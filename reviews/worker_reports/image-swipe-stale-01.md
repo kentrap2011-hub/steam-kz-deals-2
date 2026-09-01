@@ -1,12 +1,12 @@
 # Image swipe stale-image regression report
 
 ## Task
-Fix the stale image shown after rapid mobile card swipes while preserving the existing swipe directions, current-game navigation, package/scoring semantics, and the still-active `CURRENT_TASK.md` package task.
+Fix the stale image shown after rapid mobile card swipes while preserving the existing swipe directions, current-game navigation, package/scoring semantics, and the `CURRENT_TASK.md` task ledger.
 
 ## Verified facts
 - `web/app.js` switches the current game and card text synchronously, while the original `setShot()` directly replaced the `<img>` source and gallery background. A browser can continue painting the previous decoded bitmap while the replacement image is still loading, so title/price can already belong to the new game while the old image is still visible.
 - Swipe navigation is separate from image loading. The existing direction contract remains unchanged: swipe left goes to the next game and swipe right goes to the previous game.
-- `CURRENT_TASK.md` is an active fixed-package task. This worker did not edit `CURRENT_TASK.md`, package/scoring code, or package semantics.
+- The package work advanced independently while this worker ran. This worker did not edit `CURRENT_TASK.md`, package/scoring code, or package semantics.
 - No focused executable JavaScript UI race regression existed for this path, so a small standalone Node regression was added.
 
 ## Changes
@@ -26,6 +26,8 @@ Fix the stale image shown after rapid mobile card swipes while preserving the ex
   - `9a0b39097946ae166c3d7d9b687e368818e69a99` — add stale image commit guard.
   - `4a7d5b7cc7f4c0f580e0cbd706d8f0c5db779e72` — add image swipe race regression.
   - `ec15768c3ecd050084f8d5ed49e5cd1ef025b679` — load the guard with cache busting.
+  - `1504ce75a247d4cd75dcdbcc314361ef7c4e5265` — initial worker report.
+- PR `#9` merged to `main` as `d10cfe40aed926f488e02e93d19c6c43037d8e93`.
 
 ## Validation
 - `node --check web/image-swipe-sync.js` — PASS.
@@ -36,12 +38,14 @@ Fix the stale image shown after rapid mobile card swipes while preserving the ex
 - Rapid reverse path `C -> B` before `C` resolves — PASS: stale `C` completion is rejected; `B` commits.
 - Existing swipe direction handlers were not changed.
 - Package/scoring files and `CURRENT_TASK.md` were not changed by this worker.
+- GitHub PR check `validate` completed successfully for head `1504ce75a247d4cd75dcdbcc314361ef7c4e5265`.
+- GitHub Pages deploy run `33487513565` for merge commit `d10cfe40aed926f488e02e93d19c6c43037d8e93` completed successfully.
 
 ## Unresolved
-- This worker environment does not provide a physical mobile browser/device run. The race behavior is covered by an executable DOM/Image simulation using the production guard code, but a final real-phone stress swipe after deployment remains useful as an acceptance check.
+- This worker environment does not provide a physical mobile browser/device run. The race behavior is covered by an executable DOM/Image simulation using the production guard code, but one real-phone stress swipe remains a useful acceptance check.
 
 ## Status
-PASS — focused UI fix and executable regression are complete. The active package `CURRENT_TASK.md` remains open and independent.
+PASS — fix is merged to `main`, regression validation passed, and the Pages deployment completed successfully. The task ledger was not closed or rewritten by this worker.
 
 ## Recommended next step
-Merge and deploy this isolated UI change, then perform one real-phone stress pass with rapid left/right swipes (ideally on a slower connection) to confirm the production browser never displays a previous game's image under the current game's title/price.
+Perform one real-phone stress pass with rapid left/right swipes (ideally on a slower connection) to confirm the production browser never displays a previous game's image under the current game's title/price.
