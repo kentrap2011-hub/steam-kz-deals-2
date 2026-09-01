@@ -1,92 +1,87 @@
 # WORKER TASK
 
-Task ID: `package-double-count-regression-01`
-Mode: `IMPLEMENT`
-Report: `reviews/worker_reports/package-double-count-regression-01.md`
+Task ID: `package-acceptance-02`
+Mode: `ACCEPTANCE`
+Report: `reviews/worker_reports/package-acceptance-02.md`
 
 ## Goal
 
-Закрыть один конкретный пробел, найденный при проверке fixed Steam packages: добавить автоматическую проверку, которая доказывает, что один и тот же контент не считается дважды, если он одновременно входит в Season Pass/edition и виден как отдельный вложенный DLC/content.
+Провести финальную повторную проверку fixed Steam packages после добавления недостающей защиты от двойного подсчёта.
 
-Это не новая продуктовая логика и не редизайн системы. Текущее правило уже требует не считать один entitlement дважды; задача — доказать это исполняемым тестом и, только если тест реально выявит баг, сделать минимальное исправление внутри этого узкого места.
+Если весь текущий критерий готовности теперь доказан — закрыть основную fixed-package задачу. Если нет — оставить её открытой и точно указать, что ещё мешает закрытию.
 
 ## Background
 
-Предыдущая проверка сохранена здесь:
+Предыдущая полная проверка:
 
 `reviews/worker_reports/package-acceptance-01.md`
 
-Она уже доказала, что основная логика fixed-package valuation, production pre-AI, visual payload, deploy и пользовательская карточка работают для BioShock control case. Единственная незакрытая часть — отсутствующий автоматический тест на двойной подсчёт Season Pass/edition + входящего в него content.
+Она уже подтвердила основную логику, production data, visual, deploy и пользовательскую карточку для BioShock control case. Единственный незакрытый пункт был отсутствующий автоматический тест на двойной подсчёт Season Pass / вложенного контента.
 
-Перед работой перечитай актуальный `main`, `CHAT_PROTOCOL.md`, `CHAT_CONTEXT.md`, `CURRENT_TASK.md`, этот report и релевантные package contracts/tests. Не считай background выше источником истины без проверки.
+Этот пробел закрыт здесь:
 
-## What to do
+`reviews/worker_reports/package-double-count-regression-01.md`
 
-1. Найди существующие package tests, прежде всего:
-   - `scripts/test_package_complete_content_value.py`
-   - `scripts/test_fixed_package_purchase_options.py`
+Новый тест добавлен, связанные проверки прошли, production code менять не понадобилось.
 
-2. Добавь минимальный тестовый пример, где:
-   - Season Pass или edition даёт право на определённый DLC/content;
-   - тот же DLC/content также присутствует в структуре так, что наивная рекурсивная оценка могла бы посчитать его отдельно;
-   - итоговая денежная/comparable value учитывает этот entitlement ровно один раз.
+Перед началом перечитай актуальный `main`, `CHAT_PROTOCOL.md`, `CHAT_CONTEXT.md`, `CURRENT_TASK.md`, оба report-файла и только те package/production файлы, которые реально нужны для финального решения.
 
-3. Тест должен проверять реальный итог расчёта, а не только наличие флага, текста правила или строки в коде.
+## What to verify
 
-4. Если новый тест проходит на текущей реализации:
-   - не меняй production code без причины;
-   - зафиксируй только test/regression и validation.
+1. Убедись, что новый тест на двойной подсчёт действительно находится в актуальном `main` и проходит.
+2. Убедись, что остальные ранее подтверждённые package checks всё ещё проходят/остаются действительными после последних изменений.
+3. Проверь, что текущий production path по-прежнему соответствует исправленной package valuation.
+4. Если после нового commit автоматический pipeline обновил production artifacts, проверь актуальные refs и убедись, что они не внесли регрессии.
+5. Не повторяй без необходимости всё исследование из `package-acceptance-01.md`; используй его как предыдущую доказательную базу и перепроверяй только то, что могло измениться или требуется для финального закрытия.
 
-5. Если новый тест выявляет реальный double-count bug:
-   - разрешён минимальный fix только внутри этого exact scope;
-   - не меняй Taste, ranking weights, package eligibility, fixed-vs-dynamic policy, UI или соседние задачи.
+## Decision
 
-## Validation
+Если весь Definition of Done из актуального `CURRENT_TASK.md` доказан:
+- переведи fixed-package задачу в завершённое состояние;
+- не начинай следующую planned-задачу;
+- сохрани точные refs финальной проверки.
 
-Запусти минимум:
-- `scripts/test_package_complete_content_value.py`
-- `scripts/test_fixed_package_purchase_options.py`
+Если хотя бы один обязательный пункт всё ещё не доказан:
+- не закрывай задачу;
+- не начинай новую реализацию;
+- назови один конкретный незакрытый пункт и один следующий шаг.
 
-Если штатный bounded validator прямо нужен для этого изменения — запусти его тоже.
+## Parallel safety
 
-Не запускай полный production/deploy только ради добавления теста, если project contract этого не требует.
+Сейчас параллельно другой worker может работать над отдельным багом картинки карточки.
 
-## CURRENT_TASK
-
-Не закрывай основную fixed-package задачу в этой работе. После успешного IMPLEMENT всё равно нужна отдельная повторная проверка готовности.
-
-Не начинай следующую planned-задачу.
+Не изменяй его отдельный task-файл и не трогай UI-файлы, если это не требуется непосредственно для package acceptance. Если обнаружишь реальный конфликт с параллельной работой, зафиксируй его вместо перезаписи чужих изменений.
 
 ## Done when
 
-- есть исполняемый test на Season Pass/edition + recursive constituent content;
-- test доказывает отсутствие двойного подсчёта;
-- связанные package tests проходят;
-- при найденном баге исправление ограничено только этим узким случаем;
+- новый double-count test подтверждён;
+- предыдущая package acceptance остаётся действительной после последних изменений;
+- принято честное финальное решение по fixed-package задаче;
+- `CURRENT_TASK.md` закрыт только если весь критерий готовности доказан;
 - создан компактный report.
 
 ## Report format
 
 Сохрани результат в:
 
-`reviews/worker_reports/package-double-count-regression-01.md`
+`reviews/worker_reports/package-acceptance-02.md`
 
 Структура:
 
 ### Task
-Что было сделано.
+Что проверялось.
 
 ### Verified facts
-Что доказано тестом.
+Что доказано.
 
 ### Changes
-Какие файлы изменены и зачем.
+Что изменено. Если закрыт только статус задачи — так и написать.
 
 ### Validation
-Какие проверки прошли, с точными refs.
+Какие проверки/сборки/публикации подтверждены, с точными refs.
 
 ### Unresolved
-Что осталось.
+Что осталось. Если ничего — `none`.
 
 ### Status
 Ровно одно:
@@ -96,10 +91,10 @@ Report: `reviews/worker_reports/package-double-count-regression-01.md`
 - `needs_user_decision`
 
 ### Recommended next step
-При успехе: `repeat fixed-package acceptance`.
+Если задача закрыта — указать, что директор может выбрать следующую planned-задачу.
 
-Укажи commit SHA. Не копируй большие логи или полный diff.
+Не копируй большие логи или полный diff.
 
 В финальном ответе обязательно назови путь:
 
-`reviews/worker_reports/package-double-count-regression-01.md`
+`reviews/worker_reports/package-acceptance-02.md`
