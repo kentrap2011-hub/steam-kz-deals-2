@@ -7,8 +7,10 @@ on:
       - "config/fixed_package_purchase_option_contract.json"
       - "config/purchase_equivalence_overrides.json"
       - "scripts/apply_fixed_package_purchase_options.py"
+      - "scripts/refresh_visual_commercial_fields.py"
       - "scripts/build_final_visual_payload.py"
       - "scripts/priority_ranking.py"
+      - "scripts/test_commercial_refresh.py"
       - "scripts/test_fixed_package_purchase_options.py"
       - "scripts/validate_priority_ranking.py"
       - "web/app.js"
@@ -40,10 +42,18 @@ jobs:
           set -euo pipefail
           python -m py_compile \
             scripts/apply_fixed_package_purchase_options.py \
+            scripts/refresh_visual_commercial_fields.py \
             scripts/build_final_visual_payload.py \
             scripts/priority_ranking.py \
+            scripts/test_commercial_refresh.py \
             scripts/test_fixed_package_purchase_options.py \
             scripts/validate_priority_ranking.py
+
+      - name: Validate fresh commercial refresh independent of Taste
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/test_commercial_refresh.py
 
       - name: Validate package discovery, equivalence, purchase score, and UI contract
         shell: bash
