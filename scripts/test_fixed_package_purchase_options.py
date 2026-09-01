@@ -413,15 +413,26 @@ def test_ui_has_explicit_package_block_contract():
     for fragment in required_app:
         assert fragment in app, f'missing base package UI contract: {fragment}'
     required_override = [
-        'window.renderPackageDeal=function(g)',
+        'function renderPackageDeal(g,options={})',
+        'root.renderPackageDeal=renderPackageDeal;',
+        'root.renderPurchaseOptions=renderPurchaseOptions;',
+        'root.renderOffers=function(g)',
         'comparison_source_aligned',
-        'Сравнение выгоды и влияние на рейтинг обновятся после синхронизации цен.',
-        "'🎁 Выгодный набор Steam':'🎁 Набор Steam'",
+        'Состав набора подтверждён, но сравнение цен ещё синхронизируется; пока не считаю набор более выгодным.',
+        "const heading=strict?'🎁 Выгодный набор Steam':'🎁 Набор Steam';",
         'verified_purchase_equivalence',
+        'data-purchase-kind="fixed_package"',
+        'data-purchase-toggle="true"',
     ]
     for fragment in required_override:
         assert fragment in override, f'missing package UI override contract: {fragment}'
-    assert 'package-deal-ui.js?v=purchase-equivalence-1' in index
+    stale_override = [
+        'window.renderPackageDeal=function(g)',
+        'Сравнение выгоды и влияние на рейтинг обновятся после синхронизации цен.',
+    ]
+    for fragment in stale_override:
+        assert fragment not in override, f'stale package UI override contract leaked back: {fragment}'
+    assert 'package-deal-ui.js?v=compact-purchase-options-1' in index
 
 
 def test_canonical_purchase_equivalence_config_is_purchase_only():
