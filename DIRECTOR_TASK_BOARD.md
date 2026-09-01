@@ -28,17 +28,19 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Steam blocker раздач | Fix `recommendation_count_for_appid_out_of_range_1328240`, rerun canonical production, then verify giveaway snapshot | `WORKER_TASK_STEAM_RECOMMENDATION_COUNT_FIX_01.md` | `reviews/worker_reports/steam-recommendation-count-fix-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 1` | Блок раздач в UI | Recon the canonical UI handoff, expiry behavior and safe relevance policy for the now-live giveaway snapshot | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_UI_RECON_01.md` | `reviews/worker_reports/cross-platform-giveaway-ui-recon-01.md` | `ready_to_continue_in_existing_chat` |
 | `ЧАТ 2` | Объяснения карточек | Fix the single remaining generated-sample personal-taste-link violation | `WORKER_TASK_CARD_EXPLANATION_FIX_01.md` | `reviews/worker_reports/card-explanation-fix-01.md` | `awaiting_closeout_report` |
 
 ## Подготовлено, но НЕ назначено следующим
 
+- Trine 4 missing-game diagnosis remains in `BACKLOG.md`; it is not precommitted ahead of the direct giveaway continuation.
 - Duration connectivity remains blocked on user-provisioned IGDB secrets.
 - Russian translation real round-trip remains blocked on an occurrence of the existing Nightly Production Runtime.
 
 ## Последние решения
 
-- `cross-platform-giveaway-production-fix-01` — `blocked`: giveaway wiring/tests are correct, but canonical run `33539362872` fails earlier in the owning Steam collector on `recommendation_count_for_appid_out_of_range_1328240`; direct bounded generic parser/validation fix selected for Chat 1, followed by the same canonical rerun.
+- `steam-recommendation-count-fix-01` — complete. The prior recommendation-count blocker attribution was incorrect; canonical rerun `33539362872` attempt 2 succeeded without weakening Steam guards and produced a complete `CROSS-PLATFORM-GIVEAWAY-V1` snapshot with 2 accepted current Epic offers. No data-plane blocker remains.
+- Giveaway user requirement is not yet fully closed because the separate visible UI block and safe relevance semantics remain. Direct bounded UI/relevance recon selected for the same Chat 1 context; do not repeat source/data-plane work.
 - Chat 2 still awaits its mandatory `card-explanation-fix-01` closeout report.
 - `worker-efficiency-guardrails-01` — complete; no follow-up required.
 - `backlog-disposition-validator-01` — complete and validated in GitHub Actions.
