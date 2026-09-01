@@ -6,9 +6,12 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 
+from russian_description_quality import classify_description, resolve_description
+
 ROOT = Path('.')
 PURCHASE_CONTEXT = ROOT / 'data/production/pre_ai/chatgpt_purchase_context.jsonl'
 STORE_SNAPSHOT = ROOT / 'data/production/pre_ai/store_snapshot.json'
+CONTENT_METADATA = ROOT / 'data/production/pre_ai/content_metadata.json'
 FAMILY_GRAPH = ROOT / 'data/production/pre_ai/family_graph.json'
 HISTORY_SNAPSHOT = ROOT / 'data/production/pre_ai/history_snapshot.json'
 TASTE_CACHE = ROOT / 'data/cache/taste_fit.json'
@@ -93,7 +96,7 @@ def offer_from_store(key, store_entries, history_entries, rate):
 
 
 def has_russian_text(value):
-    return bool(value and re.search(r'[А-Яа-яЁё]', str(value)))
+    return classify_description(value) == 'good_ru'
 
 
 def strip_html(value):
@@ -141,12 +144,58 @@ def storebrowse_media(appids):
             header_file = str(assets.get('header') or '').strip()
             header = f'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/{asset_appid}/{header_file}' if header_file else None
             desc = str((store_item.get('basic_info') or {}).get('short_description') or '').strip() or None
+            desc_quality = classify_description(desc)
             result[result_key] = {
                 'screenshots': shots,
                 'header_image': header,
-                'short_description_ru': desc if has_russian_text(desc) else None,
+                'short_description_source': desc,
+                'short_description_source_quality': desc_quality,
+                'short_description_ru': desc if desc_quality == 'good_ru' else None,
             }
     return result
+
+
+def load_content_metadata_by_appid():
+    entries = load_json(CONTENT_METADATA).get('entries') or {}
+    return {
+        str(entry.get('steam_id')): entry
+        for entry in entries.values()
+        if isinstance(entry, dict)
+        and entry.get('entity_kind') == 'app'
+        and entry.get('steam_id')
+    }
+
+
+def resolve_description_for_appids(appids, media, content_metadata_by_appid):
+    resolutions = []
+    for appid in [str(x) for x in appids]:
+        m = media.get(appid) or {}
+        metadata = content_metadata_by_appid.get(appid) or {}
+        resolution = resolve_description(
+            m.get('short_description_source'),
+            metadata.get('short_description'),
+        )
+        resolution['description_source_appid'] = appid
+        if resolution.get('description_source_locale') == 'english':
+            resolution['description_source_path'] = 'data/production/pre_ai/content_metadata.json'
+        elif resolution.get('description_source_locale') == 'russian':
+            resolution['description_source_path'] = 'IStoreBrowseService/GetItems(language=russian)'
+        else:
+            resolution['description_source_path'] = None
+        if resolution.get('description_status') == 'ready_ru':
+            return resolution
+        resolutions.append(resolution)
+
+    if not resolutions:
+        return resolve_description(None, None)
+
+    priority = {
+        'needs_translation': 0,
+        'needs_ru_rewrite': 1,
+        'technical_source': 2,
+        'missing_source': 3,
+    }
+    return min(resolutions, key=lambda row: priority.get(row.get('description_status'), 99))
 
 
 def classify_windows(requirements):
@@ -290,6 +339,7 @@ def achievements_rank(value):
 def main():
     rows = load_jsonl(PURCHASE_CONTEXT)
     store_entries = load_json(STORE_SNAPSHOT).get('entries') or {}
+    content_metadata_by_appid = load_content_metadata_by_appid()
     family_obj = load_json(FAMILY_GRAPH)
     families = family_obj.get('families') or []
     family_by_id = {x.get('family_id'): x for x in families if isinstance(x, dict)}
@@ -358,16 +408,21 @@ def main():
             }
             offers.insert(0, primary_offer)
 
-        screenshots, header, summary = [], None, None
+        screenshots, header = [], None
         for appid in base_appids:
             m = media.get(appid) or {}
             header = header or m.get('header_image')
-            summary = summary or m.get('short_description_ru')
             for url in m.get('screenshots') or []:
                 if url not in screenshots:
                     screenshots.append(url)
                 if len(screenshots) >= 5:
                     break
+
+        description = resolve_description_for_appids(
+            base_appids,
+            media,
+            content_metadata_by_appid,
+        )
 
         taste_key = row.get('taste_subject_key')
         taste_entry = taste_entries.get(taste_key) if isinstance(taste_entries, dict) else {}
@@ -409,7 +464,13 @@ def main():
             'historical_minimum_rub': primary_offer.get('historical_minimum_rub'),
             'previously_free': primary_offer.get('previously_free'),
             'sale_end_utc': primary_offer.get('sale_end_utc'),
-            'summary': summary or 'Русское краткое описание для этой игры пока не подготовлено.',
+            'summary': description.get('summary'),
+            'description_status': description.get('description_status'),
+            'description_source_locale': description.get('description_source_locale'),
+            'description_source_quality': description.get('description_source_quality'),
+            'description_source_appid': description.get('description_source_appid'),
+            'description_source_path': description.get('description_source_path'),
+            'description_source_text': description.get('description_source_text'),
             'gameplay_points': [],
             'why_fit': reasons[:2],
             'risks': risks,

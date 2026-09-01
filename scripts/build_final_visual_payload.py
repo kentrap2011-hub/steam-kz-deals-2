@@ -69,6 +69,7 @@ def refresh_existing_media():
                 wanted_appids.add(appid)
 
     media = base_builder.visual_builder.storebrowse_media(wanted_appids) if wanted_appids else {}
+    content_metadata_by_appid = base_builder.visual_builder.load_content_metadata_by_appid()
     touched = 0
     for game in items:
         screenshots = []
@@ -88,6 +89,25 @@ def refresh_existing_media():
         if header and header != game.get('header_image'):
             game['header_image'] = header
             changed = True
+        description = base_builder.visual_builder.resolve_description_for_appids(
+            game.get('base_appids') or [],
+            media,
+            content_metadata_by_appid,
+        )
+        description_fields = {
+            'summary': description.get('summary'),
+            'description_status': description.get('description_status'),
+            'description_source_locale': description.get('description_source_locale'),
+            'description_source_quality': description.get('description_source_quality'),
+            'description_source_appid': description.get('description_source_appid'),
+            'description_source_path': description.get('description_source_path'),
+            'description_source_text': description.get('description_source_text'),
+        }
+        for key, value in description_fields.items():
+            if game.get(key) != value:
+                game[key] = value
+                changed = True
+
         if changed:
             touched += 1
 

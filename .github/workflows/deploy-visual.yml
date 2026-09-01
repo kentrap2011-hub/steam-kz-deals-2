@@ -12,6 +12,8 @@ on:
     paths:
       - 'web/**'
       - 'data/production/visual/current.json'
+      - 'scripts/russian_description_quality.py'
+      - 'scripts/validate_russian_descriptions.py'
       - '.github/workflows/deploy-visual.yml'
 
 permissions:
@@ -38,6 +40,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+
+      - name: Require meaningful Russian descriptions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_russian_descriptions.py data/production/visual/current.json
 
       - name: Run UI regressions
         shell: bash

@@ -14,6 +14,9 @@ on:
       - "scripts/build_final_visual_payload.py"
       - "scripts/build_daily_visual_payload.py"
       - "scripts/build_visual_feed_v2.py"
+      - "scripts/russian_description_quality.py"
+      - "scripts/test_russian_description_quality.py"
+      - "scripts/validate_russian_descriptions.py"
       - "scripts/apply_fixed_package_purchase_options.py"
       - "scripts/refresh_visual_commercial_fields.py"
       - "scripts/test_commercial_refresh.py"
@@ -84,6 +87,12 @@ jobs:
           python scripts/test_commercial_refresh.py
           python scripts/test_fixed_package_purchase_options.py
 
+      - name: Validate Russian description quality rules
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/test_russian_description_quality.py
+
       - name: Require complete history classification coverage before replacing daily visual
         id: history
         shell: bash
@@ -137,6 +146,13 @@ jobs:
           else
             echo "built=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Require meaningful Russian descriptions before canonical commit
+        if: steps.build.outputs.built == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_russian_descriptions.py data/production/visual/current.json
 
       - name: Build ranking review export
         if: steps.build.outputs.built == 'true'
