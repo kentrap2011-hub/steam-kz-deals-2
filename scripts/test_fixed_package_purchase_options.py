@@ -4,7 +4,7 @@ from pathlib import Path
 
 import build_final_visual_payload as final_visual
 import priority_ranking
-from apply_fixed_package_purchase_options import build_recommendations, load_purchase_equivalence
+from apply_fixed_package_purchase_options import apply_to_visual, build_recommendations, load_purchase_equivalence
 from build_fixed_package_purchase_options import classify_package, packageid_for_returned_item
 
 
@@ -305,6 +305,59 @@ def test_package_over_practical_price_ceiling_is_visible_but_does_not_boost_scor
     assert game['package_value_points'] == 0
 
 
+def test_source_mismatch_surfaces_membership_but_never_claims_savings_or_boosts_rank():
+    visual = {
+        'source_mailing_updated_at_utc': 'old-source',
+        'items': [
+            ranking_game('BioShock® 2', id='game:8850', base_appids=['8850']),
+            ranking_game('BioShock Infinite', id='game:8870', base_appids=['8870']),
+        ],
+    }
+    packages = {
+        'source_mailing_updated_at_utc': 'new-source',
+        'packages': {
+            'Sub_127633': package(127633, 1420, [409710, 409720, 8870], 'BioShock: The Collection'),
+        },
+    }
+    family_graph = {'source_updated_at_utc': 'new-source', 'families': []}
+    stats = apply_to_visual(
+        visual,
+        packages,
+        family_graph,
+        RATE,
+        purchase_equivalence=bioshock_equivalence(),
+    )
+    assert stats['source_binding_aligned'] is False
+    assert stats['display_only_due_source_mismatch'] is True
+    assert stats['visible_game_count_with_better_package'] == 2
+
+    by_title = {row['title']: row for row in visual['items']}
+    for title in ('BioShock® 2', 'BioShock Infinite'):
+        rec = by_title[title]['better_purchase_option']
+        assert rec['packageid'] == 127633
+        assert rec['comparison_source_aligned'] is False
+        assert rec['standalone_total_rub'] is None
+        assert rec['savings_rub'] is None
+        assert rec['savings_percent_vs_standalone'] is None
+        assert rec['strict_current_price_savings'] is False
+
+    evidence = {
+        row['family_id']: row['matches']
+        for row in by_title['BioShock® 2']['better_purchase_option']['coverage_evidence']
+    }
+    assert any(
+        match.get('coverage_mode') == 'verified_purchase_equivalence'
+        and match.get('visible_appid') == '8850'
+        and match.get('package_appid') == '409720'
+        for match in evidence['game:8850']
+    )
+
+    ranked, _ = priority_ranking.apply_final_priority_order(visual['items'])
+    for row in ranked:
+        assert row['score_breakdown']['purchase_route'] == 'standalone'
+        assert row['package_value_points'] == 0
+
+
 def test_deterministic_refresh_reapplies_package_before_ranking():
     ready = {
         'items': [ranking_game('Standalone'), ranking_game('Bundled')],
@@ -361,10 +414,10 @@ def test_ui_has_explicit_package_block_contract():
         assert fragment in app, f'missing base package UI contract: {fragment}'
     required_override = [
         'window.renderPackageDeal=function(g)',
-        "strict_current_price_savings",
+        'comparison_source_aligned',
+        'Сравнение выгоды и влияние на рейтинг обновятся после синхронизации цен.',
         "'🎁 Выгодный набор Steam':'🎁 Набор Steam'",
         'verified_purchase_equivalence',
-        'не повышает рейтинг',
     ]
     for fragment in required_override:
         assert fragment in override, f'missing package UI override contract: {fragment}'
@@ -440,6 +493,7 @@ def main():
         test_four_game_package_materially_improves_purchase_score_without_changing_taste,
         test_non_saving_package_stays_visible_but_does_not_boost_ranking,
         test_package_over_practical_price_ceiling_is_visible_but_does_not_boost_score,
+        test_source_mismatch_surfaces_membership_but_never_claims_savings_or_boosts_rank,
         test_deterministic_refresh_reapplies_package_before_ranking,
         test_force_refresh_path_wires_deterministic_purchase_refresh,
         test_ui_has_explicit_package_block_contract,
