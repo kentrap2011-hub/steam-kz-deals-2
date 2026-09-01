@@ -44,7 +44,7 @@ def _positive_reason(value):
     if any(phrase in text for phrase in ['different solutions', 'multiple ways', 'multiple approaches', 'alternative approaches']):
         return (
             'multiple_solutions',
-            'Для игровых задач предусмотрено несколько разных решений или подходов — это совпадает с твоей любовью к играм, где можно самому выбирать способ прохождения.',
+            'Для игровых задач предусмотрено несколько разных решений или подходов — тебе особенно подходят игры, где можно самому выбирать способ прохождения.',
         )
 
     traversal_terms = [
@@ -65,7 +65,7 @@ def _positive_reason(value):
     if any(phrase in text for phrase in ['new abilities', 'unlock abilities', 'unlock new', 'upgrade abilities', 'ability upgrades']):
         return (
             'ability_progression',
-            'По мере прохождения здесь открываются или улучшаются способности с игровым эффектом — это совпадает с твоей любовью к ясному прогрессу, который реально меняет возможности персонажа.',
+            'По мере прохождения здесь открываются или улучшаются способности с игровым эффектом — тебе особенно подходят игры с ясным прогрессом, который реально меняет возможности персонажа.',
         )
 
     investigation_details = []
