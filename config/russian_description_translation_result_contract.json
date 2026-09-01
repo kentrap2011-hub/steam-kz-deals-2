@@ -1,0 +1,71 @@
+{
+  "contract": "RUSSIAN-DESCRIPTION-TRANSLATION-RESULT-V1",
+  "status": "canonical",
+  "request_contract": "config/russian_description_translation_contract.json",
+  "purpose": "Define the only translation-specific semantic result shape accepted from the existing scheduled ChatGPT data-plane.",
+  "submission_schema": {
+    "schema_version": 1,
+    "additional_fields_allowed": false,
+    "required_fields": [
+      "contract",
+      "schema_version",
+      "results"
+    ],
+    "field_rules": {
+      "contract": "RUSSIAN-DESCRIPTION-TRANSLATION-RESULT-V1",
+      "schema_version": 1,
+      "results": "array of zero or more unique result records; zero results do not imply completeness"
+    }
+  },
+  "result_record_schema": {
+    "additional_fields_allowed": false,
+    "required_fields": [
+      "request_id",
+      "source_key",
+      "source_appid",
+      "source_text_sha256",
+      "source_version",
+      "status"
+    ],
+    "allowed_optional_fields": [
+      "translated_text_ru",
+      "error_code",
+      "quality_note"
+    ],
+    "field_rules": {
+      "request_id": "must exactly match one current GitHub-prepared request",
+      "source_key": "must exactly echo current request source_key",
+      "source_appid": "must exactly echo current request source_appid",
+      "source_text_sha256": "must exactly echo current request source_text_sha256",
+      "source_version": "must exactly echo current request source_version",
+      "status": [
+        "translated",
+        "error"
+      ],
+      "translated_text_ru": "required and nonempty only when status=translated; acceptance additionally requires classify_description(...)=good_ru",
+      "error_code": "required nonempty machine-readable string only when status=error",
+      "quality_note": "optional concise worker note; never authoritative for acceptance"
+    }
+  },
+  "cross_field_rules": [
+    "status=translated requires translated_text_ru and forbids error_code",
+    "status=error requires error_code and forbids translated_text_ru",
+    "all identity/hash echoes must match the exact current request before any text is considered",
+    "unknown request_id/source_key is invalid",
+    "duplicate request_id within one submission is invalid"
+  ],
+  "acceptance": {
+    "translated_text_quality_function": "scripts/russian_description_quality.py::classify_description",
+    "translated_text_required_quality": "good_ru",
+    "placeholder_or_technical_is_rejected": true,
+    "non_ru_or_weak_ru_is_rejected": true,
+    "worker_error_is_not_cacheable": true,
+    "stale_or_mismatched_result_is_not_cacheable": true
+  },
+  "ownership": {
+    "worker_only_produces_result_records": true,
+    "github_validates_and_persists": true,
+    "worker_decides_completeness": false,
+    "worker_controls_retry": false
+  }
+}

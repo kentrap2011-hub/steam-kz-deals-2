@@ -1,0 +1,209 @@
+{
+  "contract": "RUSSIAN-DESCRIPTION-TRANSLATION-V1",
+  "status": "canonical",
+  "purpose": "Define the bounded semantic translation interface for unresolved Russian game descriptions while preserving GitHub control-plane ownership and reusing the existing nightly scheduled ChatGPT data-plane.",
+  "ownership_contract": "config/execution_ownership_contract.json",
+  "daily_execution_contract": "config/daily_execution_contract.json",
+  "result_contract": "config/russian_description_translation_result_contract.json",
+  "cache_entry_contract": "config/russian_description_translation_cache_entry_contract.json",
+  "implementation_boundary": {
+    "this_task_is_contract_only": true,
+    "translation_producer_or_ingest_implementation_in_scope": false,
+    "mass_translation_in_scope": false,
+    "production_cache_population_in_scope": false,
+    "interactive_manual_catalog_fill_allowed": false
+  },
+  "ownership": {
+    "github_control_plane": {
+      "owns": [
+        "derive the exact current unresolved description scope",
+        "select the exact source text and source state for each request",
+        "construct and order the immutable translation work input",
+        "track unresolved state, retries, checkpoints, and completeness",
+        "validate returned keys, hashes, statuses, and Russian text quality",
+        "merge validated results into the canonical translation cache",
+        "invalidate stale cache entries when the source-text binding changes",
+        "rebuild downstream visual artifacts and enforce the final Russian-description gate"
+      ],
+      "must_not_delegate": [
+        "scope selection",
+        "queue construction or ordering",
+        "retry policy",
+        "completeness decisions",
+        "canonical cache merge logic",
+        "downstream orchestration"
+      ]
+    },
+    "scheduled_chatgpt_data_plane": {
+      "role": "constrained semantic translation worker",
+      "allowed": [
+        "read only the exact immutable translation work input prepared by GitHub",
+        "translate non-Russian source text into meaningful Russian",
+        "rewrite weak Russian source text into meaningful Russian without changing material meaning",
+        "return only result records bound to exact request identities supplied by GitHub"
+      ],
+      "forbidden": [
+        "discover or add games independently",
+        "change source selection",
+        "invent new request identities",
+        "manage retries or completeness",
+        "write directly to the canonical translation cache",
+        "create a separate recurring scheduler or daily quota"
+      ]
+    },
+    "interactive_chat": {
+      "role": "developer/operator only",
+      "production_catalog_translation_allowed": false,
+      "manual_cache_population_allowed": false
+    }
+  },
+  "runtime_reuse": {
+    "reuse_existing_nightly_scheduled_chatgpt_runtime": true,
+    "existing_daily_contract_id": "DAILY-VISUAL-EXECUTION-V2",
+    "separate_recurring_translation_schedule_allowed": false,
+    "translation_is_additional_semantic_work_type_inside_existing_cycle": true,
+    "taste_specific_input_or_result_schema_may_be_reused": false,
+    "rule": "Translation may use a translation-specific queue/result schema, but GitHub must attach that work to the same GitHub-owned nightly production cycle and existing scheduled ChatGPT data-plane rather than creating an independent chat-owned scheduler."
+  },
+  "scope": {
+    "owner": "github_control_plane",
+    "eligible_description_statuses": [
+      "needs_translation",
+      "needs_ru_rewrite"
+    ],
+    "eligible_source_qualities": [
+      "non_ru",
+      "weak_ru"
+    ],
+    "not_semantic_translation_work": [
+      "ready_ru",
+      "technical_source",
+      "missing_source"
+    ],
+    "rule": "The work input contains the full current set of description records that remain unresolved after deterministic Russian-source resolution and are semantically translatable. Technical/missing-source cases remain explicit GitHub-owned data-quality blockers and must not be disguised as translation requests.",
+    "no_daily_item_quota": true,
+    "checkpointing_is_transport_only": true
+  },
+  "reserved_artifacts_for_followup_implementation": {
+    "request_work_input": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
+    "request_status_manifest": "data/production/pre_ai/chatgpt_ru_description_status.json",
+    "runtime_submission_glob": "data/ai_inbox/russian_descriptions/*.json",
+    "canonical_cache": "data/cache/russian_description_translations.json",
+    "note": "These paths are contractually reserved for the bounded follow-up IMPLEMENT task. This contract-only task must not populate them."
+  },
+  "request_identity": {
+    "request_key_field": "request_id",
+    "stable_entity_key_field": "source_key",
+    "stable_entity_key_format": "App_<steam_appid>",
+    "source_appid_field": "source_appid",
+    "source_text_hash_field": "source_text_sha256",
+    "source_version_field": "source_version",
+    "source_version_format": "sha256:<source_text_sha256>",
+    "hash_algorithm": "sha256",
+    "source_text_normalization": "scripts/russian_description_quality.py::normalize_description UTF-8",
+    "request_id_canonical_fields_in_order": [
+      "contract_id",
+      "source_key",
+      "source_text_sha256"
+    ],
+    "request_id_serialization": "UTF-8 strings joined by LF with no trailing LF",
+    "request_id_value": "sha256(serialized request_id_canonical_fields_in_order)",
+    "freshness_rule": "A translation is reusable only for the exact source_key and source_text_sha256/source_version binding. Any normalized source-text change creates a different request identity and re-enters GitHub-owned unresolved scope if still needed."
+  },
+  "request_schema": {
+    "schema_version": 1,
+    "additional_fields_allowed": false,
+    "required_fields": [
+      "request_id",
+      "source_key",
+      "source_appid",
+      "title",
+      "work_type",
+      "source_text",
+      "source_text_sha256",
+      "source_version",
+      "source_locale_state",
+      "source_quality",
+      "source_path",
+      "target_locale"
+    ],
+    "field_rules": {
+      "request_id": "64 lowercase hexadecimal sha256 computed by request_identity",
+      "source_key": "App_<source_appid>",
+      "source_appid": "decimal Steam appid encoded as string",
+      "title": "nonempty display title used only to improve translation quality; not identity",
+      "work_type": [
+        "translate_to_ru",
+        "rewrite_ru"
+      ],
+      "source_text": "nonempty normalized exact source text selected by GitHub",
+      "source_text_sha256": "64 lowercase hexadecimal sha256 of normalized source_text UTF-8 bytes",
+      "source_version": "sha256:<source_text_sha256>",
+      "source_locale_state": [
+        "non_ru",
+        "weak_ru"
+      ],
+      "source_quality": [
+        "non_ru",
+        "weak_ru"
+      ],
+      "source_path": "nonempty repository/API provenance label chosen by GitHub",
+      "target_locale": "ru"
+    },
+    "context_minimization_rule": "Do not include price, discount, history, reviews, wishlist, Taste verdicts, ranking, purchase context, or unrelated production fields."
+  },
+  "worker_output_binding": {
+    "result_contract_id": "RUSSIAN-DESCRIPTION-TRANSLATION-RESULT-V1",
+    "must_echo_exact_fields": [
+      "request_id",
+      "source_key",
+      "source_appid",
+      "source_text_sha256",
+      "source_version"
+    ],
+    "unknown_request_keys_allowed": false,
+    "worker_may_return_subset_checkpoint": true,
+    "subset_checkpoint_rule": "A submission may contain a strict subset of current requests for transport/checkpoint reasons. Missing results remain unresolved; subset size never becomes a daily quota or completeness rule."
+  },
+  "github_validation": {
+    "exact_current_request_match_required": true,
+    "unknown_output_key_action": "reject_submission",
+    "request_or_hash_mismatch_action": "reject_result_and_keep_current_request_unresolved",
+    "duplicate_request_id_action": "reject_submission",
+    "translated_text_quality_function": "scripts/russian_description_quality.py::classify_description",
+    "accepted_translated_text_quality": "good_ru",
+    "placeholder_or_technical_text_action": "reject_result_and_keep_current_request_unresolved",
+    "non_ru_or_weak_ru_result_action": "reject_result_and_keep_current_request_unresolved",
+    "worker_error_action": "do_not_cache; GitHub keeps request unresolved and applies GitHub-owned retry policy",
+    "fail_closed": true
+  },
+  "persistence_and_invalidation": {
+    "cache_owner": "github_control_plane",
+    "cache_entry_contract_id": "RUSSIAN-DESCRIPTION-TRANSLATION-CACHE-ENTRY-V1",
+    "worker_direct_cache_write_allowed": false,
+    "cache_hit_requires": [
+      "exact source_key",
+      "exact source_text_sha256",
+      "exact source_version",
+      "translated_text_ru still classifies as good_ru"
+    ],
+    "source_hash_change_action": "cache_miss_and_requeue_if_description_is_still_unresolved",
+    "arbitrary_daily_retranslation_allowed": false,
+    "current_direct_ready_ru_precedence": "A current deterministic ready_ru source remains authoritative; translation cache is only a reusable resolution for otherwise unresolved translatable source text."
+  },
+  "retry_and_completeness": {
+    "owner": "github_control_plane",
+    "chatgpt_retry_loop_allowed": false,
+    "chatgpt_batch_quota_allowed": false,
+    "success_condition": "Every current translatable unresolved request has either an exact valid cache hit or a validated accepted result; technical/missing-source blockers are separately accounted by GitHub and still block final replacement when a visible description remains unresolved.",
+    "stale_or_invalid_result": "remains unresolved and is eligible for GitHub-owned retry in the same/current canonical production lifecycle according to runtime state",
+    "production_completion_decider": "GitHub only"
+  },
+  "downstream": {
+    "validated_cache_ingest_must_trigger_or_enable_existing_downstream_rebuild": true,
+    "final_visual_artifact": "data/production/visual/current.json",
+    "final_quality_gate": "scripts/validate_russian_descriptions.py",
+    "final_gate_must_remain_fail_closed": true,
+    "unresolved_translation_may_not_become_normal_summary": true
+  }
+}

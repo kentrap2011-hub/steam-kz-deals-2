@@ -9,7 +9,12 @@ on:
       - "config/execution_ownership_contract.json"
       - "config/daily_execution_contract.json"
       - "config/steamdb_lookup_contract.json"
+      - "config/russian_description_translation_contract.json"
+      - "config/russian_description_translation_result_contract.json"
+      - "config/russian_description_translation_cache_entry_contract.json"
       - "scripts/validate_execution_ownership.py"
+      - "scripts/validate_russian_description_translation_contract.py"
+      - "scripts/russian_description_quality.py"
       - ".github/workflows/*.yml"
 
 permissions:
@@ -34,3 +39,6 @@ jobs:
 
       - name: Validate component ownership boundaries
         run: python scripts/validate_execution_ownership.py
+
+      - name: Validate Russian description translation contract
+        run: python scripts/validate_russian_description_translation_contract.py

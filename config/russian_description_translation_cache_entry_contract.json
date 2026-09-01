@@ -1,0 +1,58 @@
+{
+  "contract": "RUSSIAN-DESCRIPTION-TRANSLATION-CACHE-ENTRY-V1",
+  "status": "canonical",
+  "request_contract": "config/russian_description_translation_contract.json",
+  "result_contract": "config/russian_description_translation_result_contract.json",
+  "purpose": "Define a GitHub-owned reusable Russian-description translation cache entry that is bound to an exact app/source-text version.",
+  "entry_schema": {
+    "schema_version": 1,
+    "additional_fields_allowed": false,
+    "required_fields": [
+      "request_id",
+      "source_key",
+      "source_appid",
+      "source_text_sha256",
+      "source_version",
+      "translated_text_ru",
+      "target_locale",
+      "validated_quality",
+      "result_contract",
+      "ingested_at_utc"
+    ],
+    "field_rules": {
+      "request_id": "exact validated request identity",
+      "source_key": "exact validated App_<source_appid> binding",
+      "source_appid": "decimal Steam appid encoded as string",
+      "source_text_sha256": "exact validated normalized source-text sha256",
+      "source_version": "sha256:<source_text_sha256>",
+      "translated_text_ru": "validated meaningful Russian text",
+      "target_locale": "ru",
+      "validated_quality": "good_ru",
+      "result_contract": "RUSSIAN-DESCRIPTION-TRANSLATION-RESULT-V1",
+      "ingested_at_utc": "GitHub ingestion timestamp in UTC"
+    }
+  },
+  "write_rules": {
+    "writer": "github_control_plane_only",
+    "source": "only a result validated against the exact current GitHub-prepared request",
+    "worker_direct_write_allowed": false,
+    "partial_or_invalid_result_write_allowed": false
+  },
+  "lookup_rules": {
+    "hit_requires_exact_fields": [
+      "source_key",
+      "source_text_sha256",
+      "source_version"
+    ],
+    "translated_text_must_revalidate_as": "good_ru",
+    "request_id_must_match_current_request_identity": true,
+    "current_ready_ru_source_has_precedence": true
+  },
+  "invalidation": {
+    "source_text_hash_change": "cache_miss",
+    "source_entity_change": "cache_miss",
+    "translated_text_no_longer_good_ru": "cache_miss",
+    "arbitrary_age_expiry": false,
+    "rule": "A validated translation remains reusable indefinitely while its exact source binding is unchanged and its Russian quality still passes. Changed source content must never inherit the stale translation."
+  }
+}
