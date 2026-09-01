@@ -33,21 +33,15 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Бесплатные раздачи | Cross-platform claim-to-keep giveaway source/production architecture recon | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_RECON_01.md` | `reviews/worker_reports/cross-platform-giveaway-recon-01.md` | `ready_for_new_chat` |
-| `ЧАТ 2` | Объяснения карточек | Read-only audit of current “why fits / why may not fit” explanation quality on bounded top sample | `WORKER_TASK_CARD_EXPLANATION_AUDIT_01.md` | `reviews/worker_reports/card-explanation-audit-01.md` | `prepared_or_active` |
-
-## Подготовлено на следующий свободный слот
-
-- task: `WORKER_TASK_TASK_MEMORY_AUDIT_01.md`
-- report: `reviews/worker_reports/task-memory-audit-01.md`
-- scope: audit pre-backlog agreements, historical backlog removals and durable destinations; identify any additional orphaned tasks; READ-ONLY / RECON.
+| `ЧАТ 1` | Бесплатные раздачи | Cross-platform claim-to-keep giveaway source/production architecture recon | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_RECON_01.md` | `reviews/worker_reports/cross-platform-giveaway-recon-01.md` | `ready_or_active` |
+| `ЧАТ 2` | Память задач | Audit pre-backlog agreements, historical removals and orphaned tasks | `WORKER_TASK_TASK_MEMORY_AUDIT_01.md` | `reviews/worker_reports/task-memory-audit-01.md` | `ready_for_new_chat` |
 
 ## Worker chat lifecycle
 
-- Old `ЧАТ 1 — Русские описания`: `ru-translation-runtime-acceptance-01` saved with status `blocked`. Repo-side queue/runtime/ingestion path is ready, but one real result must arrive from the existing Nightly Production Runtime; worker correctly did not create a second scheduler or manually translate. This state is durable; old chat no longer needs to occupy a slot and may be deleted. Resume later in a fresh free slot after a real nightly translation result exists or when the existing runtime binding can be addressed safely.
-- New `ЧАТ 1 — Бесплатные раздачи`: launch as a fresh chat because it is independent from Russian descriptions and benefits from clean context.
-- `ЧАТ 2 — Объяснения карточек`: independent read-only audit; continue if already launched.
-- When the next slot becomes free, launch `task-memory-audit-01`; the director should not perform that historical audit itself.
+- Old `ЧАТ 1 — Русские описания`: durable blocked state saved; may be deleted.
+- `ЧАТ 1 — Бесплатные раздачи`: independent high-priority recon; continue/run in a fresh chat.
+- Old `ЧАТ 2 — Объяснения карточек`: audit report is now saved at the required path `reviews/worker_reports/card-explanation-audit-01.md`; findings are durable. This old chat may be deleted. Explanation implementation remains deferred until after higher-priority giveaway work and task-memory reconciliation.
+- New `ЧАТ 2 — Память задач`: launch fresh with `WORKER_TASK_TASK_MEMORY_AUDIT_01.md`. The director must not perform this history audit itself.
 
 ## Recovered task-memory findings already known
 
@@ -61,16 +55,17 @@
 
 ## Последние завершённые / blocked worker-этапы
 
+- `card-explanation-audit-01` — audit complete; current explanations fail quality gate: 0/30 fully game-specific positive rationales, placeholder positive text on 11/30, and no-risk filler shown as a negative bullet on 13/30. Implementation intentionally not started yet.
 - `ru-translation-runtime-acceptance-01` — `blocked`; current queue has 155 pending translations, repo-side binding exists, but no real scheduled-runtime result has yet occurred. Resume only through the existing Nightly Production Runtime.
 - `package-ui-blocker-fix-01` — `complete`.
-- `ru-translation-implement-01` — repo-side implementation completed; real runtime round-trip remains operationally pending.
 - `duration-igdb-implement-01` — code complete but blocked on missing GitHub Secrets.
 
 ## Ближайшие задачи
 
-1. **NEW ЧАТ 1:** run `cross-platform-giveaway-recon-01` now.
-2. Current `ЧАТ 2`: finish explanation-quality audit if already launched.
-3. Next freed slot: `task-memory-audit-01`.
-4. After giveaway recon, prioritize its bounded contract/implementation sequence before explanation/ranking polish because giveaways expire.
-5. Resume Russian translation acceptance only through the existing Nightly Production Runtime after a real result exists; do not create a second scheduler.
-6. User provisions IGDB secrets when convenient; resume duration connectivity acceptance in a later free slot.
+1. `ЧАТ 1`: cross-platform giveaway recon.
+2. **NEW ЧАТ 2:** task-memory audit.
+3. After giveaway recon, prioritize its bounded contract/implementation sequence because giveaways expire.
+4. After task-memory audit, restore only worker-proven orphaned tasks or ask user on genuinely ambiguous ones.
+5. Explanation-quality implementation remains important but comes after the time-limited giveaway path and memory-integrity audit.
+6. Resume Russian translation acceptance only through the existing Nightly Production Runtime after a real result exists.
+7. User provisions IGDB secrets when convenient; resume duration connectivity acceptance in a later free slot.
