@@ -320,8 +320,19 @@ function searchRender(){
 }
 
 async function init(){
-  try{const res=await fetch(DATA_URL,{cache:'no-store'});if(!res.ok)throw new Error('data');data=await res.json();items=(data.items||[]).filter(x=>x&&x.id);byId=new Map(items.map(x=>[x.id,x]));buildQueue();render()}
-  catch{$('emptyFeed').classList.remove('hidden');$('emptyFeed').textContent='Не удалось загрузить текущий список игр.';$('gameCard').classList.add('hidden')}
+  try{
+    const res=await fetch(DATA_URL,{cache:'no-store'});if(!res.ok)throw new Error('data');
+    data=await res.json();
+    items=(data.items||[]).filter(x=>x&&x.id);
+    byId=new Map(items.map(x=>[x.id,x]));
+    if(window.GiveawayUI)window.GiveawayUI.render(data.giveaways,$('giveawayBlock'));
+    buildQueue();
+    render();
+  }
+  catch{
+    if(window.GiveawayUI)window.GiveawayUI.render(null,$('giveawayBlock'));
+    $('emptyFeed').classList.remove('hidden');$('emptyFeed').textContent='Не удалось загрузить текущий список игр.';$('gameCard').classList.add('hidden');
+  }
 }
 
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{currentTab=b.dataset.tab;render()}));
