@@ -7,7 +7,7 @@
     "canonical_profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
     "taste_model_version": "taste-v3",
     "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-    "content_metadata_blob_sha": "6f5418ffda6afb0a15019d08a16b29323c43a43d"
+    "content_metadata_blob_sha": "ccadb4c8c29e94a18dbcfe03839cc0b64237210c"
   },
   "wishlist_binding": {
     "blob_sha": "62886ecf856d4634ca3880be5d7c2abb056ea49b",
@@ -54,7 +54,9 @@
     "taste_queue_jsonl": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
     "purchase_context_jsonl": "data/production/pre_ai/chatgpt_purchase_context.jsonl",
     "line_alignment": "taste_queue line N == purchase_context line N for 1..ai_queue_count",
-    "ready_context_start_line": 4
+    "ready_context_start_line": 4,
+    "russian_description_translation_queue_jsonl": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
+    "russian_description_translation_status_json": "data/production/pre_ai/chatgpt_ru_description_status.json"
   },
   "source_family_count": 673,
   "candidate_description_known_count": 673,
@@ -73,7 +75,7 @@
   "sale_end_coverage": 1.0,
   "sale_end_missing_count": 0,
   "sale_end_missing_primary_keys": [],
-  "source_pre_ai_artifact_bytes": 2486675,
+  "source_pre_ai_artifact_bytes": 2486674,
   "deterministically_excluded_primary_keys": [
     "App_1041920",
     "App_1044620",
@@ -172,5 +174,25 @@
     "App_893850",
     "App_967250"
   ],
-  "elapsed_seconds": 0.08
+  "elapsed_seconds": 0.154,
+  "semantic_work": {
+    "taste": {
+      "work_type": "taste",
+      "queue_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
+      "queue_count": 3,
+      "result_contract": "config/taste_result_contract.json"
+    },
+    "russian_description_translation": {
+      "work_type": "russian_description_translation",
+      "contract": "RUSSIAN-DESCRIPTION-TRANSLATION-V1",
+      "result_contract": "RUSSIAN-DESCRIPTION-TRANSLATION-RESULT-V1",
+      "cache_contract": "RUSSIAN-DESCRIPTION-TRANSLATION-CACHE-ENTRY-V1",
+      "queue_path": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
+      "status_path": "data/production/pre_ai/chatgpt_ru_description_status.json",
+      "queue_count": 155,
+      "submission_glob": "data/ai_inbox/russian_descriptions/*.json",
+      "runtime_owner": "scheduled_chatgpt_runtime_data_plane",
+      "control_plane_owner": "github_control_plane"
+    }
+  }
 }
