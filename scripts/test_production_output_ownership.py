@@ -21,10 +21,15 @@ def main():
         write(root / "freebies_index.json", "old freebies index")
 
         # Downstream and unrelated production artifacts must survive untouched.
+        # Cross-platform giveaways are deliberately a separate single-writer
+        # family and therefore must also survive the Steam collector reset.
         protected = [
             root / "mailing" / "index.json",
             root / "pre_ai" / "chatgpt_payload.json",
             root / "daily_ready" / "latest.json",
+            root / "giveaways" / "index.json",
+            root / "giveaways" / "v1" / "current.json",
+            root / "giveaways" / "v1" / "audit.jsonl",
             root / "other_producer" / "sentinel.txt",
         ]
         for path in protected:
