@@ -4,6 +4,17 @@
 
 ## Завершено
 
+### Cross-platform claim-to-keep giveaway RECON 01
+Статус: `complete`.
+- worker task: `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_RECON_01.md`;
+- выполнен только RECON: collector/UI/scheduling/production pipeline не изменялись;
+- рекомендованный первый IMPLEMENT baseline: hardened Steam + Epic Games Store + GOG;
+- Amazon Luna / Prime PC-game grants оставлены отдельным `subscription_entitlement` классом и не входят в universal claim-to-keep baseline;
+- зафиксированы KZ fail-closed region policy, anti-false-positive predicates, store identity/dedup, normalized schema, single-writer ownership boundary и failure modes;
+- текущий Steam `price_kzt == 0 && discount_percent > 0` трактуется как candidate discovery, а не достаточное доказательство temporary permanent-ownership giveaway;
+- report: `reviews/worker_reports/cross-platform-giveaway-recon-01.md`;
+- report commit: `1e6184d2235618336a5af402d76712f95b761adb`.
+
 ### Taste V3 migration
 Статус: `complete`.
 - исходная миграция Taste V3 была завершена и production-validated;
