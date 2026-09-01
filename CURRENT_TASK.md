@@ -121,6 +121,13 @@
 - если evidence недостаточно для содержательных плюса/минуса, карточка считается incomplete и требует enrichment, а не placeholder;
 - добавить score/explanation regression guards.
 
+### A1. Card explanation implementation 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_CARD_EXPLANATION_IMPLEMENT_01.md`;
+- цель: исправить подтверждённые audit-дефекты positive `why_fit` и consistency negative `risks[]` в текущем canonical producer path;
+- ranking weights, giveaway, duration, translation, package и unrelated UI не меняются;
+- другая параллельная работа F сохраняется без изменений.
+
 ### B. Russian language availability as a ranking factor
 Статус: `planned`.
 - проверять минимум русский интерфейс: `yes/no/unknown` + evidence;
