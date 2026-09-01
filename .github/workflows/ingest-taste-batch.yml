@@ -31,6 +31,9 @@ jobs:
       - name: Validate normalized taste factor contract
         run: python scripts/validate_taste_v3_contract.py
 
+      - name: Validate taste inbox transactional proof regression
+        run: python scripts/validate_taste_inbox_transactional_proof.py
+
       - name: Validate, ingest and rebuild taste consumers atomically
         run: python scripts/process_taste_inbox.py
 
