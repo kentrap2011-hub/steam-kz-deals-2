@@ -29,19 +29,19 @@
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
 | `ЧАТ 1` | Бесплатные раздачи | Implement Tier-1 cross-platform giveaway data plane: hardened Steam + Epic KZ + GOG KZ | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_IMPLEMENT_01.md` | `reviews/worker_reports/cross-platform-giveaway-implement-01.md` | `active_or_ready` |
-| `ЧАТ 2` | Защита памяти задач | Add fail-closed backlog deletion -> durable disposition validator | `WORKER_TASK_BACKLOG_DISPOSITION_VALIDATOR_01.md` | `reviews/worker_reports/backlog-disposition-validator-01.md` | `ready_for_new_chat` |
+| `ЧАТ 2` | Эффективность worker-чатов | Audit recent worker execution for repeated avoidable detours and recommend the smallest durable prevention mechanism | `WORKER_TASK_WORKER_EFFICIENCY_AUDIT_01.md` | `reviews/worker_reports/worker-efficiency-audit-01.md` | `ready_for_new_chat` |
 
 ## Подготовлено, но НЕ назначено следующим
 
-- `WORKER_TASK_WORKER_EFFICIENCY_AUDIT_01.md` -> `reviews/worker_reports/worker-efficiency-audit-01.md` (`prepared_unscheduled`).
 - Explanation-quality implementation remains deferred.
 - Duration connectivity remains blocked on user-provisioned IGDB secrets.
 - Russian translation real round-trip remains blocked on an occurrence of the existing Nightly Production Runtime.
 
 ## Последние решения
 
-- `task-memory-audit-01` — complete; no new unrecovered orphaned/ambiguous tasks found. The only confirmed lifecycle gaps were the already restored cross-platform giveaways and media/screenshots reconciliation tail.
-- Direct follow-up chosen for Chat 2: implement the small machine-checkable backlog deletion guard recommended by the audit, rather than start another unrelated prepared task.
+- `backlog-disposition-validator-01` — complete. Lightweight fail-closed validator is implemented and validated in GitHub Actions; no direct follow-up required.
+- `worker-efficiency-audit-01` is selected for the now-free Chat 2 slot because it addresses the user's explicit recent concern about repeated worker mistakes and does not overlap with Chat 1 giveaway implementation.
+- `task-memory-audit-01` — complete; no new unrecovered orphaned/ambiguous tasks found.
 - `cross-platform-giveaway-recon-01` completed its source/architecture recon; Chat 1 is now on direct Tier-1 implementation.
 
 ## Выбор следующей работы
