@@ -66,7 +66,7 @@
 - `App_901735` remains blocked/retryable;
 - exact Kazakhstan historical minimum remains unproven and must not be fabricated.
 
-## Запланировано, но ещё НЕ начато
+## Запланировано / выполняется
 
 ### A. Ranking and card explanation quality audit
 Статус: `planned`.
@@ -113,7 +113,8 @@
 - regression/snapshot на mobile viewport.
 
 ### G. Compact purchase options — best option first, full list on demand
-Статус: `planned`.
+Статус: `in_progress`.
+- worker task: `compact-purchase-options-01`;
 - в карточке по умолчанию показывать только самый выгодный/рекомендуемый способ покупки вместо длинного списка всех вариантов;
 - пользователь должен явно видеть, что есть другие варианты, и по нажатию раскрывать полный список;
 - после раскрытия должны оставаться доступны все подтверждённые варианты покупки и состав набора;
@@ -125,4 +126,4 @@
 
 ## Текущий статус работ
 
-Fixed-package complete-content valuation и stale-image swipe bug завершены и закрыты. Current Taste ingestion остаётся отдельным GitHub-owned blocker. Новая planned-задача пока не начата.
+Текущая interactive-задача: G / `compact-purchase-options-01`. Fixed-package complete-content valuation и stale-image swipe bug завершены и закрыты. Current Taste ingestion остаётся отдельным GitHub-owned blocker и не изменяется этой UI-задачей.
