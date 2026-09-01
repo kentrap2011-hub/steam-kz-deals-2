@@ -1,0 +1,165 @@
+{
+  "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
+  "schema_version": 1,
+  "country_code": "KZ",
+  "generated_at_utc": "2026-09-01T19:30:40.405647Z",
+  "fresh_until_utc": "2026-09-03T01:30:40.405647Z",
+  "snapshot_status": "complete",
+  "required_sources": [
+    "steam",
+    "epic",
+    "gog"
+  ],
+  "source_health": {
+    "steam": {
+      "required": true,
+      "status": "ok",
+      "complete": true,
+      "observed_at_utc": "2026-09-01T19:30:40.405647Z",
+      "endpoint": "existing KZ catalog candidates + targeted Steam first-party validation",
+      "candidate_count": 0,
+      "accepted_count": 0,
+      "rejected_count": 0,
+      "unverified_count": 0,
+      "error_code": null,
+      "error": null,
+      "details": {
+        "candidate_source_updated_at_utc": "2026-09-01T19:30:39.890043Z",
+        "candidate_count": 0,
+        "source_age_hours": 0.0,
+        "candidate_rule": "existing KZ catalog: final price 0 + positive discount; validation is separate",
+        "targeted_validation_errors": 0
+      }
+    },
+    "epic": {
+      "required": true,
+      "status": "ok",
+      "complete": true,
+      "observed_at_utc": "2026-09-01T19:30:40.405647Z",
+      "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
+      "candidate_count": 9,
+      "accepted_count": 2,
+      "rejected_count": 7,
+      "unverified_count": 0,
+      "error_code": null,
+      "error": null,
+      "details": {
+        "country": "KZ",
+        "allowCountries": "KZ",
+        "candidate_count": 9,
+        "schema_guard": "strict",
+        "api_stability": "undocumented_storefront_backend"
+      }
+    },
+    "gog": {
+      "required": true,
+      "status": "ok",
+      "complete": true,
+      "observed_at_utc": "2026-09-01T19:30:40.405647Z",
+      "endpoint": "https://catalog.gog.com/v1/catalog",
+      "candidate_count": 0,
+      "accepted_count": 0,
+      "rejected_count": 0,
+      "unverified_count": 0,
+      "error_code": null,
+      "error": null,
+      "details": {
+        "countryCode": "KZ",
+        "pages_fetched": 1,
+        "candidate_count": 0,
+        "targeted_validation_errors": 0,
+        "schema_guard": "strict",
+        "api_stability": "undocumented_storefront_backend"
+      }
+    }
+  },
+  "accepted_offer_count": 2,
+  "game_group_count": 2,
+  "rejected_offer_count": 7,
+  "unverified_offer_count": 0,
+  "games": [
+    {
+      "canonical_game_key": "meta-v1:eedcf4e120faba87d9c6928a",
+      "identity_confidence": "high",
+      "identity_evidence": {
+        "basis": "exact_normalized_title_and_publishers",
+        "publishers": [
+          "hypetrain digital"
+        ]
+      },
+      "title": "Breathedge",
+      "offers": [
+        {
+          "source_id": "epic",
+          "source_offer_id": "epic:08ae29e4f70a4b62aa055e383381aa82:8401414902e84f2cb9afa9142f051d32:2026-09-03T15:00:00Z:2026-08-27T15:00:00Z",
+          "source_product_id": "08ae29e4f70a4b62aa055e383381aa82:8401414902e84f2cb9afa9142f051d32",
+          "storefront": "epic",
+          "title": "Breathedge",
+          "claim_url": "https://store.epicgames.com/en-US/p/breathedge",
+          "promotion_start_utc": "2026-08-27T15:00:00Z",
+          "promotion_end_utc": "2026-09-03T15:00:00Z",
+          "observed_at_utc": "2026-09-01T19:30:40.405647Z",
+          "base_price": 690000,
+          "final_price": 0,
+          "currency": "KZT",
+          "discount_percent": 100,
+          "content_type": "game",
+          "region_status": "available",
+          "classification_reason_codes": [
+            "ACTIVE_WINDOW",
+            "ZERO_PRICE",
+            "PAID_BASE_OR_EXPLICIT_GIVEAWAY",
+            "PERMANENT_GRANT",
+            "FULL_GAME",
+            "KZ_AVAILABLE"
+          ]
+        }
+      ]
+    },
+    {
+      "canonical_game_key": "meta-v1:c76eb4d804a486978fc24b06",
+      "identity_confidence": "high",
+      "identity_evidence": {
+        "basis": "exact_normalized_title_and_publishers",
+        "publishers": [
+          "prodigy design ltd"
+        ]
+      },
+      "title": "Rival Stars Horse Racing : Desktop Edition",
+      "offers": [
+        {
+          "source_id": "epic",
+          "source_offer_id": "epic:f570d80aa4fe463ca53c4410d1c75e1e:8f1fcf01e32e4fd4b2ae0a9737992760:2026-09-03T15:00:00Z:2026-08-27T15:00:00Z",
+          "source_product_id": "f570d80aa4fe463ca53c4410d1c75e1e:8f1fcf01e32e4fd4b2ae0a9737992760",
+          "storefront": "epic",
+          "title": "Rival Stars Horse Racing : Desktop Edition",
+          "claim_url": "https://store.epicgames.com/en-US/p/rival-stars-horse-racing-dd09de",
+          "promotion_start_utc": "2026-08-27T15:00:00Z",
+          "promotion_end_utc": "2026-09-03T15:00:00Z",
+          "observed_at_utc": "2026-09-01T19:30:40.405647Z",
+          "base_price": 463000,
+          "final_price": 0,
+          "currency": "KZT",
+          "discount_percent": 100,
+          "content_type": "game",
+          "region_status": "available",
+          "classification_reason_codes": [
+            "ACTIVE_WINDOW",
+            "ZERO_PRICE",
+            "PAID_BASE_OR_EXPLICIT_GIVEAWAY",
+            "PERMANENT_GRANT",
+            "FULL_GAME",
+            "KZ_AVAILABLE"
+          ]
+        }
+      ]
+    }
+  ],
+  "publication_invariants": {
+    "accepted_offers_are_active_at_generated_at": true,
+    "stale_source_rows_are_not_reused": true,
+    "title_only_cross_store_merge": false,
+    "subscription_entitlements_included": false,
+    "paid_ranking_or_taste_modified": false
+  }
+}
