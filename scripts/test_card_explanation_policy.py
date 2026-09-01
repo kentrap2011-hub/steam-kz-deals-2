@@ -17,6 +17,18 @@ def run():
     assert reasons == []
     assert provenance == []
 
+    multiple_solution_reasons, _ = positive_reasons([
+        'Objectives support multiple approaches and different solutions.',
+    ])
+    assert len(multiple_solution_reasons) == 1
+    assert 'теб' in multiple_solution_reasons[0].casefold()
+
+    progression_reasons, _ = positive_reasons([
+        'You unlock new abilities as the campaign progresses.',
+    ])
+    assert len(progression_reasons) == 1
+    assert 'теб' in progression_reasons[0].casefold()
+
     heuristic_only = {
         'candidate': {
             'code': 'platform_repetition',
@@ -57,7 +69,7 @@ def run():
     positive_reasons([])
     assert unrelated == before
 
-    print('CARD_EXPLANATION_POLICY_TESTS=PASS count=5')
+    print('CARD_EXPLANATION_POLICY_TESTS=PASS count=7')
 
 
 if __name__ == '__main__':
