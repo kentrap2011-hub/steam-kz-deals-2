@@ -165,6 +165,30 @@ def test_commercial_refresh_changes_only_commercial_state():
     assert game['sale_end_utc'] == '2026-09-05T17:00:00+00:00'
 
 
+def test_stale_semantic_family_is_removed_instead_of_retaining_stale_price():
+    visual = {
+        'source_mailing_updated_at_utc': 'old-semantic-source',
+        'items': [
+            semantic_game('game:1', 'One', '1'),
+            semantic_game('game:999', 'No longer current', '999'),
+        ],
+    }
+    stats = commercial_refresh.refresh_visual_commercial_fields(
+        visual,
+        payload=payload(),
+        store_snapshot=store_snapshot(),
+        family_graph=family_graph(),
+        history_snapshot=history_snapshot(),
+        now=NOW,
+    )
+
+    assert [row['id'] for row in visual['items']] == ['game:1']
+    assert stats['visible_item_count_before_refresh'] == 2
+    assert stats['visible_item_count_after_refresh'] == 1
+    assert stats['removed_stale_family_count'] == 1
+    assert stats['removed_stale_family_ids'] == ['game:999']
+
+
 def test_package_comparison_uses_refreshed_current_prices_not_stale_family_price():
     visual = {
         'source_mailing_updated_at_utc': 'old-semantic-source',
@@ -225,6 +249,7 @@ def test_package_comparison_uses_refreshed_current_prices_not_stale_family_price
 def main():
     tests = [
         test_commercial_refresh_changes_only_commercial_state,
+        test_stale_semantic_family_is_removed_instead_of_retaining_stale_price,
         test_package_comparison_uses_refreshed_current_prices_not_stale_family_price,
     ]
     for test in tests:

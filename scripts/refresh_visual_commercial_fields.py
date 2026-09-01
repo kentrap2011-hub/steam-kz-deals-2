@@ -103,6 +103,9 @@ def refresh_visual_commercial_fields(
     The accepted semantic card remains the same object: fit, taste factors, explanations,
     risks and semantic source stay untouched. Only current offers/price/history/deadline
     are rebuilt from one current GitHub-owned commercial source before package scoring.
+
+    If an older semantic card no longer exists in the current complete family graph,
+    it is removed from the current storefront rather than retaining stale commercial data.
     """
     if payload is None or store_snapshot is None or family_graph is None or history_snapshot is None:
         current_payload, current_store, current_family, current_history = current_docs()
@@ -123,7 +126,7 @@ def refresh_visual_commercial_fields(
     before_count = len(visual.get('items') or [])
 
     refreshed = []
-    missing_families = []
+    removed_stale_families = []
     removed_without_active_offer = []
     changed_price_count = 0
     changed_offer_count = 0
@@ -132,7 +135,7 @@ def refresh_visual_commercial_fields(
         family_id = str(game.get('id') or '')
         family = family_by_id.get(family_id)
         if family is None:
-            missing_families.append(family_id)
+            removed_stale_families.append(family_id)
             continue
 
         offers = []
@@ -185,23 +188,19 @@ def refresh_visual_commercial_fields(
         game['web_url'] = primary.get('web_url') or game.get('web_url')
         refreshed.append(game)
 
-    if missing_families:
-        raise ValueError(
-            'Commercial refresh cannot source-align every visible semantic family: '
-            + ','.join(sorted(missing_families)[:20])
-        )
-
     visual['items'] = refreshed
     visual['item_count'] = len(refreshed)
     visual['commercial_source_mailing_updated_at_utc'] = source
     visual['commercial_store_observed_at_utc'] = store_snapshot.get('observed_at_utc')
     stats = {
-        'schema_version': 1,
+        'schema_version': 2,
         'semantic_source_preserved': visual.get('source_mailing_updated_at_utc'),
         'commercial_source_mailing_updated_at_utc': source,
         'store_observed_at_utc': store_snapshot.get('observed_at_utc'),
         'visible_item_count_before_refresh': before_count,
         'visible_item_count_after_refresh': len(refreshed),
+        'removed_stale_family_count': len(removed_stale_families),
+        'removed_stale_family_ids': removed_stale_families,
         'removed_without_active_offer_count': len(removed_without_active_offer),
         'removed_without_active_offer_ids': removed_without_active_offer,
         'changed_price_count': changed_price_count,
