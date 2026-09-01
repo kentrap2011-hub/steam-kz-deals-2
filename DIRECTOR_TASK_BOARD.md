@@ -21,18 +21,23 @@
 13. Живые worker-чаты имеют пользовательские слоты `ЧАТ 1`, `ЧАТ 2`.
 14. Первая строка каждого копируемого сообщения worker-у содержит его метку, например `=== ЧАТ 2 — ДЛИТЕЛЬНОСТЬ ===`.
 15. Та же метка повторяется во всех follow-up сообщениях этому чату.
+16. Before introducing semantic translation, first check whether approved structured sources already provide ready Russian text. Translation is fallback, not assumed default.
 
 ## Активно сейчас
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Русские описания | Canonical contract for GitHub-owned translation scope + constrained scheduled ChatGPT translation worker | `WORKER_TASK_RU_TRANSLATION_CONTRACT_01.md` | `reviews/worker_reports/ru-translation-contract-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 1` | Русские описания | Recon ready-Russian structured sources before any translation architecture | `WORKER_TASK_RU_DESCRIPTION_SOURCE_RECON_01.md` | `reviews/worker_reports/ru-description-source-recon-01.md` | `ready_to_continue_in_existing_chat` |
 | `ЧАТ 2` | Длительность | Canonical IGDB duration-source/enrichment contract; GitHub-direct executor | `WORKER_TASK_DURATION_CONTRACT_01.md` | `reviews/worker_reports/duration-contract-01.md` | `ready_to_continue_in_existing_chat` |
+
+## Отложено / superseded for now
+
+- `WORKER_TASK_RU_TRANSLATION_CONTRACT_01.md` — **deferred**, not current. User correctly challenged the assumption that translation is needed before checking other ready-Russian sources. Revisit only if source recon proves a translation fallback is still necessary.
 
 ## Последние завершённые worker-этапы
 
-- `ru-description-implement-01` — deterministic producer/source-quality gate implemented. Legacy full payload has 132/442 invalid descriptions; manual translation was not performed. Remaining gap is canonical semantic translation ownership/interface. Status `needs_user_decision`, resolved by director choosing bounded GitHub-control-plane + scheduled ChatGPT translation contract next.
-- `duration-provider-recon-01` — `complete`; primary recommendation IGDB `game_time_to_beats`, executor `GitHub-direct`; RAWG rejected as semantic mismatch and HLTB scraping rejected without official permission/API. Contract required before implementation.
+- `ru-description-implement-01` — deterministic producer/source-quality gate implemented. Legacy full payload has 132/442 invalid descriptions; manual translation was not performed.
+- `duration-provider-recon-01` — `complete`; primary recommendation IGDB `game_time_to_beats`, executor `GitHub-direct`; RAWG rejected as semantic mismatch and HLTB scraping rejected without official permission/API.
 - `duration-source-recon-01` — `complete`; no existing structured duration source/cache/runtime path.
 - `duration-data-diagnosis-01` — root cause proven: final visual duration currently depends on text extraction from descriptions/summaries; no manual per-game processing allowed.
 - `ru-description-audit-01` — `complete`; 15/30 sample needed real fix; root cause systemic producer/source handling.
@@ -42,7 +47,7 @@
 
 ## Ближайшие задачи после текущей пары
 
-1. После `ru-translation-contract-01`: bounded IMPLEMENT for GitHub-owned unresolved-description payload/cache/ingestion + scheduled ChatGPT translation result interface; no manual catalog translation.
+1. После `ru-description-source-recon-01`: choose source precedence. If ready-Russian sources cover the gap adequately, implement GitHub-direct source enrichment. Only if gaps remain should a bounded translation contract be reconsidered.
 2. После `duration-contract-01`: bounded IMPLEMENT for GitHub-direct IGDB collection/cache/final-builder integration, gated on credentials/licensing/attribution/connectivity provisioning.
 3. После реализации и production rebuild двух data-quality paths — пользовательская выборочная проверка карточек.
 4. Ranking/card explanation quality audit — bounded recon top-30.
@@ -53,7 +58,7 @@
 
 1. Способ покупки — завершено.
 2. Детальная оценка — завершено.
-3. Русские описания — deterministic gate готов; contract translation path следующий.
+3. Русские описания — deterministic gate готов; source recon before translation.
 4. Duration coverage — IGDB выбран; canonical contract следующий.
 5. Качество причин `почему подходит / почему может не подойти`.
 6. Информация о русском языке и её влияние на ranking.
