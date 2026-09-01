@@ -29,36 +29,25 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Русские описания | Implement GitHub-owned translation scope/result ingestion/cache/resolver against existing nightly ChatGPT runtime | `WORKER_TASK_RU_TRANSLATION_IMPLEMENT_01.md` | `reviews/worker_reports/ru-translation-implement-01.md` | `implementation_committed_report_missing` |
+| `ЧАТ 1` | Русские описания | Fix pre-existing package/UI regression that blocks pre-AI workflow before translation acceptance | `WORKER_TASK_PACKAGE_UI_BLOCKER_FIX_01.md` | `reviews/worker_reports/package-ui-blocker-fix-01.md` | `ready_to_continue_in_existing_chat` |
 | `ЧАТ 2` | Длительность | IGDB implementation code complete; waiting only for IGDB/Twitch GitHub Secrets and live connectivity acceptance | `WORKER_TASK_DURATION_IGDB_IMPLEMENT_01.md` | `reviews/worker_reports/duration-igdb-implement-01.md` | `blocked_on_user_provisioning` |
 
 ## Worker chat lifecycle
 
-- `ЧАТ 1 — Русские описания`: implementation commits are present on `main` (scope producer, ingestion, cache, resolver, workflow and bounded scope build), but the required report `reviews/worker_reports/ru-translation-implement-01.md` is not yet saved. Do not delete or assign a new task; same chat must only save the report/closeout for the work already done.
+- `ЧАТ 1 — Русские описания`: `ru-translation-implement-01` report is now saved with status `needs_fix`. Repo-side translation mechanics exist, but production scope publication and scheduled-runtime round-trip are not yet proven. Immediate next step is the narrow package/UI blocker fix because that regression stops the canonical pre-AI workflow before translation stages. Keep the same chat for this bounded follow-up.
 - `ЧАТ 2 — Длительность`: implementation code/report saved. Do not assign more code until user provisions `IGDB_CLIENT_ID` and `IGDB_CLIENT_SECRET`; then use the existing canonical workflow for bounded connectivity acceptance.
-
-## Отложено / superseded
-
-- `WORKER_TASK_RU_TRANSLATION_PROVIDER_RECON_01.md` — cancelled by user decision.
-- Wikimedia ready-Russian secondary source — not approved as production dependency; incomplete coverage + CC BY-SA obligations.
 
 ## Последние завершённые worker-этапы
 
-- `duration-igdb-implement-01` — code complete but status `blocked` on missing GitHub Secrets. GitHub-owned IGDB collection/cache/final-builder path implemented and tested synthetically; production collection remains disabled. Expected secrets: `IGDB_CLIENT_ID`, `IGDB_CLIENT_SECRET`.
-- `ru-translation-contract-01` — `complete`; canonical translation request/result/cache contracts added, existing nightly scheduled ChatGPT runtime reused, GitHub remains control-plane owner.
-- `ru-description-source-recon-01` — `complete`; no broad second ready-Russian source; translation still needed for some unresolved descriptions.
-- `duration-contract-01` — `complete`; canonical `DURATION-ENRICHMENT-V1` chooses IGDB `game_time_to_beats`, GitHub-direct, unchanged `unknown = 2/3`.
-- `ru-description-implement-01` — deterministic description quality gate implemented; legacy payload has 132/442 invalid descriptions.
-- `duration-provider-recon-01` — `complete`; IGDB primary recommendation.
-- `duration-source-recon-01` — `complete`.
-- `duration-data-diagnosis-01` — root cause proven.
-- `detailed-score-user-fixes-01` — `complete`; phone check passed.
-- `compact-purchase-options-01` — `complete`; phone check passed.
+- `ru-translation-implement-01` — `needs_fix`; scope producer, ingestion, cache, resolver and workflow integration implemented. Remaining acceptance gaps: successful current production translation scope/status publication after final dedupe and end-to-end scheduled ChatGPT round-trip. Report `reviews/worker_reports/ru-translation-implement-01.md`.
+- `duration-igdb-implement-01` — code complete but blocked on missing GitHub Secrets.
+- `ru-translation-contract-01` — `complete`.
+- `ru-description-source-recon-01` — `complete`.
+- `duration-contract-01` — `complete`.
 
 ## Ближайшие задачи
 
-1. Same `ЧАТ 1` saves `reviews/worker_reports/ru-translation-implement-01.md` for the already committed implementation; no rework.
-2. Then director reviews whether the repo-side translation implementation is actually complete or requires one scheduled-runtime follow-up.
+1. Same `ЧАТ 1`: fix the package/UI regression with `WORKER_TASK_PACKAGE_UI_BLOCKER_FIX_01.md`.
+2. Then run one bounded Russian translation runtime acceptance: current GitHub scope -> scheduled ChatGPT -> strict ingestion/cache -> visual rebuild.
 3. User provisions `IGDB_CLIENT_ID` and `IGDB_CLIENT_SECRET` for Chat 2 connectivity acceptance.
-4. Track the separate pre-existing package/UI regression independently.
-5. After both data-quality paths are fully live/rebuilt — user spot-check of visible cards.
+4. After both data-quality paths are fully live/rebuilt — user spot-check of visible cards.
