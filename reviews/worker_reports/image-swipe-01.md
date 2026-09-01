@@ -23,6 +23,7 @@
 - Существующие направления свайпа не менялись.
 - GitHub PR check `validate` — success.
 - Pages deploy run `33487513565` для merge commit — success.
+- После усиления regression-проверки Pages deploy run `33487711192` для commit `8067c105ae6c2d7c3b9f7316d22ff17b475b20e2` — success.
 
 ### Unresolved
 Физический stress-test на реальном телефоне из worker-среды недоступен; race покрыт исполняемой DOM/Image simulation с production guard-кодом.
