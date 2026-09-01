@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import py_compile
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
@@ -175,6 +176,15 @@ class DurationEnrichmentTests(unittest.TestCase):
             self.assertTrue(de.write_cache(path, cache, before_text=''))
             first = path.read_text(encoding='utf-8')
             self.assertFalse(de.write_cache(path, cache, before_text=first))
+
+    def test_final_builder_duration_integration_compiles_and_declares_precedence(self):
+        builder = Path(__file__).with_name('build_final_visual_payload.py')
+        py_compile.compile(str(builder), doraise=True)
+        text = builder.read_text(encoding='utf-8')
+        self.assertIn('duration_enrichment.structured_duration_for_game', text)
+        self.assertIn("'igdb_game_time_to_beats_normally'", text)
+        self.assertIn("'legacy_text_explicit_duration_phrase'", text)
+        self.assertIn("'unknown'", text)
 
 
 if __name__ == '__main__':
