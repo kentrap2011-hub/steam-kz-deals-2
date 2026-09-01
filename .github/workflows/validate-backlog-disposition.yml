@@ -1,0 +1,51 @@
+name: Validate backlog dispositions
+
+on:
+  pull_request:
+    paths:
+      - "BACKLOG.md"
+      - "WORKER_TASK*.md"
+      - "CURRENT_TASK.md"
+      - "DIRECTOR_TASK_BOARD.md"
+      - "PROJECT_DECISIONS.md"
+      - "reviews/worker_reports/**"
+      - "scripts/validate_backlog_dispositions.py"
+      - "scripts/test_backlog_disposition_validator.py"
+      - ".github/workflows/validate-backlog-disposition.yml"
+  push:
+    branches: [main]
+    paths:
+      - "BACKLOG.md"
+      - "WORKER_TASK*.md"
+      - "CURRENT_TASK.md"
+      - "DIRECTOR_TASK_BOARD.md"
+      - "PROJECT_DECISIONS.md"
+      - "reviews/worker_reports/**"
+      - "scripts/validate_backlog_dispositions.py"
+      - "scripts/test_backlog_disposition_validator.py"
+      - ".github/workflows/validate-backlog-disposition.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backlog-disposition-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backlog-disposition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run backlog disposition regressions
+        run: python scripts/test_backlog_disposition_validator.py
+
+      - name: Validate backlog deletion dispositions
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: python scripts/validate_backlog_dispositions.py --base "$BASE_SHA" --head "$HEAD_SHA"
