@@ -9,6 +9,7 @@ RECEIPT_DIR = Path('data/cache/taste_ingest_receipts')
 PROJECTION = Path('data/production/pre_ai/taste_projection.json')
 MANIFEST = Path('data/production/pre_ai/chatgpt_payload.json')
 QUEUE = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
+FAMILY_GRAPH = Path('data/production/pre_ai/family_graph.json')
 
 
 def load_json(path: Path):
@@ -86,6 +87,92 @@ def sale_end_state_is_consistent(manifest):
     return coverage == expected_coverage
 
 
+def retained_base_support_keys(all_keys, after_queue, after_projection, family_graph):
+    queue_by_key = {}
+    duplicate_queue_keys = set()
+    for row in after_queue:
+        key = row.get('taste_subject_key')
+        if key in queue_by_key:
+            duplicate_queue_keys.add(key)
+        queue_by_key[key] = row
+
+    family_by_id = {
+        family.get('family_id'): family
+        for family in family_graph.get('families') or []
+        if isinstance(family, dict) and family.get('family_id')
+    }
+    projection_entries = after_projection.get('entries') or {}
+    retained_keys = set(all_keys) & set(queue_by_key)
+    allowed = set()
+    invalid = {}
+
+    for key in sorted(retained_keys):
+        row = queue_by_key[key]
+        family = family_by_id.get(row.get('family_id'))
+        reasons = []
+        if key in duplicate_queue_keys:
+            reasons.append('duplicate_queue_key')
+        if (projection_entries.get(key) or {}).get('status') != 'cache_hit':
+            reasons.append('not_safe_cache_hit')
+        if row.get('work_required') != ['resolve_base_support_condition']:
+            reasons.append('unexpected_work_required')
+        if not family:
+            reasons.append('family_missing')
+        else:
+            if family.get('taste_subject_key') != key:
+                reasons.append('family_taste_subject_mismatch')
+            if family.get('requires_ai_base_support') is not True:
+                reasons.append('family_does_not_require_base_support')
+        if reasons:
+            invalid[key] = reasons
+        else:
+            allowed.add(key)
+
+    return allowed, invalid
+
+
+def build_transactional_proof_checks(
+    *,
+    all_keys,
+    total_results,
+    baseline_safe_hits,
+    baseline_ai_required,
+    baseline_ai_queue,
+    after_projection,
+    after_manifest,
+    after_queue,
+    family_graph,
+):
+    after_queue_keys = {row.get('taste_subject_key') for row in after_queue}
+    allowed_retained_keys, invalid_retained_keys = retained_base_support_keys(
+        all_keys,
+        after_queue,
+        after_projection,
+        family_graph,
+    )
+    expected_safe_hits = baseline_safe_hits + total_results
+    expected_ai_required = baseline_ai_required - total_results
+    expected_ai_queue = baseline_ai_queue - total_results + len(allowed_retained_keys)
+
+    checks = {
+        'projection_complete': after_projection.get('complete_coverage') is True,
+        'family_partition_complete': after_manifest.get('complete_family_partition') is True,
+        'sale_end_state_consistent': sale_end_state_is_consistent(after_manifest),
+        'missing_sale_end_is_nonblocking': (after_manifest.get('contract') or {}).get('missing_sale_end_does_not_exclude_candidate') is True,
+        'safe_hits_increment_exact': after_projection.get('safe_cache_hit_count') == expected_safe_hits,
+        'ai_required_decrement_exact': after_projection.get('ai_required_count') == expected_ai_required,
+        'retained_ingest_keys_are_base_support_only': not invalid_retained_keys,
+        'ai_queue_decrement_exact': after_manifest.get('ai_queue_count') == expected_ai_queue,
+        'queue_file_count_exact': len(after_queue) == expected_ai_queue,
+        'all_ingested_keys_removed_from_queue': (set(all_keys) & after_queue_keys) == allowed_retained_keys,
+        'all_ingested_keys_are_cache_hits': all(
+            (after_projection.get('entries') or {}).get(key, {}).get('status') == 'cache_hit'
+            for key in all_keys
+        ),
+    }
+    return checks, allowed_retained_keys, invalid_retained_keys, expected_ai_queue
+
+
 def main():
     inbox_files = sorted(INBOX_DIR.glob('*.json')) if INBOX_DIR.exists() else []
     if not inbox_files:
@@ -148,29 +235,27 @@ def main():
     after_projection = load_json(PROJECTION)
     after_manifest = load_json(MANIFEST)
     after_queue = read_jsonl(QUEUE)
-    after_queue_keys = {row['taste_subject_key'] for row in after_queue}
+    family_graph = load_json(FAMILY_GRAPH)
 
-    expected_safe_hits = baseline_safe_hits + total_results
-    expected_ai_required = baseline_ai_required - total_results
-    expected_ai_queue = baseline_ai_queue - total_results
-
-    checks = {
-        'projection_complete': after_projection.get('complete_coverage') is True,
-        'family_partition_complete': after_manifest.get('complete_family_partition') is True,
-        'sale_end_state_consistent': sale_end_state_is_consistent(after_manifest),
-        'missing_sale_end_is_nonblocking': (after_manifest.get('contract') or {}).get('missing_sale_end_does_not_exclude_candidate') is True,
-        'safe_hits_increment_exact': after_projection.get('safe_cache_hit_count') == expected_safe_hits,
-        'ai_required_decrement_exact': after_projection.get('ai_required_count') == expected_ai_required,
-        'ai_queue_decrement_exact': after_manifest.get('ai_queue_count') == expected_ai_queue,
-        'queue_file_count_exact': len(after_queue) == expected_ai_queue,
-        'all_ingested_keys_removed_from_queue': not (set(all_keys) & after_queue_keys),
-        'all_ingested_keys_are_cache_hits': all(
-            (after_projection.get('entries') or {}).get(key, {}).get('status') == 'cache_hit'
-            for key in all_keys
-        ),
-    }
+    checks, allowed_retained_keys, invalid_retained_keys, expected_ai_queue = build_transactional_proof_checks(
+        all_keys=all_keys,
+        total_results=total_results,
+        baseline_safe_hits=baseline_safe_hits,
+        baseline_ai_required=baseline_ai_required,
+        baseline_ai_queue=baseline_ai_queue,
+        after_projection=after_projection,
+        after_manifest=after_manifest,
+        after_queue=after_queue,
+        family_graph=family_graph,
+    )
     failed = [name for name, ok in checks.items() if not ok]
     if failed:
+        if invalid_retained_keys:
+            print(json.dumps({
+                'invalid_retained_ingest_keys': invalid_retained_keys,
+                'expected_ai_queue_count': expected_ai_queue,
+                'actual_ai_queue_count': after_manifest.get('ai_queue_count'),
+            }, ensure_ascii=False, indent=2))
         raise SystemExit(f'Taste inbox transactional proof failed: {failed}')
 
     batch_id = digest.hexdigest()[:20]
