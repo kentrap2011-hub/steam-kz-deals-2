@@ -10,6 +10,12 @@ from giveaway_steam import normalize_candidate as normalize_steam
 
 NOW = datetime(2026, 9, 1, 12, 0, tzinfo=timezone.utc)
 
+FIRST_PARTY_URLS = {
+    "steam": "https://store.steampowered.com/app/10/",
+    "epic": "https://store.epicgames.com/en-US/p/test-game",
+    "gog": "https://www.gog.com/en/game/test_game",
+}
+
 
 def generic(source="steam", title="Test Game"):
     item = base_candidate(source, NOW)
@@ -17,7 +23,7 @@ def generic(source="steam", title="Test Game"):
         "source_product_id": f"{source}-1",
         "source_offer_id": f"{source}:offer:1",
         "title": title,
-        "claim_url": f"https://example.invalid/{source}/1",
+        "claim_url": FIRST_PARTY_URLS[source],
         "promotion_start_utc": iso_utc(NOW - timedelta(hours=1)),
         "promotion_end_utc": iso_utc(NOW + timedelta(days=2)),
         "promotion_type": "claim_to_keep",
@@ -38,7 +44,7 @@ def generic(source="steam", title="Test Game"):
 
 
 def collection(source_id, candidates, complete=True):
-    return SourceCollection(source_id, candidates, complete, "ok" if complete else "failed", f"https://{source_id}.invalid", iso_utc(NOW), {}, None if complete else "SOURCE_ERROR", None if complete else "fixture failure")
+    return SourceCollection(source_id, candidates, complete, "ok" if complete else "failed", FIRST_PARTY_URLS[source_id], iso_utc(NOW), {}, None if complete else "SOURCE_ERROR", None if complete else "fixture failure")
 
 
 class GiveawayTests(unittest.TestCase):
