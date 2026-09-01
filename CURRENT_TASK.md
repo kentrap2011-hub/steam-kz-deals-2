@@ -28,6 +28,16 @@
 
 Все пункты Definition of Done для этой fixed-package задачи подтверждены. Следующая planned-задача здесь не начата.
 
+### Fix stale/wrong game image when swiping cards
+Статус: `complete`.
+- причина была в том, что старая картинка могла оставаться видимой, пока новый кадр ещё загружался;
+- добавлен guard: старый foreground/blur очищается сразу, поздняя загрузка от предыдущей карточки игнорируется;
+- regression моделирует быстрые переходы `A -> B -> C` и обратный переход с загрузками не по порядку;
+- merge: `d10cfe40aed926f488e02e93d19c6c43037d8e93`; усиление regression: `8067c105ae6c2d7c3b9f7316d22ff17b475b20e2`;
+- deploy run `33487711192`: success;
+- worker report: `reviews/worker_reports/image-swipe-01.md`;
+- финальная пользовательская проверка на реальном телефоне 2026-09-01: картинка больше не залипает при перелистывании.
+
 ## Завершённые package-инварианты, которые сохраняются
 
 - только fixed Steam Store Package (`Sub_`);
@@ -83,13 +93,6 @@
 - не подставлять случайные/спойлерные видео ради ссылки;
 - producer-owned choice, UI display-only.
 
-### D. Fix stale/wrong game image when swiping cards
-Статус: `planned`.
-- при переходе на новую игру иногда остаётся изображение предыдущей до ручного refresh;
-- text/price/image должны атомарно соответствовать текущей игре;
-- проверить image state/key/cache и async race при быстрых переходах;
-- добавить regression на несколько быстрых последовательных swipes.
-
 ### E. Guarantee Russian game descriptions
 Статус: `planned`.
 - 100% visible cards должны иметь содержательное русское описание;
@@ -122,4 +125,4 @@
 
 ## Текущий статус работ
 
-Fixed-package complete-content valuation завершена и закрыта. Новая planned-задача в этом worker-чате не начата. Current Taste ingestion остаётся отдельным GitHub-owned blocker.
+Fixed-package complete-content valuation и stale-image swipe bug завершены и закрыты. Current Taste ingestion остаётся отдельным GitHub-owned blocker. Новая planned-задача пока не начата.
