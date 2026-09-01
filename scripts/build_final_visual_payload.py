@@ -209,6 +209,41 @@ def apply_deterministic_purchase_refresh(ready):
     return package_stats, final_priority_order
 
 
+def refresh_existing_giveaways_only():
+    """Update only the giveaway sibling on an already accepted visual payload.
+
+    This bounded path exists so an auxiliary giveaway refresh never has to rewrite
+    paid cards while an independent paid-card prerequisite is blocked. It preserves
+    the canonical final visual producer and explicitly asserts that paid `items`
+    remain byte-equivalent after JSON normalization.
+    """
+    if not OUT.exists():
+        raise RuntimeError(f'missing canonical visual payload: {OUT}')
+
+    before = OUT.read_text(encoding='utf-8')
+    ready = json.loads(before)
+    paid_before = json.dumps(ready.get('items') or [], ensure_ascii=False, separators=(',', ':'))
+
+    giveaways = giveaway_visual_handoff.derive_from_path()
+    ready['giveaways'] = giveaways
+    contract = ready.setdefault('production_contract', {})
+    contract['final_visual_producer_blob_sha'] = base_builder.git_sha('scripts/build_final_visual_payload.py')
+    contract['giveaway_visual_handoff_blob_sha'] = base_builder.git_sha('scripts/giveaway_visual_handoff.py')
+    contract['source_giveaway_snapshot_blob_sha'] = base_builder.git_sha('data/production/giveaways/v1/current.json')
+    contract['giveaway_visual_schema_version'] = 1
+
+    paid_after = json.dumps(ready.get('items') or [], ensure_ascii=False, separators=(',', ':'))
+    if paid_after != paid_before:
+        raise RuntimeError('giveaway-only refresh mutated paid items')
+
+    after = json.dumps(ready, ensure_ascii=False, separators=(',', ':'))
+    changed = after != before
+    if changed:
+        OUT.write_text(after, encoding='utf-8')
+
+    return changed, giveaways.get('state'), giveaways.get('accepted_offer_count_at_build')
+
+
 def refresh_existing_media():
     if not OUT.exists():
         return False, 0, 0, {}
@@ -330,6 +365,14 @@ def refresh_existing_media():
 
 
 def main():
+    if os.environ.get('GIVEAWAY_VISUAL_REFRESH_ONLY') == '1':
+        changed, state, offer_count = refresh_existing_giveaways_only()
+        print(
+            f'VISUAL_GIVEAWAY_REFRESH=BUILT changed={str(changed).lower()} '
+            f'state={state} offers={offer_count}'
+        )
+        return
+
     source_key, payload = base_builder.current_production_readiness()
     if source_key is None:
         if os.environ.get('FORCE_VISUAL_BUILD') == '1':
