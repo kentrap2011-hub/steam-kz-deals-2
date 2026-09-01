@@ -4,17 +4,73 @@ from pathlib import Path
 
 import apply_fixed_package_purchase_options as package_options
 import build_daily_visual_payload as base_builder
+import duration_enrichment
 import priority_ranking
 import refine_visual_ranking as refiner
 
 ROOT = Path('.')
 OUT = ROOT / 'data/production/visual/current.json'
+DURATION_CONTRACT = ROOT / 'config/duration_enrichment_contract.json'
+DURATION_CACHE = ROOT / 'data/cache/duration_estimates.json'
 
 
 def normalize_media_url(value):
     if isinstance(value, str) and value.startswith('https://shared.fastly.steamstatic.com/'):
         return 'https://shared.akamai.steamstatic.com/' + value[len('https://shared.fastly.steamstatic.com/'):]
     return value
+
+
+def load_duration_entries():
+    if not DURATION_CONTRACT.exists():
+        return {}
+    contract = duration_enrichment.load_json(DURATION_CONTRACT)
+    cache = duration_enrichment.load_cache(DURATION_CACHE, contract)
+    entries = cache.get('entries') or {}
+    return entries if isinstance(entries, dict) else {}
+
+
+def apply_duration_resolution(game, projection, duration_entries, preserve_existing_fallback=False):
+    structured = duration_enrichment.structured_duration_for_game(game, duration_entries)
+    if structured:
+        resolved = structured
+    elif preserve_existing_fallback and game.get('duration_estimate_source') != 'igdb_game_time_to_beats_normally':
+        return False
+    else:
+        resolved = duration_enrichment.resolve_duration_for_game(
+            game,
+            projection,
+            duration_entries,
+            refiner.extract_duration_hours,
+        )
+
+    hours = resolved.get('hours')
+    band, penalty = refiner.duration_band(hours)
+    fields = {
+        'estimated_duration_hours': hours,
+        'duration_estimate_source': resolved.get('source'),
+        'duration_estimate_provenance': resolved.get('provenance'),
+        'duration_preference_band': band,
+        'duration_tiebreak_penalty': penalty,
+    }
+    changed = False
+    for key, value in fields.items():
+        if game.get(key) != value:
+            game[key] = value
+            changed = True
+    return changed
+
+
+def duration_source_distribution(items):
+    counts = {'structured_igdb': 0, 'legacy_text': 0, 'unknown': 0}
+    for game in items or []:
+        source = game.get('duration_estimate_source')
+        if source == 'igdb_game_time_to_beats_normally':
+            counts['structured_igdb'] += 1
+        elif source == 'legacy_text_explicit_duration_phrase':
+            counts['legacy_text'] += 1
+        else:
+            counts['unknown'] += 1
+    return counts
 
 
 def apply_deterministic_purchase_refresh(ready):
@@ -37,6 +93,14 @@ def apply_deterministic_purchase_refresh(ready):
         'fixed_package_helper_blob_sha': base_builder.git_sha('scripts/apply_fixed_package_purchase_options.py'),
         'fixed_package_options_blob_sha': package_options.git_blob_sha(package_options.PACKAGE_OPTIONS),
         'purchase_equivalence_blob_sha': package_options.git_blob_sha(package_options.PURCHASE_EQUIVALENCE),
+        'duration_enrichment_helper_blob_sha': base_builder.git_sha('scripts/duration_enrichment.py'),
+        'duration_enrichment_contract_blob_sha': base_builder.git_sha('config/duration_enrichment_contract.json'),
+        'duration_cache_blob_sha': base_builder.git_sha('data/cache/duration_estimates.json'),
+        'duration_source_precedence': [
+            'validated_structured_igdb_normally',
+            'legacy_text_explicit_duration_phrase',
+            'unknown',
+        ],
         'ranking_stage': 'single_canonical_sort_after_deterministic_purchase_option_refresh',
         'priority_factors': final_priority_order,
         'priority_ranking_contract': 'FINAL-PRIORITY-RANKING-V2',
@@ -61,6 +125,7 @@ def refresh_existing_media():
     before = OUT.read_text(encoding='utf-8')
     ready = json.loads(before)
     items = ready.get('items') or []
+    duration_entries = load_duration_entries()
     wanted_appids = set()
     for game in items:
         for appid in game.get('base_appids') or []:
@@ -71,6 +136,7 @@ def refresh_existing_media():
     media = base_builder.visual_builder.storebrowse_media(wanted_appids) if wanted_appids else {}
     content_metadata_by_appid = base_builder.visual_builder.load_content_metadata_by_appid()
     touched = 0
+    duration_touched = 0
     for game in items:
         screenshots = []
         header = None
@@ -108,11 +174,15 @@ def refresh_existing_media():
                 game[key] = value
                 changed = True
 
+        if apply_duration_resolution(game, {}, duration_entries, preserve_existing_fallback=True):
+            duration_touched += 1
+            changed = True
+
         if changed:
             touched += 1
 
-    # Even when there is no new semantic Taste result, package/equivalence/price logic
-    # is deterministic and must be allowed to refresh the current visual snapshot.
+    # Even when there is no new semantic Taste result, package/equivalence/price/duration
+    # logic is deterministic and must be allowed to refresh the current visual snapshot.
     package_stats, _ = apply_deterministic_purchase_refresh(ready)
     items = ready.get('items') or []
 
@@ -128,6 +198,8 @@ def refresh_existing_media():
     contract = ready.setdefault('production_contract', {})
     contract['visual_builder_blob_sha'] = base_builder.git_sha('scripts/build_visual_feed_v2.py')
     contract['final_visual_producer_blob_sha'] = base_builder.git_sha('scripts/build_final_visual_payload.py')
+    contract['duration_source_distribution'] = duration_source_distribution(items)
+    contract['duration_structured_refresh_touched_count'] = duration_touched
 
     after = json.dumps(ready, ensure_ascii=False, separators=(',', ':'))
     if after == before:
@@ -180,6 +252,7 @@ def main():
         if refiner.TASTE_PROJECTION.exists()
         else {}
     )
+    duration_entries = load_duration_entries()
     profile, profile_error = refiner.fetch_bound_profile(payload)
     direct_index = refiner.direct_profile_index(profile)
 
@@ -228,12 +301,7 @@ def main():
         if game.get('fit') != old_fit:
             fit_changes += 1
 
-        hours, duration_source = refiner.extract_duration_hours(projection, game)
-        band, penalty = refiner.duration_band(hours)
-        game['estimated_duration_hours'] = hours
-        game['duration_estimate_source'] = duration_source
-        game['duration_preference_band'] = band
-        game['duration_tiebreak_penalty'] = penalty
+        apply_duration_resolution(game, projection, duration_entries)
 
         if not refiner.apply_commercial_branch(game, context):
             removed += 1
@@ -265,6 +333,7 @@ def main():
         'without_any_image': len(refined) - with_any_image,
         'coverage_percent': round((with_any_image / len(refined)) * 100, 1) if refined else 100.0,
     }
+    duration_distribution = duration_source_distribution(refined)
     contract = ready.setdefault('production_contract', {})
     contract.clear()
     contract.update({
@@ -278,6 +347,9 @@ def main():
         'ranking_helper_blob_sha': base_builder.git_sha('scripts/priority_ranking.py'),
         'ranking_policy_blob_sha': base_builder.git_sha('config/final_ranking_policy.json'),
         'refinement_helper_blob_sha': base_builder.git_sha('scripts/refine_visual_ranking.py'),
+        'duration_enrichment_helper_blob_sha': base_builder.git_sha('scripts/duration_enrichment.py'),
+        'duration_enrichment_contract_blob_sha': base_builder.git_sha('config/duration_enrichment_contract.json'),
+        'duration_cache_blob_sha': base_builder.git_sha('data/cache/duration_estimates.json'),
         'fixed_package_helper_blob_sha': base_builder.git_sha('scripts/apply_fixed_package_purchase_options.py'),
         'fixed_package_options_blob_sha': package_options.git_blob_sha(package_options.PACKAGE_OPTIONS),
         'purchase_equivalence_blob_sha': package_options.git_blob_sha(package_options.PURCHASE_EQUIVALENCE),
@@ -310,7 +382,13 @@ def main():
         'windows_rule': 'legacy Steam XP/7/8 requirement label alone is neutral; only confirmed modern-Windows friction may penalize',
         'ui_manual_end_rule': 'local explicit end-of-queue override is applied by UI after production priority_rank',
         'backtracking_rule': 'location reuse itself is neutral; penalize unchanged repetition without new gameplay value',
-        'duration_rule': 'very weak late tiebreak only',
+        'duration_rule': 'structured IGDB normally -> legacy explicit-text fallback -> unknown; ranking weights unchanged',
+        'duration_source_precedence': [
+            'validated_structured_igdb_normally',
+            'legacy_text_explicit_duration_phrase',
+            'unknown',
+        ],
+        'duration_source_distribution': duration_distribution,
         'achievement_profile_scale': {
             '5': 'new_play_styles_or_challenges',
             '4': 'deeper_mechanic_use',
@@ -334,6 +412,9 @@ def main():
         f'expired_removed={ready.get("expired_family_count_removed_at_build")} '
         f'fit_changes={fit_changes} removed={removed} '
         f'windows_labels_neutralized={windows_labels_neutralized} '
+        f'duration_igdb={duration_distribution.get("structured_igdb")} '
+        f'duration_text={duration_distribution.get("legacy_text")} '
+        f'duration_unknown={duration_distribution.get("unknown")} '
         f'package_qualifying={package_stats.get("qualifying_package_count")} '
         f'package_strict={package_stats.get("strict_savings_package_count")} '
         f'package_equivalence={package_stats.get("verified_equivalence_package_count")} '
