@@ -22,23 +22,24 @@
 14. Первая строка каждого копируемого сообщения worker-у содержит его метку, например `=== ЧАТ 2 — ДЛИТЕЛЬНОСТЬ ===`.
 15. Та же метка повторяется во всех follow-up сообщениях этому чату.
 16. Before introducing semantic translation, first check whether approved structured sources already provide ready Russian text. Translation is fallback, not assumed default.
+17. User decision 2026-09-01: when translation is required after ready-Russian sources are exhausted, prefer ChatGPT semantic translation over generic machine-translation APIs because description quality is more important than replacing ChatGPT with a lower-quality translator. Do not pursue DeepL/Google/Yandex/Azure unless this decision is later changed.
 
 ## Активно / подготовлено сейчас
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Русские описания | Compare GitHub-direct machine-translation APIs so ChatGPT translation can be avoided if feasible | `WORKER_TASK_RU_TRANSLATION_PROVIDER_RECON_01.md` | `reviews/worker_reports/ru-translation-provider-recon-01.md` | `prepared_for_new_chat` |
+| `ЧАТ 1` | Русские описания | Canonical GitHub-owned translation contract with constrained scheduled ChatGPT fallback | `WORKER_TASK_RU_TRANSLATION_CONTRACT_01.md` | `reviews/worker_reports/ru-translation-contract-01.md` | `prepared_for_new_chat` |
 | `ЧАТ 2` | Длительность | IGDB duration contract complete; implementation waits on credentials/licensing/attribution provisioning | `WORKER_TASK_DURATION_CONTRACT_01.md` | `reviews/worker_reports/duration-contract-01.md` | `awaiting_user_provisioning` |
 
 ## Worker chat lifecycle
 
-- Old `ЧАТ 1 — Русские описания` reached maximum context after completing `ru-description-source-recon-01`. Report is saved and director decision made. **Old chat may be deleted.** Slot `ЧАТ 1` is reused by the new translation-provider recon chat.
-- Existing `ЧАТ 2 — Длительность` completed the contract task. No further worker action should be assigned until IGDB provisioning prerequisites are clarified. Its report is durable, so the chat may also be deleted if the user prefers; a future implementation can start in a fresh `ЧАТ 2`.
+- Old `ЧАТ 1 — Русские описания` reached maximum context after completing `ru-description-source-recon-01`. Report is saved and director decision made. **Old chat may be deleted.** Slot `ЧАТ 1` is reused by a fresh translation-contract chat.
+- Existing `ЧАТ 2 — Длительность` completed the contract task. No further worker action should be assigned until IGDB provisioning prerequisites are clarified. Its report is durable, so the chat may be deleted; later implementation can start in a fresh `ЧАТ 2`.
 
-## Отложено / superseded for now
+## Отложено / superseded
 
-- `WORKER_TASK_RU_TRANSLATION_CONTRACT_01.md` — deferred. Do not use unless provider recon shows a GitHub-direct translation API is unsuitable and a semantic ChatGPT fallback is still needed.
-- Wikimedia ready-Russian secondary source — technically feasible but not yet approved because coverage is incomplete and reused Wikipedia text requires CC BY-SA attribution/share-alike handling.
+- `WORKER_TASK_RU_TRANSLATION_PROVIDER_RECON_01.md` — **cancelled/superseded by user decision**. Do not compare generic translation APIs unless user explicitly reopens that option.
+- Wikimedia ready-Russian secondary source — technically feasible but not approved as a production dependency because coverage is incomplete and reused Wikipedia text requires CC BY-SA attribution/share-alike handling. It may be reconsidered separately, but translation architecture does not depend on it.
 
 ## Последние завершённые worker-этапы
 
@@ -55,7 +56,7 @@
 
 ## Ближайшие задачи
 
-1. `ЧАТ 1`: translation-provider recon (DeepL / Google / Yandex, optionally Azure) to determine whether GitHub can translate directly without ChatGPT.
+1. `ЧАТ 1`: canonical translation contract: GitHub prepares exact unresolved source-text work; scheduled ChatGPT translates only those immutable records; GitHub validates, persists and rebuilds. No manual catalog translation.
 2. `ЧАТ 2`: after user clarifies project commercial status and IGDB credentials can be provisioned, bounded IMPLEMENT for GitHub-direct IGDB collection/cache/final-builder integration.
 3. After both data-quality paths are implemented and rebuilt — user spot-check of visible cards.
 4. Ranking/card explanation quality audit — bounded recon top-30.
@@ -66,7 +67,7 @@
 
 1. Способ покупки — завершено.
 2. Детальная оценка — завершено.
-3. Русские описания — quality gate done; choose direct translation provider before any ChatGPT translation architecture.
+3. Русские описания — Steam RU primary; ChatGPT translation fallback chosen for unresolved descriptions; canonical contract next.
 4. Duration coverage — contract done; awaiting IGDB provisioning then implementation.
 5. Качество причин `почему подходит / почему может не подойти`.
 6. Информация о русском языке и её влияние на ranking.
