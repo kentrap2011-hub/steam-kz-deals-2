@@ -29,13 +29,13 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Русские описания | Canonical GitHub-owned translation contract with constrained scheduled ChatGPT fallback | `WORKER_TASK_RU_TRANSLATION_CONTRACT_01.md` | `reviews/worker_reports/ru-translation-contract-01.md` | `prepared_for_new_chat` |
+| `ЧАТ 1` | Русские описания | Implement GitHub-owned translation scope/result ingestion/cache/resolver against existing nightly ChatGPT runtime | `WORKER_TASK_RU_TRANSLATION_IMPLEMENT_01.md` | `reviews/worker_reports/ru-translation-implement-01.md` | `prepared_waiting_for_chat2_shared_files` |
 | `ЧАТ 2` | Длительность | Implement GitHub-direct IGDB duration collection/cache/final-builder path; stop cleanly if credentials absent | `WORKER_TASK_DURATION_IGDB_IMPLEMENT_01.md` | `reviews/worker_reports/duration-igdb-implement-01.md` | `active_in_existing_chat` |
 
 ## Worker chat lifecycle
 
-- Old `ЧАТ 1 — Русские описания` reached maximum context; report saved; may be deleted. Slot `ЧАТ 1` is reused by a fresh translation-contract chat.
-- `ЧАТ 2 — Длительность`: implementation task was sent to the existing chat rather than a fresh chat. This is acceptable; the task re-reads canonical GitHub state. Do **not** delete it mid-task. Switch to a fresh chat only if it reaches context limit or becomes confused/stale.
+- `ЧАТ 1 — Русские описания`: translation contract is complete. Next implementation task is prepared but must not start overlapping writes while `ЧАТ 2` is still changing shared final-builder/daily-workflow files. Send it after `duration-igdb-implement-01` is durably finished, or only if worker confirms no shared-file overlap.
+- `ЧАТ 2 — Длительность`: implementation task is active in the existing chat. Do not delete it mid-task.
 
 ## Отложено / superseded
 
@@ -44,6 +44,7 @@
 
 ## Последние завершённые worker-этапы
 
+- `ru-translation-contract-01` — `complete`; canonical translation request/result/cache contracts added, existing nightly scheduled ChatGPT runtime reused, GitHub remains control-plane owner. Report commit `09e7ca6b555c5e1c79bbebc62f0565f8542c7acf`.
 - `ru-description-source-recon-01` — `complete`; no broad second ready-Russian source; translation still needed for some unresolved descriptions.
 - `duration-contract-01` — `complete`; canonical `DURATION-ENRICHMENT-V1` chooses IGDB `game_time_to_beats`, GitHub-direct, unchanged `unknown = 2/3`.
 - `ru-description-implement-01` — deterministic description quality gate implemented; legacy payload has 132/442 invalid descriptions.
@@ -55,9 +56,9 @@
 
 ## Ближайшие задачи
 
-1. `ЧАТ 1`: translation contract.
-2. `ЧАТ 2`: IGDB implementation; if credentials missing, return exact provisioning steps and expected secret names without manual duration lookup.
-3. After both data-quality paths are implemented/rebuilt — user spot-check of visible cards.
+1. Дождаться durable завершения `ЧАТ 2` IGDB implementation, потому что он уже меняет shared final-builder/daily-workflow files.
+2. Затем отправить `ЧАТ 1` `WORKER_TASK_RU_TRANSLATION_IMPLEMENT_01.md`.
+3. После обеих data-quality реализаций/rebuild — пользовательский spot-check карточек.
 4. Ranking/card explanation quality audit — bounded recon top-30.
 5. Russian language availability as ranking factor.
 6. YouTube later.
