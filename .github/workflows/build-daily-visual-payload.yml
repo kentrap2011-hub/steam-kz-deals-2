@@ -15,6 +15,8 @@ on:
       - "scripts/build_daily_visual_payload.py"
       - "scripts/build_visual_feed_v2.py"
       - "scripts/apply_fixed_package_purchase_options.py"
+      - "scripts/refresh_visual_commercial_fields.py"
+      - "scripts/test_commercial_refresh.py"
       - "scripts/test_fixed_package_purchase_options.py"
       - "scripts/normalize_visual_media_urls.py"
       - "scripts/achievement_quality.py"
@@ -75,10 +77,11 @@ jobs:
           set -euo pipefail
           python scripts/validate_priority_ranking.py
 
-      - name: Validate fixed package discovery, equivalence, UI, and ranking value
+      - name: Validate fresh commercial refresh and fixed package ranking value
         shell: bash
         run: |
           set -euo pipefail
+          python scripts/test_commercial_refresh.py
           python scripts/test_fixed_package_purchase_options.py
 
       - name: Require complete history classification coverage before replacing daily visual
@@ -119,9 +122,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # The unified producer performs semantic/practical refinement and fixed-package
-          # purchase-option enrichment before assigning priority_rank exactly once from
-          # config/final_ranking_policy.json.
+          # Semantic Taste may remain on the accepted snapshot while deterministic
+          # commercial state is refreshed from the current GitHub-owned store/history
+          # source before package comparison and the canonical final ranking.
           export FORCE_VISUAL_BUILD=1
           python scripts/build_final_visual_payload.py | tee /tmp/visual-build.log
           # StoreBrowse can return stale screenshot metadata for storefront aliases
