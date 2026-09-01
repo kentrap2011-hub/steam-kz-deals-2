@@ -28,19 +28,19 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Бесплатные раздачи | Finish canonical production wiring/run for Tier-1 cross-platform giveaways | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_PRODUCTION_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-production-fix-01.md` | `ready_to_continue_in_existing_chat` |
-| `ЧАТ 2` | Эффективность worker-чатов | Implement minimal durable worker pitfall guardrails from completed efficiency audit | `WORKER_TASK_WORKER_EFFICIENCY_GUARDRAILS_01.md` | `reviews/worker_reports/worker-efficiency-guardrails-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 1` | Бесплатные раздачи | Finish canonical production wiring/run for Tier-1 cross-platform giveaways | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_PRODUCTION_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-production-fix-01.md` | `active_or_ready` |
+| `ЧАТ 2` | Объяснения карточек | Implement game-specific positive reasons and consistent grounded risk rendering | `WORKER_TASK_CARD_EXPLANATION_IMPLEMENT_01.md` | `reviews/worker_reports/card-explanation-implement-01.md` | `ready_for_new_chat` |
 
 ## Подготовлено, но НЕ назначено следующим
 
-- Explanation-quality implementation remains deferred.
 - Duration connectivity remains blocked on user-provisioned IGDB secrets.
 - Russian translation real round-trip remains blocked on an occurrence of the existing Nightly Production Runtime.
 
 ## Последние решения
 
-- `cross-platform-giveaway-implement-01` — `needs_fix`: adapters/contract/producer/tests are implemented, but producer/tests are not yet wired into canonical GitHub production/validation and no live versioned giveaway snapshot exists. Direct bounded production-wiring fix selected for Chat 1.
-- `worker-efficiency-audit-01` — complete; Chat 2 is on its minimal operational-doc follow-up.
+- `worker-efficiency-guardrails-01` — complete; the three proven reusable pitfalls are now durable and protocol hooks are in place. No follow-up required.
+- Chat 2 moves back to product work: card explanation implementation, based on the already completed quality audit. This is independent of Chat 1's giveaway production wiring.
+- `cross-platform-giveaway-implement-01` — `needs_fix`; Chat 1 is on its bounded production-wiring fix.
 - `backlog-disposition-validator-01` — complete and validated in GitHub Actions.
 
 ## Выбор следующей работы
