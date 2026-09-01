@@ -28,8 +28,8 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Бесплатные раздачи | Implement Tier-1 cross-platform giveaway data plane: hardened Steam + Epic KZ + GOG KZ | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_IMPLEMENT_01.md` | `reviews/worker_reports/cross-platform-giveaway-implement-01.md` | `ready_to_continue_in_existing_chat` |
-| `ЧАТ 2` | Память задач | Audit pre-backlog agreements, historical removals and orphaned tasks | `WORKER_TASK_TASK_MEMORY_AUDIT_01.md` | `reviews/worker_reports/task-memory-audit-01.md` | `active_or_ready` |
+| `ЧАТ 1` | Бесплатные раздачи | Implement Tier-1 cross-platform giveaway data plane: hardened Steam + Epic KZ + GOG KZ | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_IMPLEMENT_01.md` | `reviews/worker_reports/cross-platform-giveaway-implement-01.md` | `active_or_ready` |
+| `ЧАТ 2` | Защита памяти задач | Add fail-closed backlog deletion -> durable disposition validator | `WORKER_TASK_BACKLOG_DISPOSITION_VALIDATOR_01.md` | `reviews/worker_reports/backlog-disposition-validator-01.md` | `ready_for_new_chat` |
 
 ## Подготовлено, но НЕ назначено следующим
 
@@ -40,10 +40,9 @@
 
 ## Последние решения
 
-- `cross-platform-giveaway-recon-01` completed its source/architecture recon. Direct continuation is justified because this is the user's high-priority time-limited feature.
-- Tier-1 baseline chosen by recon: Steam + Epic Games Store + GOG.
-- New implementation must use one source-agnostic contract/producer, fail closed on ambiguous permanent-claim semantics, and avoid a second writer for current Steam `freebies*` outputs.
-- Amazon Prime/Luna subscription entitlements and other Tier-2/event-specific sources are outside the universal first baseline.
+- `task-memory-audit-01` — complete; no new unrecovered orphaned/ambiguous tasks found. The only confirmed lifecycle gaps were the already restored cross-platform giveaways and media/screenshots reconciliation tail.
+- Direct follow-up chosen for Chat 2: implement the small machine-checkable backlog deletion guard recommended by the audit, rather than start another unrelated prepared task.
+- `cross-platform-giveaway-recon-01` completed its source/architecture recon; Chat 1 is now on direct Tier-1 implementation.
 
 ## Выбор следующей работы
 
