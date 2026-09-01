@@ -24,13 +24,13 @@
 
 | Задача | Report | Приоритет | Размер | Область | Параллельность | Проверка пользователем | Статус |
 |---|---|---|---|---|---|---|---|
-| Detailed score UI — phone feedback fix: toggle + clearer Taste/duration copy | `reviews/worker_reports/detailed-score-user-fixes-01.md` (worker сохранил под другим именем, чем было поручено) | высокий | маленький follow-up | мобильный UI `Детальной оценки` | продолжение того же UI worker | да, телефон | `awaiting_user_check` |
-| Russian descriptions — bounded audit 25–30 cards | `reviews/worker_reports/ru-description-audit-01.md` | высокий/средний как подготовка E | маленький recon | description data/source quality | безопасно с score UI; read-only | нет | `active` |
+| Russian descriptions — bounded audit 25–30 cards | `reviews/worker_reports/ru-description-audit-01.md` | высокий/средний как подготовка E | маленький recon | description data/source quality | безопасно с duration recon; read-only | нет | `active` |
+| Duration data gap — почему visible cards получают `unknown` | `reviews/worker_reports/duration-data-diagnosis-01.md` | высокий как data-quality defect | маленький recon | duration source/enrichment/persistence | безопасно с description audit; read-only | нет | `active` |
 
 ## Последние завершённые worker-этапы
 
-- `detailed-score-user-fixes-01` — `complete` по фактическому worker report; исправлены обратное сворачивание, Taste copy и объяснение unknown duration `2/3`; deploy/regressions success; ждёт повторной проверки пользователя на телефоне. Worker отклонился от порученного имени report (`detailed-score-ui-fix-01.md`), поэтому director восстановил фактический путь по свежему commit `a2008e6b45212c4533202ec2cf3754fbdec58a55`.
-- `detailed-score-ui-01` — исходный redesign worker status `complete`, deploy success, но пользовательская проверка выявила три follow-up дефекта; они обработаны в follow-up выше.
+- `detailed-score-user-fixes-01` — `complete`; пользовательская повторная проверка на телефоне 2026-09-01 пройдена: toggle и новые формулировки устраивают пользователя. Отдельное замечание о самой причине `duration unknown` вынесено в новую data-quality diagnosis, а UI worker больше не нужен и может быть удалён.
+- `detailed-score-ui-01` — исходный redesign `complete`; его follow-up дефекты закрыты этапом выше.
 - `compact-purchase-options-01` — `complete`; deploy success; пользовательская проверка на реальном телефоне пройдена. Worker-чат удалён пользователем.
 - `taste-ingest-blocker-fix-01` — `complete`; canonical ingestion workflow успешно принял 9 файлов / 147 Taste results и оставил только 3 штатные `resolve_base_support_condition` rows. Worker-чат удалён пользователем.
 
@@ -40,8 +40,9 @@
 |---:|---|---|---|---|---|---|---|
 | 1 | Ranking and card explanation quality audit | высокий | большой | качество рекомендаций/объяснений | главная задача; сначала аудит | да — ограниченный top-30 audit | скорее да, выборочная |
 | 2 | Guarantee Russian game descriptions | высокий/средний | неизвестен до текущего аудита | данные/текст карточки | зависит от `ru-description-audit-01` | текущий recon уже идёт | да, выборочная после implement |
-| 3 | Russian language availability as ranking factor | высокий | большой | данные + финальный рейтинг | главная задача | да | да, выборочная |
-| 4 | YouTube reviews for games | средний | большой | дополнительный контент карточки | отдельная главная задача | да | да |
+| 3 | Fix duration coverage for visible recommendations | высокий | неизвестен до текущего recon | duration data/enrichment | зависит от `duration-data-diagnosis-01` | текущий recon уже идёт | выборочная после implement |
+| 4 | Russian language availability as ranking factor | высокий | большой | данные + финальный рейтинг | главная задача | да | да, выборочная |
+| 5 | YouTube reviews for games | средний | большой | дополнительный контент карточки | отдельная главная задача | да | да |
 
 ## Как выбирать быструю вторую задачу
 
@@ -54,9 +55,10 @@
 ## Предпочтительный продуктовый порядок
 
 1. Сделать способ покупки компактным и понятным. — завершено.
-2. Упростить и привести в порядок подробную оценку на карточке. — follow-up исправлен, ждёт повторной проверки на телефоне.
+2. Упростить и привести в порядок подробную оценку на карточке. — завершено после phone follow-up.
 3. Проверить качество причин `почему подходит / почему может не подойти` и исправить системные слабости.
 4. Обеспечить нормальные русские описания и понятную информацию о русском языке. — аудит масштаба активно.
-5. После стабилизации основной карточки добавлять вторичные функции, например YouTube-обзоры.
+5. Устранить необоснованные `duration unknown` в видимых рекомендациях. — диагностика активно.
+6. После стабилизации основной карточки добавлять вторичные функции, например YouTube-обзоры.
 
 Порядок можно менять по новым пользовательским проблемам или новым blocker-ам; это директорская карта, а не жёсткий roadmap.
