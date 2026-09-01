@@ -9,7 +9,12 @@
 - исходная миграция Taste V3 была завершена и production-validated;
 - model binding: `taste-v3`, semantics `0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`.
 
-Важно: это не означает, что текущий новый source snapshot уже полностью переоценён. Последний scheduled Taste run увидел authoritative queue `147`, но опубликовал `0`, потому что в `main` уже лежат 9 неингестированных submission-файлов с duplicate-key transactional hazard. Это отдельный GitHub-owned ingest/rebuild blocker; вручную строить «остаточную очередь» в ChatGPT нельзя.
+Текущий source snapshot также прошёл отдельный canonical Taste ingest recovery:
+- 9 submission-файлов / 147 уже полученных Taste results ingested и receipted GitHub-owned workflow;
+- ingestion commit: `cfadfd094c7a86ffbd4f43370a1bf42f47a79025`;
+- receipt: `data/cache/taste_ingest_receipts/970f899a5219e41aa7d7.json`;
+- safe cache hits: `492 -> 639` (+147), поэтому повторная Taste semantic оценка этих 147 результатов не требуется;
+- после rebuild AI queue содержит ровно 3 строки (`App_1017030`, `App_1019930`, `App_1022850`) и каждая требует только `resolve_base_support_condition`; это штатная отдельная downstream semantic work, а не незавершённый Taste ingest.
 
 ### Steam fixed-package purchase options — verified complete-content valuation
 Статус: `complete`.
@@ -51,6 +56,16 @@
 - deploy run `33489817719`, rerun job `99798942975`: success; `Run UI regressions` success; GitHub Pages deploy success; Pages artifact `9793337134`;
 - worker report: `reviews/worker_reports/compact-purchase-options-01.md`.
 
+### Current Taste source ingestion
+Статус: `complete_ingested_base_support_pending`.
+- authoritative prepared Taste batch: 147;
+- canonical workflow run `33440037739`, rerun job `99800543286`: success;
+- proof fix разрешает ingest key оставаться после Taste ingest только как доказанный safe cache hit с `work_required=["resolve_base_support_condition"]` и canonical `requires_ai_base_support=true`;
+- canonical receipt: `data/cache/taste_ingest_receipts/970f899a5219e41aa7d7.json`;
+- все 147 Taste results persisted как safe cache hits; 9 inbox submissions canonical workflow удалил после receipt;
+- оставшиеся 3 queue rows — только отдельная downstream base-support работа, не Taste re-evaluation и не ingest blocker;
+- повторную semantic Taste evaluation 147 игр не запускать.
+
 ## Завершённые package-инварианты, которые сохраняются
 
 - только fixed Steam Store Package (`Sub_`);
@@ -65,14 +80,6 @@
 - Season Pass / edition constituent content не считается рекурсивно второй раз.
 
 ## Не активная основная работа
-
-### Current Taste source ingestion
-Статус: `blocked_requires_github_ingestion_rebuild`, не выбран как текущая interactive-задача.
-- authoritative prepared queue: 147;
-- last scheduled run evaluated/published: 0/0;
-- blocker: 9 existing non-ingested Taste submissions and duplicate keys across inbox files;
-- canonical ingestion/downstream completion for this source is not proven;
-- GitHub-owned ingest/rebuild must resolve this before the scheduled semantic worker continues.
 
 ### SteamDB tail
 Статус: `blocked_low_priority`.
@@ -127,4 +134,4 @@
 
 ## Текущий статус работ
 
-Interactive-задача G / `compact-purchase-options-01` завершена. Следующая planned-задача не начата. Fixed-package complete-content valuation и stale-image swipe bug остаются закрыты. Current Taste ingestion остаётся отдельным GitHub-owned blocker и этой UI-задачей не изменён.
+Interactive-задача G / `compact-purchase-options-01` завершена. Taste ingestion blocker также закрыт canonical workflow; остались только 3 штатные downstream `resolve_base_support_condition` строки. Следующая planned-задача не начата. Fixed-package complete-content valuation и stale-image swipe bug остаются закрыты.
