@@ -14,6 +14,7 @@ on:
       - 'data/production/visual/current.json'
       - 'scripts/russian_description_quality.py'
       - 'scripts/validate_russian_descriptions.py'
+      - 'scripts/validate_giveaway_visual_payload.py'
       - '.github/workflows/deploy-visual.yml'
 
 permissions:
@@ -47,6 +48,12 @@ jobs:
           set -euo pipefail
           python scripts/validate_russian_descriptions.py data/production/visual/current.json
 
+      - name: Validate giveaway visual payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_giveaway_visual_payload.py data/production/visual/current.json
+
       - name: Run UI regressions
         shell: bash
         run: |
@@ -54,6 +61,7 @@ jobs:
           node web/image-swipe-sync.test.js
           node web/package-deal-ui.test.js
           node web/score-details-ui.test.js
+          node web/giveaway-ui.test.js
 
       - name: Stage precomputed visual payload
         shell: bash
