@@ -27,9 +27,12 @@ on:
       - "scripts/build_ranking_lookup.py"
       - "config/final_ranking_policy.json"
       - "config/fixed_package_purchase_option_contract.json"
+      - "config/purchase_equivalence_overrides.json"
       - "config/taste_result_contract.json"
       - "config/taste_cache_entry_contract.json"
       - "web/app.js"
+      - "web/package-deal-ui.js"
+      - "web/index.html"
       - ".github/workflows/build-daily-visual-payload.yml"
 
 permissions:
@@ -72,7 +75,7 @@ jobs:
           set -euo pipefail
           python scripts/validate_priority_ranking.py
 
-      - name: Validate fixed package discovery, UI, and ranking value
+      - name: Validate fixed package discovery, equivalence, UI, and ranking value
         shell: bash
         run: |
           set -euo pipefail
@@ -97,9 +100,6 @@ jobs:
           data = json.loads(path.read_text(encoding='utf-8'))
           counts = data.get('cache_status_counts') or {}
           missing = int(counts.get('missing') or 0)
-          # Missing persistent SteamDB history is already classified by the history
-          # snapshot as history_quality=unverified. It is secondary evidence, not a
-          # reason to block an otherwise complete candidate snapshot.
           ready = data.get('status') == 'complete' and data.get('complete_coverage') is True
           print(
               f'HISTORY_READY={str(ready).lower()} '
@@ -214,6 +214,10 @@ jobs:
                   'package_standalone_total_rub': package.get('standalone_total_rub'),
                   'package_savings_rub': package.get('savings_rub'),
                   'package_savings_percent_vs_standalone': package.get('savings_percent_vs_standalone'),
+                  'package_strict_current_price_savings': package.get('strict_current_price_savings'),
+                  'package_price_delta_vs_standalone_rub': package.get('price_delta_vs_standalone_rub'),
+                  'package_uses_verified_purchase_equivalence': package.get('uses_verified_purchase_equivalence'),
+                  'package_coverage_evidence': package.get('coverage_evidence') or [],
                   'better_purchase_option': game.get('better_purchase_option'),
                   'summary': game.get('summary'),
                   'steam_web_url': game.get('web_url'),
