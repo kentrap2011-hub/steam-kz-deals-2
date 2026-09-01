@@ -3,6 +3,8 @@ import subprocess
 from collections import defaultdict
 from pathlib import Path
 
+import refresh_visual_commercial_fields as commercial_refresh
+
 PACKAGE_OPTIONS = Path('data/production/pre_ai/fixed_package_options.json')
 FAMILY_GRAPH = Path('data/production/pre_ai/family_graph.json')
 FX_SNAPSHOT = Path('data/production/pre_ai/fx_snapshot.json')
@@ -67,7 +69,9 @@ def family_rows(family_graph, visible_items):
         family = graph.get(fid)
         if not family or family.get('family_type') != 'base_game':
             continue
-        price = family.get('primary_final_kzt')
+        price = game.get('current_price_kzt')
+        if price is None:
+            price = family.get('primary_final_kzt')
         if price is None or float(price) <= 0:
             continue
         appids = {
@@ -263,12 +267,6 @@ def build_recommendations(package_artifact, family_graph, visible_items, kzt_per
 
 
 def build_display_only_recommendations(package_artifact, visible_items, kzt_per_rub, purchase_equivalence=None):
-    """Build safe package membership info when visual and price snapshots differ.
-
-    We may use the current fixed package's own price and membership, plus explicit
-    purchase-equivalence evidence, but we deliberately withhold standalone comparison
-    and therefore make the package ineligible to improve ranking.
-    """
     visible = visible_rows_without_price(visible_items)
     appid_to_family = build_coverage_index(visible, purchase_equivalence)
     recommendations = []
@@ -355,11 +353,13 @@ def offer_from_recommendation(rec):
 
 
 def source_binding_status(visual, packages, family_graph):
-    source = visual.get('source_mailing_updated_at_utc')
+    semantic_source = visual.get('source_mailing_updated_at_utc')
+    source = visual.get('commercial_source_mailing_updated_at_utc') or semantic_source
     package_source = packages.get('source_mailing_updated_at_utc')
     family_source = family_graph.get('source_updated_at_utc')
     return {
         'aligned': bool(source and package_source == source and family_source == source),
+        'semantic_source': semantic_source,
         'visual_source': source,
         'package_source': package_source,
         'family_source': family_source,
@@ -417,13 +417,14 @@ def apply_to_visual(visual, packages, family_graph, kzt_per_rub, purchase_equiva
     strict_count = sum(1 for row in recommendations if row.get('strict_current_price_savings') is True)
     equivalence_count = sum(1 for row in recommendations if row.get('uses_verified_purchase_equivalence') is True)
     stats = {
-        'schema_version': 4,
+        'schema_version': 5,
         'fixed_sub_only': True,
         'dynamic_bundle_supported': False,
         'personalized_complete_the_set_supported': False,
         'source_binding_aligned': binding['aligned'],
         'display_only_due_source_mismatch': not binding['aligned'],
-        'visual_source_mailing_updated_at_utc': binding['visual_source'],
+        'semantic_source_mailing_updated_at_utc': binding['semantic_source'],
+        'commercial_source_mailing_updated_at_utc': binding['visual_source'],
         'package_source_mailing_updated_at_utc': binding['package_source'],
         'family_source_updated_at_utc': binding['family_source'],
         'qualifying_package_count': len(recommendations),
@@ -432,12 +433,11 @@ def apply_to_visual(visual, packages, family_graph, kzt_per_rub, purchase_equiva
         'visible_game_count_with_better_package': touched,
         'visible_game_ids_with_better_package': touched_ids,
         'comparison_rule': (
-            'show a fixed Steam Sub package when it covers at least two currently visible base-game '
-            'families by exact included appid or explicit verified purchase equivalence; when visual '
-            'and price sources differ, expose membership/package-price information only and withhold '
-            'standalone savings/ranking boost until sources align'
+            'refresh current commercial fields from the current GitHub-owned store/history/family source, '
+            'then compare fixed Steam Sub packages across at least two visible base-game families by exact '
+            'included appid or explicit verified purchase equivalence; Taste source remains independent'
         ),
-        'ranking_stage_requirement': 'package enrichment must happen before the single final ranking pass',
+        'ranking_stage_requirement': 'commercial refresh and package enrichment before the single final ranking pass',
     }
     visual['purchase_option_enrichment'] = stats
     return stats
@@ -451,6 +451,9 @@ def apply_current_artifacts_to_visual(visual):
     ]
     if missing:
         raise FileNotFoundError(f'Fixed package enrichment missing required artifacts: {missing}')
+
+    commercial_refresh.refresh_visual_commercial_fields(visual)
+
     packages = load_json(PACKAGE_OPTIONS)
     family_graph = load_json(FAMILY_GRAPH)
     fx = load_json(FX_SNAPSHOT)
@@ -482,10 +485,9 @@ def attach_contract_fields(visual):
     contract['fixed_package_options_blob_sha'] = git_blob_sha(PACKAGE_OPTIONS)
     contract['purchase_equivalence_blob_sha'] = git_blob_sha(PURCHASE_EQUIVALENCE)
     contract['fixed_package_purchase_option_rule'] = (
-        'fixed Sub only; >=2 visible game families by exact appid or explicit verified purchase '
-        'equivalence; personalized bundles excluded; display does not require strict savings; '
-        'source mismatch allows display-only membership but not savings/ranking claims; ranking boost '
-        'remains fail-closed; package enrichment before final ranking'
+        'refresh current commercial fields independently of Taste; fixed Sub only; >=2 visible game '
+        'families by exact appid or explicit verified purchase equivalence; personalized bundles excluded; '
+        'package enrichment before final ranking'
     )
 
 
