@@ -11,53 +11,56 @@
 
 Важно: это не означает, что текущий новый source snapshot уже полностью переоценён. Последний scheduled Taste run увидел authoritative queue `147`, но опубликовал `0`, потому что в `main` уже лежат 9 неингестированных submission-файлов с duplicate-key transactional hazard. Это отдельный GitHub-owned ingest/rebuild blocker; вручную строить «остаточную очередь» в ChatGPT нельзя.
 
-### Steam fixed-package purchase options — BioShock + fresh commercial ranking
-Статус: `complete_production_validated`.
+## Активная работа
 
-Итог:
-- fixed Steam `Sub_` package показывается, если покрывает >=2 visible base-game families по exact included appid или explicit verified purchase equivalence;
-- original/remaster не угадываются по названию/fuzzy matching и не сливаются в Taste family;
-- canonical purchase-only equivalence: `7670 -> 409710` (BioShock -> BioShock Remastered), `8850 -> 409720` (BioShock 2 -> BioShock 2 Remastered);
-- package может быть видимым даже если сейчас не дешевле покрываемых игр отдельно; в таком случае UI пишет `Набор Steam`, а не `Выгодный набор Steam`, и package не получает ranking boost;
-- Taste остаётся price-blind и не пересчитывается при изменении цены;
-- fresh commercial refresh независимо обновляет current offers, RUB/KZT price, discount, history quality и sale end из текущего GitHub-owned `store_snapshot + family_graph + history_snapshot`;
-- после commercial refresh выполняется package comparison, затем ровно один canonical final ranking pass;
-- старый semantic snapshot сохраняет fit/taste factors/explanations/risks; semantic source и commercial source хранятся отдельно;
-- semantic cards, которых больше нет в текущем complete family graph, удаляются из текущей витрины вместо сохранения stale цены.
+### Steam fixed-package purchase options — verified complete-content valuation
+Статус: `reopened_in_progress`.
 
-Production proof:
-- verified purchase-equivalence merge: `6783029ffe783a3971adaf57d64fa7b6aa76ec8f`;
-- deterministic package refresh merge: `1aea1408aaf54810101bb296c547999e22f81503`;
-- safe stale-source display merge: `e4b8dbb124c41b3d2ac7c947bab5cc99696c752e`;
-- fresh commercial refresh merge: `5ba7ef744fb3fd706ae9e1bbf4e114f26278a561`;
-- stale-family follow-up merge: `9a5ff38ac564c66526c04db6dbb41b09d91f8474`;
-- visual run #130 / `33473546907`: success;
-- `commercial refresh tests: 3 passed`;
-- `fixed package purchase option tests: 19 passed`;
-- `PRIORITY_RANKING_VALIDATION=PASS`;
-- build completed with `ai_queue=147`, proving commercial/package ranking no longer waits for Taste completion;
-- final visual: `442` cards, `PACKAGE_VISIBLE_CARDS=19`, `PACKAGE_RANKING_DRIVERS=15`;
-- package diagnostics: `package_qualifying=8`, `package_strict=7`, `package_equivalence=1`, `package_touched=19`;
-- visual commit: `15db361d25bdb16693bc080f1bdbbb3b71235371`;
-- deploy #171 / `33473567370`: success;
-- actual Pages artifact `9787352509` inspected: BioShock Collection is present on both `BioShock® 2` and `BioShock Infinite` with source-aligned commercial comparison.
+Причина переоткрытия:
+- production уже умеет показывать fixed `Sub_`, verified original/remaster purchase equivalence и пересчитывать коммерцию независимо от Taste;
+- однако текущая package-value модель сравнивает цену набора почти только с currently visible base-game families и присваивает нулевую ценность всем nonvisible/extra content;
+- для подтверждённого состава это слишком грубо: BioShock: The Collection включает не только BioShock Remastered, BioShock 2 Remastered и BioShock Infinite, но также BioShock 2: Minerva's Den Remastered, BioShock Infinite Season Pass и BioShock Infinite: Columbia's Finest;
+- producer уже запрашивает StoreBrowse `include_included_items`, но `build_fixed_package_purchase_options.py` сохраняет только `included_appids` / базовое membership и теряет проверяемую структуру DLC/дополнительного контента;
+- поэтому предыдущий production расчёт `256 ₽ standalone visible games vs 265 ₽ collection` не является полной оценкой ценности набора.
 
-Current BioShock production economics from deployed artifact:
-- `BioShock® 2`: 74 ₽;
-- `BioShock Infinite`: 182 ₽;
-- covered standalone total: 256 ₽;
-- `BioShock: The Collection`: 265 ₽;
-- current delta: package is 9 ₽ more expensive (`savings_rub=-9`, `-3.5%`), therefore `strict_current_price_savings=false` and both cards correctly keep `purchase_route=standalone`;
-- if future fresh prices make the package route better, the next deterministic commercial refresh will automatically recalculate package value and final rank without waiting for a new Taste evaluation.
+Отдельно установлена причина отсутствия первого BioShock в visible list:
+- `App_7670` есть в текущем KZ Store snapshot: 662 KZT, скидка 75%;
+- текущий Taste V3 entry имеет `EXCLUDE / below_moderate / exclude_direct_conflict`;
+- сохранённое direct-conflict evidence утверждает, что BioShock ранее был начат и быстро брошен из-за отсутствия интереса;
+- при этом normalized factors сами по себе не низкие: gameplay 78, development 76, pacing 59, identity 90, breadth 65;
+- это semantic veto, а не коммерческое/Steam-исключение. Его корректность не менять молча в рамках package-value задачи; если direct-experience evidence неверно или больше не должно быть hard veto, это отдельная Taste-policy проверка.
 
-Fast route:
-- `docs/fixed_package_purchase_options.md`;
-- `docs/RANK-013-fixed-package-purchase-route.md`;
-- `docs/RANK-014-commercial-freshness-independent-of-taste.md`;
-- `scripts/refresh_visual_commercial_fields.py`;
-- `scripts/apply_fixed_package_purchase_options.py`;
-- `scripts/build_final_visual_payload.py`;
-- `.github/workflows/build-daily-visual-payload.yml`.
+Архитектурное направление:
+- Taste/family identities остаются price-blind; набор не должен превращать Taste-excluded base game в standalone recommendation;
+- producer должен сохранять полный проверенный top-level состав fixed package, включая DLC/content, с Steam provenance;
+- `unknown/unverified` extra content по-прежнему имеет денежную ценность 0;
+- `verified` included content можно учитывать денежно только если producer получил текущую KZ acquisition price / эквивалентный детерминированный purchase route;
+- DLC/content, относящийся к visible/taste-qualified covered game, может увеличивать package commercial value;
+- included base game, которое Taste исключает (сейчас BioShock 1), должно быть видно как included content, но не получать полный personalized game-value boost без изменения Taste policy;
+- не считать одно entitlement дважды: direct top-level Season Pass и его внутренние DLC не суммировать рекурсивно; при неоднозначном overlap fail closed / use explicit entitlement evidence;
+- package comparison и score остаются producer-owned; UI display-only;
+- commercial refresh -> package complete-content valuation -> один canonical final ranking pass.
+
+Definition of done:
+- BioShock package artifact сохраняет все проверенные top-level included items, а не только три base-game appids;
+- для Minerva's Den Remastered, Infinite Season Pass и Columbia's Finest хранится тип/parent/evidence и current KZ standalone acquisition price, если Steam её предоставляет;
+- ranking comparison показывает отдельно: visible covered base-game value, verified incremental DLC/content value, nonpersonalized included game/content и total comparable value;
+- никакой unknown/unpriced content не получает выдуманную цену;
+- BioShock 1 отсутствие объясняется semantic veto, а не ошибочно трактуется как отсутствие товара;
+- regression запрещает старое поведение, где verified DLC молча обнуляется;
+- regression запрещает double count constituent DLC через Season Pass/recursive content;
+- production pre-AI, visual build и deploy зелёные;
+- BioShock acceptance проверен на deployed payload и пользовательская карточка показывает полный состав и честную экономику.
+
+## Завершённые package-инварианты, которые сохраняются
+
+- только fixed Steam Store Package (`Sub_`);
+- dynamic/personalized Complete-the-Set `/bundle/` исключён fail-closed;
+- exact included appid + explicit verified directional purchase equivalence; title/fuzzy remaster guessing запрещён;
+- package info может быть visible без ranking boost;
+- Taste не меняется от цены;
+- fresh commercial refresh обновляет standalone commercial fields независимо от semantic queue;
+- scorer сравнивает standalone и eligible package routes без stacking одного и того же commercial value.
 
 ## Не активная основная работа
 
@@ -129,4 +132,4 @@ Fast route:
 
 ## Текущий статус работ
 
-Незавершённой `in_progress` interactive-задачи сейчас нет. Current Taste ingestion остаётся известным GitHub-owned blocker, но не должен тормозить fresh commercial/package ranking. Остальной backlog остаётся `planned`.
+Сейчас активна одна задача: verified complete-content valuation для fixed Steam packages. Current Taste ingestion остаётся отдельным GitHub-owned blocker и не должен тормозить коммерческий package refresh.
