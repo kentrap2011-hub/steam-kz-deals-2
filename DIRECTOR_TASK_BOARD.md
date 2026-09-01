@@ -26,31 +26,32 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Русские описания | Systemic producer/pipeline fix after 30-card audit | `WORKER_TASK_RU_DESCRIPTION_IMPLEMENT_01.md` | `reviews/worker_reports/ru-description-implement-01.md` | `ready_to_continue_in_existing_chat` |
-| `ЧАТ 2` | Длительность | Find canonical structured duration source/path and owner; no per-game lookup | `WORKER_TASK_DURATION_SOURCE_RECON_01.md` | `reviews/worker_reports/duration-source-recon-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 1` | Русские описания | Systemic producer/pipeline fix after 30-card audit | `WORKER_TASK_RU_DESCRIPTION_IMPLEMENT_01.md` | `reviews/worker_reports/ru-description-implement-01.md` | `active` |
+| `ЧАТ 2` | Длительность | Compare viable authoritative duration providers and executor class; no per-game lookup | `WORKER_TASK_DURATION_PROVIDER_RECON_01.md` | `reviews/worker_reports/duration-provider-recon-01.md` | `ready_to_continue_in_existing_chat` |
 
 ## Последние завершённые worker-этапы
 
-- `duration-data-diagnosis-01` — `blocked` only because canonical structured source/path was not yet established. Root cause proven: final visual duration currently depends on text extraction from descriptions/summaries; manual per-game recount was stopped after user correction. Report `reviews/worker_reports/duration-data-diagnosis-01.md`.
-- `ru-description-audit-01` — `complete`; bounded sample 30 cards: 15/30 need a real description fix; root cause systemic producer/source handling, not UI. Report commit `99785d4860ce6cce3bf90f437419553cb6fed6d5`.
-- `detailed-score-user-fixes-01` — `complete`; пользовательская phone-проверка пройдена.
-- `compact-purchase-options-01` — `complete`; phone-проверка пройдена.
-- `taste-ingest-blocker-fix-01` — `complete`; canonical ingestion recovery closed.
+- `duration-source-recon-01` — `complete`; no canonical structured duration source/cache/runtime path exists today. A canonical provider/source decision is required before IMPLEMENT. Report `reviews/worker_reports/duration-source-recon-01.md`.
+- `duration-data-diagnosis-01` — root cause proven: final visual duration currently depends on text extraction from descriptions/summaries; no manual per-game processing allowed.
+- `ru-description-audit-01` — `complete`; 15/30 sampled cards require a real description fix; root cause systemic producer/source handling.
+- `detailed-score-user-fixes-01` — `complete`; phone check passed.
+- `compact-purchase-options-01` — `complete`; phone check passed.
+- `taste-ingest-blocker-fix-01` — `complete`.
 
 ## Ближайшие задачи после текущей пары
 
-1. После `duration-source-recon-01`: если canonical source/path уже есть — bounded IMPLEMENT в GitHub-owned pipeline; если нет — сначала точный contract/user decision gap, без самодельной очереди.
-2. После `ru-description-implement-01` проверить, что full-catalog processing принадлежит GitHub pipeline; если нужен semantic translation runtime, GitHub готовит точный scope для canonical scheduled ChatGPT path.
+1. После `duration-provider-recon-01`: выбрать/утвердить authoritative duration provider and executor class, затем отдельный canonical CONTRACT task before IMPLEMENT.
+2. После `ru-description-implement-01`: проверить GitHub-owned full-catalog rebuild/translation path and user-visible result.
 3. Ranking and card explanation quality audit — bounded recon top-30.
 4. Russian language availability as ranking factor — recon before implementation.
-5. YouTube reviews — позже, после стабилизации основной карточки.
+5. YouTube reviews — позже.
 
 ## Предпочтительный продуктовый порядок
 
 1. Способ покупки — завершено.
 2. Детальная оценка — завершено.
-3. Русские описания — systemic fix следующий.
-4. Duration coverage — source/ownership recon, затем systemic fix.
+3. Русские описания — systemic fix активно.
+4. Duration coverage — provider selection, затем contract, затем systemic implementation.
 5. Качество причин `почему подходит / почему может не подойти`.
 6. Информация о русском языке и её влияние на ranking.
 7. Вторичные функции вроде YouTube — позже.
