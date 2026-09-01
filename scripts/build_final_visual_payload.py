@@ -4,6 +4,7 @@ from pathlib import Path
 
 import apply_fixed_package_purchase_options as package_options
 import build_daily_visual_payload as base_builder
+import card_explanation_policy
 import duration_enrichment
 import priority_ranking
 import refine_visual_ranking as refiner
@@ -73,6 +74,93 @@ def duration_source_distribution(items):
     return counts
 
 
+def _set_if_changed(game, key, value):
+    if game.get(key) == value:
+        return False
+    game[key] = value
+    return True
+
+
+def explanation_risk_candidates(taste_entry, projection, practical):
+    risks = {}
+    for ev in taste_entry.get('negative_evidence') or []:
+        refiner.map_negative_evidence(ev, risks)
+    for code, row in refiner.structural_risks(projection, practical).items():
+        refiner.add_risk(
+            risks,
+            code,
+            row['score'],
+            row['text'],
+            row.get('source') or 'derived',
+        )
+    return risks
+
+
+def apply_card_explanation_policy(game, taste_entry, projection, update_scoring=True):
+    """Apply the one canonical player-facing explanation policy.
+
+    Ranking/scoring still receives the full existing risk candidate set. Only the
+    player-facing negative block is fail-closed to grounded sources.
+    """
+    changed = False
+
+    reasons, why_fit_provenance = card_explanation_policy.positive_reasons(
+        taste_entry.get('positive_evidence') or []
+    )
+    changed |= _set_if_changed(game, 'why_fit', reasons)
+    changed |= _set_if_changed(
+        game,
+        'why_fit_status',
+        {
+            'has_described_fit': bool(reasons),
+            'grounding': 'grounded' if reasons else 'insufficient_evidence',
+        },
+    )
+    changed |= _set_if_changed(game, 'why_fit_provenance', why_fit_provenance)
+
+    risks = explanation_risk_candidates(taste_entry, projection, game.get('practical') or {})
+    visible = card_explanation_policy.visible_risk_payload(risks)
+    changed |= _set_if_changed(game, 'risks', visible['risks'])
+    changed |= _set_if_changed(game, 'risk_codes', visible['risk_codes'])
+    changed |= _set_if_changed(game, 'risk_status', visible['risk_status'])
+    changed |= _set_if_changed(game, 'risk_provenance', visible['risk_provenance'])
+
+    if update_scoring:
+        # Preserve the existing ranking semantics: scoring sees all candidates,
+        # including derived heuristics, while visibility requires grounding.
+        _, _, risk_penalty, risk_level = refiner.risk_summary(risks)
+        changed |= _set_if_changed(game, 'risk_penalty', risk_penalty)
+        changed |= _set_if_changed(game, 'risk_level', risk_level)
+
+    return changed, risks
+
+
+def current_explanation_context():
+    context_by_family = {
+        str(row.get('family_id')): row
+        for row in base_builder.load_jsonl(base_builder.PURCHASE_CONTEXT)
+        if row.get('family_id')
+    }
+    taste_entries = refiner.effective_taste_entries()
+    projections = (
+        (refiner.load_json(refiner.TASTE_PROJECTION).get('entries') or {})
+        if refiner.TASTE_PROJECTION.exists()
+        else {}
+    )
+    return context_by_family, taste_entries, projections
+
+
+def explanation_inputs_for_game(game, context_by_family, taste_entries, projections):
+    context = context_by_family.get(str(game.get('id') or '')) or {}
+    taste_key = context.get('taste_subject_key')
+    taste_entry = taste_entries.get(taste_key) if taste_key else {}
+    projection = projections.get(taste_key) if taste_key else {}
+    return (
+        taste_entry if isinstance(taste_entry, dict) else {},
+        projection if isinstance(projection, dict) else {},
+    )
+
+
 def apply_deterministic_purchase_refresh(ready):
     """Reapply producer-owned purchase options and the one canonical ranking policy.
 
@@ -96,6 +184,7 @@ def apply_deterministic_purchase_refresh(ready):
         'duration_enrichment_helper_blob_sha': base_builder.git_sha('scripts/duration_enrichment.py'),
         'duration_enrichment_contract_blob_sha': base_builder.git_sha('config/duration_enrichment_contract.json'),
         'duration_cache_blob_sha': base_builder.git_sha('data/cache/duration_estimates.json'),
+        'card_explanation_policy_blob_sha': base_builder.git_sha('scripts/card_explanation_policy.py'),
         'duration_source_precedence': [
             'validated_structured_igdb_normally',
             'legacy_text_explicit_duration_phrase',
@@ -104,6 +193,7 @@ def apply_deterministic_purchase_refresh(ready):
         'ranking_stage': 'single_canonical_sort_after_deterministic_purchase_option_refresh',
         'priority_factors': final_priority_order,
         'priority_ranking_contract': 'FINAL-PRIORITY-RANKING-V2',
+        'card_explanation_rule': 'positive requires specific Taste evidence; visible negative requires grounded provenance; scoring/ranking semantics unchanged',
         'fixed_package_purchase_option_rule': (
             'fixed Sub only; >=2 visible base-game families by exact appid or explicit verified '
             'purchase equivalence; relevant package information may be displayed without strict '
@@ -126,6 +216,10 @@ def refresh_existing_media():
     ready = json.loads(before)
     items = ready.get('items') or []
     duration_entries = load_duration_entries()
+    context_by_family, taste_entries, projections = current_explanation_context()
+    translation_cache = base_builder.visual_builder.load_translation_cache(
+        base_builder.visual_builder.TRANSLATION_CACHE
+    )
     wanted_appids = set()
     for game in items:
         for appid in game.get('base_appids') or []:
@@ -137,6 +231,7 @@ def refresh_existing_media():
     content_metadata_by_appid = base_builder.visual_builder.load_content_metadata_by_appid()
     touched = 0
     duration_touched = 0
+    explanation_touched = 0
     for game in items:
         screenshots = []
         header = None
@@ -159,6 +254,7 @@ def refresh_existing_media():
             game.get('base_appids') or [],
             media,
             content_metadata_by_appid,
+            translation_cache,
         )
         description_fields = {
             'summary': description.get('summary'),
@@ -176,6 +272,22 @@ def refresh_existing_media():
 
         if apply_duration_resolution(game, {}, duration_entries, preserve_existing_fallback=True):
             duration_touched += 1
+            changed = True
+
+        taste_entry, projection = explanation_inputs_for_game(
+            game,
+            context_by_family,
+            taste_entries,
+            projections,
+        )
+        explanation_changed, _ = apply_card_explanation_policy(
+            game,
+            taste_entry,
+            projection,
+            update_scoring=True,
+        )
+        if explanation_changed:
+            explanation_touched += 1
             changed = True
 
         if changed:
@@ -198,8 +310,11 @@ def refresh_existing_media():
     contract = ready.setdefault('production_contract', {})
     contract['visual_builder_blob_sha'] = base_builder.git_sha('scripts/build_visual_feed_v2.py')
     contract['final_visual_producer_blob_sha'] = base_builder.git_sha('scripts/build_final_visual_payload.py')
+    contract['card_explanation_policy_blob_sha'] = base_builder.git_sha('scripts/card_explanation_policy.py')
+    contract['card_explanation_rule'] = 'positive requires specific Taste evidence; visible negative requires grounded provenance; scoring/ranking semantics unchanged'
     contract['duration_source_distribution'] = duration_source_distribution(items)
     contract['duration_structured_refresh_touched_count'] = duration_touched
+    contract['card_explanation_refresh_touched_count'] = explanation_touched
 
     after = json.dumps(ready, ensure_ascii=False, separators=(',', ':'))
     if after == before:
@@ -276,23 +391,12 @@ def main():
         if old_windows in {'legacy', 'older_but_plausible'}:
             windows_labels_neutralized += 1
 
-        risks = {}
-        for ev in taste_entry.get('negative_evidence') or []:
-            refiner.map_negative_evidence(ev, risks)
-        for code, row in refiner.structural_risks(projection, practical).items():
-            refiner.add_risk(
-                risks,
-                code,
-                row['score'],
-                row['text'],
-                row.get('source') or 'derived',
-            )
-
-        risk_texts, risk_codes, risk_penalty, risk_level = refiner.risk_summary(risks)
-        game['risks'] = risk_texts
-        game['risk_codes'] = risk_codes
-        game['risk_penalty'] = risk_penalty
-        game['risk_level'] = risk_level
+        _, risks = apply_card_explanation_policy(
+            game,
+            taste_entry,
+            projection,
+            update_scoring=True,
+        )
 
         evidence = refiner.direct_evidence(game, direct_index)
         game['direct_user_evidence'] = evidence or {'level': 'none'}
@@ -343,6 +447,7 @@ def main():
         'external_lookup_allowed_in_ui': False,
         'visual_builder_blob_sha': base_builder.git_sha('scripts/build_visual_feed_v2.py'),
         'final_visual_producer_blob_sha': base_builder.git_sha('scripts/build_final_visual_payload.py'),
+        'card_explanation_policy_blob_sha': base_builder.git_sha('scripts/card_explanation_policy.py'),
         'achievement_quality_builder_blob_sha': base_builder.git_sha('scripts/achievement_quality.py'),
         'ranking_helper_blob_sha': base_builder.git_sha('scripts/priority_ranking.py'),
         'ranking_policy_blob_sha': base_builder.git_sha('config/final_ranking_policy.json'),
@@ -368,6 +473,7 @@ def main():
         'ranking_stage': 'single_final_sort_after_all_refinement_and_purchase_option_enrichment',
         'priority_factors': final_priority_order,
         'priority_ranking_contract': 'FINAL-PRIORITY-RANKING-V2',
+        'card_explanation_rule': 'positive requires specific Taste evidence; visible negative requires grounded provenance; scoring/ranking semantics unchanged',
         'fixed_package_purchase_option_rule': (
             'fixed Sub only; >=2 visible base-game families by exact appid or explicit verified '
             'purchase equivalence; relevant package information may be displayed without strict '
