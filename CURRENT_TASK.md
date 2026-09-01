@@ -125,16 +125,21 @@
 - producer-owned choice, UI display-only.
 
 ### E. Guarantee Russian game descriptions
-Статус: `implementation_scope_published_runtime_acceptance_pending`.
+Статус: `runtime_acceptance_blocked_on_existing_scheduled_execution`.
 - worker task `ru-translation-contract-01`: `complete`;
-- worker task `ru-translation-implement-01`: repo-side implementation committed; report status `needs_fix` because production scope publication and scheduled-runtime round-trip had not yet been proven at closeout;
+- worker task `ru-translation-implement-01`: repo-side implementation committed; production scope publication is now proven;
+- worker task `ru-translation-runtime-acceptance-01`: `blocked`; report `reviews/worker_reports/ru-translation-runtime-acceptance-01.md`, report commit `8b9e6598f2b1233defc7b4e1262e97da0fdb46df`;
 - canonical contracts: `config/russian_description_translation_contract.json`, `config/russian_description_translation_result_contract.json`, `config/russian_description_translation_cache_entry_contract.json`;
 - exact request identity: `App_<appid>` + SHA-256 нормализованного source text; source hash является version binding, stale result/cache не должен прикрепляться после изменения текста;
 - GitHub владеет exact unresolved scope, queue/order, retry/completeness, validation, cache merge и downstream rebuild; scheduled ChatGPT — только constrained semantic translation worker;
 - existing nightly scheduled ChatGPT runtime переиспользуется; отдельный recurring translation scheduler запрещён; Taste-specific result schema не переиспользуется;
 - package/UI blocker устранён `c243dfe498abec27923bc7f229f34fc82b5c26f0`; canonical pre-AI run `33518894933`, job `99892817550` успешно дошёл до translation stages;
-- current production translation scope/status теперь опубликованы GitHub-owned commit `529795ca74db15508e5178c29090b113f9cda23d`: 155 exact translation requests, 389 direct-RU resolutions, 26 nontranslatable blockers;
-- оставшийся bounded acceptance gap: доказать round-trip одного exact GitHub-prepared translation record через существующий scheduled ChatGPT runtime -> strict GitHub ingestion/cache -> visual rebuild; не создавать новый scheduler и не переводить каталог вручную.
+- current production translation scope/status опубликованы GitHub-owned commit `529795ca74db15508e5178c29090b113f9cda23d`: 155 exact translation requests, 389 direct-RU resolutions, 0 cache-resolved translations, 26 nontranslatable blockers; queue SHA `09cad43c005dd69b6c06c9c72574f7f360722c79639d0a919dea5e137f7cf173`;
+- bounded acceptance probe детерминированно выбран как первая текущая canonical queue row: `App_3199360`, request `003a1ec59c575b35a03a97598cafbf2efa944ced0d8bcf85e18401dc179592ef`, source hash `aac29917e30285f75a212e385d8d0f9bc74a645b6fb0651d64f4b22f9283f7bf`; interactive chat её не переводил;
+- fresh acceptance checks: `data/ai_inbox/russian_descriptions/` отсутствует, commit history по этому path пуст, canonical translation cache имеет `entries={}`, среди последних 100 Actions runs нет Russian ingest run;
+- repo-side binding уже опубликован как отдельный `semantic_work.russian_description_translation`, но точный identifier/config существующей scheduled ChatGPT task не хранится в repo и не был безопасно адресуем из текущего operator context; безопасного `run now` для неидентифицированной existing task здесь нет;
+- поэтому не создавался второй scheduler, не менялось nightly cadence, не фабриковался inbox result и не выполнялся ручной перевод;
+- exact remaining gate: тот же existing Nightly Production Runtime должен один раз реально обработать current exact probe через canonical submission; после этого проверить strict ingest -> one exact cache entry -> downstream visual rebuild/final Russian validation, сохранив остальные pending under GitHub control.
 
 ### F. Redesign detailed score breakdown UI
 Статус: `in_progress`.
@@ -148,4 +153,4 @@
 
 ## Текущий статус работ
 
-`package-ui-blocker-fix-01` завершён: canonical pre-AI workflow снова проходит package regressions и публикует current Russian translation scope. E / Russian descriptions теперь ждёт только bounded scheduled-runtime round-trip acceptance; F / redesign detailed score breakdown UI сохраняется как отдельная параллельная работа. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
+`package-ui-blocker-fix-01` завершён, а GitHub-owned current Russian translation scope опубликован. E / Russian descriptions сейчас `blocked` только на одном внешнем acceptance gate: реальном occurrence того же existing Nightly Production Runtime для одного exact probe; никаких manual translations или дополнительных schedulers не создано. F / redesign detailed score breakdown UI сохраняется как отдельная параллельная работа. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
