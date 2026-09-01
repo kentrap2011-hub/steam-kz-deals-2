@@ -114,7 +114,9 @@
 - producer-owned choice, UI display-only.
 
 ### E. Guarantee Russian game descriptions
-Статус: `planned`.
+Статус: `in_progress_contract`.
+- worker task: `ru-translation-contract-01`;
+- текущая работа ограничена canonical contract + GitHub-owned queue/validation/persistence wiring для semantic translation worker; отдельный scheduler не создаётся;
 - 100% visible cards должны иметь содержательное русское описание;
 - Steam Russian -> использовать/сокращать;
 - Steam English/другой язык -> автоматически переводить на русский;
@@ -134,4 +136,4 @@
 
 ## Текущий статус работ
 
-Interactive-задача G / `compact-purchase-options-01` завершена. Taste ingestion blocker также закрыт canonical workflow; остались только 3 штатные downstream `resolve_base_support_condition` строки. Следующая planned-задача не начата. Fixed-package complete-content valuation и stale-image swipe bug остаются закрыты.
+Interactive-задача G / `compact-purchase-options-01` завершена. Taste ingestion blocker также закрыт canonical workflow; остались только 3 штатные downstream `resolve_base_support_condition` строки. Параллельно выполняются E / `ru-translation-contract-01` (canonical Russian-description semantic translation contract) и F / redesign detailed score breakdown UI; их области не должны перетирать друг друга. Fixed-package complete-content valuation и stale-image swipe bug остаются закрыты.
