@@ -130,6 +130,102 @@ def test_content_price_requires_exact_single_app_purchase_sub():
     assert row['valuation_status'] == 'verified_single_app_purchase_route'
 
 
+def test_season_pass_constituent_route_is_counted_once_in_comparable_value():
+    season_pass_appid = 700001
+    constituent_appid = 700002
+    season_pass_item = {
+        'item_type': 0,
+        'id': season_pass_appid,
+        'name': 'Example Season Pass',
+        'type': 4,
+        'related_items': {'parent_appid': 1},
+        'purchase_options': [{
+            'packageid': 910001,
+            'final_price_in_cents': 50000,
+            'original_price_in_cents': 50000,
+            'discount_pct': 0,
+            'purchase_option_name': 'Example Season Pass',
+        }],
+    }
+    constituent_item = {
+        'item_type': 0,
+        'id': constituent_appid,
+        'name': 'Constituent DLC already granted by the Season Pass',
+        'type': 4,
+        'related_items': {'parent_appid': 1},
+        'purchase_options': [{
+            'packageid': 910002,
+            'final_price_in_cents': 50000,
+            'original_price_in_cents': 50000,
+            'discount_pct': 0,
+            'purchase_option_name': 'Season Pass acquisition route',
+        }],
+    }
+    route_packages = {
+        # The pass itself has a verified standalone fixed-Sub price.
+        910001: {'included_appids': [season_pass_appid]},
+        # The constituent is obtainable through a route that also grants the pass,
+        # so its apparent 500 KZT route is not an independent entitlement price.
+        910002: {
+            'included_appids': [season_pass_appid, constituent_appid],
+            'included_items': {
+                'included_apps': [
+                    {'appid': season_pass_appid},
+                    {'appid': constituent_appid},
+                ]
+            },
+        },
+    }
+    catalog = build_content_catalog(
+        [season_pass_appid, constituent_appid],
+        [season_pass_item, constituent_item],
+        route_packages,
+    )
+    assert catalog[season_pass_appid]['current_standalone_kzt'] == 500
+    assert catalog[constituent_appid]['current_standalone_kzt'] is None
+    assert catalog[constituent_appid]['valuation_status'] == 'no_verified_single_app_purchase_route'
+
+    package = {
+        'key': 'Sub_42',
+        'packageid': 42,
+        'entity_kind': 'sub',
+        'fixed_price_semantics': True,
+        'personalized_price': False,
+        'title': 'Two games plus a Season Pass',
+        'final_kzt': 1200,
+        'original_kzt': 2000,
+        'discount_percent': 40,
+        'included_appids': ['1', '2'],
+        'all_included_appids': ['1', '2', str(season_pass_appid), str(constituent_appid)],
+        'included_content': [
+            content(1, 'One', 'game'),
+            content(2, 'Two', 'game'),
+            catalog[season_pass_appid],
+            catalog[constituent_appid],
+        ],
+        'web_url': 'https://store.steampowered.com/sub/42/',
+    }
+    artifact = {'packages': {'Sub_42': package}}
+    graph = {'families': [family('game:1', 1, 500, 'One'), family('game:2', 2, 500, 'Two')]}
+    items = [visible('game:1', 'One'), visible('game:2', 'Two')]
+
+    recs, _ = build_recommendations(artifact, graph, items, RATE)
+    assert len(recs) == 1
+    rec = recs[0]
+
+    # Base games contribute 1000 KZT. The Season Pass entitlement contributes 500 KZT
+    # exactly once; the constituent's shared Season Pass route must not add another 500.
+    assert rec['visible_standalone_game_total_kzt'] == 1000
+    assert rec['verified_incremental_content_total_kzt'] == 500
+    assert rec['verified_incremental_content_count'] == 1
+    assert rec['verified_incremental_content'][0]['appid'] == str(season_pass_appid)
+    assert rec['verified_incremental_content_unpriced_count'] == 1
+    assert rec['verified_incremental_content_unpriced'][0]['appid'] == str(constituent_appid)
+    assert rec['comparable_entitlement_total_kzt'] == 1500
+    assert rec['standalone_total_kzt'] == 1500
+    assert rec['savings_kzt'] == 300
+
+
 def test_verified_dlc_changes_bioshock_complete_content_economics_without_valuing_excluded_game():
     families = [
         family('game:8850', 8850, 397, 'BioShock 2'),
@@ -221,6 +317,7 @@ def main():
     tests = [
         test_full_membership_unions_base_appids_and_nested_dlc,
         test_content_price_requires_exact_single_app_purchase_sub,
+        test_season_pass_constituent_route_is_counted_once_in_comparable_value,
         test_verified_dlc_changes_bioshock_complete_content_economics_without_valuing_excluded_game,
         test_unpriced_verified_dlc_is_visible_but_has_zero_monetary_value,
         test_dlc_for_noncovered_game_does_not_increase_personalized_value,
