@@ -21,6 +21,20 @@ QUEUE_OUT = Path('data/production/pre_ai/chatgpt_ru_description_queue.jsonl')
 STATUS_OUT = Path('data/production/pre_ai/chatgpt_ru_description_status.json')
 CACHE_PATH = Path('data/cache/russian_description_translations.json')
 
+IDENTITY_BOUND_REQUEST_FIELDS = {
+    'request_id',
+    'source_key',
+    'source_appid',
+    'work_type',
+    'source_text',
+    'source_text_sha256',
+    'source_version',
+    'source_locale_state',
+    'source_quality',
+    'target_locale',
+}
+MERGEABLE_CONTEXT_FIELDS = {'title', 'source_path'}
+
 
 def load_json(path):
     return json.loads(Path(path).read_text(encoding='utf-8'))
@@ -66,6 +80,33 @@ def queue_sha256(queue):
     return hashlib.sha256(raw.encode('utf-8')).hexdigest()
 
 
+def merge_same_identity_request(existing, incoming):
+    request_id = incoming.get('request_id')
+    if existing is None:
+        return incoming
+    for field in IDENTITY_BOUND_REQUEST_FIELDS:
+        if existing.get(field) != incoming.get(field):
+            raise SystemExit(
+                f'conflicting duplicate translation request {request_id}: identity-bound field {field}'
+            )
+    unknown_existing = set(existing) - IDENTITY_BOUND_REQUEST_FIELDS - MERGEABLE_CONTEXT_FIELDS
+    unknown_incoming = set(incoming) - IDENTITY_BOUND_REQUEST_FIELDS - MERGEABLE_CONTEXT_FIELDS
+    if unknown_existing or unknown_incoming:
+        raise SystemExit(
+            f'conflicting duplicate translation request {request_id}: unexpected context fields '
+            f'{sorted(unknown_existing | unknown_incoming)}'
+        )
+    merged = dict(existing)
+    for field in MERGEABLE_CONTEXT_FIELDS:
+        values = sorted({
+            str(value).strip()
+            for value in [existing.get(field), incoming.get(field)]
+            if str(value or '').strip()
+        }, key=str.casefold)
+        merged[field] = values[0] if values else ''
+    return merged
+
+
 def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at_utc=None, generated_at_utc=None):
     generated_at_utc = generated_at_utc or datetime.now(timezone.utc).isoformat()
     queue_by_id = {}
@@ -96,10 +137,8 @@ def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at
         title = title or (row.get('purchase') or {}).get('title') or row.get('taste_subject_key')
         request = build_translation_request(resolution, title)
         if request:
-            existing = queue_by_id.get(request['request_id'])
-            if existing is not None and existing != request:
-                raise SystemExit(f'non-deterministic duplicate translation request {request["request_id"]}')
-            queue_by_id[request['request_id']] = request
+            request_id = request['request_id']
+            queue_by_id[request_id] = merge_same_identity_request(queue_by_id.get(request_id), request)
             continue
 
         blocker_key = source_key or str(row.get('taste_subject_key') or (row.get('purchase') or {}).get('key') or 'unknown')
@@ -109,7 +148,7 @@ def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at
             'description_source_quality': resolution.get('description_source_quality') or 'missing',
         }
 
-    queue = list(queue_by_id.values())
+    queue = [queue_by_id[key] for key in sorted(queue_by_id)]
     blocker_rows = [blocker_by_key[key] for key in sorted(blocker_by_key, key=str.casefold)]
     if queue:
         status_value = 'translation_required'
