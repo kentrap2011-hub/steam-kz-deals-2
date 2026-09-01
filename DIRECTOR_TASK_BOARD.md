@@ -28,7 +28,7 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Бесплатные раздачи | Finish canonical production wiring/run for Tier-1 cross-platform giveaways | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_PRODUCTION_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-production-fix-01.md` | `awaiting_closeout_report` |
+| `ЧАТ 1` | Steam blocker раздач | Fix `recommendation_count_for_appid_out_of_range_1328240`, rerun canonical production, then verify giveaway snapshot | `WORKER_TASK_STEAM_RECOMMENDATION_COUNT_FIX_01.md` | `reviews/worker_reports/steam-recommendation-count-fix-01.md` | `ready_to_continue_in_existing_chat` |
 | `ЧАТ 2` | Объяснения карточек | Fix the single remaining generated-sample personal-taste-link violation | `WORKER_TASK_CARD_EXPLANATION_FIX_01.md` | `reviews/worker_reports/card-explanation-fix-01.md` | `awaiting_closeout_report` |
 
 ## Подготовлено, но НЕ назначено следующим
@@ -38,9 +38,8 @@
 
 ## Последние решения
 
-- User reports both current worker chats finished. Neither mandatory closeout report exists yet at its exact expected path, so both slots remain pending closeout only; no new implementation work is assigned until reports are saved.
-- `card-explanation-implement-01` — implementation and focused behavioral tests are present, but real generated top-30 acceptance failed on exactly one card; Chat 2 received a bounded acceptance fix task.
-- `cross-platform-giveaway-production-fix-01` — Chat 1 production integration follow-up; mandatory report still required.
+- `cross-platform-giveaway-production-fix-01` — `blocked`: giveaway wiring/tests are correct, but canonical run `33539362872` fails earlier in the owning Steam collector on `recommendation_count_for_appid_out_of_range_1328240`; direct bounded generic parser/validation fix selected for Chat 1, followed by the same canonical rerun.
+- Chat 2 still awaits its mandatory `card-explanation-fix-01` closeout report.
 - `worker-efficiency-guardrails-01` — complete; no follow-up required.
 - `backlog-disposition-validator-01` — complete and validated in GitHub Actions.
 
