@@ -10,39 +10,42 @@
 - final Taste ingest, downstream visual build и deploy подтверждены зелёными;
 - model binding: `taste-v3`, semantics `0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`.
 
-### Steam fixed-package purchase options — visibility + ranking value
-Статус: `complete_production_validated`.
+## Активная работа
 
-Итоговое продуктовое правило:
+### Steam fixed-package purchase options — verified purchase equivalence / BioShock
+Статус: `reopened_in_progress`.
+
+Причина переоткрытия:
+- `BioShock: The Collection` содержит `BioShock Remastered` (`409710`), `BioShock 2 Remastered` (`409720`) и `BioShock Infinite` (`8870`);
+- текущая лента содержит `BioShock® 2` (`8850`) и `BioShock Infinite`, поэтому старый exact-appid coverage видит только Infinite и скрывает набор;
+- это не UI-баг, а отсутствие отдельной verified purchase-equivalence модели для случаев, когда fixed package содержит подтверждённую улучшенную версию видимой игры;
+- дополнительно старый producer полностью скрывает пакет, если он не строго дешевле суммы только видимых standalone игр, хотя релевантная информация о fixed package всё равно нужна пользователю.
+
+Архитектурное направление:
+- НЕ сливать original/remaster в одну Taste/family сущность;
+- НЕ угадывать equivalence по названию, словам `Remastered`, franchise или fuzzy similarity;
+- добавить отдельный producer-owned directional purchase-equivalence contract: видимая игра -> явно подтверждённые package appids, которые могут закрыть её покупку;
+- первая подтверждённая регрессия: `7670 -> 409710` (BioShock -> BioShock Remastered), `8850 -> 409720` (BioShock 2 -> BioShock 2 Remastered);
+- exact included appid остаётся приоритетным; verified equivalence используется только как дополнительное доказуемое purchase coverage;
+- package info показывать, когда fixed `Sub_` покрывает >=2 visible families по exact/verified coverage; наличие информации о наборе не должно требовать, чтобы пакет обязательно был дешевле суммы этих visible standalone цен;
+- ranking boost по-прежнему fail-closed: package-route влияет на score только когда проходит коммерческие условия ranking policy; просто наличие набора не повышает балл автоматически;
+- UI различает `Выгодный набор Steam` и просто `Набор Steam`, если strict standalone savings не подтверждены.
+
+Definition of done:
+- BioShock Collection появляется как package option минимум на текущих карточках `BioShock® 2` и `BioShock Infinite` при текущем production scope;
+- coverage audit показывает, что `BioShock® 2` покрыт именно через explicit verified equivalence `8850 -> 409720`, а Infinite — exact `8870`;
+- без equivalence-конфига старое угадывание original/remaster остаётся запрещено regression-тестом;
+- package info может быть visible без ranking boost, если strict commercial route не прошёл;
+- production build и deploy зелёные, конкретный BioShock regression проверен на deployed payload.
+
+## Завершённые package-инварианты, которые сохраняются
+
 - только fixed Steam Store Package (`Sub_`);
-- package должен покрывать >=2 currently visible base-game families по actual included appids / canonical family membership;
-- original/remaster equivalence не угадывается;
-- package должен быть строго дешевле суммы current standalone prices; family считается один раз; unknown extra content value = 0;
 - dynamic/personalized Complete-the-Set `/bundle/` исключён fail-closed;
-- package не меняет Taste и влияет только на purchase/value часть финального score;
-- scorer независимо считает standalone purchase route и eligible fixed-package route, затем берёт более высокий прозрачный purchase score; при равенстве остаётся standalone, поэтому одна и та же выгода не считается дважды;
-- package route учитывает экономию против текущей покупки игр отдельно, эффективную цену за одну покрытую игру и количество покрытых visible games;
-- package total price выше practical ceiling из ranking policy не получает package-score;
-- карточка показывает отдельный заметный блок `🎁 Выгодный набор Steam` с названием, ценой, количеством/названиями игр, standalone total, экономией, ценой за игру и кнопкой открытия package в Steam.
-
-Production proof после reopening:
-- implementation merge: `a86b0e793b445c5d1af54ac08ba00528be946f6e` (`Make fixed Steam packages visible and ranking-aware`);
-- visual run #111 / `33423352245` — success;
-- `PRIORITY_RANKING_VALIDATION=PASS`;
-- fixed-package regression: `12 passed`;
-- `package_qualifying=7`, `package_touched=17`;
-- `PACKAGE_VISIBLE_CARDS=17`, `PACKAGE_RANKING_DRIVERS=15`;
-- production examples: `FlatOut 2` purchase score `22 -> 36` (+14) через `Flatout Complete Pack` за ~272 ₽ / 3 игры; `The Night of the Rabbit` `22 -> 40` (+18) через `The Daedalic Armageddon Bundle` за ~120 ₽ / 7 игр;
-- package-aware visual commit: `66c00e9e389691be885123a9dd4e48663c41d5ad`;
-- downstream deploy #151 / `33423389598` — success на package-aware payload;
-- actual Pages artifact #151 (`9769779423`) проверен: в одном задеплоенном artifact одновременно присутствуют новый package UI и package-aware `data/current.json`;
-- более поздний visual run #113 / `33437077173` также сохранил package regressions зелёными и диагностировал те же `17` visible package cards / `15` package ranking drivers.
-
-Быстрый маршрут и rationale:
-- `docs/fixed_package_purchase_options.md`;
-- `docs/RANK-013-fixed-package-purchase-route.md`.
-
-Задачу не переоткрывать только из-за того, что конкретная просмотренная карточка не имеет package: package block появляется только у игр, для которых текущий fixed `Sub_` реально проходит условия. Если пользователь сообщает, что package не виден на игре, которая точно должна иметь `better_purchase_option`, проверять deployed artifact/current payload для этой конкретной игры.
+- unknown extra content не получает выдуманную денежную ценность;
+- package не меняет Taste;
+- scorer сравнивает standalone и eligible package purchase routes прозрачно и без двойного счёта;
+- dedicated package UI и package-aware ranking уже production-validated до текущего reopening.
 
 ## Не активная основная работа
 
@@ -96,30 +99,14 @@ Production proof после reopening:
 
 ### F. Redesign detailed score breakdown UI
 Статус: `planned`.
-
-Наблюдаемый дефект по мобильному интерфейсу:
-- раскрытая `Детальная оценка` стала визуально перегруженной после появления package-aware ranking;
-- слишком много отдельных pill/chip-строк подряд, из-за чего блок выглядит дробно и тяжело читается;
-- важные уровни иерархии (`итоговый балл`, `насколько подходит тебе`, `выгодность покупки`, выбранный purchase route) визуально конкурируют между собой;
-- длинные подписи факторов занимают много высоты и делают карточку чрезмерно длинной;
-- package-driver (`Выгодный набор Steam · +N балла против покупки отдельно`) полезен, но сейчас плохо встроен в общую визуальную структуру оценки.
-
-Требование:
-- сохранить всю прозрачность score и возможность понять, откуда взялся итоговый балл;
-- сделать раскрытую оценку заметно компактнее и визуально спокойнее на мобильном экране;
-- явно отделить крупные секции `Подходит тебе` и `Выгодность покупки`, а внутри показывать факторы более компактным списком/табличной строкой вместо каскада больших pills;
-- главный акцент — итог секции (`42,9/60`, `36/40`) и несколько реально значимых drivers; второстепенные детали не должны иметь такой же визуальный вес;
-- выбранный purchase route (`игра отдельно` / `выгодный набор Steam`) показать компактно и понятно рядом с коммерческой частью;
-- длинные технические подписи вроде `детальная нормализованная оценка`, `unknown`, внутренних source/status wording преобразовывать в понятные пользовательские формулировки;
-- не убирать данные из producer payload и не менять ranking math ради дизайна: задача только presentation/interaction layer;
-- проверить на реальной карточке с package driver (например `FlatOut 2`) и без package, а также на узком мобильном viewport;
-- добавить UI regression/snapshot или DOM-проверку, чтобы детальная оценка не возвращалась к перегруженному виду после новых score-компонентов.
-
-Definition of done:
-- на мобильном экране пользователь за несколько секунд видит итог 0–100, вклад `Подходит тебе`, вклад `Выгодность покупки` и причину package-route, не разбирая длинную стену chips;
-- все числовые составляющие по-прежнему доступны при раскрытии;
-- блок занимает существенно меньше вертикального места и имеет понятную визуальную иерархию.
+- раскрытая `Детальная оценка` визуально перегружена: слишком много pills/chips, слабая иерархия и лишняя высота на мобильном;
+- сохранить всю прозрачность score, но сделать блок компактнее и визуально спокойнее;
+- явно отделить `Подходит тебе` и `Выгодность покупки`, внутри перейти к более компактным строкам;
+- package-driver встроить в коммерческую секцию, не превращая его в отдельную стену текста;
+- технические подписи преобразовывать в пользовательские;
+- ranking math не менять ради дизайна;
+- regression/snapshot на mobile viewport.
 
 ## Текущий статус работ
 
-Сейчас незавершённой `in_progress` задачи нет. Следующую плановую задачу начинать только после явного выбора пользователя; наличие пункта в backlog не означает, что он активен.
+Сейчас активна одна задача: verified purchase equivalence / BioShock для fixed packages. Остальной backlog остаётся `planned`.
