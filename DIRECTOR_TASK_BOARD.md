@@ -28,8 +28,8 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Бесплатные раздачи | Implement Tier-1 cross-platform giveaway data plane: hardened Steam + Epic KZ + GOG KZ | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_IMPLEMENT_01.md` | `reviews/worker_reports/cross-platform-giveaway-implement-01.md` | `active_or_ready` |
-| `ЧАТ 2` | Эффективность worker-чатов | Audit recent worker execution for repeated avoidable detours and recommend the smallest durable prevention mechanism | `WORKER_TASK_WORKER_EFFICIENCY_AUDIT_01.md` | `reviews/worker_reports/worker-efficiency-audit-01.md` | `ready_for_new_chat` |
+| `ЧАТ 1` | Бесплатные раздачи | Implement Tier-1 cross-platform giveaway data plane: hardened Steam + Epic KZ + GOG KZ | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_IMPLEMENT_01.md` | `reviews/worker_reports/cross-platform-giveaway-implement-01.md` | `awaiting_closeout_report` |
+| `ЧАТ 2` | Эффективность worker-чатов | Implement minimal durable worker pitfall guardrails from completed efficiency audit | `WORKER_TASK_WORKER_EFFICIENCY_GUARDRAILS_01.md` | `reviews/worker_reports/worker-efficiency-guardrails-01.md` | `ready_to_continue_in_existing_chat` |
 
 ## Подготовлено, но НЕ назначено следующим
 
@@ -39,10 +39,10 @@
 
 ## Последние решения
 
-- `backlog-disposition-validator-01` — complete. Lightweight fail-closed validator is implemented and validated in GitHub Actions; no direct follow-up required.
-- `worker-efficiency-audit-01` is selected for the now-free Chat 2 slot because it addresses the user's explicit recent concern about repeated worker mistakes and does not overlap with Chat 1 giveaway implementation.
-- `task-memory-audit-01` — complete; no new unrecovered orphaned/ambiguous tasks found.
-- `cross-platform-giveaway-recon-01` completed its source/architecture recon; Chat 1 is now on direct Tier-1 implementation.
+- `worker-efficiency-audit-01` — complete. Audit of 17 recent worker reports found three reusable avoidable patterns worth persisting: outcome-vs-source-shape validation, GitHub Pages rerun trap after artifact upload, and architecture preflight before recommending IMPLEMENT across new source/runtime/workflow ownership boundaries.
+- Direct follow-up selected for Chat 2: one small operational-doc implementation only — `KNOWN_WORKER_PITFALLS.md` plus minimal `CHAT_PROTOCOL.md` / `DIRECTOR_PROTOCOL.md` hooks. No telemetry, quotas, dashboard, product/runtime changes or new CI are requested.
+- `backlog-disposition-validator-01` — complete and validated in GitHub Actions.
+- Chat 1 giveaway implementation has fresh implementation commits but is still missing its mandatory closeout report.
 
 ## Выбор следующей работы
 
