@@ -92,6 +92,39 @@ jobs:
           python scripts/validate_duration_enrichment_contract.py
           python scripts/test_duration_enrichment.py
 
+      - name: Check IGDB duration provisioning and connectivity
+        id: duration_connectivity
+        env:
+          IGDB_CLIENT_ID: ${{ secrets.IGDB_CLIENT_ID }}
+          IGDB_CLIENT_SECRET: ${{ secrets.IGDB_CLIENT_SECRET }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          production_enabled=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          contract = json.loads(Path('config/duration_enrichment_contract.json').read_text(encoding='utf-8'))
+          print('true' if (contract.get('provisioning_gates') or {}).get('production_collection_enabled') else 'false')
+          PY
+          )
+          echo "production_enabled=$production_enabled" >> "$GITHUB_OUTPUT"
+
+          if [ -z "${IGDB_CLIENT_ID:-}" ] || [ -z "${IGDB_CLIENT_SECRET:-}" ]; then
+            echo "DURATION_IGDB_PROVISIONING=missing_credentials expected_secrets=IGDB_CLIENT_ID,IGDB_CLIENT_SECRET"
+            echo "status=missing_credentials" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$production_enabled" = "true" ]; then
+            echo "DURATION_IGDB_PROVISIONING=credentials_present production_collection_enabled=true"
+            echo "status=ready" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          python scripts/duration_enrichment.py --connectivity-only | tee /tmp/duration-connectivity.log
+          grep -q 'DURATION_IGDB_CONNECTIVITY=PASS' /tmp/duration-connectivity.log
+          echo "status=connectivity_pass" >> "$GITHUB_OUTPUT"
+
       - name: Validate fresh commercial refresh and fixed package ranking value
         shell: bash
         run: |
@@ -134,40 +167,6 @@ jobs:
               fh.write(('true' if ready else 'false') + '\n')
           PY
           echo "ready=$(cat /tmp/history-ready)" >> "$GITHUB_OUTPUT"
-
-      - name: Check IGDB duration provisioning and connectivity
-        id: duration_connectivity
-        if: steps.history.outputs.ready == 'true'
-        env:
-          IGDB_CLIENT_ID: ${{ secrets.IGDB_CLIENT_ID }}
-          IGDB_CLIENT_SECRET: ${{ secrets.IGDB_CLIENT_SECRET }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          production_enabled=$(python - <<'PY'
-          import json
-          from pathlib import Path
-          contract = json.loads(Path('config/duration_enrichment_contract.json').read_text(encoding='utf-8'))
-          print('true' if (contract.get('provisioning_gates') or {}).get('production_collection_enabled') else 'false')
-          PY
-          )
-          echo "production_enabled=$production_enabled" >> "$GITHUB_OUTPUT"
-
-          if [ -z "${IGDB_CLIENT_ID:-}" ] || [ -z "${IGDB_CLIENT_SECRET:-}" ]; then
-            echo "DURATION_IGDB_PROVISIONING=missing_credentials expected_secrets=IGDB_CLIENT_ID,IGDB_CLIENT_SECRET"
-            echo "status=missing_credentials" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          if [ "$production_enabled" = "true" ]; then
-            echo "DURATION_IGDB_PROVISIONING=credentials_present production_collection_enabled=true"
-            echo "status=ready" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          python scripts/duration_enrichment.py --connectivity-only | tee /tmp/duration-connectivity.log
-          grep -q 'DURATION_IGDB_CONNECTIVITY=PASS' /tmp/duration-connectivity.log
-          echo "status=connectivity_pass" >> "$GITHUB_OUTPUT"
 
       - name: Refresh missing or stale IGDB duration cache
         id: duration
