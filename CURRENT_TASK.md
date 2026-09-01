@@ -114,15 +114,16 @@
 - producer-owned choice, UI display-only.
 
 ### E. Guarantee Russian game descriptions
-Статус: `in_progress_contract`.
-- worker task: `ru-translation-contract-01`;
-- текущая работа ограничена canonical contract + GitHub-owned queue/validation/persistence wiring для semantic translation worker; отдельный scheduler не создаётся;
-- 100% visible cards должны иметь содержательное русское описание;
-- Steam Russian -> использовать/сокращать;
-- Steam English/другой язык -> автоматически переводить на русский;
-- английский fallback, скрытый блок и technical placeholder не допустимы;
-- если у Steam действительно нет никакого source description, это отдельный exceptional data-quality case для разбора;
-- добавить pre-deploy validation на nonempty Russian description и запрет placeholder strings.
+Статус: `contract_complete_implementation_pending`.
+- worker task `ru-translation-contract-01`: `complete`;
+- canonical contracts: `config/russian_description_translation_contract.json`, `config/russian_description_translation_result_contract.json`, `config/russian_description_translation_cache_entry_contract.json`;
+- contract commit: `e46f4433f379ca4e7310f95afc323c70410ac5dd`; route commit: `2727d0c5052a3a74a2a5c6df3a9855e0517d6425`;
+- exact request identity: `App_<appid>` + SHA-256 нормализованного source text; source hash является version binding, stale result/cache не должен прикрепляться после изменения текста;
+- GitHub владеет exact unresolved scope, queue/order, retry/completeness, validation, cache merge и downstream rebuild; scheduled ChatGPT — только constrained semantic translation worker;
+- existing nightly scheduled ChatGPT runtime переиспользуется; отдельный recurring translation scheduler запрещён; Taste-specific result schema не переиспользуется;
+- contract-only task намеренно НЕ реализовывал producer/ingest/runtime wiring, массовый перевод и production cache population;
+- contract validation run `33512506228`, job `99871394277`: success, включая ownership validation и translation contract validation;
+- следующий bounded IMPLEMENT: GitHub-owned translation scope producer + translation-specific scheduled result ingestion/cache persistence + downstream reuse, без ручного заполнения каталога.
 
 ### F. Redesign detailed score breakdown UI
 Статус: `in_progress`.
@@ -136,4 +137,4 @@
 
 ## Текущий статус работ
 
-Interactive-задача G / `compact-purchase-options-01` завершена. Taste ingestion blocker также закрыт canonical workflow; остались только 3 штатные downstream `resolve_base_support_condition` строки. Параллельно выполняются E / `ru-translation-contract-01` (canonical Russian-description semantic translation contract) и F / redesign detailed score breakdown UI; их области не должны перетирать друг друга. Fixed-package complete-content valuation и stale-image swipe bug остаются закрыты.
+Interactive-задача G / `compact-purchase-options-01` завершена. Taste ingestion blocker также закрыт canonical workflow; остались только 3 штатные downstream `resolve_base_support_condition` строки. E / `ru-translation-contract-01` завершена на contract/schema уровне и ждёт отдельного bounded IMPLEMENT producer/ingest/cache wiring; F / redesign detailed score breakdown UI продолжает выполняться параллельно. Fixed-package complete-content valuation и stale-image swipe bug остаются закрыты.
