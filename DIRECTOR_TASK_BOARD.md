@@ -25,55 +25,49 @@
 17. User decision 2026-09-01: when translation is required, prefer ChatGPT semantic translation over generic machine-translation APIs.
 18. Current project commercial status: personal/non-commercial. Before any future monetization read `COMMERCIALIZATION_GUARD.md` and re-audit provider rights/terms.
 19. Do not leave a worker slot idle solely because an unrelated track is waiting on user provisioning. Durable blocked state stays in GitHub; the slot may be reused for an independent task and later returned to the blocked track in a fresh chat.
-20. User priority override 2026-09-01: **time-limited claim-to-keep free-game giveaways across any reliably supportable storefronts are the highest-priority next product task once either current worker slot becomes free.** They are not Steam-only. Start with bounded RECON; do not let explanation/ranking polish or secondary features take that first free slot.
-21. **Task-memory invariant:** any explicit user decision “сделать потом / добавить позже / отложить” must receive a durable destination in the same director step: current active task/board or `BACKLOG.md`. Removing a backlog item requires exact destination evidence: active task+report path, completed evidence, or explicit user cancellation/supersession. Never bulk-delete `needs_user_verification` items merely to shorten backlog.
-22. Because `BACKLOG.md` was created on 2026-08-30 without migrating all earlier agreements, a one-time `task-memory-audit-01` is required to reconcile historical orphaned tasks. This audit belongs to a worker, not the director chat.
-23. Worker efficiency is a first-class operational concern, but speed must not replace correctness. Existing protocol already requires context-budget discipline, route-first navigation, stopping after two failed approaches to the same data, and >1 minute delay analysis. A bounded `worker-efficiency-audit-01` will identify repeated avoidable detours across workers and recommend the smallest durable prevention mechanism.
+20. User priority override 2026-09-01: time-limited claim-to-keep free-game giveaways across any reliably supportable storefronts are a high product priority. They are not Steam-only.
+21. Task-memory invariant: any explicit user decision “сделать потом / добавить позже / отложить” must receive a durable destination in the same director step: current active task/board or `BACKLOG.md`.
+22. Because `BACKLOG.md` was created without migrating all earlier agreements, a one-time `task-memory-audit-01` is required. This audit belongs to a worker, not the director chat.
+23. Worker efficiency is a first-class operational concern, but speed must not replace correctness. A bounded `worker-efficiency-audit-01` is prepared to inspect repeated avoidable detours.
+24. **Priority discipline:** `prepared` does not mean `next`. A newly created useful task must not automatically become the next free-slot assignment. By default there is no precommitted next task while both workers are active. When a worker finishes, the director first reads its report and then chooses the next task from direct continuation, user priority, dependencies and backlog. Only an explicit user priority or an obvious time-critical/direct continuation may be predeclared as next.
 
-## Активно / подготовлено сейчас
+## Активно сейчас
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Бесплатные раздачи | Cross-platform claim-to-keep giveaway source/production architecture recon | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_RECON_01.md` | `reviews/worker_reports/cross-platform-giveaway-recon-01.md` | `ready_or_active` |
-| `ЧАТ 2` | Память задач | Audit pre-backlog agreements, historical removals and orphaned tasks | `WORKER_TASK_TASK_MEMORY_AUDIT_01.md` | `reviews/worker_reports/task-memory-audit-01.md` | `ready_or_active` |
+| `ЧАТ 1` | Бесплатные раздачи | Cross-platform claim-to-keep giveaway source/production architecture recon | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_RECON_01.md` | `reviews/worker_reports/cross-platform-giveaway-recon-01.md` | `active_or_ready` |
+| `ЧАТ 2` | Память задач | Audit pre-backlog agreements, historical removals and orphaned tasks | `WORKER_TASK_TASK_MEMORY_AUDIT_01.md` | `reviews/worker_reports/task-memory-audit-01.md` | `active_or_ready` |
 
-## Подготовлено на следующий свободный слот
+## Подготовлено, но НЕ назначено следующим
 
-- task: `WORKER_TASK_WORKER_EFFICIENCY_AUDIT_01.md`
-- report: `reviews/worker_reports/worker-efficiency-audit-01.md`
-- scope: bounded audit of recent workers for repeated dead ends, redundant reads/searches, stale-route rediscovery, unnecessary reruns and closeout rework; recommend one minimal durable prevention mechanism; READ-ONLY / RECON.
+- `WORKER_TASK_WORKER_EFFICIENCY_AUDIT_01.md` -> `reviews/worker_reports/worker-efficiency-audit-01.md`
+  - purpose: repeated worker dead ends / redundant reads / reruns / closeout rework;
+  - status: `prepared_unscheduled`;
+  - it does not automatically take the first freed slot.
+
+Other deferred product/operational work stays in `BACKLOG.md` or durable blocked state and is selected only after current worker reports are reviewed.
 
 ## Worker chat lifecycle
 
-- Old `ЧАТ 1 — Русские описания`: durable blocked state saved; may be deleted.
-- `ЧАТ 1 — Бесплатные раздачи`: independent high-priority recon; continue/run in a fresh chat.
-- Old `ЧАТ 2 — Объяснения карточек`: audit report is saved; old chat may be deleted.
-- `ЧАТ 2 — Память задач`: run/continue in a fresh chat. The director must not perform this history audit itself.
-- When either current slot becomes free, launch `worker-efficiency-audit-01` before ordinary secondary polish unless the giveaway track needs an immediate direct continuation that would otherwise risk missing active time-limited offers.
-
-## Recovered task-memory findings already known
-
-- Cross-platform free giveaways: product rule existed before `BACKLOG.md`; implementation task was not migrated into backlog. Restored 2026-09-01.
-- Old media/screenshots verification: restored to `BACKLOG.md` as `recovered_needs_reconciliation`.
-- Chrome shortcut icon: later positively user-verified; do not restore solely because it vanished from backlog.
-- Played-game achievements: subsequently implemented.
-- Detailed normalized Taste factors: subsequently implemented/cut over.
-- Bundles/packages: explicitly moved into active work and later completed.
-- Detailed score UI / misleading wishlist display: later completed and user-verified.
+- `ЧАТ 1 — Бесплатные раздачи`: current high-priority recon.
+- `ЧАТ 2 — Память задач`: current one-time integrity audit; director does not duplicate it.
+- When either worker finishes, do not blindly launch a prewritten task. Read the report first, determine whether a direct continuation is more important, then select from actual priorities.
 
 ## Последние завершённые / blocked worker-этапы
 
-- `card-explanation-audit-01` — audit complete; current explanations fail quality gate: 0/30 fully game-specific positive rationales, placeholder positive text on 11/30, and no-risk filler shown as a negative bullet on 13/30. Implementation intentionally not started yet.
-- `ru-translation-runtime-acceptance-01` — `blocked`; current queue has 155 pending translations, repo-side binding exists, but no real scheduled-runtime result has yet occurred. Resume only through the existing Nightly Production Runtime.
-- `package-ui-blocker-fix-01` — `complete`.
+- `card-explanation-audit-01` — audit complete; explanation implementation remains deferred.
+- `ru-translation-runtime-acceptance-01` — blocked on a real occurrence of the existing Nightly Production Runtime; no second scheduler.
+- `package-ui-blocker-fix-01` — complete.
 - `duration-igdb-implement-01` — code complete but blocked on missing GitHub Secrets.
 
-## Ближайшие задачи
+## Выбор следующей работы
 
-1. `ЧАТ 1`: cross-platform giveaway recon.
-2. `ЧАТ 2`: task-memory audit.
-3. First freed slot: `worker-efficiency-audit-01`, except an immediate direct giveaway continuation may retain priority because giveaways expire.
-4. After task-memory audit, restore only worker-proven orphaned tasks or ask user on genuinely ambiguous ones.
-5. Explanation-quality implementation remains important but comes after the time-limited giveaway path and current operational audits.
-6. Resume Russian translation acceptance only through the existing Nightly Production Runtime after a real result exists.
-7. User provisions IGDB secrets when convenient; resume duration connectivity acceptance in a later free slot.
+No task is globally precommitted as “next” while both current workers are active.
+
+When a slot frees:
+1. read that worker report;
+2. decide whether its direct continuation is necessary/urgent;
+3. compare that continuation against explicit user priorities and current backlog;
+4. only then assign the free slot.
+
+Prepared tasks such as `worker-efficiency-audit-01` are candidates, not promises.
