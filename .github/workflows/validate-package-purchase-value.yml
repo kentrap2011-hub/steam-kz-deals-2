@@ -7,11 +7,13 @@ on:
       - "config/fixed_package_purchase_option_contract.json"
       - "config/purchase_equivalence_overrides.json"
       - "scripts/apply_fixed_package_purchase_options.py"
+      - "scripts/build_fixed_package_purchase_options.py"
       - "scripts/refresh_visual_commercial_fields.py"
       - "scripts/build_final_visual_payload.py"
       - "scripts/priority_ranking.py"
       - "scripts/test_commercial_refresh.py"
       - "scripts/test_fixed_package_purchase_options.py"
+      - "scripts/test_package_complete_content_value.py"
       - "scripts/validate_priority_ranking.py"
       - "web/app.js"
       - "web/package-deal-ui.js"
@@ -42,11 +44,13 @@ jobs:
           set -euo pipefail
           python -m py_compile \
             scripts/apply_fixed_package_purchase_options.py \
+            scripts/build_fixed_package_purchase_options.py \
             scripts/refresh_visual_commercial_fields.py \
             scripts/build_final_visual_payload.py \
             scripts/priority_ranking.py \
             scripts/test_commercial_refresh.py \
             scripts/test_fixed_package_purchase_options.py \
+            scripts/test_package_complete_content_value.py \
             scripts/validate_priority_ranking.py
 
       - name: Validate fresh commercial refresh independent of Taste
@@ -60,6 +64,7 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/test_fixed_package_purchase_options.py
+          python scripts/test_package_complete_content_value.py
 
       - name: Validate full priority ranking regressions
         shell: bash

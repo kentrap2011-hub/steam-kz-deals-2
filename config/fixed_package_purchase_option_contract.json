@@ -1,8 +1,8 @@
 {
   "contract": "FIXED-PACKAGE-PURCHASE-OPTION-V1",
-  "version": "1.1",
+  "version": "1.2",
   "status": "implementation_only",
-  "purpose": "Surface relevant fixed Steam Store Package purchase options across multiple currently visible base-game families and let the ranking policy score only commercially eligible package routes, without changing price-blind Taste semantics.",
+  "purpose": "Surface relevant fixed Steam Store Package purchase options across multiple currently visible base-game families and value verified included DLC/content without changing price-blind Taste semantics.",
   "authority": {
     "ownership_contract": "config/execution_ownership_contract.json",
     "offer_family_contract": "config/offer_family_contract.json",
@@ -17,20 +17,31 @@
     "network_source": "IStoreBrowseService/GetItems",
     "country_code": "KZ",
     "include_all_purchase_options": true,
+    "include_included_items": true,
     "supported_entity_kind": "Sub_",
     "fixed_price_semantics_required": true,
     "dynamic_bundle_ids_supported": false,
     "personalized_complete_the_set_supported": false,
-    "missing_or_unreturned_optional_package_is_nonblocking": true
+    "missing_or_unreturned_optional_package_is_nonblocking": true,
+    "preserve_verified_top_level_included_content": true,
+    "included_content_requires_storebrowse_app_identity": true
   },
   "comparison": {
     "minimum_visible_base_game_family_count": 2,
     "count_distinct_families_once": true,
     "visibility_requires_strict_current_price_savings": false,
     "ranking_boost_requires_commercial_route_eligibility": true,
-    "standalone_reference": "sum of current primary KZT prices for currently visible base-game families covered by the package",
+    "visible_game_reference": "sum of current primary KZT prices for currently visible base-game families covered by the package",
+    "verified_incremental_content_reference": "sum only verified current KZ single-app acquisition prices for top-level included DLC/content whose parent game is one of the covered visible game identities",
+    "complete_comparable_reference": "visible_game_reference + verified_incremental_content_reference",
+    "backward_compatible_standalone_total_field_semantics": "complete_comparable_reference",
     "unknown_extra_content_value_kzt": 0,
-    "unknown_or_nonvisible_content_never_increases_computed_savings": true,
+    "verified_but_unpriced_content_value_kzt": 0,
+    "nonpersonalized_included_game_value_kzt": 0,
+    "price_must_not_rescue_taste_excluded_base_game": true,
+    "recursive_entitlement_expansion_for_value_allowed": false,
+    "double_count_constituent_content_allowed": false,
+    "single_app_price_requires_verified_fixed_sub_with_exactly_that_appid": true,
     "edition_equivalence_guessing_allowed": false,
     "verified_directional_purchase_equivalence_allowed": true,
     "verified_directional_purchase_equivalence_contract": "config/purchase_equivalence_overrides.json",
@@ -49,32 +60,42 @@
     "strict_savings_false_label": "Набор Steam",
     "non_saving_package_may_be_visible": true,
     "non_saving_package_must_not_claim_to_be_cheaper": true,
-    "verified_equivalence_may_be_explained_to_user": true
+    "verified_equivalence_may_be_explained_to_user": true,
+    "full_verified_included_content_should_be_visible": true,
+    "verified_incremental_content_value_should_be_broken_out": true,
+    "nonpersonalized_included_content_should_be_visible_without_fake_value": true,
+    "unpriced_verified_content_should_be_visible_without_fake_value": true
   },
   "output": {
     "pre_ai_artifact": "data/production/pre_ai/fixed_package_options.json",
+    "pre_ai_package_content_field": "included_content",
     "visual_field": "better_purchase_option",
     "visual_field_note": "legacy field name retained for compatibility; presence means relevant package option, while strict_current_price_savings and score_breakdown.purchase_route determine whether it is actually cheaper / ranking-driving",
     "also_append_to_existing_offers": true,
     "ranking_review_includes_better_purchase_option": true,
-    "coverage_evidence_required": true
+    "coverage_evidence_required": true,
+    "verified_included_content_required_when_storebrowse_provides_membership": true
   },
   "regression": {
     "bioshock_package_key": "Sub_127633",
-    "bioshock_live_member_appids": [409710, 409720, 8870],
-    "bioshock_live_member_titles": [
+    "bioshock_base_coverage_appids": [409710, 409720, 8870],
+    "bioshock_verified_top_level_content_titles": [
       "BioShock Remastered",
       "BioShock 2 Remastered",
-      "BioShock Infinite"
+      "BioShock 2: Minerva's Den Remastered",
+      "BioShock Infinite",
+      "BioShock Infinite - Season Pass",
+      "Bioshock Infinite: Columbia's Finest"
     ],
     "bioshock_verified_purchase_equivalence": {
       "7670": 409710,
       "8850": 409720
     },
-    "bioshock_current_scope_expectation": "When BioShock 2 (8850) and BioShock Infinite (8870) are visible, Sub_127633 must be surfaced using verified equivalence for 8850->409720 and exact coverage for 8870 even if strict standalone savings is not positive.",
+    "bioshock_current_scope_expectation": "When BioShock 2 (8850) and BioShock Infinite (8870) are visible, Sub_127633 must surface verified full top-level content, use verified equivalence for 8850->409720 and exact coverage for 8870, value only verified priced DLC attached to those covered games, and leave nonvisible/Taste-excluded BioShock Remastered visible but nonpersonalized.",
     "deterministic_price_fixture_is_not_live_price_authority": true,
-    "deterministic_three_remaster_family_standalone_total_kzt_fixture": 2034,
-    "deterministic_package_kzt_fixture": 1420,
-    "test_script": "scripts/test_fixed_package_purchase_options.py"
+    "test_scripts": [
+      "scripts/test_fixed_package_purchase_options.py",
+      "scripts/test_package_complete_content_value.py"
+    ]
   }
 }
