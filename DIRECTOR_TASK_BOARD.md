@@ -27,58 +27,50 @@
 19. Do not leave a worker slot idle solely because an unrelated track is waiting on user provisioning. Durable blocked state stays in GitHub; the slot may be reused for an independent task and later returned to the blocked track in a fresh chat.
 20. User priority override 2026-09-01: **time-limited claim-to-keep free-game giveaways across any reliably supportable storefronts are the highest-priority next product task once either current worker slot becomes free.** They are not Steam-only. Start with bounded RECON; do not let explanation/ranking polish or secondary features take that first free slot.
 21. **Task-memory invariant:** any explicit user decision “сделать потом / добавить позже / отложить” must receive a durable destination in the same director step: current active task/board or `BACKLOG.md`. Removing a backlog item requires exact destination evidence: active task+report path, completed evidence, or explicit user cancellation/supersession. Never bulk-delete `needs_user_verification` items merely to shorten backlog.
-22. Because `BACKLOG.md` was created on 2026-08-30 without migrating all earlier agreements, a one-time `task-memory-audit-01` is required to reconcile historical orphaned tasks. This audit must not displace the first-free-slot giveaway RECON; use the other next free slot.
+22. Because `BACKLOG.md` was created on 2026-08-30 without migrating all earlier agreements, a one-time `task-memory-audit-01` is required to reconcile historical orphaned tasks. This audit belongs to a worker, not the director chat.
 
 ## Активно / подготовлено сейчас
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Русские описания | One-record real scheduled-runtime acceptance: GitHub queue -> ChatGPT -> ingestion/cache -> visual rebuild | `WORKER_TASK_RU_TRANSLATION_RUNTIME_ACCEPTANCE_01.md` | `reviews/worker_reports/ru-translation-runtime-acceptance-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 1` | Бесплатные раздачи | Cross-platform claim-to-keep giveaway source/production architecture recon | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_RECON_01.md` | `reviews/worker_reports/cross-platform-giveaway-recon-01.md` | `ready_for_new_chat` |
 | `ЧАТ 2` | Объяснения карточек | Read-only audit of current “why fits / why may not fit” explanation quality on bounded top sample | `WORKER_TASK_CARD_EXPLANATION_AUDIT_01.md` | `reviews/worker_reports/card-explanation-audit-01.md` | `prepared_or_active` |
 
-## Подготовлено на следующие свободные слоты
+## Подготовлено на следующий свободный слот
 
-1. **Первый освободившийся слот — максимальный продуктовый приоритет:**
-   - task: `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_RECON_01.md`
-   - report: `reviews/worker_reports/cross-platform-giveaway-recon-01.md`
-   - scope: time-limited permanent-claim giveaways across Steam, Epic Games Store, GOG and any other reliably supportable storefront/source; storefront-neutral architecture; READ-ONLY / RECON.
-
-2. **Другой следующий свободный слот — project-memory integrity:**
-   - task: `WORKER_TASK_TASK_MEMORY_AUDIT_01.md`
-   - report: `reviews/worker_reports/task-memory-audit-01.md`
-   - scope: audit pre-backlog agreements, historical backlog removals and durable destinations; identify any additional orphaned tasks; READ-ONLY / RECON.
+- task: `WORKER_TASK_TASK_MEMORY_AUDIT_01.md`
+- report: `reviews/worker_reports/task-memory-audit-01.md`
+- scope: audit pre-backlog agreements, historical backlog removals and durable destinations; identify any additional orphaned tasks; READ-ONLY / RECON.
 
 ## Worker chat lifecycle
 
-- `ЧАТ 1 — Русские описания`: package/UI blocker is complete. Canonical pre-AI workflow publishes real translation scope; immediate step is one real scheduled-runtime round-trip acceptance. Keep the same chat until director reviews that report.
-- Old duration state remains durable and blocked only on user-provisioned `IGDB_CLIENT_ID` / `IGDB_CLIENT_SECRET`; it does not occupy an active slot.
-- `ЧАТ 2 — Объяснения карточек`: independent read-only audit; safe in parallel with Chat 1 if the task was actually sent.
-- When either active slot finishes, do **not** start explanation fixes or other polish first: launch cross-platform giveaway RECON.
-- When the other slot becomes free, launch `task-memory-audit-01` before further secondary backlog work.
+- Old `ЧАТ 1 — Русские описания`: `ru-translation-runtime-acceptance-01` saved with status `blocked`. Repo-side queue/runtime/ingestion path is ready, but one real result must arrive from the existing Nightly Production Runtime; worker correctly did not create a second scheduler or manually translate. This state is durable; old chat no longer needs to occupy a slot and may be deleted. Resume later in a fresh free slot after a real nightly translation result exists or when the existing runtime binding can be addressed safely.
+- New `ЧАТ 1 — Бесплатные раздачи`: launch as a fresh chat because it is independent from Russian descriptions and benefits from clean context.
+- `ЧАТ 2 — Объяснения карточек`: independent read-only audit; continue if already launched.
+- When the next slot becomes free, launch `task-memory-audit-01`; the director should not perform that historical audit itself.
 
 ## Recovered task-memory findings already known
 
 - Cross-platform free giveaways: product rule existed before `BACKLOG.md`; implementation task was not migrated into backlog. Restored 2026-09-01.
-- Old media/screenshots verification: restored to `BACKLOG.md` as `recovered_needs_reconciliation` because historical status required user verification, user later reported the expected visible result still absent, and no later durable positive verification has been established yet.
-- Chrome shortcut icon: do not restore solely because it vanished from backlog; user later positively verified the icon looked correct.
-- Played-game achievements: removed from backlog but subsequently implemented with dedicated commits.
-- Detailed normalized Taste factors: removed from backlog but subsequently implemented/cut over.
+- Old media/screenshots verification: restored to `BACKLOG.md` as `recovered_needs_reconciliation`.
+- Chrome shortcut icon: later positively user-verified; do not restore solely because it vanished from backlog.
+- Played-game achievements: subsequently implemented.
+- Detailed normalized Taste factors: subsequently implemented/cut over.
 - Bundles/packages: explicitly moved into active work and later completed.
 - Detailed score UI / misleading wishlist display: later completed and user-verified.
 
-## Последние завершённые worker-этапы
+## Последние завершённые / blocked worker-этапы
 
-- `package-ui-blocker-fix-01` — `complete`; canonical pre-AI workflow now reaches translation preparation and publishes real queue/status.
-- `ru-translation-implement-01` — `needs_fix`; repo-side mechanics implemented; runtime round-trip remained to prove.
+- `ru-translation-runtime-acceptance-01` — `blocked`; current queue has 155 pending translations, repo-side binding exists, but no real scheduled-runtime result has yet occurred. Resume only through the existing Nightly Production Runtime.
+- `package-ui-blocker-fix-01` — `complete`.
+- `ru-translation-implement-01` — repo-side implementation completed; real runtime round-trip remains operationally pending.
 - `duration-igdb-implement-01` — code complete but blocked on missing GitHub Secrets.
-- `ru-translation-contract-01` — `complete`.
 
 ## Ближайшие задачи
 
-1. Current `ЧАТ 1`: finish translation runtime acceptance.
+1. **NEW ЧАТ 1:** run `cross-platform-giveaway-recon-01` now.
 2. Current `ЧАТ 2`: finish explanation-quality audit if already launched.
-3. **First freed slot:** `cross-platform-giveaway-recon-01`.
-4. **Other next freed slot:** `task-memory-audit-01`.
-5. After giveaway recon, prioritize its bounded contract/implementation sequence before explanation/ranking polish because giveaways expire.
-6. User provisions IGDB secrets when convenient; resume duration connectivity acceptance in a later free slot unless an active time-limited giveaway issue takes precedence.
-7. If translation acceptance passes, GitHub/scheduled runtime owns remaining translation scope; interactive chats do not manually process it.
+3. Next freed slot: `task-memory-audit-01`.
+4. After giveaway recon, prioritize its bounded contract/implementation sequence before explanation/ranking polish because giveaways expire.
+5. Resume Russian translation acceptance only through the existing Nightly Production Runtime after a real result exists; do not create a second scheduler.
+6. User provisions IGDB secrets when convenient; resume duration connectivity acceptance in a later free slot.
