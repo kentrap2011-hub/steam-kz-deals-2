@@ -4,62 +4,51 @@ const GiveawayUI=require('./giveaway-ui.js');
 
 const NOW=Date.parse('2026-09-01T20:00:00Z');
 
-function offer(storefront,id,end='2026-09-03T15:00:00Z'){
+function offer(storefront,id,end='2026-09-03T15:00:00Z',url=null){
   const urls={steam:'https://store.steampowered.com/app/10/',epic:'https://store.epicgames.com/en-US/p/test-game',gog:'https://www.gog.com/en/game/test_game'};
-  return {storefront,source_offer_id:id,claim_url:urls[storefront],promotion_end_utc:end};
+  return {storefront,source_offer_id:id,claim_url:url||urls[storefront],promotion_end_utc:end};
 }
 function payload(state='active',games=[]){
   return {schema_version:1,source_contract:'CROSS-PLATFORM-GIVEAWAY-V1',state,generated_at_utc:'2026-09-01T19:30:00Z',fresh_until_utc:'2026-09-03T01:30:00Z',games};
 }
-function fakeToggleHost(){
-  const attrs={'aria-expanded':'false'};
-  const button={
-    getAttribute(name){return attrs[name]},
-    setAttribute(name,value){attrs[name]=String(value)},
-    addEventListener(type,handler){if(type==='click')this.clickHandler=handler},
-  };
-  const content={hidden:true};
-  const classes=new Set();
-  const host={
-    querySelector(selector){if(selector==='.giveaway-toggle')return button;if(selector==='.giveaway-content')return content;return null},
-    classList:{
-      toggle(name,on){if(on)classes.add(name);else classes.delete(name)},
-      contains(name){return classes.has(name)},
-    },
-  };
-  return {host,button,content};
+
+{
+  const p=payload('active',[
+    {game_key:'g:1',title:'First',offers:[offer('epic','epic:1')]},
+    {game_key:'g:2',title:'Second',offers:[offer('gog','gog:2')]},
+  ]);
+  const nav=GiveawayUI.navState(p,NOW);
+  assert.deepStrictEqual({state:nav.state,count:nav.count,label:nav.label},{state:'active',count:2,label:'(2)'});
+  const list=GiveawayUI.buildListMarkup(p,NOW);
+  assert.equal((list.match(/giveaway-list-card/g)||[]).length,2);
+  assert(list.includes('First'));
+  assert(list.includes('Second'));
+  assert(list.includes('Epic Games'));
+  assert(list.includes('GOG'));
+  assert(list.includes('Забрать'));
+  assert(list.includes('Подробнее'));
+  assert(list.includes('осталось'));
+  assert(!list.includes(GiveawayUI.ANALYSIS_INCOMPLETE_COPY));
+  assert(!list.includes('Описание</span>'));
+  assert(!list.includes('Плюсы</span>'));
+  assert(!list.includes('Минусы</span>'));
 }
 
 {
-  const p=payload('active',[{game_key:'g:1',title:'Example',offers:[offer('epic','epic:1')]}]);
-  const vm=GiveawayUI.viewModel(p,NOW);
-  assert.equal(vm.state,'active');
-  const html=GiveawayUI.buildMarkup(p,NOW);
-  assert(html.includes('🎁'));
-  assert(html.includes('Бесплатные раздачи'));
-  assert(html.includes('(1)'));
-  assert(html.includes('aria-expanded="false"'));
-  assert(/class="giveaway-content" hidden/.test(html));
-  assert(html.includes('Забрать в Epic Games'));
-  assert(html.includes('https://store.epicgames.com/en-US/p/test-game'));
-}
-
-{
-  const {host,button,content}=fakeToggleHost();
-  GiveawayUI.bindToggle(host);
-  assert.equal(button.getAttribute('aria-expanded'),'false');
-  assert.equal(content.hidden,true);
-  button.clickHandler();
-  assert.equal(button.getAttribute('aria-expanded'),'true');
-  assert.equal(content.hidden,false);
-  assert.equal(host.classList.contains('is-expanded'),true);
-  button.clickHandler();
-  assert.equal(button.getAttribute('aria-expanded'),'false');
-  assert.equal(content.hidden,true);
-  assert.equal(host.classList.contains('is-expanded'),false);
-  button.clickHandler();
-  assert.equal(button.getAttribute('aria-expanded'),'true');
-  assert.equal(content.hidden,false);
+  const p=payload('active',[
+    {game_key:'g:one',title:'Only This Detail',offers:[offer('epic','epic:one',undefined,'https://store.epicgames.com/en-US/p/only-this')]},
+    {game_key:'g:other',title:'Must Stay In List',offers:[offer('gog','gog:other')]},
+  ]);
+  const detail=GiveawayUI.buildDetailMarkup(p,'g:one',NOW);
+  assert(detail.includes('Only This Detail'));
+  assert(!detail.includes('Must Stay In List'));
+  assert(detail.includes('data-giveaway-detail-back'));
+  assert(detail.includes('Описание'));
+  assert(detail.includes('Плюсы'));
+  assert(detail.includes('Минусы'));
+  assert(detail.includes(GiveawayUI.ANALYSIS_INCOMPLETE_COPY));
+  assert(detail.includes('https://store.epicgames.com/en-US/p/only-this'));
+  assert(detail.includes('до '));
 }
 
 {
@@ -69,64 +58,63 @@ function fakeToggleHost(){
     steam_analysis:{summary:'UNSAFE_TITLE_ONLY_ANALYSIS',why_fit:['UNSAFE_PLUS'],risks:['UNSAFE_MINUS']},
     offers:[offer('epic','epic:unsafe')],
   }]);
-  const html=GiveawayUI.buildMarkup(p,NOW);
-  assert(html.includes('Анализ пока неполный'));
-  assert(html.includes('Описание'));
-  assert(html.includes('Плюсы'));
-  assert(html.includes('Минусы'));
-  assert(html.includes('не переносим Steam-анализ по названию'));
-  assert(!html.includes('UNSAFE_TITLE_ONLY_ANALYSIS'));
-  assert(!html.includes('UNSAFE_PLUS'));
-  assert(!html.includes('UNSAFE_MINUS'));
+  const list=GiveawayUI.buildListMarkup(p,NOW);
+  const detail=GiveawayUI.buildDetailMarkup(p,'g:identity-unproven',NOW);
+  for(const html of [list,detail]){
+    assert(!html.includes('UNSAFE_TITLE_ONLY_ANALYSIS'));
+    assert(!html.includes('UNSAFE_PLUS'));
+    assert(!html.includes('UNSAFE_MINUS'));
+  }
+  assert(!list.includes(GiveawayUI.ANALYSIS_INCOMPLETE_COPY));
+  assert(detail.includes(GiveawayUI.ANALYSIS_INCOMPLETE_COPY));
 }
 
 {
-  const html=GiveawayUI.buildMarkup(payload('empty',[]),NOW);
-  assert(html.includes('нет активных'));
+  const empty=payload('empty',[]);
+  assert.equal(GiveawayUI.navState(empty,NOW).label,'(0)');
+  const html=GiveawayUI.buildListMarkup(empty,NOW);
   assert(html.includes(GiveawayUI.EMPTY_COPY));
   assert(!html.includes('giveaway-claim'));
 }
 
 {
-  const p=payload('unavailable',[]);
-  const html=GiveawayUI.buildMarkup(p,NOW);
-  assert(html.includes('проверка недоступна'));
+  const unavailable=payload('unavailable',[]);
+  assert.equal(GiveawayUI.navState(unavailable,NOW).label,'(!)');
+  const html=GiveawayUI.buildListMarkup(unavailable,NOW);
   assert(html.includes(GiveawayUI.UNAVAILABLE_COPY));
   assert(!html.includes('giveaway-claim'));
 }
 
 {
   const p=payload('active',[{game_key:'g:expired',title:'Expired',offers:[offer('epic','epic:expired','2026-09-01T19:59:59Z')]}]);
-  const html=GiveawayUI.buildMarkup(p,NOW);
-  assert(html.includes('обновление'));
+  assert.equal(GiveawayUI.navState(p,NOW).state,'updating');
+  const html=GiveawayUI.buildListMarkup(p,NOW);
   assert(html.includes(GiveawayUI.UPDATING_COPY));
   assert(!html.includes('giveaway-claim'));
 }
 
 {
-  const p=payload('active',[{game_key:'g:1',title:'Future',offers:[offer('epic','epic:1')]}]);
+  const p=payload('active',[{game_key:'g:future',title:'Future',offers:[offer('epic','epic:future')]}]);
   p.fresh_until_utc='2026-09-01T19:59:59Z';
-  const html=GiveawayUI.buildMarkup(p,NOW);
+  assert.equal(GiveawayUI.navState(p,NOW).state,'unavailable');
+  const html=GiveawayUI.buildListMarkup(p,NOW);
   assert(html.includes(GiveawayUI.UNAVAILABLE_COPY));
   assert(!html.includes('giveaway-claim'));
 }
 
 {
   const p=payload('active',[{game_key:'g:multi',title:'Multi',offers:[offer('epic','epic:1'),offer('gog','gog:1')]}]);
-  const html=GiveawayUI.buildMarkup(p,NOW);
-  assert.equal((html.match(/giveaway-claim/g)||[]).length,2);
-  assert(html.includes('Забрать в Epic Games'));
-  assert(html.includes('Забрать в GOG'));
+  const list=GiveawayUI.buildListMarkup(p,NOW);
+  assert.equal((list.match(/giveaway-claim/g)||[]).length,2);
+  assert.equal((list.match(/giveaway-list-card/g)||[]).length,1);
 }
 
 {
-  const p=payload('active',[
-    {game_key:'g:a',title:'Game',offers:[offer('epic','epic:a')]},
-    {game_key:'g:b',title:'Game ',offers:[offer('gog','gog:b')]},
-  ]);
-  const html=GiveawayUI.buildMarkup(p,NOW);
-  assert(html.includes('data-giveaway-key="g:a"'));
-  assert(html.includes('data-giveaway-key="g:b"'));
+  const before={items:[{id:'paid:1'}],queue:{cursor:3},games:{'paid:1':{status:'final'}},wishlist:['paid:1']};
+  const copy=JSON.parse(JSON.stringify(before));
+  GiveawayUI.viewModel(payload('active',[{game_key:'g:1',title:'Free',offers:[offer('epic','epic:1')]}]),NOW);
+  GiveawayUI.navState(payload('active',[{game_key:'g:1',title:'Free',offers:[offer('epic','epic:1')]}]),NOW);
+  assert.deepStrictEqual(before,copy);
 }
 
 {
@@ -134,25 +122,35 @@ function fakeToggleHost(){
   assert(app.includes("const DATA_URL='data/current.json'"));
   assert(!app.includes('data/production/giveaways'));
   assert(!app.includes('giveaways/v1/current.json'));
+  assert(app.includes("document.querySelectorAll('.tab').forEach"));
+  assert(app.includes("$('wishlistView').classList.toggle('hidden',currentTab!=='wishlist')"));
 }
 
 {
   const index=fs.readFileSync(require.resolve('./index.html'),'utf8');
-  const giveaway=index.indexOf('id="giveawayBlock"');
-  const paidPosition=index.indexOf('class="position-row"');
-  assert(giveaway>=0&&paidPosition>giveaway);
-  assert(index.includes('aria-expanded="false"'));
-  assert(index.includes('class="giveaway-content" hidden'));
+  assert(index.includes('data-tab="giveaway"'));
+  assert(index.includes('id="giveawayCount"'));
+  assert(index.includes('id="giveawayView" class="hidden list-view giveaway-view"'));
+  assert(index.includes('id="wishlistView" class="hidden list-view"'));
+  assert(index.includes('data-giveaway-exit'));
+  const feedStart=index.indexOf('<section id="feedView">');
+  const giveawayView=index.indexOf('<section id="giveawayView"');
+  const feedHtml=index.slice(feedStart,giveawayView);
+  assert(feedStart>=0&&giveawayView>feedStart);
+  assert(!feedHtml.includes('giveaway-list'));
+  assert(!feedHtml.includes('giveaway-detail'));
+  assert(!feedHtml.includes('giveawayBlock'));
+  assert(!index.includes('aria-expanded="false" aria-controls="giveawayContent"'));
 }
 
 {
-  const before={items:[{id:'paid:1'}],queue:{cursor:3},games:{'paid:1':{status:'final'}}};
-  const copy=JSON.parse(JSON.stringify(before));
-  GiveawayUI.viewModel(payload('active',[{game_key:'g:1',title:'Free',offers:[offer('epic','epic:1')]}]),NOW);
-  const {host}=fakeToggleHost();
-  GiveawayUI.toggleExpanded(host);
-  GiveawayUI.toggleExpanded(host);
-  assert.deepStrictEqual(before,copy);
+  const source=fs.readFileSync(require.resolve('./giveaway-ui.js'),'utf8');
+  assert(source.includes("button.dataset.tab==='giveaway'"));
+  assert(source.includes("document.getElementById('giveawayView')?.classList.remove('hidden')"));
+  assert(source.includes("document.getElementById('giveawayView')?.classList.add('hidden')"));
+  assert(source.includes("data-giveaway-detail-back"));
+  assert(source.includes(".tab[data-tab=\"${target}\"]"));
+  assert(!source.includes('steam_analysis.summary'));
 }
 
 console.log('GIVEAWAY_UI_TESTS=PASS');
