@@ -7,7 +7,13 @@
   const EMPTY_COPY='Сейчас активных раздач не найдено.';
   const UNAVAILABLE_COPY='Раздачи временно не удалось проверить полностью.';
   const UPDATING_COPY='Текущие раздачи закончились, данные обновляются.';
-  const ANALYSIS_INCOMPLETE_COPY='В репозитории пока нет подтверждённой cross-store identity-связи с существующим анализом игры. Анализ Steam по одному совпадению названия не подставляем.';
+  const ANALYSIS_INCOMPLETE_COPY='Описание, плюсы и минусы пока недоступны: нет подтверждённой связи этой версии игры с каноническим анализом. По одному совпадению названия данные не подставляем.';
+
+  let lastPayload=null;
+  let selectedGameKey=null;
+  let returnTab='feed';
+  let browserBound=false;
+  let boundaryTimer=null;
 
   function escapeHtml(value){
     return String(value==null?'':value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -25,16 +31,27 @@
     const ms=parseTime(value);if(!Number.isFinite(ms))return '';
     return new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(ms));
   }
+  function remainingText(value,nowMs=Date.now()){
+    const end=parseTime(value);
+    if(!Number.isFinite(end)||end<=nowMs)return 'завершено';
+    const minutes=Math.ceil((end-nowMs)/60000);
+    if(minutes<60)return `осталось ${minutes} мин.`;
+    const hours=Math.ceil(minutes/60);
+    if(hours<24)return `осталось ${hours} ч.`;
+    const days=Math.floor(hours/24);
+    const rest=hours%24;
+    return rest?`осталось ${days} д. ${rest} ч.`:`осталось ${days} д.`;
+  }
 
   function viewModel(payload,nowMs=Date.now()){
     const data=payload&&typeof payload==='object'?payload:{};
     const freshUntil=parseTime(data.fresh_until_utc);
     if(data.schema_version!==1||data.source_contract!=='CROSS-PLATFORM-GIVEAWAY-V1'||!Number.isFinite(freshUntil)||freshUntil<=nowMs){
-      return {state:'unavailable',message:UNAVAILABLE_COPY,games:[]};
+      return {state:'unavailable',message:UNAVAILABLE_COPY,games:[],fresh_until_utc:data.fresh_until_utc||null};
     }
-    if(data.state==='unavailable')return {state:'unavailable',message:UNAVAILABLE_COPY,games:[]};
-    if(data.state==='empty')return {state:'empty',message:EMPTY_COPY,games:[]};
-    if(data.state!=='active')return {state:'unavailable',message:UNAVAILABLE_COPY,games:[]};
+    if(data.state==='unavailable')return {state:'unavailable',message:UNAVAILABLE_COPY,games:[],fresh_until_utc:data.fresh_until_utc};
+    if(data.state==='empty')return {state:'empty',message:EMPTY_COPY,games:[],fresh_until_utc:data.fresh_until_utc};
+    if(data.state!=='active')return {state:'unavailable',message:UNAVAILABLE_COPY,games:[],fresh_until_utc:data.fresh_until_utc};
 
     const games=[];
     for(const rawGame of Array.isArray(data.games)?data.games:[]){
@@ -47,85 +64,150 @@
         activeOffers.push({...rawOffer,_end:end});
       }
       activeOffers.sort((a,b)=>a._end-b._end||String(a.storefront||'').localeCompare(String(b.storefront||''))||String(a.source_offer_id||'').localeCompare(String(b.source_offer_id||'')));
-      if(activeOffers.length){
-        games.push({
-          game_key:rawGame.game_key,
-          title:rawGame.title,
-          offers:activeOffers,
-          analysis:{state:'incomplete',message:ANALYSIS_INCOMPLETE_COPY},
-        });
+      if(activeOffers.length)games.push({game_key:rawGame.game_key,title:rawGame.title,offers:activeOffers});
+    }
+    if(!games.length)return {state:'updating',message:UPDATING_COPY,games:[],fresh_until_utc:data.fresh_until_utc};
+    return {state:'active',message:null,games,fresh_until_utc:data.fresh_until_utc};
+  }
+
+  function navState(payload,nowMs=Date.now()){
+    const view=viewModel(payload,nowMs);
+    if(view.state==='active')return {state:'active',count:view.games.length,label:`(${view.games.length})`,title:`Активных раздач: ${view.games.length}`};
+    if(view.state==='empty')return {state:'empty',count:0,label:'(0)',title:EMPTY_COPY};
+    if(view.state==='updating')return {state:'updating',count:null,label:'(!)',title:UPDATING_COPY};
+    return {state:'unavailable',count:null,label:'(!)',title:UNAVAILABLE_COPY};
+  }
+
+  function offerMarkup(offer,nowMs,{compact=false}={}){
+    const label=storeLabel(offer.storefront);
+    const deadline=`до ${deadlineText(offer.promotion_end_utc)} · ${remainingText(offer.promotion_end_utc,nowMs)}`;
+    const claimText=compact?'Забрать':`Забрать в ${label}`;
+    return `<div class="giveaway-offer ${compact?'giveaway-offer-compact':''}"><div class="giveaway-offer-meta"><span class="giveaway-store">${escapeHtml(label)}</span><span class="giveaway-deadline">${escapeHtml(deadline)}</span></div><a class="giveaway-claim" href="${escapeHtml(offer.claim_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(claimText)}</a></div>`;
+  }
+
+  function buildListMarkup(payload,nowMs=Date.now()){
+    const view=viewModel(payload,nowMs);
+    if(view.state!=='active')return `<div class="giveaway-state giveaway-state-${escapeHtml(view.state)}">${escapeHtml(view.message)}</div>`;
+    return `<div class="giveaway-list">${view.games.map(game=>{
+      const offers=game.offers.map(offer=>offerMarkup(offer,nowMs,{compact:true})).join('');
+      return `<article class="giveaway-list-card" data-giveaway-key="${escapeHtml(game.game_key)}"><div class="giveaway-list-main"><div class="giveaway-list-title">${escapeHtml(game.title)}</div><div class="giveaway-list-offers">${offers}</div></div><button class="small-btn giveaway-details" type="button" data-giveaway-detail="${escapeHtml(game.game_key)}">Подробнее</button></article>`;
+    }).join('')}</div>`;
+  }
+
+  function buildDetailMarkup(payload,gameKey,nowMs=Date.now()){
+    const view=viewModel(payload,nowMs);
+    const back='<button class="small-btn giveaway-detail-back" type="button" data-giveaway-detail-back>← К раздачам</button>';
+    if(view.state!=='active')return `${back}<div class="giveaway-state giveaway-state-${escapeHtml(view.state)}">${escapeHtml(view.message)}</div>`;
+    const game=view.games.find(row=>String(row.game_key)===String(gameKey));
+    if(!game)return `${back}<div class="giveaway-state giveaway-state-updating">${escapeHtml(UPDATING_COPY)}</div>`;
+    const offers=game.offers.map(offer=>offerMarkup(offer,nowMs)).join('');
+    return `${back}<article class="giveaway-detail-card" data-giveaway-detail-key="${escapeHtml(game.game_key)}"><h2>${escapeHtml(game.title)}</h2><div class="giveaway-detail-offers">${offers}</div><section class="giveaway-analysis-incomplete" aria-label="Описание, плюсы и минусы пока недоступны"><div class="giveaway-analysis-labels"><span>Описание</span><span>Плюсы</span><span>Минусы</span></div><p>${escapeHtml(ANALYSIS_INCOMPLETE_COPY)}</p></section></article>`;
+  }
+
+  function nextBoundaryMs(payload,nowMs=Date.now()){
+    const candidates=[];
+    const fresh=parseTime(payload&&payload.fresh_until_utc);
+    if(Number.isFinite(fresh)&&fresh>nowMs)candidates.push(fresh);
+    for(const game of Array.isArray(payload&&payload.games)?payload.games:[]){
+      for(const offer of Array.isArray(game&&game.offers)?game.offers:[]){
+        const end=parseTime(offer&&offer.promotion_end_utc);
+        if(Number.isFinite(end)&&end>nowMs)candidates.push(end);
       }
     }
-    if(!games.length)return {state:'updating',message:UPDATING_COPY,games:[]};
-    return {state:'active',message:null,games};
+    return candidates.length?Math.min(...candidates):null;
   }
 
-  function compactStateText(view){
-    if(view.state==='active')return `(${view.games.length})`;
-    if(view.state==='empty')return 'нет активных';
-    if(view.state==='updating')return 'обновление';
-    return 'проверка недоступна';
+  function scheduleBoundaryRefresh(nowMs=Date.now()){
+    if(typeof window==='undefined'||typeof window.setTimeout!=='function')return;
+    if(boundaryTimer)window.clearTimeout(boundaryTimer);
+    boundaryTimer=null;
+    const boundary=nextBoundaryMs(lastPayload,nowMs);
+    if(!boundary)return;
+    const delay=Math.min(2147480000,Math.max(250,boundary-nowMs+100));
+    boundaryTimer=window.setTimeout(()=>renderSurface(Date.now()),delay);
   }
 
-  function analysisMarkup(game){
-    const message=escapeHtml(game.analysis&&game.analysis.message||ANALYSIS_INCOMPLETE_COPY);
-    return `<section class="giveaway-analysis giveaway-analysis-incomplete" aria-label="Анализ игры недоступен"><div class="giveaway-analysis-note"><strong>Анализ пока неполный</strong><span>${message}</span></div><div class="giveaway-analysis-grid"><div><div class="giveaway-analysis-label">Описание</div><p>Подтверждённое описание пока недоступно без безопасной identity-связи.</p></div><div><div class="giveaway-analysis-label">Плюсы</div><p>Подтверждённые плюсы не подставлены: не переносим Steam-анализ по названию.</p></div><div><div class="giveaway-analysis-label">Минусы</div><p>Подтверждённые риски не подставлены: не переносим Steam-анализ по названию.</p></div></div></section>`;
-  }
-
-  function detailsMarkup(view){
-    const intro='<div class="giveaway-heading"><div><h2>Бесплатные раздачи</h2><p>Заберите до указанного срока — после получения игра остаётся в библиотеке.</p></div></div>';
-    if(view.state!=='active'){
-      return `${intro}<div class="giveaway-state giveaway-state-${escapeHtml(view.state)}">${escapeHtml(view.message)}</div>`;
+  function renderSurface(nowMs=Date.now()){
+    if(typeof document==='undefined')return;
+    const nav=navState(lastPayload,nowMs);
+    const count=document.getElementById('giveawayCount');
+    const tab=document.querySelector('.tab[data-tab="giveaway"]');
+    if(count)count.textContent=nav.label;
+    if(tab){tab.title=nav.title;tab.dataset.giveawayState=nav.state}
+    const list=document.getElementById('giveawayList');
+    if(list)list.innerHTML=buildListMarkup(lastPayload,nowMs);
+    if(selectedGameKey){
+      const detail=document.getElementById('giveawayDetail');
+      if(detail)detail.innerHTML=buildDetailMarkup(lastPayload,selectedGameKey,nowMs);
     }
-    const cards=view.games.map(game=>{
-      const offers=game.offers.map(offer=>{
-        const label=storeLabel(offer.storefront);
-        return `<div class="giveaway-offer"><div class="giveaway-offer-meta"><span class="giveaway-store">${escapeHtml(label)}</span><span class="giveaway-deadline">до ${escapeHtml(deadlineText(offer.promotion_end_utc))}</span></div><a class="giveaway-claim" href="${escapeHtml(offer.claim_url)}" target="_blank" rel="noopener noreferrer">Забрать в ${escapeHtml(label)}</a></div>`;
-      }).join('');
-      return `<article class="giveaway-card" data-giveaway-key="${escapeHtml(game.game_key)}"><h3>${escapeHtml(game.title)}</h3>${analysisMarkup(game)}<div class="giveaway-offers">${offers}</div></article>`;
-    }).join('');
-    return `${intro}<div class="giveaway-list">${cards}</div>`;
+    scheduleBoundaryRefresh(nowMs);
   }
 
-  function buildMarkup(payload,nowMs=Date.now()){
-    const view=viewModel(payload,nowMs);
-    const stateText=compactStateText(view);
-    return `<button class="giveaway-toggle" type="button" aria-expanded="false" aria-controls="giveawayContent"><span class="giveaway-toggle-title"><span aria-hidden="true">🎁</span> Бесплатные раздачи</span><span class="giveaway-toggle-state">${escapeHtml(stateText)}</span><span class="giveaway-toggle-chevron" aria-hidden="true">⌄</span></button><div id="giveawayContent" class="giveaway-content" hidden>${detailsMarkup(view)}</div>`;
+  function showList(){
+    if(typeof document==='undefined')return;
+    selectedGameKey=null;
+    document.getElementById('giveawayListPanel')?.classList.remove('hidden');
+    document.getElementById('giveawayDetailPanel')?.classList.add('hidden');
+  }
+  function showDetail(gameKey,nowMs=Date.now()){
+    if(typeof document==='undefined')return false;
+    const view=viewModel(lastPayload,nowMs);
+    if(view.state!=='active'||!view.games.some(game=>String(game.game_key)===String(gameKey)))return false;
+    selectedGameKey=String(gameKey);
+    const detail=document.getElementById('giveawayDetail');
+    if(detail)detail.innerHTML=buildDetailMarkup(lastPayload,selectedGameKey,nowMs);
+    document.getElementById('giveawayListPanel')?.classList.add('hidden');
+    document.getElementById('giveawayDetailPanel')?.classList.remove('hidden');
+    if(typeof window!=='undefined'&&typeof window.scrollTo==='function')window.scrollTo({top:0,behavior:'smooth'});
+    return true;
+  }
+  function openView(nowMs=Date.now()){
+    if(typeof document==='undefined')return;
+    renderSurface(nowMs);
+    showList();
+    document.getElementById('giveawayView')?.classList.remove('hidden');
+  }
+  function closeView(){
+    if(typeof document==='undefined')return;
+    document.getElementById('giveawayView')?.classList.add('hidden');
+    showList();
+  }
+  function exitView(){
+    if(typeof document==='undefined')return;
+    const target=returnTab&&returnTab!=='giveaway'?returnTab:'feed';
+    const button=document.querySelector(`.tab[data-tab="${target}"]`)||document.querySelector('.tab[data-tab="feed"]');
+    if(button&&typeof button.click==='function')button.click();
   }
 
-  function setExpanded(element,expanded){
-    if(!element||typeof element.querySelector!=='function')return false;
-    const button=element.querySelector('.giveaway-toggle');
-    const content=element.querySelector('.giveaway-content');
-    if(!button||!content)return false;
-    const next=Boolean(expanded);
-    button.setAttribute('aria-expanded',next?'true':'false');
-    content.hidden=!next;
-    if(element.classList&&typeof element.classList.toggle==='function')element.classList.toggle('is-expanded',next);
-    return next;
+  function bindBrowser(){
+    if(browserBound||typeof document==='undefined')return;
+    browserBound=true;
+    document.querySelectorAll('.tab').forEach(button=>{
+      button.addEventListener('click',()=>{
+        if(button.dataset.tab==='giveaway'){
+          const active=document.querySelector('.tab.active');
+          if(active&&active.dataset.tab&&active.dataset.tab!=='giveaway')returnTab=active.dataset.tab;
+          openView(Date.now());
+        }else{
+          closeView();
+        }
+      },true);
+    });
+    document.addEventListener('click',event=>{
+      const detailButton=event.target.closest('[data-giveaway-detail]');
+      if(detailButton){showDetail(detailButton.dataset.giveawayDetail,Date.now());return}
+      if(event.target.closest('[data-giveaway-detail-back]')){showList();return}
+      if(event.target.closest('[data-giveaway-exit]')){exitView()}
+    });
   }
 
-  function toggleExpanded(element){
-    if(!element||typeof element.querySelector!=='function')return false;
-    const button=element.querySelector('.giveaway-toggle');
-    if(!button)return false;
-    return setExpanded(element,button.getAttribute('aria-expanded')!=='true');
+  function render(payload,_legacyElement,nowMs=Date.now()){
+    lastPayload=payload&&typeof payload==='object'?payload:null;
+    selectedGameKey=null;
+    bindBrowser();
+    renderSurface(nowMs);
+    showList();
   }
 
-  function bindToggle(element){
-    if(!element||typeof element.querySelector!=='function')return;
-    const button=element.querySelector('.giveaway-toggle');
-    if(!button||typeof button.addEventListener!=='function')return;
-    button.addEventListener('click',()=>toggleExpanded(element));
-  }
-
-  function render(payload,element,nowMs=Date.now()){
-    if(!element)return;
-    element.innerHTML=buildMarkup(payload,nowMs);
-    element.classList.remove('hidden');
-    setExpanded(element,false);
-    bindToggle(element);
-  }
-
-  return {viewModel,buildMarkup,render,setExpanded,toggleExpanded,bindToggle,deadlineText,validClaimUrl,EMPTY_COPY,UNAVAILABLE_COPY,UPDATING_COPY,ANALYSIS_INCOMPLETE_COPY};
+  return {viewModel,navState,buildListMarkup,buildDetailMarkup,render,showList,showDetail,openView,closeView,remainingText,deadlineText,validClaimUrl,EMPTY_COPY,UNAVAILABLE_COPY,UPDATING_COPY,ANALYSIS_INCOMPLETE_COPY};
 });
