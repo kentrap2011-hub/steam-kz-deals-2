@@ -11,6 +11,7 @@ from taste_cache_common import (
     schema_v2_entry_from_legacy,
     validate_cache_entry,
 )
+from taste_negative_contract import negative_readiness
 
 SOURCE = Path('data/cache/taste_fit.json')
 OVERLAY = Path('data/cache/taste_fit.entry_overlay.json')
@@ -33,7 +34,11 @@ def compact_entry(entry):
 
 def main():
     contract = load_json(ENTRY_CONTRACT)
-    if contract.get('contract') not in {'TASTE-CACHE-ENTRY-BINDING-V2', 'TASTE-CACHE-ENTRY-BINDING-V3'}:
+    if contract.get('contract') not in {
+        'TASTE-CACHE-ENTRY-BINDING-V2',
+        'TASTE-CACHE-ENTRY-BINDING-V3',
+        'TASTE-CACHE-ENTRY-BINDING-V4',
+    }:
         raise SystemExit('Unexpected per-entry taste cache contract')
     required_base = contract.get('base_required_entry_fields') or contract.get('schema_v2_required_entry_fields')
     if not isinstance(required_base, list) or not required_base:
@@ -52,7 +57,7 @@ def main():
 
     overlay_raw = OVERLAY.read_bytes()
     overlay = json.loads(overlay_raw.decode('utf-8'))
-    if overlay.get('schema_version') != 1 or overlay.get('entry_schema_version') not in {2, 3}:
+    if overlay.get('schema_version') != 1 or overlay.get('entry_schema_version') not in {2, 3, 4}:
         raise SystemExit('Unexpected taste overlay schema')
     overlay_entries = overlay.get('entries')
     if not isinstance(overlay_entries, dict):
@@ -98,6 +103,11 @@ def main():
     context_unbound_count = 0
     taste_factors_present_count = 0
     taste_factors_missing_count = 0
+    negative_ready_count = 0
+    negative_unresolved_count = 0
+    negative_status_counts = Counter()
+    negative_readiness_by_key = {}
+
     for key, entry in merged_entries.items():
         profile_counts[entry['profile_blob_sha']] += 1
         model_counts[entry['taste_model_version']] += 1
@@ -110,6 +120,19 @@ def main():
             taste_factors_present_count += 1
         else:
             taste_factors_missing_count += 1
+
+        readiness = negative_readiness(entry)
+        negative_readiness_by_key[key] = [
+            readiness['negative_analysis_status'],
+            readiness['confirmed_negative_count'],
+            readiness['negative_analysis_ready'],
+        ]
+        negative_status_counts[str(readiness['negative_analysis_status'] or 'legacy_missing')] += 1
+        if readiness['negative_analysis_ready']:
+            negative_ready_count += 1
+        else:
+            negative_unresolved_count += 1
+
         compact[key] = compact_entry(entry)
 
     canonical_compact = json.dumps(
@@ -166,6 +189,15 @@ def main():
         'taste_factors_present_count': taste_factors_present_count,
         'taste_factors_missing_count': taste_factors_missing_count,
         'taste_factors_coverage': round(taste_factors_present_count / len(compact), 4) if compact else 1.0,
+        'negative_readiness_fields': [
+            'negative_analysis_status',
+            'confirmed_negative_count',
+            'negative_analysis_ready',
+        ],
+        'negative_analysis_ready_count': negative_ready_count,
+        'negative_analysis_unresolved_count': negative_unresolved_count,
+        'negative_analysis_status_counts': dict(sorted(negative_status_counts.items())),
+        'negative_readiness': negative_readiness_by_key,
         'entries_digest_sha256': hashlib.sha256(canonical_compact).hexdigest(),
         'profile_binding_counts': dict(sorted(profile_counts.items())),
         'taste_model_counts': dict(sorted(model_counts.items())),
@@ -190,6 +222,8 @@ def main():
         'taste_factors_present_count': taste_factors_present_count,
         'taste_factors_missing_count': taste_factors_missing_count,
         'taste_factors_coverage': out['taste_factors_coverage'],
+        'negative_analysis_ready_count': negative_ready_count,
+        'negative_analysis_unresolved_count': negative_unresolved_count,
         'profile_generation_count': len(profile_counts),
         'model_generation_count': len(model_counts),
         'semantics_generation_count': len(semantics_counts),
