@@ -6,7 +6,7 @@ This file is maintained by the dedicated Taste Reviewer from explicit user feedb
 
 ## Profile confidence
 
-- **Low, improving** as of baseline-01 calibration. Direct user calibration now contains one confirmed played positive (`Trine 4: The Nightmare Prince`), one strong negative pre-play/start-priority control (`HighFleet`), and one lower-priority/secondary-game control (`Tails of Iron 2: Whiskers of Winter`). This is still too small a set to claim the current Taste model reliably represents Dmitry's preferences.
+- **Low, improving** as of baseline-01 calibration. Direct user calibration now contains one confirmed played positive (`Trine 4: The Nightmare Prince`), one strong negative pre-play/start-priority control (`HighFleet`), one lower-priority/secondary-game control (`Tails of Iron 2: Whiskers of Winter`), and a clearer relative-priority calibration for `High On Life`. This is still too small a set to claim the current Taste model reliably represents Dmitry's preferences.
 - Current ranking position, price/deal quality and model-produced fit are not treated as evidence that Dmitry personally likes a game.
 
 ## Strong positive signals
@@ -22,7 +22,9 @@ This file is maintained by the dedicated Taste Reviewer from explicit user feedb
 These are useful calibration evidence, but are **not equivalent to confirmed liking** unless separately confirmed below:
 
 - `American Arcadia` — current canonical production ranking marks the game as wishlist=true. Dmitry has watched a review and knows more about it than the comparison candidate `Afterimage`; he explicitly says the game's "Truman Show"-like concept appeals to him. This is a positive concept/interest signal, but not evidence that he prefers it to `Afterimage` on equal familiarity.
-- `High On Life` — current canonical production ranking marks the game as wishlist=true. Dmitry has watched a review, so comparisons against unfamiliar games must control for familiarity.
+- `High On Life` — **moderate main-game interest / queue-worthy, but not top-priority**. Dmitry has watched a review and says he would not put it ahead of everything after purchase. In his current queue, `Sifu` interests him more, and he may even replay a `Batman: Arkham` game before starting `High On Life`. Crucially, he does **not** view `High On Life` as a lightweight/palate-cleanser game; it remains a normal/full main-game candidate, just below stronger alternatives.
+- `Sifu` — **strong current pre-play interest signal**. Dmitry explicitly says it is in his queue and currently interests him more than `High On Life`. This is priority evidence, not yet a confirmed played positive unless separately established.
+- `Batman: Arkham` series — Dmitry is considering a replay ahead of `High On Life`. This suggests meaningful positive prior attachment/return value, but do not infer a specific series entry or strength of preference beyond the stated replay consideration without further confirmation.
 - `Trine 4: The Nightmare Prince` — was an explicit current-attention case while discounted and is now additionally a confirmed played positive in its intended family-play context.
 
 ## Mechanics / structure preferences
@@ -31,6 +33,7 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 - **Tentative negative structural signal:** games can lose substantial appeal when their presentation makes the experience feel dry, technical, tedious, or dominated by learning systems/instructions before the fun is apparent. `HighFleet` is the current strong example. This should be treated as aversion to the **felt burden / presentation of technicality**, not as a blanket dislike of complexity, strategy, management, simulation, or deep systems.
 - **Context-sensitive positive:** a game can be a strong fit when it works well as an accessible shared/family experience. `Trine 4` is the first confirmed example. Do not generalize this to all co-op/family games without more examples.
 - `Tails of Iron 2: Whiskers of Winter` currently reads to Dmitry as a **secondary / palate-cleanser game** rather than a main game: something he could start when he wants something lighter or needs a break from the main game, but not something he would currently choose as his primary game.
+- `High On Life` is an important counterexample showing that **lower queue priority does not imply palate-cleanser status**. Dmitry sees it as a normal/full game that simply loses to stronger current choices. The Taste model should distinguish absolute role/context from relative queue priority.
 - Current risk labels such as `directionlessness`, `unchanged_repetition`, `management_routine`, `puzzle_pacing` and similar model outputs remain hypotheses until checked against concrete user comparisons. Do not promote them to durable preferences solely because the current model applies penalties for them.
 - Do **not** infer a dislike of strategy, management, simulation, fleet mechanics, retro presentation, or any other `HighFleet` component from this case alone. More targeted comparisons are required to determine which kinds of complexity feel engaging versus instructional/tedious.
 
@@ -47,8 +50,9 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 ## Known comparison anchors
 
 - `American Arcadia` vs `Afterimage` — **not a valid preference winner yet**. Dmitry chose `American Arcadia`, but explicitly identified familiarity asymmetry: he has seen a review of `American Arcadia` and knows essentially nothing about `Afterimage`. The comparison may be reused only after giving comparable spoiler-light information about both games. What is valid from this test: both look attractive to him, and the `American Arcadia` concept appeals to him.
-- `High On Life` vs `HighFleet` — produces one reliable result despite familiarity asymmetry: `HighFleet` itself is a strong negative start-priority control after Dmitry watched its trailer and found it unappealing. The reason he gave is the sense of tedious, dry technicality — "more like studying an instruction manual than playing a game." Do not use the pair to quantify how strongly `High On Life` is liked until that is asked directly.
+- `High On Life` vs `HighFleet` — produces one reliable result despite familiarity asymmetry: `HighFleet` itself is a strong negative start-priority control after Dmitry watched its trailer and found it unappealing. The reason he gave is the sense of tedious, dry technicality — "more like studying an instruction manual than playing a game." `High On Life` was later calibrated independently as a moderate full-game candidate, not a top-priority or palate-cleanser title.
 - `Trine 4: The Nightmare Prince` vs `Tails of Iron 2: Whiskers of Winter` — **not a clean pairwise winner test**, because `Trine 4` had already been purchased and played with the family while `Tails of Iron 2` was only inspected through a trailer. Nevertheless, both sides independently produced useful evidence: `Trine 4` is a confirmed positive in family play; `Tails of Iron 2` is currently a lower-priority, secondary-game candidate with a visual-quality concern.
+- Current relative queue anchor: `Sifu` > possible `Batman: Arkham` replay > `High On Life` for near-term start priority. This is a priority relation only; it does not mean `High On Life` is disliked or secondary/lightweight.
 
 ## Calibration methodology learned from user feedback
 
@@ -58,6 +62,7 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 - A strong negative reaction to an unfamiliar game's trailer can still be a valid **pre-play interest/start-priority** signal even when the opposite member of the pair is better known.
 - When capturing a negative control, prefer the user's stated experiential reason (for example, "feels like studying an instruction manual") over broad genre labels such as strategy or simulation.
 - Distinguish **main-game priority**, **secondary/palate-cleanser suitability**, and **family-play suitability**. A game can fit one role well without being a strong candidate for another.
+- Also distinguish **role** from **relative queue priority**: a full/main-game candidate can still sit behind other stronger main-game choices without becoming a palate-cleanser.
 - Unknown/unfamiliar must remain distinct from dislike or weak fit.
 
 ## Uncertainty / questions
@@ -66,6 +71,7 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 - Does the `HighFleet` aversion generalize to other games whose systems/UX feel technical or instructional, and what kinds of complexity avoid that reaction?
 - How broad is the visual-quality sensitivity seen with `Tails of Iron 2`, and which stylized/indie-looking games are exceptions?
 - How much should the system model **play context** separately: solo main game, family/co-op game, and lighter secondary game?
+- How should the system represent **relative queue strength** among games that are all valid main-game candidates?
 - Which current risk concepts are real user turn-offs, and which are over-generalized proxies?
 - How much should explicit wishlist/current interest outweigh a model-only predicted fit when the two disagree?
 - Does attraction to distinctive high-concept premises repeat across other games strongly enough to become a durable preference?
