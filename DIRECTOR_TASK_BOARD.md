@@ -28,25 +28,30 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Раздачи как отдельный Wishlist-style экран | User verifies deployed separate giveaway view on phone | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_SEPARATE_VIEW_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-separate-view-fix-01.md` | `needs_user_verification` |
-| `ЧАТ 2` | Подтверждённые минусы | Implementation is complete; wait for existing scheduled Taste runtime to process the grounded-negative backfill, then rerun canonical acceptance | `WORKER_TASK_GROUNDED_NEGATIVE_IMPLEMENT_01.md` | `reviews/worker_reports/grounded-negative-implement-01.md` | `blocked_on_existing_taste_runtime` |
+| `ЧАТ 1` | Анализ карточек раздач | Find the safe canonical cross-store identity/analysis route so giveaway detail cards can show real description, pros and grounded cons without title matching | `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md` | `reviews/worker_reports/giveaway-analysis-identity-recon-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 2` | Свободный слот | — | — | — | `free` |
+
+## Принятый UI раздач
+
+- `cross-platform-giveaway-separate-view-fix-01` — real-device UX accepted by user on 2026-09-02. Compact giveaway button is convenient, separate Wishlist-style view is convenient. Do not revisit this navigation/layout unless a new defect appears.
+- Remaining giveaway requirement is only content completeness inside per-game detail: real description + pros + grounded cons.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
-- `grounded-negative-implement-01`: implementation is deployed; current GitHub-owned Taste queue has 599 rows (`576` targeted negative-only backfills + `23` full Taste evaluations) with work code `resolve_grounded_negative_analysis`. No manual worker processing and no second scheduler.
+- `grounded-negative-implement-01`: implementation deployed; existing GitHub-owned Taste queue has 599 rows (`576` targeted negative-only backfills + `23` full Taste evaluations) with `resolve_grounded_negative_analysis`. The user deleted Chat 2; no worker context is needed while waiting for the existing scheduled Taste runtime.
 - `card-explanation-production-acceptance-01` remains blocked on the existing Russian-description runtime. After prerequisite: visual build -> gates -> payload commit -> Pages deploy -> user verification.
 
 ## Подготовлено, но НЕ назначено следующим
 
-- `WORKER_TASK_TRINE4_MISSING_DIAGNOSIS_01.md` остаётся подготовленным.
-- Duration connectivity остаётся blocked на user-provisioned IGDB secrets.
+- `WORKER_TASK_TRINE4_MISSING_DIAGNOSIS_01.md` remains prepared.
+- Duration connectivity remains blocked on user-provisioned IGDB secrets.
 
 ## Последние решения
 
-- `cross-platform-giveaway-separate-view-fix-01` — implementation and Pages deploy complete; not stuck. Status is `needs_user_verification`. Main feed no longer contains giveaway rows; `🎁 Раздачи (N)` opens a separate compact view and `Подробнее` opens one-game detail.
-- `grounded-negative-implement-01` — implementation complete, canonical tests pass, and final visual acceptance now correctly fails closed on legacy/unresolved negative readiness. Existing scheduled Taste runtime must process 599 rows before production can become normal-ready.
-- Direct worker work for Chat 2 is currently finished; the external runtime wait should not consume a worker slot.
+- User accepted the giveaway navigation UX but confirmed detail cards still lack real description/pros/cons. This is no longer a UI-layout issue.
+- Direct Chat 1 continuation is `giveaway-analysis-identity-recon-01`: find a safe generic cross-store canonical identity route and analysis handoff. Do not repeat UI/source recon, do not map by title, and do not manually whitelist current Epic games.
+- `grounded-negative-implement-01` remains parked on the existing Taste runtime; deleting the worker chat does not lose state because report/queue ownership are durable in GitHub.
 
 ## Выбор следующей работы
 
-Do not call either track complete until its acceptance condition is met. Chat 1 requires phone verification. Chat 2 resumes only after the existing Taste runtime produces/ingests grounded-negative results.
+After Chat 1 recon report, choose its exact direct implementation or prerequisite. The free Chat 2 slot may take another independent task only if it does not interfere with the active direct continuation.
