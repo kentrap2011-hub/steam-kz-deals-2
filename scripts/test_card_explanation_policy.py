@@ -1,4 +1,5 @@
 from card_explanation_policy import positive_reasons, visible_risk_payload
+import test_grounded_negative_contract
 
 
 def run():
@@ -70,6 +71,7 @@ def run():
     assert unrelated == before
 
     print('CARD_EXPLANATION_POLICY_TESTS=PASS count=7')
+    test_grounded_negative_contract.main()
 
 
 if __name__ == '__main__':
