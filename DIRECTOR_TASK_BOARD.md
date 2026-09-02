@@ -29,7 +29,6 @@
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
 | `ЧАТ 1` | Запуск проверки Trine 4 | Determine whether the existing automatic Taste processing is currently running, whether it can be safely started now, and how completion for `App_690640` is detected | `WORKER_TASK_TASTE_RUNTIME_TRIGGER_STATUS_01.md` | `reviews/worker_reports/taste-runtime-trigger-status-01.md` | `ready_to_continue_in_existing_chat` |
-| `ЧАТ 2` | Анализ карточек раздач | Worker says finished, but expected durable report is missing; save the completed result to the exact report path without redoing recon | `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md` | `reviews/worker_reports/giveaway-analysis-identity-recon-01.md` | `awaiting_report_closeout` |
 
 ## Trine 4 diagnosis result
 
@@ -39,14 +38,20 @@
 - First disappearance is missing completed Taste analysis before visual preparation; price/ranking/region are not the cause.
 - User correctly asked not to wait blindly. Next bounded step is to establish whether normal processing is running, manually startable, and how its completion is observed.
 
-## Giveaway report closeout
+## Giveaway analysis identity recon — complete, blocked on prerequisite
 
-- Expected report `reviews/worker_reports/giveaway-analysis-identity-recon-01.md` was not found after the user reported completion.
-- One bounded repository search for the exact Task ID also found no saved result.
-- Return to existing Chat 2 only to save its already-completed findings to the exact report path.
+- Report saved: `reviews/worker_reports/giveaway-analysis-identity-recon-01.md`, blob `faa254b9abd2bdd18e615f4f7ad5d0f0d6d6165d`.
+- UI/navigation is already accepted; no further UI redesign is needed.
+- Current giveaway data has exact Epic provider product/offer IDs but no authoritative cross-store semantic-analysis identity.
+- Existing `canonical_game_key` is title/publisher-derived and must NOT authorize Steam/Taste reuse.
+- Smallest safe route is exact provider identity -> IGDB External Game -> IGDB game id -> exact Steam appid -> existing canonical description/Taste path.
+- Current bounded sample: 0/2 active Epic giveaways have a safe existing binding; both remain fail-closed.
+- Blocker is the already-known IGDB provisioning prerequisite, not a new architecture gap.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
+- Giveaway analysis identity: requires GitHub Actions secrets `IGDB_CLIENT_ID` and `IGDB_CLIENT_SECRET`. After provisioning, bounded IMPLEMENT should reuse the existing IGDB provider route; no title/fuzzy fallback, manual mapping, new queue, second semantic runtime, or browser fetch.
+- `duration-igdb-implement-01` is blocked on the same two IGDB secrets.
 - `grounded-negative-implement-01`: same existing GitHub-owned Taste data-plane has unresolved work; no worker-owned manual processing.
 - `card-explanation-production-acceptance-01` remains blocked on the existing Russian-description runtime.
 
@@ -56,4 +61,4 @@
 
 ## Выбор следующей работы
 
-Read `taste-runtime-trigger-status-01` before deciding whether to trigger existing processing now or wait. Do not manually judge Trine 4 in an interactive worker.
+Read `taste-runtime-trigger-status-01` before deciding whether to trigger existing processing now or wait. Giveaway analysis implementation should start only after the two existing IGDB GitHub Actions secrets are provisioned.
