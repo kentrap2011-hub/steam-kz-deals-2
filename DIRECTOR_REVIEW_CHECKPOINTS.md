@@ -6,18 +6,18 @@ The Director must read this file before assigning a new ordinary backlog task wh
 
 ## System Auditor
 
-system_audit_due: false
-first_system_audit_trigger: `after_current_pair_stable`
+system_audit_due: true
+first_system_audit_trigger: `satisfied_2026-09-02`
 material_changes_since_last_system_audit: 0
 last_system_audit_report: `none`
 
 ### First trigger condition
 
-Set `system_audit_due: true` as soon as BOTH are true:
-- `taste-runtime-trigger-status-01` has a saved report and Director decision;
-- `giveaway-igdb-implement-prep-01` is either complete or durably blocked on the user's IGDB secret step.
+The first trigger has been satisfied:
+- `taste-runtime-trigger-status-01` now has a saved report and Director decision (direct continuation is needed because exact cadence/manual trigger remain unverified);
+- `giveaway-igdb-implement-prep-01` reached its durable blocker on Twitch/IGDB credentials, and the IGDB route is now fallback while an alternative identity route is investigated.
 
-Once due, run the audit before the next ordinary backlog implementation unless the user explicitly prioritizes a time-sensitive incident/task.
+Run the first System Audit before assigning the next ordinary backlog implementation unless the user explicitly prioritizes a more urgent time-sensitive incident/task. Existing direct continuations already in progress may finish first.
 
 ### Recurring triggers
 
