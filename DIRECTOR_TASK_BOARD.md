@@ -28,8 +28,13 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Компактный список раздач + detail card | Fix failed phone acceptance: keep expanded giveaway list compact and move description/pros/cons into a separate per-game detail card | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_UI_DETAIL_CARD_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-ui-detail-card-fix-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 1` | Раздачи как отдельный Wishlist-style экран | Replace inline/expandable giveaway UX with a compact nav control that opens a separate giveaway view; per-game analysis stays in a separate detail card | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_SEPARATE_VIEW_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-separate-view-fix-01.md` | `ready_to_continue_in_existing_chat` |
 | `НОВЫЙ ЧАТ 2` | Контракт подтверждённых минусов | Continue from completed negative-gap diagnosis; define canonical completeness/unresolved/typed-evidence contract for grounded negatives | `WORKER_TASK_GROUNDED_NEGATIVE_CONTRACT_RECON_01.md` | `reviews/worker_reports/grounded-negative-contract-recon-01.md` | `ready_for_new_chat` |
+
+## Заменённые / superseded UI-направления Chat 1
+
+- `cross-platform-giveaway-ui-ux-fix-01` — deployed but failed user preference: inline expanded list remained too bulky.
+- `cross-platform-giveaway-ui-detail-card-fix-01` — superseded before acceptance by the user's clearer preference for the existing Wishlist-style separate view. Do not continue nested expandable-list UX as the final design.
 
 ## Заменённый worker-чат
 
@@ -46,11 +51,12 @@
 
 ## Последние решения
 
-- `cross-platform-giveaway-ui-ux-fix-01` повторно провалил real-device UX acceptance: top-level collapse работает, но expanded list всё ещё громоздкий, потому что description/pros/cons/incomplete-analysis body встроены прямо в каждый list row.
-- Direct continuation `cross-platform-giveaway-ui-detail-card-fix-01`: expanded list должен содержать только компактные строки; description/pros/cons и honest incomplete-analysis state должны открываться в отдельной карточке выбранной игры. Не повторять cross-store identity recon и не подставлять Steam analysis по названию.
-- `card-negative-analysis-gap-01` — `complete`; новый Chat 2 продолжает только с contract/recon.
-- Real-device acceptance остаётся обязательным для Chat 1 после следующего deploy.
+- User clarified the preferred giveaway UX by analogy to current Wishlist: a compact dedicated button/tab on the main screen opens a separate giveaway view/page-mode. Main paid feed must not contain an inline or nested expandable giveaway list.
+- `cross-platform-giveaway-separate-view-fix-01` is the direct Chat 1 continuation. It should reuse the existing Wishlist navigation/view pattern where practical, keep the giveaway list compact in its own view, and open description/pros/cons only in a separate selected-game detail card.
+- Safe cross-store analysis identity is still absent; do not repeat that recon or bind Steam analysis by title. Detail view remains honestly incomplete until a separate identity/analysis task solves it.
+- `card-negative-analysis-gap-01` — `complete`; new Chat 2 continues only with contract/recon.
+- Real-device acceptance remains mandatory for Chat 1 after deploy.
 
 ## Выбор следующей работы
 
-После report любого worker сначала читать его. Для Chat 1 прямой UX continuation имеет приоритет до успешной проверки на телефоне.
+After either worker report, read it first. For Chat 1, the Wishlist-style separate-view UX has priority until user acceptance passes.
