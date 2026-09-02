@@ -5,6 +5,8 @@ import subprocess
 import unicodedata
 from pathlib import Path
 
+from taste_negative_contract import validate_entry_negative_fields
+
 ENTRY_CONTRACT = Path('config/taste_cache_entry_contract.json')
 FINGERPRINT_CONTRACT = Path('config/taste_fingerprint_contract.json')
 CANDIDATE_CONTEXT_CONTRACT = Path('config/taste_candidate_context_contract.json')
@@ -166,7 +168,13 @@ def schema_v2_entry_from_legacy(entry, legacy_semantics_sha):
     return out
 
 
-def validate_cache_entry(entry, map_key, required_fields, require_taste_factors=False):
+def validate_cache_entry(
+    entry,
+    map_key,
+    required_fields,
+    require_taste_factors=False,
+    require_v4_negative_fields=False,
+):
     if not isinstance(entry, dict):
         raise ValueError(f'Entry {map_key!r} must be an object')
     missing = [field for field in required_fields if field not in entry]
@@ -183,4 +191,5 @@ def validate_cache_entry(entry, map_key, required_fields, require_taste_factors=
         validate_taste_factors(entry['taste_factors'])
     elif require_taste_factors:
         raise ValueError(f'Entry {map_key!r} missing required taste_factors')
+    validate_entry_negative_fields(entry, require_v4=require_v4_negative_fields)
     return True
