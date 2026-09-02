@@ -28,7 +28,7 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Блок раздач в UI | Save mandatory closeout for the completed giveaway UI implementation; do not restart implementation | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_UI_01.md` | `reviews/worker_reports/cross-platform-giveaway-ui-01.md` | `awaiting_closeout_report` |
+| `ЧАТ 1` | Блок раздач в UI | User verifies the deployed separate giveaway block on the actual phone/site | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_UI_01.md` | `reviews/worker_reports/cross-platform-giveaway-ui-01.md` | `needs_user_verification` |
 | `ЧАТ 2` | Пропавшие минусы карточек | Diagnose why cards can reach final output with no grounded negative evidence and define the generic remediation path | `WORKER_TASK_CARD_NEGATIVE_ANALYSIS_GAP_01.md` | `reviews/worker_reports/card-negative-analysis-gap-01.md` | `ready_to_continue_in_existing_chat` |
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
@@ -42,9 +42,9 @@
 
 ## Последние решения
 
-- User reports Chat 1 finished, but `reviews/worker_reports/cross-platform-giveaway-ui-01.md` is still absent and one bounded fresh-commit check found no later giveaway-UI commit evidence. Chat 1 is returned only for mandatory closeout, not implementation restart.
-- Chat 2's card-explanation production acceptance remains genuinely blocked on the external existing RU-description runtime; this waiting state no longer consumes the worker slot.
-- Because the user explicitly elevated the missing-grounded-negative behavior as a product problem, Chat 2 is assigned the bounded `card-negative-analysis-gap-01` diagnosis rather than left idle. The backlog entry remains until the user actually sends the task to Chat 2, per task-start invariant.
+- `cross-platform-giveaway-ui-01` — technical implementation is deployed and validated. Canonical bounded visual refresh succeeded, Pages deploy succeeded, and current deployed giveaway state is `active` with 2 offers. Task remains `needs_user_verification` until the user confirms the real phone/site UI; do not delete Chat 1 before that confirmation.
+- Chat 2's card-explanation production acceptance remains genuinely blocked on the external existing RU-description runtime; this waiting state does not consume the worker slot.
+- Chat 2 is assigned the bounded `card-negative-analysis-gap-01` diagnosis because the user explicitly elevated missing grounded negatives as a product defect.
 - `cross-platform-giveaway-ui-recon-01` — complete.
 - `steam-recommendation-count-fix-01` — complete.
 - `worker-efficiency-guardrails-01` — complete.
