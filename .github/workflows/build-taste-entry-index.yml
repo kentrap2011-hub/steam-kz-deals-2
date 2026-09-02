@@ -13,6 +13,7 @@ on:
       - "config/taste_ledger_contract.json"
       - "config/mailing_policy.json"
       - "scripts/taste_cache_common.py"
+      - "scripts/taste_negative_contract.py"
       - "scripts/build_taste_cache_index.py"
       - ".github/workflows/build-taste-entry-index.yml"
 
@@ -37,7 +38,7 @@ jobs:
           python-version: "3.12"
       - name: Build per-entry index
         run: python scripts/build_taste_cache_index.py
-      - name: Validate v2 index shape
+      - name: Validate v2 index shape with V4 readiness sidecar
         run: |
           python - <<'PY'
           import json
@@ -60,7 +61,19 @@ jobs:
           ]
           if doc['entry_fields'] not in (legacy, context_bound):
               raise SystemExit('unexpected per-entry compact shape')
-          print(f"PER_ENTRY_INDEX_V2=PASS entries={doc['index_entry_count']} fields={len(doc['entry_fields'])}")
+          expected_readiness_fields = [
+              'negative_analysis_status','confirmed_negative_count','negative_analysis_ready'
+          ]
+          if doc.get('negative_readiness_fields') != expected_readiness_fields:
+              raise SystemExit('grounded-negative readiness sidecar declaration missing')
+          readiness = doc.get('negative_readiness') or {}
+          if set(readiness) != set(doc.get('entries') or {}):
+              raise SystemExit('grounded-negative readiness sidecar does not cover compact entries')
+          print(
+              f"PER_ENTRY_INDEX_V2_V4_READINESS=PASS entries={doc['index_entry_count']} "
+              f"ready={doc.get('negative_analysis_ready_count')} "
+              f"unresolved={doc.get('negative_analysis_unresolved_count')}"
+          )
           PY
       - name: Commit per-entry index
         run: |
