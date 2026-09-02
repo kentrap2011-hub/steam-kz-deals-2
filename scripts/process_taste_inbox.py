@@ -10,6 +10,8 @@ PROJECTION = Path('data/production/pre_ai/taste_projection.json')
 MANIFEST = Path('data/production/pre_ai/chatgpt_payload.json')
 QUEUE = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
 FAMILY_GRAPH = Path('data/production/pre_ai/family_graph.json')
+NEGATIVE_WORK_CODE = 'resolve_grounded_negative_analysis'
+BASE_SUPPORT_WORK_CODE = 'resolve_base_support_condition'
 
 
 def load_json(path: Path):
@@ -87,90 +89,81 @@ def sale_end_state_is_consistent(manifest):
     return coverage == expected_coverage
 
 
-def retained_base_support_keys(all_keys, after_queue, after_projection, family_graph):
-    queue_by_key = {}
-    duplicate_queue_keys = set()
-    for row in after_queue:
-        key = row.get('taste_subject_key')
-        if key in queue_by_key:
-            duplicate_queue_keys.add(key)
-        queue_by_key[key] = row
-
-    family_by_id = {
-        family.get('family_id'): family
-        for family in family_graph.get('families') or []
-        if isinstance(family, dict) and family.get('family_id')
-    }
-    projection_entries = after_projection.get('entries') or {}
-    retained_keys = set(all_keys) & set(queue_by_key)
-    allowed = set()
-    invalid = {}
-
-    for key in sorted(retained_keys):
-        row = queue_by_key[key]
-        family = family_by_id.get(row.get('family_id'))
-        reasons = []
-        if key in duplicate_queue_keys:
-            reasons.append('duplicate_queue_key')
-        if (projection_entries.get(key) or {}).get('status') != 'cache_hit':
-            reasons.append('not_safe_cache_hit')
-        if row.get('work_required') != ['resolve_base_support_condition']:
-            reasons.append('unexpected_work_required')
-        if not family:
-            reasons.append('family_missing')
-        else:
-            if family.get('taste_subject_key') != key:
-                reasons.append('family_taste_subject_mismatch')
-            if family.get('requires_ai_base_support') is not True:
-                reasons.append('family_does_not_require_base_support')
-        if reasons:
-            invalid[key] = reasons
-        else:
-            allowed.add(key)
-
-    return allowed, invalid
+def expected_retained_work(key, result, baseline_row, after_projection):
+    projection_row = (after_projection.get('entries') or {}).get(key) or {}
+    cached = projection_row.get('cached_taste') or {}
+    verdict = cached.get('verdict')
+    incomplete = result.get('negative_analysis_status') == 'incomplete_no_confirmed_negative'
+    work = []
+    if verdict == 'INCLUDE' and incomplete:
+        work.append(NEGATIVE_WORK_CODE)
+    if BASE_SUPPORT_WORK_CODE in (baseline_row.get('work_required') or []):
+        work.append(BASE_SUPPORT_WORK_CODE)
+    return work
 
 
 def build_transactional_proof_checks(
     *,
     all_keys,
-    total_results,
+    result_by_key,
+    baseline_queue_by_key,
     baseline_safe_hits,
     baseline_ai_required,
     baseline_ai_queue,
     after_projection,
     after_manifest,
     after_queue,
-    family_graph,
 ):
-    after_queue_keys = {row.get('taste_subject_key') for row in after_queue}
-    allowed_retained_keys, invalid_retained_keys = retained_base_support_keys(
-        all_keys,
-        after_queue,
-        after_projection,
-        family_graph,
+    after_queue_by_key = {row.get('taste_subject_key'): row for row in after_queue}
+    duplicate_after_keys = len(after_queue_by_key) != len(after_queue)
+    full_eval_count = sum(
+        'evaluate_taste_fit' in (baseline_queue_by_key[key].get('work_required') or [])
+        for key in all_keys
     )
-    expected_safe_hits = baseline_safe_hits + total_results
-    expected_ai_required = baseline_ai_required - total_results
-    expected_ai_queue = baseline_ai_queue - total_results + len(allowed_retained_keys)
 
+    expected_safe_hits = baseline_safe_hits + full_eval_count
+    expected_ai_required = baseline_ai_required - full_eval_count
+    retained = {}
+    retention_mismatches = {}
+    for key in all_keys:
+        expected_work = expected_retained_work(
+            key,
+            result_by_key[key],
+            baseline_queue_by_key[key],
+            after_projection,
+        )
+        actual = after_queue_by_key.get(key)
+        if expected_work:
+            retained[key] = expected_work
+            if actual is None or actual.get('work_required') != expected_work:
+                retention_mismatches[key] = {
+                    'expected_work_required': expected_work,
+                    'actual_work_required': None if actual is None else actual.get('work_required'),
+                }
+        elif actual is not None:
+            retention_mismatches[key] = {
+                'expected_work_required': [],
+                'actual_work_required': actual.get('work_required'),
+            }
+
+    expected_ai_queue = baseline_ai_queue - len(all_keys) + len(retained)
     checks = {
         'projection_complete': after_projection.get('complete_coverage') is True,
         'family_partition_complete': after_manifest.get('complete_family_partition') is True,
         'sale_end_state_consistent': sale_end_state_is_consistent(after_manifest),
         'missing_sale_end_is_nonblocking': (after_manifest.get('contract') or {}).get('missing_sale_end_does_not_exclude_candidate') is True,
-        'safe_hits_increment_exact': after_projection.get('safe_cache_hit_count') == expected_safe_hits,
-        'ai_required_decrement_exact': after_projection.get('ai_required_count') == expected_ai_required,
-        'retained_ingest_keys_are_base_support_only': not invalid_retained_keys,
-        'ai_queue_decrement_exact': after_manifest.get('ai_queue_count') == expected_ai_queue,
+        'safe_hits_increment_only_for_full_eval': after_projection.get('safe_cache_hit_count') == expected_safe_hits,
+        'ai_required_decrement_only_for_full_eval': after_projection.get('ai_required_count') == expected_ai_required,
+        'after_queue_has_unique_keys': not duplicate_after_keys,
+        'ingested_key_retention_matches_negative_and_base_support_state': not retention_mismatches,
+        'ai_queue_count_exact': after_manifest.get('ai_queue_count') == expected_ai_queue,
         'queue_file_count_exact': len(after_queue) == expected_ai_queue,
-        'all_ingested_keys_removed_from_queue': (set(all_keys) & after_queue_keys) == allowed_retained_keys,
-        'all_ingested_keys_are_cache_hits': all(
+        'all_ingested_keys_are_fit_cache_hits': all(
             (after_projection.get('entries') or {}).get(key, {}).get('status') == 'cache_hit'
             for key in all_keys
         ),
     }
-    return checks, allowed_retained_keys, invalid_retained_keys, expected_ai_queue
+    return checks, retained, retention_mismatches, expected_ai_queue, full_eval_count
 
 
 def main():
@@ -178,9 +171,9 @@ def main():
     if not inbox_files:
         raise SystemExit('No taste inbox JSON files found')
 
-    # Synchronize the local baseline first. This deliberately consumes any canonical
-    # cache commit that may not have triggered a downstream workflow because it was
-    # written by GITHUB_TOKEN.
+    # Synchronize the local baseline first. This consumes canonical cache changes
+    # that may not have triggered a downstream workflow because they were written
+    # by GITHUB_TOKEN, and it re-derives grounded-negative queue readiness.
     rebuild_taste_consumers()
 
     baseline_projection = load_json(PROJECTION)
@@ -193,6 +186,7 @@ def main():
     all_keys = []
     total_results = 0
     batch_docs = []
+    result_by_key = {}
     digest = hashlib.sha256()
     for path in inbox_files:
         raw = path.read_bytes()
@@ -210,6 +204,8 @@ def main():
         if any(not isinstance(key, str) or not key for key in keys):
             raise SystemExit(f'{path} contains an invalid result key')
         batch_docs.append((path, doc, keys))
+        for result in results:
+            result_by_key[result['key']] = result
         all_keys.extend(keys)
         total_results += len(results)
 
@@ -225,8 +221,8 @@ def main():
     if baseline_ai_queue != len(baseline_queue):
         raise SystemExit('Baseline manifest ai_queue_count does not match JSONL line count')
 
-    # Each file is validated by the canonical ingest contract. Any failure happens
-    # before git commit, so runner-local partial writes are discarded automatically.
+    # Each file is validated by the canonical ingest contract. Negative-only rows
+    # cannot rewrite fit semantics because their accepted result shape omits them.
     for path, _doc, _keys in batch_docs:
         run('python', 'scripts/ingest_taste_results.py', '--input', str(path))
 
@@ -235,39 +231,45 @@ def main():
     after_projection = load_json(PROJECTION)
     after_manifest = load_json(MANIFEST)
     after_queue = read_jsonl(QUEUE)
-    family_graph = load_json(FAMILY_GRAPH)
 
-    checks, allowed_retained_keys, invalid_retained_keys, expected_ai_queue = build_transactional_proof_checks(
+    checks, retained, retention_mismatches, expected_ai_queue, full_eval_count = build_transactional_proof_checks(
         all_keys=all_keys,
-        total_results=total_results,
+        result_by_key=result_by_key,
+        baseline_queue_by_key=baseline_queue_by_key,
         baseline_safe_hits=baseline_safe_hits,
         baseline_ai_required=baseline_ai_required,
         baseline_ai_queue=baseline_ai_queue,
         after_projection=after_projection,
         after_manifest=after_manifest,
         after_queue=after_queue,
-        family_graph=family_graph,
     )
     failed = [name for name, ok in checks.items() if not ok]
     if failed:
-        if invalid_retained_keys:
-            print(json.dumps({
-                'invalid_retained_ingest_keys': invalid_retained_keys,
-                'expected_ai_queue_count': expected_ai_queue,
-                'actual_ai_queue_count': after_manifest.get('ai_queue_count'),
-            }, ensure_ascii=False, indent=2))
+        print(json.dumps({
+            'retained_ingest_keys': retained,
+            'retention_mismatches': retention_mismatches,
+            'expected_ai_queue_count': expected_ai_queue,
+            'actual_ai_queue_count': after_manifest.get('ai_queue_count'),
+        }, ensure_ascii=False, indent=2))
         raise SystemExit(f'Taste inbox transactional proof failed: {failed}')
 
     batch_id = digest.hexdigest()[:20]
     receipt = {
-        'schema_version': 1,
+        'schema_version': 2,
         'status': 'complete',
         'batch_id': batch_id,
         'processed_at_utc': datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         'source_mailing_updated_at_utc': after_projection.get('source_mailing_updated_at_utc'),
         'input_files': [path.name for path in inbox_files],
         'result_count': total_results,
+        'full_evaluation_result_count': full_eval_count,
+        'negative_only_result_count': total_results - full_eval_count,
+        'incomplete_negative_result_count': sum(
+            result_by_key[key].get('negative_analysis_status') == 'incomplete_no_confirmed_negative'
+            for key in all_keys
+        ),
         'keys': all_keys,
+        'retained_work_after_ingest': retained,
         'baseline': {
             'safe_cache_hit_count': baseline_safe_hits,
             'ai_required_count': baseline_ai_required,
@@ -278,6 +280,7 @@ def main():
             'ai_required_count': after_projection.get('ai_required_count'),
             'ai_queue_count': after_manifest.get('ai_queue_count'),
             'ready_without_ai_count': after_manifest.get('ready_without_ai_count'),
+            'negative_analysis': after_manifest.get('negative_analysis'),
             'deterministically_excluded_without_ai_count': after_manifest.get('deterministically_excluded_without_ai_count'),
             'sale_end_coverage': after_manifest.get('sale_end_coverage'),
             'sale_end_missing_count': after_manifest.get('sale_end_missing_count'),
