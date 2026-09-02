@@ -29,7 +29,11 @@
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
 | `ЧАТ 1` | Раздачи как отдельный Wishlist-style экран | Replace inline/expandable giveaway UX with a compact nav control that opens a separate giveaway view; per-game analysis stays in a separate detail card | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_SEPARATE_VIEW_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-separate-view-fix-01.md` | `ready_to_continue_in_existing_chat` |
-| `НОВЫЙ ЧАТ 2` | Контракт подтверждённых минусов | Continue from completed negative-gap diagnosis; define canonical completeness/unresolved/typed-evidence contract for grounded negatives | `WORKER_TASK_GROUNDED_NEGATIVE_CONTRACT_RECON_01.md` | `reviews/worker_reports/grounded-negative-contract-recon-01.md` | `ready_for_new_chat` |
+| `ЧАТ 2` | Реализация подтверждённых минусов | Implement the approved V4 negative-analysis contract, existing Taste queue work-code, structured mapper and paid-card readiness gate | `WORKER_TASK_GROUNDED_NEGATIVE_IMPLEMENT_01.md` | `reviews/worker_reports/grounded-negative-implement-01.md` | `ready_to_continue_in_existing_chat` |
+
+## Завершённый direct predecessor Chat 2
+
+- `grounded-negative-contract-recon-01` — complete design/recon. Approved implementation direction: explicit `negative_analysis_status`, structured `negative_findings`, existing queue work code `resolve_grounded_negative_analysis`, targeted negative-only backfill, structured no-drop mapping and end-to-end grounded-negative readiness witness.
 
 ## Заменённые / superseded UI-направления Chat 1
 
@@ -38,7 +42,7 @@
 
 ## Заменённый worker-чат
 
-- Старый `ЧАТ 2` (`card-negative-analysis-gap-01`) можно больше не открывать: report сохранён и статус `complete`. Пользователь сообщает, что открытие этого чата зависает в клиенте. Все нужные факты перенесены в GitHub task/report; новая работа должна идти в НОВОМ ЧАТЕ 2.
+- Старый `ЧАТ 2` (`card-negative-analysis-gap-01`) больше не используется; его report сохранён и diagnosis complete.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
@@ -51,12 +55,11 @@
 
 ## Последние решения
 
-- User clarified the preferred giveaway UX by analogy to current Wishlist: a compact dedicated button/tab on the main screen opens a separate giveaway view/page-mode. Main paid feed must not contain an inline or nested expandable giveaway list.
-- `cross-platform-giveaway-separate-view-fix-01` is the direct Chat 1 continuation. It should reuse the existing Wishlist navigation/view pattern where practical, keep the giveaway list compact in its own view, and open description/pros/cons only in a separate selected-game detail card.
-- Safe cross-store analysis identity is still absent; do not repeat that recon or bind Steam analysis by title. Detail view remains honestly incomplete until a separate identity/analysis task solves it.
-- `card-negative-analysis-gap-01` — `complete`; new Chat 2 continues only with contract/recon.
-- Real-device acceptance remains mandatory for Chat 1 after deploy.
+- `grounded-negative-contract-recon-01` produced an implementation-grade contract. Direct continuation is `grounded-negative-implement-01`; do not repeat diagnosis/design.
+- Normal ready INCLUDE must have `complete_with_confirmed_negative` plus at least one structured grounded finding that survives to a visible grounded Taste risk. `incomplete_no_confirmed_negative` is truthful but unresolved and must not masquerade as a complete card.
+- Existing GitHub-owned Taste queue/runtime is reused; no second scheduler/queue.
+- Chat 1 remains on Wishlist-style separate giveaway view until successful phone acceptance.
 
 ## Выбор следующей работы
 
-After either worker report, read it first. For Chat 1, the Wishlist-style separate-view UX has priority until user acceptance passes.
+After either worker report, read it first. Direct continuations have priority over unrelated backlog work.
