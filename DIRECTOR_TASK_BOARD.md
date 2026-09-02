@@ -31,8 +31,8 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Точный запуск проверки Trine 4 | Exact runtime/cadence/manual-trigger recon reportedly finished by worker, but durable report is missing | `WORKER_TASK_TASTE_RUNTIME_EXACT_TRIGGER_RECON_01.md` | `reviews/worker_reports/taste-runtime-exact-trigger-recon-01.md` | `awaiting_report_closeout` |
-| `ЧАТ 2` | Разрешение ITAD API | Permission request prepared; user must send email and then wait for provider reply before implementation | `WORKER_TASK_ITAD_TERMS_PERMISSION_PREP_01.md` | `reviews/worker_reports/itad-terms-permission-prep-01.md` | `complete_waiting_user_send_and_provider_reply` |
+| `ЧАТ 1` | Точный запуск проверки Trine 4 | Exact runtime/cadence/manual-trigger recon reportedly finished by worker; user has requested report closeout | `WORKER_TASK_TASTE_RUNTIME_EXACT_TRIGGER_RECON_01.md` | `reviews/worker_reports/taste-runtime-exact-trigger-recon-01.md` | `awaiting_report_closeout` |
+| `ЧАТ 2` | Разрешение ITAD API | Permission request prepared and sent by user; integration now waits only for provider reply | `WORKER_TASK_ITAD_TERMS_PERMISSION_PREP_01.md` | `reviews/worker_reports/itad-terms-permission-prep-01.md` | `external_wait_no_worker_slot` |
 
 ## System Auditor — due now
 
@@ -56,18 +56,21 @@
 - Live sale captured: KZ available, `1,520 KZT` from `7,600 KZT`, `-80%`, observed `2026-09-02T06:42:05.485251Z`, sale end `2026-09-15T17:00:00Z`.
 - Trine 4 reaches the existing Taste queue and is blocked only because its Taste result is unresolved.
 - `taste-runtime-trigger-status-01` proved queue presence but not exact runtime cadence/manual trigger.
-- The follow-up exact-runtime recon was reportedly completed by Chat 1, but its expected report is still missing; no Director conclusion until that report is saved.
+- The follow-up exact-runtime recon was reportedly completed by Chat 1; Director waits only for its durable report before deciding next action.
 
 ## Giveaway identity state
 
 - Twitch/IGDB remains fallback because Twitch 2FA activation is blocked and Support is pending.
 - IsThereAnyDeal is the strongest non-Twitch technical route found; bounded current Epic proof succeeded 2/2 using exact Epic offer IDs -> ITAD -> exact Steam appids without title matching.
-- `itad-terms-permission-prep-01` prepared the exact permission email to `api@isthereanydeal.com`.
+- `itad-terms-permission-prep-01` prepared the permission request to `api@isthereanydeal.com` and the user reports it has now been sent.
+- Status is external wait, not an active worker task. Chat 2 does not need to remain occupied while waiting.
+- When ITAD replies, classify it using the saved report as `permission_confirmed`, `permission_confirmed_with_conditions`, `permission_denied`, or `needs_clarification`, then create the corresponding bounded continuation.
 - No ITAD implementation until permission is explicit. If permitted, use exact Epic/GOG IDs -> ITAD -> unique Steam appid -> existing canonical description/Taste path; no title/fuzzy fallback or ITAD price ingestion.
+- If ITAD does not respond in a reasonable follow-up window or declines, reconsider Wikidata exact external-ID binding as the non-Twitch fallback after the mandatory System Audit, rather than leaving the problem indefinitely blocked.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
-- ITAD integration: waiting for user to send permission email and then provider reply.
+- ITAD integration: permission email sent; waiting for provider reply.
 - Twitch/IGDB: waiting for Twitch Support; fallback only.
 - `grounded-negative-implement-01`: existing GitHub-owned Taste data-plane has unresolved work.
 - `card-explanation-production-acceptance-01`: blocked on existing Russian-description runtime.
@@ -75,6 +78,6 @@
 ## Выбор следующей работы
 
 1. Get Chat 1's missing exact-runtime report saved; do not repeat the recon.
-2. User sends ITAD permission email; Chat 2 can then wait without consuming an implementation slot.
-3. Start the mandatory System Auditor in a new independent chat.
-4. Do not assign a normal backlog implementation until the audit is read and Director decides next steps.
+2. Start the mandatory System Auditor in a new independent chat.
+3. While ITAD reply is pending, do not burn a worker slot just waiting. After the audit, decide whether a bounded Wikidata fallback is worth implementing if ITAD still has not replied.
+4. When ITAD replies, classify the reply from the saved permission-prep report and continue accordingly.
