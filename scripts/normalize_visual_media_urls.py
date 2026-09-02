@@ -3,6 +3,8 @@ import re
 import urllib.request
 from pathlib import Path
 
+import grounded_negative_visual
+
 PAYLOAD = Path('data/production/visual/current.json')
 AKAMAI_PREFIX = 'https://shared.akamai.steamstatic.com/'
 FASTLY_PREFIX = 'https://shared.fastly.steamstatic.com/'
@@ -150,10 +152,18 @@ def main():
             encoding='utf-8',
         )
 
+    # This is the canonical finalization point already exercised by the daily visual
+    # route. It deliberately fails closed before commit when any paid card lacks the
+    # current bound structured Taste negative witness.
+    grounded_changed, grounded_stats = grounded_negative_visual.apply_to_current_visual()
+
     print(
         f'VISUAL_MEDIA_ITEMS_CHANGED={changed_items} '
         f'HOST_REVERTS={host_reverts} ALIASES_SEEN={aliases_seen} '
-        f'ALIASES_REFRESHED={aliases_refreshed}'
+        f'ALIASES_REFRESHED={aliases_refreshed} '
+        f'GROUNDED_NEGATIVE_CHANGED={str(grounded_changed).lower()} '
+        f'GROUNDED_NEGATIVE_MAPPED={grounded_stats.get("mapped_finding_count")} '
+        f'GROUNDED_NEGATIVE_VISIBLE_ITEMS={grounded_stats.get("visible_item_count")}'
     )
 
 
