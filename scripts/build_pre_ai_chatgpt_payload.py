@@ -6,6 +6,8 @@ import urllib.request
 from collections import Counter
 from pathlib import Path
 
+from taste_negative_contract import negative_readiness
+
 MAILING = Path('data/production/mailing/index.json')
 STORE = Path('data/production/pre_ai/store_snapshot.json')
 FX = Path('data/production/pre_ai/fx_snapshot.json')
@@ -13,12 +15,15 @@ FAMILIES = Path('data/production/pre_ai/family_graph.json')
 TASTE = Path('data/production/pre_ai/taste_projection.json')
 HISTORY = Path('data/production/pre_ai/history_snapshot.json')
 DEALS = Path('data/production/pre_ai/deal_scenarios.json')
+TASTE_CACHE = Path('data/cache/taste_fit.json')
+TASTE_OVERLAY = Path('data/cache/taste_fit.entry_overlay.json')
 MANIFEST_OUT = Path('data/production/pre_ai/chatgpt_payload.json')
 TASTE_QUEUE_OUT = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
 PURCHASE_CONTEXT_OUT = Path('data/production/pre_ai/chatgpt_purchase_context.jsonl')
 
 PREREQUISITES = [STORE, FX, FAMILIES, TASTE, HISTORY, DEALS]
 WISHLIST_URL = 'https://raw.githubusercontent.com/kentrap2011-hub/stopgame-ratings-data/main/steam_wishlist.json'
+NEGATIVE_WORK_CODE = 'resolve_grounded_negative_analysis'
 
 
 def load(path):
@@ -106,6 +111,60 @@ def write_jsonl(path, rows):
             f.write('\n')
 
 
+def cache_entries(doc):
+    entries = doc.get('entries') if isinstance(doc, dict) else None
+    return entries if isinstance(entries, dict) else {}
+
+
+def effective_taste_entries():
+    merged = dict(cache_entries(load(TASTE_CACHE)))
+    if TASTE_OVERLAY.exists():
+        merged.update(cache_entries(load(TASTE_OVERLAY)))
+    return merged
+
+
+def annotate_negative_readiness(taste_doc, effective_entries):
+    ready_count = 0
+    unresolved_cache_hit_count = 0
+    changed = False
+    for key, row in (taste_doc.get('entries') or {}).items():
+        if row.get('status') == 'cache_hit':
+            readiness = negative_readiness(effective_entries.get(key) or {})
+        else:
+            readiness = {
+                'negative_analysis_status': None,
+                'confirmed_negative_count': 0,
+                'negative_analysis_ready': False,
+            }
+        for field, value in readiness.items():
+            if row.get(field) != value:
+                row[field] = value
+                changed = True
+        cached = row.get('cached_taste')
+        if isinstance(cached, dict):
+            for field in ('negative_analysis_status', 'confirmed_negative_count', 'negative_analysis_ready'):
+                if cached.get(field) != readiness[field]:
+                    cached[field] = readiness[field]
+                    changed = True
+        if row.get('status') == 'cache_hit':
+            ready_count += int(readiness['negative_analysis_ready'])
+            unresolved_cache_hit_count += int(not readiness['negative_analysis_ready'])
+
+    summary = taste_doc.setdefault('negative_analysis', {})
+    wanted = {
+        'work_code': NEGATIVE_WORK_CODE,
+        'cache_hit_ready_count': ready_count,
+        'cache_hit_unresolved_count': unresolved_cache_hit_count,
+        'legacy_free_text_never_implies_readiness': True,
+    }
+    if summary != wanted:
+        taste_doc['negative_analysis'] = wanted
+        changed = True
+    if changed:
+        TASTE.write_text(json.dumps(taste_doc, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
+    return ready_count, unresolved_cache_hit_count
+
+
 def main():
     started = time.monotonic()
     mailing = load(MAILING)
@@ -134,6 +193,9 @@ def main():
     if taste_doc.get('source_mailing_updated_at_utc') != source_stamp:
         raise SystemExit('Taste projection stale versus mailing feed')
 
+    effective_entries = effective_taste_entries()
+    annotate_negative_readiness(taste_doc, effective_entries)
+
     feed = load_feed(mailing)
     wishlist = load_wishlist()
     store = store_doc['entries']
@@ -154,6 +216,9 @@ def main():
     excluded_keys = []
     exclusion_counts = Counter()
     sale_end_missing = []
+    negative_backfill_queue_count = 0
+    negative_full_eval_queue_count = 0
+    negative_ready_without_ai_count = 0
 
     for family in families:
         primary_key = family['primary_key']
@@ -244,8 +309,15 @@ def main():
                 excluded_keys.append(primary_key)
                 exclusion_counts['deal_excludes_for_valid_cached_fit'] += 1
                 continue
+
+            work = []
+            if not taste_row.get('negative_analysis_ready'):
+                work.append(NEGATIVE_WORK_CODE)
+                negative_backfill_queue_count += 1
             if family.get('requires_ai_base_support'):
-                work = ['resolve_base_support_condition']
+                work.append('resolve_base_support_condition')
+
+            if work:
                 ai_queue.append({
                     'family_id': family['family_id'],
                     'taste_subject_key': taste_key,
@@ -256,18 +328,22 @@ def main():
                     'short_description': taste_row.get('short_description'),
                     'bundle_members': taste_row.get('bundle_members') or [],
                     'resolved_taste_fit': fit,
+                    'negative_analysis_status': taste_row.get('negative_analysis_status'),
+                    'confirmed_negative_count': int(taste_row.get('confirmed_negative_count') or 0),
                     'work_required': work,
                     'semantic_condition': semantic_condition,
                 })
                 ai_context.append(context)
             else:
+                negative_ready_without_ai_count += 1
                 context['resolved_taste_fit'] = fit
                 context['final_purchase_decision'] = selected['purchase_decision']
                 context['final_priority_bucket'] = int(selected['priority_bucket'])
                 ready_context.append(context)
             continue
 
-        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors']
+        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]
+        negative_full_eval_queue_count += 1
         if family.get('requires_ai_base_support'):
             work.append('resolve_base_support_condition')
         # Strictly price-blind AI input. Do not add prices, discount, reviews,
@@ -285,6 +361,8 @@ def main():
             'core_fit_count': taste_row['core_fit_count'],
             'release_date': taste_row['release_date'],
             'ai_required_reason': taste_row.get('ai_required_reason'),
+            'negative_analysis_status': None,
+            'confirmed_negative_count': 0,
             'work_required': work,
             'semantic_condition': semantic_condition,
         })
@@ -311,8 +389,8 @@ def main():
 
     source_bytes = sum(path.stat().st_size for path in PREREQUISITES)
     manifest = {
-        'schema_version': 3,
-        'purpose': 'chatgpt_consumer_bundle_with_context_bound_strict_price_blind_taste_phase',
+        'schema_version': 4,
+        'purpose': 'chatgpt_consumer_bundle_with_context_bound_strict_price_blind_taste_phase_and_grounded_negative_readiness',
         'status': 'complete',
         'source_mailing_updated_at_utc': source_stamp,
         'profile_binding': {
@@ -341,6 +419,10 @@ def main():
             'normalized_taste_factors_required_for_new_taste_evaluation': True,
             'normalized_taste_factor_contract': 'config/taste_result_contract.json',
             'normalized_taste_factors_are_weight_independent': True,
+            'grounded_negative_work_code': NEGATIVE_WORK_CODE,
+            'normal_paid_card_requires_grounded_negative': True,
+            'legacy_negative_evidence_never_implies_negative_readiness': True,
+            'negative_only_backfill_must_preserve_existing_fit_semantics': True,
             'chatgpt_selects_precomputed_deal_scenario_from_final_taste_fit': True,
             'qualitative_60_40_priority_bucket_is_precomputed': True,
             'smaller_priority_bucket_means_higher_purchase_priority': True,
@@ -370,6 +452,13 @@ def main():
         'deterministically_excluded_without_ai_count': len(excluded_keys),
         'deterministic_exclusion_counts': dict(sorted(exclusion_counts.items())),
         'complete_family_partition': partition_count == len(families),
+        'negative_analysis': {
+            'work_code': NEGATIVE_WORK_CODE,
+            'negative_backfill_queue_count': negative_backfill_queue_count,
+            'negative_full_evaluation_queue_count': negative_full_eval_queue_count,
+            'negative_ready_without_ai_count': negative_ready_without_ai_count,
+            'normal_ready_requires_confirmed_negative': True,
+        },
         'sale_end_coverage': sale_end_coverage,
         'sale_end_missing_count': len(sale_end_missing),
         'sale_end_missing_primary_keys': sale_end_missing,
@@ -392,6 +481,9 @@ def main():
         'deterministically_excluded_without_ai_count': manifest['deterministically_excluded_without_ai_count'],
         'deterministic_exclusion_counts': manifest['deterministic_exclusion_counts'],
         'complete_family_partition': manifest['complete_family_partition'],
+        'negative_backfill_queue_count': negative_backfill_queue_count,
+        'negative_full_evaluation_queue_count': negative_full_eval_queue_count,
+        'negative_ready_without_ai_count': negative_ready_without_ai_count,
         'sale_end_coverage': manifest['sale_end_coverage'],
         'sale_end_missing_count': manifest['sale_end_missing_count'],
         'wishlist_entry_count': wishlist['entry_count'],
