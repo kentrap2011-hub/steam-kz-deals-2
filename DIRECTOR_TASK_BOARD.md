@@ -28,7 +28,7 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Trine 4 пропала из списка | RECON complete; no worker continuation. Wait for the existing scheduled Taste runtime to resolve `App_690640`, then canonical ingest/rebuild decides actual feed admission | `WORKER_TASK_TRINE4_MISSING_DIAGNOSIS_01.md` | `reviews/worker_reports/trine4-missing-diagnosis-01.md` | `complete_waiting_existing_runtime` |
+| `ЧАТ 1` | Запуск проверки Trine 4 | Determine whether the existing automatic Taste processing is currently running, whether it can be safely started now, and how completion for `App_690640` is detected | `WORKER_TASK_TASTE_RUNTIME_TRIGGER_STATUS_01.md` | `reviews/worker_reports/taste-runtime-trigger-status-01.md` | `ready_to_continue_in_existing_chat` |
 | `ЧАТ 2` | Анализ карточек раздач | Worker says finished, but expected durable report is missing; save the completed result to the exact report path without redoing recon | `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md` | `reviews/worker_reports/giveaway-analysis-identity-recon-01.md` | `awaiting_report_closeout` |
 
 ## Trine 4 diagnosis result
@@ -36,20 +36,18 @@
 - Canonical identity: `App_690640`, family `game:690640`.
 - Live sale captured: KZ available, `1,520 KZT` from `7,600 KZT`, `-80%`, observed `2026-09-02T06:42:05.485251Z`, sale end `2026-09-15T17:00:00Z`.
 - Trine 4 is present through store snapshot, shortlist, purchase/deal context and Taste queue.
-- First disappearance is semantic Taste readiness -> visual item preparation: `taste_cache_key_missing`, no resolved current Taste fit, so `build_visual_feed_v2.py::get_fit()` returns no admissible strong/moderate fit and the game never reaches ranking.
-- Classification: `stale_or_incomplete_data`, not a Trine-specific price/ranking/region defect.
-- Existing scheduled semantic runtime owns the needed evaluation. No manual insertion and no second queue/scheduler.
+- First disappearance is missing completed Taste analysis before visual preparation; price/ranking/region are not the cause.
+- User correctly asked not to wait blindly. Next bounded step is to establish whether normal processing is running, manually startable, and how its completion is observed.
 
 ## Giveaway report closeout
 
 - Expected report `reviews/worker_reports/giveaway-analysis-identity-recon-01.md` was not found after the user reported completion.
 - One bounded repository search for the exact Task ID also found no saved result.
-- Do not investigate implementation/history in Director. Return to the existing Chat 2 only to save its already-completed findings to the exact report path.
+- Return to existing Chat 2 only to save its already-completed findings to the exact report path.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
-- Trine 4 / `App_690640`: wait for existing scheduled Taste runtime + normal ingest/rebuild.
-- `grounded-negative-implement-01`: same existing GitHub-owned Taste data-plane is processing unresolved semantic work; no worker-owned backfill.
+- `grounded-negative-implement-01`: same existing GitHub-owned Taste data-plane has unresolved work; no worker-owned manual processing.
 - `card-explanation-production-acceptance-01` remains blocked on the existing Russian-description runtime.
 
 ## Принятый UI раздач
@@ -58,4 +56,4 @@
 
 ## Выбор следующей работы
 
-First obtain the missing Chat 2 report. After that, choose its bounded direct next step. Trine 4 needs no interactive worker until the existing semantic runtime has produced and ingested the missing Taste result.
+Read `taste-runtime-trigger-status-01` before deciding whether to trigger existing processing now or wait. Do not manually judge Trine 4 in an interactive worker.
