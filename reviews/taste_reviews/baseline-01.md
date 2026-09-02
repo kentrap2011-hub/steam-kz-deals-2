@@ -1,14 +1,20 @@
 # TASTE REVIEW — BASELINE 01
 
-Status: complete baseline review; user calibration still required
+Status: complete baseline review; initial user calibration recorded
 Role: dedicated Taste Reviewer
 Mode: advisory only; no production code/config/weight changes
 
 ## Profile confidence
 
-**LOW**.
+**LOW, improving**.
 
-The repository currently does not contain enough confirmed game-level positive and negative controls to claim that the Taste system reliably models Dmitry's preferences. `USER_TASTE_PROFILE.md` was previously only a scaffold. The baseline therefore separates explicit-interest evidence, model hypotheses and actual confirmed taste rather than treating current output as ground truth.
+The repository alone did not contain enough confirmed game-level positive and negative controls to claim that the Taste system reliably models Dmitry's preferences. Initial direct calibration now adds:
+- one confirmed played positive: `Trine 4: The Nightmare Prince` in its intended family-play context;
+- one strong negative pre-play/start-priority control: `HighFleet`;
+- one lower-priority/secondary-game control: `Tails of Iron 2: Whiskers of Winter`;
+- one positive concept/interest signal for `American Arcadia`.
+
+This is enough to identify concrete ranking/model mismatches, but not enough to infer broad genre rules or to classify the overall current selection pressure with high confidence.
 
 ## Sample reviewed
 
@@ -21,6 +27,10 @@ Bounded evidence only:
 3. Historical canonical Taste-v2 projection: `data/cache/taste_fit.index.json` and `data/cache/taste_reason_codes.report.json`.
 4. Historical downstream content eligibility: `data/cache/content_eligibility.validation.json`.
 5. Current direct-conflict report: `data/cache/taste_direct_conflicts.report.json`.
+6. Initial direct user calibration:
+   - `American Arcadia` vs `Afterimage` — invalid as a clean A/B winner because of familiarity asymmetry, but produced a positive concept signal for `American Arcadia`;
+   - `High On Life` vs `HighFleet` — invalid for relative strength because familiarity differs, but `HighFleet` independently became a strong negative start-priority control after trailer inspection;
+   - `Trine 4` vs `Tails of Iron 2` — invalid as a clean A/B winner because `Trine 4` was already bought and played while `Tails of Iron 2` was trailer-only, but both produced useful independent evidence.
 
 The full `data/production/visual/ranking_review.jsonl` artifact is empty in current `main`, so it was not used as evidence.
 
@@ -34,7 +44,7 @@ Current ranking diagnostics give wishlist points to at least:
 
 This is directionally correct: explicit interest contributes to personal priority rather than being discarded.
 
-However, baseline evidence is insufficient to determine whether +4 is the right strength.
+However, calibration is still insufficient to determine whether +4 is the right strength.
 
 ### 2. Serious modeled risks actually reduce personal score
 
@@ -53,7 +63,38 @@ The Taste-v2 content eligibility validation received 101 Taste-included candidat
 
 ## Strongest taste mismatches / concerns
 
-### 1. Production top rank can look like strong personal recommendation when it is actually urgency-driven
+### 1. `HighFleet` is a concrete model false-positive for personal priority
+
+Current diagnostics treated `HighFleet` as a very strong model-only Taste candidate; in the baseline pair it sat level with wishlist game `High On Life` on personal_score.
+
+Direct user calibration contradicts that strongly. After watching the `HighFleet` trailer, Dmitry said it did not appeal to him and that he would postpone it until there was little else left to play. The stated reason was the feeling of **tedious, dry technicality** — more like studying an instruction manual than starting a game.
+
+This is now a real negative control. The mismatch is not evidence that strategy/management/deep systems are generically bad for Dmitry; it is evidence that the current model can mistake a technically rich-looking game for a strong personal fit when its felt burden/presentation is actually a major turn-off.
+
+### 2. `Tails of Iron 2` appears over-prioritized as a main-game recommendation
+
+The baseline selected `Tails of Iron 2: Whiskers of Winter` as a current strong-fit comparison candidate.
+
+After watching its trailer, Dmitry did not reject it, but described it as visually resembling a cheap indie game with angular/rough graphics and said he could imagine using it as a **light secondary/palate-cleanser game**, not as his main game.
+
+This suggests a second ranking blind spot: the system may conflate **acceptable/fit enough to play** with **high priority to start as the main game**. A game can be a valid secondary recommendation while still being materially over-ranked for primary-play intent.
+
+### 3. `Trine 4` demonstrates a real false-negative user-visible omission
+
+Canonical diagnosis showed `Trine 4: The Nightmare Prince` had:
+- valid Steam KZ availability and active sale;
+- valid commercial/deal path;
+- no negative Taste verdict;
+- unresolved Taste semantic work because `App_690640` had `taste_cache_key_missing`;
+- fail-closed visual omission before ranking.
+
+Direct calibration now adds the missing user-side evidence: Dmitry bought `Trine 4` specifically to play with his family, played it with them the next day, and explicitly said he liked it.
+
+Therefore this is no longer merely an abstract unknown-vs-negative concern. It is a **confirmed positive that was absent from the user-visible selection because semantic state was unresolved**, demonstrating that unknown-as-absence can hide a genuinely suitable game.
+
+The context matters: the positive is confirmed for family play, not automatically for solo/main-game priority.
+
+### 4. Production top rank can look like strong personal recommendation when it is actually urgency-driven
 
 `Terminator: Resistance` is production rank 4 and `TMNT: Splintered Fate` rank 7 even though both have serious -10 Taste-risk penalties and comparatively weak personal scores (33.0 and 36.1). Their sale urgency is `today`.
 
@@ -61,22 +102,7 @@ This does not prove the underlying Taste scores are wrong. It does show that the
 
 For taste review, production rank must therefore never be treated as evidence that the system believes a game is one of Dmitry's strongest matches.
 
-### 2. Unknown semantic state can compress the user-visible selection exactly like a negative verdict
-
-`Trine 4: The Nightmare Prince` is a strong calibration case.
-
-Canonical diagnosis shows:
-- valid Steam KZ availability and active -80% sale;
-- valid commercial/deal path;
-- no negative Taste verdict;
-- unresolved Taste semantic work because `App_690640` has `taste_cache_key_missing`;
-- the visual producer fail-closes the unresolved row before ranking.
-
-Therefore Trine 4 disappears from the user-visible choice even though the system has **not actually concluded that Dmitry would dislike it**.
-
-From a user-facing taste perspective this matters: `unknown` and `negative` currently have the same visible result — absence. That can make the selection feel more certain and narrower than the available taste evidence justifies.
-
-### 3. Historical Taste-v2 evidence shows very strong exclusion pressure, much of it based on insufficient evidence
+### 5. Historical Taste-v2 evidence shows very strong exclusion pressure, much of it based on insufficient evidence
 
 The verified Taste-v2 reason-code report contains 583 entries:
 - 36 `include_strong`;
@@ -89,56 +115,61 @@ Thus the historical model excluded a very large number of candidates for insuffi
 
 This is a meaningful warning for recall/selection breadth, but it must **not** be projected mechanically onto the current normalized ranking: the current bounded ranking lookup has 442 items and represents a materially different/newer state.
 
-The current direct-conflict report also has count=0, so baseline cannot use it as a reliable set of present-day negative controls.
+The current direct-conflict report also has count=0, so it cannot provide present-day negative controls.
 
 ## Selection-pressure assessment
 
-**`cannot_determine`** for the current system, with a clear historical warning toward **too tight**.
+**`cannot_determine`** for the current system overall, but confidence has increased that there are **both false-negative and over-prioritization problems**.
 
-Why not `too_tight` yet:
-- current normalized ranking contains 442 items, much broader than the historical 101 Taste-included checkpoint;
-- we do not yet have enough confirmed positive false negatives or negative false positives from Dmitry himself;
-- model-generated fit/risk cannot be used to validate itself.
-
-Why this is still concerning:
+Evidence toward excessive tightening / lost recall:
 - historical Taste-v2 excluded many candidates for insufficient evidence;
-- unresolved current semantic candidates such as Trine 4 are invisible rather than represented as unknown;
-- production urgency can obscure the distinction between personal fit and time-sensitive purchase priority.
+- unresolved semantic state can remove candidates without a negative preference verdict;
+- `Trine 4` is now a confirmed positive family-play example that was hidden by exactly this unresolved-state path.
 
-The next calibration should therefore optimize **recall measurement**, not immediately loosen or tighten weights.
+Evidence against simply loosening everything:
+- `HighFleet` is a strong current false-positive for personal start priority;
+- `Tails of Iron 2` appears suitable only as a lower-priority secondary game despite being selected as a strong-fit calibration candidate;
+- current normalized ranking already contains 442 items.
+
+Therefore the emerging problem is **not well described by one global threshold being simply too strict or too loose**. The evidence instead points toward poor calibration of *what kind of fit* a game has, plus unsafe treatment of unknowns.
 
 ## Recommended tests / changes for Director review
 
 Maximum three, advisory only:
 
-1. **User-calibrated pair test before any Taste threshold/weight change.** Compare explicit-interest/wishlist games against high model-fit non-wishlist games and record which Dmitry actually prefers. Use the results as positive/negative controls for future Taste reviews.
+1. **Add role/context calibration to Taste QA.** Test games separately for at least `main/primary game`, `secondary/palate-cleanser`, and `family/co-op` suitability instead of treating all positive fit as one scalar priority. Use `Trine 4` (family positive) and `Tails of Iron 2` (secondary-only current fit) as initial controls.
 
-2. **Unknown-vs-negative recall test.** On a bounded current sample, count commercially valid candidates omitted only because Taste semantic state is unresolved/missing, and review several with Dmitry. Do not score `unknown` as a negative preference when measuring Taste precision/recall.
+2. **Unknown-vs-negative recall test with confirmed-positive control.** On a bounded current sample, count commercially valid candidates omitted only because Taste semantic state is unresolved/missing. `Trine 4` should be retained as a regression control showing that unknown-state omission can hide a real positive.
 
-3. **Separate personal-fit QA from urgency/purchase ordering.** For Taste acceptance, evaluate personal_score/taste ordering independently of production urgency rank so a sale ending today cannot make a weak personal match look like a top Taste success.
+3. **False-positive test for dry/technical burden.** Compare current high model-fit games against direct user reaction to games whose presentation feels technical/instructional. `HighFleet` should be a negative control. The test must not collapse this into a generic anti-strategy or anti-complexity rule.
 
 ## Unresolved taste questions
 
-Use concrete comparisons rather than generic genre questions:
+Further calibration should avoid forced pairwise comparisons where familiarity differs. Prefer already-familiar titles or independently rate one title at a time.
 
-1. `American Arcadia` vs `Afterimage`: which one would Dmitry rather start/play, ignoring current price? (`American Arcadia` is wishlist=true; `Afterimage` has a slightly stronger current total result.)
-2. `High On Life` vs `HighFleet`: which is the stronger personal fit? (Both have personal_score=47.0 in the current diagnostics; `High On Life` has explicit wishlist interest while `HighFleet` has the stronger model-only taste score.)
-3. `Trine 4: The Nightmare Prince` vs `Tails of Iron 2: Whiskers of Winter`: which is more appealing to actually play? This tests an unresolved explicit-attention candidate against a current strong-fit recommendation.
-
-For each answer, capture *why* — mechanics/structure/pacing/feel matters more than a bare winner.
+Current questions:
+- How strong is `High On Life` itself as a start/play candidate, independent of `HighFleet`?
+- Which familiar games demonstrate **complex/deep but still inviting**, to distinguish enjoyable complexity from `HighFleet`-style technical burden?
+- How often does visual perceived production value change whether a game feels like a main-game candidate versus a secondary game?
+- How strongly should family/co-op suitability influence purchase recommendations compared with solo/main-game fit?
+- Does attraction to distinctive high-concept premises repeat beyond `American Arcadia`?
 
 ## Profile update
 
-`USER_TASTE_PROFILE.md` was updated during this baseline to:
-- mark profile confidence LOW;
-- keep strong positives/negatives unconfirmed rather than invent them;
-- record `American Arcadia` and `High On Life` as explicit-interest signals, not confirmed likes;
-- record Trine 4 as an unresolved calibration case, not a negative;
-- preserve model risk labels as hypotheses until user-confirmed;
-- add the three concrete comparison anchors above.
+`USER_TASTE_PROFILE.md` now records:
+- `Trine 4` as the first confirmed played positive, specifically in family-play context;
+- `HighFleet` as a strong negative start-priority control and its explicit "instruction manual / tedious technicality" reason;
+- `Tails of Iron 2` as a current secondary/palate-cleanser candidate rather than a main-game priority, with an explicit visual-quality concern;
+- `American Arcadia` as a positive concept/interest signal without pretending it cleanly defeated an unfamiliar `Afterimage`;
+- a calibration rule separating familiarity, experienced fit, pre-play appeal and play context.
 
 ## Bottom line
 
-The current system may already be less restrictive than the historical Taste-v2 gate, so the evidence does **not** justify blindly loosening it. But it also does not justify trusting current selection as a complete picture of Dmitry's taste.
+The baseline now has enough direct user evidence to reject the idea that current Taste output is reliably calibrated simply because it is internally consistent.
 
-The largest baseline risk is **false certainty**: unknown/unresolved candidates can disappear like dislikes, and urgent deals can appear near the top like strong personal matches. The next useful evidence is direct pairwise user calibration, not another round of self-validation against the model's own scores.
+Three different failure modes are already visible:
+1. a **confirmed positive can disappear as unknown** (`Trine 4`);
+2. a **strong model fit can be a strong user negative** (`HighFleet`);
+3. a **plausible game can be assigned the wrong role/priority** (`Tails of Iron 2`: secondary rather than main).
+
+This argues against a simple global loosen/tighten change. The next useful work is to calibrate personal priority and play context with familiar games, while keeping unknown separate from negative.
