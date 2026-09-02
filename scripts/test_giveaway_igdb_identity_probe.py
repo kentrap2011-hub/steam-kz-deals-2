@@ -52,7 +52,7 @@ class GiveawayIgdbIdentityProbeTests(unittest.TestCase):
     def test_uid_probe_query_has_no_title_fuzzy_or_guessed_provider_source(self):
         query = probe.build_uid_probe_query(["namespace-1", "offer-1", "42"])
         self.assertIn('uid = ("42","namespace-1","offer-1")', query)
-        self.assertNotIn("name", query.casefold())
+        self.assertNotIn("search ", query.casefold())
         self.assertNotIn("title", query.casefold())
         self.assertNotIn("external_game_source =", query)
         self.assertNotIn("category", query.casefold())
