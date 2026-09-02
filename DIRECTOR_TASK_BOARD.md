@@ -62,15 +62,15 @@
 
 - Twitch/IGDB remains fallback because Twitch 2FA activation is blocked and Support is pending.
 - IsThereAnyDeal is the strongest non-Twitch technical route found; bounded current Epic proof succeeded 2/2 using exact Epic offer IDs -> ITAD -> exact Steam appids without title matching.
-- `itad-terms-permission-prep-01` prepared the permission request to `api@isthereanydeal.com` and the user reports it has now been sent.
+- `itad-terms-permission-prep-01` prepared the permission request to `api@isthereanydeal.com` and the user reports it has now been sent on 2026-09-02.
 - Status is external wait, not an active worker task. Chat 2 does not need to remain occupied while waiting.
+- Follow-up SLA: if no reply by 2026-09-07, send one concise follow-up; if still no reply by 2026-09-09, stop treating ITAD as an operationally available primary route and decide on the Wikidata fallback after the mandatory System Audit. A later positive ITAD reply may still supersede the fallback.
 - When ITAD replies, classify it using the saved report as `permission_confirmed`, `permission_confirmed_with_conditions`, `permission_denied`, or `needs_clarification`, then create the corresponding bounded continuation.
 - No ITAD implementation until permission is explicit. If permitted, use exact Epic/GOG IDs -> ITAD -> unique Steam appid -> existing canonical description/Taste path; no title/fuzzy fallback or ITAD price ingestion.
-- If ITAD does not respond in a reasonable follow-up window or declines, reconsider Wikidata exact external-ID binding as the non-Twitch fallback after the mandatory System Audit, rather than leaving the problem indefinitely blocked.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
-- ITAD integration: permission email sent; waiting for provider reply.
+- ITAD integration: permission email sent; first follow-up threshold 2026-09-07; operational fallback-decision threshold 2026-09-09.
 - Twitch/IGDB: waiting for Twitch Support; fallback only.
 - `grounded-negative-implement-01`: existing GitHub-owned Taste data-plane has unresolved work.
 - `card-explanation-production-acceptance-01`: blocked on existing Russian-description runtime.
@@ -79,5 +79,5 @@
 
 1. Get Chat 1's missing exact-runtime report saved; do not repeat the recon.
 2. Start the mandatory System Auditor in a new independent chat.
-3. While ITAD reply is pending, do not burn a worker slot just waiting. After the audit, decide whether a bounded Wikidata fallback is worth implementing if ITAD still has not replied.
+3. Do not burn a worker slot waiting for ITAD. If there is no reply by 2026-09-07, send one follow-up. If there is still no reply by 2026-09-09, use the audit findings to decide whether to proceed with bounded Wikidata fallback implementation.
 4. When ITAD replies, classify the reply from the saved permission-prep report and continue accordingly.
