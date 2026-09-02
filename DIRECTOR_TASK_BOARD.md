@@ -28,12 +28,12 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Блок раздач в UI | User verifies the deployed separate giveaway block on the actual phone/site | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_UI_01.md` | `reviews/worker_reports/cross-platform-giveaway-ui-01.md` | `needs_user_verification` |
+| `ЧАТ 1` | Компактные раздачи + карточки | Fix failed phone acceptance: collapse giveaways behind a compact control and enrich each giveaway with safe description/pros/cons when exact canonical identity permits | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_UI_UX_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-ui-ux-fix-01.md` | `ready_to_continue_in_existing_chat` |
 | `ЧАТ 2` | Пропавшие минусы карточек | Diagnose why cards can reach final output with no grounded negative evidence and define the generic remediation path | `WORKER_TASK_CARD_NEGATIVE_ANALYSIS_GAP_01.md` | `reviews/worker_reports/card-negative-analysis-gap-01.md` | `ready_to_continue_in_existing_chat` |
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
-- `card-explanation-production-acceptance-01` remains `blocked` on the already-existing Russian-description runtime. Current canonical status is still `translation_required` with `queue_count=164`. When that prerequisite is produced/ingested, resume only the bounded production acceptance: visual build -> gates -> payload commit -> Pages deploy -> user verification.
+- `card-explanation-production-acceptance-01` remains `blocked` on the already-existing Russian-description runtime. Resume only after the existing prerequisite is produced/ingested, then run visual build -> gates -> payload commit -> Pages deploy -> user verification.
 
 ## Подготовлено, но НЕ назначено следующим
 
@@ -42,14 +42,12 @@
 
 ## Последние решения
 
-- `cross-platform-giveaway-ui-01` — technical implementation is deployed and validated. Canonical bounded visual refresh succeeded, Pages deploy succeeded, and current deployed giveaway state is `active` with 2 offers. Task remains `needs_user_verification` until the user confirms the real phone/site UI; do not delete Chat 1 before that confirmation.
-- Chat 2's card-explanation production acceptance remains genuinely blocked on the external existing RU-description runtime; this waiting state does not consume the worker slot.
-- Chat 2 is assigned the bounded `card-negative-analysis-gap-01` diagnosis because the user explicitly elevated missing grounded negatives as a product defect.
-- `cross-platform-giveaway-ui-recon-01` — complete.
-- `steam-recommendation-count-fix-01` — complete.
-- `worker-efficiency-guardrails-01` — complete.
-- `backlog-disposition-validator-01` — complete and validated in GitHub Actions.
+- `cross-platform-giveaway-ui-01` reached production and Pages successfully, but **failed real-device acceptance**. User confirmed the block exists, but it occupies too much vertical space when always expanded and lacks enough per-game decision information.
+- Direct Chat 1 continuation is `cross-platform-giveaway-ui-ux-fix-01`: collapsed-by-default compact control is mandatory; expanded giveaway entries should include description + pros + cons only through exact canonical identity/evidence. No title-only/fuzzy Steam binding is allowed. If enrichment lacks a safe canonical route, report the exact architecture gap instead of fabricating content.
+- Real-device acceptance remains mandatory after redeploy; Chat 1 must not be deleted before the user approves the revised UI.
+- Chat 2 remains on `card-negative-analysis-gap-01`.
+- `card-explanation-production-acceptance-01` remains parked on its external RU-description prerequisite.
 
 ## Выбор следующей работы
 
-After the next worker report, read it first. Do not advance Trine 4 ahead of a direct fix produced by the negative-analysis diagnosis unless the diagnosis is complete with no follow-up.
+After either worker report, read it first and choose the direct continuation before unrelated backlog work.
