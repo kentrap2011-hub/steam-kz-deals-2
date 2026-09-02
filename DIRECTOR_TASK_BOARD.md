@@ -29,16 +29,22 @@
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
 | `НОВЫЙ ЧАТ 1` | Trine 4 пропала из списка | Capture the live discounted KZ state now, then find the first canonical stage where Trine 4 disappears from source/catalog to final visual output | `WORKER_TASK_TRINE4_MISSING_DIAGNOSIS_01.md` | `reviews/worker_reports/trine4-missing-diagnosis-01.md` | `ready_for_new_chat` |
-| `ЧАТ 2` | Свободный слот | — | — | — | `free` |
+| `НОВЫЙ ЧАТ 2` | Анализ карточек раздач | Find the safe canonical cross-store identity/analysis route so giveaway detail cards can show real description, pros and grounded cons without title matching | `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md` | `reviews/worker_reports/giveaway-analysis-identity-recon-01.md` | `ready_for_new_chat` |
+
+## Параллельность
+
+- Эти две задачи разрешено выполнять одновременно: Trine 4 трассирует paid Steam/KZ selection path, а giveaway identity recon исследует storefront-neutral identity/analysis handoff для Epic/GOG giveaway details. Они не должны менять общие production runtime/queues в RECON-режиме.
+- Trine 4 остаётся временно более срочной из-за активной скидки, но второй worker-slot не должен простаивать, пока giveaway identity recon можно вести независимо.
 
 ## Явный временный приоритет пользователя
 
 - Пользователь 2026-09-02 поднял Trine 4 выше остальных текущих задач, потому что игра сейчас находится на скидке. Диагностику нужно выполнить пока live sale state ещё наблюдаем; иначе после окончания акции отсутствие игры может стать объяснимым просто отсутствием скидки и потеряется исходный failure shape.
-- `giveaway-analysis-identity-recon-01` сохранён и остаётся прямым продолжением карточек раздач после Trine 4; его нельзя забыть или считать отменённым.
+- `giveaway-analysis-identity-recon-01` выполняется параллельно во втором слоте и не считается отменённым/отложенным до окончания Trine 4.
 
 ## Заменённый worker-чат
 
 - Старый `ЧАТ 1` достиг лимита контекста до сохранения `reviews/worker_reports/giveaway-analysis-identity-recon-01.md`. Его больше не использовать.
+- Старый `ЧАТ 2` был удалён пользователем после завершения grounded-negative implementation; его состояние сохранено в GitHub и не требуется для новых задач.
 
 ## Принятый UI раздач
 
@@ -52,15 +58,14 @@
 
 ## Подготовлено, но НЕ назначено следующим
 
-- `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md` remains prepared as the direct giveaway-content continuation after the time-sensitive Trine 4 diagnosis.
 - Duration connectivity remains blocked on user-provisioned IGDB secrets.
 
 ## Последние решения
 
-- Trine 4 diagnosis supersedes giveaway analysis temporarily because the current discount is a time-sensitive diagnostic condition, not because the giveaway requirement lost priority permanently.
-- Trine task now explicitly captures live KZ price/discount/source timestamp before deeper tracing.
-- Old Chat 1 limit does not affect Trine work; start a new worker chat from the durable task file.
+- Trine 4 diagnosis is Chat 1 because the active discount is time-sensitive diagnostic evidence.
+- Giveaway analysis identity recon moves to NEW CHAT 2 in parallel; no need to leave the second worker slot idle.
+- Both are RECON, so neither may introduce production mutations beyond their task's permitted reporting/management evidence.
 
 ## Выбор следующей работы
 
-Read `trine4-missing-diagnosis-01` first when it completes. If it finds a systemic defect, its bounded direct fix has priority while the sale condition remains relevant. Otherwise return to `giveaway-analysis-identity-recon-01`.
+Read whichever report arrives first, but if Trine 4 finds a systemic defect, its bounded direct fix keeps priority while the sale condition remains relevant. Giveaway identity may continue independently if its next step does not overlap that fix.
