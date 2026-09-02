@@ -28,8 +28,12 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Анализ карточек раздач | Find the safe canonical cross-store identity/analysis route so giveaway detail cards can show real description, pros and grounded cons without title matching | `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md` | `reviews/worker_reports/giveaway-analysis-identity-recon-01.md` | `ready_to_continue_in_existing_chat` |
+| `НОВЫЙ ЧАТ 1` | Анализ карточек раздач | Find the safe canonical cross-store identity/analysis route so giveaway detail cards can show real description, pros and grounded cons without title matching | `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md` | `reviews/worker_reports/giveaway-analysis-identity-recon-01.md` | `ready_for_new_chat` |
 | `ЧАТ 2` | Свободный слот | — | — | — | `free` |
+
+## Заменённый worker-чат
+
+- Старый `ЧАТ 1` достиг лимита контекста до сохранения `reviews/worker_reports/giveaway-analysis-identity-recon-01.md`. Его больше не использовать. Task state уже сохранён в GitHub task-file; новая работа должна идти в НОВОМ ЧАТЕ 1.
 
 ## Принятый UI раздач
 
@@ -38,7 +42,7 @@
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
-- `grounded-negative-implement-01`: implementation deployed; existing GitHub-owned Taste queue has 599 rows (`576` targeted negative-only backfills + `23` full Taste evaluations) with `resolve_grounded_negative_analysis`. The user deleted Chat 2; no worker context is needed while waiting for the existing scheduled Taste runtime.
+- `grounded-negative-implement-01`: implementation deployed; existing GitHub-owned Taste queue has 599 rows (`576` targeted negative-only backfills + `23` full Taste evaluations) with `resolve_grounded_negative_analysis`. No worker context is needed while waiting for the existing scheduled Taste runtime.
 - `card-explanation-production-acceptance-01` remains blocked on the existing Russian-description runtime. After prerequisite: visual build -> gates -> payload commit -> Pages deploy -> user verification.
 
 ## Подготовлено, но НЕ назначено следующим
@@ -48,10 +52,10 @@
 
 ## Последние решения
 
-- User accepted the giveaway navigation UX but confirmed detail cards still lack real description/pros/cons. This is no longer a UI-layout issue.
-- Direct Chat 1 continuation is `giveaway-analysis-identity-recon-01`: find a safe generic cross-store canonical identity route and analysis handoff. Do not repeat UI/source recon, do not map by title, and do not manually whitelist current Epic games.
-- `grounded-negative-implement-01` remains parked on the existing Taste runtime; deleting the worker chat does not lose state because report/queue ownership are durable in GitHub.
+- User accepted giveaway navigation UX; only detail-card analysis content remains.
+- Old Chat 1 hit its context limit before producing the identity-recon report. No broad recovery is needed because the task itself is durable in `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md`.
+- New Chat 1 must perform that bounded recon only: no UI/source recon repetition, no title matching, no manual current-game whitelist.
 
 ## Выбор следующей работы
 
-After Chat 1 recon report, choose its exact direct implementation or prerequisite. The free Chat 2 slot may take another independent task only if it does not interfere with the active direct continuation.
+After NEW CHAT 1 report, choose its exact direct implementation or prerequisite. The free Chat 2 slot may take another independent task only if it does not interfere with the active direct continuation.
