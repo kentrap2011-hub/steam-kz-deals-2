@@ -9,7 +9,7 @@
   <link rel="icon" href="icon.svg?v=shortcut-icon-1" type="image/svg+xml" sizes="any">
   <link rel="manifest" href="manifest.webmanifest?v=shortcut-icon-1">
   <link rel="stylesheet" href="styles.css?v=score-collapse-1">
-  <link rel="stylesheet" href="giveaway-ui.css?v=giveaway-ui-ux-fix-01">
+  <link rel="stylesheet" href="giveaway-ui.css?v=giveaway-separate-view-fix-01">
   <link rel="stylesheet" href="purchase-options.css?v=compact-purchase-options-1">
   <link rel="stylesheet" href="score-details.css?v=detailed-score-ui-fix-1">
 </head>
@@ -28,6 +28,7 @@
 
       <nav class="tabs" aria-label="Разделы">
         <button class="tab active" data-tab="feed" type="button">Лента <span id="feedCount"></span></button>
+        <button class="tab" data-tab="giveaway" type="button">🎁 Раздачи <span id="giveawayCount"></span></button>
         <button class="tab" data-tab="wishlist" type="button">★ Вишлист <span id="wishlistCount"></span></button>
         <button class="tab" data-tab="liked" type="button">♡ Интересно <span id="likedCount"></span></button>
         <button class="tab" data-tab="final" type="button">🏆 Финал <span id="finalCount"></span></button>
@@ -36,11 +37,6 @@
 
     <main>
       <section id="feedView">
-        <section id="giveawayBlock" class="giveaway-block" aria-label="Бесплатные раздачи">
-          <button class="giveaway-toggle" type="button" aria-expanded="false" aria-controls="giveawayContent"><span class="giveaway-toggle-title"><span aria-hidden="true">🎁</span> Бесплатные раздачи</span><span class="giveaway-toggle-state">проверяем…</span><span class="giveaway-toggle-chevron" aria-hidden="true">⌄</span></button>
-          <div id="giveawayContent" class="giveaway-content" hidden></div>
-        </section>
-
         <div class="position-row">
           <span id="position"></span>
           <span class="position-actions">
@@ -126,6 +122,15 @@
         <div class="swipe-help"><span><b>свайп ←</b><br>следующая игра</span><span><b>свайп →</b><br>предыдущая игра</span></div>
       </section>
 
+      <section id="giveawayView" class="hidden list-view giveaway-view" aria-label="Бесплатные раздачи">
+        <div class="giveaway-view-head">
+          <button class="small-btn" type="button" data-giveaway-exit>← Назад</button>
+          <div><h2>🎁 Бесплатные раздачи</h2><p>Активные предложения, которые можно забрать бесплатно до указанного срока.</p></div>
+        </div>
+        <div id="giveawayListPanel"><div id="giveawayList" class="giveaway-list"></div></div>
+        <div id="giveawayDetailPanel" class="hidden"><div id="giveawayDetail"></div></div>
+      </section>
+
       <section id="wishlistView" class="hidden list-view"><h2>★ Вишлист</h2><div id="wishlistList" class="game-list"></div></section>
       <section id="likedView" class="hidden list-view"><h2>Интересно</h2><div id="likedList" class="game-list"></div></section>
       <section id="finalView" class="hidden list-view"><h2>Финал месяца</h2><div id="finalList" class="game-list"></div></section>
@@ -141,8 +146,8 @@
   </dialog>
 
   <div id="toast" class="toast" aria-live="polite"></div>
-  <script src="giveaway-ui.js?v=giveaway-ui-ux-fix-01"></script>
-  <script src="app.js?v=giveaway-ui-ux-fix-01"></script>
+  <script src="giveaway-ui.js?v=giveaway-separate-view-fix-01"></script>
+  <script src="app.js?v=giveaway-separate-view-fix-01"></script>
   <script src="image-swipe-sync.js?v=image-swipe-sync-1"></script>
   <script src="package-deal-ui.js?v=compact-purchase-options-1"></script>
   <script src="score-details-ui.js?v=detailed-score-ui-fix-1"></script>
