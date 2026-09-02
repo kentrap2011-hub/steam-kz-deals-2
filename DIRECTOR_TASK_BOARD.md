@@ -31,7 +31,7 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Запуск проверки Trine 4 | Determine whether the existing automatic Taste processing is currently running, whether it can be safely started now, and how completion for `App_690640` is detected | `WORKER_TASK_TASTE_RUNTIME_TRIGGER_STATUS_01.md` | `reviews/worker_reports/taste-runtime-trigger-status-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 1` | Точный запуск проверки Trine 4 | Find the exact existing scheduled Taste runtime, its enabled state, exact cadence, supported manual trigger if any, and completion observation for `App_690640` | `WORKER_TASK_TASTE_RUNTIME_EXACT_TRIGGER_RECON_01.md` | `reviews/worker_reports/taste-runtime-exact-trigger-recon-01.md` | `ready_to_continue_in_existing_chat` |
 | `ЧАТ 2` | Альтернатива Twitch/IGDB | Find the safest non-Twitch primary exact identity route Epic/GOG -> authoritative game identity -> exact Steam appid, keeping IGDB only as fallback | `WORKER_TASK_GIVEAWAY_IDENTITY_PROVIDER_ALTERNATIVES_01.md` | `reviews/worker_reports/giveaway-identity-provider-alternatives-01.md` | `ready_to_continue_in_existing_chat` |
 
 ## Отдельный advisory chat — Taste Reviewer
@@ -48,18 +48,15 @@
 
 - Role: `SYSTEM_AUDITOR_ROLE.md`.
 - Durable trigger state: `DIRECTOR_REVIEW_CHECKPOINTS.md`.
-- First audit becomes due as soon as BOTH current tracks reach stable boundaries:
-  1. `taste-runtime-trigger-status-01` has a saved report + Director decision;
-  2. giveaway identity continuation reaches a durable implementation/blocker decision.
-- Before the next ordinary backlog implementation after that point, run the first System Audit unless the user explicitly prioritizes a more urgent time-sensitive incident.
+- First audit is now marked due. Existing direct continuations in Chat 1 / Chat 2 may finish first, but before assigning the next ordinary backlog implementation the audit must run unless the user explicitly prioritizes a more urgent time-sensitive task.
 
-## Trine 4 diagnosis result
+## Trine 4 state
 
 - Canonical identity: `App_690640`, family `game:690640`.
 - Live sale captured: KZ available, `1,520 KZT` from `7,600 KZT`, `-80%`, observed `2026-09-02T06:42:05.485251Z`, sale end `2026-09-15T17:00:00Z`.
-- Trine 4 is present through store snapshot, shortlist, purchase/deal context and Taste queue.
-- First disappearance is missing completed Taste analysis before visual preparation; price/ranking/region are not the cause.
-- Next bounded step is to establish whether normal processing is running, manually startable, and how its completion is observed.
+- Trine 4 reaches the existing Taste queue and is blocked only because its Taste result is unresolved.
+- `taste-runtime-trigger-status-01` confirmed queue presence but did NOT verify that processing is currently active, did NOT establish exact cadence, and did NOT establish a supported manual trigger.
+- Director decision: do not wait blindly and do not close Chat 1 yet. Run the exact-runtime/control recon only.
 
 ## Giveaway identity state
 
@@ -67,8 +64,7 @@
 - Exact identity recon found no safe current Epic/GOG -> Steam semantic binding.
 - IGDB was prepared as the clean exact bridge, but Twitch developer application creation is blocked before credentials because Twitch requires 2FA and initial 2FA phone registration fails for the user's Russian +7 number.
 - Twitch Support request has been submitted.
-- Report: `reviews/worker_reports/chat2-twitch-blocker-status-01.md`, blob `3aa927ad15917c9a2e2b1568e9b25261a16c5355`.
-- Director decision: do not wait on Twitch as the primary plan. Keep Twitch/IGDB as fallback while support is pending and recon a non-Twitch exact identity provider/route.
+- Director decision: do not wait on Twitch as the primary plan. Keep Twitch/IGDB as fallback while reconning a non-Twitch exact identity provider/route.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
@@ -82,4 +78,4 @@
 
 ## Выбор следующей работы
 
-Continue in existing Chat 2 with `WORKER_TASK_GIVEAWAY_IDENTITY_PROVIDER_ALTERNATIVES_01.md`. Do not repeat Twitch troubleshooting. Read whichever active report arrives first; when an implementation slot becomes free for ordinary backlog work, check `DIRECTOR_REVIEW_CHECKPOINTS.md` first.
+Continue current direct continuations in both existing chats. Do not assign ordinary backlog implementation until the mandatory System Auditor checkpoint is handled.
