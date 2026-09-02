@@ -1,43 +1,45 @@
 # Semantic Runtime Completion Acceptance 01
 
-## Status
+Task ID: `semantic-runtime-completion-acceptance-01`
+Status: `needs_fix`
 
-**NOT ACCEPTED / FAIL**
+## Required result
 
-## Acceptance verdict
+1. `Semantic runtime observability`: `fail`
 
-The acceptance does not pass.
+   Current concrete evidence:
+   - The existing semantic queue contains **644 of 743 families** still requiring semantic work.
+   - Queue presence is not a trustworthy runtime heartbeat and does not prove that the existing scheduled Taste worker is active, progressing, or successfully applying semantic results.
+   - The acceptance evidence does not provide a durable last-success/progress signal sufficient to establish operational observability of the existing scheduled semantic runtime.
 
-The canonical published payload currently exposes a semantic-completion ambiguity: `data/production/pre_ai/chatgpt_payload.json` reports both `status="complete"` and `complete_family_partition=true`, while the same acceptance evidence shows that **644 of 743 families remain in the semantic queue**.
+2. `Feed semantic completeness visibility`: `fail`
 
-That means the current `complete` signal demonstrates completion of the family partition/accounting step, not completion or sufficient freshness of the user-facing semantic result.
+   Current concrete evidence:
+   - `data/production/pre_ai/chatgpt_payload.json` reports `status="complete"` and `complete_family_partition=true` while **644 of 743 families** remain in the semantic queue.
+   - Therefore the current `complete` signal demonstrates completion of family partition/accounting, not that the user-visible recommendation result is sufficiently semantically complete/current.
+   - The accepted evidence does not establish an explicit user-visible degraded/incomplete semantic state or a trustworthy unresolved-age/staleness signal that prevents a materially incomplete feed from looking fully healthy.
 
-Per the task contract, **the presence of a semantic queue is not itself a heartbeat and is not evidence that the Taste semantic worker is actively progressing**. Therefore queue presence cannot be used to satisfy the runtime-completion/worker-liveness acceptance criterion.
+3. Smallest missing mechanisms:
+   1. A durable heartbeat/progress proof for the **existing canonical Taste scheduled runtime** that exposes an equivalent of active/enabled state, expected cadence/next-run expectation, and last successful semantic execution/progress. Queue existence alone must not satisfy this mechanism.
+   2. An explicit canonical semantic completeness state in publication that distinguishes `scope partitioning completed` from `user-visible recommendation result sufficiently complete/current`, including unresolved semantic count and unresolved age/staleness where available.
 
-A second Taste automation was not created; the canonical scheduler remains the intended single owner.
+4. Defect requires an `IMPLEMENT` task: `yes`
 
-## Acceptance findings
+5. Bounded implementation contract:
+   - Runtime ownership boundary: preserve the single existing Taste scheduler/runtime and queue defined by `config/execution_ownership_contract.json`; do not create a second scheduler, manual Taste path, or duplicate queue. Add only durable observability/heartbeat evidence for that existing owner.
+   - Publication boundary: limit feed-completeness implementation to `scripts/build_visual_feed_v2.py` and its canonical generated payload `data/production/pre_ai/chatgpt_payload.json`; do not change Taste policy, weights, scores, exclusion semantics, or fail-closed safety. The published state must explicitly distinguish partition completion from semantic-result completeness/currentness and expose unresolved semantic count plus age/staleness where available.
 
-1. **False/ambiguous completion signal — FAIL**
-   - Canonical payload: `data/production/pre_ai/chatgpt_payload.json`
-   - Observed acceptance state: `status="complete"`
-   - Observed acceptance state: `complete_family_partition=true`
-   - Remaining semantic queue: **644 / 743 families**
-   - Conclusion: the current completion marker describes partition/accounting completion and must not be interpreted as semantic-runtime completion of the user-visible result.
+6. Recommended next step:
 
-2. **Queue is not a worker heartbeat — FAIL for liveness proof**
-   - A non-empty semantic queue only proves pending work exists.
-   - It does not prove the canonical Taste worker is currently running, making semantic progress, or successfully applying semantic results.
+   Create one bounded `IMPLEMENT` task covering exactly the two mechanisms above: durable observability for the existing canonical Taste runtime and truthful degraded/incomplete semantic publication state.
 
-3. **Single-owner constraint preserved**
-   - No duplicate/second Taste automation was created during acceptance.
-
-## Required acceptance interpretation
-
-Until runtime liveness/progress is evidenced independently of queue existence and semantic incompleteness is surfaced without a misleading `complete` interpretation, this task must remain **NOT ACCEPTED**.
-
-## Exact repository refs used by this acceptance
+## Exact refs used
 
 - `WORKER_TASK_SEMANTIC_RUNTIME_COMPLETION_ACCEPTANCE_01.md`
+- `reviews/system_audits/baseline-01.md`
+- `reviews/worker_reports/taste-runtime-exact-trigger-recon-01.md`
+- `reviews/worker_reports/trine4-missing-diagnosis-01.md`
 - `data/production/pre_ai/chatgpt_payload.json`
+- `config/execution_ownership_contract.json`
+- `scripts/build_visual_feed_v2.py`
 - `reviews/worker_reports/semantic-runtime-completion-acceptance-01.md`
