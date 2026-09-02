@@ -6,10 +6,10 @@ The Director must read this file before assigning a new ordinary backlog task wh
 
 ## System Auditor
 
-system_audit_due: true
+system_audit_due: false
 first_system_audit_trigger: `satisfied_2026-09-02`
 material_changes_since_last_system_audit: 0
-last_system_audit_report: `none`
+last_system_audit_report: `reviews/system_audits/baseline-01.md`
 
 ### First trigger condition
 
