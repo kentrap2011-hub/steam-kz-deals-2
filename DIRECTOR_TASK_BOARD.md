@@ -32,7 +32,7 @@
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
 | `ЧАТ 1` | Точный запуск проверки Trine 4 | Find the exact existing scheduled Taste runtime, its enabled state, exact cadence, supported manual trigger if any, and completion observation for `App_690640` | `WORKER_TASK_TASTE_RUNTIME_EXACT_TRIGGER_RECON_01.md` | `reviews/worker_reports/taste-runtime-exact-trigger-recon-01.md` | `ready_to_continue_in_existing_chat` |
-| `ЧАТ 2` | Альтернатива Twitch/IGDB | Find the safest non-Twitch primary exact identity route Epic/GOG -> authoritative game identity -> exact Steam appid, keeping IGDB only as fallback | `WORKER_TASK_GIVEAWAY_IDENTITY_PROVIDER_ALTERNATIVES_01.md` | `reviews/worker_reports/giveaway-identity-provider-alternatives-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 2` | Разрешение ITAD API | Prepare the exact IsThereAnyDeal permission request and classify the provider reply before any implementation | `WORKER_TASK_ITAD_TERMS_PERMISSION_PREP_01.md` | `reviews/worker_reports/itad-terms-permission-prep-01.md` | `ready_to_continue_in_existing_chat` |
 
 ## Отдельный advisory chat — Taste Reviewer
 
@@ -55,20 +55,24 @@
 - Canonical identity: `App_690640`, family `game:690640`.
 - Live sale captured: KZ available, `1,520 KZT` from `7,600 KZT`, `-80%`, observed `2026-09-02T06:42:05.485251Z`, sale end `2026-09-15T17:00:00Z`.
 - Trine 4 reaches the existing Taste queue and is blocked only because its Taste result is unresolved.
-- `taste-runtime-trigger-status-01` confirmed queue presence but did NOT verify that processing is currently active, did NOT establish exact cadence, and did NOT establish a supported manual trigger.
-- Director decision: do not wait blindly and do not close Chat 1 yet. Run the exact-runtime/control recon only.
+- `taste-runtime-trigger-status-01` confirmed queue presence but did NOT verify that processing is currently active, exact cadence, or a supported manual trigger.
+- Director decision: continue only with exact-runtime/control recon in Chat 1.
 
 ## Giveaway identity state
 
 - Accepted giveaway UI remains unchanged.
-- Exact identity recon found no safe current Epic/GOG -> Steam semantic binding.
-- IGDB was prepared as the clean exact bridge, but Twitch developer application creation is blocked before credentials because Twitch requires 2FA and initial 2FA phone registration fails for the user's Russian +7 number.
-- Twitch Support request has been submitted.
-- Director decision: do not wait on Twitch as the primary plan. Keep Twitch/IGDB as fallback while reconning a non-Twitch exact identity provider/route.
+- Twitch/IGDB remains fallback because Twitch 2FA activation is blocked for the user's account and Support is pending.
+- `giveaway-identity-provider-alternatives-01` completed and selected IsThereAnyDeal (ITAD) as the strongest non-Twitch technical route.
+- Bounded current Epic proof: 2/2 active offers map from the exact Epic offer ID -> ITAD game UUID -> one exact Steam appid without title matching.
+- Wikidata is the non-Twitch fallback but covered only 1/2 current sample games.
+- ITAD implementation is blocked only on Terms clarification: their docs state private API use should contact them, and the project must not assume permission.
+- Director decision: prepare one concise permission request to `api@isthereanydeal.com`; do not implement before affirmative/conditional permission.
+- If ITAD permits use, next bounded IMPLEMENT reuses exact Epic/GOG IDs -> ITAD -> unique Steam appid -> existing canonical description/Taste path. No title/fuzzy fallback, no price ingestion, no new scheduler/runtime/browser fetch.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
-- Twitch/IGDB credentials path: blocked on Twitch account 2FA activation/support; fallback only for now.
+- Twitch/IGDB credentials path: blocked on Twitch account 2FA activation/support; fallback only.
+- ITAD production integration: blocked until Terms/API-use permission is confirmed.
 - `grounded-negative-implement-01`: existing GitHub-owned Taste data-plane has unresolved work; no worker-owned manual processing.
 - `card-explanation-production-acceptance-01` remains blocked on the existing Russian-description runtime.
 
