@@ -10,12 +10,15 @@ from taste_cache_common import (
     validate_taste_factors,
     validate_verdict_shape,
 )
+from taste_negative_contract import validate_negative_analysis
 
 QUEUE = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
 PROJECTION = Path('data/production/pre_ai/taste_projection.json')
+SOURCE_CACHE = Path('data/cache/taste_fit.json')
 OVERLAY = Path('data/cache/taste_fit.entry_overlay.json')
+NEGATIVE_WORK_CODE = 'resolve_grounded_negative_analysis'
 
-BASE_RESULT_FIELDS = {
+FULL_RESULT_FIELDS = {
     'key',
     'appid',
     'taste_fingerprint',
@@ -24,9 +27,20 @@ BASE_RESULT_FIELDS = {
     'fit_level',
     'reason_code',
     'positive_evidence',
+    'negative_analysis_status',
+    'negative_findings',
     'negative_evidence',
 }
-OPTIONAL_RESULT_FIELDS = {'taste_factors'}
+NEGATIVE_ONLY_RESULT_FIELDS = {
+    'key',
+    'appid',
+    'taste_fingerprint',
+    'candidate_context_sha256',
+    'negative_analysis_status',
+    'negative_findings',
+    'negative_evidence',
+}
+OPTIONAL_FULL_RESULT_FIELDS = {'taste_factors'}
 FORBIDDEN_EVIDENCE_FRAGMENTS = [
     'price', 'discount', 'wishlist', 'steam review', 'global review', 'russian review',
     'steamdb', 'historical price', 'sale price', 'rub', 'kzt',
@@ -47,21 +61,25 @@ def read_jsonl(path):
     return rows
 
 
+def validate_price_blind_text(name, value):
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f'{name} must be a non-empty string')
+    folded = value.casefold()
+    hit = next((fragment for fragment in FORBIDDEN_EVIDENCE_FRAGMENTS if fragment in folded), None)
+    if hit is not None:
+        raise ValueError(f'{name} contains forbidden non-taste evidence fragment: {hit!r}')
+
+
 def validate_evidence_list(name, values):
     if not isinstance(values, list):
         raise ValueError(f'{name} must be an array')
     for index, value in enumerate(values):
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError(f'{name}[{index}] must be a non-empty string')
-        folded = value.casefold()
-        hit = next((fragment for fragment in FORBIDDEN_EVIDENCE_FRAGMENTS if fragment in folded), None)
-        if hit is not None:
-            raise ValueError(f'{name}[{index}] contains forbidden non-taste evidence fragment: {hit!r}')
+        validate_price_blind_text(f'{name}[{index}]', value)
 
 
 def load_overlay():
     doc = load_json(OVERLAY)
-    if doc.get('schema_version') != 1 or doc.get('entry_schema_version') not in {2, 3}:
+    if doc.get('schema_version') != 1 or doc.get('entry_schema_version') not in {2, 3, 4}:
         raise ValueError('Unexpected taste overlay schema')
     entries = doc.get('entries')
     if not isinstance(entries, dict):
@@ -71,7 +89,52 @@ def load_overlay():
     return doc
 
 
-def validate_input(doc, queue_by_key, projection):
+def cache_entries(doc):
+    entries = doc.get('entries') if isinstance(doc, dict) else None
+    return entries if isinstance(entries, dict) else {}
+
+
+def effective_entries(overlay):
+    merged = dict(cache_entries(load_json(SOURCE_CACHE)))
+    merged.update(cache_entries(overlay))
+    return merged
+
+
+def validate_negative_result_fields(result):
+    findings = validate_negative_analysis(
+        result.get('negative_analysis_status'),
+        result.get('negative_findings'),
+        result.get('negative_evidence'),
+    )
+    validate_evidence_list('negative_evidence', result['negative_evidence'])
+    for index, finding in enumerate(findings):
+        validate_price_blind_text(f'negative_findings[{index}].evidence', finding['evidence'])
+        validate_price_blind_text(f'negative_findings[{index}].risk_text_ru', finding['risk_text_ru'])
+    return findings
+
+
+def validate_current_base_entry(key, entry, queue_row, projection):
+    if not isinstance(entry, dict):
+        raise ValueError(f'Negative-only backfill has no accepted cache entry for {key}')
+    expected = {
+        'appid': str(queue_row['appid']),
+        'taste_fingerprint': queue_row['taste_fingerprint'],
+        'candidate_context_sha256': queue_row.get('candidate_context_sha256'),
+        'profile_blob_sha': projection['current_profile']['blob_sha'],
+        'taste_model_version': projection['current_binding']['taste_model_version'],
+        'taste_semantics_sha256': projection['current_binding']['taste_semantics_sha256'],
+    }
+    for field, value in expected.items():
+        actual = str(entry.get(field)) if field == 'appid' else entry.get(field)
+        if actual != value:
+            raise ValueError(
+                f'Negative-only backfill base binding mismatch for {key}.{field}: '
+                f'entry={actual!r} current={value!r}'
+            )
+    return entry
+
+
+def validate_input(doc, queue_by_key, projection, current_entries):
     if doc.get('schema_version') != 1:
         raise ValueError('Unexpected ingest schema_version')
     bindings = doc.get('bindings')
@@ -105,28 +168,42 @@ def validate_input(doc, queue_by_key, projection):
     for result in results:
         if not isinstance(result, dict):
             raise ValueError('Every ingest result must be an object')
-        unknown = set(result) - (BASE_RESULT_FIELDS | OPTIONAL_RESULT_FIELDS)
-        missing = BASE_RESULT_FIELDS - set(result)
-        if unknown:
-            raise ValueError(f'Unexpected result fields: {sorted(unknown)}')
-        if missing:
-            raise ValueError(f'Missing result fields: {sorted(missing)}')
 
-        key = result['key']
+        key = result.get('key')
+        if not isinstance(key, str) or not key:
+            raise ValueError('Every ingest result requires a non-empty key')
         if key in seen:
             raise ValueError(f'Duplicate ingest key: {key}')
         seen.add(key)
+
         queue_row = queue_by_key.get(key)
         if queue_row is None:
             raise ValueError(f'Ingest key is not in current ChatGPT taste queue: {key}')
         work_required = queue_row.get('work_required') or []
-        if 'evaluate_taste_fit' not in work_required:
-            raise ValueError(f'Current queue row does not require taste evaluation: {key}')
-        factors_required = 'evaluate_normalized_taste_factors' in work_required
-        if factors_required and 'taste_factors' not in result:
-            raise ValueError(f'Current queue row requires taste_factors: {key}')
-        if 'taste_factors' in result:
-            validate_taste_factors(result['taste_factors'])
+        full_eval = 'evaluate_taste_fit' in work_required
+        negative_requested = NEGATIVE_WORK_CODE in work_required
+        if not negative_requested:
+            raise ValueError(f'Current queue row does not require grounded negative analysis: {key}')
+
+        if full_eval:
+            allowed = FULL_RESULT_FIELDS | OPTIONAL_FULL_RESULT_FIELDS
+            required = FULL_RESULT_FIELDS
+        else:
+            allowed = NEGATIVE_ONLY_RESULT_FIELDS
+            required = NEGATIVE_ONLY_RESULT_FIELDS
+
+        unknown = set(result) - allowed
+        missing = required - set(result)
+        if unknown:
+            if not full_eval:
+                raise ValueError(
+                    f'Negative-only result attempted to rewrite accepted Taste semantics for {key}: '
+                    f'{sorted(unknown)}'
+                )
+            raise ValueError(f'Unexpected result fields: {sorted(unknown)}')
+        if missing:
+            raise ValueError(f'Missing result fields: {sorted(missing)}')
+
         if str(result['appid']) != str(queue_row['appid']):
             raise ValueError(f'Appid mismatch for {key}')
         if result['taste_fingerprint'] != queue_row['taste_fingerprint']:
@@ -137,20 +214,39 @@ def validate_input(doc, queue_by_key, projection):
         if context_sha != queue_row.get('candidate_context_sha256'):
             raise ValueError(f'Candidate context mismatch for {key}')
 
-        validate_verdict_shape(result['verdict'], result['fit_level'], result['reason_code'])
-        validate_evidence_list('positive_evidence', result['positive_evidence'])
-        validate_evidence_list('negative_evidence', result['negative_evidence'])
-        if result['verdict'] == 'INCLUDE' and len(result['positive_evidence']) < 2:
-            raise ValueError(f'INCLUDE result requires at least two explicit positive evidence items: {key}')
-        if result['reason_code'] == 'exclude_direct_conflict' and not result['negative_evidence']:
-            raise ValueError(f'exclude_direct_conflict requires explicit negative evidence: {key}')
+        validate_negative_result_fields(result)
 
-        validated.append(result)
+        if full_eval:
+            factors_required = 'evaluate_normalized_taste_factors' in work_required
+            if factors_required and 'taste_factors' not in result:
+                raise ValueError(f'Current queue row requires taste_factors: {key}')
+            if 'taste_factors' in result:
+                validate_taste_factors(result['taste_factors'])
+            validate_verdict_shape(result['verdict'], result['fit_level'], result['reason_code'])
+            validate_evidence_list('positive_evidence', result['positive_evidence'])
+            if result['verdict'] == 'INCLUDE' and len(result['positive_evidence']) < 2:
+                raise ValueError(f'INCLUDE result requires at least two explicit positive evidence items: {key}')
+            if result['reason_code'] == 'exclude_direct_conflict' and not result['negative_evidence']:
+                raise ValueError(f'exclude_direct_conflict requires explicit negative evidence: {key}')
+            base_entry = None
+        else:
+            base_entry = validate_current_base_entry(
+                key,
+                current_entries.get(key),
+                queue_row,
+                projection,
+            )
+
+        validated.append({
+            'result': result,
+            'full_eval': full_eval,
+            'base_entry': base_entry,
+        })
 
     return bindings, validated
 
 
-def build_entry(result, bindings, evaluated_at):
+def build_full_entry(result, bindings, evaluated_at):
     entry = {
         'key': result['key'],
         'appid': str(result['appid']),
@@ -163,11 +259,21 @@ def build_entry(result, bindings, evaluated_at):
         'fit_level': result['fit_level'],
         'reason_code': result['reason_code'],
         'positive_evidence': result['positive_evidence'],
+        'negative_analysis_status': result['negative_analysis_status'],
+        'negative_findings': result['negative_findings'],
         'negative_evidence': result['negative_evidence'],
         'evaluated_at_utc': evaluated_at,
     }
     if 'taste_factors' in result:
         entry['taste_factors'] = result['taste_factors']
+    return entry
+
+
+def build_negative_only_entry(result, base_entry):
+    entry = dict(base_entry)
+    entry['negative_analysis_status'] = result['negative_analysis_status']
+    entry['negative_findings'] = result['negative_findings']
+    entry['negative_evidence'] = result['negative_evidence']
     return entry
 
 
@@ -188,36 +294,53 @@ def main():
     if len(queue_by_key) != len(queue):
         raise SystemExit('Current ChatGPT taste queue has duplicate taste_subject_key values')
 
-    ingest = load_json(args.input)
     try:
-        bindings, results = validate_input(ingest, queue_by_key, projection)
         overlay = load_overlay()
+        current_entries = effective_entries(overlay)
+        ingest = load_json(args.input)
+        bindings, validated = validate_input(ingest, queue_by_key, projection, current_entries)
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
 
     contract = load_json(ENTRY_CONTRACT)
     base_required = contract.get('base_required_entry_fields') or contract['schema_v2_required_entry_fields']
-    v3_required = contract.get('schema_v3_required_entry_fields') or base_required
+    v4_required = contract.get('schema_v4_required_entry_fields') or base_required
     evaluated_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     entries = dict(overlay['entries'])
     inserted = 0
     replaced = 0
     unchanged = 0
-    v3_result_count = 0
+    full_result_count = 0
+    negative_only_result_count = 0
+    incomplete_negative_count = 0
 
-    for result in results:
-        entry = build_entry(result, bindings, evaluated_at)
-        is_v3 = 'taste_factors' in result
+    for row in validated:
+        result = row['result']
+        if row['full_eval']:
+            entry = build_full_entry(result, bindings, evaluated_at)
+            full_result_count += 1
+            required_fields = v4_required
+            require_factors = True
+        else:
+            entry = build_negative_only_entry(result, row['base_entry'])
+            negative_only_result_count += 1
+            required_fields = base_required
+            require_factors = False
+
+        incomplete_negative_count += int(
+            result['negative_analysis_status'] == 'incomplete_no_confirmed_negative'
+        )
+
         try:
             validate_cache_entry(
                 entry,
                 result['key'],
-                v3_required if is_v3 else base_required,
-                require_taste_factors=is_v3,
+                required_fields,
+                require_taste_factors=require_factors,
+                require_v4_negative_fields=True,
             )
         except ValueError as exc:
             raise SystemExit(str(exc)) from exc
-        v3_result_count += int(is_v3)
 
         old = entries.get(result['key'])
         if old is None:
@@ -232,8 +355,7 @@ def main():
         entries[result['key']] = entry
 
     updated = dict(overlay)
-    if v3_result_count:
-        updated['entry_schema_version'] = 3
+    updated['entry_schema_version'] = 4
     updated['entry_count'] = len(entries)
     updated['entries'] = entries
 
@@ -243,8 +365,10 @@ def main():
     print(json.dumps({
         'status': 'validated',
         'dry_run': args.dry_run,
-        'batch_result_count': len(results),
-        'v3_result_count': v3_result_count,
+        'batch_result_count': len(validated),
+        'full_result_count': full_result_count,
+        'negative_only_result_count': negative_only_result_count,
+        'incomplete_negative_count': incomplete_negative_count,
         'overlay_before_count': len(overlay['entries']),
         'overlay_after_count': len(entries),
         'inserted_count': inserted,
@@ -254,6 +378,7 @@ def main():
         'taste_model_version': bindings['taste_model_version'],
         'taste_semantics_sha256': bindings['taste_semantics_sha256'],
         'candidate_context_required': True,
+        'negative_only_fit_semantics_immutable': True,
     }, ensure_ascii=False, indent=2))
 
 
