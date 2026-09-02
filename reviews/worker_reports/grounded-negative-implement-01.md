@@ -1,178 +1,232 @@
 # Grounded Negative Implement 01
 
-Status: **BLOCKED — implementation complete; canonical production acceptance is correctly fail-closed while the existing scheduled Taste worker processes the current grounded-negative work queue.**
+## Task
 
-This report records the implementation and acceptance outcome only. The previous diagnosis and contract design are not repeated here.
+Implemented the approved grounded-negative contract through the existing Taste/runtime path without creating a queue, scheduler, polling loop, retry owner, or manual semantic backfill.
 
-## Implemented runtime contract
-
-The approved grounded-negative scheme is now wired into the existing Taste/runtime path:
-
-- structured grounded negatives are canonical Taste fields (`negative_analysis_status`, `negative_findings`, compatibility `negative_evidence` projection);
-- normal completion requires `complete_with_confirmed_negative` with at least one structured finding;
-- truthful inability to ground a downside is represented as `incomplete_no_confirmed_negative` with empty findings/evidence and remains unresolved for normal paid-card readiness;
-- legacy free-text `negative_evidence` never upgrades readiness by itself;
-- the existing `data/production/pre_ai/chatgpt_taste_queue.jsonl` is reused with work code `resolve_grounded_negative_analysis`;
-- valid existing Taste verdicts/factors are preserved during negative-only backfill;
-- the final visible mapper admits validated findings by stable category/code rather than English keyword matching;
-- `other_grounded_taste_risk` is a no-drop escape hatch with ranking score 0;
-- a normal paid card is not accepted unless at least one current structured Taste negative survives into visible grounded-risk provenance.
-
-No new queue, scheduler, polling loop, or retry owner was created.
-
-## Files implemented
-
-### Canonical contracts / shared validation
+Implemented files:
 
 - `config/taste_result_contract.json` -> `TASTE-SEMANTIC-RESULT-V4`
 - `config/taste_cache_entry_contract.json` -> `TASTE-CACHE-ENTRY-BINDING-V4`
 - `scripts/taste_negative_contract.py`
 - `scripts/taste_cache_common.py`
-
-### Existing cache / projection / queue route
-
 - `scripts/build_taste_cache_index.py`
 - `scripts/build_pre_ai_chatgpt_payload.py`
 - `scripts/ingest_taste_results.py`
 - `scripts/process_taste_inbox.py`
-- `.github/workflows/build-taste-entry-index.yml`
-
-The compact per-entry index remains schema v2 for fit-cache compatibility. Grounded-negative readiness is an orthogonal sidecar, so legacy valid fit hits are not invalidated merely because they predate the new negative-analysis contract.
-
-### Final card / mapper route
-
 - `scripts/grounded_negative_visual.py`
 - `scripts/normalize_visual_media_urls.py`
 - `scripts/validate_card_explanations.py`
-
-The existing daily visual route already invokes `normalize_visual_media_urls.py` before final validation/commit. That existing point now performs the structured grounded-negative finalization and fails closed before commit if a normal paid card lacks a current grounded Taste witness.
-
-The legacy text keyword mapper may still execute earlier in the legacy builder, but it is no longer authoritative for accepted output: final risk/fit state is rebuilt from structured findings before acceptance. Therefore unfamiliar but valid grounded findings are not lost because their evidence wording misses a keyword list.
-
-### Regressions
-
-- `scripts/validate_taste_v3_contract.py` now validates the V4 contract while retaining its existing filename/workflow hook.
+- `scripts/validate_taste_v3_contract.py` (existing filename retained for the existing workflow hook; validator now exercises V4)
 - `scripts/test_grounded_negative_contract.py`
-- `scripts/test_card_explanation_policy.py` invokes the new grounded-negative regressions through the already-existing daily CI path.
+- `scripts/test_card_explanation_policy.py`
+- `.github/workflows/build-taste-entry-index.yml`
 
-No separate CI scheduler/workflow was introduced for the semantic worker.
+Implementation commits:
 
-## Negative-only backfill immutability
+- `a06c34819c5f66e2cb1850340efda790dc3d1c36`
+- `67ee0f8c2d59226ad74c4f2462e60b40c5d02efc`
+- `bc4940b479b5ded1aa9602d47ddd3bc6345c9b7f`
+- `372b6019e09b1257b89dcec3a46e86aef73527f0`
+- `f6f90a096714e29b2ab91ed8ba5aa59c2a2f364c`
+- `74adc6a05b7bcc8c5312c135b56bace93e15c7ad`
+- `c3314c049d1124342b662661ee9fa66500162710`
+- `8b2a1a58b492500f82a17fe0bcb008147207f3b0`
+- `7e21aa5157dd2d23f3f363797b5dc190d4753e20`
+- `bd40e520b87f58063c25d2fdfe4176aa821639f2`
+- `c7a6a94bb8f23d571824ab838192a1762c408876`
+- `832228a741dd5cb79d79e3c756b82f7e5a72fe06`
+- `afe75a695ebccb0b46447165e2d6f92f3a3e86e1`
+- `5e2873cc3c0eec6ffebce48f9e5ebb1dbb9fc6eb`
+- `d9bf84c27a3919c68a0b85ed678e2c6cc7d512c9`
 
-When a current cache-hit INCLUDE row needs only `resolve_grounded_negative_analysis`, the accepted worker result shape contains only identity/binding fields plus negative-analysis fields.
+## Contract / compatibility
 
-The ingest path validates the current accepted cache entry and copies it as the immutable base. It permits changes only to:
+Canonical new semantic state:
+
+- `negative_analysis_status = complete_with_confirmed_negative`
+- `negative_analysis_status = incomplete_no_confirmed_negative`
+
+There is no normal `complete_no_negative` state.
+
+Each V4 `negative_findings[]` row is validated as exactly:
+
+- canonical `category`
+- stable canonical `code`
+- non-empty grounded `evidence`
+- non-empty grounded `risk_text_ru`
+
+Supported initial codes preserve the existing dedicated downstream risk identities and add the no-drop escape hatch:
+
+- `unchanged_repetition`
+- `low_active_gameplay`
+- `directionlessness`
+- `management_routine`
+- `difficulty_punishment`
+- `stealth_restart_pressure`
+- `other_grounded_taste_risk`
+
+`other_grounded_taste_risk` survives as a visible grounded risk with ranking score `0`.
+
+Validation is fail-closed:
+
+- complete + zero findings -> reject;
+- incomplete + findings/evidence -> reject;
+- category/code mismatch -> reject;
+- empty evidence -> reject;
+- empty `risk_text_ru` -> reject;
+- V4 compatibility `negative_evidence` must equal the ordered projection of `negative_findings[].evidence`.
+
+Legacy V2/V3 entries remain valid compatibility inputs for fit reuse. Missing V4 negative state always derives:
+
+- `confirmed_negative_count = 0`
+- `negative_analysis_ready = false`
+
+Legacy free-text `negative_evidence` never promotes such an entry to ready.
+
+Fit cache identity/profile/model/semantic/fingerprint/context checks remain in force. Grounded-negative migration is deliberately orthogonal to accepted fit semantics, so valid existing verdicts/factors are not invalidated solely to acquire V4 negative fields.
+
+The compact per-entry fit index remains schema v2 for existing projection compatibility; V4 negative readiness is projected as a sidecar keyed to the same entries.
+
+## Queue / ingest
+
+The only semantic queue remains:
+
+`data/production/pre_ai/chatgpt_taste_queue.jsonl`
+
+Exact work code:
+
+`resolve_grounded_negative_analysis`
+
+Routing implemented:
+
+- new/stale full Taste evaluation requests `evaluate_taste_fit`, `evaluate_normalized_taste_factors`, and `resolve_grounded_negative_analysis` together;
+- valid cache-hit `INCLUDE` with unresolved negative state re-enters the same queue for `resolve_grounded_negative_analysis`;
+- valid cache-hit `INCLUDE` already negative-ready does not request this work;
+- cache-hit `EXCLUDE` does not require negative-readiness backfill for paid-card readiness;
+- an `incomplete_no_confirmed_negative` result remains unresolved and is requeued by the next normal GitHub preparation cycle;
+- already-existing `resolve_base_support_condition` work is preserved when applicable.
+
+Negative-only ingest is explicitly immutable for accepted Taste semantics. The accepted worker result shape contains identity/context fields plus only negative-analysis fields. The merge copies the current accepted entry as its base and may update only:
 
 - `negative_analysis_status`
 - `negative_findings`
 - compatibility `negative_evidence`
 
-It preserves the existing values for verdict, fit level, reason code, positive evidence, normalized Taste factors, profile/model/semantics bindings, fingerprint, candidate-context binding, and original evaluation timestamp.
+The existing verdict, fit level, reason code, positive evidence, normalized factors, profile/model/semantics bindings, fingerprint, candidate-context binding, and original evaluation timestamp are preserved. A negative-only result attempting to submit an unrelated field such as `verdict` is rejected.
 
-An attempted negative-only result containing a field such as `verdict` is rejected rather than silently rewriting the accepted Taste evaluation.
+Full evaluation rows retain normal full semantic ingest behavior.
 
-## Current production work state
+## Structured mapper
 
-The existing GitHub-owned preparation path has already rebuilt current artifacts with the new contract.
+Final grounded Taste risk admission is now structural rather than phrase-based:
 
-### Effective Taste cache/index
+`validated negative finding -> category/code catalog -> persisted risk_text_ru -> grounded provenance`
 
-- compact Taste entries: **819**
-- grounded-negative ready: **0**
-- grounded-negative unresolved: **819**
-- current negative status class: **819 `legacy_missing`**
+The structured mapper does not inspect English evidence wording to decide whether the finding survives. Raw evidence is retained in final Taste-risk provenance together with category/code.
 
-This is intentional migration behavior: the old entries remain reusable for their accepted fit semantics, but legacy free text is not treated as V4 completion proof.
+Grounded semantic source remains:
 
-### Current consumer family partition
+`taste_negative_evidence`
 
-- source families: **621**
-- current Taste queue: **599**
-- ready without AI: **0**
-- deterministic exclusions without AI: **22**
-- complete family partition: **true**
+`other_grounded_taste_risk` guarantees that a real validated negative outside the initial dedicated taxonomy is still visible while carrying neutral ranking score `0`.
 
-The 22 deterministic exclusions are outside paid-card negative readiness:
+Existing `derived` heuristic risks remain separate and cannot satisfy the mandatory grounded-negative readiness invariant. `confirmed_practical` risks may still appear as additional visible risks, but cannot substitute for the required Taste-owned negative witness.
 
-- deal excludes even if strong: **7**
-- valid cached Taste below moderate: **15**
+The legacy text keyword mapper can still execute earlier inside legacy builder code, but it is no longer acceptance-critical: the existing final visual path re-canonicalizes accepted risk/fit state from structured findings before final validation and commit. Therefore unfamiliar valid grounded evidence cannot disappear from an accepted card merely because it misses the old phrase list.
 
-### Existing Taste queue work split
+## Readiness gate
 
-Of the **599** rows in the existing `chatgpt_taste_queue.jsonl`:
+A normal paid card is explanation-ready only when the end-to-end witness exists:
 
-- **576** are targeted grounded-negative backfill for otherwise-valid cache-hit INCLUDE evaluations;
-- **23** are full/new/stale Taste evaluations and request normal Taste work plus `resolve_grounded_negative_analysis`;
-- **0** current otherwise-eligible rows are negative-ready without semantic work.
+1. current bound Taste projection is a valid cache hit;
+2. current accepted Taste verdict is `INCLUDE`;
+3. `negative_analysis_status == complete_with_confirmed_negative`;
+4. at least one valid structured finding exists;
+5. structured mapping emits at least one `taste_negative_evidence` risk;
+6. final visible risk payload contains at least one such Taste risk with code/category/raw-evidence provenance;
+7. `risk_status.grounded_taste_negative_witness == true`.
 
-Targeted rows carry the already accepted `resolved_taste_fit` and request `resolve_grounded_negative_analysis` (plus an already-existing `resolve_base_support_condition` where applicable). They are not transformed into full Taste reevaluations.
+If the negative analysis is unresolved, finalization raises before normal visual acceptance/commit. It does not synthesize a generic minus, does not expose heuristic suspicion as fact, and does not output a claim equivalent to “no risks found”.
 
-If the existing Taste worker cannot confirm a grounded minus for one of these items, it must return `incomplete_no_confirmed_negative`; the item remains/re-enters the same GitHub-owned unresolved queue state. It must not manufacture a weak/generic downside merely to make the card pass.
+The finalizer also recomputes the existing risk-dependent fit cap/commercial branch from the structured risk set before the normal priority finalization. No paid-ranking weights, discount rules, wishlist rules, or normalized Taste scoring semantics were redesigned.
 
-## Deterministic regression result
+## Validation
 
-The canonical daily route executed the implementation regressions successfully, including:
+Focused deterministic coverage is executed through existing test/workflow hooks. The canonical run produced:
 
 - `TASTE_V4_CONTRACT_VALIDATION=PASS`
 - `CARD_EXPLANATION_POLICY_TESTS=PASS`
 - `GROUNDED_NEGATIVE_CONTRACT_TEST=PASS`
 
-The regressions prove at least:
+Covered regressions include:
 
 - complete-with-confirmed-negative cannot have zero findings;
-- incomplete-no-confirmed-negative cannot carry fake findings/evidence;
-- invalid category/code pairs are rejected;
-- empty evidence and empty Russian risk text are rejected;
-- legacy free text remains negative-unresolved;
-- a valid grounded finding whose English evidence does not match legacy mapper keywords survives;
-- `other_grounded_taste_risk` survives with neutral ranking score 0;
-- heuristic-only and confirmed-practical-only risks cannot satisfy the mandatory Taste witness;
-- negative-only ingest cannot rewrite accepted fit semantics;
-- normalized Taste-factor scoring behavior remains unchanged.
+- incomplete state cannot contain fabricated findings/evidence;
+- invalid category/code pair is rejected;
+- empty evidence/risk text is rejected;
+- legacy fit entry remains fit-reusable but negative-unresolved;
+- unfamiliar valid evidence survives structured mapping;
+- `other_grounded_taste_risk` survives with score `0`;
+- heuristic-only risk cannot satisfy readiness;
+- confirmed-practical-only risk cannot satisfy mandatory Taste readiness;
+- negative-only ingest cannot rewrite verdict/fit/reason/factors/bindings;
+- truthful incomplete result has no fabricated fallback;
+- normalized Taste factor scoring remains unchanged.
 
-## Canonical production acceptance
+Smallest existing canonical production route exercised:
 
-Smallest existing production route used: `.github/workflows/build-daily-visual-payload.yml`.
+`.github/workflows/build-daily-visual-payload.yml`
 
 Acceptance run:
 
-- GitHub Actions run id: **33600489704**
-- implementation head tested: `d9bf84c27a3919c68a0b85ed678e2c6cc7d512c9`
-- regression/contract stages: **PASS**
-- final visual acceptance: **FAIL-CLOSED / BLOCKED AS DESIGNED**
+- GitHub Actions run id: `33600489704`
+- implementation head exercised: `d9bf84c27a3919c68a0b85ed678e2c6cc7d512c9`
+- contract/regression stages: PASS
+- final visual acceptance: fail-closed on unresolved grounded-negative readiness, as designed.
 
-The builder reached the new canonical grounded-negative finalizer and stopped with `RuntimeError: grounded negative readiness incomplete for normal paid visual` on current `cache_hit + INCLUDE` entries whose V4 state is still `negative_analysis_status=null`, `confirmed_negative_count=0`, `negative_analysis_ready=false`.
+The finalizer stopped on current `cache_hit + INCLUDE` cards with `negative_analysis_status=null`, `confirmed_negative_count=0`, `negative_analysis_ready=false`. No partially analyzed replacement visual was committed as normal-ready.
 
-This is the required stop behavior. No partially analyzed replacement visual payload was committed as a normal ready result.
+Current GitHub-produced readiness/work counts:
 
-## Blocker / exact unblock condition
+- effective compact Taste entries: **819**
+- negative-ready entries: **0**
+- negative-unresolved entries: **819**
+- legacy-missing negative status: **819**
+- source families: **621**
+- existing Taste queue rows: **599**
+- targeted negative-only backfill rows: **576**
+- full/new/stale Taste evaluation rows: **23**
+- ready without AI: **0**
+- deterministic exclusions without AI: **22**
+- family partition complete: **true**
 
-**Blocker owner:** the already-existing scheduled Taste semantic runtime, not a new implementation component.
+The 22 deterministic exclusions are 7 deal exclusions even if strong plus 15 valid cached Taste-below-moderate exclusions; they do not require paid-card negative-readiness backfill.
 
-**Current work source:** `data/production/pre_ai/chatgpt_taste_queue.jsonl`.
+## Production state
 
-**Required work code:** `resolve_grounded_negative_analysis`.
+The implementation is deployed and behaving as designed, but production is waiting on the already-existing scheduled Taste semantic runtime.
 
-**Current queued work:** 599 rows total = 576 targeted negative backfills + 23 full Taste evaluations.
+Current blocker source:
 
-The implementation task must therefore stop here rather than manually synthesizing or processing semantic backfill. Production acceptance becomes unblocked only as the existing scheduled Taste worker returns grounded V4 results through the normal Taste inbox/ingest path. Confirmed findings will make eligible rows ready; truthful `incomplete_no_confirmed_negative` results remain unresolved and continue to block normal-card completeness for those rows.
+`data/production/pre_ai/chatgpt_taste_queue.jsonl`
 
-No new queue/scheduler is necessary or permitted.
+Current blocker work code:
 
-## Implementation commits
+`resolve_grounded_negative_analysis`
 
-- `a06c34819c5f66e2cb1850340efda790dc3d1c36` — grounded-negative shared contract helpers
-- `67ee0f8c2d59226ad74c4f2462e60b40c5d02efc` — Taste result V4 contract
-- `bc4940b479b5ded1aa9602d47ddd3bc6345c9b7f` — cache V4 compatibility contract
-- `372b6019e09b1257b89dcec3a46e86aef73527f0` — cache validation
-- `f6f90a096714e29b2ab91ed8ba5aa59c2a2f364c` — negative readiness in compact Taste index
-- `74adc6a05b7bcc8c5312c135b56bace93e15c7ad` — existing Taste queue routing
-- `c3314c049d1124342b662661ee9fa66500162710` — immutable negative-only ingest
-- `8b2a1a58b492500f82a17fe0bcb008147207f3b0` — structured final visual mapper/readiness gate
-- `7e21aa5157dd2d23f3f363797b5dc190d4753e20` — existing daily finalization hook
-- `bd40e520b87f58063c25d2fdfe4176aa821639f2` — paid-card explanation validator
-- `c7a6a94bb8f23d571824ab838192a1762c408876` — V4 contract regressions
-- `832228a741dd5cb79d79e3c756b82f7e5a72fe06` — mixed Taste inbox transaction proof
-- `afe75a695ebccb0b46447165e2d6f92f3a3e86e1` — existing index workflow compatibility
-- `5e2873cc3c0eec6ffebce48f9e5ebb1dbb9fc6eb` — grounded-negative mapper/readiness tests
-- `d9bf84c27a3919c68a0b85ed678e2c6cc7d512c9` — run new regressions through existing explanation test path
+Exact pending semantic work: **599 rows = 576 targeted grounded-negative backfills + 23 full Taste evaluations**.
+
+The implementation worker intentionally did not process these games manually. The existing scheduled Taste worker must return V4 semantic results through the normal Taste inbox/ingest path. A confirmed grounded finding can make an eligible row ready. A truthful `incomplete_no_confirmed_negative` result remains unresolved and continues to block normal-card completeness for that row.
+
+No second queue, scheduler, or runtime was introduced.
+
+Efficiency / reusable lesson: `separate semantic readiness from fit-cache validity so contract migrations can reuse accepted fit results and request only the missing semantic dimension through the existing owned queue`
+
+## Status
+
+blocked
+
+## Recommended next step
+
+Allow the already-existing scheduled Taste worker to consume the current 599-row queue with `resolve_grounded_negative_analysis`; after its normal inbox ingestion, rerun the existing canonical daily visual route and verify the resulting bounded top-N sample.
