@@ -6,7 +6,7 @@ This file is maintained by the dedicated Taste Reviewer from explicit user feedb
 
 ## Profile confidence
 
-- **Low** as of baseline-01. There are not yet enough confirmed game-level positive and negative controls to claim that the current Taste model reliably represents Dmitry's preferences.
+- **Low, improving** as of baseline-01 calibration. There are still too few confirmed game-level controls to claim that the current Taste model reliably represents Dmitry's preferences, but direct user calibration has started producing usable controls.
 - Current ranking position, price/deal quality and model-produced fit are not treated as evidence that Dmitry personally likes a game.
 
 ## Strong positive signals
@@ -15,14 +15,14 @@ This file is maintained by the dedicated Taste Reviewer from explicit user feedb
 
 ## Strong negative signals
 
-- No game-level strong negative has yet been confirmed strongly enough for durable use.
+- `HighFleet` — **strong negative pre-play / start-priority signal**. After watching a trailer specifically for calibration, Dmitry said it did not appeal to him at all and that he would likely postpone it until there was little else left to play. This is valid evidence that `HighFleet` should currently rank low for personal start/play priority. It is not evidence that he has played the game or that every individual mechanic/genre element in it is disliked.
 
 ## Explicit-interest signals
 
 These are useful calibration evidence, but are **not equivalent to confirmed liking**:
 
 - `American Arcadia` — current canonical production ranking marks the game as wishlist=true. Dmitry has watched a review and knows more about it than the comparison candidate `Afterimage`; he explicitly says the game's "Truman Show"-like concept appeals to him. This is a positive concept/interest signal, but not evidence that he prefers it to `Afterimage` on equal familiarity.
-- `High On Life` — current canonical production ranking marks the game as wishlist=true.
+- `High On Life` — current canonical production ranking marks the game as wishlist=true. Dmitry has watched a review, so comparisons against unfamiliar games must control for familiarity.
 - `Trine 4: The Nightmare Prince` — explicit current user attention/expectation case while discounted; its current absence is caused by unresolved Taste semantic data (`taste_cache_key_missing`), not by a canonical negative Taste verdict. Treat it as an unresolved calibration case, not a dislike.
 
 ## Mechanics / structure preferences
@@ -30,30 +30,34 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 - Tentative positive hypothesis: a distinctive, easily understandable high-concept premise can increase interest. Current explicit example: `American Arcadia`, whose "Truman Show"-like concept Dmitry finds appealing. Confidence remains low until repeated across games.
 - Not otherwise established from sufficiently direct game-level evidence.
 - Current risk labels such as `directionlessness`, `unchanged_repetition`, `management_routine`, `puzzle_pacing` and similar model outputs remain hypotheses until checked against concrete user comparisons. Do not promote them to durable preferences solely because the current model applies penalties for them.
+- Do **not** infer a dislike of strategy, management, simulation, fleet mechanics, retro presentation, or any other `HighFleet` component from the current trailer reaction alone. More targeted comparisons are required to identify the cause.
 
 ## Visual preferences
 
 - `American Arcadia` and `Afterimage` were both described as visually attractive. This is too weak and too small a sample to infer a durable art-style preference.
+- `HighFleet` produced a strong negative trailer-level reaction, but the user has not yet identified whether the visual presentation itself was the cause. Do not convert this into an art-style rule yet.
 
 ## Genre preferences and exceptions
 
-- Not yet established. Do not infer genre preferences from current INCLUDE/EXCLUDE output or from isolated wishlist entries.
+- Not yet established. Do not infer genre preferences from current INCLUDE/EXCLUDE output, isolated wishlist entries, or the single `HighFleet` negative control.
 
 ## Known comparison anchors
 
 - `American Arcadia` vs `Afterimage` — **not a valid preference winner yet**. Dmitry chose `American Arcadia`, but explicitly identified familiarity asymmetry: he has seen a review of `American Arcadia` and knows essentially nothing about `Afterimage`. The comparison may be reused only after giving comparable spoiler-light information about both games. What is valid from this test: both look attractive to him, and the `American Arcadia` concept appeals to him.
-- `High On Life` vs `HighFleet` — explicit wishlist interest vs stronger model-only taste fit; pending calibration.
+- `High On Life` vs `HighFleet` — produces one reliable result despite familiarity asymmetry: `HighFleet` itself is a strong negative start-priority control after Dmitry watched its trailer and found it unappealing. Do not use the pair to quantify how strongly `High On Life` is liked until that is asked directly.
 - `Trine 4: The Nightmare Prince` vs `Tails of Iron 2: Whiskers of Winter` — unresolved-but-explicitly-noticed candidate vs a current strong-fit recommendation; pending calibration.
 
 ## Calibration methodology learned from user feedback
 
 - Pairwise taste tests must control for **familiarity / information asymmetry**. A game Dmitry already knows from a review should not be treated as a clean preference winner over an unfamiliar game.
-- When familiarity differs, first provide comparable spoiler-light descriptions of both candidates, then ask which is more appealing and why.
+- When familiarity differs, first provide comparable spoiler-light descriptions or let Dmitry inspect a trailer, then ask which is more appealing and why.
+- A strong negative reaction to an unfamiliar game's trailer can still be a valid **pre-play interest/start-priority** signal even when the opposite member of the pair is better known.
 - Unknown/unfamiliar must remain distinct from dislike or weak fit.
 
 ## Uncertainty / questions
 
 - Which current high-scoring games are genuine positives rather than plausible model guesses?
+- What specifically caused the strong negative reaction to `HighFleet`: presentation, combat, strategic layer, management burden, pacing, interface/readability, or something else?
 - Which current risk concepts are real user turn-offs, and which are over-generalized proxies?
 - How much should explicit wishlist/current interest outweigh a model-only predicted fit when the two disagree?
 - Does attraction to distinctive high-concept premises repeat across other games strongly enough to become a durable preference?
