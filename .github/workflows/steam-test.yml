@@ -20,6 +20,8 @@ on:
       - "scripts/giveaway_gog.py"
       - "scripts/giveaway_production.py"
       - "scripts/test_giveaway_production.py"
+      - "scripts/giveaway_igdb_identity_probe.py"
+      - "scripts/test_giveaway_igdb_identity_probe.py"
       - "config/cross_platform_giveaway_contract.json"
       - ".github/workflows/steam-test.yml"
 
@@ -59,6 +61,9 @@ jobs:
 
       - name: Regression test cross-platform giveaways
         run: python scripts/test_giveaway_production.py
+
+      - name: Regression test giveaway IGDB identity probe
+        run: python scripts/test_giveaway_igdb_identity_probe.py
 
       - name: Collect full Steam KZ catalog and build production shortlist
         run: python scripts/steam_production_cached.py
