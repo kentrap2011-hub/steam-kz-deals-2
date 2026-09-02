@@ -29,6 +29,7 @@
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
 | `ЧАТ 1` | Запуск проверки Trine 4 | Determine whether the existing automatic Taste processing is currently running, whether it can be safely started now, and how completion for `App_690640` is detected | `WORKER_TASK_TASTE_RUNTIME_TRIGGER_STATUS_01.md` | `reviews/worker_reports/taste-runtime-trigger-status-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 2` | IGDB для карточек раздач | Own all repo-side preparation for exact Epic/GOG -> IGDB -> Steam identity reuse and stop only on the unavoidable user secret-provisioning step | `WORKER_TASK_GIVEAWAY_IGDB_IMPLEMENT_PREP_01.md` | `reviews/worker_reports/giveaway-igdb-implement-prep-01.md` | `ready_to_continue_in_existing_chat` |
 
 ## Trine 4 diagnosis result
 
@@ -38,21 +39,25 @@
 - First disappearance is missing completed Taste analysis before visual preparation; price/ranking/region are not the cause.
 - User correctly asked not to wait blindly. Next bounded step is to establish whether normal processing is running, manually startable, and how its completion is observed.
 
-## Giveaway analysis identity recon — complete, blocked on prerequisite
+## Giveaway analysis identity recon — complete
 
 - Report saved: `reviews/worker_reports/giveaway-analysis-identity-recon-01.md`, blob `faa254b9abd2bdd18e615f4f7ad5d0f0d6d6165d`.
-- UI/navigation is already accepted; no further UI redesign is needed.
+- UI/navigation is accepted and must not be redesigned.
 - Current giveaway data has exact Epic provider product/offer IDs but no authoritative cross-store semantic-analysis identity.
-- Existing `canonical_game_key` is title/publisher-derived and must NOT authorize Steam/Taste reuse.
 - Smallest safe route is exact provider identity -> IGDB External Game -> IGDB game id -> exact Steam appid -> existing canonical description/Taste path.
-- Current bounded sample: 0/2 active Epic giveaways have a safe existing binding; both remain fail-closed.
-- Blocker is the already-known IGDB provisioning prerequisite, not a new architecture gap.
+- Current sample: 0/2 active Epic giveaways have a safe persisted binding.
+
+## IGDB continuation
+
+- Chat 2 should perform all safe repository-side preparation now via `WORKER_TASK_GIVEAWAY_IGDB_IMPLEMENT_PREP_01.md`.
+- The only unavoidable user-owned step is creating/obtaining IGDB credentials and adding them to repository Actions secrets under exact names `IGDB_CLIENT_ID` and `IGDB_CLIENT_SECRET`.
+- Secret values must never be pasted into ChatGPT or committed.
+- After the user confirms secrets are added, Chat 2 should continue with live provider verification, bounded Epic/GOG identity acceptance, canonical persistence, existing analysis reuse, and build/deploy if successful.
+- The same two secrets also unblock the existing duration/IGDB track.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
-- Giveaway analysis identity: requires GitHub Actions secrets `IGDB_CLIENT_ID` and `IGDB_CLIENT_SECRET`. After provisioning, bounded IMPLEMENT should reuse the existing IGDB provider route; no title/fuzzy fallback, manual mapping, new queue, second semantic runtime, or browser fetch.
-- `duration-igdb-implement-01` is blocked on the same two IGDB secrets.
-- `grounded-negative-implement-01`: same existing GitHub-owned Taste data-plane has unresolved work; no worker-owned manual processing.
+- `grounded-negative-implement-01`: existing GitHub-owned Taste data-plane has unresolved work; no worker-owned manual processing.
 - `card-explanation-production-acceptance-01` remains blocked on the existing Russian-description runtime.
 
 ## Принятый UI раздач
@@ -61,4 +66,4 @@
 
 ## Выбор следующей работы
 
-Read `taste-runtime-trigger-status-01` before deciding whether to trigger existing processing now or wait. Giveaway analysis implementation should start only after the two existing IGDB GitHub Actions secrets are provisioned.
+Use both current worker chats. Read whichever report arrives first. Chat 2 may prepare everything it safely can before credentials, but must not invent live IGDB semantics without actual provider verification.
