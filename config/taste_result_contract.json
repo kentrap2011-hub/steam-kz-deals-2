@@ -1,8 +1,8 @@
 {
-  "contract": "TASTE-SEMANTIC-RESULT-V3",
+  "contract": "TASTE-SEMANTIC-RESULT-V4",
   "version": "1.0",
   "status": "canonical",
-  "purpose": "Define the price-blind semantic output produced by the existing taste worker and persisted by GitHub. Normalized factors describe the candidate independently of configurable final-ranking weights.",
+  "purpose": "Define the price-blind semantic output produced by the existing taste worker and persisted by GitHub. Normalized factors describe the candidate independently of configurable final-ranking weights, while grounded negative analysis has an explicit readiness state and structured findings.",
   "ownership": {
     "semantic_evaluation": "existing_scheduled_chatgpt_taste_worker",
     "queue_scope_and_bindings": "github",
@@ -18,8 +18,49 @@
     "fit_level",
     "reason_code",
     "positive_evidence",
+    "negative_analysis_status",
+    "negative_findings",
     "negative_evidence"
   ],
+  "negative_only_result_fields": [
+    "key",
+    "appid",
+    "taste_fingerprint",
+    "candidate_context_sha256",
+    "negative_analysis_status",
+    "negative_findings",
+    "negative_evidence"
+  ],
+  "negative_analysis_work_code": "resolve_grounded_negative_analysis",
+  "negative_analysis_status_values": [
+    "complete_with_confirmed_negative",
+    "incomplete_no_confirmed_negative"
+  ],
+  "negative_finding_fields": [
+    "category",
+    "code",
+    "evidence",
+    "risk_text_ru"
+  ],
+  "negative_finding_catalog": {
+    "unchanged_repetition": {"category": "repetition", "ranking_score": 4},
+    "low_active_gameplay": {"category": "activity_balance", "ranking_score": 3},
+    "directionlessness": {"category": "direction", "ranking_score": 4},
+    "management_routine": {"category": "management_routine", "ranking_score": 3},
+    "difficulty_punishment": {"category": "difficulty_friction", "ranking_score": 2},
+    "stealth_restart_pressure": {"category": "stealth_friction", "ranking_score": 2},
+    "other_grounded_taste_risk": {"category": "other_grounded", "ranking_score": 0}
+  },
+  "negative_analysis_rules": {
+    "complete_with_confirmed_negative_requires_at_least_one_finding": true,
+    "incomplete_no_confirmed_negative_requires_empty_findings": true,
+    "incomplete_no_confirmed_negative_requires_empty_negative_evidence": true,
+    "negative_evidence_is_ordered_projection_of_negative_findings_evidence": true,
+    "no_complete_no_negative_state": true,
+    "unknown_candidate_property_must_not_be_invented": true,
+    "legacy_free_text_never_implies_negative_readiness": true,
+    "other_grounded_taste_risk_must_survive_visibility_with_neutral_ranking_score": true
+  },
   "normalized_factor_field": "taste_factors",
   "normalized_factor_work_code": "evaluate_normalized_taste_factors",
   "normalized_factor_value_range": [0, 100],
@@ -53,7 +94,7 @@
     "factor_values_are_weight_independent": true,
     "do_not_apply_final_ranking_max_points": true,
     "negative_risks_are_not_subtracted_from_factor_values": true,
-    "negative_conflicts_remain_in_negative_evidence_and_are_scored_separately_downstream": true,
+    "negative_conflicts_are_scored_separately_downstream_from_structured_findings": true,
     "generic_game_quality_is_not_a_positive_factor": true,
     "unknown_candidate_property_must_not_be_invented": true,
     "all_five_factors_are_required_when_work_code_is_present": true
@@ -65,6 +106,7 @@
       "normalized_taste_factors",
       "legacy_coarse_fit"
     ],
-    "changing_final_weights_must_not_require_semantic_reevaluation": true
+    "changing_final_weights_must_not_require_semantic_reevaluation": true,
+    "normal_paid_card_requires_grounded_taste_negative_witness": true
   }
 }
