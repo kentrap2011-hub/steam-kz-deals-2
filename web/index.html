@@ -9,7 +9,7 @@
   <link rel="icon" href="icon.svg?v=shortcut-icon-1" type="image/svg+xml" sizes="any">
   <link rel="manifest" href="manifest.webmanifest?v=shortcut-icon-1">
   <link rel="stylesheet" href="styles.css?v=score-collapse-1">
-  <link rel="stylesheet" href="giveaway-ui.css?v=giveaway-ui-1">
+  <link rel="stylesheet" href="giveaway-ui.css?v=giveaway-ui-ux-fix-01">
   <link rel="stylesheet" href="purchase-options.css?v=compact-purchase-options-1">
   <link rel="stylesheet" href="score-details.css?v=detailed-score-ui-fix-1">
 </head>
@@ -37,7 +37,8 @@
     <main>
       <section id="feedView">
         <section id="giveawayBlock" class="giveaway-block" aria-label="Бесплатные раздачи">
-          <div class="giveaway-heading"><div><h2>Бесплатные раздачи</h2><p>Проверяем текущие предложения…</p></div></div>
+          <button class="giveaway-toggle" type="button" aria-expanded="false" aria-controls="giveawayContent"><span class="giveaway-toggle-title"><span aria-hidden="true">🎁</span> Бесплатные раздачи</span><span class="giveaway-toggle-state">проверяем…</span><span class="giveaway-toggle-chevron" aria-hidden="true">⌄</span></button>
+          <div id="giveawayContent" class="giveaway-content" hidden></div>
         </section>
 
         <div class="position-row">
@@ -140,8 +141,8 @@
   </dialog>
 
   <div id="toast" class="toast" aria-live="polite"></div>
-  <script src="giveaway-ui.js?v=giveaway-ui-1"></script>
-  <script src="app.js?v=giveaway-ui-1"></script>
+  <script src="giveaway-ui.js?v=giveaway-ui-ux-fix-01"></script>
+  <script src="app.js?v=giveaway-ui-ux-fix-01"></script>
   <script src="image-swipe-sync.js?v=image-swipe-sync-1"></script>
   <script src="package-deal-ui.js?v=compact-purchase-options-1"></script>
   <script src="score-details-ui.js?v=detailed-score-ui-fix-1"></script>
