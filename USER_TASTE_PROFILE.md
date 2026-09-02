@@ -13,7 +13,7 @@ This file is maintained by the dedicated Taste Reviewer from explicit user feedb
 
 - `Trine 4: The Nightmare Prince` — **confirmed played positive in a family-play context**. Dmitry bought it specifically to play with his family, played it with them the next day, and explicitly said he liked it. This is genuine positive evidence, but its context matters: it was selected for family play, so do not automatically treat it as proof that the same game would be equally strong as a solo/main-game choice.
 - `Batman: Arkham` series — **confirmed strong replay-positive anchor**. Dmitry is willing to replay an Arkham game even ahead of starting a new game such as `High On Life`. He explicitly names atmosphere, story, combat and achievements as the reasons that make him want to return. Treat the series as strong positive evidence for those factors working together, while avoiding unsupported assumptions about a specific Arkham entry.
-- `Red Dead Redemption 2` — **strong confirmed open-world positive**. Dmitry calls it the best open world. This is important because open-world structure otherwise creates an initial negative expectation for him; `RDR2` proves that a sufficiently strong overall game can make open world a major positive rather than a liability.
+- `Red Dead Redemption 2` — **strong confirmed open-world positive**. Dmitry calls it the best open world. What specifically worked: a strong atmosphere; many activities; hunting; finding unusual people, criminals and mysteries; bounty hunting from notice boards; Arthur's observations/notes that deepened immersion; and a satisfying loop where exploration/hunting produced money that he then enjoyed spending. This is important because open-world structure otherwise creates an initial negative expectation for him; `RDR2` proves that a sufficiently rich and rewarding world can make open world a major positive rather than a liability.
 
 ## Strong negative signals
 
@@ -34,6 +34,7 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 - **Durable positive signal: achievements can materially increase both start motivation and replay value.** This now repeats across independent examples: the difficult no-aging achievement is one reason `Sifu` interests Dmitry, and achievements are one of the explicit reasons he would replay `Batman: Arkham`. The strongest confirmed form is an achievement that creates a meaningful challenge or extra reason to engage. Do not yet assume Dmitry wants exhaustive collectible/grind completion in every game.
 - **Positive signal: engaging combat is an important attraction.** `Batman: Arkham` combat is one of the reasons Dmitry wants to replay the series, while curiosity about `Sifu`'s combat is a major reason it sits high in his current queue. This supports combat quality/feel as a meaningful ranking factor, but not a blanket preference for action games.
 - **Open world is a default skepticism signal, not a hard dislike.** When Dmitry sees that a game has an open world, he says he is more likely to expect a negative than a positive. However, `Red Dead Redemption 2` is his strongest counterexample and is explicitly described as the best open world. Therefore open-world structure should slightly raise scrutiny rather than trigger a blanket penalty or exclusion.
+- **What makes open-world freedom work for Dmitry is becoming clearer.** `RDR2` works because the world supports varied activities, atmospheric immersion, organic discovery and rewarding side loops rather than merely offering space. Dmitry liked hunting, bounty hunting, spending money earned from activities, discovering unusual NPCs and criminals, and finding side details that deepened the world. This suggests that **world density + authored discoveries + meaningful activities + usable rewards** can overcome his default skepticism toward open worlds.
 - **Directionlessness cannot be scored in isolation.** Dmitry explicitly rejected an abstract "guided game vs open world" comparison because the appeal depends on the rest of the design. The project's `directionlessness` concept must therefore be tested contextually: freedom can work extremely well when the world, story, atmosphere and activities justify it, as in `RDR2`.
 - Tentative positive hypothesis: a distinctive, easily understandable high-concept premise can increase interest. Current explicit examples: `American Arcadia`, whose "Truman Show"-like concept appeals to Dmitry, and `Sifu`, whose aging mechanic he finds intriguing. Confidence is increasing but still insufficient for a broad rule.
 - **Tentative positive signal: focused/minimalist presentation can raise interest when the core activity itself is appealing.** `Sifu` is the current explicit example: Dmitry specifically cites minimalism together with wanting to try the combat. Do not interpret this as a blanket preference for short or mechanically simple games.
@@ -47,10 +48,10 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 
 ## Story / atmosphere preferences
 
-- **Atmosphere is a confirmed important positive factor.** Dmitry explicitly names atmosphere as one of the main reasons he wants to replay `Batman: Arkham`; `Sifu` also gains substantial pre-play appeal because it evokes the feeling/fantasy of `The Raid`, a film he loves. Atmosphere should therefore be treated as a genuine personal-fit signal rather than decorative metadata.
+- **Atmosphere is a confirmed important positive factor.** Dmitry explicitly names atmosphere as one of the main reasons he wants to replay `Batman: Arkham`; `Sifu` also gains substantial pre-play appeal because it evokes the feeling/fantasy of `The Raid`, a film he loves; and `RDR2`'s atmosphere is one of the main reasons its open world works for him. Atmosphere should therefore be treated as a genuine personal-fit signal rather than decorative metadata.
 - **Story can be a major positive when the title otherwise fits.** Dmitry explicitly names story among the reasons he wants to replay `Batman: Arkham`. Evidence is currently strong for Arkham but not broad enough to claim he always prioritizes narrative-heavy games.
+- **Small authored discoveries can deepen immersion strongly.** In `RDR2`, Dmitry specifically liked finding unusual NPCs/criminals and details that generated Arthur's observations/notes and made him feel more immersed in the world. This is stronger evidence for curiosity-driven worldbuilding than for passive lore dumps.
 - `American Arcadia` gains interest from a recognizable high-concept setup reminiscent of `The Truman Show`; this is concept attraction rather than confirmed story-quality preference.
-- `Red Dead Redemption 2` should be used as an exception anchor whenever open-world freedom would otherwise be treated as a negative. The exact factors that make its world work so well for Dmitry still need decomposition.
 
 ## Visual preferences
 
@@ -71,7 +72,7 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 - Current relative queue anchor: `Sifu` > possible `Batman: Arkham` replay > `High On Life` for near-term start priority. This is a priority relation only; it does not mean `High On Life` is disliked or secondary/lightweight.
 - `Sifu` priority is supported by multiple explicit attractions rather than familiarity alone: `The Raid` association, minimalism, curiosity about combat, the aging concept, and a difficult achievement that functions as a personal skill challenge.
 - `Batman: Arkham` is a useful positive decomposition anchor: atmosphere + story + combat + achievements are all independently named reasons for replay value.
-- `Red Dead Redemption 2` is the primary open-world exception anchor: open world normally creates skepticism, but this game is explicitly judged the best open world.
+- `Red Dead Redemption 2` is the primary open-world exception anchor: open world normally creates skepticism, but this game is explicitly judged the best open world because its atmosphere, activities, discoveries and reward loops make the world feel worth inhabiting.
 
 ## Calibration methodology learned from user feedback
 
@@ -90,7 +91,8 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 ## Uncertainty / questions
 
 - Which current high-scoring games are genuine positives rather than plausible model guesses?
-- What specifically makes `Red Dead Redemption 2`'s open world work so well for Dmitry despite his default skepticism toward open worlds: atmosphere/immersion, story integration, organic encounters, world density, exploration rewards, pacing, role-play fantasy, or another combination?
+- In open worlds, how important is **organic discovery itself** versus the content/reward after discovery? `RDR2` strongly supports both, but the relative importance is not yet clear.
+- Does putting side content on the map in advance reduce its appeal for Dmitry compared with finding it naturally, or is map-marking mostly neutral when the underlying content is good?
 - Does the `HighFleet` aversion generalize to other games whose systems/UX feel technical or instructional, and what kinds of complexity avoid that reaction?
 - How broad is the visual-quality sensitivity seen with `Tails of Iron 2`, and which stylized/indie-looking games are exceptions?
 - How much should the system model **play context** separately: solo main game, family/co-op game, and lighter secondary game?
