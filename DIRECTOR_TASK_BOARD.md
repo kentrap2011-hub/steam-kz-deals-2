@@ -28,44 +28,34 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `НОВЫЙ ЧАТ 1` | Trine 4 пропала из списка | Capture the live discounted KZ state now, then find the first canonical stage where Trine 4 disappears from source/catalog to final visual output | `WORKER_TASK_TRINE4_MISSING_DIAGNOSIS_01.md` | `reviews/worker_reports/trine4-missing-diagnosis-01.md` | `ready_for_new_chat` |
-| `НОВЫЙ ЧАТ 2` | Анализ карточек раздач | Find the safe canonical cross-store identity/analysis route so giveaway detail cards can show real description, pros and grounded cons without title matching | `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md` | `reviews/worker_reports/giveaway-analysis-identity-recon-01.md` | `ready_for_new_chat` |
+| `ЧАТ 1` | Trine 4 пропала из списка | RECON complete; no worker continuation. Wait for the existing scheduled Taste runtime to resolve `App_690640`, then canonical ingest/rebuild decides actual feed admission | `WORKER_TASK_TRINE4_MISSING_DIAGNOSIS_01.md` | `reviews/worker_reports/trine4-missing-diagnosis-01.md` | `complete_waiting_existing_runtime` |
+| `ЧАТ 2` | Анализ карточек раздач | Worker says finished, but expected durable report is missing; save the completed result to the exact report path without redoing recon | `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md` | `reviews/worker_reports/giveaway-analysis-identity-recon-01.md` | `awaiting_report_closeout` |
 
-## Параллельность
+## Trine 4 diagnosis result
 
-- Эти две задачи разрешено выполнять одновременно: Trine 4 трассирует paid Steam/KZ selection path, а giveaway identity recon исследует storefront-neutral identity/analysis handoff для Epic/GOG giveaway details. Они не должны менять общие production runtime/queues в RECON-режиме.
-- Trine 4 остаётся временно более срочной из-за активной скидки, но второй worker-slot не должен простаивать, пока giveaway identity recon можно вести независимо.
+- Canonical identity: `App_690640`, family `game:690640`.
+- Live sale captured: KZ available, `1,520 KZT` from `7,600 KZT`, `-80%`, observed `2026-09-02T06:42:05.485251Z`, sale end `2026-09-15T17:00:00Z`.
+- Trine 4 is present through store snapshot, shortlist, purchase/deal context and Taste queue.
+- First disappearance is semantic Taste readiness -> visual item preparation: `taste_cache_key_missing`, no resolved current Taste fit, so `build_visual_feed_v2.py::get_fit()` returns no admissible strong/moderate fit and the game never reaches ranking.
+- Classification: `stale_or_incomplete_data`, not a Trine-specific price/ranking/region defect.
+- Existing scheduled semantic runtime owns the needed evaluation. No manual insertion and no second queue/scheduler.
 
-## Явный временный приоритет пользователя
+## Giveaway report closeout
 
-- Пользователь 2026-09-02 поднял Trine 4 выше остальных текущих задач, потому что игра сейчас находится на скидке. Диагностику нужно выполнить пока live sale state ещё наблюдаем; иначе после окончания акции отсутствие игры может стать объяснимым просто отсутствием скидки и потеряется исходный failure shape.
-- `giveaway-analysis-identity-recon-01` выполняется параллельно во втором слоте и не считается отменённым/отложенным до окончания Trine 4.
-
-## Заменённый worker-чат
-
-- Старый `ЧАТ 1` достиг лимита контекста до сохранения `reviews/worker_reports/giveaway-analysis-identity-recon-01.md`. Его больше не использовать.
-- Старый `ЧАТ 2` был удалён пользователем после завершения grounded-negative implementation; его состояние сохранено в GitHub и не требуется для новых задач.
-
-## Принятый UI раздач
-
-- `cross-platform-giveaway-separate-view-fix-01` — real-device UX accepted by user on 2026-09-02. Compact giveaway button is convenient, separate Wishlist-style view is convenient. Do not revisit this navigation/layout unless a new defect appears.
-- Remaining giveaway requirement is only content completeness inside per-game detail: real description + pros + grounded cons.
+- Expected report `reviews/worker_reports/giveaway-analysis-identity-recon-01.md` was not found after the user reported completion.
+- One bounded repository search for the exact Task ID also found no saved result.
+- Do not investigate implementation/history in Director. Return to the existing Chat 2 only to save its already-completed findings to the exact report path.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
-- `grounded-negative-implement-01`: implementation deployed; existing GitHub-owned Taste queue has 599 rows (`576` targeted negative-only backfills + `23` full Taste evaluations) with `resolve_grounded_negative_analysis`. No worker context is needed while waiting for the existing scheduled Taste runtime.
-- `card-explanation-production-acceptance-01` remains blocked on the existing Russian-description runtime. After prerequisite: visual build -> gates -> payload commit -> Pages deploy -> user verification.
+- Trine 4 / `App_690640`: wait for existing scheduled Taste runtime + normal ingest/rebuild.
+- `grounded-negative-implement-01`: same existing GitHub-owned Taste data-plane is processing unresolved semantic work; no worker-owned backfill.
+- `card-explanation-production-acceptance-01` remains blocked on the existing Russian-description runtime.
 
-## Подготовлено, но НЕ назначено следующим
+## Принятый UI раздач
 
-- Duration connectivity remains blocked on user-provisioned IGDB secrets.
-
-## Последние решения
-
-- Trine 4 diagnosis is Chat 1 because the active discount is time-sensitive diagnostic evidence.
-- Giveaway analysis identity recon moves to NEW CHAT 2 in parallel; no need to leave the second worker slot idle.
-- Both are RECON, so neither may introduce production mutations beyond their task's permitted reporting/management evidence.
+- Giveaway navigation UX accepted by user on real device. Only analysis content/identity remains open.
 
 ## Выбор следующей работы
 
-Read whichever report arrives first, but if Trine 4 finds a systemic defect, its bounded direct fix keeps priority while the sale condition remains relevant. Giveaway identity may continue independently if its next step does not overlap that fix.
+First obtain the missing Chat 2 report. After that, choose its bounded direct next step. Trine 4 needs no interactive worker until the existing semantic runtime has produced and ingested the missing Taste result.
