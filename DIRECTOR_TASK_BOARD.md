@@ -28,25 +28,13 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Раздачи как отдельный Wishlist-style экран | Replace inline/expandable giveaway UX with a compact nav control that opens a separate giveaway view; per-game analysis stays in a separate detail card | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_SEPARATE_VIEW_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-separate-view-fix-01.md` | `ready_to_continue_in_existing_chat` |
-| `ЧАТ 2` | Реализация подтверждённых минусов | Implement the approved V4 negative-analysis contract, existing Taste queue work-code, structured mapper and paid-card readiness gate | `WORKER_TASK_GROUNDED_NEGATIVE_IMPLEMENT_01.md` | `reviews/worker_reports/grounded-negative-implement-01.md` | `ready_to_continue_in_existing_chat` |
-
-## Завершённый direct predecessor Chat 2
-
-- `grounded-negative-contract-recon-01` — complete design/recon. Approved implementation direction: explicit `negative_analysis_status`, structured `negative_findings`, existing queue work code `resolve_grounded_negative_analysis`, targeted negative-only backfill, structured no-drop mapping and end-to-end grounded-negative readiness witness.
-
-## Заменённые / superseded UI-направления Chat 1
-
-- `cross-platform-giveaway-ui-ux-fix-01` — deployed but failed user preference: inline expanded list remained too bulky.
-- `cross-platform-giveaway-ui-detail-card-fix-01` — superseded before acceptance by the user's clearer preference for the existing Wishlist-style separate view. Do not continue nested expandable-list UX as the final design.
-
-## Заменённый worker-чат
-
-- Старый `ЧАТ 2` (`card-negative-analysis-gap-01`) больше не используется; его report сохранён и diagnosis complete.
+| `ЧАТ 1` | Раздачи как отдельный Wishlist-style экран | User verifies deployed separate giveaway view on phone | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_SEPARATE_VIEW_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-separate-view-fix-01.md` | `needs_user_verification` |
+| `ЧАТ 2` | Подтверждённые минусы | Implementation is complete; wait for existing scheduled Taste runtime to process the grounded-negative backfill, then rerun canonical acceptance | `WORKER_TASK_GROUNDED_NEGATIVE_IMPLEMENT_01.md` | `reviews/worker_reports/grounded-negative-implement-01.md` | `blocked_on_existing_taste_runtime` |
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
-- `card-explanation-production-acceptance-01` остаётся `blocked` на существующем Russian-description runtime. После появления prerequisite: visual build -> gates -> payload commit -> Pages deploy -> user verification.
+- `grounded-negative-implement-01`: implementation is deployed; current GitHub-owned Taste queue has 599 rows (`576` targeted negative-only backfills + `23` full Taste evaluations) with work code `resolve_grounded_negative_analysis`. No manual worker processing and no second scheduler.
+- `card-explanation-production-acceptance-01` remains blocked on the existing Russian-description runtime. After prerequisite: visual build -> gates -> payload commit -> Pages deploy -> user verification.
 
 ## Подготовлено, но НЕ назначено следующим
 
@@ -55,11 +43,10 @@
 
 ## Последние решения
 
-- `grounded-negative-contract-recon-01` produced an implementation-grade contract. Direct continuation is `grounded-negative-implement-01`; do not repeat diagnosis/design.
-- Normal ready INCLUDE must have `complete_with_confirmed_negative` plus at least one structured grounded finding that survives to a visible grounded Taste risk. `incomplete_no_confirmed_negative` is truthful but unresolved and must not masquerade as a complete card.
-- Existing GitHub-owned Taste queue/runtime is reused; no second scheduler/queue.
-- Chat 1 remains on Wishlist-style separate giveaway view until successful phone acceptance.
+- `cross-platform-giveaway-separate-view-fix-01` — implementation and Pages deploy complete; not stuck. Status is `needs_user_verification`. Main feed no longer contains giveaway rows; `🎁 Раздачи (N)` opens a separate compact view and `Подробнее` opens one-game detail.
+- `grounded-negative-implement-01` — implementation complete, canonical tests pass, and final visual acceptance now correctly fails closed on legacy/unresolved negative readiness. Existing scheduled Taste runtime must process 599 rows before production can become normal-ready.
+- Direct worker work for Chat 2 is currently finished; the external runtime wait should not consume a worker slot.
 
 ## Выбор следующей работы
 
-After either worker report, read it first. Direct continuations have priority over unrelated backlog work.
+Do not call either track complete until its acceptance condition is met. Chat 1 requires phone verification. Chat 2 resumes only after the existing Taste runtime produces/ingests grounded-negative results.
