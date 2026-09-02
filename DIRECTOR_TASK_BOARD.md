@@ -31,7 +31,7 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Точный запуск проверки Trine 4 | Exact runtime/cadence/manual-trigger recon reportedly finished by worker; user has requested report closeout | `WORKER_TASK_TASTE_RUNTIME_EXACT_TRIGGER_RECON_01.md` | `reviews/worker_reports/taste-runtime-exact-trigger-recon-01.md` | `awaiting_report_closeout` |
+| `ЧАТ 1` | Точный запуск проверки Trine 4 | Exact runtime/cadence/manual-trigger recon completed and saved | `WORKER_TASK_TASTE_RUNTIME_EXACT_TRIGGER_RECON_01.md` | `reviews/worker_reports/taste-runtime-exact-trigger-recon-01.md` | `complete_chat_can_delete` |
 | `ЧАТ 2` | Разрешение ITAD API | Permission request prepared and sent by user; integration now waits only for provider reply | `WORKER_TASK_ITAD_TERMS_PERMISSION_PREP_01.md` | `reviews/worker_reports/itad-terms-permission-prep-01.md` | `external_wait_no_worker_slot` |
 
 ## System Auditor — due now
@@ -41,6 +41,7 @@
 - Expected report: `reviews/system_audits/baseline-01.md`.
 - Status: `ready_for_new_auditor_chat`.
 - This checkpoint is mandatory before the next ordinary backlog implementation unless the user explicitly prioritizes a more urgent time-sensitive incident.
+- Audit must explicitly include the proven Taste-control gap: queue presence is visible, but current enabled/schedule/next-run state was not captured reliably and no supported immediate manual trigger was confirmed.
 
 ## Taste Reviewer
 
@@ -54,9 +55,12 @@
 
 - Canonical identity: `App_690640`, family `game:690640`.
 - Live sale captured: KZ available, `1,520 KZT` from `7,600 KZT`, `-80%`, observed `2026-09-02T06:42:05.485251Z`, sale end `2026-09-15T17:00:00Z`.
-- Trine 4 reaches the existing Taste queue and is blocked only because its Taste result is unresolved.
-- `taste-runtime-trigger-status-01` proved queue presence but not exact runtime cadence/manual trigger.
-- The follow-up exact-runtime recon was reportedly completed by Chat 1; Director waits only for its durable report before deciding next action.
+- Trine 4 reaches the existing Taste queue and is blocked only because its current Taste result is unresolved.
+- Final recon report: `reviews/worker_reports/taste-runtime-exact-trigger-recon-01.md`, blob `85ad9d5cdd26d066dc1996773d4f35bd5de3b9cd`.
+- Existing scheduled ChatGPT Taste runtime exists, but the recon did not capture trustworthy live values for enabled state, exact schedule/RRULE, or next run.
+- No supported standard immediate `Run now` path was confirmed from the available execution surface.
+- Per-game completion is proven only when a current accepted semantic result for `App_690640` is persisted and the key is no longer unresolved; final-list presence is not itself the completion signal.
+- Director decision: stop repeated Trine-specific recon. Treat missing runtime observability/manual control as a system-level operational gap for the mandatory audit.
 
 ## Giveaway identity state
 
@@ -77,7 +81,7 @@
 
 ## Выбор следующей работы
 
-1. Get Chat 1's missing exact-runtime report saved; do not repeat the recon.
-2. Start the mandatory System Auditor in a new independent chat.
+1. Start the mandatory System Auditor in a new independent chat.
+2. Do not repeat Trine-specific runtime recon unless the audit identifies a new bounded missing fact.
 3. Do not burn a worker slot waiting for ITAD. If there is no reply by 2026-09-07, send one follow-up. If there is still no reply by 2026-09-09, use the audit findings to decide whether to proceed with bounded Wikidata fallback implementation.
 4. When ITAD replies, classify the reply from the saved permission-prep report and continue accordingly.
