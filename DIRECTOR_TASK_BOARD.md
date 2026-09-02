@@ -28,7 +28,7 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Компактные раздачи | User re-verifies the newly deployed collapsed giveaway UI on phone; richer real description/pros/cons still needs a safe cross-store analysis-identity continuation | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_UI_UX_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-ui-ux-fix-01.md` | `needs_user_verification` |
+| `ЧАТ 1` | Компактный список раздач + detail card | Fix failed phone acceptance: keep expanded giveaway list compact and move description/pros/cons into a separate per-game detail card | `WORKER_TASK_CROSS_PLATFORM_GIVEAWAY_UI_DETAIL_CARD_FIX_01.md` | `reviews/worker_reports/cross-platform-giveaway-ui-detail-card-fix-01.md` | `ready_to_continue_in_existing_chat` |
 | `НОВЫЙ ЧАТ 2` | Контракт подтверждённых минусов | Continue from completed negative-gap diagnosis; define canonical completeness/unresolved/typed-evidence contract for grounded negatives | `WORKER_TASK_GROUNDED_NEGATIVE_CONTRACT_RECON_01.md` | `reviews/worker_reports/grounded-negative-contract-recon-01.md` | `ready_for_new_chat` |
 
 ## Заменённый worker-чат
@@ -46,11 +46,11 @@
 
 ## Последние решения
 
-- `cross-platform-giveaway-ui-ux-fix-01` — implementation/deploy завершены, статус `needs_user_verification`. Giveaway block теперь collapsed-by-default и компактный. Safe Epic/GOG -> Steam analysis binding не найден, поэтому worker правильно не копировал analysis по названию; expanded cards показывают честный incomplete-analysis state. Реальные description/pros/cons всё ещё остаются незакрытым пользовательским требованием и потребуют отдельного identity/analysis continuation после UI recheck.
-- `card-negative-analysis-gap-01` — `complete`. Системный дефект подтверждён: в real generated top-30 28/30 карточек не имели visible grounded negative; причины включают permissive `INCLUDE + negative_evidence=[]`, misrouted negative concerns и потерю валидного free-text evidence узким lexical mapper. Final fail-closed suppression heuristics исправен и не должен ослабляться.
-- Старый Chat 2 заменяется новым из-за клиентского зависания; повторная диагностика запрещена.
-- Real-device acceptance остаётся обязательным для Chat 1.
+- `cross-platform-giveaway-ui-ux-fix-01` повторно провалил real-device UX acceptance: top-level collapse работает, но expanded list всё ещё громоздкий, потому что description/pros/cons/incomplete-analysis body встроены прямо в каждый list row.
+- Direct continuation `cross-platform-giveaway-ui-detail-card-fix-01`: expanded list должен содержать только компактные строки; description/pros/cons и honest incomplete-analysis state должны открываться в отдельной карточке выбранной игры. Не повторять cross-store identity recon и не подставлять Steam analysis по названию.
+- `card-negative-analysis-gap-01` — `complete`; новый Chat 2 продолжает только с contract/recon.
+- Real-device acceptance остаётся обязательным для Chat 1 после следующего deploy.
 
 ## Выбор следующей работы
 
-После report нового Chat 2 выбрать прямой IMPLEMENT/следующий контрактный шаг по его фактам. Trine 4 не продвигать перед прямым continuation, если grounded-negative contract recon потребует bounded implement.
+После report любого worker сначала читать его. Для Chat 1 прямой UX continuation имеет приоритет до успешной проверки на телефоне.
