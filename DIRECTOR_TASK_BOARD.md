@@ -28,12 +28,17 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `НОВЫЙ ЧАТ 1` | Анализ карточек раздач | Find the safe canonical cross-store identity/analysis route so giveaway detail cards can show real description, pros and grounded cons without title matching | `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md` | `reviews/worker_reports/giveaway-analysis-identity-recon-01.md` | `ready_for_new_chat` |
+| `НОВЫЙ ЧАТ 1` | Trine 4 пропала из списка | Capture the live discounted KZ state now, then find the first canonical stage where Trine 4 disappears from source/catalog to final visual output | `WORKER_TASK_TRINE4_MISSING_DIAGNOSIS_01.md` | `reviews/worker_reports/trine4-missing-diagnosis-01.md` | `ready_for_new_chat` |
 | `ЧАТ 2` | Свободный слот | — | — | — | `free` |
+
+## Явный временный приоритет пользователя
+
+- Пользователь 2026-09-02 поднял Trine 4 выше остальных текущих задач, потому что игра сейчас находится на скидке. Диагностику нужно выполнить пока live sale state ещё наблюдаем; иначе после окончания акции отсутствие игры может стать объяснимым просто отсутствием скидки и потеряется исходный failure shape.
+- `giveaway-analysis-identity-recon-01` сохранён и остаётся прямым продолжением карточек раздач после Trine 4; его нельзя забыть или считать отменённым.
 
 ## Заменённый worker-чат
 
-- Старый `ЧАТ 1` достиг лимита контекста до сохранения `reviews/worker_reports/giveaway-analysis-identity-recon-01.md`. Его больше не использовать. Task state уже сохранён в GitHub task-file; новая работа должна идти в НОВОМ ЧАТЕ 1.
+- Старый `ЧАТ 1` достиг лимита контекста до сохранения `reviews/worker_reports/giveaway-analysis-identity-recon-01.md`. Его больше не использовать.
 
 ## Принятый UI раздач
 
@@ -47,15 +52,15 @@
 
 ## Подготовлено, но НЕ назначено следующим
 
-- `WORKER_TASK_TRINE4_MISSING_DIAGNOSIS_01.md` remains prepared.
+- `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md` remains prepared as the direct giveaway-content continuation after the time-sensitive Trine 4 diagnosis.
 - Duration connectivity remains blocked on user-provisioned IGDB secrets.
 
 ## Последние решения
 
-- User accepted giveaway navigation UX; only detail-card analysis content remains.
-- Old Chat 1 hit its context limit before producing the identity-recon report. No broad recovery is needed because the task itself is durable in `WORKER_TASK_GIVEAWAY_ANALYSIS_IDENTITY_RECON_01.md`.
-- New Chat 1 must perform that bounded recon only: no UI/source recon repetition, no title matching, no manual current-game whitelist.
+- Trine 4 diagnosis supersedes giveaway analysis temporarily because the current discount is a time-sensitive diagnostic condition, not because the giveaway requirement lost priority permanently.
+- Trine task now explicitly captures live KZ price/discount/source timestamp before deeper tracing.
+- Old Chat 1 limit does not affect Trine work; start a new worker chat from the durable task file.
 
 ## Выбор следующей работы
 
-After NEW CHAT 1 report, choose its exact direct implementation or prerequisite. The free Chat 2 slot may take another independent task only if it does not interfere with the active direct continuation.
+Read `trine4-missing-diagnosis-01` first when it completes. If it finds a systemic defect, its bounded direct fix has priority while the sale condition remains relevant. Otherwise return to `giveaway-analysis-identity-recon-01`.
