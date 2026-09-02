@@ -6,7 +6,7 @@
 
 ## Правила работы
 
-1. Одновременно по умолчанию работают не больше двух worker-чатов.
+1. Одновременно по умолчанию работают не больше двух implementation worker-чатов.
 2. Нормальная пара: одна главная задача + одна независимая небольшая задача.
 3. Перед запуском проверять пересечение областей и canonical ownership.
 4. Неясная проблема сначала идёт в bounded `READ-ONLY / RECON`, затем отдельный `IMPLEMENT`.
@@ -17,12 +17,15 @@
 9. Worker-чат удалять только после сохранённого report, решения директора и всех ближайших проверок.
 10. Для активных задач хранить ожидаемый report path.
 11. Task-file не считается запущенной, пока пользователь реально не отправил команду worker-чату.
-12. Живые worker-чаты имеют пользовательские слоты `ЧАТ 1`, `ЧАТ 2`.
+12. Живые implementation worker-чаты имеют пользовательские слоты `ЧАТ 1`, `ЧАТ 2`.
 13. Before semantic translation, first check approved ready-Russian sources. Translation is fallback, not default.
 14. Current project commercial status: personal/non-commercial; commercial use requires `COMMERCIALIZATION_GUARD.md` review.
 15. Task-memory invariant: future user work must have a durable destination; backlog removal requires destination/completion/cancellation evidence.
 16. Worker efficiency is important, but prepared work is not automatically next.
 17. **Priority discipline:** `prepared` does not mean `next`. When a worker finishes, first read its report, then choose direct continuation vs explicit user priority vs dependencies vs backlog.
+18. **Review checkpoint invariant:** before assigning a new ordinary backlog task whenever an implementation worker slot becomes free, read `DIRECTOR_REVIEW_CHECKPOINTS.md`. If a mandatory review is due, it takes priority unless the user explicitly gives a more urgent time-sensitive task.
+19. `TASTE REVIEWER` is a separate advisory chat. It does not implement production changes and therefore does not consume one of the two implementation worker slots while used only in the boundaries of `TASTE_REVIEWER_ROLE.md`.
+20. `SYSTEM AUDITOR` is an independent periodic review role governed by `SYSTEM_AUDITOR_ROLE.md`; it must not be forgotten or replaced by ordinary acceptance tests.
 
 ## Активно сейчас
 
@@ -30,6 +33,26 @@
 |---|---|---|---|---|---|
 | `ЧАТ 1` | Запуск проверки Trine 4 | Determine whether the existing automatic Taste processing is currently running, whether it can be safely started now, and how completion for `App_690640` is detected | `WORKER_TASK_TASTE_RUNTIME_TRIGGER_STATUS_01.md` | `reviews/worker_reports/taste-runtime-trigger-status-01.md` | `ready_to_continue_in_existing_chat` |
 | `ЧАТ 2` | IGDB для карточек раздач | Own all repo-side preparation for exact Epic/GOG -> IGDB -> Steam identity reuse and stop only on the unavoidable user secret-provisioning step | `WORKER_TASK_GIVEAWAY_IGDB_IMPLEMENT_PREP_01.md` | `reviews/worker_reports/giveaway-igdb-implement-prep-01.md` | `ready_to_continue_in_existing_chat` |
+
+## Отдельный advisory chat — Taste Reviewer
+
+- Role: `TASTE_REVIEWER_ROLE.md`.
+- Durable profile: `USER_TASTE_PROFILE.md`.
+- Baseline task: `TASTE_REVIEW_BASELINE_01.md`.
+- First report: `reviews/taste_reviews/baseline-01.md`.
+- Status: `ready_for_new_advisory_chat`.
+- Purpose: understand Dmitry's game taste deeply and independently challenge whether current filtering/ranking is too restrictive or mis-prioritized.
+- This reviewer must not modify production code/weights. It may maintain only its profile/review artifacts and advise the Director.
+
+## Mandatory System Auditor checkpoint
+
+- Role: `SYSTEM_AUDITOR_ROLE.md`.
+- Durable trigger state: `DIRECTOR_REVIEW_CHECKPOINTS.md`.
+- First audit becomes due as soon as BOTH current tracks reach stable boundaries:
+  1. `taste-runtime-trigger-status-01` has a saved report + Director decision;
+  2. `giveaway-igdb-implement-prep-01` is complete or durably blocked on the user's IGDB secrets.
+- Before the next ordinary backlog implementation after that point, run the first System Audit unless the user explicitly prioritizes a more urgent time-sensitive incident.
+- Recurring audit triggers are also stored in `DIRECTOR_REVIEW_CHECKPOINTS.md`: every 3 material production changes, after relevant user-visible incidents, and after new major ownership/runtime/identity boundaries.
 
 ## Trine 4 diagnosis result
 
@@ -66,4 +89,4 @@
 
 ## Выбор следующей работы
 
-Use both current worker chats. Read whichever report arrives first. Chat 2 may prepare everything it safely can before credentials, but must not invent live IGDB semantics without actual provider verification.
+Use both current implementation worker chats. Taste Reviewer may be established independently as an advisory chat. When either implementation slot frees, first check `DIRECTOR_REVIEW_CHECKPOINTS.md` before assigning ordinary backlog work.
