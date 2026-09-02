@@ -1,8 +1,14 @@
-# WORKER TASK — CHAT 2
+# WORKER TASK — NEW CHAT 1
 
 Task ID: `trine4-missing-diagnosis-01`
 Mode: `READ-ONLY / RECON`
 Report: `reviews/worker_reports/trine4-missing-diagnosis-01.md`
+
+## Priority context
+
+The user explicitly promoted this task ahead of giveaway-analysis enrichment because `Trine 4` is currently discounted. Diagnose it while the live sale state still exists so the canonical route can be observed under the condition in which the game is expected to be eligible.
+
+Do not delay the trace until after the discount disappears if the task can be completed now.
 
 ## Goal
 
@@ -30,7 +36,17 @@ Resolve `Trine 4` to the exact canonical Steam/app/product identity used by curr
 
 Do not trace by title alone after identity is established.
 
-### 2. First disappearance point
+### 2. Capture the live sale state first
+
+Before deeper tracing, record the current canonical facts that prove the live sale context for the exact Trine 4 identity:
+- KZ availability;
+- current price;
+- discount percent / deal state;
+- relevant source timestamp.
+
+Use canonical project data first. If canonical data is stale/incomplete, report that as part of the diagnosis rather than substituting an unrelated source silently.
+
+### 3. First disappearance point
 
 Trace that exact identity through the current canonical path and stop at the **first stage where it is present before and absent after**.
 
@@ -50,7 +66,7 @@ For every stage inspected, record:
 - relevant canonical reason/status fields;
 - first exclusion reason.
 
-### 3. Correctness classification
+### 4. Correctness classification
 
 Classify the result as exactly one of:
 
@@ -68,13 +84,13 @@ D. `needs_user_decision`
 
 Do not use `expected_exclusion` merely because the code currently behaves that way; compare against canonical product rules.
 
-### 4. Scope of impact
+### 5. Scope of impact
 
 If the cause is systemic, use only a bounded sample or existing counts to determine whether it likely affects other games.
 
 Do not manually scan the whole catalog item-by-item.
 
-### 5. Next step
+### 6. Next step
 
 If `systemic_defect`, recommend one bounded IMPLEMENT fixing the generic rule plus a regression for Trine 4's failure shape.
 
@@ -103,6 +119,9 @@ What was traced.
 
 ### Canonical identity
 Exact Steam/app/product identity.
+
+### Live sale state
+Current canonical KZ price/discount/source timestamp captured while the discount is active.
 
 ### Trace
 Compact stage-by-stage presence/exclusion evidence.
