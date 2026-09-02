@@ -48,20 +48,33 @@ def validate_item(game):
     risk_status = game.get('risk_status') or {}
     risk_provenance = game.get('risk_provenance') or []
 
-    if not risk_codes and risk_status.get('has_described_risk') is False and risks:
-        errors.append(f'{title}: no-risk status still has a visible negative bullet')
-    if risks:
-        if risk_status.get('has_described_risk') is not True:
-            errors.append(f'{title}: visible risk lacks described-risk status')
-        if len(risk_codes) != len(risks):
-            errors.append(f'{title}: visible risk count and risk_codes count differ')
-        if len(risk_provenance) != len(risks):
-            errors.append(f'{title}: visible risk count and provenance count differ')
-        for row in risk_provenance:
-            if row.get('source') not in GROUNDED_RISK_SOURCES or not row.get('code'):
-                errors.append(f'{title}: visible risk lacks grounded provenance')
-    elif risk_status.get('has_described_risk') is True:
-        errors.append(f'{title}: risk_status describes a risk but risks is empty')
+    # Normal paid-card readiness is intentionally strict: absence of a grounded
+    # downside means analysis is incomplete upstream, never "no risks found".
+    if not risks:
+        errors.append(f'{title}: normal paid card has no visible grounded negative')
+    if risk_status.get('has_described_risk') is not True:
+        errors.append(f'{title}: normal paid card lacks described-risk status')
+    if risk_status.get('grounded_taste_negative_witness') is not True:
+        errors.append(f'{title}: normal paid card lacks grounded Taste negative witness status')
+    if len(risk_codes) != len(risks):
+        errors.append(f'{title}: visible risk count and risk_codes count differ')
+    if len(risk_provenance) != len(risks):
+        errors.append(f'{title}: visible risk count and provenance count differ')
+
+    taste_witnesses = 0
+    for row in risk_provenance:
+        source = row.get('source')
+        if source not in GROUNDED_RISK_SOURCES or not row.get('code'):
+            errors.append(f'{title}: visible risk lacks grounded provenance')
+            continue
+        if source == 'taste_negative_evidence':
+            taste_witnesses += 1
+            if not str(row.get('category') or '').strip():
+                errors.append(f'{title}: Taste negative provenance lacks category')
+            if not str(row.get('evidence') or '').strip():
+                errors.append(f'{title}: Taste negative provenance lacks raw grounded evidence')
+    if taste_witnesses < 1:
+        errors.append(f'{title}: visible risks contain no grounded Taste negative provenance')
 
     return errors
 
@@ -82,6 +95,10 @@ def main():
         'omitted_positive_cards': sum(not bool(game.get('why_fit')) for game in sample),
         'visible_risk_cards': sum(bool(game.get('risks')) for game in sample),
         'no_visible_risk_cards': sum(not bool(game.get('risks')) for game in sample),
+        'grounded_taste_witness_cards': sum(
+            any((row or {}).get('source') == 'taste_negative_evidence' for row in game.get('risk_provenance') or [])
+            for game in sample
+        ),
         'sample_titles': [str(game.get('title') or game.get('id') or '') for game in sample[:5]],
         'violation_count': len(errors),
     }
