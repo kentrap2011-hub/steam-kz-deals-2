@@ -6,7 +6,7 @@ This file is maintained by the dedicated Taste Reviewer from explicit user feedb
 
 ## Profile confidence
 
-- **Low, improving** as of baseline-01 calibration. Direct user calibration now contains one confirmed played positive (`Trine 4: The Nightmare Prince`), one strong negative pre-play/start-priority control (`HighFleet`), one lower-priority/secondary-game control (`Tails of Iron 2: Whiskers of Winter`), and a clearer relative-priority calibration for `High On Life`. This is still too small a set to claim the current Taste model reliably represents Dmitry's preferences.
+- **Low, improving** as of baseline-01 calibration. Direct user calibration now contains one confirmed played positive (`Trine 4: The Nightmare Prince`), one strong negative pre-play/start-priority control (`HighFleet`), one lower-priority/secondary-game control (`Tails of Iron 2: Whiskers of Winter`), a clearer relative-priority calibration for `High On Life`, and a multi-factor strong pre-play interest profile for `Sifu`. This is still too small a set to claim the current Taste model reliably represents Dmitry's preferences.
 - Current ranking position, price/deal quality and model-produced fit are not treated as evidence that Dmitry personally likes a game.
 
 ## Strong positive signals
@@ -23,13 +23,15 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 
 - `American Arcadia` — current canonical production ranking marks the game as wishlist=true. Dmitry has watched a review and knows more about it than the comparison candidate `Afterimage`; he explicitly says the game's "Truman Show"-like concept appeals to him. This is a positive concept/interest signal, but not evidence that he prefers it to `Afterimage` on equal familiarity.
 - `High On Life` — **moderate main-game interest / queue-worthy, but not top-priority**. Dmitry has watched a review and says he would not put it ahead of everything after purchase. In his current queue, `Sifu` interests him more, and he may even replay a `Batman: Arkham` game before starting `High On Life`. Crucially, he does **not** view `High On Life` as a lightweight/palate-cleanser game; it remains a normal/full main-game candidate, just below stronger alternatives.
-- `Sifu` — **strong current pre-play interest signal**. Dmitry explicitly says it is in his queue and currently interests him more than `High On Life`. This is priority evidence, not yet a confirmed played positive unless separately established.
+- `Sifu` — **strong current pre-play interest signal with multiple explicit reasons**. Dmitry associates its fantasy/atmosphere with the film `The Raid`, which he loves. He is attracted by the game's minimalism, wants to try its combat system, finds the aging concept intriguing, and is additionally motivated by a very difficult achievement for completing the challenge without aging because he wants to test himself. This is strong start-priority evidence, but not yet a confirmed played positive.
 - `Batman: Arkham` series — Dmitry is considering a replay ahead of `High On Life`. This suggests meaningful positive prior attachment/return value, but do not infer a specific series entry or strength of preference beyond the stated replay consideration without further confirmation.
 - `Trine 4: The Nightmare Prince` — was an explicit current-attention case while discounted and is now additionally a confirmed played positive in its intended family-play context.
 
 ## Mechanics / structure preferences
 
-- Tentative positive hypothesis: a distinctive, easily understandable high-concept premise can increase interest. Current explicit example: `American Arcadia`, whose "Truman Show"-like concept Dmitry finds appealing. Confidence remains low until repeated across games.
+- Tentative positive hypothesis: a distinctive, easily understandable high-concept premise can increase interest. Current explicit examples: `American Arcadia`, whose "Truman Show"-like concept appeals to Dmitry, and `Sifu`, whose aging mechanic he finds intriguing. Confidence is increasing but still insufficient for a broad rule.
+- **Tentative positive signal: focused/minimalist presentation can raise interest when the core activity itself is appealing.** `Sifu` is the current explicit example: Dmitry specifically cites minimalism together with wanting to try the combat. Do not interpret this as a blanket preference for short or mechanically simple games.
+- **Tentative positive signal: demanding mastery challenges can increase motivation when they feel like a skill test rather than grind.** In `Sifu`, a very difficult no-aging achievement is itself a reason Dmitry wants to play because he wants to test himself. Do not generalize this to achievement hunting overall, collectible grind, or completionism without more evidence.
 - **Tentative negative structural signal:** games can lose substantial appeal when their presentation makes the experience feel dry, technical, tedious, or dominated by learning systems/instructions before the fun is apparent. `HighFleet` is the current strong example. This should be treated as aversion to the **felt burden / presentation of technicality**, not as a blanket dislike of complexity, strategy, management, simulation, or deep systems.
 - **Context-sensitive positive:** a game can be a strong fit when it works well as an accessible shared/family experience. `Trine 4` is the first confirmed example. Do not generalize this to all co-op/family games without more examples.
 - `Tails of Iron 2: Whiskers of Winter` currently reads to Dmitry as a **secondary / palate-cleanser game** rather than a main game: something he could start when he wants something lighter or needs a break from the main game, but not something he would currently choose as his primary game.
@@ -37,11 +39,12 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 - Current risk labels such as `directionlessness`, `unchanged_repetition`, `management_routine`, `puzzle_pacing` and similar model outputs remain hypotheses until checked against concrete user comparisons. Do not promote them to durable preferences solely because the current model applies penalties for them.
 - Do **not** infer a dislike of strategy, management, simulation, fleet mechanics, retro presentation, or any other `HighFleet` component from this case alone. More targeted comparisons are required to determine which kinds of complexity feel engaging versus instructional/tedious.
 
-## Visual preferences
+## Visual / atmosphere preferences
 
 - `American Arcadia` and `Afterimage` were both described as visually attractive. This is too weak and too small a sample to infer a durable art-style preference.
 - `HighFleet` produced a strong negative trailer-level reaction, but the user described the cause primarily as an overall sense of tedious technicality rather than a specific art-style rejection. Do not convert this into an art-style rule.
 - `Tails of Iron 2: Whiskers of Winter` — explicit visual downgrade: Dmitry described the trailer as looking like a **cheap indie game with angular/rough graphics**. This lowers perceived main-game priority for him. Treat this as a title-level visual signal until repeated across more games; do not infer a blanket dislike of indie or stylized 2D games.
+- `Sifu` — positive atmosphere anchor through resemblance in fantasy/feel to `The Raid`, a film Dmitry loves. This is meaningful title-level interest evidence, but not yet enough to infer a general preference for martial-arts settings or film-like games.
 
 ## Genre preferences and exceptions
 
@@ -53,6 +56,7 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 - `High On Life` vs `HighFleet` — produces one reliable result despite familiarity asymmetry: `HighFleet` itself is a strong negative start-priority control after Dmitry watched its trailer and found it unappealing. The reason he gave is the sense of tedious, dry technicality — "more like studying an instruction manual than playing a game." `High On Life` was later calibrated independently as a moderate full-game candidate, not a top-priority or palate-cleanser title.
 - `Trine 4: The Nightmare Prince` vs `Tails of Iron 2: Whiskers of Winter` — **not a clean pairwise winner test**, because `Trine 4` had already been purchased and played with the family while `Tails of Iron 2` was only inspected through a trailer. Nevertheless, both sides independently produced useful evidence: `Trine 4` is a confirmed positive in family play; `Tails of Iron 2` is currently a lower-priority, secondary-game candidate with a visual-quality concern.
 - Current relative queue anchor: `Sifu` > possible `Batman: Arkham` replay > `High On Life` for near-term start priority. This is a priority relation only; it does not mean `High On Life` is disliked or secondary/lightweight.
+- `Sifu` priority is supported by multiple explicit attractions rather than familiarity alone: `The Raid` association, minimalism, curiosity about combat, the aging concept, and a difficult achievement that functions as a personal skill challenge.
 
 ## Calibration methodology learned from user feedback
 
@@ -63,6 +67,7 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 - When capturing a negative control, prefer the user's stated experiential reason (for example, "feels like studying an instruction manual") over broad genre labels such as strategy or simulation.
 - Distinguish **main-game priority**, **secondary/palate-cleanser suitability**, and **family-play suitability**. A game can fit one role well without being a strong candidate for another.
 - Also distinguish **role** from **relative queue priority**: a full/main-game candidate can still sit behind other stronger main-game choices without becoming a palate-cleanser.
+- For positive controls, capture the independent reasons that create desire to start a game; several aligned reasons are more informative than a bare winner label.
 - Unknown/unfamiliar must remain distinct from dislike or weak fit.
 
 ## Uncertainty / questions
@@ -72,6 +77,8 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 - How broad is the visual-quality sensitivity seen with `Tails of Iron 2`, and which stylized/indie-looking games are exceptions?
 - How much should the system model **play context** separately: solo main game, family/co-op game, and lighter secondary game?
 - How should the system represent **relative queue strength** among games that are all valid main-game candidates?
+- Does `Sifu` confirm a broader preference for focused mastery-driven combat games, or is the attraction mostly title-specific because of `The Raid` association and the aging concept?
+- Do difficult achievements generally increase interest only when they represent a clean skill challenge, or was this specific to `Sifu`?
 - Which current risk concepts are real user turn-offs, and which are over-generalized proxies?
 - How much should explicit wishlist/current interest outweigh a model-only predicted fit when the two disagree?
 - Does attraction to distinctive high-concept premises repeat across other games strongly enough to become a durable preference?
