@@ -2,9 +2,9 @@
   "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
   "schema_version": 1,
   "country_code": "KZ",
-  "generated_at_utc": "2026-09-02T18:00:46.615582Z",
-  "fresh_until_utc": "2026-09-04T00:00:46.615582Z",
-  "snapshot_status": "complete",
+  "generated_at_utc": "2026-09-02T20:36:23.116897Z",
+  "fresh_until_utc": "2026-09-04T02:36:23.116897Z",
+  "snapshot_status": "incomplete",
   "required_sources": [
     "steam",
     "epic",
@@ -15,7 +15,7 @@
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-09-02T18:00:46.615582Z",
+      "observed_at_utc": "2026-09-02T20:36:23.116897Z",
       "endpoint": "existing KZ catalog candidates + targeted Steam first-party validation",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -24,7 +24,7 @@
       "error_code": null,
       "error": null,
       "details": {
-        "candidate_source_updated_at_utc": "2026-09-02T18:00:45.930255Z",
+        "candidate_source_updated_at_utc": "2026-09-02T20:36:22.419743Z",
         "candidate_count": 0,
         "source_age_hours": 0.0,
         "candidate_rule": "existing KZ catalog: final price 0 + positive discount; validation is separate",
@@ -33,29 +33,23 @@
     },
     "epic": {
       "required": true,
-      "status": "ok",
-      "complete": true,
-      "observed_at_utc": "2026-09-02T18:00:46.615582Z",
+      "status": "failed",
+      "complete": false,
+      "observed_at_utc": "2026-09-02T20:36:23.116897Z",
       "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
-      "candidate_count": 9,
-      "accepted_count": 2,
-      "rejected_count": 7,
+      "candidate_count": 0,
+      "accepted_count": 0,
+      "rejected_count": 0,
       "unverified_count": 0,
-      "error_code": null,
-      "error": null,
-      "details": {
-        "country": "KZ",
-        "allowCountries": "KZ",
-        "candidate_count": 9,
-        "schema_guard": "strict",
-        "api_stability": "undocumented_storefront_backend"
-      }
+      "error_code": "SOURCE_SCHEMA_FAILURE",
+      "error": "Epic price.totalPrice schema changed",
+      "details": {}
     },
     "gog": {
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-09-02T18:00:46.615582Z",
+      "observed_at_utc": "2026-09-02T20:36:23.116897Z",
       "endpoint": "https://catalog.gog.com/v1/catalog",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -73,8 +67,8 @@
       }
     }
   },
-  "accepted_offer_count": 2,
-  "game_group_count": 2,
+  "accepted_offer_count": 0,
+  "game_group_count": 0,
   "current_path": "data/production/giveaways/v1/current.json",
   "audit_path": "data/production/giveaways/v1/audit.jsonl",
   "writer": "scripts/giveaway_production.py"
