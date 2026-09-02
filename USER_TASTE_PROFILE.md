@@ -21,14 +21,19 @@ This file is maintained by the dedicated Taste Reviewer from explicit user feedb
 
 These are useful calibration evidence, but are **not equivalent to confirmed liking**:
 
-- `American Arcadia` — current canonical production ranking marks the game as wishlist=true.
+- `American Arcadia` — current canonical production ranking marks the game as wishlist=true. Dmitry has watched a review and knows more about it than the comparison candidate `Afterimage`; he explicitly says the game's "Truman Show"-like concept appeals to him. This is a positive concept/interest signal, but not evidence that he prefers it to `Afterimage` on equal familiarity.
 - `High On Life` — current canonical production ranking marks the game as wishlist=true.
 - `Trine 4: The Nightmare Prince` — explicit current user attention/expectation case while discounted; its current absence is caused by unresolved Taste semantic data (`taste_cache_key_missing`), not by a canonical negative Taste verdict. Treat it as an unresolved calibration case, not a dislike.
 
 ## Mechanics / structure preferences
 
-- Not yet established from sufficiently direct game-level evidence.
+- Tentative positive hypothesis: a distinctive, easily understandable high-concept premise can increase interest. Current explicit example: `American Arcadia`, whose "Truman Show"-like concept Dmitry finds appealing. Confidence remains low until repeated across games.
+- Not otherwise established from sufficiently direct game-level evidence.
 - Current risk labels such as `directionlessness`, `unchanged_repetition`, `management_routine`, `puzzle_pacing` and similar model outputs remain hypotheses until checked against concrete user comparisons. Do not promote them to durable preferences solely because the current model applies penalties for them.
+
+## Visual preferences
+
+- `American Arcadia` and `Afterimage` were both described as visually attractive. This is too weak and too small a sample to infer a durable art-style preference.
 
 ## Genre preferences and exceptions
 
@@ -36,17 +41,22 @@ These are useful calibration evidence, but are **not equivalent to confirmed lik
 
 ## Known comparison anchors
 
-Pending baseline calibration with the user:
+- `American Arcadia` vs `Afterimage` — **not a valid preference winner yet**. Dmitry chose `American Arcadia`, but explicitly identified familiarity asymmetry: he has seen a review of `American Arcadia` and knows essentially nothing about `Afterimage`. The comparison may be reused only after giving comparable spoiler-light information about both games. What is valid from this test: both look attractive to him, and the `American Arcadia` concept appeals to him.
+- `High On Life` vs `HighFleet` — explicit wishlist interest vs stronger model-only taste fit; pending calibration.
+- `Trine 4: The Nightmare Prince` vs `Tails of Iron 2: Whiskers of Winter` — unresolved-but-explicitly-noticed candidate vs a current strong-fit recommendation; pending calibration.
 
-- `American Arcadia` vs `Afterimage` — explicit wishlist interest vs slightly stronger current total ranking/deal result.
-- `High On Life` vs `HighFleet` — explicit wishlist interest vs stronger model-only taste fit.
-- `Trine 4: The Nightmare Prince` vs `Tails of Iron 2: Whiskers of Winter` — unresolved-but-explicitly-noticed candidate vs a current strong-fit recommendation.
+## Calibration methodology learned from user feedback
+
+- Pairwise taste tests must control for **familiarity / information asymmetry**. A game Dmitry already knows from a review should not be treated as a clean preference winner over an unfamiliar game.
+- When familiarity differs, first provide comparable spoiler-light descriptions of both candidates, then ask which is more appealing and why.
+- Unknown/unfamiliar must remain distinct from dislike or weak fit.
 
 ## Uncertainty / questions
 
 - Which current high-scoring games are genuine positives rather than plausible model guesses?
 - Which current risk concepts are real user turn-offs, and which are over-generalized proxies?
 - How much should explicit wishlist/current interest outweigh a model-only predicted fit when the two disagree?
+- Does attraction to distinctive high-concept premises repeat across other games strongly enough to become a durable preference?
 - Unknown/unresolved Taste state must remain distinct from negative preference evidence.
 
 ## Update rule
