@@ -75,7 +75,7 @@ Efficiency / reusable lesson: keep provider-identity discovery as a read-only ex
 Exact refs:
 - task blob: `276aa72b30311edb19af908958533b4482bec9f5`
 - previous identity recon report blob: `faa254b9abd2bdd18e615f4f7ad5d0f0d6d6165d`
-- existing IGDB client / exact Steam route blob: `a1a76118f7c2bae036ccc8be880ae9152ee0f64` is **not** used here; canonical `scripts/duration_enrichment.py` blob is `a1a76118f7c2bae036ccc8be9adfa10ef0594abd`
+- existing IGDB client / exact Steam route blob: `a1a76118f7c2bae036ccc8be9adfa10ef0594abd`
 - duration enrichment contract blob: `6bdd2471eaf6f567ee7fcd26c72f7231127a6923`
 - existing IGDB secret/connectivity workflow blob: `2d56b81f822412c433852d55a749a4db8ce33b78`
 - current giveaway snapshot blob used as probe input contract evidence: `a6f45abbd40d756d0421eb3492eb3e5ef8e8f510`
