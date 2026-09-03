@@ -1,112 +1,97 @@
 # WORKER TASK
 
-Task ID: `detailed-score-ui-fix-01`
-Mode: `IMPLEMENT`
-Report: `reviews/worker_reports/detailed-score-ui-fix-01.md`
+Task ID: `giveaway-publication-gap-recon-01`
+Mode: `READ-ONLY / RECON`
+Report: `reviews/worker_reports/giveaway-publication-gap-recon-01.md`
 
 ## Goal
 
-Исправить три конкретных дефекта, обнаруженных пользователем на реальном телефоне после `detailed-score-ui-01`, не расширяя scope и не меняя ranking/scoring math без отдельного доказанного основания.
+Найти точную границу, из-за которой актуальная canonical бесплатная раздача уже есть в production data, но пользователь не видит бесплатные раздачи на опубликованном сайте.
 
-## User feedback from real phone
+Это только bounded recon. Не исправляй код и не запускай широкую переработку.
 
-На опубликованной карточке пользователь увидел:
+## Current verified facts
 
-1. Нажатие на `Детальная оценка` / `подробнее` не сворачивает уже раскрытую детализацию. Блок должен реально работать как toggle: раскрыться и снова свернуться.
-2. Строка вида `Вкус · по детальному профилю вкуса` непонятна человеку. Нужна простая подпись, объясняющая смысл показателя без внутренней терминологии.
-3. Строка `Длительность · длительность не подтверждена` одновременно показывает `+2/3`, что выглядит противоречиво. Нужно установить, почему при отсутствии подтверждения даётся 2/3, и сделать состояние понятным.
+Пользователь на реальном сайте сейчас не видит бесплатные раздачи.
 
-Previous report:
-`reviews/worker_reports/detailed-score-ui-01.md`
+При этом актуальный `main` содержит:
+- `data/production/giveaways/v1/current.json`;
+- `snapshot_status = complete`;
+- Epic `status = ok`, `complete = true`;
+- `accepted_count = 1`;
+- активную KZ-раздачу `Alone With You`, 100%, до `2026-09-10T15:00:00Z`.
 
-Перед работой прочитай актуальный `main`, `CHAT_PROTOCOL.md`, `CHAT_CONTEXT.md`, `CURRENT_TASK.md`, previous report и только релевантные score UI/scoring contract files.
+Предыдущая Epic parser-задача закрыта как `complete`:
+`reviews/worker_reports/epic-giveaway-schema-fix-01.md`.
 
-## What to do
+Не переоткрывай parser defect без нового доказательства.
 
-### 1. Toggle bug
-- Найди причину, почему disclosure после раскрытия нельзя свернуть обратно.
-- Исправь так, чтобы одно и то же пользовательское действие корректно переключало collapsed <-> expanded.
-- Сохрани client-only state; никаких production вычислений при нажатии.
-- Добавь regression на последовательность: collapsed -> expanded -> collapsed -> expanded.
+## Read first
 
-### 2. Human-readable taste label
-- Убери из пользовательской строки формулировку `по детальному профилю вкуса` и аналогичную внутреннюю лексику.
-- Подпись должна простыми словами отвечать, что означает этот вклад: совпадение игры с предпочтениями пользователя / насколько она подходит по вкусам.
-- Используй уже существующие producer-owned данные. Не изобретай новые Taste категории, thresholds или semantic interpretation во frontend.
-- Если без дополнительной producer-информации можно лишь безопасно переименовать сам показатель, сделай именно это и не выдумывай объяснение точнее имеющихся данных.
+1. Актуальный `main`.
+2. `CHAT_PROTOCOL.md` и `CHAT_CONTEXT.md`.
+3. `reviews/worker_reports/epic-giveaway-schema-fix-01.md`.
+4. `data/production/giveaways/v1/current.json`.
+5. Только минимально необходимые текущие файлы, которые реально связывают canonical giveaway data с опубликованным сайтом/рендерером.
 
-### 3. Duration contradiction
-- Сначала установи, откуда берётся `+2/3` при `duration not confirmed`.
-- Если это канонически предусмотренный нейтральный/default score для unknown duration, **не меняй математику**. Перепиши строку так, чтобы пользователь понимал смысл, например как нейтральную оценку из-за отсутствия подтверждённых данных, но только в формулировке, которая точно соответствует существующей логике.
-- Если `+2/3` при unknown является реальным producer/scoring defect и противоречит canonical contract, не чинить ranking math в рамках этого UI follow-up. Зафиксировать точный источник и вернуть `needs_fix` с отдельным producer task recommendation.
-- Недопустимо оставлять одновременно `не подтверждена` и положительный балл без понятного объяснения.
+Не восстанавливай историю проекта и не читай массово старые giveaway task/report файлы.
 
-## Hard boundaries
+## What to establish
 
-Не менять без доказанного отдельного дефекта:
-- ranking/scoring weights/math;
-- Taste semantics/model;
-- purchase route/package economics;
-- prices/evidence;
-- description data path;
-- production queues/schedule.
+Проследи только текущую цепочку:
 
-Не трогать параллельный `ru-description-audit-01` и его report.
+`canonical giveaway snapshot -> publication/deploy artifact -> browser-loaded data -> giveaway view/filter/render`
 
-## Validation
+Установи первый точный слой, где `Alone With You` перестаёт быть доступной пользователю.
 
-Минимум:
-- disclosure toggle работает в обе стороны несколько раз;
-- summary state снова скрывает обе detail sections;
-- visible copy не содержит непонятной фразы `по детальному профилю вкуса`;
-- duration unknown case больше не выглядит как необъяснимое `не подтверждена +2/3`;
-- все числовые scores остаются прежними, если canonical logic подтверждает их корректность;
-- существующие detailed score, compact purchase и image swipe UI regressions остаются green;
-- mobile deploy/visual validation по обычному fast path.
+Проверь минимум:
 
-## CURRENT_TASK
+1. Какой giveaway-файл или производный payload реально публикуется на Pages.
+2. Содержит ли текущий опубликованный artifact/site payload `Alone With You`.
+3. Если данные опубликованы — загружает ли frontend правильный путь/версию и не остаётся ли на старом payload/cache.
+4. Если frontend получает запись — не отбрасывает ли её текущая view/filter/render логика.
+5. Является ли проблема публикационной гонкой/непопавшим generated commit после run `33790442843`, stale deploy, неправильным data path или UI/filter defect.
+6. Требуется ли пользовательский hard refresh только как временная проверка, а не как постоянное решение.
 
-Задачу F не считать окончательно закрытой до повторной пользовательской проверки после этого fix. Соседние planned tasks не начинать.
+## Critical boundaries
+
+Не делать в этой задаче:
+- никаких исправлений production/frontend/workflow;
+- никаких изменений Epic parser;
+- никаких ITAD/IGDB изменений;
+- никаких Taste/ranking/paid-deal изменений;
+- никакого нового scheduler/queue/writer;
+- никакого массового исследования Git history или старых Actions runs;
+- не менять `CURRENT_TASK.md`.
+
+Разрешено сохранить только этот report-файл.
+
+## Validation standard
+
+Вывод должен опираться на точные refs текущего `main`, опубликованного Pages/deploy artifact или минимально необходимого текущего workflow evidence.
+
+Не писать `скорее всего`, если можно доказать точную границу. Если реальный deployed payload нельзя прочитать из worker-контекста, зафиксируй это как конкретный blocker и всё равно локализуй максимально узкий слой по доступным canonical данным.
 
 ## Done when
 
-- детализация сворачивается обратно;
-- Taste-подпись понятна без знания внутреннего проекта;
-- duration row либо понятно объясняет корректный neutral/default score, либо доказан отдельный producer bug без самовольной смены math;
-- regressions и deploy проходят;
-- создан компактный report.
+В report есть:
 
-## Report format
+1. `Task` — что проверялось.
+2. `Verified facts` — точная цепочка данных и где запись ещё присутствует/уже отсутствует.
+3. `Changes` — `none`, кроме report.
+4. `Validation` — exact refs/artifacts/site evidence.
+5. `Unresolved` — только реально недоказанное.
+6. `Status` — ровно одно: `complete`, `blocked`, `needs_fix`, `needs_user_decision`.
+7. `Recommended next step` — один ограниченный следующий шаг.
+8. `Efficiency / reusable lesson` — `none` либо одна короткая переносимая pitfall-ссылка.
+
+## Expected next step
+
+Если точный defect найден — рекомендовать один bounded `IMPLEMENT`, не выполнять его самому.
+
+Если defect не найден и нужна только конкретная пользовательская проверка — назвать ровно эту проверку.
 
 Сохрани итог в:
-`reviews/worker_reports/detailed-score-ui-fix-01.md`
+`reviews/worker_reports/giveaway-publication-gap-recon-01.md`
 
-### Task
-Что исправлено.
-
-### Verified facts
-Особенно: почему duration unknown получает текущий балл и является ли это корректной canonical логикой.
-
-### Changes
-Файлы и краткая причина.
-
-### Validation
-Tests/deploy refs.
-
-### Unresolved
-`none` либо точный producer/scoring gap.
-
-### Status
-Ровно одно:
-- `complete`
-- `blocked`
-- `needs_fix`
-- `needs_user_decision`
-
-### Recommended next step
-Один следующий шаг; если UI исправлен — повторный phone spot-check.
-
-Не копируй большие логи/full diff.
-
-В финальном ответе обязательно назови путь:
-`reviews/worker_reports/detailed-score-ui-fix-01.md`
+В финальном ответе обязательно назови этот путь и итоговый статус.
