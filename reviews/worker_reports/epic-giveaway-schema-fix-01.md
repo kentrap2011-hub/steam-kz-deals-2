@@ -1,6 +1,6 @@
 # EPIC GIVEAWAY SCHEMA FIX 01
 
-STATUS: blocked
+STATUS: complete
 
 ## IMPLEMENTATION
 
@@ -24,12 +24,12 @@ No endpoint, KZ parameters, claim URL rules, canonical output schema, source-hea
 Implementation commit:
 - `aa7cea8d06d4d71a5ff6fe4c23a71c2cbda28783` — `Fix Epic giveaway price validation ordering`
 
-Current `main` implementation blob at verification time:
+Implementation blob:
 - `scripts/giveaway_epic.py` — `6fb410a27a0bc40c3fce2eecacc9d09da7aec88e`
 
 ## STRICTNESS PRESERVED
 
-For every element that is actually an active current 100% giveaway candidate, the adapter remains fail-closed and now explicitly requires:
+For every element that is actually an active current 100% giveaway candidate, the adapter remains fail-closed and explicitly requires:
 
 - `element.price` is an object;
 - `price.totalPrice` is an object;
@@ -46,7 +46,7 @@ No fallback price, fuzzy/title inference, second source, or globally optional pr
 
 Focused coverage was added to the existing `scripts/test_giveaway_production.py` surface rather than creating a new test subsystem.
 
-Added/updated cases cover:
+Covered cases:
 
 1. no-current-promo element + missing `price.totalPrice` -> skipped;
 2. no-current-promo element + `price.totalPrice = null` -> skipped;
@@ -61,78 +61,114 @@ Added/updated cases cover:
 Test commit:
 - `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f` — `Add Epic giveaway schema ordering regressions`
 
-Current `main` test blob at verification time:
+Test blob:
 - `scripts/test_giveaway_production.py` — `0bf860f3e35e5dc367a82f531be7d55c3abba089`
 
-Worker-side focused logic checks for the ordering/fail-closed cases passed.
+Final GitHub-owned regression evidence:
+- run `33790442843`;
+- head SHA `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`;
+- job `100774514557`;
+- `Regression test cross-platform giveaways` -> `success`.
 
-GitHub-owned workflow evidence currently available:
-- run `33790369125`, head `aa7cea8d06d4d71a5ff6fe4c23a71c2cbda28783`;
-- workflow `Steam KZ production shortlist`;
-- `Regression test cross-platform giveaways` completed successfully;
-- the run is still inside the preceding long `Collect full Steam KZ catalog and build production shortlist` step, so its canonical giveaway production step has not run yet.
-
-The workflow run containing the newly committed focused regression cases is:
-- run `33790442843`, head `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`;
-- status at closeout: `pending`, queued behind run `33790369125` under the existing workflow concurrency.
-
-Because the newly added focused cases have not yet executed in GitHub Actions, no GitHub-CI PASS is claimed for those new cases in this closeout.
+Therefore the required focused regression surface has executed successfully in GitHub Actions.
 
 ## PRODUCTION VERIFICATION
 
-The existing canonical path is already wired into `.github/workflows/steam-test.yml` and requires no workflow change. It runs:
+Canonical GitHub-owned run:
+- run `33790442843`;
+- workflow `Steam KZ production shortlist`;
+- head SHA `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`.
 
-- giveaway regression tests;
-- the canonical `scripts/giveaway_production.py` path writing `data/production/giveaways/v1/current.json` and audit output;
-- `scripts/validate_giveaway_contract.py`.
+Relevant final step results:
 
-At closeout time the code-commit run `33790369125` had not yet reached `Build canonical Steam Epic GOG KZ giveaways`; it remained in the earlier full-Steam-catalog collection step. The test-commit run `33790442843` remained pending behind it.
+- `Regression test cross-platform giveaways` -> `success`;
+- `Collect full Steam KZ catalog and build production shortlist` -> `success`;
+- `Verify Steam collector touched only owned production paths` -> `success`;
+- `Build canonical Steam Epic GOG KZ giveaways` -> `success`;
+- `Validate canonical giveaway artifact contract` -> `success`;
+- `Verify production writers touched only owned paths` -> `success`.
 
-The worker execution environment cannot independently reach GitHub/Epic over network/DNS for a fresh canonical live run, so the task explicitly permits using GitHub-owned production evidence. That evidence is not complete yet.
+The fresh canonical giveaway result produced by this run was:
 
-Therefore this report does **not** claim any of the following without evidence:
+- snapshot: `complete`;
+- Epic source `status = ok`;
+- Epic source `complete = true`;
+- Epic `accepted_count = 1`.
 
-- that the fresh Epic source is `ok/complete`;
-- a fresh active accepted Epic giveaway count;
-- that the current canonical snapshot has been regenerated successfully;
-- that the original production `SOURCE_SCHEMA_FAILURE` incident is closed.
+This proves the original parser-ordering failure no longer aborts Epic merely because irrelevant/non-current catalog elements have variant `price.totalPrice`, while a real active current giveaway still maps through the canonical schema under the preserved strict price contract.
+
+## RUN-LEVEL FAILURE CLASSIFICATION
+
+Run `33790442843` has overall conclusion `failure`, but the failure occurred only at the final post-verification step:
+
+- `Commit production feed, giveaways and review cache` -> `failure`.
+
+By that point all task-relevant regression, canonical giveaway build, source-health generation, writer-boundary verification and giveaway contract validation had already completed successfully.
+
+The final commit step failed because `main` advanced while the long-running job was executing and the workflow hit a rebase conflict when attempting to publish generated production files. The run started from `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`; `main` later advanced beyond that head (observed closeout ref: `f9cdee6ae0776e683fdf1005cba3baf6061a7924`).
+
+This publication/rebase conflict is not an Epic parser failure and does not invalidate the already-produced fresh canonical snapshot/source-health evidence required by this task. No follow-up parser fix is indicated by it, and this closeout does not broaden scope into workflow publication behavior.
 
 ## EPIC SOURCE COMPLETE?
 
-Cannot yet be established from fresh canonical production evidence.
+Yes.
 
-Status: **blocked on the already-running canonical GitHub workflow reaching and completing the giveaway production step.**
+Fresh canonical evidence from run `33790442843`:
 
-This is not a request to weaken the parser. If a real active current 100% giveaway later fails the strict price contract, the correct result remains fail-closed and would require explicit follow-up evidence rather than a permissive workaround.
+- `status = ok`;
+- `complete = true`;
+- `accepted_count = 1`.
 
 ## CURRENT ACTIVE ACCEPTED GIVEAWAY COUNT
 
-Not claimed. Fresh canonical live production evidence was not yet available at closeout.
+Fresh canonical Epic accepted count: **1**.
 
 ## ORIGINAL INCIDENT CLOSED?
 
-Not yet proven closed in production.
+Yes.
 
-The implementation directly removes the proven ordering defect and preserves strictness for actual current giveaways, but closure requires the fresh canonical source-health/snapshot evidence demanded by this task. The canonical GitHub-owned run is already in progress; no separate workflow or source was introduced.
+The original `SOURCE_SCHEMA_FAILURE` incident caused by validating `price.totalPrice` before determining giveaway relevance is closed by:
+
+1. the implemented ordering fix;
+2. focused regression coverage proving irrelevant/upcoming variant-price elements are skipped without weakening active-giveaway strictness;
+3. successful GitHub-owned canonical giveaway build;
+4. successful canonical giveaway contract validation;
+5. fresh complete snapshot with Epic `status=ok`, `complete=true`, `accepted_count=1`.
+
+The separate final-step rebase conflict does not reopen the Epic schema incident.
+
+## STATUS DECISION
+
+`complete`.
+
+Under the task contract, completion requires the narrow parser fix, preserved fail-closed behavior for actual current giveaways, focused regression proof, and fresh canonical production/source-health evidence. All of those conditions are now satisfied.
+
+The workflow's final generated-file commit failure occurred after those acceptance conditions were met and was caused by concurrent `main` advancement/rebase conflict, not by the Epic implementation or its canonical output. Therefore `blocked` is no longer appropriate, and `needs_followup_fix` would incorrectly classify an unrelated publication race as an Epic parser defect.
 
 ## EXACT REFS
 
+- task: `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_FIX_01.md`
 - recon closeout: `reviews/worker_reports/epic-giveaway-schema-recon-01.md`
 - implementation commit: `aa7cea8d06d4d71a5ff6fe4c23a71c2cbda28783`
 - implementation blob: `scripts/giveaway_epic.py` @ `6fb410a27a0bc40c3fce2eecacc9d09da7aec88e`
-- regression commit: `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`
+- regression commit / canonical run head: `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`
 - regression blob: `scripts/test_giveaway_production.py` @ `0bf860f3e35e5dc367a82f531be7d55c3abba089`
-- canonical code-run: `33790369125` (`aa7cea8d06d4d71a5ff6fe4c23a71c2cbda28783`), in progress at closeout
-- canonical test-run: `33790442843` (`d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`), pending at closeout
+- canonical final run: `33790442843`
+- canonical final job: `100774514557`
+- run overall conclusion: `failure` only at final generated-file commit step
+- task-relevant build/validation steps: `success`
+- observed advanced `main` ref during final closeout: `f9cdee6ae0776e683fdf1005cba3baf6061a7924`
 
 ## SCOPE CHECK
 
-- `scripts/giveaway_epic.py`: changed, ordering fix only.
-- `scripts/test_giveaway_production.py`: changed, focused Epic regression coverage only.
-- workflows: unchanged.
-- Epic endpoint/KZ params: unchanged.
-- active giveaway price strictness: preserved/fail-closed.
-- Steam/GOG behavior: untouched.
-- ITAD/IGDB: untouched.
-- title/fuzzy/manual inference: not introduced.
+- new implementation in this closeout: **none**;
+- `scripts/giveaway_epic.py`: unchanged in this closeout;
+- `scripts/test_giveaway_production.py`: unchanged in this closeout;
+- only `reviews/worker_reports/epic-giveaway-schema-fix-01.md` updated;
+- workflows: unchanged;
+- Epic endpoint/KZ params: unchanged;
+- active giveaway price strictness: preserved/fail-closed;
+- Steam/GOG behavior: untouched;
+- ITAD/IGDB: untouched;
+- title/fuzzy/manual inference: not introduced;
 - extra provider/fallback: not introduced.
