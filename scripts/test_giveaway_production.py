@@ -47,6 +47,49 @@ def collection(source_id, candidates, complete=True):
     return SourceCollection(source_id, candidates, complete, "ok" if complete else "failed", FIRST_PARTY_URLS[source_id], iso_utc(NOW), {}, None if complete else "SOURCE_ERROR", None if complete else "fixture failure")
 
 
+def epic_payload(*elements):
+    return {"data": {"Catalog": {"searchStore": {"elements": list(elements)}}}}
+
+
+def epic_element(*, price, promotions, offer_id="offer-1", title="Epic Gift"):
+    return {
+        "id": offer_id,
+        "namespace": f"namespace-{offer_id}",
+        "title": title,
+        "offerType": "BASE_GAME",
+        "seller": {"name": "Example Studio"},
+        "price": price,
+        "catalogNs": {"mappings": [{"pageSlug": title.lower().replace(" ", "-")}]},
+        "promotions": promotions,
+    }
+
+
+def epic_current_promotions(*, discount_percentage=0, start="2026-09-01T00:00:00Z", end="2026-09-08T00:00:00Z"):
+    return {
+        "promotionalOffers": [{
+            "promotionalOffers": [{
+                "startDate": start,
+                "endDate": end,
+                "discountSetting": {"discountType": "PERCENTAGE", "discountPercentage": discount_percentage},
+            }]
+        }],
+        "upcomingPromotionalOffers": [],
+    }
+
+
+def epic_upcoming_promotions():
+    return {
+        "promotionalOffers": [],
+        "upcomingPromotionalOffers": [{
+            "promotionalOffers": [{
+                "startDate": "2026-09-02T00:00:00Z",
+                "endDate": "2026-09-09T00:00:00Z",
+                "discountSetting": {"discountType": "PERCENTAGE", "discountPercentage": 0},
+            }]
+        }],
+    }
+
+
 class GiveawayTests(unittest.TestCase):
     def test_true_active_steam_claim_to_keep(self):
         row = {"appid": "10", "discount_percent": "100", "title": "Steam Gift"}
@@ -56,16 +99,78 @@ class GiveawayTests(unittest.TestCase):
         self.assertEqual(item["classification_status"], "accepted")
 
     def test_true_active_epic_claim_to_keep(self):
-        payload = {"data": {"Catalog": {"searchStore": {"elements": [{
-            "id": "offer-1", "namespace": "namespace-1", "title": "Epic Gift", "offerType": "BASE_GAME",
-            "seller": {"name": "Example Studio"},
-            "price": {"totalPrice": {"originalPrice": 1999, "discountPrice": 0, "currencyCode": "KZT"}},
-            "catalogNs": {"mappings": [{"pageSlug": "epic-gift"}]},
-            "promotions": {"promotionalOffers": [{"promotionalOffers": [{"startDate": "2026-09-01T00:00:00Z", "endDate": "2026-09-08T00:00:00Z", "discountSetting": {"discountType": "PERCENTAGE", "discountPercentage": 0}}]}], "upcomingPromotionalOffers": []},
-        }]}}}}
+        payload = epic_payload(epic_element(
+            price={"totalPrice": {"originalPrice": 1999, "discountPrice": 0, "currencyCode": "KZT"}},
+            promotions=epic_current_promotions(),
+        ))
         items = normalize_epic(payload, NOW)
         self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["base_price"], 1999)
+        self.assertEqual(items[0]["final_price"], 0)
+        self.assertEqual(items[0]["discount_percent"], 100)
         self.assertEqual(classify_candidate(items[0], NOW)["classification_status"], "accepted")
+
+    def test_epic_non_current_missing_total_price_is_skipped(self):
+        payload = epic_payload(epic_element(price={}, promotions=None))
+        self.assertEqual(normalize_epic(payload, NOW), [])
+
+    def test_epic_non_current_null_total_price_is_skipped(self):
+        payload = epic_payload(epic_element(price={"totalPrice": None}, promotions={"promotionalOffers": [], "upcomingPromotionalOffers": []}))
+        self.assertEqual(normalize_epic(payload, NOW), [])
+
+    def test_epic_upcoming_variant_price_does_not_abort_current_extraction(self):
+        upcoming = epic_element(
+            offer_id="upcoming",
+            title="Upcoming Gift",
+            price={"totalPrice": None},
+            promotions=epic_upcoming_promotions(),
+        )
+        current = epic_element(
+            offer_id="current",
+            title="Current Gift",
+            price={"totalPrice": {"originalPrice": 2499, "discountPrice": 0, "currencyCode": "KZT"}},
+            promotions=epic_current_promotions(),
+        )
+        items = normalize_epic(epic_payload(upcoming, current), NOW)
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["title"], "Current Gift")
+        self.assertEqual(items[0]["source_provenance"]["promotion_state_array"], "current")
+
+    def test_epic_current_free_missing_total_price_still_fails_closed(self):
+        payload = epic_payload(epic_element(price={}, promotions=epic_current_promotions()))
+        with self.assertRaisesRegex(SourceSchemaError, "price.totalPrice"):
+            normalize_epic(payload, NOW)
+
+    def test_epic_current_free_non_object_total_price_still_fails_closed(self):
+        payload = epic_payload(epic_element(price={"totalPrice": None}, promotions=epic_current_promotions()))
+        with self.assertRaisesRegex(SourceSchemaError, "price.totalPrice"):
+            normalize_epic(payload, NOW)
+
+    def test_epic_current_free_price_fields_remain_strict_integers(self):
+        payload = epic_payload(epic_element(
+            price={"totalPrice": {"originalPrice": 1999, "discountPrice": "0", "currencyCode": "KZT"}},
+            promotions=epic_current_promotions(),
+        ))
+        with self.assertRaisesRegex(SourceSchemaError, "discountPrice"):
+            normalize_epic(payload, NOW)
+
+    def test_epic_current_free_price_mismatch_still_fails_closed(self):
+        payload = epic_payload(epic_element(
+            price={"totalPrice": {"originalPrice": 1999, "discountPrice": 100, "currencyCode": "KZT"}},
+            promotions=epic_current_promotions(),
+        ))
+        with self.assertRaisesRegex(SourceSchemaError, "non-zero discountPrice"):
+            normalize_epic(payload, NOW)
+
+    def test_epic_malformed_active_promotion_discriminator_stays_strict(self):
+        promotions = epic_current_promotions()
+        del promotions["promotionalOffers"][0]["promotionalOffers"][0]["discountSetting"]["discountPercentage"]
+        payload = epic_payload(epic_element(
+            price={"totalPrice": {"originalPrice": 1999, "discountPrice": 0, "currencyCode": "KZT"}},
+            promotions=promotions,
+        ))
+        with self.assertRaisesRegex(SourceSchemaError, "discountPercentage"):
+            normalize_epic(payload, NOW)
 
     def test_true_active_gog_claim_to_keep(self):
         product = {"id": 42, "title": "GOG Gift", "productType": "game", "slug": "gog_gift", "publishers": ["Example Studio"], "price": {"base": "29.99", "final": "0.00", "currency": "USD"}}
