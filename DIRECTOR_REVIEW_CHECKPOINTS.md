@@ -28,21 +28,29 @@ Current post-audit material changes:
 1. `semantic-runtime-completion-fix-01` completed.
 2. `semantic-runtime-completion-acceptance-02` accepted the new runtime observability/completeness control and stabilized the Trine-class unobserved-semantic-processing incident.
 
-The recurring trigger has therefore fired before the numerical count reaches 3: an unobserved automatic-process incident was stabilized and the semantic-runtime control boundary was accepted. Existing direct continuation `visual-freshness-chain-fix-01` may finish first, but do not assign ordinary backlog work before the next System Audit.
+The recurring trigger has fired: an unobserved automatic-process incident was stabilized and the semantic-runtime control boundary was accepted. Existing direct continuation `visual-freshness-chain-acceptance-02` may finish first, but do not assign ordinary backlog work before the next System Audit.
 
 ## Taste Reviewer
 
-taste_reviewer_chat_established: false
-taste_baseline_review_due: true
-last_taste_review_report: `none`
+taste_reviewer_chat_established: true
+taste_baseline_review_due: false
+last_taste_review_report: `reviews/taste_reviews/baseline-01.md`
 
-### Baseline trigger
+### Baseline result
 
-Establish a dedicated Taste Reviewer chat when convenient; it is advisory and must not modify production code.
+Baseline review completed. Current overall selection-pressure classification: `cannot_determine`, with evidence against both simplistic global interpretations (`too strict` or `too loose`). The strongest current concern is conditional/context loss: role, felt burden, optionality/density, and unknown-vs-negative treatment can be mis-modeled.
 
-Its first job is a baseline review of whether the current recommendation system is over-constrained or mis-prioritized for Dmitry's actual game taste.
+Key durable controls recorded by the reviewer include:
+- `Trine 4` confirmed family-play positive;
+- `HighFleet` strong negative start-priority control for dry/technical felt burden;
+- `Tails of Iron 2` secondary/palate-cleanser role rather than main-game priority;
+- `High On Life` moderate full/main-game candidate;
+- `Sifu` strong current pre-play interest;
+- `Batman: Arkham` replay-positive anchor;
+- `RDR2` primary open-world positive;
+- context-sensitive interpretations for `directionlessness`, `unchanged_repetition`, `management_routine`, and `puzzle_pacing`.
 
-This baseline does not need to pre-empt a time-sensitive incident, but it must occur before accepting a future material Taste/ranking-policy change.
+Reviewer recommendations are advisory only and must not be auto-converted into production policy changes. Any material Taste/ranking policy implementation still requires Director review and, before acceptance, a current Taste Review checkpoint.
 
 ### Mandatory recurring triggers
 
