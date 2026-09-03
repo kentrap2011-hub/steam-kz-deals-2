@@ -1,0 +1,85 @@
+name: Patch semantic runtime completion fix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/patch-semantic-runtime-completion-fix.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: semantic-runtime-completion-fix
+  cancel-in-progress: false
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Apply bounded semantic runtime completion patch
+        run: python scripts/apply_semantic_runtime_completion_fix.py
+
+      - name: Validate focused semantic runtime completion contract
+        run: python scripts/test_semantic_runtime_completion.py
+
+      - name: Validate existing Taste contracts
+        run: |
+          python scripts/validate_taste_v3_contract.py
+          python scripts/validate_taste_inbox_transactional_proof.py
+
+      - name: Compile touched producers
+        run: |
+          python -m py_compile \
+            scripts/semantic_runtime_completion.py \
+            scripts/process_taste_inbox.py \
+            scripts/build_pre_ai_chatgpt_payload.py \
+            scripts/build_visual_feed_v2.py \
+            scripts/build_final_visual_payload.py
+
+      - name: Prove execution ownership contract unchanged
+        run: git diff --exit-code -- config/execution_ownership_contract.json
+
+      - name: Commit implementation and current status artifacts
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add \
+            scripts/process_taste_inbox.py \
+            scripts/build_pre_ai_chatgpt_payload.py \
+            scripts/build_visual_feed_v2.py \
+            scripts/build_final_visual_payload.py \
+            data/cache/taste_ingest_receipts/latest_runtime_status.json \
+            data/production/pre_ai/chatgpt_payload.json
+          if [ -f data/production/visual/current.json ]; then
+            git add data/production/visual/current.json
+          fi
+          git diff --cached --check
+          git diff --cached --stat
+          test -n "$(git diff --cached --name-only)"
+          git commit -m "Fix semantic runtime completion observability"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
