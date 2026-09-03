@@ -12,7 +12,7 @@
 4. Неясная проблема сначала идёт в bounded `READ-ONLY / RECON`, затем отдельный `IMPLEMENT`.
 5. Bounded sample разрешён только для диагностики/validation. Interactive worker не должен вручную обрабатывать production-каталог item-by-item.
 6. Полный production scope, queue, ordering, retries, persistence, completeness и downstream rebuild принадлежат GitHub/GitHub Actions по `config/execution_ownership_contract.json`.
-7. Если GitHub не может получить внешний/semantic факт сам, scheduled ChatGPT получает только GitHub-prepared exact scope и возвращает результат через canonical interface; interactive worker не создаёт собственную production-очередь.
+7. Если GitHub не может получить внешний/semantic факт сам, scheduled ChatGPT получает only GitHub-prepared exact scope и возвращает результат через canonical interface; interactive worker не создаёт собственную production-очередь.
 8. UI-задачи с real-device judgment закрывать только после пользовательской проверки.
 9. Worker-чат удалять только после сохранённого report, решения директора и всех ближайших проверок.
 10. Для активных задач хранить ожидаемый report path.
@@ -27,12 +27,22 @@
 19. `TASTE REVIEWER` is a separate advisory chat. It does not implement production changes and therefore does not consume one of the two implementation worker slots while used only in the boundaries of `TASTE_REVIEWER_ROLE.md`.
 20. `SYSTEM AUDITOR` is an independent periodic review role governed by `SYSTEM_AUDITOR_ROLE.md`; it must not be forgotten or replaced by ordinary acceptance tests.
 
-## Активно / closeout
+## Активно сейчас
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Taste-контроль | Final acceptance passed; no further continuation | `WORKER_TASK_SEMANTIC_RUNTIME_COMPLETION_ACCEPTANCE_02.md` | `reviews/worker_reports/semantic-runtime-completion-acceptance-02.md` | `complete_chat_can_delete` |
-| `ЧАТ 2` | Финальная приёмка свежести | Verify completed freshness receipt + exact deploy binding implementation before production merge/release | `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_ACCEPTANCE_02.md` | `reviews/worker_reports/visual-freshness-chain-acceptance-02.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 1` | Срочно: страница не реагирует | Localize mobile interaction freeze where cold load/reload is non-interactive but app-switch/resume temporarily restores interaction | `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md` | `reviews/worker_reports/mobile-page-interaction-freeze-recon-01.md` | `ready_to_start_new_chat` |
+| `ЧАТ 2` | Финальная приёмка свежести | Verify completed freshness receipt + exact deploy binding implementation before production merge/release | `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_ACCEPTANCE_02.md` | `reviews/worker_reports/visual-freshness-chain-acceptance-02.md` | `running_or_ready_in_existing_chat` |
+
+## Urgent user-visible incident — mobile interaction freeze
+
+- User report 2026-09-03: discounts page is currently badly broken; nothing opens/responds after load; switching to another app and returning temporarily restores interaction; after refresh/reload it is broken again.
+- Classification: urgent user-visible UI incident; explicitly pre-empts the due System Audit and prepared ITAD implementation until localized/stabilized.
+- Task: `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md`.
+- Mode: `READ-ONLY / RECON` first because exact mechanism is unknown.
+- Required likely lenses: blocking overlay/pointer interception, missing event binding/initialization, mobile visibility/pageshow lifecycle, service-worker/cache asset mismatch, runtime exception.
+- No implementation until recon localizes the first failure mechanism.
+- Any fix will require real-device user verification before closure.
 
 ## Semantic runtime completion — accepted
 
@@ -40,49 +50,37 @@
 - Runtime observability: pass.
 - Feed semantic completeness visibility: pass.
 - No duplicate scheduler/runtime/queue.
-- Director decision: close. Chat 1 can be deleted.
+- Director decision: closed; old Chat 1 can be deleted/replaced by the new urgent incident chat.
 
 ## Visual freshness — implementation complete, acceptance due
 
 - Implementation report: `reviews/worker_reports/visual-freshness-chain-fix-01.md`, blob `e5226710d435cfbb1c0190e11d937b025ceb9aac`.
 - Status: `complete`.
 - Implementation branch: `worker/visual-freshness-chain-fix-01`.
-- Added durable `visual-freshness-receipt-v1` to ordinary build outcomes and exact deploy verification against the triggering build run.
+- Added durable `visual-freshness-receipt-v1` and exact deploy verification against triggering build run.
 - Focused bounded tests pass for fresh, degraded/no-build and stale-mismatch cases.
-- No production deployment was performed by the implementation task.
-- Director decision: run `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_ACCEPTANCE_02.md` in the same Chat 2 before merge/release decision.
+- No production deployment was performed by implementation.
+- Continue only its bounded acceptance in existing Chat 2; do not merge/release merely because this new UI incident exists unless acceptance explicitly permits and Director decides no overlap/risk.
 
 ## System Auditor checkpoint
 
 - Last report: `reviews/system_audits/baseline-01.md`.
 - `system_audit_due: true` after accepted semantic-runtime control/stabilized incident.
-- Existing direct Chat 2 freshness continuation may finish first.
-- After that direct continuation is stable, run the due System Audit before ordinary implementation work unless the user explicitly prioritizes a more urgent time-sensitive task.
+- The new page-interaction incident is an explicit urgent user priority and may pre-empt the audit.
+- After this incident and the direct Chat 2 continuation are stable, run the due System Audit before ordinary implementation work.
 
 ## Taste Reviewer — baseline complete
 
-- Dedicated reviewer is now established.
+- Dedicated reviewer established.
 - Report: `reviews/taste_reviews/baseline-01.md`, blob `f243047d9bbb3d8515e7929e2962da66688243c4`.
-- `taste_baseline_review_due: false`.
-- Overall selection pressure: `cannot_determine`; do not globally loosen or tighten Taste from this baseline.
-- Strongest evidence: model needs more contextual calibration of role/priority and risk meaning, not a simple threshold change.
-- Durable controls include Trine 4 family positive, HighFleet negative start-priority control, Tails of Iron 2 secondary role, High On Life moderate main-game candidate, Sifu strong interest, Batman replay-positive, RDR2 open-world positive.
-- Reviewer recommendations remain advisory; no Taste/ranking implementation is auto-assigned from this report.
-- Keep this chat as the dedicated Taste Reviewer if convenient; it does not consume an implementation worker slot.
+- Advisory only; no automatic Taste/ranking changes.
 
 ## Giveaway identity — ITAD permission confirmed, provider switch prepared
 
-- ITAD permission reply: `Hi, this is permitted. For details about authentication refer to docs.`
-- Classification: `permission_confirmed`.
-- Prepared task updated: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
-- Architecture decision: one provider-neutral giveaway identity interface with one canonical active-provider setting equivalent to `giveaway_identity_provider = "itad"`.
-- `itad` is active now; `igdb` is reserved for later acceptance/implementation.
-- No automatic fallback, dual lookup or provider voting.
-- Selecting unavailable `igdb` before its adapter is accepted must fail closed explicitly.
-- Downstream Steam family / description / Taste / grounded-negative attachment consumes only the common resolved Steam identity, not provider-specific ITAD/IGDB branches.
-- ITAD exact-ID adapter is the only provider implementation in the current task.
-- Twitch/IGDB remains potential later replacement through the same interface if Twitch is unblocked.
-- Status: `prepared_not_started` because System Audit is currently due and Chat 2 direct freshness continuation is still open.
+- ITAD permission confirmed.
+- Prepared task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
+- Architecture: one provider-neutral identity interface, active `itad`, reserved future `igdb`, no automatic fallback.
+- Status: `prepared_not_started` and now explicitly lower priority than the urgent page-interaction incident and due audit.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
@@ -92,7 +90,8 @@
 
 ## Выбор следующей работы
 
-1. Continue existing Chat 2 with `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_ACCEPTANCE_02.md`.
-2. After Chat 2 reaches a stable merge/release decision, run the now-due System Audit.
-3. After audit decision, start the prepared switchable-provider ITAD implementation unless a more urgent user priority supersedes it.
-4. Do not turn Taste Reviewer baseline recommendations into production ranking/Taste changes without a separate Director decision and required Taste-review checkpoint.
+1. Start NEW Chat 1 with `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md` immediately.
+2. Let existing Chat 2 finish only its already-assigned visual-freshness acceptance.
+3. When urgent recon finishes, read its exact report first and assign a bounded fix if localized.
+4. Real-device user verification is mandatory after any UI fix.
+5. After incident stabilization + Chat 2 direct continuation, run due System Audit before ITAD/ordinary backlog implementation.
