@@ -27,40 +27,37 @@
 19. `TASTE REVIEWER` is a separate advisory chat. It does not implement production changes and therefore does not consume one of the two implementation worker slots while used only in the boundaries of `TASTE_REVIEWER_ROLE.md`.
 20. `SYSTEM AUDITOR` is an independent periodic review role governed by `SYSTEM_AUDITOR_ROLE.md`; it must not be forgotten or replaced by ordinary acceptance tests.
 
-## Активно сейчас — IMPLEMENT после audit acceptance
+## Активно сейчас
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Исправление Taste-наблюдаемости | Add durable progress/heartbeat evidence for the existing canonical Taste runtime and a truthful semantic incomplete/degraded publication state | `WORKER_TASK_SEMANTIC_RUNTIME_COMPLETION_FIX_01.md` | `reviews/worker_reports/semantic-runtime-completion-fix-01.md` | `ready_to_continue_in_existing_chat` |
-| `ЧАТ 2` | Исправление свежести публикации | Add a durable build freshness receipt and bind Pages deploy to the exact triggering fresh build / explicit degraded no-build outcome | `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_FIX_01.md` | `reviews/worker_reports/visual-freshness-chain-fix-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 1` | Финальная приёмка Taste-контроля | Verify the completed runtime heartbeat/progress and truthful semantic degraded-state implementation | `WORKER_TASK_SEMANTIC_RUNTIME_COMPLETION_ACCEPTANCE_02.md` | `reviews/worker_reports/semantic-runtime-completion-acceptance-02.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 2` | Исправление свежести публикации | Worker reports implementation finished, but durable report is still missing | `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_FIX_01.md` | `reviews/worker_reports/visual-freshness-chain-fix-01.md` | `awaiting_report_closeout` |
 
-## Acceptance results — complete, both need fixes
+## Semantic runtime completion fix
 
-### Semantic runtime completion acceptance
+- Implementation report: `reviews/worker_reports/semantic-runtime-completion-fix-01.md`, blob `b414aa0d41929a8e125833b79caee74a9f022049`.
+- Status: `complete`.
+- Durable canonical runtime receipt added at `data/cache/taste_ingest_receipts/latest_runtime_status.json` through the existing transactional Taste ingest path.
+- Canonical pre-AI/visual publication now distinguishes partition completion from semantic completeness and reports `degraded` while unresolved semantic work remains.
+- Current receipt truthfully shows accepted progress belongs to an older semantic scope and therefore does not claim current-scope progress.
+- No second scheduler/runtime/queue was created and execution ownership contract remained unchanged.
+- Final implementation validation run: `33712250775`, success.
+- Director decision: run bounded follow-up acceptance `semantic-runtime-completion-acceptance-02` before closing this incident/chat.
 
-- Report: `reviews/worker_reports/semantic-runtime-completion-acceptance-01.md`, blob `95a761898d2a34fc646fde1207bb0b1fa91f6936`.
-- Status: `needs_fix`.
-- `Semantic runtime observability`: `fail`.
-- `Feed semantic completeness visibility`: `fail`.
-- Current evidence: 644 of 743 families remain in semantic queue while partition/status can still say `complete`; queue presence is not a runtime heartbeat.
-- Director decision: one bounded IMPLEMENT task only; preserve the single existing Taste scheduler/runtime and current Taste semantics.
+## Visual freshness fix
 
-### Visual freshness chain acceptance
+- Acceptance requiring fix remains: `reviews/worker_reports/visual-freshness-chain-acceptance-01.md`, blob `11f4d2b416d8034646df253df616b44143aade57`.
+- User reports Chat 2 completed `visual-freshness-chain-fix-01`, but expected durable implementation report is not yet present.
+- Director decision: do not re-run implementation or investigate broadly. Obtain report closeout only, then decide bounded follow-up acceptance.
 
-- Report: `reviews/worker_reports/visual-freshness-chain-acceptance-01.md`, blob `11f4d2b416d8034646df253df616b44143aade57`.
-- Status: `needs_fix`.
-- `Fresh-cycle build proof`: `fail`.
-- `Deploy-to-built-cycle binding`: `fail`.
-- `Stale-success visibility`: `fail`.
-- Current evidence: build can succeed without fresh visual; deploy checks out `main` rather than exact triggering visual; current history blob and visual-declared source-history blob do not match.
-- Director decision: one bounded IMPLEMENT task only; add a durable freshness receipt and exact deploy binding without redesigning the pipeline.
-
-## System Auditor baseline-01 — complete
+## System Auditor baseline-01
 
 - Report: `reviews/system_audits/baseline-01.md`, blob `5d3abfd95e84205b999329aa30bc806687d8b9cf`.
 - Status: `complete`.
-- `DIRECTOR_REVIEW_CHECKPOINTS.md`: `system_audit_due: false`, material-change counter reset to 0.
-- Audit Finding 5 (legacy dispatchable Taste write paths) remains a durable future candidate, not next while the two higher-impact fixes are active.
+- `DIRECTOR_REVIEW_CHECKPOINTS.md`: `system_audit_due: false`.
+- `material_changes_since_last_system_audit: 1` after completed `semantic-runtime-completion-fix-01`.
+- Audit Finding 5 (legacy dispatchable Taste write paths) remains a future candidate, not next.
 
 ## Taste Reviewer
 
@@ -73,15 +70,13 @@
 ## Trine 4 state
 
 - Canonical identity: `App_690640`, family `game:690640`.
-- Live sale captured: KZ available, `1,520 KZT` from `7,600 KZT`, `-80%`, observed `2026-09-02T06:42:05.485251Z`, sale end `2026-09-15T17:00:00Z`.
-- Stop Trine-specific recon. Its incident is now covered by the system-level semantic runtime completion fix.
+- Stop Trine-specific recon. Its system-level observability/completeness defect is now implemented and awaiting acceptance-02.
 
 ## Giveaway identity state
 
 - Twitch/IGDB remains fallback because Twitch 2FA activation is blocked and Support is pending.
-- IsThereAnyDeal remains strongest non-Twitch route; bounded Epic proof succeeded 2/2 with exact IDs.
-- User sent ITAD permission request on 2026-09-02.
-- Follow-up SLA: if no reply by 2026-09-07, send one concise follow-up; if still no reply by 2026-09-09, stop treating ITAD as operationally available primary route and decide on bounded Wikidata fallback. A later positive ITAD reply may supersede the fallback.
+- IsThereAnyDeal remains strongest non-Twitch route; permission request sent 2026-09-02.
+- Follow-up SLA: no reply by 2026-09-07 -> one concise follow-up; still no reply by 2026-09-09 -> decide bounded Wikidata fallback.
 - No ITAD implementation until permission is explicit.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
@@ -93,4 +88,7 @@
 
 ## Выбор следующей работы
 
-Continue both direct implementation fixes in the existing worker chats. After each implementation report, decide its bounded follow-up acceptance. Do not start ordinary backlog work ahead of these fixes unless the user explicitly prioritizes a more urgent time-sensitive incident.
+1. Continue Chat 1 with `WORKER_TASK_SEMANTIC_RUNTIME_COMPLETION_ACCEPTANCE_02.md`.
+2. Get Chat 2's already-completed implementation saved to `reviews/worker_reports/visual-freshness-chain-fix-01.md`; do not repeat implementation.
+3. After Chat 2 report, decide its bounded acceptance continuation.
+4. Do not start ordinary backlog work ahead of these direct continuations unless the user explicitly prioritizes a more urgent time-sensitive incident.
