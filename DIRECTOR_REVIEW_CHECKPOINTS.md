@@ -6,10 +6,11 @@ The Director must read this file before assigning a new ordinary backlog task wh
 
 ## System Auditor
 
-system_audit_due: true
+system_audit_due: false
 first_system_audit_trigger: `satisfied_2026-09-02`
-material_changes_since_last_system_audit: 2
-last_system_audit_report: `reviews/system_audits/baseline-01.md`
+material_changes_since_last_system_audit: 0
+last_system_audit_report: `reviews/system_audits/system-audit-02.md`
+mobile_post_incident_audit_pending: true
 
 ### First trigger condition
 
@@ -24,11 +25,18 @@ Set `system_audit_due: true` when:
 
 A completed audit resets `material_changes_since_last_system_audit` to 0 and records its report.
 
-Current post-audit material changes:
-1. `semantic-runtime-completion-fix-01` completed.
-2. `semantic-runtime-completion-acceptance-02` accepted the new runtime observability/completeness control and stabilized the Trine-class unobserved-semantic-processing incident.
+### Current audit state
 
-The recurring trigger has fired: an unobserved automatic-process incident was stabilized and the semantic-runtime control boundary was accepted. Existing direct continuation `visual-freshness-chain-acceptance-02` may finish first, but do not assign ordinary backlog work before the next System Audit.
+`System Audit 02` completed on 2026-09-03 and satisfied the previously due checkpoint.
+
+Key dispositions from `reviews/system_audits/system-audit-02.md`:
+- semantic execution heartbeat/observability: `closed`;
+- semantic incompleteness visibility: `partially_closed` because canonical degraded truth is not yet visibly surfaced in the user-facing feed;
+- visual stale-success: `partially_closed` because the accepted fix is not yet active on production `main`;
+- legacy one-shot Taste writer ambiguity remains a bounded risk hypothesis;
+- current mobile feed incident remains active and was not treated as stabilized/accepted by the audit.
+
+Because the mobile incident was still active during this audit, set `system_audit_due: true` again after that incident is actually stabilized and user-accepted, unless a later audit has already covered the exact stabilized failure class. Until stabilization, `mobile_post_incident_audit_pending: true` is a reminder, not a current blocking due checkpoint.
 
 ## Taste Reviewer
 
