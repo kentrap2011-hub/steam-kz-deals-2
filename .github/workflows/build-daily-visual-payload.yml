@@ -39,6 +39,8 @@ on:
       - "scripts/ingest_taste_results.py"
       - "scripts/taste_cache_common.py"
       - "scripts/build_ranking_lookup.py"
+      - "scripts/visual_freshness_receipt.py"
+      - "scripts/test_visual_freshness_receipt.py"
       - "config/duration_enrichment_contract.json"
       - "config/final_ranking_policy.json"
       - "config/fixed_package_purchase_option_contract.json"
@@ -116,6 +118,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Capture intended source cycle for freshness receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/visual_freshness_receipt.py capture-intent \
+            --output /tmp/visual-freshness-intent.json
 
       - name: Validate giveaway visual handoff
         shell: bash
@@ -199,6 +208,7 @@ jobs:
           PY
 
       - name: Commit canonical giveaway visual sibling
+        id: persist_giveaway
         shell: bash
         run: |
           set -euo pipefail
@@ -208,6 +218,7 @@ jobs:
           git diff --cached --check
           if git diff --cached --quiet; then
             echo "No giveaway visual change"
+            echo "persisted=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m "Refresh giveaway visual payload"
@@ -219,11 +230,113 @@ jobs:
               exit 1
             fi
             if git push origin HEAD:main; then
+              echo "persisted=true" >> "$GITHUB_OUTPUT"
               exit 0
             fi
             sleep $((attempt * 3))
           done
           exit 1
+
+      - name: Create degraded freshness receipt for giveaway-only invocation
+        if: always()
+        env:
+          WORKFLOW_RUN_ID: ${{ github.run_id }}
+          WORKFLOW_RUN_ATTEMPT: ${{ github.run_attempt }}
+          EVENT_NAME: ${{ github.event_name }}
+          WORKFLOW_HEAD_SHA: ${{ github.sha }}
+          UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
+          UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          PERSISTED: ${{ steps.persist_giveaway.outputs.persisted }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -s /tmp/visual-freshness-intent.json ]; then
+            python scripts/visual_freshness_receipt.py capture-intent \
+              --output /tmp/visual-freshness-intent.json
+          fi
+          python scripts/visual_freshness_receipt.py create-receipt \
+            --intent /tmp/visual-freshness-intent.json \
+            --output /tmp/visual-freshness-receipt.json \
+            --run-id "$WORKFLOW_RUN_ID" \
+            --run-attempt "$WORKFLOW_RUN_ATTEMPT" \
+            --event-name "$EVENT_NAME" \
+            --workflow-head-sha "$WORKFLOW_HEAD_SHA" \
+            --upstream-run-id "$UPSTREAM_RUN_ID" \
+            --upstream-head-sha "$UPSTREAM_HEAD_SHA" \
+            --build-reported false \
+            --persisted "$PERSISTED" \
+            --history-ready false \
+            --reason giveaway_only_refresh
+
+      - name: Upload visual freshness receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-freshness-receipt
+          path: /tmp/visual-freshness-receipt.json
+          if-no-files-found: error
+          retention-days: 30
+
+  no_build_receipt:
+    needs: scope
+    if: >
+      needs.scope.outputs.giveaway_only != 'true' &&
+      github.event_name == 'workflow_run' &&
+      (github.event.workflow_run.conclusion != 'success' ||
+       github.event.workflow_run.head_branch != 'main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Capture intended source cycle for skipped build receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/visual_freshness_receipt.py capture-intent \
+            --output /tmp/visual-freshness-intent.json
+
+      - name: Create degraded freshness receipt for ineligible upstream run
+        env:
+          WORKFLOW_RUN_ID: ${{ github.run_id }}
+          WORKFLOW_RUN_ATTEMPT: ${{ github.run_attempt }}
+          EVENT_NAME: ${{ github.event_name }}
+          WORKFLOW_HEAD_SHA: ${{ github.sha }}
+          UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
+          UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/visual_freshness_receipt.py create-receipt \
+            --intent /tmp/visual-freshness-intent.json \
+            --output /tmp/visual-freshness-receipt.json \
+            --run-id "$WORKFLOW_RUN_ID" \
+            --run-attempt "$WORKFLOW_RUN_ATTEMPT" \
+            --event-name "$EVENT_NAME" \
+            --workflow-head-sha "$WORKFLOW_HEAD_SHA" \
+            --upstream-run-id "$UPSTREAM_RUN_ID" \
+            --upstream-head-sha "$UPSTREAM_HEAD_SHA" \
+            --build-reported false \
+            --persisted false \
+            --history-ready false \
+            --reason upstream_prerequisite_not_ready
+
+      - name: Upload visual freshness receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-freshness-receipt
+          path: /tmp/visual-freshness-receipt.json
+          if-no-files-found: error
+          retention-days: 30
 
   build:
     needs: scope
@@ -246,6 +359,19 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Capture intended source cycle for freshness receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/visual_freshness_receipt.py capture-intent \
+            --output /tmp/visual-freshness-intent.json
+
+      - name: Validate visual freshness receipt contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/test_visual_freshness_receipt.py
 
       - name: Validate normalized taste factor contract
         shell: bash
@@ -491,11 +617,11 @@ jobs:
                   'package_price_per_visible_game_rub': package.get('package_price_per_visible_game_rub'),
                   'package_covered_visible_game_count': package.get('covered_visible_game_count'),
                   'package_standalone_total_rub': package.get('standalone_total_rub'),
-                  'package_savings_rub': package.get('savings_rub'),
-                  'package_savings_percent_vs_standalone': package.get('savings_percent_vs_standalone'),
-                  'package_strict_current_price_savings': package.get('strict_current_price_savings'),
-                  'package_price_delta_vs_standalone_rub': package.get('price_delta_vs_standalone_rub'),
-                  'package_uses_verified_purchase_equivalence': package.get('uses_verified_purchase_equivalence'),
+                  'package_savings_rub': package.get('package_savings_rub'),
+                  'package_savings_percent_vs_standalone': package.get('package_savings_percent_vs_standalone'),
+                  'package_strict_current_price_savings': package.get('package_strict_current_price_savings'),
+                  'package_price_delta_vs_standalone_rub': package.get('package_price_delta_vs_standalone_rub'),
+                  'package_uses_verified_purchase_equivalence': package.get('package_uses_verified_purchase_equivalence'),
                   'package_coverage_evidence': package.get('coverage_evidence') or [],
                   'better_purchase_option': game.get('better_purchase_option'),
                   'summary': game.get('summary'),
@@ -531,6 +657,7 @@ jobs:
           python scripts/build_ranking_lookup.py
 
       - name: Commit canonical duration cache, payload and review export
+        id: persist
         if: steps.build.outputs.built == 'true' || steps.duration.outputs.cache_changed == 'true'
         run: |
           set -euo pipefail
@@ -540,6 +667,7 @@ jobs:
           git diff --cached --check
           if git diff --cached --quiet; then
             echo "No duration cache, visual payload or review changes"
+            echo "persisted=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m "Refresh daily visual payload"
@@ -551,8 +679,50 @@ jobs:
               exit 1
             fi
             if git push origin HEAD:main; then
+              echo "persisted=true" >> "$GITHUB_OUTPUT"
               exit 0
             fi
             sleep $((attempt * 3))
           done
           exit 1
+
+      - name: Create durable visual freshness receipt
+        if: always()
+        env:
+          WORKFLOW_RUN_ID: ${{ github.run_id }}
+          WORKFLOW_RUN_ATTEMPT: ${{ github.run_attempt }}
+          EVENT_NAME: ${{ github.event_name }}
+          WORKFLOW_HEAD_SHA: ${{ github.sha }}
+          UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
+          UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          BUILD_REPORTED: ${{ steps.build.outputs.built }}
+          PERSISTED: ${{ steps.persist.outputs.persisted }}
+          HISTORY_READY: ${{ steps.history.outputs.ready }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -s /tmp/visual-freshness-intent.json ]; then
+            python scripts/visual_freshness_receipt.py capture-intent \
+              --output /tmp/visual-freshness-intent.json
+          fi
+          python scripts/visual_freshness_receipt.py create-receipt \
+            --intent /tmp/visual-freshness-intent.json \
+            --output /tmp/visual-freshness-receipt.json \
+            --run-id "$WORKFLOW_RUN_ID" \
+            --run-attempt "$WORKFLOW_RUN_ATTEMPT" \
+            --event-name "$EVENT_NAME" \
+            --workflow-head-sha "$WORKFLOW_HEAD_SHA" \
+            --upstream-run-id "$UPSTREAM_RUN_ID" \
+            --upstream-head-sha "$UPSTREAM_HEAD_SHA" \
+            --build-reported "$BUILD_REPORTED" \
+            --persisted "$PERSISTED" \
+            --history-ready "$HISTORY_READY"
+
+      - name: Upload visual freshness receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-freshness-receipt
+          path: /tmp/visual-freshness-receipt.json
+          if-no-files-found: error
+          retention-days: 30
