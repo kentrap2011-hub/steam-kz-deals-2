@@ -31,8 +31,8 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Срочно: ускорить ленту | Render last-known-good feed immediately on repeat visits and refresh canonical payload in background | `WORKER_TASK_MOBILE_FEED_INSTANT_CACHE_FIX_01.md` | `reviews/worker_reports/mobile-feed-instant-cache-fix-01.md` | `running_or_ready_in_existing_chat` |
-| `ЧАТ 2` | Epic раздачи | Diagnose current Epic giveaway schema change before a bounded parser fix | `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_RECON_01.md` | `reviews/worker_reports/epic-giveaway-schema-recon-01.md` | `ready_to_start_new_chat` |
+| `ЧАТ 1` | Срочно: ускорить ленту | Cache-first mobile feed fix is deployed; waiting only for real-device user acceptance | `WORKER_TASK_MOBILE_FEED_INSTANT_CACHE_FIX_01.md` | `reviews/worker_reports/mobile-feed-instant-cache-fix-01.md` | `needs_user_action_keep_chat` |
+| `ЧАТ 2` | Epic раздачи | Diagnose current Epic giveaway schema change before a bounded parser fix | `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_RECON_01.md` | `reviews/worker_reports/epic-giveaway-schema-recon-01.md` | `running_or_ready` |
 
 ## System Audit 02 — complete
 
@@ -44,18 +44,24 @@
 - Baseline Finding 2 semantic incompleteness visibility: partially closed; canonical payload truth is degraded/incomplete but current UI does not visibly surface it.
 - Baseline Finding 3 visual stale-success: partially closed; accepted fix is release-ready but not active on production `main`.
 - Legacy one-shot Taste write workflows remain a bounded ownership risk hypothesis.
-- Audit independently confirms that green Pages deployment does not prove prompt usable mobile feed availability; Chat 1 remains the direct incident owner.
 
 ## Urgent user-visible incident — mobile feed load latency
 
 - Recon report: `reviews/worker_reports/mobile-page-interaction-freeze-recon-01.md`, blob `48700dc77ac17fa031dd129996bef74075d86872`.
 - First fix report: `reviews/worker_reports/mobile-page-blank-feed-fix-01.md`, blob `61b23ffc479dff473310b1d7aed0d36d43a11c8f`.
 - First production fix ref: `af2c7362743b4fe3d80ea10caee7cb606acab3e5`; Pages run `33766838776` succeeded.
-- Real-device result: partial success; silent blank feed is gone, but some reloads still wait several seconds on `Загружаю игры…` before cards appear.
-- Direct continuation: `WORKER_TASK_MOBILE_FEED_INSTANT_CACHE_FIX_01.md`.
-- Target behavior: after one successful load on a device, show last-known-good feed locally immediately, then refresh canonical `data/current.json` in background.
-- Canonical network payload remains source of truth; local storage is presentation fallback only.
-- Real-device verification mandatory after deploy.
+- User real-device result after first fix: partial success; silent blank feed gone, but some reloads still waited several seconds on `Загружаю игры…`.
+- Direct continuation report: `reviews/worker_reports/mobile-feed-instant-cache-fix-01.md`, blob `8c80b9da35057ff6443665468329db37bfc8c8b1`.
+- Status: `needs_user_action` only because real-device acceptance is still required.
+- New production behavior uses one Cache Storage last-known-good response (`steam-deals-feed-lkg-v1`) because the canonical payload is about 4.1 MB and unsuitable for a safe localStorage assumption.
+- After one successful load, repeat visits should render the cached feed immediately, while fresh canonical `data/current.json` refreshes in the background.
+- Slow/failed background refresh must leave already visible cards in place; corrupt cache is ignored; canonical network payload remains source of truth.
+- No service worker, polling, second renderer, second production source, Taste/ranking changes, or visual-freshness merge were introduced.
+- Focused regression: `feed instant cache regression: PASS`.
+- Production release ref: `f745dac844213880cd7eb984573877f58803a3f0` on `main`.
+- Successful Pages deploy: `Deploy visual mailing`, run `33779042331`, run number `256`, conclusion `success`.
+- Director decision: do not close incident or delete Chat 1 yet. User must verify on the affected phone: first successful load, then 5+ reloads including rapid reloads; cards should normally appear immediately from local last-known-good data; app-switch/return must not blank/reset the feed.
+- Once user accepts the real-device result, close the incident, allow Chat 1 deletion, and set the pending post-incident System Audit due per checkpoint rule.
 
 ## Known production problem — Epic giveaway source schema failure
 
@@ -66,7 +72,7 @@
 - Epic: failed/incomplete, `SOURCE_SCHEMA_FAILURE`, `Epic price.totalPrice schema changed`.
 - Current result therefore cannot truthfully conclude that there are no active giveaways.
 - Failure occurs before ITAD/IGDB identity enrichment.
-- Prepared next task: `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_RECON_01.md`, creation commit `f4673fecaaab54ae07fe3d795322480c994e2147`.
+- Task: `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_RECON_01.md`, creation commit `f4673fecaaab54ae07fe3d795322480c994e2147`.
 - Mode is bounded READ-ONLY/RECON first; no parser implementation until exact new schema is localized.
 
 ## Operational health watch
@@ -88,7 +94,7 @@
 - Final acceptance report: `reviews/worker_reports/visual-freshness-chain-acceptance-02.md`, blob `6a691fb29d88b1785accf717752149e027265a2c`.
 - Branch `worker/visual-freshness-chain-fix-01` is ready for production merge/release.
 - Audit 02 confirms production `main` still uses the old path, so production closure remains open.
-- Release remains deferred until mobile feed incident is stabilized and overlap risk is reassessed.
+- Release remains deferred until mobile feed incident is user-accepted and overlap risk is reassessed.
 
 ## Taste Reviewer — baseline complete
 
@@ -109,9 +115,9 @@
 
 ## Выбор следующей работы
 
-1. Existing Chat 1 continues `WORKER_TASK_MOBILE_FEED_INSTANT_CACHE_FIX_01.md`.
-2. Replace finished audit Chat 2 with NEW Chat 2 running `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_RECON_01.md`.
-3. Read exact reports first when workers finish; no broad Director investigation.
-4. After mobile incident is user-accepted, set post-incident System Audit due and reassess/release accepted visual-freshness branch.
+1. User verifies the deployed mobile cache-first fix on the affected phone now.
+2. Chat 1 remains available only for immediate bounded follow-up until user acceptance; do not repurpose/delete yet.
+3. Chat 2 continues Epic giveaway schema recon.
+4. After mobile user acceptance: close incident, set post-incident System Audit due, then reassess/release accepted visual-freshness branch.
 5. After Epic recon, if IMPLEMENT-ready, fix Epic discovery before ITAD identity enrichment.
 6. Later address Audit 02 semantic degraded-state UI visibility and legacy Taste writer cleanup as bounded tasks.
