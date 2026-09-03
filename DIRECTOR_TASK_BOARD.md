@@ -32,7 +32,7 @@
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
 | `ЧАТ 1` | Срочно: контент страницы пропадает | Localize mobile lifecycle/data-render bug where shell+controls work but feed cards are absent after load/refresh and appear after app resume | `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md` | `reviews/worker_reports/mobile-page-interaction-freeze-recon-01.md` | `ready_to_start_new_chat` |
-| `ЧАТ 2` | Финальная приёмка свежести | Verify completed freshness receipt + exact deploy binding implementation before production merge/release | `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_ACCEPTANCE_02.md` | `reviews/worker_reports/visual-freshness-chain-acceptance-02.md` | `running_or_ready_in_existing_chat` |
+| `ЧАТ 2` | Свежесть публикации | Final acceptance passed; branch ready for merge/release but production release intentionally deferred until urgent missing-content incident is localized | `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_ACCEPTANCE_02.md` | `reviews/worker_reports/visual-freshness-chain-acceptance-02.md` | `complete_release_deferred_chat_can_delete` |
 
 ## Urgent user-visible incident — mobile feed content missing
 
@@ -52,22 +52,28 @@
 - No duplicate scheduler/runtime/queue.
 - Director decision: closed; old Chat 1 can be deleted/replaced by the new urgent incident chat.
 
-## Visual freshness — implementation complete, acceptance due
+## Visual freshness — accepted, release deferred
 
 - Implementation report: `reviews/worker_reports/visual-freshness-chain-fix-01.md`, blob `e5226710d435cfbb1c0190e11d937b025ceb9aac`.
+- Final acceptance report: `reviews/worker_reports/visual-freshness-chain-acceptance-02.md`, blob `6a691fb29d88b1785accf717752149e027265a2c`.
 - Status: `complete`.
-- Implementation branch: `worker/visual-freshness-chain-fix-01`.
-- Added durable `visual-freshness-receipt-v1` and exact deploy verification against triggering build run.
-- Focused bounded tests pass for fresh, degraded/no-build and stale-mismatch cases.
-- No production deployment was performed by implementation.
-- Continue only its bounded acceptance in existing Chat 2; do not merge/release merely because this UI/data incident exists unless acceptance explicitly permits and Director decides no overlap/risk.
+- All acceptance controls pass:
+  - `Fresh-cycle build proof`: pass;
+  - `Deploy-to-built-cycle binding`: pass;
+  - `Stale-success visibility`: pass;
+  - `Ownership/regression preserved`: pass.
+- Accepted branch: `worker/visual-freshness-chain-fix-01`, acceptance head `4080030e686d6b04fcc666069819aa46df18da7a`.
+- Acceptance concludes the branch is ready for production merge/release and no scoped blocker remains.
+- No production merge/regeneration/Pages deployment was performed by acceptance.
+- Director decision: do **not** merge/release while the urgent mobile missing-content incident is being localized, because an unrelated deploy/payload-cycle change would complicate incident attribution. Preserve the accepted branch/report and release after the incident is localized/stabilized and overlap risk is reassessed.
+- No immediate continuation belongs in the same worker chat; Chat 2 can be deleted.
 
 ## System Auditor checkpoint
 
 - Last report: `reviews/system_audits/baseline-01.md`.
 - `system_audit_due: true` after accepted semantic-runtime control/stabilized incident.
 - New missing-content incident is explicit urgent user priority and may pre-empt audit.
-- After incident and direct Chat 2 continuation stabilize, run due System Audit before ordinary implementation work.
+- After incident stabilizes, run due System Audit before ITAD/ordinary implementation work. Accepted visual freshness release remains a direct production continuation, not ordinary backlog work, but should be reconsidered against the incident findings before deployment.
 
 ## Taste Reviewer — baseline complete
 
@@ -90,8 +96,8 @@
 
 ## Выбор следующей работы
 
-1. Start NEW Chat 1 with corrected `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md` immediately.
-2. Let existing Chat 2 finish only its visual-freshness acceptance.
+1. Start/continue NEW Chat 1 with corrected `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md` immediately.
+2. Do not release the accepted visual-freshness branch until the urgent missing-content incident is localized/stabilized and overlap risk is reassessed.
 3. When urgent recon finishes, read its exact report first and assign bounded fix if localized.
 4. Real-device user verification mandatory after fix.
-5. After incident stabilization + Chat 2 direct continuation, run due System Audit before ITAD/ordinary backlog implementation.
+5. After incident stabilization, run due System Audit before ITAD/ordinary backlog implementation; then schedule the accepted visual-freshness release at the safest bounded point.
