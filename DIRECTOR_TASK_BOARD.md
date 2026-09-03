@@ -23,7 +23,7 @@
 15. Task-memory invariant: future user work must have a durable destination; backlog removal requires destination/completion/cancellation evidence.
 16. Worker efficiency is important, but prepared work is not automatically next.
 17. **Priority discipline:** `prepared` does not mean `next`. When a worker finishes, first read its report, then choose direct continuation vs explicit user priority vs dependencies vs backlog.
-18. **Review checkpoint invariant:** before assigning a new ordinary backlog task whenever an implementation worker slot becomes free, read `DIRECTOR_REVIEW_CHECKPOINTS.md`. If a mandatory review is due, it takes priority unless the user explicitly gives a more urgent time-sensitive task.
+18. **Review checkpoint invariant:** before assigning a new ordinary backlog task whenever a worker slot becomes free, read `DIRECTOR_REVIEW_CHECKPOINTS.md`. If a mandatory review is due, it takes priority unless the user explicitly gives a more urgent time-sensitive task.
 19. `TASTE REVIEWER` is a separate advisory chat. It does not implement production changes and therefore does not consume one of the two implementation worker slots while used only in the boundaries of `TASTE_REVIEWER_ROLE.md`.
 20. `SYSTEM AUDITOR` is an independent periodic review role governed by `SYSTEM_AUDITOR_ROLE.md`; it must not be forgotten or replaced by ordinary acceptance tests.
 
@@ -31,18 +31,18 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Срочно: страница не реагирует | Localize mobile interaction freeze where cold load/reload is non-interactive but app-switch/resume temporarily restores interaction | `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md` | `reviews/worker_reports/mobile-page-interaction-freeze-recon-01.md` | `ready_to_start_new_chat` |
+| `ЧАТ 1` | Срочно: контент страницы пропадает | Localize mobile lifecycle/data-render bug where shell+controls work but feed cards are absent after load/refresh and appear after app resume | `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md` | `reviews/worker_reports/mobile-page-interaction-freeze-recon-01.md` | `ready_to_start_new_chat` |
 | `ЧАТ 2` | Финальная приёмка свежести | Verify completed freshness receipt + exact deploy binding implementation before production merge/release | `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_ACCEPTANCE_02.md` | `reviews/worker_reports/visual-freshness-chain-acceptance-02.md` | `running_or_ready_in_existing_chat` |
 
-## Urgent user-visible incident — mobile interaction freeze
+## Urgent user-visible incident — mobile feed content missing
 
-- User report 2026-09-03: discounts page is currently badly broken; nothing opens/responds after load; switching to another app and returning temporarily restores interaction; after refresh/reload it is broken again.
-- Classification: urgent user-visible UI incident; explicitly pre-empts the due System Audit and prepared ITAD implementation until localized/stabilized.
-- Task: `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md`.
-- Mode: `READ-ONLY / RECON` first because exact mechanism is unknown.
-- Required likely lenses: blocking overlay/pointer interception, missing event binding/initialization, mobile visibility/pageshow lifecycle, service-worker/cache asset mismatch, runtime exception.
-- No implementation until recon localizes the first failure mechanism.
-- Any fix will require real-device user verification before closure.
+- User clarified with real-device screenshot on 2026-09-03: controls/tabs are clickable; the defect is not interaction freeze.
+- After normal load/refresh, page shell/navigation/swipe hint render but game content/cards are absent.
+- Switching to another app and returning causes content to appear temporarily; another refresh returns to empty-content state.
+- Corrected task keeps the same durable task/report path but now focuses on data fetch/render lifecycle, visibility/pageshow resume re-render, service-worker/cache mismatch, runtime initialization error, and whether canonical current payload is actually non-empty.
+- Classification: urgent user-visible UI/data-render incident; pre-empts System Audit and ITAD until localized/stabilized.
+- No implementation until recon localizes the earliest failing step.
+- Real-device user verification mandatory after fix.
 
 ## Semantic runtime completion — accepted
 
@@ -60,14 +60,14 @@
 - Added durable `visual-freshness-receipt-v1` and exact deploy verification against triggering build run.
 - Focused bounded tests pass for fresh, degraded/no-build and stale-mismatch cases.
 - No production deployment was performed by implementation.
-- Continue only its bounded acceptance in existing Chat 2; do not merge/release merely because this new UI incident exists unless acceptance explicitly permits and Director decides no overlap/risk.
+- Continue only its bounded acceptance in existing Chat 2; do not merge/release merely because this UI/data incident exists unless acceptance explicitly permits and Director decides no overlap/risk.
 
 ## System Auditor checkpoint
 
 - Last report: `reviews/system_audits/baseline-01.md`.
 - `system_audit_due: true` after accepted semantic-runtime control/stabilized incident.
-- The new page-interaction incident is an explicit urgent user priority and may pre-empt the audit.
-- After this incident and the direct Chat 2 continuation are stable, run the due System Audit before ordinary implementation work.
+- New missing-content incident is explicit urgent user priority and may pre-empt audit.
+- After incident and direct Chat 2 continuation stabilize, run due System Audit before ordinary implementation work.
 
 ## Taste Reviewer — baseline complete
 
@@ -80,7 +80,7 @@
 - ITAD permission confirmed.
 - Prepared task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
 - Architecture: one provider-neutral identity interface, active `itad`, reserved future `igdb`, no automatic fallback.
-- Status: `prepared_not_started` and now explicitly lower priority than the urgent page-interaction incident and due audit.
+- Status: `prepared_not_started` and explicitly lower priority than urgent missing-content incident and due audit.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
@@ -90,8 +90,8 @@
 
 ## Выбор следующей работы
 
-1. Start NEW Chat 1 with `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md` immediately.
-2. Let existing Chat 2 finish only its already-assigned visual-freshness acceptance.
-3. When urgent recon finishes, read its exact report first and assign a bounded fix if localized.
-4. Real-device user verification is mandatory after any UI fix.
+1. Start NEW Chat 1 with corrected `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md` immediately.
+2. Let existing Chat 2 finish only its visual-freshness acceptance.
+3. When urgent recon finishes, read its exact report first and assign bounded fix if localized.
+4. Real-device user verification mandatory after fix.
 5. After incident stabilization + Chat 2 direct continuation, run due System Audit before ITAD/ordinary backlog implementation.
