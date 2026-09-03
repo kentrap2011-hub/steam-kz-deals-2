@@ -71,14 +71,19 @@
 
 ## Giveaway identity state
 
-- Twitch/IGDB remains fallback because Twitch 2FA activation is blocked and Support is pending.
-- IsThereAnyDeal remains strongest non-Twitch route; permission request sent 2026-09-02.
-- Follow-up SLA: no reply by 2026-09-07 -> one concise follow-up; still no reply by 2026-09-09 -> decide bounded Wikidata fallback.
-- No ITAD implementation until permission is explicit.
+- IsThereAnyDeal permission is now explicit. User supplied provider reply on 2026-09-03: `Hi, this is permitted. For details about authentication refer to docs.`
+- Director classification: `permission_confirmed`.
+- The previous ITAD Terms blocker and follow-up SLA are closed; the scheduled 2026-09-07 permission follow-up is no longer needed operationally.
+- Prepared implementation task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
+- Expected report: `reviews/worker_reports/giveaway-itad-identity-implement-01.md`.
+- Intended route: exact Epic/GOG provider ID -> ITAD exact shop-ID lookup -> exact Steam appid -> existing canonical Steam family / description / Taste / grounded-negative path.
+- Twitch/IGDB remains fallback only; do not use it as primary while ITAD is operationally available.
+- Authentication must follow current official ITAD docs; required credentials, if any, belong in GitHub Secrets and must never be pasted into chat/repo/logs.
+- ITAD price/deal ingestion remains out of scope.
+- Status: `prepared_not_started`. Do not consume Chat 2 until its current visual-freshness closeout/direct acceptance is complete. Because System Audit is due, Director must explicitly decide audit-vs-ITAD start after the current Chat 2 continuation closes.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
-- ITAD integration: permission email sent; first follow-up threshold 2026-09-07; fallback-decision threshold 2026-09-09.
 - Twitch/IGDB: waiting for Twitch Support; fallback only.
 - `grounded-negative-implement-01`: existing GitHub-owned Taste data-plane has unresolved work.
 - `card-explanation-production-acceptance-01`: blocked on existing Russian-description runtime.
@@ -87,5 +92,5 @@
 
 1. Get Chat 2's already-completed implementation saved to `reviews/worker_reports/visual-freshness-chain-fix-01.md`; do not repeat implementation.
 2. If that report is complete and ready, run bounded follow-up acceptance for visual freshness.
-3. After the direct visual-freshness continuation is stable, run the now-due System Audit before ordinary backlog work.
+3. After the direct visual-freshness continuation is stable, run the now-due System Audit before ordinary backlog work; the prepared ITAD implementation must then be explicitly prioritized against that audit rather than auto-started merely because permission arrived.
 4. Do not reopen Trine-specific investigation under the completed Taste-control track.
