@@ -31,49 +31,40 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Срочно: контент страницы пропадает | Localize mobile lifecycle/data-render bug where shell+controls work but feed cards are absent after load/refresh and appear after app resume | `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md` | `reviews/worker_reports/mobile-page-interaction-freeze-recon-01.md` | `ready_to_start_new_chat` |
-| `ЧАТ 2` | Свежесть публикации | Final acceptance passed; branch ready for merge/release but production release intentionally deferred until urgent missing-content incident is localized | `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_ACCEPTANCE_02.md` | `reviews/worker_reports/visual-freshness-chain-acceptance-02.md` | `complete_release_deferred_chat_can_delete` |
+| `ЧАТ 1` | Срочно: исправить пустую ленту | Harden main-feed bootstrap so load/reload cannot remain silently blank; add bounded timeout/retry/lifecycle recovery and diagnostics | `WORKER_TASK_MOBILE_PAGE_BLANK_FEED_FIX_01.md` | `reviews/worker_reports/mobile-page-blank-feed-fix-01.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 2` | Свежесть публикации | Final acceptance passed; branch ready for merge/release but release deferred during incident | `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_ACCEPTANCE_02.md` | `reviews/worker_reports/visual-freshness-chain-acceptance-02.md` | `complete_release_deferred_chat_can_delete` |
 
 ## Urgent user-visible incident — mobile feed content missing
 
-- User clarified with real-device screenshot on 2026-09-03: controls/tabs are clickable; the defect is not interaction freeze.
-- After normal load/refresh, page shell/navigation/swipe hint render but game content/cards are absent.
-- Switching to another app and returning causes content to appear temporarily; another refresh returns to empty-content state.
-- Corrected task keeps the same durable task/report path but now focuses on data fetch/render lifecycle, visibility/pageshow resume re-render, service-worker/cache mismatch, runtime initialization error, and whether canonical current payload is actually non-empty.
-- Classification: urgent user-visible UI/data-render incident; pre-empts System Audit and ITAD until localized/stabilized.
-- No implementation until recon localizes the earliest failing step.
-- Real-device user verification mandatory after fix.
+- User real-device evidence: controls/tabs work; feed cards are absent after normal load/refresh; app-switch/return can make them appear.
+- Recon report: `reviews/worker_reports/mobile-page-interaction-freeze-recon-01.md`, blob `48700dc77ac17fa031dd129996bef74075d86872`.
+- Canonical payload inspected by recon is non-empty (`item_count: 442` at recon time), so the incident is not explained by a truly empty feed source.
+- Highest-confidence application failure boundary: single-shot unbounded `await fetch('data/current.json', { cache: 'no-store' })` before first feed render. Both card and empty/error surfaces begin hidden, so an unresolved/suspended request can leave an interactive shell with a blank feed indefinitely.
+- Exact Android/WebView transport-level cause is not runtime-proven, but the unsafe bootstrap state is concrete and sufficient for a bounded resilience fix.
+- No main-feed timeout, bounded retry, or guarded `pageshow` / visible-state recovery currently exists.
+- Director decision: proceed directly to `WORKER_TASK_MOBILE_PAGE_BLANK_FEED_FIX_01.md`; no more recon before implementation.
+- Required fix behavior: visible loading state, bounded request timeout, one bounded retry, idempotent bootstrap state, guarded foreground recovery, explicit terminal empty/error states, concise diagnostics.
+- Real-device user verification remains mandatory after deployment before closure.
 
 ## Semantic runtime completion — accepted
 
 - Follow-up acceptance report: `reviews/worker_reports/semantic-runtime-completion-acceptance-02.md`, blob `5b4a25c89845ab258651a30608658e90d7d1840d`.
-- Runtime observability: pass.
-- Feed semantic completeness visibility: pass.
-- No duplicate scheduler/runtime/queue.
-- Director decision: closed; old Chat 1 can be deleted/replaced by the new urgent incident chat.
+- Closed.
 
 ## Visual freshness — accepted, release deferred
 
 - Implementation report: `reviews/worker_reports/visual-freshness-chain-fix-01.md`, blob `e5226710d435cfbb1c0190e11d937b025ceb9aac`.
 - Final acceptance report: `reviews/worker_reports/visual-freshness-chain-acceptance-02.md`, blob `6a691fb29d88b1785accf717752149e027265a2c`.
-- Status: `complete`.
-- All acceptance controls pass:
-  - `Fresh-cycle build proof`: pass;
-  - `Deploy-to-built-cycle binding`: pass;
-  - `Stale-success visibility`: pass;
-  - `Ownership/regression preserved`: pass.
-- Accepted branch: `worker/visual-freshness-chain-fix-01`, acceptance head `4080030e686d6b04fcc666069819aa46df18da7a`.
-- Acceptance concludes the branch is ready for production merge/release and no scoped blocker remains.
-- No production merge/regeneration/Pages deployment was performed by acceptance.
-- Director decision: do **not** merge/release while the urgent mobile missing-content incident is being localized, because an unrelated deploy/payload-cycle change would complicate incident attribution. Preserve the accepted branch/report and release after the incident is localized/stabilized and overlap risk is reassessed.
-- No immediate continuation belongs in the same worker chat; Chat 2 can be deleted.
+- All acceptance controls pass and branch `worker/visual-freshness-chain-fix-01` is ready for production merge/release.
+- Release intentionally deferred until urgent blank-feed incident is stabilized and overlap risk is reassessed.
+- Chat 2 can be deleted.
 
 ## System Auditor checkpoint
 
 - Last report: `reviews/system_audits/baseline-01.md`.
-- `system_audit_due: true` after accepted semantic-runtime control/stabilized incident.
-- New missing-content incident is explicit urgent user priority and may pre-empt audit.
-- After incident stabilizes, run due System Audit before ITAD/ordinary implementation work. Accepted visual freshness release remains a direct production continuation, not ordinary backlog work, but should be reconsidered against the incident findings before deployment.
+- `system_audit_due: true`.
+- Urgent blank-feed incident explicitly pre-empts audit.
+- After incident stabilization, run due System Audit before ITAD/ordinary implementation work.
 
 ## Taste Reviewer — baseline complete
 
@@ -86,7 +77,7 @@
 - ITAD permission confirmed.
 - Prepared task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
 - Architecture: one provider-neutral identity interface, active `itad`, reserved future `igdb`, no automatic fallback.
-- Status: `prepared_not_started` and explicitly lower priority than urgent missing-content incident and due audit.
+- Status: `prepared_not_started`, lower priority than urgent blank-feed incident and due audit.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
@@ -96,8 +87,7 @@
 
 ## Выбор следующей работы
 
-1. Start/continue NEW Chat 1 with corrected `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md` immediately.
-2. Do not release the accepted visual-freshness branch until the urgent missing-content incident is localized/stabilized and overlap risk is reassessed.
-3. When urgent recon finishes, read its exact report first and assign bounded fix if localized.
-4. Real-device user verification mandatory after fix.
-5. After incident stabilization, run due System Audit before ITAD/ordinary backlog implementation; then schedule the accepted visual-freshness release at the safest bounded point.
+1. Continue existing Chat 1 with `WORKER_TASK_MOBILE_PAGE_BLANK_FEED_FIX_01.md` immediately.
+2. Do not release the accepted visual-freshness branch during the blank-feed fix unless Director later confirms no overlap risk.
+3. After implementation, deploy the blank-feed fix through the canonical Pages path and require real-device user verification.
+4. Once incident is stable, run due System Audit before ITAD/ordinary backlog implementation.
