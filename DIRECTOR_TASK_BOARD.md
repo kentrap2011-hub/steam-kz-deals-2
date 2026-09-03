@@ -48,6 +48,26 @@
 - No service worker, polling, second renderer, ranking/Taste changes, or visual-freshness merge inside this follow-up.
 - Real-device verification mandatory after deployment before incident closure.
 
+## Known production problem — Epic giveaway source schema failure
+
+- User-visible symptom observed on 2026-09-03: giveaway tab shows no offers and explicitly says completeness could not be verified.
+- Canonical evidence: `data/production/giveaways/v1/current.json`, blob `7354f8769b21bb9dda53910871374a5011af5586`.
+- Snapshot is `snapshot_status: incomplete`.
+- Steam source: `ok`, complete, 0 accepted offers.
+- GOG source: `ok`, complete, 0 accepted offers.
+- Epic source: `failed`, `complete: false`, `error_code: SOURCE_SCHEMA_FAILURE`, error `Epic price.totalPrice schema changed`.
+- Therefore current system cannot truthfully conclude that there are no active giveaways; Epic coverage is unknown.
+- This is separate from ITAD identity work: failure occurs while ingesting/discovering Epic giveaways, before any cross-store identity enrichment.
+- Status: `known_not_yet_assigned` because both worker slots are currently occupied by the mobile continuation and System Audit 02.
+- Next worker slot should consider bounded Epic source recon/fix as a high-priority direct production defect unless the active tracks produce a more urgent blocker.
+
+## Operational health watch
+
+- ChatGPT automation `Steam KZ Health Watch` is enabled.
+- It checks canonical repository health once per hour and should notify only on new or materially worsened production problems not already tracked here.
+- Known mobile-feed and Epic giveaway incidents are intentionally tracked on this board to avoid duplicate alerts for unchanged known state.
+- This watch is a monitoring layer, not the long-term canonical system-health contract. After current System Audit 02, consider a bounded task for one durable system-health/incident signal produced by the existing canonical workflows without adding duplicate scheduler/writer ownership.
+
 ## System Audit 02 — ready in parallel
 
 - Task: `WORKER_TASK_SYSTEM_AUDIT_02.md`, creation commit `911c6d6d39d80d3e3b91ee93d06c5545a77a5688`.
@@ -102,4 +122,5 @@
 2. New Chat 2: run `WORKER_TASK_SYSTEM_AUDIT_02.md` independently/read-only.
 3. Read each exact report when its worker finishes; do not broad-investigate.
 4. Mobile track still requires production deploy + real-device user verification before closure.
-5. After System Audit 02 completes, update `DIRECTOR_REVIEW_CHECKPOINTS.md` only if accepted; then decide visual-freshness release vs ITAD based on audit findings and mobile incident state.
+5. When a worker slot becomes free, consider the known Epic source schema failure as the next high-priority production defect unless current reports reveal something more urgent.
+6. After System Audit 02 completes, update `DIRECTOR_REVIEW_CHECKPOINTS.md` only if accepted; then decide visual-freshness release vs Epic repair vs ITAD based on current incident state and audit findings.
