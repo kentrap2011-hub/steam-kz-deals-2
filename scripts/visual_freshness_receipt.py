@@ -42,8 +42,12 @@ def capture_intent(repo: Path) -> dict[str, Any]:
     history_file = repo / HISTORY_PATH
     blob_sha = _git_optional("rev-parse", f"HEAD:{HISTORY_PATH}", cwd=repo)
     history: dict[str, Any] = {}
+    history_parse_error = None
     if history_file.exists():
-        history = _read_json(history_file)
+        try:
+            history = _read_json(history_file)
+        except (json.JSONDecodeError, OSError) as exc:
+            history_parse_error = f"{type(exc).__name__}: {exc}"
 
     source_cycle = {
         key: history.get(key)
@@ -56,8 +60,10 @@ def capture_intent(repo: Path) -> dict[str, Any]:
         if history.get(key) is not None
     }
     return {
+        "captured_checkout_commit_sha": _git_optional("rev-parse", "HEAD", cwd=repo),
         "history_snapshot_blob_sha": blob_sha,
         "history_snapshot_present": history_file.exists(),
+        "history_snapshot_parse_error": history_parse_error,
         "history_status": history.get("status"),
         "history_complete_coverage": history.get("complete_coverage"),
         "source_cycle": source_cycle,
