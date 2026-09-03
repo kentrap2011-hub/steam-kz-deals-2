@@ -31,21 +31,23 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Срочно: пустая лента | Fix deployed to production; waiting only for real-device user verification on affected phone | `WORKER_TASK_MOBILE_PAGE_BLANK_FEED_FIX_01.md` | `reviews/worker_reports/mobile-page-blank-feed-fix-01.md` | `needs_user_action_keep_chat` |
-| `ЧАТ 2` | Свежесть публикации | Final acceptance passed; branch ready for merge/release but release deferred during incident | `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_ACCEPTANCE_02.md` | `reviews/worker_reports/visual-freshness-chain-acceptance-02.md` | `complete_release_deferred_chat_can_delete` |
+| `ЧАТ 1` | Срочно: ускорить ленту | First blank-feed fix deployed and partially successful; follow-up instant last-known-good cache task is prepared but not yet sent to worker | `WORKER_TASK_MOBILE_FEED_INSTANT_CACHE_FIX_01.md` | `reviews/worker_reports/mobile-feed-instant-cache-fix-01.md` | `prepared_direct_continuation_not_started` |
+| `ЧАТ 2` | Свежесть публикации | Final acceptance passed; branch ready for merge/release but release deferred during mobile incident | `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_ACCEPTANCE_02.md` | `reviews/worker_reports/visual-freshness-chain-acceptance-02.md` | `complete_release_deferred_chat_can_delete` |
 
-## Urgent user-visible incident — mobile feed content missing
+## Urgent user-visible incident — mobile feed load latency
 
+- Original symptom: shell/controls interactive but feed blank after load/reload; app-switch/return could make games appear.
 - Recon report: `reviews/worker_reports/mobile-page-interaction-freeze-recon-01.md`, blob `48700dc77ac17fa031dd129996bef74075d86872`.
-- Fix report: `reviews/worker_reports/mobile-page-blank-feed-fix-01.md`, blob `61b23ffc479dff473310b1d7aed0d36d43a11c8f`.
-- Fix status: `needs_user_action` only because real-device acceptance is still required.
-- Production implementation changed only the blank-feed bootstrap surface plus one focused test: new `web/feed-bootstrap.js`, `web/index.html` loader, `tests/feed-bootstrap.test.js`; existing `web/app.js` filtering/queue/card/ranking behavior remains unchanged.
-- New behavior: immediate `Загружаю игры…`; 9-second bounded request timeout; maximum 2 attempts total; one guarded retry; idempotent bootstrap; guarded hidden->visible and BFCache recovery; explicit terminal error instead of silent blank; no service worker/polling/external telemetry.
-- Focused regression: `feed bootstrap regression: PASS`, including success, zero-result, network/HTTP/JSON failures, timeout, duplicate-lifecycle suppression, foreground recovery and ready-state stability.
-- Production release ref: `af2c7362743b4fe3d80ea10caee7cb606acab3e5` on `main`.
-- Successful Pages deploy: workflow `Deploy visual mailing`, run `33766838776`, run number `254`, conclusion `success`.
-- Director decision: incident is **not closed yet**. User must verify on the affected phone: fresh open, several reloads, game cards appear, no persistent blank feed, app switch/return does not break a healthy feed.
-- Keep Chat 1 until this real-device verification is complete; if user reports failure, return the exact observed symptom to the same chat for bounded follow-up, not a broad new recon.
+- First fix report: `reviews/worker_reports/mobile-page-blank-feed-fix-01.md`, blob `61b23ffc479dff473310b1d7aed0d36d43a11c8f`.
+- First production fix ref: `af2c7362743b4fe3d80ea10caee7cb606acab3e5`; Pages run `33766838776` succeeded.
+- First fix added visible `Загружаю игры…`, 9-second timeout, max 2 attempts, guarded lifecycle recovery and explicit error state.
+- Real-device result on 2026-09-03: **partial success**. Silent blank feed is gone. Sometimes refresh is instant; sometimes `Загружаю игры…` remains visible for several seconds, then games appear. User explicitly says the problem is improved but not solved and asks whether it can be fixed.
+- Director decision: yes; do not keep blocking repeat visits on network. Prepared direct continuation `WORKER_TASK_MOBILE_FEED_INSTANT_CACHE_FIX_01.md`.
+- Follow-up target behavior: after one successful load on a device, show last-known-good feed locally immediately on future open/reload, then refresh canonical `data/current.json` in background; network failure/latency must not blank or block already-available cards.
+- Canonical source remains network `data/current.json`; local browser storage is presentation fallback only, not a second source of truth.
+- No service worker, polling, second renderer, ranking/Taste changes, or visual-freshness merge inside this follow-up.
+- User has **not yet been given/sent** the follow-up worker command because the conversation paused to prepare a Director replacement. Treat the task as prepared, not started.
+- Keep existing Chat 1 until this incident is fully user-verified or a successor Director explicitly reassigns it.
 
 ## Semantic runtime completion — accepted
 
@@ -57,14 +59,14 @@
 - Implementation report: `reviews/worker_reports/visual-freshness-chain-fix-01.md`, blob `e5226710d435cfbb1c0190e11d937b025ceb9aac`.
 - Final acceptance report: `reviews/worker_reports/visual-freshness-chain-acceptance-02.md`, blob `6a691fb29d88b1785accf717752149e027265a2c`.
 - All acceptance controls pass and branch `worker/visual-freshness-chain-fix-01` is ready for production merge/release.
-- Release remains deferred until the blank-feed incident passes user verification and overlap risk is reassessed.
+- Release remains deferred until mobile feed incident is stabilized and overlap risk is reassessed.
 - Chat 2 can be deleted.
 
 ## System Auditor checkpoint
 
 - Last report: `reviews/system_audits/baseline-01.md`.
 - `system_audit_due: true`.
-- Urgent blank-feed incident continues to pre-empt audit until user verification closes or returns a concrete defect.
+- Urgent mobile feed incident still pre-empts audit until stabilized.
 - After incident stabilization, run due System Audit before ITAD/ordinary implementation work.
 
 ## Taste Reviewer — baseline complete
@@ -78,7 +80,7 @@
 - ITAD permission confirmed.
 - Prepared task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
 - Architecture: one provider-neutral identity interface, active `itad`, reserved future `igdb`, no automatic fallback.
-- Status: `prepared_not_started`, lower priority than blank-feed real-device acceptance and due audit.
+- Status: `prepared_not_started`, lower priority than mobile incident and due System Audit.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
@@ -88,7 +90,8 @@
 
 ## Выбор следующей работы
 
-1. User verifies the deployed blank-feed fix on the affected phone now.
-2. If verification passes, close incident and allow Chat 1 deletion; then reassess/release accepted visual-freshness branch at the safest bounded point.
-3. If verification fails, return exact observed behavior to existing Chat 1 for bounded follow-up.
-4. After incident stabilization, run due System Audit before ITAD/ordinary backlog implementation.
+1. If user wants to continue the mobile fix now, send existing Chat 1 `WORKER_TASK_MOBILE_FEED_INSTANT_CACHE_FIX_01.md` and mark it started only after the user actually sends the command.
+2. Require real-device verification again after deploy: repeated reloads should normally show cards immediately from last-known-good cache while fresh data updates in background.
+3. Do not release the accepted visual-freshness branch during the mobile follow-up unless Director explicitly reassesses overlap risk.
+4. After mobile incident stabilization, run due System Audit before ITAD/ordinary backlog implementation.
+5. Then schedule accepted visual-freshness release and ITAD provider-switch implementation at the safest bounded point.
