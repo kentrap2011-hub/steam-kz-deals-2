@@ -2,9 +2,9 @@
   "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
   "schema_version": 1,
   "country_code": "KZ",
-  "generated_at_utc": "2026-09-02T20:36:23.116897Z",
-  "fresh_until_utc": "2026-09-04T02:36:23.116897Z",
-  "snapshot_status": "incomplete",
+  "generated_at_utc": "2026-09-03T18:53:28.148553Z",
+  "fresh_until_utc": "2026-09-05T00:53:28.148553Z",
+  "snapshot_status": "complete",
   "required_sources": [
     "steam",
     "epic",
@@ -15,7 +15,7 @@
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-09-02T20:36:23.116897Z",
+      "observed_at_utc": "2026-09-03T18:53:28.148553Z",
       "endpoint": "existing KZ catalog candidates + targeted Steam first-party validation",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -24,7 +24,7 @@
       "error_code": null,
       "error": null,
       "details": {
-        "candidate_source_updated_at_utc": "2026-09-02T20:36:22.419743Z",
+        "candidate_source_updated_at_utc": "2026-09-03T18:53:27.390807Z",
         "candidate_count": 0,
         "source_age_hours": 0.0,
         "candidate_rule": "existing KZ catalog: final price 0 + positive discount; validation is separate",
@@ -33,23 +33,29 @@
     },
     "epic": {
       "required": true,
-      "status": "failed",
-      "complete": false,
-      "observed_at_utc": "2026-09-02T20:36:23.116897Z",
+      "status": "ok",
+      "complete": true,
+      "observed_at_utc": "2026-09-03T18:53:28.148553Z",
       "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
-      "candidate_count": 0,
-      "accepted_count": 0,
+      "candidate_count": 1,
+      "accepted_count": 1,
       "rejected_count": 0,
       "unverified_count": 0,
-      "error_code": "SOURCE_SCHEMA_FAILURE",
-      "error": "Epic price.totalPrice schema changed",
-      "details": {}
+      "error_code": null,
+      "error": null,
+      "details": {
+        "country": "KZ",
+        "allowCountries": "KZ",
+        "candidate_count": 1,
+        "schema_guard": "strict",
+        "api_stability": "undocumented_storefront_backend"
+      }
     },
     "gog": {
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-09-02T20:36:23.116897Z",
+      "observed_at_utc": "2026-09-03T18:53:28.148553Z",
       "endpoint": "https://catalog.gog.com/v1/catalog",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -67,11 +73,50 @@
       }
     }
   },
-  "accepted_offer_count": 0,
-  "game_group_count": 0,
+  "accepted_offer_count": 1,
+  "game_group_count": 1,
   "rejected_offer_count": 0,
   "unverified_offer_count": 0,
-  "games": [],
+  "games": [
+    {
+      "canonical_game_key": "meta-v1:1bad610804e74534286ec31d",
+      "identity_confidence": "high",
+      "identity_evidence": {
+        "basis": "exact_normalized_title_and_publishers",
+        "publishers": [
+          "bancyco"
+        ]
+      },
+      "title": "Alone With You",
+      "offers": [
+        {
+          "source_id": "epic",
+          "source_offer_id": "epic:cb87ac984c3c4c19b0a4e3e89048f187:b8cc76ce7d6645f0a282b843a072cc78:2026-09-10T15:00:00Z:2026-09-03T15:00:00Z",
+          "source_product_id": "cb87ac984c3c4c19b0a4e3e89048f187:b8cc76ce7d6645f0a282b843a072cc78",
+          "storefront": "epic",
+          "title": "Alone With You",
+          "claim_url": "https://store.epicgames.com/en-US/p/alone-with-you-028a15",
+          "promotion_start_utc": "2026-09-03T15:00:00Z",
+          "promotion_end_utc": "2026-09-10T15:00:00Z",
+          "observed_at_utc": "2026-09-03T18:53:28.148553Z",
+          "base_price": 185000,
+          "final_price": 0,
+          "currency": "KZT",
+          "discount_percent": 100,
+          "content_type": "game",
+          "region_status": "available",
+          "classification_reason_codes": [
+            "ACTIVE_WINDOW",
+            "ZERO_PRICE",
+            "PAID_BASE_OR_EXPLICIT_GIVEAWAY",
+            "PERMANENT_GRANT",
+            "FULL_GAME",
+            "KZ_AVAILABLE"
+          ]
+        }
+      ]
+    }
+  ],
   "publication_invariants": {
     "accepted_offers_are_active_at_generated_at": true,
     "stale_source_rows_are_not_reused": true,
