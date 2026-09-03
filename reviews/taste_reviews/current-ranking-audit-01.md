@@ -8,15 +8,28 @@ Scope: current user-visible recommendation/ranking calibration; advisory only
 
 For candidate-specific downsides, do not invent negatives from store descriptions or feature lists. Use recurring player-review complaints to establish real implementation problems, then test whether those problems conflict with Dmitry's known taste.
 
+Crucially, **description + review complaints are still not enough to conclude that Dmitry will dislike a game**. They establish what deserves further checking. A stronger personal conclusion should normally require richer title-specific evidence: a substantive review/video, trailer/gameplay footage, comparable prior experience, or Dmitry's own play.
+
 Keep separate:
 - personal fit;
 - play role (`main/full`, `secondary/palate-cleanser`, `family/co-op`);
 - relative queue priority;
-- commercial urgency.
+- commercial urgency;
+- confidence / depth of familiarity with the specific game.
 
 Also distinguish a **historically learned expectation** from a hard preference rule. If previous games in a franchise were usually secondary experiences, that can lower Dmitry's initial expectation for a new entry, but must not cap the new game's possible role before title-specific evidence is considered.
 
-Also separate **weak personal interest** from **hard rejection**. A candidate can sound low-priority while still being worth sampling if the cost/friction of trying it is very low. Price/free access can change willingness to sample without becoming evidence of stronger personal fit.
+### Discount / purchase semantics
+
+A large discount must **not** be treated as compensation for weak game quality or an already-established negative fit. Dmitry explicitly notes that many good games are also deeply discounted, so there is little reason to spend money on a weak game merely because its percentage discount is larger.
+
+Use this distinction:
+- strong/credible game fit + attractive price = meaningful purchase opportunity;
+- uncertain game + low price = may justify further inspection, not purchase by default;
+- game already judged uninteresting/weak = even a very large paid discount normally should not rescue it;
+- free giveaway = separate acquisition threshold: Dmitry may claim/sample something that still would not deserve money or recommendation priority, if there is at least some interesting element.
+
+Therefore price can change **purchase friction**, but should not manufacture **Taste fit**.
 
 ## Calibrated current candidates
 
@@ -68,34 +81,41 @@ This is a useful anti-overgeneralization control: the system may use prior franc
 
 User familiarity before calibration: none found in the full gaming profile.
 
-Player-review-grounded risk:
+Player-review-grounded concerns worth checking:
 - the meaningful concern is not generic `directionlessness`;
 - recurring complaints concern opaque puzzle communication, small/easy-to-miss details, unclear feedback after actions and repeated backtracking between locations.
 
-Direct result:
-- the premise sounds **somewhat boring / low-interest** to Dmitry;
-- he would still be willing to give it a chance if the cost of trying were effectively zero (free) or after seeing more of the game visually;
-- this is not a hard rejection.
+Direct result from the **limited information shown so far**:
+- the description sounded somewhat boring to Dmitry;
+- however, he explicitly says this is **not enough information to conclude the game would not suit him**;
+- he would want additional information such as a review or footage before making that judgment;
+- if after fuller evaluation he actually decides the game is weak/uninteresting, a large paid discount would normally not make it worth buying;
+- a free giveaway is a different case: he might claim/try it if some aspect remains interesting.
 
-Classification: **weak pre-play interest / low queue priority, but sampleable at very low entry cost; role unresolved**.
+Classification: **insufficient evidence for personal fit; weak first-impression appeal only**. Do not label as low-fit or low-priority from description/review summaries alone.
 
-Ranking implication: the original strong `directionlessness` penalty is too coarse, but the candidate also should not be promoted merely because that penalty is removed. Its actual issue is weaker baseline appeal plus a real player-reported risk around opaque communication/backtracking. Free/very-low-price access may justify surfacing it as a low-risk trial without implying strong Taste fit.
+Ranking implication: the original strong `directionlessness` penalty is too coarse, but simply removing it also does not prove positive fit. `Haven Moon` is now a control for a third state between positive and negative: **needs richer evaluation**.
 
 ## Current interpretation
 
-The audit increasingly supports the distinction between **"would play / fits"**, **"would sample cheaply"**, and **"should rank as a main near-term recommendation"**, while also showing that role itself cannot be inferred too aggressively from franchise history.
+The audit increasingly supports the distinction between **"fits"**, **"does not fit"**, and **"not enough title-specific evidence yet"**. It also shows that role, queue priority and purchase value cannot be inferred directly from discount percentage.
 
 Current controls:
 - `Sifu` — strong near-term main-game interest;
 - `High On Life` — full/main candidate, moderate queue priority;
 - `Amnesia: The Bunker` — full/main candidate, moderate queue priority;
 - `Terminator: Resistance` — moderate ordinary-queue candidate with franchise boost;
-- `Haven Moon` — weak-interest candidate that Dmitry could sample if free/very cheap or after a stronger visual preview; not a hard reject;
+- `Haven Moon` — insufficient title-specific evidence; initial description sounded dull, but no negative-fit verdict is justified yet;
 - `Tails of Iron 2` — secondary/palate-cleanser candidate based on this specific title's trailer reaction;
 - `TMNT: Splintered Fate` — franchise-positive; past TMNT games lower initial main-game expectation, but do not determine this title's role;
 - `Trine 4` — confirmed family-play positive;
-- `HighFleet` — strong negative pre-play/start-priority control.
+- `HighFleet` — strong negative pre-play/start-priority control after direct trailer inspection.
 
 ## Director-facing implication
 
-Taste/ranking QA should test role classification separately from raw fit, must not turn historical franchise patterns into hard role assignments, and should distinguish **low-cost trial value** from **strong personal fit**. `Haven Moon` is a direct control for the last distinction: removing an overbroad risk penalty does not mean the game becomes a high-priority recommendation, but an aggressive exclusion can still be wrong if a free/very-cheap trial would be acceptable.
+Taste/ranking QA should:
+1. test role classification separately from raw fit;
+2. not turn historical franchise patterns into hard role assignments;
+3. preserve an **insufficiently-known** state instead of forcing description/review summaries into positive or negative fit;
+4. ensure paid discount magnitude cannot rescue a game already judged weak/uninteresting merely because the percentage is extreme;
+5. treat free giveaways as a distinct low-friction acquisition case, not as proof of stronger recommendation value.
