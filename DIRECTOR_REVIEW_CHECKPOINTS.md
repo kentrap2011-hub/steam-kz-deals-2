@@ -8,25 +8,24 @@ The Director must read this file before assigning a new ordinary backlog task wh
 
 system_audit_due: false
 first_system_audit_trigger: `satisfied_2026-09-02`
-material_changes_since_last_system_audit: 0
+material_changes_since_last_system_audit: 1
 last_system_audit_report: `reviews/system_audits/baseline-01.md`
 
 ### First trigger condition
 
-The first trigger has been satisfied:
-- `taste-runtime-trigger-status-01` now has a saved report and Director decision (direct continuation is needed because exact cadence/manual trigger remain unverified);
-- `giveaway-igdb-implement-prep-01` reached its durable blocker on Twitch/IGDB credentials, and the IGDB route is now fallback while an alternative identity route is investigated.
-
-Run the first System Audit before assigning the next ordinary backlog implementation unless the user explicitly prioritizes a more urgent time-sensitive incident/task. Existing direct continuations already in progress may finish first.
+The first trigger has been satisfied and baseline audit completed.
 
 ### Recurring triggers
 
-Also set `system_audit_due: true` when:
+Set `system_audit_due: true` when:
 - 3 material production IMPLEMENT/ACCEPTANCE changes have closed since the last audit;
 - a user-visible missing/incorrect game/giveaway/ranking or unobserved automatic-process incident has been stabilized;
 - a new queue/scheduler/provider/identity authority/ranking gate/semantic runtime/ownership boundary has been accepted.
 
 A completed audit resets `material_changes_since_last_system_audit` to 0 and records its report.
+
+Current post-audit material change count:
+1. `semantic-runtime-completion-fix-01` completed; follow-up acceptance pending.
 
 ## Taste Reviewer
 
