@@ -49,6 +49,40 @@ def _promotion_rows(element: dict[str, Any]) -> list[tuple[str, dict[str, Any]]]
     return result
 
 
+def _current_free_promotion_rows(
+    element: dict[str, Any], observed: datetime
+) -> list[tuple[dict[str, Any], datetime, datetime]]:
+    result: list[tuple[dict[str, Any], datetime, datetime]] = []
+    for state, promo in _promotion_rows(element):
+        if state != "current":
+            continue
+
+        start = parse_iso(promo.get("startDate"))
+        end = parse_iso(promo.get("endDate"))
+        if start is None or end is None:
+            raise SourceSchemaError("Epic promotion dates missing or unparseable")
+        if observed < start or observed >= end:
+            continue
+
+        discount_setting = promo.get("discountSetting")
+        if not isinstance(discount_setting, dict):
+            raise SourceSchemaError("Epic promotion discountSetting schema changed")
+        discount_percentage = discount_setting.get("discountPercentage")
+        if not isinstance(discount_percentage, int) or isinstance(discount_percentage, bool):
+            raise SourceSchemaError("Epic promotion discountPercentage schema changed")
+        if discount_percentage == 0:
+            result.append((promo, start, end))
+
+    return result
+
+
+def _required_price_int(total: dict[str, Any], key: str) -> int:
+    value = total.get(key)
+    if not isinstance(value, int) or isinstance(value, bool):
+        raise SourceSchemaError(f"Epic price.totalPrice.{key} schema changed")
+    return value
+
+
 def normalize_payload(payload: Any, observed: datetime) -> list[dict[str, Any]]:
     if not isinstance(payload, dict):
         raise SourceSchemaError("Epic response is not an object")
@@ -63,18 +97,26 @@ def normalize_payload(payload: Any, observed: datetime) -> list[dict[str, Any]]:
     for element in elements:
         if not isinstance(element, dict):
             raise SourceSchemaError("Epic element is not an object")
-        required = ("id", "namespace", "title", "offerType", "price")
+        required = ("id", "namespace", "title", "offerType")
         if any(key not in element for key in required):
             raise SourceSchemaError("Epic element required fields changed")
 
-        price = element.get("price")
-        total = price.get("totalPrice") if isinstance(price, dict) else None
-        if not isinstance(total, dict) or "discountPrice" not in total or "originalPrice" not in total:
-            raise SourceSchemaError("Epic price.totalPrice schema changed")
-
-        promo_rows = _promotion_rows(element)
-        if not promo_rows:
+        current_free_promotions = _current_free_promotion_rows(element, observed)
+        if not current_free_promotions:
             continue
+
+        price = element.get("price")
+        if not isinstance(price, dict):
+            raise SourceSchemaError("Epic price schema changed")
+        total = price.get("totalPrice")
+        if not isinstance(total, dict):
+            raise SourceSchemaError("Epic price.totalPrice schema changed")
+        discount_price = _required_price_int(total, "discountPrice")
+        original_price = _required_price_int(total, "originalPrice")
+        if discount_price != 0:
+            raise SourceSchemaError("Epic current 100% promotion has non-zero discountPrice")
+        if original_price < 0:
+            raise SourceSchemaError("Epic price.totalPrice.originalPrice is negative")
 
         namespace = str(element["namespace"])
         offer_id = str(element["id"])
@@ -85,12 +127,7 @@ def normalize_payload(payload: Any, observed: datetime) -> list[dict[str, Any]]:
         if isinstance(seller, dict) and seller.get("name"):
             publishers.append(str(seller["name"]))
 
-        for state, promo in promo_rows:
-            start = parse_iso(promo.get("startDate"))
-            end = parse_iso(promo.get("endDate"))
-            if start is None or end is None:
-                raise SourceSchemaError("Epic promotion dates missing or unparseable")
-
+        for _promo, start, end in current_free_promotions:
             item = base_candidate("epic", observed)
             item.update({
                 "source_product_id": f"{namespace}:{offer_id}",
@@ -99,10 +136,10 @@ def normalize_payload(payload: Any, observed: datetime) -> list[dict[str, Any]]:
                 "claim_url": f"https://store.epicgames.com/en-US/p/{slug}" if slug else None,
                 "promotion_start_utc": iso_utc(start),
                 "promotion_end_utc": iso_utc(end),
-                "base_price": total.get("originalPrice"),
-                "final_price": total.get("discountPrice"),
+                "base_price": original_price,
+                "final_price": discount_price,
                 "currency": total.get("currencyCode"),
-                "discount_percent": 100 if total.get("discountPrice") == 0 and (total.get("originalPrice") or 0) > 0 else None,
+                "discount_percent": 100 if discount_price == 0 and original_price > 0 else None,
                 "region_status": "available",
                 "region_evidence": {"requested_country": "KZ", "allowCountries": "KZ", "endpoint_returned_offer": True},
                 "content_type": "game" if str(element.get("offerType")) == "BASE_GAME" else "other",
@@ -114,22 +151,16 @@ def normalize_payload(payload: Any, observed: datetime) -> list[dict[str, Any]]:
                     "params": PARAMS,
                     "namespace": namespace,
                     "epic_offer_id": offer_id,
-                    "promotion_state_array": state,
+                    "promotion_state_array": "current",
                     "offer_type": element.get("offerType"),
                 },
             })
 
             if "mystery game" in title.casefold() or title.strip().casefold() == "mystery game":
                 item["precheck_reason"] = "MYSTERY_PLACEHOLDER"
-            elif state == "upcoming" or observed < start:
-                item["precheck_reason"] = "UPCOMING_NOT_ACTIVE"
-            elif observed >= end:
-                item["precheck_reason"] = "PROMOTION_EXPIRED"
             elif item["content_type"] != "game":
                 item["precheck_reason"] = "NON_GAME_CONTENT"
-            elif total.get("discountPrice") != 0:
-                item["precheck_reason"] = "NOT_ZERO_PRICE"
-            elif (total.get("originalPrice") or 0) <= 0:
+            elif original_price <= 0:
                 item["promotion_type"] = "permanent_f2p"
             else:
                 item["promotion_type"] = "claim_to_keep"
