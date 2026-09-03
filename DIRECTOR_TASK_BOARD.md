@@ -31,8 +31,8 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Релиз свежести | Release already accepted visual freshness controls onto production main | `WORKER_TASK_VISUAL_FRESHNESS_RELEASE_01.md` | `reviews/worker_reports/visual-freshness-release-01.md` | `ready_to_start_new_chat` |
-| `ЧАТ 2` | Epic раздачи | Recon worker says finished, but canonical report is missing; save exact closeout before any new work | `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_RECON_01.md` | `reviews/worker_reports/epic-giveaway-schema-recon-01.md` | `needs_report_closeout_existing_chat` |
+| `ЧАТ 1` | Релиз свежести | Accepted freshness fix landed on production main; full dynamic release proof blocked by incomplete upstream ChatGPT payload; report status needs canonical closeout | `WORKER_TASK_VISUAL_FRESHNESS_RELEASE_01.md` | `reviews/worker_reports/visual-freshness-release-01.md` | `needs_report_status_closeout_existing_chat` |
+| `ЧАТ 2` | Epic раздачи | Implement proven Epic parser-ordering fix from completed recon | `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_FIX_01.md` | `reviews/worker_reports/epic-giveaway-schema-fix-01.md` | `running_or_ready_existing_chat` |
 
 ## Mobile feed incident — systemically closed except deploy regression gate follow-up
 
@@ -43,36 +43,43 @@
 - Remaining proven medium gap: `tests/feed-bootstrap.test.js` is not yet in the canonical Pages deploy regression gate.
 - Prepared bounded follow-up: `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`, creation commit `ad279b127ee87d8b1f15313f4d62a565c376b040`.
 - This follow-up must not redesign the client; it only wires the existing passing test into the canonical deploy gate.
-- System Audit checkpoint is satisfied and reset; no immediate audit is due.
 
-## Visual freshness — release is now top direct continuation
+## Visual freshness — IMPLEMENTATION LANDED, dynamic production proof still pending
 
 - Accepted implementation report: `reviews/worker_reports/visual-freshness-chain-fix-01.md`, blob `e5226710d435cfbb1c0190e11d937b025ceb9aac`.
-- Final acceptance: `reviews/worker_reports/visual-freshness-chain-acceptance-02.md`, blob `6a691fb29d88b1785accf717752149e027265a2c`.
-- Accepted branch: `worker/visual-freshness-chain-fix-01`.
-- Mobile post-incident audit explicitly sets `Visual freshness release priority: now`.
-- Prepared production task: `WORKER_TASK_VISUAL_FRESHNESS_RELEASE_01.md`, creation commit `629918c320d6c5d4dce617a9aba33f4e8b37b669`.
-- Release task must land only the already accepted freshness receipt/deploy-binding mechanism and prove one production cycle; no mobile regression-gate, Epic, ITAD or Taste work may be mixed in.
+- Final acceptance report: `reviews/worker_reports/visual-freshness-chain-acceptance-02.md`, blob `6a691fb29d88b1785accf717752149e027265a2c`.
+- Release report: `reviews/worker_reports/visual-freshness-release-01.md`, blob `68bdf93bb9ee3a9c2782faaa1715571f38ec9c5e`.
+- Release PR: `#13`.
+- Accepted fix landed unchanged on `main` at `ddbf25d855f3ed7b86aca5ecbebb834e87178012`.
+- Production build run `33788418064` failed upstream at `Build and refresh canonical visual payload once` with `ChatGPT production payload is not complete`.
+- Freshness protection itself executed successfully: receipt tests passed, receipt creation/upload succeeded, and production truthfully emitted `fresh_build=false outcome=degraded/no_fresh_build` instead of claiming freshness.
+- Receipt artifact: `visual-freshness-receipt`, artifact ID `9906332740`, source run `33788418064`.
+- Resulting workflow-run deploy `33788465486` was correctly skipped because its triggering build failed.
+- Exact triggering-run receipt download is installed on production `main` but could not be dynamically exercised because deploy never started.
+- Current conclusion: the accepted protection is active on `main` and already proves truthful degraded/no-fresh-build behavior; the stronger successful-build -> exact-run deploy binding proof remains pending until a normal canonical build has a complete production payload.
+- Do not redesign the accepted freshness fix to manufacture that proof.
+- Worker report currently says `STOP`, which violates task-required exact statuses. Existing Chat 1 must only normalize closeout to `blocked` (or another allowed exact status justified by its existing evidence) without new investigation.
 
-## Epic giveaway source failure — report closeout required
+## Epic giveaway source failure — FIX READY/RUNNING
 
-- Canonical current failure remains: Epic source `SOURCE_SCHEMA_FAILURE`, `Epic price.totalPrice schema changed`; snapshot incomplete.
-- Recon task: `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_RECON_01.md`.
-- User reports Chat 2 finished, but exact expected report `reviews/worker_reports/epic-giveaway-schema-recon-01.md` is absent.
-- One exact-path fetch returned 404 and one bounded task-ID repository search returned no report.
-- Director must not investigate the schema itself. Return existing Chat 2 only for report closeout at the exact path; then read that report and decide IMPLEMENT vs blocked.
-- Do not delete/reuse Chat 2 until report is saved and Director reads it.
+- Recon report: `reviews/worker_reports/epic-giveaway-schema-recon-01.md`, blob `32d487e13a916424693bd05d0d0ced41cf688bc2`.
+- Proven root cause: parser requires `price.totalPrice` on every catalog element before determining current giveaway relevance; one irrelevant variant element aborts whole Epic source.
+- Safe repair: determine current 100% promotion first; only current giveaway candidates must satisfy the existing strict price contract.
+- Prepared implementation: `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_FIX_01.md`, creation commit `07bf7fabd0ceda3e3428da2139cc535096b0192f`.
+- Existing Chat 2 is the direct continuation; do not mix ITAD/IGDB.
 
 ## Operational health watch
 
 - ChatGPT automation `Steam KZ Health Watch` is enabled hourly.
 - It alerts only on new/materially worsened canonical problems not already tracked here.
 
-## Semantic runtime completion — accepted
+## Semantic runtime / publication completeness
 
-- Final acceptance report: `reviews/worker_reports/semantic-runtime-completion-acceptance-02.md`, blob `5b4a25c89845ab258651a30608658e90d7d1840d`.
-- Runtime observability defect is closed.
-- Remaining Audit 02 gap: canonical degraded semantic completeness is not visibly surfaced to user.
+- Runtime observability acceptance: `reviews/worker_reports/semantic-runtime-completion-acceptance-02.md`, blob `5b4a25c89845ab258651a30608658e90d7d1840d`.
+- Runtime heartbeat defect is closed.
+- Current visual release evidence exposed an existing upstream readiness condition: canonical visual build could not proceed because `ChatGPT production payload is not complete`.
+- Do not diagnose this broadly in Director. Treat the next normal complete canonical build as the preferred opportunity to dynamically close visual freshness proof; if incompleteness persists as a production blocker, delegate a bounded exact recon rather than investigating here.
+- Audit 02 also records that canonical degraded semantic completeness is not visibly surfaced to the user; that remains a later bounded UI-truth task.
 
 ## Taste Reviewer — baseline complete
 
@@ -93,9 +100,9 @@
 
 ## Выбор следующей работы
 
-1. Finished mobile post-audit chat can be deleted.
-2. Start NEW Chat 1 with `WORKER_TASK_VISUAL_FRESHNESS_RELEASE_01.md`.
-3. Return SPECIFIC EXISTING Chat 2 only to save `reviews/worker_reports/epic-giveaway-schema-recon-01.md`; do not give it new work yet.
-4. After Chat 2 report appears, read it exactly and if IMPLEMENT-ready continue Epic repair before ITAD.
-5. After visual freshness release completes, run prepared `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md` at the next safe slot unless a more urgent concrete production defect intervenes.
+1. Existing Chat 1: normalize `reviews/worker_reports/visual-freshness-release-01.md` to one allowed task status using existing evidence only; no new investigation/change.
+2. Existing Chat 2 continues `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_FIX_01.md`.
+3. After Chat 1 closeout is canonical, it can be deleted; next new Chat 1 should run `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md` unless a more urgent concrete production defect appears.
+4. Re-verify exact-run visual freshness deploy binding on the next normal successful canonical visual build with complete production payload; no redesign required.
+5. After Epic fix, if source becomes complete, verify user-visible giveaway result before moving to ITAD identity enrichment.
 6. Later address semantic degraded-state UI visibility and legacy Taste writer cleanup as bounded tasks.
