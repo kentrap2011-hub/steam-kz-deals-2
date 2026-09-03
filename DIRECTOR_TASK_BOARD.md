@@ -27,37 +27,34 @@
 19. `TASTE REVIEWER` is a separate advisory chat. It does not implement production changes and therefore does not consume one of the two implementation worker slots while used only in the boundaries of `TASTE_REVIEWER_ROLE.md`.
 20. `SYSTEM AUDITOR` is an independent periodic review role governed by `SYSTEM_AUDITOR_ROLE.md`; it must not be forgotten or replaced by ordinary acceptance tests.
 
-## Активно сейчас
+## Активно / closeout
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Финальная приёмка Taste-контроля | Verify the completed runtime heartbeat/progress and truthful semantic degraded-state implementation | `WORKER_TASK_SEMANTIC_RUNTIME_COMPLETION_ACCEPTANCE_02.md` | `reviews/worker_reports/semantic-runtime-completion-acceptance-02.md` | `ready_to_continue_in_existing_chat` |
+| `ЧАТ 1` | Taste-контроль | Final acceptance passed; no further continuation in this worker chat | `WORKER_TASK_SEMANTIC_RUNTIME_COMPLETION_ACCEPTANCE_02.md` | `reviews/worker_reports/semantic-runtime-completion-acceptance-02.md` | `complete_chat_can_delete` |
 | `ЧАТ 2` | Исправление свежести публикации | Worker reports implementation finished, but durable report is still missing | `WORKER_TASK_VISUAL_FRESHNESS_CHAIN_FIX_01.md` | `reviews/worker_reports/visual-freshness-chain-fix-01.md` | `awaiting_report_closeout` |
 
-## Semantic runtime completion fix
+## Semantic runtime completion — accepted
 
-- Implementation report: `reviews/worker_reports/semantic-runtime-completion-fix-01.md`, blob `b414aa0d41929a8e125833b79caee74a9f022049`.
-- Status: `complete`.
-- Durable canonical runtime receipt added at `data/cache/taste_ingest_receipts/latest_runtime_status.json` through the existing transactional Taste ingest path.
-- Canonical pre-AI/visual publication now distinguishes partition completion from semantic completeness and reports `degraded` while unresolved semantic work remains.
-- Current receipt truthfully shows accepted progress belongs to an older semantic scope and therefore does not claim current-scope progress.
-- No second scheduler/runtime/queue was created and execution ownership contract remained unchanged.
-- Final implementation validation run: `33712250775`, success.
-- Director decision: run bounded follow-up acceptance `semantic-runtime-completion-acceptance-02` before closing this incident/chat.
+- Follow-up acceptance report: `reviews/worker_reports/semantic-runtime-completion-acceptance-02.md`, blob `5b4a25c89845ab258651a30608658e90d7d1840d`.
+- `Semantic runtime observability`: pass.
+- `Feed semantic completeness visibility`: pass.
+- Single-owner semantic execution remains preserved; no duplicate scheduler/runtime/queue was introduced.
+- Current canonical state truthfully distinguishes old accepted semantic progress from current-scope progress and publishes unresolved semantic work as degraded rather than complete.
+- Remaining blocker: none.
+- Director decision: close this track. Chat 1 can be deleted.
 
 ## Visual freshness fix
 
-- Acceptance requiring fix remains: `reviews/worker_reports/visual-freshness-chain-acceptance-01.md`, blob `11f4d2b416d8034646df253df616b44143aade57`.
-- User reports Chat 2 completed `visual-freshness-chain-fix-01`, but expected durable implementation report is not yet present.
-- Director decision: do not re-run implementation or investigate broadly. Obtain report closeout only, then decide bounded follow-up acceptance.
+- Acceptance requiring fix: `reviews/worker_reports/visual-freshness-chain-acceptance-01.md`, blob `11f4d2b416d8034646df253df616b44143aade57`.
+- User reports Chat 2 completed `visual-freshness-chain-fix-01`, but expected durable implementation report remains absent after exact-path and task-ID checks.
+- Director decision: do not repeat implementation or investigate broadly. Obtain report closeout only, then create its bounded follow-up acceptance if status permits.
 
-## System Auditor baseline-01
+## System Auditor checkpoint
 
-- Report: `reviews/system_audits/baseline-01.md`, blob `5d3abfd95e84205b999329aa30bc806687d8b9cf`.
-- Status: `complete`.
-- `DIRECTOR_REVIEW_CHECKPOINTS.md`: `system_audit_due: false`.
-- `material_changes_since_last_system_audit: 1` after completed `semantic-runtime-completion-fix-01`.
-- Audit Finding 5 (legacy dispatchable Taste write paths) remains a future candidate, not next.
+- Last report: `reviews/system_audits/baseline-01.md`.
+- `system_audit_due: true` because `semantic-runtime-completion-acceptance-02` stabilized an unobserved automatic-process incident and accepted a semantic-runtime control boundary.
+- Existing direct Chat 2 continuation may finish first. Do not assign ordinary backlog work before the next System Audit.
 
 ## Taste Reviewer
 
@@ -70,7 +67,7 @@
 ## Trine 4 state
 
 - Canonical identity: `App_690640`, family `game:690640`.
-- Stop Trine-specific recon. Its system-level observability/completeness defect is now implemented and awaiting acceptance-02.
+- The system-level observability/completeness defect exposed by the Trine incident is now accepted as fixed. This does not itself assert a positive Taste verdict or guarantee final-list inclusion for Trine 4.
 
 ## Giveaway identity state
 
@@ -88,7 +85,7 @@
 
 ## Выбор следующей работы
 
-1. Continue Chat 1 with `WORKER_TASK_SEMANTIC_RUNTIME_COMPLETION_ACCEPTANCE_02.md`.
-2. Get Chat 2's already-completed implementation saved to `reviews/worker_reports/visual-freshness-chain-fix-01.md`; do not repeat implementation.
-3. After Chat 2 report, decide its bounded acceptance continuation.
-4. Do not start ordinary backlog work ahead of these direct continuations unless the user explicitly prioritizes a more urgent time-sensitive incident.
+1. Get Chat 2's already-completed implementation saved to `reviews/worker_reports/visual-freshness-chain-fix-01.md`; do not repeat implementation.
+2. If that report is complete and ready, run bounded follow-up acceptance for visual freshness.
+3. After the direct visual-freshness continuation is stable, run the now-due System Audit before ordinary backlog work.
+4. Do not reopen Trine-specific investigation under the completed Taste-control track.
