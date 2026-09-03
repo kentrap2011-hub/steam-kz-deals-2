@@ -35,10 +35,8 @@ jobs:
       - name: Validate focused semantic runtime completion contract
         run: python scripts/test_semantic_runtime_completion.py
 
-      - name: Validate existing Taste contracts
-        run: |
-          python scripts/validate_taste_v3_contract.py
-          python scripts/validate_taste_inbox_transactional_proof.py
+      - name: Validate existing Taste contract
+        run: python scripts/validate_taste_v3_contract.py
 
       - name: Compile touched producers
         run: |

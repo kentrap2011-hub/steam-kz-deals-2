@@ -1,7 +1,7 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "purpose": "chatgpt_consumer_bundle_with_context_bound_strict_price_blind_taste_phase_and_grounded_negative_readiness",
-  "status": "complete",
+  "status": "degraded",
   "source_mailing_updated_at_utc": "2026-09-02T20:36:22.419743+00:00",
   "profile_binding": {
     "canonical_profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
@@ -208,5 +208,35 @@
       "runtime_owner": "scheduled_chatgpt_runtime_data_plane",
       "control_plane_owner": "github_control_plane"
     }
+  },
+  "semantic_completeness": {
+    "status": "degraded",
+    "scope_partition_complete": true,
+    "sufficiently_complete_for_publication": false,
+    "unresolved_semantic_count": 644,
+    "resolved_semantic_count": 0,
+    "total_relevant_semantic_scope": 644,
+    "source_family_count": 743,
+    "unresolved_scope_source_mailing_updated_at_utc": "2026-09-02T20:36:22.419743+00:00",
+    "unresolved_scope_age_seconds": 25342,
+    "unresolved_age_basis": "source_mailing_updated_at_utc"
+  },
+  "semantic_runtime_observability": {
+    "status": "no_current_scope_progress_observed",
+    "runtime_owner": "scheduled ChatGPT production task",
+    "owner_contract_ref": "config/execution_ownership_contract.json#scheduled_chatgpt_runtime_data_plane",
+    "owner_expected_by_contract": true,
+    "scheduler_platform_enabled_state": "not_exposed_to_repository",
+    "expected_cadence_or_next_run_state": "not_exposed_to_repository",
+    "latest_runtime_status_path": "data/cache/taste_ingest_receipts/latest_runtime_status.json",
+    "last_successful_semantic_execution_at_utc": "2026-09-01T21:03:08+00:00",
+    "last_accepted_semantic_progress_at_utc": "2026-09-01T21:03:08+00:00",
+    "last_accepted_source_mailing_updated_at_utc": "2026-09-01T20:47:04.563817+00:00",
+    "current_scope_source_mailing_updated_at_utc": "2026-09-02T20:36:22.419743+00:00",
+    "current_scope_progress_observed": false,
+    "last_queue_before_count": 37,
+    "last_queue_after_count": 26,
+    "last_queue_delta_count": 11,
+    "queue_presence_is_not_heartbeat": true
   }
 }

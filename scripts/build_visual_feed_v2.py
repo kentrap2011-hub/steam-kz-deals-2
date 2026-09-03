@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from card_explanation_policy import positive_reasons
+from semantic_runtime_completion import apply_visual_semantic_status
 from russian_description_quality import classify_description
 from russian_description_translation_runtime import (
     load_translation_cache,
@@ -489,6 +490,7 @@ def main():
         'item_count': len(visible),
         'items': visible,
     }
+    apply_visual_semantic_status(output, payload)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(output, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print(f'visual items: {len(visible)}; media items: {len(media)}; practical facts: {len(facts)}')
