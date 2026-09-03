@@ -31,37 +31,29 @@
 
 | Чат | Короткое имя | Задача | Task file | Report | Статус |
 |---|---|---|---|---|---|
-| `ЧАТ 1` | Срочно: ускорить ленту | Cache-first mobile feed fix is deployed; waiting only for real-device user acceptance | `WORKER_TASK_MOBILE_FEED_INSTANT_CACHE_FIX_01.md` | `reviews/worker_reports/mobile-feed-instant-cache-fix-01.md` | `needs_user_action_keep_chat` |
+| `ЧАТ 1` | Пост-инцидентный аудит | Short read-only audit after user-accepted mobile incident stabilization | `WORKER_TASK_MOBILE_POST_INCIDENT_AUDIT_01.md` | `reviews/system_audits/mobile-post-incident-audit-01.md` | `ready_to_start_new_chat` |
 | `ЧАТ 2` | Epic раздачи | Diagnose current Epic giveaway schema change before a bounded parser fix | `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_RECON_01.md` | `reviews/worker_reports/epic-giveaway-schema-recon-01.md` | `running_or_ready` |
 
-## System Audit 02 — complete
-
-- Report: `reviews/system_audits/system-audit-02.md`.
-- Status: `complete`.
-- Current due checkpoint is satisfied; `DIRECTOR_REVIEW_CHECKPOINTS.md` reset to `system_audit_due: false`, material count 0.
-- Because the mobile incident was still active during the audit, `mobile_post_incident_audit_pending: true`; set the audit due again only after that incident is actually stabilized/user-accepted.
-- Baseline Finding 1 semantic heartbeat: closed.
-- Baseline Finding 2 semantic incompleteness visibility: partially closed; canonical payload truth is degraded/incomplete but current UI does not visibly surface it.
-- Baseline Finding 3 visual stale-success: partially closed; accepted fix is release-ready but not active on production `main`.
-- Legacy one-shot Taste write workflows remain a bounded ownership risk hypothesis.
-
-## Urgent user-visible incident — mobile feed load latency
+## Mobile feed incident — CLOSED by real-device acceptance
 
 - Recon report: `reviews/worker_reports/mobile-page-interaction-freeze-recon-01.md`, blob `48700dc77ac17fa031dd129996bef74075d86872`.
 - First fix report: `reviews/worker_reports/mobile-page-blank-feed-fix-01.md`, blob `61b23ffc479dff473310b1d7aed0d36d43a11c8f`.
-- First production fix ref: `af2c7362743b4fe3d80ea10caee7cb606acab3e5`; Pages run `33766838776` succeeded.
-- User real-device result after first fix: partial success; silent blank feed gone, but some reloads still waited several seconds on `Загружаю игры…`.
-- Direct continuation report: `reviews/worker_reports/mobile-feed-instant-cache-fix-01.md`, blob `8c80b9da35057ff6443665468329db37bfc8c8b1`.
-- Status: `needs_user_action` only because real-device acceptance is still required.
-- New production behavior uses one Cache Storage last-known-good response (`steam-deals-feed-lkg-v1`) because the canonical payload is about 4.1 MB and unsuitable for a safe localStorage assumption.
-- After one successful load, repeat visits should render the cached feed immediately, while fresh canonical `data/current.json` refreshes in the background.
-- Slow/failed background refresh must leave already visible cards in place; corrupt cache is ignored; canonical network payload remains source of truth.
-- No service worker, polling, second renderer, second production source, Taste/ranking changes, or visual-freshness merge were introduced.
-- Focused regression: `feed instant cache regression: PASS`.
-- Production release ref: `f745dac844213880cd7eb984573877f58803a3f0` on `main`.
-- Successful Pages deploy: `Deploy visual mailing`, run `33779042331`, run number `256`, conclusion `success`.
-- Director decision: do not close incident or delete Chat 1 yet. User must verify on the affected phone: first successful load, then 5+ reloads including rapid reloads; cards should normally appear immediately from local last-known-good data; app-switch/return must not blank/reset the feed.
-- Once user accepts the real-device result, close the incident, allow Chat 1 deletion, and set the pending post-incident System Audit due per checkpoint rule.
+- Cache-first follow-up report: `reviews/worker_reports/mobile-feed-instant-cache-fix-01.md`, blob `8c80b9da35057ff6443665468329db37bfc8c8b1`.
+- Final production release ref: `f745dac844213880cd7eb984573877f58803a3f0`.
+- Pages deploy: `33779042331`, success.
+- Final behavior: last-known-good feed payload renders immediately from browser Cache Storage on repeat visits while canonical `data/current.json` refreshes in background; canonical network payload remains source of truth.
+- User real-device acceptance on affected Android phone: `works` on 2026-09-03.
+- Director decision: mobile user-visible incident is closed.
+- Original Chat 1 worker can be deleted.
+- Incident stabilization triggers mandatory short System Audit; task prepared as `WORKER_TASK_MOBILE_POST_INCIDENT_AUDIT_01.md`.
+
+## System Audit checkpoint
+
+- Last completed audit: `reviews/system_audits/system-audit-02.md`.
+- Mobile incident stabilization now sets `system_audit_due: true` again under the recurring incident trigger.
+- Prepared short audit: `WORKER_TASK_MOBILE_POST_INCIDENT_AUDIT_01.md`, creation commit `a85c5e9da19868595ce5fd72a1afd05c2a4f880e`.
+- Expected report: `reviews/system_audits/mobile-post-incident-audit-01.md`.
+- Do not assign ordinary backlog work before this audit completes unless the user explicitly reprioritizes.
 
 ## Known production problem — Epic giveaway source schema failure
 
@@ -72,29 +64,27 @@
 - Epic: failed/incomplete, `SOURCE_SCHEMA_FAILURE`, `Epic price.totalPrice schema changed`.
 - Current result therefore cannot truthfully conclude that there are no active giveaways.
 - Failure occurs before ITAD/IGDB identity enrichment.
-- Task: `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_RECON_01.md`, creation commit `f4673fecaaab54ae07fe3d795322480c994e2147`.
-- Mode is bounded READ-ONLY/RECON first; no parser implementation until exact new schema is localized.
+- Current task: `WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_RECON_01.md`.
 
 ## Operational health watch
 
 - ChatGPT automation `Steam KZ Health Watch` is enabled hourly.
 - It notifies only on new/materially worsened canonical problems not already tracked here.
-- Current mobile and Epic incidents are known and should not trigger duplicate unchanged alerts.
-- Long-term canonical project health signal remains a future bounded design task; do not create a duplicate scheduler/writer.
-
-## Semantic runtime completion — accepted
-
-- Final acceptance report: `reviews/worker_reports/semantic-runtime-completion-acceptance-02.md`, blob `5b4a25c89845ab258651a30608658e90d7d1840d`.
-- Runtime observability defect is closed.
-- Remaining UI truth gap from Audit 02: canonical degraded semantic completeness is not visibly surfaced to user.
+- Current Epic incident is known; closed mobile incident should no longer be treated as active unless it regresses.
 
 ## Visual freshness — accepted, release deferred
 
 - Implementation report: `reviews/worker_reports/visual-freshness-chain-fix-01.md`, blob `e5226710d435cfbb1c0190e11d937b025ceb9aac`.
 - Final acceptance report: `reviews/worker_reports/visual-freshness-chain-acceptance-02.md`, blob `6a691fb29d88b1785accf717752149e027265a2c`.
 - Branch `worker/visual-freshness-chain-fix-01` is ready for production merge/release.
-- Audit 02 confirms production `main` still uses the old path, so production closure remains open.
-- Release remains deferred until mobile feed incident is user-accepted and overlap risk is reassessed.
+- Production closure remains open until released on `main`.
+- After mobile post-incident audit, reassess release immediately; there is no longer an active mobile incident blocker.
+
+## Semantic runtime completion — accepted
+
+- Final acceptance report: `reviews/worker_reports/semantic-runtime-completion-acceptance-02.md`, blob `5b4a25c89845ab258651a30608658e90d7d1840d`.
+- Runtime observability defect is closed.
+- Remaining Audit 02 gap: canonical degraded semantic completeness is not visibly surfaced to user.
 
 ## Taste Reviewer — baseline complete
 
@@ -105,7 +95,7 @@
 
 - Prepared task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
 - Architecture: one provider-neutral identity interface, active `itad`, reserved future `igdb`, no automatic fallback.
-- Status: `prepared_not_started`; current Epic discovery failure is earlier in the pipeline and has priority over ITAD identity enrichment.
+- Status: `prepared_not_started`; Epic discovery repair remains earlier in pipeline and higher priority.
 
 ## Ожидает внешнего prerequisite, worker-слот не занимает
 
@@ -115,9 +105,9 @@
 
 ## Выбор следующей работы
 
-1. User verifies the deployed mobile cache-first fix on the affected phone now.
-2. Chat 1 remains available only for immediate bounded follow-up until user acceptance; do not repurpose/delete yet.
+1. Delete old finished Chat 1 mobile implementation worker.
+2. Start NEW Chat 1 with `WORKER_TASK_MOBILE_POST_INCIDENT_AUDIT_01.md`.
 3. Chat 2 continues Epic giveaway schema recon.
-4. After mobile user acceptance: close incident, set post-incident System Audit due, then reassess/release accepted visual-freshness branch.
+4. After post-incident audit, if closure accepted, release the already accepted visual-freshness branch unless a concrete blocker appears.
 5. After Epic recon, if IMPLEMENT-ready, fix Epic discovery before ITAD identity enrichment.
-6. Later address Audit 02 semantic degraded-state UI visibility and legacy Taste writer cleanup as bounded tasks.
+6. Later address semantic degraded-state UI visibility and legacy Taste writer cleanup as bounded tasks.
