@@ -6,11 +6,11 @@ The Director must read this file before assigning a new ordinary backlog task wh
 
 ## System Auditor
 
-system_audit_due: false
+system_audit_due: true
 first_system_audit_trigger: `satisfied_2026-09-02`
-material_changes_since_last_system_audit: 0
+material_changes_since_last_system_audit: 1
 last_system_audit_report: `reviews/system_audits/system-audit-02.md`
-mobile_post_incident_audit_pending: true
+mobile_post_incident_audit_pending: false
 
 ### First trigger condition
 
@@ -27,16 +27,16 @@ A completed audit resets `material_changes_since_last_system_audit` to 0 and rec
 
 ### Current audit state
 
-`System Audit 02` completed on 2026-09-03 and satisfied the previously due checkpoint.
+`System Audit 02` completed on 2026-09-03 and satisfied the previous checkpoint.
 
-Key dispositions from `reviews/system_audits/system-audit-02.md`:
-- semantic execution heartbeat/observability: `closed`;
-- semantic incompleteness visibility: `partially_closed` because canonical degraded truth is not yet visibly surfaced in the user-facing feed;
-- visual stale-success: `partially_closed` because the accepted fix is not yet active on production `main`;
-- legacy one-shot Taste writer ambiguity remains a bounded risk hypothesis;
-- current mobile feed incident remains active and was not treated as stabilized/accepted by the audit.
+The mobile feed incident is now stabilized and user-accepted on the affected Android phone after production release `f745dac844213880cd7eb984573877f58803a3f0` / Pages run `33779042331`.
 
-Because the mobile incident was still active during this audit, set `system_audit_due: true` again after that incident is actually stabilized and user-accepted, unless a later audit has already covered the exact stabilized failure class. Until stabilization, `mobile_post_incident_audit_pending: true` is a reminder, not a current blocking due checkpoint.
+The recurring incident trigger therefore fires now:
+- `system_audit_due: true`;
+- prepared task: `WORKER_TASK_MOBILE_POST_INCIDENT_AUDIT_01.md`;
+- expected report: `reviews/system_audits/mobile-post-incident-audit-01.md`.
+
+Do not assign ordinary backlog work before this post-incident audit completes unless the user explicitly gives a more urgent time-sensitive task.
 
 ## Taste Reviewer
 
