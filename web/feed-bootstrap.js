@@ -176,7 +176,7 @@
         return responseWithPayload(response,payload);
       }catch(error){
         if(timeoutId!=null)cancel(timeoutId);
-        let kind=error?.feedBootstrapKind||'network';
+        let kind=timedOut?'timeout':(error?.feedBootstrapKind||'network');
         if(lifecycleAbort&&!timedOut)kind='lifecycle-abort';
         warn(kind==='timeout'?'fetch-timeout':'fetch-rejected',{attempt,kind,message:String(error?.message||error)});
         throw makeError(kind,String(error?.message||kind),error);
