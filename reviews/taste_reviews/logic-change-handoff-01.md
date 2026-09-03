@@ -10,6 +10,8 @@ This handoff converts direct user calibration into bounded changes for the Direc
 
 The central finding is that the current Taste layer risks treating **structural game features as negatives before there is evidence that their implementation is actually bad for Dmitry**. Dmitry explicitly corrected the review method: every game has drawbacks, and it is not valid to invent likely negatives from a store description/feature list alone. For candidate-specific quality risks, recurring player-review evidence is more useful than speculative feature-level penalties.
 
+A second correction is now equally important: **even player-review summaries plus a text description are not enough to conclude that Dmitry personally will dislike an unfamiliar game**. They identify what deserves inspection. Stronger personal conclusions normally require richer title-specific evidence such as a substantive review/video, trailer/gameplay footage, comparable prior experience, or Dmitry's own play.
+
 ## Required logic change direction
 
 ### 1. Do not treat feature presence as a demonstrated personal negative
@@ -34,21 +36,25 @@ Direct calibration shows why:
 
 Recommendation: convert coarse feature penalties into **context/implementation hypotheses**, or sharply reduce their weight unless supported by stronger evidence.
 
-### 2. Use player-review evidence to establish real implementation risks before taste penalties
+### 2. Use player-review evidence to establish real implementation risks — but preserve uncertainty about personal fit
 
 For a candidate-specific negative, prefer this evidence chain:
 1. identify a recurring complaint from actual players/reviews;
 2. confirm it is a meaningful pattern rather than one isolated complaint;
 3. map that complaint to an experiential issue (e.g. boring missions, weak combat feel, confusing navigation, mandatory grind, poor AI, technical friction);
-4. only then test whether that issue conflicts with Dmitry's known preferences.
+4. use that issue as a **question to evaluate**, not an automatic personal penalty;
+5. only assign stronger personal-negative confidence when Dmitry's profile/history or richer title-specific inspection supports it.
 
 Do not infer a candidate's negative merely from its store description or list of mechanics.
 
 Important separation:
 - **player reviews = evidence that a quality/implementation issue is real**;
-- **Dmitry's profile/direct answers = evidence that the issue matters to him personally**.
+- **description = evidence about what the game attempts to be**;
+- **Dmitry's profile/direct answers + richer title inspection = evidence that the issue matters to him personally**.
 
 Review sentiment by itself must not become a taste score, and popularity/review percentage must not be treated as personal preference proof.
+
+`Haven Moon` is the current control: its description sounded somewhat dull and player reviews identify opaque puzzle communication/backtracking, but Dmitry explicitly says this is still not enough information to conclude that the game would not suit him. The correct state is **insufficient evidence / needs richer evaluation**, not low-fit.
 
 ### 3. Separate personal fit, role and queue priority from sale urgency
 
@@ -66,6 +72,23 @@ Controls:
 - `Terminator: Resistance`: moderate ordinary-queue interest, boosted by liking the `Terminator` film universe; not a drop-everything title.
 - `Tails of Iron 2`: secondary/palate-cleanser role, not main-game priority.
 - `Trine 4`: confirmed family-play positive.
+
+### 4. Do not let discount percentage rescue a game that is already judged weak/uninteresting
+
+Dmitry explicitly says the modern discount environment matters: many **good** games also receive very large discounts. Therefore there is little reason to spend money on a weak game merely because its discount percentage is even larger.
+
+Required semantic separation:
+- **Taste / game desirability** answers whether the game is worth wanting;
+- **price / discount** answers whether now is a good time to buy a game that is already desirable enough;
+- price must not manufacture desirability.
+
+Recommended behavior:
+- strong/credible fit + strong discount = high-value purchase candidate;
+- uncertain fit + strong discount = may justify inspection, not automatic purchase promotion;
+- confirmed weak/uninteresting fit + even extreme paid discount = normally remains low priority;
+- **free giveaway is a separate acquisition state**: the user may claim or sample an otherwise non-purchase-worthy game if something about it remains interesting, but free status should not turn it into a strong recommendation.
+
+This is an opportunity-cost issue: Dmitry's limiting resource is not merely money; attention, play time and queue space matter because attractive discounted alternatives are plentiful.
 
 ## Candidate-specific findings relevant to current ranking
 
@@ -92,9 +115,22 @@ Direct calibration:
 
 Interpretation: useful regression control against generic penalties for scarcity, pressure and pursuit.
 
+### `Haven Moon`
+
+Current diagnostic framing used a strong `directionlessness` risk.
+
+Direct calibration now shows:
+- text description alone sounded somewhat boring;
+- player reviews provide real concerns around opaque puzzle communication and backtracking;
+- Dmitry still does **not** consider that enough evidence to say the game would not suit him;
+- he would want richer information before judging it;
+- if richer evaluation eventually shows the game is weak/uninteresting, a large paid discount would not make it worth buying; free can lower the claim/sample threshold if something remains interesting.
+
+Interpretation: regression control for **insufficient evidence vs negative fit** and for **discount cannot rescue weak fit**.
+
 ### `HighFleet`
 
-Strong negative pre-play control remains valid, but the reason must stay narrow:
+Strong negative pre-play control remains valid because it came after direct trailer inspection, but the reason must stay narrow:
 - dry/technical/tedious felt presentation;
 - "more like studying an instruction manual than playing a game".
 
@@ -106,17 +142,21 @@ Confirmed positive family-play title that was omitted when semantic Taste state 
 
 ## Director acceptance tests recommended
 
-1. **Feature-vs-flaw test**
+1. **Feature-vs-flaw + evidence-depth test**
    - A game must not receive a strong negative merely because it contains puzzles, repetition, resource pressure, management, open exploration or pursuit.
-   - Strong negative should require either direct user evidence or a well-grounded implementation problem that maps to known user dislike.
+   - A recurring review complaint may establish a real implementation problem, but should remain a hypothesis about Dmitry until profile/history or richer title inspection connects it to his taste.
+   - `Haven Moon` must remain unresolved/needs-inspection rather than becoming a negative from description + review summaries alone.
 
 2. **Review-grounded risk test**
    - For a bounded current sample, compare current Taste risk reasons against recurring player complaints.
    - Flag risks that exist only as speculative structural assumptions.
    - Do not use aggregate review score as personal fit evidence.
+   - Record evidence depth/confidence for candidate-specific Taste claims.
 
-3. **Role/priority/urgency separation test**
-   - Verify `Sifu`, `High On Life`, `Amnesia: The Bunker`, `Terminator: Resistance`, `Tails of Iron 2`, and `Trine 4` can be represented without collapsing suitability, role, queue priority and commercial urgency into one signal.
+3. **Role/priority/urgency/discount separation test**
+   - Verify `Sifu`, `High On Life`, `Amnesia: The Bunker`, `Terminator: Resistance`, `Tails of Iron 2`, `Haven Moon`, and `Trine 4` can be represented without collapsing suitability, role, queue priority, evidence confidence, commercial urgency and discount magnitude into one signal.
+   - A very large paid discount must not raise a confirmed weak/uninteresting game above strong-fit games that are also deeply discounted.
+   - Free giveaway handling should be distinct from paid purchase ranking.
 
 ## Expected product effect
 
@@ -125,14 +165,17 @@ The goal is **not to loosen all filtering**. `HighFleet` proves false positives 
 The desired effect is:
 - fewer false negatives caused by speculative/coarse risk penalties;
 - fewer false positives caused by generic feature matching;
-- clearer distinction between "fits Dmitry", "fits a particular play role", "should be played soon", and "sale is urgent";
-- candidate-specific negatives grounded in real implementation evidence rather than feature-list stereotypes.
+- fewer premature fit verdicts on unfamiliar games;
+- clearer distinction between "fits Dmitry", "needs more evidence", "fits a particular play role", "should be played soon", and "sale is urgent";
+- price/discount used as purchase-timing evidence rather than a substitute for game desirability;
+- candidate-specific negatives grounded in real implementation evidence and adequate familiarity rather than feature-list stereotypes.
 
 ## Canonical evidence refs
 
 - `USER_TASTE_PROFILE.md`
 - `reviews/taste_reviews/baseline-01.md`
-- direct calibration controls: `Trine 4`, `HighFleet`, `Tails of Iron 2`, `High On Life`, `Sifu`, `Batman: Arkham`, `RDR2`, `Silent Hill (1999)`, `Silent Hill f`, `Alan Wake`, `Amnesia: The Bunker`, `Terminator: Resistance`
+- `reviews/taste_reviews/current-ranking-audit-01.md`
+- direct calibration controls: `Trine 4`, `HighFleet`, `Tails of Iron 2`, `High On Life`, `Sifu`, `Batman: Arkham`, `RDR2`, `Silent Hill (1999)`, `Silent Hill f`, `Alan Wake`, `Amnesia: The Bunker`, `Terminator: Resistance`, `Haven Moon`
 
 ## Handoff
 
