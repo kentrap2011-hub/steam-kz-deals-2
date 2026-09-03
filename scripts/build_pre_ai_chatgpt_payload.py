@@ -7,6 +7,7 @@ from collections import Counter
 from pathlib import Path
 
 from taste_negative_contract import negative_readiness
+from semantic_runtime_completion import apply_payload_status
 
 MAILING = Path('data/production/mailing/index.json')
 STORE = Path('data/production/pre_ai/store_snapshot.json')
@@ -17,6 +18,7 @@ HISTORY = Path('data/production/pre_ai/history_snapshot.json')
 DEALS = Path('data/production/pre_ai/deal_scenarios.json')
 TASTE_CACHE = Path('data/cache/taste_fit.json')
 TASTE_OVERLAY = Path('data/cache/taste_fit.entry_overlay.json')
+LATEST_RUNTIME_STATUS = Path('data/cache/taste_ingest_receipts/latest_runtime_status.json')
 MANIFEST_OUT = Path('data/production/pre_ai/chatgpt_payload.json')
 TASTE_QUEUE_OUT = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
 PURCHASE_CONTEXT_OUT = Path('data/production/pre_ai/chatgpt_purchase_context.jsonl')
@@ -466,6 +468,9 @@ def main():
         'deterministically_excluded_primary_keys': excluded_keys,
         'elapsed_seconds': round(time.monotonic() - started, 3),
     }
+    latest_runtime_status = load(LATEST_RUNTIME_STATUS) if LATEST_RUNTIME_STATUS.exists() else None
+    apply_payload_status(manifest, latest_runtime_status)
+
     MANIFEST_OUT.parent.mkdir(parents=True, exist_ok=True)
     MANIFEST_OUT.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 

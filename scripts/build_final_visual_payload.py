@@ -9,9 +9,11 @@ import duration_enrichment
 import giveaway_visual_handoff
 import priority_ranking
 import refine_visual_ranking as refiner
+from semantic_runtime_completion import apply_visual_semantic_status
 
 ROOT = Path('.')
 OUT = ROOT / 'data/production/visual/current.json'
+SEMANTIC_PAYLOAD = ROOT / 'data/production/pre_ai/chatgpt_payload.json'
 DURATION_CONTRACT = ROOT / 'config/duration_enrichment_contract.json'
 DURATION_CACHE = ROOT / 'data/cache/duration_estimates.json'
 
@@ -250,6 +252,8 @@ def refresh_existing_media():
 
     before = OUT.read_text(encoding='utf-8')
     ready = json.loads(before)
+    semantic_payload = json.loads(SEMANTIC_PAYLOAD.read_text(encoding='utf-8')) if SEMANTIC_PAYLOAD.exists() else {}
+    apply_visual_semantic_status(ready, semantic_payload)
     items = ready.get('items') or []
     duration_entries = load_duration_entries()
     context_by_family, taste_entries, projections = current_explanation_context()
@@ -405,6 +409,7 @@ def main():
     base_builder.visual_builder.main()
 
     ready = base_builder.load_json(OUT)
+    apply_visual_semantic_status(ready, payload)
     ready['items'] = base_builder.achievement_quality.enrich_visual_items(ready.get('items') or [])
     ready = base_builder.enrich_history_and_remove_expired(ready, context_by_family, payload)
     achievement_distribution = base_builder.achievement_quality_distribution(ready.get('items') or [])

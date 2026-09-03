@@ -4,8 +4,11 @@ import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
+from semantic_runtime_completion import build_runtime_status
+
 INBOX_DIR = Path('data/ai_inbox/taste')
 RECEIPT_DIR = Path('data/cache/taste_ingest_receipts')
+LATEST_RUNTIME_STATUS = RECEIPT_DIR / 'latest_runtime_status.json'
 PROJECTION = Path('data/production/pre_ai/taste_projection.json')
 MANIFEST = Path('data/production/pre_ai/chatgpt_payload.json')
 QUEUE = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
@@ -292,6 +295,13 @@ def main():
     if receipt_path.exists():
         raise SystemExit(f'Receipt already exists for this exact batch: {receipt_path}')
     receipt_path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+    previous_runtime_status = load_json(LATEST_RUNTIME_STATUS) if LATEST_RUNTIME_STATUS.exists() else None
+    latest_runtime_status = build_runtime_status(receipt, previous_runtime_status)
+    LATEST_RUNTIME_STATUS.write_text(
+        json.dumps(latest_runtime_status, ensure_ascii=False, indent=2) + '\n',
+        encoding='utf-8',
+    )
 
     for path in inbox_files:
         path.unlink()
