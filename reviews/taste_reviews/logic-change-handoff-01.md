@@ -12,6 +12,8 @@ The central finding is that the current Taste layer risks treating **structural 
 
 A second correction is now equally important: **even player-review summaries plus a text description are not enough to conclude that Dmitry personally will dislike an unfamiliar game**. They identify what deserves inspection. Stronger personal conclusions normally require richer title-specific evidence such as a substantive review/video, trailer/gameplay footage, comparable prior experience, or Dmitry's own play.
 
+A third correction concerns historical negative evidence: **a brief failed attempt, especially many years ago, is not equivalent to a current high-confidence rejection**. Old/shallow negative experience should be reopenable when later evidence strongly supports reconsideration.
+
 ## Required logic change direction
 
 ### 1. Do not treat feature presence as a demonstrated personal negative
@@ -56,7 +58,25 @@ Review sentiment by itself must not become a taste score, and popularity/review 
 
 `Haven Moon` is the current control: its description sounded somewhat dull and player reviews identify opaque puzzle communication/backtracking, but Dmitry explicitly says this is still not enough information to conclude that the game would not suit him. The correct state is **insufficient evidence / needs richer evaluation**, not low-fit.
 
-### 3. Separate personal fit, role and queue priority from sale urgency
+### 3. Weight historical negative evidence by depth, recency and confidence
+
+A past "didn't hook me" signal should not automatically become a permanent veto.
+
+`BioShock` is the control:
+- Dmitry played only a little many years ago and deleted/abandoned it because it did not engage him then;
+- this did not create firm aversion to the game or franchise;
+- the game's cult status and very large amount of positive player feedback later made him seriously reconsider it;
+- when the complete series bundle appeared at a strong discount, he seriously considered buying the bundle.
+
+Therefore historical negative evidence should carry metadata such as:
+- how much of the game was experienced;
+- how long ago;
+- whether the reaction was "not interested at that moment" versus explicit dislike;
+- whether later external evidence has reopened interest.
+
+A short old failed attempt should be weaker than a recent, well-informed negative verdict after substantial exposure.
+
+### 4. Separate personal fit, role and queue priority from sale urgency
 
 Current calibration shows at least three distinct outputs are needed conceptually:
 - is this game suitable for Dmitry at all?
@@ -73,22 +93,25 @@ Controls:
 - `Tails of Iron 2`: secondary/palate-cleanser role, not main-game priority.
 - `Trine 4`: confirmed family-play positive.
 
-### 4. Do not let discount percentage rescue a game that is already judged weak/uninteresting
+### 5. Do not let discount percentage rescue a game that is already judged weak/uninteresting — but allow price/bundle value to close a reconsideration case
 
 Dmitry explicitly says the modern discount environment matters: many **good** games also receive very large discounts. Therefore there is little reason to spend money on a weak game merely because its discount percentage is even larger.
 
 Required semantic separation:
 - **Taste / game desirability** answers whether the game is worth wanting;
-- **price / discount** answers whether now is a good time to buy a game that is already desirable enough;
-- price must not manufacture desirability.
+- **quality confidence / external evidence** can reopen an uncertain or old failed case;
+- **price / discount / bundle value** answers whether now is a good time to buy once desirability is high enough;
+- price must not manufacture desirability from a confirmed weak fit.
 
 Recommended behavior:
 - strong/credible fit + strong discount = high-value purchase candidate;
 - uncertain fit + strong discount = may justify inspection, not automatic purchase promotion;
 - confirmed weak/uninteresting fit + even extreme paid discount = normally remains low priority;
+- old/shallow negative experience + strong later quality evidence = legitimate reconsideration state;
+- legitimate reconsideration state + strong bundle discount = can become a serious purchase candidate (`BioShock` control);
 - **free giveaway is a separate acquisition state**: the user may claim or sample an otherwise non-purchase-worthy game if something about it remains interesting, but free status should not turn it into a strong recommendation.
 
-This is an opportunity-cost issue: Dmitry's limiting resource is not merely money; attention, play time and queue space matter because attractive discounted alternatives are plentiful.
+This is an opportunity-cost issue: Dmitry's limiting resource is not merely money; attention, play time and queue space matter because attractive discounted alternatives are plentiful. Bundle value matters when it expands access to a credible series, not merely because the raw percentage is high.
 
 ## Candidate-specific findings relevant to current ranking
 
@@ -128,6 +151,19 @@ Direct calibration now shows:
 
 Interpretation: regression control for **insufficient evidence vs negative fit** and for **discount cannot rescue weak fit**.
 
+### `BioShock`
+
+Historical profile:
+- 3/5, postponed/abandoned;
+- only a short attempt many years ago;
+- "not very interesting then", not firm rejection.
+
+New direct calibration:
+- cult status and a very large amount of positive player feedback materially increased confidence that the game deserved another chance;
+- Dmitry seriously considered buying the complete series when the bundle was heavily discounted.
+
+Interpretation: regression control for **historical shallow negative ≠ permanent veto** and for **bundle/discount can matter after quality evidence has already reopened interest**.
+
 ### `HighFleet`
 
 Strong negative pre-play control remains valid because it came after direct trailer inspection, but the reason must stay narrow:
@@ -147,15 +183,15 @@ Confirmed positive family-play title that was omitted when semantic Taste state 
    - A recurring review complaint may establish a real implementation problem, but should remain a hypothesis about Dmitry until profile/history or richer title inspection connects it to his taste.
    - `Haven Moon` must remain unresolved/needs-inspection rather than becoming a negative from description + review summaries alone.
 
-2. **Review-grounded risk test**
-   - For a bounded current sample, compare current Taste risk reasons against recurring player complaints.
-   - Flag risks that exist only as speculative structural assumptions.
-   - Do not use aggregate review score as personal fit evidence.
-   - Record evidence depth/confidence for candidate-specific Taste claims.
+2. **Historical-negative confidence test**
+   - `BioShock` must not be treated as a hard negative merely because it was once abandoned/deleted after a short attempt.
+   - Historical negative signals should be weighted by exposure depth, recency and explicitness.
+   - Strong later quality/reputation evidence must be able to reopen a shallow old negative case.
 
-3. **Role/priority/urgency/discount separation test**
-   - Verify `Sifu`, `High On Life`, `Amnesia: The Bunker`, `Terminator: Resistance`, `Tails of Iron 2`, `Haven Moon`, and `Trine 4` can be represented without collapsing suitability, role, queue priority, evidence confidence, commercial urgency and discount magnitude into one signal.
+3. **Role/priority/urgency/discount/bundle separation test**
+   - Verify `Sifu`, `High On Life`, `Amnesia: The Bunker`, `Terminator: Resistance`, `Tails of Iron 2`, `Haven Moon`, `BioShock`, and `Trine 4` can be represented without collapsing suitability, role, queue priority, evidence confidence, commercial urgency and discount magnitude into one signal.
    - A very large paid discount must not raise a confirmed weak/uninteresting game above strong-fit games that are also deeply discounted.
+   - A strong bundle discount may raise purchase value when the underlying game/series has already become credibly reconsiderable.
    - Free giveaway handling should be distinct from paid purchase ranking.
 
 ## Expected product effect
@@ -166,8 +202,9 @@ The desired effect is:
 - fewer false negatives caused by speculative/coarse risk penalties;
 - fewer false positives caused by generic feature matching;
 - fewer premature fit verdicts on unfamiliar games;
-- clearer distinction between "fits Dmitry", "needs more evidence", "fits a particular play role", "should be played soon", and "sale is urgent";
-- price/discount used as purchase-timing evidence rather than a substitute for game desirability;
+- fewer permanent false negatives from shallow historical abandon signals;
+- clearer distinction between "fits Dmitry", "needs more evidence", "worth reconsidering", "fits a particular play role", "should be played soon", and "sale is urgent";
+- price/discount/bundle value used as purchase-timing/value evidence rather than a substitute for game desirability;
 - candidate-specific negatives grounded in real implementation evidence and adequate familiarity rather than feature-list stereotypes.
 
 ## Canonical evidence refs
@@ -175,7 +212,7 @@ The desired effect is:
 - `USER_TASTE_PROFILE.md`
 - `reviews/taste_reviews/baseline-01.md`
 - `reviews/taste_reviews/current-ranking-audit-01.md`
-- direct calibration controls: `Trine 4`, `HighFleet`, `Tails of Iron 2`, `High On Life`, `Sifu`, `Batman: Arkham`, `RDR2`, `Silent Hill (1999)`, `Silent Hill f`, `Alan Wake`, `Amnesia: The Bunker`, `Terminator: Resistance`, `Haven Moon`
+- direct calibration controls: `Trine 4`, `HighFleet`, `Tails of Iron 2`, `High On Life`, `Sifu`, `Batman: Arkham`, `RDR2`, `Silent Hill (1999)`, `Silent Hill f`, `Alan Wake`, `Amnesia: The Bunker`, `Terminator: Resistance`, `Haven Moon`, `BioShock`
 
 ## Handoff
 
