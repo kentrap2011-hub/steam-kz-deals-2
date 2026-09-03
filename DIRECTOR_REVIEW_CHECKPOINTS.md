@@ -6,9 +6,9 @@ The Director must read this file before assigning a new ordinary backlog task wh
 
 ## System Auditor
 
-system_audit_due: false
+system_audit_due: true
 first_system_audit_trigger: `satisfied_2026-09-02`
-material_changes_since_last_system_audit: 1
+material_changes_since_last_system_audit: 2
 last_system_audit_report: `reviews/system_audits/baseline-01.md`
 
 ### First trigger condition
@@ -24,8 +24,11 @@ Set `system_audit_due: true` when:
 
 A completed audit resets `material_changes_since_last_system_audit` to 0 and records its report.
 
-Current post-audit material change count:
-1. `semantic-runtime-completion-fix-01` completed; follow-up acceptance pending.
+Current post-audit material changes:
+1. `semantic-runtime-completion-fix-01` completed.
+2. `semantic-runtime-completion-acceptance-02` accepted the new runtime observability/completeness control and stabilized the Trine-class unobserved-semantic-processing incident.
+
+The recurring trigger has therefore fired before the numerical count reaches 3: an unobserved automatic-process incident was stabilized and the semantic-runtime control boundary was accepted. Existing direct continuation `visual-freshness-chain-fix-01` may finish first, but do not assign ordinary backlog work before the next System Audit.
 
 ## Taste Reviewer
 
