@@ -15,9 +15,12 @@ on:
       - 'scripts/russian_description_quality.py'
       - 'scripts/validate_russian_descriptions.py'
       - 'scripts/validate_giveaway_visual_payload.py'
+      - 'scripts/visual_freshness_receipt.py'
+      - 'scripts/test_visual_freshness_receipt.py'
       - '.github/workflows/deploy-visual.yml'
 
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
@@ -42,6 +45,22 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+
+      - name: Validate visual freshness receipt contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/test_visual_freshness_receipt.py
+
+      - name: Download exact triggering build freshness receipt
+        if: github.event_name == 'workflow_run'
+        uses: actions/download-artifact@v4
+        with:
+          name: visual-freshness-receipt
+          path: /tmp/visual-freshness-artifact
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ github.event.workflow_run.id }}
 
       - name: Classify canonical visual mutation
         id: visual_scope
@@ -154,6 +173,57 @@ jobs:
           grep -q '"mode":"daily_precomputed_read_only_for_ui"' data/production/visual/current.json
           mkdir -p web/data
           cp data/production/visual/current.json web/data/current.json
+
+      - name: Bind staged publication to triggering build freshness receipt
+        id: freshness
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          TRIGGER_RUN_ID: ${{ github.event.workflow_run.id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "workflow_run" ]; then
+            RECEIPT=/tmp/visual-freshness-artifact/visual-freshness-receipt.json
+            test -s "$RECEIPT"
+            python scripts/visual_freshness_receipt.py verify-receipt \
+              --receipt "$RECEIPT" \
+              --expected-run-id "$TRIGGER_RUN_ID" \
+              --staged-path web/data/current.json | tee /tmp/visual-freshness-verification.log
+            classification=$(python - <<'PY'
+            import json
+            from pathlib import Path
+            data = json.loads(Path('/tmp/visual-freshness-artifact/visual-freshness-receipt.json').read_text(encoding='utf-8'))
+            print('fresh' if data.get('fresh_build') is True else 'degraded/no_fresh_build')
+            PY
+            )
+          else
+            classification='unbound/non_workflow_run'
+            echo "VISUAL_FRESHNESS=$classification event=$EVENT_NAME"
+          fi
+          echo "classification=$classification" >> "$GITHUB_OUTPUT"
+
+      - name: Expose publication freshness outcome
+        env:
+          CLASSIFICATION: ${{ steps.freshness.outputs.classification }}
+          TRIGGER_RUN_ID: ${{ github.event.workflow_run.id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "VISUAL_PUBLICATION_OUTCOME=$CLASSIFICATION"
+          {
+            echo '## Visual publication freshness'
+            echo "- classification: \`$CLASSIFICATION\`"
+            if [ -n "${TRIGGER_RUN_ID:-}" ]; then
+              echo "- triggering build run: \`$TRIGGER_RUN_ID\`"
+            fi
+            if [ "$CLASSIFICATION" = 'degraded/no_fresh_build' ]; then
+              echo '- publication is explicitly degraded and is not a fresh-cycle success.'
+            elif [ "$CLASSIFICATION" = 'unbound/non_workflow_run' ]; then
+              echo '- publication was not triggered by a build receipt and is not classified as a fresh-cycle success.'
+            else
+              echo '- staged payload is exactly bound to the triggering fresh build receipt.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
