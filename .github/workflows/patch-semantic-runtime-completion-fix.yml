@@ -35,8 +35,10 @@ jobs:
       - name: Validate focused semantic runtime completion contract
         run: python scripts/test_semantic_runtime_completion.py
 
-      - name: Validate existing Taste contract
-        run: python scripts/validate_taste_v3_contract.py
+      - name: Validate existing Taste contracts
+        run: |
+          python scripts/validate_taste_v3_contract.py
+          python scripts/validate_taste_inbox_transactional_proof.py
 
       - name: Compile touched producers
         run: |
@@ -68,7 +70,7 @@ jobs:
           git diff --cached --check
           git diff --cached --stat
           test -n "$(git diff --cached --name-only)"
-          git commit -m "Fix semantic runtime completion observability"
+          git commit -m "Refresh semantic runtime completion status"
           for attempt in 1 2 3; do
             git fetch origin main:refs/remotes/origin/main
             if ! git rebase origin/main; then
