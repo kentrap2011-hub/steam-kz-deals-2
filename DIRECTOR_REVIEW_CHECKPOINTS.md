@@ -6,10 +6,10 @@ The Director must read this file before assigning a new ordinary backlog task wh
 
 ## System Auditor
 
-system_audit_due: true
+system_audit_due: false
 first_system_audit_trigger: `satisfied_2026-09-02`
-material_changes_since_last_system_audit: 1
-last_system_audit_report: `reviews/system_audits/system-audit-02.md`
+material_changes_since_last_system_audit: 0
+last_system_audit_report: `reviews/system_audits/mobile-post-incident-audit-01.md`
 mobile_post_incident_audit_pending: false
 
 ### First trigger condition
@@ -27,16 +27,17 @@ A completed audit resets `material_changes_since_last_system_audit` to 0 and rec
 
 ### Current audit state
 
-`System Audit 02` completed on 2026-09-03 and satisfied the previous checkpoint.
+`Mobile Post-Incident Audit 01` completed on 2026-09-03.
 
-The mobile feed incident is now stabilized and user-accepted on the affected Android phone after production release `f745dac844213880cd7eb984573877f58803a3f0` / Pages run `33779042331`.
+System-level disposition:
+- accepted mobile cache-first implementation preserves canonical `data/current.json` ownership;
+- no second renderer, service worker, polling loop, scheduler, or unbounded client data plane was introduced;
+- affected Android real-device behavior is accepted as working;
+- one remaining bounded gap exists: `tests/feed-bootstrap.test.js` is not yet part of the canonical Pages regression gate;
+- the mobile client itself must not be reopened/redesigned without new runtime evidence;
+- already accepted visual-freshness production release priority is `now`.
 
-The recurring incident trigger therefore fires now:
-- `system_audit_due: true`;
-- prepared task: `WORKER_TASK_MOBILE_POST_INCIDENT_AUDIT_01.md`;
-- expected report: `reviews/system_audits/mobile-post-incident-audit-01.md`.
-
-Do not assign ordinary backlog work before this post-incident audit completes unless the user explicitly gives a more urgent time-sensitive task.
+The audit checkpoint is satisfied. Track the mobile regression-gate follow-up as a bounded implementation task, not as another immediate System Audit.
 
 ## Taste Reviewer
 
