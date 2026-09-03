@@ -1,8 +1,8 @@
-# Visual freshness release 01 — production stop report
+# Visual freshness release 01 — production blocked report
 
 - Task: `visual-freshness-release-01`
 - Requested release branch: `worker/visual-freshness-release-01`
-- Status: **STOP — accepted fix landed unchanged; production verification could not satisfy the full release acceptance proof without leaving scope**
+- Status: **blocked — accepted fix landed unchanged; production verification could not satisfy the full release acceptance proof without leaving scope**
 - Accepted implementation branch: `worker/visual-freshness-chain-fix-01`
 - Accepted implementation head: `4080030e686d6b04fcc666069819aa46df18da7a`
 - Release PR: `#13` (`Release accepted visual freshness chain`)
@@ -124,7 +124,7 @@ The accepted deploy workflow is present on production `main` and statically bind
 
 This confirms that the accepted exact-run wiring is installed on `main`. It does **not** satisfy the stronger task requirement to prove from a production run that the deploy actually attempted that exact-run download, because run `33788465486` was skipped before steps executed.
 
-## Stop decision
+## Blocked decision
 
 The release task requires production evidence that all of the following occur in one normal chain:
 
@@ -137,16 +137,16 @@ Only (1) and the installed configuration for (3)/(4) were provable in this cycle
 
 Making this verification pass now would require changing or repairing a different production-input/build path, weakening/changing the accepted deploy gate, or otherwise expanding the task beyond releasing the already accepted freshness fix. The task's stop rule explicitly forbids redesigning the accepted solution to obtain release proof.
 
-**Decision: stop without changing the accepted fix.** No remediation of the canonical payload source, Epic flow, mobile feed/cache, ITAD/IGDB path, Taste/ranking semantics, or deploy success gate was performed.
+**Decision: blocked without changing the accepted fix.** No remediation of the canonical payload source, Epic flow, mobile feed/cache, ITAD/IGDB path, Taste/ranking semantics, or deploy success gate was performed.
 
-## Production state at stop
+## Production state at blocked closeout
 
 - Accepted freshness implementation: **landed on `main`** at `ddbf25d855f3ed7b86aca5ecbebb834e87178012`.
 - Truthful freshness receipt publication: **observed in production** on build run `33788418064`.
 - Receipt artifact: **published successfully**, ID `9906332740`.
 - Resulting `workflow_run` deploy: **created but skipped**, run `33788465486`.
 - Exact triggering-run binding: **installed on production `main`**, but **not dynamically exercised** by the skipped deploy.
-- Full release verification: **not satisfied; STOP per task rule**.
+- Full release verification: **not satisfied; blocked pending separate upstream correction**.
 
 ## Re-verification exit criterion
 
