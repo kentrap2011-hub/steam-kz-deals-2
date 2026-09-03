@@ -14,6 +14,8 @@ Keep separate:
 - relative queue priority;
 - commercial urgency.
 
+Also distinguish a **historically learned expectation** from a hard preference rule. If previous games in a franchise were usually secondary experiences, that can lower Dmitry's initial expectation for a new entry, but must not cap the new game's possible role before title-specific evidence is considered.
+
 ## Calibrated current candidates
 
 ### `Amnesia: The Bunker`
@@ -49,30 +51,31 @@ User familiarity with this title: no confirmed prior experience in the full prof
 
 Franchise calibration:
 - Dmitry likes `Teenage Mutant Ninja Turtles` because of childhood cartoons;
-- however, games in the TMNT universe are generally perceived by him **at most as additional/secondary games**, not as primary main-game choices.
+- past TMNT games have created a **learned expectation** that a TMNT game may end up as an additional/secondary game;
+- Dmitry explicitly corrected that this is **not a rule or role cap**: a sufficiently strong new TMNT game can still become a main game.
 
 Player-review context already identified for this title:
 - overall reception is positive;
 - recurring complaints focus on repetition / limited encounter-location variety, grind/progression friction and late-combat visual/AOE clutter rather than on the mere existence of a roguelite loop.
 
-Classification for ranking QA: **franchise-positive but role-capped toward secondary/additional play unless title-specific evidence proves unusually strong main-game appeal**.
+Classification for ranking QA: **franchise-positive with a cautious historical prior, but current play role remains unresolved until title-specific appeal/quality is evaluated**.
 
-This is a useful role-mismatch control: the system may be directionally correct that the game is suitable while still over-prioritizing it as a main recommendation.
+This is a useful anti-overgeneralization control: the system may use prior franchise experience as a prior expectation, but must allow a new entry to override that expectation rather than hard-coding it as secondary.
 
 ## Current interpretation
 
-The audit increasingly supports the distinction between **"would play / fits"** and **"should rank as a main near-term recommendation"**.
+The audit increasingly supports the distinction between **"would play / fits"** and **"should rank as a main near-term recommendation"**, while also showing that role itself cannot be inferred too aggressively from franchise history.
 
 Current controls:
 - `Sifu` — strong near-term main-game interest;
 - `High On Life` — full/main candidate, moderate queue priority;
 - `Amnesia: The Bunker` — full/main candidate, moderate queue priority;
 - `Terminator: Resistance` — moderate ordinary-queue candidate with franchise boost;
-- `Tails of Iron 2` — secondary/palate-cleanser candidate;
-- `TMNT: Splintered Fate` — franchise-positive but generally secondary/additional role;
+- `Tails of Iron 2` — secondary/palate-cleanser candidate based on this specific title's trailer reaction;
+- `TMNT: Splintered Fate` — franchise-positive; past TMNT games lower initial main-game expectation, but do not determine this title's role;
 - `Trine 4` — confirmed family-play positive;
 - `HighFleet` — strong negative pre-play/start-priority control.
 
 ## Director-facing implication
 
-Taste/ranking QA should test role classification separately from raw fit. A positive franchise association can increase willingness to play without converting a game into a high-priority main title. `TMNT: Splintered Fate` is now a direct control for that distinction.
+Taste/ranking QA should test role classification separately from raw fit, but **must not turn historical franchise patterns into hard role assignments**. Prior experience may adjust an initial expectation; title-specific evidence must be able to override it. `TMNT: Splintered Fate` is now a direct control for this distinction.
