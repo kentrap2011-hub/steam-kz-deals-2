@@ -68,7 +68,8 @@ Final GitHub-owned regression evidence:
 - run `33790442843`;
 - head SHA `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`;
 - job `100774514557`;
-- `Regression test cross-platform giveaways` -> `success`.
+- `Regression test cross-platform giveaways` -> `success`;
+- `python scripts/test_giveaway_production.py` -> 23 tests, all passed (`OK`).
 
 Therefore the required focused regression surface has executed successfully in GitHub Actions.
 
@@ -88,12 +89,22 @@ Relevant final step results:
 - `Validate canonical giveaway artifact contract` -> `success`;
 - `Verify production writers touched only owned paths` -> `success`.
 
-The fresh canonical giveaway result produced by this run was:
+The fresh canonical giveaway result produced by this run at `2026-09-03T19:16:45.220980Z` was:
 
-- snapshot: `complete`;
-- Epic source `status = ok`;
-- Epic source `complete = true`;
-- Epic `accepted_count = 1`.
+```text
+contract = CROSS-PLATFORM-GIVEAWAY-V1
+snapshot_status = complete
+accepted_offer_count = 1
+game_group_count = 1
+
+source_health.epic.status = ok
+source_health.epic.complete = true
+source_health.epic.accepted_count = 1
+source_health.epic.unverified_count = 0
+source_health.epic.error_code = null
+```
+
+Steam and GOG were also `status=ok`, `complete=true`, so the fresh canonical snapshot itself was complete.
 
 This proves the original parser-ordering failure no longer aborts Epic merely because irrelevant/non-current catalog elements have variant `price.totalPrice`, while a real active current giveaway still maps through the canonical schema under the preserved strict price contract.
 
@@ -105,7 +116,10 @@ Run `33790442843` has overall conclusion `failure`, but the failure occurred onl
 
 By that point all task-relevant regression, canonical giveaway build, source-health generation, writer-boundary verification and giveaway contract validation had already completed successfully.
 
-The final commit step failed because `main` advanced while the long-running job was executing and the workflow hit a rebase conflict when attempting to publish generated production files. The run started from `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`; `main` later advanced beyond that head (observed closeout ref: `f9cdee6ae0776e683fdf1005cba3baf6061a7924`).
+The final commit step created local production commit:
+- `bb9c210` — `Update Steam KZ production and giveaways`.
+
+It then fetched an advanced `main` and attempted to rebase the generated production commit. `main` had moved beyond the run head; the rebase encountered content conflicts in concurrently generated production/cache artifacts, including `data/production/giveaways/v1/current.json`, and aborted. Observed advanced closeout ref: `f9cdee6ae0776e683fdf1005cba3baf6061a7924`.
 
 This publication/rebase conflict is not an Epic parser failure and does not invalidate the already-produced fresh canonical snapshot/source-health evidence required by this task. No follow-up parser fix is indicated by it, and this closeout does not broaden scope into workflow publication behavior.
 
@@ -117,11 +131,17 @@ Fresh canonical evidence from run `33790442843`:
 
 - `status = ok`;
 - `complete = true`;
-- `accepted_count = 1`.
+- `accepted_count = 1`;
+- `unverified_count = 0`;
+- `error_code = null`.
 
 ## CURRENT ACTIVE ACCEPTED GIVEAWAY COUNT
 
 Fresh canonical Epic accepted count: **1**.
+
+Overall canonical snapshot:
+- `accepted_offer_count = 1`;
+- `game_group_count = 1`.
 
 ## ORIGINAL INCIDENT CLOSED?
 
@@ -133,7 +153,7 @@ The original `SOURCE_SCHEMA_FAILURE` incident caused by validating `price.totalP
 2. focused regression coverage proving irrelevant/upcoming variant-price elements are skipped without weakening active-giveaway strictness;
 3. successful GitHub-owned canonical giveaway build;
 4. successful canonical giveaway contract validation;
-5. fresh complete snapshot with Epic `status=ok`, `complete=true`, `accepted_count=1`.
+5. fresh complete snapshot with Epic `status=ok`, `complete=true`, `accepted_count=1`, `unverified_count=0`, `error_code=null`.
 
 The separate final-step rebase conflict does not reopen the Epic schema incident.
 
@@ -155,9 +175,10 @@ The workflow's final generated-file commit failure occurred after those acceptan
 - regression blob: `scripts/test_giveaway_production.py` @ `0bf860f3e35e5dc367a82f531be7d55c3abba089`
 - canonical final run: `33790442843`
 - canonical final job: `100774514557`
+- local production commit before rebase: `bb9c210`
 - run overall conclusion: `failure` only at final generated-file commit step
-- task-relevant build/validation steps: `success`
-- observed advanced `main` ref during final closeout: `f9cdee6ae0776e683fdf1005cba3baf6061a7924`
+- task-relevant regression/build/validation steps: `success`
+- observed advanced `main` ref during closeout: `f9cdee6ae0776e683fdf1005cba3baf6061a7924`
 
 ## SCOPE CHECK
 
@@ -171,4 +192,5 @@ The workflow's final generated-file commit failure occurred after those acceptan
 - Steam/GOG behavior: untouched;
 - ITAD/IGDB: untouched;
 - title/fuzzy/manual inference: not introduced;
-- extra provider/fallback: not introduced.
+- extra provider/fallback: not introduced;
+- production writer/rebase concurrency: explicitly left outside this task scope.
