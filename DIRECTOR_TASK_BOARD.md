@@ -14,100 +14,73 @@
 6. `prepared` не значит `next`.
 7. Перед обычным backlog читать `DIRECTOR_REVIEW_CHECKPOINTS.md`.
 8. `TASTE REVIEWER` и `SYSTEM AUDITOR` — отдельные независимые роли.
-9. В каждой копируемой worker-команде первая строка должна явно начинаться с `=== ЧАТ N ===`, чтобы пользователь не путал назначения.
+9. В каждой копируемой worker-команде первая строка должна явно начинаться с `=== ЧАТ N ===`.
+10. Номер принадлежит worker-слоту: замена удалённого ЧАТА 1 остаётся ЧАТОМ 1; замена удалённого ЧАТА 2 остаётся ЧАТОМ 2.
 
 ## Активно сейчас
 
 | Чат | Задача | Task file | Report | Статус |
 |---|---|---|---|---|
-| `ЧАТ 1` | Проверить здоровье существующей semantic scheduled-задачи для текущих 701 unresolved rows | `WORKER_TASK_SEMANTIC_RUNTIME_TASK_HEALTH_RECON_01.md` | `reviews/worker_reports/semantic-runtime-task-health-recon-01.md` | `prepared_send_to_existing_chat` |
-| `ЧАТ 2` | Найти live-site divergence после технически успешного giveaway deploy | `WORKER_TASK_GIVEAWAY_LIVE_SITE_MISMATCH_RECON_01.md` | `reviews/worker_reports/giveaway-live-site-mismatch-recon-01.md` | `prepared_send_to_existing_chat` |
+| `НОВЫЙ ЧАТ 1` | Обязательный Epic post-incident System Audit | `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md` | `reviews/system_audits/epic-post-incident-audit-01.md` | `prepared_start_after_old_chat1_delete` |
+| `СУЩЕСТВУЮЩИЙ ЧАТ 2` | Исправить collision stale LKG vs giveaway-only refresh | `WORKER_TASK_GIVEAWAY_CACHE_IDENTITY_FIX_01.md` | `reviews/worker_reports/giveaway-cache-identity-fix-01.md` | `prepared_direct_continuation` |
 
-## Giveaway visibility incident — still open after user verification
+## ЧАТ 1 — завершённый semantic recon
 
-Previous bounded implementation report:
-`reviews/worker_reports/giveaway-publication-gap-fix-01.md`
-Status: technically `complete`.
-
-That implementation proved:
-- canonical giveaway -> visual refresh routing was repaired;
-- refreshed visual payload contains `Alone With You`;
-- exact deployed Pages artifact from run `33832350887` contains `Alone With You`.
-
-New decisive user evidence:
-- user checked the real mobile site after that deploy;
-- giveaways still do not appear.
-
-Therefore the user-visible incident is **not closed**. The new investigation must start downstream of the proven deployed artifact and trace:
-`deployed Pages artifact -> live HTTP-served files -> browser-loaded data -> giveaway render/view`.
-
-Prepared:
-- `WORKER_TASK_GIVEAWAY_LIVE_SITE_MISMATCH_RECON_01.md`
-- Task ID `giveaway-live-site-mismatch-recon-01`
-- mode `READ-ONLY / RECON`
-- report `reviews/worker_reports/giveaway-live-site-mismatch-recon-01.md`
-- use existing Chat 2.
-
-Do not reopen Epic parser or canonical giveaway rules without new evidence.
-
-## Visual freshness / semantic production blocker
-
-Recon report:
-`reviews/worker_reports/visual-build-input-incomplete-recon-01.md`
+Report:
+`reviews/worker_reports/semantic-runtime-task-health-recon-01.md`
 Status: `needs_user_evidence`.
 
-Proven primary blocker:
-- canonical ChatGPT/semantic payload is truthfully `degraded`;
-- `701` unresolved semantic rows remain;
-- `sufficiently_complete_for_publication=false`;
-- normal fresh visual build must remain fail-closed.
+Worker не получил authoritative scheduler/task record и поэтому честно классифицировал producer как `cannot_determine`.
+Durable report сохранён, полезного продолжения в этом worker-чате сейчас нет.
 
-Secondary separate defect:
-- visual readiness checks top-level `status != complete` before its later queued/degraded handling, making that degraded branch unreachable; this is not a safe shortcut around semantic incompleteness.
+**Старый ЧАТ 1 можно удалить.**
 
-Only missing fact from prior recon: exact health/state of the **existing scheduled ChatGPT semantic production task** for the current 701-row scope.
+Следующий новый ЧАТ 1 получает обязательный независимый System Audit `epic-post-incident-audit-01`.
 
-Prepared:
-- `WORKER_TASK_SEMANTIC_RUNTIME_TASK_HEALTH_RECON_01.md`
-- Task ID `semantic-runtime-task-health-recon-01`
-- mode `READ-ONLY / RECON`
-- report `reviews/worker_reports/semantic-runtime-task-health-recon-01.md`
-- use existing Chat 1.
+## ЧАТ 2 — giveaway live-site incident
 
-## Queued user UI request — top summary filters
+Recon report:
+`reviews/worker_reports/giveaway-live-site-mismatch-recon-01.md`
+Status: `needs_followup_fix`.
 
-Prepared task:
-`WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`
+Доказано:
+- exact deployed Pages artifact содержит `Alone With You`;
+- fresh payload корректно рендерится, если доходит до application;
+- browser-side LKG cache может выдать старый payload;
+- `web/feed-bootstrap.js::payloadIdentity()` использует только top-level `generated_at_utc`;
+- giveaway-only update может сохранить тот же `generated_at_utc`, но изменить `source_giveaway_snapshot_blob_sha`;
+- stale cached payload и fresh payload тогда ошибочно считаются `refresh-identical`, и fresh payload не применяется.
 
-Task ID: `top-summary-filter-buttons-01`.
-Status: `queued_user_requested_ui_not_started`.
+Prepared bounded IMPLEMENT:
+`WORKER_TASK_GIVEAWAY_CACHE_IDENTITY_FIX_01.md`
+Task ID `giveaway-cache-identity-fix-01`.
 
-User request:
-- make top cards `Новые`, `Не смотрел`, `Интересно`, `Видел` clickable using existing filter state;
-- after top `Интересно` fully replaces the existing function, remove the lower duplicate `Интересно` button/tab;
-- keep current meanings and counters;
-- require real-device mobile verification after deploy.
+Использовать **существующий ЧАТ 2** как прямое продолжение. Его пока не удалять.
+После deploy обязательна новая real-device/site проверка пользователя.
+
+Если пользователь сознательно хочет очистить ЧАТ 2, допустима замена на **НОВЫЙ ЧАТ 2** с тем же task file; никогда не переносить слот 2 в номер 1.
 
 ## Review checkpoint
 
-- `system_audit_due: true` from stabilized Epic source incident.
-- Prepared: `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md`.
-- Current still-open giveaway live-site defect remains more urgent.
-- Ordinary backlog/ITAD stays blocked until required audit completes, unless user explicitly reprioritizes another concrete production defect.
+`system_audit_due: true`.
+Prepared: `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md`.
+Этот READ-ONLY / AUDIT независим от bounded frontend cache fix и может идти параллельно в новом ЧАТЕ 1.
+Обычный backlog/ITAD остаётся заблокирован до завершения audit.
 
-## Other prepared / parked work
+## Queued user UI request
 
-- Mobile deploy regression gate: `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`.
-- ITAD provider-neutral identity implementation: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
-- Twitch/IGDB: waiting for Twitch Support.
-- Legacy Taste writer ambiguity: later bounded cleanup.
+`WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`
+Task ID `top-summary-filter-buttons-01`.
+
+После текущего cache fix + audit:
+- верхние `Новые / Не смотрел / Интересно / Видел` сделать кликабельными;
+- удалить нижний дубликат `Интересно` после полной замены его функции;
+- real-device verification required.
 
 ## Следующий порядок
 
-1. Chat 2 runs `giveaway-live-site-mismatch-recon-01` immediately because user verification failed.
-2. Chat 1 runs `semantic-runtime-task-health-recon-01` in parallel.
-3. Read exact reports when each worker finishes; do not infer completion from chat prose.
-4. If Chat 2 proves one exact defect, issue one bounded IMPLEMENT in the same chat when continuity remains useful.
-5. Giveaway incident closes only after technical fix + new real-site user verification succeeds.
-6. Once giveaway visibility stabilizes, run mandatory Epic post-incident audit in next free slot.
-7. Then queued UI/mobile tasks may proceed according to review checkpoints and user priority.
+1. Удалить старый завершённый ЧАТ 1.
+2. Создать НОВЫЙ ЧАТ 1 и запустить `epic-post-incident-audit-01`.
+3. Существующий ЧАТ 2 запускает `giveaway-cache-identity-fix-01` как прямое продолжение своего recon.
+4. Когда ЧАТ 2 закончит technical deploy, пользователь повторно проверяет реальные раздачи на телефоне.
+5. После audit + успешной проверки раздач перейти к queued UI/mobile tasks по checkpoint.
