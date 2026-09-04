@@ -57,6 +57,22 @@ Use existing Chat 2 as direct continuation. After deploy, require actual user si
 - Freshness protection itself truthfully emitted `degraded/no_fresh_build` and is not to be redesigned.
 - Current Chat 1 task: `WORKER_TASK_VISUAL_BUILD_INPUT_INCOMPLETE_RECON_01.md`.
 
+## Queued user UI request — top summary filters
+
+Prepared task:
+`WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`
+
+Task ID: `top-summary-filter-buttons-01`.
+Status: `queued_user_requested_ui_not_started`.
+
+User request from current mobile UI:
+- make all four top summary cards clickable using the existing filter state: `Новые`, `Не смотрел`, `Интересно`, `Видел`;
+- after the top `Интересно` card fully performs the existing interesting-filter function, remove the separate lower `Интересно` button/tab as a duplicate;
+- keep existing meanings and live counters unchanged;
+- require mobile real-device verification after deploy.
+
+Do not interrupt the current giveaway production incident or mandatory audit for this queued UX improvement unless the user explicitly reprioritizes it.
+
 ## Mobile feed incident
 
 - User/device accepted as working.
@@ -85,5 +101,5 @@ Use existing Chat 2 as direct continuation. After deploy, require actual user si
 2. Chat 1 continues/finishes `visual-build-input-incomplete-recon-01` in parallel.
 3. After Chat 2 technical deploy proof, user verifies the real site; only then close giveaway visibility incident.
 4. Once giveaway visibility incident is stabilized, run `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md` in the next free worker slot.
-5. Then use remaining free slot for the next bounded step from Chat 1 recon or mobile regression gate, respecting review checkpoints.
+5. Then use remaining free slot for the next bounded step from Chat 1 recon, mobile regression gate, or queued `top-summary-filter-buttons-01`, respecting review checkpoints and user priority.
 6. ITAD/ordinary backlog only after mandatory audit permits it.
