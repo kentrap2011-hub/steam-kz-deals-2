@@ -13,94 +13,98 @@
 5. В каждой копируемой worker-команде первая строка должна явно начинаться с `=== ЧАТ N ===`.
 6. Номер принадлежит worker-слоту.
 7. Не запускать параллельно конфликтующие IMPLEMENT-задачи.
-8. Возраст задачи не понижает её приоритет автоматически; при выборе работы сравнивать текущий пользовательский эффект, системный риск, блокеры и полный цикл.
+8. Возраст задачи не понижает её приоритет автоматически.
 
-## Giveaway cache incident — systemically closed
+## Review checkpoint
 
-System Audit:
+Latest System Audit:
 `reviews/system_audits/giveaway-cache-post-incident-audit-01.md`
 
 Status: `complete`
 Result: `Giveaway cache incident systemic closure: accepted`
 
-Audit found no incident-specific implementation follow-up required before ordinary backlog continues.
-System checkpoint reconciled: `system_audit_due: false`, material change count reset to 0.
-
-## Worker slots
-
-### ЧАТ 1
-
-Status: `free_pending_user_selection_after_audit`.
-
-Previous audit task is complete and durably saved.
-Do not auto-assign until Director/user select the next pair from the full current+older unfinished task set.
-
-### ЧАТ 2
-
-Status: `free_pending_user_selection_after_audit`.
-
-Do not auto-assign until Director/user select the next pair from the full current+older unfinished task set.
-
-## Current user-visible / ready work
-
-- Top summary buttons: recon complete; IMPLEMENT ready in `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`.
-- Epic RU giveaway availability: recon ready in `WORKER_TASK_EPIC_RU_GIVEAWAY_AVAILABILITY_RECON_01.md`; Epic only, Steam/GOG unchanged.
-- Mobile feed regression gate: `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`; existing passing mobile bootstrap test is not yet a mandatory Pages deploy gate.
-- ITAD provider-neutral giveaway identity: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`; larger integration.
-
-## Older unfinished work — current factual status
-
-### Grounded negative / card-analysis completeness
-
-V4 grounded-negative architecture is implemented.
-Report: `reviews/worker_reports/grounded-negative-implement-01.md`.
-Current implementation remains blocked on the existing scheduled Taste semantic runtime. Do not create a second scheduler/manual processing path.
-
-### Card positive explanations / production acceptance
-
-Explanation policy fix is implemented. Final production acceptance remains blocked by the independent Russian-description mandatory gate / semantic runtime.
-Report: `reviews/worker_reports/card-explanation-production-acceptance-01.md`.
-
-### Russian descriptions
-
-Repo-side translation contracts/implementation exist. Runtime acceptance remains blocked waiting for the already-existing scheduled semantic runtime to produce canonical translation submissions. Do not create another scheduler or manually translate the queue.
-
-### Russian language availability as ranking factor
-
-Still planned: detect Russian interface availability as yes/no/unknown with evidence; confirmed lack of Russian should strongly reduce practical/final priority and be visible as a downside; unknown must not equal no.
-
-### Wishlist good discount overrides weak Taste
-
-Still explicit high-importance product rule: a Steam-wishlist game with a genuinely good deal should be allowed into the final feed even with weak automatic Taste fit, while retaining price/risk warnings. Requires design/implementation and Taste Review before acceptance.
-
-### YouTube game review on card
-
-Still deferred/planned: automatically select a useful Russian-language review or reliably Russian-audio option, avoid random/spoiler-heavy videos, persist choice in production payload and show a compact link/button.
-
-### Windows compatibility evidence
-
-Still deferred: add a reliable evidence source for actual modern-Windows friction and propagate confirmed problems into visible risk/scoring.
-
-### SteamDB historical-minimum tail
-
-One remaining retry `App_901735`; low priority and externally dependent. Exact KZ historical minimum remains unproven and must not be fabricated.
-
-### Detailed score breakdown UI
-
-Implementation and user-requested fixes are technically complete/deployed. Do not promote as new implementation without fresh user evidence of a remaining problem.
-
-### Twitch/IGDB route
-
-Still waiting external/provider readiness.
-
-## Stale backlog record
-
-Old backlog text saying the separate cross-platform giveaway block does not exist is obsolete and must not be counted as unfinished work.
-
-## Review checkpoint
-
 `system_audit_due: false`.
+
+## Активная пара
+
+### ЧАТ 1 — Wishlist + хорошая скидка против слабого Taste
+
+Task:
+`WORKER_TASK_WISHLIST_GOOD_DEAL_OVERRIDE_RECON_01.md`
+
+Task ID:
+`wishlist-good-deal-override-recon-01`
+
+Mode: `READ-ONLY / RECON`
+Expected report:
+`reviews/worker_reports/wishlist-good-deal-override-recon-01.md`
+
+Goal:
+- найти точный ordinary Taste eligibility gate, который сейчас может выбросить wishlist-игру до ranking;
+- определить существующий канонический сигнал `genuinely good deal`;
+- спроектировать минимальный wishlist override только ordinary Taste gate;
+- не скрывать confirmed risks / плохую ценность покупки;
+- не менять код в recon;
+- финальный IMPLEMENT acceptance потребует независимый Taste Review, потому что меняется wishlist-vs-Taste eligibility semantics.
+
+Status: `user_approved_start_now`.
+
+### ЧАТ 2 — Epic RU giveaway availability
+
+Task:
+`WORKER_TASK_EPIC_RU_GIVEAWAY_AVAILABILITY_RECON_01.md`
+
+Task ID:
+`epic-ru-giveaway-availability-recon-01`
+
+Mode: `READ-ONLY / RECON`
+Expected report:
+`reviews/worker_reports/epic-ru-giveaway-availability-recon-01.md`
+
+Goal:
+- доказать authoritative способ определить, доступна ли Epic giveaway для RU;
+- Epic only;
+- Steam unchanged;
+- GOG unchanged;
+- не менять production code/data в recon.
+
+Status: `user_approved_start_now`.
+
+These two tasks are safely parallel: Chat 1 is paid-feed ranking/Taste policy recon; Chat 2 is Epic giveaway source/region recon.
+
+## Ready / queued after current pair
+
+### Top summary buttons
+
+Recon complete:
+`reviews/worker_reports/top-summary-filter-buttons-recon-01.md`.
+IMPLEMENT ready:
+`WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`.
+
+### Mobile bootstrap deploy regression gate
+
+Task:
+`WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`.
+Existing mobile bootstrap regression is passing but not mandatory in canonical Pages deploy gate.
+
+### ITAD provider-neutral giveaway identity
+
+Task:
+`WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
+Larger integration; exact Epic/GOG provider ID -> Steam identity through provider-neutral interface.
+
+## Older unfinished / blocked work
+
+- Grounded negative V4 architecture implemented, but semantic completion waits on existing scheduled Taste runtime; do not create second scheduler/manual processing.
+- Card positive-explanation fix implemented; production acceptance waits on Russian-description/semantic runtime prerequisite.
+- Russian-description translation contracts/ingest exist; runtime production completion waits on existing scheduled semantic runtime.
+- Russian language availability as ranking factor remains planned.
+- YouTube Russian-language game review selection remains deferred/planned.
+- Modern Windows compatibility evidence source remains deferred.
+- SteamDB tail: only `App_901735` unresolved/retryable; low priority/external.
+- Detailed score UI implementation/fixes are deployed; no new implementation without fresh user evidence.
+- Twitch/IGDB route remains externally blocked/waiting.
 
 ## Next decision
 
-Both worker slots are free. Select two safely independent tasks from the full current+older unfinished set; do not privilege newer tasks solely because they are newer.
+Read the two exact reports when workers finish. Do not auto-implement either recon result until Director checks conflicts/review requirements.
