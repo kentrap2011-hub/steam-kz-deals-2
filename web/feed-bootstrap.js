@@ -104,11 +104,11 @@
     }
     function payloadIdentity(payload){
       const generatedAt=typeof payload?.generated_at_utc==='string'?payload.generated_at_utc.trim():'';
-      const giveawayGeneratedAt=typeof payload?.giveaway_generated_at_utc==='string'?payload.giveaway_generated_at_utc.trim():'';
-      const giveawayStatus=typeof payload?.giveaway_status==='string'?payload.giveaway_status.trim():'';
-      const giveawayCount=Array.isArray(payload?.giveaways)?payload.giveaways.length:null;
-      if(generatedAt||giveawayGeneratedAt||giveawayStatus||giveawayCount!==null){
-        return `published:${JSON.stringify([generatedAt,giveawayGeneratedAt,giveawayStatus,giveawayCount])}`;
+      const giveawaySnapshotBlobSha=typeof payload?.production_contract?.source_giveaway_snapshot_blob_sha==='string'
+        ?payload.production_contract.source_giveaway_snapshot_blob_sha.trim()
+        :'';
+      if(generatedAt||giveawaySnapshotBlobSha){
+        return `published:${JSON.stringify([generatedAt,giveawaySnapshotBlobSha])}`;
       }
       try{return `json:${JSON.stringify(payload)}`}catch{return null}
     }
