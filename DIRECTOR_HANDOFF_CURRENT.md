@@ -6,228 +6,221 @@ Purpose: compact handoff for a replacement Director chat without replaying prior
 
 ## Start here
 
-A replacement Director must read, in this order:
+Read in this order:
 1. `DIRECTOR_PROTOCOL.md`
-2. `DIRECTOR_HANDOFF_CURRENT.md` (this file)
+2. `DIRECTOR_HANDOFF_CURRENT.md`
 3. `DIRECTOR_TASK_BOARD.md`
 4. `DIRECTOR_REVIEW_CHECKPOINTS.md`
 
-Do not broadly inspect Git history, workflow history, old task files, artifacts or source code just to rebuild context. Use exact saved worker reports and current management metadata first. The Director delegates investigation/implementation to worker chats rather than doing project work itself.
+Do not broadly inspect Git history, workflow history, old tasks, artifacts or source code just to rebuild context. Use exact current reports and minimum evidence. The Director delegates investigation/implementation to worker chats.
 
-## User communication style
+## User communication / operating rules
 
-- Russian.
-- Direct, practical, understandable language; explain technical conclusions in ordinary words.
-- When giving a worker command, explicitly say `НОВЫЙ ЧАТ` or `СУЩЕСТВУЮЩИЙ ЧАТ`.
-- Prefer copyable code blocks for commands.
-- Do not claim a UI incident fixed before user verifies the actual site/device.
+- Russian, direct and practical.
+- Always label worker instructions as **НОВЫЙ ЧАТ** or **СУЩЕСТВУЮЩИЙ ЧАТ**.
+- Prefer copyable code blocks for worker commands.
+- Do not claim UI/user-visible incident fixed before actual device/site verification where required.
+- The user explicitly asked the Director not to spend time/context manually following CI/log/history. If a check becomes nontrivial, delegate it to the worker chat.
+- If Director preparation takes >1 minute, visibly explain what is taking time instead of silently waiting.
 
-## Current urgent track — mobile feed latency
+## Current live worker state
 
-### Original incident
-
-On the user's Android phone the discounts page shell and controls worked, but after fresh load/reload the game feed could be blank. Switching away to another app and returning could make the games appear.
-
-Recon:
-- task: `WORKER_TASK_MOBILE_PAGE_INTERACTION_FREEZE_RECON_01.md`
-- report: `reviews/worker_reports/mobile-page-interaction-freeze-recon-01.md`
-- report blob: `48700dc77ac17fa031dd129996bef74075d86872`
-
-Recon conclusion:
-- canonical payload was non-empty;
-- highest-confidence application boundary was the single unbounded initial `fetch('data/current.json', { cache: 'no-store' })` before first feed render;
-- both feed result surfaces could remain hidden while that request was pending;
-- exact Android/WebView transport-level cause was not runtime-proven.
-
-### First fix — deployed, partial success
+### ЧАТ 1 — visual freshness release closeout only
 
 Task:
-`WORKER_TASK_MOBILE_PAGE_BLANK_FEED_FIX_01.md`
+`WORKER_TASK_VISUAL_FRESHNESS_RELEASE_01.md`
 
 Report:
-`reviews/worker_reports/mobile-page-blank-feed-fix-01.md`
+`reviews/worker_reports/visual-freshness-release-01.md`
 
-Report blob:
-`61b23ffc479dff473310b1d7aed0d36d43a11c8f`
+Current situation:
+- accepted visual-freshness fix has already landed unchanged on `main` via PR #13;
+- landing commit: `ddbf25d855f3ed7b86aca5ecbebb834e87178012`;
+- production build run `33788418064` failed upstream on `ChatGPT production payload is not complete`;
+- freshness protection itself worked correctly and emitted truthful `fresh_build=false / degraded/no_fresh_build` and uploaded its receipt artifact;
+- resulting workflow-run deploy `33788465486` was correctly skipped;
+- exact triggering-run binding is installed on `main`, but a successful build->deploy chain has not yet dynamically exercised it.
 
-Production ref:
-`af2c7362743b4fe3d80ea10caee7cb606acab3e5`
+Important closeout issue:
+- worker report used status `STOP`, which is not an allowed task status.
+- Existing Chat 1 was instructed to change only the report status to an allowed exact status (likely `blocked` based on existing evidence), with **no new investigation or implementation**.
 
-Successful Pages run:
-`33766838776`
+Do not give Chat 1 new work until this status-only closeout is saved. After canonical closeout, Chat 1 can be deleted.
+
+Separate prepared recon for the upstream blocker:
+`WORKER_TASK_VISUAL_BUILD_INPUT_INCOMPLETE_RECON_01.md`
+Expected report:
+`reviews/worker_reports/visual-build-input-incomplete-recon-01.md`
+
+Do not start it before mandatory review ordering permits, unless a more urgent concrete production problem justifies it.
+
+### ЧАТ 2 — Epic final CI closeout only
+
+Recon report:
+`reviews/worker_reports/epic-giveaway-schema-recon-01.md`
+blob `32d487e13a916424693bd05d0d0ced41cf688bc2`
+
+Fix task:
+`WORKER_TASK_EPIC_GIVEAWAY_SCHEMA_FIX_01.md`
+
+Fix report:
+`reviews/worker_reports/epic-giveaway-schema-fix-01.md`
+blob at first closeout: `4e79874e4d4d0b4ed9d101ec7dba8791686dd69b`
 
 Implemented:
-- immediate visible `Загружаю игры…` instead of silent blank;
-- 9-second timeout;
-- max 2 attempts total;
-- guarded hidden->visible/BFCache recovery;
-- explicit terminal error;
-- focused regression tests pass.
+- parser now identifies current 100% Epic promotion first;
+- irrelevant/non-current elements can be skipped without requiring `price.totalPrice`;
+- actual current giveaways still require strict/fail-closed price contract;
+- no ITAD/IGDB/title guessing/fallback source was added.
 
-Latest real-device user result:
-- better, but not solved;
-- sometimes refresh is effectively instant;
-- sometimes `Загружаю игры…` remains for several seconds;
-- games eventually appear;
-- user asks whether the remaining delay can be eliminated.
+Key refs:
+- parser fix commit: `aa7cea8d06d4d71a5ff6fe4c23a71c2cbda28783`;
+- regression commit: `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`;
+- canonical code-run `33790369125` completed `success`;
+- regression run `33790442843` was still running when the previous Director last checked.
 
-This means the first fix solved silent blankness but repeat page load still blocks on network latency.
+Production itself is already recovered:
+- `data/production/giveaways/v1/current.json` is `snapshot_status=complete`;
+- Epic is `status=ok`, `complete=true`;
+- Epic candidate_count `1`, accepted_count `1`;
+- active giveaway is `Alone With You`, 100% discount, KZ available;
+- no Epic source error.
 
-### Prepared direct continuation — NOT STARTED
+The user explicitly asked not to have the Director keep polling this CI. Existing Chat 2 was instructed to wait/check run `33790442843` itself, then update the fix report with final CI evidence and final allowed Status, without new implementation or ITAD work.
 
-Prepared task:
-`WORKER_TASK_MOBILE_FEED_INSTANT_CACHE_FIX_01.md`
+Do not delete Chat 2 until it reports final closeout.
 
-Creation commit:
-`5756dfee952893a4336f321edd6c3d368da46f45`
-
-Expected report:
-`reviews/worker_reports/mobile-feed-instant-cache-fix-01.md`
-
-Status:
-`prepared_not_started`
-
-Important: user has NOT yet been given/sent this worker command. Do not mark it started until user actually sends it to the worker chat.
-
-Goal in plain language:
-- after one successful load, keep one last-known-good feed payload locally on the phone;
-- future open/reload should show that list immediately;
-- fresh `data/current.json` loads in background and replaces the old list only when a valid new payload arrives;
-- slow/failed network must not block or blank already available cards;
-- canonical network payload remains source of truth; local copy is only presentation fallback.
-
-Boundaries:
-- no service worker;
-- no polling/background scheduler;
-- no second renderer;
-- no Taste/ranking/filter changes;
-- no unbounded historical cache;
-- no merge of the separate visual-freshness branch inside this task.
-
-If continuing this track, use **СУЩЕСТВУЮЩИЙ ЧАТ 1** and give only:
-
-```text
-=== ЧАТ 1 — УСКОРИТЬ ЗАГРУЗКУ ЛЕНТЫ ===
-
-Открой `WORKER_TASK_MOBILE_FEED_INSTANT_CACHE_FIX_01.md`
-в репозитории `kentrap2011-hub/steam-kz-deals-2`
-и выполни поручение полностью.
-
-Это прямое продолжение текущего мобильного инцидента.
-Не повторяй диагностику и не переделывай интерфейс.
-```
-
-After worker completion: read exact report path first. If deployed successfully, require real-device verification again. The desired acceptance is that after one successful visit, repeated reloads normally show cards immediately from last-known-good data while refresh occurs in background.
-
-## Visual freshness track — accepted, release deferred
-
-Implementation report:
-`reviews/worker_reports/visual-freshness-chain-fix-01.md`
-blob `e5226710d435cfbb1c0190e11d937b025ceb9aac`
-
-Final acceptance:
-`reviews/worker_reports/visual-freshness-chain-acceptance-02.md`
-blob `6a691fb29d88b1785accf717752149e027265a2c`
-
-Accepted branch:
-`worker/visual-freshness-chain-fix-01`
-
-Acceptance head:
-`4080030e686d6b04fcc666069819aa46df18da7a`
-
-All controls pass:
-- Fresh-cycle build proof: pass
-- Deploy-to-built-cycle binding: pass
-- Stale-success visibility: pass
-- Ownership/regression preserved: pass
-
-Branch is ready for production merge/release, but release is intentionally deferred until the mobile incident is stabilized and overlap risk is reassessed.
-
-Chat 2 is finished and can be deleted.
-
-## Mandatory System Auditor — due
+## Mandatory review checkpoint — currently DUE
 
 `DIRECTOR_REVIEW_CHECKPOINTS.md` currently has:
 `system_audit_due: true`
 
-The urgent mobile incident may pre-empt the audit until stabilized. After the incident is stable, run the due System Audit before ordinary backlog/ITAD work.
+Reason:
+The user-visible Epic giveaway incident has now been stabilized in production.
 
-Do not forget this checkpoint.
+Prepared short audit:
+`WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md`
 
-## Taste Reviewer — baseline complete
+Expected report:
+`reviews/system_audits/epic-post-incident-audit-01.md`
 
-Dedicated Taste Reviewer is established.
+Start this only after the existing Epic fix Chat 2 has final closeout. It should be a **NEW Chat 2** (or whichever slot is free) and is READ-ONLY/AUDIT.
 
-Report:
-`reviews/taste_reviews/baseline-01.md`
-blob `f243047d9bbb3d8515e7929e2962da66688243c4`
+Until this mandatory audit completes, do not start ordinary backlog/ITAD work unless the user explicitly gives a more urgent concrete production priority.
 
-Overall conclusion is NOT simply `too strict` or `too loose`; current assessment is `cannot_determine`, with concrete evidence that role/context/risk semantics need better calibration.
+## Mobile feed incident — CLOSED and user accepted
 
-Do not automatically change Taste/ranking weights from this advisory report. Material Taste/ranking-policy changes require the Taste Review checkpoint before acceptance.
+Original mobile blank/loading incident is fixed.
 
-## Giveaway identity — ITAD prepared with switchable provider
+Final production cache-first release:
+`f745dac844213880cd7eb984573877f58803a3f0`
 
-ITAD permission from provider is confirmed.
+Pages run:
+`33779042331` success.
+
+User real-device acceptance on affected Android phone:
+`works`.
+
+Post-incident audit:
+`reviews/system_audits/mobile-post-incident-audit-01.md`
+blob `db07eb4f7848d18e3a8cc62d5cb754e245695db4`
+
+Systemic conclusion:
+- canonical `data/current.json` remains source of truth;
+- browser Cache Storage is only one bounded last-known-good presentation fallback;
+- no second renderer, polling, service worker, scheduler or unbounded client data plane.
+
+Remaining bounded follow-up:
+`WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`
+
+Goal only:
+wire existing `tests/feed-bootstrap.test.js` into canonical Pages deploy regression gate and prove one passing normal Pages run. No client redesign.
+
+Prepared, not next while mandatory Epic post-incident audit is due.
+
+## Visual freshness — code active, full successful-chain proof pending
+
+Accepted implementation:
+- `reviews/worker_reports/visual-freshness-chain-fix-01.md`
+- final acceptance `reviews/worker_reports/visual-freshness-chain-acceptance-02.md`
+
+The protection is now on production `main` and has already proved truthful degraded/no-fresh-build behavior.
+
+Do NOT reopen/redesign the freshness solution just because the first production cycle could not complete the stronger successful-build -> exact-run deploy proof. The blocker is upstream payload completeness, not the accepted freshness receipt design.
+
+If `ChatGPT production payload is not complete` remains a real blocker after mandatory review, use the already prepared bounded recon:
+`WORKER_TASK_VISUAL_BUILD_INPUT_INCOMPLETE_RECON_01.md`.
+
+## Semantic runtime / completeness
+
+Semantic runtime heartbeat/observability fix is accepted and closed.
+
+Final acceptance:
+`reviews/worker_reports/semantic-runtime-completion-acceptance-02.md`
+blob `5b4a25c89845ab258651a30608658e90d7d1840d`.
+
+System Audit 02 still left one separate UI-truth gap:
+canonical degraded/incomplete semantic state is not visibly surfaced to the user. This is later bounded work, not reason to reopen runtime implementation now.
+
+## Giveaway identity — ITAD prepared, NOT started
+
+Provider permission is confirmed.
 
 Prepared task:
 `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
 
-Expected report:
-`reviews/worker_reports/giveaway-itad-identity-implement-01.md`
-
-Architecture decision:
-- one provider-neutral identity interface;
-- active provider now: `itad`;
-- future provider name reserved: `igdb`;
-- no automatic fallback/dual lookup/provider voting;
-- downstream Steam family/description/Taste path consumes one common resolved Steam identity and should not care whether it came from ITAD or IGDB.
+Architecture:
+- provider-neutral identity interface;
+- active provider `itad`;
+- reserved future provider `igdb`;
+- no automatic fallback / dual voting;
+- downstream Steam identity consumer remains provider-agnostic.
 
 Status:
-`prepared_not_started`
+`prepared_not_started`.
 
-Do not start before the urgent mobile incident is stabilized and due System Audit is handled, unless user explicitly reprioritizes.
+Do not start before current mandatory Epic post-incident audit and more urgent production blockers are cleared, unless user explicitly reprioritizes.
 
-Twitch/IGDB remains blocked/waiting for Twitch Support. If Twitch unblocks before ITAD starts, explicitly reconsider provider priority rather than blindly starting ITAD.
+Twitch/IGDB remains waiting on Twitch Support.
 
-## Semantic runtime completion — closed
+## Taste Reviewer
 
-Final acceptance report:
-`reviews/worker_reports/semantic-runtime-completion-acceptance-02.md`
-blob `5b4a25c89845ab258651a30608658e90d7d1840d`
+Baseline report:
+`reviews/taste_reviews/baseline-01.md`
+blob `f243047d9bbb3d8515e7929e2962da66688243c4`.
 
-System-level semantic observability/completeness fix is accepted and closed. Do not reopen Trine-specific investigation without a new defect.
+Advisory only. Material Taste/ranking policy changes require a current Taste Review checkpoint before acceptance.
 
-## Parked blockers
+## Operational health watch
 
-- `grounded-negative-implement-01`: blocked on existing GitHub-owned Taste data-plane unresolved work.
-- `card-explanation-production-acceptance-01`: blocked on existing Russian-description runtime.
+An hourly ChatGPT automation named `Steam KZ Health Watch` was created.
 
-Do not automatically reopen these after handoff.
+Purpose:
+- check canonical project health;
+- notify only on new/materially worsened production problems;
+- known tracked incidents should not generate duplicate alerts.
 
-## Priority order at handoff
+This monitoring layer is not a second canonical scheduler/writer and must not become one.
 
-Unless user explicitly changes priority:
-1. Finish current mobile feed incident via prepared instant-cache follow-up and real-device verification.
-2. Reassess/release accepted visual-freshness branch at the safest bounded point.
-3. Run mandatory System Audit.
-4. Then consider prepared switchable-provider ITAD implementation.
-5. Ordinary backlog only after review checkpoints permit it.
+## Priority order right now
+
+Unless the user explicitly changes priority:
+1. Get **existing Chat 1** status-only visual-freshness report closeout; then delete it.
+2. Get **existing Chat 2** final CI/report closeout for Epic; then delete it.
+3. Start **NEW audit chat** for `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md` because `system_audit_due=true`.
+4. After audit, choose between the concrete visual-build-input blocker recon and the prepared mobile deploy regression gate based on current production state; the visual-build blocker is likely higher priority if still active.
+5. ITAD implementation only after current review/production blockers permit it.
 
 ## Context-protection rule
 
-The previous Director was explicitly told not to consume context by broadly checking project history itself. Preserve that rule:
-- exact report path first;
+The replacement Director must preserve this strictly:
+- exact expected report first;
 - minimum current evidence only;
-- delegate code/log/history investigation to worker chats;
-- do not rebuild project history in the Director chat.
-
-## Worker deletion state
-
-- Chat 2 visual freshness: finished; can be deleted.
-- Chat 1 mobile incident: keep until the mobile incident is fully user-verified or explicitly handed to another worker.
-- Taste Reviewer: dedicated advisory chat may be kept; it does not consume an implementation worker slot.
+- no broad Git/workflow/history archaeology;
+- do not manually follow long-running CI if a worker chat can own that follow-up;
+- delegate investigation and implementation;
+- keep Director responses fast and decision-oriented.
 
 ## Source of truth
 
-If this file conflicts with a newer `DIRECTOR_TASK_BOARD.md` or exact newer worker report, prefer the newer durable evidence and update this handoff accordingly. Do not rely on chat memory over repository state.
+If this handoff conflicts with a newer `DIRECTOR_TASK_BOARD.md`, `DIRECTOR_REVIEW_CHECKPOINTS.md`, or exact newer worker report, prefer the newer durable evidence and update this handoff. Do not use chat memory as the final authority.
