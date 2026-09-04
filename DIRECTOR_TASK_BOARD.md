@@ -22,45 +22,48 @@ Report:
 `reviews/worker_reports/top-summary-filter-buttons-recon-01.md`
 Status: `complete`.
 
-Доказано:
-- верхние `Новые / Не смотрел / Интересно / Видел` сейчас не controls;
-- единый существующий UI state — `currentTab` + existing local state;
-- готовый view/action существует только для `Интересно`;
-- `Новые / Не смотрел / Видел` должны быть добавлены как режимы того же `currentTab`, без второго filter state;
-- нижний дубликат для удаления — `.tab[data-tab="liked"]`, но `#likeBtn` и `likedView` должны остаться;
-- implementation затрагивает `web/app.js`, `web/index.html`, `web/styles.css`, новый focused test и возможно deploy UI gate;
-- recon рекомендует начинать implementation только после giveaway fix acceptance из-за общего frontend/deploy окна.
+Implementation `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md` remains queued until giveaway user verification closes the current frontend incident.
 
-**Текущий ЧАТ 1 можно удалить.**
+**Текущий завершённый ЧАТ 1 можно удалить.**
 
-Implementation `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md` остаётся queued и не запускается параллельно с текущим giveaway frontend fix.
-
-### ЧАТ 2 — recovery acceptance failed
+### ЧАТ 2 — production-shaped giveaway cache fix technically complete
 
 Report:
-`reviews/worker_reports/giveaway-cache-identity-recovery-acceptance-01.md`
-Status: `needs_followup_fix`.
-Classification: `deployed_but_fix_insufficient`.
+`reviews/worker_reports/giveaway-cache-identity-production-shape-fix-01.md`
+Status: `complete`.
 
-Принятый ранее commit `6282619c65c134459a4e85c80b9355fe3174e8ae` действительно был успешно задеплоен, но fix неверен для production schema:
-- использует отсутствующие flat `giveaway_generated_at_utc` / `giveaway_status`;
-- ожидает `giveaways` array, тогда как production uses object;
-- реальный provenance: `production_contract.source_giveaway_snapshot_blob_sha`;
-- production-shaped acceptance probe воспроизводит `refresh-identical` и отсутствие app update.
+Final implementation commit:
+`024f81937942987c96bb5db1b0e1d7b66dd67587`
 
-Prepared exact bounded follow-up IMPLEMENT:
-`WORKER_TASK_GIVEAWAY_CACHE_IDENTITY_PRODUCTION_SHAPE_FIX_01.md`
-Report:
-`reviews/worker_reports/giveaway-cache-identity-production-shape-fix-01.md`.
+Canonical Pages deployment:
+- workflow run `33841356092` — success;
+- deploy job `100924142727` — success;
+- Pages artifact `9925017623`;
+- deployed build/version `024f81937942987c96bb5db1b0e1d7b66dd67587`.
 
-Use **existing ЧАТ 2** as direct continuation if context remains available.
-Do not ask user to retest until this correction is deployed successfully.
+Technical proof:
+- `payloadIdentity()` now uses actual production provenance `production_contract.source_giveaway_snapshot_blob_sha`;
+- production-shaped stale-cache -> fresh giveaway-only regression => `updated`;
+- truly identical payload => `identical`;
+- canonical UI regressions passed;
+- exact deployed artifact contains corrected `feed-bootstrap.js` and active giveaway payload.
+
+User-visible incident is **not closed yet**. Next required evidence is one normal real-mobile-session check by the user, with no cache/site-data clearing.
+
+**ЧАТ 2 пока не удалять до результата этой проверки.**
+
+If user verification succeeds:
+- close giveaway live-site incident;
+- ЧАТ 2 can be deleted;
+- start queued top-summary-buttons IMPLEMENT in a fresh ЧАТ 1.
+
+If user verification fails:
+- keep/use existing ЧАТ 2 for one bounded follow-up based on the new real-device evidence.
 
 ## Review checkpoint
 
 Epic post-incident audit complete and accepted.
 `system_audit_due: false`.
-No ordinary-backlog audit block remains.
 
 ## Semantic runtime unresolved evidence
 
@@ -68,7 +71,7 @@ No ordinary-backlog audit block remains.
 
 ## Следующий порядок
 
-1. Existing ЧАТ 2 implements `giveaway-cache-identity-production-shape-fix-01` and owns tests + deploy wait.
-2. ЧАТ 1 is not assigned a conflicting frontend IMPLEMENT while ЧАТ 2 is in this production window; its completed recon chat may be deleted.
-3. After ЧАТ 2 technical `complete`, user re-checks giveaways on real mobile site.
-4. Only after giveaway verification succeeds, start top-summary-buttons IMPLEMENT in a fresh ЧАТ 1.
+1. User checks giveaways on the real mobile site in the normal existing browser session; do not clear cache/site data.
+2. Success -> close incident and delete ЧАТ 2.
+3. Failure -> exact bounded follow-up in existing ЧАТ 2.
+4. After giveaway incident closes, launch `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md` in a fresh ЧАТ 1.
