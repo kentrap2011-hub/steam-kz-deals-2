@@ -11,130 +11,92 @@
 3. UI-инциденты закрывать только после real-device/site проверки пользователя.
 4. Worker-чат удалять только после сохранённого report, решения директора и ближайших проверок.
 5. В каждой копируемой worker-команде первая строка должна явно начинаться с `=== ЧАТ N ===`.
-6. Номер принадлежит worker-слоту: замена удалённого ЧАТА 1 остаётся ЧАТОМ 1; замена удалённого ЧАТА 2 остаётся ЧАТОМ 2.
-7. Не запускать параллельно конфликтующие IMPLEMENT-задачи в одном production/deploy контуре.
+6. Номер принадлежит worker-слоту.
+7. Не запускать параллельно конфликтующие IMPLEMENT-задачи.
+8. Возраст задачи не понижает её приоритет автоматически; при выборе работы сравнивать текущий пользовательский эффект, системный риск, блокеры и полный цикл.
 
-## Giveaway live-site incident — CLOSED
+## Активно сейчас
 
-Technical report:
-`reviews/worker_reports/giveaway-cache-identity-production-shape-fix-01.md`
-Status: `complete`.
+### ЧАТ 1 — mandatory giveaway cache post-incident audit
 
-Final implementation commit:
-`024f81937942987c96bb5db1b0e1d7b66dd67587`
-
-Deploy:
-- workflow run `33841356092` — success;
-- deploy job `100924142727` — success;
-- Pages artifact `9925017623`;
-- deployed build/version `024f81937942987c96bb5db1b0e1d7b66dd67587`.
-
-User verification on the real mobile site succeeded on 2026-09-04 without clearing site data.
-
-The incident is user-visible and stabilized after the previous System Audit, so the recurring audit trigger fired again.
-
-Prepared mandatory short audit:
+Task:
 `WORKER_TASK_GIVEAWAY_CACHE_POST_INCIDENT_AUDIT_01.md`
+
+Mode: `READ-ONLY / AUDIT`
 Expected report:
-`reviews/system_audits/giveaway-cache-post-incident-audit-01.md`.
+`reviews/system_audits/giveaway-cache-post-incident-audit-01.md`
 
-## Recommended next parallel pair
+Status: `user_approved_start_now`.
 
-### ЧАТ 1 — highest priority
+Reason: user-visible giveaway live-site incident was technically fixed and then verified working on the real mobile site. Recurring System Audit trigger is due.
 
-`giveaway-cache-post-incident-audit-01`
-Mode: `READ-ONLY / AUDIT`.
+### ЧАТ 2 — intentionally unassigned pending user choice
 
-Why now:
-- mandatory recurring checkpoint after stabilized user-visible incident;
-- short and pinned to exact incident refs;
-- should close before ordinary backlog grows further.
+User explicitly paused the previously suggested mobile deploy regression-gate task and requested a complete plain-language comparison of all current and older unfinished work before selecting the second parallel task.
 
-### ЧАТ 2 — fastest safe implementation
+Do not auto-start Chat 2 until user chooses after that comparison.
 
-`mobile-feed-regression-gate-01`
-Task: `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`.
-Mode: `IMPLEMENT`.
+## Current user-visible / ready work
 
-Why now:
-- only proven remaining gap is that existing passing `tests/feed-bootstrap.test.js` is not in the canonical Pages deploy gate;
-- expected product-code change is zero;
-- only wire the already-existing test into the existing deploy regression step and prove one passing Pages run;
-- safe in parallel with the read-only audit because the audit is pinned to the earlier stabilized incident refs and must ignore unrelated later deploy-gate-only wiring.
+- Top summary buttons: recon complete; IMPLEMENT ready in `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`.
+- Epic RU giveaway availability: future recon ready in `WORKER_TASK_EPIC_RU_GIVEAWAY_AVAILABILITY_RECON_01.md`; Epic only, Steam/GOG unchanged.
+- Mobile feed regression gate: `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`; existing passing mobile bootstrap test is not yet a mandatory Pages deploy gate.
+- ITAD provider-neutral giveaway identity: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`; larger integration.
 
-## Ready / queued after this pair
+## Older unfinished work — current factual status
 
-### Top summary buttons
+### Grounded negative / card-analysis completeness
 
-Recon complete:
-`reviews/worker_reports/top-summary-filter-buttons-recon-01.md`.
-Implementation ready:
-`WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`.
+The original diagnosis is complete and the V4 grounded-negative architecture is already implemented.
+Report: `reviews/worker_reports/grounded-negative-implement-01.md`.
+Current implementation status: `blocked` on the existing scheduled Taste semantic runtime.
+At that report's acceptance point, 599 semantic rows remained (576 targeted negative backfills + 23 full evaluations). No second scheduler/manual processing is allowed.
 
-User-visible UI implementation:
-- top `Новые / Не смотрел / Интересно / Видел` become clickable;
-- reuse one existing view/filter state;
-- remove lower duplicate `Интересно` only after replacement works;
-- production deploy + mobile user verification required.
+### Card positive explanations / production acceptance
 
-### Epic RU giveaway availability
+Explanation policy fix is implemented and a real generated top-30 candidate passed the explanation validator after the focused fix. Final production acceptance remains blocked by the independent Russian-description mandatory gate / semantic runtime.
+Report: `reviews/worker_reports/card-explanation-production-acceptance-01.md`.
 
-Prepared future recon:
-`WORKER_TASK_EPIC_RU_GIVEAWAY_AVAILABILITY_RECON_01.md`.
+### Russian descriptions
 
-Requirement:
-- Epic Games only: accept giveaways only when available/redeemable for RU;
-- Steam unchanged;
-- GOG unchanged.
+Repo-side translation contracts/implementation exist. Runtime acceptance remains blocked waiting for the already-existing scheduled semantic runtime to produce canonical translation submissions. Do not create another scheduler or manually translate the queue.
 
-Recon first because authoritative Epic RU availability semantics must be proven before implementation.
+### Russian language availability as ranking factor
 
-### Giveaway ITAD provider-neutral identity
+Still a planned product feature: detect Russian interface availability as yes/no/unknown with evidence; confirmed lack of Russian should strongly reduce practical/final priority and be visible as a downside; unknown must not equal no.
 
-Prepared larger implementation:
-`WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
+### Wishlist good discount overrides weak Taste
 
-Purpose:
-- exact Epic/GOG provider ID -> ITAD -> exact Steam appid;
-- one switchable provider-neutral identity interface;
-- no fuzzy/title fallback;
-- IGDB reserved for later provider switch.
+Still an explicit high-importance backlog product rule: a Steam-wishlist game with a genuinely good deal should be allowed into the final feed even with weak automatic Taste fit, while retaining price/risk warnings. Needs design/implementation.
 
-Larger/riskier than current recommended quick pair.
+### YouTube game review on card
 
-## Blocked / waiting / low priority
+Still deferred/planned: automatically select a useful Russian-language review (or reliably Russian-audio option), avoid random/spoiler-heavy videos, persist choice in production payload and show a compact link/button.
 
-### Semantic / Russian-description runtime
+### Windows compatibility evidence
 
-Current semantic production remains blocked on authoritative external scheduled-task evidence / execution. Do not create a parallel scheduler and do not weaken completeness.
+Still deferred: add a reliable evidence source for actual modern-Windows friction and propagate confirmed problems into visible risk/scoring. Do not infer risk merely from legacy system-requirements text.
 
-### Twitch/IGDB
+### SteamDB historical-minimum tail
 
-Waiting for Twitch Support / provider readiness; do not start dependent work as if credentials/provider route were available.
+One remaining retry `App_901735`; low priority and externally dependent. Exact KZ historical minimum remains unproven and must not be fabricated.
 
-### SteamDB tail
+### Detailed score breakdown UI
 
-`App_901735` remains low-priority blocked/retryable; exact KZ historical minimum is unproven and must not be fabricated.
+Old CURRENT_TASK label is stale. Durable reports show the redesign and user-requested fixes were technically implemented and deployed. Remaining report-level item is only real-phone spot-check/acceptance if not already recorded separately. Do not treat it as a fresh implementation task without new user evidence.
 
-## Older roadmap requiring status refresh before being promoted
+### Twitch/IGDB route
 
-`CURRENT_TASK.md` is older (2026-09-01) and still lists:
-- ranking/card explanation quality work;
-- Russian language availability as ranking factor;
-- YouTube reviews for games;
-- Russian game-description guarantee/runtime acceptance.
+Still waiting external/provider readiness per newer board. Do not treat it as immediately executable.
 
-The card explanation implementation is not fully accepted: its durable report shows behavioral tests pass but a real generated top-30 sample still had one exact positive-explanation violation (`Middle-earth: Shadow of Mordor`). Before promoting those older roadmap items above the newer board, Director should perform a bounded status refresh rather than assume the old `in_progress/planned` labels are current.
+## Stale backlog record
+
+The old BACKLOG entry saying the separate cross-platform giveaway block does not exist is obsolete: the feature exists, the recent live-site incident was fixed, and user mobile verification succeeded. It must not be counted as unfinished product work.
 
 ## Review checkpoint
 
-`system_audit_due: true` after successful real-device closure of the giveaway cache incident.
-Prepared audit: `WORKER_TASK_GIVEAWAY_CACHE_POST_INCIDENT_AUDIT_01.md`.
+`system_audit_due: true` until Chat 1 audit completes.
 
-## Suggested order
+## Next decision
 
-1. Run mandatory giveaway-cache System Audit in ЧАТ 1.
-2. In parallel run mobile-feed regression gate wiring in ЧАТ 2.
-3. After both reports, close audit checkpoint and confirm deploy gate.
-4. Then likely start top-summary-buttons implementation as the next user-visible feature.
-5. Epic RU recon remains a good independent backend/recon companion for a later slot.
+User will choose Chat 2 only after reviewing a complete plain-language task list. Do not privilege newer tasks solely because they are newer.
