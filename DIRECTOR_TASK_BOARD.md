@@ -14,48 +14,65 @@
 6. `prepared` не значит `next`.
 7. Перед обычным backlog читать `DIRECTOR_REVIEW_CHECKPOINTS.md`.
 8. `TASTE REVIEWER` и `SYSTEM AUDITOR` — отдельные независимые роли.
+9. В каждой копируемой worker-команде первая строка должна явно начинаться с `=== ЧАТ N ===`, чтобы пользователь не путал назначения.
 
 ## Активно сейчас
 
 | Чат | Задача | Task file | Report | Статус |
 |---|---|---|---|---|
-| `ЧАТ 1` | Разобрать `ChatGPT production payload is not complete` | `WORKER_TASK_VISUAL_BUILD_INPUT_INCOMPLETE_RECON_01.md` | `reviews/worker_reports/visual-build-input-incomplete-recon-01.md` | `assigned_waiting_report` |
-| `ЧАТ 2` | Исправить stale canonical -> visual giveaway publication gap | `WORKER_TASK.md` (`giveaway-publication-gap-fix-01`) | `reviews/worker_reports/giveaway-publication-gap-fix-01.md` | `prepared_send_to_existing_chat` |
+| `ЧАТ 1` | Проверить здоровье существующей semantic scheduled-задачи для текущих 701 unresolved rows | `WORKER_TASK_SEMANTIC_RUNTIME_TASK_HEALTH_RECON_01.md` | `reviews/worker_reports/semantic-runtime-task-health-recon-01.md` | `prepared_send_to_existing_chat` |
+| `ЧАТ 2` | Найти live-site divergence после технически успешного giveaway deploy | `WORKER_TASK_GIVEAWAY_LIVE_SITE_MISMATCH_RECON_01.md` | `reviews/worker_reports/giveaway-live-site-mismatch-recon-01.md` | `prepared_send_to_existing_chat` |
 
-## Giveaway visibility incident — current urgent user-visible defect
+## Giveaway visibility incident — still open after user verification
 
-Recon complete:
-`reviews/worker_reports/giveaway-publication-gap-recon-01.md`
-Status: `needs_fix`.
+Previous bounded implementation report:
+`reviews/worker_reports/giveaway-publication-gap-fix-01.md`
+Status: technically `complete`.
 
-Proven first loss boundary:
-`data/production/giveaways/v1/current.json` -> stale giveaway sibling in `data/production/visual/current.json`.
+That implementation proved:
+- canonical giveaway -> visual refresh routing was repaired;
+- refreshed visual payload contains `Alone With You`;
+- exact deployed Pages artifact from run `33832350887` contains `Alone With You`.
 
-Canonical giveaway is healthy and contains active KZ Epic giveaway `Alone With You`, but current visual payload still references the older incomplete giveaway snapshot and has `giveaways.games=[]`.
+New decisive user evidence:
+- user checked the real mobile site after that deploy;
+- giveaways still do not appear.
 
-Concrete routing gap: the existing giveaway-only visual refresh classifier does not include committed changes to `data/production/giveaways/v1/current.json`, so a healthy canonical giveaway update can fail to refresh the visual derivative.
+Therefore the user-visible incident is **not closed**. The new investigation must start downstream of the proven deployed artifact and trace:
+`deployed Pages artifact -> live HTTP-served files -> browser-loaded data -> giveaway render/view`.
 
-Prepared bounded fix in root `WORKER_TASK.md`:
-- Task ID: `giveaway-publication-gap-fix-01`;
-- mode: `IMPLEMENT`;
-- report: `reviews/worker_reports/giveaway-publication-gap-fix-01.md`.
+Prepared:
+- `WORKER_TASK_GIVEAWAY_LIVE_SITE_MISMATCH_RECON_01.md`
+- Task ID `giveaway-live-site-mismatch-recon-01`
+- mode `READ-ONLY / RECON`
+- report `reviews/worker_reports/giveaway-live-site-mismatch-recon-01.md`
+- use existing Chat 2.
 
-Use existing Chat 2 as direct continuation. After deploy, require actual user site verification before closing the user-visible incident.
+Do not reopen Epic parser or canonical giveaway rules without new evidence.
 
-## Epic giveaway source incident — closed
+## Visual freshness / semantic production blocker
 
-- Final report: `reviews/worker_reports/epic-giveaway-schema-fix-01.md`.
-- Status: `complete`.
-- Parser fix commit: `aa7cea8d06d4d71a5ff6fe4c23a71c2cbda28783`.
-- Regression commit: `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`.
-- Do not reopen parser work without new evidence.
+Recon report:
+`reviews/worker_reports/visual-build-input-incomplete-recon-01.md`
+Status: `needs_user_evidence`.
 
-## Visual freshness / visual-build blocker
+Proven primary blocker:
+- canonical ChatGPT/semantic payload is truthfully `degraded`;
+- `701` unresolved semantic rows remain;
+- `sufficiently_complete_for_publication=false`;
+- normal fresh visual build must remain fail-closed.
 
-- Accepted freshness fix landed on `main` via PR #13 at `ddbf25d855f3ed7b86aca5ecbebb834e87178012`.
-- Release report: `reviews/worker_reports/visual-freshness-release-01.md`, status `blocked` only because upstream visual build failed on `ChatGPT production payload is not complete`.
-- Freshness protection itself truthfully emitted `degraded/no_fresh_build` and is not to be redesigned.
-- Current Chat 1 task: `WORKER_TASK_VISUAL_BUILD_INPUT_INCOMPLETE_RECON_01.md`.
+Secondary separate defect:
+- visual readiness checks top-level `status != complete` before its later queued/degraded handling, making that degraded branch unreachable; this is not a safe shortcut around semantic incompleteness.
+
+Only missing fact from prior recon: exact health/state of the **existing scheduled ChatGPT semantic production task** for the current 701-row scope.
+
+Prepared:
+- `WORKER_TASK_SEMANTIC_RUNTIME_TASK_HEALTH_RECON_01.md`
+- Task ID `semantic-runtime-task-health-recon-01`
+- mode `READ-ONLY / RECON`
+- report `reviews/worker_reports/semantic-runtime-task-health-recon-01.md`
+- use existing Chat 1.
 
 ## Queued user UI request — top summary filters
 
@@ -65,41 +82,32 @@ Prepared task:
 Task ID: `top-summary-filter-buttons-01`.
 Status: `queued_user_requested_ui_not_started`.
 
-User request from current mobile UI:
-- make all four top summary cards clickable using the existing filter state: `Новые`, `Не смотрел`, `Интересно`, `Видел`;
-- after the top `Интересно` card fully performs the existing interesting-filter function, remove the separate lower `Интересно` button/tab as a duplicate;
-- keep existing meanings and live counters unchanged;
-- require mobile real-device verification after deploy.
-
-Do not interrupt the current giveaway production incident or mandatory audit for this queued UX improvement unless the user explicitly reprioritizes it.
-
-## Mobile feed incident
-
-- User/device accepted as working.
-- Post-incident audit complete.
-- Remaining bounded gap: `tests/feed-bootstrap.test.js` not yet in canonical Pages deploy gate.
-- Prepared: `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`.
+User request:
+- make top cards `Новые`, `Не смотрел`, `Интересно`, `Видел` clickable using existing filter state;
+- after top `Интересно` fully replaces the existing function, remove the lower duplicate `Интересно` button/tab;
+- keep current meanings and counters;
+- require real-device mobile verification after deploy.
 
 ## Review checkpoint
 
-- `system_audit_due: true` due to stabilized Epic user-visible source incident.
+- `system_audit_due: true` from stabilized Epic source incident.
 - Prepared: `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md`.
-- Current still-visible giveaway publication defect is more urgent and may finish first.
-- Do not start ordinary backlog/ITAD before required audit completes.
+- Current still-open giveaway live-site defect remains more urgent.
+- Ordinary backlog/ITAD stays blocked until required audit completes, unless user explicitly reprioritizes another concrete production defect.
 
 ## Other prepared / parked work
 
 - Mobile deploy regression gate: `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`.
 - ITAD provider-neutral identity implementation: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
 - Twitch/IGDB: waiting for Twitch Support.
-- Semantic runtime observability: accepted/closed; degraded semantic completeness still not visibly surfaced in UI.
 - Legacy Taste writer ambiguity: later bounded cleanup.
 
 ## Следующий порядок
 
-1. Existing Chat 2 implements `giveaway-publication-gap-fix-01` from root `WORKER_TASK.md`.
-2. Chat 1 continues/finishes `visual-build-input-incomplete-recon-01` in parallel.
-3. After Chat 2 technical deploy proof, user verifies the real site; only then close giveaway visibility incident.
-4. Once giveaway visibility incident is stabilized, run `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md` in the next free worker slot.
-5. Then use remaining free slot for the next bounded step from Chat 1 recon, mobile regression gate, or queued `top-summary-filter-buttons-01`, respecting review checkpoints and user priority.
-6. ITAD/ordinary backlog only after mandatory audit permits it.
+1. Chat 2 runs `giveaway-live-site-mismatch-recon-01` immediately because user verification failed.
+2. Chat 1 runs `semantic-runtime-task-health-recon-01` in parallel.
+3. Read exact reports when each worker finishes; do not infer completion from chat prose.
+4. If Chat 2 proves one exact defect, issue one bounded IMPLEMENT in the same chat when continuity remains useful.
+5. Giveaway incident closes only after technical fix + new real-site user verification succeeds.
+6. Once giveaway visibility stabilizes, run mandatory Epic post-incident audit in next free slot.
+7. Then queued UI/mobile tasks may proceed according to review checkpoints and user priority.
