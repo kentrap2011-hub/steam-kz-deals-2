@@ -93,7 +93,7 @@ jobs:
           git diff --name-only "$BEFORE_SHA" "$HEAD_SHA" > /tmp/visual-changed.txt
           cat /tmp/visual-changed.txt
 
-          allowed='^(scripts/build_final_visual_payload\.py|scripts/giveaway_visual_handoff\.py|scripts/test_giveaway_visual_handoff\.py|scripts/validate_giveaway_visual_payload\.py|web/giveaway-ui\.js|web/giveaway-ui\.test\.js|web/giveaway-ui\.css|web/app\.js|web/index\.html|\.github/workflows/build-daily-visual-payload\.yml)$'
+          allowed='^(scripts/build_final_visual_payload\.py|scripts/giveaway_visual_handoff\.py|scripts/test_giveaway_visual_handoff\.py|scripts/validate_giveaway_visual_payload\.py|data/production/giveaways/v1/current\.json|web/giveaway-ui\.js|web/giveaway-ui\.test\.js|web/giveaway-ui\.css|web/app\.js|web/index\.html|\.github/workflows/build-daily-visual-payload\.yml)$'
           if grep -Ev "$allowed" /tmp/visual-changed.txt | grep -q .; then
             exit 0
           fi
