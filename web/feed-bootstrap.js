@@ -103,7 +103,13 @@
       return !!payload&&typeof payload==='object'&&!Array.isArray(payload)&&Array.isArray(payload.items);
     }
     function payloadIdentity(payload){
-      if(typeof payload?.generated_at_utc==='string'&&payload.generated_at_utc)return `generated:${payload.generated_at_utc}`;
+      const generatedAt=typeof payload?.generated_at_utc==='string'?payload.generated_at_utc.trim():'';
+      const giveawayGeneratedAt=typeof payload?.giveaway_generated_at_utc==='string'?payload.giveaway_generated_at_utc.trim():'';
+      const giveawayStatus=typeof payload?.giveaway_status==='string'?payload.giveaway_status.trim():'';
+      const giveawayCount=Array.isArray(payload?.giveaways)?payload.giveaways.length:null;
+      if(generatedAt||giveawayGeneratedAt||giveawayStatus||giveawayCount!==null){
+        return `published:${JSON.stringify([generatedAt,giveawayGeneratedAt,giveawayStatus,giveawayCount])}`;
+      }
       try{return `json:${JSON.stringify(payload)}`}catch{return null}
     }
     function queueLengthFromDom(){
