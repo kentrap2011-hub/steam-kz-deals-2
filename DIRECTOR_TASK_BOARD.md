@@ -15,31 +15,36 @@
 7. Не запускать параллельно конфликтующие IMPLEMENT-задачи.
 8. Возраст задачи не понижает её приоритет автоматически; при выборе работы сравнивать текущий пользовательский эффект, системный риск, блокеры и полный цикл.
 
-## Активно сейчас
+## Giveaway cache incident — systemically closed
 
-### ЧАТ 1 — mandatory giveaway cache post-incident audit
-
-Task:
-`WORKER_TASK_GIVEAWAY_CACHE_POST_INCIDENT_AUDIT_01.md`
-
-Mode: `READ-ONLY / AUDIT`
-Expected report:
+System Audit:
 `reviews/system_audits/giveaway-cache-post-incident-audit-01.md`
 
-Status: `user_approved_start_now`.
+Status: `complete`
+Result: `Giveaway cache incident systemic closure: accepted`
 
-Reason: user-visible giveaway live-site incident was technically fixed and then verified working on the real mobile site. Recurring System Audit trigger is due.
+Audit found no incident-specific implementation follow-up required before ordinary backlog continues.
+System checkpoint reconciled: `system_audit_due: false`, material change count reset to 0.
 
-### ЧАТ 2 — intentionally unassigned pending user choice
+## Worker slots
 
-User explicitly paused the previously suggested mobile deploy regression-gate task and requested a complete plain-language comparison of all current and older unfinished work before selecting the second parallel task.
+### ЧАТ 1
 
-Do not auto-start Chat 2 until user chooses after that comparison.
+Status: `free_pending_user_selection_after_audit`.
+
+Previous audit task is complete and durably saved.
+Do not auto-assign until Director/user select the next pair from the full current+older unfinished task set.
+
+### ЧАТ 2
+
+Status: `free_pending_user_selection_after_audit`.
+
+Do not auto-assign until Director/user select the next pair from the full current+older unfinished task set.
 
 ## Current user-visible / ready work
 
 - Top summary buttons: recon complete; IMPLEMENT ready in `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`.
-- Epic RU giveaway availability: future recon ready in `WORKER_TASK_EPIC_RU_GIVEAWAY_AVAILABILITY_RECON_01.md`; Epic only, Steam/GOG unchanged.
+- Epic RU giveaway availability: recon ready in `WORKER_TASK_EPIC_RU_GIVEAWAY_AVAILABILITY_RECON_01.md`; Epic only, Steam/GOG unchanged.
 - Mobile feed regression gate: `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`; existing passing mobile bootstrap test is not yet a mandatory Pages deploy gate.
 - ITAD provider-neutral giveaway identity: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`; larger integration.
 
@@ -47,14 +52,13 @@ Do not auto-start Chat 2 until user chooses after that comparison.
 
 ### Grounded negative / card-analysis completeness
 
-The original diagnosis is complete and the V4 grounded-negative architecture is already implemented.
+V4 grounded-negative architecture is implemented.
 Report: `reviews/worker_reports/grounded-negative-implement-01.md`.
-Current implementation status: `blocked` on the existing scheduled Taste semantic runtime.
-At that report's acceptance point, 599 semantic rows remained (576 targeted negative backfills + 23 full evaluations). No second scheduler/manual processing is allowed.
+Current implementation remains blocked on the existing scheduled Taste semantic runtime. Do not create a second scheduler/manual processing path.
 
 ### Card positive explanations / production acceptance
 
-Explanation policy fix is implemented and a real generated top-30 candidate passed the explanation validator after the focused fix. Final production acceptance remains blocked by the independent Russian-description mandatory gate / semantic runtime.
+Explanation policy fix is implemented. Final production acceptance remains blocked by the independent Russian-description mandatory gate / semantic runtime.
 Report: `reviews/worker_reports/card-explanation-production-acceptance-01.md`.
 
 ### Russian descriptions
@@ -63,19 +67,19 @@ Repo-side translation contracts/implementation exist. Runtime acceptance remains
 
 ### Russian language availability as ranking factor
 
-Still a planned product feature: detect Russian interface availability as yes/no/unknown with evidence; confirmed lack of Russian should strongly reduce practical/final priority and be visible as a downside; unknown must not equal no.
+Still planned: detect Russian interface availability as yes/no/unknown with evidence; confirmed lack of Russian should strongly reduce practical/final priority and be visible as a downside; unknown must not equal no.
 
 ### Wishlist good discount overrides weak Taste
 
-Still an explicit high-importance backlog product rule: a Steam-wishlist game with a genuinely good deal should be allowed into the final feed even with weak automatic Taste fit, while retaining price/risk warnings. Needs design/implementation.
+Still explicit high-importance product rule: a Steam-wishlist game with a genuinely good deal should be allowed into the final feed even with weak automatic Taste fit, while retaining price/risk warnings. Requires design/implementation and Taste Review before acceptance.
 
 ### YouTube game review on card
 
-Still deferred/planned: automatically select a useful Russian-language review (or reliably Russian-audio option), avoid random/spoiler-heavy videos, persist choice in production payload and show a compact link/button.
+Still deferred/planned: automatically select a useful Russian-language review or reliably Russian-audio option, avoid random/spoiler-heavy videos, persist choice in production payload and show a compact link/button.
 
 ### Windows compatibility evidence
 
-Still deferred: add a reliable evidence source for actual modern-Windows friction and propagate confirmed problems into visible risk/scoring. Do not infer risk merely from legacy system-requirements text.
+Still deferred: add a reliable evidence source for actual modern-Windows friction and propagate confirmed problems into visible risk/scoring.
 
 ### SteamDB historical-minimum tail
 
@@ -83,20 +87,20 @@ One remaining retry `App_901735`; low priority and externally dependent. Exact K
 
 ### Detailed score breakdown UI
 
-Old CURRENT_TASK label is stale. Durable reports show the redesign and user-requested fixes were technically implemented and deployed. Remaining report-level item is only real-phone spot-check/acceptance if not already recorded separately. Do not treat it as a fresh implementation task without new user evidence.
+Implementation and user-requested fixes are technically complete/deployed. Do not promote as new implementation without fresh user evidence of a remaining problem.
 
 ### Twitch/IGDB route
 
-Still waiting external/provider readiness per newer board. Do not treat it as immediately executable.
+Still waiting external/provider readiness.
 
 ## Stale backlog record
 
-The old BACKLOG entry saying the separate cross-platform giveaway block does not exist is obsolete: the feature exists, the recent live-site incident was fixed, and user mobile verification succeeded. It must not be counted as unfinished product work.
+Old backlog text saying the separate cross-platform giveaway block does not exist is obsolete and must not be counted as unfinished work.
 
 ## Review checkpoint
 
-`system_audit_due: true` until Chat 1 audit completes.
+`system_audit_due: false`.
 
 ## Next decision
 
-User will choose Chat 2 only after reviewing a complete plain-language task list. Do not privilege newer tasks solely because they are newer.
+Both worker slots are free. Select two safely independent tasks from the full current+older unfinished set; do not privilege newer tasks solely because they are newer.
