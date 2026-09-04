@@ -41,14 +41,31 @@ function createDocument() {
   };
 }
 
-function basePayload() {
+function freshProductionPayload() {
   return {
-    generated_at_utc: '2026-09-03T18:29:04Z',
-    giveaway_generated_at_utc: '2026-09-03T19:16:45.220980Z',
-    giveaway_status: 'complete',
-    giveaways: [{ source: 'epic', title: 'Alone With You' }],
+    generated_at_utc: '2026-09-03T18:29:04.806292Z',
+    production_contract: {
+      mode: 'daily_precomputed_read_only_for_ui',
+      source_giveaway_snapshot_blob_sha: '7102b39bf64feeb6d8af22bc204e7e72bf077159de7da71a7c0ef42c2c7f5773',
+    },
+    giveaways: {
+      schema_version: 1,
+      source_contract: 'CROSS-PLATFORM-GIVEAWAY-V1',
+      state: 'active',
+      accepted_offer_count_at_build: 1,
+      games: [{ source: 'epic', title: 'Alone With You' }],
+    },
     items: [{ appid: 1, name: 'Cached game' }],
   };
+}
+
+function staleProductionPayload() {
+  const payload = freshProductionPayload();
+  payload.production_contract.source_giveaway_snapshot_blob_sha = 'old-giveaway-snapshot-sha';
+  payload.giveaways.state = 'absent';
+  payload.giveaways.accepted_offer_count_at_build = 0;
+  payload.giveaways.games = [];
+  return payload;
 }
 
 async function runRefreshScenario(cachedPayload, freshPayload, { failNetwork = false } = {}) {
@@ -80,9 +97,13 @@ async function runRefreshScenario(cachedPayload, freshPayload, { failNetwork = f
     console: { info() {}, warn() {}, log() {} },
   });
   controller.install();
+
+  let initCalls = 0;
+  const appliedPayloads = [];
   win.init = async () => {
+    initCalls += 1;
     const response = await win.fetch(DATA_URL, { cache: 'no-store' });
-    await response.json();
+    appliedPayloads.push(await response.json());
   };
 
   const initial = await win.fetch(DATA_URL, { cache: 'no-store' });
@@ -91,69 +112,61 @@ async function runRefreshScenario(cachedPayload, freshPayload, { failNetwork = f
   await controller.whenBackgroundIdle();
   await new Promise(resolve => setTimeout(resolve, 0));
 
-  return { controller, delivered };
+  return { controller, delivered, initCalls, appliedPayloads };
 }
 
 async function main() {
+  const fresh = freshProductionPayload();
+  const stale = staleProductionPayload();
+  const same = clone(fresh);
+
+  assert.strictEqual(Array.isArray(fresh.giveaways), false, 'production giveaways must be object-shaped');
+  assert.strictEqual(Object.hasOwn(fresh, 'giveaway_generated_at_utc'), false, 'fixture must not invent flat giveaway timestamp');
+  assert.strictEqual(Object.hasOwn(fresh, 'giveaway_status'), false, 'fixture must not invent flat giveaway status');
+  assert.strictEqual(
+    fresh.generated_at_utc,
+    stale.generated_at_utc,
+    'giveaway-only publication change must keep ordinary feed generation unchanged',
+  );
+  assert.deepStrictEqual(fresh.items, stale.items, 'giveaway-only publication change must keep ordinary feed items unchanged');
+
   const identityProbe = createFeedBootstrapResilience({
-    fetch: async () => responseFor(basePayload()),
+    fetch: async () => responseFor(fresh),
     AbortController,
     console: { info() {}, warn() {}, log() {} },
   });
 
-  const original = basePayload();
-  const same = clone(original);
   assert.strictEqual(
-    identityProbe.payloadIdentity(original),
+    identityProbe.payloadIdentity(fresh),
     identityProbe.payloadIdentity(same),
-    'same common and giveaway publication state must remain identical',
+    'truly identical production-shaped payload must remain identical',
   );
-
-  const changedGenerated = clone(original);
-  changedGenerated.giveaway_generated_at_utc = '2026-09-03T20:00:00Z';
   assert.notStrictEqual(
-    identityProbe.payloadIdentity(original),
-    identityProbe.payloadIdentity(changedGenerated),
-    'giveaway publication timestamp must participate in payload identity',
+    identityProbe.payloadIdentity(stale),
+    identityProbe.payloadIdentity(fresh),
+    'production giveaway snapshot provenance must participate in payload identity',
   );
 
-  const changedStatus = clone(original);
-  changedStatus.giveaway_status = 'partial';
-  assert.notStrictEqual(
-    identityProbe.payloadIdentity(original),
-    identityProbe.payloadIdentity(changedStatus),
-    'giveaway status must participate in payload identity',
-  );
-
-  const changedCount = clone(original);
-  changedCount.giveaway_generated_at_utc = '2026-09-03T20:01:00Z';
-  changedCount.giveaways.push({ source: 'gog', title: 'Another Giveaway' });
-  assert.notStrictEqual(
-    identityProbe.payloadIdentity(original),
-    identityProbe.payloadIdentity(changedCount),
-    'changed canonical giveaway publication/list count must not be identical',
-  );
-
-  let scenario = await runRefreshScenario(original, same);
+  let scenario = await runRefreshScenario(fresh, same);
   assert.strictEqual(scenario.controller.state.refreshOutcome, 'identical');
-  assert.deepStrictEqual(scenario.delivered, original);
+  assert.deepStrictEqual(scenario.delivered, fresh);
+  assert.strictEqual(scenario.initCalls, 0, 'identical refresh must not re-run app init');
+  assert.deepStrictEqual(scenario.appliedPayloads, []);
 
-  scenario = await runRefreshScenario(original, changedGenerated);
+  scenario = await runRefreshScenario(stale, fresh);
+  assert.deepStrictEqual(scenario.delivered, stale, 'cache-first render must still deliver the stale LKG immediately');
   assert.strictEqual(scenario.controller.state.refreshOutcome, 'updated');
+  assert.strictEqual(scenario.initCalls, 1, 'giveaway-only provenance change must apply background payload');
+  assert.deepStrictEqual(scenario.appliedPayloads, [fresh], 'background app init must receive the fresh production-shaped payload');
 
-  scenario = await runRefreshScenario(original, changedStatus);
-  assert.strictEqual(scenario.controller.state.refreshOutcome, 'updated');
-
-  scenario = await runRefreshScenario(original, changedCount);
-  assert.strictEqual(scenario.controller.state.refreshOutcome, 'updated');
-
-  scenario = await runRefreshScenario(original, original, { failNetwork: true });
-  assert.deepStrictEqual(scenario.delivered, original, 'cache-first payload must remain usable when refresh fails');
+  scenario = await runRefreshScenario(fresh, fresh, { failNetwork: true });
+  assert.deepStrictEqual(scenario.delivered, fresh, 'cache-first payload must remain usable when refresh fails');
   assert.strictEqual(scenario.controller.state.source, 'cache');
   assert.strictEqual(scenario.controller.state.status, 'ready');
   assert.strictEqual(scenario.controller.state.refreshOutcome, 'failed');
+  assert.strictEqual(scenario.initCalls, 0);
 
-  console.log('giveaway cache identity regression: PASS');
+  console.log('giveaway cache identity production-shape regression: PASS');
 }
 
 main().catch(error => {
