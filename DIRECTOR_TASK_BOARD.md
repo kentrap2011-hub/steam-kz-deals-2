@@ -14,6 +14,7 @@
 6. Номер принадлежит worker-слоту.
 7. Не запускать параллельно конфликтующие IMPLEMENT-задачи.
 8. Возраст задачи не понижает её приоритет автоматически.
+9. Taste Reviewer recommendations explicitly promoted by the user on 2026-09-04 are VERY HIGH PRIORITY and must not be displaced by ordinary UI/technical-debt work.
 
 ## Review checkpoint
 
@@ -39,15 +40,7 @@ Mode: `READ-ONLY / RECON`
 Expected report:
 `reviews/worker_reports/wishlist-good-deal-override-recon-01.md`
 
-Goal:
-- найти точный ordinary Taste eligibility gate, который сейчас может выбросить wishlist-игру до ranking;
-- определить существующий канонический сигнал `genuinely good deal`;
-- спроектировать минимальный wishlist override только ordinary Taste gate;
-- не скрывать confirmed risks / плохую ценность покупки;
-- не менять код в recon;
-- финальный IMPLEMENT acceptance потребует независимый Taste Review, потому что меняется wishlist-vs-Taste eligibility semantics.
-
-Status: `user_approved_start_now`.
+Status: `user_approved_running_recon`.
 
 ### ЧАТ 2 — Epic RU giveaway availability
 
@@ -61,18 +54,67 @@ Mode: `READ-ONLY / RECON`
 Expected report:
 `reviews/worker_reports/epic-ru-giveaway-availability-recon-01.md`
 
-Goal:
-- доказать authoritative способ определить, доступна ли Epic giveaway для RU;
-- Epic only;
-- Steam unchanged;
-- GOG unchanged;
-- не менять production code/data в recon.
-
-Status: `user_approved_start_now`.
+Status: `user_approved_running_recon`.
 
 These two tasks are safely parallel: Chat 1 is paid-feed ranking/Taste policy recon; Chat 2 is Epic giveaway source/region recon.
 
-## Ready / queued after current pair
+## VERY HIGH PRIORITY NEXT — implement Taste Reviewer recommendations
+
+User explicitly asked that implementation of the prior Taste Reviewer recommendations be treated as **very high priority**.
+
+Authoritative reviewer handoff:
+`reviews/taste_reviews/DIRECTOR_IMPLEMENTATION_HANDOFF_01.md`
+Status there: `READY_FOR_IMPLEMENTATION`.
+
+The handoff explicitly says the next step is implementation/regression testing rather than more broad taste questioning.
+
+Because repository logic evolved after that handoff, a precise implementation-gap recon is prepared first:
+`WORKER_TASK_TASTE_REVIEW_RECOMMENDATIONS_GAP_RECON_01.md`
+
+Task ID:
+`taste-review-recommendations-gap-recon-01`
+Mode: `READ-ONLY / RECON`
+Expected report:
+`reviews/worker_reports/taste-review-recommendations-gap-recon-01.md`
+Priority: `VERY_HIGH_USER_PRIORITY_NEXT_TASTE_SLOT`.
+
+Goal:
+- map each reviewer recommendation to already satisfied / partial / missing in current code;
+- avoid reimplementing later accepted work;
+- produce the smallest implementation sequence for genuinely missing recommendations;
+- retain the review controls around unknown-vs-negative, old shallow abandonment, role/queue priority, discount-vs-fit, giveaways, bundle value and franchise priors.
+
+Scheduling constraint:
+- current Chat 1 wishlist task is only RECON and may finish normally;
+- do **not** run a Taste-recommendations IMPLEMENT and wishlist/Taste IMPLEMENT in parallel because both can touch ranking/Taste semantics;
+- after current reports, reconcile wishlist findings with this very-high-priority reviewer handoff before choosing implementation order;
+- ordinary UI/technical-debt tasks should not jump ahead of this user-promoted Taste work absent a blocker.
+
+## NEW queued future request — DLC + personalized bundle economics
+
+Prepared task:
+`WORKER_TASK_DLC_PERSONALIZED_BUNDLE_ECONOMICS_RECON_01.md`
+
+Task ID:
+`dlc-personalized-bundle-economics-recon-01`
+Mode: `READ-ONLY / RECON`
+Expected report:
+`reviews/worker_reports/dlc-personalized-bundle-economics-recon-01.md`
+Status: `queued_user_requested_not_started`.
+
+User requirements:
+1. If the base game is confirmed owned, relevant DLC/expansions can be considered as paid deal candidates under explicit ownership/value rules.
+2. For a target game, inspect not only standalone discount but also package/bundle acquisition routes.
+3. If the storefront offers a personalized bundle where already-owned items reduce the **actual payable price**, that real payable price must be considered when deciding whether the target can be acquired materially cheaper.
+4. Do not fake ownership savings for ordinary fixed packages where duplicates do not reduce payable price.
+5. A target may become commercially interesting through a bundle even when standalone has no/weak discount.
+
+Known current gap:
+`reviews/worker_reports/compact-purchase-options-01.md` confirms fixed-package purchase routes already exist, but dynamic/personalized Complete-the-Set is explicitly excluded today. Package economics remain producer-owned.
+
+This new task must first prove authoritative personalized-price/ownership semantics and may split implementation into DLC eligibility and personalized-bundle economics if their source/ownership boundaries differ.
+
+## Other ready / queued work
 
 ### Top summary buttons
 
@@ -107,4 +149,6 @@ Larger integration; exact Epic/GOG provider ID -> Steam identity through provide
 
 ## Next decision
 
-Read the two exact reports when workers finish. Do not auto-implement either recon result until Director checks conflicts/review requirements.
+Let the current two READ-ONLY recons finish. Then read their exact reports.
+The next safe Taste/ranking slot should prioritize `taste-review-recommendations-gap-recon-01` before ordinary UI/technical debt, while avoiding a conflicting parallel wishlist/Taste IMPLEMENT.
+The DLC/personalized-bundle recon is durably queued and can be selected as an independent future slot.
