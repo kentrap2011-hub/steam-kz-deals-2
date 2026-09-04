@@ -21,66 +21,67 @@
 
 | Чат | Задача | Task file | Report | Статус |
 |---|---|---|---|---|
-| `НОВЫЙ ЧАТ 1` | Обязательный Epic post-incident System Audit | `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md` | `reviews/system_audits/epic-post-incident-audit-01.md` | `prepared_start_after_old_chat1_delete` |
-| `СУЩЕСТВУЮЩИЙ ЧАТ 2` | Исправить collision stale LKG vs giveaway-only refresh | `WORKER_TASK_GIVEAWAY_CACHE_IDENTITY_FIX_01.md` | `reviews/worker_reports/giveaway-cache-identity-fix-01.md` | `prepared_direct_continuation` |
+| `НОВЫЙ ЧАТ 1` | Recon queued UX: верхние summary-карточки как фильтры | `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_RECON_01.md` | `reviews/worker_reports/top-summary-filter-buttons-recon-01.md` | `prepared_start_new_chat` |
+| `НОВЫЙ ЧАТ 2` | Recovery/acceptance уже landed giveaway cache fix | `WORKER_TASK_GIVEAWAY_CACHE_IDENTITY_RECOVERY_ACCEPTANCE_01.md` | `reviews/worker_reports/giveaway-cache-identity-recovery-acceptance-01.md` | `prepared_start_new_chat_after_limit` |
 
-## ЧАТ 1 — завершённый semantic recon
+## ЧАТ 1 — Epic post-incident audit завершён
 
 Report:
-`reviews/worker_reports/semantic-runtime-task-health-recon-01.md`
-Status: `needs_user_evidence`.
+`reviews/system_audits/epic-post-incident-audit-01.md`
+Status: `complete`.
+Decision: `Epic incident systemic closure: accepted`.
 
-Worker не получил authoritative scheduler/task record и поэтому честно классифицировал producer как `cannot_determine`.
-Durable report сохранён, полезного продолжения в этом worker-чате сейчас нет.
+`DIRECTOR_REVIEW_CHECKPOINTS.md` обновлён:
+- `system_audit_due: false`;
+- `material_changes_since_last_system_audit: 0`;
+- `last_system_audit_report: reviews/system_audits/epic-post-incident-audit-01.md`.
 
-**Старый ЧАТ 1 можно удалить.**
+Старый ЧАТ 1 закончен и может быть удалён.
 
-Следующий новый ЧАТ 1 получает обязательный независимый System Audit `epic-post-incident-audit-01`.
+## ЧАТ 2 — worker достиг лимита после landing fix
 
-## ЧАТ 2 — giveaway live-site incident
+Ожидаемый report `reviews/worker_reports/giveaway-cache-identity-fix-01.md` не был сохранён на `main` до достижения лимита.
 
-Recon report:
-`reviews/worker_reports/giveaway-live-site-mismatch-recon-01.md`
-Status: `needs_followup_fix`.
+Но implementation частично/полностью landed:
+- commit `6282619c65c134459a4e85c80b9355fe3174e8ae`;
+- message `Fix giveaway cache payload identity`;
+- current `web/feed-bootstrap.js` уже содержит изменённый `payloadIdentity()`.
 
-Доказано:
-- exact deployed Pages artifact содержит `Alone With You`;
-- fresh payload корректно рендерится, если доходит до application;
-- browser-side LKG cache может выдать старый payload;
-- `web/feed-bootstrap.js::payloadIdentity()` использует только top-level `generated_at_utc`;
-- giveaway-only update может сохранить тот же `generated_at_utc`, но изменить `source_giveaway_snapshot_blob_sha`;
-- stale cached payload и fresh payload тогда ошибочно считаются `refresh-identical`, и fresh payload не применяется.
+Нельзя считать user-visible incident закрытым без восстановления доказательств tests/deploy и новой проверки пользователя.
 
-Prepared bounded IMPLEMENT:
-`WORKER_TASK_GIVEAWAY_CACHE_IDENTITY_FIX_01.md`
-Task ID `giveaway-cache-identity-fix-01`.
+Старый ЧАТ 2 достиг лимита и может быть удалён.
 
-Использовать **существующий ЧАТ 2** как прямое продолжение. Его пока не удалять.
-После deploy обязательна новая real-device/site проверка пользователя.
+Следующий **НОВЫЙ ЧАТ 2** выполняет только recovery/acceptance:
+`WORKER_TASK_GIVEAWAY_CACHE_IDENTITY_RECOVERY_ACCEPTANCE_01.md`.
+Он не должен переделывать fix с нуля.
 
-Если пользователь сознательно хочет очистить ЧАТ 2, допустима замена на **НОВЫЙ ЧАТ 2** с тем же task file; никогда не переносить слот 2 в номер 1.
-
-## Review checkpoint
-
-`system_audit_due: true`.
-Prepared: `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md`.
-Этот READ-ONLY / AUDIT независим от bounded frontend cache fix и может идти параллельно в новом ЧАТЕ 1.
-Обычный backlog/ITAD остаётся заблокирован до завершения audit.
+Если technical acceptance = complete, Director просит пользователя проверить раздачи на реальном мобильном сайте. Если acceptance = needs_followup_fix, выдаётся один bounded IMPLEMENT в ЧАТ 2.
 
 ## Queued user UI request
 
-`WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`
-Task ID `top-summary-filter-buttons-01`.
+Основная implementation-задача:
+`WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`.
 
-После текущего cache fix + audit:
-- верхние `Новые / Не смотрел / Интересно / Видел` сделать кликабельными;
-- удалить нижний дубликат `Интересно` после полной замены его функции;
-- real-device verification required.
+Пока giveaway fix проходит recovery acceptance, новый ЧАТ 1 делает только безопасный READ-ONLY recon:
+`WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_RECON_01.md`.
+
+Цель recon:
+- точно сопоставить `Новые / Не смотрел / Интересно / Видел` с существующим filter state;
+- определить нижний дубликат `Интересно`;
+- подготовить bounded implementation/test plan;
+- не менять frontend до завершения giveaway acceptance window.
+
+## Semantic runtime unresolved evidence
+
+`reviews/worker_reports/semantic-runtime-task-health-recon-01.md` остаётся `needs_user_evidence`.
+Worker не может authoritative определить состояние внешней scheduled semantic task для 701 unresolved rows. Не создавать параллельный scheduler и не ослаблять completeness.
 
 ## Следующий порядок
 
-1. Удалить старый завершённый ЧАТ 1.
-2. Создать НОВЫЙ ЧАТ 1 и запустить `epic-post-incident-audit-01`.
-3. Существующий ЧАТ 2 запускает `giveaway-cache-identity-fix-01` как прямое продолжение своего recon.
-4. Когда ЧАТ 2 закончит technical deploy, пользователь повторно проверяет реальные раздачи на телефоне.
-5. После audit + успешной проверки раздач перейти к queued UI/mobile tasks по checkpoint.
+1. Удалить старые завершённые worker-чаты 1 и 2; ЧАТ 2 всё равно достиг лимита.
+2. Создать НОВЫЙ ЧАТ 1 -> `top-summary-filter-buttons-recon-01`.
+3. Создать НОВЫЙ ЧАТ 2 -> `giveaway-cache-identity-recovery-acceptance-01`.
+4. Когда ЧАТ 2 завершит acceptance:
+   - `complete` -> пользователь повторно проверяет реальные раздачи на телефоне;
+   - `needs_followup_fix` -> один bounded IMPLEMENT в том же новом ЧАТЕ 2.
+5. ЧАТ 1 после recon не начинает implementation, пока Director не проверит conflict/acceptance state ЧАТА 2.
