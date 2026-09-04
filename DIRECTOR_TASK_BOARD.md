@@ -6,10 +6,10 @@
 
 ## Ключевые правила
 
-1. По умолчанию не больше двух implementation worker-чатов.
-2. Неясная проблема сначала `READ-ONLY / RECON`, затем отдельный `IMPLEMENT`.
+1. По умолчанию держать два worker-чата занятыми параллельно, если задачи независимы и не конфликтуют.
+2. Неясная проблема сначала `READ-ONLY / RECON`, затем отдельный `IMPLEMENT`; отдельная задача не обязательно требует нового чата.
 3. Production queue/retry/completeness принадлежат GitHub/GitHub Actions по `config/execution_ownership_contract.json`.
-4. UI-инциденты закрывать только после real-device проверки.
+4. UI-инциденты закрывать только после real-device/site проверки пользователя.
 5. Worker-чат удалять только после сохранённого report, решения директора и ближайших проверок.
 6. `prepared` не значит `next`.
 7. Перед обычным backlog читать `DIRECTOR_REVIEW_CHECKPOINTS.md`.
@@ -19,20 +19,28 @@
 
 | Чат | Задача | Task file | Report | Статус |
 |---|---|---|---|---|
-| `ЧАТ 1` | Visual freshness release closeout | `WORKER_TASK_VISUAL_FRESHNESS_RELEASE_01.md` | `reviews/worker_reports/visual-freshness-release-01.md` | `blocked_saved_chat_can_delete` |
-| `ЧАТ 2` | Найти, почему canonical раздача есть, а на сайте не видна | `WORKER_TASK.md` (`giveaway-publication-gap-recon-01`) | `reviews/worker_reports/giveaway-publication-gap-recon-01.md` | `prepared_direct_continuation_not_started_keep_chat` |
+| `ЧАТ 1` | Разобрать `ChatGPT production payload is not complete` | `WORKER_TASK_VISUAL_BUILD_INPUT_INCOMPLETE_RECON_01.md` | `reviews/worker_reports/visual-build-input-incomplete-recon-01.md` | `assigned_waiting_report` |
+| `ЧАТ 2` | Исправить stale canonical -> visual giveaway publication gap | `WORKER_TASK.md` (`giveaway-publication-gap-fix-01`) | `reviews/worker_reports/giveaway-publication-gap-fix-01.md` | `prepared_send_to_existing_chat` |
 
 ## Giveaway visibility incident — current urgent user-visible defect
 
-- User reports that free giveaways are still not visible on the published site.
-- Current canonical `data/production/giveaways/v1/current.json` on `main` is `complete` and contains one active KZ Epic giveaway: `Alone With You`, 100%, through `2026-09-10T15:00:00Z`.
-- Therefore the Epic source/parser incident is closed, but a later publication/browser/view boundary is still defective or stale.
-- Prepared bounded recon in root `WORKER_TASK.md`:
-  - Task ID: `giveaway-publication-gap-recon-01`;
-  - mode: `READ-ONLY / RECON`;
-  - report: `reviews/worker_reports/giveaway-publication-gap-recon-01.md`.
-- Use existing Chat 2 because it is a direct continuation of the giveaway incident and its context is still useful.
-- Do not start a fix until this recon proves the exact failing layer.
+Recon complete:
+`reviews/worker_reports/giveaway-publication-gap-recon-01.md`
+Status: `needs_fix`.
+
+Proven first loss boundary:
+`data/production/giveaways/v1/current.json` -> stale giveaway sibling in `data/production/visual/current.json`.
+
+Canonical giveaway is healthy and contains active KZ Epic giveaway `Alone With You`, but current visual payload still references the older incomplete giveaway snapshot and has `giveaways.games=[]`.
+
+Concrete routing gap: the existing giveaway-only visual refresh classifier does not include committed changes to `data/production/giveaways/v1/current.json`, so a healthy canonical giveaway update can fail to refresh the visual derivative.
+
+Prepared bounded fix in root `WORKER_TASK.md`:
+- Task ID: `giveaway-publication-gap-fix-01`;
+- mode: `IMPLEMENT`;
+- report: `reviews/worker_reports/giveaway-publication-gap-fix-01.md`.
+
+Use existing Chat 2 as direct continuation. After deploy, require actual user site verification before closing the user-visible incident.
 
 ## Epic giveaway source incident — closed
 
@@ -40,18 +48,14 @@
 - Status: `complete`.
 - Parser fix commit: `aa7cea8d06d4d71a5ff6fe4c23a71c2cbda28783`.
 - Regression commit: `d59d31a311c54b1501b78f4ba8bfb456cebf5f3f`.
-- Final run `33790442843` proved 23 giveaway tests pass, canonical giveaway build succeeds, contract validation succeeds, fresh snapshot is complete, Epic is `ok/complete`, accepted_count `1`.
-- Overall run failure occurred only at the final generated-file commit/rebase step after task-relevant validation and does not reopen the Epic parser incident.
+- Do not reopen parser work without new evidence.
 
-## Visual freshness
+## Visual freshness / visual-build blocker
 
-- Accepted fix landed on `main` via PR #13 at `ddbf25d855f3ed7b86aca5ecbebb834e87178012`.
-- Final release report is valid `blocked`: `reviews/worker_reports/visual-freshness-release-01.md`.
-- Production run `33788418064` truthfully emitted `fresh_build=false / degraded/no_fresh_build`; receipt artifact uploaded.
-- Full successful build->exact-run deploy proof remains pending because upstream failed on `ChatGPT production payload is not complete`.
-- Do not redesign freshness fix.
-- Prepared exact upstream recon remains: `WORKER_TASK_VISUAL_BUILD_INPUT_INCOMPLETE_RECON_01.md`.
-- Chat 1 has no immediate continuation and can be deleted.
+- Accepted freshness fix landed on `main` via PR #13 at `ddbf25d855f3ed7b86aca5ecbebb834e87178012`.
+- Release report: `reviews/worker_reports/visual-freshness-release-01.md`, status `blocked` only because upstream visual build failed on `ChatGPT production payload is not complete`.
+- Freshness protection itself truthfully emitted `degraded/no_fresh_build` and is not to be redesigned.
+- Current Chat 1 task: `WORKER_TASK_VISUAL_BUILD_INPUT_INCOMPLETE_RECON_01.md`.
 
 ## Mobile feed incident
 
@@ -62,14 +66,13 @@
 
 ## Review checkpoint
 
-- `system_audit_due: true` due to stabilized Epic user-visible incident.
-- Prepared post-audit: `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md`, report `reviews/system_audits/epic-post-incident-audit-01.md`.
-- The currently visible giveaway-publication defect is a more urgent concrete production issue and may pre-empt the audit until localized/stabilized.
-- Do not start ordinary backlog/ITAD before the required audit completes.
+- `system_audit_due: true` due to stabilized Epic user-visible source incident.
+- Prepared: `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md`.
+- Current still-visible giveaway publication defect is more urgent and may finish first.
+- Do not start ordinary backlog/ITAD before required audit completes.
 
 ## Other prepared / parked work
 
-- Visual-build input incompleteness recon: `WORKER_TASK_VISUAL_BUILD_INPUT_INCOMPLETE_RECON_01.md`.
 - Mobile deploy regression gate: `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`.
 - ITAD provider-neutral identity implementation: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
 - Twitch/IGDB: waiting for Twitch Support.
@@ -78,8 +81,9 @@
 
 ## Следующий порядок
 
-1. Delete finished Chat 1.
-2. Existing Chat 2 runs `giveaway-publication-gap-recon-01` from root `WORKER_TASK.md`.
-3. If recon proves a concrete defect, issue one bounded IMPLEMENT and require real-site verification after deploy.
-4. Once the giveaway visibility incident is stabilized, run `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md` in a fresh worker chat.
-5. Then return to visual-build input recon, mobile regression gate, and only after review checkpoints permit it ITAD/ordinary backlog.
+1. Existing Chat 2 implements `giveaway-publication-gap-fix-01` from root `WORKER_TASK.md`.
+2. Chat 1 continues/finishes `visual-build-input-incomplete-recon-01` in parallel.
+3. After Chat 2 technical deploy proof, user verifies the real site; only then close giveaway visibility incident.
+4. Once giveaway visibility incident is stabilized, run `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md` in the next free worker slot.
+5. Then use remaining free slot for the next bounded step from Chat 1 recon or mobile regression gate, respecting review checkpoints.
+6. ITAD/ordinary backlog only after mandatory audit permits it.
