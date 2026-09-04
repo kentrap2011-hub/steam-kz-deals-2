@@ -26,49 +26,46 @@ Result: `Giveaway cache incident systemic closure: accepted`
 
 `system_audit_due: false`.
 
-## Активная пара
+## Just completed
 
-### ЧАТ 1 — Wishlist + хорошая скидка против слабого Taste
+### ЧАТ 1 — Wishlist + good deal vs weak Taste recon
 
-Task:
-`WORKER_TASK_WISHLIST_GOOD_DEAL_OVERRIDE_RECON_01.md`
-
-Task ID:
-`wishlist-good-deal-override-recon-01`
-
-Mode: `READ-ONLY / RECON`
-Expected report:
+Report:
 `reviews/worker_reports/wishlist-good-deal-override-recon-01.md`
+Status: `complete`.
 
-Status: `user_approved_running_recon`.
+Key result:
+- exact pre-AI and visual eligibility gates identified;
+- safe override can reuse existing wishlist membership + ordinary weak-Taste reason + existing `decision_if_moderate == INCLUDE` + existing `БРАТЬ СЕЙЧАС`;
+- direct conflicts, commercial exclusions, risks and negative-analysis readiness remain non-overridable;
+- ranking itself does not need redesign;
+- independent Taste Review is mandatory after implementation.
 
-### ЧАТ 2 — Epic RU giveaway availability
+Do not start this IMPLEMENT before reconciling it with the very-high-priority Taste Reviewer implementation handoff below.
+
+### ЧАТ 2 — Epic RU giveaway availability recon
+
+Report:
+`reviews/worker_reports/epic-ru-giveaway-availability-recon-01.md`
+Status: `blocked`.
+
+Key result:
+- simply changing Epic discovery `KZ -> RU` is not proven sufficient;
+- Epic-owned docs establish account-country acquisition semantics and `Get` vs regional `Unavailable` as the relevant truth;
+- no automation-ready Epic-owned machine-readable RU acquisition field/endpoint was proven;
+- implementation must remain blocked rather than guessing.
+
+Prepared bounded follow-up:
+`WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`
+Expected report:
+`reviews/worker_reports/epic-ru-availability-source-probe-01.md`
+Status: `queued_blocker_resolution_not_active`.
+
+## Active next pair
+
+### ЧАТ 1 — VERY HIGH PRIORITY Taste Reviewer recommendations gap recon
 
 Task:
-`WORKER_TASK_EPIC_RU_GIVEAWAY_AVAILABILITY_RECON_01.md`
-
-Task ID:
-`epic-ru-giveaway-availability-recon-01`
-
-Mode: `READ-ONLY / RECON`
-Expected report:
-`reviews/worker_reports/epic-ru-giveaway-availability-recon-01.md`
-
-Status: `user_approved_running_recon`.
-
-These two tasks are safely parallel: Chat 1 is paid-feed ranking/Taste policy recon; Chat 2 is Epic giveaway source/region recon.
-
-## VERY HIGH PRIORITY NEXT — implement Taste Reviewer recommendations
-
-User explicitly asked that implementation of the prior Taste Reviewer recommendations be treated as **very high priority**.
-
-Authoritative reviewer handoff:
-`reviews/taste_reviews/DIRECTOR_IMPLEMENTATION_HANDOFF_01.md`
-Status there: `READY_FOR_IMPLEMENTATION`.
-
-The handoff explicitly says the next step is implementation/regression testing rather than more broad taste questioning.
-
-Because repository logic evolved after that handoff, a precise implementation-gap recon is prepared first:
 `WORKER_TASK_TASTE_REVIEW_RECOMMENDATIONS_GAP_RECON_01.md`
 
 Task ID:
@@ -76,23 +73,20 @@ Task ID:
 Mode: `READ-ONLY / RECON`
 Expected report:
 `reviews/worker_reports/taste-review-recommendations-gap-recon-01.md`
-Priority: `VERY_HIGH_USER_PRIORITY_NEXT_TASTE_SLOT`.
+Priority: `VERY_HIGH_USER_PRIORITY_ACTIVE`.
 
 Goal:
-- map each reviewer recommendation to already satisfied / partial / missing in current code;
-- avoid reimplementing later accepted work;
-- produce the smallest implementation sequence for genuinely missing recommendations;
-- retain the review controls around unknown-vs-negative, old shallow abandonment, role/queue priority, discount-vs-fit, giveaways, bundle value and franchise priors.
+- map every recommendation in `reviews/taste_reviews/DIRECTOR_IMPLEMENTATION_HANDOFF_01.md` to already satisfied / partial / still missing in current code;
+- reconcile later accepted work so nothing is duplicated or regressed;
+- explicitly incorporate/conflict-check the just-completed wishlist-good-deal recon;
+- produce the smallest ordered IMPLEMENT sequence for genuinely missing Taste/recommendation behavior;
+- do not change code in this recon.
 
-Scheduling constraint:
-- current Chat 1 wishlist task is only RECON and may finish normally;
-- do **not** run a Taste-recommendations IMPLEMENT and wishlist/Taste IMPLEMENT in parallel because both can touch ranking/Taste semantics;
-- after current reports, reconcile wishlist findings with this very-high-priority reviewer handoff before choosing implementation order;
-- ordinary UI/technical-debt tasks should not jump ahead of this user-promoted Taste work absent a blocker.
+Status: `ready_continue_existing_chat_1`.
 
-## NEW queued future request — DLC + personalized bundle economics
+### ЧАТ 2 — DLC + personalized bundle economics recon
 
-Prepared task:
+Task:
 `WORKER_TASK_DLC_PERSONALIZED_BUNDLE_ECONOMICS_RECON_01.md`
 
 Task ID:
@@ -100,19 +94,27 @@ Task ID:
 Mode: `READ-ONLY / RECON`
 Expected report:
 `reviews/worker_reports/dlc-personalized-bundle-economics-recon-01.md`
-Status: `queued_user_requested_not_started`.
+Status: `ready_continue_existing_chat_2`.
 
-User requirements:
-1. If the base game is confirmed owned, relevant DLC/expansions can be considered as paid deal candidates under explicit ownership/value rules.
-2. For a target game, inspect not only standalone discount but also package/bundle acquisition routes.
-3. If the storefront offers a personalized bundle where already-owned items reduce the **actual payable price**, that real payable price must be considered when deciding whether the target can be acquired materially cheaper.
-4. Do not fake ownership savings for ordinary fixed packages where duplicates do not reduce payable price.
-5. A target may become commercially interesting through a bundle even when standalone has no/weak discount.
+Goal:
+- if base game is confirmed owned, determine safe DLC/expansion eligibility rules;
+- compare standalone target acquisition with package/bundle routes;
+- support ownership-reduced personalized Complete-the-Set economics only from authoritative actual payable price;
+- preserve current fixed-package behavior and never invent ownership subtraction;
+- determine whether DLC and personalized bundle work should split into separate bounded IMPLEMENTs.
 
-Known current gap:
-`reviews/worker_reports/compact-purchase-options-01.md` confirms fixed-package purchase routes already exist, but dynamic/personalized Complete-the-Set is explicitly excluded today. Package economics remain producer-owned.
+These two tasks are safely parallel because both are READ-ONLY: Chat 1 maps Taste/ranking semantics; Chat 2 maps ownership/commercial package economics. No implementation overlap is allowed yet.
 
-This new task must first prove authoritative personalized-price/ownership semantics and may split implementation into DLC eligibility and personalized-bundle economics if their source/ownership boundaries differ.
+## After active pair
+
+1. Read exact Taste gap report and DLC/package report.
+2. For Taste implementation order, reconcile:
+   - `reviews/taste_reviews/DIRECTOR_IMPLEMENTATION_HANDOFF_01.md`;
+   - `reviews/worker_reports/taste-review-recommendations-gap-recon-01.md`;
+   - `reviews/worker_reports/wishlist-good-deal-override-recon-01.md`.
+3. Do not run two conflicting Taste/ranking IMPLEMENT tasks in parallel.
+4. Taste-semantic implementation acceptance requires an independent current Taste Review.
+5. Epic RU follow-up remains `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`; it may use a later independent slot because current implementation is safely blocked rather than urgent production breakage.
 
 ## Other ready / queued work
 
@@ -149,6 +151,4 @@ Larger integration; exact Epic/GOG provider ID -> Steam identity through provide
 
 ## Next decision
 
-Let the current two READ-ONLY recons finish. Then read their exact reports.
-The next safe Taste/ranking slot should prioritize `taste-review-recommendations-gap-recon-01` before ordinary UI/technical debt, while avoiding a conflicting parallel wishlist/Taste IMPLEMENT.
-The DLC/personalized-bundle recon is durably queued and can be selected as an independent future slot.
+Continue existing Chat 1 with the very-high-priority Taste gap recon and existing Chat 2 with DLC/personalized-bundle economics recon. Read both exact reports before selecting any implementation.
