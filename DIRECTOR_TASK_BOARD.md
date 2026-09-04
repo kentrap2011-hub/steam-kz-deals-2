@@ -8,147 +8,98 @@
 
 1. По умолчанию держать два worker-чата занятыми параллельно, если задачи независимы и не конфликтуют.
 2. Неясная проблема сначала `READ-ONLY / RECON`, затем отдельный `IMPLEMENT`.
-3. UI-инциденты закрывать только после real-device/site проверки пользователя.
-4. Worker-чат удалять только после сохранённого report, решения директора и ближайших проверок.
-5. В каждой копируемой worker-команде первая строка должна явно начинаться с `=== ЧАТ N ===`.
-6. Номер принадлежит worker-слоту.
-7. Не запускать параллельно конфликтующие IMPLEMENT-задачи.
-8. Возраст задачи не понижает её приоритет автоматически.
-9. Taste Reviewer recommendations explicitly promoted by the user on 2026-09-04 are VERY HIGH PRIORITY and must not be displaced by ordinary UI/technical-debt work.
+3. Worker-чат удалять только после durable report + Director decision + ближайших user checks.
+4. В каждой копируемой worker-команде первая строка явно начинается с `=== ЧАТ N ===`.
+5. Номер принадлежит worker-слоту.
+6. Не запускать параллельно конфликтующие Taste/ranking IMPLEMENT.
+7. Taste Reviewer recommendations have VERY HIGH USER PRIORITY.
 
 ## Review checkpoint
 
-Latest System Audit:
-`reviews/system_audits/giveaway-cache-post-incident-audit-01.md`
-
-Status: `complete`
-Result: `Giveaway cache incident systemic closure: accepted`
-
+Latest System Audit: `reviews/system_audits/giveaway-cache-post-incident-audit-01.md`
+Result: accepted.
 `system_audit_due: false`.
 
-## Just completed
+## Latest completed reports
 
-### ЧАТ 1 — Wishlist + good deal vs weak Taste recon
+### ЧАТ 1 — Taste recommendations gap recon
 
 Report:
-`reviews/worker_reports/wishlist-good-deal-override-recon-01.md`
+`reviews/worker_reports/taste-review-recommendations-gap-recon-01.md`
 Status: `complete`.
 
-Key result:
-- exact pre-AI and visual eligibility gates identified;
-- safe override can reuse existing wishlist membership + ordinary weak-Taste reason + existing `decision_if_moderate == INCLUDE` + existing `БРАТЬ СЕЙЧАС`;
-- direct conflicts, commercial exclusions, risks and negative-analysis readiness remain non-overridable;
-- ranking itself does not need redesign;
-- independent Taste Review is mandatory after implementation.
+Three real ordered implementation gaps remain:
+1. evidence state / confidence / reconsideration semantics;
+2. play role + relative start priority;
+3. reconsideration commercial bridge + wishlist-good-deal override.
 
-Do not start this IMPLEMENT before reconciling it with the very-high-priority Taste Reviewer implementation handoff below.
-
-### ЧАТ 2 — Epic RU giveaway availability recon
-
-Report:
-`reviews/worker_reports/epic-ru-giveaway-availability-recon-01.md`
-Status: `blocked`.
-
-Key result:
-- simply changing Epic discovery `KZ -> RU` is not proven sufficient;
-- Epic-owned docs establish account-country acquisition semantics and `Get` vs regional `Unavailable` as the relevant truth;
-- no automation-ready Epic-owned machine-readable RU acquisition field/endpoint was proven;
-- implementation must remain blocked rather than guessing.
-
-Prepared bounded follow-up:
-`WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`
-Expected report:
-`reviews/worker_reports/epic-ru-availability-source-probe-01.md`
-Status: `queued_blocker_resolution_not_active`.
-
-## Active next pair
-
-### ЧАТ 1 — VERY HIGH PRIORITY Taste Reviewer recommendations gap recon
-
-Task:
-`WORKER_TASK_TASTE_REVIEW_RECOMMENDATIONS_GAP_RECON_01.md`
-
-Task ID:
-`taste-review-recommendations-gap-recon-01`
-Mode: `READ-ONLY / RECON`
-Expected report:
-`reviews/worker_reports/taste-review-recommendations-gap-recon-01.md`
-Priority: `VERY_HIGH_USER_PRIORITY_ACTIVE`.
-
-Goal:
-- map every recommendation in `reviews/taste_reviews/DIRECTOR_IMPLEMENTATION_HANDOFF_01.md` to already satisfied / partial / still missing in current code;
-- reconcile later accepted work so nothing is duplicated or regressed;
-- explicitly incorporate/conflict-check the just-completed wishlist-good-deal recon;
-- produce the smallest ordered IMPLEMENT sequence for genuinely missing Taste/recommendation behavior;
-- do not change code in this recon.
-
-Status: `ready_continue_existing_chat_1`.
+Important sequencing: step 1 must precede the wishlist override because current reason codes are too coarse to distinguish insufficient/reconsiderable from confirmed weak/direct conflict safely.
 
 ### ЧАТ 2 — DLC + personalized bundle economics recon
 
-Task:
-`WORKER_TASK_DLC_PERSONALIZED_BUNDLE_ECONOMICS_RECON_01.md`
-
-Task ID:
-`dlc-personalized-bundle-economics-recon-01`
-Mode: `READ-ONLY / RECON`
-Expected report:
+Report:
 `reviews/worker_reports/dlc-personalized-bundle-economics-recon-01.md`
-Status: `ready_continue_existing_chat_2`.
+Status: `needs_user_decision`.
+
+Findings:
+- DLC->base dependency is already source-proven; missing piece is authoritative ownership.
+- Base-game ownership can likely use Valve `IPlayerService/GetOwnedGames` if an approved Steam Web API key is provisioned and library visibility permits it.
+- Current fixed `Sub_` package economics already exist and must remain unchanged.
+- Personalized Steam Complete The Set payable price is account-specific and cannot be proven by current unauthenticated GitHub pipeline.
+- No local subtraction/reconstruction is allowed.
+- Authenticated Steam Store account/session integration is a new security boundary and requires explicit user/Director approval before design/implementation.
+
+Recommended split:
+A. DLC ownership eligibility first.
+B. package/bundle expansion / Complete The Set second, with personalized CTS price blocked until account-context policy is approved.
+
+## Active / next
+
+### ЧАТ 1 — VERY HIGH PRIORITY IMPLEMENT 1
+
+Task:
+`WORKER_TASK_TASTE_EVIDENCE_STATE_AND_CONFIDENCE_IMPLEMENT_01.md`
+Task ID: `taste-evidence-state-and-confidence-implement-01`
+Mode: `IMPLEMENT`
+Expected report:
+`reviews/worker_reports/taste-evidence-state-and-confidence-implement-01.md`
+Status: `ready_continue_existing_chat_1`.
 
 Goal:
-- if base game is confirmed owned, determine safe DLC/expansion eligibility rules;
-- compare standalone target acquisition with package/bundle routes;
-- support ownership-reduced personalized Complete-the-Set economics only from authoritative actual payable price;
-- preserve current fixed-package behavior and never invent ownership subtraction;
-- determine whether DLC and personalized bundle work should split into separate bounded IMPLEMENTs.
+- explicit insufficient / reconsiderable / confirmed-negative evidence state;
+- stronger evidence provenance/strength rules;
+- old shallow historical negatives can be weaker/reconsiderable;
+- candidate-quality complaints separate from personal dislike;
+- preserve price-blind Taste and no-discount-rescue.
 
-These two tasks are safely parallel because both are READ-ONLY: Chat 1 maps Taste/ranking semantics; Chat 2 maps ownership/commercial package economics. No implementation overlap is allowed yet.
+Do not implement play-role or wishlist override yet.
 
-## After active pair
+### ЧАТ 2 — hold for user decision
 
-1. Read exact Taste gap report and DLC/package report.
-2. For Taste implementation order, reconcile:
-   - `reviews/taste_reviews/DIRECTOR_IMPLEMENTATION_HANDOFF_01.md`;
-   - `reviews/worker_reports/taste-review-recommendations-gap-recon-01.md`;
-   - `reviews/worker_reports/wishlist-good-deal-override-recon-01.md`.
-3. Do not run two conflicting Taste/ranking IMPLEMENT tasks in parallel.
-4. Taste-semantic implementation acceptance requires an independent current Taste Review.
-5. Epic RU follow-up remains `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`; it may use a later independent slot because current implementation is safely blocked rather than urgent production breakage.
+Status: `keep_existing_chat_2_needs_user_decision`.
 
-## Other ready / queued work
+Need user decision on two separate access boundaries:
+1. approve or reject using a Steam Web API key for a read-only canonical owned-games snapshot (`GetOwnedGames`) to support DLC eligibility;
+2. separately approve or reject future authenticated Steam Store account/session integration needed to obtain actual personalized Complete The Set payable prices.
 
-### Top summary buttons
+Do not ask user to paste any secret/API key/session cookie into ordinary chat. Credential provisioning must use an approved secret path if implementation proceeds.
 
-Recon complete:
-`reviews/worker_reports/top-summary-filter-buttons-recon-01.md`.
-IMPLEMENT ready:
-`WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`.
+## Other queued
 
-### Mobile bootstrap deploy regression gate
-
-Task:
-`WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`.
-Existing mobile bootstrap regression is passing but not mandatory in canonical Pages deploy gate.
-
-### ITAD provider-neutral giveaway identity
-
-Task:
-`WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
-Larger integration; exact Epic/GOG provider ID -> Steam identity through provider-neutral interface.
-
-## Older unfinished / blocked work
-
-- Grounded negative V4 architecture implemented, but semantic completion waits on existing scheduled Taste runtime; do not create second scheduler/manual processing.
-- Card positive-explanation fix implemented; production acceptance waits on Russian-description/semantic runtime prerequisite.
-- Russian-description translation contracts/ingest exist; runtime production completion waits on existing scheduled semantic runtime.
-- Russian language availability as ranking factor remains planned.
-- YouTube Russian-language game review selection remains deferred/planned.
-- Modern Windows compatibility evidence source remains deferred.
-- SteamDB tail: only `App_901735` unresolved/retryable; low priority/external.
-- Detailed score UI implementation/fixes are deployed; no new implementation without fresh user evidence.
-- Twitch/IGDB route remains externally blocked/waiting.
+- `WORKER_TASK_TASTE_REVIEW_RECOMMENDATIONS_GAP_RECON_01.md` complete.
+- `WORKER_TASK_WISHLIST_GOOD_DEAL_OVERRIDE_RECON_01.md` complete; implementation waits for Taste evidence-state foundation.
+- `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md` queued blocker-resolution recon.
+- `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md` ready.
+- `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md` ready.
+- `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md` queued larger integration.
+- Russian-language availability ranking factor planned.
+- YouTube review selection planned.
+- modern Windows compatibility evidence planned.
+- semantic/Russian-description completion remains blocked on existing scheduled semantic runtime evidence; do not create another scheduler.
 
 ## Next decision
 
-Continue existing Chat 1 with the very-high-priority Taste gap recon and existing Chat 2 with DLC/personalized-bundle economics recon. Read both exact reports before selecting any implementation.
+1. Continue existing Chat 1 with Taste IMPLEMENT 1.
+2. Keep existing Chat 2 until user chooses Steam access policy.
+3. After Taste step 1 report, decide whether step 2 can safely start.
+4. Do not accept/deploy the complete Taste semantic sequence without required independent Taste Review at the chosen acceptance boundary.
