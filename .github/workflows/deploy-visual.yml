@@ -164,6 +164,7 @@ jobs:
           node web/package-deal-ui.test.js
           node web/score-details-ui.test.js
           node web/giveaway-ui.test.js
+          node scripts/test_feed_bootstrap_cache_identity.js
 
       - name: Stage precomputed visual payload
         shell: bash
