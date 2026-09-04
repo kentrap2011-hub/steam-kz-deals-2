@@ -6,10 +6,10 @@ The Director must read this file before assigning a new ordinary backlog task wh
 
 ## System Auditor
 
-system_audit_due: true
+system_audit_due: false
 first_system_audit_trigger: `satisfied_2026-09-02`
-material_changes_since_last_system_audit: 1
-last_system_audit_report: `reviews/system_audits/mobile-post-incident-audit-01.md`
+material_changes_since_last_system_audit: 0
+last_system_audit_report: `reviews/system_audits/epic-post-incident-audit-01.md`
 mobile_post_incident_audit_pending: false
 
 ### First trigger condition
@@ -27,21 +27,13 @@ A completed audit resets `material_changes_since_last_system_audit` to 0 and rec
 
 ### Current audit state
 
-The Epic giveaway source incident was stabilized on 2026-09-03 after the parser-ordering repair.
+Epic post-incident audit completed:
+- report: `reviews/system_audits/epic-post-incident-audit-01.md`;
+- status: `complete`;
+- `Epic incident systemic closure: accepted`;
+- no immediate Epic parser follow-up required.
 
-Canonical production evidence now shows:
-- giveaway snapshot `complete`;
-- Epic `status=ok`, `complete=true`;
-- Epic candidate_count `1`, accepted_count `1`;
-- no Epic source error;
-- active accepted Epic giveaway `Alone With You`.
-
-Because this was a user-visible giveaway incident, the recurring incident trigger fires:
-- `system_audit_due: true`;
-- prepared task: `WORKER_TASK_EPIC_POST_INCIDENT_AUDIT_01.md`;
-- expected report: `reviews/system_audits/epic-post-incident-audit-01.md`.
-
-Do not assign ordinary backlog work before this short post-incident audit completes unless the user explicitly gives a more urgent concrete production task.
+The separate live-site giveaway stale-LKG/cache-identity incident remains tracked independently and must still pass technical acceptance plus real-device user verification before that user-visible incident is closed.
 
 ## Taste Reviewer
 
