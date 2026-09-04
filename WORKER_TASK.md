@@ -1,97 +1,108 @@
 # WORKER TASK
 
-Task ID: `giveaway-publication-gap-recon-01`
-Mode: `READ-ONLY / RECON`
-Report: `reviews/worker_reports/giveaway-publication-gap-recon-01.md`
+Task ID: `giveaway-publication-gap-fix-01`
+Mode: `IMPLEMENT`
+Report: `reviews/worker_reports/giveaway-publication-gap-fix-01.md`
 
 ## Goal
 
-Найти точную границу, из-за которой актуальная canonical бесплатная раздача уже есть в production data, но пользователь не видит бесплатные раздачи на опубликованном сайте.
+Исправить уже доказанный publication gap: актуальная canonical giveaway-раздача есть в `data/production/giveaways/v1/current.json`, но `data/production/visual/current.json` остаётся собран из старого giveaway snapshot и поэтому сайт не получает `Alone With You`.
 
-Это только bounded recon. Не исправляй код и не запускай широкую переработку.
+Это bounded fix. Не переоткрывай Epic parser и не перерабатывай giveaway UI.
 
-## Current verified facts
+## Proven recon result
 
-Пользователь на реальном сайте сейчас не видит бесплатные раздачи.
+Source report:
+`reviews/worker_reports/giveaway-publication-gap-recon-01.md`
 
-При этом актуальный `main` содержит:
-- `data/production/giveaways/v1/current.json`;
-- `snapshot_status = complete`;
-- Epic `status = ok`, `complete = true`;
-- `accepted_count = 1`;
-- активную KZ-раздачу `Alone With You`, 100%, до `2026-09-10T15:00:00Z`.
-
-Предыдущая Epic parser-задача закрыта как `complete`:
-`reviews/worker_reports/epic-giveaway-schema-fix-01.md`.
-
-Не переоткрывай parser defect без нового доказательства.
+Доказано:
+- canonical `data/production/giveaways/v1/current.json` — complete, Epic ok/complete, `Alone With You` accepted;
+- published chain uses `data/production/visual/current.json` -> `web/data/current.json`;
+- current visual payload still references old giveaway source blob `7354f876...` and has `giveaways.games=[]`;
+- current canonical giveaway blob is `33c1318a4950450aadb41b98a9552223b5cf43b8`;
+- first loss boundary is canonical giveaway -> derived visual payload;
+- existing giveaway-only refresh routing does not classify a change to `data/production/giveaways/v1/current.json` as giveaway-only, so a healthy canonical giveaway update can fail to refresh the visual derivative.
 
 ## Read first
 
-1. Актуальный `main`.
-2. `CHAT_PROTOCOL.md` и `CHAT_CONTEXT.md`.
-3. `reviews/worker_reports/epic-giveaway-schema-fix-01.md`.
+1. Current `main`.
+2. `CHAT_PROTOCOL.md` and `CHAT_CONTEXT.md`.
+3. `reviews/worker_reports/giveaway-publication-gap-recon-01.md`.
 4. `data/production/giveaways/v1/current.json`.
-5. Только минимально необходимые текущие файлы, которые реально связывают canonical giveaway data с опубликованным сайтом/рендерером.
+5. `data/production/visual/current.json`.
+6. Only the exact current workflow/helper files needed for the existing giveaway visual refresh path.
 
-Не восстанавливай историю проекта и не читай массово старые giveaway task/report файлы.
+Do not perform broad Git/Actions archaeology.
 
-## What to establish
+## Required implementation
 
-Проследи только текущую цепочку:
+Make the smallest safe change so that a committed change to the canonical giveaway snapshot reliably drives the existing bounded giveaway visual refresh path.
 
-`canonical giveaway snapshot -> publication/deploy artifact -> browser-loaded data -> giveaway view/filter/render`
+Expected behavior after the fix:
 
-Установи первый точный слой, где `Alone With You` перестаёт быть доступной пользователю.
+1. A change to `data/production/giveaways/v1/current.json` can enter the existing giveaway-only refresh route without requiring unrelated full visual rebuild work.
+2. The existing giveaway handoff regenerates the giveaway sibling in `data/production/visual/current.json` from the current canonical giveaway snapshot.
+3. Provenance remains strict: `production_contract.source_giveaway_snapshot_blob_sha` must match the canonical giveaway blob used for that derivative.
+4. The staged `web/data/current.json` must contain the same giveaway result that is present in the refreshed visual payload.
+5. Do not weaken any freshness/completeness contract merely to make the workflow green.
 
-Проверь минимум:
-
-1. Какой giveaway-файл или производный payload реально публикуется на Pages.
-2. Содержит ли текущий опубликованный artifact/site payload `Alone With You`.
-3. Если данные опубликованы — загружает ли frontend правильный путь/версию и не остаётся ли на старом payload/cache.
-4. Если frontend получает запись — не отбрасывает ли её текущая view/filter/render логика.
-5. Является ли проблема публикационной гонкой/непопавшим generated commit после run `33790442843`, stale deploy, неправильным data path или UI/filter defect.
-6. Требуется ли пользовательский hard refresh только как временная проверка, а не как постоянное решение.
+Prefer the existing workflow/handoff architecture. Do not introduce a second publication path, scheduler, writer, cache authority or renderer.
 
 ## Critical boundaries
 
-Не делать в этой задаче:
-- никаких исправлений production/frontend/workflow;
-- никаких изменений Epic parser;
-- никаких ITAD/IGDB изменений;
-- никаких Taste/ranking/paid-deal изменений;
-- никакого нового scheduler/queue/writer;
-- никакого массового исследования Git history или старых Actions runs;
-- не менять `CURRENT_TASK.md`.
+Do NOT:
+- change `scripts/giveaway_epic.py` or reopen the Epic schema fix;
+- change giveaway eligibility/region/price semantics;
+- change ITAD/IGDB identity work;
+- change Taste/ranking/paid-deal logic;
+- redesign the giveaway frontend/view unless new independent evidence proves it necessary;
+- weaken visual freshness or semantic completeness checks;
+- touch mobile feed behavior;
+- add another workflow or publication authority.
 
-Разрешено сохранить только этот report-файл.
+## Validation
 
-## Validation standard
+Use focused tests / workflow validation appropriate to the exact change.
 
-Вывод должен опираться на точные refs текущего `main`, опубликованного Pages/deploy artifact или минимально необходимого текущего workflow evidence.
+Then run/use the canonical bounded publication path needed to prove production recovery.
 
-Не писать `скорее всего`, если можно доказать точную границу. Если реальный deployed payload нельзя прочитать из worker-контекста, зафиксируй это как конкретный blocker и всё равно локализуй максимально узкий слой по доступным canonical данным.
+Required proof before calling the implementation complete:
+- refreshed `data/production/visual/current.json` no longer uses the stale giveaway source blob;
+- its `production_contract.source_giveaway_snapshot_blob_sha` equals the canonical giveaway blob used for the refresh;
+- its giveaway sibling contains `Alone With You` while that canonical giveaway remains active;
+- staged/published `web/data/current.json` contains `Alone With You`;
+- no unrelated producer/output ownership is changed;
+- exact commit refs and workflow/deploy run IDs are recorded.
+
+If a CI/deploy run is long-running, own that wait/check inside this worker chat rather than returning it to the Director unfinished.
+
+## User-visible acceptance
+
+This is a user-visible incident. Even after technical production proof, do not claim final user-visible closure on behalf of the user.
+
+Report when the deployed site should contain the giveaway and tell the Director that real-site verification by the user is still required.
 
 ## Done when
 
-В report есть:
+Save report:
+`reviews/worker_reports/giveaway-publication-gap-fix-01.md`
 
-1. `Task` — что проверялось.
-2. `Verified facts` — точная цепочка данных и где запись ещё присутствует/уже отсутствует.
-3. `Changes` — `none`, кроме report.
-4. `Validation` — exact refs/artifacts/site evidence.
-5. `Unresolved` — только реально недоказанное.
-6. `Status` — ровно одно: `complete`, `blocked`, `needs_fix`, `needs_user_decision`.
-7. `Recommended next step` — один ограниченный следующий шаг.
-8. `Efficiency / reusable lesson` — `none` либо одна короткая переносимая pitfall-ссылка.
+Report sections:
+1. Task
+2. Proven cause
+3. Changes
+4. Validation
+5. Production/deploy evidence
+6. User verification required
+7. Unresolved
+8. Status
+9. Recommended next step
+10. Exact refs
+11. Efficiency / reusable lesson
 
-## Expected next step
+Status exactly one:
+- `complete`
+- `blocked`
+- `needs_followup_fix`
 
-Если точный defect найден — рекомендовать один bounded `IMPLEMENT`, не выполнять его самому.
-
-Если defect не найден и нужна только конкретная пользовательская проверка — назвать ровно эту проверку.
-
-Сохрани итог в:
-`reviews/worker_reports/giveaway-publication-gap-recon-01.md`
-
-В финальном ответе обязательно назови этот путь и итоговый статус.
+`complete` means the bounded production publication gap is technically repaired and deployed; user real-site verification may still be pending and must be stated explicitly.
