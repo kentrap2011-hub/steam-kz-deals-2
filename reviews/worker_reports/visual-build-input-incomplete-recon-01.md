@@ -4,28 +4,28 @@
 
 `needs_user_evidence`
 
-## Scope and constraints
+## Closeout summary
 
-This was a read-only recon of the current ChatGPT/semantic production input and the visual-build readiness path. No production data, completeness thresholds, code, workflows, schedulers, queues, or unrelated product areas were changed. The only repository change made by this task is this report.
+The single outstanding external fact was checked directly against the native scheduled-task service: whether the scheduled ChatGPT semantic producer for the current unresolved scope exists and is active.
 
-No broad Git history or GitHub Actions history search was used.
+The task service did not return an inspectable task record/state to this worker session. Therefore there is still no evidence that permits a truthful classification of that producer as:
 
-## Executive finding
+- active/healthy;
+- missing;
+- disabled;
+- broken.
 
-The visual-build blocker is **mixed**, with one primary data-state blocker and one secondary visual-readiness control-flow defect:
+Accordingly, scheduler failure is **not** promoted to the primary cause without evidence, and this recon closes with `needs_user_evidence` for that one external operational fact only.
 
-1. **Primary / real publication blocker — same known semantic incompleteness.** The current canonical ChatGPT production manifest truthfully reports a complete family partition but **701 unresolved semantic rows**, so it is not sufficiently complete for publication and its top-level status is `degraded`.
-2. **Secondary / separate production defect — unreachable degraded/queued branch in visual readiness.** `current_production_readiness()` rejects any ChatGPT payload whose top-level status is not `complete` before it reaches its later `ai_queue_count != 0` handling. Therefore the truthful `degraded` state raises `RuntimeError("ChatGPT production payload is not complete")` instead of reaching the builder's existing degraded/queued path.
+No CI investigation was expanded. No code, workflow, completeness threshold, production semantic data, scheduler, or queue was changed. This report is the only repository file changed for closeout.
 
-The second issue explains the exact exception/control-flow behavior, but fixing or bypassing it would **not** make the current semantic data safe to publish as a normal fresh/complete visual build. The primary blocker remains the 701 unresolved semantic rows.
+## Proven current visual-build blocker
 
-## Exact blocker
-
-Current canonical input:
+The evidence-backed blocker for a normal fresh publishable visual build remains the current canonical ChatGPT/semantic production state in:
 
 `data/production/pre_ai/chatgpt_payload.json`
 
-Observed state:
+Observed canonical state:
 
 - `status = "degraded"`
 - `ai_queue_count = 701`
@@ -33,90 +33,77 @@ Observed state:
 - `complete_family_partition = true`
 - semantic unresolved count = `701`
 - `sufficiently_complete_for_publication = false`
-- source mailing timestamp is current-scope data from `2026-09-03T18:53:27.390807+00:00`
+- source mailing timestamp = `2026-09-03T18:53:27.390807+00:00`
 
-This is internally consistent rather than a malformed/corrupt payload. `scripts/semantic_runtime_completion.py` intentionally derives publication completeness from the semantic partition and unresolved count: unresolved semantic work greater than zero keeps publication sufficiency false and therefore keeps the manifest `degraded`.
+This state is internally consistent rather than corrupt. `scripts/semantic_runtime_completion.py` intentionally derives publication completeness from the semantic partition and unresolved count: unresolved semantic work greater than zero keeps publication sufficiency false and the manifest `degraded`.
 
-The exact visual exception is then introduced in `scripts/build_daily_visual_payload.py` inside `current_production_readiness()`:
+Therefore the normal visual publication path is correctly fail-closed while these 701 semantic records remain unresolved.
 
-- it loads the canonical ChatGPT production payload;
-- it checks `payload.get("status") != "complete"` and raises `RuntimeError("ChatGPT production payload is not complete")`;
-- only later in the same readiness logic is there handling for a nonzero AI queue (`ai_queue_count != 0`) that can return a non-ready/degraded result instead of treating it as a normal complete source.
+## Scheduled producer state
 
-Because the current truthful semantic status is `degraded`, execution never reaches that later queued branch.
+`cannot_determine`
 
-`scripts/build_final_visual_payload.py` already contains a deterministic refresh-existing-media path for the `source_key is None` / semantic-work-still-queued situation when the forced refresh mode is used, and propagates degraded semantic state rather than pretending it is complete. The early status gate above prevents the current truthful payload from reaching that path.
+The owner of resolving the 701 semantic rows is the existing scheduled ChatGPT semantic production runtime for the current canonical scope. The GitHub-side semantic completion helper derives/persists truthful canonical state; the visual builder does not own or manufacture semantic verdicts.
+
+For final closeout, the native scheduled-task inventory/state was queried directly. No inspectable task metadata was exposed to this worker session, including no authoritative task identity, enabled/disabled flag, next-run state, or health/result state.
+
+That means the evidence does **not** establish either conditional branch:
+
+- it does not establish that the scheduled producer exists and is active;
+- it does not establish that it is absent, disabled, or broken.
+
+The operational producer state must therefore remain `cannot_determine` rather than be guessed from queue age or repository state.
 
 ## Root-cause classification
 
 `mixed`
 
-### `same_known_semantic_incompleteness`
+### Primary proven condition: `same_known_semantic_incompleteness`
 
-This is the **primary blocker for a normal fresh publishable build**. The semantic runtime/control-state work previously accepted in `reviews/worker_reports/semantic-runtime-completion-acceptance-02.md` made the incomplete state explicit; it did not redefine the publication threshold. The current manifest therefore correctly says that the family partition is complete while semantic work remains unresolved.
+This is the primary blocker for a **normal fresh publishable build**. The current canonical semantic scope still contains 701 unresolved records and explicitly reports `sufficiently_complete_for_publication = false`.
 
-The broader audit/release material is consistent with this: visual freshness cannot be closed as a normal fresh complete publication while the canonical semantic production input remains incomplete.
+The prior semantic runtime/control-state work made this incomplete state explicit; it did not redefine or weaken the publication threshold.
 
-### `separate_production_defect`
+### Secondary production defect: `separate_production_defect`
 
-There is also a **secondary visual-readiness control-flow mismatch**: the coarse top-level `status == complete` check occurs before the more specific queued/degraded handling, making the latter unreachable for a truthful semantic `degraded` manifest.
+There is also a separate visual-readiness control-flow defect in `scripts/build_daily_visual_payload.py::current_production_readiness()`:
 
-This is a real defect in degraded-path reachability, but it is **not the smallest safe thing to repair first for the user's stated goal**. Removing/reordering that check now would only permit a degraded refresh path; it would not satisfy the semantic publication contract or produce a normal fresh complete visual build.
+- it rejects a ChatGPT payload whose top-level `status` is not `complete`;
+- that rejection happens before its later `ai_queue_count != 0` degraded/queued handling;
+- the truthful current `status = "degraded"` therefore raises `RuntimeError("ChatGPT production payload is not complete")` before the later queued branch can run.
 
-## Producer that owns making the condition complete
+`scripts/build_final_visual_payload.py` already contains a deterministic refresh-existing-media path for semantic-work-still-queued situations when forced refresh is used, and it preserves degraded state rather than pretending semantic completion.
 
-The owner of resolving the 701 semantic rows is the **existing scheduled ChatGPT semantic production runtime for the current canonical scope**.
-
-The GitHub-side semantic completion helper is not the producer of semantic verdicts; it derives/persists truthful canonical completeness state from the queue/results. The visual builder is also not the owner of semantic completion and must not manufacture readiness.
-
-`config/execution_ownership_contract.json` is consistent with this division: deterministic repository/control-plane logic owns canonical state/completeness derivation, while the ChatGPT semantic runtime owns completing the semantic work needed for the unresolved scope.
-
-## Current producer state
-
-`cannot_determine`
-
-Repository evidence shows accepted semantic progress for an older scope, while the current canonical production scope is newer and still contains 701 unresolved rows. The inspected repository state does **not** prove whether the existing scheduled ChatGPT task is currently enabled, has a valid next run, or has successfully accepted a batch for this current scope.
-
-There is therefore insufficient evidence to classify the producer as `working_but_incomplete`, `stalled`, or `failing`. Calling it stalled/failing from queue age alone would be an unsupported inference.
+This control-flow issue explains the exact exception path, but fixing/bypassing it would **not** make the current semantic input safe for a normal fresh/complete publication. It must not be used as a shortcut around the 701 unresolved semantic records.
 
 ## Is the current payload safe to publish?
 
 **No, not as a normal fresh/complete production payload.**
 
-Under the current contract, the normal publication path must remain fail-closed until semantic completeness reaches the accepted threshold. In the current state:
+The normal path must remain fail-closed until the semantic publication condition is naturally satisfied. A degraded deterministic refresh may preserve truthful degraded state, but it is not evidence of a complete fresh publication and cannot close visual freshness/deploy acceptance.
 
-- `sufficiently_complete_for_publication = false`;
-- unresolved semantic work is nonzero;
-- top-level semantic state is truthfully `degraded`.
-
-A deterministic degraded refresh path may preserve truthful degraded state, but it must not be treated as proof of a normal fresh complete visual publication or as closure of visual freshness/deploy acceptance. No completeness check should be weakened to turn the current 701-row unresolved scope into a nominally complete build.
+No completeness check should be weakened to turn the current unresolved scope into a nominally complete build.
 
 ## One minimal next action
 
-**Verify the existing scheduled ChatGPT semantic production task against the current 701-row scope and, if it is not active/healthy, restore that same existing task; the recovery acceptance signal is one new accepted current-scope semantic batch/receipt.**
+**Obtain one authoritative inspectable scheduled-task record for the existing ChatGPT semantic producer — task identity plus enabled/active state — and close the remaining operational branch.**
 
-Do not manually process the queue, create a new scheduler/process, or change completeness thresholds.
+Then apply exactly one of these evidence-driven outcomes:
 
-Why this is the smallest safe next step:
+- **If the existing task is active/healthy:** no scheduler repair is needed; the immediate visual-build blocker is simply the 701 unresolved semantic records, and the existing producer should be allowed to drain them naturally.
+- **If the existing task is missing, disabled, or broken:** restore that same scheduled semantic producer. Do not create a parallel scheduler/process and do not weaken semantic completeness checks. The first recovery acceptance signal is one newly accepted current-scope semantic batch/receipt.
 
-- it addresses the actual owner of the primary blocker;
-- it distinguishes a merely incomplete working producer from a stopped/broken producer without speculative code changes;
-- it preserves the existing semantic publication contract;
-- once current-scope progress is re-established, the existing producer can continue draining unresolved work naturally.
+No code change and no broader CI investigation is required to establish this remaining fact.
 
-The secondary visual-readiness ordering defect should not be used as a shortcut around semantic completeness. It can be handled separately only if degraded-refresh behavior itself later needs repair.
+## When visual freshness/deploy can be re-verified
 
-## Can visual freshness/deploy then be re-verified?
+Visual freshness/deploy can be re-verified as a normal fresh complete publication only after the current semantic scope is fully resolved and the canonical manifest naturally becomes publication-sufficient / `complete`.
 
-**Yes, but only after the current semantic scope is fully resolved.**
-
-A single accepted current-scope batch is the recovery proof for the producer, not the publication-completeness proof. After the existing producer drains the current unresolved semantic count to zero and the canonical manifest naturally becomes publication-sufficient / `complete`, rerun the existing canonical visual build and then re-verify visual freshness/deploy using the normal workflow.
-
-Until that happens, normal fresh visual publication remains correctly blocked.
+One accepted current-scope batch proves producer recovery; it does not by itself prove publication completeness. Normal publication remains blocked until unresolved semantic work reaches zero.
 
 ## Evidence inspected
 
-The recon was bounded to the task and directly relevant canonical/control files, including:
+The recon remained bounded to the task and directly relevant canonical/control evidence, including:
 
 - `WORKER_TASK_VISUAL_BUILD_INPUT_INCOMPLETE_RECON_01.md`
 - `data/production/pre_ai/chatgpt_payload.json`
@@ -129,5 +116,6 @@ The recon was bounded to the task and directly relevant canonical/control files,
 - `reviews/system_audits/system-audit-02.md`
 - `DIRECTOR_TASK_BOARD.md`
 - `config/execution_ownership_contract.json`
+- native scheduled-task service query performed for this final closeout.
 
 No code or production input was modified.
