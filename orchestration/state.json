@@ -19,14 +19,16 @@
   ],
   "authoritative_writer": "scripts/director_orchestration_controller.py",
   "dispatch_enabled": false,
-  "orchestration_phase": "phase_2b_live_readonly_pilot_attempt_1_recovery",
+  "orchestration_phase": "phase_2b_live_readonly_pilot_attempt_1_schema_continuation",
   "phase": "shadow_observer",
   "phase2b_recovery": {
     "attempt_id": "epic-ru-availability-source-probe-01:r1:a1",
+    "continued_at": "2026-09-05T17:26:53.434855Z",
     "lease_id": "slot_2:epic-ru-availability-source-probe-01:r1:a1",
     "reason": "pre_model_codex_cli_argument_failure",
-    "resume_count": 1,
-    "resumed_at": "2026-09-05T17:21:16.115347Z"
+    "resume_count": 2,
+    "resumed_at": "2026-09-05T17:21:16.115347Z",
+    "second_reason": "pre_model_invalid_output_schema"
   },
   "schema_version": 1,
   "security_boundary_schema_version": 1,
@@ -47,11 +49,12 @@
       "lease": {
         "acquired_at": "2026-09-05T16:59:12.119053Z",
         "attempt_id": "epic-ru-availability-source-probe-01:r1:a1",
-        "expires_at": "2026-09-05T17:51:16.115347Z",
+        "continued_at": "2026-09-05T17:26:53.434855Z",
+        "expires_at": "2026-09-05T17:56:53.434855Z",
         "lease_id": "slot_2:epic-ru-availability-source-probe-01:r1:a1",
         "owner": "director-controller",
         "resumed_at": "2026-09-05T17:21:16.115347Z",
-        "state_revision_acquired": 5,
+        "state_revision_acquired": 6,
         "status": "active",
         "task_id": "epic-ru-availability-source-probe-01",
         "task_revision": 1
@@ -68,7 +71,7 @@
     "director_board": "DIRECTOR_TASK_BOARD.md",
     "phase2a_contract": "config/director_orchestration_phase2a_contract.json"
   },
-  "state_revision": 5,
+  "state_revision": 6,
   "tasks": [
     {
       "allowed_input_refs": [
