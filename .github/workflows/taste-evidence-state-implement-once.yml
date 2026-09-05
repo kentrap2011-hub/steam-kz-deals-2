@@ -33,11 +33,33 @@ jobs:
           from pathlib import Path
           path = Path('scripts/_taste_evidence_implement_once.py')
           text = path.read_text(encoding='utf-8')
+
           old = "new_annotator = '''def annotate_negative_readiness"
           new = "new_annotator = r'''def annotate_negative_readiness"
           if text.count(old) != 1:
               raise SystemExit(f'Expected exactly one new_annotator patch anchor, found {text.count(old)}')
-          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          text = text.replace(old, new, 1)
+
+          old = '''cache_end = "            continue\\n\\n        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]\\n"'''
+          new = '''cache_end = "        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]\\n"'''
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected exactly one cache_end patch anchor, found {text.count(old)}')
+          text = text.replace(old, new, 1)
+
+          old = """            continue
+
+        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]
+'''
+replace_between('scripts/build_pre_ai_chatgpt_payload.py', cache_start, cache_end, cache_replacement)"""
+          new = """            continue
+
+'''
+replace_between('scripts/build_pre_ai_chatgpt_payload.py', cache_start, cache_end, cache_replacement)"""
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected exactly one cache_replacement tail anchor, found {text.count(old)}')
+          text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding='utf-8')
           PY
           python scripts/_taste_evidence_implement_once.py
 
