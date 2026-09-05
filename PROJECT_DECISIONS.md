@@ -315,7 +315,7 @@
 
 **Решение:** разрешить только два explicit post-Taste commercial eligibility bridges: `insufficient + Steam wishlist + canonical good deal`, а также `reconsiderable + existing fixed-package strict current-price savings`.
 
-**Инвариант:** bridge не повышает `fit_level`, не меняет `fit_evidence_state`, не переписывает `play_role`/`relative_start_priority`, не стирает риски и не создаёт новый ranking score. `confirmed_negative` и `exclude_direct_conflict` fail closed и не спасаются коммерческими сигналами.
+**Инвариант:** bridge не повышает `fit_level`, не меняет `fit_evidence_state`, не переписывает `play_role`/`relative_start_priority`, не стирает риски и не создаёт новый ranking score. Exact V5 `confirmed_negative` / direct confirmed conflict fail closed и не спасаются коммерческими сигналами. Сам по себе legacy `reason_code=exclude_direct_conflict` не равен V5-confirmation: без V5 binding он остаётся fail-closed, а при exact V5 `reconsiderable` не блокирует bounded package bridge.
 
 **Good deal:** только существующий `decision_if_moderate.final_disposition=INCLUDE` + `purchase_decision=БРАТЬ СЕЙЧАС`; новый discount threshold не вводится.
 

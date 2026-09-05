@@ -8,6 +8,7 @@ from pathlib import Path
 
 from taste_evidence_contract import evidence_readiness
 from taste_negative_contract import structured_grounded_risks
+import commercial_reconsideration_bridge as commercial_bridge
 
 ROOT = Path('.')
 OUT = ROOT / 'data/production/visual/current.json'
@@ -378,7 +379,16 @@ def serious_taste_risk(risks):
     return any(code in serious_codes and row.get('score', 0) >= 4 for code, row in risks.items())
 
 
-def apply_fit_adjustment(game, evidence, risks, taste_entry, projection):
+def validated_commercial_bridge(context, taste_entry):
+    if not isinstance(context, dict):
+        return None
+    return commercial_bridge.validate_visual_bridge(
+        context,
+        taste_entry if isinstance(taste_entry, dict) else {},
+    )
+
+
+def apply_fit_adjustment(game, evidence, risks, taste_entry, projection, eligibility_bridge=None):
     source_fit = game.get('fit') or 'moderate'
     game['source_fit'] = source_fit
     evidence_state = evidence_readiness(taste_entry)
@@ -409,12 +419,18 @@ def apply_fit_adjustment(game, evidence, risks, taste_entry, projection):
     else:
         game['taste_confidence'] = 'unknown'
 
+    if isinstance(eligibility_bridge, dict):
+        # Step 3 is an eligibility exception only. Final refinement may add
+        # diagnostics, but must not promote the original below-threshold Taste fit.
+        fit = source_fit
+        reason = 'commercial_eligibility_bridge_preserves_original_taste_fit'
+
     game['fit'] = fit
     game['fit_adjustment_reason'] = reason
     return game
 
 
-def apply_commercial_branch(game, context):
+def apply_commercial_branch(game, context, eligibility_bridge=None):
     fit = game.get('fit')
     branch = context.get('deal_if_strong') if fit == 'strong' else context.get('deal_if_moderate')
     if not isinstance(branch, dict):
@@ -423,6 +439,16 @@ def apply_commercial_branch(game, context):
     if branch.get('disposition') != 'INCLUDE':
         game['refiner_exclusion_reason'] = branch.get('exclusion_reason_code') or branch.get('price_gate_reason') or 'commercial_branch_exclude'
         return False
+    if isinstance(eligibility_bridge, dict):
+        decision, bucket = commercial_bridge.effective_purchase_fields(eligibility_bridge, branch)
+        game['fit'] = 'below_moderate'
+        game['eligibility_override'] = eligibility_bridge.get('kind')
+        game['commercial_eligibility_bridge'] = eligibility_bridge
+        if decision:
+            game['decision'] = decision
+        if bucket is not None:
+            game['priority_bucket'] = int(bucket)
+        return True
     if branch.get('purchase_decision'):
         game['decision'] = branch.get('purchase_decision')
     if branch.get('priority_bucket') is not None:
@@ -555,8 +581,9 @@ def main():
 
         evidence = direct_evidence(game, direct_index)
         game['direct_user_evidence'] = evidence or {'level': 'none'}
+        eligibility_bridge = validated_commercial_bridge(context, taste_entry)
         old_fit = game.get('fit')
-        apply_fit_adjustment(game, evidence, risks, taste_entry, projection)
+        apply_fit_adjustment(game, evidence, risks, taste_entry, projection, eligibility_bridge)
         if game.get('fit') != old_fit:
             fit_changes += 1
 
@@ -567,7 +594,7 @@ def main():
         game['duration_preference_band'] = band
         game['duration_tiebreak_penalty'] = penalty
 
-        if not apply_commercial_branch(game, context):
+        if not apply_commercial_branch(game, context, eligibility_bridge):
             removed += 1
             continue
         refined.append(game)

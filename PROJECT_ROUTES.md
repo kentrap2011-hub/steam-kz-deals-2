@@ -280,6 +280,7 @@ Production validator проверяет:
 - deterministic helper: `scripts/commercial_reconsideration_bridge.py`;
 - first eligibility application: `scripts/build_pre_ai_chatgpt_payload.py` cache-hit EXCLUDE boundary;
 - visual revalidation: `scripts/build_visual_feed_v2.py` without fake promotion to moderate;
+- final downstream revalidation: `scripts/refine_visual_ranking.py` + `scripts/build_final_visual_payload.py` preserve the explicit bridge through final fit/commercial recheck;
 - fixed package source: existing `scripts/apply_fixed_package_purchase_options.py` economics and exact/verified purchase-equivalence rules;
 - focused regression: `scripts/test_reconsideration_commercial_bridge.py`;
 - no new scheduler, ranker, giveaway path, discount threshold, or Taste evaluator.

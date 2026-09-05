@@ -8,16 +8,17 @@ routes:
   * existing fixed-package strict current-price savings for `reconsiderable`.
 """
 
+import json
 from collections import Counter
+from functools import lru_cache
+from pathlib import Path
 
 import apply_fixed_package_purchase_options as fixed_packages
 from taste_evidence_contract import evidence_readiness
 
 WISHLIST_GOOD_DEAL = 'wishlist_good_deal'
 RECONSIDERABLE_FIXED_PACKAGE = 'reconsiderable_fixed_package_value'
-DIRECT_CONFLICT_REASON = 'exclude_direct_conflict'
-PACKAGE_PURCHASE_DECISION = 'МОЖНО БРАТЬ'
-PACKAGE_PRIORITY_BUCKET = 5
+MAILING_POLICY = Path('config/mailing_policy.json')
 
 
 def disposition(scenario):
@@ -31,6 +32,17 @@ def canonical_good_deal(scenario):
         disposition(scenario) == 'INCLUDE'
         and scenario.get('purchase_decision') == 'БРАТЬ СЕЙЧАС'
     )
+
+
+@lru_cache(maxsize=1)
+def package_bridge_purchase_fields():
+    policy = json.loads(MAILING_POLICY.read_text(encoding='utf-8'))
+    cfg = ((policy.get('commercial_reconsideration_bridge') or {}).get('reconsiderable_fixed_package_value') or {})
+    decision = cfg.get('purchase_decision_when_bridge_applies')
+    bucket = cfg.get('qualitative_priority_bucket')
+    if not decision or bucket is None:
+        raise ValueError('Canonical reconsiderable package purchase fields are missing')
+    return str(decision), int(bucket)
 
 
 def hard_taste_block(taste_entry, readiness=None):
@@ -83,12 +95,13 @@ def resolve_bridge(*, taste_entry, wishlist, moderate_scenario, package_evidence
     if state == 'reconsiderable' and disposition(moderate_scenario) == 'INCLUDE':
         evidence = package_evidence if isinstance(package_evidence, dict) else {}
         if evidence.get('strict_current_price_savings') is True and evidence.get('comparison_source_aligned') is True:
+            purchase_decision, priority_bucket = package_bridge_purchase_fields()
             result = _base_bridge(RECONSIDERABLE_FIXED_PACKAGE, readiness)
             result.update({
                 'commercial_route': 'existing_fixed_package_purchase_option',
                 'package_evidence': evidence,
-                'bridge_purchase_decision': PACKAGE_PURCHASE_DECISION,
-                'bridge_priority_bucket': PACKAGE_PRIORITY_BUCKET,
+                'bridge_purchase_decision': purchase_decision,
+                'bridge_priority_bucket': priority_bucket,
                 'new_discount_threshold_introduced': False,
             })
             return result
@@ -97,7 +110,7 @@ def resolve_bridge(*, taste_entry, wishlist, moderate_scenario, package_evidence
 
 def effective_purchase_fields(bridge, moderate_scenario):
     if isinstance(bridge, dict) and bridge.get('kind') == RECONSIDERABLE_FIXED_PACKAGE:
-        return PACKAGE_PURCHASE_DECISION, PACKAGE_PRIORITY_BUCKET
+        return package_bridge_purchase_fields()
     return moderate_scenario.get('purchase_decision'), moderate_scenario.get('priority_bucket')
 
 

@@ -459,15 +459,16 @@ def main():
 
         evidence = refiner.direct_evidence(game, direct_index)
         game['direct_user_evidence'] = evidence or {'level': 'none'}
+        eligibility_bridge = refiner.validated_commercial_bridge(context, taste_entry)
         old_fit = game.get('fit')
-        refiner.apply_fit_adjustment(game, evidence, risks, taste_entry, projection)
+        refiner.apply_fit_adjustment(game, evidence, risks, taste_entry, projection, eligibility_bridge)
         if game.get('fit') != old_fit:
             fit_changes += 1
 
         apply_duration_resolution(game, projection, duration_entries)
         play_priority_context.apply_to_game(game, taste_entry)
 
-        if not refiner.apply_commercial_branch(game, context):
+        if not refiner.apply_commercial_branch(game, context, eligibility_bridge):
             removed += 1
             continue
         refined.append(game)

@@ -1,6 +1,6 @@
 {
   "contract": "DEAL-QUALITY-AND-SORT-V1",
-  "version": "1.4",
+  "version": "1.5",
   "status": "implementation_only",
   "purpose": "Keep taste as the eligibility base while respecting the user's limited monthly budget: 500 RUB is the normal target, 750 RUB is the absolute ceiling, and the highest overage band is reserved for exceptionally strong fit plus a very large discount.",
   "authority": {
@@ -10,8 +10,9 @@
     "never_overrides_canonical_policy": true,
     "taste_is_already_final": true,
     "deal_quality_never_raises_taste_fit": true,
-    "weak_taste_can_never_be_rescued_by_discount": true,
-    "absolute_user_budget_ceiling_rub": 750
+    "absolute_user_budget_ceiling_rub": 750,
+    "discount_alone_never_rescues_below_moderate_taste": true,
+    "bounded_v5_commercial_bridge_is_only_below_moderate_paid_exception": true
   },
   "commercial_visibility_gate": {
     "symbolic_discount_max_percent_inclusive": 5,

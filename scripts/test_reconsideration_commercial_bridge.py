@@ -3,6 +3,7 @@ import json
 
 import commercial_reconsideration_bridge as bridge
 import play_priority_context
+import refine_visual_ranking as refiner
 from taste_evidence_contract import current_evidence_contract_sha
 
 
@@ -112,6 +113,22 @@ def main():
         package_evidence=package_evidence(False),
     )
     assert package_bad is None
+    package_commercial_exclude = bridge.resolve_bridge(
+        taste_entry=reconsiderable,
+        wishlist=False,
+        moderate_scenario=scenario('БРАТЬ СЕЙЧАС', 'EXCLUDE', 3),
+        package_evidence=package_evidence(True),
+    )
+    assert package_commercial_exclude is None
+
+    bioshock = evidence_entry('reconsiderable', 'exclude_direct_conflict')
+    bioshock_bridge = bridge.resolve_bridge(
+        taste_entry=bioshock,
+        wishlist=False,
+        moderate_scenario=scenario('ЛУЧШЕ ЖДАТЬ', 'INCLUDE', 6),
+        package_evidence=package_evidence(True),
+    )
+    assert bioshock_bridge and bioshock_bridge['kind'] == bridge.RECONSIDERABLE_FIXED_PACKAGE
 
     highfleet = bridge.resolve_bridge(
         taste_entry=confirmed,
@@ -144,6 +161,41 @@ def main():
     validated = bridge.validate_visual_bridge(row, insufficient)
     assert validated and row['risks'] == ['confirmed practical warning']
 
+    package_row = {
+        'taste_subject_key': 'App_bioshock',
+        'context_only': {'wishlist': False},
+        'deal_if_moderate': scenario('ЛУЧШЕ ЖДАТЬ', 'INCLUDE', 6),
+        'commercial_eligibility_bridge': bioshock_bridge,
+        'risks': ['package route warning must survive'],
+        'risk_provenance': [{'source': 'confirmed_practical'}],
+    }
+    validated_package = bridge.validate_visual_bridge(package_row, bioshock)
+    assert validated_package and package_row['risks'] == ['package route warning must survive']
+    assert package_row['risk_provenance'] == [{'source': 'confirmed_practical'}]
+
+    final_game = {
+        'fit': 'below_moderate',
+        'decision': 'ЛУЧШЕ ЖДАТЬ',
+        'priority_bucket': 6,
+        'risks': list(package_row['risks']),
+        'risk_provenance': list(package_row['risk_provenance']),
+    }
+    final_bridge = refiner.validated_commercial_bridge(package_row, bioshock)
+    assert final_bridge and final_bridge['kind'] == bridge.RECONSIDERABLE_FIXED_PACKAGE
+    refiner.apply_fit_adjustment(
+        final_game,
+        {'rating': 5.0, 'level': 'positive'},
+        {},
+        bioshock,
+        {},
+        final_bridge,
+    )
+    assert final_game['fit'] == 'below_moderate'
+    assert refiner.apply_commercial_branch(final_game, package_row, final_bridge) is True
+    assert final_game['decision'] == 'МОЖНО БРАТЬ' and final_game['priority_bucket'] == 5
+    assert final_game['risks'] == ['package route warning must survive']
+    assert final_game['risk_provenance'] == [{'source': 'confirmed_practical'}]
+
     print(json.dumps({
         'status': 'PASS',
         'wishlist_good_deal_insufficient': True,
@@ -152,10 +204,14 @@ def main():
         'nonwishlist_weak_unchanged': True,
         'reconsiderable_package_purchase_worthy': True,
         'package_without_strict_savings_blocked': True,
+        'package_commercial_exclusion_preserved': True,
+        'bioshock_v5_reconsiderable_over_legacy_reason': True,
         'highfleet_non_rescuable': True,
         'strong_positive_unchanged': True,
         'role_start_priority_invariant': True,
-        'risks_preserved': True,
+        'wishlist_risks_preserved': True,
+        'package_risk_provenance_preserved': True,
+        'final_refinement_preserves_bridge_fit_and_purchase_value': True,
     }, ensure_ascii=False, indent=2))
     print('RECONSIDERATION_COMMERCIAL_BRIDGE_TEST=PASS')
 
