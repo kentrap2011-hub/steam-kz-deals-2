@@ -92,6 +92,7 @@ jobs:
             PROJECT_ROUTES.md
           git diff --cached --check
           git commit -m "Implement play role and relative start priority"
+          git restore scripts/_play_role_step2_once.py
           for attempt in 1 2 3; do
             git fetch origin main:refs/remotes/origin/main
             if ! git rebase origin/main; then
