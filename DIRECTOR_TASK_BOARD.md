@@ -12,8 +12,8 @@
 4. В каждой копируемой worker-команде первая строка явно начинается с `=== ЧАТ N ===`.
 5. Номер принадлежит worker-слоту.
 6. Не запускать параллельно конфликтующие Taste/ranking IMPLEMENT.
-7. Taste Reviewer recommendations have VERY HIGH USER PRIORITY.
-8. Automation migration may begin before backlog completion, but must start in shadow/read-only phases and must not interrupt active product work.
+7. Taste Reviewer recommendations имеют VERY HIGH USER PRIORITY.
+8. Automation migration может идти параллельно backlog, но сначала только shadow/read-only safety phases.
 
 ## Review checkpoint
 
@@ -27,85 +27,69 @@ Result: accepted.
 
 Task:
 `WORKER_TASK_TASTE_EVIDENCE_STATE_AND_CONFIDENCE_IMPLEMENT_01.md`
-Task ID: `taste-evidence-state-and-confidence-implement-01`
-Mode: `IMPLEMENT`
 Expected report:
 `reviews/worker_reports/taste-evidence-state-and-confidence-implement-01.md`
 Status: `running_or_ready_in_existing_chat_1`.
 
-Goal:
-- explicit insufficient / reconsiderable / confirmed-negative evidence state;
-- stronger evidence provenance/strength rules;
-- old shallow historical negatives can be weaker/reconsiderable;
-- candidate-quality complaints separate from personal dislike;
-- preserve price-blind Taste and no-discount-rescue.
+### ЧАТ 2 — Phase 1 orchestration shadow observer IMPLEMENT
 
-### ЧАТ 2 — autonomous Director orchestration recon
-
-Task:
-`WORKER_TASK_AUTONOMOUS_DIRECTOR_ORCHESTRATION_RECON_01.md`
-Task ID: `autonomous-director-orchestration-recon-01`
-Mode: `READ-ONLY / RECON`
-Expected report:
+Recon complete:
 `reviews/worker_reports/autonomous-director-orchestration-recon-01.md`
-Priority: `VERY_HIGH_INFRASTRUCTURE_PRIORITY`.
-Status: `ready_new_chat_2`.
+Status: `complete`.
+Feasibility: cloud-first without always-on home PC is feasible; ordinary worker chats are not a reliable automatable substrate and should later be replaced by GitHub-hosted cloud worker jobs using the official Codex Action / `codex exec` path.
 
-Goal:
-- design cloud-first automation for an Android-first user;
-- no always-on PC;
-- user adds tasks only through Director chat in natural language;
-- GitHub stores durable machine-readable queue/state;
-- two worker slots auto-fill when safe;
-- reports/CI/deploy/review gates auto-observed;
-- user notified only at real user gates;
-- staged rollout: shadow observer -> autonomous RECON/AUDIT -> bounded IMPLEMENT -> mature autopilot.
+Current implementation task:
+`WORKER_TASK_DIRECTOR_ORCHESTRATION_SHADOW_OBSERVER_IMPLEMENT_01.md`
+Task ID: `director-orchestration-shadow-observer-implement-01`
+Mode: `IMPLEMENT`
+Expected report:
+`reviews/worker_reports/director-orchestration-shadow-observer-implement-01.md`
+Status: `ready_continue_existing_chat_2`.
 
-Automation must not interrupt the active Taste IMPLEMENT and must not jump directly to fully autonomous product writes.
+Phase 1 scope only:
+- machine-readable orchestration contract/state;
+- current Chat 1 represented as external/manual occupied slot;
+- deterministic priority/dependency/conflict planner;
+- max 2 logical slots;
+- GitHub Actions shadow workflow producing `shadow-plan.json` artifact;
+- no OpenAI/Codex call;
+- no worker dispatch;
+- no product task mutation;
+- no secret required.
 
-## Steam access policy — user decision resolved
+If Phase 1 repeatedly matches Director decisions, next phase may add automatic READ-ONLY RECON/AUDIT cloud workers.
 
-User explicitly approved on 2026-09-05:
+## Steam access policy
 
-1. **Steam Web API key: APPROVED** for a read-only canonical owned-games snapshot using Valve `IPlayerService/GetOwnedGames`, for DLC eligibility and related deterministic ownership checks.
-2. **Authenticated Steam Store account/session integration: NOT APPROVED for now**. Do not design/store session cookies or authenticated storefront context for personalized Complete The Set payable prices.
-
-Security rule:
-- never ask user to paste Steam Web API key into ordinary chat/task/report;
-- implementation must use an approved secret store/path, e.g. GitHub Actions secret, with no secret value committed or logged.
-
-DLC ownership implementation may proceed later once the secret-provisioning path is prepared/approved. Personalized Complete The Set savings remain fail-closed/unknown until a future explicit decision changes the account-session boundary.
-
-Previous Chat 2 DLC recon is durably complete and no longer needs its local chat context after this decision.
-Report:
-`reviews/worker_reports/dlc-personalized-bundle-economics-recon-01.md`.
+User approved:
+- Steam Web API key for read-only `GetOwnedGames`: yes;
+- authenticated Steam Store session for personalized Complete The Set payable price: no for now.
+Never ask for secret values in ordinary chat/report/task files.
 
 ## Taste sequence after current step
 
-From `reviews/worker_reports/taste-review-recommendations-gap-recon-01.md`:
 1. evidence state/confidence/reconsideration semantics;
 2. play role + relative start priority;
 3. reconsideration commercial bridge + wishlist-good-deal override.
 
-Do not start step 3 before step 1 establishes stable non-negative insufficiency/reconsideration semantics.
 Independent Taste Review required at the chosen material acceptance boundary.
 
-## Other queued
+## Queued
 
-- DLC ownership eligibility IMPLEMENT: now policy-approved in principle, pending proper secret provisioning path; no Steam session.
-- Personalized Complete The Set actual payable price: blocked by explicit no-session decision; fail closed.
-- `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md` queued blocker-resolution recon.
-- `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md` ready.
-- `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md` ready.
-- `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md` queued larger integration.
-- Russian-language availability ranking factor planned.
-- YouTube review selection planned.
-- modern Windows compatibility evidence planned.
+- DLC ownership eligibility IMPLEMENT: policy-approved in principle, pending proper GitHub secret provisioning; no Steam session.
+- Personalized Complete The Set actual payable price: blocked by no-session decision.
+- `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`.
+- `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`.
+- `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`.
+- `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
+- Russian-language availability ranking factor.
+- YouTube review selection.
+- modern Windows compatibility evidence.
 - semantic/Russian-description completion remains blocked on existing scheduled semantic runtime evidence; do not create another scheduler.
 
 ## Next decision
 
 1. Keep Chat 1 on Taste IMPLEMENT 1.
-2. Old DLC Chat 2 may be deleted; start a fresh Chat 2 for autonomous orchestration recon.
-3. After automation recon, choose the smallest shadow-mode IMPLEMENT that can coexist with ongoing product work.
-4. Do not wait for the whole backlog to finish before migration to automation.
+2. Continue existing Chat 2 with shadow observer IMPLEMENT.
+3. Read both exact reports before advancing either product semantics or automation phase.
+4. Do not add OpenAI API key until Phase 1 shadow safety has been proven.
