@@ -1,0 +1,317 @@
+name: Director Phase 2B Billing-Blocked Closeout
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'orchestration/live_pilots/phase2b-epic-ru-availability-source-probe-01.blocked.json'
+
+permissions: {}
+
+concurrency:
+  group: director-phase2b-billing-blocked-closeout
+  cancel-in-progress: false
+
+jobs:
+  publisher:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    outputs:
+      report_head: ${{ steps.commit.outputs.report_head }}
+    steps:
+      - name: Checkout exact closeout head without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact blocked marker, current head, source run and billing failure
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('orchestration/live_pilots/phase2b-epic-ru-availability-source-probe-01.blocked.json')
+          got=json.loads(p.read_text(encoding='utf-8'))
+          expected={
+            'schema_version':1,
+            'pilot_id':'phase2b-live-readonly-pilot-01',
+            'task_id':'epic-ru-availability-source-probe-01',
+            'attempt_id':'epic-ru-availability-source-probe-01:r1:a1',
+            'lease_id':'slot_2:epic-ru-availability-source-probe-01:r1:a1',
+            'source_run_id':33980979557,
+            'source_worker_job_id':101346057158,
+            'status':'blocked',
+            'reason':'openai_api_billing_no_credits',
+            'expected_report_path':'reviews/worker_reports/epic-ru-availability-source-probe-01.md',
+            'invoke_codex':False,
+            'automatic_next_dispatch':False,
+            'implement_dispatch_allowed':False,
+          }
+          assert got == expected, 'blocked closeout marker mismatch'
+          PY
+          remote_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$remote_head" = "$GITHUB_SHA"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/33980979557" --jq '.status+"|"+.conclusion')" = 'completed|failure'
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/jobs/101346057158" --jq '.name+"|"+.status+"|"+.conclusion')" = 'worker|completed|failure'
+          gh api "repos/${GITHUB_REPOSITORY}/actions/jobs/101346057158/logs" > "$RUNNER_TEMP/worker.log"
+          grep -Fq 'You have no credits remaining.' "$RUNNER_TEMP/worker.log"
+          grep -Fq 'gpt-6-astra' "$RUNNER_TEMP/worker.log"
+          grep -Fq 'openai-api-key: ***' "$RUNNER_TEMP/worker.log"
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/33980979557/artifacts" --jq .total_count)" = '0'
+
+      - name: Verify exhausted same-attempt state and no second dispatch
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('orchestration/state.json').read_text(encoding='utf-8'))
+          c=json.loads(Path('config/director_orchestration_phase2b_pilot_contract.json').read_text(encoding='utf-8'))
+          assert s['state_revision']==6
+          assert s['dispatch_enabled'] is False
+          assert s['phase2b_recovery']['resume_count']==2
+          assert s['phase2b_recovery']['attempt_id']==c['pilot']['attempt_id']
+          assert s['phase2b_recovery']['lease_id']==c['pilot']['lease_id']
+          slot1=next(x for x in s['slots'] if x['slot_id']=='slot_1')
+          slot2=next(x for x in s['slots'] if x['slot_id']=='slot_2')
+          assert slot1['status']=='free'
+          assert slot2['occupancy_type']=='cloud_worker' and slot2['task_id']==c['pilot']['task_id']
+          assert slot2['lease']['attempt_id']==c['pilot']['attempt_id']
+          assert slot2['lease']['lease_id']==c['pilot']['lease_id']
+          epic=next(t for t in s['tasks'] if t['task_id']==c['pilot']['task_id'])
+          assert epic['attempt_number']==1 and epic['attempt_id']==c['pilot']['attempt_id']
+          assert epic['base_sha']==c['pilot']['base_sha'] and epic['task_file_blob_sha']==c['pilot']['task_file_blob_sha']
+          assert epic['expected_report']==c['pilot']['expected_report_path']
+          assert next(t for t in s['tasks'] if t['task_id']=='wishlist-good-deal-override-recon-01')['attempt_number']==0
+          assert next(t for t in s['tasks'] if t['task_id']=='top-summary-filter-buttons-01')['attempt_number']==0
+          assert not Path(c['pilot']['expected_report_path']).exists()
+          PY
+
+      - name: Trusted publish exact blocked Epic report only
+        run: |
+          set -euo pipefail
+          report='reviews/worker_reports/epic-ru-availability-source-probe-01.md'
+          test ! -e "$report"
+          cat > "$report" <<'EOF'
+          # Epic RU Availability Source Probe 01 — trusted blocked closeout
+
+          ## 1. Status
+
+          `blocked`
+
+          This durable file is a **trusted publisher closeout report**, not a synthesized Epic research result. The real read-only Codex worker was started for the exact task, but the OpenAI Responses API terminated the stream before the worker could complete the source probe or return a structured result.
+
+          Exact non-secret failure: `You have no credits remaining. Add credits to continue using the API`.
+
+          No retry, alternate credential/provider/model, security relaxation, or substitute research was used after this billing failure.
+
+          ## 2. Exact worker binding
+
+          - task: `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`
+          - task ID: `epic-ru-availability-source-probe-01`
+          - mode: `READ_ONLY_RECON`
+          - task revision: `1`
+          - attempt number: `1`
+          - attempt ID: `epic-ru-availability-source-probe-01:r1:a1`
+          - lease ID: `slot_2:epic-ru-availability-source-probe-01:r1:a1`
+          - base SHA: `65aa6668e1009885450103e9cde6b6b0f43008d3`
+          - task-file blob SHA: `fdefa23f6aa9d2689f98adcc4af4fd019a7bcb04`
+          - expected report path: `reviews/worker_reports/epic-ru-availability-source-probe-01.md`
+
+          ## 3. Live execution evidence
+
+          Final bounded workflow run: `33980979557`.
+
+          Prepare job: `101346024119` — `success`.
+
+          Codex worker job: `101346057158` — `failure`.
+
+          Trusted normal-result publisher job: `101346219841` — `skipped`, because no structured worker result/artifact existed.
+
+          The worker runtime reached a real Codex session using:
+
+          - immutable action pin `openai/codex-action@86365089eb2b84e0a8fb0717b304f8bdcb13b20e`;
+          - GitHub job permission `contents: read`;
+          - checkout `persist-credentials: false`;
+          - `permission-profile: :read-only`;
+          - `safety-strategy: drop-sudo`;
+          - native `web_search="live"` configuration;
+          - model `gpt-6-astra` through `codex-action-responses-proxy`;
+          - Codex sandbox reported as `read-only` and approval mode `never`.
+
+          Repository secret `OPENAI_API_KEY` was available to the action and displayed only as GitHub's masked `***`; its value was never requested, inspected, logged, or committed.
+
+          ## 4. Billing block classification
+
+          The final Codex session passed CLI parsing and structured-schema validation, started the model/API session, then retried the stream five times. It ended with the explicit OpenAI API billing response that no credits remained.
+
+          Classification: `openai_api_billing_no_credits`.
+
+          This is not an invalid-key/401 failure, repository-permission failure, sandbox failure, or model-unavailable failure.
+
+          Because billing prevented completion, **no Epic-owned RU availability/acquisition evidence was produced by the worker**. No statement about Epic RU availability should be inferred from this report.
+
+          ## 5. Previous same-attempt pre-model failures
+
+          The single logical attempt `r1:a1` had two bounded pre-model integration continuations before the billing-blocked execution:
+
+          1. `codex exec` rejected legacy `--search` before model/API execution.
+          2. Responses API rejected the initial output schema because `const` properties lacked explicit JSON Schema `type`, again before model execution.
+
+          Both were repaired without changing task, revision, attempt number, attempt ID, lease identity, base SHA, task blob, report path, or worker write authority. No `a2` was issued.
+
+          ## 6. Security and no-second-dispatch evidence
+
+          The worker had no repository/state/product write authority and no GitHub write credential. Normal publisher publication was fail-closed when the worker produced no result.
+
+          At the final execution state revision `6`:
+
+          - `dispatch_enabled` was `false`;
+          - slot 1 was free after Chat 1 became durably complete;
+          - slot 2 contained only the Epic pilot `r1:a1`;
+          - Wishlist recon remained queued/unassigned with attempt number `0`;
+          - the queued IMPLEMENT task remained queued/unassigned with attempt number `0`;
+          - no second task and no `a2` attempt were dispatched.
+
+          ## 7. Recommendation / stop condition
+
+          Phase 2B is blocked by OpenAI API billing. Do not infer an Epic RU product signal and do not automatically retry.
+
+          The only permissible next prerequisite is restoration of API credits followed by a new explicit Director authorization. General queue draining and IMPLEMENT automation remain disabled.
+          EOF
+          status="$(git status --porcelain --untracked-files=all)"
+          test "$status" = "?? $report"
+          git add -- "$report"
+          test "$(git diff --cached --name-only)" = "$report"
+          test -z "$(git diff --name-only)"
+
+      - name: Commit exact blocked report with CAS
+        id: commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          report='reviews/worker_reports/epic-ru-availability-source-probe-01.md'
+          remote_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$remote_head" = "$GITHUB_SHA"
+          test "$(git diff --cached --name-only)" = "$report"
+          git config user.name 'director-trusted-publisher'
+          git config user.email 'director-trusted-publisher@users.noreply.github.com'
+          git commit -m 'Publish billing-blocked Epic RU pilot report'
+          report_head="$(git rev-parse HEAD)"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/main
+          echo "report_head=$report_head" >> "$GITHUB_OUTPUT"
+
+  finalize:
+    needs: publisher
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      state_head: ${{ steps.commit.outputs.state_head }}
+    steps:
+      - name: Checkout exact report head without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.publisher.outputs.report_head }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Controller-validated blocked state finalization
+        env:
+          REPORT_HEAD: ${{ needs.publisher.outputs.report_head }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          remote_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$remote_head" = "$REPORT_HEAD"
+          python - <<'PY'
+          import copy,json
+          from datetime import datetime,timezone
+          from pathlib import Path
+          import sys
+          sys.path.insert(0,'scripts')
+          from director_orchestration_controller import load_json,load_intakes,validate_phase2b_pilot_contract,validate_state,verify_repository_bindings,req,persist_state
+          root=Path('.').resolve()
+          p2a=load_json(root/'config/director_orchestration_phase2a_contract.json')
+          p2b=load_json(root/'config/director_orchestration_phase2b_pilot_contract.json')
+          state=load_json(root/'orchestration/state.json')
+          events=load_intakes(root)
+          validate_phase2b_pilot_contract(p2b); validate_state(p2a,state,events); verify_repository_bindings(root,state)
+          close=p2b['blocked_closeout']; pilot=p2b['pilot']; report=root/pilot['expected_report_path']
+          req(close['required_resume_count']==2 and state.get('phase2b_recovery',{}).get('resume_count')==2,'recovery budget not exhausted')
+          req(report.is_file(),'trusted blocked report missing')
+          text=report.read_text(encoding='utf-8')
+          req('`blocked`' in text and 'openai_api_billing_no_credits' in text and '33980979557' in text and '101346057158' in text,'blocked report evidence mismatch')
+          st=copy.deepcopy(state)
+          task=next(t for t in st['tasks'] if t['task_id']==pilot['task_id'])
+          req(task['status']=='assigned' and task['attempt_number']==1 and task['attempt_id']==pilot['attempt_id'],'pilot task no longer exact assigned r1:a1')
+          req(task['base_sha']==pilot['base_sha'] and task['task_file_blob_sha']==pilot['task_file_blob_sha'] and task['expected_report']==pilot['expected_report_path'],'pilot binding changed')
+          slot=next(s for s in st['slots'] if s['slot_id']=='slot_2')
+          req(slot.get('occupancy_type')=='cloud_worker' and slot.get('task_id')==pilot['task_id'],'pilot slot changed')
+          req(slot['lease']['lease_id']==pilot['lease_id'] and slot['lease']['attempt_id']==pilot['attempt_id'],'pilot lease identity changed')
+          task['status']='blocked'; task['assigned_slot']=None; task['retry']['failure_count']=task['retry'].get('failure_count',0)+1
+          task['retry']['last_failure']={'class':'openai_api_billing_no_credits','run_id':close['source_run_id'],'worker_job_id':close['source_worker_job_id']}
+          if pilot['expected_report_path'] not in task['evidence_refs']: task['evidence_refs'].append(pilot['expected_report_path'])
+          slot.update({'status':'free','occupancy_type':None,'task_id':None,'task_file':None,'conflict_keys':[],'lease':None})
+          st['state_revision']+=1; st['dispatch_enabled']=False; st['orchestration_phase']='phase_2b_live_readonly_pilot_blocked_billing'
+          st['phase2b_closeout']={'status':'blocked','reason':'openai_api_billing_no_credits','source_run_id':close['source_run_id'],'source_worker_job_id':close['source_worker_job_id'],'attempt_id':pilot['attempt_id'],'lease_id':pilot['lease_id'],'report_path':pilot['expected_report_path'],'finalized_at':datetime.now(timezone.utc).isoformat().replace('+00:00','Z'),'automatic_next_dispatch':False}
+          validate_state(p2a,st,events)
+          persist_state(p2b,root/'orchestration/state.json',st)
+          PY
+          test "$(git status --porcelain --untracked-files=all | wc -l)" -eq 1
+          test "$(git status --porcelain --untracked-files=all | sed 's/^...//')" = 'orchestration/state.json'
+
+      - name: Commit controller-only state closeout with CAS
+        id: commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPORT_HEAD: ${{ needs.publisher.outputs.report_head }}
+        run: |
+          set -euo pipefail
+          git config user.name 'director-controller'
+          git config user.email 'director-controller@users.noreply.github.com'
+          git add -- orchestration/state.json
+          test "$(git diff --cached --name-only)" = 'orchestration/state.json'
+          git commit -m 'Finalize Phase 2B blocked on OpenAI API credits'
+          state_head="$(git rev-parse HEAD)"
+          remote_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$remote_head" = "$REPORT_HEAD"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/main
+          echo "state_head=$state_head" >> "$GITHUB_OUTPUT"
+
+  verify:
+    needs: [publisher, finalize]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout exact final state without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.finalize.outputs.state_head }}
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Verify durable blocked closure and no next dispatch
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('orchestration/state.json').read_text(encoding='utf-8'))
+          assert Path('reviews/worker_reports/epic-ru-availability-source-probe-01.md').is_file()
+          assert Path('reviews/worker_reports/director-orchestration-phase2b-live-readonly-pilot-01.md').is_file()
+          assert s['orchestration_phase']=='phase_2b_live_readonly_pilot_blocked_billing'
+          assert s['dispatch_enabled'] is False and s['phase2b_closeout']['automatic_next_dispatch'] is False
+          assert all(x['status']=='free' for x in s['slots'])
+          epic=next(t for t in s['tasks'] if t['task_id']=='epic-ru-availability-source-probe-01')
+          assert epic['status']=='blocked' and epic['assigned_slot'] is None and epic['attempt_number']==1
+          assert next(t for t in s['tasks'] if t['task_id']=='wishlist-good-deal-override-recon-01')['attempt_number']==0
+          assert next(t for t in s['tasks'] if t['task_id']=='top-summary-filter-buttons-01')['attempt_number']==0
+          PY
