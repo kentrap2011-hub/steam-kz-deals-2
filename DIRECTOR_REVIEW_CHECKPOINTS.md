@@ -6,9 +6,9 @@ The Director must read this file before assigning a new ordinary backlog task wh
 
 ## System Auditor
 
-system_audit_due: false
+system_audit_due: true
 first_system_audit_trigger: `satisfied_2026-09-02`
-material_changes_since_last_system_audit: 0
+material_changes_since_last_system_audit: 1
 last_system_audit_report: `reviews/system_audits/director-orchestration-phase1-audit-01.md`
 mobile_post_incident_audit_pending: false
 
@@ -17,20 +17,31 @@ mobile_post_incident_audit_pending: false
 Set `system_audit_due: true` when:
 - 3 material production IMPLEMENT/ACCEPTANCE changes have closed since the last audit;
 - a user-visible missing/incorrect game/giveaway/ranking or unobserved automatic-process incident has been stabilized;
-- a new queue/scheduler/provider/identity authority/ranking gate/semantic runtime/ownership boundary has been accepted.
+- a new queue/scheduler/provider/identity authority/ranking gate/semantic runtime/ownership boundary has been accepted or is at its acceptance gate.
 
 A completed audit resets `material_changes_since_last_system_audit` to 0 and records its report.
 
 ### Current audit state
 
-Latest completed audit:
-- report: `reviews/system_audits/director-orchestration-phase1-audit-01.md`;
-- status: `complete`;
-- selected systemic closure: `accepted`;
-- Phase 1 shadow orchestration is safe to use as the foundation for a separately gated Phase 2;
-- Phase 1 remains shadow-only and is not authorized to dispatch real workers, call OpenAI/Codex, mutate product state, or gain write authority.
+Phase 2A orchestration security/state boundary is technically complete but not yet systemically accepted.
 
-No System Audit is currently due.
+Audit task:
+`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2A_SYSTEM_AUDIT_01.md`
+
+Expected report:
+`reviews/system_audits/director-orchestration-phase2a-audit-01.md`
+
+Implementation under audit:
+`reviews/worker_reports/director-orchestration-phase2a-security-boundary-implement-01.md`
+
+Validated head:
+`bd0b8ad88f8c1f6b8ba4f8ac7da628df2e51be6c`
+
+Do not enable Phase 2B live worker dispatch and do not provision `OPENAI_API_KEY` until this audit accepts the boundary.
+
+Previous completed audit:
+`reviews/system_audits/director-orchestration-phase1-audit-01.md`
+closure accepted.
 
 ## Taste Reviewer
 
@@ -42,10 +53,14 @@ last_taste_review_report: `reviews/taste_reviews/baseline-01.md`
 
 Internal ordered sequence:
 1. evidence state / confidence / reconsideration semantics — technically complete;
-2. play role + relative start priority — next;
-3. reconsideration commercial bridge + wishlist-good-deal override — later.
+2. play role + relative start priority — technically complete;
+3. reconsideration commercial bridge + wishlist-good-deal override — next.
 
-The current plan is to keep these as one bounded internal sequence and run one independent current Taste Review after step 3 and regenerated controls, before final material acceptance. If any step is accepted/deployed independently as a completed material Taste boundary, a current Taste Review is required before that acceptance.
+The current plan is to keep steps 1–3 as one bounded internal sequence and run one independent current Taste Review after step 3 and regenerated controls, before final material acceptance.
+
+`taste_baseline_review_due` remains false only because step 3 has not yet completed and no intermediate step is being independently accepted/deployed as a completed product semantic boundary.
+
+After step 3 report exists, a current Taste Review becomes mandatory before final acceptance of the combined new semantics.
 
 ### Baseline controls
 
