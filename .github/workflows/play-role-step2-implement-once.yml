@@ -48,6 +48,17 @@ jobs:
           path.write_text(text.replace(old, new, 1), encoding='utf-8')
           PY
           python scripts/_play_role_step2_once.py
+          git restore .github/workflows/build-daily-visual-payload.yml
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('PROJECT_ROUTES.md')
+          text = path.read_text(encoding='utf-8')
+          old = '- validation owner: existing `.github/workflows/build-daily-visual-payload.yml` build job;'
+          new = '- focused regression: `scripts/test_play_priority_context.py`; existing recurring workflows/schedulers remain unchanged;'
+          if old not in text:
+              raise SystemExit('PROJECT_ROUTES play-priority validation line missing')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
 
       - name: Validate role start context and existing controls
         run: |
@@ -62,7 +73,7 @@ jobs:
           python scripts/test_grounded_negative_contract.py
           python scripts/test_card_explanation_policy.py
           python scripts/validate_priority_ranking.py
-          git diff --exit-code -- scripts/priority_ranking.py config/final_ranking_policy.json web/app.js
+          git diff --exit-code -- scripts/priority_ranking.py config/final_ranking_policy.json web/app.js .github/workflows/build-daily-visual-payload.yml
           python - <<'PY'
           from pathlib import Path
           helper = Path('scripts/play_priority_context.py').read_text(encoding='utf-8')
@@ -86,7 +97,6 @@ jobs:
             scripts/test_play_priority_context.py \
             scripts/build_final_visual_payload.py \
             scripts/build_ranking_lookup.py \
-            .github/workflows/build-daily-visual-payload.yml \
             PROJECT_RULES.md \
             PROJECT_DECISIONS.md \
             PROJECT_ROUTES.md
