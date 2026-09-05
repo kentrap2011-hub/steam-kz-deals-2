@@ -1,0 +1,57 @@
+name: Director Orchestration Phase 2A Validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'config/director_orchestration_phase2a_contract.json'
+      - 'config/director_orchestration_contract.json'
+      - 'orchestration/**'
+      - 'scripts/director_orchestration_controller.py'
+      - 'scripts/director_report_publisher.py'
+      - 'scripts/director_orchestration_shadow.py'
+      - 'scripts/test_director_orchestration_phase2a.py'
+      - '.github/workflows/director-orchestration-phase2a-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: director-orchestration-phase2a-validation
+  cancel-in-progress: false
+
+jobs:
+  security-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Run retained Phase 1 shadow tests
+        run: python scripts/test_director_orchestration_shadow.py -v
+      - name: Run deterministic Phase 2A security tests
+        run: python scripts/test_director_orchestration_phase2a.py -v
+      - name: Build staging-only dispatch request artifact
+        run: python scripts/director_orchestration_controller.py --output staging-dispatch-request.json
+      - name: Assert no dispatch or mutation
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('staging-dispatch-request.json'))
+          assert p['dispatch_enabled'] is False
+          assert p['dispatch_performed'] is False
+          assert p['openai_or_codex_invoked'] is False
+          assert p['product_mutation_performed'] is False
+          assert p['state_mutation_performed'] is False
+          assert p['candidate']['mode'] in ('READ_ONLY_RECON','AUDIT')
+          assert p['candidate']['executable'] is False
+          PY
+      - name: Upload staging evidence only
+        uses: actions/upload-artifact@v4
+        with:
+          name: director-orchestration-phase2a-staging-request
+          path: staging-dispatch-request.json
+          if-no-files-found: error
