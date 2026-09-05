@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://steam-kz-deals.local/orchestration/read_only_worker_result.schema.json",
+  "title": "Director read-only worker result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version","task_id","task_revision","attempt_number","attempt_id","lease_id","mode","task_file","task_file_blob_sha","base_sha","report_path","status","report_content","requested_repository_mutations","state_mutation_requested","product_mutation_requested","secret_values"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "task_revision": {"type": "integer", "minimum": 1},
+    "attempt_number": {"type": "integer", "minimum": 1},
+    "attempt_id": {"type": "string", "minLength": 1},
+    "lease_id": {"type": "string", "minLength": 1},
+    "mode": {"enum": ["READ_ONLY_RECON", "AUDIT"]},
+    "task_file": {"type": "string", "minLength": 1},
+    "task_file_blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "base_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "report_path": {"type": "string", "pattern": "^reviews/worker_reports/[^/]+\\.md$"},
+    "status": {"type": "string", "minLength": 1},
+    "report_content": {"type": "string", "minLength": 1, "maxLength": 200000},
+    "requested_repository_mutations": {"type": "array", "maxItems": 0},
+    "state_mutation_requested": {"const": false},
+    "product_mutation_requested": {"const": false},
+    "secret_values": {"type": "array", "maxItems": 0}
+  }
+}
