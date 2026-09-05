@@ -13,59 +13,21 @@
 5. Номер принадлежит worker-слоту.
 6. Не запускать параллельно конфликтующие Taste/ranking IMPLEMENT.
 7. Taste Reviewer recommendations имеют VERY HIGH USER PRIORITY.
-8. Automation migration идёт по отдельным gated phases; live Codex dispatch остаётся выключен до независимого Phase 2A audit acceptance и последующего explicit Phase 2B enablement.
+8. Automation migration идёт по отдельным gated phases; autonomous IMPLEMENT остаётся запрещён.
 
 ## Review checkpoint
 
-`system_audit_due: true`.
-Audit target: Phase 2A orchestration security/state boundary.
-Audit task:
-`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2A_SYSTEM_AUDIT_01.md`.
-Expected report:
-`reviews/system_audits/director-orchestration-phase2a-audit-01.md`.
+Latest System Audit:
+`reviews/system_audits/director-orchestration-phase2a-audit-01.md`
+Status: `PASS`.
+Closure: `accepted`.
+`system_audit_due: false`.
 
-## Latest completed
+Phase 2A audit explicitly permits user provisioning of repository Actions secret `OPENAI_API_KEY` and one separately enabled bounded Phase 2B READ-ONLY pilot afterward.
 
-### Taste step 2
+## Active product work
 
-Report:
-`reviews/worker_reports/play-role-and-start-priority-implement-01.md`
-Status: `complete`.
-Implementation commit: `19ff08128b09b9acb6cbe81f1789e0a5bba294ec`.
-Validation run: `33964033846`.
-
-Implemented explicit producer-owned context:
-- play role: `main_full`, `secondary_palate_cleanser`, `family_coop`, `unresolved`;
-- relative start priority: `high`, `ordinary`, `low`, `unresolved`;
-- both remain separate from fit and sale urgency;
-- ranking math unchanged;
-- no wishlist/commercial bridge yet.
-
-### Automation Phase 2A
-
-Report:
-`reviews/worker_reports/director-orchestration-phase2a-security-boundary-implement-01.md`
-Status: `complete`.
-Validated head: `bd0b8ad88f8c1f6b8ba4f8ac7da628df2e51be6c`.
-Validation run: `33964008655`.
-Validation job: `101300745779`.
-Artifact: `9968832310`.
-
-Implemented:
-- single future state writer/controller;
-- immutable intake/revision/attempt/lease semantics;
-- exact task/blob/base/report binding;
-- READ-ONLY RECON/AUDIT worker request/result schemas;
-- trusted report publisher boundary;
-- future pinned `openai/codex-action` template with LLM read-only permissions;
-- real dispatch disabled;
-- no OpenAI/API key used.
-
-Independent audit required before Phase 2B or user secret provisioning.
-
-## Active next pair
-
-### ЧАТ 1 — Taste step 3: reconsideration + wishlist good-deal bridge
+### ЧАТ 1 — Taste step 3
 
 Task:
 `WORKER_TASK_RECONSIDERATION_COMMERCIAL_BRIDGE_AND_WISHLIST_IMPLEMENT_01.md`
@@ -74,52 +36,61 @@ Mode: `IMPLEMENT`
 Expected report:
 `reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md`
 Priority: `VERY_HIGH_USER_PRIORITY`.
-Status: `ready_continue_existing_chat_1`.
+Status: `running_or_ready_existing_chat_1`.
 
-Goal:
-- wishlist + canonical genuinely good deal may bypass only ordinary non-negative/insufficient Taste eligibility;
-- `reconsiderable` may become purchase-worthy through credible commercial/package value;
-- `confirmed_negative` and direct confirmed conflict remain non-overridable;
-- preserve Taste evidence state, role/start priority, risks and provenance;
-- reuse existing good-deal authority, no new discount threshold;
-- giveaways and final ranking weights unchanged unless mechanically necessary.
+After step 3, independent current Taste Review is mandatory before final material acceptance of the combined three-step Taste sequence.
 
-After step 3, one independent current Taste Review is mandatory before final material acceptance of the combined three-step sequence.
+## Automation
 
-### ЧАТ 2 — independent Phase 2A System Audit
+### Phase 1
 
-Task:
-`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2A_SYSTEM_AUDIT_01.md`
-Task ID: `director-orchestration-phase2a-system-audit-01`
-Mode: `READ-ONLY / AUDIT`
+Shadow observer implemented + independently accepted.
+
+### Phase 2A
+
+Security/state/cloud-worker boundary implemented + independently accepted.
+Audit:
+`reviews/system_audits/director-orchestration-phase2a-audit-01.md`.
+
+### Phase 2B — blocked on one-time user secret setup
+
+Prepared task:
+`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2B_LIVE_READONLY_PILOT_01.md`
+Task ID: `director-orchestration-phase2b-live-readonly-pilot-01`
+Mode: `IMPLEMENT`
 Expected report:
-`reviews/system_audits/director-orchestration-phase2a-audit-01.md`
-Status: `ready_new_chat_2_independent_auditor`.
+`reviews/worker_reports/director-orchestration-phase2b-live-readonly-pilot-01.md`
+Status: `blocked_user_must_confirm_OPENAI_API_KEY_repository_secret_exists`.
 
-Goal:
-- independently verify single-writer, lease/revision/stale-result protections;
-- verify worker cannot write GitHub/state/product files;
-- verify trusted publisher path confinement;
-- verify exact immutable Codex Action pin/provenance and read-only worker permissions;
-- verify dispatch still disabled;
-- decide whether user may provision `OPENAI_API_KEY` and whether one bounded Phase 2B READ-ONLY pilot is safe.
+User action required exactly once:
+- create/use a dedicated OpenAI API key;
+- add it directly to repository `kentrap2011-hub/steam-kz-deals-2` -> Settings -> Secrets and variables -> Actions as repository secret named exactly `OPENAI_API_KEY`;
+- never paste the value into ChatGPT, Git, task/report files or logs.
 
-The Phase 2A implementation Chat 2 must not self-audit; delete it and use a fresh independent Chat 2.
+Provisioning the secret alone does NOT enable dispatch.
+
+After user confirms secret presence, create a fresh Chat 2 for Phase 2B IMPLEMENT.
+The Phase 2B implementation must enable exactly one live `READ_ONLY_RECON` cloud pilot for:
+`WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`.
+
+Critical audit carry-forward:
+- current-state / optimistic-concurrency stale barrier before publication;
+- exact task/revision/attempt/lease/base/blob/report binding;
+- max two slots;
+- current Chat 1 represented as external/manual occupancy if still active;
+- LLM job has no GitHub write credential;
+- trusted publisher writes only exact expected report path;
+- no second automatic dispatch;
+- IMPLEMENT structurally excluded from cloud worker path.
+
+The Phase 2A audit Chat 2 is complete and can be deleted.
 
 ## Taste sequence
 
 1. evidence state/confidence/reconsideration — complete internally;
 2. play role + relative start priority — complete internally;
-3. reconsideration commercial bridge + wishlist-good-deal override — active next;
+3. reconsideration commercial bridge + wishlist-good-deal override — active;
 4. independent current Taste Review — mandatory after step 3 before final acceptance.
-
-## Automation sequence
-
-- Phase 1 shadow observer — implemented + audited accepted.
-- Phase 2A security/state boundary — implemented, audit pending.
-- Phase 2B live READ-ONLY worker pilot — not authorized yet.
-- `OPENAI_API_KEY` — do not provision until Phase 2A audit acceptance.
-- Autonomous IMPLEMENT remains out of scope.
 
 ## Steam access policy
 
@@ -131,7 +102,7 @@ DLC ownership eligibility remains queued. Personalized Complete The Set actual p
 
 ## Other queued
 
-- `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`.
+- `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md` — selected as first future cloud READ-ONLY pilot.
 - DLC ownership eligibility IMPLEMENT.
 - `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`.
 - `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`.
@@ -143,7 +114,7 @@ DLC ownership eligibility remains queued. Personalized Complete The Set actual p
 
 ## Next decision
 
-1. Continue existing Chat 1 with Taste step 3.
-2. Delete Phase 2A implementation Chat 2 and create fresh independent audit Chat 2.
-3. After Chat 1 report, launch independent Taste Review before final Taste acceptance.
-4. After Chat 2 audit acceptance, instruct user to provision `OPENAI_API_KEY` directly in GitHub Actions Secrets and then prepare one bounded Phase 2B live READ-ONLY pilot.
+1. User adds repository Actions secret `OPENAI_API_KEY` and confirms only that it exists.
+2. Do not ask user to reveal the key.
+3. After confirmation, delete completed audit Chat 2 if not already deleted and create fresh Chat 2 for `WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2B_LIVE_READONLY_PILOT_01.md`.
+4. Keep Chat 1 on Taste step 3 until its exact report is available.
