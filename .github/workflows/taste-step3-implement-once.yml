@@ -34,57 +34,17 @@ jobs:
           python scripts/_taste_step3_once.py
           python - <<'PY'
           from pathlib import Path
-
           helper = Path('scripts/commercial_reconsideration_bridge.py')
           text = helper.read_text(encoding='utf-8')
-          old = '''def hard_taste_block(taste_entry, readiness=None):
-    taste_entry = taste_entry if isinstance(taste_entry, dict) else {}
-    readiness = readiness or evidence_readiness(taste_entry)
-    return (
-        readiness.get('fit_evidence_state') == 'confirmed_negative'
-        or taste_entry.get('reason_code') == DIRECT_CONFLICT_REASON
-    )
-'''
-          new = '''def hard_taste_block(taste_entry, readiness=None):
-    taste_entry = taste_entry if isinstance(taste_entry, dict) else {}
-    readiness = readiness or evidence_readiness(taste_entry)
-    # V5 evidence state is authoritative. A legacy reason_code named
-    # exclude_direct_conflict is not independently a hard block once a validated
-    # V5 entry has classified the evidence as reconsiderable (BioShock control).
-    # Ambiguous legacy direct-conflict rows remain fail-closed because
-    # fit_evidence_ready is false and resolve_bridge never reaches eligibility.
-    return readiness.get('fit_evidence_state') == 'confirmed_negative'
-'''
+          old = "    return (\n        readiness.get('fit_evidence_state') == 'confirmed_negative'\n        or taste_entry.get('reason_code') == DIRECT_CONFLICT_REASON\n    )\n"
+          new = "    # V5 evidence state is authoritative. Ambiguous legacy direct-conflict rows\n    # remain fail-closed because fit_evidence_ready is false.\n    return readiness.get('fit_evidence_state') == 'confirmed_negative'\n"
           if text.count(old) != 1:
               raise SystemExit(f'hard_taste_block patch anchor count={text.count(old)}')
           helper.write_text(text.replace(old, new, 1), encoding='utf-8')
-
           test = Path('scripts/test_reconsideration_commercial_bridge.py')
           text = test.read_text(encoding='utf-8')
-          old = '''    if state == 'reconsiderable':
-        common.update({
-            'fit_evidence_confidence': 'high',
-            'fit_evidence_basis': ['historical_user_experience'],
-            'historical_negative_context': {
-                'evidence_depth': 'brief_or_partial',
-                'outcome': 'mixed',
-                'explicit_dislike': False,
-                'current_reopening_evidence': 'meaningful_new_context',
-            },
-        })
-'''
-          new = '''    if state == 'reconsiderable':
-        common.update({
-            'fit_evidence_confidence': 'medium',
-            'fit_evidence_basis': ['historical_user_experience', 'later_quality_reputation_reopened_interest'],
-            'historical_negative_context': {
-                'exposure_depth': 'brief',
-                'recency': 'old',
-                'reaction': 'non_engagement',
-                'later_reopening_evidence': 'quality_reputation',
-            },
-        })
-'''
+          old = "            'fit_evidence_confidence': 'high',\n            'fit_evidence_basis': ['historical_user_experience'],\n            'historical_negative_context': {\n                'evidence_depth': 'brief_or_partial',\n                'outcome': 'mixed',\n                'explicit_dislike': False,\n                'current_reopening_evidence': 'meaningful_new_context',\n            },\n"
+          new = "            'fit_evidence_confidence': 'medium',\n            'fit_evidence_basis': ['historical_user_experience', 'later_quality_reputation_reopened_interest'],\n            'historical_negative_context': {\n                'exposure_depth': 'brief',\n                'recency': 'old',\n                'reaction': 'non_engagement',\n                'later_reopening_evidence': 'quality_reputation',\n            },\n"
           if text.count(old) != 1:
               raise SystemExit(f'reconsiderable fixture patch anchor count={text.count(old)}')
           test.write_text(text.replace(old, new, 1), encoding='utf-8')
@@ -124,8 +84,8 @@ jobs:
           assert 'giveaway' not in helper
           assert "readiness.get('fit_evidence_state') == 'confirmed_negative'" in helper
           preai = Path('scripts/build_pre_ai_chatgpt_payload.py').read_text(encoding='utf-8')
-          assert "canonical_good_deal_signal" in preai
-          assert "commercial_eligibility_bridge" in preai
+          assert 'canonical_good_deal_signal' in preai
+          assert 'commercial_eligibility_bridge' in preai
           visual = Path('scripts/build_visual_feed_v2.py').read_text(encoding='utf-8')
           assert "return 'below_moderate', scenario, validated" in visual
           print('BOUNDED_COMMERCIAL_BRIDGE_STATIC_GUARDS=PASS')
