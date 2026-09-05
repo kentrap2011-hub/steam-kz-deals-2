@@ -5,7 +5,21 @@ from pathlib import Path
 from director_orchestration_shadow import ShadowPlanError, plan_shadow
 ROOT=Path(__file__).resolve().parents[1]
 CONTRACT=json.loads((ROOT/'config/director_orchestration_contract.json').read_text())
-STATE=json.loads((ROOT/'orchestration/state.json').read_text())
+
+def phase1_fixture():
+    """Reconstruct the accepted Phase 1 shadow scenario in memory; never treat live Phase 2B occupancy as immutable Phase 1 input."""
+    s=json.loads((ROOT/'orchestration/state.json').read_text())
+    play=next(t for t in s['tasks'] if t['task_id']=='play-role-and-start-priority-implement-01')
+    epic=next(t for t in s['tasks'] if t['task_id']=='epic-ru-availability-source-probe-01')
+    play['status']='assigned'; play['assigned_slot']='slot_1'
+    epic['status']='queued'; epic['assigned_slot']=None
+    slot1=next(x for x in s['slots'] if x['slot_id']=='slot_1')
+    slot2=next(x for x in s['slots'] if x['slot_id']=='slot_2')
+    slot1.update({'status':'occupied','occupancy_type':'external_manual','task_id':play['task_id'],'task_file':play['task_file'],'conflict_keys':list(play['conflict_keys'])})
+    slot2.update({'status':'free','occupancy_type':None,'task_id':None,'task_file':None,'conflict_keys':[]})
+    return s
+
+STATE=phase1_fixture()
 
 def task(task_id,priority='NORMAL',sequence=100,conflicts=None,deps=None,status='queued'):
     return {'task_id':task_id,'revision':1,'mode':'READ_ONLY_RECON','priority':priority,'domain':task_id,'conflict_keys':list(conflicts or []),'status':status,'task_file':f'WORKER_TASK_{task_id}.md','expected_report':f'reviews/worker_reports/{task_id}.md','dependencies':list(deps or []),'assigned_slot':None,'queue_sequence':sequence,'user_gate':'none','review_gate':'none'}
