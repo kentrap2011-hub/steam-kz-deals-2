@@ -4,9 +4,9 @@ import copy, json, unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from director_orchestration_controller import (
-    OrchestrationError, load_intakes, load_json, prepare_phase2b_live_pilot,
-    reconcile_phase2b_manual_occupancy, validate_expected_head, validate_expected_state_revision,
-    validate_phase2b_pilot_contract, validate_state,
+    OrchestrationError, load_intakes, load_json, resume_phase2b_live_pilot,
+    validate_expected_head, validate_expected_state_revision, validate_phase2b_pilot_contract,
+    validate_state,
 )
 from director_report_publisher import validate_publication
 
@@ -15,7 +15,7 @@ P2A=load_json(ROOT/'config/director_orchestration_phase2a_contract.json')
 P2B=load_json(ROOT/'config/director_orchestration_phase2b_pilot_contract.json')
 STATE=load_json(ROOT/'orchestration/state.json')
 EVENTS=load_intakes(ROOT)
-NOW=datetime(2026,9,5,17,0,0,tzinfo=timezone.utc)
+NOW=datetime(2026,9,5,17,15,0,tzinfo=timezone.utc)
 
 def result_for(request,status='blocked',content='# Epic RU availability source probe\n\nStatus: blocked\n'):
     return {
@@ -28,71 +28,80 @@ def result_for(request,status='blocked',content='# Epic RU availability source p
     }
 
 class Phase2BLivePilotTests(unittest.TestCase):
-    def test_01_contract_is_one_bounded_readonly_pilot(self):
+    def resumed(self):
+        return resume_phase2b_live_pilot(ROOT,P2A,P2B,copy.deepcopy(STATE),EVENTS,NOW)
+
+    def test_01_contract_is_one_bounded_readonly_attempt(self):
         validate_phase2b_pilot_contract(P2B)
         self.assertFalse(P2B['general_dispatch_enabled'])
         self.assertFalse(P2B['automatic_next_dispatch'])
         self.assertFalse(P2B['implement_dispatch_allowed'])
         self.assertEqual(1,P2B['limits']['max_live_attempts'])
+        self.assertEqual(1,P2B['limits']['max_same_attempt_recovery_executions'])
         self.assertEqual(2,P2B['limits']['max_logical_slots'])
-        self.assertEqual('READ_ONLY_RECON',P2B['worker']['mode'])
+        self.assertEqual('epic-ru-availability-source-probe-01:r1:a1',P2B['pilot']['attempt_id'])
+        self.assertEqual('slot_2:epic-ru-availability-source-probe-01:r1:a1',P2B['pilot']['lease_id'])
 
-    def test_02_current_manual_occupancy_replaces_only_stale_play_role_slot(self):
-        s=reconcile_phase2b_manual_occupancy(copy.deepcopy(STATE),P2B,NOW)
+    def test_02_current_manual_completion_frees_slot_without_new_dispatch(self):
+        report=ROOT/P2B['manual_occupancy']['completion_report']
+        self.assertTrue(report.is_file())
+        self.assertIn('`complete`',report.read_text(encoding='utf-8')[:4000])
+        s,r=self.resumed()
+        slot1=next(x for x in s['slots'] if x['slot_id']=='slot_1')
+        slot2=next(x for x in s['slots'] if x['slot_id']=='slot_2')
+        self.assertEqual('free',slot1['status'])
+        self.assertIsNone(slot1['task_id'])
+        self.assertEqual('cloud_worker',slot2['occupancy_type'])
+        self.assertEqual('epic-ru-availability-source-probe-01',slot2['task_id'])
         self.assertEqual(2,len(s['slots']))
-        slot=next(x for x in s['slots'] if x['slot_id']=='slot_1')
-        self.assertEqual('external_manual',slot['occupancy_type'])
-        self.assertEqual('reconsideration-commercial-bridge-and-wishlist-implement-01',slot['task_id'])
-        old=next(x for x in s['tasks'] if x['task_id']=='play-role-and-start-priority-implement-01')
-        self.assertIsNone(old['assigned_slot'])
-        self.assertEqual('accepted',old['status'])
         validate_state(P2A,s,EVENTS)
 
-    def test_03_exact_epic_pilot_only_acquires_second_slot(self):
-        s,r=prepare_phase2b_live_pilot(ROOT,P2A,P2B,copy.deepcopy(STATE),EVENTS,NOW)
-        self.assertEqual('epic-ru-availability-source-probe-01',r['task_id'])
-        self.assertEqual('READ_ONLY_RECON',r['mode'])
+    def test_03_recovery_reuses_exact_attempt_lease_and_retry_counter(self):
+        s,r=self.resumed()
+        task=next(x for x in s['tasks'] if x['task_id']==r['task_id'])
+        self.assertEqual('epic-ru-availability-source-probe-01:r1:a1',r['attempt_id'])
+        self.assertEqual('slot_2:epic-ru-availability-source-probe-01:r1:a1',r['lease_id'])
         self.assertEqual(1,r['attempt_number'])
+        self.assertEqual(2,task['retry']['next_attempt_number'])
+        self.assertEqual(1,s['phase2b_recovery']['resume_count'])
+        self.assertEqual('READ_ONLY_RECON',r['mode'])
         self.assertEqual('reviews/worker_reports/epic-ru-availability-source-probe-01.md',r['expected_report_path'])
-        occupied=[x for x in s['slots'] if x['status']=='occupied']
-        self.assertEqual(2,len(occupied))
-        self.assertEqual({'external_manual','cloud_worker'},{x['occupancy_type'] for x in occupied})
 
-    def test_04_second_live_attempt_is_structurally_refused(self):
-        s,_=prepare_phase2b_live_pilot(ROOT,P2A,P2B,copy.deepcopy(STATE),EVENTS,NOW)
+    def test_04_second_recovery_execution_is_structurally_refused(self):
+        s,_=self.resumed()
         with self.assertRaises(OrchestrationError):
-            prepare_phase2b_live_pilot(ROOT,P2A,P2B,s,EVENTS,NOW+timedelta(minutes=1))
+            resume_phase2b_live_pilot(ROOT,P2A,P2B,s,EVENTS,NOW+timedelta(minutes=1))
 
-    def test_05_implement_task_cannot_be_substituted(self):
-        bad=copy.deepcopy(P2B)
-        bad['pilot']['task_id']='top-summary-filter-buttons-01'
-        with self.assertRaises(OrchestrationError): validate_phase2b_pilot_contract(bad)
+    def test_05_expired_original_lease_cannot_be_recovered(self):
+        with self.assertRaises(OrchestrationError):
+            resume_phase2b_live_pilot(ROOT,P2A,P2B,copy.deepcopy(STATE),EVENTS,NOW+timedelta(minutes=30))
 
-    def test_06_concurrent_state_revision_is_rejected(self):
-        s,r=prepare_phase2b_live_pilot(ROOT,P2A,P2B,copy.deepcopy(STATE),EVENTS,NOW)
-        res=result_for(r)
+    def test_06_concurrent_state_revision_rejects_result(self):
+        s,r=self.resumed(); res=result_for(r)
+        validate_publication(r,res,s,NOW+timedelta(minutes=1))
         advanced=copy.deepcopy(s); advanced['state_revision']+=1
         with self.assertRaises(OrchestrationError):
             validate_expected_state_revision(s['state_revision'],advanced['state_revision'])
-        validate_expected_state_revision(s['state_revision'],s['state_revision'])
-        validate_publication(r,res,s,NOW+timedelta(minutes=1))
 
     def test_07_expected_head_cas_conflict_fails_closed(self):
         validate_expected_head('a'*40,'a'*40)
         with self.assertRaises(OrchestrationError): validate_expected_head('a'*40,'b'*40)
-        with self.assertRaises(OrchestrationError): validate_expected_state_revision(4,5)
+        with self.assertRaises(OrchestrationError): validate_expected_state_revision(5,6)
 
-    def test_08_expired_lease_is_rejected(self):
-        s,r=prepare_phase2b_live_pilot(ROOT,P2A,P2B,copy.deepcopy(STATE),EVENTS,NOW)
+    def test_08_expired_worker_result_is_rejected(self):
+        s,r=self.resumed()
         with self.assertRaises(OrchestrationError):
             validate_publication(r,result_for(r),s,NOW+timedelta(hours=1))
 
     def test_09_wrong_report_path_is_rejected(self):
-        s,r=prepare_phase2b_live_pilot(ROOT,P2A,P2B,copy.deepcopy(STATE),EVENTS,NOW)
-        res=result_for(r); res['report_path']='reviews/worker_reports/not-the-pilot.md'
+        s,r=self.resumed(); res=result_for(r); res['report_path']='reviews/worker_reports/not-the-pilot.md'
         with self.assertRaises(OrchestrationError): validate_publication(r,res,s,NOW+timedelta(minutes=1))
 
-    def test_10_worker_job_has_no_write_credential_and_exact_codex_pin(self):
+    def test_10_implement_task_cannot_be_substituted(self):
+        bad=copy.deepcopy(P2B); bad['pilot']['task_id']='top-summary-filter-buttons-01'
+        with self.assertRaises(OrchestrationError): validate_phase2b_pilot_contract(bad)
+
+    def test_11_worker_job_has_exact_readonly_boundary_and_supported_web_search_config(self):
         text=(ROOT/'.github/workflows/director-orchestration-phase2b-live-readonly-pilot.yml').read_text(encoding='utf-8')
         worker=text.split('  worker:',1)[1].split('  publisher:',1)[0]
         self.assertIn('permissions:\n      contents: read',worker)
@@ -100,12 +109,13 @@ class Phase2BLivePilotTests(unittest.TestCase):
         self.assertIn('openai/codex-action@86365089eb2b84e0a8fb0717b304f8bdcb13b20e',worker)
         self.assertIn('permission-profile: ":read-only"',worker)
         self.assertIn('safety-strategy: drop-sudo',worker)
+        self.assertIn('web_search=\\"live\\"',worker)
+        self.assertNotIn('["--search"]',worker)
         self.assertNotIn('contents: write',worker)
         self.assertNotIn('git push',worker)
         self.assertNotIn('STEAM_',worker)
-        self.assertNotIn('provider',worker.lower())
 
-    def test_11_publisher_is_separate_and_exact_path_only(self):
+    def test_12_publisher_is_separate_and_exact_path_only(self):
         text=(ROOT/'.github/workflows/director-orchestration-phase2b-live-readonly-pilot.yml').read_text(encoding='utf-8')
         publisher=text.split('  publisher:',1)[1]
         self.assertIn('contents: write',publisher)
@@ -114,12 +124,13 @@ class Phase2BLivePilotTests(unittest.TestCase):
         self.assertIn('reviews/worker_reports/epic-ru-availability-source-probe-01.md',publisher)
         self.assertIn('git diff --name-only',publisher)
 
-    def test_12_no_queue_draining_or_automatic_next_dispatch(self):
+    def test_13_no_queue_draining_second_task_or_automatic_implement(self):
         text=(ROOT/'.github/workflows/director-orchestration-phase2b-live-readonly-pilot.yml').read_text(encoding='utf-8')
         self.assertNotIn('choose_task(',text)
         self.assertNotIn('workflow_dispatch:',text)
         self.assertNotIn('repository_dispatch',text)
-        self.assertIn('automatic_next_dispatch',json.dumps(P2B))
         self.assertFalse(P2B['automatic_next_dispatch'])
+        self.assertFalse(P2B['implement_dispatch_allowed'])
+        self.assertTrue(P2B['recovery']['must_not_select_another_task'])
 
 if __name__=='__main__': unittest.main()
