@@ -65,5 +65,18 @@
     "optimistic_concurrency_required": true,
     "reject_state_revision_advance": true,
     "reject_head_advance": true
+  },
+  "blocked_closeout": {
+    "allowed_only_after_recovery_budget_exhausted": true,
+    "required_resume_count": 2,
+    "source_run_id": 33980979557,
+    "source_worker_job_id": 101346057158,
+    "required_failure_class": "openai_api_billing_no_credits",
+    "required_failure_text": "You have no credits remaining.",
+    "report_status": "blocked",
+    "publisher_may_write_only": "reviews/worker_reports/epic-ru-availability-source-probe-01.md",
+    "must_not_invoke_codex": true,
+    "must_not_dispatch_any_task": true,
+    "finalize_state_via_controller_only": true
   }
 }
