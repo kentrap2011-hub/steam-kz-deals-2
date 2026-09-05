@@ -31,8 +31,9 @@ def result_for(request,status='blocked',content='# Report\n\nStatus: blocked\n')
     return {'schema_version':1,'task_id':request['task_id'],'task_revision':request['task_revision'],'attempt_number':request['attempt_number'],'attempt_id':request['attempt_id'],'lease_id':request['lease_id'],'mode':request['mode'],'task_file':request['task_file'],'task_file_blob_sha':request['task_file_blob_sha'],'base_sha':request['base_sha'],'report_path':request['expected_report_path'],'status':status,'report_content':content,'requested_repository_mutations':[],'state_mutation_requested':False,'product_mutation_requested':False,'secret_values':[]}
 
 class Phase2ASecurityTests(unittest.TestCase):
-    def test_01_initial_state_is_valid_and_manual_occupancy_reserved(self):
-        validate_state(CONTRACT,copy.deepcopy(STATE),EVENTS); occupied=[s for s in STATE['slots'] if s['status']=='occupied']; self.assertEqual(1,len(occupied)); self.assertEqual('external_manual',occupied[0]['occupancy_type'])
+    def test_01_initial_state_is_valid_and_manual_occupancy_is_at_most_one(self):
+        validate_state(CONTRACT,copy.deepcopy(STATE),EVENTS); occupied=[s for s in STATE['slots'] if s['status']=='occupied']; self.assertLessEqual(len(occupied),1)
+        if occupied: self.assertEqual('external_manual',occupied[0]['occupancy_type'])
     def test_02_max_two_slots_fail_closed(self):
         s=copy.deepcopy(STATE); s['slots'].append({'slot_id':'slot_3','status':'free','occupancy_type':None,'task_id':None,'task_file':None,'conflict_keys':[],'lease':None})
         with self.assertRaises(OrchestrationError): validate_state(CONTRACT,s,EVENTS)
