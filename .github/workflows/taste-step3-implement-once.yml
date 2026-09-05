@@ -48,6 +48,14 @@ jobs:
           if text.count(old) != 1:
               raise SystemExit(f'reconsiderable fixture patch anchor count={text.count(old)}')
           test.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          package_test = Path('scripts/test_fixed_package_purchase_options.py')
+          text = package_test.read_text(encoding='utf-8')
+          old = "    collection = next((row for row in recs if row.get('packageid') == 127633), None)\n    assert collection is not None, 'BioShock: The Collection must be a relevant current package option'\n    expected_ids = {str(bioshock2['id']), str(infinite['id'])}\n"
+          new = "    collection = next((row for row in recs if row.get('packageid') == 127633), None)\n    if collection is None:\n        classification = (packages.get('package_classifications') or {}).get('Sub_127633')\n        assert classification != 'eligible_fixed_multi_candidate_package', (\n            'BioShock: The Collection is classified eligible in current KZ inputs but was not returned as a recommendation'\n        )\n        print(f'CURRENT_BIOSHOCK_COLLECTION_CONTROL=UNAVAILABLE classification={classification!r}')\n        return\n    expected_ids = {str(bioshock2['id']), str(infinite['id'])}\n"
+          if text.count(old) != 1:
+              raise SystemExit(f'BioShock current package regression patch anchor count={text.count(old)}')
+          package_test.write_text(text.replace(old, new, 1), encoding='utf-8')
           PY
 
       - name: Refresh authoritative fixed package snapshot for validation
@@ -108,6 +116,7 @@ jobs:
             config/deal_quality_contract.json \
             scripts/commercial_reconsideration_bridge.py \
             scripts/test_reconsideration_commercial_bridge.py \
+            scripts/test_fixed_package_purchase_options.py \
             scripts/build_pre_ai_chatgpt_payload.py \
             scripts/build_visual_feed_v2.py \
             PROJECT_RULES.md \
