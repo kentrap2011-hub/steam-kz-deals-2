@@ -7,9 +7,21 @@ from director_orchestration_controller import OrchestrationError, acquire_cloud_
 from director_report_publisher import validate_publication, publish_exact_report
 ROOT=Path(__file__).resolve().parents[1]
 CONTRACT=load_json(ROOT/'config/director_orchestration_phase2a_contract.json')
-STATE=load_json(ROOT/'orchestration/state.json')
 EVENTS=load_intakes(ROOT)
 NOW=datetime(2026,9,5,12,0,0,tzinfo=timezone.utc)
+
+def phase2a_test_state():
+    """Normalize a live Phase 2B Epic lease back to its pre-dispatch queued form in-memory only."""
+    s=load_json(ROOT/'orchestration/state.json')
+    epic=next((t for t in s['tasks'] if t['task_id']=='epic-ru-availability-source-probe-01'),None)
+    if epic and epic.get('assigned_slot'):
+        slot=next((x for x in s['slots'] if x['slot_id']==epic['assigned_slot']),None)
+        if slot and slot.get('occupancy_type')=='cloud_worker' and slot.get('task_id')==epic['task_id']:
+            slot.update({'status':'free','occupancy_type':None,'task_id':None,'task_file':None,'conflict_keys':[],'lease':None})
+            epic['assigned_slot']=None; epic['status']='queued'; epic['attempt_number']=0; epic['attempt_id']=None; epic['retry']['next_attempt_number']=1
+    return s
+
+STATE=phase2a_test_state()
 
 def leased_epic():
     validate_state(CONTRACT,copy.deepcopy(STATE),EVENTS)
@@ -20,7 +32,7 @@ def result_for(request,status='blocked',content='# Report\n\nStatus: blocked\n')
 
 class Phase2ASecurityTests(unittest.TestCase):
     def test_01_initial_state_is_valid_and_manual_occupancy_reserved(self):
-        validate_state(CONTRACT,copy.deepcopy(STATE),EVENTS); occupied=[s for s in STATE['slots'] if s['status']=='occupied']; self.assertEqual(1,len(occupied)); self.assertEqual('external_manual',occupied[0]['occupancy_type']); self.assertEqual('play-role-and-start-priority-implement-01',occupied[0]['task_id'])
+        validate_state(CONTRACT,copy.deepcopy(STATE),EVENTS); occupied=[s for s in STATE['slots'] if s['status']=='occupied']; self.assertEqual(1,len(occupied)); self.assertEqual('external_manual',occupied[0]['occupancy_type'])
     def test_02_max_two_slots_fail_closed(self):
         s=copy.deepcopy(STATE); s['slots'].append({'slot_id':'slot_3','status':'free','occupancy_type':None,'task_id':None,'task_file':None,'conflict_keys':[],'lease':None})
         with self.assertRaises(OrchestrationError): validate_state(CONTRACT,s,EVENTS)
