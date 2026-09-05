@@ -1,0 +1,506 @@
+name: Taste step 3 final self-check once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/taste-step3-final-selfcheck-once.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: taste-step3-final-selfcheck-once
+  cancel-in-progress: false
+
+jobs:
+  closeout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Apply bounded downstream and contract corrections
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected one anchor, found {count}: {old[:120]!r}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          # The bridge reads its package purchase label/bucket from canonical policy,
+          # rather than duplicating a hidden numeric bucket in implementation code.
+          replace_once(
+              'scripts/commercial_reconsideration_bridge.py',
+              'from collections import Counter\n\nimport apply_fixed_package_purchase_options as fixed_packages\n',
+              'import json\nfrom collections import Counter\nfrom functools import lru_cache\nfrom pathlib import Path\n\nimport apply_fixed_package_purchase_options as fixed_packages\n',
+          )
+          replace_once(
+              'scripts/commercial_reconsideration_bridge.py',
+              "WISHLIST_GOOD_DEAL = 'wishlist_good_deal'\nRECONSIDERABLE_FIXED_PACKAGE = 'reconsiderable_fixed_package_value'\nDIRECT_CONFLICT_REASON = 'exclude_direct_conflict'\nPACKAGE_PURCHASE_DECISION = 'МОЖНО БРАТЬ'\nPACKAGE_PRIORITY_BUCKET = 5\n",
+              "WISHLIST_GOOD_DEAL = 'wishlist_good_deal'\nRECONSIDERABLE_FIXED_PACKAGE = 'reconsiderable_fixed_package_value'\nMAILING_POLICY = Path('config/mailing_policy.json')\n",
+          )
+          replace_once(
+              'scripts/commercial_reconsideration_bridge.py',
+              "def hard_taste_block(taste_entry, readiness=None):\n",
+              "@lru_cache(maxsize=1)\ndef package_bridge_purchase_fields():\n    policy = json.loads(MAILING_POLICY.read_text(encoding='utf-8'))\n    cfg = ((policy.get('commercial_reconsideration_bridge') or {}).get('reconsiderable_fixed_package_value') or {})\n    decision = cfg.get('purchase_decision_when_bridge_applies')\n    bucket = cfg.get('qualitative_priority_bucket')\n    if not decision or bucket is None:\n        raise ValueError('Canonical reconsiderable package purchase fields are missing')\n    return str(decision), int(bucket)\n\n\ndef hard_taste_block(taste_entry, readiness=None):\n",
+          )
+          replace_once(
+              'scripts/commercial_reconsideration_bridge.py',
+              "        if evidence.get('strict_current_price_savings') is True and evidence.get('comparison_source_aligned') is True:\n            result = _base_bridge(RECONSIDERABLE_FIXED_PACKAGE, readiness)\n            result.update({\n                'commercial_route': 'existing_fixed_package_purchase_option',\n                'package_evidence': evidence,\n                'bridge_purchase_decision': PACKAGE_PURCHASE_DECISION,\n                'bridge_priority_bucket': PACKAGE_PRIORITY_BUCKET,\n                'new_discount_threshold_introduced': False,\n            })\n",
+              "        if evidence.get('strict_current_price_savings') is True and evidence.get('comparison_source_aligned') is True:\n            purchase_decision, priority_bucket = package_bridge_purchase_fields()\n            result = _base_bridge(RECONSIDERABLE_FIXED_PACKAGE, readiness)\n            result.update({\n                'commercial_route': 'existing_fixed_package_purchase_option',\n                'package_evidence': evidence,\n                'bridge_purchase_decision': purchase_decision,\n                'bridge_priority_bucket': priority_bucket,\n                'new_discount_threshold_introduced': False,\n            })\n",
+          )
+          replace_once(
+              'scripts/commercial_reconsideration_bridge.py',
+              "def effective_purchase_fields(bridge, moderate_scenario):\n    if isinstance(bridge, dict) and bridge.get('kind') == RECONSIDERABLE_FIXED_PACKAGE:\n        return PACKAGE_PURCHASE_DECISION, PACKAGE_PRIORITY_BUCKET\n    return moderate_scenario.get('purchase_decision'), moderate_scenario.get('priority_bucket')\n",
+              "def effective_purchase_fields(bridge, moderate_scenario):\n    if isinstance(bridge, dict) and bridge.get('kind') == RECONSIDERABLE_FIXED_PACKAGE:\n        return package_bridge_purchase_fields()\n    return moderate_scenario.get('purchase_decision'), moderate_scenario.get('priority_bucket')\n",
+          )
+
+          # The final canonical refinement stage must revalidate and preserve a bridge.
+          replace_once(
+              'scripts/refine_visual_ranking.py',
+              'from taste_evidence_contract import evidence_readiness\nfrom taste_negative_contract import structured_grounded_risks\n',
+              'from taste_evidence_contract import evidence_readiness\nfrom taste_negative_contract import structured_grounded_risks\nimport commercial_reconsideration_bridge as commercial_bridge\n',
+          )
+          replace_once(
+              'scripts/refine_visual_ranking.py',
+              "def apply_fit_adjustment(game, evidence, risks, taste_entry, projection):\n",
+              "def validated_commercial_bridge(context, taste_entry):\n    if not isinstance(context, dict):\n        return None\n    return commercial_bridge.validate_visual_bridge(\n        context,\n        taste_entry if isinstance(taste_entry, dict) else {},\n    )\n\n\ndef apply_fit_adjustment(game, evidence, risks, taste_entry, projection, eligibility_bridge=None):\n",
+          )
+          replace_once(
+              'scripts/refine_visual_ranking.py',
+              "    else:\n        game['taste_confidence'] = 'unknown'\n\n    game['fit'] = fit\n    game['fit_adjustment_reason'] = reason\n",
+              "    else:\n        game['taste_confidence'] = 'unknown'\n\n    if isinstance(eligibility_bridge, dict):\n        # Step 3 is an eligibility exception only. Final refinement may add\n        # diagnostics, but must not promote the original below-threshold Taste fit.\n        fit = source_fit\n        reason = 'commercial_eligibility_bridge_preserves_original_taste_fit'\n\n    game['fit'] = fit\n    game['fit_adjustment_reason'] = reason\n",
+          )
+          replace_once(
+              'scripts/refine_visual_ranking.py',
+              "def apply_commercial_branch(game, context):\n    fit = game.get('fit')\n    branch = context.get('deal_if_strong') if fit == 'strong' else context.get('deal_if_moderate')\n    if not isinstance(branch, dict):\n        game['fit_adjustment_commercial_branch_missing'] = True\n        return True\n    if branch.get('disposition') != 'INCLUDE':\n        game['refiner_exclusion_reason'] = branch.get('exclusion_reason_code') or branch.get('price_gate_reason') or 'commercial_branch_exclude'\n        return False\n    if branch.get('purchase_decision'):\n        game['decision'] = branch.get('purchase_decision')\n    if branch.get('priority_bucket') is not None:\n        game['priority_bucket'] = int(branch.get('priority_bucket'))\n    return True\n",
+              "def apply_commercial_branch(game, context, eligibility_bridge=None):\n    fit = game.get('fit')\n    branch = context.get('deal_if_strong') if fit == 'strong' else context.get('deal_if_moderate')\n    if not isinstance(branch, dict):\n        game['fit_adjustment_commercial_branch_missing'] = True\n        return True\n    if branch.get('disposition') != 'INCLUDE':\n        game['refiner_exclusion_reason'] = branch.get('exclusion_reason_code') or branch.get('price_gate_reason') or 'commercial_branch_exclude'\n        return False\n    if isinstance(eligibility_bridge, dict):\n        decision, bucket = commercial_bridge.effective_purchase_fields(eligibility_bridge, branch)\n        game['fit'] = 'below_moderate'\n        game['eligibility_override'] = eligibility_bridge.get('kind')\n        game['commercial_eligibility_bridge'] = eligibility_bridge\n        if decision:\n            game['decision'] = decision\n        if bucket is not None:\n            game['priority_bucket'] = int(bucket)\n        return True\n    if branch.get('purchase_decision'):\n        game['decision'] = branch.get('purchase_decision')\n    if branch.get('priority_bucket') is not None:\n        game['priority_bucket'] = int(branch.get('priority_bucket'))\n    return True\n",
+          )
+          replace_once(
+              'scripts/refine_visual_ranking.py',
+              "        old_fit = game.get('fit')\n        apply_fit_adjustment(game, evidence, risks, taste_entry, projection)\n",
+              "        eligibility_bridge = validated_commercial_bridge(context, taste_entry)\n        old_fit = game.get('fit')\n        apply_fit_adjustment(game, evidence, risks, taste_entry, projection, eligibility_bridge)\n",
+          )
+          replace_once(
+              'scripts/refine_visual_ranking.py',
+              "        if not apply_commercial_branch(game, context):\n",
+              "        if not apply_commercial_branch(game, context, eligibility_bridge):\n",
+          )
+
+          # The canonical final producer uses the same bridge-aware final refinement.
+          replace_once(
+              'scripts/build_final_visual_payload.py',
+              "        old_fit = game.get('fit')\n        refiner.apply_fit_adjustment(game, evidence, risks, taste_entry, projection)\n",
+              "        eligibility_bridge = refiner.validated_commercial_bridge(context, taste_entry)\n        old_fit = game.get('fit')\n        refiner.apply_fit_adjustment(game, evidence, risks, taste_entry, projection, eligibility_bridge)\n",
+          )
+          replace_once(
+              'scripts/build_final_visual_payload.py',
+              "        if not refiner.apply_commercial_branch(game, context):\n",
+              "        if not refiner.apply_commercial_branch(game, context, eligibility_bridge):\n",
+          )
+
+          # Focused regression now covers the final-refinement boundary, package risk
+          # preservation, and the BioShock V5-state-over-legacy-reason semantic.
+          replace_once(
+              'scripts/test_reconsideration_commercial_bridge.py',
+              'import play_priority_context\nfrom taste_evidence_contract import current_evidence_contract_sha\n',
+              'import play_priority_context\nimport refine_visual_ranking as refiner\nfrom taste_evidence_contract import current_evidence_contract_sha\n',
+          )
+          replace_once(
+              'scripts/test_reconsideration_commercial_bridge.py',
+              "    package_bad = bridge.resolve_bridge(\n        taste_entry=reconsiderable,\n        wishlist=False,\n        moderate_scenario=scenario('ЛУЧШЕ ЖДАТЬ', 'INCLUDE', 6),\n        package_evidence=package_evidence(False),\n    )\n    assert package_bad is None\n\n    highfleet = bridge.resolve_bridge(\n",
+              "    package_bad = bridge.resolve_bridge(\n        taste_entry=reconsiderable,\n        wishlist=False,\n        moderate_scenario=scenario('ЛУЧШЕ ЖДАТЬ', 'INCLUDE', 6),\n        package_evidence=package_evidence(False),\n    )\n    assert package_bad is None\n    package_commercial_exclude = bridge.resolve_bridge(\n        taste_entry=reconsiderable,\n        wishlist=False,\n        moderate_scenario=scenario('БРАТЬ СЕЙЧАС', 'EXCLUDE', 3),\n        package_evidence=package_evidence(True),\n    )\n    assert package_commercial_exclude is None\n\n    # Step 1 made the exact V5 state authoritative over an ambiguous legacy reason.\n    bioshock = evidence_entry('reconsiderable', 'exclude_direct_conflict')\n    bioshock_bridge = bridge.resolve_bridge(\n        taste_entry=bioshock,\n        wishlist=False,\n        moderate_scenario=scenario('ЛУЧШЕ ЖДАТЬ', 'INCLUDE', 6),\n        package_evidence=package_evidence(True),\n    )\n    assert bioshock_bridge and bioshock_bridge['kind'] == bridge.RECONSIDERABLE_FIXED_PACKAGE\n\n    highfleet = bridge.resolve_bridge(\n",
+          )
+          replace_once(
+              'scripts/test_reconsideration_commercial_bridge.py',
+              "    validated = bridge.validate_visual_bridge(row, insufficient)\n    assert validated and row['risks'] == ['confirmed practical warning']\n\n    print(json.dumps({\n",
+              "    validated = bridge.validate_visual_bridge(row, insufficient)\n    assert validated and row['risks'] == ['confirmed practical warning']\n\n    package_row = {\n        'taste_subject_key': 'App_bioshock',\n        'context_only': {'wishlist': False},\n        'deal_if_moderate': scenario('ЛУЧШЕ ЖДАТЬ', 'INCLUDE', 6),\n        'commercial_eligibility_bridge': bioshock_bridge,\n        'risks': ['package route warning must survive'],\n        'risk_provenance': [{'source': 'confirmed_practical'}],\n    }\n    validated_package = bridge.validate_visual_bridge(package_row, bioshock)\n    assert validated_package and package_row['risks'] == ['package route warning must survive']\n    assert package_row['risk_provenance'] == [{'source': 'confirmed_practical'}]\n\n    # Final canonical refinement must not promote below_moderate or undo package value.\n    final_game = {\n        'fit': 'below_moderate',\n        'decision': 'ЛУЧШЕ ЖДАТЬ',\n        'priority_bucket': 6,\n        'risks': list(package_row['risks']),\n        'risk_provenance': list(package_row['risk_provenance']),\n    }\n    final_bridge = refiner.validated_commercial_bridge(package_row, bioshock)\n    assert final_bridge and final_bridge['kind'] == bridge.RECONSIDERABLE_FIXED_PACKAGE\n    refiner.apply_fit_adjustment(\n        final_game,\n        {'rating': 5.0, 'level': 'positive'},\n        {},\n        bioshock,\n        {},\n        final_bridge,\n    )\n    assert final_game['fit'] == 'below_moderate'\n    assert refiner.apply_commercial_branch(final_game, package_row, final_bridge) is True\n    assert final_game['decision'] == 'МОЖНО БРАТЬ' and final_game['priority_bucket'] == 5\n    assert final_game['risks'] == ['package route warning must survive']\n    assert final_game['risk_provenance'] == [{'source': 'confirmed_practical'}]\n\n    print(json.dumps({\n",
+          )
+          replace_once(
+              'scripts/test_reconsideration_commercial_bridge.py',
+              "        'package_without_strict_savings_blocked': True,\n        'highfleet_non_rescuable': True,\n        'strong_positive_unchanged': True,\n        'role_start_priority_invariant': True,\n        'risks_preserved': True,\n",
+              "        'package_without_strict_savings_blocked': True,\n        'package_commercial_exclusion_preserved': True,\n        'bioshock_v5_reconsiderable_over_legacy_reason': True,\n        'highfleet_non_rescuable': True,\n        'strong_positive_unchanged': True,\n        'role_start_priority_invariant': True,\n        'wishlist_risks_preserved': True,\n        'package_risk_provenance_preserved': True,\n        'final_refinement_preserves_bridge_fit_and_purchase_value': True,\n",
+          )
+
+          # Remove the obsolete blanket contradiction from the implementation contract.
+          deal_path = Path('config/deal_quality_contract.json')
+          deal = json.loads(deal_path.read_text(encoding='utf-8'))
+          deal['version'] = '1.5'
+          authority = deal.setdefault('authority', {})
+          authority.pop('weak_taste_can_never_be_rescued_by_discount', None)
+          authority['discount_alone_never_rescues_below_moderate_taste'] = True
+          authority['bounded_v5_commercial_bridge_is_only_below_moderate_paid_exception'] = True
+          deal_path.write_text(json.dumps(deal, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          # Clarify exact V5 authority in durable docs. Legacy reason_code alone is not
+          # equivalent to a confirmed direct conflict after Step 1.
+          replace_once(
+              'PROJECT_RULES.md',
+              "`confirmed_negative` and `exclude_direct_conflict` are non-overridable regardless of wishlist, discount, package savings, or other paid commercial signals. Existing content/store/sale/symbolic/budget gates, package equivalence rules, risk/warning visibility, giveaway path, and the single final ranking authority remain unchanged.",
+              "Exact V5 `fit_evidence_state=confirmed_negative` — including a direct conflict that V5 has actually confirmed — is non-overridable regardless of wishlist, discount, package savings, or other paid commercial signals. A legacy `reason_code=exclude_direct_conflict` alone is not confirmation: ambiguous legacy rows remain fail-closed until V5 backfill, while an exact V5 `reconsiderable` row may use the bounded package bridge. Existing content/store/sale/symbolic/budget gates, package equivalence rules, risk/warning visibility, giveaway path, and the single final ranking authority remain unchanged.",
+          )
+          replace_once(
+              'PROJECT_DECISIONS.md',
+              "**Инвариант:** bridge не повышает `fit_level`, не меняет `fit_evidence_state`, не переписывает `play_role`/`relative_start_priority`, не стирает риски и не создаёт новый ranking score. `confirmed_negative` и `exclude_direct_conflict` fail closed и не спасаются коммерческими сигналами.",
+              "**Инвариант:** bridge не повышает `fit_level`, не меняет `fit_evidence_state`, не переписывает `play_role`/`relative_start_priority`, не стирает риски и не создаёт новый ranking score. Exact V5 `confirmed_negative` / direct confirmed conflict fail closed и не спасаются коммерческими сигналами. Сам по себе legacy `reason_code=exclude_direct_conflict` не равен V5-confirmation: без V5 binding он остаётся fail-closed, а при exact V5 `reconsiderable` не блокирует bounded package bridge.",
+          )
+          replace_once(
+              'PROJECT_ROUTES.md',
+              "- visual revalidation: `scripts/build_visual_feed_v2.py` without fake promotion to moderate;\n- fixed package source: existing `scripts/apply_fixed_package_purchase_options.py` economics and exact/verified purchase-equivalence rules;",
+              "- visual revalidation: `scripts/build_visual_feed_v2.py` without fake promotion to moderate;\n- final downstream revalidation: `scripts/refine_visual_ranking.py` + `scripts/build_final_visual_payload.py` preserve the explicit bridge through final fit/commercial recheck;\n- fixed package source: existing `scripts/apply_fixed_package_purchase_options.py` economics and exact/verified purchase-equivalence rules;",
+          )
+          replace_once(
+              'scripts/build_pre_ai_chatgpt_payload.py',
+              "            'commercial_bridge_never_rescues_confirmed_negative_or_direct_conflict': True,\n",
+              "            'commercial_bridge_never_rescues_confirmed_negative_or_direct_confirmed_conflict': True,\n            'legacy_exclude_direct_conflict_reason_alone_is_not_v5_confirmation': True,\n",
+          )
+
+          print('TASTE_STEP3_BOUNDED_CLOSEOUT_FIXES=APPLIED')
+          PY
+
+      - name: Run full bounded deterministic regression set
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            scripts/commercial_reconsideration_bridge.py \
+            scripts/refine_visual_ranking.py \
+            scripts/build_final_visual_payload.py \
+            scripts/build_pre_ai_chatgpt_payload.py \
+            scripts/build_visual_feed_v2.py \
+            scripts/test_reconsideration_commercial_bridge.py
+          python scripts/test_reconsideration_commercial_bridge.py
+          python scripts/test_fixed_package_purchase_options.py
+          python scripts/test_package_complete_content_value.py
+          python scripts/test_taste_evidence_states.py
+          python scripts/test_play_priority_context.py
+          python scripts/validate_taste_v3_contract.py
+          python scripts/test_grounded_negative_contract.py
+          python scripts/test_card_explanation_policy.py
+          python scripts/validate_priority_ranking.py
+          python scripts/validate_mailing_policy.py
+          git diff --exit-code 0fddfd3fc58373645bb648348dd5dc013b347eea -- \
+            scripts/priority_ranking.py \
+            config/final_ranking_policy.json \
+            scripts/play_priority_context.py \
+            config/play_priority_context_contract.json \
+            scripts/apply_fixed_package_purchase_options.py \
+            config/purchase_equivalence_overrides.json \
+            scripts/giveaway_visual_handoff.py \
+            config/taste_result_contract.json \
+            config/taste_cache_entry_contract.json \
+            scripts/taste_evidence_contract.py \
+            scripts/ingest_taste_results.py \
+            web/app.js \
+            .github/workflows/build-daily-visual-payload.yml
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          helper = Path('scripts/commercial_reconsideration_bridge.py').read_text(encoding='utf-8')
+          assert 'discount_percent >' not in helper and 'discount_percent >=' not in helper
+          assert 'PACKAGE_PRIORITY_BUCKET' not in helper
+          assert "required_purchase_decision\": \"БРАТЬ СЕЙЧАС" in Path('config/mailing_policy.json').read_text(encoding='utf-8')
+          assert "weak_taste_can_never_be_rescued_by_discount" not in Path('config/deal_quality_contract.json').read_text(encoding='utf-8')
+          assert "legacy_exclude_direct_conflict_reason_alone_is_not_v5_confirmation" in Path('scripts/build_pre_ai_chatgpt_payload.py').read_text(encoding='utf-8')
+          deal=json.loads(Path('config/deal_quality_contract.json').read_text(encoding='utf-8'))
+          assert deal['final_ranking_principles']['qualitative_priority_buckets']['moderate']['МОЖНО БРАТЬ'] == 5
+          print('TASTE_STEP3_STATIC_BOUNDARY_GUARDS=PASS')
+          PY
+          git diff --check
+
+      - name: Run bounded current production regeneration probe
+        run: |
+          set -euo pipefail
+          python scripts/build_fixed_package_purchase_options.py | tee /tmp/taste_step3_packages.log
+          python scripts/build_pre_ai_chatgpt_payload.py | tee /tmp/taste_step3_preai.log
+          python scripts/build_visual_feed_v2.py | tee /tmp/taste_step3_visual.log
+          python scripts/build_final_visual_payload.py | tee /tmp/taste_step3_final.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest=json.loads(Path('data/production/pre_ai/chatgpt_payload.json').read_text(encoding='utf-8'))
+          rows=[json.loads(line) for line in Path('data/production/pre_ai/chatgpt_purchase_context.jsonl').read_text(encoding='utf-8').splitlines() if line.strip()]
+          intermediate=json.loads(Path('web/data/current.json').read_text(encoding='utf-8'))
+          counts={}
+          for row in rows:
+              marker=row.get('commercial_eligibility_bridge') or {}
+              kind=marker.get('kind')
+              if kind:
+                  counts[kind]=counts.get(kind,0)+1
+                  assert marker.get('taste_state_preserved') is True
+                  assert marker.get('play_role_start_priority_preserved') is True
+                  assert marker.get('risks_and_warnings_preserved') is True
+          assert counts == (manifest.get('commercial_eligibility_bridge_counts') or {})
+          pkg=manifest.get('fixed_package_bridge_evidence') or {}
+          # Empty current bridge counts are legitimate only if the current exact V5
+          # candidate state/economics also say no route is presently activatable.
+          if not counts:
+              assert int(pkg.get('reconsiderable_candidate_count') or 0) == 0
+              assert int(pkg.get('strict_savings_candidate_count') or 0) == 0
+          visible_counts={}
+          for game in intermediate.get('items') or []:
+              marker=game.get('commercial_eligibility_bridge') or {}
+              kind=marker.get('kind')
+              if kind:
+                  visible_counts[kind]=visible_counts.get(kind,0)+1
+                  assert game.get('fit') == 'below_moderate'
+                  assert game.get('eligibility_override') == kind
+          final_log=Path('/tmp/taste_step3_final.log').read_text(encoding='utf-8')
+          assert 'VISUAL_FINAL_BUILD=WAIT' in final_log or 'VISUAL_FINAL_BUILD=BUILT' in final_log
+          summary={
+              'status':'PASS',
+              'manifest_status':manifest.get('status'),
+              'source_family_count':manifest.get('source_family_count'),
+              'ai_queue_count':manifest.get('ai_queue_count'),
+              'ready_without_ai_count':manifest.get('ready_without_ai_count'),
+              'evidence_backfill_queue_count':(manifest.get('negative_analysis') or {}).get('evidence_backfill_queue_count'),
+              'complete_family_partition':manifest.get('complete_family_partition'),
+              'sale_end_coverage':manifest.get('sale_end_coverage'),
+              'commercial_eligibility_bridge_counts':counts,
+              'fixed_package_bridge_evidence':pkg,
+              'intermediate_visual_status':intermediate.get('status'),
+              'intermediate_visual_item_count':intermediate.get('item_count'),
+              'intermediate_visible_bridge_counts':visible_counts,
+              'canonical_final_producer_result':final_log.strip().splitlines()[-1] if final_log.strip() else None,
+          }
+          Path('/tmp/taste_step3_production_summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf-8')
+          print(json.dumps(summary,ensure_ascii=False,indent=2))
+          print('TASTE_STEP3_CURRENT_PRODUCTION_REGEN=PASS')
+          PY
+
+      - name: Restore generated runtime artifacts and commit bounded fixes
+        run: |
+          set -euo pipefail
+          git restore \
+            data/production/pre_ai/fixed_package_options.json \
+            data/production/pre_ai/taste_projection.json \
+            data/production/pre_ai/chatgpt_payload.json \
+            data/production/pre_ai/chatgpt_taste_queue.jsonl \
+            data/production/pre_ai/chatgpt_purchase_context.jsonl \
+            web/data/current.json
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add \
+            config/deal_quality_contract.json \
+            scripts/commercial_reconsideration_bridge.py \
+            scripts/refine_visual_ranking.py \
+            scripts/build_final_visual_payload.py \
+            scripts/build_pre_ai_chatgpt_payload.py \
+            scripts/test_reconsideration_commercial_bridge.py \
+            PROJECT_RULES.md \
+            PROJECT_DECISIONS.md \
+            PROJECT_ROUTES.md
+          git diff --cached --check
+          git commit -m "Close Taste step 3 final refinement gap"
+          git fetch origin main:refs/remotes/origin/main
+          git rebase origin/main
+          python scripts/test_reconsideration_commercial_bridge.py
+          python scripts/validate_priority_ranking.py
+          python scripts/validate_mailing_policy.py
+          git push origin HEAD:main
+          echo "$(git rev-parse HEAD)" > /tmp/taste_step3_fix_sha
+
+      - name: Write durable report and remove all Taste step 3 one-shot machinery
+        run: |
+          set -euo pipefail
+          FIX_SHA="$(cat /tmp/taste_step3_fix_sha)"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          fix_sha=Path('/tmp/taste_step3_fix_sha').read_text(encoding='utf-8').strip()
+          production=json.loads(Path('/tmp/taste_step3_production_summary.json').read_text(encoding='utf-8'))
+          run_id=os.environ['GITHUB_RUN_ID']
+          repo=os.environ['GITHUB_REPOSITORY']
+          report=f'''# Reconsideration commercial bridge and wishlist implementation 01
+
+## 1. Status
+
+`complete`
+
+Taste step 3 is repository-side technically complete after a full bounded self-recheck against current `main`. This report does **not** claim final material Taste acceptance; one independent current Taste Review over steps 1–3 remains mandatory.
+
+Primary implementation commit: `0fddfd3fc58373645bb648348dd5dc013b347eea`.
+Final bounded downstream/contract fix commit: `{fix_sha}`.
+Final self-check run: `{run_id}`.
+
+## 2. Exact eligibility / commercial bridge semantics
+
+There are exactly two post-Taste paid eligibility exceptions, both requiring an exact ready V5 evidence state and preserving the original `EXCLUDE / below_moderate` Taste state.
+
+1. `wishlist_good_deal`
+   - exact V5 `fit_evidence_state=insufficient`;
+   - Steam wishlist is true;
+   - existing `decision_if_moderate` is `INCLUDE`;
+   - its existing purchase decision is exactly `БРАТЬ СЕЙЧАС`;
+   - no new discount threshold exists.
+
+2. `reconsiderable_fixed_package_value`
+   - exact V5 `fit_evidence_state=reconsiderable`;
+   - standalone moderate commercial scenario remains `INCLUDE` (so ordinary content/store/symbolic/budget/commercial exclusions still win);
+   - an existing fixed Steam `Sub_` package, using exact or explicitly verified purchase equivalence, has `strict_current_price_savings=true` with aligned current sources;
+   - the bridge may make the purchase advice `МОЖНО БРАТЬ`, using the canonical policy bucket for that advice, without changing Taste.
+
+The final refinement layer revalidates the marker from purchase context. It cannot promote a bridge row from `below_moderate`, and it cannot overwrite package-bridge purchase advice with the standalone moderate advice.
+
+## 3. Confirmed-negative / direct-conflict protection
+
+Exact V5 `fit_evidence_state=confirmed_negative` is a hard non-overridable block for wishlist, discount and package value. HighFleet remains the calibrated non-rescue control.
+
+Step 1 intentionally made V5 evidence state authoritative: a legacy `reason_code=exclude_direct_conflict` **alone is not proof of a confirmed current conflict**. An ambiguous legacy row is fail-closed until V5 backfill. If exact V5 evidence classifies that row as `reconsiderable` (BioShock control), the legacy reason does not incorrectly block the bounded package route. This distinction is now aligned in code, contracts and durable docs.
+
+## 4. Canonical good-deal signal
+
+Reused unchanged:
+
+```text
+decision_if_moderate disposition == INCLUDE
+AND
+purchase_decision == "БРАТЬ СЕЙЧАС"
+```
+
+No new raw-discount cutoff or hidden discount constant was added. The package bridge's purchase bucket is read from canonical `config/mailing_policy.json` rather than duplicated as an implementation constant.
+
+## 5. Package / reconsideration behavior
+
+The bridge reuses `scripts/apply_fixed_package_purchase_options.py`; that implementation itself was not changed by Step 3. It remains fixed-`Sub_` only, rejects personalized pricing, requires at least two covered visible base-game families, uses exact appid or explicit verified purchase equivalence, counts only verified priced relevant incremental content, and assumes zero value for unknown/unpriced extras. Personalized Complete-the-Set arithmetic and fuzzy/franchise guessing remain forbidden.
+
+Package value cannot create `reconsiderable`, cannot create positive Taste, and cannot rescue `confirmed_negative`.
+
+## 6. State / role / risk preservation
+
+A bridge marker records that Taste state, fit, role/start and warning semantics are preserved. Purchase context keeps the original Taste verdict/reason/state. `build_visual_feed_v2.py` renders the real `below_moderate` fit and explicit `eligibility_override`; `refine_visual_ranking.py` and `build_final_visual_payload.py` now revalidate that marker through the final production boundary and preserve that fit.
+
+Commercial signals do not feed `play_priority_context`; Step-2 role/start tests remain green. Existing grounded risk/card-explanation logic runs on the original Taste entry, and focused tests cover both wishlist and package-route warning/provenance preservation.
+
+## 7. Files changed for Step 3
+
+Primary implementation surface:
+- `config/mailing_policy.json`;
+- `config/deal_quality_contract.json`;
+- `scripts/commercial_reconsideration_bridge.py`;
+- `scripts/build_pre_ai_chatgpt_payload.py`;
+- `scripts/build_visual_feed_v2.py`;
+- `scripts/refine_visual_ranking.py`;
+- `scripts/build_final_visual_payload.py`;
+- `scripts/test_reconsideration_commercial_bridge.py`;
+- `scripts/test_fixed_package_purchase_options.py` (current-production BioShock package assertion made availability-aware while deterministic package controls remain strict);
+- `scripts/validate_mailing_policy.py`;
+- `PROJECT_RULES.md`;
+- `PROJECT_DECISIONS.md`;
+- `PROJECT_ROUTES.md`.
+
+Explicitly unchanged semantically/protected by diff guard:
+- `scripts/priority_ranking.py` and `config/final_ranking_policy.json`;
+- Step-1 V5 result/cache/evidence/ingest contracts;
+- Step-2 play-role/start resolver and contract;
+- fixed-package economics and purchase-equivalence rules;
+- giveaway handoff, UI, and recurring daily workflow.
+
+## 8. Regression / control results
+
+Final self-check run `{run_id}` passed:
+- `scripts/test_reconsideration_commercial_bridge.py`;
+- `scripts/test_fixed_package_purchase_options.py` (19 deterministic/current tests; current BioShock Collection control is availability-aware);
+- `scripts/test_package_complete_content_value.py` (6 tests);
+- `scripts/test_taste_evidence_states.py`;
+- `scripts/test_play_priority_context.py`;
+- V5 contract validation;
+- grounded-negative contract;
+- card-explanation policy;
+- final priority-ranking validation;
+- mailing-policy validation;
+- protected-path diff guard and `git diff --check`.
+
+Required Step-3 controls proven:
+- wishlist + canonical good deal + `insufficient` -> bounded pass;
+- wishlist + ordinary deal + `insufficient` -> no override;
+- wishlist/package + `confirmed_negative` + very strong commercial signal -> blocked;
+- non-wishlist weak Taste -> unchanged;
+- `reconsiderable` + credible fixed-package value -> purchase-worthy without Taste promotion;
+- package commercial exclusion / no strict savings -> blocked;
+- BioShock-style exact V5 `reconsiderable` is not vetoed by an ambiguous legacy reason code;
+- HighFleet stays non-rescuable;
+- strong positive stays unchanged;
+- role/start is invariant to wishlist/discount/bridge context;
+- wishlist and package risk/warning provenance survive;
+- final refinement keeps `fit=below_moderate` and keeps package bridge purchase advice.
+
+## 9. Production regeneration / comparison
+
+Final bounded current-data regeneration in run `{run_id}` produced:
+
+```json
+{json.dumps(production, ensure_ascii=False, indent=2)}
+```
+
+Interpretation: current exact production data has no presently activatable bridge row because there are no exact ready V5 `reconsiderable` package candidates in this snapshot and the existing semantic backfill queue is still unresolved. Therefore current bridge counts of `{{}}` are a legitimate current-data absence, not a wiring failure. Activation is covered deterministically by the focused regression including the final-refinement boundary.
+
+The canonical final producer was run normally as far as current dependencies permit. If the semantic payload is degraded with unresolved Taste/V5 work, it correctly returns `WAIT`; this task did not manually process semantic queues or fabricate missing backfill.
+
+## 10. Exact commits / runs / artifacts
+
+- Step-1 foundation: `2a1708ad598ea9baf7095478b646da689eb8f890`, run `33962387867`.
+- Step-2 foundation: `19ff08128b09b9acb6cbe81f1789e0a5bba294ec`, run `33964033846`.
+- Step-3 primary implementation: `0fddfd3fc58373645bb648348dd5dc013b347eea`.
+- Step-3 implementation validation: run `33973214082`, job `101325287657` — success.
+- Earlier current production probe: commit `685972c2c8a4399a76ac56d7f1ab67f92bd9f3a2`, run `33973331054`, job `101325600995` — success; 803 families, complete partition, 523 intermediate visual items, current bridge count `{{}}`.
+- Final self-check/downstream-fix commit: `{fix_sha}`.
+- Final full bounded self-check + current regeneration: run `{run_id}` — success (this run).
+- No generated production snapshot from the self-check is committed; generated runtime files are restored after validation.
+- No persistent Actions artifact is required; durable evidence is this report plus cited commits and Actions logs.
+
+Repository URLs:
+- implementation: `https://github.com/{repo}/commit/0fddfd3fc58373645bb648348dd5dc013b347eea`
+- final fix: `https://github.com/{repo}/commit/{fix_sha}`
+- implementation validation: `https://github.com/{repo}/actions/runs/33973214082`
+- production probe: `https://github.com/{repo}/actions/runs/33973331054`
+- final self-check: `https://github.com/{repo}/actions/runs/{run_id}`
+
+## 11. Temporary one-shot cleanup
+
+The final report/cleanup commit removes all Step-3 temporary execution machinery:
+- `scripts/_taste_step3_once.py`;
+- `.github/workflows/taste-step3-implement-once.yml`;
+- `.github/workflows/taste-step3-production-probe-once.yml`;
+- `.github/workflows/taste-step3-final-selfcheck-once.yml`.
+
+Durable tests and production owners remain; no recurring Step-3 scheduler/runtime is introduced.
+
+## 12. Independent Taste Review gate / one bounded next step
+
+**Required next step only:** Director starts one fresh independent current Taste Review covering the combined steps 1–3 and regenerated controls. Reviewer advice remains advisory and must not auto-write policy.
+
+Until that review is accepted, do not call the new Taste/wishlist semantics final material product acceptance. No further Step-3 implementation work is pending on the repository side.
+'''
+          out=Path('reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md')
+          out.parent.mkdir(parents=True,exist_ok=True)
+          out.write_text(report,encoding='utf-8')
+          PY
+          git rm \
+            scripts/_taste_step3_once.py \
+            .github/workflows/taste-step3-implement-once.yml \
+            .github/workflows/taste-step3-production-probe-once.yml \
+            .github/workflows/taste-step3-final-selfcheck-once.yml
+          git add reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md
+          git diff --cached --check
+          git commit -m "Close Taste step 3 with durable report"
+          git fetch origin main:refs/remotes/origin/main
+          git rebase origin/main
+          git push origin HEAD:main
+          echo "REPORT_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+          echo "FIX_COMMIT=$FIX_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "REPORT_PATH=reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md" >> "$GITHUB_STEP_SUMMARY"
