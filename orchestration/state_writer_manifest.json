@@ -1,8 +1,7 @@
 {
-  "schema_version": 1,
   "authoritative_state": "orchestration/state.json",
-  "writers": ["scripts/director_orchestration_controller.py"],
-  "writer_count": 1,
-  "second_writer_allowed": false,
-  "phase2a_persistence_enabled": false
+  "other_writers_allowed": false,
+  "schema_version": 1,
+  "single_writer": "scripts/director_orchestration_controller.py",
+  "state_persistence_enabled_in_phase2a": false
 }
