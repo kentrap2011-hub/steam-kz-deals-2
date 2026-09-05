@@ -23,68 +23,75 @@ Status: `PASS`.
 Closure: `accepted`.
 `system_audit_due: false`.
 
-## Active product work
-
-### ЧАТ 1 — Taste step 3
+## ЧАТ 1 — Taste step 3 closeout required
 
 Task:
 `WORKER_TASK_RECONSIDERATION_COMMERCIAL_BRIDGE_AND_WISHLIST_IMPLEMENT_01.md`
-Task ID: `reconsideration-commercial-bridge-and-wishlist-implement-01`
-Mode: `IMPLEMENT`
 Expected report:
 `reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md`
-Priority: `VERY_HIGH_USER_PRIORITY`.
-Status: `running_or_ready_existing_chat_1`.
 
-After step 3, independent current Taste Review is mandatory before final material acceptance of the combined three-step Taste sequence.
+User reports Chat 1 finished, but Director durable closure check found the required report is still absent from `main`.
 
-## Automation
+Implementation evidence already exists and must NOT be redone broadly:
+- `a3e39f6b98573616f19f444909742d3378d25d20` — align Step 3 guards with V5 reconsiderable semantics;
+- `0b95d364376f7553965d2e7505c25ef9e261fe42` — align mailing-policy validator;
+- `0fddfd3fc58373645bb648348dd5dc013b347eea` — bounded Taste commercial reconsideration bridge implementation;
+- `f64d518a203604051bcda032780c5bb515976197` and `960a749fbf65b79eb0df629d11ad0c67c853ab72` — refreshed fixed-package/BioShock validation adjustments;
+- production probe commit `685972c2c8a4399a76ac56d7f1ab67f92bd9f3a2`.
 
-### Phase 1
+Production probe:
+- workflow `Taste step 3 production probe once`;
+- run `33973331054` — success;
+- job `101325600995` — success;
+- all producer/provenance verification steps passed;
+- canonical pre-AI status remained `degraded` because existing semantic queues remain unresolved;
+- current bridge counts were `{}` because refreshed current inputs had zero exact reconsiderable/strict-savings candidates;
+- complete family partition remained true;
+- visual producer built 523 items and bridge provenance check passed.
 
-Shadow observer implemented + independently accepted.
+Closeout defects only:
+1. required durable report is absent;
+2. temporary `.github/workflows/taste-step3-production-probe-once.yml` still exists on `main`.
 
-### Phase 2A
+Status: `continue_existing_chat_1_same_scope_closeout_only`.
+Do not start independent Taste Review until exact Step 3 report exists.
+Chat 1 remains occupied/manual until closeout is durable.
 
-Security/state/cloud-worker boundary implemented + independently accepted.
-Audit:
-`reviews/system_audits/director-orchestration-phase2a-audit-01.md`.
+After exact Step 3 report is consumed, the implementation Chat 1 may be deleted and a fresh independent Chat 1 should run the combined current Taste Review for steps 1–3 before final semantic acceptance.
 
-### Phase 2B — READY
-
-User confirmed on 2026-09-05 that repository Actions secret named exactly `OPENAI_API_KEY` has been added to `kentrap2011-hub/steam-kz-deals-2`.
-
-Secret handling:
-- confirmation is presence-only;
-- value is not known to Director and must never be pasted into chat, Git, task/report files or logs.
+## ЧАТ 2 — Phase 2B live READ-ONLY pilot
 
 Task:
 `WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2B_LIVE_READONLY_PILOT_01.md`
-Task ID: `director-orchestration-phase2b-live-readonly-pilot-01`
-Mode: `IMPLEMENT`
 Expected report:
 `reviews/worker_reports/director-orchestration-phase2b-live-readonly-pilot-01.md`
-Status: `ready_new_chat_2`.
+Status: `created_and_running_or_working_new_chat_2`.
 
-Pilot scope exactly:
-- reconcile current orchestration state and current manual Chat 1 occupancy;
-- implement audit-required optimistic-concurrency/current-state stale barrier;
-- enable exactly one live cloud `READ_ONLY_RECON` pilot;
-- pilot target: `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`;
-- pinned official Codex Action only;
-- LLM job remains repository-read-only with no GitHub write credential;
-- trusted publisher may write only exact expected report path;
-- no second automatic dispatch;
-- autonomous IMPLEMENT remains structurally excluded.
+User confirmed repository Actions secret `OPENAI_API_KEY` exists; value is never requested/known/logged.
 
-The completed Phase 2A audit Chat 2 may be deleted. Create a fresh Chat 2 for the Phase 2B pilot.
+Pilot target exactly:
+`WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`
+Expected automatic cloud-worker report:
+`reviews/worker_reports/epic-ru-availability-source-probe-01.md`
+
+Critical pilot proof:
+- one real Codex READ_ONLY_RECON worker only;
+- Director must later observe the automatic Epic report in GitHub without user relaying worker output;
+- max two slots and current Chat 1 manual occupancy preserved;
+- LLM job no GitHub write credential;
+- trusted publisher exact report path only;
+- stale/current-state barrier enforced;
+- no second auto-dispatch;
+- IMPLEMENT structurally excluded.
+
+Do not delete/reassign Chat 2 until the exact Phase 2B report is consumed.
 
 ## Taste sequence
 
 1. evidence state/confidence/reconsideration — complete internally;
 2. play role + relative start priority — complete internally;
-3. reconsideration commercial bridge + wishlist-good-deal override — active;
-4. independent current Taste Review — mandatory after step 3 before final acceptance.
+3. reconsideration commercial bridge + wishlist-good-deal override — implementation/probe present, durable closeout pending;
+4. independent current Taste Review — mandatory after Step 3 durable report before final acceptance.
 
 ## Steam access policy
 
@@ -96,7 +103,6 @@ DLC ownership eligibility remains queued. Personalized Complete The Set actual p
 
 ## Other queued
 
-- `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md` — selected as first live cloud READ-ONLY pilot.
 - DLC ownership eligibility IMPLEMENT.
 - `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`.
 - `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`.
@@ -108,7 +114,7 @@ DLC ownership eligibility remains queued. Personalized Complete The Set actual p
 
 ## Next decision
 
-1. Start a fresh Chat 2 with `WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2B_LIVE_READONLY_PILOT_01.md`.
-2. Keep Chat 1 on Taste step 3 until its exact report is available.
-3. After Phase 2B pilot report, Director must verify the automatically published Epic RU worker report exists without user relay.
-4. Only after successful pilot verification may the next automation phase be designed.
+1. Existing Chat 1 performs closeout only: remove temporary one-shot workflow if no longer needed and save exact required Step 3 report using existing successful evidence.
+2. Keep current Chat 2 running Phase 2B untouched.
+3. Read exact Step 3 report before creating fresh independent Taste Reviewer Chat 1.
+4. Read exact Phase 2B report and independently fetch auto-published Epic report before advancing automation.
