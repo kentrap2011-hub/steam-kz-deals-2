@@ -1,6 +1,6 @@
 # CURRENT TASK
 
-Последнее обновление: 2026-09-01
+Последнее обновление: 2026-09-05
 
 ## Завершено
 
@@ -128,6 +128,14 @@
 - ranking weights, giveaway, duration, translation, package и unrelated UI не меняются;
 - другая параллельная работа F сохраняется без изменений.
 
+### A2. Taste evidence state and confidence implementation 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_EVIDENCE_STATE_AND_CONFIDENCE_IMPLEMENT_01.md`;
+- цель: развести `insufficient`, `reconsiderable`, `confirmed_negative` без нарушения price-blind Taste;
+- сохранить HighFleet strong-negative control, Haven Moon insufficient control, BioShock reconsiderable control;
+- wishlist override, play-role/start-priority, giveaway и новые schedulers вне scope;
+- existing GitHub-owned Taste semantic queue/cache/ingest остаются единственным control plane.
+
 ### B. Russian language availability as a ranking factor
 Статус: `planned`.
 - проверять минимум русский интерфейс: `yes/no/unknown` + evidence;
@@ -171,4 +179,4 @@
 
 ## Текущий статус работ
 
-`package-ui-blocker-fix-01` завершён, а GitHub-owned current Russian translation scope опубликован. E / Russian descriptions сейчас `blocked` только на одном внешнем acceptance gate: реальном occurrence того же existing Nightly Production Runtime для одного exact probe; никаких manual translations или дополнительных schedulers не создано. F / redesign detailed score breakdown UI сохраняется как отдельная параллельная работа. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
+`package-ui-blocker-fix-01` завершён, а GitHub-owned current Russian translation scope опубликован. E / Russian descriptions сейчас `blocked` только на одном внешнем acceptance gate: реальном occurrence того же existing Nightly Production Runtime для одного exact probe; никаких manual translations или дополнительных schedulers не создано. F / redesign detailed score breakdown UI и A1 / card explanation implementation сохраняются как отдельные параллельные работы. A2 / Taste evidence state and confidence implementation начат как bounded internal semantic step 1. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
