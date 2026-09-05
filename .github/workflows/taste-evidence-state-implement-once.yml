@@ -129,6 +129,7 @@ jobs:
             PROJECT_DECISIONS.md
           git diff --cached --check
           git commit -m "Implement Taste evidence state and reconsideration"
+          git restore scripts/_taste_evidence_implement_once.py
           for attempt in 1 2 3; do
             git fetch origin main:refs/remotes/origin/main
             if ! git rebase origin/main; then
