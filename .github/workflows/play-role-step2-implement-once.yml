@@ -29,6 +29,24 @@ jobs:
 
       - name: Apply bounded implementation
         run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/_play_role_step2_once.py')
+          text = path.read_text(encoding='utf-8')
+          old = '''replace_once(
+              'scripts/build_final_visual_payload.py',
+              "        'card_explanation_rule': 'positive requires specific Taste evidence; visible negative requires grounded provenance; scoring/ranking semantics unchanged',\\n        'fixed_package_purchase_option_rule': (\\n",
+              "        'card_explanation_rule': 'positive requires specific Taste evidence; visible negative requires grounded provenance; scoring/ranking semantics unchanged',\\n        'play_priority_context_rule': 'play role and relative start priority are producer-owned semantic context; they do not change eligibility, fit, sale urgency, total_score, priority_rank, or create a second sorter',\\n        'play_priority_context_distribution': play_priority_context.distributions(refined),\\n        'fixed_package_purchase_option_rule': (\\n",
+          )'''
+          new = '''replace_once(
+              'scripts/build_final_visual_payload.py',
+              "        'ranking_stage': 'single_final_sort_after_all_refinement_and_purchase_option_enrichment',\\n        'priority_factors': final_priority_order,\\n        'priority_ranking_contract': 'FINAL-PRIORITY-RANKING-V2',\\n        'card_explanation_rule': 'positive requires specific Taste evidence; visible negative requires grounded provenance; scoring/ranking semantics unchanged',\\n        'fixed_package_purchase_option_rule': (\\n",
+              "        'ranking_stage': 'single_final_sort_after_all_refinement_and_purchase_option_enrichment',\\n        'priority_factors': final_priority_order,\\n        'priority_ranking_contract': 'FINAL-PRIORITY-RANKING-V2',\\n        'card_explanation_rule': 'positive requires specific Taste evidence; visible negative requires grounded provenance; scoring/ranking semantics unchanged',\\n        'play_priority_context_rule': 'play role and relative start priority are producer-owned semantic context; they do not change eligibility, fit, sale urgency, total_score, priority_rank, or create a second sorter',\\n        'play_priority_context_distribution': play_priority_context.distributions(refined),\\n        'fixed_package_purchase_option_rule': (\\n",
+          )'''
+          if text.count(old) != 1:
+              raise SystemExit(f'expected one ambiguous producer patch block, found {text.count(old)}')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
           python scripts/_play_role_step2_once.py
 
       - name: Validate role start context and existing controls
