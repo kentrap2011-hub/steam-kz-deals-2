@@ -1,0 +1,106 @@
+{
+  "contract": "DIRECTOR-ORCHESTRATION-SHADOW-V1",
+  "status": "phase_1_shadow_only",
+  "phase": 1,
+  "mode": "shadow_observer",
+  "purpose": "Deterministically simulate Director worker-slot assignment without dispatching workers or mutating product state.",
+  "authority": {
+    "canonical_state_owner": "GitHub repository and GitHub Actions",
+    "phase_1_behavior": "read_only_planning",
+    "future_single_state_writer": "one serialized GitHub dispatcher/controller workflow",
+    "does_not_replace": [
+      "DIRECTOR_PROTOCOL.md",
+      "DIRECTOR_TASK_BOARD.md",
+      "DIRECTOR_REVIEW_CHECKPOINTS.md"
+    ]
+  },
+  "limits": {
+    "max_logical_slots": 2
+  },
+  "slots": {
+    "allowed_ids": ["slot_1", "slot_2"],
+    "allowed_statuses": ["free", "occupied"],
+    "allowed_occupancy_types": ["external_manual", "cloud_worker"],
+    "external_manual_occupancy_supported": true,
+    "manual_occupancy_is_reserved": true
+  },
+  "tasks": {
+    "allowed_statuses": [
+      "queued",
+      "assigned",
+      "running",
+      "report_ready",
+      "director_review",
+      "review_pending",
+      "user_gate",
+      "deferred",
+      "cancelled",
+      "blocked",
+      "accepted",
+      "stale"
+    ],
+    "eligible_statuses": ["queued"],
+    "never_eligible_statuses": ["deferred", "cancelled", "blocked", "accepted", "stale"],
+    "required_fields": [
+      "task_id",
+      "revision",
+      "mode",
+      "priority",
+      "domain",
+      "conflict_keys",
+      "status",
+      "task_file",
+      "expected_report",
+      "dependencies",
+      "assigned_slot",
+      "queue_sequence",
+      "user_gate",
+      "review_gate"
+    ]
+  },
+  "priority": {
+    "class_weights": {
+      "VERY_HIGH": 400,
+      "HIGH": 300,
+      "NORMAL": 200,
+      "LOW": 100
+    },
+    "sort_order": [
+      "explicit_priority_desc",
+      "dependency_unblocking_value_desc",
+      "queue_sequence_asc",
+      "task_id_asc"
+    ],
+    "rule": "Explicit Director/user priority always wins before computed unblocking value or FIFO. The planner never invents a higher priority."
+  },
+  "dependencies": {
+    "satisfied_statuses": ["accepted"],
+    "missing_dependency_behavior": "fail_closed",
+    "rule": "Every dependency must exist in state and be accepted before assignment."
+  },
+  "conflicts": {
+    "exclusive_on_shared_key": true,
+    "semantic_keys": [
+      "taste-write",
+      "ranking-write",
+      "taste-ranking-policy",
+      "frontend-feed",
+      "production-deploy",
+      "scheduler-runtime",
+      "orchestration-control",
+      "provider-authority:epic"
+    ],
+    "rule": "A queued task cannot be selected when any conflict key overlaps an occupied slot or a task already selected in the same plan. Material Taste/ranking work carries the shared taste-ranking-policy umbrella key."
+  },
+  "gates": {
+    "clear_user_gate_values": ["none", "resolved"],
+    "clear_review_gate_values": ["none", "not_applicable", "clear"],
+    "rule": "Any unknown or non-clear gate value is ineligible and fails closed."
+  },
+  "security": {
+    "secrets_in_state": "forbidden",
+    "openai_or_codex_in_phase_1": "forbidden",
+    "worker_dispatch_in_phase_1": "forbidden",
+    "product_mutation_in_phase_1": "forbidden"
+  }
+}
