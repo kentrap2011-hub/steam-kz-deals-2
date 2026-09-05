@@ -14,6 +14,7 @@
 6. Не запускать параллельно конфликтующие Taste/ranking IMPLEMENT.
 7. Taste Reviewer recommendations имеют VERY HIGH USER PRIORITY.
 8. Automation migration идёт по отдельным gated phases; autonomous IMPLEMENT остаётся запрещён.
+9. User will not pay additional money for OpenAI API usage. Do not ask user to add API credits or continue an architecture that requires separately billed OpenAI API usage. Any future automation redesign must target zero incremental paid API cost unless user explicitly changes this decision.
 
 ## Review checkpoint
 
@@ -33,30 +34,27 @@ Status: `continue_existing_chat_1_full_bounded_self_recheck`.
 
 Implementation/probe evidence exists; Chat 1 must independently re-read current GitHub truth, verify all bounded Step 3 requirements, clean temporary one-shot machinery if appropriate, fix only genuine in-scope defects, and save the exact durable report. Do not start independent Taste Review until Director consumes that report.
 
-## ЧАТ 2 — Phase 2B live READ-ONLY pilot
+## Automation — Phase 2B API route stopped by user cost constraint
 
 Task:
 `WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2B_LIVE_READONLY_PILOT_01.md`
-Expected report:
+Durable report:
 `reviews/worker_reports/director-orchestration-phase2b-live-readonly-pilot-01.md`
 
-Durable Phase 2B report exists and was consumed by Director.
-Status: `blocked_user_openai_api_credits`.
+Outcome:
+- real pinned Codex worker reached OpenAI Responses API under intended read-only security boundary;
+- run was blocked by `You have no credits remaining. Add credits to continue using the API`;
+- expected Epic worker report was not published, correctly fail-closed;
+- no unauthorized worker write, no second task, no autonomous IMPLEMENT.
 
-Verified bounded outcome from the report:
-- real pinned Codex worker reached the OpenAI Responses API under the intended read-only security boundary;
-- exact logical pilot remained `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`, revision 1 / attempt 1;
-- final worker failed with non-secret billing error: `You have no credits remaining. Add credits to continue using the API`;
-- expected automatic worker report `reviews/worker_reports/epic-ru-availability-source-probe-01.md` was correctly NOT published because no structured worker result existed;
-- trusted publisher skipped fail-closed;
-- no unauthorized worker write occurred;
-- no second task and no attempt `a2` were dispatched;
-- `dispatch_enabled` remains false;
-- autonomous IMPLEMENT remains disabled.
+User decision after learning API billing is separate from ChatGPT Plus:
+- user will not purchase/add OpenAI API credits;
+- do not request API funding again;
+- do not retry Phase 2B through separately billed OpenAI API;
+- current API-key/GitHub-action route is paused/stopped as an automation solution under current cost policy;
+- a future automation design may be investigated only if it can run without additional paid API cost, unless user explicitly changes this decision.
 
-Phase 2B is therefore not accepted as successful yet. One bounded next step only: user restores/adds OpenAI API credits, then Director authorizes a separate bounded retry. Do not auto-retry and do not drain the queue.
-
-The current Chat 2 has a complete durable blocked report and may be deleted; a fresh replacement Chat 2 should be created only after credits are restored and Director prepares/authorizes the bounded retry.
+Current Chat 2 may be deleted. Do not create a replacement Phase 2B retry chat for the paid API route.
 
 ## Taste sequence
 
@@ -87,6 +85,5 @@ DLC ownership eligibility remains queued. Personalized Complete The Set actual p
 ## Next decision
 
 1. Existing Chat 1 continues full bounded Step 3 self-recheck until its exact report exists.
-2. User restores/adds OpenAI API credits.
-3. Only after user confirms credits are available, Director authorizes a fresh bounded Phase 2B retry in replacement Chat 2.
-4. After a successful retry, Director must verify the auto-published Epic RU report before advancing automation.
+2. Do not spend money on or retry the separately billed OpenAI API automation route.
+3. If automation remains desired, investigate a zero-incremental-cost alternative as a separate bounded design task; do not assume ChatGPT Plus can fund GitHub Actions API calls.
