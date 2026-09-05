@@ -6,15 +6,11 @@ The Director must read this file before assigning a new ordinary backlog task wh
 
 ## System Auditor
 
-system_audit_due: true
+system_audit_due: false
 first_system_audit_trigger: `satisfied_2026-09-02`
-material_changes_since_last_system_audit: 1
-last_system_audit_report: `reviews/system_audits/giveaway-cache-post-incident-audit-01.md`
+material_changes_since_last_system_audit: 0
+last_system_audit_report: `reviews/system_audits/director-orchestration-phase1-audit-01.md`
 mobile_post_incident_audit_pending: false
-
-### First trigger condition
-
-The first trigger has been satisfied and baseline audit completed.
 
 ### Recurring triggers
 
@@ -27,22 +23,14 @@ A completed audit resets `material_changes_since_last_system_audit` to 0 and rec
 
 ### Current audit state
 
-A new mandatory audit is due for the accepted Phase 1 Director orchestration shadow boundary.
-
-Audit task:
-`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE1_SYSTEM_AUDIT_01.md`
-
-Expected report:
-`reviews/system_audits/director-orchestration-phase1-audit-01.md`
-
-Reason:
-- Phase 1 introduced machine-readable orchestration state, logical worker-slot semantics, dependency/conflict scheduling rules, and a GitHub Actions shadow planner that future Phase 2 cloud workers will trust;
-- the current implementation remains shadow-only and dispatches no real workers, but this is still a new queue/orchestration authority boundary and therefore triggers the recurring System Auditor rule.
-
-Previous completed audit:
-- report: `reviews/system_audits/giveaway-cache-post-incident-audit-01.md`;
+Latest completed audit:
+- report: `reviews/system_audits/director-orchestration-phase1-audit-01.md`;
 - status: `complete`;
-- `Giveaway cache incident systemic closure: accepted`.
+- selected systemic closure: `accepted`;
+- Phase 1 shadow orchestration is safe to use as the foundation for a separately gated Phase 2;
+- Phase 1 remains shadow-only and is not authorized to dispatch real workers, call OpenAI/Codex, mutate product state, or gain write authority.
+
+No System Audit is currently due.
 
 ## Taste Reviewer
 
@@ -50,21 +38,28 @@ taste_reviewer_chat_established: true
 taste_baseline_review_due: false
 last_taste_review_report: `reviews/taste_reviews/baseline-01.md`
 
-### Baseline result
+### Current Taste implementation sequence
 
-Baseline review completed. Current overall selection-pressure classification: `cannot_determine`, with evidence against both simplistic global interpretations (`too strict` or `too loose`). The strongest current concern is conditional/context loss: role, felt burden, optionality/density, and unknown-vs-negative treatment can be mis-modeled.
+Internal ordered sequence:
+1. evidence state / confidence / reconsideration semantics — technically complete;
+2. play role + relative start priority — next;
+3. reconsideration commercial bridge + wishlist-good-deal override — later.
 
-Key durable controls recorded by the reviewer include:
-- `Trine 4` confirmed family-play positive;
+The current plan is to keep these as one bounded internal sequence and run one independent current Taste Review after step 3 and regenerated controls, before final material acceptance. If any step is accepted/deployed independently as a completed material Taste boundary, a current Taste Review is required before that acceptance.
+
+### Baseline controls
+
+Key durable controls include:
+- `Trine 4` family-play positive;
 - `HighFleet` strong negative start-priority control for dry/technical felt burden;
-- `Tails of Iron 2` secondary/palate-cleanser role rather than main-game priority;
+- `Tails of Iron 2` secondary/palate-cleanser role;
 - `High On Life` moderate full/main-game candidate;
 - `Sifu` strong current pre-play interest;
 - `Batman: Arkham` replay-positive anchor;
 - `RDR2` primary open-world positive;
 - context-sensitive interpretations for `directionlessness`, `unchanged_repetition`, `management_routine`, and `puzzle_pacing`.
 
-Reviewer recommendations are advisory only and must not be auto-converted into production policy changes. Any material Taste/ranking policy implementation still requires Director review and, before acceptance, a current Taste Review checkpoint.
+Reviewer recommendations remain advisory and must not be auto-converted into product policy.
 
 ### Mandatory recurring triggers
 
