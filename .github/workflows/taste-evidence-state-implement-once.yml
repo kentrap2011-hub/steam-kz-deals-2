@@ -28,7 +28,18 @@ jobs:
           python-version: "3.12"
 
       - name: Apply bounded implementation
-        run: python scripts/_taste_evidence_implement_once.py
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/_taste_evidence_implement_once.py')
+          text = path.read_text(encoding='utf-8')
+          old = "new_annotator = '''def annotate_negative_readiness"
+          new = "new_annotator = r'''def annotate_negative_readiness"
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected exactly one new_annotator patch anchor, found {text.count(old)}')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+          python scripts/_taste_evidence_implement_once.py
 
       - name: Validate contracts and controls
         run: |
