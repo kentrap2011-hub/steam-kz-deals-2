@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "state_revision": 1,
+  "phase": "shadow_observer",
+  "source_refs": {
+    "director_board": "DIRECTOR_TASK_BOARD.md",
+    "active_manual_task": "WORKER_TASK_TASTE_EVIDENCE_STATE_AND_CONFIDENCE_IMPLEMENT_01.md"
+  },
+  "slots": [
+    {
+      "slot_id": "slot_1",
+      "status": "occupied",
+      "occupancy_type": "external_manual",
+      "task_id": "taste-evidence-state-and-confidence-implement-01",
+      "task_file": "WORKER_TASK_TASTE_EVIDENCE_STATE_AND_CONFIDENCE_IMPLEMENT_01.md",
+      "conflict_keys": ["taste-write", "ranking-write", "taste-ranking-policy"]
+    },
+    {
+      "slot_id": "slot_2",
+      "status": "free",
+      "occupancy_type": null,
+      "task_id": null,
+      "task_file": null,
+      "conflict_keys": []
+    }
+  ],
+  "tasks": [
+    {
+      "task_id": "taste-evidence-state-and-confidence-implement-01",
+      "revision": 1,
+      "mode": "IMPLEMENT",
+      "priority": "VERY_HIGH",
+      "domain": "taste-ranking",
+      "conflict_keys": ["taste-write", "ranking-write", "taste-ranking-policy"],
+      "status": "running",
+      "task_file": "WORKER_TASK_TASTE_EVIDENCE_STATE_AND_CONFIDENCE_IMPLEMENT_01.md",
+      "expected_report": "reviews/worker_reports/taste-evidence-state-and-confidence-implement-01.md",
+      "dependencies": [],
+      "assigned_slot": "slot_1",
+      "queue_sequence": 0,
+      "user_gate": "none",
+      "review_gate": "none"
+    },
+    {
+      "task_id": "wishlist-good-deal-override-recon-01",
+      "revision": 1,
+      "mode": "READ_ONLY_RECON",
+      "priority": "VERY_HIGH",
+      "domain": "taste-ranking",
+      "conflict_keys": ["taste-write", "ranking-write", "taste-ranking-policy"],
+      "status": "queued",
+      "task_file": "WORKER_TASK_WISHLIST_GOOD_DEAL_OVERRIDE_RECON_01.md",
+      "expected_report": "reviews/worker_reports/wishlist-good-deal-override-recon-01.md",
+      "dependencies": ["taste-evidence-state-and-confidence-implement-01"],
+      "assigned_slot": null,
+      "queue_sequence": 10,
+      "user_gate": "none",
+      "review_gate": "none"
+    },
+    {
+      "task_id": "epic-ru-availability-source-probe-01",
+      "revision": 1,
+      "mode": "READ_ONLY_RECON",
+      "priority": "HIGH",
+      "domain": "epic-ru-availability",
+      "conflict_keys": ["provider-authority:epic"],
+      "status": "queued",
+      "task_file": "WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md",
+      "expected_report": "reviews/worker_reports/epic-ru-availability-source-probe-01.md",
+      "dependencies": [],
+      "assigned_slot": null,
+      "queue_sequence": 20,
+      "user_gate": "none",
+      "review_gate": "none"
+    },
+    {
+      "task_id": "top-summary-filter-buttons-01",
+      "revision": 1,
+      "mode": "IMPLEMENT",
+      "priority": "NORMAL",
+      "domain": "frontend-feed",
+      "conflict_keys": ["frontend-feed"],
+      "status": "queued",
+      "task_file": "WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md",
+      "expected_report": "reviews/worker_reports/top-summary-filter-buttons-01.md",
+      "dependencies": [],
+      "assigned_slot": null,
+      "queue_sequence": 30,
+      "user_gate": "none",
+      "review_gate": "none"
+    }
+  ]
+}
