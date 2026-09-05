@@ -1,8 +1,8 @@
 {
-  "contract": "TASTE-SEMANTIC-RESULT-V4",
+  "contract": "TASTE-SEMANTIC-RESULT-V5",
   "version": "1.0",
   "status": "canonical",
-  "purpose": "Define the price-blind semantic output produced by the existing taste worker and persisted by GitHub. Normalized factors describe the candidate independently of configurable final-ranking weights, while grounded negative analysis has an explicit readiness state and structured findings.",
+  "purpose": "Define the price-blind semantic output produced by the existing Taste worker and persisted by GitHub, including normalized fit factors, grounded personal negatives, a separate evidence-state/confidence layer, historical reconsideration context, and candidate-quality findings that do not automatically imply personal dislike.",
   "ownership": {
     "semantic_evaluation": "existing_scheduled_chatgpt_taste_worker",
     "queue_scope_and_bindings": "github",
@@ -20,7 +20,12 @@
     "positive_evidence",
     "negative_analysis_status",
     "negative_findings",
-    "negative_evidence"
+    "negative_evidence",
+    "fit_evidence_state",
+    "fit_evidence_confidence",
+    "fit_evidence_basis",
+    "historical_negative_context",
+    "candidate_quality_findings"
   ],
   "negative_only_result_fields": [
     "key",
@@ -29,7 +34,12 @@
     "candidate_context_sha256",
     "negative_analysis_status",
     "negative_findings",
-    "negative_evidence"
+    "negative_evidence",
+    "fit_evidence_state",
+    "fit_evidence_confidence",
+    "fit_evidence_basis",
+    "historical_negative_context",
+    "candidate_quality_findings"
   ],
   "negative_analysis_work_code": "resolve_grounded_negative_analysis",
   "negative_analysis_status_values": [
@@ -40,16 +50,44 @@
     "category",
     "code",
     "evidence",
-    "risk_text_ru"
+    "risk_text_ru",
+    "evidence_origin",
+    "evidence_strength",
+    "personal_relevance"
   ],
   "negative_finding_catalog": {
-    "unchanged_repetition": {"category": "repetition", "ranking_score": 4},
-    "low_active_gameplay": {"category": "activity_balance", "ranking_score": 3},
-    "directionlessness": {"category": "direction", "ranking_score": 4},
-    "management_routine": {"category": "management_routine", "ranking_score": 3},
-    "difficulty_punishment": {"category": "difficulty_friction", "ranking_score": 2},
-    "stealth_restart_pressure": {"category": "stealth_friction", "ranking_score": 2},
-    "other_grounded_taste_risk": {"category": "other_grounded", "ranking_score": 0}
+    "unchanged_repetition": {
+      "category": "repetition",
+      "ranking_score": 4
+    },
+    "low_active_gameplay": {
+      "category": "activity_balance",
+      "ranking_score": 3
+    },
+    "directionlessness": {
+      "category": "direction",
+      "ranking_score": 4
+    },
+    "management_routine": {
+      "category": "management_routine",
+      "ranking_score": 3
+    },
+    "difficulty_punishment": {
+      "category": "difficulty_friction",
+      "ranking_score": 2
+    },
+    "stealth_restart_pressure": {
+      "category": "stealth_friction",
+      "ranking_score": 2
+    },
+    "other_grounded_taste_risk": {
+      "category": "other_grounded",
+      "ranking_score": 0
+    },
+    "felt_technical_burden": {
+      "category": "felt_burden",
+      "ranking_score": 4
+    }
   },
   "negative_analysis_rules": {
     "complete_with_confirmed_negative_requires_at_least_one_finding": true,
@@ -63,7 +101,10 @@
   },
   "normalized_factor_field": "taste_factors",
   "normalized_factor_work_code": "evaluate_normalized_taste_factors",
-  "normalized_factor_value_range": [0, 100],
+  "normalized_factor_value_range": [
+    0,
+    100
+  ],
   "normalized_factor_ids": [
     "gameplay_mastery",
     "development_variety",
@@ -84,12 +125,12 @@
       "price",
       "discount",
       "wishlist",
-      "reviews",
       "steamdb_history",
       "historical_price",
       "sale_end",
       "deal_quality",
-      "commercial_priority"
+      "commercial_priority",
+      "review_sentiment_or_percentage_as_fit_evidence"
     ],
     "factor_values_are_weight_independent": true,
     "do_not_apply_final_ranking_max_points": true,
@@ -97,7 +138,8 @@
     "negative_conflicts_are_scored_separately_downstream_from_structured_findings": true,
     "generic_game_quality_is_not_a_positive_factor": true,
     "unknown_candidate_property_must_not_be_invented": true,
-    "all_five_factors_are_required_when_work_code_is_present": true
+    "all_five_factors_are_required_when_work_code_is_present": true,
+    "candidate_quality_findings_may_use_recurring_public_complaints_only_as_separate_nonfit_evidence": true
   },
   "consumer": {
     "ranking_policy": "config/final_ranking_policy.json",
@@ -108,5 +150,113 @@
     ],
     "changing_final_weights_must_not_require_semantic_reevaluation": true,
     "normal_paid_card_requires_grounded_taste_negative_witness": true
+  },
+  "fit_evidence_state": {
+    "values": [
+      "sufficient",
+      "insufficient",
+      "reconsiderable",
+      "confirmed_negative"
+    ],
+    "confidence_values": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "work_code": "resolve_grounded_negative_analysis",
+    "new_work_code_created": false,
+    "basis_values": [
+      "candidate_specific_positive_match",
+      "candidate_information_insufficient",
+      "direct_user_current_reaction",
+      "title_specific_inspection",
+      "historical_user_experience",
+      "later_quality_reputation_reopened_interest",
+      "direct_current_interest_reopened_history",
+      "richer_title_specific_evidence_reopened_history",
+      "same_series_continuity"
+    ],
+    "rules": {
+      "sufficient_requires_include": true,
+      "insufficient_requires_exclude_but_is_not_dislike": true,
+      "reconsiderable_requires_exclude_and_historical_reopening_context": true,
+      "confirmed_negative_requires_high_confidence_and_strong_confirmed_personal_finding": true,
+      "old_brief_non_engagement_cannot_alone_be_confirmed_negative": true,
+      "price_discount_wishlist_bundle_never_change_state": true
+    }
+  },
+  "negative_evidence_provenance": {
+    "origin_values": [
+      "direct_user_reaction",
+      "title_specific_inspection",
+      "historical_user_experience",
+      "same_series_continuity",
+      "candidate_specific_profile_conflict"
+    ],
+    "strength_values": [
+      "weak",
+      "moderate",
+      "strong"
+    ],
+    "personal_relevance_required_value": "confirmed",
+    "generic_feature_hypothesis_is_not_valid_personal_negative_origin": true,
+    "recurring_player_complaint_is_not_valid_personal_negative_origin": true,
+    "score_4_personal_risk_requires_strong_evidence": true
+  },
+  "historical_negative_context": {
+    "nullable": true,
+    "fields": [
+      "exposure_depth",
+      "recency",
+      "reaction",
+      "later_reopening_evidence"
+    ],
+    "exposure_depth_values": [
+      "brief",
+      "partial",
+      "substantial",
+      "complete",
+      "unknown"
+    ],
+    "recency_values": [
+      "old",
+      "recent",
+      "unknown"
+    ],
+    "reaction_values": [
+      "non_engagement",
+      "mixed",
+      "explicit_dislike",
+      "unknown"
+    ],
+    "later_reopening_values": [
+      "none",
+      "quality_reputation",
+      "direct_current_interest",
+      "richer_title_specific_evidence"
+    ]
+  },
+  "candidate_quality_findings": {
+    "fields": [
+      "category",
+      "code",
+      "evidence",
+      "source",
+      "recurrence",
+      "personal_relevance",
+      "risk_text_ru"
+    ],
+    "source_values": [
+      "recurring_player_complaints",
+      "substantive_review_synthesis",
+      "direct_user_quality_observation"
+    ],
+    "recurrence_values": [
+      "recurring_pattern",
+      "single_observation"
+    ],
+    "personal_relevance_value": "unresolved",
+    "never_changes_fit_verdict_or_normalized_factors": true,
+    "public_review_sentiment_percentage_is_not_taste_evidence": true
   }
 }

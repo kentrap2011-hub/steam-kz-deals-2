@@ -11,6 +11,11 @@ from taste_cache_common import (
     validate_verdict_shape,
 )
 from taste_negative_contract import validate_negative_analysis
+from taste_evidence_contract import (
+    EVIDENCE_RESULT_FIELDS,
+    current_evidence_contract_sha,
+    validate_fit_evidence_fields,
+)
 
 QUEUE = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
 PROJECTION = Path('data/production/pre_ai/taste_projection.json')
@@ -40,6 +45,8 @@ NEGATIVE_ONLY_RESULT_FIELDS = {
     'negative_findings',
     'negative_evidence',
 }
+FULL_RESULT_FIELDS |= EVIDENCE_RESULT_FIELDS
+NEGATIVE_ONLY_RESULT_FIELDS |= EVIDENCE_RESULT_FIELDS
 OPTIONAL_FULL_RESULT_FIELDS = {'taste_factors'}
 FORBIDDEN_EVIDENCE_FRAGMENTS = [
     'price', 'discount', 'wishlist', 'steam review', 'global review', 'russian review',
@@ -79,7 +86,7 @@ def validate_evidence_list(name, values):
 
 def load_overlay():
     doc = load_json(OVERLAY)
-    if doc.get('schema_version') != 1 or doc.get('entry_schema_version') not in {2, 3, 4}:
+    if doc.get('schema_version') != 1 or doc.get('entry_schema_version') not in {2, 3, 4, 5}:
         raise ValueError('Unexpected taste overlay schema')
     entries = doc.get('entries')
     if not isinstance(entries, dict):
@@ -105,12 +112,26 @@ def validate_negative_result_fields(result):
         result.get('negative_analysis_status'),
         result.get('negative_findings'),
         result.get('negative_evidence'),
+        require_v5=True,
     )
     validate_evidence_list('negative_evidence', result['negative_evidence'])
     for index, finding in enumerate(findings):
         validate_price_blind_text(f'negative_findings[{index}].evidence', finding['evidence'])
         validate_price_blind_text(f'negative_findings[{index}].risk_text_ru', finding['risk_text_ru'])
     return findings
+
+
+def validate_noncommercial_quality_text(name, value):
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f'{name} must be a non-empty string')
+    forbidden = [
+        'price', 'discount', 'wishlist', 'steamdb', 'historical price', 'sale price',
+        'rub', 'kzt', 'цена', 'скидк', 'вишлист', 'историческ', 'руб.', 'рублей', 'тенге', 'распродаж',
+    ]
+    folded = value.casefold()
+    hit = next((fragment for fragment in forbidden if fragment in folded), None)
+    if hit is not None:
+        raise ValueError(f'{name} contains forbidden commercial evidence fragment: {hit!r}')
 
 
 def validate_current_base_entry(key, entry, queue_row, projection):
@@ -215,8 +236,12 @@ def validate_input(doc, queue_by_key, projection, current_entries):
             raise ValueError(f'Candidate context mismatch for {key}')
 
         validate_negative_result_fields(result)
+        for q_index, finding in enumerate(result.get('candidate_quality_findings') or []):
+            validate_noncommercial_quality_text(f'candidate_quality_findings[{q_index}].evidence', finding['evidence'])
+            validate_noncommercial_quality_text(f'candidate_quality_findings[{q_index}].risk_text_ru', finding['risk_text_ru'])
 
         if full_eval:
+            validate_fit_evidence_fields(result, require_v5=True)
             factors_required = 'evaluate_normalized_taste_factors' in work_required
             if factors_required and 'taste_factors' not in result:
                 raise ValueError(f'Current queue row requires taste_factors: {key}')
@@ -226,8 +251,12 @@ def validate_input(doc, queue_by_key, projection, current_entries):
             validate_evidence_list('positive_evidence', result['positive_evidence'])
             if result['verdict'] == 'INCLUDE' and len(result['positive_evidence']) < 2:
                 raise ValueError(f'INCLUDE result requires at least two explicit positive evidence items: {key}')
-            if result['reason_code'] == 'exclude_direct_conflict' and not result['negative_evidence']:
-                raise ValueError(f'exclude_direct_conflict requires explicit negative evidence: {key}')
+            if (
+                result['reason_code'] == 'exclude_direct_conflict'
+                and result['fit_evidence_state'] == 'confirmed_negative'
+                and not result['negative_evidence']
+            ):
+                raise ValueError(f'confirmed exclude_direct_conflict requires explicit negative evidence: {key}')
             base_entry = None
         else:
             base_entry = validate_current_base_entry(
@@ -236,6 +265,9 @@ def validate_input(doc, queue_by_key, projection, current_entries):
                 queue_row,
                 projection,
             )
+            evidence_view = dict(base_entry)
+            evidence_view.update(result)
+            validate_fit_evidence_fields(evidence_view, require_v5=True)
 
         validated.append({
             'result': result,
@@ -262,6 +294,12 @@ def build_full_entry(result, bindings, evaluated_at):
         'negative_analysis_status': result['negative_analysis_status'],
         'negative_findings': result['negative_findings'],
         'negative_evidence': result['negative_evidence'],
+        'evidence_contract_sha': current_evidence_contract_sha(),
+        'fit_evidence_state': result['fit_evidence_state'],
+        'fit_evidence_confidence': result['fit_evidence_confidence'],
+        'fit_evidence_basis': result['fit_evidence_basis'],
+        'historical_negative_context': result['historical_negative_context'],
+        'candidate_quality_findings': result['candidate_quality_findings'],
         'evaluated_at_utc': evaluated_at,
     }
     if 'taste_factors' in result:
@@ -274,6 +312,9 @@ def build_negative_only_entry(result, base_entry):
     entry['negative_analysis_status'] = result['negative_analysis_status']
     entry['negative_findings'] = result['negative_findings']
     entry['negative_evidence'] = result['negative_evidence']
+    entry['evidence_contract_sha'] = current_evidence_contract_sha()
+    for field in EVIDENCE_RESULT_FIELDS:
+        entry[field] = result[field]
     return entry
 
 
@@ -304,7 +345,7 @@ def main():
 
     contract = load_json(ENTRY_CONTRACT)
     base_required = contract.get('base_required_entry_fields') or contract['schema_v2_required_entry_fields']
-    v4_required = contract.get('schema_v4_required_entry_fields') or base_required
+    v5_required = contract.get('schema_v5_required_entry_fields') or contract.get('schema_v4_required_entry_fields') or base_required
     evaluated_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     entries = dict(overlay['entries'])
     inserted = 0
@@ -319,7 +360,7 @@ def main():
         if row['full_eval']:
             entry = build_full_entry(result, bindings, evaluated_at)
             full_result_count += 1
-            required_fields = v4_required
+            required_fields = v5_required
             require_factors = True
         else:
             entry = build_negative_only_entry(result, row['base_entry'])
@@ -338,6 +379,7 @@ def main():
                 required_fields,
                 require_taste_factors=require_factors,
                 require_v4_negative_fields=True,
+                require_v5_evidence_fields=True,
             )
         except ValueError as exc:
             raise SystemExit(str(exc)) from exc
@@ -355,7 +397,7 @@ def main():
         entries[result['key']] = entry
 
     updated = dict(overlay)
-    updated['entry_schema_version'] = 4
+    updated['entry_schema_version'] = 5
     updated['entry_count'] = len(entries)
     updated['entries'] = entries
 

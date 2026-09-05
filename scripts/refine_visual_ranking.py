@@ -6,6 +6,9 @@ import subprocess
 import urllib.request
 from pathlib import Path
 
+from taste_evidence_contract import evidence_readiness
+from taste_negative_contract import structured_grounded_risks
+
 ROOT = Path('.')
 OUT = ROOT / 'data/production/visual/current.json'
 TASTE_CACHE = ROOT / 'data/cache/taste_fit.json'
@@ -203,6 +206,22 @@ def map_negative_evidence(value, risks):
     # problem when the evidence also indicates unchanged/repetitive play.
 
 
+def personal_taste_risks(taste_entry):
+    """Use V5 structured personal negatives once exactly evidence-bound.
+
+    Legacy free text remains a migration fallback so an informed negative such
+    as HighFleet is never silently erased before its V5 backfill completes.
+    Candidate-quality findings are intentionally absent from this path.
+    """
+    state = evidence_readiness(taste_entry)
+    if state.get('fit_evidence_bound'):
+        return structured_grounded_risks(taste_entry)
+    risks = {}
+    for value in (taste_entry or {}).get('negative_evidence') or []:
+        map_negative_evidence(value, risks)
+    return risks
+
+
 def structural_risks(projection, practical):
     risks = {}
     tags = [str(x).casefold() for x in projection.get('fit_tags') or []]
@@ -339,7 +358,7 @@ def risk_summary(risks):
     return [x['text'] for x in top], [x['code'] for x in rows], sum(x['score'] for x in rows), level
 
 
-def direct_fit_cap(source_fit, evidence):
+def direct_fit_cap(source_fit, evidence, fit_evidence_state=None):
     if not evidence:
         return source_fit, None
     rating = evidence['rating']
@@ -347,6 +366,8 @@ def direct_fit_cap(source_fit, evidence):
         return 'strong', 'direct_user_rating_4_or_higher'
     if rating >= 3.5:
         return 'moderate', 'direct_user_rating_3_5_mixed'
+    if fit_evidence_state == 'reconsiderable':
+        return source_fit, 'old_shallow_reconsiderable_rating_does_not_hard_cap_current_fit'
     if source_fit == 'strong':
         return 'moderate', 'direct_user_rating_below_3_5_caps_strong'
     return source_fit, 'direct_user_rating_below_3_5'
@@ -360,7 +381,12 @@ def serious_taste_risk(risks):
 def apply_fit_adjustment(game, evidence, risks, taste_entry, projection):
     source_fit = game.get('fit') or 'moderate'
     game['source_fit'] = source_fit
-    fit, reason = direct_fit_cap(source_fit, evidence)
+    evidence_state = evidence_readiness(taste_entry)
+    game['fit_evidence_state'] = evidence_state.get('fit_evidence_state')
+    game['fit_evidence_confidence'] = evidence_state.get('fit_evidence_confidence')
+    game['fit_evidence_state_source'] = evidence_state.get('fit_evidence_source')
+    game['fit_evidence_bound'] = bool(evidence_state.get('fit_evidence_bound'))
+    fit, reason = direct_fit_cap(source_fit, evidence, evidence_state.get('fit_evidence_state'))
 
     direct_override = bool(evidence)
     if not direct_override and fit == 'strong' and serious_taste_risk(risks):
@@ -517,9 +543,7 @@ def main():
         if old_windows in {'legacy', 'older_but_plausible'}:
             windows_labels_neutralized += 1
 
-        risks = {}
-        for ev in taste_entry.get('negative_evidence') or []:
-            map_negative_evidence(ev, risks)
+        risks = personal_taste_risks(taste_entry)
         for code, row in structural_risks(projection, practical).items():
             add_risk(risks, code, row['score'], row['text'], row.get('source') or 'derived')
 
@@ -576,7 +600,7 @@ def main():
     contract['backtracking_rule'] = 'location reuse itself is neutral; penalize unchanged repetition without new gameplay value'
     contract['duration_rule'] = 'very weak late tiebreak only; medium duration preferred over very short or very long games when otherwise equal'
     contract['fit_adjustment_rule'] = 'direct user evidence overrides inference; serious confirmed personal conflicts can cap strong to moderate'
-    contract['taste_evidence_merge_rule'] = 'legacy base plus incremental overlay; overlay exact key wins'
+    contract['taste_evidence_merge_rule'] = 'legacy fit remains reusable; V5 evidence state is separately bound and ambiguous legacy evidence is backfilled through existing Taste work'
     contract['refinement_stats'] = {
         'fit_changes': fit_changes,
         'removed_after_fit_change_and_commercial_recheck': removed,

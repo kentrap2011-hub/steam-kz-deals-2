@@ -85,9 +85,7 @@ def _set_if_changed(game, key, value):
 
 
 def explanation_risk_candidates(taste_entry, projection, practical):
-    risks = {}
-    for ev in taste_entry.get('negative_evidence') or []:
-        refiner.map_negative_evidence(ev, risks)
+    risks = refiner.personal_taste_risks(taste_entry)
     for code, row in refiner.structural_risks(projection, practical).items():
         refiner.add_risk(
             risks,

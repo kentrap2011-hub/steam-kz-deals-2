@@ -47,7 +47,7 @@
 
 **Что ищем:** текущий semantic scope Taste V3, exact bindings, inbox submissions, canonical ingest и downstream propagation пяти нормализованных price-blind факторов.
 
-**Последняя проверка:** 2026-08-31  
+**Последняя проверка:** 2026-08-31
 **Проверенный recovery ref:** после commit `31a3f3e2b84185ab32cf0a4e5bbdf1776681331b`.
 
 **Канонические контракты:**
@@ -91,9 +91,9 @@
 
 **Что ищем:** где формируется production ranking, из каких баллов он складывается и как локальная мобильная очередь может его отображать.
 
-**Последняя проверка:** 2026-08-30  
-**Последний успешный production build:** GitHub Actions run `33325344781` (`Build daily visual payload`, run 64) — success.  
-**Последний успешный deploy:** run `33325360599` (`Deploy visual mailing`, run 100) — success.  
+**Последняя проверка:** 2026-08-30
+**Последний успешный production build:** GitHub Actions run `33325344781` (`Build daily visual payload`, run 64) — success.
+**Последний успешный deploy:** run `33325360599` (`Deploy visual mailing`, run 100) — success.
 **Production payload commit:** `491b1660dcca7a4b069978c29e9ff46e071252e2`.
 
 **Сначала открыть:**
@@ -172,7 +172,7 @@ Production ranking **не меняется**. В `web/app.js` есть отде�
 
 ### Проверенный пример
 
-**High On Life:** 62.5/100, production rank 220.  
+**High On Life:** 62.5/100, production rank 220.
 **Seraph's Last Stand:** 44.5/100, production rank 348.
 
 High On Life выше по score благодаря wishlist, отсутствию серьёзного риска и большей реальной экономии. Seraph получает +12/12 за низкую текущую цену, но её экономия 17 ₽ даёт 0/20 и серьёзный риск даёт −10.
@@ -239,3 +239,26 @@ Production validator проверяет:
 - canonical cache: `data/cache/russian_description_translations.json`.
 
 **Текущее состояние:** contract/schema wiring завершён. Producer, runtime ingest и production cache population намеренно **не реализованы в этой contract-only задаче**; это следующий отдельный bounded IMPLEMENT согласно `WORKER_TASK_RU_TRANSLATION_CONTRACT_01.md`.
+
+
+---
+
+## Taste V5 / evidence state and reconsideration
+
+**Что ищем:** price-blind distinction between `sufficient`, `insufficient`, `reconsiderable`, and `confirmed_negative` without invalidating reusable fit verdicts.
+
+**Канонические контракты:**
+- `config/mailing_policy.json -> taste_evidence_state`;
+- `config/taste_result_contract.json` (`TASTE-SEMANTIC-RESULT-V5`);
+- `config/taste_cache_entry_contract.json` (`TASTE-CACHE-ENTRY-BINDING-V5`);
+- `config/taste_ledger_contract.json` keeps the binary fit ledger as compatibility/eligibility only.
+
+**Быстрая точка входа:**
+1. `scripts/taste_evidence_contract.py` — state/confidence/history/candidate-quality validation + legacy compatibility.
+2. `scripts/taste_negative_contract.py` — V5 personal-negative provenance/strength; legacy V4 accepted only for migration.
+3. `scripts/ingest_taste_results.py` — GitHub stamps exact `evidence_contract_sha`; evidence-only backfill preserves fit semantics.
+4. `scripts/build_pre_ai_chatgpt_payload.py` — reuses `resolve_grounded_negative_analysis`; ambiguous legacy excludes are queued for evidence backfill before being interpreted as dislike.
+5. `scripts/refine_visual_ranking.py` — exact V5 state uses structured personal negatives; legacy free text remains only until backfill, preventing migration-time loss of real negatives.
+6. `scripts/test_taste_evidence_states.py` — Haven Moon / BioShock / HighFleet and evidence-boundary controls.
+
+**Архитектурный инвариант:** evidence-state binding is orthogonal to the existing fit semantic digest. No new scheduler, queue authority, ranking authority, wishlist override, or play-role logic is introduced.

@@ -2,9 +2,9 @@
 
 Долговечный журнал **почему** в проекте приняты неочевидные продуктовые и архитектурные решения.
 
-`PROJECT_RULES.md` отвечает на вопрос **что должно быть**.  
-`config/*.json` отвечает на вопрос **как это формально задано машине**.  
-`PROJECT_ROUTES.md` отвечает на вопрос **где это реализовано и как быстро туда попасть**.  
+`PROJECT_RULES.md` отвечает на вопрос **что должно быть**.
+`config/*.json` отвечает на вопрос **как это формально задано машине**.
+`PROJECT_ROUTES.md` отвечает на вопрос **где это реализовано и как быстро туда попасть**.
 `PROJECT_DECISIONS.md` отвечает на вопрос **почему правило именно такое, какую проблему оно решает и какие альтернативы были сознательно отвергнуты**.
 
 ## Как вести журнал
@@ -19,7 +19,7 @@
 
 ## RANK-001 — Только одна финальная формула `priority_rank`
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** implemented in production path; regression verified, full payload rebuild pending external history gate
 
 **Решение:** pipeline может иметь несколько стадий enrichment/refinement, но итоговый `priority_rank` должен вычисляться одной канонической policy-driven формулой только после завершения всех refinement-факторов.
@@ -34,7 +34,7 @@
 
 ## RANK-002 — Срочность окончания скидки выше автоматического качества рекомендации
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** implemented and regression verified
 
 **Решение:** среди уже прошедших taste/commercial eligibility игр самый верхний автоматический слой сортировки: `скидка заканчивается сегодня → завтра → позже/срок неизвестен`.
@@ -49,7 +49,7 @@
 
 ## RANK-003 — Смешанная группа «вкус + выгодность» остаётся главным обычным качественным слоем
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** superseded by RANK-010 for final ordering
 
 **Решение:** качественный `priority_bucket` по-прежнему реализует согласованную матрицу примерно 60% taste / 40% deal и остаётся главным обычным качественным слоем, но после срочности и серьёзного подтверждённого риска согласно RANK-009.
@@ -66,7 +66,7 @@
 
 ## RANK-004 — Прямую оценку пользователя не учитывать второй раз после `priority_bucket`
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** principle retained; final mechanism superseded by RANK-010
 
 **Решение:** direct user evidence может корректировать `fit`, после чего пересчитывается коммерческая ветка и `priority_bucket`; отдельного следующего слоя `direct_user_evidence` в final sort быть не должно.
@@ -81,7 +81,7 @@
 
 ## RANK-005 — Подтверждённые персональные/Windows-риски раньше wishlist и цены
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** risk principle retained; precedence mechanism superseded by RANK-010; confirmed Windows fact acquisition still missing
 
 **Решение:** учитывать **серьёзные подтверждённые** персональные и практические риски, включая реальные проблемы запуска на современной Windows. По RANK-009 этот слой теперь стоит даже раньше смешанной группы «вкус + выгодность». Средние/слабые эвристические риски остаются описательными и сами по себе не должны обгонять группу приоритета, wishlist или коммерческую выгоду.
@@ -100,7 +100,7 @@
 
 ## RANK-006 — Wishlist важен, но ограничен
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** principle retained; final mechanism superseded by RANK-010
 
 **Решение:** после серьёзных рисков и группы приоритета wishlist даёт заметный приоритет уже допустимому кандидату.
@@ -117,7 +117,7 @@
 
 ## RANK-007 — Размер скидки важнее качества относительно исторического минимума
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** superseded by RANK-011
 
 **Решение:** внутри одинаковых expiry/risk/bucket/wishlist условий сначала сравнивать `discount_percent`, и только потом `price_quality_vs_history`.
@@ -134,7 +134,7 @@
 
 ## RANK-008 — Достижения и длительность только поздние различители близких кандидатов
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** principle retained; lexicographic mechanism superseded by RANK-010; achievement strength refined by RANK-012
 
 **Решение:** после скидки, истории и текущей цены учитывать achievement quality; duration — ещё позже как самый слабый дополнительный критерий перед title.
@@ -149,7 +149,7 @@
 
 ## RANK-009 — Серьёзный подтверждённый риск важнее смешанной группы «вкус + выгодность»
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** superseded in final mechanism by RANK-010; rationale preserved
 
 **Решение:** после срочности окончания скидки сравнивать серьёзный подтверждённый персональный/практический риск и только затем `priority_bucket`. Средние и слабые риски на этом раннем слое остаются нейтральными.
@@ -164,7 +164,7 @@
 
 ## RANK-010 — Финальный рейтинг 0–100 должен быть прозрачным и настраиваемым из одного конфига
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** implementation in progress
 
 **Решение:** после eligibility финальный обычный приоритет определяется числовым `total_score` 0–100. Стартовое распределение: до 60 баллов за персональную ценность и до 40 за выгодность покупки. Срочность окончания акции остаётся отдельным верхним слоем вне 100 баллов; `manual_end_at` остаётся UI override поверх всего автоматического порядка.
@@ -183,7 +183,7 @@
 
 ## RANK-011 — Скидочную выгоду считать по рублям экономии, а не по проценту скидки
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** implemented in scorer/config; regression added, production rebuild pending
 
 **Решение:** компонент выгодности акции считает `savings_rub = max(0, original_price_rub - current_price_rub)`. `discount_percent` остаётся только отображением/контекстом и сам по себе не добавляет score. Стартовый максимум компонента экономии — 20 баллов; все рублёвые диапазоны задаются только в policy-конфиге.
@@ -200,7 +200,7 @@
 
 ## RANK-012 — Достижения значительно важнее для уже сыгранной игры
 
-**Дата:** 2026-08-31  
+**Дата:** 2026-08-31
 **Статус:** implemented in scorer/config; regression verified; production payload rebuilt
 
 **Решение:** achievement-компонент зависит от подтверждённого предыдущего опыта с игрой. Текущий канонический сигнал `played confirmed` — наличие числовой `direct_user_evidence.rating`, то есть точной пользовательской оценки из привязанного игрового профиля. Для новой или не подтверждённо сыгранной игры достижения остаются небольшим бонусом: максимум `+1.5`. Для уже сыгранной игры качественный набор может дать до `+3`, но слабый набор становится причиной не возвращаться: качество `2/5 → −2`, `1/5 → −4`, отсутствие Steam Achievements → `−6`. Если статус/качество достижений неизвестны, неизвестность сама по себе не штрафуется.
@@ -219,7 +219,7 @@
 
 ## UI-001 — «В конец очереди» абсолютнее любой автоматической сортировки
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** implemented; existing behavior regression protected
 
 **Решение:** явное локальное действие пользователя `В конец очереди` всегда накладывается поверх production `priority_rank`. Даже игра со скидкой, заканчивающейся сегодня, остаётся в конце, если пользователь её туда отправил.
@@ -234,7 +234,7 @@
 
 ## STEAMDB-001 — Полный scope должен завершаться целиком, но это не то же самое, что запрещать partial persistence
 
-**Дата:** 2026-08-30  
+**Дата:** 2026-08-30
 **Статус:** rationale recovered; current implementation over-blocking confirmed; replacement behavior not yet approved
 
 **Исходное решение:** весь GitHub-подготовленный набор SteamDB true misses для текущего production cycle должен считаться одной стадией. Размер внешнего batch/checkpoint — только техническая деталь и никогда не означает суточную квоту или завершение стадии. Partial subset нельзя объявлять готовым completed artifact.
@@ -257,7 +257,7 @@
 
 ## CHAT-001 — Процедурные правила чата должны работать как короткий обязательный gate
 
-**Дата:** 2026-09-01  
+**Дата:** 2026-09-01
 **Статус:** implemented; cold-start verification pending
 
 **Решение:** обязательные правила поведения интерактивного чата вынесены в отдельный корневой `CHAT_PROTOCOL.md` с тремя явными gates: `START`, `DURING`, `PRE-SEND`. Новый чат обязан читать его **до** `CHAT_CONTEXT.md`, а перед каждым пользовательским ответом проходить релевантный `PRE-SEND`; перед финальным ответом по подзадаче — весь gate.
@@ -271,3 +271,22 @@
 **Проверка:** основная acceptance-проверка должна выполняться из нового чата/cold start, чтобы исключить помощь памяти текущей сессии. Новый чат получает только указание найти репозиторий и выполнить небольшую задачу; успешным считается самостоятельное чтение `CHAT_PROTOCOL.md`, соблюдение стартового маршрута и проявление соответствующего PRE-SEND поведения при специально созданном trigger-case.
 
 **Основные места:** `CHAT_PROTOCOL.md`, `README.md`, `CHAT_CONTEXT.md`, `PROJECT_DECISIONS.md`.
+
+---
+
+## TASTE-001 — Evidence confidence is not the fit verdict
+
+**Дата:** 2026-09-05
+**Статус:** implemented as internal Taste step 1; independent Taste Review required before material product acceptance.
+
+**Решение:** binary `INCLUDE/EXCLUDE` and `strong/moderate/below_moderate` remain compatibility fit/eligibility semantics, while a separately bound price-blind evidence layer distinguishes `sufficient`, `insufficient`, `reconsiderable`, and `confirmed_negative`.
+
+**Почему:** lack of evidence, an old shallow failed attempt, and a current informed rejection have different meaning. Collapsing them into `below_moderate` made uncertainty look like dislike and could turn old non-engagement into a permanent veto.
+
+**Граница:** price, discount, wishlist and bundle value never manufacture or change evidence state. Recurring public complaints may establish candidate-quality risk but stay `personal_relevance=unresolved`; a strong personal-negative finding requires candidate-specific personal/title evidence. `confirmed_negative` remains non-overridable by paid commercial value.
+
+**Миграция:** existing exact fit bindings remain reusable. Safe legacy cases receive compatibility evidence states; ambiguous legacy direct-conflict/audited-below and risk-bearing include rows are backfilled through the existing `resolve_grounded_negative_analysis` work path. Until exact V5 backfill, legacy personal-risk scoring remains fail-safe so real negatives are not silently erased.
+
+**Не делать:** не use evidence state as wishlist override, play-role/start-priority, discount boost, second ranking formula, or new semantic scheduler.
+
+**Основные места:** `config/taste_result_contract.json`, `config/taste_cache_entry_contract.json`, `scripts/taste_evidence_contract.py`, `scripts/ingest_taste_results.py`, `scripts/build_pre_ai_chatgpt_payload.py`, `scripts/refine_visual_ranking.py`.

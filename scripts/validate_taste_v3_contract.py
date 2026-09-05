@@ -77,11 +77,19 @@ def fixture():
                 'code': 'other_grounded_taste_risk',
                 'evidence': 'A confirmed candidate-specific downside that does not fit the initial taxonomy.',
                 'risk_text_ru': 'У игры есть подтверждённый персональный минус, который пока не относится к отдельной категории риска.',
+                'evidence_origin': 'title_specific_inspection',
+                'evidence_strength': 'strong',
+                'personal_relevance': 'confirmed',
             }
         ],
         'negative_evidence': [
             'A confirmed candidate-specific downside that does not fit the initial taxonomy.'
         ],
+        'fit_evidence_state': 'sufficient',
+        'fit_evidence_confidence': 'high',
+        'fit_evidence_basis': ['candidate_specific_positive_match', 'title_specific_inspection'],
+        'historical_negative_context': None,
+        'candidate_quality_findings': [],
         'taste_factors': {
             'gameplay_mastery': 80,
             'development_variety': 65,
@@ -105,13 +113,14 @@ def main():
 
     entry = build_full_entry(result, bindings, '2026-09-02T00:01:00+00:00')
     contract = load_json(ENTRY_CONTRACT)
-    required = contract['schema_v4_required_entry_fields']
+    required = contract['schema_v5_required_entry_fields']
     assert validate_cache_entry(
         entry,
         result['key'],
         required,
         require_taste_factors=True,
         require_v4_negative_fields=True,
+        require_v5_evidence_fields=True,
     )
     assert negative_readiness(entry)['negative_analysis_ready'] is True
 
@@ -189,6 +198,8 @@ def main():
         for field in [
             'key', 'appid', 'taste_fingerprint', 'candidate_context_sha256',
             'negative_analysis_status', 'negative_findings', 'negative_evidence',
+            'fit_evidence_state', 'fit_evidence_confidence', 'fit_evidence_basis',
+            'historical_negative_context', 'candidate_quality_findings',
         ]
     }
     negative_doc = {'schema_version': 1, 'bindings': bindings, 'results': [negative_result]}
@@ -241,7 +252,7 @@ def main():
 
     print(json.dumps({
         'status': 'PASS',
-        'contract': 'TASTE-SEMANTIC-RESULT-V4',
+        'contract': 'TASTE-SEMANTIC-RESULT-V5',
         'factor_ids': list(TASTE_FACTOR_IDS),
         'valid_vector_persists': True,
         'configured_score_points': scored['points'],
@@ -251,7 +262,7 @@ def main():
         'unfamiliar_structured_finding_survives': True,
         'other_grounded_taste_risk_score': 0,
     }, ensure_ascii=False, indent=2))
-    print('TASTE_V4_CONTRACT_VALIDATION=PASS')
+    print('TASTE_V5_CONTRACT_VALIDATION=PASS')
 
 
 if __name__ == '__main__':

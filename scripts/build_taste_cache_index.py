@@ -38,6 +38,7 @@ def main():
         'TASTE-CACHE-ENTRY-BINDING-V2',
         'TASTE-CACHE-ENTRY-BINDING-V3',
         'TASTE-CACHE-ENTRY-BINDING-V4',
+        'TASTE-CACHE-ENTRY-BINDING-V5',
     }:
         raise SystemExit('Unexpected per-entry taste cache contract')
     required_base = contract.get('base_required_entry_fields') or contract.get('schema_v2_required_entry_fields')
@@ -57,7 +58,7 @@ def main():
 
     overlay_raw = OVERLAY.read_bytes()
     overlay = json.loads(overlay_raw.decode('utf-8'))
-    if overlay.get('schema_version') != 1 or overlay.get('entry_schema_version') not in {2, 3, 4}:
+    if overlay.get('schema_version') != 1 or overlay.get('entry_schema_version') not in {2, 3, 4, 5}:
         raise SystemExit('Unexpected taste overlay schema')
     overlay_entries = overlay.get('entries')
     if not isinstance(overlay_entries, dict):

@@ -1,8 +1,8 @@
 {
-  "contract": "TASTE-CACHE-ENTRY-BINDING-V4",
+  "contract": "TASTE-CACHE-ENTRY-BINDING-V5",
   "version": "1.0",
   "status": "canonical",
-  "purpose": "Allow incremental mixed-generation derived taste caching while adding normalized price-blind taste factors and explicit grounded-negative readiness without weakening exact cache-hit validity.",
+  "purpose": "Preserve exact reusable price-blind fit bindings while adding an independently bound V5 evidence-state layer. Legacy V2/V3/V4 fit entries remain reusable; ambiguous evidence semantics are backfilled through the existing Taste work path.",
   "authority": {
     "canonical_policy_path": "config/mailing_policy.json",
     "canonical_cache_path": "data/cache/taste_fit.json",
@@ -22,7 +22,7 @@
     "algorithm": "sha256",
     "serialization": "json ensure_ascii=false sort_keys=true separators comma_colon",
     "purpose": "Invalidate cached decisions when actual taste-evaluation semantics change while ignoring unrelated render/cache plumbing changes.",
-    "migration_note": "Grounded-negative readiness is deliberately orthogonal to the fit semantic digest. Existing valid V2/V3 fit bindings remain reusable and are backfilled through the existing Taste queue instead of forcing full reevaluation."
+    "migration_note": "Evidence-state/confidence and grounded-negative V5 provenance are deliberately orthogonal to the existing fit semantic digest. Changing the evidence contract does not invalidate an otherwise exact fit cache entry; evidence readiness is bound separately."
   },
   "base_required_entry_fields": [
     "key",
@@ -94,7 +94,10 @@
       "identity_hooks",
       "breadth_of_match"
     ],
-    "value_range_inclusive": [0, 100],
+    "value_range_inclusive": [
+      0,
+      100
+    ],
     "weight_independent": true,
     "price_blind": true
   },
@@ -126,12 +129,16 @@
     "new_validated_batches_replace_only_their_exact_keys": true,
     "partial_refresh_becomes_reusable_immediately": true,
     "never_upgrade_an_old_entry_fit_binding_or_add_factors_without_a_new_ai_verdict": true,
-    "negative_only_backfill_may_add_only_negative_analysis_fields_to_an_existing_valid_entry": true
+    "negative_only_backfill_may_add_only_negative_analysis_fields_to_an_existing_valid_entry": true,
+    "legacy_v4_entries_without_evidence_state_may_be_fit_cache_hits": true,
+    "legacy_v4_entries_without_evidence_state_are_not_v5_evidence_bound": true,
+    "v5_evidence_backfill_may_modify_only_evidence_and_negative_analysis_fields": true
   },
   "overlay": {
     "container_schema_version": 1,
-    "current_entry_schema_version": 4,
-    "mixed_v2_v3_v4_rows_allowed_during_migration": true
+    "current_entry_schema_version": 5,
+    "mixed_v2_v3_v4_rows_allowed_during_migration": true,
+    "mixed_v2_v3_v4_v5_rows_allowed_during_migration": true
   },
   "legacy_schema_v1_migration": {
     "allowed": true,
@@ -140,5 +147,49 @@
     "legacy_semantics_binding_source": "data/cache/taste_fit.ledger_validation.json bindings.policy_blob_sha",
     "historical_policy_must_be_readable_from_git_object_database": true,
     "fail_closed_if_historical_policy_or_binding_cannot_be_proven": true
+  },
+  "schema_v5_required_entry_fields": [
+    "key",
+    "appid",
+    "profile_blob_sha",
+    "taste_model_version",
+    "taste_semantics_sha256",
+    "candidate_context_sha256",
+    "taste_fingerprint",
+    "verdict",
+    "fit_level",
+    "reason_code",
+    "positive_evidence",
+    "negative_analysis_status",
+    "negative_findings",
+    "negative_evidence",
+    "taste_factors",
+    "evidence_contract_sha",
+    "fit_evidence_state",
+    "fit_evidence_confidence",
+    "fit_evidence_basis",
+    "historical_negative_context",
+    "candidate_quality_findings",
+    "evaluated_at_utc"
+  ],
+  "evidence_state": {
+    "contract_binding_field": "evidence_contract_sha",
+    "binding_source": "git_blob_sha_of_config/taste_result_contract.json",
+    "fit_binding_remains_independent": true,
+    "legacy_entries_without_v5_evidence_remain_fit_reusable": true,
+    "ambiguous_legacy_entries_require_evidence_backfill": true,
+    "evidence_backfill_preserves": [
+      "verdict",
+      "fit_level",
+      "reason_code",
+      "positive_evidence",
+      "taste_factors",
+      "profile_blob_sha",
+      "taste_model_version",
+      "taste_semantics_sha256",
+      "taste_fingerprint",
+      "candidate_context_sha256",
+      "evaluated_at_utc"
+    ]
   }
 }

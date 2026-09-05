@@ -7,6 +7,7 @@ from collections import Counter
 from pathlib import Path
 
 from taste_negative_contract import negative_readiness
+from taste_evidence_contract import evidence_readiness
 from semantic_runtime_completion import apply_payload_status
 
 MAILING = Path('data/production/mailing/index.json')
@@ -128,39 +129,70 @@ def effective_taste_entries():
 def annotate_negative_readiness(taste_doc, effective_entries):
     ready_count = 0
     unresolved_cache_hit_count = 0
+    evidence_ready_count = 0
+    evidence_bound_count = 0
+    evidence_backfill_count = 0
+    evidence_state_counts = Counter()
     changed = False
     for key, row in (taste_doc.get('entries') or {}).items():
         if row.get('status') == 'cache_hit':
-            readiness = negative_readiness(effective_entries.get(key) or {})
+            entry = effective_entries.get(key) or {}
+            readiness = negative_readiness(entry)
+            evidence = evidence_readiness(entry)
         else:
             readiness = {
                 'negative_analysis_status': None,
                 'confirmed_negative_count': 0,
                 'negative_analysis_ready': False,
             }
-        for field, value in readiness.items():
+            evidence = {
+                'fit_evidence_state': None,
+                'fit_evidence_confidence': None,
+                'fit_evidence_ready': False,
+                'fit_evidence_bound': False,
+                'fit_evidence_source': 'new_fit_evaluation_required',
+                'fit_evidence_backfill_required': False,
+            }
+        merged = dict(readiness)
+        merged.update(evidence)
+        for field, value in merged.items():
             if row.get(field) != value:
                 row[field] = value
                 changed = True
         cached = row.get('cached_taste')
         if isinstance(cached, dict):
-            for field in ('negative_analysis_status', 'confirmed_negative_count', 'negative_analysis_ready'):
-                if cached.get(field) != readiness[field]:
-                    cached[field] = readiness[field]
+            for field, value in merged.items():
+                if cached.get(field) != value:
+                    cached[field] = value
                     changed = True
         if row.get('status') == 'cache_hit':
             ready_count += int(readiness['negative_analysis_ready'])
             unresolved_cache_hit_count += int(not readiness['negative_analysis_ready'])
+            evidence_ready_count += int(evidence['fit_evidence_ready'])
+            evidence_bound_count += int(evidence['fit_evidence_bound'])
+            evidence_backfill_count += int(evidence['fit_evidence_backfill_required'])
+            evidence_state_counts[str(evidence['fit_evidence_state'] or 'unresolved')] += 1
 
-    summary = taste_doc.setdefault('negative_analysis', {})
     wanted = {
         'work_code': NEGATIVE_WORK_CODE,
         'cache_hit_ready_count': ready_count,
         'cache_hit_unresolved_count': unresolved_cache_hit_count,
         'legacy_free_text_never_implies_readiness': True,
     }
-    if summary != wanted:
+    if taste_doc.get('negative_analysis') != wanted:
         taste_doc['negative_analysis'] = wanted
+        changed = True
+    evidence_summary = {
+        'work_code': NEGATIVE_WORK_CODE,
+        'new_work_code_created': False,
+        'cache_hit_ready_count': evidence_ready_count,
+        'cache_hit_bound_v5_count': evidence_bound_count,
+        'cache_hit_backfill_required_count': evidence_backfill_count,
+        'state_counts': dict(sorted(evidence_state_counts.items())),
+        'price_blind': True,
+    }
+    if taste_doc.get('fit_evidence_state') != evidence_summary:
+        taste_doc['fit_evidence_state'] = evidence_summary
         changed = True
     if changed:
         TASTE.write_text(json.dumps(taste_doc, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
@@ -221,6 +253,7 @@ def main():
     negative_backfill_queue_count = 0
     negative_full_eval_queue_count = 0
     negative_ready_without_ai_count = 0
+    evidence_backfill_queue_count = 0
 
     for family in families:
         primary_key = family['primary_key']
@@ -301,10 +334,48 @@ def main():
         cache_hit = taste_row['status'] == 'cache_hit'
         cached_taste = taste_row.get('cached_taste') if cache_hit else None
         if cache_hit:
+            evidence_backfill = bool(taste_row.get('fit_evidence_backfill_required'))
             if cached_taste['verdict'] != 'INCLUDE':
-                excluded_keys.append(primary_key)
-                exclusion_counts['valid_cached_taste_below_moderate'] += 1
+                if evidence_backfill:
+                    work = [NEGATIVE_WORK_CODE]
+                    if family.get('requires_ai_base_support'):
+                        work.append('resolve_base_support_condition')
+                    ai_queue.append({
+                        'family_id': family['family_id'],
+                        'taste_subject_key': taste_key,
+                        'appid': taste_row['appid'],
+                        'title': taste_row['taste_subject_title'],
+                        'taste_fingerprint': taste_row['taste_fingerprint'],
+                        'candidate_context_sha256': taste_row['candidate_context_sha256'],
+                        'short_description': taste_row.get('short_description'),
+                        'bundle_members': taste_row.get('bundle_members') or [],
+                        'resolved_taste_fit': cached_taste['fit_level'],
+                        'resolved_taste_verdict': cached_taste['verdict'],
+                        'resolved_taste_reason_code': cached_taste['reason_code'],
+                        'fit_evidence_state': taste_row.get('fit_evidence_state'),
+                        'fit_evidence_confidence': taste_row.get('fit_evidence_confidence'),
+                        'fit_evidence_source': taste_row.get('fit_evidence_source'),
+                        'negative_analysis_status': taste_row.get('negative_analysis_status'),
+                        'confirmed_negative_count': int(taste_row.get('confirmed_negative_count') or 0),
+                        'work_required': work,
+                        'semantic_condition': semantic_condition,
+                    })
+                    ai_context.append({
+                        'family_id': family['family_id'],
+                        'family_type': family['family_type'],
+                        'taste_subject_key': taste_key,
+                        'semantic_condition': semantic_condition,
+                        'context_kind': 'taste_evidence_backfill_only',
+                        'commercial_context_withheld': True,
+                    })
+                    evidence_backfill_queue_count += 1
+                    negative_backfill_queue_count += 1
+                else:
+                    excluded_keys.append(primary_key)
+                    state = cached_taste.get('fit_evidence_state') or 'legacy_below_moderate'
+                    exclusion_counts[f'valid_cached_taste_{state}'] += 1
                 continue
+
             fit = cached_taste['fit_level']
             selected = strong_scenario if fit == 'strong' else moderate_scenario
             if selected['disposition'] != 'INCLUDE':
@@ -313,9 +384,10 @@ def main():
                 continue
 
             work = []
-            if not taste_row.get('negative_analysis_ready'):
+            if not taste_row.get('negative_analysis_ready') or evidence_backfill:
                 work.append(NEGATIVE_WORK_CODE)
                 negative_backfill_queue_count += 1
+                evidence_backfill_queue_count += int(evidence_backfill)
             if family.get('requires_ai_base_support'):
                 work.append('resolve_base_support_condition')
 
@@ -330,6 +402,11 @@ def main():
                     'short_description': taste_row.get('short_description'),
                     'bundle_members': taste_row.get('bundle_members') or [],
                     'resolved_taste_fit': fit,
+                    'resolved_taste_verdict': cached_taste['verdict'],
+                    'resolved_taste_reason_code': cached_taste['reason_code'],
+                    'fit_evidence_state': taste_row.get('fit_evidence_state'),
+                    'fit_evidence_confidence': taste_row.get('fit_evidence_confidence'),
+                    'fit_evidence_source': taste_row.get('fit_evidence_source'),
                     'negative_analysis_status': taste_row.get('negative_analysis_status'),
                     'confirmed_negative_count': int(taste_row.get('confirmed_negative_count') or 0),
                     'work_required': work,
@@ -339,6 +416,9 @@ def main():
             else:
                 negative_ready_without_ai_count += 1
                 context['resolved_taste_fit'] = fit
+                context['fit_evidence_state'] = taste_row.get('fit_evidence_state')
+                context['fit_evidence_confidence'] = taste_row.get('fit_evidence_confidence')
+                context['fit_evidence_source'] = taste_row.get('fit_evidence_source')
                 context['final_purchase_decision'] = selected['purchase_decision']
                 context['final_priority_bucket'] = int(selected['priority_bucket'])
                 ready_context.append(context)
@@ -365,6 +445,9 @@ def main():
             'ai_required_reason': taste_row.get('ai_required_reason'),
             'negative_analysis_status': None,
             'confirmed_negative_count': 0,
+            'fit_evidence_state': None,
+            'fit_evidence_confidence': None,
+            'fit_evidence_source': 'new_fit_evaluation_required',
             'work_required': work,
             'semantic_condition': semantic_condition,
         })
@@ -391,8 +474,8 @@ def main():
 
     source_bytes = sum(path.stat().st_size for path in PREREQUISITES)
     manifest = {
-        'schema_version': 4,
-        'purpose': 'chatgpt_consumer_bundle_with_context_bound_strict_price_blind_taste_phase_and_grounded_negative_readiness',
+        'schema_version': 5,
+        'purpose': 'chatgpt_consumer_bundle_with_context_bound_price_blind_taste_fit_evidence_state_and_grounded_negative_readiness',
         'status': 'complete',
         'source_mailing_updated_at_utc': source_stamp,
         'profile_binding': {
@@ -425,6 +508,11 @@ def main():
             'normal_paid_card_requires_grounded_negative': True,
             'legacy_negative_evidence_never_implies_negative_readiness': True,
             'negative_only_backfill_must_preserve_existing_fit_semantics': True,
+            'negative_work_also_resolves_fit_evidence_state_v5': True,
+            'new_evidence_work_code_or_scheduler_created': False,
+            'fit_evidence_states': ['sufficient', 'insufficient', 'reconsiderable', 'confirmed_negative'],
+            'candidate_quality_findings_do_not_change_fit_or_personal_negative': True,
+            'confirmed_negative_cannot_be_rescued_by_paid_commercial_signals': True,
             'chatgpt_selects_precomputed_deal_scenario_from_final_taste_fit': True,
             'qualitative_60_40_priority_bucket_is_precomputed': True,
             'smaller_priority_bucket_means_higher_purchase_priority': True,
@@ -459,6 +547,7 @@ def main():
             'negative_backfill_queue_count': negative_backfill_queue_count,
             'negative_full_evaluation_queue_count': negative_full_eval_queue_count,
             'negative_ready_without_ai_count': negative_ready_without_ai_count,
+            'evidence_backfill_queue_count': evidence_backfill_queue_count,
             'normal_ready_requires_confirmed_negative': True,
         },
         'sale_end_coverage': sale_end_coverage,
@@ -489,6 +578,7 @@ def main():
         'negative_backfill_queue_count': negative_backfill_queue_count,
         'negative_full_evaluation_queue_count': negative_full_eval_queue_count,
         'negative_ready_without_ai_count': negative_ready_without_ai_count,
+        'evidence_backfill_queue_count': evidence_backfill_queue_count,
         'sale_end_coverage': manifest['sale_end_coverage'],
         'sale_end_missing_count': manifest['sale_end_missing_count'],
         'wishlist_entry_count': wishlist['entry_count'],

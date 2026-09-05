@@ -6,6 +6,7 @@ import unicodedata
 from pathlib import Path
 
 from taste_negative_contract import validate_entry_negative_fields
+from taste_evidence_contract import validate_entry_evidence_fields
 
 ENTRY_CONTRACT = Path('config/taste_cache_entry_contract.json')
 FINGERPRINT_CONTRACT = Path('config/taste_fingerprint_contract.json')
@@ -174,6 +175,7 @@ def validate_cache_entry(
     required_fields,
     require_taste_factors=False,
     require_v4_negative_fields=False,
+    require_v5_evidence_fields=False,
 ):
     if not isinstance(entry, dict):
         raise ValueError(f'Entry {map_key!r} must be an object')
@@ -191,5 +193,10 @@ def validate_cache_entry(
         validate_taste_factors(entry['taste_factors'])
     elif require_taste_factors:
         raise ValueError(f'Entry {map_key!r} missing required taste_factors')
-    validate_entry_negative_fields(entry, require_v4=require_v4_negative_fields)
+    validate_entry_negative_fields(
+        entry,
+        require_v4=require_v4_negative_fields,
+        require_v5=require_v5_evidence_fields,
+    )
+    validate_entry_evidence_fields(entry, require_v5=require_v5_evidence_fields)
     return True

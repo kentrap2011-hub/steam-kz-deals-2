@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.19",
+  "version": "1.20",
   "status": "canonical",
   "purpose": "Personalized daily Steam KZ deal data preparation with stable price-blind taste verdicts, taste-first eligibility, one nightly commercial snapshot, and resumable taste-cache checkpoints.",
   "policy_loading": {
@@ -737,6 +737,38 @@
       "generic_game_quality_is_not_a_positive_factor": true,
       "unknown_candidate_property_must_not_be_invented": true,
       "all_five_factors_are_required_when_work_code_is_present": true
+    }
+  },
+  "taste_evidence_state": {
+    "required": true,
+    "price_blind": true,
+    "orthogonal_to_fit_cache_binding": true,
+    "states": {
+      "sufficient": "Enough candidate-specific evidence exists to interpret the current fit verdict; this is not a claim that the game has no downsides.",
+      "insufficient": "The current evidence is not rich enough to conclude personal dislike; the candidate may still remain below the paid eligibility threshold until later work explicitly permits an exception.",
+      "reconsiderable": "Older or shallow negative history has been legitimately reopened by later non-commercial evidence; this is not a positive fit promotion and remains below paid eligibility until a later explicit bridge.",
+      "confirmed_negative": "Strong current/title-specific or adequately informed personal evidence supports a real negative fit; paid price, discount, wishlist or bundle value cannot override this state."
+    },
+    "confidence_values": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "confirmed_negative_non_overridable_by_paid_deal": true,
+    "reconsiderable_requires_old_or_shallow_history_plus_later_reopening_evidence": true,
+    "candidate_quality_findings_are_separate_from_personal_dislike": true,
+    "recurring_public_complaints_may_populate_candidate_quality_findings": true,
+    "recurring_public_complaints_alone_cannot_create_confirmed_negative": true,
+    "generic_feature_presence_alone_cannot_create_strong_personal_negative": true,
+    "wishlist_discount_price_bundle_value_cannot_set_or_change_evidence_state": true,
+    "existing_negative_work_code_is_reused_for_evidence_backfill": "resolve_grounded_negative_analysis",
+    "new_scheduler_or_parallel_semantic_queue_forbidden": true,
+    "legacy_compatibility": {
+      "include_without_legacy_negative_evidence": "sufficient",
+      "exclude_insufficient": "insufficient",
+      "legacy_include_with_negative_evidence": "requires_v5_evidence_backfill",
+      "exclude_audited_below": "requires_v5_evidence_backfill",
+      "exclude_direct_conflict": "requires_v5_evidence_backfill"
     }
   }
 }
