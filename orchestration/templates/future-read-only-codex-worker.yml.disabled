@@ -1,0 +1,84 @@
+# PHASE 2A NON-EXECUTABLE TEMPLATE ONLY.
+# This file is intentionally outside .github/workflows and cannot be dispatched.
+# Phase 2B must explicitly enable state persistence/dispatch and provision OPENAI_API_KEY.
+name: Future Director Read-Only Codex Worker
+on:
+  workflow_call:
+    inputs:
+      request_json:
+        required: true
+        type: string
+    secrets:
+      OPENAI_API_KEY:
+        required: true
+
+jobs:
+  worker:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      worker_result: ${{ steps.codex.outputs.final-message }}
+    steps:
+      - name: Checkout exact request base without credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ fromJSON(inputs.request_json).base_sha }}
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Materialize bound request and prompt
+        env:
+          REQUEST_JSON: ${{ inputs.request_json }}
+        run: |
+          mkdir -p orchestration/runtime
+          printf '%s' "$REQUEST_JSON" > orchestration/runtime/request.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('orchestration/runtime/request.json').read_text())
+          assert r['mode'] in ('READ_ONLY_RECON','AUDIT')
+          assert r['repository_write_authority'] is False
+          assert r['github_write_credential'] is False
+          assert r['state_write_authority'] is False
+          assert r['product_write_authority'] is False
+          prompt=f'''Execute this Director task in strict READ-ONLY mode.\nTask: {r['task_id']} revision {r['task_revision']} attempt {r['attempt_id']}\nTask file: {r['task_file']}\nExact task blob SHA: {r['task_file_blob_sha']}\nExact base SHA: {r['base_sha']}\nExpected report path: {r['expected_report_path']}\nDo not modify repository files or state. Do not choose another task. Return only JSON matching orchestration/schemas/read_only_worker_result.schema.json.'''
+          Path('orchestration/runtime/prompt.txt').write_text(prompt)
+          PY
+      - name: Run Codex read-only
+        id: codex
+        uses: openai/codex-action@86365089eb2b84e0a8fb0717b304f8bdcb13b20e
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          allow-bot-users: github-actions[bot]
+          prompt-file: orchestration/runtime/prompt.txt
+          output-schema-file: orchestration/schemas/read_only_worker_result.schema.json
+          permission-profile: ":read-only"
+          safety-strategy: drop-sudo
+
+  publisher:
+    needs: worker
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout trusted control plane
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validate worker result and write only expected report
+        env:
+          REQUEST_JSON: ${{ inputs.request_json }}
+          WORKER_RESULT: ${{ needs.worker.outputs.worker_result }}
+        run: |
+          printf '%s' "$REQUEST_JSON" > /tmp/request.json
+          printf '%s' "$WORKER_RESULT" > /tmp/result.json
+          EXPECTED_REPORT="$(python -c 'import json; print(json.load(open("/tmp/request.json"))["expected_report_path"])')"
+          python scripts/director_report_publisher.py --request /tmp/request.json --result /tmp/result.json --state orchestration/state.json --repo-root . --write
+          test "$(git diff --name-only | wc -l)" -eq 1
+          test "$(git diff --name-only)" = "$EXPECTED_REPORT"
+          git add -- "$EXPECTED_REPORT"
+          git diff --cached --name-only | grep -Fx "$EXPECTED_REPORT"
+          git config user.name 'director-trusted-publisher'
+          git config user.email 'director-trusted-publisher@users.noreply.github.com'
+          git commit -m "Publish read-only worker report"
+          git push
