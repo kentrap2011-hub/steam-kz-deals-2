@@ -1,0 +1,42 @@
+name: Director orchestration shadow observer
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: director-orchestrator-shadow
+  cancel-in-progress: false
+
+jobs:
+  shadow-plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Run deterministic shadow planner tests
+        run: python scripts/test_director_orchestration_shadow.py -v
+
+      - name: Build shadow assignment plan
+        run: >-
+          python scripts/director_orchestration_shadow.py
+          --contract config/director_orchestration_contract.json
+          --state orchestration/state.json
+          --output shadow-plan.json
+
+      - name: Show shadow plan
+        run: cat shadow-plan.json
+
+      - name: Upload shadow plan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: shadow-plan
+          path: shadow-plan.json
+          if-no-files-found: error
+          retention-days: 14
