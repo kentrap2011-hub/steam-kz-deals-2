@@ -6,10 +6,10 @@ The Director must read this file before assigning a new ordinary backlog task wh
 
 ## System Auditor
 
-system_audit_due: true
+system_audit_due: false
 first_system_audit_trigger: `satisfied_2026-09-02`
-material_changes_since_last_system_audit: 1
-last_system_audit_report: `reviews/system_audits/director-orchestration-phase1-audit-01.md`
+material_changes_since_last_system_audit: 0
+last_system_audit_report: `reviews/system_audits/director-orchestration-phase2a-audit-01.md`
 mobile_post_incident_audit_pending: false
 
 ### Recurring triggers
@@ -23,25 +23,22 @@ A completed audit resets `material_changes_since_last_system_audit` to 0 and rec
 
 ### Current audit state
 
-Phase 2A orchestration security/state boundary is technically complete but not yet systemically accepted.
-
-Audit task:
-`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2A_SYSTEM_AUDIT_01.md`
-
-Expected report:
+Latest completed audit:
 `reviews/system_audits/director-orchestration-phase2a-audit-01.md`
 
-Implementation under audit:
-`reviews/worker_reports/director-orchestration-phase2a-security-boundary-implement-01.md`
+Status: `PASS`.
+Closure: `accepted`.
 
-Validated head:
-`bd0b8ad88f8c1f6b8ba4f8ac7da628df2e51be6c`
+Phase 2A security/state/cloud-worker boundary is accepted.
+The user may now provision repository Actions secret `OPENAI_API_KEY` directly in GitHub.
+Provisioning the secret alone does not enable dispatch.
 
-Do not enable Phase 2B live worker dispatch and do not provision `OPENAI_API_KEY` until this audit accepts the boundary.
+Next automation gate:
+`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2B_LIVE_READONLY_PILOT_01.md`
 
-Previous completed audit:
-`reviews/system_audits/director-orchestration-phase1-audit-01.md`
-closure accepted.
+Phase 2B remains blocked until the user confirms secret presence. The first pilot is exactly one `READ_ONLY_RECON` cloud worker for `epic-ru-availability-source-probe-01` and must preserve the audit-required current-state/optimistic-concurrency stale barrier.
+
+No System Audit is currently due.
 
 ## Taste Reviewer
 
@@ -54,11 +51,9 @@ last_taste_review_report: `reviews/taste_reviews/baseline-01.md`
 Internal ordered sequence:
 1. evidence state / confidence / reconsideration semantics — technically complete;
 2. play role + relative start priority — technically complete;
-3. reconsideration commercial bridge + wishlist-good-deal override — next.
+3. reconsideration commercial bridge + wishlist-good-deal override — active in Chat 1.
 
 The current plan is to keep steps 1–3 as one bounded internal sequence and run one independent current Taste Review after step 3 and regenerated controls, before final material acceptance.
-
-`taste_baseline_review_due` remains false only because step 3 has not yet completed and no intermediate step is being independently accepted/deployed as a completed product semantic boundary.
 
 After step 3 report exists, a current Taste Review becomes mandatory before final acceptance of the combined new semantics.
 
