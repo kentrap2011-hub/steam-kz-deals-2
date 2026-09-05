@@ -128,7 +128,8 @@ jobs:
       - name: Restore generated artifacts, rebase, revalidate, and commit fixes
         run: |
           set -euo pipefail
-          git restore data/production/pre_ai/fixed_package_options.json data/production/pre_ai/taste_projection.json data/production/pre_ai/chatgpt_payload.json data/production/pre_ai/chatgpt_taste_queue.jsonl data/production/pre_ai/chatgpt_purchase_context.jsonl web/data/current.json
+          git restore data/production/pre_ai/fixed_package_options.json data/production/pre_ai/taste_projection.json data/production/pre_ai/chatgpt_payload.json data/production/pre_ai/chatgpt_taste_queue.jsonl data/production/pre_ai/chatgpt_purchase_context.jsonl
+          rm -f web/data/current.json
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
           git add config/deal_quality_contract.json scripts/commercial_reconsideration_bridge.py scripts/refine_visual_ranking.py scripts/build_final_visual_payload.py scripts/build_pre_ai_chatgpt_payload.py scripts/test_reconsideration_commercial_bridge.py PROJECT_RULES.md PROJECT_DECISIONS.md PROJECT_ROUTES.md
