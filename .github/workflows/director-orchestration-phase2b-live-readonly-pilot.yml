@@ -24,14 +24,14 @@ jobs:
       lease_id: ${{ steps.emit.outputs.lease_id }}
       state_head: ${{ steps.commit_state.outputs.state_head }}
     steps:
-      - name: Checkout launch head without persisted credentials
+      - name: Checkout recovery head without persisted credentials
         uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Validate exact one-shot launch marker and current head
+      - name: Validate exact same-attempt recovery marker and current head
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -50,9 +50,12 @@ jobs:
             "expected_report_path":"reviews/worker_reports/epic-ru-availability-source-probe-01.md",
             "max_live_attempts":1,
             "automatic_next_dispatch":False,
-            "implement_dispatch_allowed":False
+            "implement_dispatch_allowed":False,
+            "recovery_mode":"resume_same_attempt_after_pre_model_cli_failure",
+            "expected_attempt_id":"epic-ru-availability-source-probe-01:r1:a1",
+            "expected_lease_id":"slot_2:epic-ru-availability-source-probe-01:r1:a1"
           }
-          assert got == expected, "launch marker does not match exact bounded pilot"
+          assert got == expected, "recovery marker does not match exact bounded same-attempt pilot"
           PY
           remote_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
           test "$remote_head" = "$GITHUB_SHA"
@@ -63,14 +66,14 @@ jobs:
           python scripts/test_director_orchestration_shadow.py -v
           python scripts/test_director_orchestration_phase2a.py -v
 
-      - name: Run deterministic Phase 2B security tests
+      - name: Run deterministic Phase 2B recovery security tests
         run: python scripts/test_director_orchestration_phase2b.py -v
 
-      - name: Acquire exact pilot lease through authoritative controller
+      - name: Resume exact r1:a1 lease through authoritative controller
         run: |
           set -euo pipefail
           python scripts/director_orchestration_controller.py \
-            --phase2b-live-pilot \
+            --phase2b-resume-pilot \
             --expected-head "$GITHUB_SHA" \
             --output "$RUNNER_TEMP/phase2b-pilot-plan.json"
 
@@ -80,7 +83,7 @@ jobs:
           test "$(git status --porcelain --untracked-files=all | wc -l)" -eq 1
           test "$(git status --porcelain --untracked-files=all | sed 's/^...//')" = "orchestration/state.json"
 
-      - name: Emit fixed request bindings
+      - name: Emit fixed same-attempt request bindings
         id: emit
         run: |
           set -euo pipefail
@@ -88,11 +91,13 @@ jobs:
           import json,sys
           p=json.load(open(sys.argv[1],encoding='utf-8'))
           r=p['request']
-          assert p['dispatch_scope']=='exact_epic_pilot_only'
+          assert p['dispatch_scope']=='exact_epic_pilot_same_attempt_recovery_only'
           assert p['automatic_next_dispatch'] is False
           assert r['task_id']=='epic-ru-availability-source-probe-01'
           assert r['mode']=='READ_ONLY_RECON'
           assert r['attempt_number']==1
+          assert r['attempt_id']=='epic-ru-availability-source-probe-01:r1:a1'
+          assert r['lease_id']=='slot_2:epic-ru-availability-source-probe-01:r1:a1'
           assert r['expected_report_path']=='reviews/worker_reports/epic-ru-availability-source-probe-01.md'
           assert r['repository_write_authority'] is False
           assert r['github_write_credential'] is False
@@ -106,7 +111,7 @@ jobs:
               out.write('lease_id='+r['lease_id']+'\n')
           PY
 
-      - name: Commit controller-authorized state transition with CAS
+      - name: Commit controller-authorized recovery state with CAS
         id: commit_state
         env:
           GH_TOKEN: ${{ github.token }}
@@ -116,7 +121,7 @@ jobs:
           git config user.email 'director-controller@users.noreply.github.com'
           git add -- orchestration/state.json
           test "$(git diff --cached --name-only)" = "orchestration/state.json"
-          git commit -m "Acquire Phase 2B Epic read-only pilot lease"
+          git commit -m "Resume Phase 2B Epic r1:a1 after pre-model CLI failure"
           state_head="$(git rev-parse HEAD)"
           remote_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
           test "$remote_head" = "$GITHUB_SHA"
@@ -146,6 +151,8 @@ jobs:
           r=json.loads(os.environ['REQUEST_JSON'])
           assert r['task_id']=='epic-ru-availability-source-probe-01'
           assert r['task_revision']==1 and r['attempt_number']==1
+          assert r['attempt_id']=='epic-ru-availability-source-probe-01:r1:a1'
+          assert r['lease_id']=='slot_2:epic-ru-availability-source-probe-01:r1:a1'
           assert r['mode']=='READ_ONLY_RECON'
           assert r['task_file']=='WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md'
           assert r['task_file_blob_sha']=='fdefa23f6aa9d2689f98adcc4af4fd019a7bcb04'
@@ -167,11 +174,11 @@ jobs:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           permission-profile: ":read-only"
           safety-strategy: drop-sudo
-          codex-args: '["--search"]'
+          codex-args: '["--config","web_search=\"live\""]'
           output-schema: |
-            {"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","additionalProperties":false,"required":["schema_version","task_id","task_revision","attempt_number","attempt_id","lease_id","mode","task_file","task_file_blob_sha","base_sha","report_path","status","report_content","requested_repository_mutations","state_mutation_requested","product_mutation_requested","secret_values"],"properties":{"schema_version":{"const":1},"task_id":{"const":"epic-ru-availability-source-probe-01"},"task_revision":{"const":1},"attempt_number":{"const":1},"attempt_id":{"type":"string","minLength":1},"lease_id":{"type":"string","minLength":1},"mode":{"const":"READ_ONLY_RECON"},"task_file":{"const":"WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md"},"task_file_blob_sha":{"const":"fdefa23f6aa9d2689f98adcc4af4fd019a7bcb04"},"base_sha":{"const":"65aa6668e1009885450103e9cde6b6b0f43008d3"},"report_path":{"const":"reviews/worker_reports/epic-ru-availability-source-probe-01.md"},"status":{"enum":["complete","blocked","needs_user_evidence"]},"report_content":{"type":"string","minLength":1,"maxLength":200000},"requested_repository_mutations":{"type":"array","maxItems":0},"state_mutation_requested":{"const":false},"product_mutation_requested":{"const":false},"secret_values":{"type":"array","maxItems":0}}}
+            {"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","additionalProperties":false,"required":["schema_version","task_id","task_revision","attempt_number","attempt_id","lease_id","mode","task_file","task_file_blob_sha","base_sha","report_path","status","report_content","requested_repository_mutations","state_mutation_requested","product_mutation_requested","secret_values"],"properties":{"schema_version":{"const":1},"task_id":{"const":"epic-ru-availability-source-probe-01"},"task_revision":{"const":1},"attempt_number":{"const":1},"attempt_id":{"const":"epic-ru-availability-source-probe-01:r1:a1"},"lease_id":{"const":"slot_2:epic-ru-availability-source-probe-01:r1:a1"},"mode":{"const":"READ_ONLY_RECON"},"task_file":{"const":"WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md"},"task_file_blob_sha":{"const":"fdefa23f6aa9d2689f98adcc4af4fd019a7bcb04"},"base_sha":{"const":"65aa6668e1009885450103e9cde6b6b0f43008d3"},"report_path":{"const":"reviews/worker_reports/epic-ru-availability-source-probe-01.md"},"status":{"enum":["complete","blocked","needs_user_evidence"]},"report_content":{"type":"string","minLength":1,"maxLength":200000},"requested_repository_mutations":{"type":"array","maxItems":0},"state_mutation_requested":{"const":false},"product_mutation_requested":{"const":false},"secret_values":{"type":"array","maxItems":0}}}
           prompt: |
-            Execute exactly one Director cloud worker request in strict READ_ONLY_RECON mode.
+            Execute the single already-issued Director cloud worker attempt in strict READ_ONLY_RECON mode.
 
             Bound request JSON:
             ${{ needs.prepare.outputs.request_json }}
@@ -179,18 +186,25 @@ jobs:
             Read and follow only this task:
             WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md
 
-            Research public Epic Games surfaces relevant to RU-region catalog and purchase availability.
-            Use public web search when useful. Do not change any repository file, state, product logic,
-            configuration, workflow, or task. Do not choose or suggest executing a different task.
+            This is a recovery execution of the SAME logical attempt r1:a1 because the earlier process
+            failed in Codex CLI argument parsing before any model/API request. Do not create, select,
+            discuss executing, or act on any other task.
+
+            Use the native Codex web search tool for public research. Do not use shell/curl/direct network
+            access as a substitute for native search. Repository reads are allowed; repository writes are not.
             Do not inspect environment variables or attempt to discover secrets.
+
+            Resolve the task's exact Epic-owned RU acquisition-signal question. Apply its stop conditions
+            strictly: if Epic-owned evidence cannot prove an automation-ready acquisition signal, return
+            status `blocked` with the evidence and exact limitation rather than guessing.
 
             Return ONLY one JSON object matching the supplied output schema. Copy every binding field
             exactly from the bound request. `report_content` must be a durable Markdown worker report
-            with evidence/source URLs, limitations, recommendation, and one of the allowed statuses.
-            `requested_repository_mutations` and `secret_values` must be empty arrays;
-            state/product mutation flags must be false. If research cannot be completed because of
-            access/API/model limitations, return an allowed blocked/evidence-needed status rather than
-            weakening the security boundary.
+            including Status, exact evidence/source URLs, RU semantics, available/unavailable cases where
+            proven, failure behavior, limitations, and recommendation. `requested_repository_mutations`
+            and `secret_values` must be empty arrays; state/product mutation flags must be false.
+            If native web search/API/model access itself is unavailable, return an allowed blocked status
+            with the non-secret failure limitation if the model can still produce structured output.
 
       - name: Validate structured result and prove repository remained clean
         env:
@@ -228,7 +242,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout exact controller state head without persisted credentials
+      - name: Checkout exact controller recovery state head without persisted credentials
         uses: actions/checkout@v4
         with:
           ref: ${{ needs.prepare.outputs.state_head }}
