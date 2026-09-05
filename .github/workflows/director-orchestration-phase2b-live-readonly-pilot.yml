@@ -1,0 +1,300 @@
+name: Director Phase 2B Live Read-Only Pilot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'orchestration/live_pilots/phase2b-epic-ru-availability-source-probe-01.launch.json'
+
+permissions: {}
+
+concurrency:
+  group: director-phase2b-live-readonly-pilot
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      request_json: ${{ steps.emit.outputs.request_json }}
+      state_revision: ${{ steps.emit.outputs.state_revision }}
+      attempt_id: ${{ steps.emit.outputs.attempt_id }}
+      lease_id: ${{ steps.emit.outputs.lease_id }}
+      state_head: ${{ steps.commit_state.outputs.state_head }}
+    steps:
+      - name: Checkout launch head without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate exact one-shot launch marker and current head
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('orchestration/live_pilots/phase2b-epic-ru-availability-source-probe-01.launch.json')
+          got=json.loads(p.read_text(encoding='utf-8'))
+          expected={
+            "schema_version":1,
+            "pilot_id":"phase2b-live-readonly-pilot-01",
+            "task_id":"epic-ru-availability-source-probe-01",
+            "task_file":"WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md",
+            "mode":"READ_ONLY_RECON",
+            "expected_report_path":"reviews/worker_reports/epic-ru-availability-source-probe-01.md",
+            "max_live_attempts":1,
+            "automatic_next_dispatch":False,
+            "implement_dispatch_allowed":False
+          }
+          assert got == expected, "launch marker does not match exact bounded pilot"
+          PY
+          remote_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$remote_head" = "$GITHUB_SHA"
+
+      - name: Run retained Phase 1 and Phase 2A tests
+        run: |
+          set -euo pipefail
+          python scripts/test_director_orchestration_shadow.py -v
+          python scripts/test_director_orchestration_phase2a.py -v
+
+      - name: Run deterministic Phase 2B security tests
+        run: python scripts/test_director_orchestration_phase2b.py -v
+
+      - name: Acquire exact pilot lease through authoritative controller
+        run: |
+          set -euo pipefail
+          python scripts/director_orchestration_controller.py \
+            --phase2b-live-pilot \
+            --expected-head "$GITHUB_SHA" \
+            --output "$RUNNER_TEMP/phase2b-pilot-plan.json"
+
+      - name: Assert controller changed state only
+        run: |
+          set -euo pipefail
+          test "$(git status --porcelain --untracked-files=all | wc -l)" -eq 1
+          test "$(git status --porcelain --untracked-files=all | sed 's/^...//')" = "orchestration/state.json"
+
+      - name: Emit fixed request bindings
+        id: emit
+        run: |
+          set -euo pipefail
+          python - "$RUNNER_TEMP/phase2b-pilot-plan.json" "$GITHUB_OUTPUT" <<'PY'
+          import json,sys
+          p=json.load(open(sys.argv[1],encoding='utf-8'))
+          r=p['request']
+          assert p['dispatch_scope']=='exact_epic_pilot_only'
+          assert p['automatic_next_dispatch'] is False
+          assert r['task_id']=='epic-ru-availability-source-probe-01'
+          assert r['mode']=='READ_ONLY_RECON'
+          assert r['attempt_number']==1
+          assert r['expected_report_path']=='reviews/worker_reports/epic-ru-availability-source-probe-01.md'
+          assert r['repository_write_authority'] is False
+          assert r['github_write_credential'] is False
+          assert r['state_write_authority'] is False
+          assert r['product_write_authority'] is False
+          assert r['worker_can_choose_next_task'] is False
+          with open(sys.argv[2],'a',encoding='utf-8') as out:
+              out.write('request_json='+json.dumps(r,separators=(',',':'))+'\n')
+              out.write('state_revision='+str(p['state_revision'])+'\n')
+              out.write('attempt_id='+r['attempt_id']+'\n')
+              out.write('lease_id='+r['lease_id']+'\n')
+          PY
+
+      - name: Commit controller-authorized state transition with CAS
+        id: commit_state
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git config user.name 'director-controller'
+          git config user.email 'director-controller@users.noreply.github.com'
+          git add -- orchestration/state.json
+          test "$(git diff --cached --name-only)" = "orchestration/state.json"
+          git commit -m "Acquire Phase 2B Epic read-only pilot lease"
+          state_head="$(git rev-parse HEAD)"
+          remote_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$remote_head" = "$GITHUB_SHA"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/main
+          echo "state_head=$state_head" >> "$GITHUB_OUTPUT"
+
+  worker:
+    needs: prepare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout exact bound task base without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ fromJSON(needs.prepare.outputs.request_json).base_sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Validate bound request before Codex
+        env:
+          REQUEST_JSON: ${{ needs.prepare.outputs.request_json }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os
+          r=json.loads(os.environ['REQUEST_JSON'])
+          assert r['task_id']=='epic-ru-availability-source-probe-01'
+          assert r['task_revision']==1 and r['attempt_number']==1
+          assert r['mode']=='READ_ONLY_RECON'
+          assert r['task_file']=='WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md'
+          assert r['task_file_blob_sha']=='fdefa23f6aa9d2689f98adcc4af4fd019a7bcb04'
+          assert r['base_sha']=='65aa6668e1009885450103e9cde6b6b0f43008d3'
+          assert r['expected_report_path']=='reviews/worker_reports/epic-ru-availability-source-probe-01.md'
+          assert not r['github_write_credential'] and not r['repository_write_authority']
+          assert not r['state_write_authority'] and not r['product_write_authority']
+          assert not r['worker_can_choose_next_task'] and r['secret_values']==[]
+          data=open(r['task_file'],'rb').read()
+          blob=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+          assert blob==r['task_file_blob_sha']
+          PY
+          test -z "$(git status --porcelain --untracked-files=all)"
+
+      - name: Run Codex read-only Epic source probe
+        id: codex
+        uses: openai/codex-action@86365089eb2b84e0a8fb0717b304f8bdcb13b20e
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          permission-profile: ":read-only"
+          safety-strategy: drop-sudo
+          codex-args: '["--search"]'
+          output-schema: |
+            {"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","additionalProperties":false,"required":["schema_version","task_id","task_revision","attempt_number","attempt_id","lease_id","mode","task_file","task_file_blob_sha","base_sha","report_path","status","report_content","requested_repository_mutations","state_mutation_requested","product_mutation_requested","secret_values"],"properties":{"schema_version":{"const":1},"task_id":{"const":"epic-ru-availability-source-probe-01"},"task_revision":{"const":1},"attempt_number":{"const":1},"attempt_id":{"type":"string","minLength":1},"lease_id":{"type":"string","minLength":1},"mode":{"const":"READ_ONLY_RECON"},"task_file":{"const":"WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md"},"task_file_blob_sha":{"const":"fdefa23f6aa9d2689f98adcc4af4fd019a7bcb04"},"base_sha":{"const":"65aa6668e1009885450103e9cde6b6b0f43008d3"},"report_path":{"const":"reviews/worker_reports/epic-ru-availability-source-probe-01.md"},"status":{"enum":["complete","blocked","needs_user_evidence"]},"report_content":{"type":"string","minLength":1,"maxLength":200000},"requested_repository_mutations":{"type":"array","maxItems":0},"state_mutation_requested":{"const":false},"product_mutation_requested":{"const":false},"secret_values":{"type":"array","maxItems":0}}}
+          prompt: |
+            Execute exactly one Director cloud worker request in strict READ_ONLY_RECON mode.
+
+            Bound request JSON:
+            ${{ needs.prepare.outputs.request_json }}
+
+            Read and follow only this task:
+            WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md
+
+            Research public Epic Games surfaces relevant to RU-region catalog and purchase availability.
+            Use public web search when useful. Do not change any repository file, state, product logic,
+            configuration, workflow, or task. Do not choose or suggest executing a different task.
+            Do not inspect environment variables or attempt to discover secrets.
+
+            Return ONLY one JSON object matching the supplied output schema. Copy every binding field
+            exactly from the bound request. `report_content` must be a durable Markdown worker report
+            with evidence/source URLs, limitations, recommendation, and one of the allowed statuses.
+            `requested_repository_mutations` and `secret_values` must be empty arrays;
+            state/product mutation flags must be false. If research cannot be completed because of
+            access/API/model limitations, return an allowed blocked/evidence-needed status rather than
+            weakening the security boundary.
+
+      - name: Validate structured result and prove repository remained clean
+        env:
+          REQUEST_JSON: ${{ needs.prepare.outputs.request_json }}
+          WORKER_RESULT: ${{ steps.codex.outputs.final-message }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$WORKER_RESULT" > "$RUNNER_TEMP/worker-result.json"
+          python - "$RUNNER_TEMP/worker-result.json" <<'PY'
+          import json,os,sys
+          r=json.loads(os.environ['REQUEST_JSON'])
+          x=json.load(open(sys.argv[1],encoding='utf-8'))
+          for k in ('task_id','task_revision','attempt_number','attempt_id','lease_id','mode','task_file','task_file_blob_sha','base_sha'):
+              assert x[k]==r[k], f'binding mismatch: {k}'
+          assert x['report_path']==r['expected_report_path']
+          assert x['status'] in r['allowed_result_statuses']
+          assert x['requested_repository_mutations']==[]
+          assert x['state_mutation_requested'] is False
+          assert x['product_mutation_requested'] is False
+          assert x['secret_values']==[]
+          PY
+          test -z "$(git status --porcelain --untracked-files=all)"
+
+      - name: Upload worker result for trusted publisher
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase2b-epic-readonly-worker-result
+          path: ${{ runner.temp }}/worker-result.json
+          if-no-files-found: error
+          retention-days: 1
+
+  publisher:
+    needs: [prepare, worker]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout exact controller state head without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.state_head }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Download exact worker result
+        uses: actions/download-artifact@v4
+        with:
+          name: phase2b-epic-readonly-worker-result
+          path: ${{ runner.temp }}/phase2b-worker-result
+
+      - name: Trusted validate and materialize exact report only
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUEST_JSON: ${{ needs.prepare.outputs.request_json }}
+          STATE_HEAD: ${{ needs.prepare.outputs.state_head }}
+          STATE_REVISION: ${{ needs.prepare.outputs.state_revision }}
+          EXPECTED_REPORT: reviews/worker_reports/epic-ru-availability-source-probe-01.md
+        run: |
+          set -euo pipefail
+          test ! -e "$EXPECTED_REPORT"
+          printf '%s' "$REQUEST_JSON" > "$RUNNER_TEMP/request.json"
+          result_file="$RUNNER_TEMP/phase2b-worker-result/worker-result.json"
+          test -s "$result_file"
+          current_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$current_head" = "$STATE_HEAD"
+          python - "$STATE_REVISION" <<'PY'
+          import json,sys
+          sys.path.insert(0,'scripts')
+          from director_orchestration_controller import validate_expected_state_revision
+          state=json.load(open('orchestration/state.json',encoding='utf-8'))
+          validate_expected_state_revision(int(sys.argv[1]),state['state_revision'])
+          PY
+          python scripts/director_report_publisher.py \
+            --request "$RUNNER_TEMP/request.json" \
+            --result "$result_file" \
+            --state orchestration/state.json \
+            --repo-root . \
+            --write
+          status="$(git status --porcelain --untracked-files=all)"
+          test "$status" = "?? $EXPECTED_REPORT"
+          git add -- "$EXPECTED_REPORT"
+          test "$(git diff --cached --name-only)" = "$EXPECTED_REPORT"
+          test -z "$(git diff --name-only)"
+          current_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$current_head" = "$STATE_HEAD"
+          python - "$STATE_REVISION" <<'PY'
+          import json,sys
+          sys.path.insert(0,'scripts')
+          from director_orchestration_controller import validate_expected_state_revision
+          state=json.load(open('orchestration/state.json',encoding='utf-8'))
+          validate_expected_state_revision(int(sys.argv[1]),state['state_revision'])
+          PY
+
+      - name: Commit and push exact report with final CAS
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STATE_HEAD: ${{ needs.prepare.outputs.state_head }}
+          EXPECTED_REPORT: reviews/worker_reports/epic-ru-availability-source-probe-01.md
+        run: |
+          set -euo pipefail
+          remote_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$remote_head" = "$STATE_HEAD"
+          test "$(git diff --cached --name-only)" = "$EXPECTED_REPORT"
+          git config user.name 'director-trusted-publisher'
+          git config user.email 'director-trusted-publisher@users.noreply.github.com'
+          git commit -m "Publish Epic RU read-only worker report"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/main
