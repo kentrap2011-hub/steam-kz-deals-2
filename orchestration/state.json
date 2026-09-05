@@ -1,53 +1,99 @@
 {
   "applied_intake_events": [
-    {"digest_sha256": "13c38f436e823c0a9221d33616486e325638a42f30971314daca2f156760d97b", "event_id": "intake-20260905-0001-play-role-r1"},
-    {"digest_sha256": "65095c7f6f9af9cb8a25a8a502d3663cccaabed13b3ebb209a78ccf80212bd7d", "event_id": "intake-20260905-0002-wishlist-recon-r1"},
-    {"digest_sha256": "7d1b509ed87f9cb1017f5e58b4a32e1754ef45a791143c92cad2fd7821863c39", "event_id": "intake-20260905-0003-epic-recon-r1"},
-    {"digest_sha256": "4b691ac7b89adfe8666d612b24a6afaa9d99b32f912d591ad35cb41bf399d56f", "event_id": "intake-20260905-0004-top-summary-implement-r1"}
+    {
+      "digest_sha256": "13c38f436e823c0a9221d33616486e325638a42f30971314daca2f156760d97b",
+      "event_id": "intake-20260905-0001-play-role-r1"
+    },
+    {
+      "digest_sha256": "65095c7f6f9af9cb8a25a8a502d3663cccaabed13b3ebb209a78ccf80212bd7d",
+      "event_id": "intake-20260905-0002-wishlist-recon-r1"
+    },
+    {
+      "digest_sha256": "7d1b509ed87f9cb1017f5e58b4a32e1754ef45a791143c92cad2fd7821863c39",
+      "event_id": "intake-20260905-0003-epic-recon-r1"
+    },
+    {
+      "digest_sha256": "4b691ac7b89adfe8666d612b24a6afaa9d99b32f912d591ad35cb41bf399d56f",
+      "event_id": "intake-20260905-0004-top-summary-implement-r1"
+    }
   ],
   "authoritative_writer": "scripts/director_orchestration_controller.py",
   "dispatch_enabled": false,
-  "orchestration_phase": "phase_2a_security_boundary",
+  "orchestration_phase": "phase_2b_live_readonly_pilot_attempt_1",
   "phase": "shadow_observer",
   "schema_version": 1,
   "security_boundary_schema_version": 1,
   "slots": [
     {
-      "conflict_keys": ["taste-write", "ranking-write", "taste-ranking-policy"],
+      "conflict_keys": [
+        "taste-write",
+        "ranking-write",
+        "taste-ranking-policy"
+      ],
       "lease": {
-        "acquired_at": "2026-09-05T11:35:00Z",
-        "attempt_id": "play-role-and-start-priority-implement-01:r1:a1",
+        "acquired_at": "2026-09-05T16:59:12.119053Z",
+        "attempt_id": "reconsideration-commercial-bridge-and-wishlist-implement-01:r1:a1",
         "expires_at": null,
-        "lease_id": "slot_1:play-role-and-start-priority-implement-01:r1:a1",
+        "lease_id": "slot_1:reconsideration-commercial-bridge-and-wishlist-implement-01:r1:a1",
         "owner": "external_manual:chat_1",
-        "state_revision_acquired": 2,
+        "state_revision_acquired": 3,
         "status": "active_external_manual",
-        "task_id": "play-role-and-start-priority-implement-01",
+        "task_id": "reconsideration-commercial-bridge-and-wishlist-implement-01",
         "task_revision": 1
       },
       "occupancy_type": "external_manual",
       "slot_id": "slot_1",
       "status": "occupied",
-      "task_file": "WORKER_TASK_PLAY_ROLE_AND_START_PRIORITY_IMPLEMENT_01.md",
-      "task_id": "play-role-and-start-priority-implement-01"
+      "task_file": "WORKER_TASK_RECONSIDERATION_COMMERCIAL_BRIDGE_AND_WISHLIST_IMPLEMENT_01.md",
+      "task_id": "reconsideration-commercial-bridge-and-wishlist-implement-01"
     },
-    {"conflict_keys": [], "lease": null, "occupancy_type": null, "slot_id": "slot_2", "status": "free", "task_file": null, "task_id": null}
+    {
+      "conflict_keys": [
+        "provider-authority:epic"
+      ],
+      "lease": {
+        "acquired_at": "2026-09-05T16:59:12.119053Z",
+        "attempt_id": "epic-ru-availability-source-probe-01:r1:a1",
+        "expires_at": "2026-09-05T17:29:12.119053Z",
+        "lease_id": "slot_2:epic-ru-availability-source-probe-01:r1:a1",
+        "owner": "director-controller",
+        "state_revision_acquired": 4,
+        "status": "active",
+        "task_id": "epic-ru-availability-source-probe-01",
+        "task_revision": 1
+      },
+      "occupancy_type": "cloud_worker",
+      "slot_id": "slot_2",
+      "status": "occupied",
+      "task_file": "WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md",
+      "task_id": "epic-ru-availability-source-probe-01"
+    }
   ],
   "source_refs": {
-    "active_manual_task": "WORKER_TASK_PLAY_ROLE_AND_START_PRIORITY_IMPLEMENT_01.md",
+    "active_manual_task": "WORKER_TASK_RECONSIDERATION_COMMERCIAL_BRIDGE_AND_WISHLIST_IMPLEMENT_01.md",
     "director_board": "DIRECTOR_TASK_BOARD.md",
     "phase2a_contract": "config/director_orchestration_phase2a_contract.json"
   },
-  "state_revision": 2,
+  "state_revision": 4,
   "tasks": [
     {
-      "allowed_input_refs": ["WORKER_TASK_PLAY_ROLE_AND_START_PRIORITY_IMPLEMENT_01.md"],
-      "allowed_result_statuses": ["complete", "blocked", "needs_followup_fix"],
-      "assigned_slot": "slot_1",
+      "allowed_input_refs": [
+        "WORKER_TASK_PLAY_ROLE_AND_START_PRIORITY_IMPLEMENT_01.md"
+      ],
+      "allowed_result_statuses": [
+        "complete",
+        "blocked",
+        "needs_followup_fix"
+      ],
+      "assigned_slot": null,
       "attempt_id": "play-role-and-start-priority-implement-01:r1:a1",
       "attempt_number": 1,
       "base_sha": "65aa6668e1009885450103e9cde6b6b0f43008d3",
-      "conflict_keys": ["taste-write", "ranking-write", "taste-ranking-policy"],
+      "conflict_keys": [
+        "taste-write",
+        "ranking-write",
+        "taste-ranking-policy"
+      ],
       "dependencies": [],
       "domain": "taste-ranking",
       "evidence_refs": [],
@@ -56,24 +102,41 @@
       "mode": "IMPLEMENT",
       "priority": "VERY_HIGH",
       "queue_sequence": 0,
-      "retry": {"failure_count": 0, "last_failure": null, "max_attempts": 2, "next_attempt_number": 2},
+      "retry": {
+        "failure_count": 0,
+        "last_failure": null,
+        "max_attempts": 2,
+        "next_attempt_number": 2
+      },
       "review_gate": "none",
       "revision": 1,
-      "status": "running",
+      "status": "accepted",
       "task_file": "WORKER_TASK_PLAY_ROLE_AND_START_PRIORITY_IMPLEMENT_01.md",
       "task_file_blob_sha": "dbb7eb0cc78341d819b2a0715fcda0d825ede3b8",
       "task_id": "play-role-and-start-priority-implement-01",
       "user_gate": "none"
     },
     {
-      "allowed_input_refs": ["WORKER_TASK_WISHLIST_GOOD_DEAL_OVERRIDE_RECON_01.md"],
-      "allowed_result_statuses": ["complete", "blocked", "needs_user_decision"],
+      "allowed_input_refs": [
+        "WORKER_TASK_WISHLIST_GOOD_DEAL_OVERRIDE_RECON_01.md"
+      ],
+      "allowed_result_statuses": [
+        "complete",
+        "blocked",
+        "needs_user_decision"
+      ],
       "assigned_slot": null,
       "attempt_id": null,
       "attempt_number": 0,
       "base_sha": "65aa6668e1009885450103e9cde6b6b0f43008d3",
-      "conflict_keys": ["taste-write", "ranking-write", "taste-ranking-policy"],
-      "dependencies": ["play-role-and-start-priority-implement-01"],
+      "conflict_keys": [
+        "taste-write",
+        "ranking-write",
+        "taste-ranking-policy"
+      ],
+      "dependencies": [
+        "play-role-and-start-priority-implement-01"
+      ],
       "domain": "taste-ranking",
       "evidence_refs": [],
       "expected_report": "reviews/worker_reports/wishlist-good-deal-override-recon-01.md",
@@ -81,7 +144,12 @@
       "mode": "READ_ONLY_RECON",
       "priority": "VERY_HIGH",
       "queue_sequence": 10,
-      "retry": {"failure_count": 0, "last_failure": null, "max_attempts": 2, "next_attempt_number": 1},
+      "retry": {
+        "failure_count": 0,
+        "last_failure": null,
+        "max_attempts": 2,
+        "next_attempt_number": 1
+      },
       "review_gate": "none",
       "revision": 1,
       "status": "queued",
@@ -91,13 +159,21 @@
       "user_gate": "none"
     },
     {
-      "allowed_input_refs": ["WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md"],
-      "allowed_result_statuses": ["complete", "blocked", "needs_user_evidence"],
-      "assigned_slot": null,
-      "attempt_id": null,
-      "attempt_number": 0,
+      "allowed_input_refs": [
+        "WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md"
+      ],
+      "allowed_result_statuses": [
+        "complete",
+        "blocked",
+        "needs_user_evidence"
+      ],
+      "assigned_slot": "slot_2",
+      "attempt_id": "epic-ru-availability-source-probe-01:r1:a1",
+      "attempt_number": 1,
       "base_sha": "65aa6668e1009885450103e9cde6b6b0f43008d3",
-      "conflict_keys": ["provider-authority:epic"],
+      "conflict_keys": [
+        "provider-authority:epic"
+      ],
       "dependencies": [],
       "domain": "epic-ru-availability",
       "evidence_refs": [],
@@ -106,23 +182,36 @@
       "mode": "READ_ONLY_RECON",
       "priority": "HIGH",
       "queue_sequence": 20,
-      "retry": {"failure_count": 0, "last_failure": null, "max_attempts": 2, "next_attempt_number": 1},
+      "retry": {
+        "failure_count": 0,
+        "last_failure": null,
+        "max_attempts": 2,
+        "next_attempt_number": 2
+      },
       "review_gate": "none",
       "revision": 1,
-      "status": "queued",
+      "status": "assigned",
       "task_file": "WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md",
       "task_file_blob_sha": "fdefa23f6aa9d2689f98adcc4af4fd019a7bcb04",
       "task_id": "epic-ru-availability-source-probe-01",
       "user_gate": "none"
     },
     {
-      "allowed_input_refs": ["WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md"],
-      "allowed_result_statuses": ["complete", "blocked", "needs_followup_fix"],
+      "allowed_input_refs": [
+        "WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md"
+      ],
+      "allowed_result_statuses": [
+        "complete",
+        "blocked",
+        "needs_followup_fix"
+      ],
       "assigned_slot": null,
       "attempt_id": null,
       "attempt_number": 0,
       "base_sha": "65aa6668e1009885450103e9cde6b6b0f43008d3",
-      "conflict_keys": ["frontend-feed"],
+      "conflict_keys": [
+        "frontend-feed"
+      ],
       "dependencies": [],
       "domain": "frontend-feed",
       "evidence_refs": [],
@@ -131,7 +220,12 @@
       "mode": "IMPLEMENT",
       "priority": "NORMAL",
       "queue_sequence": 30,
-      "retry": {"failure_count": 0, "last_failure": null, "max_attempts": 2, "next_attempt_number": 1},
+      "retry": {
+        "failure_count": 0,
+        "last_failure": null,
+        "max_attempts": 2,
+        "next_attempt_number": 1
+      },
       "review_gate": "none",
       "revision": 1,
       "status": "queued",
