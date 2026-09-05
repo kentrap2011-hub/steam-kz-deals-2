@@ -23,8 +23,6 @@ Status: `PASS`.
 Closure: `accepted`.
 `system_audit_due: false`.
 
-Phase 2A audit explicitly permits user provisioning of repository Actions secret `OPENAI_API_KEY` and one separately enabled bounded Phase 2B READ-ONLY pilot afterward.
-
 ## Active product work
 
 ### ЧАТ 1 — Taste step 3
@@ -52,38 +50,34 @@ Security/state/cloud-worker boundary implemented + independently accepted.
 Audit:
 `reviews/system_audits/director-orchestration-phase2a-audit-01.md`.
 
-### Phase 2B — blocked on one-time user secret setup
+### Phase 2B — READY
 
-Prepared task:
+User confirmed on 2026-09-05 that repository Actions secret named exactly `OPENAI_API_KEY` has been added to `kentrap2011-hub/steam-kz-deals-2`.
+
+Secret handling:
+- confirmation is presence-only;
+- value is not known to Director and must never be pasted into chat, Git, task/report files or logs.
+
+Task:
 `WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2B_LIVE_READONLY_PILOT_01.md`
 Task ID: `director-orchestration-phase2b-live-readonly-pilot-01`
 Mode: `IMPLEMENT`
 Expected report:
 `reviews/worker_reports/director-orchestration-phase2b-live-readonly-pilot-01.md`
-Status: `blocked_user_must_confirm_OPENAI_API_KEY_repository_secret_exists`.
+Status: `ready_new_chat_2`.
 
-User action required exactly once:
-- create/use a dedicated OpenAI API key;
-- add it directly to repository `kentrap2011-hub/steam-kz-deals-2` -> Settings -> Secrets and variables -> Actions as repository secret named exactly `OPENAI_API_KEY`;
-- never paste the value into ChatGPT, Git, task/report files or logs.
-
-Provisioning the secret alone does NOT enable dispatch.
-
-After user confirms secret presence, create a fresh Chat 2 for Phase 2B IMPLEMENT.
-The Phase 2B implementation must enable exactly one live `READ_ONLY_RECON` cloud pilot for:
-`WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`.
-
-Critical audit carry-forward:
-- current-state / optimistic-concurrency stale barrier before publication;
-- exact task/revision/attempt/lease/base/blob/report binding;
-- max two slots;
-- current Chat 1 represented as external/manual occupancy if still active;
-- LLM job has no GitHub write credential;
-- trusted publisher writes only exact expected report path;
+Pilot scope exactly:
+- reconcile current orchestration state and current manual Chat 1 occupancy;
+- implement audit-required optimistic-concurrency/current-state stale barrier;
+- enable exactly one live cloud `READ_ONLY_RECON` pilot;
+- pilot target: `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`;
+- pinned official Codex Action only;
+- LLM job remains repository-read-only with no GitHub write credential;
+- trusted publisher may write only exact expected report path;
 - no second automatic dispatch;
-- IMPLEMENT structurally excluded from cloud worker path.
+- autonomous IMPLEMENT remains structurally excluded.
 
-The Phase 2A audit Chat 2 is complete and can be deleted.
+The completed Phase 2A audit Chat 2 may be deleted. Create a fresh Chat 2 for the Phase 2B pilot.
 
 ## Taste sequence
 
@@ -102,7 +96,7 @@ DLC ownership eligibility remains queued. Personalized Complete The Set actual p
 
 ## Other queued
 
-- `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md` — selected as first future cloud READ-ONLY pilot.
+- `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md` — selected as first live cloud READ-ONLY pilot.
 - DLC ownership eligibility IMPLEMENT.
 - `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`.
 - `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`.
@@ -114,7 +108,7 @@ DLC ownership eligibility remains queued. Personalized Complete The Set actual p
 
 ## Next decision
 
-1. User adds repository Actions secret `OPENAI_API_KEY` and confirms only that it exists.
-2. Do not ask user to reveal the key.
-3. After confirmation, delete completed audit Chat 2 if not already deleted and create fresh Chat 2 for `WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2B_LIVE_READONLY_PILOT_01.md`.
-4. Keep Chat 1 on Taste step 3 until its exact report is available.
+1. Start a fresh Chat 2 with `WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2B_LIVE_READONLY_PILOT_01.md`.
+2. Keep Chat 1 on Taste step 3 until its exact report is available.
+3. After Phase 2B pilot report, Director must verify the automatically published Epic RU worker report exists without user relay.
+4. Only after successful pilot verification may the next automation phase be designed.
