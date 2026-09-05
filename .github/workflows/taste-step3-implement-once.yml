@@ -33,7 +33,9 @@ jobs:
           set -euo pipefail
           python scripts/_taste_step3_once.py
           python - <<'PY'
+          import json
           from pathlib import Path
+
           helper = Path('scripts/commercial_reconsideration_bridge.py')
           text = helper.read_text(encoding='utf-8')
           old = "    return (\n        readiness.get('fit_evidence_state') == 'confirmed_negative'\n        or taste_entry.get('reason_code') == DIRECT_CONFLICT_REASON\n    )\n"
@@ -41,6 +43,7 @@ jobs:
           if text.count(old) != 1:
               raise SystemExit(f'hard_taste_block patch anchor count={text.count(old)}')
           helper.write_text(text.replace(old, new, 1), encoding='utf-8')
+
           test = Path('scripts/test_reconsideration_commercial_bridge.py')
           text = test.read_text(encoding='utf-8')
           old = "            'fit_evidence_confidence': 'high',\n            'fit_evidence_basis': ['historical_user_experience'],\n            'historical_negative_context': {\n                'evidence_depth': 'brief_or_partial',\n                'outcome': 'mixed',\n                'explicit_dislike': False,\n                'current_reopening_evidence': 'meaningful_new_context',\n            },\n"
@@ -56,6 +59,36 @@ jobs:
           if text.count(old) != 1:
               raise SystemExit(f'BioShock current package regression patch anchor count={text.count(old)}')
           package_test.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          mailing_path = Path('config/mailing_policy.json')
+          mailing = json.loads(mailing_path.read_text(encoding='utf-8'))
+          deal = mailing['deal_selection']
+          deal.pop('below_moderate_taste_cannot_be_rescued_by_discount', None)
+          deal['below_moderate_taste_cannot_be_promoted_by_commercial_bridge'] = True
+          deal['below_moderate_commercial_eligibility_exception_requires_explicit_v5_bridge'] = True
+          wishlist = mailing['final_ranking_context']['wishlist']
+          wishlist.pop('apply_only_during_final_sorting', None)
+          wishlist.pop('cannot_rescue_below_moderate_taste', None)
+          wishlist['role'] = 'final_ranking_bonus_plus_bounded_post_taste_commercial_eligibility_context'
+          wishlist['ranking_bonus_applies_only_during_final_sorting'] = True
+          wishlist['may_be_used_as_bounded_commercial_eligibility_context'] = True
+          wishlist['bounded_eligibility_context_never_changes_taste_fit'] = True
+          mailing_path.write_text(json.dumps(mailing, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          validator = Path('scripts/validate_mailing_policy.py')
+          text = validator.read_text(encoding='utf-8')
+          replacements = {
+              "'version': p.get('version') == '1.19'": "'version': p.get('version') == '1.21'",
+              "'weak_taste_not_rescued': deal['below_moderate_taste_cannot_be_rescued_by_discount'] is True": "'weak_taste_not_promoted': deal['below_moderate_taste_cannot_be_promoted_by_commercial_bridge'] is True,\n        'weak_taste_exception_requires_v5_bridge': deal['below_moderate_commercial_eligibility_exception_requires_explicit_v5_bridge'] is True",
+              "'wishlist_final_sort_only': p['final_ranking_context']['wishlist']['apply_only_during_final_sorting'] is True": "'wishlist_ranking_bonus_final_sort_only': p['final_ranking_context']['wishlist']['ranking_bonus_applies_only_during_final_sorting'] is True,\n        'wishlist_bounded_eligibility_context': p['final_ranking_context']['wishlist']['may_be_used_as_bounded_commercial_eligibility_context'] is True,\n        'wishlist_bridge_never_changes_taste': p['final_ranking_context']['wishlist']['bounded_eligibility_context_never_changes_taste_fit'] is True",
+              "'cache_contract_v3': cache_contract.get('contract') == 'TASTE-CACHE-ENTRY-BINDING-V3'": "'cache_contract_v5': cache_contract.get('contract') == 'TASTE-CACHE-ENTRY-BINDING-V5'",
+              "mixed_generation.get('never_upgrade_an_old_entry_binding_or_add_factors_without_a_new_ai_verdict') is True": "mixed_generation.get('never_upgrade_an_old_entry_fit_binding_or_add_factors_without_a_new_ai_verdict') is True",
+          }
+          for old, new in replacements.items():
+              if text.count(old) != 1:
+                  raise SystemExit(f'validator patch anchor count={text.count(old)} for {old!r}')
+              text = text.replace(old, new, 1)
+          validator.write_text(text, encoding='utf-8')
           PY
 
       - name: Refresh authoritative fixed package snapshot for validation
@@ -70,7 +103,8 @@ jobs:
             scripts/commercial_reconsideration_bridge.py \
             scripts/test_reconsideration_commercial_bridge.py \
             scripts/build_pre_ai_chatgpt_payload.py \
-            scripts/build_visual_feed_v2.py
+            scripts/build_visual_feed_v2.py \
+            scripts/validate_mailing_policy.py
           python scripts/test_reconsideration_commercial_bridge.py
           python scripts/test_fixed_package_purchase_options.py
           python scripts/test_package_complete_content_value.py
@@ -119,6 +153,7 @@ jobs:
             scripts/test_fixed_package_purchase_options.py \
             scripts/build_pre_ai_chatgpt_payload.py \
             scripts/build_visual_feed_v2.py \
+            scripts/validate_mailing_policy.py \
             PROJECT_RULES.md \
             PROJECT_DECISIONS.md \
             PROJECT_ROUTES.md
