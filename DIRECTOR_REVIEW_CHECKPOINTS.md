@@ -6,9 +6,9 @@ The Director must read this file before assigning a new ordinary backlog task wh
 
 ## System Auditor
 
-system_audit_due: false
+system_audit_due: true
 first_system_audit_trigger: `satisfied_2026-09-02`
-material_changes_since_last_system_audit: 0
+material_changes_since_last_system_audit: 1
 last_system_audit_report: `reviews/system_audits/giveaway-cache-post-incident-audit-01.md`
 mobile_post_incident_audit_pending: false
 
@@ -27,19 +27,22 @@ A completed audit resets `material_changes_since_last_system_audit` to 0 and rec
 
 ### Current audit state
 
-Latest completed audit:
+A new mandatory audit is due for the accepted Phase 1 Director orchestration shadow boundary.
+
+Audit task:
+`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE1_SYSTEM_AUDIT_01.md`
+
+Expected report:
+`reviews/system_audits/director-orchestration-phase1-audit-01.md`
+
+Reason:
+- Phase 1 introduced machine-readable orchestration state, logical worker-slot semantics, dependency/conflict scheduling rules, and a GitHub Actions shadow planner that future Phase 2 cloud workers will trust;
+- the current implementation remains shadow-only and dispatches no real workers, but this is still a new queue/orchestration authority boundary and therefore triggers the recurring System Auditor rule.
+
+Previous completed audit:
 - report: `reviews/system_audits/giveaway-cache-post-incident-audit-01.md`;
 - status: `complete`;
-- `Giveaway cache incident systemic closure: accepted`;
-- no incident-specific implementation follow-up required before ordinary backlog continues.
-
-The audited incident was the stabilized live-site giveaway stale-LKG/cache-identity failure:
-- technical fix report: `reviews/worker_reports/giveaway-cache-identity-production-shape-fix-01.md`;
-- final implementation commit: `024f81937942987c96bb5db1b0e1d7b66dd67587`;
-- deploy run `33841356092` success;
-- real mobile user verification succeeded on 2026-09-04 without clearing site data.
-
-Checkpoint is now clear for ordinary backlog selection.
+- `Giveaway cache incident systemic closure: accepted`.
 
 ## Taste Reviewer
 
