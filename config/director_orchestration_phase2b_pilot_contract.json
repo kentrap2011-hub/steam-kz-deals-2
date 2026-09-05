@@ -9,6 +9,7 @@
   "limits": {
     "max_logical_slots": 2,
     "max_live_attempts": 1,
+    "max_same_attempt_recovery_executions": 1,
     "cloud_lease_seconds": 1800
   },
   "manual_occupancy": {
@@ -16,6 +17,7 @@
     "task_id": "reconsideration-commercial-bridge-and-wishlist-implement-01",
     "task_revision": 1,
     "task_file": "WORKER_TASK_RECONSIDERATION_COMMERCIAL_BRIDGE_AND_WISHLIST_IMPLEMENT_01.md",
+    "completion_report": "reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md",
     "replaces_task_id": "play-role-and-start-priority-implement-01",
     "conflict_keys": [
       "taste-write",
@@ -29,7 +31,19 @@
     "task_file": "WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md",
     "task_file_blob_sha": "fdefa23f6aa9d2689f98adcc4af4fd019a7bcb04",
     "base_sha": "65aa6668e1009885450103e9cde6b6b0f43008d3",
-    "expected_report_path": "reviews/worker_reports/epic-ru-availability-source-probe-01.md"
+    "expected_report_path": "reviews/worker_reports/epic-ru-availability-source-probe-01.md",
+    "attempt_number": 1,
+    "attempt_id": "epic-ru-availability-source-probe-01:r1:a1",
+    "lease_id": "slot_2:epic-ru-availability-source-probe-01:r1:a1"
+  },
+  "recovery": {
+    "allowed": true,
+    "reason": "pre_model_codex_cli_argument_failure",
+    "must_reuse_same_attempt": true,
+    "must_reuse_same_lease_identity": true,
+    "may_refresh_lease_expiry": true,
+    "must_not_increment_retry_counter": true,
+    "must_not_select_another_task": true
   },
   "worker": {
     "mode": "READ_ONLY_RECON",
@@ -40,7 +54,8 @@
     "worker_can_choose_next_task": false,
     "codex_action": "openai/codex-action@86365089eb2b84e0a8fb0717b304f8bdcb13b20e",
     "permission_profile": ":read-only",
-    "safety_strategy": "drop-sudo"
+    "safety_strategy": "drop-sudo",
+    "web_search_config": "web_search=\"live\""
   },
   "publisher": {
     "trusted_separate_job": true,
