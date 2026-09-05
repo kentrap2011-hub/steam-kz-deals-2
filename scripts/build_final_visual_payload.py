@@ -7,6 +7,7 @@ import build_daily_visual_payload as base_builder
 import card_explanation_policy
 import duration_enrichment
 import giveaway_visual_handoff
+import play_priority_context
 import priority_ranking
 import refine_visual_ranking as refiner
 from semantic_runtime_completion import apply_visual_semantic_status
@@ -328,6 +329,9 @@ def refresh_existing_media():
             explanation_touched += 1
             changed = True
 
+        if play_priority_context.apply_to_game(game, taste_entry):
+            changed = True
+
         if changed:
             touched += 1
 
@@ -351,6 +355,10 @@ def refresh_existing_media():
     contract['final_visual_producer_blob_sha'] = base_builder.git_sha('scripts/build_final_visual_payload.py')
     contract['card_explanation_policy_blob_sha'] = base_builder.git_sha('scripts/card_explanation_policy.py')
     contract['card_explanation_rule'] = 'positive requires specific Taste evidence; visible negative requires grounded provenance; scoring/ranking semantics unchanged'
+    contract['play_priority_context_helper_blob_sha'] = base_builder.git_sha('scripts/play_priority_context.py')
+    contract['play_priority_context_contract_blob_sha'] = base_builder.git_sha('config/play_priority_context_contract.json')
+    contract['play_priority_context_rule'] = 'play role and relative start priority are producer-owned semantic context; they do not change eligibility, fit, sale urgency, total_score, priority_rank, or create a second sorter'
+    contract['play_priority_context_distribution'] = play_priority_context.distributions(items)
     contract['duration_source_distribution'] = duration_source_distribution(items)
     contract['duration_structured_refresh_touched_count'] = duration_touched
     contract['card_explanation_refresh_touched_count'] = explanation_touched
@@ -457,6 +465,7 @@ def main():
             fit_changes += 1
 
         apply_duration_resolution(game, projection, duration_entries)
+        play_priority_context.apply_to_game(game, taste_entry)
 
         if not refiner.apply_commercial_branch(game, context):
             removed += 1
@@ -500,6 +509,8 @@ def main():
         'visual_builder_blob_sha': base_builder.git_sha('scripts/build_visual_feed_v2.py'),
         'final_visual_producer_blob_sha': base_builder.git_sha('scripts/build_final_visual_payload.py'),
         'card_explanation_policy_blob_sha': base_builder.git_sha('scripts/card_explanation_policy.py'),
+        'play_priority_context_helper_blob_sha': base_builder.git_sha('scripts/play_priority_context.py'),
+        'play_priority_context_contract_blob_sha': base_builder.git_sha('config/play_priority_context_contract.json'),
         'achievement_quality_builder_blob_sha': base_builder.git_sha('scripts/achievement_quality.py'),
         'ranking_helper_blob_sha': base_builder.git_sha('scripts/priority_ranking.py'),
         'ranking_policy_blob_sha': base_builder.git_sha('config/final_ranking_policy.json'),
@@ -529,6 +540,8 @@ def main():
         'priority_factors': final_priority_order,
         'priority_ranking_contract': 'FINAL-PRIORITY-RANKING-V2',
         'card_explanation_rule': 'positive requires specific Taste evidence; visible negative requires grounded provenance; scoring/ranking semantics unchanged',
+        'play_priority_context_rule': 'play role and relative start priority are producer-owned semantic context; they do not change eligibility, fit, sale urgency, total_score, priority_rank, or create a second sorter',
+        'play_priority_context_distribution': play_priority_context.distributions(refined),
         'fixed_package_purchase_option_rule': (
             'fixed Sub only; >=2 visible base-game families by exact appid or explicit verified '
             'purchase equivalence; relevant package information may be displayed without strict '

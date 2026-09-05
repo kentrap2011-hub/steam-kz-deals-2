@@ -52,6 +52,13 @@ def compact_row(game):
         'fit_evidence_state': game.get('fit_evidence_state'),
         'fit_evidence_confidence': game.get('fit_evidence_confidence'),
         'fit_evidence_state_source': game.get('fit_evidence_state_source'),
+        'play_role': game.get('play_role'),
+        'play_role_confidence': game.get('play_role_confidence'),
+        'play_role_provenance': game.get('play_role_provenance') or [],
+        'relative_start_priority': game.get('relative_start_priority'),
+        'relative_start_priority_confidence': game.get('relative_start_priority_confidence'),
+        'relative_start_priority_provenance': game.get('relative_start_priority_provenance') or [],
+        'play_priority_context_source': game.get('play_priority_context_source'),
         'decision': game.get('decision'),
         'risk_level': game.get('risk_level'),
         'risk_status': game.get('risk_status'),
@@ -89,7 +96,7 @@ def main():
         counts[bucket] = len(rows)
 
     manifest = {
-        'schema_version': 3,
+        'schema_version': 4,
         'source': str(SOURCE),
         'bucket_rule': 'first case-folded title character; a-z, 0-9, or _',
         'item_count': sum(counts.values()),

@@ -1,0 +1,196 @@
+{
+  "contract_id": "PLAY-ROLE-START-PRIORITY-V1",
+  "schema_version": 1,
+  "purpose": "Producer-owned semantic context separating personal fit, play role, relative start priority, and commercial purchase urgency.",
+  "play_role_values": [
+    "main_full",
+    "secondary_palate_cleanser",
+    "family_coop",
+    "unresolved"
+  ],
+  "relative_start_priority_values": [
+    "high",
+    "ordinary",
+    "low",
+    "unresolved"
+  ],
+  "confidence_values": [
+    "low",
+    "medium",
+    "high"
+  ],
+  "semantic_rules": {
+    "orthogonal_to_fit": true,
+    "orthogonal_to_sale_urgency": true,
+    "wishlist_cannot_resolve_or_raise_start_priority": true,
+    "price_discount_purchase_decision_cannot_resolve_or_raise_start_priority": true,
+    "strong_fit_does_not_imply_main_role": true,
+    "franchise_history_is_weak_prior_only": true,
+    "franchise_history_alone_cannot_resolve_role_or_start_priority": true,
+    "confirmed_negative_forces_non_high_start_priority": true,
+    "confirmed_negative_start_priority": "low",
+    "confirmed_negative_play_role": "unresolved",
+    "changes_eligibility": false,
+    "changes_fit": false,
+    "changes_total_score": false,
+    "changes_priority_rank": false,
+    "creates_sorter": false
+  },
+  "forbidden_resolution_inputs": [
+    "wishlist",
+    "discount_percent",
+    "current_price_rub",
+    "original_price_rub",
+    "history_quality",
+    "purchase_decision",
+    "decision",
+    "sale_end_utc",
+    "sale_expiry_urgency",
+    "sale_expiry_urgency_rank",
+    "priority_rank",
+    "total_score",
+    "personal_score",
+    "purchase_score"
+  ],
+  "default_context": {
+    "play_role": "unresolved",
+    "play_role_confidence": "low",
+    "relative_start_priority": "unresolved",
+    "relative_start_priority_confidence": "low",
+    "provenance": [
+      "no_title_specific_role_or_start_evidence"
+    ]
+  },
+  "title_calibrations": {
+    "sifu": {
+      "aliases": [
+        "Sifu"
+      ],
+      "title_specific_evidence": true,
+      "play_role": "main_full",
+      "play_role_confidence": "high",
+      "relative_start_priority": "high",
+      "relative_start_priority_confidence": "high",
+      "provenance": [
+        "reviewer_calibrated_title_specific_current_interest"
+      ]
+    },
+    "high_on_life": {
+      "aliases": [
+        "High On Life"
+      ],
+      "title_specific_evidence": true,
+      "play_role": "main_full",
+      "play_role_confidence": "high",
+      "relative_start_priority": "ordinary",
+      "relative_start_priority_confidence": "high",
+      "provenance": [
+        "reviewer_calibrated_title_specific_role"
+      ]
+    },
+    "amnesia_the_bunker": {
+      "aliases": [
+        "Amnesia: The Bunker"
+      ],
+      "title_specific_evidence": true,
+      "play_role": "main_full",
+      "play_role_confidence": "high",
+      "relative_start_priority": "ordinary",
+      "relative_start_priority_confidence": "high",
+      "provenance": [
+        "reviewer_calibrated_title_specific_role"
+      ]
+    },
+    "terminator_resistance": {
+      "aliases": [
+        "Terminator: Resistance"
+      ],
+      "title_specific_evidence": true,
+      "play_role": "main_full",
+      "play_role_confidence": "medium",
+      "relative_start_priority": "ordinary",
+      "relative_start_priority_confidence": "high",
+      "provenance": [
+        "reviewer_calibrated_title_specific_role",
+        "franchise_history_weak_prior"
+      ]
+    },
+    "tails_of_iron_2": {
+      "aliases": [
+        "Tails of Iron 2",
+        "Tails of Iron 2: Whiskers of Winter"
+      ],
+      "title_specific_evidence": true,
+      "play_role": "secondary_palate_cleanser",
+      "play_role_confidence": "high",
+      "relative_start_priority": "ordinary",
+      "relative_start_priority_confidence": "high",
+      "provenance": [
+        "reviewer_calibrated_title_specific_role"
+      ]
+    },
+    "trine_4": {
+      "aliases": [
+        "Trine 4",
+        "Trine 4: The Nightmare Prince"
+      ],
+      "title_specific_evidence": true,
+      "play_role": "family_coop",
+      "play_role_confidence": "high",
+      "relative_start_priority": "ordinary",
+      "relative_start_priority_confidence": "medium",
+      "provenance": [
+        "reviewer_calibrated_confirmed_family_play_positive"
+      ]
+    },
+    "tmnt_splintered_fate": {
+      "aliases": [
+        "TMNT: Splintered Fate",
+        "Teenage Mutant Ninja Turtles: Splintered Fate"
+      ],
+      "title_specific_evidence": false,
+      "play_role": "unresolved",
+      "play_role_confidence": "low",
+      "relative_start_priority": "unresolved",
+      "relative_start_priority_confidence": "low",
+      "provenance": [
+        "franchise_history_weak_prior"
+      ]
+    }
+  },
+  "control_expectations": {
+    "Sifu": {
+      "play_role": "main_full",
+      "relative_start_priority": "high"
+    },
+    "High On Life": {
+      "play_role": "main_full",
+      "relative_start_priority": "ordinary"
+    },
+    "Amnesia: The Bunker": {
+      "play_role": "main_full",
+      "relative_start_priority": "ordinary"
+    },
+    "Terminator: Resistance": {
+      "play_role": "main_full",
+      "relative_start_priority": "ordinary"
+    },
+    "Tails of Iron 2": {
+      "play_role": "secondary_palate_cleanser",
+      "relative_start_priority": "ordinary"
+    },
+    "Trine 4": {
+      "play_role": "family_coop",
+      "relative_start_priority": "ordinary"
+    },
+    "TMNT: Splintered Fate": {
+      "play_role": "unresolved",
+      "relative_start_priority": "unresolved"
+    },
+    "HighFleet": {
+      "play_role": "unresolved",
+      "relative_start_priority": "low",
+      "requires_fit_evidence_state": "confirmed_negative"
+    }
+  }
+}

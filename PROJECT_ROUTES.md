@@ -262,3 +262,13 @@ Production validator проверяет:
 6. `scripts/test_taste_evidence_states.py` — Haven Moon / BioShock / HighFleet and evidence-boundary controls.
 
 **Архитектурный инвариант:** evidence-state binding is orthogonal to the existing fit semantic digest. No new scheduler, queue authority, ranking authority, wishlist override, or play-role logic is introduced.
+
+## Taste play-role / start-priority context
+
+- contract: `config/play_priority_context_contract.json`;
+- deterministic helper: `scripts/play_priority_context.py`;
+- focused controls/regression: `scripts/test_play_priority_context.py`;
+- canonical visual attachment: `scripts/build_final_visual_payload.py`;
+- compact diagnostics: `scripts/build_ranking_lookup.py`;
+- focused regression: `scripts/test_play_priority_context.py`; existing recurring workflows/schedulers remain unchanged;
+- semantics: role/start are separate from fit, wishlist and sale urgency; no second ranker/sorter; `confirmed_negative` cannot receive high start priority.

@@ -290,3 +290,18 @@
 **Не делать:** не use evidence state as wishlist override, play-role/start-priority, discount boost, second ranking formula, or new semantic scheduler.
 
 **Основные места:** `config/taste_result_contract.json`, `config/taste_cache_entry_contract.json`, `scripts/taste_evidence_contract.py`, `scripts/ingest_taste_results.py`, `scripts/build_pre_ai_chatgpt_payload.py`, `scripts/refine_visual_ranking.py`.
+
+---
+
+## TASTE-002 — Play role and start priority are not purchase urgency
+
+**Дата:** 2026-09-05
+**Статус:** implemented as internal Taste step 2; combined independent Taste Review remains pending after step 3.
+
+**Решение:** хранить `play_role` и `relative_start_priority` как отдельный producer-owned semantic/context layer поверх price-blind Taste evidence, но вне commercial urgency/value и вне канонического ranker.
+
+**Почему:** scalar fit/score не умеет одновременно выразить `Sifu = main/high`, `High On Life = main/ordinary`, `Tails of Iron 2 = secondary`, `Trine 4 = family/co-op`. Sale deadline отвечает на вопрос «не пропустить ли покупку», а start priority — «насколько скоро запускать среди подходящих игр».
+
+**Граница:** wishlist, цена, скидка, history quality, purchase verdict и sale expiry не разрешают role/start state. Franchise history — только слабый prior; без title-specific evidence состояние остаётся `unresolved`. Step-1 `confirmed_negative` не может получить `high`. `priority_ranking.py` и `config/final_ranking_policy.json` остаются единственной автоматической ranking authority и этой задачей не меняются.
+
+**Основные места:** `config/play_priority_context_contract.json`, `scripts/play_priority_context.py`, `scripts/build_final_visual_payload.py`, `scripts/build_ranking_lookup.py`, `scripts/test_play_priority_context.py`.
