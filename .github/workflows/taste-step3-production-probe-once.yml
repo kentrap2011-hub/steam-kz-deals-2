@@ -1,0 +1,82 @@
+name: Taste step 3 production probe once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/taste-step3-production-probe-once.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Refresh existing fixed package producer input
+        run: python scripts/build_fixed_package_purchase_options.py
+
+      - name: Rebuild canonical pre-AI consumer payload
+        run: python scripts/build_pre_ai_chatgpt_payload.py
+
+      - name: Verify bridge manifest and immutable Taste role fields
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest=json.loads(Path('data/production/pre_ai/chatgpt_payload.json').read_text(encoding='utf-8'))
+          rows=[json.loads(line) for line in Path('data/production/pre_ai/chatgpt_purchase_context.jsonl').read_text(encoding='utf-8').splitlines() if line.strip()]
+          kinds={}
+          for row in rows:
+              marker=row.get('commercial_eligibility_bridge') or {}
+              kind=marker.get('kind')
+              if kind:
+                  kinds[kind]=kinds.get(kind,0)+1
+                  assert marker.get('taste_state_preserved') is True
+                  assert marker.get('taste_fit_preserved') == 'below_moderate'
+                  assert marker.get('play_role_start_priority_preserved') is True
+                  assert marker.get('risks_and_warnings_preserved') is True
+          assert kinds == (manifest.get('commercial_eligibility_bridge_counts') or {}), (kinds, manifest.get('commercial_eligibility_bridge_counts'))
+          print(json.dumps({
+              'status':'PASS',
+              'manifest_status':manifest.get('status'),
+              'bridge_counts':kinds,
+              'fixed_package_bridge_evidence':manifest.get('fixed_package_bridge_evidence'),
+              'ai_queue_count':manifest.get('ai_queue_count'),
+              'ready_without_ai_count':manifest.get('ready_without_ai_count'),
+              'deterministically_excluded_without_ai_count':manifest.get('deterministically_excluded_without_ai_count'),
+              'complete_family_partition':manifest.get('complete_family_partition'),
+          },ensure_ascii=False,indent=2))
+          print('TASTE_STEP3_PREAI_PRODUCTION_PROBE=PASS')
+          PY
+
+      - name: Rebuild current visual through canonical visual producer
+        run: python scripts/build_visual_feed_v2.py
+
+      - name: Verify visible bridge provenance
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          visual=json.loads(Path('web/data/current.json').read_text(encoding='utf-8'))
+          bridges={}
+          for row in visual.get('items') or []:
+              marker=row.get('commercial_eligibility_bridge') or {}
+              kind=marker.get('kind')
+              if kind:
+                  bridges[kind]=bridges.get(kind,0)+1
+                  assert row.get('fit') == 'below_moderate'
+                  assert row.get('eligibility_override') == kind
+          print(json.dumps({'status':'PASS','visual_status':visual.get('status'),'visual_item_count':visual.get('item_count'),'visible_bridge_counts':bridges},ensure_ascii=False,indent=2))
+          print('TASTE_STEP3_VISUAL_PRODUCTION_PROBE=PASS')
+          PY
