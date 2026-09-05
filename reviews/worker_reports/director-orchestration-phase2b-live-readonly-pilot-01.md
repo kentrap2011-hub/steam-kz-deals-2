@@ -1,219 +1,242 @@
 # Director Orchestration Phase 2B Live Read-Only Pilot 01
 
-## 1. Status
+## 1. Final status
 
 `blocked`
 
-Phase 2B did **not** satisfy the pilot success criteria because the final real Codex worker could not complete the Epic RU source probe: the OpenAI Responses API terminated the stream with the non-secret billing error `You have no credits remaining. Add credits to continue using the API`.
+Phase 2B is durably closed, but the pilot did **not** succeed. The final real Codex execution reached an OpenAI Responses API model session and was blocked by the exact non-secret billing error:
 
-The security boundary was not weakened and no further worker execution was attempted after this billing failure.
+`You have no credits remaining. Add credits to continue using the API`
 
-## 2. Secret-presence gate result
+No further Codex execution was attempted after that billing failure. No alternate key/provider/model was substituted and no security boundary was relaxed.
 
-Passed for presence only.
+Both mandatory durable paths now exist:
 
-The user had already confirmed that repository Actions secret `OPENAI_API_KEY` exists. The workflow supplied it only to the pinned Codex action. GitHub Actions rendered the value as `***`; the value was never requested, inspected, printed, committed, or copied into orchestration state/result data.
+- `reviews/worker_reports/epic-ru-availability-source-probe-01.md`
+- `reviews/worker_reports/director-orchestration-phase2b-live-readonly-pilot-01.md`
 
-The final Codex execution reached the OpenAI Responses API and received a billing/credit error, which also proves that the secret was available to the action. The failure was **not** `401`/invalid-key, permissions, or model-unavailable; it was specifically zero remaining API credits.
+The Epic path is explicitly a **trusted blocked-closeout evidence report**, not a fabricated or substituted Epic research result. Billing prevented the worker from completing the requested source probe, so no Epic RU availability conclusion is claimed.
 
-## 3. Files/contracts/workflows changed
+## 2. Secret availability and failure classification
 
-Phase 2B infrastructure-only changes were made in:
+Repository Actions secret `OPENAI_API_KEY` was available to the pinned Codex action. Its value was never requested, inspected, printed, committed, copied into state, or exposed in this report. GitHub Actions rendered it only as masked `***`.
 
-- `config/director_orchestration_phase2b_pilot_contract.json`
-- `scripts/director_orchestration_controller.py`
-- `scripts/test_director_orchestration_phase2b.py`
-- `scripts/test_director_orchestration_phase2a.py`
-- `scripts/test_director_orchestration_shadow.py`
-- `.github/workflows/director-orchestration-phase2b-live-readonly-pilot.yml`
-- `orchestration/live_pilots/phase2b-epic-ru-availability-source-probe-01.launch.json`
-- `.gitignore` (Python bytecode/cache only)
-- controller-authorized transitions of `orchestration/state.json`
+The final worker reached the OpenAI Responses API and started a Codex session, therefore this was not a missing-secret path. The final failure was not `401`/invalid key, repository permission failure, sandbox failure, or model-unavailable failure.
 
-No Taste/product logic was changed. No Steam/provider credential was added or exposed. General queue draining and autonomous IMPLEMENT dispatch remain disabled.
+Final classification: `openai_api_billing_no_credits`.
 
-## 4. Current-state/manual occupancy reconciliation
+## 3. Exact logical pilot binding
 
-The initial live attempt reconciled the old `play-role-and-start-priority-implement-01` occupancy to the then-active external/manual Chat 1 task `reconsideration-commercial-bridge-and-wishlist-implement-01`.
+Only this logical pilot was dispatched:
 
-During recovery, Chat 1 had become durably complete at:
-
-`reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md`
-
-The authoritative controller therefore freed `slot_1` rather than continuing to count a completed manual task as active.
-
-Current durable state at state revision `6`:
-
-- exactly two logical slots still exist;
-- `slot_1`: free;
-- `slot_2`: occupied only by the Epic RU pilot cloud worker;
-- `dispatch_enabled`: `false`;
-- Wishlist recon remains queued/unassigned with attempt number `0`;
-- the queued IMPLEMENT task remains unassigned with attempt number `0`;
-- no next task was selected or dispatched.
-
-Latest controller state commit:
-
-`5e92ee8ab568fb8958162142f5fc3ec06ef67b2d` — `Continue Phase 2B Epic r1:a1 after invalid output schema`
-
-That commit changed only `orchestration/state.json`.
-
-## 5. Optimistic-concurrency/current-state stale barrier
-
-The live workflow implements fail-closed current-state/CAS checks at both controller and publisher boundaries:
-
-- marker/head must match the current remote `main` before state transition;
-- the controller validates exact task revision, attempt, lease, task-file blob, base SHA and report path;
-- state is committed only after asserting the controller changed `orchestration/state.json` and no other path;
-- controller state push is non-force and guarded by expected remote head;
-- trusted publisher, if reached, requires remote HEAD to equal the exact controller `state_head`;
-- trusted publisher requires authoritative `state_revision` to equal the prepare job's bound revision before materialization and again immediately before commit;
-- `director_report_publisher.py` independently validates task/revision/attempt/lease/base/blob/report path and lease expiry;
-- publisher staging is restricted to the exact expected worker report and rejects any other working-tree or staged mutation;
-- final publisher push is non-force and guarded by another remote-head comparison.
-
-Deterministic Phase 2B tests also verify fail-closed behavior for concurrent state revision advance, expected-head conflict, expired lease, wrong report path, IMPLEMENT substitution, and additional continuation beyond the bounded recovery count.
-
-Because the worker never produced a structured result, the publisher correctly did not attempt to publish a stale or partial result.
-
-## 6. Exact pilot task binding
-
-Pilot task only:
-
-- task: `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`
+- task file: `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`
 - task ID: `epic-ru-availability-source-probe-01`
-- mode: `READ_ONLY_RECON`
+- worker mode: `READ_ONLY_RECON`
 - task revision: `1`
 - attempt number: `1`
 - attempt ID: `epic-ru-availability-source-probe-01:r1:a1`
 - lease ID: `slot_2:epic-ru-availability-source-probe-01:r1:a1`
 - base SHA: `65aa6668e1009885450103e9cde6b6b0f43008d3`
 - task-file blob SHA: `fdefa23f6aa9d2689f98adcc4af4fd019a7bcb04`
-- expected report: `reviews/worker_reports/epic-ru-availability-source-probe-01.md`
+- exact report path: `reviews/worker_reports/epic-ru-availability-source-probe-01.md`
 
-No `a2` attempt was issued. No second task was bound to a cloud-worker slot.
+No `a2` attempt was issued. Wishlist remained attempt `0`. The queued IMPLEMENT task remained attempt `0`. No second task was cloud-dispatched.
 
-## 7. Tests
+## 4. Current-state synchronization and slot accounting
 
-Before the final live continuation, prepare job `101346024119` in run `33980979557` passed:
+At the initial live pilot, the stale `play-role-and-start-priority-implement-01` occupancy was replaced by the then-active external/manual Chat 1 task `reconsideration-commercial-bridge-and-wishlist-implement-01`.
 
-- retained Phase 1 shadow tests;
-- retained Phase 2A security/state tests;
-- Phase 2B continuation security tests;
-- exact marker/current-head validation;
-- exact same-attempt controller continuation;
-- state-only mutation assertion;
-- fixed request binding validation;
-- controller state commit/push CAS.
+Chat 1 later became durably complete at:
 
-The tests preserve the accepted invariants rather than hard-coding obsolete queue ordering: Phase 2A staging remains non-executable and dispatch-disabled even after the completed Chat 1 task unblocked Wishlist in the logical queue.
+`reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md`
 
-## 8. Live dispatch runs/jobs
+The authoritative recovery controller therefore freed `slot_1` instead of retaining obsolete manual occupancy.
 
-The investigation found the following Phase 2B workflow executions. They are recorded explicitly because several physical GitHub worker-process invocations occurred while correcting failures that happened before useful task execution; all remained bound to the same logical task/attempt `r1:a1`, and no second task or `a2` attempt was dispatched.
+Final durable orchestration state is revision `7` with phase:
 
-1. Run `33979466677`: pre-dispatch prepare gate failed because Python tests created untracked `__pycache__` files. Worker and publisher were skipped. No Codex invocation occurred.
-2. Run `33979523662`: prepare succeeded; worker job `101342143972` failed before model/API execution because current `codex exec` rejected legacy CLI argument `--search`. Publisher `101342195897` was skipped.
-3. Run `33980692415`: same logical `r1:a1` recovery; worker job `101345274848` reached the Responses API but the request was rejected before model execution because the structured output schema used `const` fields without explicit JSON Schema `type`. Publisher `101345321309` was skipped.
-4. Run `33980919916`: prepare failed in a retained Phase 2A test that incorrectly hard-coded Epic as the forever staging candidate after Chat 1 completion had legitimately unblocked Wishlist. Worker and publisher were skipped; no Codex invocation occurred.
-5. Final run `33980979557`: prepare job `101346024119` succeeded; worker job `101346057158` started the pinned Codex action and reached a real model/API session; publisher job `101346219841` was skipped because the worker failed before producing a structured result.
+`phase_2b_live_readonly_pilot_blocked_billing`
 
-Strictly interpreted as a count of physical GitHub worker jobs, there were multiple process executions during recovery. This is an implementation-history deviation from a literal “one physical worker job” reading. There was nevertheless only one logical pilot task and one attempt identity (`r1:a1`), with no second task, no `a2`, and no queue draining. This deviation is one reason this report does not claim `complete`.
+Final slot state:
 
-## 9. Codex worker result
+- `slot_1`: free
+- `slot_2`: free
+- `dispatch_enabled`: `false`
+- `automatic_next_dispatch`: `false`
 
-Final real worker job: `101346057158` in run `33980979557`.
+Epic is `blocked`, unassigned, still bound to attempt `r1:a1`, with billing failure evidence recorded. Wishlist is still queued/unassigned at attempt `0`. The queued IMPLEMENT task is still queued/unassigned at attempt `0`.
 
-Verified runtime boundary from the job log:
+Final controller state commit:
 
-- GitHub token permissions: `Contents: read`, `Metadata: read`;
-- exact checkout base: `65aa6668e1009885450103e9cde6b6b0f43008d3`;
+`670c22f1859889fa365da1de0d797368b0b1d605` — `Finalize Phase 2B blocked on OpenAI API credits`
+
+That commit changed only `orchestration/state.json`.
+
+## 5. Worker security boundary
+
+The real Codex worker retained the required boundary:
+
+- exact immutable action pin `openai/codex-action@86365089eb2b84e0a8fb0717b304f8bdcb13b20e`;
+- GitHub job permission `contents: read` only, plus GitHub metadata read;
 - checkout `persist-credentials: false`;
-- exact immutable action pin: `openai/codex-action@86365089eb2b84e0a8fb0717b304f8bdcb13b20e`;
+- no worker GitHub write credential;
+- no Steam/provider secret;
 - `permission-profile: :read-only`;
 - `safety-strategy: drop-sudo`;
-- native Codex web-search configuration: `web_search="live"`;
-- Codex CLI: `0.153.4`;
-- model selected: `gpt-6-astra`;
-- provider: `codex-action-responses-proxy`;
-- sandbox reported by Codex: `read-only`;
-- approval mode: `never`;
-- sudo/docker privilege removal and `no_new_privs`/empty capability launch were enforced by the pinned action.
+- repository/state/product write authority all `false`;
+- worker could not select the next task;
+- native Codex hosted web-search config `web_search="live"` without granting direct repository write authority;
+- Codex sandbox reported `read-only` and approval mode `never`;
+- pinned action removed sudo/docker privilege paths and launched with `no_new_privs`/empty capabilities.
 
-The structured schema was accepted far enough for the Codex session to start. The run then retried the stream five times and terminated with:
+No worker-owned repository write occurred.
 
-`stream disconnected before completion: You have no credits remaining. Add credits to continue using the API`
+## 6. Optimistic-concurrency/current-state stale barrier
 
-Classification: **OpenAI API billing/credits blocked**.
+Phase 2B implemented fail-closed CAS/current-state checks around state transitions and publication:
 
-This is not a repository permission failure, not a missing/invalid secret failure, not a quota-format ambiguity, and not model unavailability. No attempt was made to bypass billing or switch credentials/providers/models.
+- launch/closeout marker HEAD had to equal current remote `main`;
+- controller validated task revision, attempt ID, lease ID, base SHA, task blob and report path;
+- state commits were restricted to `orchestration/state.json` and pushed non-force only after remote-head comparison;
+- normal publisher required exact state revision and remote HEAD before materialization and again before commit;
+- wrong report path, expired lease, stale revision/attempt, concurrent state advance and IMPLEMENT substitution were covered by deterministic tests;
+- normal worker result publication was skipped when no valid structured result existed;
+- blocked-closeout publisher independently verified the completed failed source run/job and exact billing text before creating the exact Epic path;
+- blocked-closeout publication staged only the exact Epic report path and used a non-force CAS push;
+- controller finalization then used the published-report head as its expected current HEAD and changed only state.
 
-## 10. Trusted publisher result
+Any stale/concurrent mismatch remained fail-closed.
 
-Final trusted publisher job: `101346219841`.
+## 7. Phase 2B execution history
 
-Conclusion: `skipped`.
+Several physical GitHub workflow/worker-process executions occurred while repairing pre-model integration failures. They all remained the same logical task and same logical attempt `r1:a1`; no second task and no `a2` were dispatched.
 
-The worker produced no final structured result and no result artifact, so the publisher correctly did not run. This is fail-closed behavior.
+1. Run `33979466677`: prepare failed before state commit because Python tests produced untracked `__pycache__`. Worker and publisher skipped; no Codex invocation.
+2. Run `33979523662`: prepare succeeded; worker `101342143972` failed before model/API execution because the installed `codex exec` rejected legacy `--search`. Publisher `101342195897` skipped.
+3. Run `33980692415`: same `r1:a1` recovery; worker `101345274848` reached Responses API request validation, but the structured output schema was rejected before model execution because `const` fields lacked explicit JSON Schema `type`. Publisher `101345321309` skipped.
+4. Run `33980919916`: prepare failed before worker because a retained Phase 2A test incorrectly hard-coded Epic as the forever staging candidate after Chat 1 completion. Worker/publisher skipped; no Codex invocation.
+5. Final live execution run `33980979557`: prepare `101346024119` succeeded; real Codex worker `101346057158` started a model/API session; normal trusted publisher `101346219841` skipped because billing terminated the worker before a structured result was produced.
 
-Workflow run `33980979557` has zero artifacts.
+The two same-attempt continuations were bounded explicitly in state as pre-model integration recovery. Recovery count ended at `2`. No continuation was permitted after the final model/API billing failure.
 
-## 11. Attempt/lease/base/blob/report refs
+## 8. Final real Codex worker result
 
-- attempt: `epic-ru-availability-source-probe-01:r1:a1`
-- lease: `slot_2:epic-ru-availability-source-probe-01:r1:a1`
-- state revision at final execution: `6`
-- final state/head commit: `5e92ee8ab568fb8958162142f5fc3ec06ef67b2d`
-- base: `65aa6668e1009885450103e9cde6b6b0f43008d3`
-- task blob: `fdefa23f6aa9d2689f98adcc4af4fd019a7bcb04`
-- expected worker report: `reviews/worker_reports/epic-ru-availability-source-probe-01.md`
-- final recovery count: `2`, both recovery reasons recorded as pre-model integration failures before the final billing-blocked execution
-- automatic next dispatch: disabled
-- IMPLEMENT dispatch: disabled
+Final real worker:
 
-## 12. Exact resulting worker report path/commit
+- workflow run: `33980979557`
+- prepare job: `101346024119` — `success`
+- Codex worker job: `101346057158` — `failure`
+- normal trusted publisher: `101346219841` — `skipped`
 
-Expected path:
+Runtime evidence showed:
+
+- Codex CLI `0.153.4`;
+- model `gpt-6-astra`;
+- provider `codex-action-responses-proxy`;
+- read-only sandbox;
+- corrected structured schema accepted far enough for the Codex session to start;
+- stream reconnect attempted five times;
+- terminal failure: `You have no credits remaining. Add credits to continue using the API`.
+
+Run `33980979557` produced no worker-result artifact, so the normal result publisher correctly failed closed.
+
+## 9. Trusted publisher results
+
+### Normal worker-result publisher
+
+Job `101346219841`: `skipped`.
+
+Reason: the billing failure prevented a final structured worker result/artifact. It did not publish partial/stale output.
+
+### Trusted billing-blocked closeout publisher
+
+A separate Phase 2B closeout workflow was introduced only after the recovery budget was exhausted and the billing failure was proven. It contains no Codex invocation and cannot dispatch another task.
+
+First closeout run `33981388632` failed closed before publication because GitHub CLI refused ANSI-bearing job logs without `--allow-escape-sequences`. No report or state change occurred in that failed closeout.
+
+After fixing only that trusted log reader, closeout run `33981465053` completed `success`:
+
+- trusted blocked publisher job `101347325055` — `success`;
+- controller finalizer job `101347357372` — `success`;
+- read-only verifier job `101347383484` — `success`.
+
+The trusted blocked publisher automatically created exactly:
 
 `reviews/worker_reports/epic-ru-availability-source-probe-01.md`
 
-Result: **not published**.
+Publisher commit:
 
-There is no worker report commit. The path remains absent from `main` because the billing failure prevented a structured worker result and the separate trusted publisher therefore skipped. The report was deliberately **not** synthesized or manually committed as if it had been worker-produced.
+`916946a24787ef9754f9d72e525d11613c7516a0` — `Publish billing-blocked Epic RU pilot report`
 
-## 13. Proof of no unauthorized write or second dispatch
+That commit changed only the exact Epic report path.
 
-No unauthorized worker write occurred:
+The report is deliberately labeled a trusted blocked-closeout report. It records the real worker/billing evidence and explicitly says that no Epic RU research conclusion was produced.
 
-- final worker GitHub permission was `contents: read` only;
-- worker checkout did not retain GitHub credentials;
-- worker had no GitHub write credential in its bound request;
-- repository/state/product write authority flags were all `false`;
-- no worker result artifact was uploaded after the billing failure;
-- publisher was skipped and therefore wrote nothing;
-- final controller state commit `5e92ee8ab568fb8958162142f5fc3ec06ef67b2d` changed only `orchestration/state.json`;
-- no Taste/product file was changed by the worker or publisher.
+## 10. Final state finalization
 
-No second task was automatically dispatched:
+Controller finalizer in closeout run `33981465053` validated:
 
-- state revision `6` has `slot_1` free and only the Epic pilot in `slot_2`;
-- Wishlist remains `queued`, `assigned_slot: null`, `attempt_number: 0`;
-- the queued IMPLEMENT task remains `queued`, `assigned_slot: null`, `attempt_number: 0`;
-- `dispatch_enabled` remains `false`;
-- contract `automatic_next_dispatch` remains `false`;
-- contract `implement_dispatch_allowed` remains `false`;
-- the live workflow is path-triggered only by the exact bounded pilot marker and has no general queue-draining trigger.
+- recovery count `2`;
+- exact attempt/lease identity;
+- exact base/blob/report bindings;
+- exact blocked report contents and source run/job;
+- current state before mutation;
+- no second dispatch.
 
-## 14. Whether Phase 2B pilot succeeded
+It then:
+
+- changed Epic status from `assigned` to `blocked`;
+- cleared Epic `assigned_slot`;
+- freed `slot_2`;
+- recorded `last_failure.class = openai_api_billing_no_credits` with source run/job;
+- added the exact Epic report path to evidence refs;
+- incremented authoritative state revision from `6` to `7`;
+- left `dispatch_enabled` false;
+- recorded `phase2b_closeout.status = blocked` and `automatic_next_dispatch = false`.
+
+The final verifier confirmed both mandatory report files exist and both slots are free.
+
+## 11. Proof of no unauthorized writes
+
+Worker-side:
+
+- worker had `contents: read` only;
+- checkout did not retain credentials;
+- bound request had `github_write_credential: false`;
+- repository/state/product write authority were false;
+- no worker result artifact was produced after billing failure;
+- worker made no repository commit.
+
+Trusted writes were narrowly separated:
+
+- `916946a24787ef9754f9d72e525d11613c7516a0`: only `reviews/worker_reports/epic-ru-availability-source-probe-01.md`;
+- `670c22f1859889fa365da1de0d797368b0b1d605`: only `orchestration/state.json`;
+- this Director report update: only `reviews/worker_reports/director-orchestration-phase2b-live-readonly-pilot-01.md`.
+
+No Taste/product logic was changed by the worker or publishers. No Steam/provider secret was introduced.
+
+## 12. Proof no second task was automatically launched
+
+Final state revision `7` proves:
+
+- both logical slots are free;
+- Wishlist recon: `queued`, `assigned_slot: null`, `attempt_number: 0`;
+- Epic: `blocked`, `assigned_slot: null`, `attempt_number: 1`, still `r1:a1`;
+- queued IMPLEMENT task: `queued`, `assigned_slot: null`, `attempt_number: 0`;
+- `dispatch_enabled: false`;
+- Phase 2B closeout `automatic_next_dispatch: false`.
+
+No queue draining and no automated IMPLEMENT occurred.
+
+## 13. Did Phase 2B pilot succeed?
 
 **No.**
 
-Phase 2B infrastructure reached a real pinned Codex/model/API execution under the required read-only boundary, but the pilot success criteria require the exact Epic worker report to be durably produced and trusted-published. That did not happen because the OpenAI API account has no remaining credits.
+The infrastructure successfully reached a real pinned Codex/model/API session under the required read-only boundary, but the worker could not complete `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md` because the configured OpenAI API account had no remaining credits.
 
-Final Phase 2B status is therefore `blocked`, not `complete` and not `needs_followup_fix`.
+Therefore final Phase 2B status is **`blocked`**, not `complete`.
 
-The security outcome itself is fail-closed: no stale/partial report was accepted, no permission was broadened, no alternate secret/provider/model was substituted, no second task was dispatched, and autonomous IMPLEMENT remains disabled.
+The blocked state is now durable and internally consistent: both mandatory paths exist, the exact Epic path truthfully records blocked evidence rather than fabricated research, the lease is closed, state is revision `7`, both slots are free, no next task was dispatched, and the security boundary stayed fail-closed.
 
-## 15. One bounded next step only
+## 14. Only permissible future prerequisite
 
-Restore/add OpenAI API credits for the repository's configured API account, then require an explicit Director review and separately authorized bounded retry. Do **not** automatically retry the current exhausted recovery path, do not drain the queue, and do not start an IMPLEMENT task.
+Restore/add OpenAI API credits for the configured API account. Any future worker retry requires a new explicit Director authorization; it must not be automatic, must not reuse this exhausted closeout as queue draining, and must not start an IMPLEMENT task implicitly.
