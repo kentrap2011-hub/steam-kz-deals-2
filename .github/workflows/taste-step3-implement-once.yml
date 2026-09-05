@@ -1,0 +1,105 @@
+name: Taste step 3 implement once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/taste-step3-implement-once.yml"
+      - "scripts/_taste_step3_once.py"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: taste-step3-implement-once
+  cancel-in-progress: false
+
+jobs:
+  implement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Apply bounded commercial bridge
+        run: python scripts/_taste_step3_once.py
+
+      - name: Validate focused and existing regressions
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            scripts/commercial_reconsideration_bridge.py \
+            scripts/test_reconsideration_commercial_bridge.py \
+            scripts/build_pre_ai_chatgpt_payload.py \
+            scripts/build_visual_feed_v2.py
+          python scripts/test_reconsideration_commercial_bridge.py
+          python scripts/test_fixed_package_purchase_options.py
+          python scripts/test_package_complete_content_value.py
+          python scripts/test_taste_evidence_states.py
+          python scripts/test_play_priority_context.py
+          python scripts/validate_taste_v3_contract.py
+          python scripts/test_grounded_negative_contract.py
+          python scripts/validate_priority_ranking.py
+          python scripts/validate_mailing_policy.py
+          git diff --exit-code -- \
+            scripts/priority_ranking.py \
+            config/final_ranking_policy.json \
+            scripts/play_priority_context.py \
+            config/play_priority_context_contract.json \
+            scripts/apply_fixed_package_purchase_options.py \
+            config/purchase_equivalence_overrides.json \
+            scripts/giveaway_visual_handoff.py \
+            web/app.js
+          python - <<'PY'
+          from pathlib import Path
+          helper = Path('scripts/commercial_reconsideration_bridge.py').read_text(encoding='utf-8')
+          assert 'discount_percent >' not in helper and 'discount_percent >=' not in helper
+          assert 'priority_ranking' not in helper
+          assert 'play_role' not in helper.replace("'play_role_start_priority_preserved'", '')
+          assert 'giveaway' not in helper
+          preai = Path('scripts/build_pre_ai_chatgpt_payload.py').read_text(encoding='utf-8')
+          assert "canonical_good_deal_signal" in preai
+          assert "commercial_eligibility_bridge" in preai
+          visual = Path('scripts/build_visual_feed_v2.py').read_text(encoding='utf-8')
+          assert "return 'below_moderate', scenario, validated" in visual
+          print('BOUNDED_COMMERCIAL_BRIDGE_STATIC_GUARDS=PASS')
+          PY
+          git diff --check
+
+      - name: Commit implementation
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add \
+            config/mailing_policy.json \
+            config/deal_quality_contract.json \
+            scripts/commercial_reconsideration_bridge.py \
+            scripts/test_reconsideration_commercial_bridge.py \
+            scripts/build_pre_ai_chatgpt_payload.py \
+            scripts/build_visual_feed_v2.py \
+            PROJECT_RULES.md \
+            PROJECT_DECISIONS.md \
+            PROJECT_ROUTES.md
+          git diff --cached --check
+          git commit -m "Implement bounded Taste commercial reconsideration bridge"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo "IMPLEMENTATION_SHA=$(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
