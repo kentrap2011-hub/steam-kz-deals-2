@@ -14,9 +14,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  implement:
+  finalize:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      IMPLEMENTATION_SHA: 2a1708ad598ea9baf7095478b646da689eb8f890
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,56 +29,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Apply bounded implementation
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          path = Path('scripts/_taste_evidence_implement_once.py')
-          text = path.read_text(encoding='utf-8')
-
-          old = "new_annotator = '''def annotate_negative_readiness"
-          new = "new_annotator = r'''def annotate_negative_readiness"
-          if text.count(old) != 1:
-              raise SystemExit(f'Expected exactly one new_annotator patch anchor, found {text.count(old)}')
-          text = text.replace(old, new, 1)
-
-          old = "cache_end = \"            continue\\n\\n        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]\\n\""
-          new = "cache_end = \"        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]\\n\""
-          if text.count(old) != 1:
-              raise SystemExit(f'Expected exactly one cache_end patch anchor, found {text.count(old)}')
-          text = text.replace(old, new, 1)
-
-          old = "            continue\n\n        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]\n'''\nreplace_between('scripts/build_pre_ai_chatgpt_payload.py', cache_start, cache_end, cache_replacement)"
-          new = "            continue\n\n'''\nreplace_between('scripts/build_pre_ai_chatgpt_payload.py', cache_start, cache_end, cache_replacement)"
-          if text.count(old) != 1:
-              raise SystemExit(f'Expected exactly one cache_replacement tail anchor, found {text.count(old)}')
-          text = text.replace(old, new, 1)
-
-          path.write_text(text, encoding='utf-8')
-          PY
-          python scripts/_taste_evidence_implement_once.py
-          python - <<'PY'
-          from pathlib import Path
-          path = Path('scripts/ingest_taste_results.py')
-          text = path.read_text(encoding='utf-8')
-          old = "        validate_negative_result_fields(result)\n        validate_fit_evidence_fields(result, require_v5=True)\n        for q_index, finding in enumerate(result.get('candidate_quality_findings') or []):\n            validate_noncommercial_quality_text(f'candidate_quality_findings[{q_index}].evidence', finding['evidence'])\n            validate_noncommercial_quality_text(f'candidate_quality_findings[{q_index}].risk_text_ru', finding['risk_text_ru'])\n\n        if full_eval:\n"
-          new = "        validate_negative_result_fields(result)\n        for q_index, finding in enumerate(result.get('candidate_quality_findings') or []):\n            validate_noncommercial_quality_text(f'candidate_quality_findings[{q_index}].evidence', finding['evidence'])\n            validate_noncommercial_quality_text(f'candidate_quality_findings[{q_index}].risk_text_ru', finding['risk_text_ru'])\n\n        if full_eval:\n            validate_fit_evidence_fields(result, require_v5=True)\n"
-          if text.count(old) != 1:
-              raise SystemExit(f'Expected exactly one evidence validation placement anchor, found {text.count(old)}')
-          text = text.replace(old, new, 1)
-          old = "            base_entry = validate_current_base_entry(\n                key,\n                current_entries.get(key),\n                queue_row,\n                projection,\n            )\n"
-          new = old + "            evidence_view = dict(base_entry)\n            evidence_view.update(result)\n            validate_fit_evidence_fields(evidence_view, require_v5=True)\n"
-          if text.count(old) != 1:
-              raise SystemExit(f'Expected exactly one negative-only base-entry anchor, found {text.count(old)}')
-          text = text.replace(old, new, 1)
-          path.write_text(text, encoding='utf-8')
-
-          for doc_path in (Path('PROJECT_DECISIONS.md'), Path('PROJECT_ROUTES.md')):
-              doc = doc_path.read_text(encoding='utf-8')
-              doc_path.write_text('\n'.join(line.rstrip() for line in doc.splitlines()) + '\n', encoding='utf-8')
-          PY
-
-      - name: Validate contracts and controls
+      - name: Verify committed implementation
         run: |
           python -m py_compile \
             scripts/taste_evidence_contract.py \
@@ -105,50 +58,20 @@ jobs:
             data/production/pre_ai/chatgpt_purchase_context.jsonl
           git diff --check
 
-      - name: Commit implementation
+      - name: Write report and remove one-shot machinery
         run: |
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git add \
-            config/mailing_policy.json \
-            config/taste_result_contract.json \
-            config/taste_cache_entry_contract.json \
-            config/taste_ledger_contract.json \
-            scripts/taste_evidence_contract.py \
-            scripts/taste_negative_contract.py \
-            scripts/taste_cache_common.py \
-            scripts/ingest_taste_results.py \
-            scripts/build_taste_cache_index.py \
-            scripts/build_pre_ai_chatgpt_payload.py \
-            scripts/refine_visual_ranking.py \
-            scripts/build_final_visual_payload.py \
-            scripts/build_ranking_lookup.py \
-            scripts/validate_taste_v3_contract.py \
-            scripts/test_taste_evidence_states.py \
-            PROJECT_ROUTES.md \
-            PROJECT_DECISIONS.md
-          git diff --cached --check
-          git commit -m "Implement Taste evidence state and reconsideration"
-          git restore scripts/_taste_evidence_implement_once.py
-          for attempt in 1 2 3; do
-            git fetch origin main:refs/remotes/origin/main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              exit 1
-            fi
-            if git push origin HEAD:main; then
-              echo "IMPLEMENTATION_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-              exit 0
-            fi
-            sleep $((attempt * 3))
-          done
-          exit 1
-
-      - name: Write report and remove one-shot machinery
-        run: |
-          git fetch origin main:refs/remotes/origin/main
-          git rebase origin/main
           python scripts/_taste_evidence_report_once.py
+          python - <<'PY'
+          from pathlib import Path
+          for path in (
+              Path('reviews/worker_reports/taste-evidence-state-and-confidence-implement-01.md'),
+              Path('CURRENT_TASK.md'),
+          ):
+              text = path.read_text(encoding='utf-8')
+              path.write_text('\n'.join(line.rstrip() for line in text.splitlines()) + '\n', encoding='utf-8')
+          PY
           git rm \
             .github/workflows/taste-evidence-state-implement-once.yml \
             scripts/_taste_evidence_implement_once.py \
