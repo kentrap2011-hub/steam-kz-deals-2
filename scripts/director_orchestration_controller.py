@@ -54,8 +54,8 @@ def validate_phase2b_pilot_contract(contract: dict[str,Any]) -> None:
     req(contract.get('automatic_next_dispatch') is False,'automatic next dispatch must remain disabled')
     req(contract.get('implement_dispatch_allowed') is False,'IMPLEMENT dispatch must remain disabled')
     req(contract.get('limits',{}).get('max_logical_slots')==2,'exactly two logical slots required')
-    req(contract.get('limits',{}).get('max_live_attempts')==1,'live pilot is exactly one attempt')
-    req(contract.get('limits',{}).get('max_same_attempt_recovery_executions')==1,'same-attempt recovery must be bounded to one execution')
+    req(contract.get('limits',{}).get('max_live_attempts')==1,'live pilot is exactly one logical attempt')
+    req(contract.get('limits',{}).get('max_same_attempt_recovery_executions')==2,'pre-model same-attempt recovery must be bounded to two executions')
     worker=contract.get('worker',{})
     req(worker.get('mode')=='READ_ONLY_RECON','pilot worker must be READ_ONLY_RECON')
     for k in ('github_write_credential','repository_write_authority','state_write_authority','product_write_authority','worker_can_choose_next_task'):
@@ -70,9 +70,11 @@ def validate_phase2b_pilot_contract(contract: dict[str,Any]) -> None:
     req(pilot.get('lease_id')=='slot_2:epic-ru-availability-source-probe-01:r1:a1','wrong live pilot lease binding')
     recovery=contract.get('recovery',{})
     req(recovery.get('allowed') is True,'same-attempt recovery disabled')
-    req(recovery.get('reason')=='pre_model_codex_cli_argument_failure','unexpected recovery reason')
+    req(recovery.get('initial_reason')=='pre_model_codex_cli_argument_failure','unexpected initial recovery reason')
+    req(recovery.get('second_reason')=='pre_model_invalid_output_schema','unexpected second recovery reason')
     req(recovery.get('must_reuse_same_attempt') is True and recovery.get('must_reuse_same_lease_identity') is True,'recovery must reuse attempt/lease')
     req(recovery.get('must_not_increment_retry_counter') is True and recovery.get('must_not_select_another_task') is True,'recovery must not dispatch another attempt/task')
+    req(recovery.get('no_recovery_after_model_execution') is True,'recovery after model execution must be forbidden')
     manual=contract.get('manual_occupancy',{})
     req(manual.get('task_id')=='reconsideration-commercial-bridge-and-wishlist-implement-01','wrong current manual task')
     req(manual.get('task_file')=='WORKER_TASK_RECONSIDERATION_COMMERCIAL_BRIDGE_AND_WISHLIST_IMPLEMENT_01.md','wrong current manual task file')
@@ -214,7 +216,6 @@ def reconcile_expired_leases(contract,state,now):
     return st,changed
 
 def reconcile_phase2b_manual_occupancy(state:dict[str,Any], contract:dict[str,Any], now:datetime) -> dict[str,Any]:
-    """Replace only the known stale Chat 1 occupancy with the current external/manual Chat 1 task."""
     validate_phase2b_pilot_contract(contract)
     st=copy.deepcopy(state)
     req(len(st.get('slots',[]))==2,'exactly two slots required before reconciliation')
@@ -227,56 +228,26 @@ def reconcile_phase2b_manual_occupancy(state:dict[str,Any], contract:dict[str,An
     req(slot.get('task_id')==current['replaces_task_id'],'manual occupancy is ambiguous; refusing reconciliation')
     old=next((t for t in st['tasks'] if t['task_id']==current['replaces_task_id']),None)
     req(old is not None and old.get('assigned_slot')==slot['slot_id'],'stale manual task binding not found')
-    old['assigned_slot']=None
-    old['status']='accepted'
+    old['assigned_slot']=None; old['status']='accepted'
     new_rev=st['state_revision']+1
     aid=f"{current['task_id']}:r{current['task_revision']}:a1"
-    slot.update({
-        'status':'occupied','occupancy_type':'external_manual','task_id':current['task_id'],
-        'task_file':current['task_file'],'conflict_keys':list(current['conflict_keys']),
-        'lease':{
-            'lease_id':f"{slot['slot_id']}:{aid}",'owner':'external_manual:chat_1',
-            'status':'active_external_manual','task_id':current['task_id'],
-            'task_revision':current['task_revision'],'attempt_id':aid,
-            'acquired_at':now.isoformat().replace('+00:00','Z'),'expires_at':None,
-            'state_revision_acquired':new_rev,
-        },
-    })
-    st['state_revision']=new_rev
-    st['source_refs']['active_manual_task']=current['task_file']
+    slot.update({'status':'occupied','occupancy_type':'external_manual','task_id':current['task_id'],'task_file':current['task_file'],'conflict_keys':list(current['conflict_keys']),'lease':{'lease_id':f"{slot['slot_id']}:{aid}",'owner':'external_manual:chat_1','status':'active_external_manual','task_id':current['task_id'],'task_revision':current['task_revision'],'attempt_id':aid,'acquired_at':now.isoformat().replace('+00:00','Z'),'expires_at':None,'state_revision_acquired':new_rev}})
+    st['state_revision']=new_rev; st['source_refs']['active_manual_task']=current['task_file']
     return st
 
 def prepare_phase2b_live_pilot(root:Path, phase2a:dict[str,Any], phase2b:dict[str,Any], state:dict[str,Any], events:dict[str,dict[str,Any]], now:datetime):
-    """Prepare exactly one Epic READ_ONLY_RECON attempt; never select from the general queue."""
-    validate_phase2b_pilot_contract(phase2b)
-    validate_state(phase2a,state,events)
-    verify_repository_bindings(root,state)
-    st=reconcile_phase2b_manual_occupancy(state,phase2b,now)
-    validate_state(phase2a,st,events)
-    pilot=phase2b['pilot']
-    task=next((t for t in st['tasks'] if t['task_id']==pilot['task_id']),None)
-    req(task is not None,'pilot task missing')
-    req(task['mode']=='READ_ONLY_RECON','pilot mode changed')
-    req(task['status']=='queued' and task['attempt_number']==0 and task['attempt_id'] is None,'pilot already attempted or not queued; second live attempt forbidden')
-    req(task['retry']['next_attempt_number']==1,'pilot retry counter is not at first attempt')
-    req(task['revision']==pilot['task_revision'],'pilot revision changed')
-    for field,expected in [('task_file',pilot['task_file']),('task_file_blob_sha',pilot['task_file_blob_sha']),('base_sha',pilot['base_sha']),('expected_report',pilot['expected_report_path'])]:
-        req(task[field]==expected,f'pilot binding changed: {field}')
+    validate_phase2b_pilot_contract(phase2b); validate_state(phase2a,state,events); verify_repository_bindings(root,state)
+    st=reconcile_phase2b_manual_occupancy(state,phase2b,now); validate_state(phase2a,st,events); pilot=phase2b['pilot']
+    task=next((t for t in st['tasks'] if t['task_id']==pilot['task_id']),None); req(task is not None,'pilot task missing')
+    req(task['mode']=='READ_ONLY_RECON','pilot mode changed'); req(task['status']=='queued' and task['attempt_number']==0 and task['attempt_id'] is None,'pilot already attempted or not queued; second live attempt forbidden')
+    req(task['retry']['next_attempt_number']==1,'pilot retry counter is not at first attempt'); req(task['revision']==pilot['task_revision'],'pilot revision changed')
+    for field,expected in [('task_file',pilot['task_file']),('task_file_blob_sha',pilot['task_file_blob_sha']),('base_sha',pilot['base_sha']),('expected_report',pilot['expected_report_path'])]: req(task[field]==expected,f'pilot binding changed: {field}')
     req(sum(1 for s in st['slots'] if s['status']=='free')==1,'expected exactly one free slot after manual reconciliation')
-    lease_contract={'limits':{'cloud_lease_seconds':phase2b['limits']['cloud_lease_seconds']}}
-    leased,request=acquire_cloud_lease(lease_contract,st,pilot['task_id'],pilot['task_revision'],now)
-    req(request['attempt_number']==1,'pilot must use exactly attempt 1')
-    req(request['mode']=='READ_ONLY_RECON','pilot request mode changed')
-    req(request['expected_report_path']==pilot['expected_report_path'],'pilot request report path changed')
-    req(len(leased['slots'])==2,'slot count changed')
-    manual=next(s for s in leased['slots'] if s['slot_id']==phase2b['manual_occupancy']['slot_id'])
-    cloud=next(s for s in leased['slots'] if s.get('occupancy_type')=='cloud_worker')
-    req(manual.get('task_id')==phase2b['manual_occupancy']['task_id'],'current manual occupancy lost')
-    req(cloud.get('task_id')==pilot['task_id'],'wrong cloud task leased')
-    leased['orchestration_phase']='phase_2b_live_readonly_pilot_attempt_1'
-    leased['dispatch_enabled']=False
-    validate_state(phase2a,leased,events)
-    return leased,request
+    lease_contract={'limits':{'cloud_lease_seconds':phase2b['limits']['cloud_lease_seconds']}}; leased,request=acquire_cloud_lease(lease_contract,st,pilot['task_id'],pilot['task_revision'],now)
+    req(request['attempt_number']==1,'pilot must use exactly attempt 1'); req(request['mode']=='READ_ONLY_RECON','pilot request mode changed'); req(request['expected_report_path']==pilot['expected_report_path'],'pilot request report path changed')
+    req(len(leased['slots'])==2,'slot count changed'); manual=next(s for s in leased['slots'] if s['slot_id']==phase2b['manual_occupancy']['slot_id']); cloud=next(s for s in leased['slots'] if s.get('occupancy_type')=='cloud_worker')
+    req(manual.get('task_id')==phase2b['manual_occupancy']['task_id'],'current manual occupancy lost'); req(cloud.get('task_id')==pilot['task_id'],'wrong cloud task leased')
+    leased['orchestration_phase']='phase_2b_live_readonly_pilot_attempt_1'; leased['dispatch_enabled']=False; validate_state(phase2a,leased,events); return leased,request
 
 def _manual_completion_is_durable(root:Path, phase2b:dict[str,Any]) -> bool:
     report=root/phase2b['manual_occupancy']['completion_report']
@@ -284,54 +255,43 @@ def _manual_completion_is_durable(root:Path, phase2b:dict[str,Any]) -> bool:
     head=report.read_text(encoding='utf-8')[:4000]
     return re.search(r'(?m)^## 1\. Status\s*\n+\s*`complete`\s*$',head) is not None
 
+def _same_attempt_request(task:dict[str,Any], lease:dict[str,Any]) -> dict[str,Any]:
+    r={'schema_version':1,'task_id':task['task_id'],'task_revision':task['revision'],'attempt_number':task['attempt_number'],'attempt_id':task['attempt_id'],'lease_id':lease['lease_id'],'lease_expires_at':lease['expires_at'],'mode':task['mode'],'task_file':task['task_file'],'task_file_blob_sha':task['task_file_blob_sha'],'base_sha':task['base_sha'],'allowed_input_refs':list(task['allowed_input_refs']),'expected_report_path':task['expected_report'],'allowed_result_statuses':list(task['allowed_result_statuses']),'repository_write_authority':False,'github_write_credential':False,'state_write_authority':False,'product_write_authority':False,'worker_can_choose_next_task':False,'secret_values':[]}
+    validate_worker_request(r); return r
+
+def _validate_same_epic_attempt(root:Path, phase2b:dict[str,Any], state:dict[str,Any], now:datetime):
+    pilot=phase2b['pilot']; req(not (root/pilot['expected_report_path']).exists(),'worker report already exists; continuation forbidden')
+    task=next((t for t in state['tasks'] if t['task_id']==pilot['task_id']),None); req(task is not None,'pilot task missing')
+    req(task['mode']=='READ_ONLY_RECON' and task['status']=='assigned','pilot is not the assigned read-only task'); req(task['revision']==pilot['task_revision'],'pilot revision changed')
+    req(task['attempt_number']==pilot['attempt_number'] and task['attempt_id']==pilot['attempt_id'],'continuation would change attempt identity'); req(task['retry']['next_attempt_number']==2,'retry counter changed; refusing same-attempt continuation')
+    for field,expected in [('task_file',pilot['task_file']),('task_file_blob_sha',pilot['task_file_blob_sha']),('base_sha',pilot['base_sha']),('expected_report',pilot['expected_report_path'])]: req(task[field]==expected,f'pilot binding changed: {field}')
+    slot=next((s for s in state['slots'] if s.get('occupancy_type')=='cloud_worker'),None); req(slot is not None and slot.get('slot_id')=='slot_2' and slot.get('task_id')==pilot['task_id'],'exact pilot cloud slot missing')
+    lease=slot['lease']; req(lease.get('lease_id')==pilot['lease_id'],'continuation would change lease identity'); req(lease.get('attempt_id')==pilot['attempt_id'] and lease.get('task_revision')==pilot['task_revision'],'lease binding changed'); req(parse_time(lease['expires_at'])>now,'pilot lease expired before continuation; fail closed')
+    return task,slot,lease
+
 def resume_phase2b_live_pilot(root:Path, phase2a:dict[str,Any], phase2b:dict[str,Any], state:dict[str,Any], events:dict[str,dict[str,Any]], now:datetime):
-    """Resume the same r1:a1 after a proven pre-model CLI failure. Never create a second attempt or select another task."""
-    validate_phase2b_pilot_contract(phase2b)
-    validate_state(phase2a,state,events)
-    verify_repository_bindings(root,state)
-    req(state.get('phase2b_recovery') is None,'same-attempt recovery already consumed')
-    pilot=phase2b['pilot']; recovery=phase2b['recovery']
-    req(recovery['allowed'] is True and recovery['must_reuse_same_attempt'] is True,'same-attempt recovery forbidden')
-    req(not (root/pilot['expected_report_path']).exists(),'worker report already exists; recovery forbidden')
-    task=next((t for t in state['tasks'] if t['task_id']==pilot['task_id']),None)
-    req(task is not None,'pilot task missing')
-    req(task['mode']=='READ_ONLY_RECON' and task['status']=='assigned','pilot is not the assigned read-only task')
-    req(task['revision']==pilot['task_revision'],'pilot revision changed')
-    req(task['attempt_number']==pilot['attempt_number'] and task['attempt_id']==pilot['attempt_id'],'recovery would change attempt identity')
-    req(task['retry']['next_attempt_number']==2,'retry counter changed; refusing same-attempt recovery')
-    for field,expected in [('task_file',pilot['task_file']),('task_file_blob_sha',pilot['task_file_blob_sha']),('base_sha',pilot['base_sha']),('expected_report',pilot['expected_report_path'])]:
-        req(task[field]==expected,f'pilot binding changed: {field}')
-    slot=next((s for s in state['slots'] if s.get('occupancy_type')=='cloud_worker'),None)
-    req(slot is not None and slot.get('slot_id')=='slot_2' and slot.get('task_id')==pilot['task_id'],'exact pilot cloud slot missing')
-    lease=slot['lease']
-    req(lease.get('lease_id')==pilot['lease_id'],'recovery would change lease identity')
-    req(lease.get('attempt_id')==pilot['attempt_id'] and lease.get('task_revision')==pilot['task_revision'],'lease binding changed')
-    req(parse_time(lease['expires_at'])>now,'original pilot lease expired before recovery; fail closed')
-    st=copy.deepcopy(state)
-    manual_slot=next(s for s in st['slots'] if s['slot_id']==phase2b['manual_occupancy']['slot_id'])
+    validate_phase2b_pilot_contract(phase2b); validate_state(phase2a,state,events); verify_repository_bindings(root,state); req(state.get('phase2b_recovery') is None,'first same-attempt recovery already consumed')
+    recovery=phase2b['recovery']; task,slot,lease=_validate_same_epic_attempt(root,phase2b,state,now)
+    st=copy.deepcopy(state); manual_slot=next(s for s in st['slots'] if s['slot_id']==phase2b['manual_occupancy']['slot_id'])
     if _manual_completion_is_durable(root,phase2b):
         req(manual_slot.get('status') in {'free','occupied'},'manual slot status malformed')
         if manual_slot.get('status')=='occupied':
-            req(manual_slot.get('occupancy_type')=='external_manual' and manual_slot.get('task_id')==phase2b['manual_occupancy']['task_id'],'completed manual occupancy is ambiguous')
-            manual_slot.update({'status':'free','occupancy_type':None,'task_id':None,'task_file':None,'conflict_keys':[],'lease':None})
-        st['source_refs'].pop('active_manual_task',None)
-        st['source_refs']['completed_manual_task_report']=phase2b['manual_occupancy']['completion_report']
-    else:
-        req(manual_slot.get('occupancy_type')=='external_manual' and manual_slot.get('task_id')==phase2b['manual_occupancy']['task_id'],'current manual task not durably complete and occupancy missing')
-    new_rev=st['state_revision']+1
-    cloud=next(s for s in st['slots'] if s.get('occupancy_type')=='cloud_worker')
-    cloud['lease']['resumed_at']=now.isoformat().replace('+00:00','Z')
-    cloud['lease']['expires_at']=(now+timedelta(seconds=phase2b['limits']['cloud_lease_seconds'])).isoformat().replace('+00:00','Z')
-    cloud['lease']['state_revision_acquired']=new_rev
-    st['state_revision']=new_rev
-    st['phase2b_recovery']={'resume_count':1,'reason':recovery['reason'],'attempt_id':pilot['attempt_id'],'lease_id':pilot['lease_id'],'resumed_at':cloud['lease']['resumed_at']}
-    st['orchestration_phase']='phase_2b_live_readonly_pilot_attempt_1_recovery'
-    st['dispatch_enabled']=False
-    request={'schema_version':1,'task_id':task['task_id'],'task_revision':task['revision'],'attempt_number':task['attempt_number'],'attempt_id':task['attempt_id'],'lease_id':cloud['lease']['lease_id'],'lease_expires_at':cloud['lease']['expires_at'],'mode':task['mode'],'task_file':task['task_file'],'task_file_blob_sha':task['task_file_blob_sha'],'base_sha':task['base_sha'],'allowed_input_refs':list(task['allowed_input_refs']),'expected_report_path':task['expected_report'],'allowed_result_statuses':list(task['allowed_result_statuses']),'repository_write_authority':False,'github_write_credential':False,'state_write_authority':False,'product_write_authority':False,'worker_can_choose_next_task':False,'secret_values':[]}
-    validate_worker_request(request)
-    req(request['attempt_id']==pilot['attempt_id'] and request['lease_id']==pilot['lease_id'],'recovery request identity changed')
-    validate_state(phase2a,st,events)
-    return st,request
+            req(manual_slot.get('occupancy_type')=='external_manual' and manual_slot.get('task_id')==phase2b['manual_occupancy']['task_id'],'completed manual occupancy is ambiguous'); manual_slot.update({'status':'free','occupancy_type':None,'task_id':None,'task_file':None,'conflict_keys':[],'lease':None})
+        st['source_refs'].pop('active_manual_task',None); st['source_refs']['completed_manual_task_report']=phase2b['manual_occupancy']['completion_report']
+    else: req(manual_slot.get('occupancy_type')=='external_manual' and manual_slot.get('task_id')==phase2b['manual_occupancy']['task_id'],'current manual task not durably complete and occupancy missing')
+    new_rev=st['state_revision']+1; cloud=next(s for s in st['slots'] if s.get('occupancy_type')=='cloud_worker'); cloud['lease']['resumed_at']=now.isoformat().replace('+00:00','Z'); cloud['lease']['expires_at']=(now+timedelta(seconds=phase2b['limits']['cloud_lease_seconds'])).isoformat().replace('+00:00','Z'); cloud['lease']['state_revision_acquired']=new_rev
+    st['state_revision']=new_rev; st['phase2b_recovery']={'resume_count':1,'reason':recovery['initial_reason'],'attempt_id':phase2b['pilot']['attempt_id'],'lease_id':phase2b['pilot']['lease_id'],'resumed_at':cloud['lease']['resumed_at']}; st['orchestration_phase']='phase_2b_live_readonly_pilot_attempt_1_recovery'; st['dispatch_enabled']=False
+    request=_same_attempt_request(next(t for t in st['tasks'] if t['task_id']==phase2b['pilot']['task_id']),cloud['lease']); validate_state(phase2a,st,events); return st,request
+
+def continue_phase2b_live_pilot(root:Path, phase2a:dict[str,Any], phase2b:dict[str,Any], state:dict[str,Any], events:dict[str,dict[str,Any]], now:datetime):
+    """One final pre-model continuation for the same r1:a1 after the server rejected only the output schema."""
+    validate_phase2b_pilot_contract(phase2b); validate_state(phase2a,state,events); verify_repository_bindings(root,state)
+    recovery=phase2b['recovery']; marker=state.get('phase2b_recovery'); req(isinstance(marker,dict),'first recovery state missing')
+    req(marker.get('resume_count')==1,'second pre-model continuation already consumed or malformed'); req(marker.get('reason')==recovery['initial_reason'],'unexpected first recovery reason'); req(marker.get('attempt_id')==phase2b['pilot']['attempt_id'] and marker.get('lease_id')==phase2b['pilot']['lease_id'],'first recovery identity changed')
+    task,slot,lease=_validate_same_epic_attempt(root,phase2b,state,now); st=copy.deepcopy(state); new_rev=st['state_revision']+1; cloud=next(s for s in st['slots'] if s.get('occupancy_type')=='cloud_worker')
+    continued_at=now.isoformat().replace('+00:00','Z'); cloud['lease']['continued_at']=continued_at; cloud['lease']['expires_at']=(now+timedelta(seconds=phase2b['limits']['cloud_lease_seconds'])).isoformat().replace('+00:00','Z'); cloud['lease']['state_revision_acquired']=new_rev
+    st['state_revision']=new_rev; st['phase2b_recovery']['resume_count']=2; st['phase2b_recovery']['second_reason']=recovery['second_reason']; st['phase2b_recovery']['continued_at']=continued_at; st['orchestration_phase']='phase_2b_live_readonly_pilot_attempt_1_schema_continuation'; st['dispatch_enabled']=False
+    request=_same_attempt_request(next(t for t in st['tasks'] if t['task_id']==phase2b['pilot']['task_id']),cloud['lease']); validate_state(phase2a,st,events); return st,request
 
 def persist_state(contract,path:Path,state):
     req(contract.get('state_persistence_enabled') is True,'state persistence disabled; Phase 2A cannot write state'); req(path.as_posix().endswith('orchestration/state.json'),'controller may write only orchestration/state.json'); tmp=path.with_suffix('.json.tmp'); tmp.write_text(json.dumps(state,indent=2,sort_keys=True)+'\n',encoding='utf-8'); os.replace(tmp,path)
@@ -339,52 +299,29 @@ def persist_state(contract,path:Path,state):
 def current_git_head(root:Path) -> str:
     try: value=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True,stderr=subprocess.STDOUT).strip()
     except subprocess.CalledProcessError as exc: raise OrchestrationError(f'cannot resolve current git head: {exc.output.strip()}') from exc
-    req(bool(HEX40.fullmatch(value)),'current git head malformed')
-    return value
+    req(bool(HEX40.fullmatch(value)),'current git head malformed'); return value
 
 def validate_expected_head(expected_head:str,current_head:str) -> None:
-    req(bool(HEX40.fullmatch(expected_head)) and bool(HEX40.fullmatch(current_head)),'expected/current head malformed')
-    req(expected_head==current_head,'concurrent repository head advance; fail closed')
+    req(bool(HEX40.fullmatch(expected_head)) and bool(HEX40.fullmatch(current_head)),'expected/current head malformed'); req(expected_head==current_head,'concurrent repository head advance; fail closed')
 
 def validate_expected_state_revision(expected_revision:int,current_revision:int) -> None:
-    req(isinstance(expected_revision,int) and expected_revision>=1,'expected state revision invalid')
-    req(isinstance(current_revision,int) and current_revision>=1,'current state revision invalid')
-    req(expected_revision==current_revision,'concurrent authoritative state revision advance; fail closed')
+    req(isinstance(expected_revision,int) and expected_revision>=1,'expected state revision invalid'); req(isinstance(current_revision,int) and current_revision>=1,'current state revision invalid'); req(expected_revision==current_revision,'concurrent authoritative state revision advance; fail closed')
 
 def main(argv=None):
-    ap=argparse.ArgumentParser()
-    ap.add_argument('--root',default='.')
-    ap.add_argument('--output',required=True)
-    ap.add_argument('--now')
-    ap.add_argument('--phase2b-live-pilot',action='store_true')
-    ap.add_argument('--phase2b-resume-pilot',action='store_true')
-    ap.add_argument('--expected-head')
-    a=ap.parse_args(argv); root=Path(a.root).resolve()
+    ap=argparse.ArgumentParser(); ap.add_argument('--root',default='.'); ap.add_argument('--output',required=True); ap.add_argument('--now'); ap.add_argument('--phase2b-live-pilot',action='store_true'); ap.add_argument('--phase2b-resume-pilot',action='store_true'); ap.add_argument('--phase2b-continue-pilot',action='store_true'); ap.add_argument('--expected-head'); a=ap.parse_args(argv); root=Path(a.root).resolve()
     try:
-        req(not (a.phase2b_live_pilot and a.phase2b_resume_pilot),'choose only one Phase 2B operation')
-        phase2a=load_json(root/'config/director_orchestration_phase2a_contract.json')
-        state=load_json(root/'orchestration/state.json')
-        events=load_intakes(root)
-        now=parse_time(a.now) if a.now else datetime.now(timezone.utc)
-        if a.phase2b_live_pilot or a.phase2b_resume_pilot:
-            phase2b=load_json(root/'config/director_orchestration_phase2b_pilot_contract.json')
-            validate_phase2b_pilot_contract(phase2b)
+        req(sum(bool(x) for x in (a.phase2b_live_pilot,a.phase2b_resume_pilot,a.phase2b_continue_pilot))<=1,'choose only one Phase 2B operation')
+        phase2a=load_json(root/'config/director_orchestration_phase2a_contract.json'); state=load_json(root/'orchestration/state.json'); events=load_intakes(root); now=parse_time(a.now) if a.now else datetime.now(timezone.utc)
+        if a.phase2b_live_pilot or a.phase2b_resume_pilot or a.phase2b_continue_pilot:
+            phase2b=load_json(root/'config/director_orchestration_phase2b_pilot_contract.json'); validate_phase2b_pilot_contract(phase2b)
             if a.expected_head: validate_expected_head(a.expected_head,current_git_head(root))
-            if a.phase2b_resume_pilot:
-                next_state,request=resume_phase2b_live_pilot(root,phase2a,phase2b,state,events,now)
-                dispatch_scope='exact_epic_pilot_same_attempt_recovery_only'
-            else:
-                next_state,request=prepare_phase2b_live_pilot(root,phase2a,phase2b,state,events,now)
-                dispatch_scope='exact_epic_pilot_only'
-            persist_state(phase2b,root/'orchestration/state.json',next_state)
-            payload={'schema_version':1,'phase':'2B_LIVE_READONLY_PILOT','dispatch_scope':dispatch_scope,'automatic_next_dispatch':False,'state_revision':next_state['state_revision'],'request':request}
-            Path(a.output).write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
-            print(json.dumps(payload,indent=2,sort_keys=True))
+            if a.phase2b_continue_pilot: next_state,request=continue_phase2b_live_pilot(root,phase2a,phase2b,state,events,now); dispatch_scope='exact_epic_pilot_same_attempt_schema_continuation_only'
+            elif a.phase2b_resume_pilot: next_state,request=resume_phase2b_live_pilot(root,phase2a,phase2b,state,events,now); dispatch_scope='exact_epic_pilot_same_attempt_recovery_only'
+            else: next_state,request=prepare_phase2b_live_pilot(root,phase2a,phase2b,state,events,now); dispatch_scope='exact_epic_pilot_only'
+            persist_state(phase2b,root/'orchestration/state.json',next_state); payload={'schema_version':1,'phase':'2B_LIVE_READONLY_PILOT','dispatch_scope':dispatch_scope,'automatic_next_dispatch':False,'state_revision':next_state['state_revision'],'request':request}; Path(a.output).write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8'); print(json.dumps(payload,indent=2,sort_keys=True))
         else:
-            validate_state(phase2a,state,events); verify_repository_bindings(root,state)
-            plan=staging_plan(phase2a,state,now); Path(a.output).write_text(json.dumps(plan,indent=2,sort_keys=True)+'\n',encoding='utf-8'); print(json.dumps(plan,indent=2,sort_keys=True))
+            validate_state(phase2a,state,events); verify_repository_bindings(root,state); plan=staging_plan(phase2a,state,now); Path(a.output).write_text(json.dumps(plan,indent=2,sort_keys=True)+'\n',encoding='utf-8'); print(json.dumps(plan,indent=2,sort_keys=True))
     except OrchestrationError as exc:
-        label='Phase 2B pilot controller' if (a.phase2b_live_pilot or a.phase2b_resume_pilot) else 'Phase 2A controller'
-        print(f'{label} failed closed: {exc}',file=sys.stderr); return 2
+        label='Phase 2B pilot controller' if (a.phase2b_live_pilot or a.phase2b_resume_pilot or a.phase2b_continue_pilot) else 'Phase 2A controller'; print(f'{label} failed closed: {exc}',file=sys.stderr); return 2
     return 0
 if __name__=='__main__': raise SystemExit(main())
