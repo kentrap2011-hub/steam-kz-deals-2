@@ -96,7 +96,7 @@
 - existing fit-cache semantic digest preserved; V5 evidence has separate exact contract binding;
 - legacy ambiguous evidence backfills through existing `resolve_grounded_negative_analysis`; no new scheduler;
 - HighFleet/Haven Moon/BioShock deterministic controls passed;
-- wishlist override and play-role/start-priority remain intentionally unimplemented.
+- Step 2 role/start and Step 3 commercial bridge are now implemented separately; final material acceptance remains pending the combined independent review.
 
 ### Play role and start priority implementation 01
 Статус: `complete` (internal Taste step 2; combined final Taste Review remains pending after step 3).
@@ -107,7 +107,21 @@
 - role/start remain separate from fit, wishlist and commercial sale urgency;
 - `confirmed_negative` cannot receive high start priority;
 - `priority_ranking.py` / final ranking policy unchanged; no second sorter/scheduler;
-- wishlist-good-deal and reconsideration commercial bridge remain intentionally unimplemented.
+- Step 3 wishlist-good-deal/reconsideration bridge is now implemented and technically closed; combined final Taste Review remains pending.
+
+### Reconsideration commercial bridge and wishlist implementation 01
+Статус: `complete` (internal Taste step 3; final material Taste acceptance pending combined independent review).
+- worker task: `WORKER_TASK_RECONSIDERATION_COMMERCIAL_BRIDGE_AND_WISHLIST_IMPLEMENT_01.md`;
+- primary implementation: `0fddfd3fc58373645bb648348dd5dc013b347eea`;
+- final downstream/contract closeout fix: `69baa039c30c7cbc1f266f2a4395656a2b71fad8`;
+- final self-check: run `33979912267`, job `101343174589`: success;
+- canonical wishlist route: exact ready V5 `insufficient` + Steam wishlist + moderate scenario `INCLUDE` + purchase decision `БРАТЬ СЕЙЧАС`;
+- exact ready V5 `reconsiderable` may use existing strict fixed-`Sub_` package savings while Taste remains `EXCLUDE / below_moderate`;
+- exact V5 `confirmed_negative` / direct confirmed conflict remains non-rescuable; legacy `exclude_direct_conflict` reason alone is not V5 confirmation;
+- role/start, warnings/risks, ranking weights, giveaway and package-equivalence semantics remain unchanged;
+- current production payload is still degraded on existing V5 backfill (`379`) with `0` current reconsiderable package candidates; canonical final producer fail-closes as expected and no semantic queue was fabricated;
+- report: `reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md`, report commit `1f843dd55edb3811820cf7b616889a7e17fcd84f`;
+- all temporary Step-3 helpers/workflows were removed after validation.
 
 ## Завершённые package-инварианты, которые сохраняются
 
@@ -192,4 +206,4 @@
 
 ## Текущий статус работ
 
-`package-ui-blocker-fix-01` завершён, а GitHub-owned current Russian translation scope опубликован. E / Russian descriptions сейчас `blocked` только на одном внешнем acceptance gate: реальном occurrence того же existing Nightly Production Runtime для одного exact probe; никаких manual translations или дополнительных schedulers не создано. F / redesign detailed score breakdown UI и A1 / card explanation implementation сохраняются как отдельные параллельные работы. Taste steps 1–2 завершены как bounded internal implementations; step 3 может начинаться отдельно, а material Taste acceptance остаётся за combined independent review после него. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
+`package-ui-blocker-fix-01` завершён, а GitHub-owned current Russian translation scope опубликован. E / Russian descriptions сейчас `blocked` только на одном внешнем acceptance gate: реальном occurrence того же existing Nightly Production Runtime для одного exact probe; никаких manual translations или дополнительных schedulers не создано. F / redesign detailed score breakdown UI и A1 / card explanation implementation сохраняются как отдельные параллельные работы. Taste steps 1–3 завершены как bounded internal implementations; repository-side Step 3 технически закрыт, а material Taste acceptance остаётся за одним combined independent current review Steps 1–3. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
