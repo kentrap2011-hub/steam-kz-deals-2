@@ -1,11 +1,4 @@
-import json
-import os
-from pathlib import Path
-
-impl = os.environ['IMPLEMENTATION_SHA']
-run_id = os.environ.get('GITHUB_RUN_ID')
-summary = json.loads(Path('/tmp/taste_validation_summary.json').read_text(encoding='utf-8'))
-report = f'''# Taste evidence state and confidence implementation 01
+# Taste evidence state and confidence implementation 01
 
 ## 1. Status
 
@@ -13,8 +6,8 @@ report = f'''# Taste evidence state and confidence implementation 01
 
 This is internal Taste IMPLEMENT step 1 of the ordered three-step sequence. It is technically validated, but it is **not** final product acceptance of the full Taste Reviewer handoff. No wishlist-good-deal override, play-role/start-priority logic, giveaway change, final-ranking weight change, or new scheduler was introduced.
 
-Implementation commit: `{impl}`  
-Validation workflow run: `{run_id}`
+Implementation commit: `2a1708ad598ea9baf7095478b646da689eb8f890`
+Validation workflow run: `33962387867`
 
 ## 2. Exact semantic changes
 
@@ -62,7 +55,7 @@ Durable navigation/rationale updated:
 
 **Existing fit cache is not invalidated.** The pre/post implementation fit semantic digest remained exactly:
 
-`{summary['fit_semantics_sha256']}`
+`0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`
 
 The V5 evidence layer has its own exact `evidence_contract_sha` binding to the Git blob of `config/taste_result_contract.json`. GitHub stamps that binding on ingest; the semantic worker cannot invent it.
 
@@ -81,7 +74,7 @@ Until an ambiguous legacy row receives exact V5 backfill, legacy personal-risk s
 
 ## 5. Regression / control results
 
-All focused and existing regressions passed in workflow run `{run_id}`:
+All focused and existing regressions passed in workflow run `33962387867`:
 
 - `scripts/test_taste_evidence_states.py` — PASS;
 - `scripts/validate_taste_v3_contract.py` / V5 contract validation — PASS;
@@ -102,7 +95,14 @@ Calibrated controls proven deterministically:
 
 Bounded current producer validation summary:
 ```json
-{json.dumps(summary, ensure_ascii=False, indent=2)}
+{
+  "complete_family_partition": true,
+  "ai_queue_count": 710,
+  "evidence_backfill_queue_count": 379,
+  "deterministically_excluded_without_ai_count": 93,
+  "bioshock_current_control": null,
+  "fit_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828"
+}
 ```
 
 ## 6. Production / runtime dependency
@@ -121,50 +121,11 @@ Do not treat this as final material Taste acceptance/deployment on its own. Per 
 
 ## 8. Exact commits / runs / artifacts
 
-- implementation commit: `{impl}`;
-- implementation/validation workflow run: `{run_id}`;
-- fit semantic digest unchanged: `{summary['fit_semantics_sha256']}`;
+- implementation commit: `2a1708ad598ea9baf7095478b646da689eb8f890`;
+- implementation/validation workflow run: `33962387867`;
+- fit semantic digest unchanged: `0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`;
 - deterministic generated pre-AI/cache artifacts were restored after validation and were **not** persisted as a manual semantic production run.
 
 ## 9. One bounded next step
 
 Only: `play-role-and-start-priority-implement-01` (Taste step 2), consuming the new evidence-state layer without implementing wishlist-good-deal or commercial reconsideration bridge yet.
-'''
-out = Path('reviews/worker_reports/taste-evidence-state-and-confidence-implement-01.md')
-out.parent.mkdir(parents=True, exist_ok=True)
-out.write_text(report, encoding='utf-8')
-
-current = Path('CURRENT_TASK.md')
-text = current.read_text(encoding='utf-8')
-block = '''### A2. Taste evidence state and confidence implementation 01
-Статус: `in_progress`.
-- worker task: `WORKER_TASK_TASTE_EVIDENCE_STATE_AND_CONFIDENCE_IMPLEMENT_01.md`;
-- цель: развести `insufficient`, `reconsiderable`, `confirmed_negative` без нарушения price-blind Taste;
-- сохранить HighFleet strong-negative control, Haven Moon insufficient control, BioShock reconsiderable control;
-- wishlist override, play-role/start-priority, giveaway и новые schedulers вне scope;
-- existing GitHub-owned Taste semantic queue/cache/ingest остаются единственным control plane.
-
-'''
-if block not in text:
-    raise SystemExit('CURRENT_TASK A2 active block missing')
-text = text.replace(block, '', 1)
-completed = f'''### Taste evidence state and confidence implementation 01
-Статус: `complete` (internal Taste step 1; final Taste acceptance pending combined review).
-- implementation: `{impl}`;
-- report: `reviews/worker_reports/taste-evidence-state-and-confidence-implement-01.md`;
-- semantic states: `sufficient / insufficient / reconsiderable / confirmed_negative`;
-- existing fit-cache semantic digest preserved; V5 evidence has separate exact contract binding;
-- legacy ambiguous evidence backfills through existing `resolve_grounded_negative_analysis`; no new scheduler;
-- HighFleet/Haven Moon/BioShock deterministic controls passed;
-- wishlist override and play-role/start-priority remain intentionally unimplemented.
-
-'''
-anchor = '## Завершённые package-инварианты, которые сохраняются\n'
-if anchor not in text:
-    raise SystemExit('CURRENT_TASK completion anchor missing')
-text = text.replace(anchor, completed + anchor, 1)
-old_status = 'F / redesign detailed score breakdown UI и A1 / card explanation implementation сохраняются как отдельные параллельные работы. A2 / Taste evidence state and confidence implementation начат как bounded internal semantic step 1.'
-new_status = 'F / redesign detailed score breakdown UI и A1 / card explanation implementation сохраняются как отдельные параллельные работы. Taste evidence state and confidence implementation завершён как internal step 1; следующий Taste implementation step может начинаться, но material Taste acceptance остаётся за combined independent review.'
-if old_status in text:
-    text = text.replace(old_status, new_status, 1)
-current.write_text(text, encoding='utf-8')

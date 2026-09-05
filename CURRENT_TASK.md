@@ -88,6 +88,16 @@
 - production scope опубликован автоматически commit `529795ca74db15508e5178c29090b113f9cda23d`: `translation_queue_count=155`, `resolved_direct_ru_count=389`, `nontranslatable_blocker_count=26`;
 - report: `reviews/worker_reports/package-ui-blocker-fix-01.md`.
 
+### Taste evidence state and confidence implementation 01
+Статус: `complete` (internal Taste step 1; final Taste acceptance pending combined review).
+- implementation: `2a1708ad598ea9baf7095478b646da689eb8f890`;
+- report: `reviews/worker_reports/taste-evidence-state-and-confidence-implement-01.md`;
+- semantic states: `sufficient / insufficient / reconsiderable / confirmed_negative`;
+- existing fit-cache semantic digest preserved; V5 evidence has separate exact contract binding;
+- legacy ambiguous evidence backfills through existing `resolve_grounded_negative_analysis`; no new scheduler;
+- HighFleet/Haven Moon/BioShock deterministic controls passed;
+- wishlist override and play-role/start-priority remain intentionally unimplemented.
+
 ## Завершённые package-инварианты, которые сохраняются
 
 - только fixed Steam Store Package (`Sub_`);
@@ -127,14 +137,6 @@
 - цель: исправить подтверждённые audit-дефекты positive `why_fit` и consistency negative `risks[]` в текущем canonical producer path;
 - ranking weights, giveaway, duration, translation, package и unrelated UI не меняются;
 - другая параллельная работа F сохраняется без изменений.
-
-### A2. Taste evidence state and confidence implementation 01
-Статус: `in_progress`.
-- worker task: `WORKER_TASK_TASTE_EVIDENCE_STATE_AND_CONFIDENCE_IMPLEMENT_01.md`;
-- цель: развести `insufficient`, `reconsiderable`, `confirmed_negative` без нарушения price-blind Taste;
-- сохранить HighFleet strong-negative control, Haven Moon insufficient control, BioShock reconsiderable control;
-- wishlist override, play-role/start-priority, giveaway и новые schedulers вне scope;
-- existing GitHub-owned Taste semantic queue/cache/ingest остаются единственным control plane.
 
 ### B. Russian language availability as a ranking factor
 Статус: `planned`.
@@ -179,4 +181,4 @@
 
 ## Текущий статус работ
 
-`package-ui-blocker-fix-01` завершён, а GitHub-owned current Russian translation scope опубликован. E / Russian descriptions сейчас `blocked` только на одном внешнем acceptance gate: реальном occurrence того же existing Nightly Production Runtime для одного exact probe; никаких manual translations или дополнительных schedulers не создано. F / redesign detailed score breakdown UI и A1 / card explanation implementation сохраняются как отдельные параллельные работы. A2 / Taste evidence state and confidence implementation начат как bounded internal semantic step 1. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
+`package-ui-blocker-fix-01` завершён, а GitHub-owned current Russian translation scope опубликован. E / Russian descriptions сейчас `blocked` только на одном внешнем acceptance gate: реальном occurrence того же existing Nightly Production Runtime для одного exact probe; никаких manual translations или дополнительных schedulers не создано. F / redesign detailed score breakdown UI и A1 / card explanation implementation сохраняются как отдельные параллельные работы. Taste evidence state and confidence implementation завершён как internal step 1; следующий Taste implementation step может начинаться, но material Taste acceptance остаётся за combined independent review. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
