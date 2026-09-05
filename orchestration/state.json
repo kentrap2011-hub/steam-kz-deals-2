@@ -19,33 +19,26 @@
   ],
   "authoritative_writer": "scripts/director_orchestration_controller.py",
   "dispatch_enabled": false,
-  "orchestration_phase": "phase_2b_live_readonly_pilot_attempt_1",
+  "orchestration_phase": "phase_2b_live_readonly_pilot_attempt_1_recovery",
   "phase": "shadow_observer",
+  "phase2b_recovery": {
+    "attempt_id": "epic-ru-availability-source-probe-01:r1:a1",
+    "lease_id": "slot_2:epic-ru-availability-source-probe-01:r1:a1",
+    "reason": "pre_model_codex_cli_argument_failure",
+    "resume_count": 1,
+    "resumed_at": "2026-09-05T17:21:16.115347Z"
+  },
   "schema_version": 1,
   "security_boundary_schema_version": 1,
   "slots": [
     {
-      "conflict_keys": [
-        "taste-write",
-        "ranking-write",
-        "taste-ranking-policy"
-      ],
-      "lease": {
-        "acquired_at": "2026-09-05T16:59:12.119053Z",
-        "attempt_id": "reconsideration-commercial-bridge-and-wishlist-implement-01:r1:a1",
-        "expires_at": null,
-        "lease_id": "slot_1:reconsideration-commercial-bridge-and-wishlist-implement-01:r1:a1",
-        "owner": "external_manual:chat_1",
-        "state_revision_acquired": 3,
-        "status": "active_external_manual",
-        "task_id": "reconsideration-commercial-bridge-and-wishlist-implement-01",
-        "task_revision": 1
-      },
-      "occupancy_type": "external_manual",
+      "conflict_keys": [],
+      "lease": null,
+      "occupancy_type": null,
       "slot_id": "slot_1",
-      "status": "occupied",
-      "task_file": "WORKER_TASK_RECONSIDERATION_COMMERCIAL_BRIDGE_AND_WISHLIST_IMPLEMENT_01.md",
-      "task_id": "reconsideration-commercial-bridge-and-wishlist-implement-01"
+      "status": "free",
+      "task_file": null,
+      "task_id": null
     },
     {
       "conflict_keys": [
@@ -54,10 +47,11 @@
       "lease": {
         "acquired_at": "2026-09-05T16:59:12.119053Z",
         "attempt_id": "epic-ru-availability-source-probe-01:r1:a1",
-        "expires_at": "2026-09-05T17:29:12.119053Z",
+        "expires_at": "2026-09-05T17:51:16.115347Z",
         "lease_id": "slot_2:epic-ru-availability-source-probe-01:r1:a1",
         "owner": "director-controller",
-        "state_revision_acquired": 4,
+        "resumed_at": "2026-09-05T17:21:16.115347Z",
+        "state_revision_acquired": 5,
         "status": "active",
         "task_id": "epic-ru-availability-source-probe-01",
         "task_revision": 1
@@ -70,11 +64,11 @@
     }
   ],
   "source_refs": {
-    "active_manual_task": "WORKER_TASK_RECONSIDERATION_COMMERCIAL_BRIDGE_AND_WISHLIST_IMPLEMENT_01.md",
+    "completed_manual_task_report": "reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md",
     "director_board": "DIRECTOR_TASK_BOARD.md",
     "phase2a_contract": "config/director_orchestration_phase2a_contract.json"
   },
-  "state_revision": 4,
+  "state_revision": 5,
   "tasks": [
     {
       "allowed_input_refs": [
