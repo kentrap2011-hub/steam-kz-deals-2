@@ -1,0 +1,123 @@
+name: Taste play role step 2 implement once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/play-role-step2-implement-once.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: taste-play-role-step2-implement-once
+  cancel-in-progress: false
+
+jobs:
+  implement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Apply bounded implementation
+        run: |
+          python scripts/_play_role_step2_once.py
+
+      - name: Validate role start context and existing controls
+        run: |
+          python -m py_compile \
+            scripts/play_priority_context.py \
+            scripts/test_play_priority_context.py \
+            scripts/build_final_visual_payload.py \
+            scripts/build_ranking_lookup.py
+          python scripts/test_play_priority_context.py
+          python scripts/test_taste_evidence_states.py
+          python scripts/validate_taste_v3_contract.py
+          python scripts/test_grounded_negative_contract.py
+          python scripts/test_card_explanation_policy.py
+          python scripts/validate_priority_ranking.py
+          git diff --exit-code -- scripts/priority_ranking.py config/final_ranking_policy.json web/app.js
+          python - <<'PY'
+          from pathlib import Path
+          helper = Path('scripts/play_priority_context.py').read_text(encoding='utf-8')
+          assert 'sorted(' not in helper and '.sort(' not in helper, 'play priority helper must not sort candidates'
+          producer = Path('scripts/build_final_visual_payload.py').read_text(encoding='utf-8')
+          assert 'priority_ranking.apply_final_priority_order' in producer
+          assert 'wishlist_good_deal' not in helper
+          assert 'reconsideration_commercial_bridge' not in helper
+          print('SINGLE_RANKER_GUARD=PASS')
+          PY
+          git diff --check
+
+      - name: Commit implementation
+        run: |
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add \
+            config/play_priority_context_contract.json \
+            scripts/play_priority_context.py \
+            scripts/test_play_priority_context.py \
+            scripts/build_final_visual_payload.py \
+            scripts/build_ranking_lookup.py \
+            .github/workflows/build-daily-visual-payload.yml \
+            PROJECT_RULES.md \
+            PROJECT_DECISIONS.md \
+            PROJECT_ROUTES.md
+          git diff --cached --check
+          git commit -m "Implement play role and relative start priority"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo "IMPLEMENTATION_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
+
+      - name: Write report and remove one-shot machinery
+        run: |
+          git fetch origin main:refs/remotes/origin/main
+          git rebase origin/main
+          python scripts/_play_role_step2_report_once.py
+          python - <<'PY'
+          from pathlib import Path
+          for path in (
+              Path('reviews/worker_reports/play-role-and-start-priority-implement-01.md'),
+              Path('CURRENT_TASK.md'),
+          ):
+              text = path.read_text(encoding='utf-8')
+              path.write_text('\n'.join(line.rstrip() for line in text.splitlines()) + '\n', encoding='utf-8')
+          PY
+          git rm \
+            .github/workflows/play-role-step2-implement-once.yml \
+            scripts/_play_role_step2_once.py \
+            scripts/_play_role_step2_report_once.py
+          git add CURRENT_TASK.md reviews/worker_reports/play-role-and-start-priority-implement-01.md
+          git diff --cached --check
+          git commit -m "Report play role and start priority implementation"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo "REPORT_SHA=$(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
