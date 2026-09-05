@@ -19,8 +19,19 @@
   ],
   "authoritative_writer": "scripts/director_orchestration_controller.py",
   "dispatch_enabled": false,
-  "orchestration_phase": "phase_2b_live_readonly_pilot_attempt_1_schema_continuation",
+  "orchestration_phase": "phase_2b_live_readonly_pilot_blocked_billing",
   "phase": "shadow_observer",
+  "phase2b_closeout": {
+    "attempt_id": "epic-ru-availability-source-probe-01:r1:a1",
+    "automatic_next_dispatch": false,
+    "finalized_at": "2026-09-05T17:36:23.324852Z",
+    "lease_id": "slot_2:epic-ru-availability-source-probe-01:r1:a1",
+    "reason": "openai_api_billing_no_credits",
+    "report_path": "reviews/worker_reports/epic-ru-availability-source-probe-01.md",
+    "source_run_id": 33980979557,
+    "source_worker_job_id": 101346057158,
+    "status": "blocked"
+  },
   "phase2b_recovery": {
     "attempt_id": "epic-ru-availability-source-probe-01:r1:a1",
     "continued_at": "2026-09-05T17:26:53.434855Z",
@@ -43,27 +54,13 @@
       "task_id": null
     },
     {
-      "conflict_keys": [
-        "provider-authority:epic"
-      ],
-      "lease": {
-        "acquired_at": "2026-09-05T16:59:12.119053Z",
-        "attempt_id": "epic-ru-availability-source-probe-01:r1:a1",
-        "continued_at": "2026-09-05T17:26:53.434855Z",
-        "expires_at": "2026-09-05T17:56:53.434855Z",
-        "lease_id": "slot_2:epic-ru-availability-source-probe-01:r1:a1",
-        "owner": "director-controller",
-        "resumed_at": "2026-09-05T17:21:16.115347Z",
-        "state_revision_acquired": 6,
-        "status": "active",
-        "task_id": "epic-ru-availability-source-probe-01",
-        "task_revision": 1
-      },
-      "occupancy_type": "cloud_worker",
+      "conflict_keys": [],
+      "lease": null,
+      "occupancy_type": null,
       "slot_id": "slot_2",
-      "status": "occupied",
-      "task_file": "WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md",
-      "task_id": "epic-ru-availability-source-probe-01"
+      "status": "free",
+      "task_file": null,
+      "task_id": null
     }
   ],
   "source_refs": {
@@ -71,7 +68,7 @@
     "director_board": "DIRECTOR_TASK_BOARD.md",
     "phase2a_contract": "config/director_orchestration_phase2a_contract.json"
   },
-  "state_revision": 6,
+  "state_revision": 7,
   "tasks": [
     {
       "allowed_input_refs": [
@@ -164,7 +161,7 @@
         "blocked",
         "needs_user_evidence"
       ],
-      "assigned_slot": "slot_2",
+      "assigned_slot": null,
       "attempt_id": "epic-ru-availability-source-probe-01:r1:a1",
       "attempt_number": 1,
       "base_sha": "65aa6668e1009885450103e9cde6b6b0f43008d3",
@@ -173,21 +170,27 @@
       ],
       "dependencies": [],
       "domain": "epic-ru-availability",
-      "evidence_refs": [],
+      "evidence_refs": [
+        "reviews/worker_reports/epic-ru-availability-source-probe-01.md"
+      ],
       "expected_report": "reviews/worker_reports/epic-ru-availability-source-probe-01.md",
       "intake_event_id": "intake-20260905-0003-epic-recon-r1",
       "mode": "READ_ONLY_RECON",
       "priority": "HIGH",
       "queue_sequence": 20,
       "retry": {
-        "failure_count": 0,
-        "last_failure": null,
+        "failure_count": 1,
+        "last_failure": {
+          "class": "openai_api_billing_no_credits",
+          "run_id": 33980979557,
+          "worker_job_id": 101346057158
+        },
         "max_attempts": 2,
         "next_attempt_number": 2
       },
       "review_gate": "none",
       "revision": 1,
-      "status": "assigned",
+      "status": "blocked",
       "task_file": "WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md",
       "task_file_blob_sha": "fdefa23f6aa9d2689f98adcc4af4fd019a7bcb04",
       "task_id": "epic-ru-availability-source-probe-01",
