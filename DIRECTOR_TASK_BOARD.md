@@ -13,51 +13,70 @@
 5. Номер принадлежит worker-слоту.
 6. Не запускать параллельно конфликтующие Taste/ranking IMPLEMENT.
 7. Taste Reviewer recommendations имеют VERY HIGH USER PRIORITY.
-8. Automation migration может идти параллельно backlog, но сначала только shadow/read-only safety phases.
+8. Automation migration может идти параллельно backlog, но новая orchestration authority проходит обязательный System Audit перед Phase 2.
 
 ## Review checkpoint
 
-Latest System Audit: `reviews/system_audits/giveaway-cache-post-incident-audit-01.md`
-Result: accepted.
-`system_audit_due: false`.
+`system_audit_due: true`.
+Reason: accepted Phase 1 orchestration/state/queue boundary.
+Audit task: `WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE1_SYSTEM_AUDIT_01.md`.
+Expected report: `reviews/system_audits/director-orchestration-phase1-audit-01.md`.
 
-## Active
-
-### ЧАТ 1 — VERY HIGH PRIORITY Taste IMPLEMENT 1
+## ЧАТ 1 — Taste IMPLEMENT 1 needs continuation
 
 Task:
 `WORKER_TASK_TASTE_EVIDENCE_STATE_AND_CONFIDENCE_IMPLEMENT_01.md`
 Expected report:
 `reviews/worker_reports/taste-evidence-state-and-confidence-implement-01.md`
-Status: `running_or_ready_in_existing_chat_1`.
 
-### ЧАТ 2 — Phase 1 orchestration shadow observer IMPLEMENT
+Current durable status: **not complete**.
 
-Recon complete:
-`reviews/worker_reports/autonomous-director-orchestration-recon-01.md`
-Status: `complete`.
-Feasibility: cloud-first without always-on home PC is feasible; ordinary worker chats are not a reliable automatable substrate and should later be replaced by GitHub-hosted cloud worker jobs using the official Codex Action / `codex exec` path.
+Evidence:
+- expected report does not exist on `main`;
+- latest one-shot workflow `Taste evidence state implement once` run `33955749866` failed;
+- job `101278674109`:
+  - `Apply bounded implementation`: success;
+  - `Validate contracts and controls`: failure;
+  - commit/report cleanup steps skipped;
+- exact failure: `SyntaxError: unterminated string literal` in temporary modified `scripts/build_pre_ai_chatgpt_payload.py`, line 198.
 
-Current implementation task:
-`WORKER_TASK_DIRECTOR_ORCHESTRATION_SHADOW_OBSERVER_IMPLEMENT_01.md`
-Task ID: `director-orchestration-shadow-observer-implement-01`
-Mode: `IMPLEMENT`
-Expected report:
+Recent one-shot helper commits include:
+- `8a432d7037ea33db8b5e4610f88c7f614324fbf3`
+- `3e7b69c8e819369bb69a95b9337897526170dd83`
+- `b695dd82356d89d46509d5a1d2981570a123e00a`
+- `08f1c5c200556e2f7214ec3817f9df4e37af2ec4`
+
+Status: `continue_existing_chat_1_same_scope_fix_validation_then_report`.
+
+Do not start Taste step 2 until the exact required report exists and Director verifies successful validation.
+
+## ЧАТ 2 — Phase 1 shadow observer complete; independent audit next
+
+Implementation report:
 `reviews/worker_reports/director-orchestration-shadow-observer-implement-01.md`
-Status: `ready_continue_existing_chat_2`.
+Status: `complete`.
 
-Phase 1 scope only:
-- machine-readable orchestration contract/state;
-- current Chat 1 represented as external/manual occupied slot;
-- deterministic priority/dependency/conflict planner;
-- max 2 logical slots;
-- GitHub Actions shadow workflow producing `shadow-plan.json` artifact;
-- no OpenAI/Codex call;
-- no worker dispatch;
-- no product task mutation;
-- no secret required.
+Verified implementation evidence:
+- run `33955350364` success;
+- job `101277589011` success;
+- artifact `9966167937` / `shadow-plan`;
+- exact simulated assignment: `epic-ru-availability-source-probe-01` to free `slot_2`;
+- current manual Chat 1 occupied `slot_1`;
+- conflicting Taste/wishlist task blocked;
+- no OpenAI/Codex invocation;
+- no real worker dispatch;
+- no product mutation.
 
-If Phase 1 repeatedly matches Director decisions, next phase may add automatic READ-ONLY RECON/AUDIT cloud workers.
+Because this establishes a new orchestration/state/queue boundary, Phase 2 must not start before an independent System Audit.
+
+Audit task:
+`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE1_SYSTEM_AUDIT_01.md`
+Mode: `READ-ONLY / AUDIT`
+Expected report:
+`reviews/system_audits/director-orchestration-phase1-audit-01.md`
+Status: `ready_new_chat_2_independent_auditor`.
+
+The implementation Chat 2 may be deleted before creating the independent audit Chat 2.
 
 ## Steam access policy
 
@@ -68,13 +87,23 @@ Never ask for secret values in ordinary chat/report/task files.
 
 ## Taste sequence after current step
 
-1. evidence state/confidence/reconsideration semantics;
+1. evidence state/confidence/reconsideration semantics — current step, not yet complete;
 2. play role + relative start priority;
 3. reconsideration commercial bridge + wishlist-good-deal override.
 
 Independent Taste Review required at the chosen material acceptance boundary.
 
-## Queued
+## Automation sequence
+
+Phase 1 shadow observer: implemented and technically validated; independent System Audit pending.
+
+If audit accepts:
+- close `system_audit_due`;
+- proceed to a bounded Phase 2 security/dispatch boundary for automatic READ-ONLY RECON/AUDIT cloud workers;
+- before actual Codex worker execution, provision `OPENAI_API_KEY` only through approved GitHub Actions secret storage and perform bounded permissions/security review;
+- no autonomous product IMPLEMENT yet.
+
+## Other queued
 
 - DLC ownership eligibility IMPLEMENT: policy-approved in principle, pending proper GitHub secret provisioning; no Steam session.
 - Personalized Complete The Set actual payable price: blocked by no-session decision.
@@ -89,7 +118,7 @@ Independent Taste Review required at the chosen material acceptance boundary.
 
 ## Next decision
 
-1. Keep Chat 1 on Taste IMPLEMENT 1.
-2. Continue existing Chat 2 with shadow observer IMPLEMENT.
-3. Read both exact reports before advancing either product semantics or automation phase.
-4. Do not add OpenAI API key until Phase 1 shadow safety has been proven.
+1. Existing Chat 1 fixes the exact current validation failure and completes the same Taste task/report.
+2. Existing Phase 1 implementation Chat 2 can be deleted.
+3. Create a fresh independent Chat 2 for `director-orchestration-phase1-system-audit-01`.
+4. Read both exact reports before advancing Taste step 2 or automation Phase 2.
