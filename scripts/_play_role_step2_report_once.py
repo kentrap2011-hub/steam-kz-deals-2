@@ -12,7 +12,7 @@ report = f'''# Play role and start priority implementation 01
 
 `complete`
 
-This is internal Taste IMPLEMENT step 2. It adds a canonical producer-owned play-role / relative-start-priority context without implementing Taste step 3, wishlist-good-deal override, reconsideration commercial bridge, or a second ranker/sorter.
+This is internal Taste IMPLEMENT step 2. It adds canonical producer-owned play-role / relative-start-priority context without implementing Taste step 3, wishlist-good-deal override, reconsideration commercial bridge, or a second ranker/sorter.
 
 Implementation commit: `{impl}`
 Validation workflow run: `{run_id}`
@@ -34,7 +34,7 @@ Relative start priority:
 - `low`;
 - `unresolved`.
 
-Both dimensions persist independent confidence/provenance. The context layer is deliberately conservative: uncalibrated titles remain unresolved rather than being inferred from score, genre, wishlist or franchise identity.
+Both dimensions persist independent confidence/provenance. The layer is deliberately conservative: uncalibrated titles remain unresolved rather than being inferred from score, genre, wishlist or franchise identity.
 
 ## 3. Files changed
 
@@ -43,10 +43,9 @@ Canonical/new:
 - `scripts/play_priority_context.py`;
 - `scripts/test_play_priority_context.py`.
 
-Existing producer/diagnostics/validation:
+Existing producer/diagnostics:
 - `scripts/build_final_visual_payload.py`;
-- `scripts/build_ranking_lookup.py`;
-- `.github/workflows/build-daily-visual-payload.yml`.
+- `scripts/build_ranking_lookup.py`.
 
 Durable project documentation:
 - `PROJECT_RULES.md`;
@@ -54,11 +53,14 @@ Durable project documentation:
 - `PROJECT_ROUTES.md`.
 
 Explicitly unchanged by this implementation:
+- `.github/workflows/build-daily-visual-payload.yml` and all recurring/scheduled execution;
 - `scripts/priority_ranking.py`;
 - `config/final_ranking_policy.json`;
 - Taste V5 evidence-state semantics/contracts;
 - `web/app.js` and the existing urgency/score toggle UI;
 - eligibility/commercial bridge logic.
+
+The focused regression is a durable repository test (`scripts/test_play_priority_context.py`) and was executed by the bounded implementation validation. No workflow-permission escalation or new scheduler was introduced merely to wire this test into a recurring job.
 
 ## 4. How role differs from fit
 
@@ -107,14 +109,15 @@ Existing regressions executed in the same workflow:
 - `scripts/test_grounded_negative_contract.py` — PASS;
 - `scripts/test_card_explanation_policy.py` — PASS;
 - `scripts/validate_priority_ranking.py` — PASS;
-- `git diff --exit-code -- scripts/priority_ranking.py config/final_ranking_policy.json web/app.js` — PASS;
+- `git diff --exit-code -- scripts/priority_ranking.py config/final_ranking_policy.json web/app.js .github/workflows/build-daily-visual-payload.yml` — PASS;
+- single-ranker static guard — PASS;
 - `git diff --check` — PASS.
 
 ## 7. Ranking / UI impact
 
-Ranking math and ordering are unchanged. The final visual producer now attaches the new context fields after Taste evidence is available and before/through commercial refresh, but never passes them into `priority_ranking`.
+Ranking math and ordering are unchanged. The final visual producer attaches the new context fields after Taste evidence is available and before/through commercial refresh, but never passes them into `priority_ranking`.
 
-`build_ranking_lookup.py` exposes role/start/confidence/provenance for diagnostics and the existing daily visual ranking-review export carries the same fields. `web/app.js` is intentionally unchanged in this step, avoiding conflict with the parallel score-breakdown UI work and preserving the current truthful score/urgency toggle behavior.
+`build_ranking_lookup.py` exposes role/start/confidence/provenance for diagnostics. `web/app.js` is intentionally unchanged in this step, avoiding conflict with parallel score-breakdown UI work and preserving the current truthful score/urgency toggle behavior.
 
 ## 8. Proof no wishlist / commercial bridge was implemented
 
