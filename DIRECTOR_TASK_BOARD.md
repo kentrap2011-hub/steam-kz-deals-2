@@ -13,101 +13,110 @@
 5. Номер принадлежит worker-слоту.
 6. Не запускать параллельно конфликтующие Taste/ranking IMPLEMENT.
 7. Taste Reviewer recommendations имеют VERY HIGH USER PRIORITY.
-8. Automation migration может идти параллельно backlog, но новая orchestration authority проходит обязательный System Audit перед Phase 2.
+8. Automation migration идёт по отдельным gated phases; Phase 2A ещё не включает реальный Codex dispatch.
 
 ## Review checkpoint
 
-`system_audit_due: true`.
-Reason: accepted Phase 1 orchestration/state/queue boundary.
-Audit task: `WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE1_SYSTEM_AUDIT_01.md`.
-Expected report: `reviews/system_audits/director-orchestration-phase1-audit-01.md`.
+Latest System Audit:
+`reviews/system_audits/director-orchestration-phase1-audit-01.md`
+Status: complete.
+Closure: accepted.
+`system_audit_due: false`.
 
-## ЧАТ 1 — Taste IMPLEMENT 1 needs continuation
+## Latest completed
 
-Task:
-`WORKER_TASK_TASTE_EVIDENCE_STATE_AND_CONFIDENCE_IMPLEMENT_01.md`
-Expected report:
+### Taste step 1
+
+Report:
 `reviews/worker_reports/taste-evidence-state-and-confidence-implement-01.md`
+Status: `complete`.
+Implementation commit: `2a1708ad598ea9baf7095478b646da689eb8f890`.
+Validation run: `33962387867`.
 
-Current durable status: **not complete**.
+Implemented explicit price-blind evidence states:
+- sufficient;
+- insufficient;
+- reconsiderable;
+- confirmed_negative.
 
-Evidence:
-- expected report does not exist on `main`;
-- latest one-shot workflow `Taste evidence state implement once` run `33955749866` failed;
-- job `101278674109`:
-  - `Apply bounded implementation`: success;
-  - `Validate contracts and controls`: failure;
-  - commit/report cleanup steps skipped;
-- exact failure: `SyntaxError: unterminated string literal` in temporary modified `scripts/build_pre_ai_chatgpt_payload.py`, line 198.
+Confirmed negative remains non-overridable by paid commercial signals. Step 2 may start. This is internal sequence progress, not final Taste acceptance.
 
-Recent one-shot helper commits include:
-- `8a432d7037ea33db8b5e4610f88c7f614324fbf3`
-- `3e7b69c8e819369bb69a95b9337897526170dd83`
-- `b695dd82356d89d46509d5a1d2981570a123e00a`
-- `08f1c5c200556e2f7214ec3817f9df4e37af2ec4`
-
-Status: `continue_existing_chat_1_same_scope_fix_validation_then_report`.
-
-Do not start Taste step 2 until the exact required report exists and Director verifies successful validation.
-
-## ЧАТ 2 — Phase 1 shadow observer complete; independent audit next
+### Automation Phase 1
 
 Implementation report:
-`reviews/worker_reports/director-orchestration-shadow-observer-implement-01.md`
-Status: `complete`.
+`reviews/worker_reports/director-orchestration-shadow-observer-implement-01.md`.
+Independent audit:
+`reviews/system_audits/director-orchestration-phase1-audit-01.md`.
 
-Verified implementation evidence:
-- run `33955350364` success;
-- job `101277589011` success;
-- artifact `9966167937` / `shadow-plan`;
-- exact simulated assignment: `epic-ru-availability-source-probe-01` to free `slot_2`;
-- current manual Chat 1 occupied `slot_1`;
-- conflicting Taste/wishlist task blocked;
-- no OpenAI/Codex invocation;
-- no real worker dispatch;
-- no product mutation.
+Phase 1 systemic closure accepted. Safe foundation for separately gated Phase 2.
 
-Because this establishes a new orchestration/state/queue boundary, Phase 2 must not start before an independent System Audit.
+## Active next pair
 
-Audit task:
-`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE1_SYSTEM_AUDIT_01.md`
-Mode: `READ-ONLY / AUDIT`
+### ЧАТ 1 — Taste step 2: play role + relative start priority
+
+Task:
+`WORKER_TASK_PLAY_ROLE_AND_START_PRIORITY_IMPLEMENT_01.md`
+Task ID: `play-role-and-start-priority-implement-01`
+Mode: `IMPLEMENT`
 Expected report:
-`reviews/system_audits/director-orchestration-phase1-audit-01.md`
-Status: `ready_new_chat_2_independent_auditor`.
+`reviews/worker_reports/play-role-and-start-priority-implement-01.md`
+Priority: `VERY_HIGH_USER_PRIORITY`.
+Status: `ready_continue_existing_chat_1`.
 
-The implementation Chat 2 may be deleted before creating the independent audit Chat 2.
+Goal:
+- explicit main/full vs secondary/palate-cleanser vs family/co-op vs unresolved role;
+- explicit relative start/queue priority;
+- keep these separate from personal fit and sale urgency;
+- preserve Step 1 evidence states;
+- no wishlist-good-deal/commercial reconsideration bridge yet;
+- no second ranker/sorter.
+
+### ЧАТ 2 — Automation Phase 2A security/state boundary
+
+Task:
+`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2A_SECURITY_BOUNDARY_IMPLEMENT_01.md`
+Task ID: `director-orchestration-phase2a-security-boundary-implement-01`
+Mode: `IMPLEMENT`
+Expected report:
+`reviews/worker_reports/director-orchestration-phase2a-security-boundary-implement-01.md`
+Priority: `VERY_HIGH_INFRASTRUCTURE_PRIORITY`.
+Status: `ready_new_chat_2_after_audit_chat_deleted`.
+
+Goal:
+- single authoritative state writer/controller;
+- immutable intake/revision/attempt/lease semantics;
+- READ-ONLY RECON/AUDIT worker request/result contracts;
+- trusted report publisher boundary;
+- future official Codex Action worker definition pinned and permission-bounded;
+- real dispatch stays disabled;
+- no OpenAI API key required in Phase 2A;
+- no OpenAI/Codex invocation;
+- no autonomous IMPLEMENT.
+
+After Phase 2A acceptance, user will perform one-time `OPENAI_API_KEY` setup directly in GitHub Actions Secrets before Phase 2B live READ-ONLY worker pilot. Secret must never be pasted into chat/task/report/Git.
+
+These two tasks are safely parallel: Chat 1 changes Taste/product semantics; Chat 2 changes disabled orchestration infrastructure only and must not touch product/Taste logic.
+
+## Taste sequence
+
+1. evidence state/confidence/reconsideration — complete internally;
+2. play role + relative start priority — active next;
+3. reconsideration commercial bridge + wishlist-good-deal override — after step 2.
+
+If all three remain one bounded internal sequence, run one independent current Taste Review after step 3 before final material acceptance.
 
 ## Steam access policy
 
 User approved:
 - Steam Web API key for read-only `GetOwnedGames`: yes;
 - authenticated Steam Store session for personalized Complete The Set payable price: no for now.
-Never ask for secret values in ordinary chat/report/task files.
 
-## Taste sequence after current step
-
-1. evidence state/confidence/reconsideration semantics — current step, not yet complete;
-2. play role + relative start priority;
-3. reconsideration commercial bridge + wishlist-good-deal override.
-
-Independent Taste Review required at the chosen material acceptance boundary.
-
-## Automation sequence
-
-Phase 1 shadow observer: implemented and technically validated; independent System Audit pending.
-
-If audit accepts:
-- close `system_audit_due`;
-- proceed to a bounded Phase 2 security/dispatch boundary for automatic READ-ONLY RECON/AUDIT cloud workers;
-- before actual Codex worker execution, provision `OPENAI_API_KEY` only through approved GitHub Actions secret storage and perform bounded permissions/security review;
-- no autonomous product IMPLEMENT yet.
+DLC ownership implementation remains queued pending later proper secret provisioning. Personalized Complete The Set actual payable price remains fail-closed/unknown.
 
 ## Other queued
 
-- DLC ownership eligibility IMPLEMENT: policy-approved in principle, pending proper GitHub secret provisioning; no Steam session.
-- Personalized Complete The Set actual payable price: blocked by no-session decision.
 - `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md`.
+- DLC ownership eligibility IMPLEMENT.
 - `WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md`.
 - `WORKER_TASK_MOBILE_FEED_REGRESSION_GATE_01.md`.
 - `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`.
@@ -118,7 +127,7 @@ If audit accepts:
 
 ## Next decision
 
-1. Existing Chat 1 fixes the exact current validation failure and completes the same Taste task/report.
-2. Existing Phase 1 implementation Chat 2 can be deleted.
-3. Create a fresh independent Chat 2 for `director-orchestration-phase1-system-audit-01`.
-4. Read both exact reports before advancing Taste step 2 or automation Phase 2.
+1. Continue existing Chat 1 with Taste step 2.
+2. Phase 1 audit Chat 2 may be deleted; create a fresh Chat 2 for Phase 2A IMPLEMENT.
+3. Read both exact reports before Taste step 3 or Phase 2B.
+4. Do not provision `OPENAI_API_KEY` until Phase 2A security boundary is validated.
