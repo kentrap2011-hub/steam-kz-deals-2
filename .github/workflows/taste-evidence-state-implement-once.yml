@@ -55,6 +55,22 @@ jobs:
           path.write_text(text, encoding='utf-8')
           PY
           python scripts/_taste_evidence_implement_once.py
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/ingest_taste_results.py')
+          text = path.read_text(encoding='utf-8')
+          old = "        validate_negative_result_fields(result)\n        validate_fit_evidence_fields(result, require_v5=True)\n        for q_index, finding in enumerate(result.get('candidate_quality_findings') or []):\n            validate_noncommercial_quality_text(f'candidate_quality_findings[{q_index}].evidence', finding['evidence'])\n            validate_noncommercial_quality_text(f'candidate_quality_findings[{q_index}].risk_text_ru', finding['risk_text_ru'])\n\n        if full_eval:\n"
+          new = "        validate_negative_result_fields(result)\n        for q_index, finding in enumerate(result.get('candidate_quality_findings') or []):\n            validate_noncommercial_quality_text(f'candidate_quality_findings[{q_index}].evidence', finding['evidence'])\n            validate_noncommercial_quality_text(f'candidate_quality_findings[{q_index}].risk_text_ru', finding['risk_text_ru'])\n\n        if full_eval:\n            validate_fit_evidence_fields(result, require_v5=True)\n"
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected exactly one evidence validation placement anchor, found {text.count(old)}')
+          text = text.replace(old, new, 1)
+          old = "            base_entry = validate_current_base_entry(\n                key,\n                current_entries.get(key),\n                queue_row,\n                projection,\n            )\n"
+          new = old + "            evidence_view = dict(base_entry)\n            evidence_view.update(result)\n            validate_fit_evidence_fields(evidence_view, require_v5=True)\n"
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected exactly one negative-only base-entry anchor, found {text.count(old)}')
+          text = text.replace(old, new, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
 
       - name: Validate contracts and controls
         run: |
