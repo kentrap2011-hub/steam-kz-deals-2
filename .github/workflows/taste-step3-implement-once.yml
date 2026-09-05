@@ -50,6 +50,11 @@ jobs:
           test.write_text(text.replace(old, new, 1), encoding='utf-8')
           PY
 
+      - name: Refresh authoritative fixed package snapshot for validation
+        run: |
+          set -euo pipefail
+          python scripts/build_fixed_package_purchase_options.py
+
       - name: Validate focused and existing regressions
         run: |
           set -euo pipefail
@@ -95,6 +100,7 @@ jobs:
       - name: Commit implementation
         run: |
           set -euo pipefail
+          git restore data/production/pre_ai/fixed_package_options.json
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
           git add \
