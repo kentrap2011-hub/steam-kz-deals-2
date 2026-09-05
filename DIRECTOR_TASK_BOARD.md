@@ -23,7 +23,7 @@ Status: `PASS`.
 Closure: `accepted`.
 `system_audit_due: false`.
 
-## ЧАТ 1 — Taste step 3 closeout required
+## ЧАТ 1 — Taste step 3 full bounded self-recheck
 
 Task:
 `WORKER_TASK_RECONSIDERATION_COMMERCIAL_BRIDGE_AND_WISHLIST_IMPLEMENT_01.md`
@@ -32,14 +32,14 @@ Expected report:
 
 User reports Chat 1 finished, but Director durable closure check found the required report is still absent from `main`.
 
-Implementation evidence already exists and must NOT be redone broadly:
+Implementation evidence already exists and should be treated as evidence to verify rather than blindly redo:
 - `a3e39f6b98573616f19f444909742d3378d25d20` — align Step 3 guards with V5 reconsiderable semantics;
 - `0b95d364376f7553965d2e7505c25ef9e261fe42` — align mailing-policy validator;
 - `0fddfd3fc58373645bb648348dd5dc013b347eea` — bounded Taste commercial reconsideration bridge implementation;
 - `f64d518a203604051bcda032780c5bb515976197` and `960a749fbf65b79eb0df629d11ad0c67c853ab72` — refreshed fixed-package/BioShock validation adjustments;
 - production probe commit `685972c2c8a4399a76ac56d7f1ab67f92bd9f3a2`.
 
-Production probe:
+Known production probe evidence:
 - workflow `Taste step 3 production probe once`;
 - run `33973331054` — success;
 - job `101325600995` — success;
@@ -49,13 +49,25 @@ Production probe:
 - complete family partition remained true;
 - visual producer built 523 items and bridge provenance check passed.
 
-Closeout defects only:
-1. required durable report is absent;
-2. temporary `.github/workflows/taste-step3-production-probe-once.yml` still exists on `main`.
+Because Chat 1 had a very long context, it must now re-open the authoritative task and sources from current `main` and independently revalidate the whole bounded Step 3 scope before closure. The worker must not rely on its conversational memory or previous self-summary.
 
-Status: `continue_existing_chat_1_same_scope_closeout_only`.
-Do not start independent Taste Review until exact Step 3 report exists.
-Chat 1 remains occupied/manual until closeout is durable.
+Required self-recheck:
+1. re-read the exact task plus Step 1/Step 2 reports and the three authoritative design/recon sources named by the task;
+2. inspect current owner code/contracts on `main`, not only previous diffs;
+3. verify every required outcome, preserve rule, required regression and control from the task one-by-one;
+4. confirm canonical good-deal semantics are reused with no invented threshold;
+5. confirm `confirmed_negative` and direct conflict remain non-overridable;
+6. confirm reconsiderable/package and wishlist-good-deal exceptions preserve original Taste/evidence state, role/start priority, risks, warnings and provenance;
+7. confirm fixed-package behavior is authoritative and no personalized Complete-the-Set arithmetic was fabricated;
+8. rerun bounded deterministic regressions and current canonical regeneration/probe as needed;
+9. inspect whether current `{}` bridge counts are legitimate current-data absence rather than a wiring defect;
+10. remove temporary one-shot workflow if it is no longer needed;
+11. if any real bounded defect is found, fix it in this same task and rerun relevant regressions;
+12. save the exact required durable report with one allowed status and exact commits/runs/evidence.
+
+Status: `continue_existing_chat_1_full_bounded_self_recheck`.
+Do not start independent Taste Review until exact Step 3 report exists and Director consumes it.
+Chat 1 remains occupied/manual until recheck and durable closure are complete.
 
 After exact Step 3 report is consumed, the implementation Chat 1 may be deleted and a fresh independent Chat 1 should run the combined current Taste Review for steps 1–3 before final semantic acceptance.
 
@@ -90,7 +102,7 @@ Do not delete/reassign Chat 2 until the exact Phase 2B report is consumed.
 
 1. evidence state/confidence/reconsideration — complete internally;
 2. play role + relative start priority — complete internally;
-3. reconsideration commercial bridge + wishlist-good-deal override — implementation/probe present, durable closeout pending;
+3. reconsideration commercial bridge + wishlist-good-deal override — implementation/probe evidence present, full bounded self-recheck + durable closeout pending;
 4. independent current Taste Review — mandatory after Step 3 durable report before final acceptance.
 
 ## Steam access policy
@@ -114,7 +126,7 @@ DLC ownership eligibility remains queued. Personalized Complete The Set actual p
 
 ## Next decision
 
-1. Existing Chat 1 performs closeout only: remove temporary one-shot workflow if no longer needed and save exact required Step 3 report using existing successful evidence.
+1. Existing Chat 1 performs full bounded self-recheck from current GitHub truth, fixes only genuine in-scope defects if found, cleans temporary one-shot machinery if no longer needed, and saves the exact required Step 3 report.
 2. Keep current Chat 2 running Phase 2B untouched.
 3. Read exact Step 3 report before creating fresh independent Taste Reviewer Chat 1.
 4. Read exact Phase 2B report and independently fetch auto-published Epic report before advancing automation.
