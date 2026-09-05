@@ -30,20 +30,20 @@ Status: `PASS`.
 Closure: `accepted`.
 
 Phase 2A security/state/cloud-worker boundary is accepted.
-The user may now provision repository Actions secret `OPENAI_API_KEY` directly in GitHub.
-Provisioning the secret alone does not enable dispatch.
 
-Next automation gate:
-`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2B_LIVE_READONLY_PILOT_01.md`
+The separately billed OpenAI API Phase 2B route reached a real read-only Codex execution but is stopped by user cost policy after API credits were unavailable. Do not ask the user to fund that route.
 
-Phase 2B remains blocked until the user confirms secret presence. The first pilot is exactly one `READ_ONLY_RECON` cloud worker for `epic-ru-availability-source-probe-01` and must preserve the audit-required current-state/optimistic-concurrency stale barrier.
+Zero-cost recon completed at:
+`reviews/worker_reports/zero-incremental-cost-director-automation-recon-01.md`
 
-No System Audit is currently due.
+It identifies direct GitHub Copilot CLI in Actions using built-in `GITHUB_TOKEN` and included Copilot entitlement as the preferred quota-bounded zero-additional-payment candidate. No live Copilot pilot has yet been accepted, so no new provider boundary is accepted yet.
+
+No System Audit is currently due. A successful Copilot-provider live pilot reaches a new provider acceptance gate and must trigger an independent System Audit before that provider boundary is materially accepted for general orchestration.
 
 ## Taste Reviewer
 
 taste_reviewer_chat_established: true
-taste_baseline_review_due: false
+taste_baseline_review_due: true
 last_taste_review_report: `reviews/taste_reviews/baseline-01.md`
 
 ### Current Taste implementation sequence
@@ -51,11 +51,13 @@ last_taste_review_report: `reviews/taste_reviews/baseline-01.md`
 Internal ordered sequence:
 1. evidence state / confidence / reconsideration semantics — technically complete;
 2. play role + relative start priority — technically complete;
-3. reconsideration commercial bridge + wishlist-good-deal override — active in Chat 1.
+3. reconsideration commercial bridge + wishlist-good-deal override — technically complete after owner self-recheck.
 
-The current plan is to keep steps 1–3 as one bounded internal sequence and run one independent current Taste Review after step 3 and regenerated controls, before final material acceptance.
+Step 3 durable report:
+`reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md`
+Status: `complete`.
 
-After step 3 report exists, a current Taste Review becomes mandatory before final acceptance of the combined new semantics.
+A fresh independent current Taste Review over combined Steps 1–3 is now mandatory before final material acceptance of the new semantics.
 
 ### Baseline controls
 
