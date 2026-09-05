@@ -1,0 +1,89 @@
+{
+  "authority": {
+    "authoritative_state": "orchestration/state.json",
+    "immutable_intake_dir": "orchestration/intake",
+    "second_state_writer_allowed": false,
+    "single_state_writer": "scripts/director_orchestration_controller.py",
+    "worker_can_choose_next_task": false,
+    "worker_can_mutate_state": false
+  },
+  "contract": "DIRECTOR-ORCHESTRATION-PHASE2A-SECURITY-BOUNDARY-V1",
+  "dispatch_enabled": false,
+  "fail_closed_on": [
+    "malformed_state",
+    "unknown_state_schema",
+    "unknown_slot",
+    "more_than_two_slots",
+    "duplicate_event_id",
+    "changed_applied_intake_event",
+    "stale_task_revision",
+    "stale_attempt",
+    "expired_lease",
+    "wrong_task_file_blob_sha",
+    "wrong_base_sha",
+    "wrong_report_path",
+    "forbidden_worker_mode",
+    "worker_mutation_request",
+    "detectable_secret_material"
+  ],
+  "future_codex_action": {
+    "github_commit_verified": true,
+    "github_verification_reason": "valid",
+    "immutable_commit_sha": "86365089eb2b84e0a8fb0717b304f8bdcb13b20e",
+    "repository": "openai/codex-action",
+    "template": "orchestration/templates/future-read-only-codex-worker.yml.disabled",
+    "verified_at": "2026-08-20T23:39:07Z"
+  },
+  "leases": {
+    "cloud_active_status": "active",
+    "cloud_lease_requires_expiry": true,
+    "expired_status": "expired",
+    "free_slot_requires_null_lease": true,
+    "manual_active_status": "active_external_manual",
+    "manual_lease_may_have_null_expiry": true
+  },
+  "limits": {
+    "cloud_lease_seconds": 1800,
+    "max_attempts_per_revision": 2,
+    "max_logical_slots": 2
+  },
+  "phase": "2A",
+  "publisher": {
+    "allowed_path_prefix": "reviews/worker_reports/",
+    "implementation": "scripts/director_report_publisher.py",
+    "product_mutation": false,
+    "reject_stale_attempt": true,
+    "reject_stale_revision": true,
+    "reject_wrong_base_sha": true,
+    "reject_wrong_task_blob_sha": true,
+    "requires_active_lease": true,
+    "state_mutation": false,
+    "write_scope": "exact_expected_report_path_only"
+  },
+  "security_boundary_schema_version": 1,
+  "state_persistence_enabled": false,
+  "state_schema_version": 1,
+  "status": "phase_2a_validation_only",
+  "validation": {
+    "artifact_kind": "staging_dispatch_request_only",
+    "codex_invocation_allowed": false,
+    "openai_required": false,
+    "product_mutation_allowed": false,
+    "worker_dispatch_allowed": false
+  },
+  "worker": {
+    "allowed_modes": [
+      "READ_ONLY_RECON",
+      "AUDIT"
+    ],
+    "forbidden_modes": [
+      "IMPLEMENT"
+    ],
+    "github_write_credential": false,
+    "product_write_authority": false,
+    "repository_write_authority": false,
+    "request_schema": "orchestration/schemas/read_only_worker_request.schema.json",
+    "result_schema": "orchestration/schemas/read_only_worker_result.schema.json",
+    "state_write_authority": false
+  }
+}
