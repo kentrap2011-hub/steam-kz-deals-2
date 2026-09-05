@@ -9,6 +9,7 @@ from pathlib import Path
 from card_explanation_policy import positive_reasons
 from semantic_runtime_completion import apply_visual_semantic_status
 from russian_description_quality import classify_description
+import commercial_reconsideration_bridge as commercial_bridge
 from russian_description_translation_runtime import (
     load_translation_cache,
     resolve_description_for_appids as resolve_description_with_translation_cache,
@@ -59,6 +60,23 @@ def get_fit(row, taste_entries):
         return None
     fit = entry.get('fit_level')
     return fit if fit in {'strong', 'moderate'} else None
+
+
+
+
+def get_visual_eligibility(row, taste_entries):
+    fit = get_fit(row, taste_entries)
+    if fit in {'strong', 'moderate'}:
+        scenario = row.get(f'deal_if_{fit}') or {}
+        return fit, scenario, None
+    taste_entry = taste_entries.get(row.get('taste_subject_key')) if isinstance(taste_entries, dict) else None
+    validated = commercial_bridge.validate_visual_bridge(row, taste_entry if isinstance(taste_entry, dict) else {})
+    if not validated:
+        return None, None, None
+    scenario = row.get('deal_if_moderate') or {}
+    if scenario.get('disposition') != 'INCLUDE':
+        return None, None, None
+    return 'below_moderate', scenario, validated
 
 
 def rub_from_kzt(value, rate):
@@ -343,10 +361,9 @@ def main():
     prepared = []
     wanted_appids = set()
     for row in rows:
-        fit = get_fit(row, taste_entries)
-        if fit not in {'strong', 'moderate'}:
+        fit, scenario, eligibility_bridge = get_visual_eligibility(row, taste_entries)
+        if fit not in {'strong', 'moderate', 'below_moderate'} or not isinstance(scenario, dict):
             continue
-        scenario = row.get(f'deal_if_{fit}') or {}
         if scenario.get('disposition') != 'INCLUDE':
             continue
         purchase = row.get('purchase') or {}
@@ -354,13 +371,13 @@ def main():
         fam = family_by_id.get(family_id) or {}
         base_appids = [str(x) for x in ((row.get('semantic_condition') or {}).get('base_appids') or fam.get('base_appids') or [])]
         wanted_appids.update(x for x in base_appids if x.isdigit())
-        prepared.append((row, fit, scenario, purchase, family_id, fam, base_appids))
+        prepared.append((row, fit, scenario, purchase, family_id, fam, base_appids, eligibility_bridge))
 
     media = storebrowse_media(wanted_appids)
     facts = practical_facts(wanted_appids)
     visible = []
 
-    for row, fit, scenario, purchase, family_id, fam, base_appids in prepared:
+    for row, fit, scenario, purchase, family_id, fam, base_appids, eligibility_bridge in prepared:
         main_key = purchase.get('key')
         offers = []
         seen_offer_keys = set()
@@ -428,6 +445,7 @@ def main():
         practical = {'windows_status': windows_status, 'steam_achievements': steam_achievements, 'achievement_total': achievement_total}
         risks = derive_risks(taste_entry.get('negative_evidence') or [], tags, taste_description, projection.get('release_date'), practical)
 
+        final_decision, final_bucket = commercial_bridge.effective_purchase_fields(eligibility_bridge, scenario)
         visible.append({
             'id': family_id,
             'family_type': row.get('family_type'),
@@ -435,8 +453,12 @@ def main():
             'base_appids': base_appids,
             'fit': fit,
             'taste_factors': taste_entry.get('taste_factors'),
-            'decision': scenario.get('purchase_decision'),
-            'priority_bucket': scenario.get('priority_bucket'),
+            'decision': final_decision,
+            'priority_bucket': final_bucket,
+            'fit_evidence_state': (eligibility_bridge or {}).get('fit_evidence_state') if eligibility_bridge else None,
+            'fit_evidence_confidence': (eligibility_bridge or {}).get('fit_evidence_confidence') if eligibility_bridge else None,
+            'eligibility_override': (eligibility_bridge or {}).get('kind') if eligibility_bridge else None,
+            'commercial_eligibility_bridge': eligibility_bridge,
             'wishlist': bool((row.get('context_only') or {}).get('wishlist')),
             'current_price_rub': primary_offer.get('current_price_rub'),
             'original_price_rub': primary_offer.get('original_price_rub'),

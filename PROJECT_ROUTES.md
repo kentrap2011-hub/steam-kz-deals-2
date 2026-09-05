@@ -272,3 +272,14 @@ Production validator проверяет:
 - compact diagnostics: `scripts/build_ranking_lookup.py`;
 - focused regression: `scripts/test_play_priority_context.py`; existing recurring workflows/schedulers remain unchanged;
 - semantics: role/start are separate from fit, wishlist and sale urgency; no second ranker/sorter; `confirmed_negative` cannot receive high start priority.
+
+## Taste reconsideration / wishlist commercial bridge
+
+- canonical policy: `config/mailing_policy.json -> commercial_reconsideration_bridge`;
+- implementation contract alignment: `config/deal_quality_contract.json`;
+- deterministic helper: `scripts/commercial_reconsideration_bridge.py`;
+- first eligibility application: `scripts/build_pre_ai_chatgpt_payload.py` cache-hit EXCLUDE boundary;
+- visual revalidation: `scripts/build_visual_feed_v2.py` without fake promotion to moderate;
+- fixed package source: existing `scripts/apply_fixed_package_purchase_options.py` economics and exact/verified purchase-equivalence rules;
+- focused regression: `scripts/test_reconsideration_commercial_bridge.py`;
+- no new scheduler, ranker, giveaway path, discount threshold, or Taste evaluator.

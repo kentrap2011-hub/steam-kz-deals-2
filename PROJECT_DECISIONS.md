@@ -305,3 +305,20 @@
 **Граница:** wishlist, цена, скидка, history quality, purchase verdict и sale expiry не разрешают role/start state. Franchise history — только слабый prior; без title-specific evidence состояние остаётся `unresolved`. Step-1 `confirmed_negative` не может получить `high`. `priority_ranking.py` и `config/final_ranking_policy.json` остаются единственной автоматической ranking authority и этой задачей не меняются.
 
 **Основные места:** `config/play_priority_context_contract.json`, `scripts/play_priority_context.py`, `scripts/build_final_visual_payload.py`, `scripts/build_ranking_lookup.py`, `scripts/test_play_priority_context.py`.
+
+---
+
+## TASTE-003 — Commercial signals can reopen eligibility, not Taste
+
+**Дата:** 2026-09-05
+**Статус:** implemented as internal Taste step 3; independent combined Taste Review required before final material acceptance.
+
+**Решение:** разрешить только два explicit post-Taste commercial eligibility bridges: `insufficient + Steam wishlist + canonical good deal`, а также `reconsiderable + existing fixed-package strict current-price savings`.
+
+**Инвариант:** bridge не повышает `fit_level`, не меняет `fit_evidence_state`, не переписывает `play_role`/`relative_start_priority`, не стирает риски и не создаёт новый ranking score. `confirmed_negative` и `exclude_direct_conflict` fail closed и не спасаются коммерческими сигналами.
+
+**Good deal:** только существующий `decision_if_moderate.final_disposition=INCLUDE` + `purchase_decision=БРАТЬ СЕЙЧАС`; новый discount threshold не вводится.
+
+**Package:** используется существующий fixed-Sub deterministic economics / exact-or-verified purchase equivalence / `strict_current_price_savings`; personalized Complete-the-Set и fuzzy equivalence по-прежнему запрещены. Package value может использовать уже `reconsiderable`, но не создаёт это состояние.
+
+**Основные места:** `config/mailing_policy.json`, `config/deal_quality_contract.json`, `scripts/commercial_reconsideration_bridge.py`, `scripts/build_pre_ai_chatgpt_payload.py`, `scripts/build_visual_feed_v2.py`, `scripts/test_reconsideration_commercial_bridge.py`.

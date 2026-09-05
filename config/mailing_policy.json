@@ -1,6 +1,6 @@
 {
   "contract": "GAME-DEALS-MAILING",
-  "version": "1.20",
+  "version": "1.21",
   "status": "canonical",
   "purpose": "Personalized daily Steam KZ deal data preparation with stable price-blind taste verdicts, taste-first eligibility, one nightly commercial snapshot, and resumable taste-cache checkpoints.",
   "policy_loading": {
@@ -659,7 +659,6 @@
     "taste_is_primary_eligibility_filter": true,
     "minimum_taste_fit": "moderate",
     "discount_can_never_raise_taste_fit": true,
-    "below_moderate_taste_cannot_be_rescued_by_discount": true,
     "symbolic_discount_max_percent_inclusive": 5,
     "symbolic_discount_is_early_commercial_exclusion": true,
     "normal_target_rub": 500,
@@ -676,25 +675,28 @@
     "weak_non_symbolic_deal_within_standard_fit_band_remains_visible_as_wait_or_low_priority": true,
     "strong_standard_fit_band_max_rub": 650,
     "moderate_standard_fit_band_max_rub": 550,
-    "high_overage_650_to_750_requires_strong_taste_and_exceptional_discount": true
+    "high_overage_650_to_750_requires_strong_taste_and_exceptional_discount": true,
+    "below_moderate_taste_cannot_be_promoted_by_commercial_bridge": true,
+    "below_moderate_commercial_eligibility_exception_requires_explicit_v5_bridge": true
   },
   "final_ranking_context": {
     "wishlist": {
       "source": "steam_wishlist.json",
-      "role": "strong_bounded_priority_bonus_after_all_eligibility_and_purchase_gates",
-      "apply_only_during_final_sorting": true,
+      "role": "final_ranking_bonus_plus_bounded_post_taste_commercial_eligibility_context",
       "never_used_for_discovery": true,
       "never_used_as_taste_evidence": true,
       "never_changes_taste_fit": true,
       "never_proves_ownership": true,
       "never_causes_inclusion_by_itself": true,
-      "cannot_rescue_below_moderate_taste": true,
       "cannot_override_symbolic_discount_exclusion": true,
       "cannot_override_budget_ceiling": true,
       "cannot_automatically_beat_materially_better_taste_plus_deal_candidate": true,
       "priority_effect": "meaningful_boost_among_already_eligible_candidates",
       "fixed_numeric_bonus": null,
-      "numeric_bonus_must_not_be_invented_without_user_agreement": true
+      "numeric_bonus_must_not_be_invented_without_user_agreement": true,
+      "ranking_bonus_applies_only_during_final_sorting": true,
+      "may_be_used_as_bounded_commercial_eligibility_context": true,
+      "bounded_eligibility_context_never_changes_taste_fit": true
     }
   },
   "taste_factor_semantics": {
@@ -769,6 +771,35 @@
       "legacy_include_with_negative_evidence": "requires_v5_evidence_backfill",
       "exclude_audited_below": "requires_v5_evidence_backfill",
       "exclude_direct_conflict": "requires_v5_evidence_backfill"
+    }
+  },
+  "commercial_reconsideration_bridge": {
+    "enabled": true,
+    "affects_taste_fit": false,
+    "affects_fit_evidence_state": false,
+    "affects_play_role_or_start_priority": false,
+    "confirmed_negative_non_overridable": true,
+    "direct_confirmed_conflict_non_overridable": true,
+    "preserve_risks_and_warnings": true,
+    "ranking_weights_unchanged": true,
+    "wishlist_good_deal": {
+      "required_fit_evidence_state": "insufficient",
+      "wishlist_required": true,
+      "commercial_scenario": "decision_if_moderate",
+      "required_disposition": "INCLUDE",
+      "required_purchase_decision": "БРАТЬ СЕЙЧАС",
+      "new_discount_threshold": null
+    },
+    "reconsiderable_fixed_package_value": {
+      "required_fit_evidence_state": "reconsiderable",
+      "standalone_moderate_scenario_must_include": true,
+      "package_semantics": "existing_fixed_sub_purchase_option_only",
+      "strict_current_price_savings_required": true,
+      "comparison_source_alignment_required": true,
+      "personalized_complete_the_set_allowed": false,
+      "fuzzy_equivalence_allowed": false,
+      "purchase_decision_when_bridge_applies": "МОЖНО БРАТЬ",
+      "qualitative_priority_bucket": 5
     }
   }
 }

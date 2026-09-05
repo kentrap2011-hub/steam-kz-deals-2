@@ -9,6 +9,8 @@ from pathlib import Path
 from taste_negative_contract import negative_readiness
 from taste_evidence_contract import evidence_readiness
 from semantic_runtime_completion import apply_payload_status
+import apply_fixed_package_purchase_options as fixed_packages
+import commercial_reconsideration_bridge as commercial_bridge
 
 MAILING = Path('data/production/mailing/index.json')
 STORE = Path('data/production/pre_ai/store_snapshot.json')
@@ -19,6 +21,7 @@ HISTORY = Path('data/production/pre_ai/history_snapshot.json')
 DEALS = Path('data/production/pre_ai/deal_scenarios.json')
 TASTE_CACHE = Path('data/cache/taste_fit.json')
 TASTE_OVERLAY = Path('data/cache/taste_fit.entry_overlay.json')
+FIXED_PACKAGE_OPTIONS = Path('data/production/pre_ai/fixed_package_options.json')
 LATEST_RUNTIME_STATUS = Path('data/cache/taste_ingest_receipts/latest_runtime_status.json')
 MANIFEST_OUT = Path('data/production/pre_ai/chatgpt_payload.json')
 TASTE_QUEUE_OUT = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
@@ -208,6 +211,7 @@ def main():
     taste_doc = load(TASTE)
     history_doc = load(HISTORY)
     deals_doc = load(DEALS)
+    package_doc = load(FIXED_PACKAGE_OPTIONS) if FIXED_PACKAGE_OPTIONS.exists() else {}
 
     docs = [store_doc, fx_doc, family_doc, taste_doc, history_doc, deals_doc]
     if any(doc.get('status') != 'complete' for doc in docs):
@@ -244,6 +248,19 @@ def main():
     if len(families) != int(family_doc['family_count']):
         raise SystemExit('Family count mismatch')
 
+    purchase_equivalence = fixed_packages.load_purchase_equivalence()
+    package_bridge_by_family, package_bridge_stats = commercial_bridge.build_package_bridge_index(
+        package_artifact=package_doc,
+        family_graph=family_doc,
+        store_entries=store,
+        taste_projection_entries=taste,
+        effective_taste_entries=effective_entries,
+        deal_entries=deals,
+        kzt_per_rub=rate,
+        purchase_equivalence=purchase_equivalence,
+        source_stamp=source_stamp,
+    )
+
     ai_queue = []
     ai_context = []
     ready_context = []
@@ -254,6 +271,7 @@ def main():
     negative_full_eval_queue_count = 0
     negative_ready_without_ai_count = 0
     evidence_backfill_queue_count = 0
+    commercial_bridge_counts = Counter()
 
     for family in families:
         primary_key = family['primary_key']
@@ -335,7 +353,20 @@ def main():
         cached_taste = taste_row.get('cached_taste') if cache_hit else None
         if cache_hit:
             evidence_backfill = bool(taste_row.get('fit_evidence_backfill_required'))
-            if cached_taste['verdict'] != 'INCLUDE':
+            eligibility_bridge = None
+            if cached_taste['verdict'] != 'INCLUDE' and not evidence_backfill:
+                effective_taste = effective_entries.get(taste_key) or cached_taste
+                eligibility_bridge = commercial_bridge.resolve_bridge(
+                    taste_entry=effective_taste,
+                    wishlist=bool((context.get('context_only') or {}).get('wishlist')),
+                    moderate_scenario=moderate_scenario,
+                    package_evidence=package_bridge_by_family.get(str(family.get('family_id') or '')),
+                )
+                if eligibility_bridge:
+                    context['commercial_eligibility_bridge'] = eligibility_bridge
+                    context['eligibility_override'] = eligibility_bridge['kind']
+                    commercial_bridge_counts[eligibility_bridge['kind']] += 1
+            if cached_taste['verdict'] != 'INCLUDE' and not eligibility_bridge:
                 if evidence_backfill:
                     work = [NEGATIVE_WORK_CODE]
                     if family.get('requires_ai_base_support'):
@@ -419,8 +450,12 @@ def main():
                 context['fit_evidence_state'] = taste_row.get('fit_evidence_state')
                 context['fit_evidence_confidence'] = taste_row.get('fit_evidence_confidence')
                 context['fit_evidence_source'] = taste_row.get('fit_evidence_source')
-                context['final_purchase_decision'] = selected['purchase_decision']
-                context['final_priority_bucket'] = int(selected['priority_bucket'])
+                if eligibility_bridge:
+                    context['resolved_taste_verdict'] = cached_taste['verdict']
+                    context['resolved_taste_reason_code'] = cached_taste['reason_code']
+                final_decision, final_bucket = commercial_bridge.effective_purchase_fields(eligibility_bridge, selected)
+                context['final_purchase_decision'] = final_decision
+                context['final_priority_bucket'] = int(final_bucket)
                 ready_context.append(context)
             continue
 
@@ -520,9 +555,12 @@ def main():
             'missing_sale_end_does_not_exclude_candidate': True,
             'known_sale_end_at_or_before_consumer_time_is_inactive': True,
             'current_offer_state_must_not_be_reused_past_known_sale_end': True,
-            'wishlist_is_context_only': True,
-            'wishlist_applies_only_during_final_sorting': True,
-            'wishlist_never_causes_inclusion_or_changes_taste_fit': True,
+            'wishlist_is_not_taste_proof': True,
+            'wishlist_never_changes_taste_fit_or_evidence_state': True,
+            'wishlist_can_only_create_bounded_eligibility_exception_for_explicit_insufficient_plus_canonical_good_deal': True,
+            'canonical_good_deal_signal': 'decision_if_moderate INCLUDE + БРАТЬ СЕЙЧАС',
+            'reconsiderable_package_bridge_uses_existing_fixed_package_strict_current_price_savings': True,
+            'commercial_bridge_never_rescues_confirmed_negative_or_direct_conflict': True,
             'wishlist_is_strong_but_bounded_priority_bonus': True,
             'reviews_and_discovery_flags_are_not_positive_taste_proof': True,
         },
@@ -541,6 +579,8 @@ def main():
         'purchase_context_line_count': len(purchase_context),
         'deterministically_excluded_without_ai_count': len(excluded_keys),
         'deterministic_exclusion_counts': dict(sorted(exclusion_counts.items())),
+        'commercial_eligibility_bridge_counts': dict(sorted(commercial_bridge_counts.items())),
+        'fixed_package_bridge_evidence': package_bridge_stats,
         'complete_family_partition': partition_count == len(families),
         'negative_analysis': {
             'work_code': NEGATIVE_WORK_CODE,
@@ -574,6 +614,8 @@ def main():
         'ready_without_ai_count': manifest['ready_without_ai_count'],
         'deterministically_excluded_without_ai_count': manifest['deterministically_excluded_without_ai_count'],
         'deterministic_exclusion_counts': manifest['deterministic_exclusion_counts'],
+        'commercial_eligibility_bridge_counts': manifest['commercial_eligibility_bridge_counts'],
+        'fixed_package_bridge_evidence': package_bridge_stats,
         'complete_family_partition': manifest['complete_family_partition'],
         'negative_backfill_queue_count': negative_backfill_queue_count,
         'negative_full_evaluation_queue_count': negative_full_eval_queue_count,

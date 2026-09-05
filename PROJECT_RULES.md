@@ -165,3 +165,13 @@ ChatGPT должен участвовать в смысловой оценке �
 Franchise history используется только как слабый prior и без title-specific evidence не может жёстко назначить main/secondary роль или высокий/низкий start priority. При недостатке доказательств сохранять `unresolved`, а не угадывать по жанру, score или франшизе.
 
 `confirmed_negative` из канонического Taste evidence-state остаётся сильным негативом: такой кандидат не может получить `high` start priority. Этот контекст не меняет eligibility, Taste fit, `total_score`, `priority_rank` и не создаёт вторую формулу сортировки. Канонический контракт: `config/play_priority_context_contract.json`.
+
+## Bounded commercial reconsideration bridge
+
+Paid commercial signals may affect eligibility only after the price-blind Taste/evidence state is already explicit. They never rewrite Taste fit/evidence, play role, relative start priority, risks, or ranking weights.
+
+Two bounded routes are canonical. First: Steam wishlist + `fit_evidence_state=insufficient` may pass the ordinary weak Taste eligibility gate only when the already-existing moderate commercial scenario is `INCLUDE` and its current purchase decision is exactly `БРАТЬ СЕЙЧАС`. This is the canonical good-deal signal; do not add another raw discount threshold.
+
+Second: `fit_evidence_state=reconsiderable` may become purchase-worthy through an existing verified fixed Steam `Sub_` package only when the existing fixed-package economics produce `strict_current_price_savings=true` with aligned sources. The package route may set commercial purchase advice to `МОЖНО БРАТЬ`, but the Taste verdict remains `EXCLUDE / below_moderate / reconsiderable`.
+
+`confirmed_negative` and `exclude_direct_conflict` are non-overridable regardless of wishlist, discount, package savings, or other paid commercial signals. Existing content/store/sale/symbolic/budget gates, package equivalence rules, risk/warning visibility, giveaway path, and the single final ranking authority remain unchanged.

@@ -1,6 +1,6 @@
 {
   "contract": "DEAL-QUALITY-AND-SORT-V1",
-  "version": "1.3",
+  "version": "1.4",
   "status": "implementation_only",
   "purpose": "Keep taste as the eligibility base while respecting the user's limited monthly budget: 500 RUB is the normal target, 750 RUB is the absolute ceiling, and the highest overage band is reserved for exceptionally strong fit plus a very large discount.",
   "authority": {
@@ -82,7 +82,8 @@
         "ЛУЧШЕ ЖДАТЬ": 6
       }
     },
-    "wishlist_role": "tie_breaker_within_priority_bucket_only"
+    "wishlist_role": "existing_ranking_bonus_plus_bounded_insufficient_good_deal_eligibility_exception",
+    "commercial_bridge_may_create_eligibility_without_promoting_taste_fit": true
   },
   "fx": {
     "base": "RUB",
@@ -92,5 +93,13 @@
     "one_request_per_stage_run": true,
     "fail_closed_if_rate_unavailable_or_stale": true,
     "rub_value_formula": "kzt / kzt_per_rub"
+  },
+  "authority_and_separation": {
+    "commercial_bridge_never_changes_taste_fit": true,
+    "confirmed_negative_can_never_be_rescued_by_paid_commercial_signals": true,
+    "direct_confirmed_conflict_can_never_be_rescued_by_paid_commercial_signals": true,
+    "wishlist_insufficient_exception_uses_existing_moderate_include_and_buy_now_signal": true,
+    "reconsiderable_package_exception_uses_existing_fixed_package_strict_current_price_savings": true,
+    "no_new_discount_threshold_for_commercial_bridge": true
   }
 }
