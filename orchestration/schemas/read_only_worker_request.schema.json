@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://steam-kz-deals.local/orchestration/read_only_worker_request.schema.json",
+  "title": "Director read-only worker request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version","task_id","task_revision","attempt_number","attempt_id","lease_id","lease_expires_at","mode","task_file","task_file_blob_sha","base_sha","allowed_input_refs","expected_report_path","allowed_result_statuses","repository_write_authority","github_write_credential","state_write_authority","product_write_authority","worker_can_choose_next_task","secret_values"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "task_revision": {"type": "integer", "minimum": 1},
+    "attempt_number": {"type": "integer", "minimum": 1},
+    "attempt_id": {"type": "string", "minLength": 1},
+    "lease_id": {"type": "string", "minLength": 1},
+    "lease_expires_at": {"type": "string", "format": "date-time"},
+    "mode": {"enum": ["READ_ONLY_RECON", "AUDIT"]},
+    "task_file": {"type": "string", "pattern": "^WORKER_TASK_[A-Z0-9_\\-]+\\.md$"},
+    "task_file_blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "base_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "allowed_input_refs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "expected_report_path": {"type": "string", "pattern": "^reviews/worker_reports/[^/]+\\.md$"},
+    "allowed_result_statuses": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "repository_write_authority": {"const": false},
+    "github_write_credential": {"const": false},
+    "state_write_authority": {"const": false},
+    "product_write_authority": {"const": false},
+    "worker_can_choose_next_task": {"const": false},
+    "secret_values": {"type": "array", "maxItems": 0}
+  }
+}
