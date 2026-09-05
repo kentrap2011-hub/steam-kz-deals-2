@@ -1,0 +1,37 @@
+{
+  "allowed_input_refs": [
+    "WORKER_TASK_WISHLIST_GOOD_DEAL_OVERRIDE_RECON_01.md"
+  ],
+  "allowed_result_statuses": [
+    "complete",
+    "blocked",
+    "needs_user_decision"
+  ],
+  "base_sha": "65aa6668e1009885450103e9cde6b6b0f43008d3",
+  "conflict_keys": [
+    "taste-write",
+    "ranking-write",
+    "taste-ranking-policy"
+  ],
+  "created_at_utc": "2026-09-05T11:35:00Z",
+  "dependencies": [
+    "play-role-and-start-priority-implement-01"
+  ],
+  "domain": "taste-ranking",
+  "event_id": "intake-20260905-0002-wishlist-recon-r1",
+  "event_type": "task_revision_intake",
+  "expected_report_path": "reviews/worker_reports/wishlist-good-deal-override-recon-01.md",
+  "external_manual_slot": null,
+  "initial_status": "queued",
+  "mode": "READ_ONLY_RECON",
+  "priority": "VERY_HIGH",
+  "priority_source": "VERY_HIGH_USER_PRIORITY",
+  "queue_sequence": 10,
+  "review_gate": "none",
+  "schema_version": 1,
+  "task_file": "WORKER_TASK_WISHLIST_GOOD_DEAL_OVERRIDE_RECON_01.md",
+  "task_file_blob_sha": "975b0b96074f96bf372eb86b6fabc7d65c4617fa",
+  "task_id": "wishlist-good-deal-override-recon-01",
+  "task_revision": 1,
+  "user_gate": "none"
+}
