@@ -13,97 +13,113 @@
 5. Номер принадлежит worker-слоту.
 6. Не запускать параллельно конфликтующие Taste/ranking IMPLEMENT.
 7. Taste Reviewer recommendations имеют VERY HIGH USER PRIORITY.
-8. Automation migration идёт по отдельным gated phases; Phase 2A ещё не включает реальный Codex dispatch.
+8. Automation migration идёт по отдельным gated phases; live Codex dispatch остаётся выключен до независимого Phase 2A audit acceptance и последующего explicit Phase 2B enablement.
 
 ## Review checkpoint
 
-Latest System Audit:
-`reviews/system_audits/director-orchestration-phase1-audit-01.md`
-Status: complete.
-Closure: accepted.
-`system_audit_due: false`.
+`system_audit_due: true`.
+Audit target: Phase 2A orchestration security/state boundary.
+Audit task:
+`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2A_SYSTEM_AUDIT_01.md`.
+Expected report:
+`reviews/system_audits/director-orchestration-phase2a-audit-01.md`.
 
 ## Latest completed
 
-### Taste step 1
+### Taste step 2
 
 Report:
-`reviews/worker_reports/taste-evidence-state-and-confidence-implement-01.md`
+`reviews/worker_reports/play-role-and-start-priority-implement-01.md`
 Status: `complete`.
-Implementation commit: `2a1708ad598ea9baf7095478b646da689eb8f890`.
-Validation run: `33962387867`.
+Implementation commit: `19ff08128b09b9acb6cbe81f1789e0a5bba294ec`.
+Validation run: `33964033846`.
 
-Implemented explicit price-blind evidence states:
-- sufficient;
-- insufficient;
-- reconsiderable;
-- confirmed_negative.
+Implemented explicit producer-owned context:
+- play role: `main_full`, `secondary_palate_cleanser`, `family_coop`, `unresolved`;
+- relative start priority: `high`, `ordinary`, `low`, `unresolved`;
+- both remain separate from fit and sale urgency;
+- ranking math unchanged;
+- no wishlist/commercial bridge yet.
 
-Confirmed negative remains non-overridable by paid commercial signals. Step 2 may start. This is internal sequence progress, not final Taste acceptance.
+### Automation Phase 2A
 
-### Automation Phase 1
+Report:
+`reviews/worker_reports/director-orchestration-phase2a-security-boundary-implement-01.md`
+Status: `complete`.
+Validated head: `bd0b8ad88f8c1f6b8ba4f8ac7da628df2e51be6c`.
+Validation run: `33964008655`.
+Validation job: `101300745779`.
+Artifact: `9968832310`.
 
-Implementation report:
-`reviews/worker_reports/director-orchestration-shadow-observer-implement-01.md`.
-Independent audit:
-`reviews/system_audits/director-orchestration-phase1-audit-01.md`.
+Implemented:
+- single future state writer/controller;
+- immutable intake/revision/attempt/lease semantics;
+- exact task/blob/base/report binding;
+- READ-ONLY RECON/AUDIT worker request/result schemas;
+- trusted report publisher boundary;
+- future pinned `openai/codex-action` template with LLM read-only permissions;
+- real dispatch disabled;
+- no OpenAI/API key used.
 
-Phase 1 systemic closure accepted. Safe foundation for separately gated Phase 2.
+Independent audit required before Phase 2B or user secret provisioning.
 
 ## Active next pair
 
-### ЧАТ 1 — Taste step 2: play role + relative start priority
+### ЧАТ 1 — Taste step 3: reconsideration + wishlist good-deal bridge
 
 Task:
-`WORKER_TASK_PLAY_ROLE_AND_START_PRIORITY_IMPLEMENT_01.md`
-Task ID: `play-role-and-start-priority-implement-01`
+`WORKER_TASK_RECONSIDERATION_COMMERCIAL_BRIDGE_AND_WISHLIST_IMPLEMENT_01.md`
+Task ID: `reconsideration-commercial-bridge-and-wishlist-implement-01`
 Mode: `IMPLEMENT`
 Expected report:
-`reviews/worker_reports/play-role-and-start-priority-implement-01.md`
+`reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md`
 Priority: `VERY_HIGH_USER_PRIORITY`.
 Status: `ready_continue_existing_chat_1`.
 
 Goal:
-- explicit main/full vs secondary/palate-cleanser vs family/co-op vs unresolved role;
-- explicit relative start/queue priority;
-- keep these separate from personal fit and sale urgency;
-- preserve Step 1 evidence states;
-- no wishlist-good-deal/commercial reconsideration bridge yet;
-- no second ranker/sorter.
+- wishlist + canonical genuinely good deal may bypass only ordinary non-negative/insufficient Taste eligibility;
+- `reconsiderable` may become purchase-worthy through credible commercial/package value;
+- `confirmed_negative` and direct confirmed conflict remain non-overridable;
+- preserve Taste evidence state, role/start priority, risks and provenance;
+- reuse existing good-deal authority, no new discount threshold;
+- giveaways and final ranking weights unchanged unless mechanically necessary.
 
-### ЧАТ 2 — Automation Phase 2A security/state boundary
+After step 3, one independent current Taste Review is mandatory before final material acceptance of the combined three-step sequence.
+
+### ЧАТ 2 — independent Phase 2A System Audit
 
 Task:
-`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2A_SECURITY_BOUNDARY_IMPLEMENT_01.md`
-Task ID: `director-orchestration-phase2a-security-boundary-implement-01`
-Mode: `IMPLEMENT`
+`WORKER_TASK_DIRECTOR_ORCHESTRATION_PHASE2A_SYSTEM_AUDIT_01.md`
+Task ID: `director-orchestration-phase2a-system-audit-01`
+Mode: `READ-ONLY / AUDIT`
 Expected report:
-`reviews/worker_reports/director-orchestration-phase2a-security-boundary-implement-01.md`
-Priority: `VERY_HIGH_INFRASTRUCTURE_PRIORITY`.
-Status: `ready_new_chat_2_after_audit_chat_deleted`.
+`reviews/system_audits/director-orchestration-phase2a-audit-01.md`
+Status: `ready_new_chat_2_independent_auditor`.
 
 Goal:
-- single authoritative state writer/controller;
-- immutable intake/revision/attempt/lease semantics;
-- READ-ONLY RECON/AUDIT worker request/result contracts;
-- trusted report publisher boundary;
-- future official Codex Action worker definition pinned and permission-bounded;
-- real dispatch stays disabled;
-- no OpenAI API key required in Phase 2A;
-- no OpenAI/Codex invocation;
-- no autonomous IMPLEMENT.
+- independently verify single-writer, lease/revision/stale-result protections;
+- verify worker cannot write GitHub/state/product files;
+- verify trusted publisher path confinement;
+- verify exact immutable Codex Action pin/provenance and read-only worker permissions;
+- verify dispatch still disabled;
+- decide whether user may provision `OPENAI_API_KEY` and whether one bounded Phase 2B READ-ONLY pilot is safe.
 
-After Phase 2A acceptance, user will perform one-time `OPENAI_API_KEY` setup directly in GitHub Actions Secrets before Phase 2B live READ-ONLY worker pilot. Secret must never be pasted into chat/task/report/Git.
-
-These two tasks are safely parallel: Chat 1 changes Taste/product semantics; Chat 2 changes disabled orchestration infrastructure only and must not touch product/Taste logic.
+The Phase 2A implementation Chat 2 must not self-audit; delete it and use a fresh independent Chat 2.
 
 ## Taste sequence
 
 1. evidence state/confidence/reconsideration — complete internally;
-2. play role + relative start priority — active next;
-3. reconsideration commercial bridge + wishlist-good-deal override — after step 2.
+2. play role + relative start priority — complete internally;
+3. reconsideration commercial bridge + wishlist-good-deal override — active next;
+4. independent current Taste Review — mandatory after step 3 before final acceptance.
 
-If all three remain one bounded internal sequence, run one independent current Taste Review after step 3 before final material acceptance.
+## Automation sequence
+
+- Phase 1 shadow observer — implemented + audited accepted.
+- Phase 2A security/state boundary — implemented, audit pending.
+- Phase 2B live READ-ONLY worker pilot — not authorized yet.
+- `OPENAI_API_KEY` — do not provision until Phase 2A audit acceptance.
+- Autonomous IMPLEMENT remains out of scope.
 
 ## Steam access policy
 
@@ -111,7 +127,7 @@ User approved:
 - Steam Web API key for read-only `GetOwnedGames`: yes;
 - authenticated Steam Store session for personalized Complete The Set payable price: no for now.
 
-DLC ownership implementation remains queued pending later proper secret provisioning. Personalized Complete The Set actual payable price remains fail-closed/unknown.
+DLC ownership eligibility remains queued. Personalized Complete The Set actual payable price remains fail-closed/unknown.
 
 ## Other queued
 
@@ -127,7 +143,7 @@ DLC ownership implementation remains queued pending later proper secret provisio
 
 ## Next decision
 
-1. Continue existing Chat 1 with Taste step 2.
-2. Phase 1 audit Chat 2 may be deleted; create a fresh Chat 2 for Phase 2A IMPLEMENT.
-3. Read both exact reports before Taste step 3 or Phase 2B.
-4. Do not provision `OPENAI_API_KEY` until Phase 2A security boundary is validated.
+1. Continue existing Chat 1 with Taste step 3.
+2. Delete Phase 2A implementation Chat 2 and create fresh independent audit Chat 2.
+3. After Chat 1 report, launch independent Taste Review before final Taste acceptance.
+4. After Chat 2 audit acceptance, instruct user to provision `OPENAI_API_KEY` directly in GitHub Actions Secrets and then prepare one bounded Phase 2B live READ-ONLY pilot.
