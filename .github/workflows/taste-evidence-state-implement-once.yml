@@ -40,21 +40,14 @@ jobs:
               raise SystemExit(f'Expected exactly one new_annotator patch anchor, found {text.count(old)}')
           text = text.replace(old, new, 1)
 
-          old = '''cache_end = "            continue\\n\\n        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]\\n"'''
-          new = '''cache_end = "        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]\\n"'''
+          old = "cache_end = \"            continue\\n\\n        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]\\n\""
+          new = "cache_end = \"        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]\\n\""
           if text.count(old) != 1:
               raise SystemExit(f'Expected exactly one cache_end patch anchor, found {text.count(old)}')
           text = text.replace(old, new, 1)
 
-          old = """            continue
-
-        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]
-'''
-replace_between('scripts/build_pre_ai_chatgpt_payload.py', cache_start, cache_end, cache_replacement)"""
-          new = """            continue
-
-'''
-replace_between('scripts/build_pre_ai_chatgpt_payload.py', cache_start, cache_end, cache_replacement)"""
+          old = "            continue\n\n        work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]\n'''\nreplace_between('scripts/build_pre_ai_chatgpt_payload.py', cache_start, cache_end, cache_replacement)"
+          new = "            continue\n\n'''\nreplace_between('scripts/build_pre_ai_chatgpt_payload.py', cache_start, cache_end, cache_replacement)"
           if text.count(old) != 1:
               raise SystemExit(f'Expected exactly one cache_replacement tail anchor, found {text.count(old)}')
           text = text.replace(old, new, 1)
