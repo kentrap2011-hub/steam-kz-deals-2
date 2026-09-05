@@ -1,0 +1,52 @@
+{
+  "contract": "DIRECTOR-ORCHESTRATION-PHASE2B-LIVE-READONLY-PILOT-V1",
+  "phase": "2B_LIVE_READONLY_PILOT",
+  "state_persistence_enabled": true,
+  "general_dispatch_enabled": false,
+  "automatic_next_dispatch": false,
+  "implement_dispatch_allowed": false,
+  "single_state_writer": "scripts/director_orchestration_controller.py",
+  "limits": {
+    "max_logical_slots": 2,
+    "max_live_attempts": 1,
+    "cloud_lease_seconds": 1800
+  },
+  "manual_occupancy": {
+    "slot_id": "slot_1",
+    "task_id": "reconsideration-commercial-bridge-and-wishlist-implement-01",
+    "task_revision": 1,
+    "task_file": "WORKER_TASK_RECONSIDERATION_COMMERCIAL_BRIDGE_AND_WISHLIST_IMPLEMENT_01.md",
+    "replaces_task_id": "play-role-and-start-priority-implement-01",
+    "conflict_keys": [
+      "taste-write",
+      "ranking-write",
+      "taste-ranking-policy"
+    ]
+  },
+  "pilot": {
+    "task_id": "epic-ru-availability-source-probe-01",
+    "task_revision": 1,
+    "task_file": "WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_01.md",
+    "task_file_blob_sha": "fdefa23f6aa9d2689f98adcc4af4fd019a7bcb04",
+    "base_sha": "65aa6668e1009885450103e9cde6b6b0f43008d3",
+    "expected_report_path": "reviews/worker_reports/epic-ru-availability-source-probe-01.md"
+  },
+  "worker": {
+    "mode": "READ_ONLY_RECON",
+    "github_write_credential": false,
+    "repository_write_authority": false,
+    "state_write_authority": false,
+    "product_write_authority": false,
+    "worker_can_choose_next_task": false,
+    "codex_action": "openai/codex-action@86365089eb2b84e0a8fb0717b304f8bdcb13b20e",
+    "permission_profile": ":read-only",
+    "safety_strategy": "drop-sudo"
+  },
+  "publisher": {
+    "trusted_separate_job": true,
+    "exact_report_path_only": true,
+    "optimistic_concurrency_required": true,
+    "reject_state_revision_advance": true,
+    "reject_head_advance": true
+  }
+}
