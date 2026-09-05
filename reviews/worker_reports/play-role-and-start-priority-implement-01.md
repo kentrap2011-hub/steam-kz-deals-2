@@ -1,12 +1,4 @@
-import json
-import os
-from pathlib import Path
-
-impl = os.environ['IMPLEMENTATION_SHA']
-run_id = os.environ.get('GITHUB_RUN_ID', 'unknown')
-contract = json.loads(Path('config/play_priority_context_contract.json').read_text(encoding='utf-8'))
-
-report = f'''# Play role and start priority implementation 01
+# Play role and start priority implementation 01
 
 ## 1. Status
 
@@ -14,13 +6,13 @@ report = f'''# Play role and start priority implementation 01
 
 This is internal Taste IMPLEMENT step 2. It adds canonical producer-owned play-role / relative-start-priority context without implementing Taste step 3, wishlist-good-deal override, reconsideration commercial bridge, or a second ranker/sorter.
 
-Implementation commit: `{impl}`
-Validation workflow run: `{run_id}`
+Implementation commit: `19ff08128b09b9acb6cbe81f1789e0a5bba294ec`
+Validation workflow run: `33964033846`
 
 ## 2. Exact role / start-priority contract
 
 Canonical contract: `config/play_priority_context_contract.json`
-Contract id: `{contract['contract_id']}`
+Contract id: `PLAY-ROLE-START-PRIORITY-V1`
 
 Play roles:
 - `main_full` — full/main game candidate;
@@ -80,7 +72,7 @@ No sorting formula consumes the new states in this step. Existing `priority_rank
 
 ## 6. Control / regression results
 
-Workflow `{run_id}` passed the focused play-priority test and the existing Taste/ranking regressions.
+Workflow `33964033846` passed the focused play-priority test and the existing Taste/ranking regressions.
 
 Calibrated controls:
 - `Sifu` -> `main_full / high`;
@@ -133,8 +125,8 @@ This is not final material Taste acceptance. If steps 1–3 remain one bounded i
 
 ## 10. Exact commits / runs / artifacts
 
-- implementation commit: `{impl}`;
-- implementation/validation workflow run: `{run_id}`;
+- implementation commit: `19ff08128b09b9acb6cbe81f1789e0a5bba294ec`;
+- implementation/validation workflow run: `33964033846`;
 - report: `reviews/worker_reports/play-role-and-start-priority-implement-01.md`;
 - no manual production semantic artifact was fabricated;
 - one-shot implementation/report machinery is removed by the final report commit.
@@ -142,46 +134,3 @@ This is not final material Taste acceptance. If steps 1–3 remain one bounded i
 ## 11. One bounded next step
 
 Only: Taste step 3 — reconsideration commercial bridge / wishlist-good-deal override, consuming step-1 evidence state while preserving step-2 role/start context and the existing single ranking authority.
-'''
-
-out = Path('reviews/worker_reports/play-role-and-start-priority-implement-01.md')
-out.parent.mkdir(parents=True, exist_ok=True)
-out.write_text(report, encoding='utf-8')
-
-current = Path('CURRENT_TASK.md')
-text = current.read_text(encoding='utf-8')
-active = '''### A2. Play role and start priority implementation 01
-Статус: `in_progress`.
-- worker task: `WORKER_TASK_PLAY_ROLE_AND_START_PRIORITY_IMPLEMENT_01.md`;
-- цель: добавить producer-owned `play_role` и `relative_start_priority` отдельно от fit и commercial urgency;
-- role states: `main_full / secondary_palate_cleanser / family_coop / unresolved`;
-- start priority: `high / ordinary / low / unresolved`;
-- existing `priority_ranking.py` остаётся единственным ranker; новая семантика не меняет `total_score` / `priority_rank`;
-- wishlist-good-deal override и reconsideration commercial bridge вне scope;
-- A1 / F и другие параллельные работы сохраняются без изменений.
-
-'''
-if active not in text:
-    raise SystemExit('CURRENT_TASK active A2 block missing')
-text = text.replace(active, '', 1)
-completed = f'''### Play role and start priority implementation 01
-Статус: `complete` (internal Taste step 2; combined final Taste Review remains pending after step 3).
-- implementation: `{impl}`;
-- report: `reviews/worker_reports/play-role-and-start-priority-implement-01.md`;
-- roles: `main_full / secondary_palate_cleanser / family_coop / unresolved`;
-- start priority: `high / ordinary / low / unresolved`;
-- role/start remain separate from fit, wishlist and commercial sale urgency;
-- `confirmed_negative` cannot receive high start priority;
-- `priority_ranking.py` / final ranking policy unchanged; no second sorter/scheduler;
-- wishlist-good-deal and reconsideration commercial bridge remain intentionally unimplemented.
-
-'''
-anchor = '## Завершённые package-инварианты, которые сохраняются\n'
-if anchor not in text:
-    raise SystemExit('CURRENT_TASK completion anchor missing')
-text = text.replace(anchor, completed + anchor, 1)
-old = 'Taste evidence state and confidence implementation завершён как internal step 1; A2 / play role and start priority implementation сейчас выполняется как bounded internal step 2 без изменения ranker/commercial eligibility.'
-new = 'Taste steps 1–2 завершены как bounded internal implementations; step 3 может начинаться отдельно, а material Taste acceptance остаётся за combined independent review после него.'
-if old in text:
-    text = text.replace(old, new, 1)
-current.write_text(text, encoding='utf-8')

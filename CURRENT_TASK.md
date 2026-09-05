@@ -98,6 +98,17 @@
 - HighFleet/Haven Moon/BioShock deterministic controls passed;
 - wishlist override and play-role/start-priority remain intentionally unimplemented.
 
+### Play role and start priority implementation 01
+Статус: `complete` (internal Taste step 2; combined final Taste Review remains pending after step 3).
+- implementation: `19ff08128b09b9acb6cbe81f1789e0a5bba294ec`;
+- report: `reviews/worker_reports/play-role-and-start-priority-implement-01.md`;
+- roles: `main_full / secondary_palate_cleanser / family_coop / unresolved`;
+- start priority: `high / ordinary / low / unresolved`;
+- role/start remain separate from fit, wishlist and commercial sale urgency;
+- `confirmed_negative` cannot receive high start priority;
+- `priority_ranking.py` / final ranking policy unchanged; no second sorter/scheduler;
+- wishlist-good-deal and reconsideration commercial bridge remain intentionally unimplemented.
+
 ## Завершённые package-инварианты, которые сохраняются
 
 - только fixed Steam Store Package (`Sub_`);
@@ -137,16 +148,6 @@
 - цель: исправить подтверждённые audit-дефекты positive `why_fit` и consistency negative `risks[]` в текущем canonical producer path;
 - ranking weights, giveaway, duration, translation, package и unrelated UI не меняются;
 - другая параллельная работа F сохраняется без изменений.
-
-### A2. Play role and start priority implementation 01
-Статус: `in_progress`.
-- worker task: `WORKER_TASK_PLAY_ROLE_AND_START_PRIORITY_IMPLEMENT_01.md`;
-- цель: добавить producer-owned `play_role` и `relative_start_priority` отдельно от fit и commercial urgency;
-- role states: `main_full / secondary_palate_cleanser / family_coop / unresolved`;
-- start priority: `high / ordinary / low / unresolved`;
-- existing `priority_ranking.py` остаётся единственным ranker; новая семантика не меняет `total_score` / `priority_rank`;
-- wishlist-good-deal override и reconsideration commercial bridge вне scope;
-- A1 / F и другие параллельные работы сохраняются без изменений.
 
 ### B. Russian language availability as a ranking factor
 Статус: `planned`.
@@ -191,4 +192,4 @@
 
 ## Текущий статус работ
 
-`package-ui-blocker-fix-01` завершён, а GitHub-owned current Russian translation scope опубликован. E / Russian descriptions сейчас `blocked` только на одном внешнем acceptance gate: реальном occurrence того же existing Nightly Production Runtime для одного exact probe; никаких manual translations или дополнительных schedulers не создано. F / redesign detailed score breakdown UI и A1 / card explanation implementation сохраняются как отдельные параллельные работы. Taste evidence state and confidence implementation завершён как internal step 1; A2 / play role and start priority implementation сейчас выполняется как bounded internal step 2 без изменения ranker/commercial eligibility. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
+`package-ui-blocker-fix-01` завершён, а GitHub-owned current Russian translation scope опубликован. E / Russian descriptions сейчас `blocked` только на одном внешнем acceptance gate: реальном occurrence того же existing Nightly Production Runtime для одного exact probe; никаких manual translations или дополнительных schedulers не создано. F / redesign detailed score breakdown UI и A1 / card explanation implementation сохраняются как отдельные параллельные работы. Taste steps 1–2 завершены как bounded internal implementations; step 3 может начинаться отдельно, а material Taste acceptance остаётся за combined independent review после него. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
