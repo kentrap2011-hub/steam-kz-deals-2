@@ -59,7 +59,7 @@ jobs:
           test "$remote_head" = "$GITHUB_SHA"
           test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/33980979557" --jq '.status+"|"+.conclusion')" = 'completed|failure'
           test "$(gh api "repos/${GITHUB_REPOSITORY}/actions/jobs/101346057158" --jq '.name+"|"+.status+"|"+.conclusion')" = 'worker|completed|failure'
-          gh api "repos/${GITHUB_REPOSITORY}/actions/jobs/101346057158/logs" > "$RUNNER_TEMP/worker.log"
+          gh api --allow-escape-sequences "repos/${GITHUB_REPOSITORY}/actions/jobs/101346057158/logs" > "$RUNNER_TEMP/worker.log"
           grep -Fq 'You have no credits remaining.' "$RUNNER_TEMP/worker.log"
           grep -Fq 'gpt-6-astra' "$RUNNER_TEMP/worker.log"
           grep -Fq 'openai-api-key: ***' "$RUNNER_TEMP/worker.log"
