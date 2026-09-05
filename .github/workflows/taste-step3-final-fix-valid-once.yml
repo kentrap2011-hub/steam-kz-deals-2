@@ -65,7 +65,12 @@ jobs:
           python scripts/build_fixed_package_purchase_options.py
           python scripts/build_pre_ai_chatgpt_payload.py
           python scripts/build_visual_feed_v2.py
-          python scripts/build_final_visual_payload.py | tee /tmp/taste_step3_final.log
+          set +e
+          python scripts/build_final_visual_payload.py > /tmp/taste_step3_final.log 2>&1
+          FINAL_RC=$?
+          set -e
+          echo "$FINAL_RC" > /tmp/taste_step3_final.rc
+          cat /tmp/taste_step3_final.log
           python - <<'PY'
           import json
           from pathlib import Path
@@ -90,8 +95,15 @@ jobs:
                   visible_counts[kind]=visible_counts.get(kind,0)+1
                   assert game.get('fit') == 'below_moderate'
                   assert game.get('eligibility_override') == kind
-          final_result=Path('/tmp/taste_step3_final.log').read_text(encoding='utf-8').strip().splitlines()[-1]
-          assert final_result.startswith('VISUAL_FINAL_BUILD=WAIT') or final_result.startswith('VISUAL_FINAL_BUILD=BUILT')
+          final_log=Path('/tmp/taste_step3_final.log').read_text(encoding='utf-8')
+          final_rc=int(Path('/tmp/taste_step3_final.rc').read_text(encoding='utf-8').strip())
+          if manifest.get('status') == 'complete':
+              assert final_rc == 0, (final_rc, final_log)
+              final_result='COMPLETE_PRODUCER_EXIT_0'
+          else:
+              assert final_rc != 0, (final_rc, final_log)
+              assert 'ChatGPT production payload is not complete' in final_log
+              final_result='EXPECTED_FAIL_CLOSED_DEGRADED_PAYLOAD'
           print(json.dumps({
               'status':'PASS',
               'manifest_status':manifest.get('status'),
@@ -106,6 +118,7 @@ jobs:
               'intermediate_visual_status':visual.get('status'),
               'intermediate_visual_item_count':visual.get('item_count'),
               'intermediate_visible_bridge_counts':visible_counts,
+              'canonical_final_producer_exit_code':final_rc,
               'canonical_final_producer_result':final_result,
           },ensure_ascii=False,indent=2))
           print('TASTE_STEP3_CURRENT_PRODUCTION_REGEN=PASS')
