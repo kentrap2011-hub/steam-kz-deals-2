@@ -50,6 +50,18 @@ jobs:
           python scripts/build_taste_cache_index.py
           git restore data/cache/taste_fit.entry_index.json
           python scripts/build_pre_ai_chatgpt_payload.py
+          python - <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          from taste_cache_common import taste_semantics_digest
+          policy = json.loads(Path('config/mailing_policy.json').read_text(encoding='utf-8'))
+          contract = json.loads(Path('config/taste_cache_entry_contract.json').read_text(encoding='utf-8'))
+          digest = taste_semantics_digest(policy, contract)
+          Path('/tmp/taste_fit_semantics_digest.txt').write_text(digest, encoding='utf-8')
+          print(f'FIT_SEMANTICS_CURRENT={digest}')
+          PY
           python scripts/_taste_evidence_validation_summary_once.py
           git restore \
             data/production/pre_ai/taste_projection.json \
