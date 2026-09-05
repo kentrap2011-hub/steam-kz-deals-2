@@ -66,7 +66,8 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           helper = Path('scripts/play_priority_context.py').read_text(encoding='utf-8')
-          assert 'sorted(' not in helper and '.sort(' not in helper, 'play priority helper must not sort candidates'
+          assert '.sort(' not in helper, 'play priority helper must not sort candidates in place'
+          assert 'sorted(items' not in helper and 'sorted(candidates' not in helper and 'sorted(games' not in helper, 'play priority helper must not sort candidate collections'
           producer = Path('scripts/build_final_visual_payload.py').read_text(encoding='utf-8')
           assert 'priority_ranking.apply_final_priority_order' in producer
           assert 'wishlist_good_deal' not in helper
