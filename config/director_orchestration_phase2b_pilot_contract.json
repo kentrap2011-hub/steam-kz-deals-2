@@ -9,7 +9,7 @@
   "limits": {
     "max_logical_slots": 2,
     "max_live_attempts": 1,
-    "max_same_attempt_recovery_executions": 1,
+    "max_same_attempt_recovery_executions": 2,
     "cloud_lease_seconds": 1800
   },
   "manual_occupancy": {
@@ -38,12 +38,14 @@
   },
   "recovery": {
     "allowed": true,
-    "reason": "pre_model_codex_cli_argument_failure",
+    "initial_reason": "pre_model_codex_cli_argument_failure",
+    "second_reason": "pre_model_invalid_output_schema",
     "must_reuse_same_attempt": true,
     "must_reuse_same_lease_identity": true,
     "may_refresh_lease_expiry": true,
     "must_not_increment_retry_counter": true,
-    "must_not_select_another_task": true
+    "must_not_select_another_task": true,
+    "no_recovery_after_model_execution": true
   },
   "worker": {
     "mode": "READ_ONLY_RECON",
