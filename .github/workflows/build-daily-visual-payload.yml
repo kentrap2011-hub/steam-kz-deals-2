@@ -86,6 +86,24 @@ jobs:
         run: |
           set -euo pipefail
           echo "giveaway_only=false" >> "$GITHUB_OUTPUT"
+
+          # Canonical giveaway snapshots are produced inside mixed production commits.
+          # Detect section staleness from canonical provenance first; do not require
+          # the triggering commit itself to be giveaway-only.
+          source_giveaway_blob=$(git rev-parse HEAD:data/production/giveaways/v1/current.json)
+          visual_giveaway_blob=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('data/production/visual/current.json').read_text(encoding='utf-8'))
+          print((data.get('production_contract') or {}).get('source_giveaway_snapshot_blob_sha') or '')
+          PY
+          )
+          if [ -n "$source_giveaway_blob" ] && [ "$source_giveaway_blob" != "$visual_giveaway_blob" ]; then
+            echo "giveaway_only=true" >> "$GITHUB_OUTPUT"
+            echo "VISUAL_SCOPE=giveaway_only reason=source_provenance_mismatch source_blob=$source_giveaway_blob visual_source_blob=${visual_giveaway_blob:-missing}"
+            exit 0
+          fi
+
           if [ "$EVENT_NAME" != "push" ] || [ -z "${BEFORE_SHA:-}" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
             exit 0
           fi

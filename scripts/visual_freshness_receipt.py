@@ -10,7 +10,11 @@ from typing import Any
 CONTRACT = "visual-freshness-receipt-v1"
 SCHEMA_VERSION = 1
 HISTORY_PATH = "data/production/pre_ai/history_snapshot.json"
+GIVEAWAY_PATH = "data/production/giveaways/v1/current.json"
 VISUAL_PATH = "data/production/visual/current.json"
+FULL_SCOPE = "full_visual"
+GIVEAWAY_SCOPE = "giveaway_only"
+GIVEAWAY_REASON = "giveaway_only_refresh"
 
 
 def _git(*args: str, cwd: Path) -> str:
@@ -41,6 +45,7 @@ def _as_bool(value: str | None) -> bool:
 def capture_intent(repo: Path) -> dict[str, Any]:
     history_file = repo / HISTORY_PATH
     blob_sha = _git_optional("rev-parse", f"HEAD:{HISTORY_PATH}", cwd=repo)
+    giveaway_blob_sha = _git_optional("rev-parse", f"HEAD:{GIVEAWAY_PATH}", cwd=repo)
     history: dict[str, Any] = {}
     history_parse_error = None
     if history_file.exists():
@@ -62,6 +67,7 @@ def capture_intent(repo: Path) -> dict[str, Any]:
     return {
         "captured_checkout_commit_sha": _git_optional("rev-parse", "HEAD", cwd=repo),
         "history_snapshot_blob_sha": blob_sha,
+        "giveaway_snapshot_blob_sha": giveaway_blob_sha,
         "history_snapshot_present": history_file.exists(),
         "history_snapshot_parse_error": history_parse_error,
         "history_status": history.get("status"),
@@ -81,10 +87,15 @@ def _visual_state(repo: Path) -> dict[str, Any]:
         raise SystemExit(
             f"canonical visual commit/blob mismatch: commit_blob={commit_blob_sha} head_blob={blob_sha}"
         )
+    giveaways = data.get("giveaways") or {}
     return {
         "blob_sha": blob_sha,
         "commit_sha": commit_sha,
         "source_history_snapshot_blob_sha": contract.get("source_history_snapshot_blob_sha"),
+        "source_giveaway_snapshot_blob_sha": contract.get("source_giveaway_snapshot_blob_sha"),
+        "giveaway_state": giveaways.get("state"),
+        "giveaway_generated_at_utc": giveaways.get("generated_at_utc"),
+        "giveaway_fresh_until_utc": giveaways.get("fresh_until_utc"),
     }
 
 
@@ -103,19 +114,39 @@ def create_receipt(
     history_ready: bool,
     reason_override: str | None,
 ) -> dict[str, Any]:
+    scoped_giveaway = reason_override == GIVEAWAY_REASON
+    freshness_scope = GIVEAWAY_SCOPE if scoped_giveaway else FULL_SCOPE
     intended_history = intent.get("history_snapshot_blob_sha")
-    fresh_build = bool(build_reported and persisted and intended_history)
+    intended_giveaway = intent.get("giveaway_snapshot_blob_sha")
+    intended_source = intended_giveaway if scoped_giveaway else intended_history
+
+    # Giveaway-only publication is a real scoped build even though the workflow must
+    # not claim that the independently blocked paid/Taste section is globally fresh.
+    fresh_build = bool(persisted and intended_source) if scoped_giveaway else bool(
+        build_reported and persisted and intended_history
+    )
     observed_visual: dict[str, Any] | None = None
-    reason = reason_override
+    reason = None if scoped_giveaway else reason_override
 
     if fresh_build:
         observed_visual = _visual_state(repo)
-        if observed_visual.get("source_history_snapshot_blob_sha") != intended_history:
+        if scoped_giveaway:
+            if observed_visual.get("source_giveaway_snapshot_blob_sha") != intended_giveaway:
+                fresh_build = False
+                reason = "visual_source_giveaway_mismatch"
+        elif observed_visual.get("source_history_snapshot_blob_sha") != intended_history:
             fresh_build = False
             reason = "visual_source_history_mismatch"
 
     if not fresh_build and not reason:
-        if not intended_history:
+        if scoped_giveaway:
+            if not intended_giveaway:
+                reason = "missing_intended_giveaway_snapshot"
+            elif not persisted:
+                reason = "giveaway_only_refresh_not_persisted"
+            else:
+                reason = "no_fresh_giveaway_build"
+        elif not intended_history:
             reason = "missing_intended_history_snapshot"
         elif not history_ready:
             reason = "prerequisite_not_ready"
@@ -131,6 +162,8 @@ def create_receipt(
         "schema_version": SCHEMA_VERSION,
         "contract": CONTRACT,
         "fresh_build": fresh_build,
+        "freshness_scope": freshness_scope,
+        "full_visual_freshness": bool(fresh_build and not scoped_giveaway),
         "outcome": "fresh_build" if fresh_build else "degraded/no_fresh_build",
         "reason": None if fresh_build else reason,
         "intended_source_cycle": intent,
@@ -165,12 +198,16 @@ def verify_receipt(
             f"freshness receipt run mismatch: receipt={run.get('id')} expected={expected_run_id}"
         )
 
+    scope = receipt.get("freshness_scope") or FULL_SCOPE
+    if scope not in {FULL_SCOPE, GIVEAWAY_SCOPE}:
+        raise SystemExit(f"unsupported visual freshness scope: {scope}")
+
     if receipt.get("fresh_build") is not True:
         if receipt.get("outcome") != "degraded/no_fresh_build":
             raise SystemExit("fresh_build=false receipt missing degraded/no_fresh_build outcome")
         print(
             "VISUAL_FRESHNESS=degraded/no_fresh_build "
-            f"reason={receipt.get('reason') or 'unspecified'} run_id={expected_run_id}"
+            f"scope={scope} reason={receipt.get('reason') or 'unspecified'} run_id={expected_run_id}"
         )
         return "degraded/no_fresh_build"
 
@@ -178,18 +215,44 @@ def verify_receipt(
         raise SystemExit("fresh_build=true receipt has non-fresh outcome")
 
     intended = receipt.get("intended_source_cycle") or {}
-    intended_history = intended.get("history_snapshot_blob_sha")
     produced = receipt.get("produced_visual") or {}
     expected_blob = produced.get("blob_sha")
     expected_commit = produced.get("commit_sha")
-    if not intended_history or not expected_blob or not expected_commit:
-        raise SystemExit("fresh receipt missing intended history or produced visual identity")
+    if not expected_blob or not expected_commit:
+        raise SystemExit("fresh receipt missing produced visual identity")
 
-    current_history = _git("rev-parse", f"HEAD:{HISTORY_PATH}", cwd=repo)
-    if current_history != intended_history:
-        raise SystemExit(
-            f"stale source cycle mismatch: current_history={current_history} receipt_history={intended_history}"
-        )
+    if scope == GIVEAWAY_SCOPE:
+        if receipt.get("full_visual_freshness") is not False:
+            raise SystemExit("giveaway-only receipt must not claim full visual freshness")
+        intended_giveaway = intended.get("giveaway_snapshot_blob_sha")
+        produced_giveaway = produced.get("source_giveaway_snapshot_blob_sha")
+        if not intended_giveaway:
+            raise SystemExit("fresh giveaway receipt missing intended giveaway snapshot")
+        current_giveaway = _git("rev-parse", f"HEAD:{GIVEAWAY_PATH}", cwd=repo)
+        if current_giveaway != intended_giveaway:
+            raise SystemExit(
+                f"stale giveaway source mismatch: current_giveaway={current_giveaway} receipt_giveaway={intended_giveaway}"
+            )
+        if produced_giveaway != intended_giveaway:
+            raise SystemExit(
+                f"produced giveaway provenance mismatch: visual_giveaway={produced_giveaway} receipt_giveaway={intended_giveaway}"
+            )
+    else:
+        if receipt.get("full_visual_freshness") is not True:
+            raise SystemExit("full visual fresh receipt missing full_visual_freshness=true")
+        intended_history = intended.get("history_snapshot_blob_sha")
+        if not intended_history:
+            raise SystemExit("fresh receipt missing intended history")
+        current_history = _git("rev-parse", f"HEAD:{HISTORY_PATH}", cwd=repo)
+        if current_history != intended_history:
+            raise SystemExit(
+                f"stale source cycle mismatch: current_history={current_history} receipt_history={intended_history}"
+            )
+        if produced.get("source_history_snapshot_blob_sha") != intended_history:
+            raise SystemExit(
+                "produced visual/source provenance mismatch: "
+                f"visual_history={produced.get('source_history_snapshot_blob_sha')} receipt_history={intended_history}"
+            )
 
     current_blob = _git("rev-parse", f"HEAD:{VISUAL_PATH}", cwd=repo)
     if current_blob != expected_blob:
@@ -210,11 +273,21 @@ def verify_receipt(
         )
 
     visual = _read_json(repo / VISUAL_PATH)
-    visual_history = (visual.get("production_contract") or {}).get("source_history_snapshot_blob_sha")
-    if visual_history != intended_history:
-        raise SystemExit(
-            f"visual/source provenance mismatch: visual_history={visual_history} receipt_history={intended_history}"
-        )
+    contract = visual.get("production_contract") or {}
+    if scope == GIVEAWAY_SCOPE:
+        intended_giveaway = intended.get("giveaway_snapshot_blob_sha")
+        visual_giveaway = contract.get("source_giveaway_snapshot_blob_sha")
+        if visual_giveaway != intended_giveaway:
+            raise SystemExit(
+                f"visual/giveaway provenance mismatch: visual_giveaway={visual_giveaway} receipt_giveaway={intended_giveaway}"
+            )
+    else:
+        intended_history = intended.get("history_snapshot_blob_sha")
+        visual_history = contract.get("source_history_snapshot_blob_sha")
+        if visual_history != intended_history:
+            raise SystemExit(
+                f"visual/source provenance mismatch: visual_history={visual_history} receipt_history={intended_history}"
+            )
 
     staged_bytes = staged_path.read_bytes()
     canonical_bytes = (repo / VISUAL_PATH).read_bytes()
@@ -229,11 +302,18 @@ def verify_receipt(
             f"staged visual blob mismatch: staged_blob={staged_blob} receipt_blob={expected_blob}"
         )
 
-    print(
-        "VISUAL_FRESHNESS=fresh "
-        f"run_id={expected_run_id} history_blob={intended_history} "
-        f"visual_blob={expected_blob} visual_commit={expected_commit}"
-    )
+    if scope == GIVEAWAY_SCOPE:
+        print(
+            "VISUAL_FRESHNESS=fresh scope=giveaway_only "
+            f"run_id={expected_run_id} giveaway_blob={intended.get('giveaway_snapshot_blob_sha')} "
+            f"visual_blob={expected_blob} visual_commit={expected_commit} full_visual_freshness=false"
+        )
+    else:
+        print(
+            "VISUAL_FRESHNESS=fresh scope=full_visual "
+            f"run_id={expected_run_id} history_blob={intended.get('history_snapshot_blob_sha')} "
+            f"visual_blob={expected_blob} visual_commit={expected_commit}"
+        )
     return "fresh"
 
 
@@ -292,7 +372,7 @@ def main() -> None:
         _write_json(Path(args.output), receipt)
         print(
             f"FRESHNESS_RECEIPT fresh_build={str(receipt['fresh_build']).lower()} "
-            f"outcome={receipt['outcome']} reason={receipt.get('reason')}"
+            f"scope={receipt['freshness_scope']} outcome={receipt['outcome']} reason={receipt.get('reason')}"
         )
         return
 
