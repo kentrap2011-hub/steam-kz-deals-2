@@ -28,46 +28,27 @@ Authoritative existing singleton:
 - GitHub-owned producer fence is implemented;
 - no second producer may be created.
 
-## Chat 1 — giveaway recurrence recon COMPLETE
+## Chat 1 — giveaway visual publication recovery IMPLEMENT COMPLETE
 Completed task:
-`WORKER_TASK_GIVEAWAY_EMPTY_FEED_RECURRENCE_RECON_01.md`
+`WORKER_TASK_GIVEAWAY_VISUAL_PUBLICATION_RECOVERY_IMPLEMENT_01.md`
 
 Durable report:
-`reviews/worker_reports/giveaway-empty-feed-recurrence-recon-01.md`
-
-Accepted Director-level diagnosis:
-- canonical giveaway snapshot is healthy, complete and fresh;
-- one valid active Epic giveaway exists (`Alone With You` at recon time);
-- current site-facing `data/production/visual/current.json` is bound to an older expired giveaway snapshot;
-- canonical `Build daily visual payload` run `34037436064` failed/degraded at `Build and refresh canonical visual payload once`;
-- no fresh visual was persisted;
-- fail-closed is behaving correctly and must not be weakened;
-- incident is NOT the old browser cache/identity issue and NOT an upstream giveaway-source outage.
-
-User should NOT re-check the site yet.
-
-Completed recon worker Chat 1 is deletable.
-
-### Next Chat 1 — giveaway visual publication recovery IMPLEMENT
-Task:
-`WORKER_TASK_GIVEAWAY_VISUAL_PUBLICATION_RECOVERY_IMPLEMENT_01.md`
-Expected report:
 `reviews/worker_reports/giveaway-visual-publication-recovery-implement-01.md`
-Mode: `IMPLEMENT / ACCEPTANCE`
-Priority: `VERY_HIGH_USER_PRIORITY`
-Status: `ready_fresh_chat_1`.
 
-Scope:
-- repair/recover only the existing canonical daily visual build/publication path;
-- identify the actual failure inside the proven boundary;
-- preserve a single visual writer;
-- preserve fail-closed freshness/completeness;
-- if unrelated subsystem incompleteness blocks the whole visual build, allow only a minimal safe section-level refresh architecture if it keeps unrelated sections explicitly degraded and does not fabricate freshness;
-- no manual patch of visual/cache;
-- no second scheduler/writer;
-- no UI workaround.
+Status: `complete_ready_for_user_verification`.
 
-Acceptance requires the published visual artifact to bind exactly to the then-current canonical giveaway blob, with a fresh handoff and fresh produced/persisted visual receipt. Only then may status be `complete_ready_for_user_verification`.
+Accepted production outcome:
+- exact prior full-build failure remains fail-closed on incomplete independent ChatGPT/Taste production payload;
+- bounded existing giveaway refresh now activates from canonical giveaway/visual provenance mismatch even when the giveaway snapshot arrived in a mixed production commit;
+- no second scheduler, giveaway writer, visual writer, cache path, or UI workaround was created;
+- canonical giveaway blob `04a913e4be29689d7ded6c8cf0f3f81f2030d23f` is now bound into canonical visual blob `61b20125acdcddd722df8efa0f67ed0dc23341af`;
+- canonical visual producer commit: `1d7fb4d172d6d36dec4e78a5db2cdf51fa26b6ab`;
+- giveaway state is `active`, offer count `1`, validated fresh-until `2026-09-07T02:45:35.089580Z`;
+- visual build run `34047960720`: success through existing `giveaway_refresh`; paid items remained unchanged;
+- freshness receipt: `fresh_build=true`, `scope=giveaway_only`, exact produced/persisted/staged identity verified, `full_visual_freshness=false`;
+- normal deploy run `34047980496`: success; `VISUAL_PUBLICATION_OUTCOME=fresh`; GitHub Pages deployment success.
+
+Chat 1 worker is complete and must not start another implementation task. The next action for this incident is real user verification on the deployed site/Android device.
 
 ## Chat 2 — Taste existing singleton canary execution
 Task:
@@ -95,7 +76,7 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. Fresh Chat 1 runs the bounded giveaway visual publication recovery implementation.
+1. Ask the user to verify the giveaway section on the real deployed site/Android device; the publication recovery is now a valid verification target.
 2. Chat 2 continues the one-row Taste singleton canary independently.
-3. If giveaway recovery reaches `complete_ready_for_user_verification`, Director asks for real Android verification before closing the incident.
+3. Do not start another Chat 1 implementation task from this worker.
 4. Do not widen Taste throughput before Director consumes its canary report.
