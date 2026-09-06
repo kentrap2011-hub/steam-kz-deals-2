@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'orchestration/live_pilots/copilot-cli-zero-cost-live-readonly-pilot-02-pre-dispatch-recovery.json'
+      - '.github/workflows/director-copilot-cli-zero-cost-live-readonly-pilot-02-recovery.yml'
 
 permissions: {}
 
@@ -75,7 +76,8 @@ jobs:
           worker=w.split('  worker:',1)[1].split('  publisher:',1)[0]
           assert 'contents: read' in worker and 'copilot-requests: write' in worker
           assert 'contents: write' not in worker
-          assert '${{ secrets.' not in worker
+          expression_prefix='$'+'{{'
+          assert expression_prefix+' secrets.' not in worker
           assert 'persist-credentials: false' in worker
           assert 'rerun' not in worker.lower()
           assert 'top-summary-filter-buttons-01' not in worker
