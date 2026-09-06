@@ -10,58 +10,44 @@
 ## Taste — logic implemented, production materialization still pending
 The Taste Steps 1–3 semantic logic and the independent Taste Reviewer maintenance recommendations are already implemented and regression-covered.
 
-Durable implementation/acceptance report:
-`reviews/worker_reports/taste-steps-1-3-production-materialization-acceptance-01.md`
-
-Current blocking truth from that report:
-- semantic scope: 701;
-- resolved: 0;
-- unresolved: 701;
-- publication completeness: false;
-- current site is not yet a valid verification target for the new Taste behavior.
-
 Authoritative existing singleton:
 - task title: `Taste Semantic Producer`;
 - task instance id: `6a9d6fdddc00819193ed670d782045c4`;
 - canonical producer id: `chatgpt_scheduled_task:6a9d6fdddc00819193ed670d782045c4`;
 - producer generation: `1`;
-- GitHub-owned producer fence is implemented;
 - no second producer may be created.
 
-## Chat 1 — giveaway visual publication recovery IMPLEMENT COMPLETE
-Completed task:
+## Chat 1 — giveaway visual publication recovery COMPLETE
+Task:
 `WORKER_TASK_GIVEAWAY_VISUAL_PUBLICATION_RECOVERY_IMPLEMENT_01.md`
-
 Durable report:
 `reviews/worker_reports/giveaway-visual-publication-recovery-implement-01.md`
-
 Status: `complete_ready_for_user_verification`.
 
 Accepted production outcome:
-- exact prior full-build failure remains fail-closed on incomplete independent ChatGPT/Taste production payload;
-- bounded existing giveaway refresh now activates from canonical giveaway/visual provenance mismatch even when the giveaway snapshot arrived in a mixed production commit;
-- no second scheduler, giveaway writer, visual writer, cache path, or UI workaround was created;
-- canonical giveaway blob `04a913e4be29689d7ded6c8cf0f3f81f2030d23f` is now bound into canonical visual blob `61b20125acdcddd722df8efa0f67ed0dc23341af`;
-- canonical visual producer commit: `1d7fb4d172d6d36dec4e78a5db2cdf51fa26b6ab`;
-- giveaway state is `active`, offer count `1`, validated fresh-until `2026-09-07T02:45:35.089580Z`;
-- visual build run `34047960720`: success through existing `giveaway_refresh`; paid items remained unchanged;
-- freshness receipt: `fresh_build=true`, `scope=giveaway_only`, exact produced/persisted/staged identity verified, `full_visual_freshness=false`;
-- normal deploy run `34047980496`: success; `VISUAL_PUBLICATION_OUTCOME=fresh`; GitHub Pages deployment success.
+- giveaway publication is repaired through the existing canonical visual writer;
+- no second scheduler/writer and no manual patch were introduced;
+- canonical giveaway blob is now bound into `data/production/visual/current.json`;
+- giveaway state is active with one offer at acceptance time;
+- freshness receipt proves a real produced/persisted scoped visual refresh;
+- full independent Taste visual freshness remains explicitly false and was not fabricated;
+- normal Pages deploy succeeded.
 
-Chat 1 worker is complete and must not start another implementation task. The next action for this incident is real user verification on the deployed site/Android device.
+Next action: user verifies the real giveaway section on Android. Chat 1 worker is durably complete and deletable.
 
-## Chat 2 — Taste existing singleton canary execution
+## Chat 2 — Taste existing singleton canary durable closeout MISSING
 Task:
 `WORKER_TASK_TASTE_EXISTING_SINGLETON_CANARY_EXECUTE_01.md`
 Expected report:
 `reviews/worker_reports/taste-existing-singleton-canary-execute-01.md`
 Mode: `IMPLEMENT / ACCEPTANCE`
 Priority: `VERY_HIGH_USER_PRIORITY`.
-Status: `ready_or_running_chat_2`.
+Status: `worker_claimed_finished_but_required_report_missing`.
 
-This task must reuse the SAME existing Scheduled Task instance `6a9d6fdddc00819193ed670d782045c4` and process exactly one semantic row before Director review.
+Director checked only the exact expected report path after the worker completion claim; it is absent from `main`. Director will not reconstruct task outcome from logs/Actions/commits. Existing Chat 2 must self-verify and write the exact durable report even if final status is `blocked`.
 
-Hard prohibitions:
+Hard invariants remain:
+- reuse only task instance `6a9d6fdddc00819193ed670d782045c4`;
 - no second Scheduled Task/producer/generation;
 - no paid OpenAI API;
 - no Copilot fallback;
@@ -76,7 +62,7 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. Ask the user to verify the giveaway section on the real deployed site/Android device; the publication recovery is now a valid verification target.
-2. Chat 2 continues the one-row Taste singleton canary independently.
-3. Do not start another Chat 1 implementation task from this worker.
-4. Do not widen Taste throughput before Director consumes its canary report.
+1. User verifies giveaways on the real Android site now.
+2. Existing Chat 2 performs only its own durable Taste canary closeout and writes `reviews/worker_reports/taste-existing-singleton-canary-execute-01.md`.
+3. Do not widen Taste throughput until Director consumes that exact report.
+4. Do not start unrelated work in either slot before these gates are resolved.
