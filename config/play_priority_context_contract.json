@@ -61,6 +61,31 @@
       "no_title_specific_role_or_start_evidence"
     ]
   },
+  "profile_revalidation_guard": {
+    "profile_path": "USER_TASTE_PROFILE.md",
+    "scope": "static_title_specific_calibrations_only",
+    "rule": "Every static title-specific role/start calibration must remain bound to explicit canonical profile evidence. If a required profile evidence fragment disappears or the guarded calibration set changes, validation must fail until the calibration is explicitly revalidated.",
+    "required_fragments_by_calibration": {
+      "sifu": [
+        "`Sifu` — **strong current pre-play interest signal with multiple explicit reasons**"
+      ],
+      "high_on_life": [
+        "`High On Life` — **moderate main-game interest / queue-worthy, but not top-priority**"
+      ],
+      "amnesia_the_bunker": [
+        "`Amnesia: The Bunker` — **positive pre-play interest with moderate queue priority**"
+      ],
+      "terminator_resistance": [
+        "`Terminator: Resistance` — **moderate positive pre-play interest with franchise-driven boost, not queue-reordering priority**"
+      ],
+      "tails_of_iron_2": [
+        "`Tails of Iron 2: Whiskers of Winter` currently reads to Dmitry as a **secondary / palate-cleanser game**"
+      ],
+      "trine_4": [
+        "`Trine 4: The Nightmare Prince` — **confirmed played positive in a family-play context**"
+      ]
+    }
+  },
   "title_calibrations": {
     "sifu": {
       "aliases": [
@@ -72,7 +97,8 @@
       "relative_start_priority": "high",
       "relative_start_priority_confidence": "high",
       "provenance": [
-        "reviewer_calibrated_title_specific_current_interest"
+        "reviewer_calibrated_title_specific_current_interest",
+        "USER_TASTE_PROFILE.md:sifu_current_interest"
       ]
     },
     "high_on_life": {
@@ -85,7 +111,8 @@
       "relative_start_priority": "ordinary",
       "relative_start_priority_confidence": "high",
       "provenance": [
-        "reviewer_calibrated_title_specific_role"
+        "reviewer_calibrated_title_specific_role",
+        "USER_TASTE_PROFILE.md:high_on_life_main_game_interest"
       ]
     },
     "amnesia_the_bunker": {
@@ -98,7 +125,8 @@
       "relative_start_priority": "ordinary",
       "relative_start_priority_confidence": "high",
       "provenance": [
-        "reviewer_calibrated_title_specific_role"
+        "reviewer_calibrated_title_specific_role",
+        "USER_TASTE_PROFILE.md:amnesia_bunker_queue_interest"
       ]
     },
     "terminator_resistance": {
@@ -112,7 +140,8 @@
       "relative_start_priority_confidence": "high",
       "provenance": [
         "reviewer_calibrated_title_specific_role",
-        "franchise_history_weak_prior"
+        "franchise_history_weak_prior",
+        "USER_TASTE_PROFILE.md:terminator_resistance_queue_interest"
       ]
     },
     "tails_of_iron_2": {
@@ -126,7 +155,8 @@
       "relative_start_priority": "ordinary",
       "relative_start_priority_confidence": "high",
       "provenance": [
-        "reviewer_calibrated_title_specific_role"
+        "reviewer_calibrated_title_specific_role",
+        "USER_TASTE_PROFILE.md:tails_of_iron_2_secondary_role"
       ]
     },
     "trine_4": {
@@ -140,7 +170,8 @@
       "relative_start_priority": "ordinary",
       "relative_start_priority_confidence": "medium",
       "provenance": [
-        "reviewer_calibrated_confirmed_family_play_positive"
+        "reviewer_calibrated_confirmed_family_play_positive",
+        "USER_TASTE_PROFILE.md:trine_4_family_play_positive"
       ]
     },
     "tmnt_splintered_fate": {
