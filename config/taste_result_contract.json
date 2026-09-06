@@ -9,6 +9,15 @@
     "validation_and_persistence": "github",
     "final_weight_application": "github_final_ranking_producer"
   },
+  "producer_fence": {
+    "active_producer_id": "chatgpt_scheduled_task:6a9d6fdddc00819193ed670d782045c4",
+    "active_producer_generation": 1,
+    "transport_fields": [
+      "producer_id",
+      "producer_generation"
+    ],
+    "missing_legacy_or_mismatch_policy": "reject_before_ingest"
+  },
   "required_base_result_fields": [
     "key",
     "appid",
