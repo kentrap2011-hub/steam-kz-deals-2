@@ -12,43 +12,56 @@
 - `material_changes_since_last_system_audit: 1`.
 - `taste_integrated_production_verification_pending: true`.
 
-## Taste — waiting one user evidence item
-Completed task: `WORKER_TASK_TASTE_SEMANTIC_RUNTIME_RECOVERY_RECON_01.md`
+## Taste — historical scheduler absent from current runnable surface
+Completed recon: `WORKER_TASK_TASTE_SEMANTIC_RUNTIME_RECOVERY_RECON_01.md`
 Report: `reviews/worker_reports/taste-semantic-runtime-recovery-recon-01.md`
-Status: `needs_user_evidence`.
 
-Recovered canonical historical producer:
+Recovered historical producer:
 - name: `Taste Semantic Producer`
 - task/jawbone ID: `0a51664a-af13-5b98-8c25-d589f0d247c9`
 - historical owner: ChatGPT scheduled-task service
 - historically proven recent accepted production through 2026-09-01.
 
-Current enabled/disabled/deleted/owner-scope/schedule state is not proven by repository evidence or the current visible task surface. Do not create a replacement scheduler while this ambiguity remains.
+User owner-scope evidence received 2026-09-06 from current ChatGPT Tasks UI:
+- `Активно`: no user-created active tasks shown;
+- `Приостановленные`: no `Taste Semantic Producer` shown;
+- completed screenshot is partial and is not used to claim global deletion.
 
-Required user evidence: from the same ChatGPT account/workspace, open Tasks and show whether `Taste Semantic Producer` exists. If present, show its enabled state/schedule; if absent, show the task list demonstrating absence. This is the only current Taste unblock fact needed.
+Operational classification: historical producer is absent from the current runnable scheduler surface. Do not wait for another enabled/disabled screenshot and do not create a duplicate blindly.
 
-Previous Chat 1 recon is durably complete and may be deleted.
+Copilot zero-cost Rev02 does not provide a replacement: its durable report is `blocked` before successful semantic inference.
 
-## Next Chat 1 — fresh giveaway recurrence recon
+Next Taste task:
+`WORKER_TASK_TASTE_ZERO_COST_RUNTIME_MIGRATION_RECON_01.md`
+Expected report:
+`reviews/worker_reports/taste-zero-cost-runtime-migration-recon-01.md`
+Mode: `READ-ONLY / RECON`
+Priority: `VERY_HIGH_USER_PRIORITY`
+Status: `ready_fresh_chat_2`.
+Goal: identify one realistic zero-extra-cost singleton migration/recovery path, or classify the external blocker, while preserving GitHub queue/control plane and `TASTE-SEMANTIC-RESULT-V5`.
+
+## Chat 1 — fresh giveaway recurrence recon
 Task: `WORKER_TASK_GIVEAWAY_EMPTY_FEED_RECURRENCE_RECON_01.md`
 Expected report: `reviews/worker_reports/giveaway-empty-feed-recurrence-recon-01.md`
 Mode: `READ-ONLY / RECON`
 Priority: `VERY_HIGH_USER_PRIORITY`.
-Status: `ready_fresh_chat_1`.
+Status: `running_or_ready_chat_1`.
 
-Reason: fresh real Android production incident while Taste waits only on user evidence.
-User screenshot shows:
+Real Android production incident:
 - `Данные: 31 авг., 00:37`
 - active `🎁 Раздачи (!)` tab
 - warning `Раздачи временно не удалось проверить полностью.`
 - no giveaway cards visible.
+Do not request another site verification until diagnosis/fix reaches the user gate.
 
-## Chat 2 — zero-cost Copilot pilot revision 02
+## Chat 2 — Copilot zero-cost pilot revision 02 — CLOSED BLOCKED
 Task: `WORKER_TASK_COPILOT_CLI_ZERO_COST_LIVE_READONLY_PILOT_02.md`
-Expected pilot report: `reviews/worker_reports/copilot-cli-zero-cost-live-readonly-pilot-02.md`
-Expected semantic report: `reviews/worker_reports/epic-ru-availability-source-probe-02.md`
-Status: `worker_claimed_finished_but_durable_closeout_missing` until exact reports appear.
-Existing Chat 2 must not be deleted yet and must self-verify/close its own task.
+Durable report: `reviews/worker_reports/copilot-cli-zero-cost-live-readonly-pilot-02.md`
+Status: `blocked_closed`.
+
+The pilot stopped before successful Copilot semantic inference. The child report `reviews/worker_reports/epic-ru-availability-source-probe-02.md` is absent by design and must not be fabricated. No paid fallback or unauthorized autonomous IMPLEMENT is accepted. This worker chat is durably free/deletable.
+
+Replacement Chat 2 takes the Taste zero-cost runtime migration recon above.
 
 ## Giveaway ITAD identity
 Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
@@ -58,7 +71,7 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. User provides one Tasks screenshot/evidence for `Taste Semantic Producer`; then Director chooses restore/reconnect/migration without duplication.
-2. Fresh Chat 1 investigates the recurring empty giveaway feed while waiting.
-3. Existing Chat 2 finishes durable Copilot pilot closeout independently.
-4. Do not ask user to verify Taste or giveaways on site until the respective gates are actually ready.
+1. Fresh Chat 2 performs the bounded Taste zero-cost runtime migration recon.
+2. Chat 1 continues the giveaway recurrence recon independently.
+3. Do not create a Taste replacement scheduler until the migration recon proves a safe singleton route.
+4. Do not ask the user to verify Taste or giveaways on site until the respective gates are actually ready.
