@@ -1,6 +1,6 @@
 # CURRENT TASK
 
-Последнее обновление: 2026-09-05
+Последнее обновление: 2026-09-06
 
 ## Завершено
 
@@ -145,6 +145,21 @@
 
 ## Запланировано / выполняется
 
+### Taste Steps 1–3 production materialization acceptance 01
+Статус: `blocked_semantic_runtime`.
+- worker task: `WORKER_TASK_TASTE_STEPS_1_3_PRODUCTION_MATERIALIZATION_ACCEPTANCE_01.md`;
+- priority: `VERY_HIGH_USER_PRIORITY`; не переключаться на giveaway/ITAD или другой backlog до снятия production gate;
+- reviewer recommendations A1/A2 implemented and regression-covered: Batman/RDR2 positive-exception guards + fail-closed static role/start profile provenance revalidation;
+- current canonical V5 semantic scope: `701`, resolved `0`, unresolved `701`, `sufficiently_complete_for_publication=false`;
+- runtime owner remains the existing `scheduled ChatGPT production task`; repository observability says `no_current_scope_progress_observed` after current source update `2026-09-03T18:53:27.390807+00:00`;
+- no second semantic scheduler/queue was created and interactive chat did not manually process the 701-row backlog;
+- deterministic acceptance snapshot: `data/cache/taste_steps123_production_acceptance.json`;
+- validation run `34010651477`: success; execution ownership run `34010651478`: success;
+- all 10 required controls are recorded in the acceptance snapshot; HighFleet is `semantic_pending_current_scope` and its confirmed-negative guard forces `unresolved / low`, while the current visual HighFleet row is explicitly not accepted as new Taste evidence;
+- downstream final regeneration/deploy intentionally not run while semantic completeness is false;
+- report: `reviews/worker_reports/taste-steps-1-3-production-materialization-acceptance-01.md`;
+- exact unblock: resume/repair the same existing scheduled semantic producer so current V5 results arrive through the canonical inbox/ingest path; only after legitimate completeness may GitHub-owned downstream regeneration/deploy and user-site verification proceed.
+
 ### A. Ranking and card explanation quality audit
 Статус: `planned`.
 - audit минимум top-30 + boundary cases;
@@ -206,4 +221,4 @@
 
 ## Текущий статус работ
 
-`package-ui-blocker-fix-01` завершён, а GitHub-owned current Russian translation scope опубликован. E / Russian descriptions сейчас `blocked` только на одном внешнем acceptance gate: реальном occurrence того же existing Nightly Production Runtime для одного exact probe; никаких manual translations или дополнительных schedulers не создано. F / redesign detailed score breakdown UI и A1 / card explanation implementation сохраняются как отдельные параллельные работы. Taste steps 1–3 завершены как bounded internal implementations; repository-side Step 3 технически закрыт, а material Taste acceptance остаётся за одним combined independent current review Steps 1–3. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
+Taste Steps 1–3 production materialization acceptance — текущая `VERY_HIGH_USER_PRIORITY` работа этого чата и остаётся `blocked_semantic_runtime`: reviewer A1/A2 закрыты, deterministic/ownership validation зелёные, но current V5 semantic scope остаётся `0/701` resolved, поэтому сайт не передаётся на пользовательскую проверку и downstream deploy не запускается. Не создавать второй semantic scheduler/queue и не подменять это ручным backfill; следующий допустимый production шаг — восстановить прогресс того же existing scheduled ChatGPT semantic producer через canonical ingest. E / Russian descriptions остаётся отдельным runtime blocker, а F / redesign detailed score breakdown UI и A1 / card explanation implementation — отдельными параллельными работами, без переключения текущего Taste-приоритета. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
