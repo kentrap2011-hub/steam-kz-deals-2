@@ -28,6 +28,12 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Validate singleton Taste producer fence regression
+        run: python scripts/validate_taste_producer_fence.py
+
+      - name: Enforce active producer on canonical Taste inbox
+        run: python scripts/taste_producer_fence.py data/ai_inbox/taste
+
       - name: Validate normalized taste factor contract
         run: python scripts/validate_taste_v3_contract.py
 
