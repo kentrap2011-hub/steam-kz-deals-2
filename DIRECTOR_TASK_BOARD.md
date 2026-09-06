@@ -12,29 +12,31 @@
 - `material_changes_since_last_system_audit: 1`.
 - `taste_baseline_review_due: false`.
 - latest Taste Review: `reviews/taste_reviews/taste-steps-1-3-current-review-01.md` — `ACCEPT_WITH_ADVISORY_RECOMMENDATIONS`.
-- `taste_integrated_production_verification_pending: true` until canonical post-backfill output is regenerated and bounded controls are verified.
+- `taste_integrated_production_verification_pending: true`.
+- current Taste blocker: canonical semantic runtime not advancing current V5 scope.
 
-## Completed Taste Review
-Task: `WORKER_TASK_TASTE_STEPS_1_3_CURRENT_REVIEW_01.md`
-Report: `reviews/taste_reviews/taste-steps-1-3-current-review-01.md`
-Status: `ACCEPT_WITH_ADVISORY_RECOMMENDATIONS`.
-No blocking semantic findings. Steps 1–3 semantic boundary is accepted, but current persisted production/ranking output is stale and not yet suitable for final user verification.
-
-## Next Chat 1 — Taste production materialization acceptance
+## Completed Chat 1 — Taste production materialization acceptance
 Task: `WORKER_TASK_TASTE_STEPS_1_3_PRODUCTION_MATERIALIZATION_ACCEPTANCE_01.md`
-Mode: `IMPLEMENT / ACCEPTANCE`
-Expected report: `reviews/worker_reports/taste-steps-1-3-production-materialization-acceptance-01.md`
+Report: `reviews/worker_reports/taste-steps-1-3-production-materialization-acceptance-01.md`
+Status: `blocked_semantic_runtime`.
+
+Accepted high-level outcome from durable report:
+- remaining Taste Reviewer maintenance recommendations are implemented and regression-covered;
+- current V5 semantic scope is `701` unresolved / `0` resolved;
+- publication completeness is false;
+- old visual output is explicitly rejected as Steps 1–3 acceptance evidence;
+- no second semantic scheduler, parallel queue or manual bulk semantic processing was introduced;
+- HighFleet deterministic confirmed-negative guard is green, but live semantic materialization is still pending;
+- current site is **not** ready for user verification.
+
+This implementation/acceptance chat may be deleted after Director consumes the report.
+
+## Next Chat 1 — Taste semantic runtime recovery recon
+Task: `WORKER_TASK_TASTE_SEMANTIC_RUNTIME_RECOVERY_RECON_01.md`
+Mode: `READ-ONLY / RECON`
+Expected report: `reviews/worker_reports/taste-semantic-runtime-recovery-recon-01.md`
 Status: `ready_fresh_chat_1`.
-
-Purpose:
-- implement remaining Taste Reviewer maintenance recommendations for Batman/RDR2 positive-exception regressions and role/start calibration revalidation provenance;
-- preserve the canonical semantic runtime; no second scheduler/manual bulk queue;
-- close or honestly report the current semantic-runtime/materialization gate;
-- regenerate only through the canonical production path once legitimately complete;
-- run integrated ten-control acceptance including critical HighFleet behavior;
-- reach `complete_ready_for_user_verification` only when current published output is demonstrably post-Steps-1–3.
-
-Do not start ITAD/giveaway work in Chat 1 until this Taste production/user-verification gate is resolved.
+Purpose: recover/identify the intended canonical scheduled semantic producer or define the smallest canonical zero-cost recovery path without creating a second scheduler. Stay on Taste.
 
 ## Chat 2 — zero-cost Copilot live pilot revision 02
 Task: `WORKER_TASK_COPILOT_CLI_ZERO_COST_LIVE_READONLY_PILOT_02.md`
@@ -43,7 +45,7 @@ Expected report: `reviews/worker_reports/copilot-cli-zero-cost-live-readonly-pil
 Status: `ready_fresh_chat_2` unless already created/running by user.
 Representative task: `WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_02.md`.
 Expected semantic report: `reviews/worker_reports/epic-ru-availability-source-probe-02.md`.
-This infrastructure pilot is independent of Taste and may run in parallel.
+This infrastructure pilot is independent and may run in parallel. Its result may become relevant to a future canonical semantic-runtime migration only if the provider path is actually proven and accepted.
 
 ## Giveaway ITAD identity
 Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
@@ -61,10 +63,10 @@ The separately billed OpenAI API automation route is stopped by user policy and 
 - Russian-language availability ranking factor.
 - YouTube review selection.
 - modern Windows compatibility evidence.
-- semantic/Russian-description completion must use the existing canonical runtime; do not create another scheduler.
+- semantic/Russian-description completion must use the existing canonical runtime or an explicitly accepted canonical migration; do not create another active scheduler.
 
 ## Next decision
-1. Chat 1 stays on Taste through production materialization and user-verification readiness.
-2. Chat 2 may independently run Copilot CLI zero-cost pilot revision 02.
-3. Consume exact reports independently.
-4. Only after Taste report says `complete_ready_for_user_verification` ask the user to check the real site/mobile output.
+1. Fresh Chat 1 runs semantic-runtime recovery recon and stays strictly on the Taste unblock path.
+2. Chat 2 may independently continue the zero-cost Copilot pilot.
+3. Do not ask the user to verify the site yet.
+4. After the recovery recon, choose exactly one bounded restore/reconnect/migration/user-evidence action.
