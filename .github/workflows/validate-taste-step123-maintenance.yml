@@ -9,6 +9,7 @@ on:
       - "config/play_priority_context_contract.json"
       - "scripts/play_priority_context.py"
       - "scripts/test_play_priority_context.py"
+      - "scripts/test_taste_evidence_states.py"
       - "scripts/taste_negative_contract.py"
       - "scripts/test_taste_step123_maintenance_guards.py"
       - ".github/workflows/validate-taste-step123-maintenance.yml"
@@ -41,4 +42,5 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/test_play_priority_context.py
+          python scripts/test_taste_evidence_states.py
           python scripts/test_taste_step123_maintenance_guards.py
