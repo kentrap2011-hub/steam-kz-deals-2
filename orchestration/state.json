@@ -15,11 +15,15 @@
     {
       "digest_sha256": "4b691ac7b89adfe8666d612b24a6afaa9d99b32f912d591ad35cb41bf399d56f",
       "event_id": "intake-20260905-0004-top-summary-implement-r1"
+    },
+    {
+      "digest_sha256": "83a65525312022fa011149045acb5037a91fd98affad48480fedf612ad5d2058",
+      "event_id": "intake-20260906-0005-epic-recon-02-r1"
     }
   ],
   "authoritative_writer": "scripts/director_orchestration_controller.py",
   "dispatch_enabled": false,
-  "orchestration_phase": "phase_2b_live_readonly_pilot_blocked_billing",
+  "orchestration_phase": "copilot_cli_zero_cost_live_readonly_pilot_02_attempt_1",
   "phase": "shadow_observer",
   "phase2b_closeout": {
     "attempt_id": "epic-ru-availability-source-probe-01:r1:a1",
@@ -54,13 +58,25 @@
       "task_id": null
     },
     {
-      "conflict_keys": [],
-      "lease": null,
-      "occupancy_type": null,
+      "conflict_keys": [
+        "provider-authority:epic"
+      ],
+      "lease": {
+        "acquired_at": "2026-09-06T06:46:16.428666Z",
+        "attempt_id": "epic-ru-availability-source-probe-02:r1:a1",
+        "expires_at": "2026-09-06T07:46:16.428666Z",
+        "lease_id": "slot_2:epic-ru-availability-source-probe-02:r1:a1",
+        "owner": "director-controller",
+        "state_revision_acquired": 8,
+        "status": "active",
+        "task_id": "epic-ru-availability-source-probe-02",
+        "task_revision": 1
+      },
+      "occupancy_type": "cloud_worker",
       "slot_id": "slot_2",
-      "status": "free",
-      "task_file": null,
-      "task_id": null
+      "status": "occupied",
+      "task_file": "WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_02.md",
+      "task_id": "epic-ru-availability-source-probe-02"
     }
   ],
   "source_refs": {
@@ -68,7 +84,7 @@
     "director_board": "DIRECTOR_TASK_BOARD.md",
     "phase2a_contract": "config/director_orchestration_phase2a_contract.json"
   },
-  "state_revision": 7,
+  "state_revision": 8,
   "tasks": [
     {
       "allowed_input_refs": [
@@ -232,6 +248,45 @@
       "task_file": "WORKER_TASK_TOP_SUMMARY_FILTER_BUTTONS_01.md",
       "task_file_blob_sha": "0215da111d634d28abbb1a44e450751d5d5bdbb2",
       "task_id": "top-summary-filter-buttons-01",
+      "user_gate": "none"
+    },
+    {
+      "allowed_input_refs": [
+        "WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_02.md",
+        "reviews/worker_reports/epic-ru-giveaway-availability-recon-01.md"
+      ],
+      "allowed_result_statuses": [
+        "complete",
+        "blocked",
+        "needs_user_evidence"
+      ],
+      "assigned_slot": "slot_2",
+      "attempt_id": "epic-ru-availability-source-probe-02:r1:a1",
+      "attempt_number": 1,
+      "base_sha": "4027aea1103a1a872c27b24ebd4a9c3e1473d315",
+      "conflict_keys": [
+        "provider-authority:epic"
+      ],
+      "dependencies": [],
+      "domain": "epic-ru-availability",
+      "evidence_refs": [],
+      "expected_report": "reviews/worker_reports/epic-ru-availability-source-probe-02.md",
+      "intake_event_id": "intake-20260906-0005-epic-recon-02-r1",
+      "mode": "READ_ONLY_RECON",
+      "priority": "HIGH",
+      "queue_sequence": 21,
+      "retry": {
+        "failure_count": 0,
+        "last_failure": null,
+        "max_attempts": 2,
+        "next_attempt_number": 2
+      },
+      "review_gate": "none",
+      "revision": 1,
+      "status": "assigned",
+      "task_file": "WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_02.md",
+      "task_file_blob_sha": "8270487fb3019135adc5662d0b67f0f37e189bed",
+      "task_id": "epic-ru-availability-source-probe-02",
       "user_gate": "none"
     }
   ]
