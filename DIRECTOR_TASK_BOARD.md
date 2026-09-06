@@ -4,6 +4,7 @@
 - Keep two independent worker slots busy when safe.
 - User will not pay extra for automation/inference.
 - No autonomous IMPLEMENT without separate approval.
+- Before assigning/reassigning a worker slot, Director must reconcile exactly: current Board -> exact task file -> exact durable report from the immediately preceding step. Do not infer slot state from an old chat history alone.
 - Do not move a user-priority semantic change to unrelated backlog work before its required production/user-verification gate is reachable.
 
 ## Taste — logic implemented, production materialization still pending
@@ -22,20 +23,17 @@ Current blocking truth from that report:
 A singleton replacement ChatGPT Scheduled Task was then implemented:
 `reviews/worker_reports/taste-scheduled-task-singleton-canary-implement-01.md`
 
-That report closed `blocked` only at the live execution boundary:
-- exactly one replacement `Taste Semantic Producer` exists;
+Authoritative existing singleton:
+- task title: `Taste Semantic Producer`;
 - task instance id: `6a9d6fdddc00819193ed670d782045c4`;
-- producer id: `chatgpt_scheduled_task:6a9d6fdddc00819193ed670d782045c4`;
-- generation: 1;
+- canonical producer id: `chatgpt_scheduled_task:6a9d6fdddc00819193ed670d782045c4`;
+- producer generation: `1`;
 - GitHub-owned producer fence is implemented;
-- task retained disabled/fail-closed;
+- prior durable state: disabled/fail-closed;
 - `last_run_time = null`;
-- semantic rows processed: 0;
-- no second producer may be created.
+- semantic rows processed: 0.
 
-The worker chat that created the canary was deleted by the user after its durable report was already saved. Therefore no active worker is currently advancing Taste. The next Taste worker must reuse the exact existing task instance above and perform only the bounded one-row execution/ingest continuation; it must never create another Taste producer.
-
-Priority: `VERY_HIGH_USER_PRIORITY`.
+No second producer may be created.
 
 ## Chat 1 — current giveaway incident
 Task:
@@ -44,11 +42,9 @@ Expected report:
 `reviews/worker_reports/giveaway-empty-feed-recurrence-recon-01.md`
 Mode: `READ-ONLY / RECON`
 Priority: `VERY_HIGH_USER_PRIORITY`.
+Status: `running_chat_1`.
 
-User has created the current Chat 1 for this task.
-Current durable report path is still absent from `main`, so this worker is considered running/not durably complete.
-
-Important: Chat 1 is currently diagnosing the empty/fail-closed giveaway feed; it is NOT yet an implementation fix. Once the durable recon identifies one bounded root cause/action, the next immediate task in this slot should be the corresponding IMPLEMENT fix before ordinary backlog work.
+Chat 1 is diagnosing the empty/fail-closed giveaway feed. It is NOT yet the implementation fix. Once its durable recon identifies one bounded root cause/action, the immediate next Chat 1 task is the corresponding IMPLEMENT fix before ordinary backlog work.
 
 User-visible incident evidence:
 - `Данные: 31 авг., 00:37`;
@@ -58,13 +54,27 @@ User-visible incident evidence:
 
 Do not ask user to re-check giveaways until diagnosis -> bounded fix -> deploy reaches the user verification gate.
 
-## Chat 2 — slot free, must return to Taste
-The previous Taste canary worker chat was deleted by the user after durable closeout.
+## Chat 2 — Taste existing singleton canary execution
+Task:
+`WORKER_TASK_TASTE_EXISTING_SINGLETON_CANARY_EXECUTE_01.md`
+Expected report:
+`reviews/worker_reports/taste-existing-singleton-canary-execute-01.md`
+Mode: `IMPLEMENT / ACCEPTANCE`
+Priority: `VERY_HIGH_USER_PRIORITY`.
+Status: `ready_fresh_chat_2`.
 
-Status: `FREE_BUT_TASTE_CONTINUATION_REQUIRED`.
+This task must reuse the SAME existing Scheduled Task instance `6a9d6fdddc00819193ed670d782045c4`.
+It may schedule/enable that same task for one bounded near-future execution if no synchronous `run now` exists, but it must process exactly one semantic row total, then disable/pause/guard the same task before a second row can run.
 
-Do NOT assign UI/top-summary or ordinary backlog work to Chat 2 yet.
-The next Chat 2 assignment must continue Taste production materialization using the SAME existing Scheduled Task instance `6a9d6fdddc00819193ed670d782045c4` and must not create another producer.
+Hard prohibitions:
+- no second Scheduled Task;
+- no second producer id;
+- no new generation;
+- no paid OpenAI API;
+- no Copilot fallback;
+- no manual semantic processing;
+- no throughput widening;
+- no UI/giveaway/ITAD work.
 
 ## Giveaway ITAD identity
 Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
@@ -74,7 +84,8 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. Chat 1 finishes the giveaway recurrence recon and then immediately moves to the bounded giveaway fix based on its durable diagnosis.
-2. Fresh Chat 2 continues the existing Taste singleton canary path; no second Taste producer.
-3. Taste site verification waits for legitimate semantic materialization and regenerated production output.
-4. Giveaway site verification waits for diagnosis, implementation fix, deploy, then real Android verification.
+1. Chat 1 finishes giveaway recon, then moves immediately to the bounded giveaway IMPLEMENT fix based on its durable diagnosis.
+2. Fresh Chat 2 executes exactly one Taste semantic row through the existing singleton producer and canonical GitHub ingest.
+3. Do not widen Taste throughput before Director consumes `reviews/worker_reports/taste-existing-singleton-canary-execute-01.md`.
+4. Taste site verification waits for legitimate semantic materialization and regenerated production output.
+5. Giveaway site verification waits for diagnosis, fix, deploy, then real Android verification.
