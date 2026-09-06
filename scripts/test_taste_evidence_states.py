@@ -48,6 +48,18 @@ def strong_negative(code='felt_technical_burden', category='felt_burden', origin
     }
 
 
+def generic_positive_exception_finding(title, code, category, generic_label):
+    return {
+        'category': category,
+        'code': code,
+        'evidence': f'Only generic {generic_label} metadata is known for {title}; there is no title-specific user-negative evidence.',
+        'risk_text_ru': f'Общий ярлык {generic_label} сам по себе не доказывает личный минус для {title}.',
+        'evidence_origin': 'generic_feature_hypothesis',
+        'evidence_strength': 'strong',
+        'personal_relevance': 'confirmed',
+    }
+
+
 def main():
     haven = base_result('insufficient', 'low', ['candidate_information_insufficient'])
     haven['candidate_quality_findings'] = [quality_finding()]
@@ -87,6 +99,32 @@ def main():
         lambda: validate_negative_analysis('complete_with_confirmed_negative', generic, [generic[0]['evidence']], require_v5=True),
         'invalid personal-negative evidence origin',
     )
+
+    # Reviewer maintenance advisory A1: named positive controls prevent future
+    # shortcuts from turning broad structural labels into automatic personal dislike.
+    # Batman is replay-positive despite potential repetition/complexity labels; RDR2
+    # is a strong open-world positive despite generic directionlessness/open-world risk.
+    positive_exception_controls = {
+        'Batman: Arkham': generic_positive_exception_finding(
+            'Batman: Arkham', 'unchanged_repetition', 'repetition', 'repetition/complexity',
+        ),
+        'Red Dead Redemption 2': generic_positive_exception_finding(
+            'Red Dead Redemption 2', 'directionlessness', 'direction', 'open-world/directionlessness',
+        ),
+    }
+    for title, finding in positive_exception_controls.items():
+        expect_error(
+            lambda finding=finding: validate_negative_analysis(
+                'complete_with_confirmed_negative', [finding], [finding['evidence']], require_v5=True,
+            ),
+            'invalid personal-negative evidence origin',
+        )
+        # The safe fallback remains no confirmed personal-negative finding; no
+        # positive bonus or broad genre rule is introduced by this regression.
+        safe = base_result('insufficient', 'low', ['candidate_information_insufficient'])
+        safe['key'] = title
+        validate_fit_evidence_fields(safe)
+        assert structured_grounded_risks(safe) == {}
 
     old_hard = deepcopy(highfleet)
     old_hard['fit_evidence_basis'] = ['historical_user_experience']
@@ -128,6 +166,7 @@ def main():
         'reconsiderable_not_confirmed_negative': True,
         'old_shallow_weaker_than_informed_rejection': True,
         'generic_feature_cannot_create_strong_personal_negative': True,
+        'positive_exception_regressions': sorted(positive_exception_controls),
         'candidate_quality_risk_without_personal_dislike': True,
         'highfleet_strong_negative_score': risks['felt_technical_burden']['score'],
         'bioshock_reconsiderable_supported': True, 'haven_moon_insufficient_supported': True,
