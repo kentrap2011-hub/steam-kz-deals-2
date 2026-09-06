@@ -20,39 +20,54 @@ Current blocking truth from that report:
 - publication completeness: false;
 - current site is not yet a valid verification target for the new Taste behavior.
 
-A singleton replacement ChatGPT Scheduled Task was then implemented:
-`reviews/worker_reports/taste-scheduled-task-singleton-canary-implement-01.md`
-
 Authoritative existing singleton:
 - task title: `Taste Semantic Producer`;
 - task instance id: `6a9d6fdddc00819193ed670d782045c4`;
 - canonical producer id: `chatgpt_scheduled_task:6a9d6fdddc00819193ed670d782045c4`;
 - producer generation: `1`;
 - GitHub-owned producer fence is implemented;
-- prior durable state: disabled/fail-closed;
-- `last_run_time = null`;
-- semantic rows processed: 0.
+- no second producer may be created.
 
-No second producer may be created.
-
-## Chat 1 — current giveaway incident
-Task:
+## Chat 1 — giveaway recurrence recon COMPLETE
+Completed task:
 `WORKER_TASK_GIVEAWAY_EMPTY_FEED_RECURRENCE_RECON_01.md`
-Expected report:
+
+Durable report:
 `reviews/worker_reports/giveaway-empty-feed-recurrence-recon-01.md`
-Mode: `READ-ONLY / RECON`
-Priority: `VERY_HIGH_USER_PRIORITY`.
-Status: `running_chat_1`.
 
-Chat 1 is diagnosing the empty/fail-closed giveaway feed. It is NOT yet the implementation fix. Once its durable recon identifies one bounded root cause/action, the immediate next Chat 1 task is the corresponding IMPLEMENT fix before ordinary backlog work.
+Accepted Director-level diagnosis:
+- canonical giveaway snapshot is healthy, complete and fresh;
+- one valid active Epic giveaway exists (`Alone With You` at recon time);
+- current site-facing `data/production/visual/current.json` is bound to an older expired giveaway snapshot;
+- canonical `Build daily visual payload` run `34037436064` failed/degraded at `Build and refresh canonical visual payload once`;
+- no fresh visual was persisted;
+- fail-closed is behaving correctly and must not be weakened;
+- incident is NOT the old browser cache/identity issue and NOT an upstream giveaway-source outage.
 
-User-visible incident evidence:
-- `Данные: 31 авг., 00:37`;
-- active `🎁 Раздачи (!)` tab;
-- warning `Раздачи временно не удалось проверить полностью.`;
-- no giveaway cards visible.
+User should NOT re-check the site yet.
 
-Do not ask user to re-check giveaways until diagnosis -> bounded fix -> deploy reaches the user verification gate.
+Completed recon worker Chat 1 is deletable.
+
+### Next Chat 1 — giveaway visual publication recovery IMPLEMENT
+Task:
+`WORKER_TASK_GIVEAWAY_VISUAL_PUBLICATION_RECOVERY_IMPLEMENT_01.md`
+Expected report:
+`reviews/worker_reports/giveaway-visual-publication-recovery-implement-01.md`
+Mode: `IMPLEMENT / ACCEPTANCE`
+Priority: `VERY_HIGH_USER_PRIORITY`
+Status: `ready_fresh_chat_1`.
+
+Scope:
+- repair/recover only the existing canonical daily visual build/publication path;
+- identify the actual failure inside the proven boundary;
+- preserve a single visual writer;
+- preserve fail-closed freshness/completeness;
+- if unrelated subsystem incompleteness blocks the whole visual build, allow only a minimal safe section-level refresh architecture if it keeps unrelated sections explicitly degraded and does not fabricate freshness;
+- no manual patch of visual/cache;
+- no second scheduler/writer;
+- no UI workaround.
+
+Acceptance requires the published visual artifact to bind exactly to the then-current canonical giveaway blob, with a fresh handoff and fresh produced/persisted visual receipt. Only then may status be `complete_ready_for_user_verification`.
 
 ## Chat 2 — Taste existing singleton canary execution
 Task:
@@ -61,20 +76,16 @@ Expected report:
 `reviews/worker_reports/taste-existing-singleton-canary-execute-01.md`
 Mode: `IMPLEMENT / ACCEPTANCE`
 Priority: `VERY_HIGH_USER_PRIORITY`.
-Status: `ready_fresh_chat_2`.
+Status: `ready_or_running_chat_2`.
 
-This task must reuse the SAME existing Scheduled Task instance `6a9d6fdddc00819193ed670d782045c4`.
-It may schedule/enable that same task for one bounded near-future execution if no synchronous `run now` exists, but it must process exactly one semantic row total, then disable/pause/guard the same task before a second row can run.
+This task must reuse the SAME existing Scheduled Task instance `6a9d6fdddc00819193ed670d782045c4` and process exactly one semantic row before Director review.
 
 Hard prohibitions:
-- no second Scheduled Task;
-- no second producer id;
-- no new generation;
+- no second Scheduled Task/producer/generation;
 - no paid OpenAI API;
 - no Copilot fallback;
 - no manual semantic processing;
-- no throughput widening;
-- no UI/giveaway/ITAD work.
+- no throughput widening.
 
 ## Giveaway ITAD identity
 Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
@@ -84,8 +95,7 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. Chat 1 finishes giveaway recon, then moves immediately to the bounded giveaway IMPLEMENT fix based on its durable diagnosis.
-2. Fresh Chat 2 executes exactly one Taste semantic row through the existing singleton producer and canonical GitHub ingest.
-3. Do not widen Taste throughput before Director consumes `reviews/worker_reports/taste-existing-singleton-canary-execute-01.md`.
-4. Taste site verification waits for legitimate semantic materialization and regenerated production output.
-5. Giveaway site verification waits for diagnosis, fix, deploy, then real Android verification.
+1. Fresh Chat 1 runs the bounded giveaway visual publication recovery implementation.
+2. Chat 2 continues the one-row Taste singleton canary independently.
+3. If giveaway recovery reaches `complete_ready_for_user_verification`, Director asks for real Android verification before closing the incident.
+4. Do not widen Taste throughput before Director consumes its canary report.
