@@ -26,9 +26,10 @@ OUTPUT_FIELDS = (
 )
 
 
-def load_contract(path=CONTRACT_PATH):
+def load_contract(path=CONTRACT_PATH, *, profile_path=None):
     data = json.loads(Path(path).read_text(encoding='utf-8'))
     validate_contract(data)
+    validate_profile_revalidation_guard(data, profile_path=profile_path)
     return data
 
 
@@ -78,6 +79,56 @@ def validate_contract(contract):
                 raise ValueError(f'duplicate title alias: {alias!r}')
             seen[normalized] = key
     return contract
+
+
+def validate_profile_revalidation_guard(contract, *, profile_path=None):
+    """Fail closed when static role/start calibrations lose canonical profile support.
+
+    This is deliberately narrower than a full-profile hash. The contract names the
+    exact canonical evidence fragments that justify each static title calibration.
+    Editorial changes elsewhere in USER_TASTE_PROFILE.md do not create churn, while
+    changing/removing the evidence that a calibration depends on forces an explicit
+    contract revalidation before production can continue.
+    """
+    guard = contract.get('profile_revalidation_guard')
+    if not isinstance(guard, dict):
+        raise ValueError('profile revalidation guard missing')
+    if guard.get('scope') != 'static_title_specific_calibrations_only':
+        raise ValueError('profile revalidation guard scope drift')
+
+    required = guard.get('required_fragments_by_calibration')
+    if not isinstance(required, dict) or not required:
+        raise ValueError('profile revalidation guard fragments missing')
+
+    calibrations = contract.get('title_calibrations') or {}
+    static_keys = {
+        key for key, hint in calibrations.items()
+        if hint.get('title_specific_evidence') is True
+    }
+    if set(required) != static_keys:
+        raise ValueError('profile revalidation guard calibration coverage drift')
+
+    canonical_profile_path = str(guard.get('profile_path') or '').strip()
+    if not canonical_profile_path:
+        raise ValueError('profile revalidation guard profile_path missing')
+    actual_profile_path = Path(profile_path) if profile_path is not None else Path(canonical_profile_path)
+    try:
+        profile_text = actual_profile_path.read_text(encoding='utf-8')
+    except OSError as exc:
+        raise ValueError(f'canonical taste profile unavailable for role/start revalidation: {actual_profile_path}') from exc
+
+    provenance_prefix = f'{Path(canonical_profile_path).name}:'
+    for key in sorted(static_keys):
+        fragments = required.get(key)
+        if not isinstance(fragments, list) or not fragments or any(not isinstance(x, str) or not x.strip() for x in fragments):
+            raise ValueError(f'{key}: profile revalidation fragments must be non-empty strings')
+        missing = [fragment for fragment in fragments if fragment not in profile_text]
+        if missing:
+            raise ValueError(f'{key}: canonical taste profile evidence changed; explicit role/start revalidation required')
+        provenance = calibrations[key].get('provenance') or []
+        if not any(str(item).startswith(provenance_prefix) for item in provenance):
+            raise ValueError(f'{key}: canonical taste profile provenance missing')
+    return True
 
 
 def _validate_hint(hint, roles=None, starts=None, confidence=None, label='hint'):
