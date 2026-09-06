@@ -12,6 +12,11 @@ on:
       - "scripts/test_taste_evidence_states.py"
       - "scripts/taste_negative_contract.py"
       - "scripts/test_taste_step123_maintenance_guards.py"
+      - "scripts/test_taste_steps123_production_acceptance.py"
+      - "data/production/pre_ai/chatgpt_payload.json"
+      - "data/production/pre_ai/taste_projection.json"
+      - "data/production/pre_ai/chatgpt_taste_queue.jsonl"
+      - "data/production/visual/current.json"
       - ".github/workflows/validate-taste-step123-maintenance.yml"
 
 permissions:
@@ -44,3 +49,9 @@ jobs:
           python scripts/test_play_priority_context.py
           python scripts/test_taste_evidence_states.py
           python scripts/test_taste_step123_maintenance_guards.py
+
+      - name: Inspect current production materialization acceptance gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/test_taste_steps123_production_acceptance.py
