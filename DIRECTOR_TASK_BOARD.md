@@ -8,8 +8,6 @@
 - Do not move a user-priority semantic change to unrelated backlog work before its required production/user-verification gate is reachable.
 
 ## Taste — logic implemented, production materialization still pending
-The Taste Steps 1–3 semantic logic and the independent Taste Reviewer maintenance recommendations are already implemented and regression-covered.
-
 Authoritative existing singleton:
 - task title: `Taste Semantic Producer`;
 - task instance id: `6a9d6fdddc00819193ed670d782045c4`;
@@ -17,42 +15,55 @@ Authoritative existing singleton:
 - producer generation: `1`;
 - no second producer may be created.
 
-## Chat 1 — giveaway visual publication recovery COMPLETE
-Task:
-`WORKER_TASK_GIVEAWAY_VISUAL_PUBLICATION_RECOVERY_IMPLEMENT_01.md`
-Durable report:
-`reviews/worker_reports/giveaway-visual-publication-recovery-implement-01.md`
-Status: `complete_ready_for_user_verification`.
-
-Accepted production outcome:
-- giveaway publication is repaired through the existing canonical visual writer;
-- no second scheduler/writer and no manual patch were introduced;
-- canonical giveaway blob is now bound into `data/production/visual/current.json`;
-- giveaway state is active with one offer at acceptance time;
-- freshness receipt proves a real produced/persisted scoped visual refresh;
-- full independent Taste visual freshness remains explicitly false and was not fabricated;
-- normal Pages deploy succeeded.
-
-Next action: user verifies the real giveaway section on Android. Chat 1 worker is durably complete and deletable.
-
-## Chat 2 — Taste existing singleton canary durable closeout MISSING
+### Completed canary execution attempt
 Task:
 `WORKER_TASK_TASTE_EXISTING_SINGLETON_CANARY_EXECUTE_01.md`
-Expected report:
+Durable report:
 `reviews/worker_reports/taste-existing-singleton-canary-execute-01.md`
-Mode: `IMPLEMENT / ACCEPTANCE`
-Priority: `VERY_HIGH_USER_PRIORITY`.
-Status: `worker_claimed_finished_but_required_report_missing`.
+Final status: `blocked`.
 
-Director checked only the exact expected report path after the worker completion claim; it is absent from `main`. Director will not reconstruct task outcome from logs/Actions/commits. Existing Chat 2 must self-verify and write the exact durable report even if final status is `blocked`.
+Accepted Director-level outcome from the durable report:
+- exact existing singleton task was reused;
+- exactly one durable semantic submission was produced: `App_10150` / `Prototype`;
+- producer fence and validation gates passed;
+- canonical ingest workflow run `34047485340` failed at `Validate, ingest and rebuild taste consumers atomically`;
+- no canonical acceptance, fresh receipt or queue delta occurred;
+- no second semantic row was accepted;
+- exact Scheduled Task is disabled/fail-closed;
+- no second producer/task/generation was created;
+- no paid API, Copilot or manual semantic inference was used.
 
-Hard invariants remain:
-- reuse only task instance `6a9d6fdddc00819193ed670d782045c4`;
-- no second Scheduled Task/producer/generation;
-- no paid OpenAI API;
-- no Copilot fallback;
-- no manual semantic processing;
-- no throughput widening.
+Completed canary worker Chat 2 is deletable.
+
+### Next Chat 2 — atomic ingest failure recon
+Task:
+`WORKER_TASK_TASTE_CANARY_ATOMIC_INGEST_FAILURE_RECON_01.md`
+Expected report:
+`reviews/worker_reports/taste-canary-atomic-ingest-failure-recon-01.md`
+Mode: `READ-ONLY / RECON`
+Priority: `VERY_HIGH_USER_PRIORITY`
+Status: `ready_fresh_chat_2`.
+
+Scope:
+- determine exact root cause inside failed atomic ingest/rebuild step for the existing Prototype canary;
+- determine whether the existing submission can be safely reprocessed after a minimal fix or must remain rejected;
+- define exactly one bounded next IMPLEMENT action;
+- do not run another game;
+- do not create another task/producer/generation;
+- no paid API/Copilot/manual patch/validation weakening.
+
+## Chat 1 — visual header date recon
+Task:
+`WORKER_TASK_VISUAL_HEADER_DATA_DATE_RECON_01.md`
+Expected report:
+`reviews/worker_reports/visual-header-data-date-recon-01.md`
+Mode: `READ-ONLY / RECON`
+Status: `ready_or_running_chat_1`.
+
+Goal: determine exactly why the header still shows `Данные: 31 авг., 00:37` after giveaway publication recovered, and whether that label is misleading under section-level freshness.
+
+## Giveaway publication
+User has verified on Android that the free giveaway is visible again. Incident is user-visible recovered.
 
 ## Giveaway ITAD identity
 Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
@@ -62,7 +73,6 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. User verifies giveaways on the real Android site now.
-2. Existing Chat 2 performs only its own durable Taste canary closeout and writes `reviews/worker_reports/taste-existing-singleton-canary-execute-01.md`.
-3. Do not widen Taste throughput until Director consumes that exact report.
-4. Do not start unrelated work in either slot before these gates are resolved.
+1. Fresh Chat 2 investigates only the atomic Taste ingest failure and returns one bounded implement action.
+2. Chat 1 continues the header-date recon independently.
+3. Do not run another semantic game or widen Taste throughput before the ingest failure is understood and explicitly fixed.
