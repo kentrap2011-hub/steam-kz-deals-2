@@ -1,0 +1,264 @@
+name: Copilot CLI Zero-Cost Live Read-Only Pilot 02 Pre-Dispatch Recovery
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'orchestration/live_pilots/copilot-cli-zero-cost-live-readonly-pilot-02-pre-dispatch-recovery.json'
+
+permissions: {}
+
+concurrency:
+  group: director-copilot-cli-zero-cost-live-readonly-pilot-02
+  cancel-in-progress: false
+
+env:
+  TASK_ID: epic-ru-availability-source-probe-02
+  REPORT_PATH: reviews/worker_reports/epic-ru-availability-source-probe-02.md
+  PILOT_REPORT_PATH: reviews/worker_reports/copilot-cli-zero-cost-live-readonly-pilot-02.md
+
+jobs:
+  prepare:
+    name: prepare-exact-pilot-lease
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      state_head: ${{ steps.commit.outputs.state_head }}
+      state_revision: ${{ steps.meta.outputs.state_revision }}
+      base_sha: ${{ steps.meta.outputs.base_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Prove this is the one pre-dispatch recovery, not a second semantic dispatch
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          p='orchestration/live_pilots/copilot-cli-zero-cost-live-readonly-pilot-02-pre-dispatch-recovery.json'
+          x=json.load(open(p))
+          assert x=={
+            'schema_version':1,
+            'pilot_id':'copilot-cli-zero-cost-live-readonly-pilot-02',
+            'reason':'initial_run_failed_before_lease_on_wrong_phase2b_fixture',
+            'initial_run_id':34017053600,
+            'initial_prepare_job_id':101442565794,
+            'initial_worker_job_id':101442579536,
+            'initial_publisher_job_id':101442579523,
+            'semantic_dispatches_so_far':0,
+            'semantic_worker_conclusion':'skipped',
+            'second_semantic_dispatch_allowed':False,
+            'recovery_scope':'same_pilot_pre_dispatch_infrastructure_recovery'
+          }
+          PY
+          test ! -e "$REPORT_PATH"
+          test ! -e "$PILOT_REPORT_PATH"
+
+      - name: Re-run retained Phase 2B regression on the correct pre-recovery fixture
+        run: |
+          set -euo pipefail
+          git worktree add "$RUNNER_TEMP/p2b" 69a3c929c9ab32416a54b513b4f8c662b8013c91
+          (cd "$RUNNER_TEMP/p2b" && python scripts/test_director_orchestration_phase2b.py -v)
+
+      - name: Re-run Pilot 02 adapter security checks
+        run: |
+          set -euo pipefail
+          python scripts/copilot_cli_pilot02_control.py selftest
+          python scripts/test_copilot_cli_pilot02.py -v
+          python - <<'PY'
+          from pathlib import Path
+          w=Path('.github/workflows/director-copilot-cli-zero-cost-live-readonly-pilot-02-recovery.yml').read_text()
+          worker=w.split('  worker:',1)[1].split('  publisher:',1)[0]
+          assert 'contents: read' in worker and 'copilot-requests: write' in worker
+          assert 'contents: write' not in worker
+          assert '${{ secrets.' not in worker
+          assert 'persist-credentials: false' in worker
+          assert 'rerun' not in worker.lower()
+          assert 'top-summary-filter-buttons-01' not in worker
+          assert 'copilot_cli_pilot02_worker.py' in worker
+          publisher=w.split('  publisher:',1)[1]
+          assert 'contents: write' in publisher
+          assert 'copilot-requests: write' not in publisher
+          PY
+
+      - name: Acquire exactly one bound slot_2 READ_ONLY_RECON lease
+        run: |
+          set -euo pipefail
+          base_sha="$(python - <<'PY'
+          import json
+          print(json.load(open('orchestration/intake/intake-20260906-0005-epic-recon-02-r1.json'))['base_sha'])
+          PY
+          )"
+          test "$base_sha" = "4027aea1103a1a872c27b24ebd4a9c3e1473d315"
+          python scripts/copilot_cli_pilot02_control.py prepare \
+            --base-sha "$base_sha" \
+            --out-request "$RUNNER_TEMP/pilot-request.json" \
+            --out-meta "$RUNNER_TEMP/pilot-meta.json"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: copilot-pilot02-request-recovery
+          path: ${{ runner.temp }}/pilot-request.json
+          retention-days: 1
+          if-no-files-found: error
+
+      - name: Emit exact state metadata
+        id: meta
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json,os
+          x=json.load(open(os.environ['RUNNER_TEMP']+'/pilot-meta.json'))
+          print('state_revision='+str(x['state_revision']))
+          print('base_sha='+x['base_sha'])
+          PY
+
+      - name: Commit controller-authored state with CAS
+        id: commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(git status --porcelain --untracked-files=all | wc -l)" -eq 1
+          test "$(git status --porcelain --untracked-files=all | sed 's/^...//')" = "orchestration/state.json"
+          remote="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$remote" = "$GITHUB_SHA"
+          git config user.name director-controller
+          git config user.email director-controller@users.noreply.github.com
+          git add -- orchestration/state.json
+          git commit -m 'Lease exact Copilot CLI Pilot 02 after pre-dispatch recovery'
+          state_head="$(git rev-parse HEAD)"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/main
+          echo "state_head=$state_head" >> "$GITHUB_OUTPUT"
+
+  worker:
+    name: copilot-cli-readonly-worker
+    needs: prepare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      copilot-requests: write
+    steps:
+      - name: Checkout recovery control plane without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: control-plane
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Checkout exact immutable worker base without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.base_sha }}
+          path: worker-base
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: copilot-pilot02-request-recovery
+          path: ${{ runner.temp }}/request
+
+      - name: Verify prepared state is still current
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_STATE_HEAD: ${{ needs.prepare.outputs.state_head }}
+        run: |
+          set -euo pipefail
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)" = "$EXPECTED_STATE_HEAD"
+          test -z "$(git -C worker-base status --porcelain --untracked-files=all)"
+
+      - name: Run the one-shot zero-cost Copilot harness
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          COPILOT_HOME: ${{ runner.temp }}/copilot-home
+        run: |
+          set -euo pipefail
+          python control-plane/scripts/copilot_cli_pilot02_worker.py \
+            --repo-root worker-base \
+            --request "$RUNNER_TEMP/request/pilot-request.json" \
+            --evidence "$RUNNER_TEMP/evidence.json" \
+            --temp-dir "$RUNNER_TEMP/copilot-pilot02"
+          python - <<'PY'
+          import json,os
+          x=json.load(open(os.environ['RUNNER_TEMP']+'/evidence.json'))
+          assert x['copilot_invocation_count'] in (0,1)
+          if x['provider_outcome']=='provider_unavailable_zero_cost_gate': assert x['copilot_invocation_count']==0
+          if x['provider_outcome']=='semantic_result': assert x['copilot_invocation_count']==1 and isinstance(x['semantic_result'],dict)
+          print(json.dumps({'provider_outcome':x['provider_outcome'],'copilot_invocation_count':x['copilot_invocation_count'],'quota_reason':(x.get('quota_preflight') or {}).get('reason'),'copilot_cli_version':x.get('copilot_cli_version')},ensure_ascii=False))
+          PY
+          test -z "$(git -C worker-base status --porcelain --untracked-files=all)"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: copilot-pilot02-evidence-recovery
+          path: ${{ runner.temp }}/evidence.json
+          retention-days: 1
+          if-no-files-found: error
+
+  publisher:
+    name: trusted-publisher-and-closeout
+    needs: [prepare, worker]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.state_head }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: copilot-pilot02-request-recovery
+          path: ${{ runner.temp }}/request
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: copilot-pilot02-evidence-recovery
+          path: ${{ runner.temp }}/evidence
+
+      - name: Trusted publication and deterministic closeout
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREPARED_STATE_HEAD: ${{ needs.prepare.outputs.state_head }}
+        run: |
+          set -euo pipefail
+          remote="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$remote" = "$PREPARED_STATE_HEAD"
+          gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/jobs?per_page=100" > "$RUNNER_TEMP/jobs.json"
+          python scripts/copilot_cli_pilot02_control.py finalize \
+            --request "$RUNNER_TEMP/request/pilot-request.json" \
+            --evidence "$RUNNER_TEMP/evidence/evidence.json" \
+            --jobs "$RUNNER_TEMP/jobs.json" \
+            --launch-sha "$GITHUB_SHA" \
+            --prepared-head "$PREPARED_STATE_HEAD" \
+            --run-id "$GITHUB_RUN_ID" \
+            --run-attempt "$GITHUB_RUN_ATTEMPT"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          s=json.load(open('orchestration/state.json'))
+          c=s['copilot_cli_pilot02_closeout']
+          assert s['dispatch_enabled'] is False
+          assert c['automatic_next_dispatch'] is False and c['paid_fallback_used'] is False
+          assert c['copilot_invocation_count'] in (0,1)
+          assert all(x['status']=='free' and x['lease'] is None for x in s['slots'])
+          impl=next(x for x in s['tasks'] if x['task_id']=='top-summary-filter-buttons-01')
+          assert impl['mode']=='IMPLEMENT' and impl['attempt_number']==0 and impl['attempt_id'] is None
+          assert Path(os.environ['PILOT_REPORT_PATH']).is_file()
+          if c['status']=='complete': assert Path(os.environ['REPORT_PATH']).is_file()
+          else: assert not Path(os.environ['REPORT_PATH']).exists()
+          PY
+          git config user.name director-pilot-publisher
+          git config user.email director-pilot-publisher@users.noreply.github.com
+          git add -- orchestration/state.json "$PILOT_REPORT_PATH"
+          if test -e "$REPORT_PATH"; then git add -- "$REPORT_PATH"; fi
+          git commit -m 'Close Copilot CLI zero-cost live read-only Pilot 02'
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)" = "$remote"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/main
