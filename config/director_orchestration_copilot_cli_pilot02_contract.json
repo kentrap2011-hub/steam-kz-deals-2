@@ -1,0 +1,46 @@
+{
+  "automatic_next_dispatch": false,
+  "contract": "DIRECTOR-COPILOT-CLI-ZERO-COST-LIVE-READONLY-PILOT-02-V1",
+  "general_dispatch_enabled": false,
+  "implement_dispatch_allowed": false,
+  "pilot_id": "copilot-cli-zero-cost-live-readonly-pilot-02",
+  "state_persistence_enabled": true,
+  "single_state_writer": "scripts/director_orchestration_controller.py",
+  "limits": {
+    "max_logical_slots": 2,
+    "max_live_attempts": 1,
+    "cloud_lease_seconds": 3600
+  },
+  "cost_gate": {
+    "authentication": "GITHUB_TOKEN",
+    "additional_payment_allowed": false,
+    "paid_overage_allowed": false,
+    "paid_fallback_allowed": false,
+    "pat_allowed": false,
+    "openai_api_key_allowed": false,
+    "quota_failure_behavior": "blocked_before_inference"
+  },
+  "worker": {
+    "mode": "READ_ONLY_RECON",
+    "repository_write_authority": false,
+    "state_write_authority": false,
+    "product_write_authority": false,
+    "worker_can_choose_next_task": false,
+    "permissions": {
+      "contents": "read",
+      "copilot-requests": "write"
+    },
+    "available_tools": ["view", "glob", "grep", "web_fetch"],
+    "disable_builtin_mcps": true,
+    "model": "auto",
+    "max_ai_credits": 30
+  },
+  "publisher": {
+    "implementation": "scripts/director_report_publisher.py",
+    "contents_write": true,
+    "copilot_requests": false,
+    "exact_report_path_only": true,
+    "requires_active_lease": true,
+    "requires_current_state": true
+  }
+}
