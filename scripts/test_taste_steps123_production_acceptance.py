@@ -8,6 +8,7 @@ PAYLOAD_PATH = Path('data/production/pre_ai/chatgpt_payload.json')
 PROJECTION_PATH = Path('data/production/pre_ai/taste_projection.json')
 QUEUE_PATH = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
 VISUAL_PATH = Path('data/production/visual/current.json')
+OUTPUT_PATH = Path('data/cache/taste_steps123_production_acceptance.json')
 
 CONTROLS = {
     'Sifu': ['Sifu'],
@@ -168,6 +169,8 @@ def main():
         assert all(row['current_visual_is_steps123_acceptance_evidence'] is False for row in control_rows.values())
 
     result = {
+        'schema_version': 1,
+        'purpose': 'deterministic_taste_steps123_production_acceptance_observability',
         'status': 'ready_for_publication_acceptance' if publication_ready else 'blocked_semantic_runtime',
         'semantic_completeness': {
             'status': semantic.get('status'),
@@ -191,7 +194,10 @@ def main():
         },
         'old_visual_snapshot_rejected_as_acceptance_evidence_when_semantic_incomplete': not publication_ready,
     }
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+    rendered = json.dumps(result, ensure_ascii=False, indent=2)
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT_PATH.write_text(rendered + '\n', encoding='utf-8')
+    print(rendered)
     print('TASTE_STEPS123_PRODUCTION_ACCEPTANCE=' + ('READY' if publication_ready else 'BLOCKED_SEMANTIC_RUNTIME'))
 
 
