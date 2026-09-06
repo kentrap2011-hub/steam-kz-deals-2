@@ -1,0 +1,378 @@
+name: Copilot CLI Zero-Cost Live Read-Only Pilot 02
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'orchestration/intake/intake-20260906-0005-epic-recon-02-r1.json'
+
+permissions: {}
+
+concurrency:
+  group: director-copilot-cli-zero-cost-live-readonly-pilot-02
+  cancel-in-progress: false
+
+env:
+  TASK_ID: epic-ru-availability-source-probe-02
+  TASK_FILE: WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_02.md
+  TASK_BLOB_SHA: 8270487fb3019135adc5662d0b67f0f37e189bed
+  REPORT_PATH: reviews/worker_reports/epic-ru-availability-source-probe-02.md
+  PILOT_REPORT_PATH: reviews/worker_reports/copilot-cli-zero-cost-live-readonly-pilot-02.md
+  ATTEMPT_ID: epic-ru-availability-source-probe-02:r1:a1
+  LEASE_ID: slot_2:epic-ru-availability-source-probe-02:r1:a1
+
+jobs:
+  prepare:
+    name: prepare-exact-pilot-lease
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      state_head: ${{ steps.commit.outputs.state_head }}
+      state_revision: ${{ steps.meta.outputs.state_revision }}
+      base_sha: ${{ steps.meta.outputs.base_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Run retained Phase 1 and Phase 2A security regressions
+        run: |
+          set -euo pipefail
+          git worktree add "$RUNNER_TEMP/p2a" 548a48782890a3d3a25e16cae2599b4209fc04ea
+          (cd "$RUNNER_TEMP/p2a" && python scripts/test_director_orchestration_shadow.py -v && python scripts/test_director_orchestration_phase2a.py -v)
+
+      - name: Run retained Phase 2B security regressions
+        run: |
+          set -euo pipefail
+          git worktree add "$RUNNER_TEMP/p2b" 98f88a3813a7a882f452c816898a6d0f748ab85e
+          (cd "$RUNNER_TEMP/p2b" && python scripts/test_director_orchestration_phase2b.py -v)
+
+      - name: Run Pilot 02 bounded adapter regressions
+        run: |
+          python scripts/copilot_cli_pilot02_control.py selftest
+          python scripts/test_copilot_cli_pilot02.py -v
+
+      - name: Acquire exactly one slot_2 READ_ONLY_RECON lease
+        run: |
+          set -euo pipefail
+          test ! -e "$REPORT_PATH"
+          test ! -e "$PILOT_REPORT_PATH"
+          python scripts/copilot_cli_pilot02_control.py prepare \
+            --base-sha '${{ github.event.before }}' \
+            --out-request "$RUNNER_TEMP/pilot-request.json" \
+            --out-meta "$RUNNER_TEMP/pilot-meta.json"
+
+      - name: Upload exact request
+        uses: actions/upload-artifact@v4
+        with:
+          name: copilot-pilot02-request
+          path: ${{ runner.temp }}/pilot-request.json
+          retention-days: 1
+          if-no-files-found: error
+
+      - name: Emit state metadata
+        id: meta
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json,os
+          p=json.load(open(os.environ['RUNNER_TEMP']+'/pilot-meta.json'))
+          print('state_revision='+str(p['state_revision']))
+          print('base_sha='+p['base_sha'])
+          PY
+
+      - name: Commit controller-authored state with CAS
+        id: commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(git status --porcelain --untracked-files=all | wc -l)" -eq 1
+          test "$(git status --porcelain --untracked-files=all | sed 's/^...//')" = "orchestration/state.json"
+          remote="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$remote" = "$GITHUB_SHA"
+          git config user.name director-controller
+          git config user.email director-controller@users.noreply.github.com
+          git add -- orchestration/state.json
+          git commit -m 'Lease exact Copilot CLI Pilot 02 attempt'
+          state_head="$(git rev-parse HEAD)"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/main
+          echo "state_head=$state_head" >> "$GITHUB_OUTPUT"
+
+  worker:
+    name: copilot-cli-readonly-worker
+    needs: prepare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      copilot-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.base_sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: copilot-pilot02-request
+          path: ${{ runner.temp }}/request
+
+      - name: Validate exact binding and fresh authoritative state head
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_STATE_HEAD: ${{ needs.prepare.outputs.state_head }}
+        run: |
+          set -euo pipefail
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)" = "$EXPECTED_STATE_HEAD"
+          python - <<'PY'
+          import hashlib,json,os
+          r=json.load(open(os.environ['RUNNER_TEMP']+'/request/pilot-request.json'))
+          assert r['task_id']==os.environ['TASK_ID'] and r['task_revision']==1
+          assert r['attempt_number']==1 and r['attempt_id']==os.environ['ATTEMPT_ID']
+          assert r['lease_id']==os.environ['LEASE_ID'] and r['mode']=='READ_ONLY_RECON'
+          assert r['task_file']==os.environ['TASK_FILE'] and r['task_file_blob_sha']==os.environ['TASK_BLOB_SHA']
+          assert r['expected_report_path']==os.environ['REPORT_PATH']
+          assert not r['repository_write_authority'] and not r['github_write_credential']
+          assert not r['state_write_authority'] and not r['product_write_authority'] and not r['worker_can_choose_next_task']
+          assert r['secret_values']==[]
+          data=open(r['task_file'],'rb').read()
+          blob=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+          assert blob==r['task_file_blob_sha']
+          PY
+          test -z "$(git status --porcelain --untracked-files=all)"
+
+      - name: Install official Copilot CLI and quota SDK
+        id: install
+        run: |
+          set +e
+          npm install -g @github/copilot@latest
+          cli_code=$?
+          mkdir -p "$RUNNER_TEMP/sdk"
+          (cd "$RUNNER_TEMP/sdk" && npm init -y >/dev/null 2>&1 && npm install @github/copilot-sdk@latest)
+          sdk_code=$?
+          set -e
+          if command -v copilot >/dev/null 2>&1; then copilot --version > "$RUNNER_TEMP/copilot-version.txt" 2>&1 || true; else echo unavailable > "$RUNNER_TEMP/copilot-version.txt"; fi
+          printf '{"cli_install_code":%s,"sdk_install_code":%s}\n' "$cli_code" "$sdk_code" > "$RUNNER_TEMP/install.json"
+
+      - name: Zero-cost entitlement/quota preflight and at most one semantic invocation
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          EXPECTED_STATE_HEAD: ${{ needs.prepare.outputs.state_head }}
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/sdk/quota.mjs" <<'JS'
+          import { CopilotClient } from '@github/copilot-sdk';
+          import fs from 'node:fs';
+          const out=process.argv[2];
+          const token=process.env.GITHUB_TOKEN;
+          const clean=s=>({
+            isUnlimitedEntitlement:s?.isUnlimitedEntitlement ?? null,
+            entitlementRequests:s?.entitlementRequests ?? null,
+            usedRequests:s?.usedRequests ?? null,
+            usageAllowedWithExhaustedQuota:s?.usageAllowedWithExhaustedQuota ?? null,
+            remainingPercentage:s?.remainingPercentage ?? null,
+            overage:s?.overage ?? null,
+            overageAllowedWithExhaustedQuota:s?.overageAllowedWithExhaustedQuota ?? null,
+            resetDate:s?.resetDate ?? null
+          });
+          let result={ok:false,reason:'quota_unavailable',quotaSnapshots:{},safeForZeroAdditionalPayment:false};
+          if (!token) { fs.writeFileSync(out,JSON.stringify({...result,reason:'GITHUB_TOKEN_missing'})); process.exit(0); }
+          const client=new CopilotClient({gitHubToken:token,useLoggedInUser:false});
+          try {
+            const q=await client.rpc.account.getQuota({});
+            const snaps={}; for (const [k,v] of Object.entries(q?.quotaSnapshots||{})) snaps[k]=clean(v);
+            const p=snaps.premium_interactions;
+            let safe=!!p;
+            safe=safe && p.overageAllowedWithExhaustedQuota===false;
+            safe=safe && (p.overage===null || Number(p.overage)<=0);
+            safe=safe && (p.isUnlimitedEntitlement===true || p.entitlementRequests===-1 || Number(p.remainingPercentage)>0);
+            result={ok:true,reason:safe?'included_premium_quota_with_paid_overage_disabled':'cannot_prove_included_premium_quota_without_overage',quotaSnapshots:snaps,safeForZeroAdditionalPayment:safe};
+          } catch (e) { result.reason='quota_auth_or_entitlement_error:'+String(e?.message||e).slice(0,500); }
+          try { await client.stop(); } catch {}
+          fs.writeFileSync(out,JSON.stringify(result));
+          JS
+
+          python - <<'PY'
+          import json,os
+          install=json.load(open(os.environ['RUNNER_TEMP']+'/install.json'))
+          e={'provider_outcome':'provider_unavailable_zero_cost_gate','provider_diagnostic':None,'copilot_invocation_count':0,'semantic_result':None,'quota_preflight':None,'quota_postflight':None,'copilot_cli_version':open(os.environ['RUNNER_TEMP']+'/copilot-version.txt').read().strip()}
+          if install['cli_install_code'] or install['sdk_install_code']:
+              e['provider_diagnostic']='official Copilot CLI/SDK installation failed; inference not attempted'
+          json.dump(e,open(os.environ['RUNNER_TEMP']+'/evidence.json','w'),ensure_ascii=False,indent=2)
+          PY
+
+          install_ok="$(python - <<'PY'
+          import json,os
+          x=json.load(open(os.environ['RUNNER_TEMP']+'/install.json')); print('yes' if x['cli_install_code']==0 and x['sdk_install_code']==0 else 'no')
+          PY
+          )"
+          if test "$install_ok" = yes; then
+            (cd "$RUNNER_TEMP/sdk" && node quota.mjs "$RUNNER_TEMP/quota-pre.json") || true
+            python - <<'PY'
+          import json,os
+          p=os.environ['RUNNER_TEMP']; e=json.load(open(p+'/evidence.json'))
+          try: q=json.load(open(p+'/quota-pre.json'))
+          except Exception as exc: q={'ok':False,'reason':'quota_preflight_parse_failure:'+str(exc),'quotaSnapshots':{},'safeForZeroAdditionalPayment':False}
+          e['quota_preflight']=q
+          if not q.get('safeForZeroAdditionalPayment'): e['provider_diagnostic']=q.get('reason')
+          json.dump(e,open(p+'/evidence.json','w'),ensure_ascii=False,indent=2)
+          PY
+          fi
+
+          safe="$(python - <<'PY'
+          import json,os
+          x=json.load(open(os.environ['RUNNER_TEMP']+'/evidence.json')); print('yes' if (x.get('quota_preflight') or {}).get('safeForZeroAdditionalPayment') else 'no')
+          PY
+          )"
+          if test "$safe" = yes; then
+            cat > "$RUNNER_TEMP/prompt.txt" <<'PROMPT'
+          Execute exactly the already-bound Director worker task WORKER_TASK_EPIC_RU_AVAILABILITY_SOURCE_PROBE_02.md in strict READ_ONLY_RECON mode.
+          Read relevant repository evidence and use web access only for public Epic-owned URLs needed to prove or disprove the acquisition-availability signal. Do not modify any file, repository, issue, PR, state, product, credential, billing setting, or task. Do not choose another task. Do not ask for a PAT, OPENAI_API_KEY, provider secret, or paid fallback. If the required proof bar cannot be met, return status blocked rather than guessing.
+          Return ONLY one JSON object with fields: schema_version, task_id, task_revision, attempt_number, attempt_id, lease_id, mode, task_file, task_file_blob_sha, base_sha, report_path, status, report_content, requested_repository_mutations, state_mutation_requested, product_mutation_requested, secret_values.
+          Copy binding fields exactly from REQUEST_JSON below. status is complete, blocked, or needs_user_evidence. report_content is a durable Markdown report with exact Epic-owned endpoints/fields/evidence, RU semantics, available/unavailable cases if proven, acquisition-vs-catalog distinction, failure behavior, limitations, and recommendation. requested_repository_mutations and secret_values are []; state_mutation_requested and product_mutation_requested are false.
+          PROMPT
+            printf '\nREQUEST_JSON=' >> "$RUNNER_TEMP/prompt.txt"
+            python - <<'PY' >> "$RUNNER_TEMP/prompt.txt"
+          import json,os
+          print(json.dumps(json.load(open(os.environ['RUNNER_TEMP']+'/request/pilot-request.json')),separators=(',',':')))
+          PY
+            set +e
+            copilot -s -p "$(cat "$RUNNER_TEMP/prompt.txt")" \
+              --stream=off --no-banner --no-color --no-ask-user --no-auto-update \
+              --no-custom-instructions --no-experimental --no-remote --no-remote-export \
+              --disable-builtin-mcps --model=auto --max-ai-credits=30 \
+              --available-tools='view,glob,grep,web_fetch' \
+              --allow-tool='read' \
+              --allow-url='https://www.epicgames.com' \
+              --allow-url='https://store.epicgames.com' \
+              --allow-url='https://*.epicgames.com' \
+              > "$RUNNER_TEMP/copilot-out.txt" 2> "$RUNNER_TEMP/copilot-err.txt"
+            code=$?
+            set -e
+            python - "$code" <<'PY'
+          import json,os,sys,re
+          p=os.environ['RUNNER_TEMP']; code=int(sys.argv[1]); e=json.load(open(p+'/evidence.json'))
+          e['copilot_invocation_count']=1
+          if code!=0:
+              msg=open(p+'/copilot-err.txt',errors='replace').read()
+              msg=re.sub(r'(github_pat_[A-Za-z0-9_]+|gh[ousr]_[A-Za-z0-9_]+|Bearer\s+\S+)','[REDACTED]',msg,flags=re.I)
+              e['provider_outcome']='provider_runtime_failure'; e['provider_diagnostic']='copilot_exit_'+str(code)+': '+' '.join(msg.split())[-800:]
+          else:
+              try:
+                  x=json.load(open(p+'/copilot-out.txt'))
+                  req=json.load(open(p+'/request/pilot-request.json'))
+                  exact={'schema_version':1,'task_id':req['task_id'],'task_revision':req['task_revision'],'attempt_number':req['attempt_number'],'attempt_id':req['attempt_id'],'lease_id':req['lease_id'],'mode':req['mode'],'task_file':req['task_file'],'task_file_blob_sha':req['task_file_blob_sha'],'base_sha':req['base_sha'],'report_path':req['expected_report_path']}
+                  for k,v in exact.items(): assert x.get(k)==v,k
+                  assert x.get('status') in req['allowed_result_statuses']
+                  assert isinstance(x.get('report_content'),str) and x['report_content'].strip()
+                  assert x.get('requested_repository_mutations')==[] and x.get('secret_values')==[]
+                  assert x.get('state_mutation_requested') is False and x.get('product_mutation_requested') is False
+                  e['provider_outcome']='semantic_result'; e['provider_diagnostic']=None; e['semantic_result']=x
+              except Exception as exc:
+                  e['provider_outcome']='provider_runtime_failure'; e['provider_diagnostic']='invalid_machine_result:'+type(exc).__name__+':'+str(exc)
+          json.dump(e,open(p+'/evidence.json','w'),ensure_ascii=False,indent=2)
+          PY
+            (cd "$RUNNER_TEMP/sdk" && node quota.mjs "$RUNNER_TEMP/quota-post.json") || true
+            python - <<'PY'
+          import json,os
+          p=os.environ['RUNNER_TEMP']; e=json.load(open(p+'/evidence.json'))
+          try: e['quota_postflight']=json.load(open(p+'/quota-post.json'))
+          except Exception as exc: e['quota_postflight']={'ok':False,'reason':'postflight_unavailable:'+str(exc)}
+          json.dump(e,open(p+'/evidence.json','w'),ensure_ascii=False,indent=2)
+          PY
+          fi
+
+          python - <<'PY'
+          import json,os
+          x=json.load(open(os.environ['RUNNER_TEMP']+'/evidence.json'))
+          assert x['copilot_invocation_count'] in (0,1)
+          if x['provider_outcome']=='semantic_result': assert x['copilot_invocation_count']==1 and x['semantic_result']
+          if x['provider_outcome']=='provider_unavailable_zero_cost_gate': assert x['copilot_invocation_count']==0
+          print(json.dumps({'provider_outcome':x['provider_outcome'],'copilot_invocation_count':x['copilot_invocation_count'],'quota_reason':(x.get('quota_preflight') or {}).get('reason')},ensure_ascii=False))
+          PY
+          test -z "$(git status --porcelain --untracked-files=all)"
+
+      - name: Upload non-secret live evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: copilot-pilot02-evidence
+          path: ${{ runner.temp }}/evidence.json
+          retention-days: 1
+          if-no-files-found: error
+
+  publisher:
+    name: trusted-publisher-and-closeout
+    needs: [prepare, worker]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.state_head }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: copilot-pilot02-request
+          path: ${{ runner.temp }}/request
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: copilot-pilot02-evidence
+          path: ${{ runner.temp }}/evidence
+
+      - name: Validate fresh state, publish exact result if accepted, and close pilot
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREPARED_STATE_HEAD: ${{ needs.prepare.outputs.state_head }}
+          BASE_SHA: ${{ needs.prepare.outputs.base_sha }}
+        run: |
+          set -euo pipefail
+          remote_head="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)"
+          test "$remote_head" = "$PREPARED_STATE_HEAD"
+          test ! -e "$REPORT_PATH"
+          test ! -e "$PILOT_REPORT_PATH"
+          gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/jobs?per_page=100" > "$RUNNER_TEMP/jobs.json"
+          python scripts/copilot_cli_pilot02_control.py finalize \
+            --request "$RUNNER_TEMP/request/pilot-request.json" \
+            --evidence "$RUNNER_TEMP/evidence/evidence.json" \
+            --jobs "$RUNNER_TEMP/jobs.json" \
+            --launch-sha "$GITHUB_SHA" \
+            --prepared-head "$PREPARED_STATE_HEAD" \
+            --run-id "$GITHUB_RUN_ID" \
+            --run-attempt "$GITHUB_RUN_ATTEMPT"
+
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          s=json.load(open('orchestration/state.json'))
+          assert s['dispatch_enabled'] is False
+          c=s['copilot_cli_pilot02_closeout']
+          assert c['automatic_next_dispatch'] is False and c['paid_fallback_used'] is False
+          assert c['copilot_invocation_count'] in (0,1)
+          slot1=next(x for x in s['slots'] if x['slot_id']=='slot_1'); slot2=next(x for x in s['slots'] if x['slot_id']=='slot_2')
+          assert slot1['status']=='free'
+          assert slot2['status']=='free' and slot2['lease'] is None
+          impl=next(x for x in s['tasks'] if x['task_id']=='top-summary-filter-buttons-01')
+          assert impl['mode']=='IMPLEMENT' and impl['attempt_number']==0 and impl['attempt_id'] is None
+          assert Path(os.environ['PILOT_REPORT_PATH']).is_file()
+          if c['status']=='complete': assert Path(os.environ['REPORT_PATH']).is_file()
+          else: assert not Path(os.environ['REPORT_PATH']).exists()
+          PY
+
+          git config user.name director-pilot-publisher
+          git config user.email director-pilot-publisher@users.noreply.github.com
+          git add -- orchestration/state.json "$PILOT_REPORT_PATH"
+          if test -e "$REPORT_PATH"; then git add -- "$REPORT_PATH"; fi
+          changed="$(git diff --cached --name-only | sort)"
+          expected="$(printf '%s\n%s\n' 'orchestration/state.json' "$PILOT_REPORT_PATH" | sort)"
+          if test -e "$REPORT_PATH"; then expected="$(printf '%s\n%s\n%s\n' 'orchestration/state.json' "$PILOT_REPORT_PATH" "$REPORT_PATH" | sort)"; fi
+          test "$changed" = "$expected"
+          git commit -m 'Close Copilot CLI zero-cost live read-only Pilot 02'
+          test "$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq .object.sha)" = "$remote_head"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:refs/heads/main
