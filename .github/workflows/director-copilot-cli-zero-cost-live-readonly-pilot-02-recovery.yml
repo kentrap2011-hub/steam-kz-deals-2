@@ -73,7 +73,10 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           w=Path('.github/workflows/director-copilot-cli-zero-cost-live-readonly-pilot-02-recovery.yml').read_text()
-          worker=w.split('  worker:',1)[1].split('  publisher:',1)[0]
+          ws=w.index('\n  worker:\n')
+          ps=w.index('\n  publisher:\n',ws)
+          worker=w[ws:ps]
+          publisher=w[ps:]
           assert 'contents: read' in worker and 'copilot-requests: write' in worker
           assert 'contents: write' not in worker
           expression_prefix='$'+'{{'
@@ -82,7 +85,6 @@ jobs:
           assert 'rerun' not in worker.lower()
           assert 'top-summary-filter-buttons-01' not in worker
           assert 'copilot_cli_pilot02_worker.py' in worker
-          publisher=w.split('  publisher:',1)[1]
           assert 'contents: write' in publisher
           assert 'copilot-requests: write' not in publisher
           PY
