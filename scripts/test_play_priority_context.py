@@ -1,5 +1,6 @@
 import copy
 import json
+import tempfile
 from pathlib import Path
 
 import build_ranking_lookup
@@ -13,6 +14,15 @@ def assert_context(title, role, start, taste_entry=None, **extra):
     assert resolved['play_role'] == role, (title, resolved)
     assert resolved['relative_start_priority'] == start, (title, resolved)
     return resolved
+
+
+def expect_value_error(fn, contains):
+    try:
+        fn()
+    except ValueError as exc:
+        assert contains in str(exc), (contains, str(exc))
+        return
+    raise AssertionError(f'Expected ValueError containing {contains!r}')
 
 
 def confirmed_negative_entry():
@@ -38,6 +48,28 @@ def confirmed_negative_entry():
 def main():
     contract = context.load_contract()
     expected = contract['control_expectations']
+
+    # Reviewer maintenance advisory A2: static title calibrations are fail-closed
+    # against the exact canonical evidence fragments that justify them. Unrelated
+    # profile edits do not churn the contract, while evidence edits/removals do.
+    assert context.validate_profile_revalidation_guard(contract) is True
+    guard = contract['profile_revalidation_guard']
+    sifu_fragment = guard['required_fragments_by_calibration']['sifu'][0]
+    profile_text = Path(guard['profile_path']).read_text(encoding='utf-8')
+    assert sifu_fragment in profile_text
+    with tempfile.TemporaryDirectory() as tmpdir:
+        changed_profile = Path(tmpdir) / 'USER_TASTE_PROFILE.md'
+        changed_profile.write_text(profile_text.replace(sifu_fragment, '[material Sifu evidence changed]', 1), encoding='utf-8')
+        expect_value_error(
+            lambda: context.validate_profile_revalidation_guard(contract, profile_path=changed_profile),
+            'explicit role/start revalidation required',
+        )
+    coverage_drift = copy.deepcopy(contract)
+    coverage_drift['title_calibrations']['sifu']['title_specific_evidence'] = False
+    expect_value_error(
+        lambda: context.validate_profile_revalidation_guard(coverage_drift),
+        'profile revalidation guard calibration coverage drift',
+    )
 
     sifu = assert_context('Sifu', 'main_full', 'high')
     high_on_life = assert_context('High On Life', 'main_full', 'ordinary', wishlist=True)
@@ -146,6 +178,9 @@ def main():
         'franchise_prior_not_hard_cap': True,
         'confirmed_negative_cannot_be_high': True,
         'ranking_fields_immutable': True,
+        'profile_revalidation_guard_current_profile': True,
+        'profile_revalidation_guard_fails_on_material_evidence_change': True,
+        'profile_revalidation_guard_fails_on_calibration_coverage_drift': True,
     }
     print(json.dumps(result, ensure_ascii=False, indent=2))
     print('PLAY_PRIORITY_CONTEXT_TEST=PASS')
