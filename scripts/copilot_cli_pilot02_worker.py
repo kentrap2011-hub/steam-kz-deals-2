@@ -86,6 +86,7 @@ let result={ok:false,reason:'quota_unavailable',quotaSnapshots:{},safeForZeroAdd
 if (!token) { fs.writeFileSync(out,JSON.stringify({...result,reason:'GITHUB_TOKEN_missing'})); process.exit(0); }
 const client=new CopilotClient({gitHubToken:token,useLoggedInUser:false});
 try {
+  await client.start();
   const q=await client.rpc.account.getQuota({});
   const snaps={}; for (const [k,v] of Object.entries(q?.quotaSnapshots||{})) snaps[k]=clean(v);
   const p=snaps.premium_interactions;
