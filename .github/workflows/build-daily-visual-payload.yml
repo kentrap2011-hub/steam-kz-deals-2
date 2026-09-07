@@ -54,6 +54,8 @@ on:
       - "web/giveaway-ui.test.js"
       - "web/giveaway-ui.css"
       - "web/package-deal-ui.js"
+      - "web/paid-freshness-ui.js"
+      - "web/paid-freshness-ui.test.js"
       - "web/index.html"
       - ".github/workflows/build-daily-visual-payload.yml"
 
@@ -69,6 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       giveaway_only: ${{ steps.classify.outputs.giveaway_only }}
+      commercial_only: ${{ steps.classify.outputs.commercial_only }}
     steps:
       - name: Checkout current main
         uses: actions/checkout@v4
@@ -76,7 +79,7 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Classify bounded giveaway-only refresh
+      - name: Classify bounded visual refresh scopes
         id: classify
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -85,11 +88,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          echo "giveaway_only=false" >> "$GITHUB_OUTPUT"
+          giveaway_needed=false
 
-          # Canonical giveaway snapshots are produced inside mixed production commits.
-          # Detect section staleness from canonical provenance first; do not require
-          # the triggering commit itself to be giveaway-only.
+          # Giveaway freshness remains its own bounded sibling. Do not require the
+          # triggering commit itself to be giveaway-only because source snapshots
+          # can be produced inside mixed production commits.
           source_giveaway_blob=$(git rev-parse HEAD:data/production/giveaways/v1/current.json)
           visual_giveaway_blob=$(python - <<'PY'
           import json
@@ -99,26 +102,86 @@ jobs:
           PY
           )
           if [ -n "$source_giveaway_blob" ] && [ "$source_giveaway_blob" != "$visual_giveaway_blob" ]; then
-            echo "giveaway_only=true" >> "$GITHUB_OUTPUT"
-            echo "VISUAL_SCOPE=giveaway_only reason=source_provenance_mismatch source_blob=$source_giveaway_blob visual_source_blob=${visual_giveaway_blob:-missing}"
-            exit 0
+            giveaway_needed=true
+            echo "VISUAL_SCOPE giveaway_only=true reason=source_provenance_mismatch source_blob=$source_giveaway_blob visual_source_blob=${visual_giveaway_blob:-missing}"
           fi
 
-          if [ "$EVENT_NAME" != "push" ] || [ -z "${BEFORE_SHA:-}" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
-            exit 0
+          # Commercial freshness is intentionally independent of ChatGPT semantic
+          # completeness. Only deterministic commercial source state participates
+          # in this decision; a payload-only semantic rewrite must not steal a full
+          # semantic build from the existing fail-closed path.
+          commercial_needed=$(python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+
+          def read(path):
+              return json.loads(Path(path).read_text(encoding='utf-8'))
+
+          def blob(path):
+              return subprocess.check_output(['git', 'rev-parse', f'HEAD:{path}'], text=True).strip()
+
+          try:
+              payload = read('data/production/pre_ai/chatgpt_payload.json')
+              store = read('data/production/pre_ai/store_snapshot.json')
+              family = read('data/production/pre_ai/family_graph.json')
+              visual = read('data/production/visual/current.json')
+          except Exception as exc:
+              print('false')
+              raise SystemExit(0)
+
+          source = payload.get('source_mailing_updated_at_utc')
+          bound = bool(
+              source
+              and store.get('status') == 'complete'
+              and family.get('status') == 'complete'
+              and store.get('discovery_source_updated_at_utc') == source
+              and family.get('source_updated_at_utc') == source
+          )
+          if not bound:
+              print('false')
+              raise SystemExit(0)
+
+          contract = visual.get('production_contract') or {}
+          paid = visual.get('paid_list_freshness') or {}
+          expected = {
+              'commercial_source_store_snapshot_blob_sha': blob('data/production/pre_ai/store_snapshot.json'),
+              'commercial_source_family_graph_blob_sha': blob('data/production/pre_ai/family_graph.json'),
+              'commercial_source_history_snapshot_blob_sha': blob('data/production/pre_ai/history_snapshot.json'),
+          }
+          stale = (
+              visual.get('commercial_source_mailing_updated_at_utc') != source
+              or paid.get('status') != 'published'
+              or paid.get('source_mailing_updated_at_utc') != source
+              or any(contract.get(key) != value for key, value in expected.items())
+          )
+          if stale:
+              print(
+                  'COMMERCIAL_SCOPE_REASON '
+                  f'source={source} visual_source={visual.get("commercial_source_mailing_updated_at_utc")} '
+                  f'paid_source={paid.get("source_mailing_updated_at_utc")}',
+                  file=__import__('sys').stderr,
+              )
+          print('true' if stale else 'false')
+          PY
+          )
+
+          # Keep the legacy giveaway-only push heuristic as a fallback for UI/code
+          # changes that explicitly belong to that bounded sibling.
+          if [ "$EVENT_NAME" = "push" ] && [ -n "${BEFORE_SHA:-}" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            git diff --name-only "$BEFORE_SHA" "$HEAD_SHA" > /tmp/visual-changed.txt
+            cat /tmp/visual-changed.txt
+            allowed='^(scripts/build_final_visual_payload\.py|scripts/giveaway_visual_handoff\.py|scripts/test_giveaway_visual_handoff\.py|scripts/validate_giveaway_visual_payload\.py|data/production/giveaways/v1/current\.json|web/giveaway-ui\.js|web/giveaway-ui\.test\.js|web/giveaway-ui\.css|web/app\.js|web/index\.html|\.github/workflows/build-daily-visual-payload\.yml)$'
+            if ! grep -Ev "$allowed" /tmp/visual-changed.txt | grep -q .; then
+              if git diff "$BEFORE_SHA" "$HEAD_SHA" -- $(cat /tmp/visual-changed.txt) | grep -qi 'giveaway'; then
+                giveaway_needed=true
+              fi
+            fi
           fi
 
-          git diff --name-only "$BEFORE_SHA" "$HEAD_SHA" > /tmp/visual-changed.txt
-          cat /tmp/visual-changed.txt
-
-          allowed='^(scripts/build_final_visual_payload\.py|scripts/giveaway_visual_handoff\.py|scripts/test_giveaway_visual_handoff\.py|scripts/validate_giveaway_visual_payload\.py|data/production/giveaways/v1/current\.json|web/giveaway-ui\.js|web/giveaway-ui\.test\.js|web/giveaway-ui\.css|web/app\.js|web/index\.html|\.github/workflows/build-daily-visual-payload\.yml)$'
-          if grep -Ev "$allowed" /tmp/visual-changed.txt | grep -q .; then
-            exit 0
-          fi
-          if git diff "$BEFORE_SHA" "$HEAD_SHA" -- $(cat /tmp/visual-changed.txt) | grep -qi 'giveaway'; then
-            echo "giveaway_only=true" >> "$GITHUB_OUTPUT"
-            echo "VISUAL_SCOPE=giveaway_only"
-          fi
+          echo "giveaway_only=$giveaway_needed" >> "$GITHUB_OUTPUT"
+          echo "commercial_only=$commercial_needed" >> "$GITHUB_OUTPUT"
+          echo "VISUAL_SCOPE giveaway_only=$giveaway_needed commercial_only=$commercial_needed"
 
   giveaway_refresh:
     needs: scope
@@ -287,6 +350,249 @@ jobs:
             --reason giveaway_only_refresh
 
       - name: Upload visual freshness receipt
+        if: always() && needs.scope.outputs.commercial_only != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-freshness-receipt
+          path: /tmp/visual-freshness-receipt.json
+          if-no-files-found: error
+          retention-days: 30
+
+  commercial_refresh:
+    needs: [scope, giveaway_refresh]
+    if: >
+      always() &&
+      needs.scope.outputs.commercial_only == 'true' &&
+      (needs.giveaway_refresh.result == 'success' || needs.giveaway_refresh.result == 'skipped')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Capture intended commercial source for freshness receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/visual_freshness_receipt.py capture-intent \
+            --output /tmp/visual-freshness-intent.json
+
+      - name: Validate bounded commercial refresh contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/test_commercial_refresh.py
+          python scripts/test_fixed_package_purchase_options.py
+          python scripts/test_visual_freshness_receipt.py
+          node web/paid-freshness-ui.test.js
+
+      - name: Record giveaway sibling fingerprint
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY' > /tmp/giveaway-before.sha256
+          import hashlib, json
+          from pathlib import Path
+          data = json.loads(Path('data/production/visual/current.json').read_text(encoding='utf-8'))
+          contract = data.get('production_contract') or {}
+          bounded = {
+              'giveaways': data.get('giveaways') or {},
+              'provenance': {
+                  key: contract.get(key)
+                  for key in (
+                      'giveaway_visual_handoff_blob_sha',
+                      'source_giveaway_snapshot_blob_sha',
+                      'giveaway_visual_schema_version',
+                  )
+              },
+          }
+          raw = json.dumps(bounded, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')
+          print(hashlib.sha256(raw).hexdigest())
+          PY
+          echo "GIVEAWAY_BEFORE=$(cat /tmp/giveaway-before.sha256)"
+
+      - name: Refresh only canonical paid commercial state
+        env:
+          COMMERCIAL_VISUAL_REFRESH_ONLY: "1"
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/build_final_visual_payload.py | tee /tmp/commercial-visual-refresh.log
+          grep -q 'VISUAL_COMMERCIAL_REFRESH=BUILT' /tmp/commercial-visual-refresh.log
+
+      - name: Validate commercial publication freshness and stale-row removal
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import subprocess
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          def read(path):
+              return json.loads(Path(path).read_text(encoding='utf-8'))
+
+          def blob(path):
+              return subprocess.check_output(['git', 'rev-parse', f'HEAD:{path}'], text=True).strip()
+
+          payload = read('data/production/pre_ai/chatgpt_payload.json')
+          store = read('data/production/pre_ai/store_snapshot.json')
+          family = read('data/production/pre_ai/family_graph.json')
+          visual = read('data/production/visual/current.json')
+          contract = visual.get('production_contract') or {}
+          paid = visual.get('paid_list_freshness') or {}
+          refresh = visual.get('commercial_refresh') or {}
+
+          source = payload.get('source_mailing_updated_at_utc')
+          assert source, 'missing commercial source timestamp'
+          assert store.get('status') == 'complete'
+          assert family.get('status') == 'complete'
+          assert store.get('discovery_source_updated_at_utc') == source
+          assert family.get('source_updated_at_utc') == source
+          assert visual.get('commercial_source_mailing_updated_at_utc') == source
+          assert paid.get('status') == 'published'
+          assert paid.get('scope') == 'commercial_only'
+          assert paid.get('source_mailing_updated_at_utc') == source
+          assert paid.get('store_observed_at_utc') == store.get('observed_at_utc')
+          assert refresh.get('taste_recalculated') is False
+          assert refresh.get('semantic_fields_rewritten') is False
+
+          bindings = {
+              'payload_blob_sha': ('data/production/pre_ai/chatgpt_payload.json', 'commercial_source_payload_blob_sha'),
+              'store_snapshot_blob_sha': ('data/production/pre_ai/store_snapshot.json', 'commercial_source_store_snapshot_blob_sha'),
+              'family_graph_blob_sha': ('data/production/pre_ai/family_graph.json', 'commercial_source_family_graph_blob_sha'),
+              'history_snapshot_blob_sha': ('data/production/pre_ai/history_snapshot.json', 'commercial_source_history_snapshot_blob_sha'),
+              'helper_blob_sha': ('scripts/refresh_visual_commercial_fields.py', 'commercial_refresh_helper_blob_sha'),
+          }
+          for paid_key, (path, contract_key) in bindings.items():
+              expected = blob(path)
+              assert contract.get(contract_key) == expected, (contract_key, contract.get(contract_key), expected)
+              assert paid.get(paid_key) == expected, (paid_key, paid.get(paid_key), expected)
+
+          items = visual.get('items') or []
+          ids = [str(item.get('id')) for item in items]
+          assert len(ids) == len(set(ids)), 'duplicate visible family rows after commercial refresh'
+
+          now = datetime.now(timezone.utc)
+          expired = []
+          for item in items:
+              value = item.get('sale_end_utc')
+              if not value:
+                  continue
+              try:
+                  end = datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+              except ValueError:
+                  raise AssertionError(f'invalid sale_end_utc: {item.get("id")}={value}')
+              if end <= now:
+                  expired.append((item.get('id'), item.get('title'), value))
+          assert not expired, f'expired sale rows remain visible: {expired[:10]}'
+
+          print(
+              'COMMERCIAL_PUBLICATION_VALIDATION=PASS '
+              f'source={source} items={len(items)} '
+              f'removed_stale={refresh.get("removed_stale_family_count")} '
+              f'prices_changed={refresh.get("price_changed_item_count")} '
+              f'offers_changed={refresh.get("offer_set_changed_item_count")}'
+          )
+          PY
+
+      - name: Prove giveaway sibling remained unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY' > /tmp/giveaway-after.sha256
+          import hashlib, json
+          from pathlib import Path
+          data = json.loads(Path('data/production/visual/current.json').read_text(encoding='utf-8'))
+          contract = data.get('production_contract') or {}
+          bounded = {
+              'giveaways': data.get('giveaways') or {},
+              'provenance': {
+                  key: contract.get(key)
+                  for key in (
+                      'giveaway_visual_handoff_blob_sha',
+                      'source_giveaway_snapshot_blob_sha',
+                      'giveaway_visual_schema_version',
+                  )
+              },
+          }
+          raw = json.dumps(bounded, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')
+          print(hashlib.sha256(raw).hexdigest())
+          PY
+          echo "GIVEAWAY_AFTER=$(cat /tmp/giveaway-after.sha256)"
+          test "$(cat /tmp/giveaway-before.sha256)" = "$(cat /tmp/giveaway-after.sha256)"
+
+      - name: Commit canonical commercial visual refresh
+        id: persist_commercial
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/production/visual/current.json
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo "No commercial visual change"
+            echo "persisted=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "Refresh commercial visual payload"
+
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              echo "persisted=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
+
+      - name: Create scoped commercial freshness receipt
+        if: always()
+        env:
+          WORKFLOW_RUN_ID: ${{ github.run_id }}
+          WORKFLOW_RUN_ATTEMPT: ${{ github.run_attempt }}
+          EVENT_NAME: ${{ github.event_name }}
+          WORKFLOW_HEAD_SHA: ${{ github.sha }}
+          UPSTREAM_RUN_ID: ${{ github.event.workflow_run.id }}
+          UPSTREAM_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          PERSISTED: ${{ steps.persist_commercial.outputs.persisted }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -s /tmp/visual-freshness-intent.json ]; then
+            python scripts/visual_freshness_receipt.py capture-intent \
+              --output /tmp/visual-freshness-intent.json
+          fi
+          python scripts/visual_freshness_receipt.py create-receipt \
+            --intent /tmp/visual-freshness-intent.json \
+            --output /tmp/visual-freshness-receipt.json \
+            --run-id "$WORKFLOW_RUN_ID" \
+            --run-attempt "$WORKFLOW_RUN_ATTEMPT" \
+            --event-name "$EVENT_NAME" \
+            --workflow-head-sha "$WORKFLOW_HEAD_SHA" \
+            --upstream-run-id "$UPSTREAM_RUN_ID" \
+            --upstream-head-sha "$UPSTREAM_HEAD_SHA" \
+            --build-reported false \
+            --persisted "$PERSISTED" \
+            --history-ready false \
+            --reason commercial_only_refresh
+
+      - name: Upload visual freshness receipt
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -299,6 +605,7 @@ jobs:
     needs: scope
     if: >
       needs.scope.outputs.giveaway_only != 'true' &&
+      needs.scope.outputs.commercial_only != 'true' &&
       github.event_name == 'workflow_run' &&
       (github.event.workflow_run.conclusion != 'success' ||
        github.event.workflow_run.head_branch != 'main')
@@ -360,6 +667,7 @@ jobs:
     needs: scope
     if: >
       needs.scope.outputs.giveaway_only != 'true' &&
+      needs.scope.outputs.commercial_only != 'true' &&
       (github.event_name != 'workflow_run' ||
        (github.event.workflow_run.conclusion == 'success' &&
         github.event.workflow_run.head_branch == 'main'))
