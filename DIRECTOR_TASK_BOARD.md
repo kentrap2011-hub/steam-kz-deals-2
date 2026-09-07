@@ -5,6 +5,7 @@
 - User will not pay extra for automation/inference.
 - No autonomous IMPLEMENT without separate approval.
 - Before assigning/reassigning a worker slot, Director must reconcile exactly: current Board -> exact task file -> exact durable report from the immediately preceding step. Do not infer slot state from an old chat history alone.
+- Do not infer that a newly assigned worker task has actually been launched merely because the task command was prepared. Treat a slot as running only after the user says the new chat was created/sent the task or provides equivalent confirmation.
 - Do not move a user-priority semantic change to unrelated backlog work before its required production/user-verification gate is reachable.
 
 ## Taste — logic implemented, production materialization still pending
@@ -51,23 +52,40 @@ Scope:
 - never reuse old Prototype result;
 - no second task/producer/generation, paid API or Copilot.
 
-## Chat 1 — main list freshness recon DURABLE CLOSEOUT MISSING
+## Chat 1 — old header-date recon COMPLETE
+Completed task:
+`WORKER_TASK_VISUAL_HEADER_DATA_DATE_RECON_01.md`
+Durable report:
+`reviews/worker_reports/visual-header-data-date-recon-01.md`
+Status: `complete`.
+
+This is the old Chat 1 the user still had open. It completed correctly and is deletable.
+
+The old label-only recommendation was rejected by the user as insufficient. Task `WORKER_TASK_VISUAL_HEADER_DATA_LABEL_IMPLEMENT_01.md` remains SUPERSEDED / DO NOT RUN.
+
+### Next Chat 1 — main list freshness recon NOT YET LAUNCHED
 Task:
 `WORKER_TASK_VISUAL_MAIN_LIST_FRESHNESS_RECON_01.md`
 Expected report:
 `reviews/worker_reports/visual-main-list-freshness-recon-01.md`
 Mode: `READ-ONLY / RECON`
 Priority: `VERY_HIGH_USER_PRIORITY`
-Status: `worker_claimed_finished_but_required_report_missing`.
+Status: `ready_fresh_chat_1_not_yet_launched`.
 
-User-visible evidence remains:
+User explicitly clarified that this new Chat 1 has not yet been created/launched. Therefore the absence of its durable report is expected and is NOT a worker closeout failure.
+
+User-visible evidence to investigate when launched:
 - giveaway works;
 - header shows old date;
 - first three visible main-list games show `скидка закончилась`.
 
-Director checked only the exact expected report path after the user's request to check both chats; it is absent from `main`. Director will not reconstruct the diagnosis from code/logs. Existing Chat 1 must self-verify and save the exact required report, even if blocked.
-
-Task `WORKER_TASK_VISUAL_HEADER_DATA_LABEL_IMPLEMENT_01.md` remains SUPERSEDED / DO NOT RUN.
+Goals when launched:
+- establish the real last successful refresh of the displayed discounted-games list;
+- determine why the first visible rows already show ended discounts;
+- decide whether the main list is stale/degraded;
+- identify the exact blocking boundary if stale;
+- determine a truthful user-facing freshness date/status;
+- define one minimal next IMPLEMENT action.
 
 ## Giveaway publication
 User has verified on Android that the free giveaway is visible again.
@@ -80,7 +98,8 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. Existing Chat 1 performs only its durable main-list freshness closeout and writes the exact missing report.
-2. Fresh Chat 2 performs the bounded pre-AI contract-guard fix and validates fresh atomic pre-AI publication.
-3. Do not run a new Taste semantic canary until Chat 2's implementation report proves fresh current bindings are committed.
-4. If Chat 1 proves the main list stale, prioritize the real freshness/publication fix before cosmetic header wording.
+1. User may delete the old completed Chat 1.
+2. User still needs to launch fresh Chat 1 with `WORKER_TASK_VISUAL_MAIN_LIST_FRESHNESS_RECON_01.md`.
+3. Fresh Chat 2 may run the bounded pre-AI contract-guard fix.
+4. Do not run a new Taste semantic canary until Chat 2's implementation report proves fresh current bindings are committed.
+5. If future Chat 1 proves the main list stale, prioritize the real freshness/publication fix before cosmetic header wording.
