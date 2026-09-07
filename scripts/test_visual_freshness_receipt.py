@@ -9,6 +9,9 @@ from pathlib import Path
 import visual_freshness_receipt as freshness
 
 
+SOURCE = "2026-09-03T00:00:00+00:00"
+
+
 def run(repo: Path, *args: str) -> str:
     return subprocess.check_output(list(args), cwd=repo, text=True).strip()
 
@@ -36,9 +39,36 @@ def make_repo(root: Path) -> tuple[Path, dict]:
         {
             "status": "complete",
             "complete_coverage": True,
-            "source_mailing_updated_at_utc": "2026-09-03T00:00:00+00:00",
+            "source_mailing_updated_at_utc": SOURCE,
         },
     )
+    write_json(
+        repo / freshness.COMMERCIAL_PAYLOAD_PATH,
+        {
+            "source_mailing_updated_at_utc": SOURCE,
+            "fx_binding": {"kzt_per_rub": 5.0},
+        },
+    )
+    write_json(
+        repo / freshness.COMMERCIAL_STORE_PATH,
+        {
+            "status": "complete",
+            "discovery_source_updated_at_utc": SOURCE,
+            "observed_at_utc": "2026-09-03T01:00:00+00:00",
+            "entries": {},
+        },
+    )
+    write_json(
+        repo / freshness.COMMERCIAL_FAMILY_PATH,
+        {
+            "status": "complete",
+            "source_updated_at_utc": SOURCE,
+            "families": [],
+        },
+    )
+    helper = repo / freshness.COMMERCIAL_HELPER_PATH
+    helper.parent.mkdir(parents=True, exist_ok=True)
+    helper.write_text("# test commercial helper\n", encoding="utf-8")
     write_json(
         repo / freshness.GIVEAWAY_PATH,
         {
@@ -60,7 +90,25 @@ def make_repo(root: Path) -> tuple[Path, dict]:
     )
     commit_all(repo, "seed")
     intent = freshness.capture_intent(repo)
+    assert freshness._commercial_intent_ready(intent["commercial_source"])
     return repo, intent
+
+
+def commercial_contract(commercial: dict) -> dict:
+    return {
+        contract_key: commercial[intent_key]
+        for intent_key, (_, contract_key) in freshness.COMMERCIAL_BLOB_BINDINGS.items()
+    }
+
+
+def paid_freshness(commercial: dict) -> dict:
+    return {
+        "status": "published",
+        "scope": freshness.COMMERCIAL_SCOPE,
+        "source_mailing_updated_at_utc": commercial["source_mailing_updated_at_utc"],
+        "store_observed_at_utc": commercial["store_observed_at_utc"],
+        **{intent_key: commercial[intent_key] for intent_key in freshness.COMMERCIAL_BLOB_BINDINGS},
+    }
 
 
 def test_fresh_path() -> None:
@@ -145,6 +193,51 @@ def test_fresh_giveaway_only_path_does_not_claim_full_visual_freshness() -> None
         staged = repo / "staged.json"
         staged.write_bytes((repo / freshness.VISUAL_PATH).read_bytes())
         assert freshness.verify_receipt(repo, receipt, expected_run_id="151", staged_path=staged) == "fresh"
+
+
+def test_fresh_commercial_only_path_does_not_claim_full_visual_freshness() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        repo, intent = make_repo(Path(td))
+        commercial = intent["commercial_source"]
+        contract = commercial_contract(commercial)
+        contract.update({
+            "source_history_snapshot_blob_sha": "old-semantic-history",
+            "source_giveaway_snapshot_blob_sha": "old-giveaway",
+        })
+        write_json(
+            repo / freshness.VISUAL_PATH,
+            {
+                "production_contract": contract,
+                "commercial_source_mailing_updated_at_utc": commercial["source_mailing_updated_at_utc"],
+                "commercial_store_observed_at_utc": commercial["store_observed_at_utc"],
+                "paid_list_freshness": paid_freshness(commercial),
+                "giveaways": {"state": "active"},
+                "items": [{"id": 1, "fit": "strong"}],
+            },
+        )
+        commit_all(repo, "fresh commercial sibling")
+        receipt = freshness.create_receipt(
+            repo,
+            intent,
+            run_id="181",
+            run_attempt="1",
+            event_name="push",
+            workflow_head_sha=run(repo, "git", "rev-parse", "HEAD"),
+            upstream_run_id=None,
+            upstream_head_sha=None,
+            build_reported=False,
+            persisted=True,
+            history_ready=False,
+            reason_override=freshness.COMMERCIAL_REASON,
+        )
+        assert receipt["fresh_build"] is True
+        assert receipt["freshness_scope"] == freshness.COMMERCIAL_SCOPE
+        assert receipt["full_visual_freshness"] is False
+        assert receipt["reason"] is None
+        assert receipt["produced_visual"]["commercial_source_mailing_updated_at_utc"] == SOURCE
+        staged = repo / "commercial-staged.json"
+        staged.write_bytes((repo / freshness.VISUAL_PATH).read_bytes())
+        assert freshness.verify_receipt(repo, receipt, expected_run_id="181", staged_path=staged) == "fresh"
 
 
 def test_degraded_no_build() -> None:
@@ -245,10 +338,52 @@ def test_giveaway_source_mismatch_fails_closed() -> None:
         assert receipt["reason"] == "visual_source_giveaway_mismatch"
 
 
+def test_commercial_source_mismatch_fails_closed() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        repo, intent = make_repo(Path(td))
+        commercial = intent["commercial_source"]
+        contract = commercial_contract(commercial)
+        contract["commercial_source_store_snapshot_blob_sha"] = "wrong-store"
+        write_json(
+            repo / freshness.VISUAL_PATH,
+            {
+                "production_contract": contract,
+                "commercial_source_mailing_updated_at_utc": SOURCE,
+                "commercial_store_observed_at_utc": commercial["store_observed_at_utc"],
+                "paid_list_freshness": paid_freshness(commercial),
+                "items": [{"id": 1}],
+            },
+        )
+        commit_all(repo, "wrong commercial visual")
+        receipt = freshness.create_receipt(
+            repo,
+            intent,
+            run_id="505",
+            run_attempt="1",
+            event_name="push",
+            workflow_head_sha=run(repo, "git", "rev-parse", "HEAD"),
+            upstream_run_id=None,
+            upstream_head_sha=None,
+            build_reported=False,
+            persisted=True,
+            history_ready=False,
+            reason_override=freshness.COMMERCIAL_REASON,
+        )
+        assert receipt["fresh_build"] is False
+        assert receipt["freshness_scope"] == freshness.COMMERCIAL_SCOPE
+        assert receipt["full_visual_freshness"] is False
+        assert receipt["reason"] == "visual_source_commercial_mismatch"
+
+
 if __name__ == "__main__":
     test_fresh_path()
     test_fresh_giveaway_only_path_does_not_claim_full_visual_freshness()
+    test_fresh_commercial_only_path_does_not_claim_full_visual_freshness()
     test_degraded_no_build()
     test_stale_mismatch_fails_closed()
     test_giveaway_source_mismatch_fails_closed()
-    print("VISUAL_FRESHNESS_RECEIPT_TESTS=PASS cases=fresh_full,fresh_giveaway,degraded,stale_mismatch,giveaway_mismatch")
+    test_commercial_source_mismatch_fails_closed()
+    print(
+        "VISUAL_FRESHNESS_RECEIPT_TESTS=PASS "
+        "cases=fresh_full,fresh_giveaway,fresh_commercial,degraded,stale_mismatch,giveaway_mismatch,commercial_mismatch"
+    )
