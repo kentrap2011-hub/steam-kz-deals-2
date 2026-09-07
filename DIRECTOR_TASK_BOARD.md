@@ -8,6 +8,18 @@
 - Do not infer that a newly assigned worker task has actually been launched merely because the task command was prepared. Treat a slot as running only after the user says the new chat was created/sent the task or provides equivalent confirmation.
 - Do not move a user-priority semantic change to unrelated backlog work before its required production/user-verification gate is reachable.
 - All future non-trivial worker tasks must obey `WORKER_REPORT_DURABILITY_PROTOCOL.md`: create the exact report path early with `in_progress`, checkpoint it before long verification, and never claim completion before the report is committed and re-read from `main`.
+- Every user-facing worker closeout must obey `DIRECTOR_USER_COMMUNICATION_PROTOCOL.md`: explain in ordinary Russian what was wrong, what the worker actually did, why, what succeeded, what remains unresolved, and what the next stage is and why. Internal technical labels are never a substitute for explanation.
+
+## User communication
+Canonical protocol:
+`DIRECTOR_USER_COMMUNICATION_PROTOCOL.md`
+
+Required behavior after every consumed worker report:
+- explain the result in plain language before giving the next worker command;
+- cover what we did, why we did it, what changed, what is still not solved, and why the next step is necessary;
+- do not make the user decode internal terms such as `pre-AI`, `commercial_only`, `blocked`, `canary`, `receipt`, `fail-closed`, `handoff` or workflow/task names;
+- if a technical name is needed for traceability or a copy-paste command, place it after the plain-language explanation;
+- do not omit a deeper unresolved cause merely because the current local fix succeeded.
 
 ## Worker report reliability
 Canonical protocol:
@@ -94,7 +106,8 @@ Status: `queued_after_main_list_refresh_recovery`.
 User has verified on Android that the free giveaway is visible again.
 
 ## Giveaway ITAD identity
-Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
+Task:
+`WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
 Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 
 ## Stopped route
