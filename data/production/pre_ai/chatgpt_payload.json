@@ -7,7 +7,7 @@
     "canonical_profile_blob_sha": "c42a6a5dcf608e04bf86d24be9e1542f1b934456",
     "taste_model_version": "taste-v3",
     "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-    "content_metadata_blob_sha": "48271ae46a7a84fcf0388b1d2aa16aa2f1756d02"
+    "content_metadata_blob_sha": "ef4f5d259feab7c08c96f859346a8cb437ccb67b"
   },
   "wishlist_binding": {
     "blob_sha": "f741d075cc6549a0cbbaf826594a94cdd59f6dec",
@@ -108,7 +108,7 @@
   "sale_end_coverage": 1.0,
   "sale_end_missing_count": 0,
   "sale_end_missing_primary_keys": [],
-  "source_pre_ai_artifact_bytes": 2766911,
+  "source_pre_ai_artifact_bytes": 2766916,
   "deterministically_excluded_primary_keys": [
     "App_1044620",
     "App_1058450",
@@ -151,7 +151,7 @@
     "App_761600",
     "App_802880"
   ],
-  "elapsed_seconds": 0.298,
+  "elapsed_seconds": 0.127,
   "semantic_completeness": {
     "status": "degraded",
     "scope_partition_complete": true,
@@ -161,7 +161,7 @@
     "total_relevant_semantic_scope": 681,
     "source_family_count": 721,
     "unresolved_scope_source_mailing_updated_at_utc": "2026-09-06T21:00:38.938100+00:00",
-    "unresolved_scope_age_seconds": 22743,
+    "unresolved_scope_age_seconds": 22794,
     "unresolved_age_basis": "source_mailing_updated_at_utc"
   },
   "semantic_runtime_observability": {
@@ -196,7 +196,7 @@
       "cache_contract": "RUSSIAN-DESCRIPTION-TRANSLATION-CACHE-ENTRY-V1",
       "queue_path": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
       "status_path": "data/production/pre_ai/chatgpt_ru_description_status.json",
-      "queue_count": 214,
+      "queue_count": 213,
       "submission_glob": "data/ai_inbox/russian_descriptions/*.json",
       "runtime_owner": "scheduled_chatgpt_runtime_data_plane",
       "control_plane_owner": "github_control_plane"
