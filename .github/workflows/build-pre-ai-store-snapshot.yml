@@ -44,6 +44,7 @@ on:
       - "scripts/test_fixed_package_purchase_options.py"
       - "scripts/test_package_complete_content_value.py"
       - "scripts/test_expired_offer_guard.py"
+      - "scripts/test_pre_ai_deal_contract_guard.py"
       - "scripts/build_pre_ai_fx_snapshot.py"
       - "scripts/build_pre_ai_content_rules.py"
       - "scripts/build_pre_ai_family_graph.py"
@@ -83,6 +84,9 @@ jobs:
 
       - name: Regression test expired offer guard
         run: python scripts/test_expired_offer_guard.py
+
+      - name: Regression test deal quality contract guard
+        run: python scripts/test_pre_ai_deal_contract_guard.py
 
       - name: Regression test fixed package purchase options
         run: |
