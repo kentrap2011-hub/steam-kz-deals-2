@@ -15,6 +15,23 @@ For every non-trivial worker task with an expected report path:
 5. The final user-facing worker response must be sent only after the exact report path has been written to `main` and re-read/confirmed.
 6. A worker must never say `finished`, `done`, `complete`, or equivalent when the required report is still only local/in-memory/uncommitted.
 
+## Missing-report recovery gate
+
+If a previous response cycle ended and the exact required report still does not exist in `main`, the next worker turn is a persistence-recovery turn.
+
+The **first repository mutation/tool action in that turn must create the exact report path** with status `in_progress` (or the most truthful already-known non-final status) and summarize the already-completed work from the worker's current context.
+
+Before that first report write, do NOT:
+- rerun tests;
+- inspect Actions/logs;
+- do more code/history research;
+- start a new implementation step;
+- perform another acceptance check.
+
+If the first report write fails, stop immediately and report the exact persistence/tool error. Do not spend the turn on other work.
+
+After the report exists in `main`, the worker may continue only the bounded closeout needed to finalize that same report.
+
 ## Priority rule
 
 When forced to choose between one more diagnostic/verification action and preserving the durable report, preserve the report first. Additional work can continue in the next turn; an unsaved result cannot be consumed reliably by Director.
