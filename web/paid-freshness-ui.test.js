@@ -29,6 +29,14 @@ assert.strictEqual(
   'giveaway-only freshness must not advance paid-list freshness',
 );
 
+const semanticOnlyChange = JSON.parse(JSON.stringify(payload));
+semanticOnlyChange.source_mailing_updated_at_utc = '2026-09-09T10:00:00+00:00';
+assert.strictEqual(
+  ui.paidFreshnessTimestamp(semanticOnlyChange),
+  ui.paidFreshnessTimestamp(payload),
+  'semantic source time must not replace the separately published paid-list freshness identity',
+);
+
 assert.strictEqual(
   ui.paidFreshnessTimestamp({ commercial_source_mailing_updated_at_utc: '2026-09-01T00:00:00Z' }),
   '2026-09-01T00:00:00Z',
