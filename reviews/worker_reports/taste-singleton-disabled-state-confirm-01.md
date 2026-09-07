@@ -31,7 +31,7 @@ Confirm only the current enabled/disabled state of the exact existing ChatGPT Sc
 - Whether the exact task is currently enabled or disabled remains undetermined because its authoritative enabled flag could not be read reliably in this worker context.
 
 ## Status
-`verified`
+`blocked_state_unavailable`
 
 ## Recommended next step
 Director must **not** prepare the future one-game test under an assumption that this singleton task is disabled. First obtain a separate reliable control-plane confirmation for this same task instance ID. This worker made no control-plane change and did not run a test.
