@@ -10,11 +10,25 @@ from typing import Any
 CONTRACT = "visual-freshness-receipt-v1"
 SCHEMA_VERSION = 1
 HISTORY_PATH = "data/production/pre_ai/history_snapshot.json"
+COMMERCIAL_PAYLOAD_PATH = "data/production/pre_ai/chatgpt_payload.json"
+COMMERCIAL_STORE_PATH = "data/production/pre_ai/store_snapshot.json"
+COMMERCIAL_FAMILY_PATH = "data/production/pre_ai/family_graph.json"
+COMMERCIAL_HELPER_PATH = "scripts/refresh_visual_commercial_fields.py"
 GIVEAWAY_PATH = "data/production/giveaways/v1/current.json"
 VISUAL_PATH = "data/production/visual/current.json"
 FULL_SCOPE = "full_visual"
 GIVEAWAY_SCOPE = "giveaway_only"
+COMMERCIAL_SCOPE = "commercial_only"
 GIVEAWAY_REASON = "giveaway_only_refresh"
+COMMERCIAL_REASON = "commercial_only_refresh"
+
+COMMERCIAL_BLOB_BINDINGS = {
+    "payload_blob_sha": (COMMERCIAL_PAYLOAD_PATH, "commercial_source_payload_blob_sha"),
+    "store_snapshot_blob_sha": (COMMERCIAL_STORE_PATH, "commercial_source_store_snapshot_blob_sha"),
+    "family_graph_blob_sha": (COMMERCIAL_FAMILY_PATH, "commercial_source_family_graph_blob_sha"),
+    "history_snapshot_blob_sha": (HISTORY_PATH, "commercial_source_history_snapshot_blob_sha"),
+    "helper_blob_sha": (COMMERCIAL_HELPER_PATH, "commercial_refresh_helper_blob_sha"),
+}
 
 
 def _git(*args: str, cwd: Path) -> str:
@@ -33,6 +47,16 @@ def _read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _read_json_optional(path: Path) -> tuple[dict[str, Any], str | None]:
+    if not path.exists():
+        return {}, "missing"
+    try:
+        value = _read_json(path)
+    except (json.JSONDecodeError, OSError) as exc:
+        return {}, f"{type(exc).__name__}: {exc}"
+    return value, None
+
+
 def _write_json(path: Path, value: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -42,17 +66,25 @@ def _as_bool(value: str | None) -> bool:
     return (value or "").strip().lower() == "true"
 
 
+def _commercial_intent_ready(commercial: dict[str, Any]) -> bool:
+    source = commercial.get("source_mailing_updated_at_utc")
+    if not source:
+        return False
+    if commercial.get("store_source_updated_at_utc") != source:
+        return False
+    if commercial.get("family_source_updated_at_utc") != source:
+        return False
+    return all(commercial.get(key) for key in COMMERCIAL_BLOB_BINDINGS)
+
+
 def capture_intent(repo: Path) -> dict[str, Any]:
     history_file = repo / HISTORY_PATH
-    blob_sha = _git_optional("rev-parse", f"HEAD:{HISTORY_PATH}", cwd=repo)
+    history_blob_sha = _git_optional("rev-parse", f"HEAD:{HISTORY_PATH}", cwd=repo)
     giveaway_blob_sha = _git_optional("rev-parse", f"HEAD:{GIVEAWAY_PATH}", cwd=repo)
-    history: dict[str, Any] = {}
-    history_parse_error = None
-    if history_file.exists():
-        try:
-            history = _read_json(history_file)
-        except (json.JSONDecodeError, OSError) as exc:
-            history_parse_error = f"{type(exc).__name__}: {exc}"
+    history, history_parse_error = _read_json_optional(history_file)
+    payload, payload_parse_error = _read_json_optional(repo / COMMERCIAL_PAYLOAD_PATH)
+    store, store_parse_error = _read_json_optional(repo / COMMERCIAL_STORE_PATH)
+    family, family_parse_error = _read_json_optional(repo / COMMERCIAL_FAMILY_PATH)
 
     source_cycle = {
         key: history.get(key)
@@ -64,15 +96,37 @@ def capture_intent(repo: Path) -> dict[str, Any]:
         )
         if history.get(key) is not None
     }
+    commercial_source = {
+        "source_mailing_updated_at_utc": payload.get("source_mailing_updated_at_utc"),
+        "store_source_updated_at_utc": store.get("discovery_source_updated_at_utc"),
+        "family_source_updated_at_utc": family.get("source_updated_at_utc"),
+        "store_observed_at_utc": store.get("observed_at_utc"),
+        "payload_blob_sha": _git_optional("rev-parse", f"HEAD:{COMMERCIAL_PAYLOAD_PATH}", cwd=repo),
+        "store_snapshot_blob_sha": _git_optional("rev-parse", f"HEAD:{COMMERCIAL_STORE_PATH}", cwd=repo),
+        "family_graph_blob_sha": _git_optional("rev-parse", f"HEAD:{COMMERCIAL_FAMILY_PATH}", cwd=repo),
+        "history_snapshot_blob_sha": history_blob_sha,
+        "helper_blob_sha": _git_optional("rev-parse", f"HEAD:{COMMERCIAL_HELPER_PATH}", cwd=repo),
+        "parse_errors": {
+            key: value
+            for key, value in {
+                "payload": payload_parse_error,
+                "store_snapshot": store_parse_error,
+                "family_graph": family_parse_error,
+                "history_snapshot": history_parse_error,
+            }.items()
+            if value
+        },
+    }
     return {
         "captured_checkout_commit_sha": _git_optional("rev-parse", "HEAD", cwd=repo),
-        "history_snapshot_blob_sha": blob_sha,
+        "history_snapshot_blob_sha": history_blob_sha,
         "giveaway_snapshot_blob_sha": giveaway_blob_sha,
         "history_snapshot_present": history_file.exists(),
         "history_snapshot_parse_error": history_parse_error,
         "history_status": history.get("status"),
         "history_complete_coverage": history.get("complete_coverage"),
         "source_cycle": source_cycle,
+        "commercial_source": commercial_source,
     }
 
 
@@ -88,15 +142,44 @@ def _visual_state(repo: Path) -> dict[str, Any]:
             f"canonical visual commit/blob mismatch: commit_blob={commit_blob_sha} head_blob={blob_sha}"
         )
     giveaways = data.get("giveaways") or {}
+    paid_freshness = data.get("paid_list_freshness") or {}
     return {
         "blob_sha": blob_sha,
         "commit_sha": commit_sha,
         "source_history_snapshot_blob_sha": contract.get("source_history_snapshot_blob_sha"),
         "source_giveaway_snapshot_blob_sha": contract.get("source_giveaway_snapshot_blob_sha"),
+        "commercial_source_payload_blob_sha": contract.get("commercial_source_payload_blob_sha"),
+        "commercial_source_store_snapshot_blob_sha": contract.get("commercial_source_store_snapshot_blob_sha"),
+        "commercial_source_family_graph_blob_sha": contract.get("commercial_source_family_graph_blob_sha"),
+        "commercial_source_history_snapshot_blob_sha": contract.get("commercial_source_history_snapshot_blob_sha"),
+        "commercial_refresh_helper_blob_sha": contract.get("commercial_refresh_helper_blob_sha"),
+        "commercial_source_mailing_updated_at_utc": data.get("commercial_source_mailing_updated_at_utc"),
+        "commercial_store_observed_at_utc": data.get("commercial_store_observed_at_utc"),
+        "paid_list_freshness": paid_freshness,
         "giveaway_state": giveaways.get("state"),
         "giveaway_generated_at_utc": giveaways.get("generated_at_utc"),
         "giveaway_fresh_until_utc": giveaways.get("fresh_until_utc"),
     }
+
+
+def _commercial_visual_matches(observed: dict[str, Any], commercial: dict[str, Any]) -> bool:
+    source = commercial.get("source_mailing_updated_at_utc")
+    if observed.get("commercial_source_mailing_updated_at_utc") != source:
+        return False
+    paid = observed.get("paid_list_freshness") or {}
+    if paid.get("status") != "published" or paid.get("scope") != COMMERCIAL_SCOPE:
+        return False
+    if paid.get("source_mailing_updated_at_utc") != source:
+        return False
+    if paid.get("store_observed_at_utc") != commercial.get("store_observed_at_utc"):
+        return False
+    for intent_key, (_, contract_key) in COMMERCIAL_BLOB_BINDINGS.items():
+        expected = commercial.get(intent_key)
+        if observed.get(contract_key) != expected:
+            return False
+        if paid.get(intent_key) != expected:
+            return False
+    return True
 
 
 def create_receipt(
@@ -115,18 +198,29 @@ def create_receipt(
     reason_override: str | None,
 ) -> dict[str, Any]:
     scoped_giveaway = reason_override == GIVEAWAY_REASON
-    freshness_scope = GIVEAWAY_SCOPE if scoped_giveaway else FULL_SCOPE
+    scoped_commercial = reason_override == COMMERCIAL_REASON
+    if scoped_giveaway:
+        freshness_scope = GIVEAWAY_SCOPE
+    elif scoped_commercial:
+        freshness_scope = COMMERCIAL_SCOPE
+    else:
+        freshness_scope = FULL_SCOPE
+
     intended_history = intent.get("history_snapshot_blob_sha")
     intended_giveaway = intent.get("giveaway_snapshot_blob_sha")
-    intended_source = intended_giveaway if scoped_giveaway else intended_history
+    intended_commercial = intent.get("commercial_source") or {}
 
-    # Giveaway-only publication is a real scoped build even though the workflow must
-    # not claim that the independently blocked paid/Taste section is globally fresh.
-    fresh_build = bool(persisted and intended_source) if scoped_giveaway else bool(
-        build_reported and persisted and intended_history
-    )
+    # Scoped publication is a real bounded build but must never claim the unrelated
+    # visual domains are globally fresh.
+    if scoped_giveaway:
+        fresh_build = bool(persisted and intended_giveaway)
+    elif scoped_commercial:
+        fresh_build = bool(persisted and _commercial_intent_ready(intended_commercial))
+    else:
+        fresh_build = bool(build_reported and persisted and intended_history)
+
     observed_visual: dict[str, Any] | None = None
-    reason = None if scoped_giveaway else reason_override
+    reason = None if (scoped_giveaway or scoped_commercial) else reason_override
 
     if fresh_build:
         observed_visual = _visual_state(repo)
@@ -134,6 +228,10 @@ def create_receipt(
             if observed_visual.get("source_giveaway_snapshot_blob_sha") != intended_giveaway:
                 fresh_build = False
                 reason = "visual_source_giveaway_mismatch"
+        elif scoped_commercial:
+            if not _commercial_visual_matches(observed_visual, intended_commercial):
+                fresh_build = False
+                reason = "visual_source_commercial_mismatch"
         elif observed_visual.get("source_history_snapshot_blob_sha") != intended_history:
             fresh_build = False
             reason = "visual_source_history_mismatch"
@@ -146,6 +244,13 @@ def create_receipt(
                 reason = "giveaway_only_refresh_not_persisted"
             else:
                 reason = "no_fresh_giveaway_build"
+        elif scoped_commercial:
+            if not _commercial_intent_ready(intended_commercial):
+                reason = "missing_or_unbound_intended_commercial_source"
+            elif not persisted:
+                reason = "commercial_only_refresh_not_persisted"
+            else:
+                reason = "no_fresh_commercial_build"
         elif not intended_history:
             reason = "missing_intended_history_snapshot"
         elif not history_ready:
@@ -158,12 +263,13 @@ def create_receipt(
             reason = "no_fresh_build"
 
     produced_visual = observed_visual if fresh_build else None
+    scoped = scoped_giveaway or scoped_commercial
     receipt = {
         "schema_version": SCHEMA_VERSION,
         "contract": CONTRACT,
         "fresh_build": fresh_build,
         "freshness_scope": freshness_scope,
-        "full_visual_freshness": bool(fresh_build and not scoped_giveaway),
+        "full_visual_freshness": bool(fresh_build and not scoped),
         "outcome": "fresh_build" if fresh_build else "degraded/no_fresh_build",
         "reason": None if fresh_build else reason,
         "intended_source_cycle": intent,
@@ -180,6 +286,18 @@ def create_receipt(
     if observed_visual and not fresh_build:
         receipt["observed_visual"] = observed_visual
     return receipt
+
+
+def _verify_current_commercial_sources(repo: Path, commercial: dict[str, Any]) -> None:
+    if not _commercial_intent_ready(commercial):
+        raise SystemExit("fresh commercial receipt missing exact intended commercial source")
+    for intent_key, (path, _) in COMMERCIAL_BLOB_BINDINGS.items():
+        intended_blob = commercial.get(intent_key)
+        current_blob = _git("rev-parse", f"HEAD:{path}", cwd=repo)
+        if current_blob != intended_blob:
+            raise SystemExit(
+                f"stale commercial source mismatch: path={path} current={current_blob} receipt={intended_blob}"
+            )
 
 
 def verify_receipt(
@@ -199,7 +317,7 @@ def verify_receipt(
         )
 
     scope = receipt.get("freshness_scope") or FULL_SCOPE
-    if scope not in {FULL_SCOPE, GIVEAWAY_SCOPE}:
+    if scope not in {FULL_SCOPE, GIVEAWAY_SCOPE, COMMERCIAL_SCOPE}:
         raise SystemExit(f"unsupported visual freshness scope: {scope}")
 
     if receipt.get("fresh_build") is not True:
@@ -237,6 +355,13 @@ def verify_receipt(
             raise SystemExit(
                 f"produced giveaway provenance mismatch: visual_giveaway={produced_giveaway} receipt_giveaway={intended_giveaway}"
             )
+    elif scope == COMMERCIAL_SCOPE:
+        if receipt.get("full_visual_freshness") is not False:
+            raise SystemExit("commercial-only receipt must not claim full visual freshness")
+        intended_commercial = intended.get("commercial_source") or {}
+        _verify_current_commercial_sources(repo, intended_commercial)
+        if not _commercial_visual_matches(produced, intended_commercial):
+            raise SystemExit("produced visual/commercial provenance mismatch")
     else:
         if receipt.get("full_visual_freshness") is not True:
             raise SystemExit("full visual fresh receipt missing full_visual_freshness=true")
@@ -281,6 +406,11 @@ def verify_receipt(
             raise SystemExit(
                 f"visual/giveaway provenance mismatch: visual_giveaway={visual_giveaway} receipt_giveaway={intended_giveaway}"
             )
+    elif scope == COMMERCIAL_SCOPE:
+        intended_commercial = intended.get("commercial_source") or {}
+        current_state = _visual_state(repo)
+        if not _commercial_visual_matches(current_state, intended_commercial):
+            raise SystemExit("visual/commercial provenance mismatch")
     else:
         intended_history = intended.get("history_snapshot_blob_sha")
         visual_history = contract.get("source_history_snapshot_blob_sha")
@@ -307,6 +437,14 @@ def verify_receipt(
             "VISUAL_FRESHNESS=fresh scope=giveaway_only "
             f"run_id={expected_run_id} giveaway_blob={intended.get('giveaway_snapshot_blob_sha')} "
             f"visual_blob={expected_blob} visual_commit={expected_commit} full_visual_freshness=false"
+        )
+    elif scope == COMMERCIAL_SCOPE:
+        commercial = intended.get("commercial_source") or {}
+        print(
+            "VISUAL_FRESHNESS=fresh scope=commercial_only "
+            f"run_id={expected_run_id} source={commercial.get('source_mailing_updated_at_utc')} "
+            f"store_blob={commercial.get('store_snapshot_blob_sha')} visual_blob={expected_blob} "
+            f"visual_commit={expected_commit} full_visual_freshness=false"
         )
     else:
         print(
