@@ -126,7 +126,7 @@ jobs:
               store = read('data/production/pre_ai/store_snapshot.json')
               family = read('data/production/pre_ai/family_graph.json')
               visual = read('data/production/visual/current.json')
-          except Exception as exc:
+          except Exception:
               print('false')
               raise SystemExit(0)
 
@@ -166,15 +166,26 @@ jobs:
           PY
           )
 
-          # Keep the legacy giveaway-only push heuristic as a fallback for UI/code
-          # changes that explicitly belong to that bounded sibling.
           if [ "$EVENT_NAME" = "push" ] && [ -n "${BEFORE_SHA:-}" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
             git diff --name-only "$BEFORE_SHA" "$HEAD_SHA" > /tmp/visual-changed.txt
             cat /tmp/visual-changed.txt
-            allowed='^(scripts/build_final_visual_payload\.py|scripts/giveaway_visual_handoff\.py|scripts/test_giveaway_visual_handoff\.py|scripts/validate_giveaway_visual_payload\.py|data/production/giveaways/v1/current\.json|web/giveaway-ui\.js|web/giveaway-ui\.test\.js|web/giveaway-ui\.css|web/app\.js|web/index\.html|\.github/workflows/build-daily-visual-payload\.yml)$'
-            if ! grep -Ev "$allowed" /tmp/visual-changed.txt | grep -q .; then
+
+            # Preserve the legacy bounded giveaway maintenance fallback.
+            giveaway_allowed='^(scripts/build_final_visual_payload\.py|scripts/giveaway_visual_handoff\.py|scripts/test_giveaway_visual_handoff\.py|scripts/validate_giveaway_visual_payload\.py|data/production/giveaways/v1/current\.json|web/giveaway-ui\.js|web/giveaway-ui\.test\.js|web/giveaway-ui\.css|web/app\.js|web/index\.html|\.github/workflows/build-daily-visual-payload\.yml)$'
+            if ! grep -Ev "$giveaway_allowed" /tmp/visual-changed.txt | grep -q .; then
               if git diff "$BEFORE_SHA" "$HEAD_SHA" -- $(cat /tmp/visual-changed.txt) | grep -qi 'giveaway'; then
                 giveaway_needed=true
+              fi
+            fi
+
+            # Code-only changes to this bounded commercial handoff should validate
+            # through commercial_only rather than accidentally entering the full
+            # semantic build. This never applies to arbitrary Taste/semantic files.
+            commercial_allowed='^(scripts/build_final_visual_payload\.py|scripts/refresh_visual_commercial_fields\.py|scripts/test_commercial_refresh\.py|scripts/test_fixed_package_purchase_options\.py|scripts/visual_freshness_receipt\.py|scripts/test_visual_freshness_receipt\.py|web/paid-freshness-ui\.js|web/paid-freshness-ui\.test\.js|web/index\.html|\.github/workflows/build-daily-visual-payload\.yml)$'
+            if ! grep -Ev "$commercial_allowed" /tmp/visual-changed.txt | grep -q .; then
+              if git diff "$BEFORE_SHA" "$HEAD_SHA" -- $(cat /tmp/visual-changed.txt) | grep -Eqi 'commercial|paid[_ -]?freshness'; then
+                commercial_needed=true
+                echo "VISUAL_SCOPE commercial_only=true reason=bounded_commercial_implementation_push"
               fi
             fi
           fi
