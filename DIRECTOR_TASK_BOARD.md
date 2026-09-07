@@ -11,26 +11,29 @@
 
 ## Current worker slots
 
-### Chat 1 — paid-list repair response cycle ended, task NOT yet durably complete
+### Chat 1 — paid-list repair DURABLY CLOSED; awaiting user verification
 Task:
 `WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`
 Report:
 `reviews/worker_reports/visual-main-list-refresh-handoff-implement-01.md`
-Report status: `in_progress`.
+Final status: `complete_ready_for_user_verification`.
 
-Plain current state:
-- worker confirmed the repair target and existing safe helper;
-- worker confirmed Steam collection and the upstream daily data path are not the thing to change;
-- actual bounded production wiring, final runtime acceptance, publication proof, and deploy verification are still listed as pending in the report;
-- therefore the response cycle ended before the task was finished.
+Plain result:
+- fresh Steam-derived commercial truth can now update the paid list without waiting for new ChatGPT/Taste analysis;
+- no second scheduler, Steam collection path, publication writer, or Pages route was introduced;
+- the ordinary full semantic path remains separate and fail-closed;
+- stale paid rows were removed and the accepted paid list was reduced from 442 to 190 current visible items;
+- protected Taste/semantic fields were not rewritten;
+- giveaway state was preserved;
+- ordinary GitHub Pages deployment succeeded;
+- accepted paid source lineage is `2026-09-06T21:00:38.938100+00:00`, newer than the stale Aug 30/31 incident state.
 
-Required action:
-- keep the SAME Chat 1;
-- do not restart investigation;
-- continue only the unfinished implementation/acceptance items already listed in the report;
-- update this same report to one of the task's allowed final statuses and re-read it from `main` before closing.
+User verification required before closing the user-visible incident:
+- reload/open the deployed site on Android/browser;
+- confirm the main paid list no longer shows the stale August state and prices/discounts/deadlines look current;
+- confirm the paid-list freshness indicator reflects the current paid source independently of giveaway/semantic timestamps.
 
-Chat 1 must NOT be deleted yet.
+Chat 1 worker result is durable. This worker chat can be deleted.
 
 ### Chat 2 — completed-task reuse recon DURABLY CLOSED
 Task:
@@ -40,40 +43,42 @@ Report:
 Final status: `blocked_same_id_reuse_unproven`.
 
 Plain result:
-- generic ChatGPT product behavior supports rescheduling/editing existing finished tasks;
-- worker could not prove exact-id targeting from its read-only control plane;
-- no state was changed, no task was created, and no game analysis was run.
+- no state was changed, no task was created, and no game analysis was run;
+- worker could not prove exact-id in-place reuse from its read-only control plane.
 
 Chat 2 worker result is durable. This worker chat can be deleted.
 
 ## User control-plane observation for existing Taste Scheduled Task
-On 2026-09-07 the user opened the existing completed `Taste Semantic Producer` from ChatGPT Scheduled on Android/web mobile and provided screenshots.
+On 2026-09-07 the user inspected the existing completed `Taste Semantic Producer` in ChatGPT Scheduled.
 
-Observed directly:
-- task title displayed: `Taste Semantic Producer`;
-- state displayed: `Завершено` / `Completed`;
-- the task has not been deleted;
-- inside the existing task detail panel, under `ПЕРИОДИЧНОСТЬ`, the same card exposes `Дата` and `Время` controls with dropdown indicators (currently showing the prior Sep 6 canary date/time).
+Observed directly by the user:
+- state is `Завершено` / `Completed`;
+- Date and Time values are visible but not active/editable;
+- filtering Scheduled by `Активно` / `Active` returns an empty list;
+- the existing completed task has not been deleted.
 
 Operational conclusion:
-- a separate worker is no longer needed merely to discover whether the visible existing task offers in-place schedule controls: the user UI demonstrably exposes them on that existing completed task card;
-- this does NOT prove that the mobile UI exposed the immutable backend jawbone id, so do not claim the screenshot itself proves exact id equality;
-- do not create a replacement `Taste Semantic Producer`;
-- do not delete the existing task.
+- correct the prior Director inference: visible Date/Time rows did NOT establish editable in-place schedule controls;
+- current user-visible control-plane evidence strongly establishes that there is no active scheduled Taste producer and this completed task is not presently scheduled to run again;
+- this evidence does not establish why the product makes the completed task non-editable, and does not by itself prove whether some hidden/API-level same-id reactivation exists;
+- for project operation, however, no future automatic semantic run may be assumed from this completed card;
+- do not delete the completed task yet because it remains useful provenance/evidence;
+- do not create a replacement task without a new bounded design/authorization step.
 
 ## Taste next gate
-A fresh one-game canary is still NOT started yet.
-Reason: Chat 1 is currently finishing a production paid-list publication repair. A semantic canary could also cause downstream production activity and would make acceptance evidence harder to separate while Chat 1 is changing/validating the visual publication workflow.
+The previous plan to reschedule the same completed card through Date/Time is invalidated by the user's direct UI evidence.
 
-After Chat 1 reaches a durable final result, Director may authorize a one-time reschedule of this same visible completed `Taste Semantic Producer` through its existing Date/Time controls for exactly one fresh current game, with no new task and no second semantic row until Director review.
+Before restoring automatic ChatGPT analysis, the project needs a new bounded design decision for how to establish exactly one ACTIVE recurring producer without overlap and without paid OpenAI API/Copilot. Any replacement must account for the fact that the prior canary task is completed and non-editable in the user's current Scheduled UI.
+
+No fresh one-game canary is authorized yet.
 
 ## Paid-list publication repair
-Still active in Chat 1. Do not call the incident repaired until the same report reaches a final accepted status and the user verifies the site on Android if worker acceptance says it is ready.
+Implementation is complete and deployed. User verification on Android/browser is the remaining closure gate.
 
 ## Publication freshness recurrence postmortem
 Task:
 `WORKER_TASK_PUBLICATION_FRESHNESS_RECURRENCE_POSTMORTEM_01.md`
-Status: `queued_after_main_list_refresh_recovery`.
+Status: `queued_after_main_list_refresh_user_verification`.
 
 This remains mandatory after recovery to add first-day detection for silent failures and compare the giveaway, paid-list, and ChatGPT-analysis incidents.
 
@@ -89,8 +94,7 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route remains prohibited unless the user explicitly reverses that policy.
 
 ## Next decision
-1. Existing Chat 1 finishes its current paid-list repair and finalizes the same report.
-2. Chat 2 may be deleted; no replacement Chat 2 is needed merely to inspect the schedule UI.
-3. Do not change Date/Time on `Taste Semantic Producer` while Chat 1 repair acceptance is still in progress.
-4. After Chat 1 final report is consumed, prepare the exactly-one-game canary and tell the user the exact one-time Date/Time to set on this same task card.
-5. Do not create or delete any Taste Scheduled Task.
+1. User verifies the repaired main paid list on Android/browser.
+2. After that verification, run the mandatory publication-freshness recurrence postmortem and keep the automatic-ChatGPT failure in scope.
+3. Separately prepare a bounded Taste control-plane redesign for exactly one active recurring ChatGPT Scheduled Task; do not reuse the now-invalid assumption that the completed task's Date/Time can be edited.
+4. Do not create or delete any Taste Scheduled Task until that bounded step is explicitly authorized.
