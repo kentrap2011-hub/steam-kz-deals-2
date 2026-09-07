@@ -122,7 +122,7 @@ def main():
         raise SystemExit('Pre-AI FX snapshot incomplete')
     if history_doc.get('status') != 'complete' or not history_doc.get('complete_coverage'):
         raise SystemExit('Pre-AI history snapshot incomplete')
-    if contract.get('contract') != 'DEAL-QUALITY-AND-SORT-V1' or contract.get('version') != '1.3':
+    if contract.get('contract') != 'DEAL-QUALITY-AND-SORT-V1' or contract.get('version') != '1.5':
         raise SystemExit('Unexpected deal quality contract')
 
     gate, thresholds = build_gate(contract)
