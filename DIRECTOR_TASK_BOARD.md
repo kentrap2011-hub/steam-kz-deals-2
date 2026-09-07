@@ -19,7 +19,7 @@ Expected report:
 `reviews/worker_reports/taste-daily-automation-failure-forensic-recon-01.md`
 Mode: `READ-ONLY / RECON / FORENSIC`
 Priority: `VERY_HIGH_RELIABILITY`
-Status: `ready_fresh_chat_1`.
+Status: `running_or_awaiting_user_completion_signal`.
 
 Purpose in plain terms:
 - establish the last proven successful automatic ChatGPT analysis;
@@ -31,22 +31,26 @@ Purpose in plain terms:
 
 No repair or automation state change in this task.
 
-### Chat 2 — confirm replacement ChatGPT automation is currently off
+### Chat 2 — replacement ChatGPT automation state check needs report-status correction
 Task:
 `WORKER_TASK_TASTE_SINGLETON_DISABLED_STATE_CONFIRM_01.md`
-Expected report:
+Report:
 `reviews/worker_reports/taste-singleton-disabled-state-confirm-01.md`
 Mode: `READ-ONLY / CONTROL-PLANE CONFIRMATION`
 Priority: `VERY_HIGH_USER_PRIORITY`
-Status: `ready_fresh_chat_2`.
+Status: `result_state_unavailable_report_status_malformed`.
 
-Exact existing task:
-- title `Taste Semantic Producer`;
-- task id `6a9d6fdddc00819193ed670d782045c4`;
-- generation `1`.
+Plain result:
+- worker could not reliably see whether exact task `6a9d6fdddc00819193ed670d782045c4` is currently on or off;
+- worker did not change task state and did not run a game test;
+- therefore Director must not authorize the one-game test yet.
 
-Purpose in plain terms:
-confirm only whether this exact existing automation is currently disabled before any future one-game test. Do not change its state and do not run a test.
+Report contract issue:
+- task required one of `complete_confirmed_disabled`, `complete_found_enabled`, `blocked_state_unavailable`;
+- report used `verified` instead;
+- existing Chat 2 must only correct the final status to `blocked_state_unavailable`, re-read the same report, and stop.
+
+Do not delete Chat 2 until this report-only correction is persisted.
 
 ## Paid-list publication repair
 Forensic report is complete and repair is understood, but repair launch is temporarily held while Chat 1 investigates the deeper automatic-ChatGPT failure raised by the user.
@@ -55,19 +59,15 @@ Prepared repair task:
 `WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`
 Status: `needs_bounded_task_correction_before_launch`.
 
-The correction will reuse the existing safe commercial refresh helper, connect it to the existing visual publication workflow, preserve old semantic analysis safely, preserve giveaways, and add proof that paid prices/discounts actually caught up. No second scheduler/writer.
-
 ## Taste current state
 The deal-rule bug that previously stopped deterministic preparation has been fixed and verified. Fresh prepared data is now saved and aligned with the current mailing source. Old Prototype result was not reused.
 
-A fresh one-game ChatGPT test is still forbidden until Chat 2 positively confirms the exact existing replacement task is disabled.
+A fresh one-game ChatGPT test is still forbidden because current on/off state of the exact replacement automation is not yet authoritatively known.
 
 ## Publication freshness recurrence postmortem
 Task:
 `WORKER_TASK_PUBLICATION_FRESHNESS_RECURRENCE_POSTMORTEM_01.md`
 Status: `queued_after_main_list_refresh_recovery`.
-
-This remains required after repair to compare giveaway failure, paid-list failure, and the automatic ChatGPT failure, then define one systemic prevention package.
 
 ## Giveaway publication
 User verified on Android that the free giveaway is visible again.
@@ -81,6 +81,6 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. User launches fresh Chat 1 with the automatic-analysis failure forensic task.
-2. User launches fresh Chat 2 with the exact disabled-state confirmation task.
-3. Director consumes both exact reports and explains results in plain Russian before issuing any further worker command.
+1. Existing Chat 2 only corrects its report final status to `blocked_state_unavailable` and stops.
+2. Wait for Chat 1 forensic result before deciding the deeper recovery order.
+3. Do not run the one-game Taste test yet.
