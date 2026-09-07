@@ -6,7 +6,7 @@ Forensic READ-ONLY recon of why automatic ChatGPT Taste analysis stopped produci
 Worker task: `WORKER_TASK_TASTE_DAILY_AUTOMATION_FAILURE_FORENSIC_RECON_01.md`
 
 ## Status
-`complete_read_only_forensic_recon`
+`complete_root_cause_bounded`
 
 No repair, scheduler mutation, Taste-row processing, canary inference, workflow dispatch, or production-data mutation was performed. The only repository mutation in this task is this required report.
 
