@@ -15,55 +15,62 @@ Authoritative existing singleton:
 - producer generation: `1`;
 - no second producer may be created.
 
-### Chat 2 — atomic ingest failure recon
-Task:
+### Chat 2 — atomic ingest failure recon COMPLETE
+Completed task:
 `WORKER_TASK_TASTE_CANARY_ATOMIC_INGEST_FAILURE_RECON_01.md`
-Expected report:
+Durable report:
 `reviews/worker_reports/taste-canary-atomic-ingest-failure-recon-01.md`
-Mode: `READ-ONLY / RECON`
+Status: `complete`.
+
+Accepted Director-level diagnosis:
+- Prototype semantic result itself was not the immediate cause;
+- canary ingest failed before row-level ingest because committed pre-AI state was stale versus current mailing;
+- upstream root cause is obsolete exact contract guard in `scripts/build_pre_ai_deal_scenarios.py`: builder expects deal-quality v1.3 while canonical contract is v1.5;
+- this caused pre-AI run `33991072184` to fail before atomic commit, leaving Sep-3 pre-AI state beside newer Sep-5 mailing state;
+- old Prototype result is bound to the stale snapshot and must NOT be reused after repair;
+- after repair, a completely fresh one-row canary will be required as a separate later task;
+- existing Taste Scheduled Task remains disabled/fail-closed.
+
+Completed recon worker Chat 2 is deletable.
+
+### Next Chat 2 — pre-AI deal contract guard IMPLEMENT
+Task:
+`WORKER_TASK_TASTE_PRE_AI_DEAL_CONTRACT_GUARD_FIX_IMPLEMENT_01.md`
+Expected report:
+`reviews/worker_reports/taste-pre-ai-deal-contract-guard-fix-implement-01.md`
+Mode: `IMPLEMENT / ACCEPTANCE`
 Priority: `VERY_HIGH_USER_PRIORITY`
-Status: `ready_or_running_chat_2`.
+Status: `ready_fresh_chat_2`.
 
 Scope:
-- determine exact root cause inside failed atomic ingest/rebuild step for the existing Prototype canary;
-- determine whether the existing submission can be safely reprocessed after a minimal fix or must remain rejected;
-- define exactly one bounded next IMPLEMENT action;
-- do not run another game;
-- do not create another task/producer/generation;
-- no paid API/Copilot/manual patch/validation weakening.
+- align the obsolete deal-scenario builder compatibility guard with canonical v1.5;
+- preserve fail-closed behavior for incompatible contracts;
+- prove the normal pre-AI atomic workflow succeeds and commits fresh state aligned with current mailing;
+- do NOT run a new semantic canary in this task;
+- keep the existing Taste producer disabled;
+- never reuse old Prototype result;
+- no second task/producer/generation, paid API or Copilot.
 
-## Chat 1 — header-date recon COMPLETE, label-only fix SUPERSEDED
-Completed recon:
-`WORKER_TASK_VISUAL_HEADER_DATA_DATE_RECON_01.md`
-Durable report:
-`reviews/worker_reports/visual-header-data-date-recon-01.md`
-
-The prior recommendation to change `Данные:` -> `Рассылка:` was rejected by the user as insufficient because it does not tell whether the displayed main list is actually current.
-
-User additionally observed on Android that the first three games in the main list already show `скидка закончилась`. This is now treated as stronger evidence of a potential stale/degraded main commercial list, not merely a wording problem.
-
-Task `WORKER_TASK_VISUAL_HEADER_DATA_LABEL_IMPLEMENT_01.md` is **SUPERSEDED / DO NOT RUN** unless explicitly revived by a later Director decision.
-
-### Next Chat 1 — main list freshness recon
+## Chat 1 — main list freshness recon DURABLE CLOSEOUT MISSING
 Task:
 `WORKER_TASK_VISUAL_MAIN_LIST_FRESHNESS_RECON_01.md`
 Expected report:
 `reviews/worker_reports/visual-main-list-freshness-recon-01.md`
 Mode: `READ-ONLY / RECON`
 Priority: `VERY_HIGH_USER_PRIORITY`
-Status: `ready_fresh_chat_1`.
+Status: `worker_claimed_finished_but_required_report_missing`.
 
-Goals:
-- establish the real last successful refresh of the displayed discounted-games list;
-- inspect why the first three visible rows already say their discounts ended;
-- determine whether the main list is stale/degraded and what exact gate is preventing freshness;
-- determine a truthful user-facing freshness model/date/status;
-- prefer separate main-deals/giveaway freshness or an explicit stale warning if a single global timestamp cannot be truthful;
-- define exactly one minimal next IMPLEMENT action;
-- no code/data/workflow changes in recon.
+User-visible evidence remains:
+- giveaway works;
+- header shows old date;
+- first three visible main-list games show `скидка закончилась`.
+
+Director checked only the exact expected report path after the user's request to check both chats; it is absent from `main`. Director will not reconstruct the diagnosis from code/logs. Existing Chat 1 must self-verify and save the exact required report, even if blocked.
+
+Task `WORKER_TASK_VISUAL_HEADER_DATA_LABEL_IMPLEMENT_01.md` remains SUPERSEDED / DO NOT RUN.
 
 ## Giveaway publication
-User has verified on Android that the free giveaway is visible again. Incident is user-visible recovered.
+User has verified on Android that the free giveaway is visible again.
 
 ## Giveaway ITAD identity
 Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
@@ -73,7 +80,7 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. Fresh Chat 1 investigates actual main-list freshness and expired top rows; do not run the old label-only task.
-2. Chat 2 continues only the atomic Taste ingest recon.
-3. If the main list is stale, fix real freshness/publication truth before cosmetic timestamp wording.
-4. Do not run another semantic game or widen Taste throughput before the ingest failure is understood and explicitly fixed.
+1. Existing Chat 1 performs only its durable main-list freshness closeout and writes the exact missing report.
+2. Fresh Chat 2 performs the bounded pre-AI contract-guard fix and validates fresh atomic pre-AI publication.
+3. Do not run a new Taste semantic canary until Chat 2's implementation report proves fresh current bindings are committed.
+4. If Chat 1 proves the main list stale, prioritize the real freshness/publication fix before cosmetic header wording.
