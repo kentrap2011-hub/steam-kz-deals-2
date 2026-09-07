@@ -1,6 +1,6 @@
 # CURRENT TASK
 
-Последнее обновление: 2026-09-06
+Последнее обновление: 2026-09-07
 
 ## Завершено
 
@@ -145,6 +145,16 @@
 
 ## Запланировано / выполняется
 
+### Taste pre-AI deal contract guard fix implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_PRE_AI_DEAL_CONTRACT_GUARD_FIX_IMPLEMENT_01.md`;
+- scope: только exact-version guard для canonical deal-quality contract, focused regression и штатный pre-AI refresh/acceptance;
+- canonical contract version: `1.5`; stale expected version в builder: `1.3`;
+- fail-closed для wrong/missing/malformed contract должен сохраниться;
+- Taste canary в этой задаче не запускать; Prototype output не использовать;
+- существующий Taste Semantic Producer `6a9d6fdddc00819193ed670d782045c4` должен остаться выключенным;
+- запрещены второй Scheduled Task/producer, новая generation и ручная правка queue/cache/receipt.
+
 ### Taste Steps 1–3 production materialization acceptance 01
 Статус: `blocked_semantic_runtime`.
 - worker task: `WORKER_TASK_TASTE_STEPS_1_3_PRODUCTION_MATERIALIZATION_ACCEPTANCE_01.md`;
@@ -177,48 +187,3 @@
 - цель: исправить подтверждённые audit-дефекты positive `why_fit` и consistency negative `risks[]` в текущем canonical producer path;
 - ranking weights, giveaway, duration, translation, package и unrelated UI не меняются;
 - другая параллельная работа F сохраняется без изменений.
-
-### B. Russian language availability as a ranking factor
-Статус: `planned`.
-- проверять минимум русский интерфейс: `yes/no/unknown` + evidence;
-- полного русского нет -> сильный practical/final-ranking penalty и видимый существенный минус;
-- `unknown` не равно `no`;
-- Taste semantics не менять.
-
-### C. YouTube reviews for games
-Статус: `planned`.
-- полезный релевантный обзор перед покупкой;
-- приоритет качественному русскоязычному ролику или подтверждённой русской аудиодорожке;
-- не подставлять случайные/спойлерные видео ради ссылки;
-- producer-owned choice, UI display-only.
-
-### E. Guarantee Russian game descriptions
-Статус: `runtime_acceptance_blocked_on_existing_scheduled_execution`.
-- worker task `ru-translation-contract-01`: `complete`;
-- worker task `ru-translation-implement-01`: repo-side implementation committed; production scope publication is now proven;
-- worker task `ru-translation-runtime-acceptance-01`: `blocked`; report `reviews/worker_reports/ru-translation-runtime-acceptance-01.md`, report commit `8b9e6598f2b1233defc7b4e1262e97da0fdb46df`;
-- canonical contracts: `config/russian_description_translation_contract.json`, `config/russian_description_translation_result_contract.json`, `config/russian_description_translation_cache_entry_contract.json`;
-- exact request identity: `App_<appid>` + SHA-256 нормализованного source text; source hash является version binding, stale result/cache не должен прикрепляться после изменения текста;
-- GitHub владеет exact unresolved scope, queue/order, retry/completeness, validation, cache merge и downstream rebuild; scheduled ChatGPT — только constrained semantic translation worker;
-- existing nightly scheduled ChatGPT runtime переиспользуется; отдельный recurring translation scheduler запрещён; Taste-specific result schema не переиспользуется;
-- package/UI blocker устранён `c243dfe498abec27923bc7f229f34fc82b5c26f0`; canonical pre-AI run `33518894933`, job `99892817550` успешно дошёл до translation stages;
-- current production translation scope/status опубликованы GitHub-owned commit `529795ca74db15508e5178c29090b113f9cda23d`: 155 exact translation requests, 389 direct-RU resolutions, 0 cache-resolved translations, 26 nontranslatable blockers; queue SHA `09cad43c005dd69b6c06c9c72574f7f360722c79639d0a919dea5e137f7cf173`;
-- bounded acceptance probe детерминированно выбран как первая текущая canonical queue row: `App_3199360`, request `003a1ec59c575b35a03a97598cafbf2efa944ced0d8bcf85e18401dc179592ef`, source hash `aac29917e30285f75a212e385d8d0f9bc74a645b6fb0651d64f4b22f9283f7bf`; interactive chat её не переводил;
-- fresh acceptance checks: `data/ai_inbox/russian_descriptions/` отсутствует, commit history по этому path пуст, canonical translation cache имеет `entries={}`, среди последних 100 Actions runs нет Russian ingest run;
-- repo-side binding уже опубликован как отдельный `semantic_work.russian_description_translation`, но точный identifier/config существующей scheduled ChatGPT task не хранится в repo и не был безопасно адресуем из текущего operator context; безопасного `run now` для неидентифицированной existing task здесь нет;
-- поэтому не создавался второй scheduler, не менялось nightly cadence, не фабриковался inbox result и не выполнялся ручной перевод;
-- exact remaining gate: тот же existing Nightly Production Runtime должен один раз реально обработать current exact probe через canonical submission; после этого проверить strict ingest -> one exact cache entry -> downstream visual rebuild/final Russian validation, сохранив остальные pending under GitHub control.
-
-### F. Redesign detailed score breakdown UI
-Статус: `in_progress`.
-- раскрытая `Детальная оценка` визуально перегружена: слишком много pills/chips, слабая иерархия и лишняя высота на мобильном;
-- сохранить всю прозрачность score, но сделать блок компактнее и визуально спокойнее;
-- явно отделить `Подходит тебе` и `Выгодность покупки`, внутри перейти к более компактным строкам;
-- package-driver встроить в коммерческую секцию, не превращая его в отдельную стену текста;
-- технические подписи преобразовывать в пользовательские;
-- ranking math не менять ради дизайна;
-- regression/snapshot на mobile viewport.
-
-## Текущий статус работ
-
-Taste Steps 1–3 production materialization acceptance — текущая `VERY_HIGH_USER_PRIORITY` работа этого чата и остаётся `blocked_semantic_runtime`: reviewer A1/A2 закрыты, deterministic/ownership validation зелёные, но current V5 semantic scope остаётся `0/701` resolved, поэтому сайт не передаётся на пользовательскую проверку и downstream deploy не запускается. Не создавать второй semantic scheduler/queue и не подменять это ручным backfill; следующий допустимый production шаг — восстановить прогресс того же existing scheduled ChatGPT semantic producer через canonical ingest. E / Russian descriptions остаётся отдельным runtime blocker, а F / redesign detailed score breakdown UI и A1 / card explanation implementation — отдельными параллельными работами, без переключения текущего Taste-приоритета. Fixed-package economics, compact purchase behavior и stale-image swipe fix остаются без изменений.
