@@ -10,6 +10,7 @@ import giveaway_visual_handoff
 import play_priority_context
 import priority_ranking
 import refine_visual_ranking as refiner
+import refresh_visual_commercial_fields as commercial_refresh
 from semantic_runtime_completion import apply_visual_semantic_status
 
 ROOT = Path('.')
@@ -17,6 +18,41 @@ OUT = ROOT / 'data/production/visual/current.json'
 SEMANTIC_PAYLOAD = ROOT / 'data/production/pre_ai/chatgpt_payload.json'
 DURATION_CONTRACT = ROOT / 'config/duration_enrichment_contract.json'
 DURATION_CACHE = ROOT / 'data/cache/duration_estimates.json'
+COMMERCIAL_STORE = ROOT / 'data/production/pre_ai/store_snapshot.json'
+COMMERCIAL_FAMILY = ROOT / 'data/production/pre_ai/family_graph.json'
+COMMERCIAL_HISTORY = ROOT / 'data/production/pre_ai/history_snapshot.json'
+
+COMMERCIAL_SOURCE_PATHS = {
+    'payload_blob_sha': 'data/production/pre_ai/chatgpt_payload.json',
+    'store_snapshot_blob_sha': 'data/production/pre_ai/store_snapshot.json',
+    'family_graph_blob_sha': 'data/production/pre_ai/family_graph.json',
+    'history_snapshot_blob_sha': 'data/production/pre_ai/history_snapshot.json',
+}
+COMMERCIAL_CONTRACT_KEYS = {
+    'payload_blob_sha': 'commercial_source_payload_blob_sha',
+    'store_snapshot_blob_sha': 'commercial_source_store_snapshot_blob_sha',
+    'family_graph_blob_sha': 'commercial_source_family_graph_blob_sha',
+    'history_snapshot_blob_sha': 'commercial_source_history_snapshot_blob_sha',
+}
+SEMANTIC_PRESERVED_FIELDS = (
+    'fit',
+    'source_fit',
+    'taste_factors',
+    'why_fit',
+    'why_fit_status',
+    'why_fit_provenance',
+    'risks',
+    'risk_codes',
+    'risk_status',
+    'risk_provenance',
+    'risk_level',
+    'risk_penalty',
+    'direct_user_evidence',
+    'taste_rank',
+    'play_role',
+    'start_priority',
+    'play_priority_context',
+)
 
 
 def normalize_media_url(value):
@@ -210,6 +246,55 @@ def apply_deterministic_purchase_refresh(ready):
     return package_stats, final_priority_order
 
 
+def current_commercial_lineage():
+    payload = base_builder.load_json(SEMANTIC_PAYLOAD)
+    store = base_builder.load_json(COMMERCIAL_STORE)
+    family = base_builder.load_json(COMMERCIAL_FAMILY)
+    source, _ = commercial_refresh.validate_commercial_binding(payload, store, family)
+    lineage = {
+        key: base_builder.git_sha(path)
+        for key, path in COMMERCIAL_SOURCE_PATHS.items()
+    }
+    return source, store.get('observed_at_utc'), lineage
+
+
+def stamp_paid_list_freshness(ready, *, scope, include_commercial_helper):
+    source, observed_at, lineage = current_commercial_lineage()
+    contract = ready.setdefault('production_contract', {})
+    for key, contract_key in COMMERCIAL_CONTRACT_KEYS.items():
+        contract[contract_key] = lineage[key]
+    if include_commercial_helper:
+        helper_blob = base_builder.git_sha('scripts/refresh_visual_commercial_fields.py')
+        contract['commercial_refresh_helper_blob_sha'] = helper_blob
+    else:
+        helper_blob = None
+
+    ready['commercial_source_mailing_updated_at_utc'] = source
+    ready['commercial_store_observed_at_utc'] = observed_at
+    paid = {
+        'status': 'published',
+        'scope': scope,
+        'source_mailing_updated_at_utc': source,
+        'store_observed_at_utc': observed_at,
+        **lineage,
+    }
+    if helper_blob:
+        paid['helper_blob_sha'] = helper_blob
+    ready['paid_list_freshness'] = paid
+    return paid
+
+
+def semantic_preservation_snapshot(items):
+    return {
+        str(game.get('id')): {
+            key: game.get(key)
+            for key in SEMANTIC_PRESERVED_FIELDS
+        }
+        for game in items or []
+        if game.get('id') is not None
+    }
+
+
 def refresh_existing_giveaways_only():
     """Update only the giveaway sibling on an already accepted visual payload.
 
@@ -243,6 +328,56 @@ def refresh_existing_giveaways_only():
         OUT.write_text(after, encoding='utf-8')
 
     return changed, giveaways.get('state'), giveaways.get('accepted_offer_count_at_build')
+
+
+def refresh_existing_commercial_only():
+    """Refresh deterministic paid commercial state without rebuilding Taste semantics."""
+    if not OUT.exists():
+        raise RuntimeError(f'missing canonical visual payload: {OUT}')
+
+    before = OUT.read_text(encoding='utf-8')
+    ready = json.loads(before)
+    semantic_before = semantic_preservation_snapshot(ready.get('items') or [])
+    giveaway_before = json.dumps(
+        ready.get('giveaways') or {}, ensure_ascii=False, sort_keys=True, separators=(',', ':')
+    )
+    giveaway_contract_keys = (
+        'giveaway_visual_handoff_blob_sha',
+        'source_giveaway_snapshot_blob_sha',
+        'giveaway_visual_schema_version',
+    )
+    contract_before = ready.get('production_contract') or {}
+    giveaway_contract_before = {key: contract_before.get(key) for key in giveaway_contract_keys}
+
+    stats = commercial_refresh.refresh_visual_commercial_fields(ready)
+    package_stats, _ = apply_deterministic_purchase_refresh(ready)
+    stamp_paid_list_freshness(
+        ready,
+        scope='commercial_only',
+        include_commercial_helper=True,
+    )
+
+    semantic_after = semantic_preservation_snapshot(ready.get('items') or [])
+    for family_id, fields in semantic_after.items():
+        if semantic_before.get(family_id) != fields:
+            raise RuntimeError(f'commercial-only refresh mutated Taste/semantic fields for {family_id}')
+
+    giveaway_after = json.dumps(
+        ready.get('giveaways') or {}, ensure_ascii=False, sort_keys=True, separators=(',', ':')
+    )
+    if giveaway_after != giveaway_before:
+        raise RuntimeError('commercial-only refresh mutated giveaway sibling')
+    contract_after = ready.get('production_contract') or {}
+    giveaway_contract_after = {key: contract_after.get(key) for key in giveaway_contract_keys}
+    if giveaway_contract_after != giveaway_contract_before:
+        raise RuntimeError('commercial-only refresh mutated giveaway provenance')
+
+    after = json.dumps(ready, ensure_ascii=False, separators=(',', ':'))
+    changed = after != before
+    if changed:
+        OUT.write_text(after, encoding='utf-8')
+
+    return changed, stats, package_stats
 
 
 def refresh_existing_media():
@@ -380,6 +515,22 @@ def main():
         print(
             f'VISUAL_GIVEAWAY_REFRESH=BUILT changed={str(changed).lower()} '
             f'state={state} offers={offer_count}'
+        )
+        return
+
+    if os.environ.get('COMMERCIAL_VISUAL_REFRESH_ONLY') == '1':
+        changed, stats, package_stats = refresh_existing_commercial_only()
+        print(
+            f'VISUAL_COMMERCIAL_REFRESH=BUILT changed={str(changed).lower()} '
+            f'source={stats.get("commercial_source_mailing_updated_at_utc")} '
+            f'items_before={stats.get("visible_item_count_before_refresh")} '
+            f'items_after={stats.get("visible_item_count_after_refresh")} '
+            f'removed_stale={stats.get("removed_stale_family_count")} '
+            f'prices_changed={stats.get("price_changed_item_count")} '
+            f'offers_changed={stats.get("offer_set_changed_item_count")} '
+            f'package_touched={package_stats.get("visible_game_count_with_better_package")} '
+            f'taste_recalculated={str(stats.get("taste_recalculated")).lower()} '
+            f'semantic_fields_rewritten={str(stats.get("semantic_fields_rewritten")).lower()}'
         )
         return
 
@@ -580,6 +731,11 @@ def main():
             'direct_profile_error': profile_error,
         },
     })
+    stamp_paid_list_freshness(
+        ready,
+        scope='full_visual',
+        include_commercial_helper=False,
+    )
 
     OUT.write_text(json.dumps(ready, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print(
