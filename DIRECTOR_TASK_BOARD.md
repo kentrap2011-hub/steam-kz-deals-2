@@ -12,24 +12,30 @@
 
 ## Current two worker slots
 
-### Chat 1 — investigate why automatic ChatGPT analysis stopped
+### Chat 1 — automatic ChatGPT analysis failure forensic complete, report status needs correction
 Task:
 `WORKER_TASK_TASTE_DAILY_AUTOMATION_FAILURE_FORENSIC_RECON_01.md`
-Expected report:
+Report:
 `reviews/worker_reports/taste-daily-automation-failure-forensic-recon-01.md`
 Mode: `READ-ONLY / RECON / FORENSIC`
 Priority: `VERY_HIGH_RELIABILITY`
-Status: `running_or_awaiting_user_completion_signal`.
+Status: `substantive_complete_report_status_malformed`.
 
-Purpose in plain terms:
-- establish the last proven successful automatic ChatGPT analysis;
-- determine what happened on the following daily cycles as far as retained evidence allows;
-- determine whether the old automation was disabled/deleted/unavailable/failing, without guessing if history cannot prove it;
-- explain why unresolved games accumulated for days without an alert;
-- identify the missing one-day health/alarm rule;
-- determine whether this is actually the same root cause as stale paid-list publication or a separate failure whose effects compounded.
+Plain result:
+- last proven accepted automatic ChatGPT analysis was 2026-09-01 21:03 UTC / 2026-09-02 01:03 Europe/Samara;
+- it accepted 11 game results and reduced the unresolved queue 37 -> 26;
+- by the next expected daily cycle, GitHub had successfully prepared a fresh current scope with 644 unresolved items, but no normal ChatGPT output arrived for ingest;
+- therefore the first missed cycle is located at the external ChatGPT automation stage, not at Steam data collection, deterministic preparation, or ingest of a produced result;
+- repository evidence cannot prove whether the old ChatGPT scheduled task ran and failed, did not run, was disabled, was deleted, became inaccessible, or hit another platform-side state; exact historical scheduler cause remains unreconstructible and must not be guessed;
+- the system failed to alert because no durable rule existed at the time that treated “fresh unresolved work exists but no accepted ChatGPT progress by the daily deadline” as an incident;
+- paid-list staleness and ChatGPT-analysis outage are separate primary failures that later compounded each other: the paid-list publication problem began earlier, while the later ChatGPT outage prolonged the stale state by preventing full rebuilds.
 
-No repair or automation state change in this task.
+Report contract issue:
+- task required final status exactly `complete_root_cause_bounded` or `blocked`;
+- report used `complete_read_only_forensic_recon` instead;
+- existing Chat 1 must only correct final status to `complete_root_cause_bounded`, re-read the same report, and stop.
+
+Do not delete Chat 1 until this report-only correction is persisted.
 
 ### Chat 2 — replacement ChatGPT automation state check needs report-status correction
 Task:
@@ -53,16 +59,16 @@ Report contract issue:
 Do not delete Chat 2 until this report-only correction is persisted.
 
 ## Paid-list publication repair
-Forensic report is complete and repair is understood, but repair launch is temporarily held while Chat 1 investigates the deeper automatic-ChatGPT failure raised by the user.
+Forensic report is complete and repair is understood. Launch remains held until Director converts the now-known combined incident picture into the next bounded repair/reliability order.
 
 Prepared repair task:
 `WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`
 Status: `needs_bounded_task_correction_before_launch`.
 
 ## Taste current state
-The deal-rule bug that previously stopped deterministic preparation has been fixed and verified. Fresh prepared data is now saved and aligned with the current mailing source. Old Prototype result was not reused.
+The data-preparation bug that previously blocked the pipeline has been fixed and verified. Fresh prepared data is saved and aligned with the current mailing source. Old Prototype result was not reused.
 
-A fresh one-game ChatGPT test is still forbidden because current on/off state of the exact replacement automation is not yet authoritatively known.
+A fresh one-game ChatGPT test is still forbidden because current on/off state of the exact replacement automation is not authoritatively known.
 
 ## Publication freshness recurrence postmortem
 Task:
@@ -81,6 +87,6 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. Existing Chat 2 only corrects its report final status to `blocked_state_unavailable` and stops.
-2. Wait for Chat 1 forensic result before deciding the deeper recovery order.
-3. Do not run the one-game Taste test yet.
+1. Existing Chat 1 only corrects its report final status to `complete_root_cause_bounded` and stops.
+2. Existing Chat 2 only corrects its report final status to `blocked_state_unavailable` and stops.
+3. After both report-only corrections, Director chooses the next bounded implementation order using the combined evidence: restore reliable daily ChatGPT execution/alerting and repair independent paid-list publication without conflating the two failures.
