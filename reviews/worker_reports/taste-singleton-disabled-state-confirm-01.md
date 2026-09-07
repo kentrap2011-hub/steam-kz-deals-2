@@ -1,33 +1,46 @@
 # Worker Report — Taste Singleton Disabled State Confirm 01
 
 ## Task
-Confirm only the current enabled/disabled state of the exact existing ChatGPT scheduled task `Taste Semantic Producer` with task instance ID `6a9d6fdddc00819193ed670d782045c4`. Read-only: no task mutation, no Taste processing, no one-game test.
+Confirm only the current enabled/disabled state of the exact existing ChatGPT Scheduled Task `Taste Semantic Producer` with task instance ID `6a9d6fdddc00819193ed670d782045c4`. Read-only control-plane audit: no task mutation, no Taste processing, no one-game test.
 
 ## Verified facts
-- Required task file read from `main`.
-- Exact task identity to inspect: `Taste Semantic Producer`, ID `6a9d6fdddc00819193ed670d782045c4`.
-- Authoritative scheduled-task state has not yet been read.
+- Required protocols and task file were read from `main`.
+- Required prior worker reports were read:
+  - `reviews/worker_reports/taste-pre-ai-deal-contract-guard-fix-implement-01.md`
+  - `reviews/worker_reports/taste-scheduled-task-singleton-canary-implement-01.md`
+- Read-only inspection of the ChatGPT Scheduled Tasks control surface was attempted repeatedly.
+- The worker context did not expose a reliably inspectable record combining the exact task instance ID `6a9d6fdddc00819193ed670d782045c4` with its current enabled flag.
+- Therefore neither `enabled` nor `disabled` can be proven without guessing.
+- Required conclusion: the current state is **not reliably readable** in this worker context.
+- No scheduled-task mutation was performed.
+- No game test was run.
+- No new scheduled task was created.
 
 ## Changes
-- Created this required durable worker report only.
-- No scheduled-task state change performed.
+- Created and finalized only this durable worker report in `main`.
+- No product/control-plane state was changed.
 
 ## Validation
-- Report path created in `main` before control-plane inspection.
+- Target identity remained fixed to:
+  - title: `Taste Semantic Producer`
+  - task instance ID: `6a9d6fdddc00819193ed670d782045c4`
+- Multiple read-only Scheduled Tasks inspections failed to yield a worker-visible exact ID + current enabled-flag pair.
+- No title-only or inferred state was accepted as proof.
 
 ## Unresolved
-- Whether the exact task is currently enabled or disabled.
-- Whether Director can safely prepare exactly one future one-game test using this same task.
+- Whether the exact task is currently enabled or disabled remains undetermined because its authoritative enabled flag could not be read reliably in this worker context.
 
 ## Status
-`in_progress`
+`verified`
 
 ## Recommended next step
-Read the authoritative Scheduled Tasks control surface for the exact task ID and finalize this same report without changing task state.
+Director must **not** prepare the future one-game test under an assumption that this singleton task is disabled. First obtain a separate reliable control-plane confirmation for this same task instance ID. This worker made no control-plane change and did not run a test.
 
 ## Refs
-- Task file: `WORKER_TASK_TASTE_SINGLETON_DISABLED_STATE_CONFIRM_01.md`
-- Exact task ID: `6a9d6fdddc00819193ed670d782045c4`
+- `WORKER_TASK_TASTE_SINGLETON_DISABLED_STATE_CONFIRM_01.md`
+- `reviews/worker_reports/taste-pre-ai-deal-contract-guard-fix-implement-01.md`
+- `reviews/worker_reports/taste-scheduled-task-singleton-canary-implement-01.md`
+- Exact Scheduled Task ID: `6a9d6fdddc00819193ed670d782045c4`
 
 ## Efficiency / reusable lesson
-none
+For singleton Scheduled Task state checks, do not infer state from title, prior reports, or task existence. Require a worker-visible authoritative record that binds the immutable task instance ID to the current enabled flag; otherwise report the state as not reliably readable.
