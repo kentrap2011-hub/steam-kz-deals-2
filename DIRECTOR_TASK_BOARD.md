@@ -72,21 +72,37 @@ Accepted Director-level conclusion:
 
 Completed recon worker Chat 1 is deletable.
 
-### Next Chat 1 — main list refresh handoff IMPLEMENT
+### Next Chat 1 — PRE-FIX FORENSIC RECON BEFORE REPAIR
+Task:
+`WORKER_TASK_PUBLICATION_FRESHNESS_PRE_FIX_FORENSIC_RECON_01.md`
+Expected report:
+`reviews/worker_reports/publication-freshness-pre-fix-forensic-recon-01.md`
+Mode: `READ-ONLY / RECON / FORENSIC`
+Priority: `VERY_HIGH_RELIABILITY`
+Status: `ready_fresh_chat_1_before_repair`.
+
+Reason:
+repairing the commercial handoff first may mutate the very workflow/receipt/artifact state needed to explain how the incident arose and why safeguards failed. Capture the broken state first.
+
+Required outcome:
+- exact current broken edge/handoff;
+- whether/when it historically stopped is proven or only bounded;
+- why upstream freshness coexisted with stale published paid items;
+- why current monitoring/receipts/fail-closed logic did not escalate the stale domain;
+- compare with giveaway incident before repair changes the evidence;
+- freeze pre-fix identities/timestamps/state for later comparison;
+- verify whether the already-written repair task is safe as-is or needs one bounded correction.
+
+### Then Chat 1 — main list refresh handoff IMPLEMENT
 Task:
 `WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`
 Expected report:
 `reviews/worker_reports/visual-main-list-refresh-handoff-implement-01.md`
 Mode: `IMPLEMENT / ACCEPTANCE`
 Priority: `VERY_HIGH_USER_PRIORITY`
-Status: `ready_fresh_chat_1`.
+Status: `blocked_on_pre_fix_forensic_recon`.
 
-Scope:
-- reconnect the existing fresh daily Steam shortlist to the existing canonical commercial mailing/visual publication chain;
-- preserve the single writer/scheduler architecture and fail-closed gates;
-- publish genuinely fresh paid `items` through the normal path;
-- persist/expose truthful paid-list freshness that advances only with a successful paid-list publication and not with giveaway-only refresh;
-- no manual row/price patching, no duplicate pipeline, no Taste changes.
+Do not run this IMPLEMENT until the pre-fix forensic report is consumed.
 
 ## Publication freshness recurrence postmortem — REQUIRED AFTER CURRENT RECOVERY
 Task:
@@ -97,19 +113,7 @@ Mode: `READ-ONLY / RECON / POSTMORTEM`
 Priority: `VERY_HIGH_RELIABILITY`
 Status: `queued_after_main_list_refresh_recovery`.
 
-Reason:
-this is no longer one isolated freshness incident. Recent user-visible failures include giveaway publication not advancing despite fresh upstream data and paid-list publication remaining stale despite fresh Steam collection.
-
-Required outcome:
-- compare both incidents;
-- determine local and common systemic root causes;
-- explain why current freshness/fail-closed safeguards allowed stale user-visible publication to persist;
-- define per-domain end-to-end freshness invariant (`fresh source -> canonical handoff -> accepted artifact -> published site`);
-- define automatic stale detection/escalation without manual user checking;
-- recommend exactly one bounded reliability IMPLEMENT;
-- determine whether an independent System Audit is required afterward.
-
-Do not move on from this incident family to unrelated backlog work before this postmortem is consumed.
+This remains required after repair. It will compare the captured broken state, the actual repair, and the earlier giveaway incident, then define one systemic prevention package.
 
 ## Giveaway publication
 User has verified on Android that the free giveaway is visible again.
@@ -122,8 +126,8 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. User may delete completed Chat 1 and launch a fresh Chat 1 with `WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`.
+1. Fresh Chat 1 runs the pre-fix forensic recon first; do not repair the main-list handoff yet.
 2. Existing Chat 2 must save its missing durable report and must not start another task.
-3. Do not run a fresh Taste semantic canary until Director consumes Chat 2's exact implementation report.
-4. Main-list user verification waits until Chat 1's implementation proves fresh paid items were actually published.
-5. After main-list recovery is accepted, run `WORKER_TASK_PUBLICATION_FRESHNESS_RECURRENCE_POSTMORTEM_01.md` before unrelated backlog work.
+3. After Director consumes the pre-fix forensic report, run the bounded main-list repair, adjusted only if the forensic report proves the current task unsafe/incomplete.
+4. After repair and user verification, run the cross-incident recurrence postmortem before unrelated backlog work.
+5. Do not run a fresh Taste semantic canary until Director consumes Chat 2's exact implementation report.
