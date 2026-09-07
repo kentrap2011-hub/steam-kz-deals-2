@@ -10,100 +10,67 @@
 - All future non-trivial worker tasks must obey `WORKER_REPORT_DURABILITY_PROTOCOL.md`: create the exact report path early with `in_progress`, checkpoint it before long verification, and never claim completion before the report is committed and re-read from `main`.
 - Every user-facing worker closeout must obey `DIRECTOR_USER_COMMUNICATION_PROTOCOL.md`: explain in ordinary Russian what was wrong, what the worker actually did, why, what succeeded, what remains unresolved, and what the next stage is and why. Internal technical labels are never a substitute for explanation.
 
-## User communication
-Canonical protocol:
-`DIRECTOR_USER_COMMUNICATION_PROTOCOL.md`
+## Current two worker slots
 
-Required behavior after every consumed worker report:
-- explain the result in plain language before giving the next worker command;
-- cover what we did, why we did it, what changed, what is still not solved, and why the next step is necessary;
-- do not make the user decode internal terms such as `pre-AI`, `commercial_only`, `blocked`, `canary`, `receipt`, `fail-closed`, `handoff` or workflow/task names;
-- if a technical name is needed for traceability or a copy-paste command, place it after the plain-language explanation;
-- do not omit a deeper unresolved cause merely because the current local fix succeeded.
-
-## Worker report reliability
-Canonical protocol:
-`WORKER_REPORT_DURABILITY_PROTOCOL.md`
-
-Current evidence:
-- report-first protocol protected Chat 1 forensic work and allowed the same report to be finalized on the next turn;
-- Chat 2's legacy missing-report failure was recovered and the exact report now exists in `main`.
-
-## Taste — logic implemented, production materialization still pending
-Authoritative existing singleton:
-- task title: `Taste Semantic Producer`;
-- task instance id: `6a9d6fdddc00819193ed670d782045c4`;
-- canonical producer id: `chatgpt_scheduled_task:6a9d6fdddc00819193ed670d782045c4`;
-- producer generation: `1`;
-- no second producer may be created.
-
-### Chat 2 — pre-AI deal contract guard IMPLEMENT DURABLY CLOSED AS BLOCKED
+### Chat 1 — investigate why automatic ChatGPT analysis stopped
 Task:
-`WORKER_TASK_TASTE_PRE_AI_DEAL_CONTRACT_GUARD_FIX_IMPLEMENT_01.md`
-Durable report:
-`reviews/worker_reports/taste-pre-ai-deal-contract-guard-fix-implement-01.md`
-Final status: `blocked`.
+`WORKER_TASK_TASTE_DAILY_AUTOMATION_FAILURE_FORENSIC_RECON_01.md`
+Expected report:
+`reviews/worker_reports/taste-daily-automation-failure-forensic-recon-01.md`
+Mode: `READ-ONLY / RECON / FORENSIC`
+Priority: `VERY_HIGH_RELIABILITY`
+Status: `ready_fresh_chat_1`.
 
-Accepted Director-level result:
-- stale deal-quality contract guard was fixed from exact v1.3 to canonical exact v1.5;
-- focused fail-closed regressions passed;
-- normal `Build pre-AI deterministic payload` workflow completed successfully and reached atomic commit;
-- fresh pre-AI artifacts were persisted and aligned with current mailing source;
-- old Prototype result was not reused;
-- no new canary or second producer/task/generation was created.
+Purpose in plain terms:
+- establish the last proven successful automatic ChatGPT analysis;
+- determine what happened on the following daily cycles as far as retained evidence allows;
+- determine whether the old automation was disabled/deleted/unavailable/failing, without guessing if history cannot prove it;
+- explain why unresolved games accumulated for days without an alert;
+- identify the missing one-day health/alarm rule;
+- determine whether this is actually the same root cause as stale paid-list publication or a separate failure whose effects compounded.
 
-Only remaining blocker from the worker report:
-- live control-plane state of singleton task `6a9d6fdddc00819193ed670d782045c4` could not be authoritatively confirmed as disabled in that closing pass.
+No repair or automation state change in this task.
 
-Do not launch a fresh canary until that exact disabled state is positively confirmed by a separate bounded step.
-
-Completed Chat 2 worker can be deleted; its result is durable.
-
-## Chat 1 — PRE-FIX FORENSIC RECON COMPLETE
+### Chat 2 — confirm replacement ChatGPT automation is currently off
 Task:
-`WORKER_TASK_PUBLICATION_FRESHNESS_PRE_FIX_FORENSIC_RECON_01.md`
-Durable report:
-`reviews/worker_reports/publication-freshness-pre-fix-forensic-recon-01.md`
-Final status: `complete_ready_for_repair`.
+`WORKER_TASK_TASTE_SINGLETON_DISABLED_STATE_CONFIRM_01.md`
+Expected report:
+`reviews/worker_reports/taste-singleton-disabled-state-confirm-01.md`
+Mode: `READ-ONLY / CONTROL-PLANE CONFIRMATION`
+Priority: `VERY_HIGH_USER_PRIORITY`
+Status: `ready_fresh_chat_2`.
 
-Accepted Director-level result:
-- fresh Steam-derived data reaches shortlist, mailing and deterministic pre-AI state;
-- full visual rebuild is correctly blocked when semantic ChatGPT payload is incomplete;
-- deterministic commercial scoped helper already exists: `scripts/refresh_visual_commercial_fields.py`;
-- production visual workflow has a wired `giveaway_only` scoped path but no equivalent `commercial_only` orchestration/receipt path;
-- therefore the active break is deterministic commercial truth -> canonical paid visual publication orchestration, not Steam ingestion or shortlist/mailing;
-- exact first historical missed commercial invocation is not reconstructible and was not guessed;
-- common systemic pattern with giveaway is that independently refreshable deterministic subdomains can remain stale indefinitely when full visual publication is blocked by semantic incompleteness and no scoped liveness path exists.
+Exact existing task:
+- title `Taste Semantic Producer`;
+- task id `6a9d6fdddc00819193ed670d782045c4`;
+- generation `1`.
 
-Repair task assessment:
-`WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md` is directionally correct but requires one bounded correction before execution:
-- explicitly reuse `scripts/refresh_visual_commercial_fields.py`;
-- wire `commercial_only` into the existing visual workflow;
-- add scoped commercial freshness receipt/proof;
-- preserve the existing full semantic fail-closed guard;
-- require current deterministic source binding plus safe prior semantic coverage;
-- prove giveaway preservation;
-- no new scheduler/writer.
+Purpose in plain terms:
+confirm only whether this exact existing automation is currently disabled before any future one-game test. Do not change its state and do not run a test.
 
-Completed Chat 1 forensic worker can be deleted; it is not stuck.
+## Paid-list publication repair
+Forensic report is complete and repair is understood, but repair launch is temporarily held while Chat 1 investigates the deeper automatic-ChatGPT failure raised by the user.
 
-### Next paid-list step
+Prepared repair task:
 `WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`
 Status: `needs_bounded_task_correction_before_launch`.
 
-Do not launch the repair task until Director updates it to match the finalized forensic report.
+The correction will reuse the existing safe commercial refresh helper, connect it to the existing visual publication workflow, preserve old semantic analysis safely, preserve giveaways, and add proof that paid prices/discounts actually caught up. No second scheduler/writer.
 
-## Publication freshness recurrence postmortem — REQUIRED AFTER CURRENT RECOVERY
+## Taste current state
+The deal-rule bug that previously stopped deterministic preparation has been fixed and verified. Fresh prepared data is now saved and aligned with the current mailing source. Old Prototype result was not reused.
+
+A fresh one-game ChatGPT test is still forbidden until Chat 2 positively confirms the exact existing replacement task is disabled.
+
+## Publication freshness recurrence postmortem
 Task:
 `WORKER_TASK_PUBLICATION_FRESHNESS_RECURRENCE_POSTMORTEM_01.md`
-Expected report:
-`reviews/worker_reports/publication-freshness-recurrence-postmortem-01.md`
-Mode: `READ-ONLY / RECON / POSTMORTEM`
-Priority: `VERY_HIGH_RELIABILITY`
 Status: `queued_after_main_list_refresh_recovery`.
 
+This remains required after repair to compare giveaway failure, paid-list failure, and the automatic ChatGPT failure, then define one systemic prevention package.
+
 ## Giveaway publication
-User has verified on Android that the free giveaway is visible again.
+User verified on Android that the free giveaway is visible again.
 
 ## Giveaway ITAD identity
 Task:
@@ -114,6 +81,6 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. Correct the paid-list repair task using the finalized forensic report, then launch a fresh Chat 1 for the bounded repair.
-2. Run one separate bounded control-plane confirmation that the existing Taste singleton is disabled before allowing exactly one fresh canary.
-3. After paid-list repair and user verification, run the cross-incident recurrence postmortem before unrelated backlog work.
+1. User launches fresh Chat 1 with the automatic-analysis failure forensic task.
+2. User launches fresh Chat 2 with the exact disabled-state confirmation task.
+3. Director consumes both exact reports and explains results in plain Russian before issuing any further worker command.
