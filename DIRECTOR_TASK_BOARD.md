@@ -12,37 +12,39 @@
 
 ## Current worker slots
 
-### Chat 1 — automatic ChatGPT analysis failure investigation DURABLY CLOSED
-Task:
+### Chat 1 — previous investigation DURABLY CLOSED / NEW TASK PREPARED, NOT YET LAUNCHED
+Previous task:
 `WORKER_TASK_TASTE_DAILY_AUTOMATION_FAILURE_FORENSIC_RECON_01.md`
-Report:
+Previous report:
 `reviews/worker_reports/taste-daily-automation-failure-forensic-recon-01.md`
 Final status: `complete_root_cause_bounded`.
 
-Plain result:
-- last proven accepted automatic ChatGPT analysis was 2026-09-01 21:03 UTC / 2026-09-02 01:03 Europe/Samara;
-- it accepted 11 game results and reduced unresolved work 37 -> 26;
-- by the next expected daily cycle, GitHub had successfully prepared fresh work with 644 unresolved items, but no normal ChatGPT output arrived;
-- the break is at the external ChatGPT automation stage, not Steam collection or data preparation;
-- retained evidence cannot prove whether the old scheduled task failed, did not run, was disabled, was deleted, became inaccessible, or hit another platform-side state;
-- no automatic rule existed that turned “fresh unresolved work exists but no accepted ChatGPT progress by the daily deadline” into an incident;
-- stale paid-list publication and ChatGPT-analysis outage are separate primary failures that later compounded each other.
+The old Chat 1 can be deleted.
 
-Chat 1 result is durable. This worker chat can be deleted.
+Next Chat 1 task prepared:
+`WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`
+Expected report:
+`reviews/worker_reports/visual-main-list-refresh-handoff-implement-01.md`
+Status: `prepared_awaiting_user_launch`.
 
-### Chat 2 — replacement ChatGPT automation repository-side state check DURABLY CLOSED
-Task:
+The required forensic bounded correction has now been applied to the task. Repair target is only the missing deterministic `commercial_only` visual handoff. Healthy Steam -> shortlist -> mailing must not be changed, existing `scripts/refresh_visual_commercial_fields.py` must be reused, giveaway state preserved, scoped commercial freshness proof added, and the full semantic ChatGPT-completion fail-closed guard retained unchanged.
+
+### Chat 2 — previous state check DURABLY CLOSED / NEW TASK PREPARED, NOT YET LAUNCHED
+Previous task:
 `WORKER_TASK_TASTE_SINGLETON_DISABLED_STATE_CONFIRM_01.md`
-Report:
+Previous report:
 `reviews/worker_reports/taste-singleton-disabled-state-confirm-01.md`
 Final worker status: `blocked_state_unavailable`.
 
-Plain result:
-- worker could not prove live ChatGPT control-plane state from repository evidence alone;
-- worker changed nothing and ran no game test;
-- this worker limitation has now been superseded by direct user control-plane evidence recorded below.
+The old Chat 2 can be deleted.
 
-Chat 2 result is durable. This worker chat can be deleted.
+Next Chat 2 task prepared:
+`WORKER_TASK_TASTE_COMPLETED_SINGLETON_REUSE_RECON_01.md`
+Expected report:
+`reviews/worker_reports/taste-completed-singleton-reuse-recon-01.md`
+Status: `prepared_awaiting_user_launch`.
+
+Purpose: read-only proof whether the exact completed singleton task id `6a9d6fdddc00819193ed670d782045c4` can be reused/reactivated for a future one-game canary without creating a second Scheduled Task identity. No mutation and no canary in this task.
 
 ## Taste Scheduled Task user control-plane confirmation
 On 2026-09-07 the user inspected ChatGPT Scheduled on Android and showed the `Taste Semantic Producer` card.
@@ -55,23 +57,25 @@ Observed directly in the user UI:
 Director conclusion for the overlap-safety gate:
 - the displayed singleton is not currently active/running and has no next automatic run indicated;
 - the risk gate that previously blocked a fresh one-game canary solely because on/off state was unknown is cleared;
-- the task MUST NOT be deleted, because the project requires preserving the one existing singleton identity and forbids creating a second producer/task/generation.
+- the Scheduled Task itself MUST NOT be deleted, because the project requires preserving the one existing singleton identity and forbids creating a second producer/task/generation.
 
 Important bounded uncertainty:
 - the immutable task id is not displayed in this mobile UI, so do not claim the UI exposed the id directly;
-- before the fresh canary is launched, confirm the same completed task can be reused/reactivated without creating a replacement task id. Do not create a new Scheduled Task merely because the completed card lacks a resume control.
+- before the fresh canary is launched, confirm the same completed task can be reused/reactivated without creating a replacement task id.
 
 ## Paid-list publication repair
-Forensic report is complete and repair is understood. The repair is still pending a bounded task correction before launch.
+Forensic report:
+`reviews/worker_reports/publication-freshness-pre-fix-forensic-recon-01.md`
+Final status: `complete_ready_for_repair`.
 
 Prepared repair task:
 `WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`
-Status: `needs_bounded_task_correction_before_launch`.
+Status: `prepared_awaiting_user_launch`.
 
 ## Taste current state
 The data-preparation bug that previously blocked the pipeline has been fixed and verified. Fresh prepared data is saved and aligned with the current mailing source. Old Prototype result was not reused.
 
-The former blocker “current singleton on/off state unknown” is cleared by direct user Scheduled-UI evidence. A fresh one-game test is not yet launched. The remaining pre-canary safety question is only whether the exact completed singleton can be reused/reactivated without creating a second task identity.
+A fresh one-game test is not yet launched. The remaining pre-canary safety question is whether the exact completed singleton can be reused/reactivated without creating a second task identity. That question now has a dedicated read-only recon task.
 
 ## Publication freshness recurrence postmortem
 Task:
@@ -90,8 +94,10 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. Do NOT delete the completed `Taste Semantic Producer` task.
-2. Confirm whether that exact completed task can be reused/reactivated for exactly one fresh one-game canary without creating a replacement task id; if not, stop and redesign rather than silently creating a second task.
-3. After that bounded confirmation and separate approval, run exactly one fresh one-game canary through the same singleton.
-4. Separately correct and run the paid-list publication repair so fresh prices/discounts do not depend on ChatGPT analysis completion.
-5. After recovery and user verification, run the required cross-incident reliability postmortem and add automatic first-day failure detection.
+1. User may delete the old completed worker chats Chat 1 and Chat 2. Do NOT delete the Scheduled Task `Taste Semantic Producer`.
+2. Launch a fresh Chat 1 with `WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`.
+3. Launch a fresh Chat 2 with `WORKER_TASK_TASTE_COMPLETED_SINGLETON_REUSE_RECON_01.md`.
+4. Consume each exact durable report independently before assigning further work.
+5. If paid-list repair reaches `complete_ready_for_user_verification`, require user Android/site verification before calling that incident closed.
+6. If same-id Taste reuse is proven, prepare a separate explicitly authorized exactly-one-game canary using that same singleton; do not create a replacement task.
+7. After paid-list recovery/user verification, run the queued cross-incident reliability postmortem and add automatic first-day failure detection.
