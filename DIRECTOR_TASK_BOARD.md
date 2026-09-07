@@ -7,6 +7,21 @@
 - Before assigning/reassigning a worker slot, Director must reconcile exactly: current Board -> exact task file -> exact durable report from the immediately preceding step. Do not infer slot state from an old chat history alone.
 - Do not infer that a newly assigned worker task has actually been launched merely because the task command was prepared. Treat a slot as running only after the user says the new chat was created/sent the task or provides equivalent confirmation.
 - Do not move a user-priority semantic change to unrelated backlog work before its required production/user-verification gate is reachable.
+- All future non-trivial worker tasks must obey `WORKER_REPORT_DURABILITY_PROTOCOL.md`: create the exact report path early with `in_progress`, checkpoint it before long verification, and never claim completion before the report is committed and re-read from `main`.
+
+## Worker report reliability
+Canonical protocol:
+`WORKER_REPORT_DURABILITY_PROTOCOL.md`
+
+Reason:
+workers have repeatedly completed substantial work but failed to persist the required durable report before the response cycle ended. This is now treated as an orchestration/process defect, not a normal closeout condition.
+
+Required behavior:
+- report-first lifecycle;
+- incremental checkpoint updates;
+- preserve report before one-more-check behavior;
+- missing report means task not durably closed;
+- worker prose never overrides missing GitHub report.
 
 ## Taste — logic implemented, production materialization still pending
 Authoritative existing singleton:
@@ -73,6 +88,29 @@ Scope:
 - persist/expose truthful paid-list freshness that advances only with a successful paid-list publication and not with giveaway-only refresh;
 - no manual row/price patching, no duplicate pipeline, no Taste changes.
 
+## Publication freshness recurrence postmortem — REQUIRED AFTER CURRENT RECOVERY
+Task:
+`WORKER_TASK_PUBLICATION_FRESHNESS_RECURRENCE_POSTMORTEM_01.md`
+Expected report:
+`reviews/worker_reports/publication-freshness-recurrence-postmortem-01.md`
+Mode: `READ-ONLY / RECON / POSTMORTEM`
+Priority: `VERY_HIGH_RELIABILITY`
+Status: `queued_after_main_list_refresh_recovery`.
+
+Reason:
+this is no longer one isolated freshness incident. Recent user-visible failures include giveaway publication not advancing despite fresh upstream data and paid-list publication remaining stale despite fresh Steam collection.
+
+Required outcome:
+- compare both incidents;
+- determine local and common systemic root causes;
+- explain why current freshness/fail-closed safeguards allowed stale user-visible publication to persist;
+- define per-domain end-to-end freshness invariant (`fresh source -> canonical handoff -> accepted artifact -> published site`);
+- define automatic stale detection/escalation without manual user checking;
+- recommend exactly one bounded reliability IMPLEMENT;
+- determine whether an independent System Audit is required afterward.
+
+Do not move on from this incident family to unrelated backlog work before this postmortem is consumed.
+
 ## Giveaway publication
 User has verified on Android that the free giveaway is visible again.
 
@@ -88,3 +126,4 @@ Separately billed OpenAI API automation route is stopped by user policy and must
 2. Existing Chat 2 must save its missing durable report and must not start another task.
 3. Do not run a fresh Taste semantic canary until Director consumes Chat 2's exact implementation report.
 4. Main-list user verification waits until Chat 1's implementation proves fresh paid items were actually published.
+5. After main-list recovery is accepted, run `WORKER_TASK_PUBLICATION_FRESHNESS_RECURRENCE_POSTMORTEM_01.md` before unrelated backlog work.
