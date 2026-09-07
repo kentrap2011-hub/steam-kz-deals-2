@@ -32,7 +32,7 @@ Required action:
 
 Chat 1 must NOT be deleted yet.
 
-### Chat 2 — completed-task reuse recon DURABLY CLOSED, but same-id reuse remains unproven
+### Chat 2 — completed-task reuse recon DURABLY CLOSED
 Task:
 `WORKER_TASK_TASTE_COMPLETED_SINGLETON_REUSE_RECON_01.md`
 Report:
@@ -41,24 +41,31 @@ Final status: `blocked_same_id_reuse_unproven`.
 
 Plain result:
 - generic ChatGPT product behavior supports rescheduling/editing existing finished tasks;
-- however the worker could not prove that the exact existing task id `6a9d6fdddc00819193ed670d782045c4` can currently be targeted in place;
-- no state was changed, no task was created, and no game analysis was run;
-- therefore a fresh one-game test is still not authorized;
-- the existing `Taste Semantic Producer` task must be preserved and not deleted.
+- worker could not prove exact-id targeting from its read-only control plane;
+- no state was changed, no task was created, and no game analysis was run.
 
 Chat 2 worker result is durable. This worker chat can be deleted.
 
-## User control-plane observation for Taste Scheduled Task
-On 2026-09-07 the user showed the `Taste Semantic Producer` task in Android ChatGPT Scheduled:
-- displayed state `Завершено` / `Completed`;
-- no pending next run shown;
-- menu only showed notification settings and delete;
-- user has not deleted it.
+## User control-plane observation for existing Taste Scheduled Task
+On 2026-09-07 the user opened the existing completed `Taste Semantic Producer` from ChatGPT Scheduled on Android/web mobile and provided screenshots.
 
-This clears the earlier overlap concern that it might currently be running, but does not by itself prove that the immutable task id can be reactivated in place.
+Observed directly:
+- task title displayed: `Taste Semantic Producer`;
+- state displayed: `Завершено` / `Completed`;
+- the task has not been deleted;
+- inside the existing task detail panel, under `ПЕРИОДИЧНОСТЬ`, the same card exposes `Дата` and `Время` controls with dropdown indicators (currently showing the prior Sep 6 canary date/time).
+
+Operational conclusion:
+- a separate worker is no longer needed merely to discover whether the visible existing task offers in-place schedule controls: the user UI demonstrably exposes them on that existing completed task card;
+- this does NOT prove that the mobile UI exposed the immutable backend jawbone id, so do not claim the screenshot itself proves exact id equality;
+- do not create a replacement `Taste Semantic Producer`;
+- do not delete the existing task.
 
 ## Taste next gate
-Before any fresh one-game test, the project needs one explicitly authorized control-plane step that can demonstrate an in-place operation against exact task id `6a9d6fdddc00819193ed670d782045c4` without creating a replacement task. If exact-id targeting cannot be demonstrated, stop and redesign rather than creating a second task.
+A fresh one-game canary is still NOT started yet.
+Reason: Chat 1 is currently finishing a production paid-list publication repair. A semantic canary could also cause downstream production activity and would make acceptance evidence harder to separate while Chat 1 is changing/validating the visual publication workflow.
+
+After Chat 1 reaches a durable final result, Director may authorize a one-time reschedule of this same visible completed `Taste Semantic Producer` through its existing Date/Time controls for exactly one fresh current game, with no new task and no second semantic row until Director review.
 
 ## Paid-list publication repair
 Still active in Chat 1. Do not call the incident repaired until the same report reaches a final accepted status and the user verifies the site on Android if worker acceptance says it is ready.
@@ -83,6 +90,7 @@ Separately billed OpenAI API automation route remains prohibited unless the user
 
 ## Next decision
 1. Existing Chat 1 finishes its current paid-list repair and finalizes the same report.
-2. Chat 2 may be deleted.
-3. After explicit authorization, a fresh Chat 2 may perform the narrow exact-id in-place control-plane proof for the completed `Taste Semantic Producer`; no canary yet unless same-id reuse is proven.
-4. Consume both durable results independently before any wider rollout.
+2. Chat 2 may be deleted; no replacement Chat 2 is needed merely to inspect the schedule UI.
+3. Do not change Date/Time on `Taste Semantic Producer` while Chat 1 repair acceptance is still in progress.
+4. After Chat 1 final report is consumed, prepare the exactly-one-game canary and tell the user the exact one-time Date/Time to set on this same task card.
+5. Do not create or delete any Taste Scheduled Task.
