@@ -2,15 +2,13 @@
 
 Task: `WORKER_TASK_TASTE_PRE_AI_DEAL_CONTRACT_GUARD_FIX_IMPLEMENT_01.md`
 
-Status: `in_progress`
-
-This report is being persisted first, before any additional acceptance re-checks in this closing pass, as required.
+Final status: `blocked`
 
 ## What was fixed
 
 The pre-AI deal scenario builder had a stale hard-coded deal-quality contract version check: it required version `1.3`, while the canonical `config/deal_quality_contract.json` is version `1.5` under contract id `DEAL-QUALITY-AND-SORT-V1`.
 
-The implementation changed only the accepted exact version in `scripts/build_pre_ai_deal_scenarios.py` from `1.3` to `1.5`. The exact contract id check and fail-closed behavior were retained; wrong, missing, or malformed contract metadata is not accepted.
+The implementation changed only the accepted exact version in `scripts/build_pre_ai_deal_scenarios.py` from `1.3` to `1.5`. The exact contract id check and fail-closed behavior were retained; wrong, missing, or malformed contract metadata is still rejected.
 
 A focused regression test was added in `scripts/test_pre_ai_deal_contract_guard.py`, covering:
 - canonical `1.5` accepted;
@@ -18,49 +16,78 @@ A focused regression test was added in `scripts/test_pre_ai_deal_contract_guard.
 - missing version rejected;
 - malformed JSON rejected.
 
-The existing `.github/workflows/build-pre-ai-store-snapshot.yml` was wired to run this focused regression. No second producer, scheduler, or parallel task was created.
+The existing `.github/workflows/build-pre-ai-store-snapshot.yml` was wired to run this focused regression. No second producer, scheduler, task, or generation was created.
 
-## Known implementation commits
+## Implementation commits
 
 - `d061edd319955d28f9da1e523d380adec01a6691` — `fix: accept canonical deal quality contract v1.5`
 - `f0ee769527b9e21af5cd6183ae24c7d7ae99467f` — `test: lock pre-ai deal contract version guard`
 - `351279c5d4aad437a57099497d7b09deb15271cc` — `test: run pre-ai deal contract guard regression`
 
-## Already established acceptance evidence
+Initial persistence of this mandatory worker report was committed as:
+- `e95affac16a778b98d00d5922ec810baf5d9d2f6` — `docs: persist taste pre-ai contract guard worker report`
 
-A normal `Build pre-AI deterministic payload` workflow run `34079302600` completed successfully on `main` at head `351279c5d4aad437a57099497d7b09deb15271cc`.
+## Verification results
 
-In that run:
-- the focused deal-contract regression passed: `Ran 4 tests ... OK`;
-- the normal deterministic pre-AI pipeline completed;
-- strong/moderate deal scenarios built successfully with `status: complete`;
-- builder output reported `family_count: 721` and `scenario_count: 1442`;
-- the atomic pre-AI commit step succeeded;
-- the acceptance-run atomic refresh commit was `68fd8d4876a7b55df1c9869e2f0544da0bebbc2c` (`Refresh atomic pre-AI payload`).
+The normal workflow `Build pre-AI deterministic payload`, run `34079302600`, completed successfully on `main` at head `351279c5d4aad437a57099497d7b09deb15271cc`.
 
-Current-main freshness had also already been established in the preceding verification pass:
+Established results from that run:
+- focused deal-contract regression: `Ran 4 tests in 0.004s` / `OK`;
+- normal deterministic pre-AI pipeline completed successfully;
+- strong/moderate deal-scenario build returned `status: complete`;
+- `family_count: 721`;
+- `scenario_count: 1442`;
+- atomic pre-AI commit step succeeded;
+- acceptance-run atomic refresh commit: `68fd8d4876a7b55df1c9869e2f0544da0bebbc2c` (`Refresh atomic pre-AI payload`).
+
+Therefore the contract-guard fix and its focused rejection behavior passed the established acceptance checks.
+
+## Did the normal pre-AI update pass?
+
+Yes. The ordinary `Build pre-AI deterministic payload` path completed successfully, including the guard regression, deterministic builders, strong/moderate scenarios, consumer-bundle steps, validations, and atomic pre-AI commit.
+
+## Were fresh data actually persisted?
+
+Yes. Current-main persistence was established after the fix:
+- `data/production/pre_ai/store_snapshot.json` was generated at `2026-09-07T03:20:02Z`;
+- the latest persisted atomic pre-AI refresh commit observed on current `main` was `00e42c8109a22d2cbac6bab2bf28a2f7d389ca72` (`Refresh atomic pre-AI payload`, `2026-09-07T03:20:04Z`);
+- current `data/production/pre_ai/deal_scenarios.json` was complete with `family_count: 721`, `scenario_count: 1442`, and complete coverage.
+
+Thus the successful update was not only a transient workflow result; fresh pre-AI artifacts were persisted to `main`.
+
+## Does the source match the current mailing?
+
+Yes, for the current-main artifacts established in this task:
 - `data/production/mailing/index.json` had `source_generated_at: 2026-09-06T21:01:47Z`;
-- `data/production/pre_ai/store_snapshot.json` had `source_index: data/production/mailing/index.json` and the same `source_generated_at: 2026-09-06T21:01:47Z`;
-- the current pre-AI snapshot was generated at `2026-09-07T03:20:02Z`;
-- the latest persisted atomic pre-AI refresh commit observed on current `main` was `00e42c8109a22d2cbac6bab2bf28a2f7d389ca72` (`Refresh atomic pre-AI payload`).
+- `data/production/pre_ai/store_snapshot.json` declared `source_index: data/production/mailing/index.json`;
+- that pre-AI snapshot had the exact same `source_generated_at: 2026-09-06T21:01:47Z`.
 
-This establishes that fresh pre-AI data was actually persisted and that its recorded source matched the current canonical mailing index at that time.
+The deterministic store-snapshot builder consumes the canonical production mailing index, so the persisted pre-AI snapshot was source-aligned with the current mailing rather than a stale Prototype result.
 
-## Taste producer / Prototype / canary constraints
+## Taste Semantic Producer state
 
-Required singleton producer id: `6a9d6fdddc00819193ed670d782045c4` (`Taste Semantic Producer`). Its final disabled-state re-check is still pending in this closing pass, so this report remains `in_progress` until that read-only verification is completed.
+Required singleton producer:
+- name: `Taste Semantic Producer`;
+- id: `6a9d6fdddc00819193ed670d782045c4`.
 
-No new Taste canary has been launched during this task-closing pass.
+The task requires this producer to remain disabled. During this closing pass, read-only automation inspection was attempted, but no authoritative live enabled/disabled value was surfaced in the available result. Repository task/report evidence states the required invariant but is not itself proof of the current control-plane state.
 
-The old `Prototype` result was not reused as part of the implementation or the established pre-AI refresh. The successful path used the deterministic canonical pre-AI builders sourced from the current production mailing data, not a previous Prototype output.
+Therefore this report deliberately does **not** claim that the producer is currently disabled. This missing live-state confirmation is the only reason the final status is `blocked` rather than `complete_ready_for_fresh_canary`.
 
-No second producer/task/generation was created, and no next task has been started.
+No producer state was changed during this closing pass.
 
-## Pending closure
+## Prototype / canary / singleton constraints
 
-Only the remaining read-only closure checks are pending:
-1. confirm the singleton Taste Semantic Producer is still disabled;
-2. re-read the persisted current-main artifacts/report as needed;
-3. update this same report to the final task status.
+- The old `Prototype` result was **not reused**. The successful path used the deterministic canonical pre-AI builders and current production mailing source.
+- No new Taste canary was launched.
+- No second producer/task/generation was created.
+- No next task was started.
+- No manual reuse of an old Prototype output was performed.
 
-If the disabled singleton state remains intact and the already-established acceptance evidence still holds, the intended final status is `complete_ready_for_fresh_canary`: exactly one new fresh canary may then be launched by a separate next task. This worker must not launch that canary itself.
+## Can one new fresh canary be launched now?
+
+Not yet under this report.
+
+The pre-AI code/data acceptance is green, the normal update passed, fresh artifacts were persisted, and their source matches the current mailing. However, the required live invariant that singleton producer `6a9d6fdddc00819193ed670d782045c4` is disabled has not been authoritatively confirmed in this closing pass.
+
+Once that exact singleton is positively confirmed disabled, this task can move to `complete_ready_for_fresh_canary`, after which exactly one new fresh canary may be launched by a separate next task. This worker does not launch that canary.
