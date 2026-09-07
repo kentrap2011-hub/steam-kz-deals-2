@@ -64,14 +64,19 @@ jobs:
 
       - name: Classify canonical visual mutation
         id: visual_scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
         shell: bash
         run: |
           set -euo pipefail
           echo "giveaway_only=false" >> "$GITHUB_OUTPUT"
+          echo "commercial_only=false" >> "$GITHUB_OUTPUT"
           python - <<'PY' | tee /tmp/visual-scope.txt
           import copy
           import json
+          import os
           import subprocess
+          from pathlib import Path
 
           path = 'data/production/visual/current.json'
           visual_commit = subprocess.check_output(
@@ -104,7 +109,7 @@ jobs:
               print(f'VISUAL_DEPLOY_SCOPE=general visual_commit={visual_commit} reason=unreadable_diff')
               raise SystemExit(0)
 
-          allowed_contract = {
+          giveaway_contract = {
               'final_visual_producer_blob_sha',
               'giveaway_visual_handoff_blob_sha',
               'source_giveaway_snapshot_blob_sha',
@@ -115,7 +120,7 @@ jobs:
               data = copy.deepcopy(data)
               data.pop('giveaways', None)
               contract = data.get('production_contract') or {}
-              for key in allowed_contract:
+              for key in giveaway_contract:
                   contract.pop(key, None)
               return data
 
@@ -128,16 +133,84 @@ jobs:
           )
           if is_giveaway_only:
               print(f'VISUAL_DEPLOY_SCOPE=giveaway_only visual_commit={visual_commit} non_giveaway_state_unchanged=true')
+              raise SystemExit(0)
+
+          # Commercial-only deploys may remove stale rows and rewrite deterministic
+          # prices/offers/ranking, but they may not add unanalyzed rows, rewrite
+          # player-facing semantics/descriptions, or touch the giveaway sibling.
+          receipt = {}
+          receipt_path = Path('/tmp/visual-freshness-artifact/visual-freshness-receipt.json')
+          if os.environ.get('EVENT_NAME') == 'workflow_run' and receipt_path.exists():
+              receipt = json.loads(receipt_path.read_text(encoding='utf-8'))
+
+          produced = receipt.get('produced_visual') or {}
+          receipt_is_commercial = (
+              receipt.get('fresh_build') is True
+              and receipt.get('freshness_scope') == 'commercial_only'
+              and receipt.get('full_visual_freshness') is False
+              and produced.get('commit_sha') == visual_commit
+          )
+
+          before_items = {str(item.get('id')): item for item in before.get('items') or []}
+          after_items = {str(item.get('id')): item for item in after.get('items') or []}
+          no_new_rows = set(after_items).issubset(before_items)
+
+          protected_fields = (
+              'fit', 'source_fit', 'taste_factors', 'why_fit', 'why_fit_status',
+              'why_fit_provenance', 'risks', 'risk_codes', 'risk_status',
+              'risk_provenance', 'risk_level', 'risk_penalty', 'direct_user_evidence',
+              'taste_rank', 'play_role', 'start_priority', 'play_priority_context',
+              'summary', 'description_status', 'description_source_locale',
+              'description_source_quality', 'description_source_appid',
+              'description_source_path', 'description_source_text',
+          )
+          semantics_unchanged = no_new_rows and all(
+              all(after_item.get(key) == before_items[family_id].get(key) for key in protected_fields)
+              for family_id, after_item in after_items.items()
+          )
+
+          before_contract = before.get('production_contract') or {}
+          after_contract = after.get('production_contract') or {}
+          giveaway_provenance_unchanged = all(
+              before_contract.get(key) == after_contract.get(key)
+              for key in (
+                  'giveaway_visual_handoff_blob_sha',
+                  'source_giveaway_snapshot_blob_sha',
+                  'giveaway_visual_schema_version',
+              )
+          )
+          giveaway_unchanged = before.get('giveaways') == after.get('giveaways') and giveaway_provenance_unchanged
+          paid = after.get('paid_list_freshness') or {}
+          commercial_marker = paid.get('status') == 'published' and paid.get('scope') == 'commercial_only'
+
+          if receipt_is_commercial and commercial_marker and semantics_unchanged and giveaway_unchanged:
+              print(
+                  f'VISUAL_DEPLOY_SCOPE=commercial_only visual_commit={visual_commit} '
+                  f'rows_before={len(before_items)} rows_after={len(after_items)} '
+                  'semantic_and_description_fields_unchanged=true giveaway_unchanged=true'
+              )
           else:
-              print(f'VISUAL_DEPLOY_SCOPE=general visual_commit={visual_commit}')
+              print(
+                  f'VISUAL_DEPLOY_SCOPE=general visual_commit={visual_commit} '
+                  f'receipt_is_commercial={str(receipt_is_commercial).lower()} '
+                  f'commercial_marker={str(commercial_marker).lower()} '
+                  f'no_new_rows={str(no_new_rows).lower()} '
+                  f'semantics_unchanged={str(semantics_unchanged).lower()} '
+                  f'giveaway_unchanged={str(giveaway_unchanged).lower()}'
+              )
           PY
 
           if grep -q 'VISUAL_DEPLOY_SCOPE=giveaway_only' /tmp/visual-scope.txt; then
             echo "giveaway_only=true" >> "$GITHUB_OUTPUT"
           fi
+          if grep -q 'VISUAL_DEPLOY_SCOPE=commercial_only' /tmp/visual-scope.txt; then
+            echo "commercial_only=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Require meaningful Russian descriptions for general visual changes
-        if: steps.visual_scope.outputs.giveaway_only != 'true'
+        if: >
+          steps.visual_scope.outputs.giveaway_only != 'true' &&
+          steps.visual_scope.outputs.commercial_only != 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -149,6 +222,13 @@ jobs:
         run: |
           set -euo pipefail
           echo 'PAID_VISUAL_ACCEPTANCE=reused_existing_canonical_payload structural_diff_proof=pass'
+
+      - name: Accept preserved semantic payload for commercial-only deploy
+        if: steps.visual_scope.outputs.commercial_only == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo 'COMMERCIAL_VISUAL_ACCEPTANCE=bounded_paid_refresh semantic_and_description_fields_unchanged=true giveaway_unchanged=true'
 
       - name: Validate giveaway visual payload
         shell: bash
@@ -164,6 +244,7 @@ jobs:
           node web/package-deal-ui.test.js
           node web/score-details-ui.test.js
           node web/giveaway-ui.test.js
+          node web/paid-freshness-ui.test.js
           node scripts/test_feed_bootstrap_cache_identity.js
 
       - name: Stage precomputed visual payload
