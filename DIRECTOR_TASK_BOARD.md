@@ -14,8 +14,8 @@ Canonical protocol:
 `WORKER_REPORT_DURABILITY_PROTOCOL.md`
 
 Current evidence:
-- new report-first protocol protected Chat 1 forensic work: its report exists in `main` with substantial `in_progress` checkpoint evidence even though the worker did not finalize in the same response cycle;
-- legacy Chat 2 task still has no report at all and remains a true durability failure until it persists one.
+- report-first protocol protected Chat 1 forensic work and allowed the same report to be finalized on the next turn;
+- Chat 2's legacy missing-report failure was recovered and the exact report now exists in `main`.
 
 ## Taste — logic implemented, production materialization still pending
 Authoritative existing singleton:
@@ -25,59 +25,61 @@ Authoritative existing singleton:
 - producer generation: `1`;
 - no second producer may be created.
 
-### Chat 2 — pre-AI deal contract guard IMPLEMENT REPORT STILL ABSENT
+### Chat 2 — pre-AI deal contract guard IMPLEMENT DURABLY CLOSED AS BLOCKED
 Task:
 `WORKER_TASK_TASTE_PRE_AI_DEAL_CONTRACT_GUARD_FIX_IMPLEMENT_01.md`
-Expected report:
+Durable report:
 `reviews/worker_reports/taste-pre-ai-deal-contract-guard-fix-implement-01.md`
-Mode: `IMPLEMENT / ACCEPTANCE`
-Priority: `VERY_HIGH_USER_PRIORITY`
-Status: `worker_finished_response_cycle_report_absent`.
+Final status: `blocked`.
 
-Director rechecked only the exact expected path after the latest worker completion message; the report is still absent from `main`.
+Accepted Director-level result:
+- stale deal-quality contract guard was fixed from exact v1.3 to canonical exact v1.5;
+- focused fail-closed regressions passed;
+- normal `Build pre-AI deterministic payload` workflow completed successfully and reached atomic commit;
+- fresh pre-AI artifacts were persisted and aligned with current mailing source;
+- old Prototype result was not reused;
+- no new canary or second producer/task/generation was created.
 
-Existing Chat 2 must perform report persistence first. No new analysis or task may begin before the exact report exists.
+Only remaining blocker from the worker report:
+- live control-plane state of singleton task `6a9d6fdddc00819193ed670d782045c4` could not be authoritatively confirmed as disabled in that closing pass.
 
-Hard invariants remain:
-- no new Taste canary;
-- existing producer remains disabled/fail-closed;
-- old Prototype result must not be reused;
-- no second task/producer/generation;
-- no paid API or Copilot.
+Do not launch a fresh canary until that exact disabled state is positively confirmed by a separate bounded step.
 
-Do not delete Chat 2 yet.
+Completed Chat 2 worker can be deleted; its result is durable.
 
-## Chat 1 — PRE-FIX FORENSIC RECON CHECKPOINT SAFELY PERSISTED
+## Chat 1 — PRE-FIX FORENSIC RECON COMPLETE
 Task:
 `WORKER_TASK_PUBLICATION_FRESHNESS_PRE_FIX_FORENSIC_RECON_01.md`
-Report:
+Durable report:
 `reviews/worker_reports/publication-freshness-pre-fix-forensic-recon-01.md`
-Mode: `READ-ONLY / RECON / FORENSIC`
-Priority: `VERY_HIGH_RELIABILITY`
-Status: `in_progress_checkpoint_persisted_worker_response_cycle_ended_before_finalize`.
+Final status: `complete_ready_for_repair`.
 
-Important: this is NOT a missing-report failure. The report exists in `main` and contains substantial frozen pre-fix evidence, including the current source/visual identities and the currently proven break classification.
+Accepted Director-level result:
+- fresh Steam-derived data reaches shortlist, mailing and deterministic pre-AI state;
+- full visual rebuild is correctly blocked when semantic ChatGPT payload is incomplete;
+- deterministic commercial scoped helper already exists: `scripts/refresh_visual_commercial_fields.py`;
+- production visual workflow has a wired `giveaway_only` scoped path but no equivalent `commercial_only` orchestration/receipt path;
+- therefore the active break is deterministic commercial truth -> canonical paid visual publication orchestration, not Steam ingestion or shortlist/mailing;
+- exact first historical missed commercial invocation is not reconstructible and was not guessed;
+- common systemic pattern with giveaway is that independently refreshable deterministic subdomains can remain stale indefinitely when full visual publication is blocked by semantic incompleteness and no scoped liveness path exists.
 
-Current checkpoint already proves:
-- fresh Steam-derived state reaches shortlist, mailing and deterministic pre-AI state;
-- full visual rebuild is correctly blocked by semantic incompleteness;
-- scoped deterministic commercial refresh helper already exists;
-- production workflow has a `giveaway_only` scoped branch but no equivalent `commercial_only` production orchestration/receipt branch;
-- the active break is therefore the deterministic commercial state -> canonical paid visual publication orchestration edge;
-- common systemic pattern with giveaway is coupling independently refreshable deterministic domains to a full semantic-completion gate without a wired scoped handoff/liveness invariant.
+Repair task assessment:
+`WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md` is directionally correct but requires one bounded correction before execution:
+- explicitly reuse `scripts/refresh_visual_commercial_fields.py`;
+- wire `commercial_only` into the existing visual workflow;
+- add scoped commercial freshness receipt/proof;
+- preserve the existing full semantic fail-closed guard;
+- require current deterministic source binding plus safe prior semantic coverage;
+- prove giveaway preservation;
+- no new scheduler/writer.
 
-The report is not final yet. Existing Chat 1 should only finish the bounded unresolved evidence items already listed in its report, then set final status and re-read the report. Do not repair anything yet.
+Completed Chat 1 forensic worker can be deleted; it is not stuck.
 
-### Then Chat 1 — main list refresh handoff IMPLEMENT
-Task:
+### Next paid-list step
 `WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`
-Expected report:
-`reviews/worker_reports/visual-main-list-refresh-handoff-implement-01.md`
-Mode: `IMPLEMENT / ACCEPTANCE`
-Priority: `VERY_HIGH_USER_PRIORITY`
-Status: `blocked_on_final_pre_fix_forensic_report`.
+Status: `needs_bounded_task_correction_before_launch`.
 
-Do not run this IMPLEMENT until Director consumes the finalized pre-fix forensic report.
+Do not launch the repair task until Director updates it to match the finalized forensic report.
 
 ## Publication freshness recurrence postmortem — REQUIRED AFTER CURRENT RECOVERY
 Task:
@@ -99,8 +101,6 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. Existing Chat 1 finalizes only its already-persisted forensic report; no repair yet.
-2. Existing Chat 2 persists its missing exact report before doing anything else.
-3. After Director consumes the final forensic report, run the bounded main-list repair, adjusted only if the forensic report proves the current task unsafe/incomplete.
-4. After repair and user verification, run the cross-incident recurrence postmortem before unrelated backlog work.
-5. Do not run a fresh Taste semantic canary until Director consumes Chat 2's exact implementation report.
+1. Correct the paid-list repair task using the finalized forensic report, then launch a fresh Chat 1 for the bounded repair.
+2. Run one separate bounded control-plane confirmation that the existing Taste singleton is disabled before allowing exactly one fresh canary.
+3. After paid-list repair and user verification, run the cross-incident recurrence postmortem before unrelated backlog work.
