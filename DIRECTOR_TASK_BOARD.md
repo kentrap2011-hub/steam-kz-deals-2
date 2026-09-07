@@ -12,23 +12,23 @@
 
 ## Current worker slots
 
-### Chat 1 — automatic ChatGPT analysis failure forensic complete, report status correction still pending
+### Chat 1 — automatic ChatGPT analysis failure investigation DURABLY CLOSED
 Task:
 `WORKER_TASK_TASTE_DAILY_AUTOMATION_FAILURE_FORENSIC_RECON_01.md`
 Report:
 `reviews/worker_reports/taste-daily-automation-failure-forensic-recon-01.md`
-Status: `substantive_complete_report_status_malformed`.
+Final status: `complete_root_cause_bounded`.
 
 Plain result:
 - last proven accepted automatic ChatGPT analysis was 2026-09-01 21:03 UTC / 2026-09-02 01:03 Europe/Samara;
-- it accepted 11 game results and reduced the unresolved queue 37 -> 26;
-- by the next expected daily cycle, GitHub had successfully prepared fresh current work with 644 unresolved items, but no normal ChatGPT output arrived;
-- the break is at the external ChatGPT automation stage, not Steam collection or deterministic preparation;
+- it accepted 11 game results and reduced unresolved work 37 -> 26;
+- by the next expected daily cycle, GitHub had successfully prepared fresh work with 644 unresolved items, but no normal ChatGPT output arrived;
+- the break is at the external ChatGPT automation stage, not Steam collection or data preparation;
 - retained evidence cannot prove whether the old scheduled task failed, did not run, was disabled, was deleted, became inaccessible, or hit another platform-side state;
 - no automatic rule existed that turned “fresh unresolved work exists but no accepted ChatGPT progress by the daily deadline” into an incident;
-- the stale paid-list failure and ChatGPT-analysis outage are separate primary failures that later compounded each other.
+- stale paid-list publication and ChatGPT-analysis outage are separate primary failures that later compounded each other.
 
-Existing Chat 1 must only correct final report status to `complete_root_cause_bounded`, re-read the report, and stop. Do not delete Chat 1 until this is persisted.
+Chat 1 result is durable. This worker chat can be deleted.
 
 ### Chat 2 — replacement ChatGPT automation state check DURABLY CLOSED
 Task:
@@ -45,7 +45,7 @@ Plain result:
 Chat 2 result is durable. This worker chat can be deleted.
 
 ## Paid-list publication repair
-Forensic report is complete and repair is understood. Launch remains held until Director converts the combined incident picture into the next bounded repair/reliability order.
+Forensic report is complete and repair is understood. The repair is still pending a bounded task correction before launch.
 
 Prepared repair task:
 `WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`
@@ -54,7 +54,7 @@ Status: `needs_bounded_task_correction_before_launch`.
 ## Taste current state
 The data-preparation bug that previously blocked the pipeline has been fixed and verified. Fresh prepared data is saved and aligned with the current mailing source. Old Prototype result was not reused.
 
-A fresh one-game ChatGPT test is still forbidden because the current on/off state of the exact replacement automation is not authoritatively known.
+A fresh one-game ChatGPT test is still held only because the current on/off state of the exact replacement automation is not authoritatively known. User can inspect the task state in ChatGPT Scheduled without changing it.
 
 ## Publication freshness recurrence postmortem
 Task:
@@ -73,6 +73,7 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route is stopped by user policy and must not be retried.
 
 ## Next decision
-1. Existing Chat 1 only corrects its report final status to `complete_root_cause_bounded` and stops.
-2. Chat 2 is complete and deletable.
-3. After Chat 1 report-only correction, Director chooses the next bounded implementation order using the combined evidence: restore reliable daily ChatGPT execution/alerting and repair independent paid-list publication without conflating the two failures.
+1. Obtain authoritative current on/off state of exact replacement ChatGPT task `6a9d6fdddc00819193ed670d782045c4`, preferably from the user's Scheduled UI if tool-side state remains unreadable.
+2. If confirmed off, prepare exactly one one-game test using the same existing task; if confirmed on, do not overlap runs and decide whether to pause it first.
+3. Separately correct and run the paid-list publication repair so fresh prices/discounts do not depend on ChatGPT analysis completion.
+4. After recovery and user verification, run the required cross-incident reliability postmortem and add automatic first-day failure detection.
