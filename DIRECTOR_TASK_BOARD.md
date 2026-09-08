@@ -15,59 +15,59 @@
 Task: `WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`
 Report: `reviews/worker_reports/visual-main-list-refresh-handoff-implement-01.md`
 Result: fresh paid prices/discounts now publish independently of unfinished ChatGPT semantic analysis.
-User verification: stale/non-current discounts disappeared and the paid update date advanced.
 
-### Completed Taste task reuse recon — DURABLY CLOSED
-Task: `WORKER_TASK_TASTE_COMPLETED_SINGLETON_REUSE_RECON_01.md`
-Report: `reviews/worker_reports/taste-completed-singleton-reuse-recon-01.md`
-Result: same-id reuse/reactivation of old completed task was not proven.
-Old completed task remains preserved and inactive.
-
-### Silent-stall prevention postmortem — DURABLY CLOSED
-Task: `WORKER_TASK_PUBLICATION_FRESHNESS_RECURRENCE_POSTMORTEM_01.md`
-Report: `reviews/worker_reports/publication-freshness-recurrence-postmortem-01.md`
-User declined the proposed independent 03:15 watchdog. Date-only freshness visibility remains selected policy.
-
-### Taste active producer restore design — DURABLY CLOSED
+### Taste restore design — DURABLY CLOSED
 Task: `WORKER_TASK_TASTE_ACTIVE_PRODUCER_RESTORE_DESIGN_01.md`
 Report: `reviews/worker_reports/taste-active-producer-restore-design-01.md`
 Final status: `complete_restore_plan_ready`.
 
-### Taste active producer restore implementation — COMPLETE, CANARY ARMED
+### Taste restore implementation — COMPLETE, CANARY ARMED
 Task: `WORKER_TASK_TASTE_ACTIVE_PRODUCER_RESTORE_IMPLEMENT_01.md`
 Report: `reviews/worker_reports/taste-active-producer-restore-implement-01.md`
 Final status: `complete_canary_armed_system_audit_pending`.
 
-Accepted result:
-- exactly one new recurring `Taste Semantic Producer` was created;
-- new task id: `6aa032f37e688191a5c9a1a83f91c5d9`;
-- schedule: daily 01:00 Europe/Samara;
-- first scheduled run: 2026-09-09 01:00 Europe/Samara;
-- old completed task remained untouched;
-- canonical producer identity moved to the new task and generation 2;
-- first run is restricted to exactly one fresh game: `Chernobylite Complete Edition` / AppID `1016800`;
-- no fallback to another game;
-- after successful canary, later runs remain no-op until separate widening approval;
-- no paid OpenAI API/Copilot/external scheduler;
-- no backlog processing started.
+Current active task:
+- `Taste Semantic Producer`
+- task id `6aa032f37e688191a5c9a1a83f91c5d9`
+- daily 01:00 Europe/Samara
+- generation 2
+- currently canary-bound to `Chernobylite Complete Edition` / AppID `1016800`
+- old generation-1 task remains Completed/inactive.
 
-Current state: `waiting_for_first_canary_run`.
-The canary was armed but had not run when the worker finished.
-Do not run System Audit before there is first-run evidence unless there is a separate control-plane concern.
-After the 01:00 run, use a NEW independent worker chat for System Audit. Do not reuse the implementation worker for the audit.
-Implementation worker Chat 1 can be deleted.
+## USER DECISION — FULL PRODUCTION SHOULD RUN AT 01:00
+User explicitly does not want the 01:00 occurrence to be the first canary. User wants the test executed now, then independent audit, then (only if PASS) widening of the SAME recurring task before 01:00 so that 01:00 is normal full production.
 
-## Superseded watchdog implementation
-`WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md`
-Status: `SUPERSEDED_BY_USER_DECISION_DO_NOT_RUN`.
-Do not launch it.
+Do not skip safety validation and blindly widen before a runtime canary. The accepted accelerated sequence is:
+1. execute existing one-game canary now using SAME task;
+2. independent System Audit immediately after accepted canary;
+3. if audit PASS, separately widen SAME task to normal production before 01:00;
+4. verify final schedule remains daily 01:00 Europe/Samara.
+
+## AUTHORIZED NOW — immediate canary execution
+Task: `WORKER_TASK_TASTE_CANARY_EXECUTE_NOW_01.md`
+Expected report: `reviews/worker_reports/taste-canary-execute-now-01.md`
+Status: `authorized_waiting_for_user_launch_confirmation`.
+
+Scope:
+- same active task id only;
+- exact existing Chernobylite canary only;
+- prefer direct run-now if available;
+- otherwise temporary near-term reschedule of SAME recurring task is allowed only if identity/recurrence remain safe;
+- restore permanent DAILY 01:00 Europe/Samara schedule before finalizing;
+- no second task;
+- no fallback game;
+- no widening here;
+- no paid API/Copilot/external scheduler.
+
+## Next sequence
+1. User launches immediate-canary worker.
+2. Director consumes only exact report.
+3. If `complete_canary_accepted_ready_for_system_audit`, immediately prepare/launch NEW independent System Audit worker.
+4. If audit PASS, use already-given user authorization to prepare and launch bounded widening before 01:00; do not ask the user to re-approve the same stated goal unless a new risk/scope appears.
+5. If canary or audit fails, do not widen at 01:00; report exact blocker.
+
+## Superseded watchdog
+`WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
 
 ## Giveaway ITAD identity
-Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
-Status: `queued_after_current_reliability_and_taste_gate`.
-
-## Next decision
-1. Wait for the first scheduled Taste canary at 2026-09-09 01:00 Europe/Samara.
-2. After that run window, assign a NEW independent worker to verify whether the one-game canary ran and was accepted safely.
-3. If the canary is accepted and System Audit passes, separately authorize widening the SAME recurring task to normal daily Taste production.
-4. If the canary fails or does not run, diagnose that exact failure without creating another producer.
+`WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md` remains queued after the current Taste gate.
