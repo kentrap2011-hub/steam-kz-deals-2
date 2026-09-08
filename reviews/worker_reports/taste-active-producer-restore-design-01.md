@@ -358,7 +358,7 @@ Repository design checks completed:
 
 ## Status
 
-`completed`
+`complete_restore_plan_ready`
 
 ## Exact refs
 
