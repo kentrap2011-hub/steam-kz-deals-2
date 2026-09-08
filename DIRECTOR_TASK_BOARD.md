@@ -41,14 +41,13 @@ Final status: `complete_restore_plan_ready`.
 Accepted design: preserve old completed task; create exactly one new recurring daily Scheduled Task; migrate producer identity to new task id/generation 2; first run limited to one fresh game; same task remains active but canary-locked until independent System Audit PASS; no paid API/Copilot/external scheduler.
 Old design worker chat can be deleted.
 
-## Authorized implementation — WAITING FOR USER TO SEND TO NEW CHAT 1
+## ACTIVE — Taste producer restore implementation
 Task: `WORKER_TASK_TASTE_ACTIVE_PRODUCER_RESTORE_IMPLEMENT_01.md`
 Expected report: `reviews/worker_reports/taste-active-producer-restore-implement-01.md`
 Mode: `IMPLEMENT / CONTROL-PLANE + CONTRACT MIGRATION + CANARY ARMING`
-Status: `authorized_waiting_for_user_launch_confirmation`.
+Status: `running`.
 
-User explicitly approved this implementation.
-Do NOT mark it running until user confirms the worker command was actually sent/launched in a new Chat 1.
+User confirmed the implementation command was sent to NEW Chat 1.
 
 Implementation scope:
 - create exactly one new recurring ChatGPT Scheduled `Taste Semantic Producer`;
@@ -62,6 +61,8 @@ Implementation scope:
 - independent System Audit required before widening;
 - zero separately billed OpenAI API/Copilot/external automation cost.
 
+Do not inspect intermediate implementation state from Director. Consume only the exact durable report after the user says the worker finished.
+
 ## Superseded watchdog implementation
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md`
 Status: `SUPERSEDED_BY_USER_DECISION_DO_NOT_RUN`.
@@ -72,7 +73,6 @@ Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
 Status: `queued_after_current_reliability_and_taste_gate`.
 
 ## Next decision
-1. User sends the prepared implementation command to NEW Chat 1.
-2. After user confirms launch, mark task running.
-3. When worker says finished, consume only exact durable report.
-4. If canary is armed or accepted successfully, run independent System Audit before widening the same task.
+1. Wait for user to say Chat 1 finished.
+2. Then fetch only `reviews/worker_reports/taste-active-producer-restore-implement-01.md`.
+3. If canary is armed or accepted successfully, run independent System Audit before widening the same task.
