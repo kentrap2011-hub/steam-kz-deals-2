@@ -31,54 +31,51 @@ Task: `WORKER_TASK_TASTE_CANARY_EXECUTE_NOW_01.md`
 Report: `reviews/worker_reports/taste-canary-execute-now-01.md`
 Final status: `complete_canary_rejected_needs_diagnosis`.
 
-Runtime result:
-- the SAME generation-2 recurring task ran successfully now;
-- exactly one result was produced for Chernobylite / AppID 1016800;
-- result reached the canonical GitHub Taste inbox;
-- no second game/task/backlog processing occurred;
-- permanent schedule was restored and task is enabled daily at 01:00 Europe/Samara;
-- the new result was not canonically ingested because the active inbox still contains historical generation-1 Prototype file `data/ai_inbox/taste/canary-App_10150-producer-g1.json`;
-- whole-inbox producer-fence scanning rejects that historical file before the current gen2 result can be ingested;
-- new generation-2 envelope itself was not shown invalid;
-- current task remains canary-only.
+### Stale inbox repair — COMPLETE REPAIR, CANARY STILL STALE
+Task: `WORKER_TASK_TASTE_STALE_INBOX_REPAIR_01.md`
+Report: `reviews/worker_reports/taste-stale-inbox-repair-01.md`
+Final status: `needs_followup`.
 
-The worker chat used for this immediate-canary task was explicitly declared deletable by Director and the user confirmed it was deleted.
+Accepted result of repair:
+- historical generation-1 Prototype file was confirmed as the original blocker;
+- it was preserved under `data/ai_archive/taste/generation-1/` and removed from active inbox;
+- active old-generation or malformed files still fail closed;
+- current producer safety was not weakened;
+- the existing Chernobylite gen2 result then reached the later normal binding validation;
+- it was rejected because the canonical taste-profile blob had changed since that result was produced;
+- Chernobylite remains unaccepted/pending;
+- no semantic rerun, other game, new task, or backlog processing occurred.
 
 ## USER GOAL — FULL PRODUCTION AT 01:00
-User wants the runtime test completed and verified before 01:00 so the 01:00 run can be normal production.
-Accepted accelerated sequence:
-1. repair stale historical inbox artifact/lifecycle blocker;
-2. canonically ingest the EXISTING Chernobylite gen2 result without semantic rerun if still current;
-3. run independent System Audit in a NEW chat;
-4. if audit PASS, widen the SAME recurring task before 01:00;
-5. verify schedule remains daily 01:00 Europe/Samara.
+User wants runtime validation completed before 01:00 so the 01:00 run can be normal production.
+The stale inbox problem is now repaired. The remaining required runtime step is one fresh Chernobylite result bound to the current profile.
 
-## ACTIVE — stale inbox repair + existing canary re-ingest
-Task: `WORKER_TASK_TASTE_STALE_INBOX_REPAIR_01.md`
-Expected report: `reviews/worker_reports/taste-stale-inbox-repair-01.md`
-Status: `running`.
-
-User confirmed the command was sent to NEW Chat 1.
+## AUTHORIZED NEXT — refreshed Chernobylite canary rerun
+Task: `WORKER_TASK_TASTE_REFRESHED_CANARY_RERUN_01.md`
+Expected report: `reviews/worker_reports/taste-refreshed-canary-rerun-01.md`
+Status: `prepared_for_existing_chat_1`.
 
 Scope:
-- confirm exact whole-inbox stale-file blocker;
-- preserve old generation-1 evidence, preferably by archive/quarantine/move outside active inbox;
-- do not weaken producer validation;
-- old-generation files must still fail if present in active inbox;
-- re-ingest the EXISTING `canary-app-1016800-gen2.json` through canonical path if still current;
-- no ChatGPT semantic rerun;
-- no second game/task;
+- use only Chernobylite / AppID 1016800;
+- freeze current exact binding including current profile SHA;
+- preserve/archive the now-stale previous gen2 Chernobylite inbox result before fresh submission;
+- update only the SAME generation-2 Scheduled Task id `6aa032f37e688191a5c9a1a83f91c5d9` to the refreshed canary tuple;
+- trigger that SAME task now;
+- restore/verify DAILY 01:00 Europe/Samara schedule and enabled state;
+- verify exactly one fresh Chernobylite result is canonically accepted and queue/receipt state advances;
+- no other game;
+- no second task;
 - no backlog widening;
 - no paid API/Copilot/external scheduler.
 
-Do not inspect intermediate state from Director. Consume only the exact durable report after the user says this worker finished.
+The current stale-inbox repair worker Chat 1 may be reused for this immediate follow-up. Do not delete it yet.
 
 ## Next sequence
-1. Wait for user to say NEW Chat 1 finished.
-2. Then fetch only `reviews/worker_reports/taste-stale-inbox-repair-01.md`.
-3. If `complete_canary_accepted_ready_for_system_audit`, immediately launch NEW independent System Audit worker.
-4. If audit PASS, prepare/launch bounded widening of SAME task before 01:00 under already-stated user goal.
-5. If repair/audit fails, do not widen; report exact blocker.
+1. Existing Chat 1 executes `WORKER_TASK_TASTE_REFRESHED_CANARY_RERUN_01.md`.
+2. Director consumes only the exact durable report.
+3. If `complete_canary_accepted_ready_for_system_audit`, launch a NEW independent System Audit worker immediately.
+4. If System Audit PASS, widen the SAME recurring task before 01:00 under the user's already-stated goal.
+5. If rerun/audit fails, do not widen; report the exact blocker.
 
 ## Superseded watchdog
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
