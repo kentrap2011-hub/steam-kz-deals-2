@@ -10,7 +10,7 @@ Confirm and minimally repair the stale Taste inbox blocker, preserve the histori
 - The active Taste producer fence is canonical `TASTE-SEMANTIC-RESULT-V5`, active producer `chatgpt_scheduled_task:6aa032f37e688191a5c9a1a83f91c5d9`, generation `2`, with mismatch policy `reject_before_ingest`.
 - `.github/workflows/ingest-taste-batch.yml` runs `scripts/taste_producer_fence.py data/ai_inbox/taste` before `process_taste_inbox.py`.
 - `taste_producer_fence.py::validate_taste_inbox()` scans every top-level `data/ai_inbox/taste/*.json` and rejects the whole run on the first producer mismatch.
-- Current active inbox contains exactly the historical gen1 `canary-App_10150-producer-g1.json` and the current gen2 `canary-app-1016800-gen2.json`.
+- Current active inbox initially contained exactly the historical gen1 `canary-App_10150-producer-g1.json` and the current gen2 `canary-app-1016800-gen2.json`.
 - The prior canonical workflow run `34260132159` failed exactly on the historical gen1 file before the Chernobylite ingest transaction.
 - Current Chernobylite queue row still exists and its appid, taste fingerprint, candidate-context digest and required Taste work match the existing gen2 result.
 - Current global profile/model/semantic/source bindings also still match the existing gen2 result: profile `c42a6a5dcf608e04bf86d24be9e1542f1b934456`, model `taste-v3`, semantics `0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`, source `2026-09-07T20:45:43.377890+00:00`.
@@ -21,27 +21,52 @@ The blocker is deterministic whole-active-inbox fencing: a historical generation
 ## Architecture preflight
 - Owner of queue scope, validation, persistence and inbox ingest: GitHub/GitHub Actions under `config/execution_ownership_contract.json`.
 - Canonical authorization: `config/taste_result_contract.json` producer fence plus the existing GitHub-owned ingest workflow.
-- Planned repair stays inside GitHub-owned artifact lifecycle; it does not transfer control-plane work to ChatGPT or this interactive chat.
+- Repair stays inside GitHub-owned artifact lifecycle; it does not transfer control-plane work to ChatGPT or this interactive chat.
 - No new recurring stage, queue, retry loop, quota, scheduler, producer identity or backlog manager is introduced.
 
-## Planned minimal lifecycle repair
-No pre-existing Taste archive/quarantine location was found in the current `data/ai_inbox` layout. Introduce a dedicated historical Taste archive outside the active inbox, preserve the old gen1 file there, and add focused regression proving archived stale producer evidence is not scanned while the same stale producer remains rejected if placed back in the active inbox.
+## Historical-artifact lifecycle chosen
+No pre-existing Taste archive/quarantine location existed in the current `data/ai_inbox` layout. A dedicated historical archive outside the active inbox is now defined at `data/ai_archive/taste/**`.
 
-## Changes
-- Durable report created before implementation changes.
+Rules persisted in `data/ai_archive/taste/README.md`:
+- only `data/ai_inbox/taste/*.json` is active;
+- archived artifacts are provenance only and are not ingest candidates;
+- archiving never makes an old producer valid;
+- if the same old/wrong producer artifact is put back into the active inbox, normal strict producer fencing still rejects it;
+- malformed active files remain fail-closed.
+
+The exact historical gen1 Prototype artifact has been copied byte-for-content to:
+`data/ai_archive/taste/generation-1/canary-App_10150-producer-g1.json`
+
+Focused regression was added to `scripts/validate_taste_producer_fence.py` proving:
+- historical archive content does not enter the active scan;
+- an old-generation producer placed in the active inbox is still rejected;
+- malformed active JSON is still rejected.
+
+## Changes so far
+- `reviews/worker_reports/taste-stale-inbox-repair-01.md`
+- `data/ai_archive/taste/README.md`
+- `data/ai_archive/taste/generation-1/canary-App_10150-producer-g1.json`
+- `scripts/validate_taste_producer_fence.py`
+
+Implementation commits so far:
+- archive lifecycle README: `4de393be585f2e73cf0f89ec45c0f43a770d84b3`
+- preserved historical file: `37b7fecb7de41b7be4e2432c0feb1744438db391`
+- focused producer/archive regression: `ff3b80831459045eb9c403a5c85bc5904225abc7`
 
 ## Validation
-- Root-cause confirmation: PASS by current workflow/script inspection plus prior failed run evidence.
+- Root-cause confirmation: PASS.
 - Existing Chernobylite result freshness/current-binding check: PASS.
-- Implementation and canonical re-ingest: pending.
+- Archive preservation created before active-file removal: PASS.
+- Regression code added without changing `taste_producer_fence.py` acceptance logic: PASS by code inspection; canonical workflow execution still pending.
+- Canonical Chernobylite re-ingest: pending.
 
 ## Unresolved
-- Historical gen1 artifact has not yet been moved out of the active inbox.
+- Historical gen1 source copy is still present in the active inbox until the next bounded step removes only that active copy.
 - Chernobylite has not yet been canonically re-ingested/receipted.
 - Final queue advancement and exact-once acceptance proof pending.
 
 ## Recommended next step
-Implement only the archive lifecycle/regression, then remove the preserved gen1 copy from the active inbox so the canonical existing workflow processes the already-present Chernobylite result.
+Delete only the now-preserved gen1 copy from `data/ai_inbox/taste/`; that top-level inbox change should trigger the unchanged canonical ingest workflow against the already-present Chernobylite gen2 result.
 
 ## Efficiency / reusable lesson
 `none`
