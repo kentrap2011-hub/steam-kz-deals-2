@@ -38,36 +38,29 @@ User declined the proposed independent 03:15 watchdog. Date-only freshness visib
 Task: `WORKER_TASK_TASTE_ACTIVE_PRODUCER_RESTORE_DESIGN_01.md`
 Report: `reviews/worker_reports/taste-active-producer-restore-design-01.md`
 Final status: `complete_restore_plan_ready`.
+Accepted design: preserve old completed task; create exactly one new recurring daily Scheduled Task; migrate producer identity to new task id/generation 2; first run limited to one fresh game; same task remains active but canary-locked until independent System Audit PASS; no paid API/Copilot/external scheduler.
+Old design worker chat can be deleted.
 
-Accepted design:
-- preserve old completed task for provenance;
-- restore via exactly one NEW recurring daily ChatGPT Scheduled Task;
-- new immutable task id becomes canonical producer `chatgpt_scheduled_task:<NEW_TASK_ID>`;
-- producer generation advances from 1 to 2;
-- migrate only canonical producer fence identity fields in `config/taste_result_contract.json`;
-- first scheduled run is a one-fresh-current-game canary using exact current binding tuple and no fallback;
-- SAME recurring task remains Active after canary but canary-locked/no-op until independent System Audit;
-- only after System Audit PASS may the SAME task be widened to normal daily Taste production;
-- canonical normal cadence remains daily 01:00 Europe/Samara;
-- no paid OpenAI API/Copilot/external automation service.
-
-Old design worker Chat 1 can be deleted.
-
-## Prepared implementation — NOT YET AUTHORIZED/LAUNCHED
+## Authorized implementation — WAITING FOR USER TO SEND TO NEW CHAT 1
 Task: `WORKER_TASK_TASTE_ACTIVE_PRODUCER_RESTORE_IMPLEMENT_01.md`
 Expected report: `reviews/worker_reports/taste-active-producer-restore-implement-01.md`
 Mode: `IMPLEMENT / CONTROL-PLANE + CONTRACT MIGRATION + CANARY ARMING`
-Status: `prepared_waiting_for_separate_user_approval`.
+Status: `authorized_waiting_for_user_launch_confirmation`.
 
-This implementation will materially mutate project/control-plane state by:
-- creating exactly one new recurring ChatGPT Scheduled Task;
-- capturing its immutable id;
-- moving canonical Taste producer identity to generation 2;
-- arming exactly one fresh canary;
-- leaving old completed task untouched;
-- requiring independent System Audit before any widening.
+User explicitly approved this implementation.
+Do NOT mark it running until user confirms the worker command was actually sent/launched in a new Chat 1.
 
-Do not mark running until user explicitly approves and confirms the command was sent/launched.
+Implementation scope:
+- create exactly one new recurring ChatGPT Scheduled `Taste Semantic Producer`;
+- keep old completed task untouched;
+- select exactly one fresh current game for the first test;
+- bind the new task to that one game only, no fallback;
+- capture new immutable task id and move canonical producer identity to generation 2;
+- validate new identity accepted and old generation-1 identity rejected;
+- leave the same new task active and recurring but canary-locked/no-op after first success;
+- do not widen to normal backlog processing;
+- independent System Audit required before widening;
+- zero separately billed OpenAI API/Copilot/external automation cost.
 
 ## Superseded watchdog implementation
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md`
@@ -79,7 +72,7 @@ Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
 Status: `queued_after_current_reliability_and_taste_gate`.
 
 ## Next decision
-1. Ask user for explicit approval to launch `WORKER_TASK_TASTE_ACTIVE_PRODUCER_RESTORE_IMPLEMENT_01.md`.
-2. If approved, assign to NEW Chat 1.
-3. After worker report, consume exact durable report only.
-4. If canary accepted or armed successfully, require independent System Audit before widening the same task.
+1. User sends the prepared implementation command to NEW Chat 1.
+2. After user confirms launch, mark task running.
+3. When worker says finished, consume only exact durable report.
+4. If canary is armed or accepted successfully, run independent System Audit before widening the same task.
