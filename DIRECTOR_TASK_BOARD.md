@@ -42,6 +42,8 @@ Runtime result:
 - new generation-2 envelope itself was not shown invalid;
 - current task remains canary-only.
 
+The worker chat used for this immediate-canary task was explicitly declared deletable by Director and the user has confirmed it was deleted. Do not address it as an existing chat.
+
 ## USER GOAL — FULL PRODUCTION AT 01:00
 User wants the runtime test completed and verified before 01:00 so the 01:00 run can be normal production.
 Accepted accelerated sequence now:
@@ -54,7 +56,7 @@ Accepted accelerated sequence now:
 ## AUTHORIZED NEXT — stale inbox repair + existing canary re-ingest
 Task: `WORKER_TASK_TASTE_STALE_INBOX_REPAIR_01.md`
 Expected report: `reviews/worker_reports/taste-stale-inbox-repair-01.md`
-Status: `prepared_for_existing_chat_1`.
+Status: `prepared_for_new_chat_1`.
 
 Scope:
 - confirm exact whole-inbox stale-file blocker;
@@ -68,7 +70,7 @@ Scope:
 - no paid API/Copilot/external scheduler.
 
 ## Next sequence
-1. Existing Chat 1 executes `WORKER_TASK_TASTE_STALE_INBOX_REPAIR_01.md`.
+1. NEW Chat 1 executes `WORKER_TASK_TASTE_STALE_INBOX_REPAIR_01.md`.
 2. Director consumes only exact durable report.
 3. If `complete_canary_accepted_ready_for_system_audit`, immediately launch NEW independent System Audit worker.
 4. If audit PASS, prepare/launch bounded widening of SAME task before 01:00 under already-stated user goal.
