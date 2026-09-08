@@ -26,45 +26,53 @@ Task: `WORKER_TASK_TASTE_ACTIVE_PRODUCER_RESTORE_IMPLEMENT_01.md`
 Report: `reviews/worker_reports/taste-active-producer-restore-implement-01.md`
 Final status: `complete_canary_armed_system_audit_pending`.
 
-Current active task:
-- `Taste Semantic Producer`
-- task id `6aa032f37e688191a5c9a1a83f91c5d9`
-- daily 01:00 Europe/Samara
-- generation 2
-- currently canary-bound to `Chernobylite Complete Edition` / AppID `1016800`
-- old generation-1 task remains Completed/inactive.
-
-## USER DECISION — FULL PRODUCTION SHOULD RUN AT 01:00
-User explicitly does not want the 01:00 occurrence to be the first canary. User wants the test executed now, then independent audit, then (only if PASS) widening of the SAME recurring task before 01:00 so that 01:00 is normal full production.
-
-Do not skip safety validation and blindly widen before a runtime canary. The accepted accelerated sequence is:
-1. execute existing one-game canary now using SAME task;
-2. independent System Audit immediately after accepted canary;
-3. if audit PASS, separately widen SAME task to normal production before 01:00;
-4. verify final schedule remains daily 01:00 Europe/Samara.
-
-## AUTHORIZED NOW — immediate canary execution
+### Immediate canary execution — RAN, NOT ACCEPTED
 Task: `WORKER_TASK_TASTE_CANARY_EXECUTE_NOW_01.md`
-Expected report: `reviews/worker_reports/taste-canary-execute-now-01.md`
-Status: `authorized_waiting_for_user_launch_confirmation`.
+Report: `reviews/worker_reports/taste-canary-execute-now-01.md`
+Final status: `complete_canary_rejected_needs_diagnosis`.
+
+Runtime result:
+- the SAME generation-2 recurring task ran successfully now;
+- exactly one result was produced for Chernobylite / AppID 1016800;
+- result reached the canonical GitHub Taste inbox;
+- no second game/task/backlog processing occurred;
+- permanent schedule was restored and task is enabled daily at 01:00 Europe/Samara;
+- the new result was not canonically ingested because the active inbox still contains historical generation-1 Prototype file `data/ai_inbox/taste/canary-App_10150-producer-g1.json`;
+- whole-inbox producer-fence scanning rejects that historical file before the current gen2 result can be ingested;
+- new generation-2 envelope itself was not shown invalid;
+- current task remains canary-only.
+
+## USER GOAL — FULL PRODUCTION AT 01:00
+User wants the runtime test completed and verified before 01:00 so the 01:00 run can be normal production.
+Accepted accelerated sequence now:
+1. repair stale historical inbox artifact/lifecycle blocker;
+2. canonically ingest the EXISTING Chernobylite gen2 result without semantic rerun if still current;
+3. run independent System Audit in a NEW chat;
+4. if audit PASS, widen the SAME recurring task before 01:00;
+5. verify schedule remains daily 01:00 Europe/Samara.
+
+## AUTHORIZED NEXT — stale inbox repair + existing canary re-ingest
+Task: `WORKER_TASK_TASTE_STALE_INBOX_REPAIR_01.md`
+Expected report: `reviews/worker_reports/taste-stale-inbox-repair-01.md`
+Status: `prepared_for_existing_chat_1`.
 
 Scope:
-- same active task id only;
-- exact existing Chernobylite canary only;
-- prefer direct run-now if available;
-- otherwise temporary near-term reschedule of SAME recurring task is allowed only if identity/recurrence remain safe;
-- restore permanent DAILY 01:00 Europe/Samara schedule before finalizing;
-- no second task;
-- no fallback game;
-- no widening here;
+- confirm exact whole-inbox stale-file blocker;
+- preserve old generation-1 evidence, preferably by archive/quarantine/move outside active inbox;
+- do not weaken producer validation;
+- old-generation files must still fail if present in active inbox;
+- re-ingest the EXISTING `canary-app-1016800-gen2.json` through canonical path if still current;
+- no ChatGPT semantic rerun;
+- no second game/task;
+- no backlog widening;
 - no paid API/Copilot/external scheduler.
 
 ## Next sequence
-1. User launches immediate-canary worker.
-2. Director consumes only exact report.
-3. If `complete_canary_accepted_ready_for_system_audit`, immediately prepare/launch NEW independent System Audit worker.
-4. If audit PASS, use already-given user authorization to prepare and launch bounded widening before 01:00; do not ask the user to re-approve the same stated goal unless a new risk/scope appears.
-5. If canary or audit fails, do not widen at 01:00; report exact blocker.
+1. Existing Chat 1 executes `WORKER_TASK_TASTE_STALE_INBOX_REPAIR_01.md`.
+2. Director consumes only exact durable report.
+3. If `complete_canary_accepted_ready_for_system_audit`, immediately launch NEW independent System Audit worker.
+4. If audit PASS, prepare/launch bounded widening of SAME task before 01:00 under already-stated user goal.
+5. If repair/audit fails, do not widen; report exact blocker.
 
 ## Superseded watchdog
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
