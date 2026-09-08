@@ -45,11 +45,15 @@ Old design worker chat can be deleted.
 Task: `WORKER_TASK_TASTE_ACTIVE_PRODUCER_RESTORE_IMPLEMENT_01.md`
 Expected report: `reviews/worker_reports/taste-active-producer-restore-implement-01.md`
 Mode: `IMPLEMENT / CONTROL-PLANE + CONTRACT MIGRATION + CANARY ARMING`
-Status: `running`.
+Status: `resume_ready_after_user_preflight`.
 
-User confirmed the implementation command was sent to NEW Chat 1.
+The first worker pass stopped fail-closed with report status `blocked` because the worker could not inspect the active Scheduled Task inventory and therefore refused to risk duplicate creation.
+User has now explicitly checked `ChatGPT -> Запланированные -> Активно` and confirmed the Active list is empty.
+This satisfies the missing zero-active user preflight for resuming the SAME implementation task.
 
-Implementation scope:
+Resume scope:
+- reuse the same Chat 1 and same durable report;
+- treat user-confirmed Active list empty as the required zero-active precondition;
 - create exactly one new recurring ChatGPT Scheduled `Taste Semantic Producer`;
 - keep old completed task untouched;
 - select exactly one fresh current game for the first test;
@@ -73,6 +77,7 @@ Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
 Status: `queued_after_current_reliability_and_taste_gate`.
 
 ## Next decision
-1. Wait for user to say Chat 1 finished.
-2. Then fetch only `reviews/worker_reports/taste-active-producer-restore-implement-01.md`.
-3. If canary is armed or accepted successfully, run independent System Audit before widening the same task.
+1. Resume the existing Chat 1 implementation using the user-confirmed empty Active Scheduled list as the missing preflight fact.
+2. Wait for user to say Chat 1 finished.
+3. Then fetch only `reviews/worker_reports/taste-active-producer-restore-implement-01.md`.
+4. If canary is armed or accepted successfully, run independent System Audit before widening the same task.
