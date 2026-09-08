@@ -24,37 +24,39 @@ User evidence establishes existing `Taste Semantic Producer` is `Completed`, Dat
 Therefore there is currently no active recurring ChatGPT Scheduled Taste producer.
 Do not delete the completed Scheduled Task yet.
 
-## Silent-stall prevention postmortem — FORMAL STATUS FIXED, FACTUAL CORRECTION STILL REQUIRED
+### Silent-stall prevention postmortem — DURABLY CLOSED
 Task: `WORKER_TASK_PUBLICATION_FRESHNESS_RECURRENCE_POSTMORTEM_01.md`
 Report: `reviews/worker_reports/publication-freshness-recurrence-postmortem-01.md`
-Current formal status: `complete_reliability_action_required`.
+Final status: `complete_reliability_action_required`.
+Old worker Chat 1 can be deleted.
 
-The report's central cycle-aware monitoring conclusion remains useful, but one factual premise is wrong:
-- it claims `.github/workflows/build-mailing-feed.yml` has an independent daily 09:17 Europe/Samara schedule;
-- direct inspection proves that workflow has NO `schedule:` trigger. It runs via `workflow_dispatch`, successful `workflow_run` of `Steam KZ production shortlist`, and selected pushes.
+Accepted corrected findings:
+- `.github/workflows/build-mailing-feed.yml` has no independent daily schedule; previous 09:17 claim was false and was removed.
+- `.github/workflows/steam-test.yml` has GitHub Actions cron nominally 00:10 Europe/Samara.
+- GitHub Actions history proved recent scheduled producer runs around 00:21–00:22, so configuration and execution are now distinguished.
+- corrected deterministic freshness window: normal through 01:30, delayed 01:30–02:30, stale from 02:30.
+- Taste contractual target remains 01:00, normal through 02:00, delayed 02:00–03:00, stale from 03:00, but there is currently no active ChatGPT Scheduled task.
+- no verified existing independent execution exists after the latest 03:00 cutoff that can serve as the observer.
+- narrowest safe remedy is one independent health-only daily observer around 03:15 Europe/Samara; it must only read evidence and report health, never rerun/repair producers or invoke ChatGPT.
 
-Separate verified configuration fact:
-- `.github/workflows/steam-test.yml` (`Steam KZ production shortlist`) contains `schedule: cron "10 20 * * *"`, documented as 00:10 Europe/Samara;
-- this is a GitHub Actions scheduler, NOT a ChatGPT Scheduled Task and therefore cannot appear in the user's ChatGPT Scheduled UI;
-- configuration existence has been verified, but Director has NOT proven from recent run history that the scheduled 00:10 run actually executed today/recently. Do not conflate configured cron with proven runtime execution.
+## Prepared reliability implementation — NOT LAUNCHED
+Task: `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md`
+Expected report: `reviews/worker_reports/publication-freshness-sentinel-implement-01.md`
+Status: `prepared_waiting_for_user_approval`
 
-ChatGPT distinction:
-- the expected 01:00 semantic/Taste producer belongs to ChatGPT Scheduled;
-- user UI proves there is currently no active recurring ChatGPT task, so the 01:00 semantic run should be treated as NOT currently scheduled/running.
+Scope:
+- one unified independent health-only observer after latest stale cutoff, target about 03:15 Europe/Samara;
+- per-domain `current` / `delayed` / `stale` plus diagnostic reason;
+- one canonical machine-readable health snapshot/status truth;
+- preserve last-known-good publications;
+- no producer rerun/retry/recovery;
+- no Steam/giveaway collection;
+- no ChatGPT invocation or Scheduled Task mutation;
+- no OpenAI API/Copilot/separately paid service;
+- final status must be `complete_ready_for_system_audit`, `needs_followup_fix`, or `blocked`.
 
-Required same-worker correction:
-1. Correct the false 09:17 claim in the same report.
-2. Distinguish GitHub 00:10 configured cron from ChatGPT 01:00 inactive task.
-3. Verify, if accessible, whether recent 00:10 GitHub scheduled runs actually occurred; if not provable, mark runtime execution unknown rather than infer it.
-4. Recompute the sentinel observation design. A 00:10 producer cannot independently detect its own total non-dispatch and runs before the 01:00 ChatGPT expectation. If no existing independent post-cutoff scheduler is proven, the report must say so plainly and recommend the narrowest safe observer design rather than inventing one.
-5. No implementation in this correction.
-
-Chat 1 must NOT be deleted until this factual correction is durably persisted and re-read.
-
-## Existing useful freshness semantics pending corrected observer design
-Proposed state windows in Europe/Samara remain subject to report correction but currently are:
-- paid/giveaway: normal through 01:10, delayed 01:10-02:10, stale from 02:10;
-- ChatGPT/Taste: normal through 02:00, delayed 02:00-03:00, stale from 03:00.
+Do not mark this task running until the user explicitly approves/launches it.
+If completed successfully, independent System Audit is required before acceptance because runtime/health behavior changes materially.
 
 ## Taste automatic analysis
 No active recurring ChatGPT Scheduled Taste producer currently exists.
@@ -66,6 +68,6 @@ Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
 Status: `queued_after_current_reliability_and_taste_gate`.
 
 ## Next decision
-1. Existing Chat 1 corrects the postmortem's scheduler facts and observer recommendation, and verifies recent 00:10 GitHub scheduled execution only if evidence is accessible.
-2. Director consumes only the corrected durable report.
-3. Only then prepare the single bounded freshness-sentinel IMPLEMENT task.
+1. Ask user whether to launch the prepared bounded freshness-sentinel IMPLEMENT task.
+2. If approved, assign it to a NEW Chat 1 and mark running only after user confirms it was sent/launched.
+3. After successful implementation, require independent System Audit before acceptance.
