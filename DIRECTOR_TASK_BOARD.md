@@ -4,7 +4,7 @@
 - Keep two independent worker slots busy when safe.
 - User will not pay extra for automation/inference.
 - No autonomous IMPLEMENT without separate approval.
-- Before assigning/reassigning a worker slot, reconcile current Board -> exact task -> exact preceding report.
+- Before assigning/reassigning a worker slot, reconcile current Board -> exact task file -> exact durable report from the immediately preceding step.
 - Worker completion means exact durable report is final, not merely that the chat response ended.
 - All non-trivial workers obey `WORKER_REPORT_DURABILITY_PROTOCOL.md`.
 - All user-facing closeouts obey `DIRECTOR_USER_COMMUNICATION_PROTOCOL.md`.
@@ -21,51 +21,41 @@ User verification: stale/non-current discounts disappeared and the paid update d
 Task: `WORKER_TASK_TASTE_COMPLETED_SINGLETON_REUSE_RECON_01.md`
 Report: `reviews/worker_reports/taste-completed-singleton-reuse-recon-01.md`
 Result: same-id reuse/reactivation of old completed task was not proven.
-User evidence establishes existing old `Taste Semantic Producer` is `Completed`, Date/Time are not editable, and ChatGPT Scheduled filter `Active` is empty.
-Old identity remains:
-- task id `6a9d6fdddc00819193ed670d782045c4`;
-- producer `chatgpt_scheduled_task:6a9d6fdddc00819193ed670d782045c4`;
-- generation `1`.
-Do not delete old completed task yet.
+Old completed task remains preserved and inactive.
 
 ### Silent-stall prevention postmortem — DURABLY CLOSED
 Task: `WORKER_TASK_PUBLICATION_FRESHNESS_RECURRENCE_POSTMORTEM_01.md`
 Report: `reviews/worker_reports/publication-freshness-recurrence-postmortem-01.md`
-Final status: `complete_reliability_action_required`.
 User declined the proposed independent 03:15 watchdog. Date-only freshness visibility remains selected policy.
 
 ### Taste active producer restore design — DURABLY CLOSED
 Task: `WORKER_TASK_TASTE_ACTIVE_PRODUCER_RESTORE_DESIGN_01.md`
 Report: `reviews/worker_reports/taste-active-producer-restore-design-01.md`
 Final status: `complete_restore_plan_ready`.
-Accepted design: preserve old completed task; create exactly one new recurring daily Scheduled Task; migrate producer identity to new task id/generation 2; first run limited to one fresh game; same task remains active but canary-locked until independent System Audit PASS; no paid API/Copilot/external scheduler.
-Old design worker chat can be deleted.
 
-## ACTIVE — Taste producer restore implementation
+### Taste active producer restore implementation — COMPLETE, CANARY ARMED
 Task: `WORKER_TASK_TASTE_ACTIVE_PRODUCER_RESTORE_IMPLEMENT_01.md`
-Expected report: `reviews/worker_reports/taste-active-producer-restore-implement-01.md`
-Mode: `IMPLEMENT / CONTROL-PLANE + CONTRACT MIGRATION + CANARY ARMING`
-Status: `resume_ready_after_user_preflight`.
+Report: `reviews/worker_reports/taste-active-producer-restore-implement-01.md`
+Final status: `complete_canary_armed_system_audit_pending`.
 
-The first worker pass stopped fail-closed with report status `blocked` because the worker could not inspect the active Scheduled Task inventory and therefore refused to risk duplicate creation.
-User has now explicitly checked `ChatGPT -> Запланированные -> Активно` and confirmed the Active list is empty.
-This satisfies the missing zero-active user preflight for resuming the SAME implementation task.
+Accepted result:
+- exactly one new recurring `Taste Semantic Producer` was created;
+- new task id: `6aa032f37e688191a5c9a1a83f91c5d9`;
+- schedule: daily 01:00 Europe/Samara;
+- first scheduled run: 2026-09-09 01:00 Europe/Samara;
+- old completed task remained untouched;
+- canonical producer identity moved to the new task and generation 2;
+- first run is restricted to exactly one fresh game: `Chernobylite Complete Edition` / AppID `1016800`;
+- no fallback to another game;
+- after successful canary, later runs remain no-op until separate widening approval;
+- no paid OpenAI API/Copilot/external scheduler;
+- no backlog processing started.
 
-Resume scope:
-- reuse the same Chat 1 and same durable report;
-- treat user-confirmed Active list empty as the required zero-active precondition;
-- create exactly one new recurring ChatGPT Scheduled `Taste Semantic Producer`;
-- keep old completed task untouched;
-- select exactly one fresh current game for the first test;
-- bind the new task to that one game only, no fallback;
-- capture new immutable task id and move canonical producer identity to generation 2;
-- validate new identity accepted and old generation-1 identity rejected;
-- leave the same new task active and recurring but canary-locked/no-op after first success;
-- do not widen to normal backlog processing;
-- independent System Audit required before widening;
-- zero separately billed OpenAI API/Copilot/external automation cost.
-
-Do not inspect intermediate implementation state from Director. Consume only the exact durable report after the user says the worker finished.
+Current state: `waiting_for_first_canary_run`.
+The canary was armed but had not run when the worker finished.
+Do not run System Audit before there is first-run evidence unless there is a separate control-plane concern.
+After the 01:00 run, use a NEW independent worker chat for System Audit. Do not reuse the implementation worker for the audit.
+Implementation worker Chat 1 can be deleted.
 
 ## Superseded watchdog implementation
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md`
@@ -77,7 +67,7 @@ Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
 Status: `queued_after_current_reliability_and_taste_gate`.
 
 ## Next decision
-1. Resume the existing Chat 1 implementation using the user-confirmed empty Active Scheduled list as the missing preflight fact.
-2. Wait for user to say Chat 1 finished.
-3. Then fetch only `reviews/worker_reports/taste-active-producer-restore-implement-01.md`.
-4. If canary is armed or accepted successfully, run independent System Audit before widening the same task.
+1. Wait for the first scheduled Taste canary at 2026-09-09 01:00 Europe/Samara.
+2. After that run window, assign a NEW independent worker to verify whether the one-game canary ran and was accepted safely.
+3. If the canary is accepted and System Audit passes, separately authorize widening the SAME recurring task to normal daily Taste production.
+4. If the canary fails or does not run, diagnose that exact failure without creating another producer.
