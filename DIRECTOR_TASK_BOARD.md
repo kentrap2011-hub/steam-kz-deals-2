@@ -11,27 +11,26 @@
 
 ## Current worker slots
 
-### Chat 1 — paid-list repair DURABLY CLOSED; awaiting user verification
+### Chat 1 — paid-list repair DURABLY CLOSED and USER VERIFIED
 Task:
 `WORKER_TASK_VISUAL_MAIN_LIST_REFRESH_HANDOFF_IMPLEMENT_01.md`
 Report:
 `reviews/worker_reports/visual-main-list-refresh-handoff-implement-01.md`
 Final status: `complete_ready_for_user_verification`.
+User verification: PASS.
 
-Plain result:
-- fresh Steam-derived commercial truth can now update the paid list without waiting for new ChatGPT/Taste analysis;
+User-observed result on Android/browser:
+- stale/non-current discount rows disappeared;
+- paid-list update date advanced.
+
+Therefore the user-visible paid-list freshness incident is closed.
+
+Plain implementation result:
+- fresh Steam-derived commercial truth now updates the paid list without waiting for new ChatGPT/Taste analysis;
 - no second scheduler, Steam collection path, publication writer, or Pages route was introduced;
-- the ordinary full semantic path remains separate and fail-closed;
-- stale paid rows were removed and the accepted paid list was reduced from 442 to 190 current visible items;
 - protected Taste/semantic fields were not rewritten;
 - giveaway state was preserved;
-- ordinary GitHub Pages deployment succeeded;
-- accepted paid source lineage is `2026-09-06T21:00:38.938100+00:00`, newer than the stale Aug 30/31 incident state.
-
-User verification required before closing the user-visible incident:
-- reload/open the deployed site on Android/browser;
-- confirm the main paid list no longer shows the stale August state and prices/discounts/deadlines look current;
-- confirm the paid-list freshness indicator reflects the current paid source independently of giveaway/semantic timestamps.
+- ordinary GitHub Pages deployment succeeded.
 
 Chat 1 worker result is durable. This worker chat can be deleted.
 
@@ -42,45 +41,46 @@ Report:
 `reviews/worker_reports/taste-completed-singleton-reuse-recon-01.md`
 Final status: `blocked_same_id_reuse_unproven`.
 
-Plain result:
-- no state was changed, no task was created, and no game analysis was run;
-- worker could not prove exact-id in-place reuse from its read-only control plane.
-
 Chat 2 worker result is durable. This worker chat can be deleted.
 
 ## User control-plane observation for existing Taste Scheduled Task
-On 2026-09-07 the user inspected the existing completed `Taste Semantic Producer` in ChatGPT Scheduled.
+User directly established:
+- existing `Taste Semantic Producer` is `Завершено` / `Completed`;
+- Date and Time are visible but not editable;
+- Scheduled filter `Активно` / `Active` is empty;
+- no future automatic semantic run should be assumed from that completed card.
 
-Observed directly by the user:
-- state is `Завершено` / `Completed`;
-- Date and Time values are visible but not active/editable;
-- filtering Scheduled by `Активно` / `Active` returns an empty list;
-- the existing completed task has not been deleted.
+Do not delete the completed task yet because it remains useful provenance/evidence. Do not create a replacement task without a new bounded design/authorization step.
 
-Operational conclusion:
-- correct the prior Director inference: visible Date/Time rows did NOT establish editable in-place schedule controls;
-- current user-visible control-plane evidence strongly establishes that there is no active scheduled Taste producer and this completed task is not presently scheduled to run again;
-- this evidence does not establish why the product makes the completed task non-editable, and does not by itself prove whether some hidden/API-level same-id reactivation exists;
-- for project operation, however, no future automatic semantic run may be assumed from this completed card;
-- do not delete the completed task yet because it remains useful provenance/evidence;
-- do not create a replacement task without a new bounded design/authorization step.
+## Freshness visibility / silent-stall problem
+The paid-list repair now exposes a truthful last-update date, but the user correctly identified a remaining reliability/UI gap:
+- a timestamp alone does not tell the user that the NEXT expected daily refresh has been missed;
+- today the user must manually remember the expected cadence and compare dates;
+- this is not sufficient protection against another multi-day silent stall.
 
-## Taste next gate
-The previous plan to reschedule the same completed card through Date/Time is invalidated by the user's direct UI evidence.
-
-Before restoring automatic ChatGPT analysis, the project needs a new bounded design decision for how to establish exactly one ACTIVE recurring producer without overlap and without paid OpenAI API/Copilot. Any replacement must account for the fact that the prior canary task is completed and non-editable in the user's current Scheduled UI.
-
-No fresh one-game canary is authorized yet.
-
-## Paid-list publication repair
-Implementation is complete and deployed. User verification on Android/browser is the remaining closure gate.
+Required next reliability outcome:
+- each independently refreshed domain must have a visible health state derived from its expected cadence, not only a last-update timestamp;
+- at minimum distinguish `current`, `update delayed`, and `stale/not updating` in ordinary user language;
+- do not let giveaway freshness mask paid-list staleness, and do not let paid-list freshness mask stalled ChatGPT semantic analysis;
+- detection threshold must be based on the actual expected daily schedule plus a bounded grace window, not an arbitrary artifact timestamp;
+- backend/system monitoring must also raise a durable failure signal when an expected refresh/progress event is missed, rather than relying on the user to notice the site date.
 
 ## Publication freshness recurrence postmortem
 Task:
 `WORKER_TASK_PUBLICATION_FRESHNESS_RECURRENCE_POSTMORTEM_01.md`
-Status: `queued_after_main_list_refresh_user_verification`.
+Status: `ready_to_launch_after_user_verified_recovery`.
 
-This remains mandatory after recovery to add first-day detection for silent failures and compare the giveaway, paid-list, and ChatGPT-analysis incidents.
+This task must now explicitly answer how the site and system should show/raise a missed expected refresh within the first day for:
+- paid prices/discounts;
+- giveaway publication;
+- automatic ChatGPT semantic analysis.
+
+After the postmortem, prepare exactly one bounded reliability IMPLEMENT task for the visible stale-state indicator plus automatic missed-refresh detection/escalation.
+
+## Taste next gate
+Before restoring automatic ChatGPT analysis, the project needs a bounded design decision for exactly one active recurring producer without overlap and without paid OpenAI API/Copilot.
+
+No fresh one-game canary is authorized yet.
 
 ## Giveaway publication
 User already verified on Android that the free giveaway is visible again.
@@ -94,7 +94,7 @@ Status: `queued_after_current_user-visible_recurrence_and_taste_gate`.
 Separately billed OpenAI API automation route remains prohibited unless the user explicitly reverses that policy.
 
 ## Next decision
-1. User verifies the repaired main paid list on Android/browser.
-2. After that verification, run the mandatory publication-freshness recurrence postmortem and keep the automatic-ChatGPT failure in scope.
-3. Separately prepare a bounded Taste control-plane redesign for exactly one active recurring ChatGPT Scheduled Task; do not reuse the now-invalid assumption that the completed task's Date/Time can be edited.
-4. Do not create or delete any Taste Scheduled Task until that bounded step is explicitly authorized.
+1. Launch the mandatory publication-freshness recurrence postmortem now that the paid-list repair is user-verified.
+2. In parallel only if safe, prepare the bounded Taste control-plane redesign for exactly one active recurring ChatGPT Scheduled Task.
+3. After postmortem, implement visible `current/delayed/stale` states and automatic first-day missed-refresh detection rather than relying on timestamps alone.
+4. Do not create or delete any Taste Scheduled Task until its bounded design step is explicitly authorized.
