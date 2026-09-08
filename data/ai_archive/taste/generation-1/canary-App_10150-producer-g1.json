@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "producer_id": "chatgpt_scheduled_task:6a9d6fdddc00819193ed670d782045c4",
+  "producer_generation": 1,
+  "bindings": {
+    "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+    "taste_model_version": "taste-v3",
+    "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+    "source_mailing_updated_at_utc": "2026-09-03T18:53:27.390807+00:00"
+  },
+  "results": [
+    {
+      "key": "App_10150",
+      "appid": "10150",
+      "taste_fingerprint": "ed46bdeca520dcc7dd002fb462eef58689fb423a6ef8be1acd896109622f8a4e",
+      "candidate_context_sha256": "b43f8e93ab6bc1aa8d4e213c3a4aa6978e09b434e266e2a3c2669b745e87a3e5",
+      "verdict": "INCLUDE",
+      "fit_level": "strong",
+      "reason_code": "include_strong",
+      "positive_evidence": [
+        "Пользователь уже играл в Prototype и отдельно отмечал удовольствие от бега по стенам, планирования или полёта и выразительного перемещения.",
+        "Пользователю нравились разные способы уничтожения врагов и развитие способностей, включая заметные изменения и усиления руки.",
+        "Атмосфера Prototype пользователю нравилась, а непосредственная игровая сила героя и движение оставили устойчивое положительное впечатление."
+      ],
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "fit_evidence_state": "sufficient",
+      "fit_evidence_confidence": "high",
+      "fit_evidence_basis": [
+        "historical_user_experience",
+        "candidate_specific_positive_match"
+      ],
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "taste_factors": {
+        "gameplay_mastery": 94,
+        "development_variety": 86,
+        "structure_pacing_direction": 78,
+        "identity_hooks": 89,
+        "breadth_of_match": 91
+      }
+    }
+  ]
+}
