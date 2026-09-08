@@ -48,34 +48,38 @@ Accepted result of repair:
 
 ## USER GOAL — FULL PRODUCTION AT 01:00
 User wants runtime validation completed before 01:00 so the 01:00 run can be normal production.
-The stale inbox problem is now repaired. The remaining required runtime step is one fresh Chernobylite result bound to the current profile.
+The stale inbox problem is repaired. The remaining required runtime step is one fresh Chernobylite result bound to the current profile.
 
-## AUTHORIZED NEXT — refreshed Chernobylite canary rerun
+## ACTIVE — refreshed Chernobylite canary rerun
 Task: `WORKER_TASK_TASTE_REFRESHED_CANARY_RERUN_01.md`
 Expected report: `reviews/worker_reports/taste-refreshed-canary-rerun-01.md`
-Status: `prepared_for_existing_chat_1`.
+Status: `same_chat_1_must_continue_report_in_progress`.
 
-Scope:
-- use only Chernobylite / AppID 1016800;
-- freeze current exact binding including current profile SHA;
-- preserve/archive the now-stale previous gen2 Chernobylite inbox result before fresh submission;
-- update only the SAME generation-2 Scheduled Task id `6aa032f37e688191a5c9a1a83f91c5d9` to the refreshed canary tuple;
-- trigger that SAME task now;
-- restore/verify DAILY 01:00 Europe/Samara schedule and enabled state;
-- verify exactly one fresh Chernobylite result is canonically accepted and queue/receipt state advances;
-- no other game;
-- no second task;
+The user reported Chat 1 finished, but the exact durable report still has status `in_progress`.
+Current durable checkpoint proves only:
+- current Chernobylite tuple was frozen;
+- no Scheduled Task mutation had occurred yet;
+- no new task/game/backlog work occurred;
+- canonical acceptance was still pending.
+
+Therefore Chat 1 is NOT considered complete. Do not infer success or failure from the chat ending.
+The SAME Chat 1 must continue this exact task and update the SAME report to one allowed final status only after completing or safely stopping the task.
+
+Scope remains:
+- only Chernobylite / AppID 1016800;
+- same generation-2 Scheduled Task id `6aa032f37e688191a5c9a1a83f91c5d9`;
+- no second task/game;
 - no backlog widening;
+- restore/verify DAILY 01:00 Europe/Samara schedule before final report;
 - no paid API/Copilot/external scheduler.
 
-The current stale-inbox repair worker Chat 1 may be reused for this immediate follow-up. Do not delete it yet.
-
 ## Next sequence
-1. Existing Chat 1 executes `WORKER_TASK_TASTE_REFRESHED_CANARY_RERUN_01.md`.
-2. Director consumes only the exact durable report.
-3. If `complete_canary_accepted_ready_for_system_audit`, launch a NEW independent System Audit worker immediately.
-4. If System Audit PASS, widen the SAME recurring task before 01:00 under the user's already-stated goal.
-5. If rerun/audit fails, do not widen; report the exact blocker.
+1. SAME Chat 1 resumes `WORKER_TASK_TASTE_REFRESHED_CANARY_RERUN_01.md` from its existing durable checkpoint.
+2. Director waits for user to say it finished again.
+3. Director fetches only `reviews/worker_reports/taste-refreshed-canary-rerun-01.md`.
+4. If final status is `complete_canary_accepted_ready_for_system_audit`, launch NEW independent System Audit worker immediately.
+5. If System Audit PASS, widen SAME recurring task before 01:00 under user's already-stated goal.
+6. If rerun/audit fails, do not widen; report exact blocker.
 
 ## Superseded watchdog
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
