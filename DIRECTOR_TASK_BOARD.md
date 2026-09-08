@@ -22,35 +22,48 @@ Old worker Chat 1 can be deleted.
 Task: `WORKER_TASK_TASTE_COMPLETED_SINGLETON_REUSE_RECON_01.md`
 Report: `reviews/worker_reports/taste-completed-singleton-reuse-recon-01.md`
 Result: exact same-id reuse was not proven.
-User evidence additionally established that existing `Taste Semantic Producer` is `Completed`, Date/Time are not editable, and Active filter is empty.
+User evidence established existing `Taste Semantic Producer` is `Completed`, Date/Time are not editable, and Active filter is empty.
 Old worker Chat 2 can be deleted. Do not delete the completed Scheduled Task yet.
 
-## Immediate priority — silent-stall prevention
-The user identified the remaining reliability gap: a last-update timestamp alone does not tell them that the next expected daily refresh was missed.
-
-Required outcome:
-- per-domain visible health state derived from expected cadence;
-- ordinary-language states at least `current`, `update delayed`, `stale/not updating`;
-- separate truth for paid deals, giveaways, and ChatGPT/Taste progress;
-- durable backend signal when an expected daily refresh/progress event is missed;
-- detection within the first missed day;
-- no manual daily checking by the user;
-- no paid API requirement;
-- no duplicate writers/schedulers.
-
-### Next worker — PREPARED, NOT YET LAUNCHED
+## Silent-stall prevention postmortem — substantive result complete, report status malformed
 Task: `WORKER_TASK_PUBLICATION_FRESHNESS_RECURRENCE_POSTMORTEM_01.md`
-Expected report: `reviews/worker_reports/publication-freshness-recurrence-postmortem-01.md`
-Mode: `READ-ONLY / RECON / POSTMORTEM`
-Priority: `VERY_HIGH_RELIABILITY`
-Status: `prepared_awaiting_user_launch`.
+Report: `reviews/worker_reports/publication-freshness-recurrence-postmortem-01.md`
+Current report status: `done`.
+Task contract allows only:
+- `complete_reliability_action_required`
+- `complete_no_common_systemic_defect`
+- `blocked`
 
-The task has been updated to cover all three incidents:
-1. giveaway publication;
-2. paid-list publication;
-3. silent stop of automatic ChatGPT semantic analysis.
+Substantive conclusion clearly corresponds to `complete_reliability_action_required`.
+Existing Chat 1 must only change the final report status from `done` to `complete_reliability_action_required`, re-read the same report from `main`, and stop. No new investigation or implementation before this correction.
+Chat 1 must NOT be deleted until the corrected report is persisted.
 
-It must define exact expected cadence/grace windows, visible current/delayed/stale semantics, durable first-day missed-refresh signaling, and exactly one bounded reliability IMPLEMENT task.
+## Accepted substantive findings from the postmortem
+The giveaway, paid-list, and ChatGPT incidents are not one shared producer bug. The common systemic defect is missing cycle-aware end-to-end health monitoring for independently refreshed domains.
+
+Exact proposed health windows in Europe/Samara:
+- paid prices/discounts: expected start 00:10; normal until 01:10; delayed 01:10-02:10; stale from 02:10;
+- giveaways: expected start 00:10; normal until 01:10; delayed 01:10-02:10; stale from 02:10;
+- ChatGPT/Taste: expected start 01:00; normal until 02:00; delayed 02:00-03:00; stale from 03:00.
+
+Important semantics:
+- state is based on whether the expected daily cycle completed with coherent domain-specific evidence, not raw file age;
+- last-known-good data remains readable when stale, but UI clearly marks the affected domain stale;
+- paid, giveaway, and Taste freshness must be shown independently;
+- zero giveaways counts as current only if the current daily cycle has valid success evidence;
+- missing ChatGPT dispatch must be detectable even if ChatGPT never starts and therefore writes no failure receipt.
+
+Recommended single bounded reliability implementation:
+`WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01`
+
+Design:
+- one unified read-only freshness evaluator for commercial, giveaways, and Taste;
+- reuse existing 09:17 Europe/Samara `Build mailing feed` daily schedule as the observer, adding no new scheduler;
+- persist one machine-readable freshness snapshot such as `site/publication_freshness.json`;
+- expose per-domain current/delayed/stale status through existing health/status/public UI;
+- never rerun or repair producers;
+- detect a missed overnight cycle on the first missed local day;
+- no paid API.
 
 ## Taste automatic analysis
 No active recurring `Taste Semantic Producer` exists in the user's current Scheduled view.
@@ -62,7 +75,6 @@ Task: `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md`
 Status: `queued_after_current_reliability_and_taste_gate`.
 
 ## Next decision
-1. User launches the silent-stall postmortem worker.
-2. Director consumes only its exact durable report.
-3. If report recommends reliability action, Director prepares exactly one bounded implementation for visible stale-state indication plus automatic first-day missed-refresh detection.
-4. Independent System Audit follows if the report/implementation requires it.
+1. Existing Chat 1 performs report-only status correction to `complete_reliability_action_required`.
+2. After corrected report is consumed, prepare exactly one bounded IMPLEMENT task `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01`.
+3. After implementation, require independent System Audit if material runtime/health behavior changed.
