@@ -42,21 +42,23 @@ Runtime result:
 - new generation-2 envelope itself was not shown invalid;
 - current task remains canary-only.
 
-The worker chat used for this immediate-canary task was explicitly declared deletable by Director and the user has confirmed it was deleted. Do not address it as an existing chat.
+The worker chat used for this immediate-canary task was explicitly declared deletable by Director and the user confirmed it was deleted.
 
 ## USER GOAL — FULL PRODUCTION AT 01:00
 User wants the runtime test completed and verified before 01:00 so the 01:00 run can be normal production.
-Accepted accelerated sequence now:
+Accepted accelerated sequence:
 1. repair stale historical inbox artifact/lifecycle blocker;
 2. canonically ingest the EXISTING Chernobylite gen2 result without semantic rerun if still current;
 3. run independent System Audit in a NEW chat;
 4. if audit PASS, widen the SAME recurring task before 01:00;
 5. verify schedule remains daily 01:00 Europe/Samara.
 
-## AUTHORIZED NEXT — stale inbox repair + existing canary re-ingest
+## ACTIVE — stale inbox repair + existing canary re-ingest
 Task: `WORKER_TASK_TASTE_STALE_INBOX_REPAIR_01.md`
 Expected report: `reviews/worker_reports/taste-stale-inbox-repair-01.md`
-Status: `prepared_for_new_chat_1`.
+Status: `running`.
+
+User confirmed the command was sent to NEW Chat 1.
 
 Scope:
 - confirm exact whole-inbox stale-file blocker;
@@ -69,9 +71,11 @@ Scope:
 - no backlog widening;
 - no paid API/Copilot/external scheduler.
 
+Do not inspect intermediate state from Director. Consume only the exact durable report after the user says this worker finished.
+
 ## Next sequence
-1. NEW Chat 1 executes `WORKER_TASK_TASTE_STALE_INBOX_REPAIR_01.md`.
-2. Director consumes only exact durable report.
+1. Wait for user to say NEW Chat 1 finished.
+2. Then fetch only `reviews/worker_reports/taste-stale-inbox-repair-01.md`.
 3. If `complete_canary_accepted_ready_for_system_audit`, immediately launch NEW independent System Audit worker.
 4. If audit PASS, prepare/launch bounded widening of SAME task before 01:00 under already-stated user goal.
 5. If repair/audit fails, do not widen; report exact blocker.
