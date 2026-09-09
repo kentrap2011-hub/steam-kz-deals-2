@@ -19,16 +19,29 @@ Do not choose another game. Do not create another Scheduled Task. Do not widen t
 - `CHAT_CONTEXT.md`
 - `DIRECTOR_PROTOCOL.md`
 - `WORKER_REPORT_DURABILITY_PROTOCOL.md`
+- `WORKER_ANTI_STALL_PROTOCOL.md`
 - `DIRECTOR_USER_COMMUNICATION_PROTOCOL.md`
 - `DIRECTOR_TASK_BOARD.md`
 - `WORKER_TASK_TASTE_PREAI_PROFILE_SYNC_AND_CANARY_RERUN_01.md`
 - `reviews/worker_reports/taste-preai-profile-sync-and-canary-rerun-01.md`
+- the existing report for this task;
 - current canonical production/pre-AI generation workflow and only the contracts directly required for this retry.
 
-## Known prior outcome
-The immediately preceding task finished `needs_followup`.
+## Stale-worker recovery — MUST DO FIRST
+The previous worker chat stopped updating its report after checkpoint `2026-09-09T08:41:22Z` (12:41:22 Europe/Samara). At that saved checkpoint it stated that the authorized retry had NOT yet been launched.
 
-Its one authorized synchronization attempt:
+Do NOT assume that nothing happened after that checkpoint.
+
+Before launching anything:
+1. inspect current GitHub Actions/repository truth for any production/pre-AI synchronization run/rerun started after that checkpoint that plausibly belongs to this task;
+2. if such an attempt exists, it consumes this task's single retry authorization — use/verify that exact attempt and do NOT launch another;
+3. if no such attempt exists, explicitly record that proof in the same report and only then may you launch the one authorized retry;
+4. preserve the SAME report path; do not create a replacement report.
+
+## Known prior outcome
+The task before this one finished `needs_followup`.
+
+Its synchronization attempt:
 - reused production workflow run `34274404165`;
 - rerun job id `102329869100`;
 - deterministic collection/generation ran;
@@ -37,7 +50,7 @@ Its one authorized synchronization attempt:
 - no Chernobylite semantic run occurred;
 - no second rebuild occurred.
 
-That previous task is closed. This new task authorizes one fresh bounded retry only after a quiescence preflight.
+This task authorizes one fresh bounded retry only after quiescence/recovery checks.
 
 ## Existing semantic Scheduled Task
 - title: `Taste Semantic Producer`
@@ -53,17 +66,24 @@ Target game only:
 
 ## Required sequence
 
-### 0. Durable report first
-Create `reviews/worker_reports/taste-preai-sync-retry-after-contention-01.md` with status `in_progress`, persist to `main`, and re-read before mutation.
+### 0. Durable report / heartbeat
+Continue the existing report. Re-read it from `main` before mutation.
 
-### 1. Quiescence preflight
-Before launching any new regeneration, inspect the current GitHub-owned workflows/runs that can write the same production/pre-AI generated state or otherwise advance `main` in the relevant path.
+Every checkpoint must include:
+- `Last checkpoint UTC`;
+- lifecycle state;
+- exact next action.
+
+Obey `WORKER_ANTI_STALL_PROTOCOL.md`: no silent waits and no >15 minute unresolved work without a durable checkpoint.
+
+### 1. Recovery + quiescence preflight
+Complete the stale-worker recovery gate above, then inspect current GitHub-owned workflows/runs that can write the same production/pre-AI generated state or otherwise advance `main` in the relevant path.
 
 Required decision:
-- if a relevant writer is currently active/in-progress/queued and collision risk is real, DO NOT launch the retry; stop `needs_followup` and record the exact active writer/run;
-- if there is no relevant active writer and repository state is suitable for one clean attempt, continue.
+- if a relevant writer is active/in-progress/queued and collision risk is real, DO NOT launch the retry; finalize `needs_followup` and record exact active writer/run;
+- if there is no relevant active writer and no unseen retry was already launched, continue.
 
-Do not wait indefinitely inside this task.
+Do not wait indefinitely.
 Do not disable unrelated workflows.
 Do not edit workflow concurrency/locking architecture in this task.
 
@@ -76,16 +96,23 @@ Do not hand-edit generated bindings.
 ### 3. Run exactly ONE canonical synchronization retry
 Use the existing GitHub-owned deterministic production/pre-AI path.
 
-This new task authorizes exactly one regeneration/rerun attempt.
+This task permits one retry total, including any unseen retry discovered during stale-worker recovery.
 
-After it finishes, require all of the following before semantic work:
+Immediately after launch:
+- persist exact run/job id and `Last checkpoint UTC` to the report;
+- do bounded status checking only;
+- if still running after at most 3 checks / roughly 10 minutes, set lifecycle state `waiting_external`, save/re-read the report, and RETURN CONTROL. Do not keep the response open waiting.
+
+On the next turn, resume from that exact run/job id.
+
+After the retry finishes, require all of the following before semantic work:
 - regenerated production/pre-AI state is durably committed to `main`;
 - committed canonical `canonical_profile_blob_sha` equals the live profile SHA current at verification time;
 - Chernobylite AppID 1016800 remains the required selected fresh Taste row;
 - its fingerprint/context/model/semantics/source bindings are current.
 
-If commit/push conflicts again, STOP `needs_followup`; do not launch a second retry.
-If live profile changes again before equality is established, STOP `needs_followup`; do not chase it.
+If commit/push conflicts again, finalize `needs_followup`; do not launch a second retry.
+If live profile changes again before equality is established, finalize `needs_followup`; do not chase it.
 
 ### 4. Freeze exact committed Chernobylite tuple
 Only after the committed profile-binding equality passes, record exact:
@@ -127,6 +154,8 @@ Prefer supported direct run-now.
 
 If unavailable, temporarily move the schedule of THIS SAME recurring task to the earliest safe near-term time in Europe/Samara and then restore DAILY 01:00 Europe/Samara.
 
+Immediately after dispatch, persist the task/run identity and checkpoint. If waiting on execution exceeds the anti-stall bounded window, use `waiting_external` and return control rather than waiting silently.
+
 Immediately before semantic work, re-check that current live profile still equals the committed prepared binding. If not, no-op/stop.
 
 ### 8. Verify canonical acceptance
@@ -162,12 +191,14 @@ Before final response verify:
 - no profile-binding bypass/manual SHA substitution;
 - no V5 weakening;
 - no workflow locking/concurrency redesign in this task;
-- exactly one canonical synchronization retry maximum.
+- exactly one canonical synchronization retry maximum;
+- no silent external waiting; obey anti-stall protocol.
 
 ## Required report
 `reviews/worker_reports/taste-preai-sync-retry-after-contention-01.md`
 
 Include:
+- stale-worker recovery result and whether any unseen retry existed;
 - quiescence preflight result and any relevant active writers;
 - live profile SHA before retry;
 - exact canonical retry mechanism/run/job;
@@ -181,7 +212,12 @@ Include:
 - proof no second game/task/widening and only one sync retry;
 - System Audit readiness.
 
-## Final status — exactly one
+## Lifecycle states
+Non-final:
+- `in_progress`
+- `waiting_external`
+
+Final status — exactly one:
 - `complete_canary_accepted_ready_for_system_audit`
 - `needs_followup`
 - `blocked`
