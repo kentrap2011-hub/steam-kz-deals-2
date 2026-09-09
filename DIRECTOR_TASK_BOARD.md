@@ -54,26 +54,38 @@ Accepted final result:
 ## Current user goal
 Restore safe full daily Taste production using the existing generation-2 Scheduled Task. Runtime canary must be accepted before independent System Audit and later widening. The missed 2026-09-09 01:00 full-production target is not considered achieved.
 
-## AUTHORIZED NEXT — synchronize pre-AI to current profile and rerun same canary
+## ACTIVE — synchronize pre-AI to current profile and rerun same canary
 Task: `WORKER_TASK_TASTE_PREAI_PROFILE_SYNC_AND_CANARY_RERUN_01.md`
 Expected report: `reviews/worker_reports/taste-preai-profile-sync-and-canary-rerun-01.md`
-Status: `prepared_for_existing_chat_1`.
+Status: `replace_old_chat_1_with_new_chat_1_from_durable_checkpoint`.
 
-Scope:
-- canonically regenerate atomic pre-AI state ONCE against the then-current live Taste profile;
+Durable checkpoint from old Chat 1:
+- report status remains `in_progress`;
+- live recommendation profile SHA observed: `cfc12e032723c7a442ffaca8985f2b8f01875d00`;
+- canonical pre-AI generation path confirmed;
+- exactly one bounded rerun of existing production workflow/job was initiated;
+- rerun job id: `102329869100`;
+- checkpoint recorded that this GitHub job was `in_progress` at that time;
+- no second rerun is allowed;
+- no Scheduled Task mutation or semantic canary execution had occurred yet at checkpoint.
+
+The old Chat 1 has not updated its report since 2026-09-09 03:47:23Z (07:47:23 Europe/Samara). User has chosen to replace that chat. Its durable checkpoint is sufficient for handoff, so the old worker chat may be deleted.
+
+NEW Chat 1 must continue from repository truth and this same report. It must NOT start the task from scratch and must NOT launch a second regeneration blindly. First inspect the current state/outcome of the already-started bounded rerun job `102329869100`, then continue the exact task from there.
+
+Scope remains:
+- one bounded canonical pre-AI regeneration attempt only; the already-started rerun counts as that attempt;
 - do not manually substitute profile hashes;
 - after regeneration prove prepared profile SHA equals current live profile SHA;
-- if profile changes again before equality/dispatch, stop fail-closed rather than loop indefinitely;
+- if profile changed again before equality/dispatch, stop fail-closed rather than loop indefinitely;
 - use only Chernobylite / AppID 1016800;
 - update and run only SAME Scheduled Task id `6aa032f37e688191a5c9a1a83f91c5d9`;
 - no new task, other game, backlog widening, paid API/Copilot/external scheduler;
 - restore/verify DAILY 01:00 Europe/Samara schedule;
 - require canonical acceptance receipt/cache/queue evidence before calling the canary successful.
 
-The existing Chat 1 may continue this bounded follow-up. Do not delete it yet.
-
 ## Next sequence
-1. SAME Chat 1 executes `WORKER_TASK_TASTE_PREAI_PROFILE_SYNC_AND_CANARY_RERUN_01.md`.
+1. NEW Chat 1 resumes `WORKER_TASK_TASTE_PREAI_PROFILE_SYNC_AND_CANARY_RERUN_01.md` from the existing durable report/checkpoint.
 2. Director consumes only the exact durable report.
 3. If `complete_canary_accepted_ready_for_system_audit`, launch a NEW independent System Audit worker.
 4. Only after System Audit PASS may the SAME recurring producer be widened to normal daily production.
