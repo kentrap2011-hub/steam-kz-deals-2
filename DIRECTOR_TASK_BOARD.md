@@ -86,7 +86,12 @@ Accepted result:
 - semantic results: 0; ingest attempts: 0; no second game/task/widening/System Audit.
 
 ## Current user goal
-Run exactly one real Chernobylite semantic acceptance canary, but only after the lightweight preparation path binds to the then-current canonical live Taste profile rather than the stale committed profile snapshot.
+Run exactly one real Chernobylite semantic acceptance canary, then move Taste toward normal daily operation.
+
+Permanent operating requirement from the user:
+- the live game-taste profile will continue to be updated in parallel while Taste is operating;
+- the user must not need to pause profile updates to let Taste work;
+- profile updates are normal operation and the binding route must safely tolerate them without mixing versions or becoming permanently stuck.
 
 ## Reconciliation — 2026-09-09
 Durable GitHub evidence is authoritative over chat handoff when they conflict.
@@ -95,27 +100,32 @@ Verified:
 - `reviews/worker_reports/taste-current-main-canary-path-implement-01.md` is complete and proves the fast read-only one-AppID path;
 - `reviews/worker_reports/taste-chernobylite-real-canary-execute-01.md` is a later durable result and already proves that a real acceptance attempt stopped at the mandatory live-profile equality gate;
 - no later durable worker report exists for a current-live profile-binding fix;
-- therefore another unchanged ACCEPTANCE rerun must not be dispatched before the binding route is fixed, because it would repeat the already-proven stale-binding blocker rather than advance acceptance.
+- therefore another unchanged ACCEPTANCE rerun must not be dispatched before the binding route is fixed.
 
 User authorization state:
 - user has explicitly authorized exactly one real semantic Chernobylite canary for AppID `1016800` / `App_1016800`;
 - that authorization remains recorded for the separate real ACCEPTANCE step after the binding fix is independently validated;
 - no repeat user confirmation for that same single canary is required after the fix;
-- this authorization does NOT waive the live-profile equality gate or authorize a second game/backlog widening.
+- this authorization does NOT waive safety gates or authorize a second game/backlog widening.
 
-## NEXT REQUIRES USER IMPLEMENT APPROVAL — fix current-live profile binding
-Status: `awaiting_user_implementation_approval`.
+## CURRENT NEXT — concurrency-safe live-profile binding fix
+Status: `approved_ready_for_dispatch`.
 
-Prepared bounded task:
+User separately approved this IMPLEMENT on 2026-09-09 and clarified that profile updates will continue in parallel in normal operation.
+
+Task:
 `WORKER_TASK_TASTE_CURRENT_LIVE_PROFILE_BINDING_FIX_01.md`
 
 Expected report:
 `reviews/worker_reports/taste-current-live-profile-binding-fix-01.md`
 
 Required scope:
-- make the lightweight one-AppID preparation resolve and prove the then-current canonical live `gaming_taste_live.json` binding rather than reuse stale committed profile binding;
-- preserve read-only one-AppID preparation and all existing producer-fence/binding/V5/evidence/price-blind safety checks;
-- fail closed if the live profile cannot be fetched/proven unambiguously;
+- fix the lightweight one-AppID path so each tuple uses one exact immutable profile version;
+- profile changes before the tuple is frozen must select the new version;
+- profile changes after freeze must never create a mixed-version tuple;
+- if canonical rules make an older frozen result stale after a profile update, it must fail closed cleanly and the next bounded attempt must use the newer profile without manual repair;
+- do not require a user-controlled quiet window or paused profile updates;
+- preserve one-AppID preparation and all existing producer-fence/binding/V5/evidence/price-blind safety checks;
 - no manual SHA substitution;
 - no canonical queue/payload/cache/receipt/inbox hand-edit;
 - no semantic execution in the fix task;
@@ -123,12 +133,10 @@ Required scope:
 - no other game/backlog work;
 - no paid OpenAI API, Copilot, paid external service, or external scheduler.
 
-The task file is prepared only. Do not dispatch/start this IMPLEMENT until the user gives separate approval for the fix.
-
 ## Next sequence
-1. User approves or declines `WORKER_TASK_TASTE_CURRENT_LIVE_PROFILE_BINDING_FIX_01.md`.
-2. If approved, run it in a NEW bounded worker chat and wait for its exact durable report.
-3. If the fix report closes `complete_ready_for_real_canary_acceptance`, Director prepares a separate bounded ACCEPTANCE task for exactly one Chernobylite and may dispatch it under the already-recorded single-canary authorization without asking again.
+1. Dispatch `WORKER_TASK_TASTE_CURRENT_LIVE_PROFILE_BINDING_FIX_01.md` to a NEW bounded worker chat.
+2. Wait for exact durable report `reviews/worker_reports/taste-current-live-profile-binding-fix-01.md`.
+3. If status is `complete_ready_for_real_canary_acceptance`, Director prepares a separate bounded ACCEPTANCE task for exactly one Chernobylite and may dispatch it under the already-recorded single-canary authorization without asking again.
 4. If the canary is canonically accepted, launch a NEW independent System Audit worker.
 5. Only after System Audit PASS may the SAME recurring producer be widened to normal daily Taste production.
 
