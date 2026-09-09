@@ -1,0 +1,69 @@
+name: Taste current-main Chernobylite acceptance once
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/taste-current-main-canary-acceptance-once.yml
+
+permissions:
+  contents: read
+
+jobs:
+  prepare-one:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout current main read-only
+        uses: actions/checkout@v4
+        with:
+          ref: refs/heads/main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Establish current-main provenance and clean tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --prune origin +refs/heads/main:refs/remotes/origin/main
+          HEAD_SHA="$(git rev-parse HEAD)"
+          MAIN_SHA="$(git rev-parse refs/remotes/origin/main)"
+          test "$HEAD_SHA" = "$MAIN_SHA"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          echo "HEAD_SHA=$HEAD_SHA"
+          echo "ORIGIN_MAIN_SHA=$MAIN_SHA"
+
+      - name: Prepare exactly one Taste subject without semantics
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUTPUT_DIR="$RUNNER_TEMP/taste-current-main-canary"
+          /usr/bin/time -f 'WALL_SECONDS=%e' python scripts/build_taste_current_main_canary.py \
+            --appid "1016800" \
+            --output-dir "$OUTPUT_DIR"
+
+      - name: Prove repository remained untouched
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code --
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+
+      - name: Upload read-only canary proof
+        uses: actions/upload-artifact@v4
+        with:
+          name: taste-current-main-canary-1016800-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/taste-current-main-canary/main_provenance.json
+            ${{ runner.temp }}/taste-current-main-canary/taste_projection.one.json
+            ${{ runner.temp }}/taste-current-main-canary/chatgpt_payload.one.json
+            ${{ runner.temp }}/taste-current-main-canary/chatgpt_taste_queue.one.jsonl
+            ${{ runner.temp }}/taste-current-main-canary/canary_proof.json
+          if-no-files-found: error
+          retention-days: 7
