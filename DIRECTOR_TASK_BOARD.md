@@ -6,8 +6,16 @@
 - No autonomous IMPLEMENT without separate approval.
 - Before assigning/reassigning a worker slot, reconcile current Board -> exact task file -> exact durable report from the immediately preceding step.
 - Worker completion means exact durable report is final, not merely that the chat response ended.
-- All non-trivial workers obey `WORKER_REPORT_DURABILITY_PROTOCOL.md`.
+- All non-trivial workers obey `WORKER_REPORT_DURABILITY_PROTOCOL.md` and `WORKER_ANTI_STALL_PROTOCOL.md`.
 - All user-facing closeouts obey `DIRECTOR_USER_COMMUNICATION_PROTOCOL.md`.
+
+## Anti-stall policy
+- Worker must checkpoint unresolved work at least roughly every 15 minutes.
+- Long external runs must be recorded immediately with exact run/job id.
+- Worker may poll an external run at most 3 times / roughly 10 minutes in one response cycle.
+- If still running, report lifecycle becomes `waiting_external` and worker returns control instead of silently waiting.
+- A report older than ~20 minutes with no recorded external run explaining the wait is presumptively stalled and worker may be replaced.
+- Replacement worker must first determine whether the stale worker launched anything after its last checkpoint; no blind duplicate retries.
 
 ## Closed worker results
 
@@ -60,37 +68,37 @@ Accepted final result:
 ## Current user goal
 Restore safe full daily Taste production using the existing generation-2 Scheduled Task. Runtime canary must be canonically accepted before independent System Audit and later widening.
 
-## ACTIVE — bounded sync retry after repository contention
+## ACTIVE — bounded sync retry after repository contention, REPLACE STALLED CHAT 1
 Task: `WORKER_TASK_TASTE_PREAI_SYNC_RETRY_AFTER_CONTENTION_01.md`
 Expected report: `reviews/worker_reports/taste-preai-sync-retry-after-contention-01.md`
-Status: `same_chat_1_report_in_progress`.
+Status: `replace_stalled_chat_1_with_new_chat_1_using_same_report`.
 
-Current durable checkpoint:
-- quiescence preflight completed twice;
-- no active or queued GitHub Actions writer was observed;
-- current live Taste profile was captured;
-- current committed prepared payload still does not match live profile;
-- exactly one synchronization retry is still pending and has NOT yet been launched in this task;
-- no semantic Chernobylite run has started;
-- no Scheduled Task mutation has occurred.
+Last durable checkpoint from stale Chat 1:
+- report lifecycle `in_progress`;
+- checkpoint commit time `2026-09-09T08:41:22Z` (12:41:22 Europe/Samara);
+- at that checkpoint no active/queued GitHub Actions writer existed;
+- live profile and prepared profile still differed;
+- the one retry authorized by this task had NOT yet been launched as of that checkpoint;
+- no Chernobylite semantic run or Scheduled Task mutation had occurred as of that checkpoint.
 
-User reported Chat 1 finished, but exact durable report remains `in_progress`. Therefore this worker response cycle ended without durable task completion.
+Because the old worker then went ~1h45 without another checkpoint and no external run was recorded to explain the wait, user chose to replace it.
 
-The SAME Chat 1 must continue from the existing report/checkpoint. It must not create a new report and must not restart the task from scratch.
+Important recovery rule:
+- the NEW Chat 1 must NOT assume nothing happened after the stale checkpoint;
+- first inspect current GitHub/repository truth for any production/pre-AI retry launched after `2026-09-09T08:41:22Z` that belongs to this task;
+- if found, that attempt consumes the single retry authorization and must be consumed/verified; do not launch another;
+- only if no such attempt exists may the new worker launch the one authorized retry.
 
-Scope remains:
-- perform at most the one authorized canonical sync retry;
-- if a relevant writer becomes active before retry, stop `needs_followup` rather than launch into contention;
-- if retry commits successfully, require committed prepared profile binding == current live profile;
-- only then run Chernobylite AppID 1016800 through SAME Scheduled Task id `6aa032f37e688191a5c9a1a83f91c5d9`;
-- no new task, other game, backlog widening, paid API/Copilot/external scheduler;
-- restore/verify DAILY 01:00 Europe/Samara;
-- require canonical receipt/cache/queue evidence before success.
+Task file has been hardened to require `WORKER_ANTI_STALL_PROTOCOL.md`:
+- checkpoint at least every ~15 minutes;
+- external run id saved immediately;
+- max ~10 minutes / 3 polls per response cycle;
+- then `waiting_external` and return control rather than hanging.
 
 ## Next sequence
-1. SAME Chat 1 resumes `WORKER_TASK_TASTE_PREAI_SYNC_RETRY_AFTER_CONTENTION_01.md` from the existing durable checkpoint.
-2. It updates the SAME report to one allowed final status.
-3. Director consumes only the exact durable report.
+1. NEW Chat 1 resumes the SAME task/report from repository truth under anti-stall protocol.
+2. If an async retry is launched and remains running, worker returns `waiting_external` with exact run/job id rather than staying open.
+3. Director later consumes only the exact durable report/status.
 4. If `complete_canary_accepted_ready_for_system_audit`, launch NEW independent System Audit worker.
 5. Only after System Audit PASS may the SAME recurring producer be widened to normal daily production.
 6. If retry is blocked/fails, do not widen and do not create another producer.
