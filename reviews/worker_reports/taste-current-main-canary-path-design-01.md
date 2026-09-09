@@ -322,7 +322,7 @@ No workflow was dispatched or rerun. No Chernobylite semantic action was execute
 - Whether the then-current committed snapshot contains sufficient AppID `1016800` context is an implementation/run preflight question and was deliberately not converted into a semantic execution here.
 
 ## Status
-`done`
+`complete_design_ready_for_implementation`
 
 ## Recommended next step
 Create a separate implementation worker task for the read-only `workflow_dispatch` + bounded temporary-output harness. Keep Chernobylite execution as a separately authorized follow-up.
