@@ -71,25 +71,33 @@ Accepted final result:
 ## Current user goal
 Restore safe full daily Taste production using the existing generation-2 Scheduled Task, but first make one-game canary verification operationally lightweight and based on current `main` rather than historical workflow reruns.
 
-## PREPARED NEXT — design current-main one-game canary path
+## ACTIVE CLOSEOUT — current-main one-game canary design
 Task: `WORKER_TASK_TASTE_CURRENT_MAIN_CANARY_PATH_DESIGN_01.md`
-Expected report: `reviews/worker_reports/taste-current-main-canary-path-design-01.md`
-Status: `prepared_not_launched`.
+Report: `reviews/worker_reports/taste-current-main-canary-path-design-01.md`
+Status: `design_done_exact_final_status_missing`.
 
-Mode: READ-ONLY / RECON + DESIGN only.
+Accepted design substance:
+- no existing safe bounded one-AppID current-main preparation path exists as-is;
+- full current pre-AI workflow can use current `main` but is too broad and write-producing for this canary;
+- smallest safe design is a new workflow_dispatch-only, read-only current-main canary workflow with one required AppID;
+- explicit checkout of refs/heads/main;
+- bounded one-AppID harness reusing current Taste logic;
+- outputs only in runner temp/artifact, no canonical repository writes, no commit/push, no semantic execution;
+- current committed snapshots/config are consumed read-only and broad StoreBrowse refresh is not part of the canary;
+- historical workflow reruns are explicitly rejected as the normal canary path;
+- design expects seconds-to-tens-of-seconds preparation after runner startup rather than a full minutes-class production rebuild, to be measured during implementation.
 
-Goal:
-- identify or design the smallest current-main path to regenerate only the Taste/pre-AI state needed for AppID 1016800;
-- avoid rerunning stale historical workflow context;
-- avoid touching unrelated production outputs where possible;
-- preserve all existing profile-binding, producer-fence, semantic-validation and canonical ingest guarantees;
-- produce a later implementation and acceptance plan;
-- do not implement or run Chernobylite in this design task.
+Protocol closeout issue:
+- report lifecycle says `State: done` and commit message says design finished;
+- task contract required one exact final status: `complete_design_ready_for_implementation`, `needs_followup`, or `blocked`;
+- exact required final status is not present in the durable report.
+
+No IMPLEMENT should start until the same worker updates/re-reads the same report with the exact truthful final status. No further recon is needed.
 
 ## Next sequence
-1. NEW Chat 1 executes `WORKER_TASK_TASTE_CURRENT_MAIN_CANARY_PATH_DESIGN_01.md`.
-2. Director consumes only the exact durable design report.
-3. If design is ready, user may separately authorize IMPLEMENT.
+1. SAME Chat 1 performs report-only closeout: add exact final status and re-read report.
+2. Director consumes only the corrected exact report.
+3. If `complete_design_ready_for_implementation`, user may separately authorize IMPLEMENT.
 4. After implementation, run one bounded Chernobylite acceptance canary.
 5. Only after that canary and independent System Audit PASS may normal daily Taste production be widened.
 
