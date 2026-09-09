@@ -68,44 +68,47 @@ Task: `WORKER_TASK_TASTE_CURRENT_MAIN_CANARY_PATH_IMPLEMENT_01.md`
 Report: `reviews/worker_reports/taste-current-main-canary-path-implement-01.md`
 Final status: `complete_implementation_ready_for_canary_execution`.
 
-Accepted implementation result:
-- permanent manual current-main one-AppID path is implemented;
-- exactly one AppID can be prepared without canonical writes;
-- AppID 1016800 preparation-only validation passed;
-- focused tests passed 7/7 locally and on GitHub runner;
-- measured preparation wall-time was 0.580 seconds;
-- full validation job was about 12 seconds;
-- no semantic execution, production write, Scheduled Task mutation, historical rerun, paid API/Copilot/external scheduler occurred.
+### Real Chernobylite semantic canary — STOPPED BEFORE SEMANTIC EXECUTION
+Task: `WORKER_TASK_TASTE_CHERNOBYLITE_REAL_CANARY_EXECUTE_01.md`
+Report: `reviews/worker_reports/taste-chernobylite-real-canary-execute-01.md`
+Final status: `needs_followup`.
+
+Accepted result:
+- new lightweight current-main preparation worked successfully for AppID 1016800;
+- preparation run `34381380867`, job `102566817948`, artifact `10115975634`;
+- preparation took about 0.547 seconds and produced exactly one semantic queue row for AppID 1016800;
+- repository stayed clean and no canonical write occurred;
+- semantic execution was STOPPED before Scheduled Task mutation because prepared profile binding was stale;
+- prepared profile blob SHA: `191b6d6c5dec2f9ef2976517f301528740f9bec2`;
+- then-current live profile blob SHA: `9c9ef7cdf2d705b8dd10196cec654f16e04341e4`;
+- exact equality gate failed;
+- Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` was not mutated or triggered;
+- semantic results: 0; ingest attempts: 0; no second game/task/widening/System Audit.
 
 ## Current user goal
-Run exactly one real Chernobylite semantic acceptance canary through the proven lightweight current-main preparation path, then perform an independent System Audit before any widening to normal daily Taste production.
+Run exactly one real Chernobylite semantic acceptance canary, but only after the lightweight preparation path binds to the then-current canonical live Taste profile rather than the stale committed profile snapshot.
 
-## PREPARED — one real Chernobylite semantic canary
-Task: `WORKER_TASK_TASTE_CHERNOBYLITE_REAL_CANARY_EXECUTE_01.md`
-Expected report: `reviews/worker_reports/taste-chernobylite-real-canary-execute-01.md`
-Status: `prepared_not_launched`.
+## NEXT REQUIRES USER APPROVAL — fix current-live profile binding in lightweight canary preparation
+Status: `awaiting_user_implementation_approval`.
 
-User explicitly authorized exactly one real semantic Chernobylite result.
+Required fix scope, if approved:
+- make the lightweight one-AppID preparation resolve the then-current canonical live `gaming_taste_live.json` binding rather than reuse stale committed profile binding;
+- preserve read-only one-AppID preparation and all existing producer-fence/binding/V5 safety checks;
+- fail closed if the live profile cannot be fetched/proven current;
+- no manual SHA substitution;
+- no canonical queue/payload hand-edit;
+- no semantic execution in the fix task;
+- no Scheduled Task mutation;
+- no other game/backlog work.
 
-Scope:
-- prepare AppID 1016800 from current `main` using the new lightweight path;
-- require queue cardinality exactly 1;
-- hard-gate semantic execution on exact equality between prepared profile binding and then-current canonical live Taste profile;
-- hard-gate on canonical queue/binding/producer-fence/V5 acceptability;
-- if any gate fails, stop quickly `needs_followup` with no semantic execution and no broad rebuild;
-- if gates pass, freeze exact tuple and use ONLY existing Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9`, generation 2;
-- generate at most one Chernobylite semantic result;
-- verify canonical ingest/receipt/cache/queue acceptance;
-- no second game, no new Scheduled Task, no backlog widening;
-- restore/verify permanent DAILY 01:00 Europe/Samara schedule;
-- obey anti-stall protocol.
+After the fix is independently validated, the existing user authorization for one real Chernobylite semantic canary may be re-used only if the user confirms they still want the real canary at that time.
 
 ## Next sequence
-1. NEW Chat 1 executes `WORKER_TASK_TASTE_CHERNOBYLITE_REAL_CANARY_EXECUTE_01.md`.
-2. Director consumes only the exact durable report.
-3. If `complete_canary_accepted_ready_for_system_audit`, launch NEW independent System Audit worker.
-4. Only after System Audit PASS may the SAME recurring producer be widened to normal daily Taste production.
-5. If any acceptance gate fails, do not widen and do not create another producer.
+1. User approves or declines the live-profile binding fix.
+2. If approved, Director prepares a separate bounded IMPLEMENT worker task.
+3. After implementation passes, ask/confirm one real Chernobylite canary execution.
+4. If canonically accepted, launch NEW independent System Audit worker.
+5. Only after System Audit PASS may the SAME recurring producer be widened to normal daily Taste production.
 
 ## Superseded watchdog
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
