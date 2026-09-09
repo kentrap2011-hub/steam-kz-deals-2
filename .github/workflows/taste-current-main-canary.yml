@@ -47,10 +47,11 @@ jobs:
       - name: Run focused canary tests
         run: python -m unittest tests.test_taste_current_main_canary -v
 
-      - name: Prepare exactly one Taste subject without semantics
+      - name: Prepare exactly one Taste subject against frozen current-live profile without semantics
         shell: bash
         env:
           APPID: ${{ inputs.appid }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           OUTPUT_DIR="$RUNNER_TEMP/taste-current-main-canary"
@@ -71,6 +72,9 @@ jobs:
           name: taste-current-main-canary-${{ inputs.appid }}-${{ github.run_id }}
           path: |
             ${{ runner.temp }}/taste-current-main-canary/main_provenance.json
+            ${{ runner.temp }}/taste-current-main-canary/frozen_profile/profile_binding.json
+            ${{ runner.temp }}/taste-current-main-canary/frozen_profile/gaming_taste_live.json
+            ${{ runner.temp }}/taste-current-main-canary/prepared_semantic_tuple.json
             ${{ runner.temp }}/taste-current-main-canary/taste_projection.one.json
             ${{ runner.temp }}/taste-current-main-canary/chatgpt_payload.one.json
             ${{ runner.temp }}/taste-current-main-canary/chatgpt_taste_queue.one.jsonl
