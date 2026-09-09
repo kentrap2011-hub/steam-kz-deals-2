@@ -4,15 +4,21 @@
 - Mode: `ACCEPTANCE / ONE REAL SEMANTIC CANARY`
 - Authorized subject: `Chernobylite Complete Edition` / AppID `1016800` / `App_1016800`
 - Lifecycle: `in_progress`
-- Last checkpoint UTC: `2026-09-09T17:11:00Z`
-- Next action: execute the existing `scripts/build_taste_current_main_canary.py` path for exactly AppID `1016800` in a temporary read-only GitHub Actions wrapper, then inspect only that run artifact. The available GitHub connector has no workflow-dispatch action, so the permanent manual workflow cannot be directly dispatched from this chat.
+- Last checkpoint UTC: `2026-09-09T17:12:00Z`
+- Next action: inspect only GitHub Actions run `34381380867`; if it succeeds, consume its proof artifact and evaluate the mandatory live-profile/canonical-acceptance gates. Do not launch a duplicate preflight run.
 
-## Current-main path provenance before run
+## Current-main preflight
 
 - Permanent workflow: `.github/workflows/taste-current-main-canary.yml` (`workflow_dispatch` only, `contents: read`).
 - Harness: `scripts/build_taste_current_main_canary.py`.
-- Current `main` observed before launch: `107bac76eeb9bcde9a74ffa3ace14ef6e4dde46e`.
-- Previous implementation validation is not being treated as the acceptance preflight; a fresh current-main preparation is required.
+- Direct workflow dispatch is unavailable through the connected GitHub tool, so a one-off read-only push wrapper was used to execute the existing harness for exactly AppID `1016800`.
+- One-off workflow: `.github/workflows/taste-current-main-canary-acceptance-once.yml`.
+- Launch commit/head SHA: `7ae4cb9e004b21a7631d3c80966f0568bbc80ed5`.
+- GitHub Actions run: `34381380867`.
+- Workflow ID: `354232367`.
+- Observed launch status: `queued`.
+- Created/run-start timestamp: `2026-09-09T17:11:28Z`.
+- Duplicate retry is forbidden unless repository truth proves this exact run did not execute.
 
 ## Containment
 
