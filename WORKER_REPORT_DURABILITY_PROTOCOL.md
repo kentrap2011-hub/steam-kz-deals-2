@@ -4,16 +4,27 @@ This protocol exists because workers have repeatedly completed substantial work 
 
 This is a process failure, not an acceptable normal closeout state.
 
+Every worker governed by this protocol must also obey `WORKER_ANTI_STALL_PROTOCOL.md`.
+
 ## Mandatory report-first lifecycle
 
 For every non-trivial worker task with an expected report path:
 
 1. After reading the task and before expensive investigation/implementation, create the exact required report file in `main` with status `in_progress` and a short scope/task identity section.
 2. Update the same report after each major durable milestone (root cause proven, implementation committed, production run started/completed, acceptance result known).
-3. Before starting a potentially long/expensive final verification sequence, persist a checkpoint into the report first.
-4. If execution may end before full acceptance, stop additional exploration and persist the current truthful state (`blocked`, `needs_followup_fix`, or task-specific equivalent) rather than risking a missing report.
-5. The final user-facing worker response must be sent only after the exact report path has been written to `main` and re-read/confirmed.
-6. A worker must never say `finished`, `done`, `complete`, or equivalent when the required report is still only local/in-memory/uncommitted.
+3. Every checkpoint must include `Last checkpoint UTC`, the current lifecycle state, and the next concrete action.
+4. Before starting a potentially long/expensive final verification sequence or any asynchronous external process, persist a checkpoint into the report first.
+5. Immediately after launching an asynchronous process, persist its exact run/job/task id before waiting or doing further work.
+6. Never wait silently on an asynchronous process. Follow `WORKER_ANTI_STALL_PROTOCOL.md`: bounded polling only, then persist `waiting_external` and return control if it is still running.
+7. If execution may end before full acceptance, stop additional exploration and persist the current truthful state (`blocked`, `needs_followup_fix`, task-specific equivalent, or non-final `waiting_external`) rather than risking a missing/stale report.
+8. The final user-facing worker response must be sent only after the exact report path has been written to `main` and re-read/confirmed.
+9. A worker must never say `finished`, `done`, `complete`, or equivalent when the required report is still only local/in-memory/uncommitted or has lifecycle state `in_progress`/`waiting_external`.
+
+## Heartbeat requirement
+
+Do not allow more than roughly 15 minutes of unresolved active worker effort without a durable report checkpoint.
+
+If no concrete progress is possible for roughly 10 minutes and there is no identified external process legitimately still running, persist a truthful stop/follow-up state and return control instead of remaining silent.
 
 ## Missing-report recovery gate
 
@@ -32,6 +43,12 @@ If the first report write fails, stop immediately and report the exact persisten
 
 After the report exists in `main`, the worker may continue only the bounded closeout needed to finalize that same report.
 
+## Stale-worker recovery gate
+
+If a worker chat is being replaced after a stale checkpoint, the replacement must first determine whether the old worker launched any asynchronous action after its last saved checkpoint.
+
+Do not blindly repeat a supposedly `not launched yet` action solely from an old report. Search current repository/Actions/task truth for a matching later run first. If one exists, consume that exact attempt. Launch a new attempt only if current truth proves no prior attempt exists and the task still authorizes it.
+
 ## Priority rule
 
 When forced to choose between one more diagnostic/verification action and preserving the durable report, preserve the report first. Additional work can continue in the next turn; an unsaved result cannot be consumed reliably by Director.
@@ -47,3 +64,5 @@ If report persistence fails for any reason:
 ## Director handling
 
 Director treats a missing exact report as incomplete regardless of worker prose. Director does not reconstruct the worker's result from Actions/logs/commits unless the task contract explicitly allows that.
+
+A report with no checkpoint for more than ~20 minutes and no recorded external run explaining the wait is presumptively stalled and the worker may be replaced from durable state.
