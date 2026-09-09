@@ -88,26 +88,48 @@ Accepted result:
 ## Current user goal
 Run exactly one real Chernobylite semantic acceptance canary, but only after the lightweight preparation path binds to the then-current canonical live Taste profile rather than the stale committed profile snapshot.
 
-## NEXT REQUIRES USER APPROVAL — fix current-live profile binding in lightweight canary preparation
+## Reconciliation — 2026-09-09
+Durable GitHub evidence is authoritative over chat handoff when they conflict.
+
+Verified:
+- `reviews/worker_reports/taste-current-main-canary-path-implement-01.md` is complete and proves the fast read-only one-AppID path;
+- `reviews/worker_reports/taste-chernobylite-real-canary-execute-01.md` is a later durable result and already proves that a real acceptance attempt stopped at the mandatory live-profile equality gate;
+- no later durable worker report exists for a current-live profile-binding fix;
+- therefore another unchanged ACCEPTANCE rerun must not be dispatched before the binding route is fixed, because it would repeat the already-proven stale-binding blocker rather than advance acceptance.
+
+User authorization state:
+- user has explicitly authorized exactly one real semantic Chernobylite canary for AppID `1016800` / `App_1016800`;
+- that authorization remains recorded for the separate real ACCEPTANCE step after the binding fix is independently validated;
+- no repeat user confirmation for that same single canary is required after the fix;
+- this authorization does NOT waive the live-profile equality gate or authorize a second game/backlog widening.
+
+## NEXT REQUIRES USER IMPLEMENT APPROVAL — fix current-live profile binding
 Status: `awaiting_user_implementation_approval`.
 
-Required fix scope, if approved:
-- make the lightweight one-AppID preparation resolve the then-current canonical live `gaming_taste_live.json` binding rather than reuse stale committed profile binding;
-- preserve read-only one-AppID preparation and all existing producer-fence/binding/V5 safety checks;
-- fail closed if the live profile cannot be fetched/proven current;
-- no manual SHA substitution;
-- no canonical queue/payload hand-edit;
-- no semantic execution in the fix task;
-- no Scheduled Task mutation;
-- no other game/backlog work.
+Prepared bounded task:
+`WORKER_TASK_TASTE_CURRENT_LIVE_PROFILE_BINDING_FIX_01.md`
 
-After the fix is independently validated, the existing user authorization for one real Chernobylite semantic canary may be re-used only if the user confirms they still want the real canary at that time.
+Expected report:
+`reviews/worker_reports/taste-current-live-profile-binding-fix-01.md`
+
+Required scope:
+- make the lightweight one-AppID preparation resolve and prove the then-current canonical live `gaming_taste_live.json` binding rather than reuse stale committed profile binding;
+- preserve read-only one-AppID preparation and all existing producer-fence/binding/V5/evidence/price-blind safety checks;
+- fail closed if the live profile cannot be fetched/proven unambiguously;
+- no manual SHA substitution;
+- no canonical queue/payload/cache/receipt/inbox hand-edit;
+- no semantic execution in the fix task;
+- no Scheduled Task mutation or trigger;
+- no other game/backlog work;
+- no paid OpenAI API, Copilot, paid external service, or external scheduler.
+
+The task file is prepared only. Do not dispatch/start this IMPLEMENT until the user gives separate approval for the fix.
 
 ## Next sequence
-1. User approves or declines the live-profile binding fix.
-2. If approved, Director prepares a separate bounded IMPLEMENT worker task.
-3. After implementation passes, ask/confirm one real Chernobylite canary execution.
-4. If canonically accepted, launch NEW independent System Audit worker.
+1. User approves or declines `WORKER_TASK_TASTE_CURRENT_LIVE_PROFILE_BINDING_FIX_01.md`.
+2. If approved, run it in a NEW bounded worker chat and wait for its exact durable report.
+3. If the fix report closes `complete_ready_for_real_canary_acceptance`, Director prepares a separate bounded ACCEPTANCE task for exactly one Chernobylite and may dispatch it under the already-recorded single-canary authorization without asking again.
+4. If the canary is canonically accepted, launch a NEW independent System Audit worker.
 5. Only after System Audit PASS may the SAME recurring producer be widened to normal daily Taste production.
 
 ## Superseded watchdog
