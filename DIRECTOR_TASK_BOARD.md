@@ -76,25 +76,30 @@ Accepted design result:
 - expected preparation runtime is seconds-to-tens-of-seconds after runner startup, to be measured during implementation.
 
 ## Current user goal
-Restore safe full daily Taste production using the existing generation-2 Scheduled Task, but first implement and validate the lightweight one-game current-main canary path, then run one bounded Chernobylite acceptance canary.
+Restore safe full daily Taste production using the existing generation-2 Scheduled Task, first by implementing and validating the lightweight one-game current-main canary path, then run one bounded Chernobylite acceptance canary.
 
-## NEXT REQUIRES USER APPROVAL — implement current-main one-game canary path
-Status: `awaiting_user_implementation_approval`.
+## PREPARED — implement current-main one-game canary path
+Task: `WORKER_TASK_TASTE_CURRENT_MAIN_CANARY_PATH_IMPLEMENT_01.md`
+Expected report: `reviews/worker_reports/taste-current-main-canary-path-implement-01.md`
+Status: `prepared_not_launched`.
 
-Implementation scope, once approved:
-- add a workflow_dispatch-only read-only current-main canary workflow;
+User explicitly approved IMPLEMENT.
+
+Implementation scope:
+- add `.github/workflows/taste-current-main-canary.yml` as workflow_dispatch-only, one AppID input, contents read-only, explicit current-main checkout;
 - add bounded one-AppID temporary-output harness reusing current Taste logic;
-- add focused tests for one-subject bounding, output isolation, zero/one queue behavior, and fail-closed missing context;
-- do not run Chernobylite in the implementation task unless separately authorized;
-- do not modify Scheduled Task;
-- no paid API/Copilot/external scheduler;
+- add focused tests for one-subject bounding, output isolation, zero/one queue behavior, exact bindings and fail-closed missing context;
+- a non-semantic artifact-only validation run is allowed and should measure runtime;
+- do NOT run Chernobylite semantic analysis;
+- do NOT modify Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9`;
+- no production writes, canonical ingest, paid API/Copilot/external scheduler;
 - obey anti-stall protocol.
 
 ## Next sequence
-1. User explicitly approves or declines IMPLEMENT.
-2. If approved, Director prepares a separate IMPLEMENT worker task.
-3. After implementation passes, separately authorize/run one bounded Chernobylite acceptance canary.
-4. Only after that canary and independent System Audit PASS may normal daily Taste production be widened.
+1. NEW Chat 1 executes `WORKER_TASK_TASTE_CURRENT_MAIN_CANARY_PATH_IMPLEMENT_01.md`.
+2. Director consumes only the exact durable implementation report.
+3. If `complete_implementation_ready_for_canary_execution`, separately authorize/run one bounded real Chernobylite semantic canary.
+4. Only after successful canary and independent System Audit PASS may normal daily Taste production be widened.
 
 ## Superseded watchdog
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
