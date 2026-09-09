@@ -1,0 +1,79 @@
+name: Taste current-main one-AppID canary preparation
+
+on:
+  workflow_dispatch:
+    inputs:
+      appid:
+        description: "Exactly one numeric Steam AppID"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  prepare-one:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout current main read-only
+        uses: actions/checkout@v4
+        with:
+          ref: refs/heads/main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Establish current-main provenance and clean tree
+        shell: bash
+        env:
+          APPID: ${{ inputs.appid }}
+        run: |
+          set -euo pipefail
+          [[ "$APPID" =~ ^[0-9]+$ ]] || { echo "appid must be numeric" >&2; exit 2; }
+          test "$APPID" != "0" || { echo "appid must be positive" >&2; exit 2; }
+          git fetch --no-tags --prune origin +refs/heads/main:refs/remotes/origin/main
+          HEAD_SHA="$(git rev-parse HEAD)"
+          MAIN_SHA="$(git rev-parse refs/remotes/origin/main)"
+          test "$HEAD_SHA" = "$MAIN_SHA" || { echo "HEAD is not current origin/main" >&2; exit 2; }
+          test -z "$(git status --porcelain=v1 --untracked-files=all)" || { echo "checkout is dirty" >&2; exit 2; }
+          echo "head_sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
+          echo "origin_main_sha=$MAIN_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Run focused canary tests
+        run: python -m unittest tests.test_taste_current_main_canary -v
+
+      - name: Prepare exactly one Taste subject without semantics
+        shell: bash
+        env:
+          APPID: ${{ inputs.appid }}
+        run: |
+          set -euo pipefail
+          OUTPUT_DIR="$RUNNER_TEMP/taste-current-main-canary"
+          python scripts/build_taste_current_main_canary.py \
+            --appid "$APPID" \
+            --output-dir "$OUTPUT_DIR"
+
+      - name: Prove repository remained untouched
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code --
+          test -z "$(git status --porcelain=v1 --untracked-files=all)" || { echo "repository mutated by canary" >&2; exit 2; }
+
+      - name: Upload read-only canary proof
+        uses: actions/upload-artifact@v4
+        with:
+          name: taste-current-main-canary-${{ inputs.appid }}-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/taste-current-main-canary/main_provenance.json
+            ${{ runner.temp }}/taste-current-main-canary/taste_projection.one.json
+            ${{ runner.temp }}/taste-current-main-canary/chatgpt_payload.one.json
+            ${{ runner.temp }}/taste-current-main-canary/chatgpt_taste_queue.one.jsonl
+            ${{ runner.temp }}/taste-current-main-canary/canary_proof.json
+          if-no-files-found: error
+          retention-days: 7
