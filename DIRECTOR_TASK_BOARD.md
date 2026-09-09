@@ -36,53 +36,48 @@ Task: `WORKER_TASK_TASTE_STALE_INBOX_REPAIR_01.md`
 Report: `reviews/worker_reports/taste-stale-inbox-repair-01.md`
 Final status: `needs_followup`.
 
-Accepted result of repair:
-- historical generation-1 Prototype file was confirmed as the original blocker;
-- it was preserved under `data/ai_archive/taste/generation-1/` and removed from active inbox;
-- active old-generation or malformed files still fail closed;
-- current producer safety was not weakened;
-- the existing Chernobylite gen2 result then reached the later normal binding validation;
-- it was rejected because the canonical taste-profile blob had changed since that result was produced;
-- Chernobylite remains unaccepted/pending;
-- no semantic rerun, other game, new task, or backlog processing occurred.
-
-## USER GOAL — FULL PRODUCTION AT 01:00
-The intended 2026-09-09 01:00 Europe/Samara widening deadline has now passed. Do not claim full production happened at 01:00 unless a final durable worker report proves it. No blind recovery or new producer is authorized from Director inference.
-
-## ACTIVE — refreshed Chernobylite canary rerun
+### Refreshed Chernobylite canary rerun — STOPPED SAFELY
 Task: `WORKER_TASK_TASTE_REFRESHED_CANARY_RERUN_01.md`
-Expected report: `reviews/worker_reports/taste-refreshed-canary-rerun-01.md`
-Status: `same_chat_1_final_report_still_missing_after_user_completion_signal`.
+Report: `reviews/worker_reports/taste-refreshed-canary-rerun-01.md`
+Final status: `needs_followup`.
 
-The user again reported Chat 1 finished, but the exact durable report is unchanged and still has status `in_progress`.
-The durable checkpoint proves only:
-- current Chernobylite tuple was frozen;
-- no Scheduled Task mutation had occurred yet at that checkpoint;
-- no new task/game/backlog work had occurred;
-- canonical acceptance was still pending.
+Accepted final result:
+- no new Chernobylite result was produced or accepted;
+- no other game/task/backlog processing occurred;
+- same generation-2 Scheduled Task remains enabled;
+- permanent schedule is DAILY 01:00 Europe/Samara, next recorded start 2026-09-10 01:00;
+- old stale Chernobylite gen2 result was preserved in archive and removed from active inbox;
+- canonical pre-AI payload and current live Taste profile no longer have the same profile blob;
+- prepared pre-AI profile binding was `191b6d6c5dec2f9ef2976517f301528740f9bec2` while live profile had advanced to `705e1f852d91a8a63d8686b37c51ace41c02f4ac`;
+- worker correctly stopped rather than bypassing exact binding validation.
 
-Because 01:00 has passed, the SAME Chat 1 must now finish by reconciling the actual current state rather than blindly continuing the old timing assumptions. It must explicitly determine and record:
-- whether the existing Scheduled Task ran at 01:00;
-- what exact prompt/binding it had at that time;
-- whether any Chernobylite submission/result occurred;
-- whether anything was canonically accepted;
-- current active inbox/archive state;
-- current queue/receipt state for AppID 1016800;
-- current Scheduled Task enabled state and next DAILY 01:00 recurrence;
-- whether a safe refreshed one-game rerun is still needed or already occurred;
-- one allowed final status only after completing or safely stopping the exact task.
+## Current user goal
+Restore safe full daily Taste production using the existing generation-2 Scheduled Task. Runtime canary must be accepted before independent System Audit and later widening. The missed 2026-09-09 01:00 full-production target is not considered achieved.
 
-Do not create another Scheduled Task.
-Do not process another game.
-Do not widen backlog/full production without a later independent System Audit PASS and separate widening task.
-Do not rerun blindly if a 01:00 execution already produced a current valid result.
+## AUTHORIZED NEXT — synchronize pre-AI to current profile and rerun same canary
+Task: `WORKER_TASK_TASTE_PREAI_PROFILE_SYNC_AND_CANARY_RERUN_01.md`
+Expected report: `reviews/worker_reports/taste-preai-profile-sync-and-canary-rerun-01.md`
+Status: `prepared_for_existing_chat_1`.
+
+Scope:
+- canonically regenerate atomic pre-AI state ONCE against the then-current live Taste profile;
+- do not manually substitute profile hashes;
+- after regeneration prove prepared profile SHA equals current live profile SHA;
+- if profile changes again before equality/dispatch, stop fail-closed rather than loop indefinitely;
+- use only Chernobylite / AppID 1016800;
+- update and run only SAME Scheduled Task id `6aa032f37e688191a5c9a1a83f91c5d9`;
+- no new task, other game, backlog widening, paid API/Copilot/external scheduler;
+- restore/verify DAILY 01:00 Europe/Samara schedule;
+- require canonical acceptance receipt/cache/queue evidence before calling the canary successful.
+
+The existing Chat 1 may continue this bounded follow-up. Do not delete it yet.
 
 ## Next sequence
-1. SAME Chat 1 resumes from the existing report and reconciles actual post-01:00 state.
-2. It updates the SAME report to one allowed final status: `complete_canary_accepted_ready_for_system_audit`, `needs_followup`, or `blocked`.
-3. Director consumes only that exact durable report.
-4. If accepted-ready, launch NEW independent System Audit.
-5. Only after audit PASS may the SAME recurring producer be widened for future 01:00 runs.
+1. SAME Chat 1 executes `WORKER_TASK_TASTE_PREAI_PROFILE_SYNC_AND_CANARY_RERUN_01.md`.
+2. Director consumes only the exact durable report.
+3. If `complete_canary_accepted_ready_for_system_audit`, launch a NEW independent System Audit worker.
+4. Only after System Audit PASS may the SAME recurring producer be widened to normal daily production.
+5. If profile changes again or another blocker occurs, stop and report exact condition; do not create another producer.
 
 ## Superseded watchdog
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
