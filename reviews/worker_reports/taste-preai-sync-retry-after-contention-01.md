@@ -1,101 +1,179 @@
 # Worker Report — Taste pre-AI sync retry after contention 01
 
 - Task: `WORKER_TASK_TASTE_PREAI_SYNC_RETRY_AFTER_CONTENTION_01.md`
-- Status: `waiting_external`
+- Status: `needs_followup`
 - Started: `2026-09-09T08:36:00Z`
-- Last checkpoint UTC: `2026-09-09T11:24:00Z`
-- Lifecycle state: `waiting_external`
-- Next action: on the next worker turn, resume only workflow run `34274404165`, attempt `3`, job `102445283223`; inspect its completion/result without rerunning it. If successful, verify durable `main` propagation and prepared/live profile equality before any Chernobylite Scheduled Task mutation.
+- Last checkpoint UTC: `2026-09-09T11:57:00Z`
+- Lifecycle state: `needs_followup`
+- Next action: no further execution is allowed in this task. A separately authorized follow-up must use a canonical synchronization mechanism based on current `main` rather than rerunning this stale historical workflow attempt; this task must not retry again.
 
-## Stale-worker recovery gate
+## Final outcome
 
-The recovery check required after the previous saved checkpoint `2026-09-09T08:41:22Z` was completed before retry launch.
+The one retry authorized by this task was consumed by GitHub Actions workflow run `34274404165`, run attempt `3`, job `102445283223`.
 
-GitHub Actions truth inspected:
-- repository runs created after `2026-09-09T08:41:22Z` were inspected; none was the `Steam KZ production shortlist` workflow (`.github/workflows/steam-test.yml`, workflow id `343053414`);
-- no new relevant `workflow_dispatch` production/pre-AI run after the checkpoint was found;
-- before this task's launch, prior production run `34274404165` remained `run_attempt=2`, `status=completed`, `conclusion=failure`, `updated_at=2026-09-09T04:09:41Z`; therefore it had not been rerun after the stale-worker checkpoint and there was no hidden attempt 3 to consume.
+Final job state:
+- status: `completed`;
+- conclusion: `failure`;
+- failed step: `Commit production feed, giveaways and review cache`.
 
-Recovery decision: **no unseen authorized synchronization retry existed after the stale checkpoint**. The single retry authorization was therefore unused and could be consumed exactly once by this worker.
+The deterministic collection and validation work itself completed successfully, but the generated state did **not** become durable on `main`. The job created a local generated commit and then failed while trying to rebase that commit onto the real current branch. No successful push occurred.
+
+Per the task contract, a second retry is forbidden. The task therefore ends `needs_followup`.
+
+## Stale-worker recovery and retry count
+
+The replacement-worker recovery gate proved there was no unseen retry after the stale checkpoint `2026-09-09T08:41:22Z`. Before launch, the existing run was still only `run_attempt=2`; no hidden attempt 3 existed.
+
+Final retry accounting:
+- retries authorized by this task: `1`;
+- retries executed by this task: `1`;
+- exact run: `34274404165`;
+- exact run attempt: `3`;
+- exact job: `102445283223`;
+- second retry: **NO**.
 
 ## Quiescence preflight
 
-Repository-wide GitHub Actions preflight was repeated after the report-only pre-launch checkpoint and immediately before launch:
-- `status=in_progress`: `0` runs.
-- `status=queued`: `0` runs.
-- No active or queued GitHub Actions writer was observed.
+Immediately before launch:
+- GitHub Actions `in_progress`: `0`;
+- GitHub Actions `queued`: `0`;
+- no active/queued repository writer was observed.
 
-No unrelated writer was disabled and no workflow concurrency/locking architecture was changed.
+The retry was therefore launched only after the required quiescence gate passed.
 
-## Architecture / execution gate
+## Immediate pre-retry live profile
 
-Required project protocols and execution contracts were read before mutation. The bounded retry remains within the canonical ownership boundary:
-- GitHub/GitHub Actions owns deterministic production scope, generation, validation and persistence.
-- The previous authorized synchronization used the existing `Steam KZ production shortlist` job and failed only at its commit/rebase/push stage.
-- This follow-up consumed its one retry by rerunning that same canonical production job after proving writer quiescence.
-- A successful production push is the upstream repository event from which current generated pre-AI state must become durable on `main`; no derived pre-AI binding will be hand-edited or manually SHA-patched.
-- The existing Scheduled Task remains untouched until prepared/live profile equality is proven.
+Canonical live Taste profile immediately before retry:
+- repository: `kentrap2011-hub/stopgame-ratings-data`;
+- file: `gaming_taste_live.json`;
+- blob SHA: `b956875b3f74e8348e28ab7e3d6cba4b910dd426`.
 
-## Immediate pre-retry live binding
+The same live blob SHA was still current at final verification after attempt 3 failed.
 
-Canonical live Taste profile was captured again after final quiescence and immediately before launch from `kentrap2011-hub/stopgame-ratings-data:main/gaming_taste_live.json`:
-- live profile blob SHA: `b956875b3f74e8348e28ab7e3d6cba4b910dd426`.
+No manual SHA substitution or generated binding edit was performed.
 
-This value was unchanged between the pre-launch checkpoint and the final capture. It was not manually substituted into generated files.
+## Attempt 3 execution result
 
-Current committed prepared ChatGPT state before retry remained stale relative to live:
-- prepared file blob SHA: `5b868f2920e02adb5f557db8fb5834f12f93b62e`;
-- `profile_binding.canonical_profile_blob_sha`: `191b6d6c5dec2f9ef2976517f301528740f9bec2`;
+All stages before persistence passed:
+- setup/checkout: PASS;
+- production output ownership regression: PASS;
+- cross-platform giveaway regression: PASS;
+- giveaway identity regression: PASS;
+- full Steam KZ collection: PASS;
+- production ownership checks: PASS;
+- canonical giveaway build: PASS;
+- giveaway contract validation: PASS.
+
+The collector completed a full snapshot and the job locally created:
+- local commit: `0153ef4`;
+- commit message: `Update Steam KZ production and giveaways`;
+- local diff summary: `21 files changed, 593 insertions(+), 675 deletions(-)`;
+- local deletion included `data/production/shortlist/chunk_014.tsv`.
+
+This local commit was never pushed.
+
+## Exact failure cause
+
+Attempt 3 was a rerun of historical workflow run `34274404165`. GitHub Actions checked out that run's historical head:
+- checkout/base SHA: `d50102145fc8e563440e9566c4a5be00f17178a5`.
+
+At workflow startup GitHub briefly observed the actual repository branch already at a newer commit, but the rerun then explicitly fetched the historical run SHA into `origin/main` and checked out `d501021...` as required by the old run context.
+
+When the long collection finished, the persistence step fetched the real current branch again:
+- `origin/main` advanced from `d501021...` to `e283e4b8c38207ff150888eda6b9aaf4d70878ff`.
+
+Comparison of those two repository states shows current `main` was `31` commits ahead of the historical rerun base and had changed the same canonical production/pre-AI families, including:
+- `data/cache/steam_review_http_cache.json`;
+- `data/production/freebies_index.json`;
+- `data/production/giveaways/**`;
+- `data/production/manifest.json`;
+- `data/production/shortlist/**`;
+- `data/production/pre_ai/chatgpt_payload.json`;
+- `data/production/pre_ai/chatgpt_taste_queue.jsonl` and other pre-AI artifacts.
+
+The job then ran `git rebase origin/main` for local commit `0153ef4`. Rebase produced content conflicts in:
+- `data/cache/steam_review_http_cache.json`;
+- `data/production/freebies_index.json`;
+- `data/production/giveaways/index.json`;
+- `data/production/giveaways/v1/audit.jsonl`;
+- `data/production/giveaways/v1/current.json`;
+- `data/production/manifest.json`;
+- `data/production/shortlist/chunk_001.tsv` through `chunk_013.tsv`;
+- `data/production/shortlist/index.json`.
+
+The exact terminal failure was:
+- `error: could not apply 0153ef4... Update Steam KZ production and giveaways`;
+- `Rebase failed; aborting.`;
+- process exit code `1`.
+
+Because the workflow exits immediately when rebase fails, it never reached a successful `git push origin HEAD:main` for this generated commit.
+
+Therefore the precise cause is **historical-run rerun base contention**: attempt 3 regenerated production state from old run head `d501021...`, while canonical `main` had already advanced 31 commits and changed overlapping generated state. The generated commit could not be safely replayed onto current `main`.
+
+## What actually reached `main`
+
+Attempt 3 generated commit `0153ef4`: **NOT PRESENT ON `main` / NOT PUSHED**.
+
+Current `main` immediately after failure remained:
+- head: `e283e4b8c38207ff150888eda6b9aaf4d70878ff` before this final report commit;
+- that head commit itself was the report-only checkpoint `Record authorized Taste sync retry run identity`.
+
+There are legitimate intervening commits between historical base `d501021...` and current `main`, including earlier production/pre-AI updates, but they are not the output of attempt 3. No partial subset of local commit `0153ef4` was pushed: Git persistence is atomic here and rebase failed before push.
+
+Most importantly, the canonical prepared Taste payload on `main` remained exactly the same as before this retry:
+- file: `data/production/pre_ai/chatgpt_payload.json`;
+- blob SHA: `5b868f2920e02adb5f557db8fb5834f12f93b62e`;
+- status: `degraded`;
 - `source_mailing_updated_at_utc`: `2026-09-08T20:46:16.637935+00:00`;
-- status: `degraded`.
+- `profile_binding.canonical_profile_blob_sha`: `191b6d6c5dec2f9ef2976517f301528740f9bec2`.
 
-Therefore no semantic Chernobylite work was allowed before the retry and equality verification.
+Final live profile SHA remains:
+- `b956875b3f74e8348e28ab7e3d6cba4b910dd426`.
 
-## Single authorized synchronization retry — launched
+Thus:
+`191b6d6c5dec2f9ef2976517f301528740f9bec2 != b956875b3f74e8348e28ab7e3d6cba4b910dd426`.
 
-Authorization consumed: **YES — exactly once**.
+The required committed prepared/live equality gate is **not satisfied**.
 
-Canonical mechanism:
-- workflow: `Steam KZ production shortlist`;
-- workflow file: `.github/workflows/steam-test.yml`;
-- workflow id: `343053414`;
-- existing workflow run id: `34274404165`;
-- rerun mechanism: rerun specific failed canonical job;
-- resulting run attempt: `3`;
-- exact new job id: `102445283223`;
-- run attempt started at: `2026-09-09T11:23:13Z`;
-- first post-launch observation: run `status=queued` while GitHub initialized attempt 3, then job `102445283223` became `status=in_progress` with checkout active.
+## Chernobylite containment
 
-No second retry is authorized. Do not call rerun again on the next turn regardless of this attempt's result.
+Because the full canonical synchronization did not successfully commit and the profile-binding equality gate failed, semantic execution was intentionally not started.
 
-## Prior contention evidence
+Chernobylite in this task:
+- title: `Chernobylite Complete Edition`;
+- AppID: `1016800`;
+- `taste_subject_key`: `App_1016800`;
+- semantic task trigger after attempt 3: **NOT STARTED**;
+- new semantic result: **NONE**;
+- canonical ingest transaction from this task: **NONE**;
+- receipt/cache advancement from this task: **NONE**;
+- queue acceptance/removal claim: **NONE**.
 
-Previous attempt job `102329869100` was re-read at log level. It generated the ordinary Steam production snapshot and failed while rebasing its generated-data commit onto a concurrently advanced `main`; conflicts occurred in production shortlist/giveaway/manifest/cache files and the job exited before push. No generated pre-AI file or profile hash was hand-patched.
+The existing Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` was not rebound or triggered after this failed synchronization. No new Scheduled Task was created.
 
-## Semantic containment
+The last previously verified permanent schedule remains DAILY 01:00 Europe/Samara; this failed sync task made no schedule mutation.
 
-Semantic canary in this task: **NOT STARTED YET**.
-Scheduled Task mutation in this task: **NONE YET**.
+## Safety / containment proof
 
-Only permitted later target if the binding gate passes:
-- `Chernobylite Complete Edition`;
-- `taste_subject_key = App_1016800`;
-- AppID `1016800`;
-- existing Scheduled Task only: `6aa032f37e688191a5c9a1a83f91c5d9`;
-- generation `2`;
-- permanent schedule must remain DAILY 01:00 Europe/Samara.
+- One canonical synchronization retry attempted: **YES, exactly one**.
+- Second retry: **NO**.
+- Chernobylite semantic run after failed sync: **NO**.
+- Other game processed: **NO**.
+- New Scheduled Task created: **NO**.
+- Backlog/full-production semantic widening: **NO**.
+- Manual profile hash substitution: **NO**.
+- Generated pre-AI binding hand-edit: **NO**.
+- Producer fence / binding / V5 validation weakened: **NO**.
+- System Audit started: **NO**.
 
-No other game, no fallback, no backlog/full-production widening, no new Scheduled Task, no manual SHA substitution, no validation weakening, no System Audit.
+## System Audit readiness
 
-## Waiting external
+**NOT READY.**
 
-The only authorized retry is now an identified external GitHub Actions process. Per `WORKER_ANTI_STALL_PROTOCOL.md`, this response cycle stops rather than waiting on the long production collection.
+The required fresh canonical synchronization did not become durable on `main`, the current committed prepared profile binding still differs from the current live Taste profile, and the Chernobylite acceptance test was therefore correctly not executed.
 
-On continuation:
-1. inspect only run `34274404165` attempt `3` / job `102445283223`;
-2. if still running, bounded polling only and remain `waiting_external`;
-3. if failed, finalize `needs_followup` with exact failure; **no second retry**;
-4. if successful, verify regenerated production/pre-AI state is durably committed to `main`;
-5. fetch the then-current live Taste profile and require exact committed `canonical_profile_blob_sha` equality;
-6. if live changed again before equality, finalize `needs_followup` rather than chasing it;
-7. only if equality passes, freeze the exact committed Chernobylite tuple and proceed with the same Scheduled Task.
+## Final status
+
+`needs_followup`
+
+This task is closed with no further retry permitted inside it.
