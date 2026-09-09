@@ -58,48 +58,43 @@ Task: `WORKER_TASK_TASTE_PREAI_SYNC_RETRY_AFTER_CONTENTION_01.md`
 Report: `reviews/worker_reports/taste-preai-sync-retry-after-contention-01.md`
 Final status: `needs_followup`.
 
-Accepted final result:
-- single authorized retry was used: run `34274404165`, attempt `3`, job `102445283223`;
-- deterministic collection/validation passed;
-- persistence failed because rerunning the historical workflow checked out stale head `d501021...` while current `main` was 31 commits ahead and had changed overlapping generated production/pre-AI files;
-- rebase conflicted and no generated commit was pushed;
-- prepared Taste profile binding remained stale versus live profile;
-- Chernobylite semantic execution did not start;
-- no other game, new Scheduled Task, widening, or System Audit occurred;
-- another rerun of this same historical workflow path is not authorized or recommended.
-
-## Current user goal
-Restore safe full daily Taste production using the existing generation-2 Scheduled Task, but first make one-game canary verification operationally lightweight and based on current `main` rather than historical workflow reruns.
-
-## ACTIVE CLOSEOUT — current-main one-game canary design
+### Current-main one-game canary design — DURABLY CLOSED
 Task: `WORKER_TASK_TASTE_CURRENT_MAIN_CANARY_PATH_DESIGN_01.md`
 Report: `reviews/worker_reports/taste-current-main-canary-path-design-01.md`
-Status: `design_done_exact_final_status_missing`.
+Final status: `complete_design_ready_for_implementation`.
 
-Accepted design substance:
-- no existing safe bounded one-AppID current-main preparation path exists as-is;
-- full current pre-AI workflow can use current `main` but is too broad and write-producing for this canary;
+Accepted design result:
+- there is no existing safe bounded one-AppID current-main preparation path as-is;
+- full pre-AI workflow can use current `main` but is too broad and write-producing for this canary;
 - smallest safe design is a new workflow_dispatch-only, read-only current-main canary workflow with one required AppID;
-- explicit checkout of refs/heads/main;
+- explicit checkout of `refs/heads/main`;
 - bounded one-AppID harness reusing current Taste logic;
-- outputs only in runner temp/artifact, no canonical repository writes, no commit/push, no semantic execution;
-- current committed snapshots/config are consumed read-only and broad StoreBrowse refresh is not part of the canary;
-- historical workflow reruns are explicitly rejected as the normal canary path;
-- design expects seconds-to-tens-of-seconds preparation after runner startup rather than a full minutes-class production rebuild, to be measured during implementation.
+- all outputs go to runner temp/artifact only, with no canonical repository writes, commit/push, semantic execution, inbox/ingest/cache/overlay mutation;
+- committed current-main snapshots/config are consumed read-only; broad StoreBrowse refresh is excluded from the canary;
+- historical workflow reruns are rejected as the normal canary path;
+- implementation must prove one-subject bounding, current-main provenance, clean repo tree, exact binding/decision trace, and fail-closed missing context;
+- expected preparation runtime is seconds-to-tens-of-seconds after runner startup, to be measured during implementation.
 
-Protocol closeout issue:
-- report lifecycle says `State: done` and commit message says design finished;
-- task contract required one exact final status: `complete_design_ready_for_implementation`, `needs_followup`, or `blocked`;
-- exact required final status is not present in the durable report.
+## Current user goal
+Restore safe full daily Taste production using the existing generation-2 Scheduled Task, but first implement and validate the lightweight one-game current-main canary path, then run one bounded Chernobylite acceptance canary.
 
-No IMPLEMENT should start until the same worker updates/re-reads the same report with the exact truthful final status. No further recon is needed.
+## NEXT REQUIRES USER APPROVAL — implement current-main one-game canary path
+Status: `awaiting_user_implementation_approval`.
+
+Implementation scope, once approved:
+- add a workflow_dispatch-only read-only current-main canary workflow;
+- add bounded one-AppID temporary-output harness reusing current Taste logic;
+- add focused tests for one-subject bounding, output isolation, zero/one queue behavior, and fail-closed missing context;
+- do not run Chernobylite in the implementation task unless separately authorized;
+- do not modify Scheduled Task;
+- no paid API/Copilot/external scheduler;
+- obey anti-stall protocol.
 
 ## Next sequence
-1. SAME Chat 1 performs report-only closeout: add exact final status and re-read report.
-2. Director consumes only the corrected exact report.
-3. If `complete_design_ready_for_implementation`, user may separately authorize IMPLEMENT.
-4. After implementation, run one bounded Chernobylite acceptance canary.
-5. Only after that canary and independent System Audit PASS may normal daily Taste production be widened.
+1. User explicitly approves or declines IMPLEMENT.
+2. If approved, Director prepares a separate IMPLEMENT worker task.
+3. After implementation passes, separately authorize/run one bounded Chernobylite acceptance canary.
+4. Only after that canary and independent System Audit PASS may normal daily Taste production be widened.
 
 ## Superseded watchdog
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
