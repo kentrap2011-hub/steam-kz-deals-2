@@ -47,39 +47,42 @@ Accepted result of repair:
 - no semantic rerun, other game, new task, or backlog processing occurred.
 
 ## USER GOAL — FULL PRODUCTION AT 01:00
-User wants runtime validation completed before 01:00 so the 01:00 run can be normal production.
-The stale inbox problem is repaired. The remaining required runtime step is one fresh Chernobylite result bound to the current profile.
+The intended 2026-09-09 01:00 Europe/Samara widening deadline has now passed. Do not claim full production happened at 01:00 unless a final durable worker report proves it. No blind recovery or new producer is authorized from Director inference.
 
 ## ACTIVE — refreshed Chernobylite canary rerun
 Task: `WORKER_TASK_TASTE_REFRESHED_CANARY_RERUN_01.md`
 Expected report: `reviews/worker_reports/taste-refreshed-canary-rerun-01.md`
-Status: `same_chat_1_must_continue_report_in_progress`.
+Status: `same_chat_1_final_report_still_missing_after_user_completion_signal`.
 
-The user reported Chat 1 finished, but the exact durable report still has status `in_progress`.
-Current durable checkpoint proves only:
+The user again reported Chat 1 finished, but the exact durable report is unchanged and still has status `in_progress`.
+The durable checkpoint proves only:
 - current Chernobylite tuple was frozen;
-- no Scheduled Task mutation had occurred yet;
-- no new task/game/backlog work occurred;
+- no Scheduled Task mutation had occurred yet at that checkpoint;
+- no new task/game/backlog work had occurred;
 - canonical acceptance was still pending.
 
-Therefore Chat 1 is NOT considered complete. Do not infer success or failure from the chat ending.
-The SAME Chat 1 must continue this exact task and update the SAME report to one allowed final status only after completing or safely stopping the task.
+Because 01:00 has passed, the SAME Chat 1 must now finish by reconciling the actual current state rather than blindly continuing the old timing assumptions. It must explicitly determine and record:
+- whether the existing Scheduled Task ran at 01:00;
+- what exact prompt/binding it had at that time;
+- whether any Chernobylite submission/result occurred;
+- whether anything was canonically accepted;
+- current active inbox/archive state;
+- current queue/receipt state for AppID 1016800;
+- current Scheduled Task enabled state and next DAILY 01:00 recurrence;
+- whether a safe refreshed one-game rerun is still needed or already occurred;
+- one allowed final status only after completing or safely stopping the exact task.
 
-Scope remains:
-- only Chernobylite / AppID 1016800;
-- same generation-2 Scheduled Task id `6aa032f37e688191a5c9a1a83f91c5d9`;
-- no second task/game;
-- no backlog widening;
-- restore/verify DAILY 01:00 Europe/Samara schedule before final report;
-- no paid API/Copilot/external scheduler.
+Do not create another Scheduled Task.
+Do not process another game.
+Do not widen backlog/full production without a later independent System Audit PASS and separate widening task.
+Do not rerun blindly if a 01:00 execution already produced a current valid result.
 
 ## Next sequence
-1. SAME Chat 1 resumes `WORKER_TASK_TASTE_REFRESHED_CANARY_RERUN_01.md` from its existing durable checkpoint.
-2. Director waits for user to say it finished again.
-3. Director fetches only `reviews/worker_reports/taste-refreshed-canary-rerun-01.md`.
-4. If final status is `complete_canary_accepted_ready_for_system_audit`, launch NEW independent System Audit worker immediately.
-5. If System Audit PASS, widen SAME recurring task before 01:00 under user's already-stated goal.
-6. If rerun/audit fails, do not widen; report exact blocker.
+1. SAME Chat 1 resumes from the existing report and reconciles actual post-01:00 state.
+2. It updates the SAME report to one allowed final status: `complete_canary_accepted_ready_for_system_audit`, `needs_followup`, or `blocked`.
+3. Director consumes only that exact durable report.
+4. If accepted-ready, launch NEW independent System Audit.
+5. Only after audit PASS may the SAME recurring producer be widened for future 01:00 runs.
 
 ## Superseded watchdog
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
