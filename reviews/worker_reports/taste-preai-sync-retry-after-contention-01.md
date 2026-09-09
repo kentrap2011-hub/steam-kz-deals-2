@@ -6,14 +6,39 @@
 
 ## Quiescence preflight
 
-Initial repository-wide GitHub Actions preflight immediately before any synchronization mutation:
+Repository-wide GitHub Actions preflight was performed before any synchronization mutation and repeated after the report/protocol reads:
 - `status=in_progress`: `0` runs.
 - `status=queued`: `0` runs.
-- No active or queued GitHub Actions writer was observed at this preflight.
+- No active or queued GitHub Actions writer was observed at either preflight.
 
 No synchronization retry has been launched yet in this task.
 No semantic canary has been launched yet in this task.
 No Scheduled Task has been created or changed yet in this task.
+
+## Architecture / execution gate
+
+Required project protocols and execution contracts were read before mutation. The bounded retry remains within the canonical ownership boundary:
+- GitHub/GitHub Actions owns deterministic production scope, generation, validation and persistence.
+- The interactive worker may manually trigger/repair the existing canonical pipeline as bounded operator verification.
+- This task authorizes exactly one fresh canonical synchronization attempt; no retry loop, new recurring stage, new producer or ownership transfer is introduced.
+- The existing Scheduled Task remains only the constrained semantic data-plane worker and may be touched only after prepared/live profile equality is proven.
+
+## Current binding checkpoint before retry
+
+Current canonical live Taste profile captured from `kentrap2011-hub/stopgame-ratings-data:main/gaming_taste_live.json`:
+- live profile blob SHA: `c805f1e1681cf1189d398d17eb385f79f631bcc0`.
+
+Current committed prepared ChatGPT payload before retry:
+- file blob SHA: `5b868f2920e02adb5f557db8fb5834f12f93b62e`;
+- `profile_binding.canonical_profile_blob_sha`: `191b6d6c5dec2f9ef2976517f301528740f9bec2`;
+- `source_mailing_updated_at_utc`: `2026-09-08T20:46:16.637935+00:00`;
+- status: `degraded`.
+
+Therefore the prepared/live profile equality gate is currently **not** satisfied; the authorized canonical regeneration is required before any Chernobylite semantic work.
+
+## Prior contention evidence
+
+Previous authorized job `102329869100` was re-read at log level. It generated the ordinary Steam production snapshot and failed while rebasing its single generated-data commit onto an concurrently advanced `main`; conflicts occurred in production shortlist/giveaway/manifest/cache files and the job exited before push. No generated pre-AI file or profile hash was hand-patched.
 
 ## Guardrails
 
@@ -25,4 +50,4 @@ No Scheduled Task has been created or changed yet in this task.
 
 ## Progress
 
-Pending required reading, current live-profile capture, one bounded canonical retry, durable-main verification, profile equality gate, and—only if that gate passes—the single Chernobylite canary.
+Required reading, quiescence preflight, architecture gate and current live/prepared binding capture are complete. Pending: exactly one canonical synchronization retry, durable-main verification, profile equality gate, and—only if that gate passes—the single Chernobylite canary plus canonical receipt/cache/queue verification and permanent 01:00 Europe/Samara schedule verification.
