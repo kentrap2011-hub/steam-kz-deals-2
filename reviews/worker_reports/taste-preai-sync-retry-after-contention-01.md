@@ -3,6 +3,21 @@
 - Task: `WORKER_TASK_TASTE_PREAI_SYNC_RETRY_AFTER_CONTENTION_01.md`
 - Status: `in_progress`
 - Started: `2026-09-09T08:36:00Z`
+- Last checkpoint UTC: `2026-09-09T11:18:00Z`
+- Lifecycle state: `in_progress`
+- Next action: capture the current canonical live Taste profile SHA immediately before the retry, repeat final writer quiescence, then launch the single authorized canonical GitHub production/pre-AI retry and persist its exact run/job identity before bounded polling.
+
+## Stale-worker recovery gate
+
+The recovery check required after the previous saved checkpoint `2026-09-09T08:41:22Z` is complete before any retry launch.
+
+GitHub Actions truth inspected:
+- repository runs created after `2026-09-09T08:41:22Z` were inspected; none was the `Steam KZ production shortlist` workflow (`.github/workflows/steam-test.yml`, workflow id `343053414`);
+- no new relevant `workflow_dispatch` production/pre-AI run after the checkpoint was found;
+- the prior production run `34274404165` remains `run_attempt=2`, `status=completed`, `conclusion=failure`, `updated_at=2026-09-09T04:09:41Z`; therefore it was not rerun after the stale-worker checkpoint and there is no hidden attempt 3 to consume;
+- current `main` Actions truth immediately before this checkpoint: `status=in_progress` = `0`, `status=queued` = `0`.
+
+Recovery decision: **no unseen authorized synchronization retry exists after the stale checkpoint**. The task's single retry authorization is therefore still unused at this checkpoint. No duplicate has been launched.
 
 ## Quiescence preflight
 
@@ -50,4 +65,4 @@ Previous authorized job `102329869100` was re-read at log level. It generated th
 
 ## Progress
 
-Required reading, quiescence preflight, architecture gate and current live/prepared binding capture are complete. Pending: exactly one canonical synchronization retry, durable-main verification, profile equality gate, and—only if that gate passes—the single Chernobylite canary plus canonical receipt/cache/queue verification and permanent 01:00 Europe/Samara schedule verification.
+Required reading, stale-worker recovery, quiescence preflight, architecture gate and current live/prepared binding capture are complete. Pending: recapture the live profile immediately before retry, exactly one canonical synchronization retry, durable-main verification, profile equality gate, and—only if that gate passes—the single Chernobylite canary plus canonical receipt/cache/queue verification and permanent 01:00 Europe/Samara schedule verification.
