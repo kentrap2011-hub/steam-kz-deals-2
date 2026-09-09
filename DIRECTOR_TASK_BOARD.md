@@ -63,43 +63,46 @@ Task: `WORKER_TASK_TASTE_CURRENT_MAIN_CANARY_PATH_DESIGN_01.md`
 Report: `reviews/worker_reports/taste-current-main-canary-path-design-01.md`
 Final status: `complete_design_ready_for_implementation`.
 
-Accepted design result:
-- there is no existing safe bounded one-AppID current-main preparation path as-is;
-- full pre-AI workflow can use current `main` but is too broad and write-producing for this canary;
-- smallest safe design is a new workflow_dispatch-only, read-only current-main canary workflow with one required AppID;
-- explicit checkout of `refs/heads/main`;
-- bounded one-AppID harness reusing current Taste logic;
-- all outputs go to runner temp/artifact only, with no canonical repository writes, commit/push, semantic execution, inbox/ingest/cache/overlay mutation;
-- committed current-main snapshots/config are consumed read-only; broad StoreBrowse refresh is excluded from the canary;
-- historical workflow reruns are rejected as the normal canary path;
-- implementation must prove one-subject bounding, current-main provenance, clean repo tree, exact binding/decision trace, and fail-closed missing context;
-- expected preparation runtime is seconds-to-tens-of-seconds after runner startup, to be measured during implementation.
+### Current-main one-game canary implementation — DURABLY CLOSED
+Task: `WORKER_TASK_TASTE_CURRENT_MAIN_CANARY_PATH_IMPLEMENT_01.md`
+Report: `reviews/worker_reports/taste-current-main-canary-path-implement-01.md`
+Final status: `complete_implementation_ready_for_canary_execution`.
+
+Accepted implementation result:
+- added permanent manual `.github/workflows/taste-current-main-canary.yml`;
+- added bounded `scripts/build_taste_current_main_canary.py` and focused tests;
+- one-AppID preparation is bounded before projection/payload expansion;
+- validation used AppID 1016800 preparation-only, with no semantic execution;
+- exactly one queue row for AppID 1016800 was prepared;
+- repository remained clean and no canonical production/Taste state was written;
+- Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` was not modified;
+- no production rebuild or historical workflow rerun occurred;
+- focused tests passed 7/7 locally and on GitHub runner;
+- measured preparation wall-time on GitHub runner was 0.580 seconds;
+- full validation job including checkout/tests/artifact upload completed in about 12 seconds;
+- no paid API/Copilot/external scheduler was used.
 
 ## Current user goal
-Restore safe full daily Taste production using the existing generation-2 Scheduled Task, first by implementing and validating the lightweight one-game current-main canary path, then run one bounded Chernobylite acceptance canary.
+Run exactly one real Chernobylite semantic acceptance canary through the proven lightweight current-main preparation path, then perform an independent System Audit before any widening to normal daily Taste production.
 
-## PREPARED — implement current-main one-game canary path
-Task: `WORKER_TASK_TASTE_CURRENT_MAIN_CANARY_PATH_IMPLEMENT_01.md`
-Expected report: `reviews/worker_reports/taste-current-main-canary-path-implement-01.md`
-Status: `prepared_not_launched`.
+## NEXT REQUIRES USER APPROVAL — one real Chernobylite semantic canary
+Status: `awaiting_user_canary_execution_approval`.
 
-User explicitly approved IMPLEMENT.
-
-Implementation scope:
-- add `.github/workflows/taste-current-main-canary.yml` as workflow_dispatch-only, one AppID input, contents read-only, explicit current-main checkout;
-- add bounded one-AppID temporary-output harness reusing current Taste logic;
-- add focused tests for one-subject bounding, output isolation, zero/one queue behavior, exact bindings and fail-closed missing context;
-- a non-semantic artifact-only validation run is allowed and should measure runtime;
-- do NOT run Chernobylite semantic analysis;
-- do NOT modify Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9`;
-- no production writes, canonical ingest, paid API/Copilot/external scheduler;
+Planned scope after approval:
+- prepare AppID 1016800 from current `main` using the new lightweight path;
+- freeze the exact resulting current tuple;
+- use only existing Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` generation 2;
+- execute exactly one Chernobylite semantic result;
+- verify unchanged producer fence/binding/V5 checks and canonical ingest/receipt/cache/queue acceptance;
+- no second game, no new Scheduled Task, no backlog widening;
+- restore/verify permanent DAILY 01:00 Europe/Samara schedule;
 - obey anti-stall protocol.
 
 ## Next sequence
-1. NEW Chat 1 executes `WORKER_TASK_TASTE_CURRENT_MAIN_CANARY_PATH_IMPLEMENT_01.md`.
-2. Director consumes only the exact durable implementation report.
-3. If `complete_implementation_ready_for_canary_execution`, separately authorize/run one bounded real Chernobylite semantic canary.
-4. Only after successful canary and independent System Audit PASS may normal daily Taste production be widened.
+1. User explicitly approves or declines the real Chernobylite canary execution.
+2. If approved, Director prepares a separate bounded ACCEPTANCE worker task.
+3. If Chernobylite is canonically accepted, launch NEW independent System Audit worker.
+4. Only after System Audit PASS may the SAME recurring producer be widened to normal daily Taste production.
 
 ## Superseded watchdog
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
