@@ -1,7 +1,7 @@
 # TASTE Normal Daily Binding — Design Report
 
 - task_id: `taste-normal-daily-binding-design-01`
-- lifecycle: `completed`
+- lifecycle: `complete_design_ready_for_implementation`
 - current_utc: `2026-09-10T07:44:49Z`
 - decision: `recommend_max_10_prepared_taste_items_per_invocation`
 - next_action: create a separate implementation task that codifies this binding in the canonical producer/contracts and the existing Scheduled Task, then verifies it with a bounded canary; do not implement from this design task
