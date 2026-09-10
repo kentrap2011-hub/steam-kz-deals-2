@@ -18,6 +18,7 @@ from taste_negative_contract import (
     structured_grounded_risks,
     validate_negative_analysis,
 )
+from taste_pinned_work_unit import build_pinned_work_unit
 
 
 def expect_value_error(fn, contains):
@@ -29,12 +30,42 @@ def expect_value_error(fn, contains):
     raise AssertionError(f'Expected ValueError containing {contains!r}')
 
 
+def pinned_fixture(projection, queue_row, commit_char):
+    authority_commit = commit_char * 40
+    profile_binding = {
+        'repository': projection['current_profile']['repository'],
+        'path': projection['current_profile']['path'],
+        'resolved_commit_sha': commit_char * 40,
+        'blob_sha': projection['current_profile']['blob_sha'],
+        'content_sha256': commit_char * 64,
+        'bytes': projection['current_profile']['bytes'],
+    }
+    pinned = build_pinned_work_unit(
+        projection,
+        [queue_row],
+        profile_binding,
+        prepared_at_utc='2026-09-02T00:00:00+00:00',
+    )
+    pinned['authority_commit'] = authority_commit
+    bindings = dict(pinned['bindings'])
+    bindings['pinned_work_unit_sha256'] = pinned['ordered_work_unit_sha256']
+    bindings['pin_authority_commit'] = authority_commit
+    return pinned, bindings
+
+
 def fixture():
     key = 'App_999999'
     fingerprint = '1' * 64
     context_sha = '2' * 64
     projection = {
-        'current_profile': {'blob_sha': '3' * 40},
+        'status': 'complete',
+        'complete_coverage': True,
+        'current_profile': {
+            'repository': 'owner/profile-repo',
+            'path': 'gaming_taste_live.json',
+            'blob_sha': '3' * 40,
+            'bytes': 123,
+        },
         'current_binding': {
             'taste_model_version': 'taste-v4-test',
             'taste_semantics_sha256': '4' * 64,
@@ -51,12 +82,6 @@ def fixture():
             'evaluate_normalized_taste_factors',
             'resolve_grounded_negative_analysis',
         ],
-    }
-    bindings = {
-        'profile_blob_sha': projection['current_profile']['blob_sha'],
-        'taste_model_version': projection['current_binding']['taste_model_version'],
-        'taste_semantics_sha256': projection['current_binding']['taste_semantics_sha256'],
-        'source_mailing_updated_at_utc': projection['source_mailing_updated_at_utc'],
     }
     result = {
         'key': key,
@@ -98,15 +123,16 @@ def fixture():
             'breadth_of_match': 60,
         },
     }
-    return projection, queue_row, bindings, result
+    pinned, bindings = pinned_fixture(projection, queue_row, '5')
+    return projection, queue_row, bindings, result, pinned
 
 
 def main():
-    projection, queue_row, bindings, result = fixture()
+    projection, queue_row, bindings, result, pinned = fixture()
     queue_by_key = {queue_row['taste_subject_key']: queue_row}
     doc = {'schema_version': 1, 'bindings': bindings, 'results': [result]}
 
-    validated_bindings, validated_rows = validate_input(doc, queue_by_key, projection, {})
+    validated_bindings, validated_rows = validate_input(doc, queue_by_key, projection, {}, pinned)
     assert validated_bindings == bindings
     assert len(validated_rows) == 1 and validated_rows[0]['full_eval'] is True
     assert tuple(result['taste_factors']) == TASTE_FACTOR_IDS
@@ -186,13 +212,14 @@ def main():
     incomplete['negative_findings'] = []
     incomplete['negative_evidence'] = []
     incomplete_doc = {'schema_version': 1, 'bindings': bindings, 'results': [incomplete]}
-    _, incomplete_rows = validate_input(incomplete_doc, queue_by_key, projection, {})
+    _, incomplete_rows = validate_input(incomplete_doc, queue_by_key, projection, {}, pinned)
     assert incomplete_rows[0]['result']['negative_analysis_status'] == 'incomplete_no_confirmed_negative'
 
     # Negative-only work returns only identity + negative fields. Therefore an
     # attempted fit rewrite is rejected before merge; the accepted entry is the base.
     negative_queue = deepcopy(queue_row)
     negative_queue['work_required'] = ['resolve_grounded_negative_analysis']
+    negative_pin, negative_bindings = pinned_fixture(projection, negative_queue, '7')
     negative_result = {
         field: deepcopy(result[field])
         for field in [
@@ -202,12 +229,13 @@ def main():
             'historical_negative_context', 'candidate_quality_findings',
         ]
     }
-    negative_doc = {'schema_version': 1, 'bindings': bindings, 'results': [negative_result]}
+    negative_doc = {'schema_version': 1, 'bindings': negative_bindings, 'results': [negative_result]}
     _, negative_rows = validate_input(
         negative_doc,
         {negative_queue['taste_subject_key']: negative_queue},
         projection,
         {result['key']: entry},
+        negative_pin,
     )
     merged = build_negative_only_entry(negative_result, negative_rows[0]['base_entry'])
     for field in [
@@ -225,6 +253,7 @@ def main():
             {negative_queue['taste_subject_key']: negative_queue},
             projection,
             {result['key']: entry},
+            negative_pin,
         ),
         'attempted to rewrite accepted Taste semantics',
     )
@@ -246,7 +275,7 @@ def main():
     missing_vector = deepcopy(doc)
     missing_vector['results'][0].pop('taste_factors')
     expect_value_error(
-        lambda: validate_input(missing_vector, queue_by_key, projection, {}),
+        lambda: validate_input(missing_vector, queue_by_key, projection, {}, pinned),
         'requires taste_factors',
     )
 
@@ -254,6 +283,7 @@ def main():
         'status': 'PASS',
         'contract': 'TASTE-SEMANTIC-RESULT-V5',
         'factor_ids': list(TASTE_FACTOR_IDS),
+        'pinned_work_unit_binding_exercised': True,
         'valid_vector_persists': True,
         'configured_score_points': scored['points'],
         'negative_contract_consistency_rejected_when_invalid': True,
