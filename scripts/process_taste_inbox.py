@@ -13,6 +13,7 @@ PROJECTION = Path('data/production/pre_ai/taste_projection.json')
 MANIFEST = Path('data/production/pre_ai/chatgpt_payload.json')
 QUEUE = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
 FAMILY_GRAPH = Path('data/production/pre_ai/family_graph.json')
+DEALS = Path('data/production/pre_ai/deal_scenarios.json')
 NEGATIVE_WORK_CODE = 'resolve_grounded_negative_analysis'
 BASE_SUPPORT_WORK_CODE = 'resolve_base_support_condition'
 
@@ -92,10 +93,36 @@ def sale_end_state_is_consistent(manifest):
     return coverage == expected_coverage
 
 
-def expected_retained_work(key, result, baseline_row, after_projection):
+def expected_retained_work(
+    key,
+    result,
+    baseline_row,
+    after_projection,
+    *,
+    deterministically_excluded=False,
+    deal_row=None,
+):
     projection_row = (after_projection.get('entries') or {}).get(key) or {}
     cached = projection_row.get('cached_taste') or {}
     verdict = cached.get('verdict')
+
+    # Canonical consumer gating removes non-INCLUDE rows before constructing
+    # base-support work when the family has no eligibility bridge and is final.
+    if verdict != 'INCLUDE' and deterministically_excluded:
+        return []
+
+    # For a valid cached INCLUDE, the consumer selects the precomputed deal
+    # scenario for the resolved fit before constructing grounded-negative work.
+    if verdict == 'INCLUDE':
+        fit = cached.get('fit_level')
+        scenario_name = {
+            'strong': 'decision_if_strong',
+            'moderate': 'decision_if_moderate',
+        }.get(fit)
+        selected = (deal_row or {}).get(scenario_name) if scenario_name else None
+        if isinstance(selected, dict) and selected.get('final_disposition') != 'INCLUDE':
+            return []
+
     incomplete = result.get('negative_analysis_status') == 'incomplete_no_confirmed_negative'
     work = []
     if verdict == 'INCLUDE' and incomplete:
@@ -116,6 +143,8 @@ def build_transactional_proof_checks(
     after_projection,
     after_manifest,
     after_queue,
+    after_family_graph=None,
+    after_deals=None,
 ):
     after_queue_by_key = {row.get('taste_subject_key'): row for row in after_queue}
     duplicate_after_keys = len(after_queue_by_key) != len(after_queue)
@@ -124,16 +153,28 @@ def build_transactional_proof_checks(
         for key in all_keys
     )
 
+    family_by_taste_key = {
+        row.get('taste_subject_key'): row
+        for row in ((after_family_graph or {}).get('families') or [])
+        if row.get('taste_subject_key')
+    }
+    deal_entries = (after_deals or {}).get('entries') or {}
+    excluded_primary_keys = set(after_manifest.get('deterministically_excluded_primary_keys') or [])
+
     expected_safe_hits = baseline_safe_hits + full_eval_count
     expected_ai_required = baseline_ai_required - full_eval_count
     retained = {}
     retention_mismatches = {}
     for key in all_keys:
+        family = family_by_taste_key.get(key) or {}
+        primary_key = family.get('primary_key') or key
         expected_work = expected_retained_work(
             key,
             result_by_key[key],
             baseline_queue_by_key[key],
             after_projection,
+            deterministically_excluded=primary_key in excluded_primary_keys,
+            deal_row=deal_entries.get(primary_key) or {},
         )
         actual = after_queue_by_key.get(key)
         if expected_work:
@@ -234,6 +275,8 @@ def main():
     after_projection = load_json(PROJECTION)
     after_manifest = load_json(MANIFEST)
     after_queue = read_jsonl(QUEUE)
+    after_family_graph = load_json(FAMILY_GRAPH)
+    after_deals = load_json(DEALS)
 
     checks, retained, retention_mismatches, expected_ai_queue, full_eval_count = build_transactional_proof_checks(
         all_keys=all_keys,
@@ -245,6 +288,8 @@ def main():
         after_projection=after_projection,
         after_manifest=after_manifest,
         after_queue=after_queue,
+        after_family_graph=after_family_graph,
+        after_deals=after_deals,
     )
     failed = [name for name, ok in checks.items() if not ok]
     if failed:
