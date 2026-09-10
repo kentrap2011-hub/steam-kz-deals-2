@@ -1,0 +1,97 @@
+name: Chernobylite acceptance 02 read-only preflight
+
+on:
+  push:
+    branches:
+      - worker/taste-chernobylite-acceptance-02-prep
+    paths:
+      - .github/workflows/taste-chernobylite-acceptance-02-prep.yml
+
+permissions:
+  contents: read
+
+jobs:
+  prepare-one:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact current main read-only
+        uses: actions/checkout@v4
+        with:
+          ref: refs/heads/main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Establish current-main provenance and clean tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --prune origin +refs/heads/main:refs/remotes/origin/main
+          HEAD_SHA="$(git rev-parse HEAD)"
+          MAIN_SHA="$(git rev-parse refs/remotes/origin/main)"
+          test "$HEAD_SHA" = "$MAIN_SHA"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          echo "PREP_MAIN_SHA=$MAIN_SHA"
+
+      - name: Focused fixed-route tests
+        run: python -m unittest tests.test_taste_current_main_canary -v
+
+      - name: Prepare exactly one current-live Chernobylite tuple
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/taste-current-main-canary"
+          python scripts/build_taste_current_main_canary.py --appid 1016800 --output-dir "$OUT"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          out=Path(os.environ['RUNNER_TEMP'])/'taste-current-main-canary'
+          tup=json.loads((out/'prepared_semantic_tuple.json').read_text(encoding='utf-8'))
+          bind=json.loads((out/'frozen_profile/profile_binding.json').read_text(encoding='utf-8'))
+          queue=[json.loads(x) for x in (out/'chatgpt_taste_queue.one.jsonl').read_text(encoding='utf-8').splitlines() if x.strip()]
+          proof=json.loads((out/'canary_proof.json').read_text(encoding='utf-8'))
+          print('PREP_SUMMARY='+json.dumps({
+            'main_sha': tup.get('main_sha') or tup.get('artifact_main_sha') or proof.get('main_sha') or proof.get('artifact_main_sha'),
+            'queue_count': len(queue),
+            'queue_keys': [x.get('taste_subject_key') or x.get('key') for x in queue],
+            'appid': tup.get('appid') or (queue[0].get('appid') if queue else None),
+            'key': tup.get('taste_subject_key') or tup.get('key') or (queue[0].get('taste_subject_key') if queue else None),
+            'title': tup.get('title') or (queue[0].get('title') if queue else None),
+            'profile_repository': bind.get('repository'),
+            'profile_path': bind.get('path'),
+            'profile_commit_sha': bind.get('commit_sha'),
+            'profile_blob_sha': bind.get('blob_sha'),
+            'profile_content_sha256': bind.get('content_sha256'),
+            'taste_model_version': tup.get('taste_model_version'),
+            'taste_semantics_sha256': tup.get('taste_semantics_sha256'),
+            'taste_fingerprint': tup.get('taste_fingerprint'),
+            'candidate_context_sha256': tup.get('candidate_context_sha256') or tup.get('candidate_context_fingerprint'),
+            'producer_id': tup.get('producer_id'),
+            'producer_generation': tup.get('producer_generation'),
+            'prompt_version': tup.get('prompt_version'),
+            'result_contract_version': tup.get('result_contract_version'),
+            'profile_binding_mode': tup.get('profile_binding_mode'),
+            'profile_config_fingerprint': tup.get('profile_config_fingerprint'),
+            'fixed_score_binding': tup.get('fixed_score_binding'),
+            'evidence_state': tup.get('evidence_state'),
+            'price_fields_present': [k for k in tup.keys() if any(s in k.lower() for s in ('price','discount','wishlist'))],
+          }, sort_keys=True))
+          if len(queue) != 1:
+            raise SystemExit('queue cardinality not 1')
+          row=queue[0]
+          if str(row.get('appid')) != '1016800' or (row.get('taste_subject_key') or row.get('key')) != 'App_1016800':
+            raise SystemExit('wrong subject')
+          PY
+
+      - name: Prove repository untouched
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code --
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
