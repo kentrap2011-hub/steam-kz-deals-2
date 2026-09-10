@@ -1,0 +1,160 @@
+name: Site current games recovery once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/site-current-games-recovery-once.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: site-current-games-recovery-once
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Apply minimal degraded-readiness repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/build_daily_visual_payload.py')
+          text = path.read_text(encoding='utf-8')
+          old = """def current_production_readiness():
+              payload = load_json(PAYLOAD)
+              if payload.get('status') != 'complete':
+                  raise SystemExit('ChatGPT production payload is not complete')
+              if payload.get('complete_family_partition') is not True:
+                  raise SystemExit('Production family partition is not complete')
+          """
+          new = """def current_production_readiness():
+              payload = load_json(PAYLOAD)
+              payload_status = str(payload.get('status') or '')
+              if payload_status not in {'complete', 'degraded'}:
+                  raise SystemExit('ChatGPT production payload is not complete')
+              if payload.get('complete_family_partition') is not True:
+                  raise SystemExit('Production family partition is not complete')
+          """
+          if text.count(old) != 1:
+              raise SystemExit(f'expected readiness header exactly once, found {text.count(old)}')
+          text = text.replace(old, new, 1)
+
+          old_tail = """    if ai_queue_count != 0:
+              return None, payload
+              if ready_count != purchase_context_count:
+          """
+          new_tail = """    if ai_queue_count != 0:
+              return None, payload
+              if payload_status != 'complete':
+                  raise SystemExit('ChatGPT production payload is not complete')
+              if ready_count != purchase_context_count:
+          """
+          if text.count(old_tail) != 1:
+              raise SystemExit(f'expected readiness queue gate exactly once, found {text.count(old_tail)}')
+          text = text.replace(old_tail, new_tail, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Add focused regression test
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > scripts/test_visual_degraded_refresh_readiness.py <<'PY'
+          import json
+          import sys
+          import tempfile
+          from pathlib import Path
+
+          sys.path.insert(0, str(Path(__file__).resolve().parent))
+          import build_daily_visual_payload as builder
+
+
+          def write_json(path, obj):
+              path.write_text(json.dumps(obj), encoding='utf-8')
+
+
+          def bind_case(root, *, status, ai_count, ready_count):
+              root = Path(root)
+              builder.PAYLOAD = root / 'payload.json'
+              builder.TASTE_QUEUE = root / 'queue.jsonl'
+              builder.PURCHASE_CONTEXT = root / 'purchase.jsonl'
+              excluded = 0
+              source_count = ai_count + ready_count + excluded
+              write_json(
+                  builder.PAYLOAD,
+                  {
+                      'status': status,
+                      'complete_family_partition': True,
+                      'source_family_count': source_count,
+                      'ready_without_ai_count': ready_count,
+                      'deterministically_excluded_without_ai_count': excluded,
+                      'ai_queue_count': ai_count,
+                      'purchase_context_line_count': ai_count + ready_count,
+                      'source_mailing_updated_at_utc': '2026-09-10T00:00:00Z',
+                  },
+              )
+              builder.TASTE_QUEUE.write_text(''.join('{}\n' for _ in range(ai_count)), encoding='utf-8')
+              builder.PURCHASE_CONTEXT.write_text(
+                  ''.join('{}\n' for _ in range(ai_count + ready_count)), encoding='utf-8'
+              )
+
+
+          with tempfile.TemporaryDirectory() as tmp:
+              bind_case(tmp, status='degraded', ai_count=1, ready_count=0)
+              source_key, payload = builder.current_production_readiness()
+              assert source_key is None
+              assert payload['status'] == 'degraded'
+
+          with tempfile.TemporaryDirectory() as tmp:
+              bind_case(tmp, status='degraded', ai_count=0, ready_count=1)
+              try:
+                  builder.current_production_readiness()
+              except SystemExit as exc:
+                  assert str(exc) == 'ChatGPT production payload is not complete'
+              else:
+                  raise AssertionError('degraded payload with closed queue must remain fail-closed')
+
+          with tempfile.TemporaryDirectory() as tmp:
+              bind_case(tmp, status='unknown', ai_count=1, ready_count=0)
+              try:
+                  builder.current_production_readiness()
+              except SystemExit as exc:
+                  assert str(exc) == 'ChatGPT production payload is not complete'
+              else:
+                  raise AssertionError('unknown payload status must remain fail-closed')
+
+          print('visual degraded-readiness regression: ok')
+          PY
+
+      - name: Run focused regression and syntax checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/build_daily_visual_payload.py scripts/test_visual_degraded_refresh_readiness.py
+          python scripts/test_visual_degraded_refresh_readiness.py
+          python scripts/test_giveaway_visual_handoff.py
+
+      - name: Commit permanent repair and remove one-shot workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/site-current-games-recovery-once.yml
+          git add scripts/build_daily_visual_payload.py scripts/test_visual_degraded_refresh_readiness.py
+          git diff --cached --check
+          git diff --cached --quiet && { echo 'repair produced no changes'; exit 1; }
+          git commit -m "fix: allow safe visual refresh while taste queue is pending"
+          git push origin HEAD:main
