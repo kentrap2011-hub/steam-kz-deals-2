@@ -2,7 +2,7 @@
   "schema_version": 1,
   "purpose": "incremental_per_entry_taste_verdict_overlay",
   "entry_schema_version": 5,
-  "entry_count": 807,
+  "entry_count": 813,
   "entries": {
     "App_241930": {
       "key": "App_241930",
@@ -12299,61 +12299,71 @@
     "Sub_44162": {
       "key": "Sub_44162",
       "appid": "214340",
-      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "profile_blob_sha": "b487e62b3fec9f413fb001d96b4894f8ac43e5d5",
       "taste_model_version": "taste-v3",
       "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "628900bd6b11edba6767fdf1701c1a1c8c0defa7cb8085685c474143ae432168",
       "taste_fingerprint": "db847c1e087b86f675cb53c8e882e5237bc4f987ca23c6f67f1a58faaa715068",
-      "verdict": "INCLUDE",
-      "fit_level": "moderate",
-      "reason_code": "include_moderate",
-      "positive_evidence": [
-        "The bundle provides several distinct adventure settings and protagonists, supporting variety across its stories.",
-        "Its fantasy premises and unusual worlds provide clear identity hooks for a profile that values memorable atmosphere and discovery."
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
+      "positive_evidence": [],
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "insufficient",
+      "fit_evidence_confidence": "medium",
+      "fit_evidence_basis": [
+        "candidate_information_insufficient"
       ],
-      "negative_evidence": [
-        "The prepared context gives limited evidence of active mechanical mastery."
-      ],
-      "evaluated_at_utc": "2026-08-31T12:38:57+00:00",
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-10T13:46:36+00:00",
       "taste_factors": {
-        "gameplay_mastery": 42,
-        "development_variety": 74,
-        "structure_pacing_direction": 66,
-        "identity_hooks": 78,
-        "breadth_of_match": 65
+        "gameplay_mastery": 25,
+        "development_variety": 45,
+        "structure_pacing_direction": 55,
+        "identity_hooks": 70,
+        "breadth_of_match": 48
       }
     },
     "Sub_55062": {
       "key": "Sub_55062",
       "appid": "214340",
-      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "profile_blob_sha": "b487e62b3fec9f413fb001d96b4894f8ac43e5d5",
       "taste_model_version": "taste-v3",
       "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "d5175e738adfe2c22025c12a5f44840b9f8115d6e58b02a4d8669bf1704c5120",
       "taste_fingerprint": "2c91187c103dde9a228a2ffb263b34483930ddf751b2d98eb8abe122c0aba2f3",
-      "verdict": "INCLUDE",
-      "fit_level": "moderate",
-      "reason_code": "include_moderate",
-      "positive_evidence": [
-        "This large adventure bundle spans curses, political conflict, fantasy worlds and multiple protagonists, offering substantial thematic variety.",
-        "The unusual settings and character-focused stories supply distinctive identity and mystery hooks."
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
+      "positive_evidence": [],
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "insufficient",
+      "fit_evidence_confidence": "medium",
+      "fit_evidence_basis": [
+        "candidate_information_insufficient"
       ],
-      "negative_evidence": [
-        "Prepared evidence does not establish deep action or systemic progression."
-      ],
-      "evaluated_at_utc": "2026-08-31T12:38:57+00:00",
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-10T13:46:36+00:00",
       "taste_factors": {
-        "gameplay_mastery": 41,
-        "development_variety": 81,
-        "structure_pacing_direction": 65,
-        "identity_hooks": 80,
-        "breadth_of_match": 66
+        "gameplay_mastery": 25,
+        "development_variety": 50,
+        "structure_pacing_direction": 55,
+        "identity_hooks": 68,
+        "breadth_of_match": 50
       }
     },
     "App_1016920": {
       "key": "App_1016920",
       "appid": "1016920",
-      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "profile_blob_sha": "b487e62b3fec9f413fb001d96b4894f8ac43e5d5",
       "taste_model_version": "taste-v3",
       "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "5eddb6f5dd6fec14e9899e136f92536cf3e18bb4c28774201ea884888903f972",
@@ -12362,19 +12372,27 @@
       "fit_level": "strong",
       "reason_code": "include_strong",
       "positive_evidence": [
-        "Building track in real time while preventing derailment demands monitoring, coordination and rapid adaptation.",
-        "Procedural worlds, random encounters and train upgrades ensure the activity develops across a run."
+        "Кооператив требует постоянно работать вместе с друзьями над строительством пути, что прямо совпадает с сильным профилем пользователя на совместную тактику, распределение ролей и общий игровой опыт.",
+        "Процедурно меняющиеся миры, случайные встречи и улучшение поезда обещают заметное изменение ситуаций и прогрессию вместо статичного неизменного цикла, что совпадает с критически важным предпочтением развития и разнообразия."
       ],
-      "negative_evidence": [
-        "The prepared context emphasizes cooperative multiplayer, so solo suitability is not established."
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "sufficient",
+      "fit_evidence_confidence": "high",
+      "fit_evidence_basis": [
+        "candidate_specific_positive_match"
       ],
-      "evaluated_at_utc": "2026-08-31T12:38:57+00:00",
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-10T13:46:36+00:00",
       "taste_factors": {
-        "gameplay_mastery": 85,
-        "development_variety": 84,
-        "structure_pacing_direction": 82,
-        "identity_hooks": 73,
-        "breadth_of_match": 84
+        "gameplay_mastery": 88,
+        "development_variety": 87,
+        "structure_pacing_direction": 78,
+        "identity_hooks": 72,
+        "breadth_of_match": 85
       }
     },
     "App_1108000": {
@@ -17038,7 +17056,7 @@
     "Sub_4156": {
       "key": "Sub_4156",
       "appid": "6800",
-      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "profile_blob_sha": "b487e62b3fec9f413fb001d96b4894f8ac43e5d5",
       "taste_model_version": "taste-v3",
       "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "eda37d7a4316fdaaee140ef458139eac40107479a4719683d4ad8f00aba35221",
@@ -17047,19 +17065,27 @@
       "fit_level": "moderate",
       "reason_code": "include_moderate",
       "positive_evidence": [
-        "Mission-based squad tactics strongly match the user's interest in compact problems that reward choosing the right approach.",
-        "Distinct specialist roles create meaningful decision making and mastery rather than relying on reflexes alone."
+        "Управление небольшой группой бойцов с разными ролями в тактических миссиях соответствует устойчивому интересу пользователя к локальным тактическим задачам и поиску способа победы.",
+        "Серия построена вокруг отдельных миссий с конкретными целями, что хорошо совпадает с предпочтением ясного направления и осмысленных задач."
       ],
-      "negative_evidence": [
-        "Stealth missions can become a poor fit when success requires prolonged level study and repeated restarts before the intended solution is clear."
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "sufficient",
+      "fit_evidence_confidence": "medium",
+      "fit_evidence_basis": [
+        "candidate_specific_positive_match"
       ],
-      "evaluated_at_utc": "2026-09-01T09:06:38+00:00",
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-10T13:46:36+00:00",
       "taste_factors": {
         "gameplay_mastery": 82,
-        "development_variety": 73,
-        "structure_pacing_direction": 69,
-        "identity_hooks": 65,
-        "breadth_of_match": 76
+        "development_variety": 65,
+        "structure_pacing_direction": 83,
+        "identity_hooks": 72,
+        "breadth_of_match": 70
       }
     },
     "App_1038280": {
@@ -21229,6 +21255,224 @@
         "structure_pacing_direction": 76,
         "identity_hooks": 91,
         "breadth_of_match": 82
+      }
+    },
+    "App_2336880": {
+      "key": "App_2336880",
+      "appid": "2336880",
+      "profile_blob_sha": "b487e62b3fec9f413fb001d96b4894f8ac43e5d5",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "de83aa96a5fb29a1d8df896f006442c708b4afc25533df77b7c49504efe03a2a",
+      "taste_fingerprint": "097b3a222b602f3128ecf89a20737c9ac9bd223c41e5110149eede7ff75074af",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
+      "positive_evidence": [],
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "insufficient",
+      "fit_evidence_confidence": "low",
+      "fit_evidence_basis": [
+        "candidate_information_insufficient"
+      ],
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-10T13:46:36+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 35,
+        "development_variety": 45,
+        "structure_pacing_direction": 45,
+        "identity_hooks": 50,
+        "breadth_of_match": 25
+      }
+    },
+    "App_527070": {
+      "key": "App_527070",
+      "appid": "527070",
+      "profile_blob_sha": "b487e62b3fec9f413fb001d96b4894f8ac43e5d5",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "562b863fe6ca932362076a8d1ce1e8eb16d193313e0aee4c1edd346fadaf3e54",
+      "taste_fingerprint": "18ac32f48583dfe8f548bb744449c63e45485cb1b98f8955283141ffa74ca830",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Шпионаж с поиском слабых мест противника и активное завоевание планет дают понятные стратегические решения, что соответствует интересу пользователя к тактике и поиску подхода.",
+        "Развитие цивилизации через талантливых граждан и расширение возможностей соответствует устойчивому интересу к прогрессии и заметному развитию игрового процесса."
+      ],
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "sufficient",
+      "fit_evidence_confidence": "medium",
+      "fit_evidence_basis": [
+        "candidate_specific_positive_match"
+      ],
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-10T13:46:36+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 72,
+        "development_variety": 78,
+        "structure_pacing_direction": 70,
+        "identity_hooks": 62,
+        "breadth_of_match": 60
+      }
+    },
+    "Sub_87601": {
+      "key": "Sub_87601",
+      "appid": "304240",
+      "profile_blob_sha": "b487e62b3fec9f413fb001d96b4894f8ac43e5d5",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "54b46a1879b19917d0a47d5526f273dd2b07ba997aa207df0902d3d181ef142c",
+      "taste_fingerprint": "8c492c88bfd549e881568ca60bd615e746164e158caae58dc2e96d43235df5ee",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Survival-horror направленность и выраженная хоррор-идентичность совпадают с подтверждённым интересом пользователя к сильной атмосфере и загадочности в Silent Hill.",
+        "Это знакомая серия Resident Evil, к которой у пользователя есть положительный опыт: Resident Evil 4 и его ремейк оценены как хорошие и приятные игры, поэтому у Origins есть релевантная сериальная опора."
+      ],
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "sufficient",
+      "fit_evidence_confidence": "medium",
+      "fit_evidence_basis": [
+        "candidate_specific_positive_match",
+        "same_series_continuity"
+      ],
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-10T13:46:36+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 62,
+        "development_variety": 65,
+        "structure_pacing_direction": 68,
+        "identity_hooks": 85,
+        "breadth_of_match": 72
+      }
+    },
+    "App_1004240": {
+      "key": "App_1004240",
+      "appid": "1004240",
+      "profile_blob_sha": "b487e62b3fec9f413fb001d96b4894f8ac43e5d5",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "8a5b75f53d3000e8a466ff885702723251296eac61287a74780aa574b2469bb7",
+      "taste_fingerprint": "aa91889d1666d6c8dcecdbc35ea0eb2b71a814463ed58999e817ef5454a511cb",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
+      "positive_evidence": [],
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "insufficient",
+      "fit_evidence_confidence": "low",
+      "fit_evidence_basis": [
+        "candidate_information_insufficient"
+      ],
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-10T13:46:36+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 35,
+        "development_variety": 25,
+        "structure_pacing_direction": 35,
+        "identity_hooks": 30,
+        "breadth_of_match": 20
+      }
+    },
+    "App_10150": {
+      "key": "App_10150",
+      "appid": "10150",
+      "profile_blob_sha": "b487e62b3fec9f413fb001d96b4894f8ac43e5d5",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "b43f8e93ab6bc1aa8d4e213c3a4aa6978e09b434e266e2a3c2669b745e87a3e5",
+      "taste_fingerprint": "ed46bdeca520dcc7dd002fb462eef58689fb423a6ef8be1acd896109622f8a4e",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Для Prototype в каноническом профиле прямо подтверждены удовольствие от бега по стенам и планирования, разные способы уничтожения врагов и атмосфера.",
+        "Пользователь отдельно отмечал развитие способностей, а описание кандидата подтверждает быстрый бой и изменение тела под ситуацию, то есть основной игровой крючок совпадает с подтверждённым опытом."
+      ],
+      "negative_analysis_status": "complete_with_confirmed_negative",
+      "negative_findings": [
+        {
+          "category": "other_grounded",
+          "code": "other_grounded_taste_risk",
+          "evidence": "В каноническом профиле для Prototype пользователь отметил, что сюжет почти не запомнился.",
+          "risk_text_ru": "Сюжетный крючок оказался для пользователя слабее, чем движение, способности и экшен.",
+          "evidence_origin": "historical_user_experience",
+          "evidence_strength": "moderate",
+          "personal_relevance": "confirmed"
+        }
+      ],
+      "negative_evidence": [
+        "В каноническом профиле для Prototype пользователь отметил, что сюжет почти не запомнился."
+      ],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "sufficient",
+      "fit_evidence_confidence": "high",
+      "fit_evidence_basis": [
+        "historical_user_experience",
+        "candidate_specific_positive_match"
+      ],
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-10T13:46:36+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 85,
+        "development_variety": 82,
+        "structure_pacing_direction": 65,
+        "identity_hooks": 80,
+        "breadth_of_match": 86
+      }
+    },
+    "App_1015940": {
+      "key": "App_1015940",
+      "appid": "1015940",
+      "profile_blob_sha": "b487e62b3fec9f413fb001d96b4894f8ac43e5d5",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "ec0e18a36084e98e0ca5c11c3dd2daa74a6ad9c3bbb7293a1971bb1b4c3b86e3",
+      "taste_fingerprint": "ec612c812134b6455b80ddc1e12cf5575337005030d83b76ef681fc0fcde2a1c",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Кандидат строится на реальных человеческих историях с драмой, травмой, любовью и юмором; это совпадает с подтверждённым сильным откликом пользователя на эмоционально значимые человеческие истории в Sanitarium.",
+        "Формат сюжетного приключения с исследованием острова и историями за каждым поворотом даёт выраженный атмосферно-сюжетный крючок, а сюжет и атмосфера являются важными устойчивыми факторами профиля."
+      ],
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "sufficient",
+      "fit_evidence_confidence": "medium",
+      "fit_evidence_basis": [
+        "candidate_specific_positive_match"
+      ],
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-10T13:46:36+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 45,
+        "development_variety": 68,
+        "structure_pacing_direction": 75,
+        "identity_hooks": 88,
+        "breadth_of_match": 70
       }
     }
   }
