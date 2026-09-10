@@ -102,73 +102,63 @@ Permanent operating requirement from the user:
 - bounded retry/fail-closed behavior is acceptable;
 - no unbounded retry loop or manual repair should be required.
 
-## Interrupted broad audit — SUPERSEDED BY SPLIT CHECKS
-Original task:
-`WORKER_TASK_TASTE_POST_CANARY_SYSTEM_AUDIT_01.md`
+## Interrupted audit history
+The original broad post-canary audit was interrupted twice and never reached a final status.
 
-Original report:
-`reviews/worker_reports/taste-post-canary-system-audit-01.md`
+Then it was split into:
+- `WORKER_TASK_TASTE_POST_CANARY_STATE_AUDIT_01.md`
+- `WORKER_TASK_TASTE_POST_CANARY_RUNTIME_GUARDRAIL_AUDIT_01.md`
 
-State:
-- interrupted twice before finalization;
-- durable report did not advance after the first checkpoint;
-- remains `in_progress` and is NOT a PASS;
-- no semantic result or production mutation was made by it;
-- no outstanding external run was recorded.
+Both split workers also stopped before creating their required durable reports. No commits or report files from either worker exist after dispatch. Therefore neither split audit produced usable evidence and neither may be treated as PASS.
 
 Director decision:
-- do not retry the same broad audit unchanged a third time;
-- preserve its partial report as evidence;
-- split remaining independent checks into two bounded read-only audits.
+- do not retry either failed split audit unchanged;
+- make the next worker turns much smaller;
+- require report creation as the first action before any substantive reading;
+- close coverage incrementally across short stages.
 
-## CURRENT NEXT — two parallel bounded audits
+## CURRENT NEXT — two parallel micro-audits, stage 1
 Status: `prepared_ready_for_parallel_dispatch`.
 
-### Worker slot / CHAT 1 — accepted-data state
+### CHAT 1 — state micro-audit stage 1
 Task:
-`WORKER_TASK_TASTE_POST_CANARY_STATE_AUDIT_01.md`
+`WORKER_TASK_TASTE_POST_CANARY_STATE_AUDIT_STAGE1_01.md`
 
 Expected report:
-`reviews/worker_reports/taste-post-canary-state-audit-01.md`
+`reviews/worker_reports/taste-post-canary-state-audit-stage1-01.md`
 
-Scope:
-- accepted Chernobylite state;
-- queue absence;
-- receipt;
-- consumed inbox;
-- cache/overlay/index/runtime consistency;
-- duplicate/second-result absence;
-- no manual repair requirement.
+Only four checks:
+- App_1016800 exists exactly once in accepted canonical state;
+- App_1016800 is absent from pending queue;
+- consumed Chernobylite inbox submission is absent;
+- referenced ingest receipt exists and records exactly one accepted result.
 
 Final decision:
-- `PASS_STATE_READY`, or
-- `FAIL_STATE_NOT_READY`.
+- `PASS_STAGE1_STATE`, or
+- `FAIL_STAGE1_STATE`.
 
-### Worker slot / CHAT 2 — runtime and guardrails
+### CHAT 2 — runtime micro-audit stage 1
 Task:
-`WORKER_TASK_TASTE_POST_CANARY_RUNTIME_GUARDRAIL_AUDIT_01.md`
+`WORKER_TASK_TASTE_POST_CANARY_RUNTIME_AUDIT_STAGE1_01.md`
 
 Expected report:
-`reviews/worker_reports/taste-post-canary-runtime-guardrail-audit-01.md`
+`reviews/worker_reports/taste-post-canary-runtime-audit-stage1-01.md`
 
-Scope:
-- existing Scheduled Task health/schedule/uniqueness;
-- producer generation 2;
-- current-live profile freeze and concurrent-update safety;
-- stale-profile regression prevention;
-- producer/binding/V5/evidence/price-blind guardrails;
-- no unbounded retry blocker;
-- no paid service requirement.
+Only four checks:
+- existing Scheduled Task id exists;
+- it is enabled;
+- schedule is DAILY 01:00 Europe/Samara;
+- no second Scheduled Task exists for the same Taste semantic producer role.
 
 Final decision:
-- `PASS_RUNTIME_GUARDRAILS_READY`, or
-- `FAIL_RUNTIME_GUARDRAILS_NOT_READY`.
+- `PASS_STAGE1_RUNTIME`, or
+- `FAIL_STAGE1_RUNTIME`.
 
 ## Next sequence
-1. Run both bounded audits independently, preferably in parallel.
+1. Run both stage-1 micro-audits in parallel.
 2. Director reads both exact durable reports.
-3. Only if BOTH are PASS may Director conclude the interrupted broad audit's required coverage is satisfied and prepare the final bounded step toward normal daily Taste operation.
-4. If either FAILs, prepare only the smallest follow-up for that blocker.
+3. If both PASS, prepare the next short stage(s) for the remaining cache/binding/profile/guardrail checks.
+4. Only after all short stages PASS may Director conclude the system audit and prepare the final bounded step toward normal daily Taste operation.
 5. Any IMPLEMENT change still requires separate user approval.
 
 ## Superseded watchdog
