@@ -3,9 +3,9 @@
 - task_id: `taste-post-canary-runtime-audit-stage1-01`
 - lifecycle: `in_progress`
 - started_utc: `2026-09-10T05:54:49Z`
-- completed_checks: `2/4`
+- completed_checks: `3/4`
 - decision: `pending`
-- next_action: `check 3 — verify the permanent schedule is DAILY 01:00 Europe/Samara`
+- next_action: `check 4 — verify there is no second Scheduled Task for the same Taste semantic producer role`
 
 ## Checks
 
@@ -17,5 +17,8 @@
    - expected: `enabled=true`
    - runtime evidence: scheduler inspection did not expose readable state for the target task, so the enabled flag could not be affirmatively confirmed.
    - interpretation: this is a failed verification, not evidence that the task is disabled.
-3. Permanent schedule is DAILY 01:00 Europe/Samara: `pending`
+3. Permanent schedule is DAILY 01:00 Europe/Samara: `FAIL (unverified)`
+   - expected: `DAILY 01:00 Europe/Samara`
+   - runtime evidence: scheduler inspection did not expose readable schedule or timezone state for the target task, so cadence, time, and timezone could not be affirmatively confirmed.
+   - interpretation: this is a failed verification, not evidence that the configured schedule differs.
 4. No second Scheduled Task for the same Taste semantic producer role: `pending`
