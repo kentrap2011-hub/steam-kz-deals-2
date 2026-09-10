@@ -3,8 +3,8 @@
 - task_id: `taste-post-canary-guardrail-audit-stage2-01`
 - lifecycle: `in_progress`
 - started_utc: `2026-09-10T06:48:37Z`
-- completed_checks: `3/7`
-- next_action: `check 4`
+- completed_checks: `4/7`
+- next_action: `check 5`
 
 ## Checks
 
@@ -26,3 +26,10 @@
    - `scripts/taste_producer_fence.py` refuses any contract other than V5 and rejects producer-id or producer-generation mismatch against the active fence.
    - `scripts/ingest_taste_results.py` requires current profile blob/model/semantics/source bindings and exact queue `appid`, `taste_fingerprint` and `candidate_context_sha256` before accepting a result; V5 evidence/negative validation is invoked with `require_v5=True`.
    - The real Chernobylite acceptance predecessor recorded the same current path passing the producer fence with generation 2 and exact immutable tuple bindings before canonical ingest.
+
+4. Evidence sufficiency, normalized factor validation and price-blind/non-review-sentiment protections remain active: `PASS`
+   - `scripts/taste_evidence_contract.py` requires all V5 evidence fields, constrains evidence state/confidence/basis combinations, requires sufficient evidence to map to an INCLUDE strong/moderate fit with medium/high confidence, and keeps public/review quality findings separate with `personal_relevance: unresolved`.
+   - `scripts/taste_cache_common.py::validate_taste_factors()` requires exactly the five canonical factor IDs, numeric non-boolean values, each within `0..100`.
+   - `scripts/ingest_taste_results.py` requires `taste_factors` whenever the queue requests `evaluate_normalized_taste_factors`, validates them, requires at least two explicit positive evidence items for INCLUDE, and validates positive/negative evidence text.
+   - The ingest path rejects price/discount/wishlist/SteamDB/historical-price/sale/commercial fragments as Taste evidence; current V5 contract explicitly sets `price_blind: true`, lists commercial inputs and `review_sentiment_or_percentage_as_fit_evidence` as forbidden, and states public review sentiment percentage is not Taste evidence.
+   - The Chernobylite real acceptance predecessor proved these guards on one actual result: evidence/factors passed and no forbidden commercial/price/review fields were used as Taste-fit evidence.
