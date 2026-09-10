@@ -3,8 +3,8 @@
 - task_id: `taste-post-canary-guardrail-audit-stage2-01`
 - lifecycle: `in_progress`
 - started_utc: `2026-09-10T06:48:37Z`
-- completed_checks: `2/7`
-- next_action: `check 3`
+- completed_checks: `3/7`
+- next_action: `check 4`
 
 ## Checks
 
@@ -19,3 +19,10 @@
    - Once a stable head is confirmed, all later preparation is bound to the immutable frozen snapshot; a later live-profile change cannot rewrite or mix the tuple.
    - `PROFILE_FREEZE_MAX_ATTEMPTS = 3`; churn across all attempts raises a retry-later `CanaryError` and stops rather than looping indefinitely.
    - Predecessor focused tests explicitly passed for update-before-freeze selecting the newer state, update-after-freeze preventing mixed versions, and continuous churn failing closed after the bounded attempts.
+
+3. Semantic producer/ingest path enforces generation 2, exact bindings and the V5 fence: `PASS`
+   - Current `config/taste_result_contract.json` is canonical `TASTE-SEMANTIC-RESULT-V5`, with active producer `chatgpt_scheduled_task:6aa032f37e688191a5c9a1a83f91c5d9`, active generation `2`, and mismatch policy `reject_before_ingest`.
+   - `.github/workflows/ingest-taste-batch.yml` runs producer-fence regression, the active producer fence, normalized-factor validation and transactional proof before `process_taste_inbox.py`.
+   - `scripts/taste_producer_fence.py` refuses any contract other than V5 and rejects producer-id or producer-generation mismatch against the active fence.
+   - `scripts/ingest_taste_results.py` requires current profile blob/model/semantics/source bindings and exact queue `appid`, `taste_fingerprint` and `candidate_context_sha256` before accepting a result; V5 evidence/negative validation is invoked with `require_v5=True`.
+   - The real Chernobylite acceptance predecessor recorded the same current path passing the producer fence with generation 2 and exact immutable tuple bindings before canonical ingest.
