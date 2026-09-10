@@ -11,221 +11,128 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / 'scripts'
 sys.path.insert(0, str(SCRIPTS))
 
-PIN_MODULE_PATH = SCRIPTS / 'taste_pinned_work_unit.py'
-spec = importlib.util.spec_from_file_location('taste_pinned_work_unit', PIN_MODULE_PATH)
-pin = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(pin)
-
-INGEST_MODULE_PATH = SCRIPTS / 'ingest_taste_results.py'
-ingest_spec = importlib.util.spec_from_file_location('ingest_taste_results', INGEST_MODULE_PATH)
-ingest = importlib.util.module_from_spec(ingest_spec)
-ingest_spec.loader.exec_module(ingest)
-
-EXISTING_BATCH = ROOT / 'data/ai_inbox/taste/manual-throughput-drain-01-batch-001.json'
+spec = importlib.util.spec_from_file_location('taste_pinned_work_unit', SCRIPTS / 'taste_pinned_work_unit.py')
+pin = importlib.util.module_from_spec(spec); spec.loader.exec_module(pin)
+ingest_spec = importlib.util.spec_from_file_location('ingest_taste_results', SCRIPTS / 'ingest_taste_results.py')
+ingest = importlib.util.module_from_spec(ingest_spec); ingest_spec.loader.exec_module(ingest)
+EXISTING_BATCH = ROOT / pin.LEGACY_RESULT_PATH
 
 
 def projection(profile, model='taste-v3', semantics='s' * 64, source='2026-09-10T00:00:00+00:00'):
     return {
-        'status': 'complete',
-        'complete_coverage': True,
-        'source_mailing_updated_at_utc': source,
-        'current_profile': {
-            'repository': 'owner/profile-repo',
-            'path': 'gaming_taste_live.json',
-            'blob_sha': profile,
-            'bytes': 123,
-        },
-        'current_binding': {
-            'taste_model_version': model,
-            'taste_semantics_sha256': semantics,
-        },
+        'status': 'complete', 'complete_coverage': True, 'source_mailing_updated_at_utc': source,
+        'current_profile': {'repository': 'owner/profile-repo', 'path': 'gaming_taste_live.json', 'blob_sha': profile, 'bytes': 100},
+        'current_binding': {'taste_model_version': model, 'taste_semantics_sha256': semantics},
     }
 
 
-def queue(profile_tag='a'):
-    rows = []
-    for number in range(10):
-        rows.append({
-            'taste_subject_key': f'App_{number + 1}',
-            'appid': str(number + 1),
-            'taste_fingerprint': (profile_tag + f'{number:x}')[:1] * 64,
-            'candidate_context_sha256': f'{number:x}' * 64,
-            'work_required': [
-                'evaluate_taste_fit',
-                'evaluate_normalized_taste_factors',
-                'resolve_grounded_negative_analysis',
-            ],
-        })
-    return rows
+def frozen(profile, tag):
+    return {
+        'repository': 'owner/profile-repo', 'path': 'gaming_taste_live.json',
+        'resolved_commit_sha': tag * 40, 'blob_sha': profile, 'content_sha256': tag * 64, 'bytes': 100,
+    }
 
 
-def result_document(pinned_profile, rows, model='taste-v3', semantics='s' * 64, source='2026-09-10T00:00:00+00:00'):
+def queue(tag='1'):
+    return [{
+        'taste_subject_key': f'App_{i+1}', 'appid': str(i+1),
+        'taste_fingerprint': f'{(i+1)%10}' * 64,
+        'candidate_context_sha256': tag * 64,
+        'work_required': ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', 'resolve_grounded_negative_analysis'],
+    } for i in range(10)]
+
+
+def result_doc(profile, rows, pin_doc, pin_commit, model='taste-v3', semantics='s' * 64, source='2026-09-10T00:00:00+00:00'):
     return {
         'schema_version': 1,
         'bindings': {
-            'profile_blob_sha': pinned_profile,
-            'taste_model_version': model,
-            'taste_semantics_sha256': semantics,
-            'source_mailing_updated_at_utc': source,
+            'profile_blob_sha': profile, 'taste_model_version': model,
+            'taste_semantics_sha256': semantics, 'source_mailing_updated_at_utc': source,
+            'pinned_work_unit_sha256': pin_doc['ordered_work_unit_sha256'], 'pin_authority_commit': pin_commit,
         },
         'results': [{
-            'key': row['taste_subject_key'],
-            'appid': row['appid'],
-            'taste_fingerprint': row['taste_fingerprint'],
-            'candidate_context_sha256': row['candidate_context_sha256'],
-        } for row in rows],
+            'key': r['taste_subject_key'], 'appid': r['appid'], 'taste_fingerprint': r['taste_fingerprint'],
+            'candidate_context_sha256': r['candidate_context_sha256'],
+        } for r in rows],
     }
 
 
 def git(cwd, *args):
-    proc = subprocess.run(['git', *args], cwd=cwd, text=True, capture_output=True, check=True)
-    return proc.stdout.strip()
+    return subprocess.run(['git', *args], cwd=cwd, text=True, capture_output=True, check=True).stdout.strip()
+
+
+def write_json(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True); path.write_text(json.dumps(value) + '\n', encoding='utf-8')
 
 
 class TastePinnedWorkUnitLifecycleTests(unittest.TestCase):
-    def test_profile_a_pin_survives_live_profile_b_before_validation(self):
-        rows = queue('a')
-        pinned = pin.build_pinned_work_unit(projection('A' * 40), rows, authority_commit='1' * 40)
-        doc = result_document('A' * 40, rows)
-
-        live_after_semantics = projection('B' * 40)
-        self.assertEqual(live_after_semantics['current_profile']['blob_sha'], 'B' * 40)
-        pin.validate_document_against_pin(doc, pinned)
-        self.assertEqual(pinned['bindings']['profile_blob_sha'], 'A' * 40)
-
-    def test_new_work_unit_after_live_profile_b_pins_b(self):
-        rows = queue('b')
-        pinned_b = pin.build_pinned_work_unit(projection('B' * 40), rows, authority_commit='2' * 40)
-        self.assertEqual(pinned_b['bindings']['profile_blob_sha'], 'B' * 40)
-        self.assertNotEqual(pinned_b['bindings']['profile_blob_sha'], 'A' * 40)
-
-    def test_arbitrary_stale_a_result_cannot_reach_back_into_history(self):
-        rows = queue('a')
-        stale_a = result_document('A' * 40, rows)
-        current_pin_b = pin.build_pinned_work_unit(projection('B' * 40), rows, authority_commit='2' * 40)
-        with self.assertRaisesRegex(ValueError, 'pinned profile_blob_sha'):
-            pin.validate_document_against_pin(stale_a, current_pin_b)
-
-    def test_order_fingerprint_context_model_and_semantics_mismatches_fail_closed(self):
-        rows = queue('a')
-        pinned = pin.build_pinned_work_unit(projection('A' * 40), rows)
-        base = result_document('A' * 40, rows)
-
-        variants = []
-        changed = copy.deepcopy(base)
-        changed['results'][0], changed['results'][1] = changed['results'][1], changed['results'][0]
-        variants.append(changed)
-        changed = copy.deepcopy(base)
-        changed['results'][0]['taste_fingerprint'] = 'f' * 64
-        variants.append(changed)
-        changed = copy.deepcopy(base)
-        changed['results'][0]['candidate_context_sha256'] = 'e' * 64
-        variants.append(changed)
-        changed = copy.deepcopy(base)
-        changed['bindings']['taste_model_version'] = 'taste-v-old'
-        variants.append(changed)
-        changed = copy.deepcopy(base)
-        changed['bindings']['taste_semantics_sha256'] = '0' * 64
-        variants.append(changed)
-
-        for changed in variants:
-            with self.subTest(changed=changed):
-                with self.assertRaises(ValueError):
-                    pin.validate_document_against_pin(changed, pinned)
-
-    def test_result_count_and_duplicate_guards_remain_strict(self):
-        rows = queue('a')
-        pinned = pin.build_pinned_work_unit(projection('A' * 40), rows)
-        base = result_document('A' * 40, rows)
-
-        too_short = copy.deepcopy(base)
-        too_short['results'].pop()
-        with self.assertRaisesRegex(ValueError, 'result count'):
-            pin.validate_document_against_pin(too_short, pinned)
-
-        duplicate = copy.deepcopy(base)
-        duplicate['results'][1] = copy.deepcopy(duplicate['results'][0])
-        with self.assertRaisesRegex(ValueError, 'Duplicate ingest key'):
-            pin.validate_document_against_pin(duplicate, pinned)
-
-    def test_git_introduction_parent_is_the_authority_even_after_head_advances(self):
-        rows = queue('a')
+    def test_a_pin_survives_live_b_and_new_work_after_retirement_uses_b(self):
         with tempfile.TemporaryDirectory() as tmp:
-            repo = Path(tmp)
-            git(repo, 'init')
-            git(repo, 'config', 'user.email', 'test@example.invalid')
-            git(repo, 'config', 'user.name', 'Taste Test')
-            (repo / 'data/production/pre_ai').mkdir(parents=True)
-            (repo / 'data/ai_inbox/taste').mkdir(parents=True)
-            projection_path = repo / 'data/production/pre_ai/taste_projection.json'
-            queue_path = repo / 'data/production/pre_ai/chatgpt_taste_queue.jsonl'
-            input_path = repo / 'data/ai_inbox/taste/batch.json'
+            repo = Path(tmp); git(repo, 'init'); git(repo, 'config', 'user.email', 't@example.invalid'); git(repo, 'config', 'user.name', 'Taste Test')
+            proj = repo / 'data/production/pre_ai/taste_projection.json'; q = repo / 'data/production/pre_ai/chatgpt_taste_queue.jsonl'
+            active = repo / pin.ACTIVE_PIN; inbox = repo / 'data/ai_inbox/taste/batch-a.json'
+            rows_a = queue('a'); write_json(proj, projection('A' * 40)); q.parent.mkdir(parents=True, exist_ok=True); q.write_text('\n'.join(json.dumps(x) for x in rows_a) + '\n')
+            pin_a = pin.build_pinned_work_unit(projection('A' * 40), rows_a, frozen('A' * 40, 'a'), prepared_at_utc='2026-09-10T00:00:00+00:00')
+            write_json(active, pin_a); git(repo, 'add', '.'); git(repo, 'commit', '-m', 'pin A before semantics'); a_commit = git(repo, 'rev-parse', 'HEAD')
 
-            projection_path.write_text(json.dumps(projection('A' * 40)), encoding='utf-8')
-            queue_path.write_text('\n'.join(json.dumps(row) for row in rows) + '\n', encoding='utf-8')
-            git(repo, 'add', '.')
-            git(repo, 'commit', '-m', 'prepare profile A work')
-            pre_result_commit = git(repo, 'rev-parse', 'HEAD')
+            write_json(proj, projection('B' * 40)); git(repo, 'add', str(proj.relative_to(repo))); git(repo, 'commit', '-m', 'live advances to B')
+            write_json(inbox, result_doc('A' * 40, rows_a, pin_a, a_commit)); git(repo, 'add', str(inbox.relative_to(repo))); git(repo, 'commit', '-m', 'A semantic result')
+            resolved_a, _, resolved_rows_a = pin.resolve_pinned_work_unit(inbox, proj, q, active, repo)
+            self.assertEqual(resolved_a['bindings']['profile_blob_sha'], 'A' * 40)
+            self.assertEqual(len(resolved_rows_a), 10)
 
-            input_path.write_text(json.dumps(result_document('A' * 40, rows)), encoding='utf-8')
-            git(repo, 'add', str(input_path.relative_to(repo)))
-            git(repo, 'commit', '-m', 'submit A results')
-            result_commit = git(repo, 'rev-parse', 'HEAD')
+            active.unlink(); rows_b = queue('b'); q.write_text('\n'.join(json.dumps(x) for x in rows_b) + '\n'); write_json(proj, projection('B' * 40))
+            git(repo, 'add', '-A'); git(repo, 'commit', '-m', 'retire A')
+            pin_b = pin.build_pinned_work_unit(projection('B' * 40), rows_b, frozen('B' * 40, 'b'), prepared_at_utc='2026-09-10T01:00:00+00:00')
+            write_json(active, pin_b); git(repo, 'add', '.'); git(repo, 'commit', '-m', 'pin B next work'); b_commit = git(repo, 'rev-parse', 'HEAD')
+            self.assertEqual(pin_b['bindings']['profile_blob_sha'], 'B' * 40)
+            self.assertNotEqual(pin_a['ordered_work_unit_sha256'], pin_b['ordered_work_unit_sha256'])
 
-            projection_path.write_text(json.dumps(projection('B' * 40)), encoding='utf-8')
-            git(repo, 'add', str(projection_path.relative_to(repo)))
-            git(repo, 'commit', '-m', 'advance live profile to B')
+            stale = repo / 'data/ai_inbox/taste/copied-old-a.json'; write_json(stale, result_doc('A' * 40, rows_a, pin_a, a_commit)); git(repo, 'add', str(stale.relative_to(repo))); git(repo, 'commit', '-m', 'arbitrary stale A')
+            with self.assertRaises(ValueError):
+                pin.resolve_pinned_work_unit(stale, proj, q, active, repo)
 
-            resolved, _, _ = pin.resolve_pinned_work_unit(input_path, projection_path, queue_path, repo)
-            pin.validate_document_against_pin(json.loads(input_path.read_text()), resolved)
-            self.assertEqual(resolved['authority_commit'], pre_result_commit)
-            self.assertEqual(resolved['result_commit'], result_commit)
-            self.assertEqual(resolved['bindings']['profile_blob_sha'], 'A' * 40)
+            fresh_b = repo / 'data/ai_inbox/taste/batch-b.json'; write_json(fresh_b, result_doc('B' * 40, rows_b, pin_b, b_commit)); git(repo, 'add', str(fresh_b.relative_to(repo))); git(repo, 'commit', '-m', 'B semantic result')
+            resolved_b, _, _ = pin.resolve_pinned_work_unit(fresh_b, proj, q, active, repo)
+            self.assertEqual(resolved_b['bindings']['profile_blob_sha'], 'B' * 40)
 
-            copied = repo / 'data/ai_inbox/taste/copied-stale.json'
-            copied.write_bytes(input_path.read_bytes())
-            git(repo, 'add', str(copied.relative_to(repo)))
-            git(repo, 'commit', '-m', 'copy stale A result after B')
-            copied_pin, _, _ = pin.resolve_pinned_work_unit(copied, projection_path, queue_path, repo)
-            self.assertEqual(copied_pin['bindings']['profile_blob_sha'], 'B' * 40)
-            with self.assertRaisesRegex(ValueError, 'pinned profile_blob_sha'):
-                pin.validate_document_against_pin(json.loads(copied.read_text()), copied_pin)
+    def test_pin_hash_commit_order_fingerprint_context_model_semantics_and_count_fail_closed(self):
+        rows = queue('a'); p = pin.build_pinned_work_unit(projection('A' * 40), rows, frozen('A' * 40, 'a'), prepared_at_utc='2026-09-10T00:00:00+00:00'); commit = '1' * 40
+        base = result_doc('A' * 40, rows, p, commit)
+        pin.validate_document_against_pin(base, p, authority_commit=commit)
+        variants = []
+        x = copy.deepcopy(base); x['bindings']['pinned_work_unit_sha256'] = '0' * 64; variants.append(x)
+        x = copy.deepcopy(base); x['bindings']['pin_authority_commit'] = '2' * 40; variants.append(x)
+        x = copy.deepcopy(base); x['results'][0], x['results'][1] = x['results'][1], x['results'][0]; variants.append(x)
+        x = copy.deepcopy(base); x['results'][0]['taste_fingerprint'] = 'f' * 64; variants.append(x)
+        x = copy.deepcopy(base); x['results'][0]['candidate_context_sha256'] = 'e' * 64; variants.append(x)
+        x = copy.deepcopy(base); x['bindings']['taste_model_version'] = 'old'; variants.append(x)
+        x = copy.deepcopy(base); x['bindings']['taste_semantics_sha256'] = '0' * 64; variants.append(x)
+        x = copy.deepcopy(base); x['results'].pop(); variants.append(x)
+        x = copy.deepcopy(base); x['results'][1] = copy.deepcopy(x['results'][0]); variants.append(x)
+        for x in variants:
+            with self.subTest(case=x):
+                with self.assertRaises(ValueError): pin.validate_document_against_pin(x, p, authority_commit=commit)
 
-    def test_existing_v5_package_still_hits_full_ingest_shape_validation(self):
+    def test_active_pin_requires_full_immutable_profile_identity(self):
+        rows = queue('a'); bad = frozen('A' * 40, 'a'); bad.pop('content_sha256')
+        with self.assertRaisesRegex(ValueError, 'immutable profile identity'):
+            pin.build_pinned_work_unit(projection('A' * 40), rows, bad)
+
+    def test_existing_10_package_is_exactly_grandfatherable_and_v5_stays_strict(self):
         doc = json.loads(EXISTING_BATCH.read_text(encoding='utf-8'))
-        bindings = doc['bindings']
-        rows = []
-        for result in doc['results']:
-            work_required = ['evaluate_taste_fit', 'resolve_grounded_negative_analysis']
-            if 'taste_factors' in result:
-                work_required.append('evaluate_normalized_taste_factors')
-            rows.append({
-                'taste_subject_key': result['key'],
-                'appid': str(result['appid']),
-                'taste_fingerprint': result['taste_fingerprint'],
-                'candidate_context_sha256': result['candidate_context_sha256'],
-                'work_required': work_required,
-            })
-        pinned_projection = projection(
-            bindings['profile_blob_sha'],
-            model=bindings['taste_model_version'],
-            semantics=bindings['taste_semantics_sha256'],
-            source=bindings['source_mailing_updated_at_utc'],
-        )
-        pinned = pin.build_pinned_work_unit(pinned_projection, rows)
-        queue_by_key = {row['taste_subject_key']: row for row in rows}
-
-        ingest.validate_input(copy.deepcopy(doc), queue_by_key, pinned_projection, {}, pinned)
-
-        missing_v5 = copy.deepcopy(doc)
-        missing_v5['results'][0].pop('fit_evidence_state')
+        resolved, pinned_projection, pinned_rows = pin.resolve_pinned_work_unit(EXISTING_BATCH, pin.DEFAULT_PROJECTION, pin.DEFAULT_QUEUE, pin.ACTIVE_PIN, ROOT)
+        self.assertTrue(resolved['grandfathered_legacy_package'])
+        self.assertEqual(resolved['authority_commit'], pin.LEGACY_PIN_COMMIT)
+        self.assertEqual(resolved['result_commit'], pin.LEGACY_RESULT_COMMIT)
+        self.assertEqual(resolved['bindings']['profile_blob_sha'], 'b487e62b3fec9f413fb001d96b4894f8ac43e5d5')
+        queue_by_key = {r['taste_subject_key']: r for r in pinned_rows}
+        ingest.validate_input(copy.deepcopy(doc), queue_by_key, pinned_projection, {}, resolved)
+        missing = copy.deepcopy(doc); missing['results'][0].pop('fit_evidence_state')
         with self.assertRaisesRegex(ValueError, 'Missing result fields'):
-            ingest.validate_input(missing_v5, queue_by_key, pinned_projection, {}, pinned)
-
-        duplicated = copy.deepcopy(doc)
-        duplicated['results'][1] = copy.deepcopy(duplicated['results'][0])
-        with self.assertRaises(ValueError):
-            ingest.validate_input(duplicated, queue_by_key, pinned_projection, {}, pinned)
+            ingest.validate_input(missing, queue_by_key, pinned_projection, {}, resolved)
+        duplicate = copy.deepcopy(doc); duplicate['results'][1] = copy.deepcopy(duplicate['results'][0])
+        with self.assertRaises(ValueError): ingest.validate_input(duplicate, queue_by_key, pinned_projection, {}, resolved)
 
 
 if __name__ == '__main__':
