@@ -3,8 +3,8 @@
 - task_id: `taste-post-canary-state-audit-stage1-01`
 - lifecycle: `in_progress`
 - started_utc: `2026-09-10T05:54:32Z`
-- completed_checks: `2/4`
-- next_action: `check 3 — verify package 20260909T061807Z__1908946 no longer exists in the active Taste inbox`
+- completed_checks: `3/4`
+- next_action: `check 4 — verify receipt 065e182a9147bfe3a7a6 exists and matches controlled canary provenance`
 
 ## Checks
 
@@ -17,3 +17,8 @@ Evidence source: `data/cache/taste_fit.entry_overlay.json`.
 **PASS.** The canonical pending queue is `data/production/pre_ai/chatgpt_taste_queue.jsonl`; a fresh exact search of its current contents finds no occurrence of `App_1016800`. The accepted Chernobylite canary is therefore no longer pending in the Taste queue.
 
 Evidence source: `data/production/pre_ai/chatgpt_taste_queue.jsonl`.
+
+### Check 3 — consumed active inbox package
+**PASS.** A fresh recursive `main` tree search finds no path containing package id `20260909T061807Z__1908946`. It also finds no active `data/ai_inbox` path. The controlled canary package is therefore no longer present in the active inbox.
+
+Evidence source: current recursive `main` tree.
