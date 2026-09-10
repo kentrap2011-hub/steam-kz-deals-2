@@ -1,11 +1,11 @@
 {
   "contract": "TASTE-SEMANTIC-RESULT-V5",
-  "version": "1.0",
+  "version": "1.1",
   "status": "canonical",
-  "purpose": "Define the price-blind semantic output produced by the existing Taste worker and persisted by GitHub, including normalized fit factors, grounded personal negatives, a separate evidence-state/confidence layer, historical reconsideration context, and candidate-quality findings that do not automatically imply personal dislike.",
+  "purpose": "Define the price-blind semantic output produced by the existing Taste worker and persisted by GitHub, including normalized fit factors, grounded personal negatives, a separate evidence-state/confidence layer, historical reconsideration context, candidate-quality findings, and exact durable pre-semantic work-unit/profile binding.",
   "ownership": {
     "semantic_evaluation": "existing_scheduled_chatgpt_taste_worker",
-    "queue_scope_and_bindings": "github",
+    "queue_scope_and_bindings": "github_durable_pinned_work_unit_authority",
     "validation_and_persistence": "github",
     "final_weight_application": "github_final_ranking_producer"
   },
@@ -17,6 +17,67 @@
       "producer_generation"
     ],
     "missing_legacy_or_mismatch_policy": "reject_before_ingest"
+  },
+  "pinned_work_unit_binding": {
+    "schema": "TASTE-PINNED-WORK-UNIT-V1",
+    "canonical_active_pin_path": "data/production/pre_ai/taste_active_work_unit.json",
+    "authority_owner": "github_control_plane",
+    "pin_must_be_durable_in_git_before_semantic_execution": true,
+    "required_profile_identity": [
+      "repository",
+      "path",
+      "resolved_commit_sha",
+      "blob_sha",
+      "content_sha256",
+      "bytes"
+    ],
+    "required_semantic_bindings": [
+      "profile_blob_sha",
+      "taste_model_version",
+      "taste_semantics_sha256",
+      "source_mailing_updated_at_utc"
+    ],
+    "required_ordered_row_identity": [
+      "key",
+      "appid",
+      "taste_fingerprint",
+      "candidate_context_sha256",
+      "work_required"
+    ],
+    "new_result_binding_fields": [
+      "pinned_work_unit_sha256",
+      "pin_authority_commit"
+    ],
+    "new_result_must_descend_from_pin_authority_commit": true,
+    "ingest_authority": "exact durable pinned work-unit rather than current live profile at ingest time",
+    "later_live_profile_update_does_not_invalidate_exact_matching_in_flight_pin": true,
+    "new_work_unit_after_prior_pin_retirement_must_freeze_then_current_live_profile": true,
+    "arbitrary_historical_profile_or_result_without_matching_pre_semantic_pin": "reject_before_ingest",
+    "fail_closed_on_any_mismatch": [
+      "producer fence",
+      "pin hash",
+      "pin authority commit",
+      "ordered result identity",
+      "appid",
+      "taste_fingerprint",
+      "candidate_context_sha256",
+      "profile_blob_sha",
+      "taste_model_version",
+      "taste_semantics_sha256",
+      "source_mailing_updated_at_utc",
+      "result count",
+      "duplicate key",
+      "V5 semantic result shape"
+    ],
+    "grandfathered_exact_package": {
+      "path": "data/ai_inbox/taste/manual-throughput-drain-01-batch-001.json",
+      "pre_semantic_pin_commit": "0ec1ed0ec10e8950f86e6f600bc360325481ae9b",
+      "result_introduction_commit": "f138d5216248c999fde588c47ca5088ff9c076ee",
+      "profile_blob_sha": "b487e62b3fec9f413fb001d96b4894f8ac43e5d5",
+      "policy": "acceptance_eligibility_only_if_exact_path_bytes_commits_parentage_bindings_order_and_rows_match_the_proven_checkpoint",
+      "reintroduction_or_copy_is_not_grandfathered": true,
+      "does_not_authorize_general_historical_profile_fallback": true
+    }
   },
   "required_base_result_fields": [
     "key",
