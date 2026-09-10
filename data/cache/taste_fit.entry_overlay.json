@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "purpose": "incremental_per_entry_taste_verdict_overlay",
-  "entry_schema_version": 3,
-  "entry_count": 806,
+  "entry_schema_version": 5,
+  "entry_count": 807,
   "entries": {
     "App_241930": {
       "key": "App_241930",
@@ -21179,6 +21179,56 @@
         "structure_pacing_direction": 66,
         "identity_hooks": 86,
         "breadth_of_match": 73
+      }
+    },
+    "App_1016800": {
+      "key": "App_1016800",
+      "appid": "1016800",
+      "profile_blob_sha": "b487e62b3fec9f413fb001d96b4894f8ac43e5d5",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "2fb17ed4b0732e67bee6e9e05668c31fbeac2bd60c4858801a9282bbf319480e",
+      "taste_fingerprint": "b8f101a75b7f50b2139e18349a0f31ea791fb4601b463f00a99d48834e5e4129",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Сильная атмосфера Чернобыльской зоны и личная загадка о прошлом хорошо совпадают с устойчивой любовью к выразительной атмосфере, тайне и истории, которую хочется раскрыть.",
+        "У игры есть понятный личный вектор: поиск пропавшей возлюбленной и раскрытие правды о прошлом, что поддерживает предпочтение к исследованию с ясной причиной двигаться дальше.",
+        "Стелс, открытый бой, подготовка снаряжения, развитие навыков, создание базы и выбор способов прохождения дают несколько независимых форм активных решений и прогрессии вместо одного неизменного цикла.",
+        "Нелинейные сюжетные решения и отношения с товарищами добавляют вариативность ситуаций и последствия выбора, что совпадает с предпочтением к развитию опыта по ходу игры."
+      ],
+      "negative_analysis_status": "complete_with_confirmed_negative",
+      "negative_findings": [
+        {
+          "category": "management_routine",
+          "code": "management_routine",
+          "evidence": "Chernobylite требует ежедневного планирования операций и распределения ресурсов и задач между товарищами; в замороженном профиле подтверждён риск от перегруженных систем и предварительного планирования, когда они начинают мешать прямому и понятному игровому действию.",
+          "risk_text_ru": "Ежедневное управление ресурсами и заданиями товарищей может со временем ощущаться как обязательная управленческая рутина и снижать темп.",
+          "evidence_origin": "candidate_specific_profile_conflict",
+          "evidence_strength": "moderate",
+          "personal_relevance": "confirmed"
+        }
+      ],
+      "negative_evidence": [
+        "Chernobylite требует ежедневного планирования операций и распределения ресурсов и задач между товарищами; в замороженном профиле подтверждён риск от перегруженных систем и предварительного планирования, когда они начинают мешать прямому и понятному игровому действию."
+      ],
+      "evidence_contract_sha": "6c4eef8944e1c1c09923b8c51aee1adff036a192",
+      "fit_evidence_state": "sufficient",
+      "fit_evidence_confidence": "high",
+      "fit_evidence_basis": [
+        "candidate_specific_positive_match",
+        "title_specific_inspection"
+      ],
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-10T02:33:21+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 68,
+        "development_variety": 84,
+        "structure_pacing_direction": 76,
+        "identity_hooks": 91,
+        "breadth_of_match": 82
       }
     }
   }
