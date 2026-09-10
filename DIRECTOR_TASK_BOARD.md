@@ -9,15 +9,17 @@
 - Worker completion means exact durable report is final, not merely that the chat response ended.
 - All non-trivial workers obey `WORKER_REPORT_DURABILITY_PROTOCOL.md` and `WORKER_ANTI_STALL_PROTOCOL.md`.
 - All user-facing closeouts obey `DIRECTOR_USER_COMMUNICATION_PROTOCOL.md`.
+- Proactive operational gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user must not be the project's monitoring layer.
 
 ## Current user priority — PROCESS REAL GAMES FIRST
 The user explicitly does not want to pause backlog processing for another optimization cycle.
 
 Primary goal now:
 1. finish acceptance of the already-produced 10-result Taste package;
-2. resume real Taste backlog processing in bounded batches;
-3. get enough canonically processed games that the user can actually inspect/use the output;
-4. defer smarter profile-change reevaluation architecture until later.
+2. apply the narrow required queue-order policy before starting new semantic backlog batches;
+3. resume real Taste backlog processing in bounded batches;
+4. get enough canonically processed games that the user can actually inspect/use the output;
+5. defer smarter profile-change reevaluation architecture until later.
 
 Do not interrupt backlog drain merely to optimize reevaluation invalidation unless a real correctness blocker requires it.
 
@@ -38,8 +40,31 @@ State at latest Director checkpoint:
 - same worker was instructed to resolve the exact new run/job IDs, verify success/failure, finalize the existing report, and not dispatch again;
 - no next games may start inside this task.
 
-## Immediate next — resume real backlog drain
-After the exact existing-10 ingest task reaches a terminal verified state, resume the throughput-drain experiment from the then-current canonical Taste queue/work-unit.
+## IMMEDIATE REQUIRED NEXT — Taste queue age-priority ordering
+Task:
+`WORKER_TASK_TASTE_QUEUE_AGE_PRIORITY_ORDER_01.md`
+
+Report:
+`reviews/worker_reports/taste-queue-age-priority-order-01.md`
+
+Status:
+`queued_after_existing_10_terminal_state_before_next_new_semantic_batch`
+
+User-required ordering for newly constructed Taste work:
+1. items that have never had a canonically accepted successful Taste semantic result;
+2. then previously checked items from oldest successful canonical Taste evaluation to newest.
+
+Rules:
+- an already pinned/in-flight work-unit is never reordered mid-flight;
+- failed/rejected/unaccepted attempts do not count as a successful check;
+- equal times use deterministic stable canonical identity as tie-breaker;
+- do not substitute source/queue/profile/Git commit time for semantic successful-evaluation time;
+- if no reliable canonical successful-evaluation timestamp exists, worker must stop and report the smallest explicit state addition needed rather than invent an approximation.
+
+This is a narrow ordering requirement, not a new commercial ranking system.
+
+## Immediate after ordering — resume real backlog drain
+After the exact existing-10 ingest reaches a terminal verified state and the age-priority ordering task is complete, resume the throughput-drain experiment from the then-current canonical Taste queue/work-unit.
 
 Operational intent:
 - process real games, not architecture work;
@@ -49,6 +74,29 @@ Operational intent:
 - do not count stale-profile historical acceptance as current-profile backlog reduction when A→B rules keep work pending.
 
 The observed result should later inform a practical per-invocation capacity, but must not silently become a business quota.
+
+## Proactive Project Auditor — standing role
+Protocol:
+`PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`
+
+Status:
+`standing_operational_role`
+
+Purpose:
+Detect operational/architecture mismatches without waiting for the user to notice them.
+
+Examples this role is expected to catch proactively:
+- stale one-game/canary prompt still active after production architecture is ready;
+- old cadence surviving after a newer user cadence requirement;
+- queue ordering that does not match current product priority;
+- a design report whose assumptions were superseded by later changes;
+- implementation that passed local tests but is not wired into the real production path;
+- recurring unnecessary reprocessing that should become a later architecture task;
+- a production/system defect being mistaken for normal throughput/capacity.
+
+The auditor is read-only by default and uses a free reusable worker slot when safe. It does not become a permanent third worker and cannot repair findings without separate authorization.
+
+Mandatory gates include production failure, producer/scheduler/queue lifecycle changes, user operating-policy changes, before declaring automated production fully enabled, and after multi-step architecture repair acceptance.
 
 ## Normal Scheduled Task — IMPORTANT CURRENT STATE
 Existing task:
@@ -87,7 +135,9 @@ Existing recommendation:
 
 The design originally preserved a daily cadence. User requirement has now superseded that cadence detail: when implementation is authorized/enabled, normal producer cadence should be hourly. The execution-safety cap remains separate from cadence and from business completeness.
 
-Do not implement this merely because it is on the board; user priority is current real-game processing first.
+The deterministic head must be built from the user-required age-priority queue, once `taste-queue-age-priority-order-01` is implemented.
+
+Do not implement the broader normal producer merely because it is on the board; current priority is current real-game processing first.
 
 ## QUEUED LATER — selective profile-change reevaluation
 Task ID / backlog item:
