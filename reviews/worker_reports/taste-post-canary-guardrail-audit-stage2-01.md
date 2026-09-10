@@ -3,8 +3,8 @@
 - task_id: `taste-post-canary-guardrail-audit-stage2-01`
 - lifecycle: `in_progress`
 - started_utc: `2026-09-10T06:48:37Z`
-- completed_checks: `5/7`
-- next_action: `check 6`
+- completed_checks: `6/7`
+- next_action: `check 7`
 
 ## Checks
 
@@ -39,3 +39,9 @@
    - A later profile update is handled by immutable tuple binding plus fail-closed ingest validation; it does not require the user to hold the profile still.
    - The implementation predecessor explicitly identifies the former defect as a preparation-time binding defect rather than a reason for a user-controlled quiet window, and its concurrency tests proved the replacement behavior.
    - Stage 1 separately verified the existing Taste Semantic Producer Scheduled Task is enabled on the permanent daily schedule; normal operation therefore has an existing automated trigger and no manual freeze step.
+
+6. No unresolved runtime/guardrail blocker requires recurring manual repair or an unbounded retry loop: `PASS`
+   - Checks 1–5 close the known live-profile race, producer/binding fence, semantic-evidence/factor protections, and daily-trigger guardrails without introducing a manual repair step.
+   - Profile freeze churn is bounded to three attempts and fails closed; `.github/workflows/ingest-taste-batch.yml` also bounds its rebase/push contention loop to three attempts before exiting failure.
+   - The accepted real Chernobylite canary completed one generation-2 semantic result and one canonical ingest transaction successfully, consumed the inbox item, removed the game from the queue and persisted a safe cache hit; its report identifies no recurring repair requirement.
+   - Stage 1 then passed the remaining Scheduled Task existence/enabled/permanent-schedule/singleton checks. No predecessor reports leave an unresolved runtime/guardrail blocker for ordinary daily operation.
