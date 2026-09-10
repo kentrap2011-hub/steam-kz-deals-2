@@ -1,11 +1,11 @@
 # Taste Post-Canary State Audit — Stage 2
 
 - task_id: `taste-post-canary-state-audit-stage2-01`
-- lifecycle: `in_progress`
+- lifecycle: `done`
 - started_utc: `2026-09-10T06:48:32Z`
-- completed_checks: `4/5`
-- next_action: `check 5`
-- decision: `pending`
+- completed_checks: `5/5`
+- next_action: `none`
+- decision: `pass`
 
 ## Accepted canary binding
 
@@ -31,7 +31,7 @@ The two predecessor reports were read once before investigation. The accepted bi
 **Result: PASS**
 
 - Current `data/cache/taste_fit.entry_overlay.json` contains `App_1016800` with profile blob `b487e62b3fec9f413fb001d96b4894f8ac43e5d5`, `taste_model_version=taste-v3`, semantics SHA256 `0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`, fingerprint `b8f101a75b7f50b2139e18349a0f31ea791fb4601b463f00a99d48834e5e4129`, and candidate-context SHA256 `2fb17ed4b0732e67bee6e9e05668c31fbeac2bd60c4858801a9282bbf319480e`; these match the accepted canary tuple exactly.
-- Current canonical ingest receipt `data/cache/taste_ingest_receipts/065e182a9147bfe3a7a6.json` names `TasteFitGen2_1016800_20260217.json`, confirming the persisted real AppID and producer generation `2` for the accepted ingest.
+- Current canonical ingest receipt `data/cache/taste_ingest_receipts/065e182a9147bfe3a7a6.json` is `status=complete`, batch id `065e182a9147bfe3a7a6`, has the sole input `canary-app-1016800-gen2.json`, `result_count=1`, `full_evaluation_result_count=1`, and sole key `App_1016800`; this confirms the persisted real AppID and generation-2 canary ingest.
 - The exact frozen source repo/path/branch/commit/content-hash tuple above comes from the accepted canary report; the current canonical record retains its exact accepted profile blob identity.
 - No repair action or runtime execution was performed.
 
@@ -69,3 +69,15 @@ The two predecessor reports were read once before investigation. The accepted bi
 - Therefore the accepted persisted canary state itself has not drifted since the canonical ingest. No source-of-truth exception is needed because no saved-state mutation occurred in the comparison interval.
 - The audit report commits created by this task are documentation-only and do not alter TASTE state.
 - No repair action or runtime execution was performed.
+
+### Check 5 — Final verdict
+
+**Result: PASS**
+
+All required saved-state conclusions are established: the current `App_1016800` record preserves the exact accepted canary binding; the canonical cache/merged-index/overlay surfaces agree; no contradictory duplicate or active stale copy was found; and the canonical TASTE saved state has not changed since accepted ingest commit `69af81919611fda00ffc507570d0788d6b9a53dc`.
+
+## Final decision
+
+`pass`
+
+No repair actions were performed. No TASTE data, runtime/cache state, Scheduled Task, code, queue, inbox, or configuration was modified or executed. Only this required audit report was created and incrementally updated after each check.
