@@ -1,12 +1,17 @@
 import argparse
+import base64
 import hashlib
 import json
+import os
 import subprocess
+import urllib.parse
+import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
 PIN_SCHEMA = 'TASTE-PINNED-WORK-UNIT-V1'
 CANONICAL_BATCH_SIZE = 10
+PROFILE_FREEZE_MAX_ATTEMPTS = 3
 ACTIVE_PIN = Path('data/production/pre_ai/taste_active_work_unit.json')
 DEFAULT_PROJECTION = Path('data/production/pre_ai/taste_projection.json')
 DEFAULT_QUEUE = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
@@ -30,6 +35,87 @@ LEGACY_PROFILE_IDENTITY = {
 def _sha(value):
     raw = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()
     return hashlib.sha256(raw).hexdigest()
+
+
+def _git_blob_sha_bytes(raw):
+    return hashlib.sha1(f'blob {len(raw)}\0'.encode('ascii') + raw).hexdigest()
+
+
+def _github_headers():
+    headers = {
+        'Accept': 'application/vnd.github+json',
+        'User-Agent': 'steam-kz-deals-pinned-taste-work-unit/1.0',
+        'X-GitHub-Api-Version': '2022-11-28',
+    }
+    token = os.environ.get('GITHUB_TOKEN')
+    if token:
+        headers['Authorization'] = f'Bearer {token}'
+    return headers
+
+
+def _fetch_github_json(url):
+    req = urllib.request.Request(url, headers=_github_headers())
+    with urllib.request.urlopen(req, timeout=15) as response:
+        raw = response.read()
+    doc = json.loads(raw.decode('utf-8'))
+    if not isinstance(doc, dict):
+        raise ValueError('Canonical live Taste profile API response must be an object')
+    return doc
+
+
+def _decode_contents_file(doc):
+    if doc.get('type') != 'file':
+        raise ValueError('Canonical live Taste profile contents response is not a file')
+    blob_sha = str(doc.get('sha') or '')
+    if len(blob_sha) != 40:
+        raise ValueError('Canonical live Taste profile blob SHA is missing or malformed')
+    if doc.get('encoding') != 'base64' or not isinstance(doc.get('content'), str):
+        raise ValueError('Canonical live Taste profile contents response has no base64 content')
+    raw = base64.b64decode(''.join(doc['content'].split()), validate=True)
+    if _git_blob_sha_bytes(raw) != blob_sha:
+        raise ValueError('Canonical live Taste profile content does not match advertised Git blob SHA')
+    parsed = json.loads(raw.decode('utf-8'))
+    if not isinstance(parsed, dict):
+        raise ValueError('Canonical live Taste profile JSON must be an object')
+    return raw, blob_sha
+
+
+def freeze_profile_identity_for_projection(projection, fetch_json=_fetch_github_json, max_attempts=PROFILE_FREEZE_MAX_ATTEMPTS):
+    profile = projection.get('current_profile') or {}
+    repository = str(profile.get('repository') or '')
+    path = str(profile.get('path') or '')
+    expected_blob = str(profile.get('blob_sha') or '')
+    expected_bytes = profile.get('bytes')
+    if not repository or not path or len(expected_blob) != 40 or not isinstance(expected_bytes, int) or expected_bytes <= 0:
+        raise ValueError('Prepared Taste projection lacks canonical profile identity needed for immutable pinning')
+    encoded_path = urllib.parse.quote(path, safe='/')
+    api_root = f'https://api.github.com/repos/{repository}'
+    head_url = f'{api_root}/commits/main'
+    for _attempt in range(1, int(max_attempts) + 1):
+        before = str(fetch_json(head_url).get('sha') or '')
+        if len(before) != 40:
+            raise ValueError('Canonical live Taste profile commit SHA is missing or malformed')
+        contents_url = f'{api_root}/contents/{encoded_path}?ref={before}'
+        raw, blob_sha = _decode_contents_file(fetch_json(contents_url))
+        after = str(fetch_json(head_url).get('sha') or '')
+        if len(after) != 40:
+            raise ValueError('Canonical live Taste profile confirmation SHA is missing or malformed')
+        if after != before:
+            continue
+        if blob_sha != expected_blob or len(raw) != expected_bytes:
+            raise ValueError(
+                'Canonical live Taste profile changed after the prepared projection; '
+                'refusing to pin a mixed profile/work-unit tuple'
+            )
+        return {
+            'repository': repository,
+            'path': path,
+            'resolved_commit_sha': before,
+            'blob_sha': blob_sha,
+            'content_sha256': hashlib.sha256(raw).hexdigest(),
+            'bytes': len(raw),
+        }
+    raise ValueError('Canonical live Taste profile changed during all bounded pin freeze attempts')
 
 
 def read_jsonl(path):
@@ -58,15 +144,20 @@ def _bindings(projection):
     return out
 
 
-def _profile(projection, frozen):
+def _profile(projection, frozen=None):
     p = projection.get('current_profile') or {}
     frozen = dict(frozen or {})
     out = {
         'repository': frozen.get('repository') or p.get('repository'),
         'path': frozen.get('path') or p.get('path'),
-        'resolved_commit_sha': frozen.get('resolved_commit_sha') or frozen.get('commit_sha'),
+        'resolved_commit_sha': (
+            frozen.get('resolved_commit_sha')
+            or frozen.get('commit_sha')
+            or p.get('resolved_commit_sha')
+            or p.get('commit_sha')
+        ),
         'blob_sha': frozen.get('blob_sha') or p.get('blob_sha'),
-        'content_sha256': frozen.get('content_sha256'),
+        'content_sha256': frozen.get('content_sha256') or p.get('content_sha256'),
         'bytes': frozen.get('bytes') if frozen.get('bytes') is not None else p.get('bytes'),
     }
     if out['blob_sha'] != p.get('blob_sha'):
@@ -121,7 +212,14 @@ def validate_pin_authority(pin):
     return pin
 
 
-def build_pinned_work_unit(projection, queue_rows, profile_binding, *, prepared_at_utc=None, authority='canonical_git_pre_semantic_work_unit_pin'):
+def build_pinned_work_unit(
+    projection,
+    queue_rows,
+    profile_binding=None,
+    *,
+    prepared_at_utc=None,
+    authority='canonical_git_pre_semantic_work_unit_pin',
+):
     if projection.get('status') != 'complete' or not projection.get('complete_coverage'):
         raise ValueError('Pinned taste projection is incomplete')
     if not isinstance(queue_rows, list) or not queue_rows:
@@ -147,8 +245,11 @@ def build_pinned_work_unit(projection, queue_rows, profile_binding, *, prepared_
 def pin_queue_rows(pin):
     validate_pin_authority(pin)
     return [{
-        'taste_subject_key': r['key'], 'appid': r['appid'], 'taste_fingerprint': r['taste_fingerprint'],
-        'candidate_context_sha256': r['candidate_context_sha256'], 'work_required': list(r['work_required']),
+        'taste_subject_key': r['key'],
+        'appid': r['appid'],
+        'taste_fingerprint': r['taste_fingerprint'],
+        'candidate_context_sha256': r['candidate_context_sha256'],
+        'work_required': list(r['work_required']),
     } for r in pin['ordered_rows']]
 
 
@@ -156,10 +257,21 @@ def pin_projection(pin):
     validate_pin_authority(pin)
     p, b = pin['profile_identity'], pin['bindings']
     return {
-        'status': 'complete', 'complete_coverage': True,
+        'status': 'complete',
+        'complete_coverage': True,
         'source_mailing_updated_at_utc': b['source_mailing_updated_at_utc'],
-        'current_profile': {'repository': p['repository'], 'path': p['path'], 'blob_sha': p['blob_sha'], 'bytes': p['bytes']},
-        'current_binding': {'taste_model_version': b['taste_model_version'], 'taste_semantics_sha256': b['taste_semantics_sha256']},
+        'current_profile': {
+            'repository': p['repository'],
+            'path': p['path'],
+            'resolved_commit_sha': p['resolved_commit_sha'],
+            'blob_sha': p['blob_sha'],
+            'content_sha256': p['content_sha256'],
+            'bytes': p['bytes'],
+        },
+        'current_binding': {
+            'taste_model_version': b['taste_model_version'],
+            'taste_semantics_sha256': b['taste_semantics_sha256'],
+        },
     }
 
 
@@ -238,58 +350,200 @@ def _result_commit(repo, path, raw):
 def _legacy_pin(repo, projection_path, queue_path):
     projection = json.loads(_bytes(repo, LEGACY_PIN_COMMIT, projection_path).decode())
     rows = [json.loads(line) for line in _bytes(repo, LEGACY_PIN_COMMIT, queue_path).decode().splitlines() if line.strip()]
-    pin = build_pinned_work_unit(projection, rows, LEGACY_PROFILE_IDENTITY, prepared_at_utc='2026-09-10T08:14:03+00:00', authority='grandfathered_git_pre_semantic_checkpoint')
+    pin = build_pinned_work_unit(
+        projection,
+        rows,
+        LEGACY_PROFILE_IDENTITY,
+        prepared_at_utc='2026-09-10T08:14:03+00:00',
+        authority='grandfathered_git_pre_semantic_checkpoint',
+    )
     return pin, projection, rows[:len(pin['ordered_rows'])]
 
 
-def resolve_pinned_work_unit(input_path, projection_path=DEFAULT_PROJECTION, queue_path=DEFAULT_QUEUE, active_pin_path=ACTIVE_PIN, repo_root=Path('.')):
-    repo = Path(repo_root).resolve(); inp = Path(input_path).resolve(); active = Path(active_pin_path).resolve()
+def resolve_pinned_work_unit(
+    input_path,
+    projection_path=DEFAULT_PROJECTION,
+    queue_path=DEFAULT_QUEUE,
+    active_pin_path=ACTIVE_PIN,
+    repo_root=Path('.'),
+):
+    repo = Path(repo_root).resolve()
+    inp = Path(input_path).resolve()
+    active = Path(active_pin_path).resolve()
     try:
-        rel_inp = inp.relative_to(repo).as_posix(); rel_proj = Path(projection_path).resolve().relative_to(repo).as_posix()
-        rel_queue = Path(queue_path).resolve().relative_to(repo).as_posix(); rel_pin = active.relative_to(repo).as_posix()
+        rel_inp = inp.relative_to(repo).as_posix()
+        rel_proj = Path(projection_path).resolve().relative_to(repo).as_posix()
+        rel_queue = Path(queue_path).resolve().relative_to(repo).as_posix()
+        rel_pin = active.relative_to(repo).as_posix()
     except ValueError as exc:
         raise ValueError('Pinned Taste paths must be inside canonical Git checkout') from exc
-    raw = inp.read_bytes(); result_commit = _result_commit(repo, rel_inp, raw); doc = json.loads(raw.decode())
+    raw = inp.read_bytes()
+    result_commit = _result_commit(repo, rel_inp, raw)
+    doc = json.loads(raw.decode())
     if rel_inp == LEGACY_RESULT_PATH:
         if result_commit != LEGACY_RESULT_COMMIT or _text(repo, 'rev-parse', f'{result_commit}^') != LEGACY_PIN_COMMIT:
             raise ValueError('Grandfathered Taste package provenance mismatch')
         pin, projection, rows = _legacy_pin(repo, rel_proj, rel_queue)
         validate_document_against_pin(doc, pin, legacy=True)
-        pin = dict(pin, authority_commit=LEGACY_PIN_COMMIT, result_commit=result_commit, grandfathered_legacy_package=True)
+        pin = dict(
+            pin,
+            authority_commit=LEGACY_PIN_COMMIT,
+            result_commit=result_commit,
+            grandfathered_legacy_package=True,
+        )
         return pin, projection, rows
     if not active.exists():
         raise ValueError('No durable active pinned Taste work-unit exists for this result')
-    pin_raw = active.read_bytes(); pin_commit = _text(repo, 'log', '-1', '--format=%H', '--', rel_pin)
+    pin_raw = active.read_bytes()
+    pin_commit = _text(repo, 'log', '-1', '--format=%H', '--', rel_pin)
     if not pin_commit or _bytes(repo, pin_commit, rel_pin) != pin_raw:
         raise ValueError('Active Taste pin lacks immutable durable Git authority')
     if _git(repo, 'merge-base', '--is-ancestor', pin_commit, result_commit, check=False).returncode:
         raise ValueError('Result does not descend from claimed pre-semantic pin commit')
     pin = json.loads(pin_raw.decode())
     validate_document_against_pin(doc, pin, authority_commit=pin_commit, legacy=False)
-    pin = dict(pin, authority_commit=pin_commit, result_commit=result_commit, grandfathered_legacy_package=False)
+    pin = dict(
+        pin,
+        authority_commit=pin_commit,
+        result_commit=result_commit,
+        grandfathered_legacy_package=False,
+    )
     return pin, pin_projection(pin), pin_queue_rows(pin)
 
 
-def prepare_pin(projection_path, queue_path, profile_binding_path, output_path):
+def _load_profile_binding(profile_binding_path, projection):
+    if profile_binding_path is not None:
+        return json.loads(Path(profile_binding_path).read_text(encoding='utf-8'))
+    return freeze_profile_identity_for_projection(projection)
+
+
+def _write_pin(output, pin):
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(pin, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+
+def prepare_pin(projection_path, queue_path, profile_binding_path=None, output_path=ACTIVE_PIN):
     output = Path(output_path)
     if output.exists():
         raise ValueError(f'Active Taste work-unit already exists: {output}')
-    pin = build_pinned_work_unit(json.loads(Path(projection_path).read_text()), read_jsonl(queue_path), json.loads(Path(profile_binding_path).read_text()))
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(pin, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    projection = json.loads(Path(projection_path).read_text(encoding='utf-8'))
+    rows = read_jsonl(queue_path)
+    profile_binding = _load_profile_binding(profile_binding_path, projection)
+    pin = build_pinned_work_unit(projection, rows, profile_binding)
+    _write_pin(output, pin)
     return pin
 
 
+def ensure_active_pin(projection_path=DEFAULT_PROJECTION, queue_path=DEFAULT_QUEUE, profile_binding_path=None, output_path=ACTIVE_PIN):
+    output = Path(output_path)
+    if output.exists():
+        existing = json.loads(output.read_text(encoding='utf-8'))
+        validate_pin_authority(existing)
+        return {
+            'status': 'preserved_existing_active_pin',
+            'pin': existing,
+        }
+    rows = read_jsonl(queue_path)
+    if not rows:
+        return {
+            'status': 'no_taste_work_no_active_pin',
+            'pin': None,
+        }
+    projection = json.loads(Path(projection_path).read_text(encoding='utf-8'))
+    pin = build_pinned_work_unit(
+        projection,
+        rows,
+        _load_profile_binding(profile_binding_path, projection),
+    )
+    _write_pin(output, pin)
+    return {
+        'status': 'prepared_new_active_pin',
+        'pin': pin,
+    }
+
+
+def transition_active_pin_after_success(
+    completed_pin,
+    projection_path=DEFAULT_PROJECTION,
+    queue_path=DEFAULT_QUEUE,
+    profile_binding_path=None,
+    output_path=ACTIVE_PIN,
+):
+    output = Path(output_path)
+    retired = None
+    if completed_pin is not None:
+        validate_pin_authority(completed_pin)
+        if completed_pin.get('grandfathered_legacy_package'):
+            raise ValueError('Legacy grandfathered package is not the canonical active pin and cannot retire it')
+        if not output.exists():
+            raise ValueError('Completed active Taste pin is missing before retirement')
+        current = json.loads(output.read_text(encoding='utf-8'))
+        validate_pin_authority(current)
+        if _hash_payload(current) != _hash_payload(completed_pin):
+            raise ValueError('Active Taste pin changed before proven-success retirement')
+        retired = current
+        output.unlink()
+    elif output.exists():
+        existing = json.loads(output.read_text(encoding='utf-8'))
+        validate_pin_authority(existing)
+        return {
+            'status': 'preserved_existing_next_active_pin',
+            'retired_pin': None,
+            'next_pin': existing,
+        }
+
+    rows = read_jsonl(queue_path)
+    if not rows:
+        return {
+            'status': 'retired_without_next_work' if retired is not None else 'no_next_work_no_active_pin',
+            'retired_pin': retired,
+            'next_pin': None,
+        }
+    projection = json.loads(Path(projection_path).read_text(encoding='utf-8'))
+    next_pin = build_pinned_work_unit(
+        projection,
+        rows,
+        _load_profile_binding(profile_binding_path, projection),
+    )
+    _write_pin(output, next_pin)
+    return {
+        'status': 'retired_and_prepared_next_active_pin' if retired is not None else 'prepared_next_active_pin',
+        'retired_pin': retired,
+        'next_pin': next_pin,
+    }
+
+
 def main():
-    parser = argparse.ArgumentParser(); sub = parser.add_subparsers(dest='command', required=True)
-    p = sub.add_parser('prepare'); p.add_argument('--projection', type=Path, default=DEFAULT_PROJECTION); p.add_argument('--queue', type=Path, default=DEFAULT_QUEUE)
-    p.add_argument('--profile-binding', required=True, type=Path); p.add_argument('--output', type=Path, default=ACTIVE_PIN)
+    parser = argparse.ArgumentParser()
+    sub = parser.add_subparsers(dest='command', required=True)
+    for name in ('prepare', 'ensure'):
+        p = sub.add_parser(name)
+        p.add_argument('--projection', type=Path, default=DEFAULT_PROJECTION)
+        p.add_argument('--queue', type=Path, default=DEFAULT_QUEUE)
+        p.add_argument('--profile-binding', type=Path)
+        p.add_argument('--output', type=Path, default=ACTIVE_PIN)
     args = parser.parse_args()
     try:
-        pin = prepare_pin(args.projection, args.queue, args.profile_binding, args.output)
-    except ValueError as exc:
+        if args.command == 'prepare':
+            pin = prepare_pin(args.projection, args.queue, args.profile_binding, args.output)
+            result = {
+                'status': 'prepared_not_yet_durable',
+                'path': str(args.output),
+                'ordered_work_unit_sha256': pin['ordered_work_unit_sha256'],
+                'profile_blob_sha': pin['bindings']['profile_blob_sha'],
+            }
+        else:
+            ensured = ensure_active_pin(args.projection, args.queue, args.profile_binding, args.output)
+            p = ensured['pin']
+            result = {
+                'status': ensured['status'],
+                'path': str(args.output),
+                'ordered_work_unit_sha256': None if p is None else p['ordered_work_unit_sha256'],
+                'profile_blob_sha': None if p is None else p['bindings']['profile_blob_sha'],
+            }
+    except (ValueError, json.JSONDecodeError, OSError) as exc:
         raise SystemExit(str(exc)) from exc
-    print(json.dumps({'status': 'prepared_not_yet_durable', 'path': str(args.output), 'ordered_work_unit_sha256': pin['ordered_work_unit_sha256'], 'profile_blob_sha': pin['bindings']['profile_blob_sha']}, indent=2))
+    print(json.dumps(result, indent=2))
 
 
 if __name__ == '__main__':

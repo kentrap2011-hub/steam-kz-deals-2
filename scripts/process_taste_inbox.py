@@ -5,6 +5,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from semantic_runtime_completion import build_runtime_status
+from taste_pinned_work_unit import (
+    ACTIVE_PIN,
+    resolve_pinned_work_unit,
+    transition_active_pin_after_success,
+)
 
 INBOX_DIR = Path('data/ai_inbox/taste')
 RECEIPT_DIR = Path('data/cache/taste_ingest_receipts')
@@ -132,6 +137,38 @@ def expected_retained_work(
     return work
 
 
+def _queue_identity(row):
+    row = row or {}
+    return {
+        'appid': str(row.get('appid')),
+        'taste_fingerprint': row.get('taste_fingerprint'),
+        'candidate_context_sha256': row.get('candidate_context_sha256'),
+        'work_required': list(row.get('work_required') or []),
+    }
+
+
+def result_is_reusable_for_current_projection(result, pinned_work_unit, current_projection, current_queue_row):
+    current_profile = current_projection.get('current_profile') or {}
+    current_binding = current_projection.get('current_binding') or {}
+    pinned_binding = pinned_work_unit.get('bindings') or {}
+    pinned_rows = {
+        row.get('key'): row
+        for row in (pinned_work_unit.get('ordered_rows') or [])
+        if row.get('key')
+    }
+    pinned_row = pinned_rows.get(result.get('key')) or {}
+    return bool(
+        current_queue_row
+        and pinned_binding.get('profile_blob_sha') == current_profile.get('blob_sha')
+        and pinned_binding.get('taste_model_version') == current_binding.get('taste_model_version')
+        and pinned_binding.get('taste_semantics_sha256') == current_binding.get('taste_semantics_sha256')
+        and str(result.get('appid')) == str(current_queue_row.get('appid')) == str(pinned_row.get('appid'))
+        and result.get('taste_fingerprint') == current_queue_row.get('taste_fingerprint') == pinned_row.get('taste_fingerprint')
+        and result.get('candidate_context_sha256') == current_queue_row.get('candidate_context_sha256') == pinned_row.get('candidate_context_sha256')
+        and list(current_queue_row.get('work_required') or []) == list(pinned_row.get('work_required') or [])
+    )
+
+
 def build_transactional_proof_checks(
     *,
     all_keys,
@@ -145,11 +182,23 @@ def build_transactional_proof_checks(
     after_queue,
     after_family_graph=None,
     after_deals=None,
+    baseline_projection=None,
+    current_reusable_by_key=None,
 ):
     after_queue_by_key = {row.get('taste_subject_key'): row for row in after_queue}
     duplicate_after_keys = len(after_queue_by_key) != len(after_queue)
+    if current_reusable_by_key is None:
+        current_reusable_by_key = {key: True for key in all_keys}
+    if set(current_reusable_by_key) != set(all_keys):
+        raise ValueError('Current-reuse proof must cover every ingested Taste key exactly')
+
     full_eval_count = sum(
         'evaluate_taste_fit' in (baseline_queue_by_key[key].get('work_required') or [])
+        for key in all_keys
+    )
+    current_reusable_full_eval_count = sum(
+        current_reusable_by_key[key]
+        and 'evaluate_taste_fit' in (baseline_queue_by_key[key].get('work_required') or [])
         for key in all_keys
     )
 
@@ -161,11 +210,23 @@ def build_transactional_proof_checks(
     deal_entries = (after_deals or {}).get('entries') or {}
     excluded_primary_keys = set(after_manifest.get('deterministically_excluded_primary_keys') or [])
 
-    expected_safe_hits = baseline_safe_hits + full_eval_count
-    expected_ai_required = baseline_ai_required - full_eval_count
+    expected_safe_hits = baseline_safe_hits + current_reusable_full_eval_count
+    expected_ai_required = baseline_ai_required - current_reusable_full_eval_count
     retained = {}
     retention_mismatches = {}
     for key in all_keys:
+        if not current_reusable_by_key[key]:
+            expected_work = list(baseline_queue_by_key[key].get('work_required') or [])
+            retained[key] = expected_work
+            actual = after_queue_by_key.get(key)
+            if actual is None or _queue_identity(actual) != _queue_identity(baseline_queue_by_key[key]):
+                retention_mismatches[key] = {
+                    'expected_work_required': expected_work,
+                    'actual_work_required': None if actual is None else actual.get('work_required'),
+                    'reason': 'pinned_result_is_valid_but_not_reusable_for_current_live_identity',
+                }
+            continue
+
         family = family_by_taste_key.get(key) or {}
         primary_key = family.get('primary_key') or key
         expected_work = expected_retained_work(
@@ -191,21 +252,44 @@ def build_transactional_proof_checks(
             }
 
     expected_ai_queue = baseline_ai_queue - len(all_keys) + len(retained)
+    baseline_entries = (baseline_projection or {}).get('entries') or {}
+    after_entries = after_projection.get('entries') or {}
+    stale_keys = [key for key in all_keys if not current_reusable_by_key[key]]
+    reusable_keys = [key for key in all_keys if current_reusable_by_key[key]]
+
+    stale_projection_unchanged = all(
+        (after_entries.get(key) or {}).get('status') == (baseline_entries.get(key) or {}).get('status')
+        for key in stale_keys
+    ) if baseline_projection is not None else not stale_keys
+    stale_not_promoted_to_current_hit = all(
+        (after_entries.get(key) or {}).get('status') != 'cache_hit'
+        for key in stale_keys
+    )
+    stale_queue_exact = all(
+        key in after_queue_by_key
+        and _queue_identity(after_queue_by_key[key]) == _queue_identity(baseline_queue_by_key[key])
+        for key in stale_keys
+    )
+    reusable_are_hits = all(
+        (after_entries.get(key) or {}).get('status') == 'cache_hit'
+        for key in reusable_keys
+    )
+
     checks = {
         'projection_complete': after_projection.get('complete_coverage') is True,
         'family_partition_complete': after_manifest.get('complete_family_partition') is True,
         'sale_end_state_consistent': sale_end_state_is_consistent(after_manifest),
         'missing_sale_end_is_nonblocking': (after_manifest.get('contract') or {}).get('missing_sale_end_does_not_exclude_candidate') is True,
-        'safe_hits_increment_only_for_full_eval': after_projection.get('safe_cache_hit_count') == expected_safe_hits,
-        'ai_required_decrement_only_for_full_eval': after_projection.get('ai_required_count') == expected_ai_required,
+        'safe_hits_increment_only_for_current_reusable_full_eval': after_projection.get('safe_cache_hit_count') == expected_safe_hits,
+        'ai_required_decrement_only_for_current_reusable_full_eval': after_projection.get('ai_required_count') == expected_ai_required,
         'after_queue_has_unique_keys': not duplicate_after_keys,
-        'ingested_key_retention_matches_negative_and_base_support_state': not retention_mismatches,
+        'ingested_key_retention_matches_negative_base_support_or_newer_live_state': not retention_mismatches,
         'ai_queue_count_exact': after_manifest.get('ai_queue_count') == expected_ai_queue,
         'queue_file_count_exact': len(after_queue) == expected_ai_queue,
-        'all_ingested_keys_are_fit_cache_hits': all(
-            (after_projection.get('entries') or {}).get(key, {}).get('status') == 'cache_hit'
-            for key in all_keys
-        ),
+        'current_reusable_ingested_keys_are_fit_cache_hits': reusable_are_hits,
+        'older_pinned_result_does_not_become_current_live_cache_hit': stale_not_promoted_to_current_hit,
+        'newer_live_projection_state_is_preserved_for_older_pinned_results': stale_projection_unchanged,
+        'newer_live_work_remains_exact_for_next_work_unit': stale_queue_exact,
     }
     return checks, retained, retention_mismatches, expected_ai_queue, full_eval_count
 
@@ -231,6 +315,8 @@ def main():
     total_results = 0
     batch_docs = []
     result_by_key = {}
+    resolved_pin_by_key = {}
+    resolved_batch_pins = []
     digest = hashlib.sha256()
     for path in inbox_files:
         raw = path.read_bytes()
@@ -247,9 +333,21 @@ def main():
         keys = [row.get('key') for row in results]
         if any(not isinstance(key, str) or not key for key in keys):
             raise SystemExit(f'{path} contains an invalid result key')
-        batch_docs.append((path, doc, keys))
+        try:
+            resolved_pin, _pinned_projection, _pinned_rows = resolve_pinned_work_unit(
+                path,
+                PROJECTION,
+                QUEUE,
+                ACTIVE_PIN,
+                Path('.'),
+            )
+        except (ValueError, OSError, json.JSONDecodeError) as exc:
+            raise SystemExit(f'Pinned Taste work-unit proof failed for {path}: {exc}') from exc
+        resolved_batch_pins.append(resolved_pin)
+        batch_docs.append((path, doc, keys, resolved_pin))
         for result in results:
             result_by_key[result['key']] = result
+            resolved_pin_by_key[result['key']] = resolved_pin
         all_keys.extend(keys)
         total_results += len(results)
 
@@ -259,6 +357,16 @@ def main():
     if missing_from_queue:
         raise SystemExit(f'Inbox keys are not in the synchronized current taste queue: {missing_from_queue[:20]}')
 
+    current_reusable_by_key = {
+        key: result_is_reusable_for_current_projection(
+            result_by_key[key],
+            resolved_pin_by_key[key],
+            baseline_projection,
+            baseline_queue_by_key[key],
+        )
+        for key in all_keys
+    }
+
     baseline_safe_hits = baseline_projection.get('safe_cache_hit_count')
     baseline_ai_required = baseline_projection.get('ai_required_count')
     baseline_ai_queue = baseline_manifest.get('ai_queue_count')
@@ -267,7 +375,7 @@ def main():
 
     # Each file is validated by the canonical ingest contract. Negative-only rows
     # cannot rewrite fit semantics because their accepted result shape omits them.
-    for path, _doc, _keys in batch_docs:
+    for path, _doc, _keys, _pin in batch_docs:
         run('python', 'scripts/ingest_taste_results.py', '--input', str(path))
 
     rebuild_taste_consumers()
@@ -290,20 +398,48 @@ def main():
         after_queue=after_queue,
         after_family_graph=after_family_graph,
         after_deals=after_deals,
+        baseline_projection=baseline_projection,
+        current_reusable_by_key=current_reusable_by_key,
     )
     failed = [name for name, ok in checks.items() if not ok]
     if failed:
         print(json.dumps({
             'retained_ingest_keys': retained,
             'retention_mismatches': retention_mismatches,
+            'current_reusable_by_key': current_reusable_by_key,
             'expected_ai_queue_count': expected_ai_queue,
             'actual_ai_queue_count': after_manifest.get('ai_queue_count'),
         }, ensure_ascii=False, indent=2))
         raise SystemExit(f'Taste inbox transactional proof failed: {failed}')
 
+    normal_active_pins = [
+        p for p in resolved_batch_pins
+        if not p.get('grandfathered_legacy_package')
+    ]
+    completed_active_pin = None
+    if normal_active_pins:
+        hashes = {p.get('ordered_work_unit_sha256') for p in normal_active_pins}
+        authorities = {p.get('authority_commit') for p in normal_active_pins}
+        if len(hashes) != 1 or len(authorities) != 1:
+            raise SystemExit('A single Taste transaction cannot retire multiple active pinned work-units')
+        completed_active_pin = normal_active_pins[0]
+
+    try:
+        pin_transition = transition_active_pin_after_success(
+            completed_active_pin,
+            PROJECTION,
+            QUEUE,
+            None,
+            ACTIVE_PIN,
+        )
+    except (ValueError, OSError, json.JSONDecodeError) as exc:
+        raise SystemExit(f'Taste active pin retirement/next-pin preparation failed: {exc}') from exc
+
     batch_id = digest.hexdigest()[:20]
+    next_pin = pin_transition.get('next_pin')
+    retired_pin = pin_transition.get('retired_pin')
     receipt = {
-        'schema_version': 2,
+        'schema_version': 3,
         'status': 'complete',
         'batch_id': batch_id,
         'processed_at_utc': datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
@@ -318,6 +454,8 @@ def main():
         ),
         'keys': all_keys,
         'retained_work_after_ingest': retained,
+        'current_reusable_result_count': sum(bool(current_reusable_by_key[key]) for key in all_keys),
+        'newer_live_pending_result_count': sum(not current_reusable_by_key[key] for key in all_keys),
         'baseline': {
             'safe_cache_hit_count': baseline_safe_hits,
             'ai_required_count': baseline_ai_required,
@@ -332,6 +470,14 @@ def main():
             'deterministically_excluded_without_ai_count': after_manifest.get('deterministically_excluded_without_ai_count'),
             'sale_end_coverage': after_manifest.get('sale_end_coverage'),
             'sale_end_missing_count': after_manifest.get('sale_end_missing_count'),
+        },
+        'pin_lifecycle': {
+            'transition_status': pin_transition.get('status'),
+            'retired_work_unit_sha256': None if retired_pin is None else retired_pin.get('ordered_work_unit_sha256'),
+            'retired_profile_blob_sha': None if retired_pin is None else (retired_pin.get('bindings') or {}).get('profile_blob_sha'),
+            'next_work_unit_sha256': None if next_pin is None else next_pin.get('ordered_work_unit_sha256'),
+            'next_profile_blob_sha': None if next_pin is None else (next_pin.get('bindings') or {}).get('profile_blob_sha'),
+            'legacy_grandfathered_input_does_not_retire_unrelated_active_pin': completed_active_pin is None,
         },
         'checks': checks,
     }

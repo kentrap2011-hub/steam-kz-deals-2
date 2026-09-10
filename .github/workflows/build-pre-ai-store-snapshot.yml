@@ -37,6 +37,7 @@ on:
       - "data/cache/taste_fit.ledger_validation.json"
       - "data/cache/russian_description_translations.json"
       - "scripts/taste_cache_common.py"
+      - "scripts/taste_pinned_work_unit.py"
       - "scripts/build_taste_cache_index.py"
       - "scripts/ingest_taste_results.py"
       - "scripts/build_pre_ai_store_snapshot.py"
@@ -123,6 +124,11 @@ jobs:
       - name: Build split ChatGPT consumer bundle
         run: python scripts/build_pre_ai_chatgpt_payload.py
 
+      - name: Persist or preserve pre-semantic Taste active pin
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/taste_pinned_work_unit.py ensure
+
       - name: Validate Russian translation runtime contract
         run: |
           set -euo pipefail
@@ -152,6 +158,10 @@ jobs:
             data/production/pre_ai/chatgpt_purchase_context.jsonl \
             data/production/pre_ai/chatgpt_ru_description_queue.jsonl \
             data/production/pre_ai/chatgpt_ru_description_status.json
+          if [ -e data/production/pre_ai/taste_active_work_unit.json ] || \
+             git ls-files --error-unmatch data/production/pre_ai/taste_active_work_unit.json >/dev/null 2>&1; then
+            git add -A data/production/pre_ai/taste_active_work_unit.json
+          fi
           if git diff --cached --quiet; then
             echo "Pre-AI deterministic payload already current"
             exit 0

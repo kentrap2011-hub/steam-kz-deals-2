@@ -189,7 +189,7 @@ def illegal_retained_taste_work_case():
     assert 'App_1' in mismatches
     assert expected_queue == 0
     assert full_eval_count == 1
-    assert checks['ingested_key_retention_matches_negative_and_base_support_state'] is False
+    assert checks['ingested_key_retention_matches_negative_base_support_or_newer_live_state'] is False
     assert checks['ai_queue_count_exact'] is False
     assert checks['queue_file_count_exact'] is False
     failed = [name for name, ok in checks.items() if not ok]

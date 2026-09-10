@@ -41,6 +41,8 @@ jobs:
         run: python scripts/validate_taste_inbox_transactional_proof.py
 
       - name: Validate, ingest and rebuild taste consumers atomically
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: python scripts/process_taste_inbox.py
 
       - name: Commit processed taste batch and synchronized consumer state
@@ -56,6 +58,10 @@ jobs:
             data/production/pre_ai/chatgpt_payload.json \
             data/production/pre_ai/chatgpt_taste_queue.jsonl \
             data/production/pre_ai/chatgpt_purchase_context.jsonl
+          if [ -e data/production/pre_ai/taste_active_work_unit.json ] || \
+             git ls-files --error-unmatch data/production/pre_ai/taste_active_work_unit.json >/dev/null 2>&1; then
+            git add -A data/production/pre_ai/taste_active_work_unit.json
+          fi
           git diff --cached --check
           changed="$(git diff --cached --name-only)"
           echo "$changed"
