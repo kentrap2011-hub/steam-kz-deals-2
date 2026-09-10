@@ -11,6 +11,8 @@ on:
     paths:
       - "scripts/steam_production.py"
       - "scripts/steam_production_cached.py"
+      - "scripts/steam_traversal_recovery.py"
+      - "scripts/test_steam_traversal_recovery.py"
       - "scripts/production_output_ownership.py"
       - "scripts/test_production_output_ownership.py"
       - "scripts/giveaway_core.py"
@@ -55,6 +57,9 @@ jobs:
 
       - name: Install dependencies
         run: pip install requests beautifulsoup4
+
+      - name: Regression test Steam traversal recovery
+        run: python scripts/test_steam_traversal_recovery.py
 
       - name: Regression test production output ownership
         run: python scripts/test_production_output_ownership.py
