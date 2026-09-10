@@ -2,9 +2,11 @@ import json
 import sys
 from pathlib import Path
 
+import build_daily_visual_payload as readiness_builder
 from card_explanation_policy import GROUNDED_RISK_SOURCES
 
 
+CURRENT_VISUAL = Path('data/production/visual/current.json')
 GENERIC_POSITIVE_PREFIX = 'Игра прошла строгий вкусовой отбор'
 COMMERCIAL_ONLY_TERMS = ('скидк', 'цена', 'цене', 'руб', 'rank', 'score', 'рейтинг')
 
@@ -13,6 +15,14 @@ def load_items(path):
     data = json.loads(Path(path).read_text(encoding='utf-8'))
     items = data.get('items') or []
     return sorted(items, key=lambda game: int(game.get('priority_rank') or 999999))
+
+
+def semantic_validation_required(path):
+    candidate = Path(path)
+    if candidate.resolve() != CURRENT_VISUAL.resolve():
+        return True
+    source_key, _payload = readiness_builder.current_production_readiness()
+    return source_key is not None
 
 
 def validate_item(game):
@@ -80,9 +90,21 @@ def validate_item(game):
 
 
 def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else 'data/production/visual/current.json'
+    path = sys.argv[1] if len(sys.argv) > 1 else str(CURRENT_VISUAL)
     sample_limit = int(sys.argv[2]) if len(sys.argv) > 2 else 30
     items = load_items(path)
+
+    if not semantic_validation_required(path):
+        print(json.dumps({
+            'path': path,
+            'sample_size': min(len(items), sample_limit),
+            'item_count': len(items),
+            'validation_mode': 'preserve_existing_semantics',
+            'reason': 'pending_ai_queue',
+        }, ensure_ascii=False, indent=2))
+        print('CARD_EXPLANATION_VALIDATION=SKIP reason=pending_ai_queue_preserve_existing_semantics')
+        return
+
     sample = items[:sample_limit]
     errors = []
     for game in sample:
