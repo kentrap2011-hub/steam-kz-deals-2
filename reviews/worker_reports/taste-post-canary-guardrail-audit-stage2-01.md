@@ -3,8 +3,8 @@
 - task_id: `taste-post-canary-guardrail-audit-stage2-01`
 - lifecycle: `in_progress`
 - started_utc: `2026-09-10T06:48:37Z`
-- completed_checks: `4/7`
-- next_action: `check 5`
+- completed_checks: `5/7`
+- next_action: `check 6`
 
 ## Checks
 
@@ -33,3 +33,9 @@
    - `scripts/ingest_taste_results.py` requires `taste_factors` whenever the queue requests `evaluate_normalized_taste_factors`, validates them, requires at least two explicit positive evidence items for INCLUDE, and validates positive/negative evidence text.
    - The ingest path rejects price/discount/wishlist/SteamDB/historical-price/sale/commercial fragments as Taste evidence; current V5 contract explicitly sets `price_blind: true`, lists commercial inputs and `review_sentiment_or_percentage_as_fit_evidence` as forbidden, and states public review sentiment percentage is not Taste evidence.
    - The Chernobylite real acceptance predecessor proved these guards on one actual result: evidence/factors passed and no forbidden commercial/price/review fields were used as Taste-fit evidence.
+
+5. Normal daily operation requires no user pause, quiet window or manual profile freeze: `PASS`
+   - Checks 1–2 establish that preparation itself resolves the current canonical profile, freezes an immutable commit/file snapshot, detects a concurrent pre-freeze update, retries at most three times, and then uses only the frozen snapshot for the tuple.
+   - A later profile update is handled by immutable tuple binding plus fail-closed ingest validation; it does not require the user to hold the profile still.
+   - The implementation predecessor explicitly identifies the former defect as a preparation-time binding defect rather than a reason for a user-controlled quiet window, and its concurrency tests proved the replacement behavior.
+   - Stage 1 separately verified the existing Taste Semantic Producer Scheduled Task is enabled on the permanent daily schedule; normal operation therefore has an existing automated trigger and no manual freeze step.
