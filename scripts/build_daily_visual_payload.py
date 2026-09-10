@@ -307,7 +307,8 @@ def enrich_personal_risks(ready, context_by_family):
 
 def current_production_readiness():
     payload = load_json(PAYLOAD)
-    if payload.get('status') != 'complete':
+    payload_status = str(payload.get('status') or '')
+    if payload_status not in {'complete', 'degraded'}:
         raise SystemExit('ChatGPT production payload is not complete')
     if payload.get('complete_family_partition') is not True:
         raise SystemExit('Production family partition is not complete')
@@ -333,6 +334,8 @@ def current_production_readiness():
         raise SystemExit('Production payload has no source_mailing_updated_at_utc')
     if ai_queue_count != 0:
         return None, payload
+    if payload_status != 'complete':
+        raise SystemExit('ChatGPT production payload is not complete')
     if ready_count != purchase_context_count:
         raise SystemExit('Closed AI queue must leave one purchase-context row per ready family: ' f'ready={ready_count} purchase_context={purchase_context_count}')
     return source_key, payload
