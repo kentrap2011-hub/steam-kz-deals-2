@@ -29,6 +29,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install dependencies
+        run: python -m pip install requests beautifulsoup4
+
       - name: Apply bounded recovery fixes
         run: python scripts/site_giveaway_freshness_recovery_once.py
 
