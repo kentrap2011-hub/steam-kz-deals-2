@@ -16,6 +16,7 @@ from taste_evidence_contract import (
     current_evidence_contract_sha,
     validate_fit_evidence_fields,
 )
+from taste_pinned_work_unit import resolve_pinned_work_unit, validate_document_against_pin
 
 QUEUE = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
 PROJECTION = Path('data/production/pre_ai/taste_projection.json')
@@ -150,33 +151,13 @@ def validate_current_base_entry(key, entry, queue_row, projection):
         if actual != value:
             raise ValueError(
                 f'Negative-only backfill base binding mismatch for {key}.{field}: '
-                f'entry={actual!r} current={value!r}'
+                f'entry={actual!r} pinned={value!r}'
             )
     return entry
 
 
-def validate_input(doc, queue_by_key, projection, current_entries):
-    if doc.get('schema_version') != 1:
-        raise ValueError('Unexpected ingest schema_version')
-    bindings = doc.get('bindings')
-    if not isinstance(bindings, dict):
-        raise ValueError('Ingest bindings must be an object')
-
-    current_profile = projection['current_profile']['blob_sha']
-    current_model = projection['current_binding']['taste_model_version']
-    current_semantics = projection['current_binding']['taste_semantics_sha256']
-    current_source = projection['source_mailing_updated_at_utc']
-    expected = {
-        'profile_blob_sha': current_profile,
-        'taste_model_version': current_model,
-        'taste_semantics_sha256': current_semantics,
-        'source_mailing_updated_at_utc': current_source,
-    }
-    for field, value in expected.items():
-        if bindings.get(field) != value:
-            raise ValueError(
-                f'Ingest binding mismatch for {field}: input={bindings.get(field)!r} current={value!r}'
-            )
+def validate_input(doc, queue_by_key, projection, current_entries, pinned_work_unit):
+    bindings = validate_document_against_pin(doc, pinned_work_unit)
 
     results = doc.get('results')
     if not isinstance(results, list) or not results:
@@ -199,12 +180,12 @@ def validate_input(doc, queue_by_key, projection, current_entries):
 
         queue_row = queue_by_key.get(key)
         if queue_row is None:
-            raise ValueError(f'Ingest key is not in current ChatGPT taste queue: {key}')
+            raise ValueError(f'Ingest key is not in pinned ChatGPT taste work-unit: {key}')
         work_required = queue_row.get('work_required') or []
         full_eval = 'evaluate_taste_fit' in work_required
         negative_requested = NEGATIVE_WORK_CODE in work_required
         if not negative_requested:
-            raise ValueError(f'Current queue row does not require grounded negative analysis: {key}')
+            raise ValueError(f'Pinned queue row does not require grounded negative analysis: {key}')
 
         if full_eval:
             allowed = FULL_RESULT_FIELDS | OPTIONAL_FULL_RESULT_FIELDS
@@ -244,7 +225,7 @@ def validate_input(doc, queue_by_key, projection, current_entries):
             validate_fit_evidence_fields(result, require_v5=True)
             factors_required = 'evaluate_normalized_taste_factors' in work_required
             if factors_required and 'taste_factors' not in result:
-                raise ValueError(f'Current queue row requires taste_factors: {key}')
+                raise ValueError(f'Pinned queue row requires taste_factors: {key}')
             if 'taste_factors' in result:
                 validate_taste_factors(result['taste_factors'])
             validate_verdict_shape(result['verdict'], result['fit_level'], result['reason_code'])
@@ -324,22 +305,26 @@ def main():
     parser.add_argument('--dry-run', action='store_true')
     args = parser.parse_args()
 
-    projection = load_json(PROJECTION)
-    if projection.get('status') != 'complete' or not projection.get('complete_coverage'):
-        raise SystemExit('Current taste projection is incomplete')
-    if not (projection.get('cache_binding') or {}).get('index_integrity_ok'):
-        raise SystemExit('Current per-entry taste index integrity is not proven')
-
-    queue = read_jsonl(QUEUE)
-    queue_by_key = {row['taste_subject_key']: row for row in queue}
-    if len(queue_by_key) != len(queue):
-        raise SystemExit('Current ChatGPT taste queue has duplicate taste_subject_key values')
-
     try:
+        ingest = load_json(args.input)
+        pinned_work_unit, projection, queue = resolve_pinned_work_unit(
+            args.input,
+            PROJECTION,
+            QUEUE,
+        )
+        queue_by_key = {row['taste_subject_key']: row for row in queue}
+        if len(queue_by_key) != len(queue):
+            raise ValueError('Pinned ChatGPT taste work-unit has duplicate taste_subject_key values')
+
         overlay = load_overlay()
         current_entries = effective_entries(overlay)
-        ingest = load_json(args.input)
-        bindings, validated = validate_input(ingest, queue_by_key, projection, current_entries)
+        bindings, validated = validate_input(
+            ingest,
+            queue_by_key,
+            projection,
+            current_entries,
+            pinned_work_unit,
+        )
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
 
@@ -419,6 +404,9 @@ def main():
         'profile_blob_sha': bindings['profile_blob_sha'],
         'taste_model_version': bindings['taste_model_version'],
         'taste_semantics_sha256': bindings['taste_semantics_sha256'],
+        'pinned_work_unit_sha256': pinned_work_unit['ordered_work_unit_sha256'],
+        'pinned_authority_commit': pinned_work_unit['authority_commit'],
+        'result_introduction_commit': pinned_work_unit['result_commit'],
         'candidate_context_required': True,
         'negative_only_fit_semantics_immutable': True,
     }, ensure_ascii=False, indent=2))
