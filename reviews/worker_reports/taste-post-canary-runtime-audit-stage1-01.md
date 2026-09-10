@@ -1,11 +1,12 @@
 # TASTE Post-Canary Runtime Audit — Stage 1
 
 - task_id: `taste-post-canary-runtime-audit-stage1-01`
-- lifecycle: `in_progress`
+- lifecycle: `completed`
 - started_utc: `2026-09-10T05:54:49Z`
 - completed_checks: `4/4`
-- decision: `pending`
-- next_action: `finalize audit decision`
+- decision: `FAIL`
+- failed_checks: `1, 2, 3, 4 — runtime verification unavailable`
+- next_action: `rerun Stage-1 runtime audit in an execution context where scheduler inspection returns readable task state; do not alter the Scheduled Task solely on this verification failure`
 
 ## Checks
 
@@ -25,3 +26,11 @@
    - expected: no second Scheduled Task for the same Taste semantic producer role
    - runtime evidence: scheduler inventory was not exposed readably in this execution context, so absence of a duplicate could not be affirmatively established.
    - interpretation: this is a failed verification, not evidence that a duplicate task exists.
+
+## Final decision
+
+`FAIL`
+
+Reason: all four required runtime properties could not be affirmatively verified because scheduler inspection did not expose readable task state in this execution context. This is a verification failure, not evidence that the task is missing, disabled, mis-scheduled, or duplicated.
+
+No code or Scheduled Task configuration was modified.
