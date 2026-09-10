@@ -240,6 +240,42 @@ def test_fresh_commercial_only_path_does_not_claim_full_visual_freshness() -> No
         assert freshness.verify_receipt(repo, receipt, expected_run_id="181", staged_path=staged) == "fresh"
 
 
+def test_deterministic_refresh_auto_detects_pending_semantic_queue() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        repo, _ = make_repo(Path(td))
+        write_json(
+            repo / freshness.COMMERCIAL_PAYLOAD_PATH,
+            {
+                "source_mailing_updated_at_utc": SOURCE,
+                "fx_binding": {"kzt_per_rub": 5.0},
+                "status": "degraded",
+                "ai_queue_count": 3,
+                "complete_family_partition": True,
+            },
+        )
+        commit_all(repo, "open semantic queue")
+        intent = freshness.capture_intent(repo)
+        receipt = freshness.create_receipt(
+            repo,
+            intent,
+            run_id="191",
+            run_attempt="1",
+            event_name="push",
+            workflow_head_sha=run(repo, "git", "rev-parse", "HEAD"),
+            upstream_run_id=None,
+            upstream_head_sha=None,
+            build_reported=True,
+            persisted=True,
+            history_ready=True,
+            reason_override=None,
+        )
+        assert receipt["fresh_build"] is False
+        assert receipt["freshness_scope"] == freshness.FULL_SCOPE
+        assert receipt["full_visual_freshness"] is False
+        assert receipt["reason"] == freshness.DETERMINISTIC_REFRESH_REASON
+        assert receipt.get("observed_visual") is None
+
+
 def test_degraded_no_build() -> None:
     with tempfile.TemporaryDirectory() as td:
         repo, intent = make_repo(Path(td))
@@ -379,11 +415,12 @@ if __name__ == "__main__":
     test_fresh_path()
     test_fresh_giveaway_only_path_does_not_claim_full_visual_freshness()
     test_fresh_commercial_only_path_does_not_claim_full_visual_freshness()
+    test_deterministic_refresh_auto_detects_pending_semantic_queue()
     test_degraded_no_build()
     test_stale_mismatch_fails_closed()
     test_giveaway_source_mismatch_fails_closed()
     test_commercial_source_mismatch_fails_closed()
     print(
         "VISUAL_FRESHNESS_RECEIPT_TESTS=PASS "
-        "cases=fresh_full,fresh_giveaway,fresh_commercial,degraded,stale_mismatch,giveaway_mismatch,commercial_mismatch"
+        "cases=fresh_full,fresh_giveaway,fresh_commercial,deterministic_preserved,degraded,stale_mismatch,giveaway_mismatch,commercial_mismatch"
     )

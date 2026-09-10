@@ -21,6 +21,7 @@ GIVEAWAY_SCOPE = "giveaway_only"
 COMMERCIAL_SCOPE = "commercial_only"
 GIVEAWAY_REASON = "giveaway_only_refresh"
 COMMERCIAL_REASON = "commercial_only_refresh"
+DETERMINISTIC_REFRESH_REASON = "deterministic_refresh_preserved_semantic_history"
 
 COMMERCIAL_BLOB_BINDINGS = {
     "payload_blob_sha": (COMMERCIAL_PAYLOAD_PATH, "commercial_source_payload_blob_sha"),
@@ -126,6 +127,11 @@ def capture_intent(repo: Path) -> dict[str, Any]:
         "history_status": history.get("status"),
         "history_complete_coverage": history.get("complete_coverage"),
         "source_cycle": source_cycle,
+        "semantic_state": {
+            "payload_status": payload.get("status"),
+            "ai_queue_count": payload.get("ai_queue_count"),
+            "complete_family_partition": payload.get("complete_family_partition"),
+        },
         "commercial_source": commercial_source,
     }
 
@@ -209,18 +215,36 @@ def create_receipt(
     intended_history = intent.get("history_snapshot_blob_sha")
     intended_giveaway = intent.get("giveaway_snapshot_blob_sha")
     intended_commercial = intent.get("commercial_source") or {}
+    semantic_state = intent.get("semantic_state") or {}
+    try:
+        pending_semantic_queue = int(semantic_state.get("ai_queue_count") or 0) > 0
+    except (TypeError, ValueError):
+        pending_semantic_queue = False
 
     # Scoped publication is a real bounded build but must never claim the unrelated
-    # visual domains are globally fresh.
+    # visual domains are globally fresh. Likewise, a FORCE deterministic refresh
+    # while semantic work remains queued may persist a new visual blob, but it must
+    # preserve the last accepted semantic history and therefore cannot claim full
+    # semantic freshness.
     if scoped_giveaway:
         fresh_build = bool(persisted and intended_giveaway)
     elif scoped_commercial:
         fresh_build = bool(persisted and _commercial_intent_ready(intended_commercial))
     else:
-        fresh_build = bool(build_reported and persisted and intended_history)
+        fresh_build = bool(
+            build_reported
+            and persisted
+            and intended_history
+            and not pending_semantic_queue
+        )
 
     observed_visual: dict[str, Any] | None = None
-    reason = None if (scoped_giveaway or scoped_commercial) else reason_override
+    if scoped_giveaway or scoped_commercial:
+        reason = None
+    elif pending_semantic_queue and build_reported and persisted:
+        reason = DETERMINISTIC_REFRESH_REASON
+    else:
+        reason = reason_override
 
     if fresh_build:
         observed_visual = _visual_state(repo)

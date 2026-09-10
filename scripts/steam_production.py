@@ -11,6 +11,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from production_output_ownership import reset_steam_collector_outputs
+from steam_traversal_recovery import next_recovery_sort, recovery_needed, reported_total_from_passes
 
 
 URL = "https://store.steampowered.com/search/results/"
@@ -1129,54 +1130,37 @@ def refined_reasons(item):
 
 started = datetime.now(timezone.utc)
 
-first = collect("Name_ASC")
-catalog = dict(first["catalog"])
+passes = [collect("Name_ASC")]
+catalog = dict(passes[0]["catalog"])
 
-first_total = first["total"] or 0
-second = None
+while recovery_needed(len(catalog), passes):
+    reported_before = reported_total_from_passes(passes)
+    sort_by = next_recovery_sort(passes)
+    if len(passes) == 1:
+        print(
+            "First pass is not exact:",
+            len(catalog),
+            "/",
+            reported_before,
+            f"Running {sort_by} recovery pass.",
+        )
+    else:
+        print(
+            "Recovery still not exact after live catalog movement:",
+            len(catalog),
+            "/",
+            reported_before,
+            f"Running final bounded {sort_by} reconciliation pass.",
+        )
+    recovery = collect(sort_by)
+    passes.append(recovery)
+    catalog.update(recovery["catalog"])
 
-if (
-    first_total
-    and len(catalog) != first_total
-):
-    print(
-        "First pass is not exact:",
-        len(catalog),
-        "/",
-        first_total,
-        "Running Name_DESC recovery pass.",
-    )
-
-    second = collect("Name_DESC")
-    catalog.update(second["catalog"])
-
-totals = []
-
-if first["total"] is not None:
-    totals.append(first["total"])
-
-if second and second["total"] is not None:
-    totals.append(second["total"])
-
-reported_total = (
-    max(totals)
-    if totals
-    else None
-)
-
-rows_seen = first["rows_seen"]
-duplicate_rows = first["duplicate_rows"]
-requests_made = first["requests_made"]
-reached_end = first["reached_end"]
-
-if second:
-    rows_seen += second["rows_seen"]
-    duplicate_rows += second["duplicate_rows"]
-    requests_made += second["requests_made"]
-    reached_end = (
-        reached_end
-        and second["reached_end"]
-    )
+reported_total = reported_total_from_passes(passes)
+rows_seen = sum(row["rows_seen"] for row in passes)
+duplicate_rows = sum(row["duplicate_rows"] for row in passes)
+requests_made = sum(row["requests_made"] for row in passes)
+reached_end = all(row["reached_end"] for row in passes)
 
 items = sorted(
     catalog.values(),
@@ -1659,7 +1643,9 @@ manifest = {
     "requests_made":
         requests_made,
     "recovery_pass_used":
-        second is not None,
+        len(passes) > 1,
+    "traversal_pass_count":
+        len(passes),
     "coverage_ratio": (
         round(coverage, 6)
         if coverage is not None
