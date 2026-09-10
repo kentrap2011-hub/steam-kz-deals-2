@@ -84,56 +84,69 @@ Report: `reviews/worker_reports/taste-current-live-profile-binding-fix-01.md`
 Final status: `complete_ready_for_real_canary_acceptance`.
 
 Accepted result:
-- lightweight one-AppID preparation now resolves and freezes the canonical live `gaming_taste_live.json` by immutable commit/blob/content identity;
+- lightweight one-AppID preparation now freezes one exact canonical live profile version;
 - profile changes before freeze select the newer proven version;
 - profile changes after freeze cannot create a mixed-version tuple;
-- continuous churn at the freeze boundary is bounded to three attempts and fails closed without requiring the user to pause profile updates;
-- validation for AppID 1016800 passed with exactly one queued subject and no semantic execution/canonical write/Scheduled Task mutation;
-- focused tests: 13/13 passed;
-- validation run `34391317370`, job `102600034706`, artifact `10119736896`.
+- continuous churn is bounded and does not require the user to pause profile updates;
+- focused tests passed 13/13.
+
+### Real Chernobylite acceptance — DURABLY CLOSED AND ACCEPTED
+Task: `WORKER_TASK_TASTE_CHERNOBYLITE_REAL_CANARY_ACCEPTANCE_02.md`
+Report: `reviews/worker_reports/taste-chernobylite-real-canary-acceptance-02.md`
+Final status: `complete_canary_accepted_ready_for_system_audit`.
+
+Accepted result:
+- exactly one real semantic result was generated for Chernobylite / AppID 1016800;
+- result was accepted and canonically ingested;
+- canonical receipt/cache/overlay advanced;
+- active inbox was consumed;
+- App_1016800 left the pending queue;
+- no second game or second semantic result was produced;
+- existing Scheduled Task remained the only semantic producer and was restored to DAILY 01:00 Europe/Samara;
+- no backlog widening occurred;
+- System Audit is now ready.
 
 ## Current user goal
-Run exactly one real Chernobylite semantic acceptance result, then move Taste toward normal daily operation.
+Move Taste safely to normal daily operation, while allowing the live game-taste profile to keep changing in parallel.
 
 Permanent operating requirement from the user:
-- the live game-taste profile will continue to be updated in parallel while Taste is operating;
 - the user must not need to pause profile updates;
 - no mixed-version result may be created;
-- bounded retry/fail-closed behavior is acceptable, but no unbounded retry loop or manual repair should be required.
+- bounded retry/fail-closed behavior is acceptable;
+- no unbounded retry loop or manual repair should be required.
 
-## User authorization state
-- user has explicitly authorized exactly one real semantic Chernobylite result for AppID `1016800` / `App_1016800`;
-- that authorization remains active for the prepared ACCEPTANCE step below;
-- no repeat confirmation is required for this same single result;
-- authorization does NOT permit a second semantic result, second game, new Scheduled Task, backlog widening, or weakened guards.
-
-## CURRENT NEXT — one real Chernobylite acceptance
-Status: `prepared_ready_for_dispatch_under_existing_user_authorization`.
+## CURRENT NEXT — post-canary system audit
+Status: `prepared_ready_for_dispatch`.
 
 Task:
-`WORKER_TASK_TASTE_CHERNOBYLITE_REAL_CANARY_ACCEPTANCE_02.md`
+`WORKER_TASK_TASTE_POST_CANARY_SYSTEM_AUDIT_01.md`
 
 Expected report:
-`reviews/worker_reports/taste-chernobylite-real-canary-acceptance-02.md`
+`reviews/worker_reports/taste-post-canary-system-audit-01.md`
 
-Required scope:
-- exactly one game: Chernobylite Complete Edition, AppID 1016800;
-- use fixed immutable live-profile binding route;
-- allow at most three pre-semantic preparation attempts if the profile changes before semantic execution;
-- never mix versions;
-- exactly one semantic result maximum;
-- use only existing Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9`, generation 2;
-- verify canonical ingest/receipt/cache/queue acceptance;
-- restore/verify DAILY 01:00 Europe/Samara;
-- no second game/result/task;
-- no widening;
+Purpose:
+- independently verify current production state after the accepted Chernobylite result;
+- verify queue/cache/receipt/inbox consistency;
+- verify existing Scheduled Task is healthy and restored to DAILY 01:00 Europe/Samara;
+- verify no duplicate/second result or second producer exists;
+- verify live-profile updates cannot reintroduce the stale-binding failure;
+- verify all safety guards remain enabled;
+- decide PASS/FAIL for normal daily Taste operation.
+
+Hard boundaries:
+- read-only/acceptance only;
+- no implementation changes;
+- no new semantic result;
+- no Scheduled Task trigger or mutation;
+- no second game;
+- no widening in the audit itself;
 - no paid OpenAI API, Copilot, external service or scheduler.
 
 ## Next sequence
-1. Dispatch `WORKER_TASK_TASTE_CHERNOBYLITE_REAL_CANARY_ACCEPTANCE_02.md` to a NEW bounded worker chat.
-2. Wait for exact durable report `reviews/worker_reports/taste-chernobylite-real-canary-acceptance-02.md`.
-3. If status is `complete_canary_accepted_ready_for_system_audit`, launch a NEW independent System Audit worker.
-4. Only after System Audit PASS may the SAME recurring producer be widened to normal daily Taste production.
+1. Dispatch `WORKER_TASK_TASTE_POST_CANARY_SYSTEM_AUDIT_01.md` to a NEW independent worker chat.
+2. Read exact durable report `reviews/worker_reports/taste-post-canary-system-audit-01.md`.
+3. If System Audit returns PASS, Director may prepare the final bounded step to enable normal daily Taste operation using the SAME existing producer.
+4. Any IMPLEMENT change still requires separate user approval under the current rules.
 
 ## Superseded watchdog
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
