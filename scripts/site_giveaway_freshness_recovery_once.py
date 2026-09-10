@@ -167,19 +167,98 @@ reached_end = all(row["reached_end"] for row in passes)
 
     freshness = Path('scripts/visual_freshness_receipt.py')
     text = freshness.read_text(encoding='utf-8')
-    marker = 'COMMERCIAL_REASON = "commercial_only_refresh"\n'
-    addition = marker + 'DETERMINISTIC_REFRESH_REASON = "deterministic_refresh_preserved_semantic_history"\n'
-    if text.count(marker) != 1:
-        raise SystemExit(f'expected commercial reason marker once, found {text.count(marker)}')
-    text = text.replace(marker, addition, 1)
+    reason_marker = 'COMMERCIAL_REASON = "commercial_only_refresh"\n'
+    reason_addition = reason_marker + 'DETERMINISTIC_REFRESH_REASON = "deterministic_refresh_preserved_semantic_history"\n'
+    if text.count(reason_marker) != 1:
+        raise SystemExit(f'expected commercial reason marker once, found {text.count(reason_marker)}')
+    text = text.replace(reason_marker, reason_addition, 1)
+
+    intent_marker = '        "source_cycle": source_cycle,\n        "commercial_source": commercial_source,\n'
+    intent_new = '''        "source_cycle": source_cycle,
+        "semantic_state": {
+            "payload_status": payload.get("status"),
+            "ai_queue_count": payload.get("ai_queue_count"),
+            "complete_family_partition": payload.get("complete_family_partition"),
+        },
+        "commercial_source": commercial_source,
+'''
+    if text.count(intent_marker) != 1:
+        raise SystemExit(f'expected intent return marker once, found {text.count(intent_marker)}')
+    text = text.replace(intent_marker, intent_new, 1)
+
+    create_old = '''    intended_history = intent.get("history_snapshot_blob_sha")
+    intended_giveaway = intent.get("giveaway_snapshot_blob_sha")
+    intended_commercial = intent.get("commercial_source") or {}
+
+    # Scoped publication is a real bounded build but must never claim the unrelated
+    # visual domains are globally fresh.
+    if scoped_giveaway:
+        fresh_build = bool(persisted and intended_giveaway)
+    elif scoped_commercial:
+        fresh_build = bool(persisted and _commercial_intent_ready(intended_commercial))
+    else:
+        fresh_build = bool(build_reported and persisted and intended_history)
+
+    observed_visual: dict[str, Any] | None = None
+    reason = None if (scoped_giveaway or scoped_commercial) else reason_override
+'''
+    create_new = '''    intended_history = intent.get("history_snapshot_blob_sha")
+    intended_giveaway = intent.get("giveaway_snapshot_blob_sha")
+    intended_commercial = intent.get("commercial_source") or {}
+    semantic_state = intent.get("semantic_state") or {}
+    try:
+        pending_semantic_queue = int(semantic_state.get("ai_queue_count") or 0) > 0
+    except (TypeError, ValueError):
+        pending_semantic_queue = False
+
+    # Scoped publication is a real bounded build but must never claim the unrelated
+    # visual domains are globally fresh. Likewise, a FORCE deterministic refresh
+    # while semantic work remains queued may persist a new visual blob, but it must
+    # preserve the last accepted semantic history and therefore cannot claim full
+    # semantic freshness.
+    if scoped_giveaway:
+        fresh_build = bool(persisted and intended_giveaway)
+    elif scoped_commercial:
+        fresh_build = bool(persisted and _commercial_intent_ready(intended_commercial))
+    else:
+        fresh_build = bool(
+            build_reported
+            and persisted
+            and intended_history
+            and not pending_semantic_queue
+        )
+
+    observed_visual: dict[str, Any] | None = None
+    if scoped_giveaway or scoped_commercial:
+        reason = None
+    elif pending_semantic_queue and build_reported and persisted:
+        reason = DETERMINISTIC_REFRESH_REASON
+    else:
+        reason = reason_override
+'''
+    if text.count(create_old) != 1:
+        raise SystemExit(f'expected receipt create block once, found {text.count(create_old)}')
+    text = text.replace(create_old, create_new, 1)
     freshness.write_text(text, encoding='utf-8')
 
     test_freshness = Path('scripts/test_visual_freshness_receipt.py')
     text = test_freshness.read_text(encoding='utf-8')
     marker = '\ndef test_degraded_no_build() -> None:\n'
-    case = '''\ndef test_deterministic_refresh_does_not_claim_full_semantic_freshness() -> None:
+    case = '''\ndef test_deterministic_refresh_auto_detects_pending_semantic_queue() -> None:
     with tempfile.TemporaryDirectory() as td:
-        repo, intent = make_repo(Path(td))
+        repo, _ = make_repo(Path(td))
+        write_json(
+            repo / freshness.COMMERCIAL_PAYLOAD_PATH,
+            {
+                "source_mailing_updated_at_utc": SOURCE,
+                "fx_binding": {"kzt_per_rub": 5.0},
+                "status": "degraded",
+                "ai_queue_count": 3,
+                "complete_family_partition": True,
+            },
+        )
+        commit_all(repo, "open semantic queue")
+        intent = freshness.capture_intent(repo)
         receipt = freshness.create_receipt(
             repo,
             intent,
@@ -189,10 +268,10 @@ reached_end = all(row["reached_end"] for row in passes)
             workflow_head_sha=run(repo, "git", "rev-parse", "HEAD"),
             upstream_run_id=None,
             upstream_head_sha=None,
-            build_reported=False,
+            build_reported=True,
             persisted=True,
             history_ready=True,
-            reason_override=freshness.DETERMINISTIC_REFRESH_REASON,
+            reason_override=None,
         )
         assert receipt["fresh_build"] is False
         assert receipt["freshness_scope"] == freshness.FULL_SCOPE
@@ -205,7 +284,7 @@ reached_end = all(row["reached_end"] for row in passes)
         raise SystemExit(f'expected degraded test marker once, found {text.count(marker)}')
     text = text.replace(marker, case + marker, 1)
     call_marker = '    test_fresh_commercial_only_path_does_not_claim_full_visual_freshness()\n    test_degraded_no_build()\n'
-    call_new = '    test_fresh_commercial_only_path_does_not_claim_full_visual_freshness()\n    test_deterministic_refresh_does_not_claim_full_semantic_freshness()\n    test_degraded_no_build()\n'
+    call_new = '    test_fresh_commercial_only_path_does_not_claim_full_visual_freshness()\n    test_deterministic_refresh_auto_detects_pending_semantic_queue()\n    test_degraded_no_build()\n'
     if text.count(call_marker) != 1:
         raise SystemExit('freshness test call marker not found exactly once')
     text = text.replace(call_marker, call_new, 1)
@@ -215,51 +294,6 @@ reached_end = all(row["reached_end"] for row in passes)
         raise SystemExit('freshness cases marker not found exactly once')
     text = text.replace(print_old, print_new, 1)
     test_freshness.write_text(text, encoding='utf-8')
-
-    workflow = Path('.github/workflows/build-daily-visual-payload.yml')
-    text = workflow.read_text(encoding='utf-8')
-    old_logic = '''          if grep -q 'VISUAL_FINAL_BUILD=BUILT' /tmp/visual-build.log || \\
-             grep -Eq 'VISUAL_MEDIA_ITEMS_CHANGED=[1-9][0-9]*' /tmp/media-refresh.log; then
-            echo "built=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "built=false" >> "$GITHUB_OUTPUT"
-          fi
-'''
-    new_logic = '''          if grep -q 'VISUAL_FINAL_BUILD=BUILT' /tmp/visual-build.log || \\
-             grep -Eq 'VISUAL_MEDIA_ITEMS_CHANGED=[1-9][0-9]*' /tmp/media-refresh.log; then
-            echo "built=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "built=false" >> "$GITHUB_OUTPUT"
-          fi
-
-          # A FORCE build while the Taste queue is still open intentionally
-          # preserves the previously accepted semantic lineage. Treat that as a
-          # bounded deterministic refresh, not as a full semantic freshness claim.
-          if grep -q 'VISUAL_FINAL_BUILD=BUILT mode=deterministic_refresh' /tmp/visual-build.log; then
-            echo "freshness_build_reported=false" >> "$GITHUB_OUTPUT"
-            echo "freshness_reason=deterministic_refresh_preserved_semantic_history" >> "$GITHUB_OUTPUT"
-          elif grep -q 'VISUAL_FINAL_BUILD=BUILT' /tmp/visual-build.log; then
-            echo "freshness_build_reported=true" >> "$GITHUB_OUTPUT"
-            echo "freshness_reason=" >> "$GITHUB_OUTPUT"
-          else
-            echo "freshness_build_reported=false" >> "$GITHUB_OUTPUT"
-            echo "freshness_reason=" >> "$GITHUB_OUTPUT"
-          fi
-'''
-    if text.count(old_logic) != 1:
-        raise SystemExit(f'expected visual build output logic once, found {text.count(old_logic)}')
-    text = text.replace(old_logic, new_logic, 1)
-    old_env = '          BUILD_REPORTED: ${{ steps.build.outputs.built }}\n          PERSISTED: ${{ steps.persist.outputs.persisted }}\n'
-    new_env = '          BUILD_REPORTED: ${{ steps.build.outputs.freshness_build_reported }}\n          FRESHNESS_REASON: ${{ steps.build.outputs.freshness_reason }}\n          PERSISTED: ${{ steps.persist.outputs.persisted }}\n'
-    if text.count(old_env) != 1:
-        raise SystemExit(f'expected receipt env block once, found {text.count(old_env)}')
-    text = text.replace(old_env, new_env, 1)
-    old_args = '            --build-reported "$BUILD_REPORTED" \\\n            --persisted "$PERSISTED" \\\n            --history-ready "$HISTORY_READY"\n'
-    new_args = '            --build-reported "$BUILD_REPORTED" \\\n            --persisted "$PERSISTED" \\\n            --history-ready "$HISTORY_READY" \\\n            --reason "$FRESHNESS_REASON"\n'
-    if text.count(old_args) != 1:
-        raise SystemExit(f'expected full receipt args once, found {text.count(old_args)}')
-    text = text.replace(old_args, new_args, 1)
-    workflow.write_text(text, encoding='utf-8')
 
 
 if __name__ == '__main__':
