@@ -20,6 +20,48 @@ For every non-trivial worker task with an expected report path:
 8. The final user-facing worker response must be sent only after the exact report path has been written to `main` and re-read/confirmed.
 9. A worker must never say `finished`, `done`, `complete`, or equivalent when the required report is still only local/in-memory/uncommitted or has lifecycle state `in_progress`/`waiting_external`.
 
+## Mandatory self-diagnosis on unsuccessful outcome
+
+If a worker cannot complete its assigned task and is about to finish with any failure/follow-up state such as `failed`, `failed_closed`, `blocked`, `needs_followup`, or a task-specific equivalent, the worker must perform a bounded self-diagnosis **before returning control** whenever the evidence needed for that diagnosis is already available within the authorized scope.
+
+The same durable report must record:
+- the exact step/action that failed or blocked progress;
+- the first real error or failed invariant, not only downstream symptoms;
+- the most specific root cause that can be proven from available evidence;
+- whether the failure is semantic/business-data related, code/config related, runtime/tooling related, external-process related, permissions/auth related, or still unknown;
+- what state was already changed before the failure and what state definitely was not changed;
+- whether already-produced artifacts/results remain valid and reusable;
+- whether retrying unchanged would be safe, pointless, or dangerous;
+- the smallest recommended next action;
+- what the worker deliberately did **not** attempt because it was outside authorization.
+
+The worker must distinguish clearly between:
+- `root_cause_proven` — direct evidence identifies the cause;
+- `likely_root_cause` — evidence strongly points to a cause but does not prove it;
+- `root_cause_unknown` — available evidence is insufficient.
+
+A worker must never invent a confident root cause merely to satisfy this rule.
+
+### Self-diagnosis boundaries
+
+Self-diagnosis does **not** expand implementation authority.
+
+Unless the task explicitly authorizes it, the worker must not during self-diagnosis:
+- repair code/configuration/state;
+- rerun a failed production action;
+- regenerate semantic/AI results;
+- mutate queues, caches, canonical data, Scheduled Tasks, secrets, or external systems;
+- widen the task into a general architecture audit;
+- bypass a fail-closed guardrail.
+
+Read-only inspection of the exact failed run/job/log/step, already-produced artifact, directly involved code path, or exact invariant is allowed when necessary to identify the failure and when that inspection is available within the task's existing permissions/scope.
+
+If meaningful diagnosis itself would require a new consequential action, broad investigation, unavailable permissions/tooling, or work explicitly forbidden by the task, record that limitation and stop. Director can then create a separate diagnosis/repair task if needed.
+
+### Why this rule exists
+
+A failed worker should normally hand Director a usable explanation, not merely `something failed`. This avoids unnecessary follow-up diagnosis chats when the worker already has the evidence in front of it, while preserving the rule that fixes and retries require their own authorization when not already granted.
+
 ## Heartbeat requirement
 
 Do not allow more than roughly 15 minutes of unresolved active worker effort without a durable report checkpoint.
