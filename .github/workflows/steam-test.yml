@@ -34,6 +34,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: steam-kz-production
@@ -110,8 +111,11 @@ jobs:
           fi
 
       - name: Commit production feed, giveaways and review cache
+        id: publish
         shell: bash
         run: |
+          set -euo pipefail
+          echo "changed=false" >> "$GITHUB_OUTPUT"
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
 
@@ -131,6 +135,7 @@ jobs:
           fi
 
           git commit -m "Update Steam KZ production and giveaways"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
 
           # Пока длинный сборщик работает, main может успеть
           # продвинуться другим commit/workflow.
@@ -158,3 +163,9 @@ jobs:
 
           echo "Push failed after 3 attempts."
           exit 1
+
+      - name: Dispatch visual refresh after production update
+        if: steps.publish.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run build-daily-visual-payload.yml --ref main
