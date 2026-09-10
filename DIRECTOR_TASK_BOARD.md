@@ -2,6 +2,7 @@
 
 ## Current rules
 - Keep two independent worker slots busy when safe.
+- `ЧАТ 1` and `ЧАТ 2` are reusable worker slots, not monotonically increasing task numbers.
 - User will not pay extra for automation/inference.
 - No autonomous IMPLEMENT without separate approval.
 - Before assigning/reassigning a worker slot, reconcile current Board -> exact task file -> exact durable report from the immediately preceding step.
@@ -93,6 +94,19 @@ Accepted result:
 - existing Scheduled Task remained the only semantic producer and was restored to DAILY 01:00 Europe/Samara;
 - no backlog widening occurred.
 
+### Taste post-canary audit Stage 1 — CLOSED
+State report: `reviews/worker_reports/taste-post-canary-state-audit-stage1-01.md`
+Final: `PASS_STAGE1_STATE`.
+
+Runtime report: `reviews/worker_reports/taste-post-canary-runtime-audit-stage1-01.md`
+Final: `PASS_STAGE1_RUNTIME`.
+
+Runtime note:
+- worker-side `automations.peek()` and explicit task-list output were compacted as `Skipped 1 message` and could not be read by that worker;
+- this was not evidence of a Scheduled Task failure;
+- user manually verified in ChatGPT Tasks UI that the target task exists, is active, is scheduled DAILY 01:00 Europe/Samara, and there is no second Taste Semantic Producer task;
+- Director recorded that verification explicitly as manual UI evidence.
+
 ## Current user goal
 Move Taste safely to normal daily operation, while allowing the live game-taste profile to keep changing in parallel.
 
@@ -105,60 +119,53 @@ Permanent operating requirement from the user:
 ## Interrupted audit history
 The original broad post-canary audit was interrupted twice and never reached a final status.
 
-Then it was split into:
-- `WORKER_TASK_TASTE_POST_CANARY_STATE_AUDIT_01.md`
-- `WORKER_TASK_TASTE_POST_CANARY_RUNTIME_GUARDRAIL_AUDIT_01.md`
+The first split attempt also failed to create durable reports. Subsequent micro-audits use strict transactional execution:
+- report created first;
+- result persisted after every check;
+- no repeated reading without a named reason.
 
-Both split workers also stopped before creating their required durable reports. No commits or report files from either worker exist after dispatch. Therefore neither split audit produced usable evidence and neither may be treated as PASS.
-
-Director decision:
-- do not retry either failed split audit unchanged;
-- make the next worker turns much smaller;
-- require report creation as the first action before any substantive reading;
-- close coverage incrementally across short stages.
-
-## CURRENT NEXT — two parallel micro-audits, stage 1
+## CURRENT NEXT — two parallel micro-audits, stage 2
 Status: `prepared_ready_for_parallel_dispatch`.
 
-### CHAT 1 — state micro-audit stage 1
+### CHAT 1 — saved-result consistency Stage 2
 Task:
-`WORKER_TASK_TASTE_POST_CANARY_STATE_AUDIT_STAGE1_01.md`
+`WORKER_TASK_TASTE_POST_CANARY_STATE_AUDIT_STAGE2_01.md`
 
 Expected report:
-`reviews/worker_reports/taste-post-canary-state-audit-stage1-01.md`
+`reviews/worker_reports/taste-post-canary-state-audit-stage2-01.md`
 
 Only four checks:
-- App_1016800 exists exactly once in accepted canonical state;
-- App_1016800 is absent from pending queue;
-- consumed Chernobylite inbox submission is absent;
-- referenced ingest receipt exists and records exactly one accepted result.
+- accepted App_1016800 bindings exactly match the accepted tuple;
+- cache/overlay/index/runtime references are mutually consistent;
+- no second/fallback canonical Chernobylite result exists;
+- no manual state repair is required for the accepted result.
 
 Final decision:
-- `PASS_STAGE1_STATE`, or
-- `FAIL_STAGE1_STATE`.
+- `PASS_STAGE2_STATE`, or
+- `FAIL_STAGE2_STATE`.
 
-### CHAT 2 — runtime micro-audit stage 1
+### CHAT 2 — live-profile and guardrails Stage 2
 Task:
-`WORKER_TASK_TASTE_POST_CANARY_RUNTIME_AUDIT_STAGE1_01.md`
+`WORKER_TASK_TASTE_POST_CANARY_GUARDRAIL_AUDIT_STAGE2_01.md`
 
 Expected report:
-`reviews/worker_reports/taste-post-canary-runtime-audit-stage1-01.md`
+`reviews/worker_reports/taste-post-canary-guardrail-audit-stage2-01.md`
 
 Only four checks:
-- existing Scheduled Task id exists;
-- it is enabled;
-- schedule is DAILY 01:00 Europe/Samara;
-- no second Scheduled Task exists for the same Taste semantic producer role.
+- exact immutable live-profile freeze; stale committed projection is not authority;
+- safe behavior under profile changes before/after freeze and bounded fail-closed retry under continuous churn;
+- generation 2 / exact binding / V5 acceptance fences remain active;
+- evidence, normalized-factor and price-blind/no-commercial-review-sentiment protections remain active.
 
 Final decision:
-- `PASS_STAGE1_RUNTIME`, or
-- `FAIL_STAGE1_RUNTIME`.
+- `PASS_STAGE2_GUARDRAILS`, or
+- `FAIL_STAGE2_GUARDRAILS`.
 
 ## Next sequence
-1. Run both stage-1 micro-audits in parallel.
-2. Director reads both exact durable reports.
-3. If both PASS, prepare the next short stage(s) for the remaining cache/binding/profile/guardrail checks.
-4. Only after all short stages PASS may Director conclude the system audit and prepare the final bounded step toward normal daily Taste operation.
+1. Run both Stage-2 micro-audits in parallel.
+2. Director reads only both exact durable reports.
+3. If both PASS, prepare one final short Stage 3 only for any still-uncovered audit criteria (including no paid dependency / no unresolved daily-operation blocker), rather than rerunning prior checks.
+4. Only after all required short stages PASS may Director conclude the system audit and prepare the final bounded step toward normal daily Taste operation.
 5. Any IMPLEMENT change still requires separate user approval.
 
 ## Superseded watchdog
