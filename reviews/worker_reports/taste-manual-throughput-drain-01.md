@@ -1,17 +1,21 @@
 # Taste Manual Throughput Drain 01 — Worker Report
 
 - task_id: `taste-manual-throughput-drain-01`
-- lifecycle: `in_progress`
+- lifecycle: `failed_closed`
 - started_at_utc: `2026-09-10T08:12:02Z`
-- checkpoint_at_utc: `2026-09-10T08:14:03Z`
+- checkpoint_at_utc: `2026-09-10T08:22:20Z`
 - starting_queue_count: `566`
+- ending_verified_queue_count: `566`
 - current_verified_queue_count: `566`
 - accepted_batches: `0`
 - accepted_games_total: `0`
 - last_committed_batch: `none`
-- stop_reason: `none`
+- last_durable_selection_checkpoint: `batch 1`
+- stop_reason: `canonical_ingest_workflow_failure`
 - observed_games_capacity_this_worker_chat: `0`
-- next_action: `semantically evaluate, validate, submit, and verify batch 1`
+- empirical_capacity_note: `This is an observed result of this worker chat under this run, not a permanent worker limit.`
+- resumability: `blocked pending separate diagnosis of the failed canonical ingest and explicit handling of the still-present inbox submission; do not continue this run around the failure`
+- next_action: `separate diagnosis/repair task required before any further queue processing`
 
 ## Start-state verification
 
@@ -19,8 +23,8 @@
 - canonical_manifest: `data/production/pre_ai/chatgpt_payload.json`
 - manifest_ai_queue_count: `566`
 - queue_line_566_present: `true`
-- queue_sha: `74be1d45c1b93ab9607971ab9c8cb3f38f6ae4e9`
-- manifest_sha: `702a0bea68e7933446706d35a3500711ae8ce74f`
+- starting_queue_sha: `74be1d45c1b93ab9607971ab9c8cb3f38f6ae4e9`
+- starting_manifest_sha: `702a0bea68e7933446706d35a3500711ae8ce74f`
 - projection_status: `complete`
 - projection_complete_coverage: `true`
 - projection_index_integrity_ok: `true`
@@ -31,8 +35,9 @@
 - canonical_ingest_workflow: `.github/workflows/ingest-taste-batch.yml`
 - scheduled_task_touched: `false`
 
-## Batch 1 — selected, not yet submitted
+## Batch 1 — durable selection
 
+- selection_checkpoint_commit: `0ec1ed0ec10e8950f86e6f600bc360325481ae9b`
 - selection_queue_sha: `74be1d45c1b93ab9607971ab9c8cb3f38f6ae4e9`
 - selection_order: canonical queue lines `1..10`
 - result_contract: `TASTE-SEMANTIC-RESULT-V5`
@@ -55,6 +60,44 @@
 | 9 | `App_1015940` | `1015940` | Welcome to Elk | `ec612c812134b6455b80ddc1e12cf5575337005030d83b76ef681fc0fcde2a1c` | `ec0e18a36084e98e0ca5c11c3dd2daa74a6ad9c3bbb7293a1971bb1b4c3b86e3` |
 | 10 | `App_1016920` | `1016920` | Unrailed! | `725ef10ec9c94aa0ef83e5543dbeb19c327499f95961726ded2e2568a6c2d311` | `5eddb6f5dd6fec14e9899e136f92536cf3e18bb4c28774201ea884888903f972` |
 
-Batch 1 has been durably selected before semantic execution. No result for this batch has been submitted or counted yet.
+## Batch 1 — semantic execution and submission
 
-This is an authorized one-off production execution and empirical worker-chat capacity probe. Only canonically accepted real games from this chat count toward `observed_games_capacity_this_worker_chat`.
+- semantic_result_count: `10`
+- exact_order_preserved: `true`
+- immutable_bindings_rechecked_before_submission: `true`
+- queue_sha_before_submission: `74be1d45c1b93ab9607971ab9c8cb3f38f6ae4e9`
+- normalized_taste_factors_present_for_all_results: `true`
+- forbidden_commercial/review evidence precheck: `pass`
+- submission_path: `data/ai_inbox/taste/manual-throughput-drain-01-batch-001.json`
+- submission_commit: `f138d5216248c999fde588c47ca5088ff9c076ee`
+- scheduled_task_touched: `false`
+
+## Canonical ingest verification — FAILED CLOSED
+
+- canonical_ingest_check_name: `ingest`
+- canonical_ingest_check_run_id: `102798215077`
+- canonical_ingest_status: `completed`
+- canonical_ingest_conclusion: `failure`
+- canonical_ingest_started_at_utc: `2026-09-10T08:21:09Z`
+- canonical_ingest_completed_at_utc: `2026-09-10T08:21:19Z`
+- annotation_count_reported_by_github: `2`
+- annotation_detail_fetch_supported_by_current_connector: `false`
+- inbox_submission_still_present_after_failure: `true`
+- canonical_ingest_commit_created: `false`
+- receipt_verified: `false`
+- accepted_batch: `false`
+- accepted_game_count: `0`
+
+Per the task's fail-closed rule, no retry, mutation workaround, direct cache/queue edit, second-batch selection, or Scheduled Task execution was attempted after this failure.
+
+## Post-failure canonical state
+
+- ending_manifest_ai_queue_count: `566`
+- ending_manifest_sha: `702a0bea68e7933446706d35a3500711ae8ce74f`
+- ending_queue_sha: `74be1d45c1b93ab9607971ab9c8cb3f38f6ae4e9`
+- queue_decrease: `0`
+- batch_1_items_removed_from_queue: `false`
+- durable_submission_remains_unaccepted: `true`
+- scheduled_task_touched: `false`
+
+`observed_games_capacity_this_worker_chat = 0` because the measurement counts only real games whose results were canonically accepted, verified, and saved. The ten semantically evaluated candidates were submitted but the canonical ingest failed, so none of them qualifies for the measured capacity.
