@@ -3,8 +3,8 @@
 - task_id: `taste-post-canary-state-audit-stage2-01`
 - lifecycle: `in_progress`
 - started_utc: `2026-09-10T06:48:32Z`
-- completed_checks: `3/5`
-- next_action: `check 4`
+- completed_checks: `4/5`
+- next_action: `check 5`
 - decision: `pending`
 
 ## Accepted canary binding
@@ -58,4 +58,14 @@ The two predecessor reports were read once before investigation. The accepted bi
 - Current `data/ai_inbox/taste` is absent, so there is no active duplicate canary submission waiting beside the persisted result.
 - No contradictory duplicate or stale `App_1016800` record was found in the nearby canonical persisted TASTE surfaces checked above.
 - `data/cache/taste_direct_conflicts.report.json` was observed to reference an older cache blob, so it was not treated as current authoritative evidence for this check.
+- No repair action or runtime execution was performed.
+
+### Check 4 — No post-canary saved-state drift
+
+**Result: PASS**
+
+- Direct commit comparison from accepted canonical ingest `69af81919611fda00ffc507570d0788d6b9a53dc` to current `main` reports `47` commits ahead and `0` behind.
+- Every changed path in that comparison is a director/protocol/task/report document. No canonical TASTE saved-state path under `data/cache`, `data/production/pre_ai`, or `data/ai_inbox` changed after the accepted ingest.
+- Therefore the accepted persisted canary state itself has not drifted since the canonical ingest. No source-of-truth exception is needed because no saved-state mutation occurred in the comparison interval.
+- The audit report commits created by this task are documentation-only and do not alter TASTE state.
 - No repair action or runtime execution was performed.
