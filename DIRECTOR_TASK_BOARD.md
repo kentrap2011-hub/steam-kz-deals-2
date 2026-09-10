@@ -7,47 +7,59 @@
 - Reconcile Board -> exact task -> exact durable report before assigning follow-up work.
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 
-## CURRENT TOP PRIORITY — RESTORE CURRENT WEBSITE OUTPUT
-The user explicitly changed priority: before Taste queue ordering or more backlog processing, the real site must show the current canonical publishable games and the current eligible free-game item.
+## CURRENT TOP PRIORITY — FINISH CURRENT WEBSITE RECOVERY
+The user explicitly changed priority: before Taste queue ordering or more backlog processing, the real site must show the current canonical publishable games and the current eligible free-game entries.
 
 Primary sequence now:
-1. restore visual/site build and publication end-to-end;
-2. verify current eligible free game appears on the live site;
-3. verify all other games that current canonical publication rules require are present;
-4. only then return to Taste queue age-ordering;
-5. then resume real Taste backlog processing;
-6. later implement selective profile-change reevaluation.
+1. finish giveaway-source refresh and publication freshness correctness;
+2. verify current eligible Epic giveaways appear in the deployed Pages artifact/site;
+3. only then return to Taste queue age-ordering;
+4. then resume real Taste backlog processing;
+5. later implement selective profile-change reevaluation.
 
-## ACTIVE NEXT — site current games and free-game recovery
+## PARTIALLY COMPLETE — first site recovery
 Task:
 `WORKER_TASK_SITE_CURRENT_GAMES_AND_FREE_GAME_RECOVERY_01.md`
 
 Report:
 `reviews/worker_reports/site-current-games-and-free-game-recovery-01.md`
 
+Final status:
+`failed_closed_root_cause_proven`
+
+Completed:
+- original `Build daily visual payload` failure diagnosed and repaired;
+- several pending-AI visual/semantic validation gates corrected without weakening completed-semantic checks;
+- final build run `34498384650` succeeded;
+- final deploy run `34498439445` succeeded;
+- GitHub Pages deployment completed;
+- deployed Pages artifact contains 115 non-giveaway entries.
+
+Still broken:
+1. deployed freshness is `degraded/no_fresh_build`, reason `visual_source_history_mismatch`;
+2. canonical giveaway snapshot is stale across the 2026-09-10 Epic rotation;
+3. deployed giveaway block is `state=unavailable`, `games=[]`;
+4. current Epic giveaways identified in the report are `Astral Ascent` and `Luftrausers`, both absent from the deployed artifact.
+
+Do NOT mark the site fully current until both giveaway freshness and publication freshness are resolved.
+
+## PREPARED FOLLOW-UP — giveaway + freshness recovery
+Task:
+`WORKER_TASK_SITE_GIVEAWAY_AND_FRESHNESS_RECOVERY_02.md`
+
+Report:
+`reviews/worker_reports/site-giveaway-and-freshness-recovery-02.md`
+
 Status:
-`ready_for_dispatch`
-
-Mode:
-`IMPLEMENT / END-TO-END PRODUCTION RECOVERY`
-
-Known evidence:
-- Taste ingest succeeded in acceptance commit `ddb1a51b8321997bbbb83505d69cfe4031758619`;
-- downstream `Build daily visual payload` run `34484781975` failed;
-- downstream `Deploy visual mailing` run `34484824317` was skipped;
-- user reports the current free game is absent from the site.
+`prepared_awaiting_user_authorization`
 
 Goal:
-- diagnose the first real visual-build failure;
-- repair the smallest directly involved production path;
-- get current visual payload to build;
-- publish/deploy current site state;
-- prove the current eligible free-game identity is present end-to-end;
-- prove all other currently publishable entries are present;
-- do not force legitimately excluded items onto the site;
-- do not change Taste semantics/queue/order/scheduler in this task.
+- identify and repair why canonical giveaway source did not refresh after rotation;
+- restore current eligible giveaway entries end-to-end;
+- diagnose and repair `visual_source_history_mismatch` without weakening freshness checks;
+- rebuild, deploy, and verify the exact deployed Pages artifact is fresh and contains current giveaways.
 
-The earlier read-only task `WORKER_TASK_PROACTIVE_VISUAL_DOWNSTREAM_FAILURE_AUDIT_01.md` is superseded by this explicitly authorized end-to-end recovery task and should not be dispatched separately unless the implementation task itself requires a later independent audit.
+This is a direct continuation of the same site goal and should preferably use the same CHAT 1 while its context remains useful.
 
 ## CLOSED — existing 10-result pinned ingest
 Task:
