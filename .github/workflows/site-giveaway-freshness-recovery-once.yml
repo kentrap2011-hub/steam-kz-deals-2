@@ -50,22 +50,19 @@ jobs:
           python scripts/test_giveaway_production.py
           python scripts/test_giveaway_visual_handoff.py
 
-      - name: Commit permanent repair and remove temporary helpers
+      - name: Commit permanent non-workflow repair
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm \
-            .github/workflows/site-giveaway-freshness-recovery-once.yml \
-            scripts/site_giveaway_freshness_recovery_once.py
+          git rm scripts/site_giveaway_freshness_recovery_once.py
           git add \
             scripts/steam_traversal_recovery.py \
             scripts/test_steam_traversal_recovery.py \
             scripts/steam_production.py \
             scripts/visual_freshness_receipt.py \
-            scripts/test_visual_freshness_receipt.py \
-            .github/workflows/build-daily-visual-payload.yml
+            scripts/test_visual_freshness_receipt.py
           git diff --cached --check
           git diff --cached --quiet && { echo 'repair produced no changes'; exit 1; }
           git commit -m "fix: recover giveaway source and freshness classification"
