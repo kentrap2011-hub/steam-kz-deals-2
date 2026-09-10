@@ -3,9 +3,9 @@
 - task_id: `taste-post-canary-runtime-audit-stage1-01`
 - lifecycle: `in_progress`
 - started_utc: `2026-09-10T05:54:49Z`
-- completed_checks: `3/4`
+- completed_checks: `4/4`
 - decision: `pending`
-- next_action: `check 4 — verify there is no second Scheduled Task for the same Taste semantic producer role`
+- next_action: `finalize audit decision`
 
 ## Checks
 
@@ -21,4 +21,7 @@
    - expected: `DAILY 01:00 Europe/Samara`
    - runtime evidence: scheduler inspection did not expose readable schedule or timezone state for the target task, so cadence, time, and timezone could not be affirmatively confirmed.
    - interpretation: this is a failed verification, not evidence that the configured schedule differs.
-4. No second Scheduled Task for the same Taste semantic producer role: `pending`
+4. No second Scheduled Task for the same Taste semantic producer role: `FAIL (unverified)`
+   - expected: no second Scheduled Task for the same Taste semantic producer role
+   - runtime evidence: scheduler inventory was not exposed readably in this execution context, so absence of a duplicate could not be affirmatively established.
+   - interpretation: this is a failed verification, not evidence that a duplicate task exists.
