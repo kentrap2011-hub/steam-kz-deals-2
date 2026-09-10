@@ -1,0 +1,331 @@
+name: Site giveaway freshness recovery once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/site-giveaway-freshness-recovery-once.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: site-giveaway-freshness-recovery-once
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Apply bounded recovery fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          helper = Path('scripts/steam_traversal_recovery.py')
+          helper.write_text('''from __future__ import annotations
+
+MAX_TOTAL_PASSES = 3
+RECOVERY_SORTS = ("Name_DESC", "Name_ASC")
+
+
+def reported_total_from_passes(passes):
+    totals = [
+        int(row["total"])
+        for row in passes
+        if row.get("total") is not None
+    ]
+    return max(totals) if totals else None
+
+
+def recovery_needed(unique_count, passes):
+    reported = reported_total_from_passes(passes)
+    return bool(
+        reported
+        and int(unique_count) != reported
+        and len(passes) < MAX_TOTAL_PASSES
+    )
+
+
+def next_recovery_sort(passes):
+    index = len(passes) - 1
+    if index < 0 or index >= len(RECOVERY_SORTS):
+        raise RuntimeError("Steam traversal recovery pass budget exhausted")
+    return RECOVERY_SORTS[index]
+''', encoding='utf-8')
+
+          test = Path('scripts/test_steam_traversal_recovery.py')
+          test.write_text('''from steam_traversal_recovery import (
+    MAX_TOTAL_PASSES,
+    next_recovery_sort,
+    recovery_needed,
+    reported_total_from_passes,
+)
+
+
+def main():
+    first = [{"total": 17036}]
+    assert recovery_needed(17033, first) is True
+    assert next_recovery_sort(first) == "Name_DESC"
+
+    growing = [{"total": 17036}, {"total": 17037}]
+    assert reported_total_from_passes(growing) == 17037
+    assert recovery_needed(17036, growing) is True
+    assert next_recovery_sort(growing) == "Name_ASC"
+
+    reconciled = growing + [{"total": 17037}]
+    assert len(reconciled) == MAX_TOTAL_PASSES
+    assert recovery_needed(17037, reconciled) is False
+
+    exhausted_gap = [{"total": 17036}, {"total": 17037}, {"total": 17037}]
+    assert recovery_needed(17036, exhausted_gap) is False
+    print("Steam traversal bounded recovery regression: PASS")
+
+
+if __name__ == "__main__":
+    main()
+''', encoding='utf-8')
+
+          source = Path('scripts/steam_production.py')
+          text = source.read_text(encoding='utf-8')
+          old_import = 'from production_output_ownership import reset_steam_collector_outputs\n'
+          new_import = old_import + 'from steam_traversal_recovery import next_recovery_sort, recovery_needed, reported_total_from_passes\n'
+          if text.count(old_import) != 1:
+              raise SystemExit(f'expected ownership import once, found {text.count(old_import)}')
+          text = text.replace(old_import, new_import, 1)
+
+          old = '''first = collect("Name_ASC")
+catalog = dict(first["catalog"])
+
+first_total = first["total"] or 0
+second = None
+
+if (
+    first_total
+    and len(catalog) != first_total
+):
+    print(
+        "First pass is not exact:",
+        len(catalog),
+        "/",
+        first_total,
+        "Running Name_DESC recovery pass.",
+    )
+
+    second = collect("Name_DESC")
+    catalog.update(second["catalog"])
+
+totals = []
+
+if first["total"] is not None:
+    totals.append(first["total"])
+
+if second and second["total"] is not None:
+    totals.append(second["total"])
+
+reported_total = (
+    max(totals)
+    if totals
+    else None
+)
+
+rows_seen = first["rows_seen"]
+duplicate_rows = first["duplicate_rows"]
+requests_made = first["requests_made"]
+reached_end = first["reached_end"]
+
+if second:
+    rows_seen += second["rows_seen"]
+    duplicate_rows += second["duplicate_rows"]
+    requests_made += second["requests_made"]
+    reached_end = (
+        reached_end
+        and second["reached_end"]
+    )
+'''
+          new = '''passes = [collect("Name_ASC")]
+catalog = dict(passes[0]["catalog"])
+
+while recovery_needed(len(catalog), passes):
+    reported_before = reported_total_from_passes(passes)
+    sort_by = next_recovery_sort(passes)
+    if len(passes) == 1:
+        print(
+            "First pass is not exact:",
+            len(catalog),
+            "/",
+            reported_before,
+            f"Running {sort_by} recovery pass.",
+        )
+    else:
+        print(
+            "Recovery still not exact after live catalog movement:",
+            len(catalog),
+            "/",
+            reported_before,
+            f"Running final bounded {sort_by} reconciliation pass.",
+        )
+    recovery = collect(sort_by)
+    passes.append(recovery)
+    catalog.update(recovery["catalog"])
+
+reported_total = reported_total_from_passes(passes)
+rows_seen = sum(row["rows_seen"] for row in passes)
+duplicate_rows = sum(row["duplicate_rows"] for row in passes)
+requests_made = sum(row["requests_made"] for row in passes)
+reached_end = all(row["reached_end"] for row in passes)
+'''
+          if text.count(old) != 1:
+              raise SystemExit(f'expected traversal orchestration block once, found {text.count(old)}')
+          text = text.replace(old, new, 1)
+          old_manifest = '    "recovery_pass_used":\n        second is not None,\n'
+          new_manifest = '    "recovery_pass_used":\n        len(passes) > 1,\n    "traversal_pass_count":\n        len(passes),\n'
+          if text.count(old_manifest) != 1:
+              raise SystemExit(f'expected recovery manifest block once, found {text.count(old_manifest)}')
+          text = text.replace(old_manifest, new_manifest, 1)
+          source.write_text(text, encoding='utf-8')
+
+          freshness = Path('scripts/visual_freshness_receipt.py')
+          text = freshness.read_text(encoding='utf-8')
+          marker = 'COMMERCIAL_REASON = "commercial_only_refresh"\n'
+          addition = marker + 'DETERMINISTIC_REFRESH_REASON = "deterministic_refresh_preserved_semantic_history"\n'
+          if text.count(marker) != 1:
+              raise SystemExit(f'expected commercial reason marker once, found {text.count(marker)}')
+          text = text.replace(marker, addition, 1)
+          freshness.write_text(text, encoding='utf-8')
+
+          test_freshness = Path('scripts/test_visual_freshness_receipt.py')
+          text = test_freshness.read_text(encoding='utf-8')
+          marker = '\ndef test_degraded_no_build() -> None:\n'
+          case = '''\ndef test_deterministic_refresh_does_not_claim_full_semantic_freshness() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        repo, intent = make_repo(Path(td))
+        receipt = freshness.create_receipt(
+            repo,
+            intent,
+            run_id="191",
+            run_attempt="1",
+            event_name="push",
+            workflow_head_sha=run(repo, "git", "rev-parse", "HEAD"),
+            upstream_run_id=None,
+            upstream_head_sha=None,
+            build_reported=False,
+            persisted=True,
+            history_ready=True,
+            reason_override=freshness.DETERMINISTIC_REFRESH_REASON,
+        )
+        assert receipt["fresh_build"] is False
+        assert receipt["freshness_scope"] == freshness.FULL_SCOPE
+        assert receipt["full_visual_freshness"] is False
+        assert receipt["reason"] == freshness.DETERMINISTIC_REFRESH_REASON
+        assert receipt.get("observed_visual") is None
+
+'''
+          if text.count(marker) != 1:
+              raise SystemExit(f'expected degraded test marker once, found {text.count(marker)}')
+          text = text.replace(marker, case + marker, 1)
+          call_marker = '    test_fresh_commercial_only_path_does_not_claim_full_visual_freshness()\n    test_degraded_no_build()\n'
+          call_new = '    test_fresh_commercial_only_path_does_not_claim_full_visual_freshness()\n    test_deterministic_refresh_does_not_claim_full_semantic_freshness()\n    test_degraded_no_build()\n'
+          if text.count(call_marker) != 1:
+              raise SystemExit('freshness test call marker not found exactly once')
+          text = text.replace(call_marker, call_new, 1)
+          print_old = 'cases=fresh_full,fresh_giveaway,fresh_commercial,degraded,stale_mismatch,giveaway_mismatch,commercial_mismatch'
+          print_new = 'cases=fresh_full,fresh_giveaway,fresh_commercial,deterministic_preserved,degraded,stale_mismatch,giveaway_mismatch,commercial_mismatch'
+          if text.count(print_old) != 1:
+              raise SystemExit('freshness cases marker not found exactly once')
+          text = text.replace(print_old, print_new, 1)
+          test_freshness.write_text(text, encoding='utf-8')
+
+          workflow = Path('.github/workflows/build-daily-visual-payload.yml')
+          text = workflow.read_text(encoding='utf-8')
+          old_logic = '''          if grep -q 'VISUAL_FINAL_BUILD=BUILT' /tmp/visual-build.log || \\
+             grep -Eq 'VISUAL_MEDIA_ITEMS_CHANGED=[1-9][0-9]*' /tmp/media-refresh.log; then
+            echo "built=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "built=false" >> "$GITHUB_OUTPUT"
+          fi
+'''
+          new_logic = '''          if grep -q 'VISUAL_FINAL_BUILD=BUILT' /tmp/visual-build.log || \\
+             grep -Eq 'VISUAL_MEDIA_ITEMS_CHANGED=[1-9][0-9]*' /tmp/media-refresh.log; then
+            echo "built=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "built=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          # A FORCE build while the Taste queue is still open intentionally
+          # preserves the previously accepted semantic lineage. Treat that as a
+          # bounded deterministic refresh, not as a full semantic freshness claim.
+          if grep -q 'VISUAL_FINAL_BUILD=BUILT mode=deterministic_refresh' /tmp/visual-build.log; then
+            echo "freshness_build_reported=false" >> "$GITHUB_OUTPUT"
+            echo "freshness_reason=deterministic_refresh_preserved_semantic_history" >> "$GITHUB_OUTPUT"
+          elif grep -q 'VISUAL_FINAL_BUILD=BUILT' /tmp/visual-build.log; then
+            echo "freshness_build_reported=true" >> "$GITHUB_OUTPUT"
+            echo "freshness_reason=" >> "$GITHUB_OUTPUT"
+          else
+            echo "freshness_build_reported=false" >> "$GITHUB_OUTPUT"
+            echo "freshness_reason=" >> "$GITHUB_OUTPUT"
+          fi
+'''
+          if text.count(old_logic) != 1:
+              raise SystemExit(f'expected visual build output logic once, found {text.count(old_logic)}')
+          text = text.replace(old_logic, new_logic, 1)
+          old_env = '          BUILD_REPORTED: ${{ steps.build.outputs.built }}\n          PERSISTED: ${{ steps.persist.outputs.persisted }}\n'
+          new_env = '          BUILD_REPORTED: ${{ steps.build.outputs.freshness_build_reported }}\n          FRESHNESS_REASON: ${{ steps.build.outputs.freshness_reason }}\n          PERSISTED: ${{ steps.persist.outputs.persisted }}\n'
+          if text.count(old_env) != 1:
+              raise SystemExit(f'expected receipt env block once, found {text.count(old_env)}')
+          text = text.replace(old_env, new_env, 1)
+          old_args = '            --build-reported "$BUILD_REPORTED" \\\n            --persisted "$PERSISTED" \\\n            --history-ready "$HISTORY_READY"\n'
+          new_args = '            --build-reported "$BUILD_REPORTED" \\\n            --persisted "$PERSISTED" \\\n            --history-ready "$HISTORY_READY" \\\n            --reason "$FRESHNESS_REASON"\n'
+          if text.count(old_args) != 1:
+              raise SystemExit(f'expected full receipt args once, found {text.count(old_args)}')
+          text = text.replace(old_args, new_args, 1)
+          workflow.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Run focused regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile \
+            scripts/steam_traversal_recovery.py \
+            scripts/test_steam_traversal_recovery.py \
+            scripts/steam_production.py \
+            scripts/visual_freshness_receipt.py \
+            scripts/test_visual_freshness_receipt.py
+          python scripts/test_steam_traversal_recovery.py
+          python scripts/test_visual_freshness_receipt.py
+          python scripts/test_giveaway_production.py
+          python scripts/test_giveaway_visual_handoff.py
+
+      - name: Commit permanent repair and remove one-shot workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/site-giveaway-freshness-recovery-once.yml
+          git add \
+            scripts/steam_traversal_recovery.py \
+            scripts/test_steam_traversal_recovery.py \
+            scripts/steam_production.py \
+            scripts/visual_freshness_receipt.py \
+            scripts/test_visual_freshness_receipt.py \
+            .github/workflows/build-daily-visual-payload.yml
+          git diff --cached --check
+          git diff --cached --quiet && { echo 'repair produced no changes'; exit 1; }
+          git commit -m "fix: recover giveaway source and freshness classification"
+          git push origin HEAD:main
