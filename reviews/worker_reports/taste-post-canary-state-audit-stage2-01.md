@@ -1,11 +1,12 @@
 # Taste Post-Canary State Audit — Stage 2
 
 - task_id: `taste-post-canary-state-audit-stage2-01`
-- lifecycle: `done`
+- lifecycle: `complete_final_state_pass`
 - started_utc: `2026-09-10T06:48:32Z`
 - completed_checks: `5/5`
 - next_action: `none`
-- decision: `pass`
+- decision: `PASS_FINAL_STATE_AUDIT`
+- further_state_audit_required: `no`
 
 ## Accepted canary binding
 
