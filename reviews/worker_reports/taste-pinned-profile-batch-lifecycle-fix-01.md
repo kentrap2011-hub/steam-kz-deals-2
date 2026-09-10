@@ -1,222 +1,262 @@
 # Worker Report — Taste Pinned Profile Batch Lifecycle Fix 01
 
 - task_id: `taste-pinned-profile-batch-lifecycle-fix-01`
-- lifecycle: `needs_followup`
-- current_utc: `2026-09-10T12:33:00Z`
-- implementation_status: `pinned_validation_model_and_regressions_pass_but_production_lifecycle_not_fully_wired`
-- final_status: `needs_followup`
-- next_action: `wire the existing GitHub pre-semantic producer/checkpoint path to create and durably commit the already-implemented active pin before semantic execution, then make process_taste_inbox post-ingest proof distinguish accepted pinned A from current live B without weakening any binding guard`
+- lifecycle: `complete`
+- current_utc: `2026-09-10T12:58:00Z`
+- implementation_status: `production_pinned_work_unit_lifecycle_wired_and_regression_proven`
+- final_status: `complete_pinned_profile_lifecycle_fix_ready_for_acceptance`
+- next_action: `return_control_to_director; existing_10_result_package_remains_uningested`
 
-## Scope guardrails observed
+## Final result
 
-No semantic Taste run was executed. The existing 10-result package was not ingested, edited, or regenerated. No next 10 games were analyzed. No queue/cache/production data was manually mutated. Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` and its cadence were not modified or triggered by this task.
+`complete_pinned_profile_lifecycle_fix_ready_for_acceptance`
 
-A branch-only validation workflow used `contents: read` and ran tests only. It did not run `scripts/process_taste_inbox.py`, `scripts/ingest_taste_results.py --input ...`, any semantic worker, or any production write command. The validation checkout proved tracked repository state remained unchanged. The temporary validation branch was force-reset to the tested `main` commit after the run, so the one-shot workflow is no longer present at the branch tip.
+The production Taste lifecycle now uses the already-established `TASTE-PINNED-WORK-UNIT-V1` authority end to end:
 
-## Durable checkpoint and implementation history
+1. normal pre-AI production builds the exact current Taste projection and ordered ChatGPT queue;
+2. before any semantic work can begin, GitHub creates or preserves `data/production/pre_ai/taste_active_work_unit.json` and includes it in the same atomic pre-AI Git commit;
+3. the pin freezes the exact immutable profile repository/path/resolved commit/blob/content SHA256/byte identity plus model/semantics/source and exact ordered key/appid/fingerprint/context/work identity;
+4. semantic results must bind to the exact work-unit hash and the exact Git authority commit;
+5. ingest validates against that durable pin rather than the later live profile;
+6. post-ingest proof distinguishes an exact accepted older A result from current B reuse eligibility, so A is persisted without being misclassified as a B cache hit and B remains exact pending work;
+7. only after transactional proof passes is the completed normal active pin retired and the then-current live work frozen as the next active pin;
+8. arbitrary historical results without the exact durable pre-semantic pin still fail closed.
 
-The required report checkpoint was saved before further testing/change in commit:
+## Exact production implementation commit
 
-- `1ca3a2f0e2056e7a789b436586b73a9cc9087a19` — report checkpoint recording already completed implementation.
+The final tested production files were atomically applied to `main` in:
 
-Original implementation commits already present when this continuation began:
+- `fc355295eb0c473a9d0d73ad33e4cfa9d621cc0b` — `fix: complete pinned Taste production lifecycle [skip ci]`
 
-- `887505e28caf8dd89d3b6ad490980063be437bb5` — initial `scripts/taste_pinned_work_unit.py` helper.
-- `55b91fb098df983fb0e3cf95c17ebb1d5858560a` — `scripts/ingest_taste_results.py` switched from current-live validation to pinned-work-unit validation.
-- `b3c8813649ad2238304ce7fc57e39af6cbcaf09f` — first focused lifecycle regression tests.
+The `[skip ci]` marker was intentional: installing this architecture must not itself start a new production work-unit, semantic run, or ingest while this implementation task is still active. GitHub reports zero workflow runs for this head SHA.
 
-The authority was subsequently strengthened, without reverting to historical-profile fallback:
+The commit changes exactly these six files and no production data/cache/queue/result file:
 
-- `8f9961f9f63efe91058d6092e273d8b88d885aaf` — introduced explicit durable pre-semantic work-unit pin state.
-- `26bc8579a83b062242f976fd020cece9174a53bb` — made pin validation resolver-aware and restricted legacy grandfathering to the exact proven package.
-- `5431266c72c017bce5d74ef49631ec081b76bba3` — focused tests for A→B, next B pin, arbitrary stale rejection, strict binding guards, and the existing package.
+- `.github/workflows/build-pre-ai-store-snapshot.yml`
+- `.github/workflows/ingest-taste-batch.yml`
+- `scripts/process_taste_inbox.py`
+- `scripts/taste_pinned_work_unit.py`
+- `scripts/validate_taste_inbox_transactional_proof.py`
+- `tests/test_taste_pinned_production_lifecycle.py`
 
-Contract/test synchronization in this continuation:
+Comparison `72995d07a46da80993026f7d1228e8dff5182622...fc355295eb0c473a9d0d73ad33e4cfa9d621cc0b` is one commit ahead and contains only those six paths.
 
-- `b27befae0cc23198af45fa2f6cf5001ef2af6ba7` — `config/taste_result_contract.json` v1.1 explicitly defines `TASTE-PINNED-WORK-UNIT-V1`, required immutable profile identity, exact ordered row identity, `pinned_work_unit_sha256`, `pin_authority_commit`, fail-closed binding rules, and the exact legacy package exception while preserving `TASTE-SEMANTIC-RESULT-V5` and producer generation 2.
-- `5bc24ccba943b6f202dabd1914b455457b12e727` — `config/execution_ownership_contract.json` explicitly assigns Taste work-unit pin creation/retirement and result validation authority to GitHub control plane; Scheduled ChatGPT remains only the constrained semantic data plane.
-- `523f417bff92753597c06706e7f99df020f5e69b` — `scripts/validate_taste_v3_contract.py` regression fixture updated to supply the required pinned authority to the already-changed `validate_input` signature; no semantic rule was changed.
+## Pre-semantic durable pin creation
 
-`config/taste_checkpoint_contract.json` was reviewed but deliberately left unchanged. It is the separate `MANDATORY-TASTE-CHECKPOINT-V1` proof for final cache completeness before downstream stages; it is not the pre-semantic work-unit/profile authority. Changing it would conflate two distinct checkpoint meanings and is not necessary for the pinned-work-unit contract.
+`.github/workflows/build-pre-ai-store-snapshot.yml` now runs:
 
-`config/taste_validation_contract.json` was also left unchanged because it governs the separate full mechanical fingerprint-validation artifact rather than semantic work-unit pin lifecycle.
+`python scripts/taste_pinned_work_unit.py ensure`
 
-## Implemented pinned authority model
+after the exact split ChatGPT consumer bundle/queue is built and before the atomic pre-AI commit is published.
 
-The implemented helper defines canonical active authority at:
+The workflow stages `data/production/pre_ai/taste_active_work_unit.json` in that same atomic commit. Therefore semantic execution can only consume an already-committed work-unit authority; the Git commit containing the pin is the durable `pin_authority_commit`.
+
+If a valid active pin already exists, `ensure` preserves it even if current live has moved forward. This is the required in-flight behavior: a later B cannot overwrite a work-unit already pinned to A.
+
+If there is no active pin and there is queued Taste work, `ensure` freezes the profile currently represented by the prepared projection using bounded GitHub head/contents/head confirmation. It verifies that the immutable fetched blob and byte count still match the already-prepared projection, computes content SHA256, and records:
+
+- repository;
+- path;
+- resolved commit SHA;
+- Git blob SHA;
+- content SHA256;
+- byte count.
+
+If live changes between projection preparation and pin freeze so the tuple could become mixed, pin creation fails closed instead of silently selecting a different version.
+
+The freeze steps use the workflow's normal `github.token`; no paid/external service or scheduler was added.
+
+## Exact pinned authority
+
+Canonical active authority path:
 
 `data/production/pre_ai/taste_active_work_unit.json`
 
-New work-unit authority requires:
+Schema:
 
-- schema `TASTE-PINNED-WORK-UNIT-V1`;
-- canonical producer id `chatgpt_scheduled_task:6aa032f37e688191a5c9a1a83f91c5d9`;
+`TASTE-PINNED-WORK-UNIT-V1`
+
+The pin binds:
+
+- producer id `chatgpt_scheduled_task:6aa032f37e688191a5c9a1a83f91c5d9`;
 - producer generation `2`;
-- immutable profile identity: repository, path, resolved commit SHA, Git blob SHA, content SHA256, byte count;
-- exact semantic bindings: profile blob, Taste model, Taste semantics SHA256, source mailing timestamp;
-- exact ordered work rows: key, appid, Taste fingerprint, candidate-context SHA256, `work_required`;
+- immutable profile identity;
+- `profile_blob_sha`;
+- `taste_model_version`;
+- `taste_semantics_sha256`;
+- `source_mailing_updated_at_utc`;
+- exact ordered work-unit rows;
+- exact `key` / `appid` / `taste_fingerprint` / `candidate_context_sha256` / `work_required` per row;
 - canonical ordered work-unit SHA256.
 
-For a normal new result, validation additionally requires exact result bindings:
+A normal new result must also carry:
 
-- `pinned_work_unit_sha256`;
-- `pin_authority_commit`.
+- `pinned_work_unit_sha256` equal to the active pin's exact hash;
+- `pin_authority_commit` equal to the Git commit that durably contains that exact pin.
 
-The result introduction commit must descend from the exact durable pin commit. Active pin bytes must equal their Git authority snapshot. Any profile/model/semantics/source/order/appid/fingerprint/context/count/duplicate mismatch fails closed.
+The result-introduction commit must descend from that authority commit and the active pin bytes must match their Git snapshot. There is no generic lookup of arbitrary historical profile revisions.
 
-There is no generic lookup of an arbitrary old profile revision.
+## Post-ingest A → B transactional proof
 
-## Test execution — actual GitHub Actions run
+`scripts/process_taste_inbox.py` now resolves and proves the exact pinned authority for every inbox package before canonical ingest.
 
-A branch-only read-only validation workflow was created solely to execute tests because the worker environment cannot clone GitHub directly.
+For each result it separately computes whether the accepted pinned result is reusable for the **current** projection. Reuse requires exact equality of:
 
-- temporary branch: `taste-pinned-lifecycle-validation-once`
-- validation-only workflow commit: `623ce1458ed3868fdfe0b07da1b0fe6aca23d819`
-- workflow run: `34477068093`
-- job: `102870321162`
-- tested main base: `523f417bff92753597c06706e7f99df020f5e69b`
-- token permissions: `Contents: read`, `Metadata: read`
-- job conclusion: `success`
-- repository tracked state after tests: unchanged (`TASTE_PINNED_VALIDATION_REPOSITORY_UNTOUCHED=PASS`)
+- profile blob;
+- model version;
+- semantics SHA256;
+- appid;
+- Taste fingerprint;
+- candidate-context SHA256;
+- current `work_required` identity.
 
-### Focused pinned lifecycle suite
+This produces the required behavior when A was pinned before semantics but live is B at ingest time:
 
-Command:
+- the A result remains valid and may be persisted because its exact A pin is proven;
+- it does **not** increment B safe-cache-hit count;
+- it does **not** decrement B `ai_required_count`;
+- the corresponding current B queue rows must remain present with exact identity/work requirements;
+- post-ingest verification fails if an older A result is accidentally promoted to a B cache hit or if B work disappears/changes;
+- same-profile results retain the previous strict cache-hit/queue-decrement behavior.
 
-`python -m unittest tests.test_taste_pinned_work_unit -v`
+The old atomic/fail-closed checks remain: complete projection, complete family partition, sale-end consistency, unique queue keys, exact queue count, legal retained negative/base-support work, V5 result shape and producer fence.
 
-Result: **4/4 passed**.
+## Active pin retirement and next-profile pinning
 
-Passed cases:
+After canonical ingest writes its candidate state and all post-ingest transactional checks pass, `process_taste_inbox.py` performs the pin transition.
 
-1. `test_a_pin_survives_live_b_and_new_work_after_retirement_uses_b`
-   - A is durably pinned before result creation;
-   - live projection advances to B before the A result is resolved;
-   - exact A-bound result still resolves against durable A pin;
-   - after A pin retirement, a new pin is created with B;
-   - copied arbitrary stale A result after B is rejected;
-   - fresh B-bound result resolves against B.
-2. `test_active_pin_requires_full_immutable_profile_identity`
-   - incomplete profile identity fails closed.
-3. `test_existing_10_package_is_exactly_grandfatherable_and_v5_stays_strict`
-   - the real existing package resolves only through the exact legacy proof;
-   - exact authority/result commits and A profile are verified;
-   - full `ingest.validate_input` V5 validation succeeds;
-   - missing V5 evidence field and duplicate result are rejected.
-4. `test_pin_hash_commit_order_fingerprint_context_model_semantics_and_count_fail_closed`
-   - wrong pin hash rejected;
-   - wrong authority commit rejected;
-   - order mismatch rejected;
-   - Taste fingerprint mismatch rejected;
-   - candidate-context mismatch rejected;
-   - model mismatch rejected;
-   - semantics mismatch rejected;
-   - result-count mismatch rejected;
-   - duplicate key rejected.
+For a normal active work-unit:
 
-### Current-live freeze regressions
+1. the completed pin must still exactly match the current active pin;
+2. only then is that active pin retired in the working transaction;
+3. if current queue still contains work, the current projection/profile is frozen again using the same immutable profile rules;
+4. the next active pin is written from the current queue and current live profile;
+5. `.github/workflows/ingest-taste-batch.yml` stages the active-pin deletion/replacement together with inbox removal, overlay/index/receipt changes and rebuilt pre-AI consumer state in the same ingest commit.
 
-Command:
+If creation of the next pin fails, no successful ingest commit is produced. Thus retirement cannot become a window in which the durable repository silently loses the prior pin after a failed transaction.
 
-`python -m unittest tests.test_taste_current_main_canary -v`
+For the exact legacy grandfathered 10-result package, there is deliberately no claim that it is the current active pin. Processing that package in a future authorized task therefore cannot retire an unrelated newer active pin. If no active pin exists after a successful legacy transaction and current work remains, the current live work is prepared as the next pin.
 
-Result: **13/13 passed**.
+## A → B production lifecycle regression
 
-This reconfirms the existing immutable live-profile freeze rules: exact commit/blob/content snapshot, profile update before freeze selects the newer version, profile update after freeze cannot mix tuple versions, continuous boundary churn fails closed, stale committed profile cannot override the frozen live binding, and candidate context/queue cardinality checks remain strict.
+New regression:
 
-### Directly affected V5 / producer / transactional / ownership regressions
+`tests/test_taste_pinned_production_lifecycle.py`
 
-Commands and results:
+It proves three production-level cases:
 
-- `python scripts/validate_taste_v3_contract.py` → `TASTE_V5_CONTRACT_VALIDATION=PASS`; pinned binding exercised; normalized factor vector persisted; negative evidence rules and negative-only semantic immutability preserved.
-- `python scripts/validate_taste_producer_fence.py` → `TASTE_PRODUCER_FENCE_REGRESSION=PASS`; correct active producer accepted; wrong/missing producer id and generation rejected; historical archive excluded from active scan.
-- `python scripts/validate_taste_inbox_transactional_proof.py` → `TASTE_INBOX_TRANSACTIONAL_PROOF_VALIDATION=PASS`; legal retained base-support, final Taste exclusion, deal exclusion, and illegal retained Taste work fail-closed cases all behaved as expected.
-- `python scripts/validate_execution_ownership.py` → `ARCHITECTURE_OWNERSHIP_VALID`.
+### Immutable profile freeze
 
-## A → B result
+- exact resolved commit/blob/content SHA256/byte identity is frozen;
+- projection/live mixed tuple is rejected fail closed.
 
-The pin/resolver/ingest-validation layer behaves correctly under A→B:
+### Full A → B lifecycle
 
-- a durable A pin remains A after live advances to B;
-- a matching A result is accepted by pinned authority rather than compared to live B;
-- after retirement, the next work-unit pin uses B;
-- arbitrary old A cannot reach backward to history and is rejected;
-- strict row/model/semantics/context/fingerprint/order/V5 protections remain active.
+In a temporary Git repository:
 
-However, this does **not** yet establish the full original end-to-end lifecycle through the existing production pre-semantic creation and post-ingest transactional verification paths. See root cause below.
+1. projection/queue A is prepared;
+2. A active pin is created and committed before semantic result creation;
+3. projection advances to B;
+4. `ensure` preserves the already-active A pin;
+5. an exact A-bound result is introduced only after B is live;
+6. resolver accepts it against the durable A authority;
+7. transactional proof confirms it is not reusable as B;
+8. B safe-hit count and `ai_required_count` remain unchanged;
+9. exact B work remains in the queue;
+10. only after proof succeeds is A retired;
+11. the next pin is created from B;
+12. a fresh B result resolves against B;
+13. a later copied arbitrary A result is rejected.
 
-## Existing 10-result package — final disposition
+### Workflow wiring
+
+The test also asserts that normal pre-AI workflow contains pre-semantic pin creation/persistence and normal ingest workflow includes the active-pin lifecycle in its atomic commit set.
+
+## Final tests from committed `main`
+
+Final validation was run from a temporary read-only branch created directly from production implementation commit `fc355295eb0c473a9d0d73ad33e4cfa9d621cc0b`.
+
+- final validation workflow commit: `01ef4fbad7d0bfa0e06e6a96fb078bf5df66a278`
+- GitHub Actions run: `34479631781`
+- job: `102878861799`
+- permissions: `Contents: read`, `Metadata: read`
+- result: `success`
+
+The one-shot workflow was not merged to `main`; after the run the temporary validation branches were force-reset to `fc355295eb0c473a9d0d73ad33e4cfa9d621cc0b`, so the one-shot workflow is not present at their tips.
+
+Exact final results:
+
+- changed lifecycle scripts `py_compile`: PASS;
+- `python -m unittest tests.test_taste_pinned_production_lifecycle -v`: **3/3 PASS**;
+- `python -m unittest tests.test_taste_pinned_work_unit -v`: **4/4 PASS**;
+- `python -m unittest tests.test_taste_current_main_canary -v`: **13/13 PASS**;
+- `TASTE_V5_CONTRACT_VALIDATION=PASS`;
+- `TASTE_PRODUCER_FENCE_REGRESSION=PASS`;
+- `TASTE_INBOX_TRANSACTIONAL_PROOF_VALIDATION=PASS`;
+- `ARCHITECTURE_OWNERSHIP_VALID`;
+- `TASTE_PINNED_FINAL_MAIN_REPOSITORY_UNTOUCHED=PASS`.
+
+The focused fail-closed suite still proves rejection for:
+
+- wrong pin hash;
+- wrong pin authority commit;
+- result order mismatch;
+- Taste fingerprint mismatch;
+- candidate-context mismatch;
+- model mismatch;
+- semantics mismatch;
+- result-count mismatch;
+- duplicate key;
+- missing V5 fields;
+- stale/unproven historical result;
+- incomplete immutable profile identity.
+
+## Existing 10-result package — final disposition unchanged
 
 `existing_batch_provably_grandfatherable_under_pinned_work_unit_rule`
 
-This conclusion is now verified by executable regression, not only by inspection.
+The existing package remains exactly:
 
-Exact proof:
+`data/ai_inbox/taste/manual-throughput-drain-01-batch-001.json`
 
-- package path: `data/ai_inbox/taste/manual-throughput-drain-01-batch-001.json`;
-- pre-semantic durable checkpoint commit: `0ec1ed0ec10e8950f86e6f600bc360325481ae9b`;
+Its durable proof remains:
+
+- pre-semantic checkpoint commit: `0ec1ed0ec10e8950f86e6f600bc360325481ae9b`;
 - result introduction commit: `f138d5216248c999fde588c47ca5088ff9c076ee`;
-- result commit direct parent: the exact pre-semantic checkpoint;
-- profile blob: `b487e62b3fec9f413fb001d96b4894f8ac43e5d5`;
+- result commit direct parent is that exact pre-semantic checkpoint;
+- profile blob A: `b487e62b3fec9f413fb001d96b4894f8ac43e5d5`;
 - immutable profile commit: `c8a915d1ecad2bfd4f22d83182542925f73b1e54`;
 - profile content SHA256: `6ed2adb975860783abf402ed74446eb257b1e78af69c332590dc27718a663cc4`;
-- pre-semantic checkpoint explicitly records canonical queue lines `1..10`, exact keys/appids/fingerprints/context hashes, model, semantics and source binding before semantic execution;
-- current package bytes still match the exact result-introduction commit, as exercised by `resolve_pinned_work_unit` during the passing test;
-- the package passes full V5 `ingest.validate_input` against this grandfathered exact pin authority.
+- exact ordered 10 keys/appids/fingerprints/context hashes and model/semantics/source binding were durably recorded before semantic execution;
+- focused regression still resolves the current bytes through only this exact grandfather proof and passes full V5 `validate_input`;
+- copying/reintroducing the same old result elsewhere is not grandfathered and is rejected.
 
-Grandfathering is intentionally exact-path/exact-commit/exact-parent/exact-bytes/exact-binding only. Copying or reintroducing the file later is not grandfathered and no arbitrary historical profile fallback is authorized.
+The production implementation diff contains no change to this package, queue or Taste cache. The package was not ingested in this task.
 
-The package was **not ingested** in this task.
+## Contract state
 
-## Self-diagnosis — first real completion blocker
+Previously synchronized canonical contracts remain in force:
 
-Despite all focused tests passing, the original task cannot truthfully receive `complete_pinned_profile_lifecycle_fix_ready_for_acceptance` yet because the production lifecycle does not actually create/use/retire the new active pin end to end.
+- `config/taste_result_contract.json` v1.1 — exact pre-semantic pin, work-unit hash, authority commit and narrow grandfathering rule while preserving `TASTE-SEMANTIC-RESULT-V5` and generation 2;
+- `config/execution_ownership_contract.json` — GitHub owns pin creation/retirement and exact validation; Scheduled ChatGPT remains the constrained semantic data plane.
 
-### Root cause 1 — pre-semantic production pin is not wired
+`config/taste_checkpoint_contract.json` remains the separate final cache-completeness checkpoint and was correctly not repurposed as semantic pin authority.
 
-The implemented canonical path is `data/production/pre_ai/taste_active_work_unit.json`, but that file is absent from current `main`.
+## Scope confirmation
 
-`.github/workflows/build-pre-ai-store-snapshot.yml` currently builds the Taste projection and ChatGPT payload and atomically commits those artifacts, but it does **not** invoke `scripts/taste_pinned_work_unit.py prepare`, does not create `taste_active_work_unit.json`, and does not stage such a pin in its atomic pre-AI commit.
+During this implementation/verification task:
 
-Therefore the invariant "GitHub durably records exact authorized work-unit/profile before semantic execution" is implemented as a helper/contract but not yet connected to the normal production preparation path.
-
-The helper's `prepare` command also requires an immutable `profile_binding` containing resolved profile commit/content SHA256, while the ordinary production Taste projection currently records only repository/path/raw URL/blob SHA/bytes. The existing one-AppID canary has the required immutable freeze implementation, but ordinary pre-AI production has not yet been wired to reuse it for the active pin.
-
-### Root cause 2 — post-ingest transactional proof still assumes accepted result equals current live profile
-
-`scripts/process_taste_inbox.py` still computes post-ingest expectations as though every full Taste result must immediately become a cache hit in the **current rebuilt projection**:
-
-- expected safe-cache hits increase by full-evaluation count;
-- expected current `ai_required_count` decreases by full-evaluation count;
-- every ingested key is required to be a current projection cache hit;
-- current queue count is expected to drop accordingly.
-
-For the required A→B lifecycle, successful persistence of an A-bound result while live is already B is intentionally **not** a B cache hit. B must remain unresolved for the next work-unit. Consequently the current transactional proof would reject the correct state after rebuilding consumers on B, preventing the A work-unit from completing through post-ingest verification/commit even though `ingest_taste_results.py` itself correctly accepts the pinned A result.
-
-This is the exact remaining mismatch identified earlier; the green transactional regression only proves the existing same-profile cases and does not remove this A≠B assumption.
-
-### Root cause 3 — pin retirement is not part of the canonical ingest commit
-
-`.github/workflows/ingest-taste-batch.yml` does not currently stage/remove `data/production/pre_ai/taste_active_work_unit.json`, and `process_taste_inbox.py` does not retire that pin after a proven successful work-unit. Thus the requirement that the next work-unit after completion freezes then-current B is proven at helper/test level but is not yet implemented in the normal production completion path.
-
-## Why status is not complete
-
-The user explicitly required full-batch authority through semantic evaluation, validation, ingest, post-ingest verification, and durable commit. Passing isolated pin validation while the production preparation and post-ingest paths remain unwired would make a `complete...` status false.
-
-The first real completion failure is architectural integration, not semantic correctness of the pin matcher. The smallest follow-up is therefore to connect the already-implemented authority model to the existing GitHub pre-AI/ingest lifecycle and add one focused synthetic A→B post-ingest regression. No second queue, new scheduler, historical-profile acceptance, or Scheduled Task change is needed.
-
-## Exact files changed by this task so far
-
-- `scripts/taste_pinned_work_unit.py`
-- `scripts/ingest_taste_results.py`
-- `tests/test_taste_pinned_work_unit.py`
-- `config/taste_result_contract.json`
-- `config/execution_ownership_contract.json`
-- `scripts/validate_taste_v3_contract.py`
-- `reviews/worker_reports/taste-pinned-profile-batch-lifecycle-fix-01.md`
-
-No canonical queue/cache/production data file is intentionally part of the task changes.
+- no semantic Taste run was executed;
+- no new games were analyzed;
+- the existing 10-result package was not edited, regenerated or ingested;
+- no canonical Taste queue was manually changed;
+- no canonical Taste cache was manually changed;
+- no production data was manually rewritten as test state;
+- Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` and its cadence were not modified;
+- no production ingest workflow was dispatched;
+- no production workflow ran for implementation head `fc355295eb0c473a9d0d73ad33e4cfa9d621cc0b`;
+- validation workflows used read-only repository permissions and left tracked state unchanged.
 
 ## Final status
 
-`needs_followup`
+`complete_pinned_profile_lifecycle_fix_ready_for_acceptance`
