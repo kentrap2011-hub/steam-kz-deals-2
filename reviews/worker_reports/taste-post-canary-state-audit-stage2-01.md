@@ -3,8 +3,8 @@
 - task_id: `taste-post-canary-state-audit-stage2-01`
 - lifecycle: `in_progress`
 - started_utc: `2026-09-10T06:48:32Z`
-- completed_checks: `2/5`
-- next_action: `check 3`
+- completed_checks: `3/5`
+- next_action: `check 4`
 - decision: `pending`
 
 ## Accepted canary binding
@@ -45,4 +45,17 @@ The two predecessor reports were read once before investigation. The accepted bi
 - Merge policy is `overlay_exact_key_wins`. The merged index entry for `App_1016800` contains AppID `1016800`, profile blob `b487e62b3fec9f413fb001d96b4894f8ac43e5d5`, model `taste-v3`, semantics SHA256 `0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828`, context SHA256 `2fb17ed4b0732e67bee6e9e05668c31fbeac2bd60c4858801a9282bbf319480e`, fingerprint `b8f101a75b7f50b2139e18349a0f31ea791fb4601b463f00a99d48834e5e4129`, verdict `INCLUDE`, fit `moderate`, and reason `include_moderate`; this is identical to the current overlay projection.
 - `App_1016800` negative-readiness projection is `complete_with_confirmed_negative`, confirmed-negative count `1`, ready `true`, consistent with the accepted canary result.
 - The separate legacy `taste_fit.index.json` is not the canary-synchronized merged index; its own metadata describes only a compact projection of a historical base `taste_fit.json`. It is not used as evidence for the canonical merged surface in this check.
+- No repair action or runtime execution was performed.
+
+### Check 3 — No contradictory duplicate `App_1016800` saved state
+
+**Result: PASS**
+
+- Current `data/cache/taste_fit.entry_overlay.json` has exactly one keyed occurrence of `App_1016800`.
+- Current `data/cache/taste_fit.entry_index.json` contains the expected merged entry plus its negative-readiness projection; both refer to the same accepted result and are not competing saved-state records.
+- The accepted ingest diff increased overlay `new_key_count` from `669` to `670` while inserting `App_1016800`; the base-cache source was not mutated by that ingest. The current merged index still references the same current base-cache blob, so the canary remains an overlay-new key rather than a conflicting base-cache duplicate.
+- Current `data/production/pre_ai/chatgpt_taste_queue.jsonl` contains no `App_1016800` occurrence.
+- Current `data/ai_inbox/taste` is absent, so there is no active duplicate canary submission waiting beside the persisted result.
+- No contradictory duplicate or stale `App_1016800` record was found in the nearby canonical persisted TASTE surfaces checked above.
+- `data/cache/taste_direct_conflicts.report.json` was observed to reference an older cache blob, so it was not treated as current authoritative evidence for this check.
 - No repair action or runtime execution was performed.
