@@ -8,57 +8,63 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed. Do not add a separate Code Architect review stage to active work unless the user later re-enables that idea.
 
-## NEEDS FOLLOW-UP — Steam partial publish + failure isolation
+## IN PROGRESS — real Steam partial-publish production refresh
+Task:
+`WORKER_TASK_STEAM_PARTIAL_PUBLISH_PRODUCTION_REFRESH_01.md`
+
+Task ID:
+`steam-partial-publish-production-refresh-01`
+
+Status:
+`authorized_dispatched_chat_1`
+
+Worker slot:
+`ЧАТ 1`
+
+User authorization:
+- explicit authorization granted for the real Steam production refresh.
+
+Required work:
+- safely integrate accepted worker branch `worker/steam-partial-publish-failure-queue-01` into current `main` without losing intervening Director/task files;
+- canonical workflow uses `scripts/steam_partial_publish_runner.py`;
+- allow/trigger the real Steam workflow;
+- wait for completion and verify real production result;
+- report successful processed count, unresolved problematic games, unresolved catalog segments, system-state problems, last-known-good preservation, source complete/partial status, production commit and downstream visual refresh/deploy state;
+- do not automatically investigate individual problem entries.
+
+Expected report:
+`reviews/worker_reports/steam-partial-publish-production-refresh-01.md`
+
+Expected final status:
+- `complete_real_steam_refresh_verified`
+- `complete_with_problem_entries_for_separate_review`
+- or `blocked_requires_followup`
+
+## ACCEPTED — Steam partial publish + failure isolation implementation
 Task:
 `WORKER_TASK_STEAM_PARTIAL_PUBLISH_FAILURE_QUEUE_01.md`
 
 Task ID:
 `steam-partial-publish-failure-queue-01`
 
-Worker slot:
-`ЧАТ 1`
-
-Review status:
-`needs_followup_before_acceptance`
-
-Worker branch:
+Accepted worker branch:
 `worker/steam-partial-publish-failure-queue-01`
 
-Worker head:
-`43df55f5041d4eb6b4022bbc9482f6159cd4bd36`
+Accepted worker head:
+`5556ce5c763d886a42b3c89ba69df711ba745adb`
 
-Observed implementation:
-- branch is 3 commits ahead of main;
-- added `scripts/steam_partial_publish.py`;
-- added `scripts/steam_partial_publish_runner.py`;
-- added `scripts/test_steam_partial_publish.py` with five short regression tests.
-
-Director acceptance gaps:
-1. required durable report `reviews/worker_reports/steam-partial-publish-failure-queue-01.md` is missing;
-2. no durable evidence was found that the five tests were actually executed and passed;
-3. implementation writes `complete: true` / `source_complete: true` even when failed catalog segments are recorded, which is contradictory to known partial source coverage and must not falsely claim full completeness;
-4. failure-queue loader currently resets to empty state on malformed/unreadable JSON, which can silently lose unresolved failures; a corrupt file must not remain the active source and must not be overwritten as if nothing happened;
-5. changes are still only on the worker branch, not accepted/integrated into main;
-6. before acceptance, worker must prove the actual production invocation path will use the new partial-publish runner/rules rather than the old strict path.
-
-Do NOT run the real Steam refresh yet.
-Continue in the SAME `ЧАТ 1`; do not start a new worker slot for these follow-up fixes.
-
-Required behavior remains:
-- process the Steam catalog once;
-- publish successfully processed games without waiting for failed/problematic games;
-- keep last known good data for already-known failed games;
-- record failed/unread catalog segments separately;
-- count drift is informational;
-- unresolved problems must not silently disappear;
-- short deterministic tests only before real refresh.
-
-Expected final report:
+Report:
 `reviews/worker_reports/steam-partial-publish-failure-queue-01.md`
 
-Expected final status:
-- `complete_ready_for_real_steam_refresh`
-- or `blocked_requires_followup`
+Final status:
+`complete_ready_for_real_steam_refresh`
+
+Verified before production integration:
+- partial source metadata is honest when catalog segments fail;
+- corrupt failure-state is quarantined and recorded rather than silently erased;
+- seven short regressions reported `7/7 PASS`;
+- canonical workflow on worker branch is wired to `scripts/steam_partial_publish_runner.py`;
+- no real Steam refresh was run in the implementation task.
 
 ## QUEUED LATER — ChatGPT Steam error notification watch
 Task:
@@ -83,7 +89,7 @@ Goal when later authorized:
 - do not automatically repair or investigate failures.
 
 Dependency:
-- implement and verify `steam-partial-publish-failure-queue-01` first so the exact canonical report path/schema is known.
+- real partial-publish production path/report must be established first.
 
 ## QUEUED LATER — decouple giveaways from Steam commercial crawl
 Task:
@@ -137,12 +143,10 @@ Final status:
 `failed_closed_root_cause_proven`
 
 Proven remaining root cause:
-- the full Steam commercial collector tries to prove exact completeness against a live, changing offset-paginated catalog;
-- source membership/total can move during the traversal;
-- the strict collector therefore fails before giveaway production runs;
-- current site still has the previous 115 ordinary games and stale/missing current giveaways.
-
-The old `visual_source_history_mismatch` defect was repaired; latest no-build reason became `upstream_prerequisite_not_ready` because Steam production failed earlier.
+- the full Steam commercial collector tried to prove exact completeness against a live, changing offset-paginated catalog;
+- source membership/total can move during traversal;
+- strict behavior blocked production before giveaway processing;
+- the accepted partial-publish implementation is intended to remove that global blocker while preserving explicit problem reporting.
 
 ## CLOSED — existing 10-result pinned ingest
 Task:
@@ -158,19 +162,12 @@ Verified result:
 - exactly one manual `workflow_dispatch` attempt;
 - run `34484740625`, job `102896057405`, success;
 - acceptance commit `ddb1a51b8321997bbbb83505d69cfe4031758619`;
-- receipt `data/cache/taste_ingest_receipts/ba86bfdcf8365dfa0195.json`;
 - all 10 original results canonically persisted unchanged under historical profile A;
-- queue remained `539 -> 539` intentionally because none of those A results satisfy current profile B;
-- current-B work remains pending;
-- next active work-unit pin was created for current profile B;
-- no next semantic batch was started by the ingest worker.
+- queue remained intentionally pending for current profile B.
 
 ## DEFERRED — Taste queue age-priority ordering
 Task:
 `WORKER_TASK_TASTE_QUEUE_AGE_PRIORITY_ORDER_01.md`
-
-Report:
-`reviews/worker_reports/taste-queue-age-priority-order-01.md`
 
 Status:
 `queued_before_next_new_semantic_batch`
@@ -178,15 +175,6 @@ Status:
 Required ordering for newly constructed Taste work:
 1. never successfully canonically Taste-checked;
 2. then previously checked from oldest successful canonical Taste evaluation to newest.
-
-Rules:
-- failed/rejected/unaccepted attempts do not count as a check;
-- deterministic stable tie-breaker;
-- do not invent a timestamp source;
-- do not silently mutate an already active exact pin.
-
-## After ordering — resume real backlog drain
-Resume bounded real Taste semantic processing from canonical state. Process actual games, checkpoint accepted batches, and continue until genuine blocker/safe stop/practical execution limit. Do not mistake infrastructure defects for semantic capacity.
 
 ## Proactive Project Auditor — standing role
 Protocol:
@@ -200,37 +188,7 @@ Existing task:
 - id `6aa032f37e688191a5c9a1a83f91c5d9`
 - current prompt is still the old Chernobylite one-game canary prompt.
 
-Therefore do not claim it currently drains the queue automatically.
-
-Keep the stale canary safely DAILY 01:00 Europe/Samara until normal producer implementation is actually ready. When enabled, update this SAME task, do not create a second producer.
-
-User-required eventual normal cadence: HOURLY (`RRULE:FREQ=HOURLY`).
-
-## Ready design — bounded normal producer
-Report:
-`reviews/worker_reports/taste-normal-daily-binding-design-01.md`
-
-Existing recommendation:
-- max 10 Taste items per invocation;
-- max 1 semantic work-unit per invocation;
-- deterministic producer-owned head;
-- pinned exact profile/work identity;
-- strict atomic ingest/post-ingest verification;
-- deterministic suffix resume.
-
-Cadence detail in the old design is superseded by the user's later requirement: normal producer should eventually run hourly.
-
-## QUEUED LATER — selective profile-change reevaluation
-Task ID:
-`taste-selective-profile-reevaluation-01`
-
-Status:
-`queued_after_current_backlog_is_usable`
-
-Goal:
-A small live-profile edit should not force hundreds of unaffected games through semantic reevaluation merely because whole-profile blob SHA changed. Later design must invalidate/requeue only materially affected prior results where safely provable, while preserving provenance and fail-closed behavior.
-
-Eventual reevaluation processing cadence: once per hour, meaning process affected pending work hourly, not reanalyze the whole database hourly.
+Keep the stale canary safely DAILY 01:00 Europe/Samara until normal producer implementation is actually ready.
 
 ## Other queued work
 - `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md` remains queued.
