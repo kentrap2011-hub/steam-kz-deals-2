@@ -1,6 +1,6 @@
 # TASK — steam-partial-publish-failure-queue-01
 
-Status: `authorized_dispatched_chat_1`
+Status: `authorized_followup_chat_1`
 Mode: `IMPLEMENT`
 
 ## User-required behavior
@@ -29,16 +29,47 @@ If an entire catalog page/segment cannot be fetched:
 - do not invent game identities that were never observed;
 - do not block publication of successful results solely because a segment failed.
 
+## Follow-up fixes required before acceptance
+
+The first implementation exists on branch `worker/steam-partial-publish-failure-queue-01`, but Director review found acceptance gaps. Continue in the SAME worker branch/chat and fix only these gaps:
+
+1. **Do not claim full completeness when there are failed catalog segments.**
+   - Publication may still proceed under the partial-publish model.
+   - If one or more catalog segments failed, output metadata must explicitly represent partial/incomplete source coverage.
+   - Do not simultaneously write `complete: true` / `source_complete: true` while also declaring known gaps.
+
+2. **Corrupt/unreadable failure-queue file must not silently become an empty healthy queue.**
+   - Do not overwrite the unreadable file as though there were no previous unresolved problems.
+   - Quarantine/archive/rename the unreadable file out of the active path when feasible and create a fresh active queue only after recording a system-level problem that the previous queue could not be read.
+   - Preserve enough evidence/path information for later diagnosis.
+   - The damaged file itself is not an active working source after quarantine.
+   - Add a short deterministic test for this behavior.
+
+3. **Actually execute the short automated regression tests** and record the exact command and results in the durable report.
+
+4. **Prove the real production invocation path will use the new partial-publish implementation.**
+   - Identify the exact workflow/command/entry point used for the next real Steam production refresh.
+   - Ensure it invokes the new rules instead of the old strict collector path.
+   - Make only the smallest necessary production wiring change.
+   - Do NOT run the real full Steam refresh yet.
+
+5. **Create the required durable report** at:
+   `reviews/worker_reports/steam-partial-publish-failure-queue-01.md`
+
+6. Keep changes on the worker branch until the Director reviews them. Do not merge into `main` yourself unless the existing worker protocol explicitly requires a different acceptance mechanism.
+
 ## Tests required before any real Steam production refresh
 
-Add only short deterministic automated tests for the new behavior. No full fake Steam crawl.
+Use only short deterministic automated tests. No full fake Steam crawl and no real full Steam refresh.
 
 At minimum prove:
 - one game-level failure does not block other successful games;
 - an already-known failed game keeps its last known good published data;
 - a failed catalog segment is recorded separately and does not stop the rest;
+- failed segment means partial source coverage, not false `complete=true`;
 - live catalog count drift does not fail the run;
-- unresolved failures are durably recorded and summarized.
+- unresolved failures are durably recorded and summarized;
+- corrupted/unreadable failure-state does not silently erase old unresolved state without a system-level problem record.
 
 ## Scope limits
 
@@ -47,6 +78,7 @@ At minimum prove:
 - Do not create or enable the ChatGPT error-monitoring scheduled task; that remains queued in `WORKER_TASK_STEAM_ERROR_NOTIFICATION_WATCH_01.md`.
 - Do not change Taste semantics, queue, overlay, or Scheduled Task.
 - Do not investigate individual failed games here.
+- Do not start the queued Code Architect system review here.
 
 ## Deliverable
 
@@ -57,6 +89,9 @@ Report must include:
 - exact files changed;
 - exact behavior implemented;
 - exact test commands/results;
+- exact production invocation path verified/changed;
+- corrupt failure-state handling behavior;
+- partial-vs-complete metadata behavior;
 - any migration/backward-compatibility effect;
 - whether a real Steam refresh is now safe to run under the new rules;
 - commit SHA(s);
