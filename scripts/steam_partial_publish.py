@@ -32,6 +32,18 @@ def _empty_state():
         'updated_at_utc': None,
         'unresolved_games': {},
         'unresolved_catalog_segments': {},
+        'system_problems': [],
+    }
+
+
+def source_coverage_metadata(failed_segment_count):
+    failed_segment_count = int(failed_segment_count or 0)
+    has_gaps = failed_segment_count > 0
+    return {
+        'source_complete': not has_gaps,
+        'source_has_known_gaps': has_gaps,
+        'known_gap_count': failed_segment_count,
+        'source_status': 'partial' if has_gaps else 'complete',
     }
 
 
@@ -40,24 +52,87 @@ class FailureQueue:
         self.path = Path(path)
         self.run_ref = run_ref or default_run_ref()
         self.now_fn = now_fn
+        self.load_incident = None
         self.state = self._load()
         self.failed_game_keys_this_run = set()
         self.failed_segment_ids_this_run = set()
 
+    def _validated_payload(self, payload):
+        if not isinstance(payload, dict):
+            raise ValueError('failure queue root is not an object')
+        if payload.get('schema_version') != SCHEMA_VERSION:
+            raise ValueError(
+                'unsupported failure queue schema_version='
+                f'{payload.get("schema_version")!r}'
+            )
+        if not isinstance(payload.get('unresolved_games'), dict):
+            raise ValueError('unresolved_games is not an object')
+        if not isinstance(payload.get('unresolved_catalog_segments'), dict):
+            raise ValueError('unresolved_catalog_segments is not an object')
+        system_problems = payload.get('system_problems')
+        if system_problems is None:
+            payload['system_problems'] = []
+        elif not isinstance(system_problems, list):
+            raise ValueError('system_problems is not an array')
+        return payload
+
+    def _quarantine_path(self):
+        stamp = self.now_fn().replace(':', '-').replace('+', '_')
+        quarantine_dir = self.path.parent / f'{self.path.stem}_quarantine'
+        quarantine_dir.mkdir(parents=True, exist_ok=True)
+        candidate = quarantine_dir / f'{self.path.name}.corrupt.{stamp}'
+        suffix = 1
+        while candidate.exists():
+            candidate = quarantine_dir / f'{self.path.name}.corrupt.{stamp}.{suffix}'
+            suffix += 1
+        return candidate
+
+    def _recover_unreadable_state(self, error):
+        original_path = str(self.path)
+        quarantined_path = None
+        if self.path.exists():
+            target = self._quarantine_path()
+            try:
+                self.path.replace(target)
+            except Exception as quarantine_error:
+                raise RuntimeError(
+                    'Failure queue is unreadable and could not be quarantined; '
+                    'refusing to overwrite active path. '
+                    f'load_error={_error_text(error)}; '
+                    f'quarantine_error={_error_text(quarantine_error)}'
+                ) from quarantine_error
+            quarantined_path = str(target)
+
+        now = self.now_fn()
+        problem = {
+            'problem_type': 'failure_queue_unreadable',
+            'failed_stage': 'failure_queue_load',
+            'root_error': _error_text(error),
+            'original_path': original_path,
+            'quarantined_path': quarantined_path,
+            'run_ref': self.run_ref,
+            'first_seen_at_utc': now,
+            'last_seen_at_utc': now,
+            'requires_manual_disposition': True,
+        }
+        state = _empty_state()
+        state['system_problems'].append(problem)
+        self.load_incident = problem
+        return state
+
     def _load(self):
         try:
-            payload = json.loads(self.path.read_text(encoding='utf-8'))
+            text = self.path.read_text(encoding='utf-8')
         except FileNotFoundError:
             return _empty_state()
-        except Exception:
-            return _empty_state()
-        if payload.get('schema_version') != SCHEMA_VERSION:
-            return _empty_state()
-        if not isinstance(payload.get('unresolved_games'), dict):
-            payload['unresolved_games'] = {}
-        if not isinstance(payload.get('unresolved_catalog_segments'), dict):
-            payload['unresolved_catalog_segments'] = {}
-        return payload
+        except Exception as exc:
+            return self._recover_unreadable_state(exc)
+
+        try:
+            payload = json.loads(text)
+            return self._validated_payload(payload)
+        except Exception as exc:
+            return self._recover_unreadable_state(exc)
 
     def record_game(self, key, *, appid=None, name=None, stage, error, prior_site_data_exists=False):
         key = str(key or '').strip()
@@ -120,15 +195,20 @@ class FailureQueue:
             'processed_successfully': int(successful_games),
             'problematic_games': len(self.state['unresolved_games']),
             'problematic_catalog_segments': len(self.state['unresolved_catalog_segments']),
+            'problematic_system_state': len(self.state['system_problems']),
             'game_failures_this_run': len(self.failed_game_keys_this_run),
             'catalog_segment_failures_this_run': len(self.failed_segment_ids_this_run),
+            'failure_queue_recovery_this_run': self.load_incident is not None,
         }
 
     def write(self):
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.state['updated_at_utc'] = self.now_fn()
         tmp = self.path.with_suffix(self.path.suffix + '.tmp')
-        tmp.write_text(json.dumps(self.state, ensure_ascii=False, indent=2, sort_keys=True), encoding='utf-8')
+        tmp.write_text(
+            json.dumps(self.state, ensure_ascii=False, indent=2, sort_keys=True),
+            encoding='utf-8',
+        )
         tmp.replace(self.path)
 
 
