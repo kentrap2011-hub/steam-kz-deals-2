@@ -11,6 +11,9 @@ on:
     paths:
       - "scripts/steam_production.py"
       - "scripts/steam_production_cached.py"
+      - "scripts/steam_partial_publish.py"
+      - "scripts/steam_partial_publish_runner.py"
+      - "scripts/test_steam_partial_publish.py"
       - "scripts/steam_traversal_recovery.py"
       - "scripts/test_steam_traversal_recovery.py"
       - "scripts/production_output_ownership.py"
@@ -59,6 +62,9 @@ jobs:
       - name: Install dependencies
         run: pip install requests beautifulsoup4
 
+      - name: Regression test Steam partial publish
+        run: python scripts/test_steam_partial_publish.py
+
       - name: Regression test Steam traversal recovery
         run: python scripts/test_steam_traversal_recovery.py
 
@@ -71,8 +77,8 @@ jobs:
       - name: Regression test giveaway IGDB identity probe
         run: python scripts/test_giveaway_igdb_identity_probe.py
 
-      - name: Collect full Steam KZ catalog and build production shortlist
-        run: python scripts/steam_production_cached.py
+      - name: Collect Steam KZ catalog with partial publish failure isolation
+        run: python scripts/steam_partial_publish_runner.py
 
       - name: Verify Steam collector touched only owned production paths
         shell: bash
@@ -110,7 +116,7 @@ jobs:
             exit 1
           fi
 
-      - name: Commit production feed, giveaways and review cache
+      - name: Commit production feed, giveaways, failure state and review cache
         id: publish
         shell: bash
         run: |
@@ -119,8 +125,8 @@ jobs:
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
 
-          # Each producer keeps its own path family; the workflow stages only
-          # the two explicitly-owned output sets plus the Steam review cache.
+          # Each producer keeps its own path family. Steam partial-publish owns
+          # its durable failure state in addition to the existing review cache.
           git add -A -- \
             data/production/shortlist \
             data/production/manifest.json \
@@ -128,6 +134,10 @@ jobs:
             data/production/freebies_index.json \
             data/production/giveaways
           git add data/cache/steam_review_http_cache.json
+          git add data/cache/steam_partial_publish_failures.json
+          if [[ -d data/cache/steam_partial_publish_failures_quarantine ]]; then
+            git add -A -- data/cache/steam_partial_publish_failures_quarantine
+          fi
 
           if git diff --cached --quiet; then
             echo "No production feed changes"
