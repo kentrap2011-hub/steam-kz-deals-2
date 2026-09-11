@@ -7,38 +7,52 @@
 - Reconcile Board -> exact task -> exact durable report before assigning follow-up work.
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 
-## IN PROGRESS — Steam partial publish + failure isolation
+## NEEDS FOLLOW-UP — Steam partial publish + failure isolation
 Task:
 `WORKER_TASK_STEAM_PARTIAL_PUBLISH_FAILURE_QUEUE_01.md`
 
 Task ID:
 `steam-partial-publish-failure-queue-01`
 
-Status:
-`authorized_dispatched_chat_1`
-
 Worker slot:
 `ЧАТ 1`
 
-Required behavior:
+Review status:
+`needs_followup_before_acceptance`
+
+Worker branch:
+`worker/steam-partial-publish-failure-queue-01`
+
+Worker head:
+`43df55f5041d4eb6b4022bbc9482f6159cd4bd36`
+
+Observed implementation:
+- branch is 3 commits ahead of main;
+- added `scripts/steam_partial_publish.py`;
+- added `scripts/steam_partial_publish_runner.py`;
+- added `scripts/test_steam_partial_publish.py` with five short regression tests.
+
+Director acceptance gaps:
+1. required durable report `reviews/worker_reports/steam-partial-publish-failure-queue-01.md` is missing;
+2. no durable evidence was found that the five tests were actually executed and passed;
+3. implementation writes `complete: true` / `source_complete: true` even when failed catalog segments are recorded, which is contradictory to known partial source coverage and must not falsely claim full completeness;
+4. failure-queue loader currently resets to empty state on malformed/unreadable JSON, which can silently lose unresolved failures;
+5. changes are still only on the worker branch, not accepted/integrated into main;
+6. before acceptance, worker must prove the actual production invocation path will use the new partial-publish runner/rules rather than the old strict path.
+
+Do NOT run the real Steam refresh yet.
+Continue in the SAME `ЧАТ 1`; do not start a new worker slot for these follow-up fixes.
+
+Required behavior remains:
 - process the Steam catalog once;
-- publish all successfully processed games without waiting for failed/problematic games;
-- move every concrete failed/problematic game to a separate durable problem list;
-- keep last known good site data for already-known games whose latest refresh fails;
-- record failed/unread catalog segments separately without inventing unknown game identities;
-- normal live-catalog total drift is informational and must not block the run;
-- avoid unnecessary repeated refresh of stable fields for already-known games;
-- produce a concise end-of-run problem summary;
-- implement only short deterministic automated tests before the first real production refresh.
+- publish successfully processed games without waiting for failed/problematic games;
+- keep last known good data for already-known failed games;
+- record failed/unread catalog segments separately;
+- count drift is informational;
+- unresolved problems must not silently disappear;
+- short deterministic tests only before real refresh.
 
-Scope for this worker:
-- implementation + short tests + durable report only;
-- do NOT run the real full Steam production refresh yet;
-- do NOT work on giveaway decoupling;
-- do NOT create the ChatGPT error-monitoring scheduled task;
-- do NOT change Taste state.
-
-Expected report:
+Expected final report:
 `reviews/worker_reports/steam-partial-publish-failure-queue-01.md`
 
 Expected final status:
