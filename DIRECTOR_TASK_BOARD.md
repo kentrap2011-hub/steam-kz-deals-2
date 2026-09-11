@@ -7,59 +7,46 @@
 - Reconcile Board -> exact task -> exact durable report before assigning follow-up work.
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 
-## CURRENT TOP PRIORITY — FINISH CURRENT WEBSITE RECOVERY
-The user explicitly changed priority: before Taste queue ordering or more backlog processing, the real site must show the current canonical publishable games and the current eligible free-game entries.
+## CURRENT DIRECTION — MAKE STEAM UPDATE PRACTICAL
+The user does not want more broad site-recovery work right now. Current discussion is focused on making the Steam catalog update tolerate normal live-catalog movement and recover failed pages without throwing away the whole useful pass.
 
-Primary sequence now:
-1. finish giveaway-source refresh and publication freshness correctness;
-2. verify current eligible Epic giveaways appear in the deployed Pages artifact/site;
-3. only then return to Taste queue age-ordering;
-4. then resume real Taste backlog processing;
-5. later implement selective profile-change reevaluation.
+Do not start unrelated repairs unless explicitly authorized.
 
-## PARTIALLY COMPLETE — first site recovery
-Task:
-`WORKER_TASK_SITE_CURRENT_GAMES_AND_FREE_GAME_RECOVERY_01.md`
-
-Report:
-`reviews/worker_reports/site-current-games-and-free-game-recovery-01.md`
-
-Final status:
-`failed_closed_root_cause_proven`
-
-Completed:
-- original `Build daily visual payload` failure diagnosed and repaired;
-- several pending-AI visual/semantic validation gates corrected without weakening completed-semantic checks;
-- final build run `34498384650` succeeded;
-- final deploy run `34498439445` succeeded;
-- GitHub Pages deployment completed;
-- deployed Pages artifact contains 115 non-giveaway entries.
-
-Still broken:
-1. deployed freshness is `degraded/no_fresh_build`, reason `visual_source_history_mismatch`;
-2. canonical giveaway snapshot is stale across the 2026-09-10 Epic rotation;
-3. deployed giveaway block is `state=unavailable`, `games=[]`;
-4. current Epic giveaways identified in the report are `Astral Ascent` and `Luftrausers`, both absent from the deployed artifact.
-
-Do NOT mark the site fully current until both giveaway freshness and publication freshness are resolved.
-
-## PREPARED FOLLOW-UP — giveaway + freshness recovery
+## CLOSED / DIAGNOSED — site giveaway + freshness recovery 02
 Task:
 `WORKER_TASK_SITE_GIVEAWAY_AND_FRESHNESS_RECOVERY_02.md`
 
 Report:
 `reviews/worker_reports/site-giveaway-and-freshness-recovery-02.md`
 
+Final status:
+`failed_closed_root_cause_proven`
+
+Proven remaining root cause:
+- the full Steam commercial collector tries to prove exact completeness against a live, changing offset-paginated catalog;
+- source membership/total can move during the traversal;
+- the strict collector therefore fails before giveaway production runs;
+- current site still has the previous 115 ordinary games and stale/missing current giveaways.
+
+The old `visual_source_history_mismatch` defect was repaired; latest no-build reason became `upstream_prerequisite_not_ready` because Steam production failed earlier.
+
+## QUEUED LATER — decouple giveaways from Steam commercial crawl
+Task:
+`WORKER_TASK_GIVEAWAY_DECOUPLE_FROM_STEAM_CRAWL_01.md`
+
+Task ID:
+`giveaway-decouple-from-steam-crawl-01`
+
 Status:
-`prepared_awaiting_user_authorization`
+`queued_later_do_not_start_now`
 
-Goal:
-- identify and repair why canonical giveaway source did not refresh after rotation;
-- restore current eligible giveaway entries end-to-end;
-- diagnose and repair `visual_source_history_mismatch` without weakening freshness checks;
-- rebuild, deploy, and verify the exact deployed Pages artifact is fresh and contains current giveaways.
+User instruction:
+- keep this in the queue;
+- do NOT work on it now.
 
-This is a direct continuation of the same site goal and should preferably use the same CHAT 1 while its context remains useful.
+Goal when later authorized:
+- Epic/GOG/Steam giveaway refresh must be able to update independently from the full Steam commercial catalog traversal;
+- commercial Steam crawl may remain fail-closed without blocking valid current giveaway state/publication.
 
 ## CLOSED — existing 10-result pinned ingest
 Task:
@@ -82,7 +69,7 @@ Verified result:
 - next active work-unit pin was created for current profile B;
 - no next semantic batch was started by the ingest worker.
 
-## DEFERRED UNTIL SITE IS CURRENT — Taste queue age-priority ordering
+## DEFERRED — Taste queue age-priority ordering
 Task:
 `WORKER_TASK_TASTE_QUEUE_AGE_PRIORITY_ORDER_01.md`
 
@@ -90,7 +77,7 @@ Report:
 `reviews/worker_reports/taste-queue-age-priority-order-01.md`
 
 Status:
-`queued_after_site_recovery_before_next_new_semantic_batch`
+`queued_before_next_new_semantic_batch`
 
 Required ordering for newly constructed Taste work:
 1. never successfully canonically Taste-checked;
@@ -102,7 +89,7 @@ Rules:
 - do not invent a timestamp source;
 - do not silently mutate an already active exact pin.
 
-## After site + ordering — resume real backlog drain
+## After ordering — resume real backlog drain
 Resume bounded real Taste semantic processing from canonical state. Process actual games, checkpoint accepted batches, and continue until genuine blocker/safe stop/practical execution limit. Do not mistake infrastructure defects for semantic capacity.
 
 ## Proactive Project Auditor — standing role
@@ -150,6 +137,6 @@ A small live-profile edit should not force hundreds of unaffected games through 
 Eventual reevaluation processing cadence: once per hour, meaning process affected pending work hourly, not reanalyze the whole database hourly.
 
 ## Other queued work
-`WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md` remains queued after the current Taste/site priority.
+`WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md` remains queued.
 
 `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
