@@ -6,6 +6,7 @@
 - No autonomous IMPLEMENT without separate user approval.
 - Reconcile Board -> exact task -> exact durable report before assigning follow-up work.
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
+- Current priority is operational speed. Do not add a separate Code Architect review stage to active work unless the user later re-enables that idea.
 
 ## NEEDS FOLLOW-UP — Steam partial publish + failure isolation
 Task:
@@ -170,23 +171,6 @@ Protocol:
 
 The auditor should proactively catch stale canary prompts, wrong cadence, queue-order mismatches, stale design assumptions, incomplete production wiring, unnecessary reprocessing, and system defects being mistaken for normal behavior.
 
-## Code Architect — standing role
-Protocol:
-`CODE_ARCHITECT_ROLE.md`
-
-Status:
-`standing_read_only_role`
-
-Purpose:
-- review code/repository structure for unnecessary complexity, monolithic files, duplicated paths, weak module boundaries, poor navigation, and avoidable layers;
-- recommend splitting by responsibility when useful, not by arbitrary line count;
-- recommend clear section anchors/headings for intentionally large cohesive files;
-- do not implement refactors without separate user authorization;
-- use a free reusable `ЧАТ 1` or `ЧАТ 2` slot when activated rather than becoming a permanent third implementation worker.
-
-Immediate review target:
-- before accepting the current Steam partial-publish implementation, assess whether the new 425-line runner is the simplest safe structure, whether it duplicates the existing production path, and what should be integrated/split/anchored instead.
-
 ## Normal Scheduled Task — still NOT normal producer
 Existing task:
 - title `Taste Semantic Producer`
@@ -226,6 +210,6 @@ A small live-profile edit should not force hundreds of unaffected games through 
 Eventual reevaluation processing cadence: once per hour, meaning process affected pending work hourly, not reanalyze the whole database hourly.
 
 ## Other queued work
-`WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md` remains queued.
-
-`WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
+- `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md` remains queued.
+- `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
+- Code Architect / structural optimization role is deliberately deferred and inactive while operational speed is the primary goal. Revisit only on explicit later user decision.
