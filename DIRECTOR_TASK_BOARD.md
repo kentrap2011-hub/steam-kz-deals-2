@@ -103,6 +103,29 @@ Goal when later authorized:
 - Epic/GOG/Steam giveaway refresh must be able to update independently from the full Steam commercial catalog traversal;
 - commercial Steam crawl may remain fail-closed without blocking valid current giveaway state/publication.
 
+## QUEUED LATER — architect review of current system
+Task:
+`WORKER_TASK_CODE_ARCHITECT_SYSTEM_REVIEW_01.md`
+
+Task ID:
+`code-architect-system-review-01`
+
+Status:
+`queued_later_do_not_start_now`
+
+User instruction:
+- keep operational speed as the current priority;
+- do NOT insert this review into active work now;
+- later, run a read-only architecture review of the current system as a whole.
+
+Review goal when later authorized:
+- check whether large files are appropriately cohesive or should be split by responsibility;
+- detect duplicated/parallel production paths and unnecessary layers;
+- check module boundaries, navigation, testability, failure isolation, naming and folder layout;
+- use clear section anchors where a large cohesive file should remain intact;
+- if the best architecture is uncertain, measure/compare alternatives instead of guessing;
+- produce recommendations only; do not refactor without separate user approval.
+
 ## CLOSED / DIAGNOSED — site giveaway + freshness recovery 02
 Task:
 `WORKER_TASK_SITE_GIVEAWAY_AND_FRESHNESS_RECOVERY_02.md`
@@ -212,4 +235,3 @@ Eventual reevaluation processing cadence: once per hour, meaning process affecte
 ## Other queued work
 - `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md` remains queued.
 - `WORKER_TASK_PUBLICATION_FRESHNESS_SENTINEL_IMPLEMENT_01.md` remains superseded by user decision.
-- Code Architect / structural optimization role is deliberately deferred and inactive while operational speed is the primary goal. Revisit only on explicit later user decision.
