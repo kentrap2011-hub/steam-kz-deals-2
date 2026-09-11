@@ -7,10 +7,28 @@
 - Reconcile Board -> exact task -> exact durable report before assigning follow-up work.
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 
-## CURRENT DIRECTION — MAKE STEAM UPDATE PRACTICAL
-The user does not want more broad site-recovery work right now. Current discussion is focused on making the Steam catalog update tolerate normal live-catalog movement and recover failed pages without throwing away the whole useful pass.
+## CURRENT DIRECTION — PUBLISH SUCCESSFUL STEAM GAMES, ISOLATE FAILURES
+The user explicitly chose a partial-publish model for Steam catalog refresh.
 
-Do not start unrelated repairs unless explicitly authorized.
+Required behavior:
+- process the catalog once;
+- publish all games that processed successfully without waiting for failed/problematic games;
+- move every concrete failed/problematic game to a separate durable problem list;
+- after the run, surface a concise count/list to the user (for example: `10 games could not be processed`);
+- investigate each problematic game and its cause separately later;
+- unresolved problem games must not silently disappear from the problem list;
+- normal live-catalog total drift is not itself a failed game and must not block publication.
+
+Prepared task:
+`WORKER_TASK_STEAM_PARTIAL_PUBLISH_FAILURE_QUEUE_01.md`
+
+Task ID:
+`steam-partial-publish-failure-queue-01`
+
+Status:
+`prepared_awaiting_user_authorization`
+
+Do not start implementation until the user explicitly authorizes it.
 
 ## CLOSED / DIAGNOSED — site giveaway + freshness recovery 02
 Task:
