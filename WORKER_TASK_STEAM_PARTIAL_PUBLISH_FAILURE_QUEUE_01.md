@@ -1,7 +1,7 @@
 # TASK — steam-partial-publish-failure-queue-01
 
-Status: `prepared_awaiting_user_authorization`
-Mode when authorized: `IMPLEMENT`
+Status: `authorized_dispatched_chat_1`
+Mode: `IMPLEMENT`
 
 ## User-required behavior
 
@@ -18,26 +18,51 @@ Required flow:
 8. Do NOT hold the successful catalog publication while waiting for manual investigation of the problem list.
 9. Do NOT silently discard failures; every unresolved game stays explicitly visible in the durable problem list until later resolved or deliberately dispositioned.
 10. If a problematic game already has previously accepted/published data, keep that last known good data on the site while the game remains in the problem list. A temporary refresh failure must not make an already known game disappear solely because its latest refresh failed.
+11. Normal live-catalog total drift is informational only. Do not fail the whole run because the initial/reported count differs from the unique set actually collected.
+12. Do not repeatedly refetch effectively static fields for already-known games when the existing canonical data is valid and sufficient. Refresh changing commercial data needed for the current shortlist; preserve stable known fields unless missing or explicitly required.
 
-## Important distinction
+## Catalog-segment failures
 
-Normal live-catalog count drift is not itself a failed game. The collected successful unique set is publishable. Only concrete per-game/per-request processing failures belong in the separate problem list.
+If an entire catalog page/segment cannot be fetched:
+- continue the rest of the catalog;
+- record the exact failed segment/request separately;
+- do not invent game identities that were never observed;
+- do not block publication of successful results solely because a segment failed.
 
-If an entire catalog page/segment cannot be fetched, record it as a catalog-segment problem rather than inventing game identities that were never observed.
+## Tests required before any real Steam production refresh
 
-## Not part of this task
+Add only short deterministic automated tests for the new behavior. No full fake Steam crawl.
 
-- Do not decouple giveaways here; that is separately queued in `WORKER_TASK_GIVEAWAY_DECOUPLE_FROM_STEAM_CRAWL_01.md`.
-- Do not change Taste semantics.
-- Do not investigate each failed game during the bulk catalog run.
-- Do not create or enable the ChatGPT error-monitoring scheduled task here; that is a separate queued-later task.
+At minimum prove:
+- one game-level failure does not block other successful games;
+- an already-known failed game keeps its last known good published data;
+- a failed catalog segment is recorded separately and does not stop the rest;
+- live catalog count drift does not fail the run;
+- unresolved failures are durably recorded and summarized.
 
-## Acceptance intent
+## Scope limits
 
-A test/proof run should demonstrate that intentionally failing one or more game-level operations produces:
-- successful publication of all other valid games;
-- retention of last known good published data for already-known failed games;
-- a durable exact failed-game list;
-- a durable exact failed catalog-segment list when applicable;
-- a concise end-of-run failure count;
-- no global failure merely because some individual games failed.
+- Do NOT run the real full Steam production refresh in this task. Stop after implementation + short tests + durable report.
+- Do not decouple giveaways here; that remains separately queued in `WORKER_TASK_GIVEAWAY_DECOUPLE_FROM_STEAM_CRAWL_01.md`.
+- Do not create or enable the ChatGPT error-monitoring scheduled task; that remains queued in `WORKER_TASK_STEAM_ERROR_NOTIFICATION_WATCH_01.md`.
+- Do not change Taste semantics, queue, overlay, or Scheduled Task.
+- Do not investigate individual failed games here.
+
+## Deliverable
+
+Write/update durable report:
+`reviews/worker_reports/steam-partial-publish-failure-queue-01.md`
+
+Report must include:
+- exact files changed;
+- exact behavior implemented;
+- exact test commands/results;
+- any migration/backward-compatibility effect;
+- whether a real Steam refresh is now safe to run under the new rules;
+- commit SHA(s);
+- unresolved blockers, if any;
+- mandatory bounded self-diagnosis if final status is failure/blocked/follow-up.
+
+Final status should be one of:
+- `complete_ready_for_real_steam_refresh`
+- `blocked_requires_followup`
