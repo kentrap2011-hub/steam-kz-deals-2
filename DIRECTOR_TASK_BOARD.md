@@ -7,30 +7,43 @@
 - Reconcile Board -> exact task -> exact durable report before assigning follow-up work.
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 
-## CURRENT DIRECTION — PUBLISH SUCCESSFUL STEAM GAMES, ISOLATE FAILURES
-The user explicitly chose a partial-publish model for Steam catalog refresh.
-
-Required behavior:
-- process the catalog once;
-- publish all games that processed successfully without waiting for failed/problematic games;
-- move every concrete failed/problematic game to a separate durable problem list;
-- after the run, surface a concise count/list to the user (for example: `10 games could not be processed`);
-- investigate each problematic game and its cause separately later;
-- unresolved problem games must not silently disappear from the problem list;
-- normal live-catalog total drift is not itself a failed game and must not block publication;
-- if an already-known game fails a refresh, keep its last known good data on the site while also listing it as unresolved;
-- if a whole catalog segment cannot be fetched, record that segment separately rather than inventing unknown game identities.
-
-Prepared task:
+## IN PROGRESS — Steam partial publish + failure isolation
+Task:
 `WORKER_TASK_STEAM_PARTIAL_PUBLISH_FAILURE_QUEUE_01.md`
 
 Task ID:
 `steam-partial-publish-failure-queue-01`
 
 Status:
-`prepared_awaiting_user_authorization`
+`authorized_dispatched_chat_1`
 
-Do not start implementation until the user explicitly authorizes it.
+Worker slot:
+`ЧАТ 1`
+
+Required behavior:
+- process the Steam catalog once;
+- publish all successfully processed games without waiting for failed/problematic games;
+- move every concrete failed/problematic game to a separate durable problem list;
+- keep last known good site data for already-known games whose latest refresh fails;
+- record failed/unread catalog segments separately without inventing unknown game identities;
+- normal live-catalog total drift is informational and must not block the run;
+- avoid unnecessary repeated refresh of stable fields for already-known games;
+- produce a concise end-of-run problem summary;
+- implement only short deterministic automated tests before the first real production refresh.
+
+Scope for this worker:
+- implementation + short tests + durable report only;
+- do NOT run the real full Steam production refresh yet;
+- do NOT work on giveaway decoupling;
+- do NOT create the ChatGPT error-monitoring scheduled task;
+- do NOT change Taste state.
+
+Expected report:
+`reviews/worker_reports/steam-partial-publish-failure-queue-01.md`
+
+Expected final status:
+- `complete_ready_for_real_steam_refresh`
+- or `blocked_requires_followup`
 
 ## QUEUED LATER — ChatGPT Steam error notification watch
 Task:
@@ -57,24 +70,6 @@ Goal when later authorized:
 Dependency:
 - implement and verify `steam-partial-publish-failure-queue-01` first so the exact canonical report path/schema is known.
 
-## CLOSED / DIAGNOSED — site giveaway + freshness recovery 02
-Task:
-`WORKER_TASK_SITE_GIVEAWAY_AND_FRESHNESS_RECOVERY_02.md`
-
-Report:
-`reviews/worker_reports/site-giveaway-and-freshness-recovery-02.md`
-
-Final status:
-`failed_closed_root_cause_proven`
-
-Proven remaining root cause:
-- the full Steam commercial collector tries to prove exact completeness against a live, changing offset-paginated catalog;
-- source membership/total can move during the traversal;
-- the strict collector therefore fails before giveaway production runs;
-- current site still has the previous 115 ordinary games and stale/missing current giveaways.
-
-The old `visual_source_history_mismatch` defect was repaired; latest no-build reason became `upstream_prerequisite_not_ready` because Steam production failed earlier.
-
 ## QUEUED LATER — decouple giveaways from Steam commercial crawl
 Task:
 `WORKER_TASK_GIVEAWAY_DECOUPLE_FROM_STEAM_CRAWL_01.md`
@@ -92,6 +87,24 @@ User instruction:
 Goal when later authorized:
 - Epic/GOG/Steam giveaway refresh must be able to update independently from the full Steam commercial catalog traversal;
 - commercial Steam crawl may remain fail-closed without blocking valid current giveaway state/publication.
+
+## CLOSED / DIAGNOSED — site giveaway + freshness recovery 02
+Task:
+`WORKER_TASK_SITE_GIVEAWAY_AND_FRESHNESS_RECOVERY_02.md`
+
+Report:
+`reviews/worker_reports/site-giveaway-and-freshness-recovery-02.md`
+
+Final status:
+`failed_closed_root_cause_proven`
+
+Proven remaining root cause:
+- the full Steam commercial collector tries to prove exact completeness against a live, changing offset-paginated catalog;
+- source membership/total can move during the traversal;
+- the strict collector therefore fails before giveaway production runs;
+- current site still has the previous 115 ordinary games and stale/missing current giveaways.
+
+The old `visual_source_history_mismatch` defect was repaired; latest no-build reason became `upstream_prerequisite_not_ready` because Steam production failed earlier.
 
 ## CLOSED — existing 10-result pinned ingest
 Task:
