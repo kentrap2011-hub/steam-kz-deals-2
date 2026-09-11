@@ -36,7 +36,7 @@ Director acceptance gaps:
 1. required durable report `reviews/worker_reports/steam-partial-publish-failure-queue-01.md` is missing;
 2. no durable evidence was found that the five tests were actually executed and passed;
 3. implementation writes `complete: true` / `source_complete: true` even when failed catalog segments are recorded, which is contradictory to known partial source coverage and must not falsely claim full completeness;
-4. failure-queue loader currently resets to empty state on malformed/unreadable JSON, which can silently lose unresolved failures;
+4. failure-queue loader currently resets to empty state on malformed/unreadable JSON, which can silently lose unresolved failures; a corrupt file must not remain the active source and must not be overwritten as if nothing happened;
 5. changes are still only on the worker branch, not accepted/integrated into main;
 6. before acceptance, worker must prove the actual production invocation path will use the new partial-publish runner/rules rather than the old strict path.
 
@@ -169,6 +169,23 @@ Protocol:
 `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`
 
 The auditor should proactively catch stale canary prompts, wrong cadence, queue-order mismatches, stale design assumptions, incomplete production wiring, unnecessary reprocessing, and system defects being mistaken for normal behavior.
+
+## Code Architect — standing role
+Protocol:
+`CODE_ARCHITECT_ROLE.md`
+
+Status:
+`standing_read_only_role`
+
+Purpose:
+- review code/repository structure for unnecessary complexity, monolithic files, duplicated paths, weak module boundaries, poor navigation, and avoidable layers;
+- recommend splitting by responsibility when useful, not by arbitrary line count;
+- recommend clear section anchors/headings for intentionally large cohesive files;
+- do not implement refactors without separate user authorization;
+- use a free reusable `ЧАТ 1` or `ЧАТ 2` slot when activated rather than becoming a permanent third implementation worker.
+
+Immediate review target:
+- before accepting the current Steam partial-publish implementation, assess whether the new 425-line runner is the simplest safe structure, whether it duplicates the existing production path, and what should be integrated/split/anchored instead.
 
 ## Normal Scheduled Task — still NOT normal producer
 Existing task:
