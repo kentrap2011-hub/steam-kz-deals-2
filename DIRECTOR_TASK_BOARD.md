@@ -6,7 +6,7 @@
 - No autonomous IMPLEMENT without separate user approval.
 - Reconcile Board -> exact task -> exact durable report before assigning follow-up work.
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
-- Current priority is operational speed. Do not add a separate Code Architect review stage to active work unless the user later re-enables that idea.
+- Current priority is operational speed. Architecture review may run in parallel only when read-only and non-blocking.
 
 ## IN PROGRESS — real Steam partial-publish production refresh
 Task:
@@ -38,6 +38,38 @@ Expected report:
 Expected final status:
 - `complete_real_steam_refresh_verified`
 - `complete_with_problem_entries_for_separate_review`
+- or `blocked_requires_followup`
+
+## IN PROGRESS — read-only architecture review
+Task:
+`WORKER_TASK_CODE_ARCHITECT_SYSTEM_REVIEW_01.md`
+
+Task ID:
+`code-architect-system-review-01`
+
+Status:
+`authorized_dispatched_chat_2`
+
+Worker slot:
+`ЧАТ 2`
+
+Mode:
+`READ_ONLY_REVIEW`
+
+Rules:
+- run in parallel with `ЧАТ 1`;
+- do not mutate code/data/workflows/main and do not interfere with production refresh;
+- record exact repository snapshots reviewed because `main` may move during the analysis;
+- include accepted Steam partial-publish implementation head `5556ce5c763d886a42b3c89ba69df711ba745adb` in the structural review;
+- when architecture choices are genuinely uncertain, perform bounded measurements/comparisons instead of guessing;
+- prioritize recommendations by benefit versus implementation cost, with operational speed as the current priority.
+
+Expected report:
+`reviews/worker_reports/code-architect-system-review-01.md`
+
+Expected final status:
+- `review_complete_recommendations_ready`
+- `review_complete_no_material_architecture_change_needed`
 - or `blocked_requires_followup`
 
 ## ACCEPTED — Steam partial publish + failure isolation implementation
@@ -108,29 +140,6 @@ User instruction:
 Goal when later authorized:
 - Epic/GOG/Steam giveaway refresh must be able to update independently from the full Steam commercial catalog traversal;
 - commercial Steam crawl may remain fail-closed without blocking valid current giveaway state/publication.
-
-## QUEUED LATER — architect review of current system
-Task:
-`WORKER_TASK_CODE_ARCHITECT_SYSTEM_REVIEW_01.md`
-
-Task ID:
-`code-architect-system-review-01`
-
-Status:
-`queued_later_do_not_start_now`
-
-User instruction:
-- keep operational speed as the current priority;
-- do NOT insert this review into active work now;
-- later, run a read-only architecture review of the current system as a whole.
-
-Review goal when later authorized:
-- check whether large files are appropriately cohesive or should be split by responsibility;
-- detect duplicated/parallel production paths and unnecessary layers;
-- check module boundaries, navigation, testability, failure isolation, naming and folder layout;
-- use clear section anchors where a large cohesive file should remain intact;
-- if the best architecture is uncertain, measure/compare alternatives instead of guessing;
-- produce recommendations only; do not refactor without separate user approval.
 
 ## CLOSED / DIAGNOSED — site giveaway + freshness recovery 02
 Task:
