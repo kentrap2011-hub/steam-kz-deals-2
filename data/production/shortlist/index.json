@@ -1,5 +1,5 @@
 {
-  "version": 7,
+  "version": 8,
   "format": "tsv",
   "columns": [
     "key",
@@ -19,14 +19,17 @@
     "title"
   ],
   "country_code": "kz",
-  "item_count": 618,
+  "item_count": 676,
   "chunk_size": 50,
-  "chunk_count": 13,
+  "chunk_count": 14,
   "chunk_pattern": "data/production/shortlist/chunk_NNN.tsv",
-  "source_total": 17419,
+  "source_total": 17299,
   "source_complete": true,
+  "source_status": "complete",
+  "source_has_known_gaps": false,
+  "known_catalog_gap_count": 0,
   "source_coverage_ratio": 1.0,
-  "source_updated_at_utc": "2026-09-08T20:46:16.637935+00:00",
+  "source_updated_at_utc": "2026-09-11T20:38:39.245838+00:00",
   "needs_tuning": false,
   "review_selection_rule": "global_count_and_global_or_russian_rating",
   "review_count_basis": "global",
@@ -62,13 +65,22 @@
     ]
   },
   "reason_counts": {
-    "mainstream_quality": 247,
-    "strong_fit": 291,
-    "exceptional_discount": 224,
-    "very_high_rating": 231,
-    "strong_niche_fit": 192,
-    "substantive_content": 13,
-    "recent_fit": 62,
-    "high_confidence_adjacent": 34
+    "mainstream_quality": 278,
+    "exceptional_discount": 240,
+    "very_high_rating": 251,
+    "high_confidence_adjacent": 43,
+    "strong_fit": 332,
+    "strong_niche_fit": 208,
+    "substantive_content": 14,
+    "recent_fit": 66
+  },
+  "partial_publish_summary": {
+    "processed_successfully": 17287,
+    "problematic_games": 12,
+    "problematic_catalog_segments": 0,
+    "problematic_system_state": 0,
+    "game_failures_this_run": 12,
+    "catalog_segment_failures_this_run": 0,
+    "failure_queue_recovery_this_run": false
   }
 }

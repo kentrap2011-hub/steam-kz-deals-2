@@ -2,9 +2,9 @@
   "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
   "schema_version": 1,
   "country_code": "KZ",
-  "generated_at_utc": "2026-09-08T20:46:17.374139Z",
-  "fresh_until_utc": "2026-09-10T02:46:17.374139Z",
-  "snapshot_status": "complete",
+  "generated_at_utc": "2026-09-11T20:38:39.812153Z",
+  "fresh_until_utc": "2026-09-13T02:38:39.812153Z",
+  "snapshot_status": "incomplete",
   "required_sources": [
     "steam",
     "epic",
@@ -13,32 +13,26 @@
   "source_health": {
     "steam": {
       "required": true,
-      "status": "ok",
-      "complete": true,
-      "observed_at_utc": "2026-09-08T20:46:17.374139Z",
-      "endpoint": "existing KZ catalog candidates + targeted Steam first-party validation",
+      "status": "failed",
+      "complete": false,
+      "observed_at_utc": "2026-09-11T20:38:39.812153Z",
+      "endpoint": "existing KZ Steam catalog + targeted first-party validation",
       "candidate_count": 0,
       "accepted_count": 0,
       "rejected_count": 0,
       "unverified_count": 0,
-      "error_code": null,
-      "error": null,
-      "details": {
-        "candidate_source_updated_at_utc": "2026-09-08T20:46:16.637935Z",
-        "candidate_count": 0,
-        "source_age_hours": 0.0,
-        "candidate_rule": "existing KZ catalog: final price 0 + positive discount; validation is separate",
-        "targeted_validation_errors": 0
-      }
+      "error_code": "SOURCE_STALE",
+      "error": "Steam candidate snapshot is stale: 71.9h",
+      "details": {}
     },
     "epic": {
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-09-08T20:46:17.374139Z",
+      "observed_at_utc": "2026-09-11T20:38:39.812153Z",
       "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
-      "candidate_count": 1,
-      "accepted_count": 1,
+      "candidate_count": 2,
+      "accepted_count": 2,
       "rejected_count": 0,
       "unverified_count": 0,
       "error_code": null,
@@ -46,7 +40,7 @@
       "details": {
         "country": "KZ",
         "allowCountries": "KZ",
-        "candidate_count": 1,
+        "candidate_count": 2,
         "schema_guard": "strict",
         "api_stability": "undocumented_storefront_backend"
       }
@@ -55,7 +49,7 @@
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-09-08T20:46:17.374139Z",
+      "observed_at_utc": "2026-09-11T20:38:39.812153Z",
       "endpoint": "https://catalog.gog.com/v1/catalog",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -73,32 +67,70 @@
       }
     }
   },
-  "accepted_offer_count": 1,
-  "game_group_count": 1,
+  "accepted_offer_count": 2,
+  "game_group_count": 2,
   "rejected_offer_count": 0,
   "unverified_offer_count": 0,
   "games": [
     {
-      "canonical_game_key": "meta-v1:1bad610804e74534286ec31d",
+      "canonical_game_key": "meta-v1:e62b1acbda04c72763d95dfa",
       "identity_confidence": "high",
       "identity_evidence": {
         "basis": "exact_normalized_title_and_publishers",
         "publishers": [
-          "bancyco"
+          "hibernian workshop"
         ]
       },
-      "title": "Alone With You",
+      "title": "Astral Ascent",
       "offers": [
         {
           "source_id": "epic",
-          "source_offer_id": "epic:cb87ac984c3c4c19b0a4e3e89048f187:b8cc76ce7d6645f0a282b843a072cc78:2026-09-10T15:00:00Z:2026-09-03T15:00:00Z",
-          "source_product_id": "cb87ac984c3c4c19b0a4e3e89048f187:b8cc76ce7d6645f0a282b843a072cc78",
+          "source_offer_id": "epic:0cb5817d554740e8bedf9ceea32522bd:e9bb092228f544c582e2c9395fae96f3:2026-09-17T15:00:00Z:2026-09-10T15:00:00Z",
+          "source_product_id": "0cb5817d554740e8bedf9ceea32522bd:e9bb092228f544c582e2c9395fae96f3",
           "storefront": "epic",
-          "title": "Alone With You",
-          "claim_url": "https://store.epicgames.com/en-US/p/alone-with-you-028a15",
-          "promotion_start_utc": "2026-09-03T15:00:00Z",
-          "promotion_end_utc": "2026-09-10T15:00:00Z",
-          "observed_at_utc": "2026-09-08T20:46:17.374139Z",
+          "title": "Astral Ascent",
+          "claim_url": "https://store.epicgames.com/en-US/p/astral-ascent-b33bc2",
+          "promotion_start_utc": "2026-09-10T15:00:00Z",
+          "promotion_end_utc": "2026-09-17T15:00:00Z",
+          "observed_at_utc": "2026-09-11T20:38:39.812153Z",
+          "base_price": 640000,
+          "final_price": 0,
+          "currency": "KZT",
+          "discount_percent": 100,
+          "content_type": "game",
+          "region_status": "available",
+          "classification_reason_codes": [
+            "ACTIVE_WINDOW",
+            "ZERO_PRICE",
+            "PAID_BASE_OR_EXPLICIT_GIVEAWAY",
+            "PERMANENT_GRANT",
+            "FULL_GAME",
+            "KZ_AVAILABLE"
+          ]
+        }
+      ]
+    },
+    {
+      "canonical_game_key": "meta-v1:ed75f67ddc977b985321a844",
+      "identity_confidence": "high",
+      "identity_evidence": {
+        "basis": "exact_normalized_title_and_publishers",
+        "publishers": [
+          "devolver digital inc"
+        ]
+      },
+      "title": "Luftrausers",
+      "offers": [
+        {
+          "source_id": "epic",
+          "source_offer_id": "epic:639daf403b554ee9b02eee5eedafc302:c76046dddcdb43619c33ce0395941033:2026-09-17T15:00:00Z:2026-09-10T15:00:00Z",
+          "source_product_id": "639daf403b554ee9b02eee5eedafc302:c76046dddcdb43619c33ce0395941033",
+          "storefront": "epic",
+          "title": "Luftrausers",
+          "claim_url": "https://store.epicgames.com/en-US/p/luftrausers-51e5e9",
+          "promotion_start_utc": "2026-09-10T15:00:00Z",
+          "promotion_end_utc": "2026-09-17T15:00:00Z",
+          "observed_at_utc": "2026-09-11T20:38:39.812153Z",
           "base_price": 185000,
           "final_price": 0,
           "currency": "KZT",
