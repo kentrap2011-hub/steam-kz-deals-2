@@ -17,7 +17,9 @@ Required behavior:
 - after the run, surface a concise count/list to the user (for example: `10 games could not be processed`);
 - investigate each problematic game and its cause separately later;
 - unresolved problem games must not silently disappear from the problem list;
-- normal live-catalog total drift is not itself a failed game and must not block publication.
+- normal live-catalog total drift is not itself a failed game and must not block publication;
+- if an already-known game fails a refresh, keep its last known good data on the site while also listing it as unresolved;
+- if a whole catalog segment cannot be fetched, record that segment separately rather than inventing unknown game identities.
 
 Prepared task:
 `WORKER_TASK_STEAM_PARTIAL_PUBLISH_FAILURE_QUEUE_01.md`
@@ -29,6 +31,31 @@ Status:
 `prepared_awaiting_user_authorization`
 
 Do not start implementation until the user explicitly authorizes it.
+
+## QUEUED LATER — ChatGPT Steam error notification watch
+Task:
+`WORKER_TASK_STEAM_ERROR_NOTIFICATION_WATCH_01.md`
+
+Task ID:
+`steam-error-notification-watch-01`
+
+Status:
+`queued_later_do_not_start_now`
+
+User instruction:
+- add it to the queue now;
+- do NOT create or enable the scheduled task yet.
+
+Goal when later authorized:
+- separate ChatGPT scheduled check, approximately hourly;
+- read the latest canonical Steam problem report from GitHub;
+- stay silent when there are no unresolved problems;
+- notify only when the unresolved problem set is new or changed;
+- do not repeat the same unchanged alert every hour;
+- do not automatically repair or investigate failures.
+
+Dependency:
+- implement and verify `steam-partial-publish-failure-queue-01` first so the exact canonical report path/schema is known.
 
 ## CLOSED / DIAGNOSED — site giveaway + freshness recovery 02
 Task:
