@@ -16,7 +16,7 @@ Task ID:
 `taste-normal-semantic-producer-01`
 
 Status:
-`authorized_dispatched_chat_1`
+`interrupted_before_execution_retry_required_chat_1`
 
 Mode:
 `IMPLEMENT_AND_VERIFY_READY_FOR_SCHEDULE`
@@ -25,8 +25,11 @@ Worker slot:
 `ЧАТ 1`
 
 Worker context:
-- use a NEW clean working chat named `ЧАТ 1`;
-- the previous Steam `ЧАТ 1` is closed and must not be reused for this task.
+- use the current clean Taste working chat named `ЧАТ 1`;
+- the previous Steam `ЧАТ 1` is closed and must not be reused for this task;
+- first Taste attempt was interrupted before reading the full current task, before implementation, and before writing the required worker report;
+- required report `reviews/worker_reports/taste-normal-semantic-producer-01.md` is absent, so the task is not complete and has not reached either allowed final status;
+- retry/continue the same Taste task in the current clean `ЧАТ 1`; do not reinterpret the interrupted message as a blocker report.
 
 Goal:
 - implement the normal deterministic Taste queue producer for ChatGPT evaluation;
