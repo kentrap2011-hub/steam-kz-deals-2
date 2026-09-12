@@ -12,6 +12,7 @@
       "prepare_work_manifest",
       "validate_submission",
       "persist_compact_dossier",
+      "cleanup_expired_out_of_scope_dossiers",
       "build_fail_closed_taste_semantic_input"
     ],
     "semantic_worker_responsibilities": [
@@ -36,6 +37,19 @@
     "max_ttl_days": 60,
     "stale_behavior": "hold_taste_until_refreshed",
     "replacement_policy": "replace_current_dossier_no_unbounded_history"
+  },
+  "cleanup": {
+    "owner": "github_control_plane",
+    "scheduler": "none_created_by_this_task",
+    "delete_rule": "stale_and_not_in_current_taste_scope",
+    "preserve_rules": [
+      "fresh_regardless_of_scope",
+      "stale_and_in_current_taste_scope_until_successful_refresh",
+      "invalid_fail_closed_for_manual_or_followup_handling"
+    ],
+    "in_scope_stale_state": "refresh_required",
+    "history_policy": "single_current_appid_file_atomic_replace",
+    "ordering": "lexicographic_canonical_dossier_path"
   },
   "sampling": {
     "mode": "adaptive_stability",
