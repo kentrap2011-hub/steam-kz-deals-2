@@ -1,99 +1,140 @@
 # TASK — taste-normal-semantic-producer-01
 
-Status: `authorized_dispatched_chat_1`
-Mode: `IMPLEMENT_AND_VERIFY_READY_FOR_SCHEDULE`
+Status: `authorized_corrected_resume_chat_1`
+Mode: `IMPLEMENT_AND_MEASURE_THROUGHPUT`
 
 ## Goal
 
-Replace the old one-game ChatGPT/Taste canary flow with the normal queue-based game-evaluation mechanism, then prove it is ready for the Director to switch the existing ChatGPT Scheduled Task to normal operation.
+Prepare the working normal ChatGPT/Taste semantic-processing mechanism, then perform a real throughput measurement in the current `ЧАТ 1` working run.
 
-Current priority: get normal ChatGPT game evaluation running reliably without creating a second producer or paid external API dependency.
+The purpose of this task is to measure how many games ChatGPT can actually evaluate and durably save in one uninterrupted working run.
+
+This task does **not** choose the final production limit for the Scheduled Task.
+
+## Critical distinction: measurement step vs production limit
+
+For the throughput measurement, work in sequential steps of exactly `10` games:
+
+`10 processed + durably saved` → `next 10 processed + durably saved` → `next 10` → continue until a real execution/blocking limit is reached.
+
+`10` is only the **measurement/checkpoint step size**.
+
+It is NOT:
+- the future Scheduled Task limit;
+- a permanent per-invocation limit;
+- proof that production should use 10;
+- a production configuration decision.
+
+Do not hardcode the future normal producer around a permanent 10-game production ceiling merely because the measurement uses 10-game checkpoints.
+
+## Separate deferred task: queue age-priority ordering
+
+Do **not** implement, test, or depend on age-priority ordering in this task.
+
+The rules:
+- never successfully checked first;
+- then previously checked from oldest successful canonical Taste evaluation to newest;
+
+belong only to the separate deferred task:
+`WORKER_TASK_TASTE_QUEUE_AGE_PRIORITY_ORDER_01.md`.
+
+That task must not block this throughput measurement.
+
+For this task, use the current canonical queue/order exactly as it already exists. Do not redesign or reorder it.
 
 ## Existing Scheduled Task
 
 There is already one ChatGPT Scheduled Task for this producer:
-- title: `Taste Semantic Producer`
-- id: `6aa032f37e688191a5c9a1a83f91c5d9`
+- title: `Taste Semantic Producer`;
+- id: `6aa032f37e688191a5c9a1a83f91c5d9`;
 - current state: old Chernobylite one-game canary prompt;
 - current cadence: daily at 01:00 Europe/Samara.
 
 Do NOT create a second producer.
-Do NOT change this ChatGPT Scheduled Task yourself.
-Keep it on the old safe cadence/prompt until the Director accepts this implementation and performs the final schedule/prompt switch.
+Do NOT change this Scheduled Task yourself.
+Do NOT switch its prompt, cadence, or production limit as part of this task.
 
-## Required normal producer behavior
+After the measurement, the Director must first report the measured result to the user. The final production limit will be chosen separately with the user and may intentionally be lower than the measured maximum.
 
-1. Work from the canonical Taste queue/state already present in the repository.
-2. Process at most `10` games per ChatGPT invocation.
-3. Exactly one deterministic work unit per invocation.
-4. Queue head must be deterministic and reproducible from canonical state.
-5. Before the next new semantic batch, enforce age priority:
-   - first: games that have never been successfully canonically Taste-checked;
-   - then: already checked games from oldest successful canonical Taste evaluation to newest.
-6. Do not silently skip a queue-head item because it is inconvenient. If it cannot be evaluated, preserve/report the problem according to existing durable state conventions.
-7. Preserve already accepted historical Taste results and profile provenance. Do not overwrite historical accepted results merely to simplify the new producer.
-8. Result handoff/ingest must be durable and idempotent enough that one scheduled invocation cannot create duplicate canonical evaluations when retried.
-9. The normal producer must be compatible with reusing the SAME Scheduled Task ID above once Director switches it to normal operation.
-10. No paid OpenAI API, Copilot, new paid service, external scheduler, or second ChatGPT producer.
+## Phase A — prepare the working normal Taste mechanism
 
-## Required investigation / implementation
+Read only the exact existing Taste protocols/state/result-ingest contracts needed for this task.
 
-Read only the exact existing Taste protocols/tasks/reports/state needed to establish the current canonical queue and result-ingest contract.
+Implement the smallest reliable mechanism needed so that ChatGPT can:
+- obtain the next canonical Taste work from existing repository state;
+- evaluate real games using the established Taste profile/context contract;
+- persist results through the established durable repository handoff/ingest path;
+- preserve accepted historical Taste results and provenance;
+- retry safely without duplicate canonical evaluations;
+- continue from one completed measurement step to the next without losing already accepted work.
 
-Implement the smallest production-ready normal queue mechanism needed so that a Scheduled Task invocation can:
-- determine the canonical next work unit (max 10 games);
-- obtain the exact durable game context required for semantic evaluation;
-- produce results in the established canonical format/profile contract;
-- hand off/persist those results through the existing repository workflow/state path;
-- advance deterministically without duplicate processing.
+The mechanism must not be hardcoded to Chernobylite or any single game.
 
-Integrate the already queued age-priority rule from:
-`WORKER_TASK_TASTE_QUEUE_AGE_PRIORITY_ORDER_01.md`
-into this normal producer rather than leaving ordering ambiguous.
+No paid OpenAI API, Copilot, new paid service, external scheduler, or second ChatGPT producer.
 
 Do not broaden into unrelated Taste redesign.
 
-## Tests / proof
+## Phase A verification
 
-Use short deterministic tests only.
+Before the real measurement, use only short deterministic tests sufficient to prove the mechanism is safe to exercise.
 
 At minimum prove:
-- never-checked games sort before previously checked games;
-- among previously checked games, oldest successful canonical evaluation sorts first;
-- work unit never exceeds 10 games;
-- same canonical state yields same queue head/work unit;
-- retry/idempotency behavior does not produce duplicate canonical results;
-- historical accepted Taste results/provenance are preserved;
-- normal producer path is not hardcoded to Chernobylite or any single game.
+- current canonical work selection is deterministic under the existing ordering rules;
+- result persistence/ingest is durable;
+- retries do not create duplicate accepted canonical results;
+- accepted historical Taste results/provenance are preserved;
+- the mechanism is not hardcoded to one game;
+- a completed measurement checkpoint can be followed by another checkpoint in the same working run.
 
-Do NOT run a large real semantic production batch during implementation.
-Do NOT switch the Scheduled Task yet.
+Do NOT add age-priority sorting tests here.
 
-## Final handoff requirement
+## Phase B — real throughput measurement
 
-The report must contain the exact ready-to-use instructions/prompt contract that the Director should place into the EXISTING Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` after acceptance.
+After Phase A is ready, immediately run the real measurement in this same `ЧАТ 1` working execution.
 
-It must also state the recommended normal cadence. The intended target is hourly, but if evidence shows a different cadence is required for correctness/rate limits, explain it rather than guessing.
+Rules:
+1. Process the next `10` real games using the current canonical queue/order.
+2. Persist those results through the established durable result/ingest path.
+3. Verify that the completed results are durably accepted before counting the checkpoint as complete.
+4. Update the durable worker report with the cumulative confirmed count after every completed 10-game checkpoint.
+5. Without asking the user to continue, take the next `10` real games and repeat.
+6. Continue 10-by-10 in the same uninterrupted working run until ChatGPT reaches a real execution/context/tool/canonical blocker or other genuine limit.
+7. Do not intentionally stop merely because 10, 20, 30, 50, 100, or another round number was reached.
+8. Do not treat an evaluated-but-not-durably-accepted partial checkpoint as completed throughput. Record partial/incomplete work separately if relevant.
+9. Do not change queue age-priority behavior during the measurement.
+10. Do not change the Scheduled Task during or after the measurement.
+
+The confirmed throughput result is the number of real game evaluations durably accepted during this single corrected measurement run.
+
+If the run stops because of a real limit, record the concrete reason when known. If execution is cut off before a clean closeout, the latest durable 10-game checkpoint remains the confirmed lower-bound result and must not be inflated by unsaved/uncertain work.
+
+A later user/Director continuation is not automatically added to the same throughput measurement unless explicitly designated as a new measurement run.
 
 ## Durable report
 
-Write:
+Update:
 `reviews/worker_reports/taste-normal-semantic-producer-01.md`
 
-Report must include:
-- files changed;
-- exact canonical queue/state used;
-- exact ordering implementation;
-- work-unit construction and max size;
-- retry/idempotency behavior;
-- result persistence/ingest path;
-- deterministic test commands and results;
+The prior `blocked_requires_followup` conclusion based on age-priority/current-active-10 gating is superseded by this corrected task and is not a blocker for the throughput measurement.
+
+The report must include:
+- files changed for the normal mechanism;
+- canonical queue/state and result persistence/ingest path actually used;
+- short deterministic verification performed before measurement;
+- a checkpoint log after every completed 10 real games;
+- cumulative count of durably accepted games;
+- retries/errors/blockers encountered;
+- where and why the measurement stopped;
+- whether the run was stable across completed checkpoints;
+- the measured factual throughput result;
+- proof that no age-priority sorting implementation was performed;
 - proof that no second producer/scheduler was created;
-- proof existing Scheduled Task was not changed by the worker;
-- exact prompt/instructions for the Director to put into the existing Scheduled Task;
-- recommended cadence;
-- any blocker before real activation.
+- proof that Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` was not changed;
+- an explicit statement that the measured maximum is **not** automatically the production limit.
+
+Do NOT select or install the final production limit in this report.
+Do NOT activate the normal Scheduled Task in this task.
 
 Final status exactly one of:
-- `complete_ready_for_normal_scheduled_producer`
+- `complete_throughput_measured_ready_for_user_limit_decision`
 - `blocked_requires_followup`
