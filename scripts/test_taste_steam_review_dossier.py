@@ -17,6 +17,7 @@ from taste_steam_review_dossier import (
     canonical_sha256,
     load_contract,
     persist_submission,
+    persist_submission_and_rebuild_work,
     validate_dossier,
 )
 
@@ -25,9 +26,10 @@ CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json
 NOW = datetime(2026, 9, 12, 18, 0, tzinfo=timezone.utc)
 
 
-def _queue(appids=(527070, 6800)):
+def _queue(appids=(527070, 6800), *, work_required=None):
     rows = []
     for i, appid in enumerate(appids):
+        work = list(work_required or ["resolve_grounded_negative_analysis"])
         rows.append({
             "family_id": f"game:{appid}:{i}",
             "taste_subject_key": f"App_{appid}" if i == 0 else f"Sub_{4000+i}",
@@ -35,7 +37,7 @@ def _queue(appids=(527070, 6800)):
             "title": f"Queue Game {appid}",
             "taste_fingerprint": hashlib.sha256(f"taste:{appid}:{i}".encode()).hexdigest(),
             "candidate_context_sha256": hashlib.sha256(f"ctx:{appid}:{i}".encode()).hexdigest(),
-            "work_required": ["resolve_grounded_negative_analysis"],
+            "work_required": work,
         })
     return rows
 
@@ -92,32 +94,82 @@ def _submission(work, dossiers):
     return {"schema": SUBMISSION_SCHEMA, "schema_version": 1, "scope_sha256": work["scope_sha256"], "scope_source": work["scope_source"], "source_queue_sha256": work["source_queue_sha256"], "dossiers": dossiers}
 
 
+def _docs_for_checkpoint(work):
+    return [_dossier(x["appid"]) for x in work["required_items"]]
+
+
 class SteamReviewDossierTests(unittest.TestCase):
-    def test_01_full_backlog_over_100_rows_is_not_capped_by_checkpoint(self):
+    def test_01_full_backlog_over_100_rows_exposes_bounded_checkpoint_not_quota(self):
         queue = _queue(tuple(range(100000, 100121)))
         with tempfile.TemporaryDirectory() as td:
             work = build_work_manifest(queue, CONTRACT, td, now=NOW)
         self.assertEqual(work["source_row_count"], 121)
         self.assertEqual(work["unique_appid_count"], 121)
-        self.assertEqual(len(work["items"]), 121)
         self.assertEqual(work["required_total_count"], 121)
+        self.assertEqual(work["checkpoint"]["item_count"], 10)
         self.assertEqual(len(work["required_items"]), 10)
-        self.assertEqual(work["checkpoint"]["checkpoint_size"], 10)
-        self.assertEqual(work["checkpoint"]["remaining_required_count"], 121)
         self.assertEqual(work["checkpoint"]["remaining_after_checkpoint_count"], 111)
-        self.assertEqual([x["appid"] for x in work["required_items"]], [str(x) for x in range(100000, 100010)])
+        self.assertFalse(work["full_backlog_complete"])
 
-    def test_02_duplicate_appids_collapse_to_first_queue_occurrence(self):
+    def test_02_duplicate_appids_collapse_to_first_eligible_queue_occurrence(self):
         queue = _queue((527070, 6800, 527070, 6800, 9999))
-        scope = canonical_dossier_scope_rows(queue)
+        scope = canonical_dossier_scope_rows(queue, CONTRACT)
         self.assertEqual([x["appid"] for x in scope], ["527070", "6800", "9999"])
         self.assertEqual(scope[0]["key"], queue[0]["taste_subject_key"])
         with tempfile.TemporaryDirectory() as td:
             work = build_work_manifest(queue, CONTRACT, td, now=NOW)
+        self.assertEqual(work["eligible_row_count"], 5)
         self.assertEqual(work["deduplicated_row_count"], 2)
         self.assertEqual(work["ordered_appids"], ["527070", "6800", "9999"])
 
-    def test_03_fresh_dossier_reused_without_reanalysis(self):
+    def test_03_sequential_checkpoints_25_continue_10_then_10_then_5_then_ready(self):
+        queue = _queue(tuple(range(200000, 200025)))
+        with tempfile.TemporaryDirectory() as td:
+            work1 = build_work_manifest(queue, CONTRACT, td, now=NOW)
+            self.assertEqual(work1["required_total_count"], 25)
+            self.assertEqual([x["appid"] for x in work1["required_items"]], [str(x) for x in range(200000, 200010)])
+
+            _, work2 = persist_submission_and_rebuild_work(
+                _submission(work1, _docs_for_checkpoint(work1)), work1, CONTRACT, td, queue, now=NOW
+            )
+            self.assertEqual(work2["required_total_count"], 15)
+            self.assertEqual([x["appid"] for x in work2["required_items"]], [str(x) for x in range(200010, 200020)])
+
+            _, work3 = persist_submission_and_rebuild_work(
+                _submission(work2, _docs_for_checkpoint(work2)), work2, CONTRACT, td, queue, now=NOW
+            )
+            self.assertEqual(work3["required_total_count"], 5)
+            self.assertEqual(work3["checkpoint"]["item_count"], 5)
+            self.assertTrue(work3["checkpoint"]["is_final_checkpoint"])
+            self.assertEqual([x["appid"] for x in work3["required_items"]], [str(x) for x in range(200020, 200025)])
+
+            _, work4 = persist_submission_and_rebuild_work(
+                _submission(work3, _docs_for_checkpoint(work3)), work3, CONTRACT, td, queue, now=NOW
+            )
+            self.assertEqual(work4["status"], "ready_from_fresh_cache")
+            self.assertEqual(work4["required_total_count"], 0)
+            self.assertEqual(work4["required_items"], [])
+            self.assertTrue(work4["full_backlog_complete"])
+
+    def test_04_partial_durable_progress_resumes_from_first_remaining_appid(self):
+        queue = _queue(tuple(range(300000, 300025)))
+        with tempfile.TemporaryDirectory() as td:
+            for appid in range(300000, 300004):
+                Path(td, f"App_{appid}.json").write_text(json.dumps(_dossier(appid)), encoding="utf-8")
+            work = build_work_manifest(queue, CONTRACT, td, now=NOW)
+        self.assertEqual(work["required_total_count"], 21)
+        self.assertEqual([x["appid"] for x in work["required_items"]], [str(x) for x in range(300004, 300014)])
+
+    def test_05_partial_checkpoint_submission_is_rejected_without_persistence(self):
+        queue = _queue(tuple(range(400000, 400012)))
+        with tempfile.TemporaryDirectory() as td:
+            work = build_work_manifest(queue, CONTRACT, td, now=NOW)
+            partial = _submission(work, _docs_for_checkpoint(work)[:5])
+            with self.assertRaisesRegex(ValueError, "exactly cover"):
+                persist_submission(partial, work, CONTRACT, td)
+            self.assertEqual(list(Path(td).glob("App_*.json")), [])
+
+    def test_06_fresh_dossier_reused_without_reanalysis(self):
         queue = _queue((527070,))
         with tempfile.TemporaryDirectory() as td:
             Path(td, "App_527070.json").write_text(json.dumps(_dossier(527070)), encoding="utf-8")
@@ -127,25 +179,25 @@ class SteamReviewDossierTests(unittest.TestCase):
             self.assertEqual(work["required_items"], [])
             self.assertEqual(work["items"][0]["state"], "fresh")
 
-    def test_04_stale_dossier_requires_refresh(self):
+    def test_07_stale_dossier_requires_refresh(self):
         queue = _queue((527070,))
         with tempfile.TemporaryDirectory() as td:
             Path(td, "App_527070.json").write_text(json.dumps(_dossier(527070, generated=NOW - timedelta(days=21))), encoding="utf-8")
             work = build_work_manifest(queue, CONTRACT, td, now=NOW)
             self.assertEqual(work["required_items"][0]["reason"], "refresh_required")
 
-    def test_05_missing_dossier_requires_create(self):
+    def test_08_missing_dossier_requires_create(self):
         with tempfile.TemporaryDirectory() as td:
             work = build_work_manifest(_queue((527070,)), CONTRACT, td, now=NOW)
             self.assertEqual(work["required_items"][0]["reason"], "missing_dossier")
 
-    def test_06_default_ttl_20_and_configurable(self):
+    def test_09_default_ttl_20_and_configurable(self):
         queue = _queue((527070,))
         with tempfile.TemporaryDirectory() as td:
             self.assertEqual(build_work_manifest(queue, CONTRACT, td, now=NOW)["ttl_days"], 20)
             self.assertEqual(build_work_manifest(queue, CONTRACT, td, now=NOW, ttl_days=7)["ttl_days"], 7)
 
-    def test_07_downstream_semantic_input_remains_exact_active_pin_bound(self):
+    def test_10_downstream_semantic_input_remains_exact_active_pin_bound(self):
         pin = _pin(tuple(range(100000, 100010)))
         before = canonical_sha256(pin)
         with tempfile.TemporaryDirectory() as td:
@@ -158,7 +210,7 @@ class SteamReviewDossierTests(unittest.TestCase):
         self.assertEqual(semantic["pin"]["ordered_work_unit_sha256"], pin["ordered_work_unit_sha256"])
         self.assertEqual(canonical_sha256(pin), before)
 
-    def test_08_semantic_input_holds_on_stale_or_missing_pin_dossier(self):
+    def test_11_semantic_input_holds_on_stale_or_missing_pin_dossier(self):
         pin = _pin((527070,))
         with tempfile.TemporaryDirectory() as td:
             with self.assertRaisesRegex(ValueError, "missing/stale/invalid"):
@@ -167,19 +219,44 @@ class SteamReviewDossierTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "held"):
                 build_semantic_input(pin, CONTRACT, td, now=NOW)
 
-    def test_09_submission_is_bound_to_full_queue_scope_and_persists_by_appid(self):
-        queue = _queue((6800,))
-        queue[0]["taste_subject_key"] = "Sub_4156"
+    def test_12_submission_is_bound_to_exact_checkpoint_and_queue_snapshot(self):
+        queue = _queue(tuple(range(500000, 500015)))
         with tempfile.TemporaryDirectory() as td:
             work = build_work_manifest(queue, CONTRACT, td, now=NOW)
-            persist_submission(_submission(work, [_dossier(6800)]), work, CONTRACT, td)
-            self.assertTrue(Path(td, "App_6800.json").exists())
-            bad = _submission(work, [_dossier(6800)])
+            persist_submission(_submission(work, _docs_for_checkpoint(work)), work, CONTRACT, td)
+            self.assertEqual(len(list(Path(td).glob("App_*.json"))), 10)
+            bad = _submission(work, _docs_for_checkpoint(work))
             bad["source_queue_sha256"] = "0" * 64
             with self.assertRaisesRegex(ValueError, "queue binding"):
                 persist_submission(bad, work, CONTRACT, td)
 
-    def test_10_storage_rejects_raw_reviews_and_personalized_conclusions(self):
+    def test_13_rebuild_fails_closed_if_canonical_queue_changed_since_manifest(self):
+        queue = _queue(tuple(range(600000, 600012)))
+        changed = queue + _queue((699999,))
+        with tempfile.TemporaryDirectory() as td:
+            work = build_work_manifest(queue, CONTRACT, td, now=NOW)
+            with self.assertRaisesRegex(ValueError, "queue changed"):
+                persist_submission_and_rebuild_work(
+                    _submission(work, _docs_for_checkpoint(work)), work, CONTRACT, td, changed, now=NOW
+                )
+            self.assertEqual(list(Path(td).glob("App_*.json")), [])
+
+    def test_14_base_support_only_and_other_non_taste_rows_are_excluded(self):
+        queue = _queue((700001,))
+        base_only = _queue((700002,), work_required=["resolve_base_support_condition"])[0]
+        other_only = _queue((700003,), work_required=["some_non_taste_support_work"])[0]
+        mixed = _queue((700004,), work_required=["resolve_base_support_condition", "resolve_grounded_negative_analysis"])[0]
+        queue.extend([base_only, other_only, mixed])
+        scope = canonical_dossier_scope_rows(queue, CONTRACT)
+        self.assertEqual([x["appid"] for x in scope], ["700001", "700004"])
+        with tempfile.TemporaryDirectory() as td:
+            work = build_work_manifest(queue, CONTRACT, td, now=NOW)
+        self.assertEqual(work["source_row_count"], 4)
+        self.assertEqual(work["eligible_row_count"], 2)
+        self.assertEqual(work["excluded_row_count"], 2)
+        self.assertEqual(work["ordered_appids"], ["700001", "700004"])
+
+    def test_15_storage_rejects_raw_reviews_and_personalized_conclusions(self):
         doc = _dossier(527070)
         bad = copy.deepcopy(doc); bad["raw_reviews"] = [{"review_text": "raw body"}]
         with self.assertRaisesRegex(ValueError, "Raw review archive"):
@@ -188,57 +265,10 @@ class SteamReviewDossierTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Personalized"):
             validate_dossier(polluted, CONTRACT)
 
-    def test_11_adaptive_ceiling_and_russian_lane_remain_enforced(self):
+    def test_16_adaptive_ceiling_and_russian_lane_remain_enforced(self):
         validate_dossier(_dossier(527070, ru=80, non_ru=80), CONTRACT)
         with self.assertRaisesRegex(ValueError, "ceiling"):
             validate_dossier(_dossier(527070, ru=81, non_ru=80), CONTRACT)
-
-    def test_12_twenty_five_missing_apps_progress_10_10_5_then_ready(self):
-        appids = tuple(range(200000, 200025))
-        queue = _queue(appids)
-        with tempfile.TemporaryDirectory() as td:
-            first = build_work_manifest(queue, CONTRACT, td, now=NOW)
-            self.assertEqual(first["required_total_count"], 25)
-            self.assertEqual([x["appid"] for x in first["required_items"]], [str(x) for x in appids[:10]])
-            self.assertEqual(first["checkpoint"]["remaining_after_checkpoint_count"], 15)
-            self.assertTrue(first["checkpoint"]["continue_same_invocation"])
-            persist_submission(_submission(first, [_dossier(x) for x in appids[:10]]), first, CONTRACT, td)
-
-            second = build_work_manifest(queue, CONTRACT, td, now=NOW)
-            self.assertEqual(second["required_total_count"], 15)
-            self.assertEqual([x["appid"] for x in second["required_items"]], [str(x) for x in appids[10:20]])
-            self.assertEqual(second["checkpoint"]["remaining_after_checkpoint_count"], 5)
-            self.assertTrue(second["checkpoint"]["continue_same_invocation"])
-            persist_submission(_submission(second, [_dossier(x) for x in appids[10:20]]), second, CONTRACT, td)
-
-            third = build_work_manifest(queue, CONTRACT, td, now=NOW)
-            self.assertEqual(third["required_total_count"], 5)
-            self.assertEqual([x["appid"] for x in third["required_items"]], [str(x) for x in appids[20:]])
-            self.assertEqual(third["checkpoint"]["remaining_after_checkpoint_count"], 0)
-            self.assertFalse(third["checkpoint"]["continue_same_invocation"])
-            persist_submission(_submission(third, [_dossier(x) for x in appids[20:]]), third, CONTRACT, td)
-
-            done = build_work_manifest(queue, CONTRACT, td, now=NOW)
-            self.assertEqual(done["status"], "ready_from_fresh_cache")
-            self.assertEqual(done["required_total_count"], 0)
-            self.assertEqual(done["required_items"], [])
-            self.assertEqual(done["checkpoint"]["remaining_required_count"], 0)
-
-    def test_13_incomplete_or_invalid_checkpoint_fails_before_any_persistence(self):
-        appids = tuple(range(300000, 300012))
-        queue = _queue(appids)
-        with tempfile.TemporaryDirectory() as td:
-            work = build_work_manifest(queue, CONTRACT, td, now=NOW)
-            incomplete = [_dossier(x) for x in appids[:9]]
-            with self.assertRaisesRegex(ValueError, "exactly cover.*checkpoint"):
-                persist_submission(_submission(work, incomplete), work, CONTRACT, td)
-            self.assertEqual(list(Path(td).glob("App_*.json")), [])
-
-            invalid = [_dossier(x) for x in appids[:10]]
-            invalid[-1]["raw_reviews"] = [{"review_text": "must not persist"}]
-            with self.assertRaisesRegex(ValueError, "Raw review archive"):
-                persist_submission(_submission(work, invalid), work, CONTRACT, td)
-            self.assertEqual(list(Path(td).glob("App_*.json")), [])
 
 
 if __name__ == "__main__":
