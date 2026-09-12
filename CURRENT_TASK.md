@@ -121,7 +121,7 @@
 - role/start, warnings/risks, ranking weights, giveaway and package-equivalence semantics remain unchanged;
 - current production payload is still degraded on existing V5 backfill (`379`) with `0` current reconsiderable package candidates; canonical final producer fail-closes as expected and no semantic queue was fabricated;
 - report: `reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md`, report commit `1f843dd55edb3811820cf7b616889a7e17fcd84f`;
-- all temporary Step-3 helpers/workflows были removed after validation.
+- all temporary Step-3 helpers/workflows were removed after validation.
 
 ## Завершённые package-инварианты, которые сохраняются
 
