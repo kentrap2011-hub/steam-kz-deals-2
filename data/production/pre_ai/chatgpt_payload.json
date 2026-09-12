@@ -4,13 +4,13 @@
   "status": "degraded",
   "source_mailing_updated_at_utc": "2026-09-11T22:45:29.586278+00:00",
   "profile_binding": {
-    "canonical_profile_blob_sha": "47911d373e3e908c731d80513e144c7205f1706b",
+    "canonical_profile_blob_sha": "5b8fb3c2571c1be5769b2bd1ce5fb70c90636d0e",
     "taste_model_version": "taste-v3",
     "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
     "content_metadata_blob_sha": "256b4e04c1cf90e5898f933dea9ff14842e8a0d0"
   },
   "wishlist_binding": {
-    "blob_sha": "cedbc468a05881ac78742bc474653f02921b547e",
+    "blob_sha": "0667065de31682d21d14bbcc78eb742cf6e4b14b",
     "entry_count": 92,
     "is_context_only_not_taste_proof": true
   },
@@ -72,9 +72,7 @@
     "taste_queue_jsonl": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
     "purchase_context_jsonl": "data/production/pre_ai/chatgpt_purchase_context.jsonl",
     "line_alignment": "taste_queue line N == purchase_context line N for 1..ai_queue_count",
-    "ready_context_start_line": null,
-    "russian_description_translation_queue_jsonl": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
-    "russian_description_translation_status_json": "data/production/pre_ai/chatgpt_ru_description_status.json"
+    "ready_context_start_line": null
   },
   "source_family_count": 649,
   "candidate_description_known_count": 649,
@@ -141,7 +139,7 @@
     "App_787480",
     "App_802880"
   ],
-  "elapsed_seconds": 0.197,
+  "elapsed_seconds": 0.109,
   "semantic_completeness": {
     "status": "degraded",
     "scope_partition_complete": true,
@@ -151,7 +149,7 @@
     "total_relevant_semantic_scope": 619,
     "source_family_count": 649,
     "unresolved_scope_source_mailing_updated_at_utc": "2026-09-11T22:45:29.586278+00:00",
-    "unresolved_scope_age_seconds": 41,
+    "unresolved_scope_age_seconds": 46556,
     "unresolved_age_basis": "source_mailing_updated_at_utc"
   },
   "semantic_runtime_observability": {
@@ -171,25 +169,5 @@
     "last_queue_after_count": 539,
     "last_queue_delta_count": 0,
     "queue_presence_is_not_heartbeat": true
-  },
-  "semantic_work": {
-    "taste": {
-      "work_type": "taste",
-      "queue_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
-      "queue_count": 619,
-      "result_contract": "config/taste_result_contract.json"
-    },
-    "russian_description_translation": {
-      "work_type": "russian_description_translation",
-      "contract": "RUSSIAN-DESCRIPTION-TRANSLATION-V1",
-      "result_contract": "RUSSIAN-DESCRIPTION-TRANSLATION-RESULT-V1",
-      "cache_contract": "RUSSIAN-DESCRIPTION-TRANSLATION-CACHE-ENTRY-V1",
-      "queue_path": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
-      "status_path": "data/production/pre_ai/chatgpt_ru_description_status.json",
-      "queue_count": 200,
-      "submission_glob": "data/ai_inbox/russian_descriptions/*.json",
-      "runtime_owner": "scheduled_chatgpt_runtime_data_plane",
-      "control_plane_owner": "github_control_plane"
-    }
   }
 }
