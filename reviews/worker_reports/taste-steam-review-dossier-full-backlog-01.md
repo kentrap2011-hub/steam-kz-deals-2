@@ -4,7 +4,9 @@
 
 **Branch:** `worker/taste-dossier-full-backlog-01`
 
-**Continuation status:** `ready_for_main_integration` — implementation and focused validation are complete on the worker branch; final task status is intentionally not claimed until the verified changes reach `main` through the normal safe integration path.
+**Continuation status:** `complete_ready_for_user_run_now_validation`
+
+**Main integration:** PR `#16` merged to `main` as `ecde503c6b74aa964e7b331da009f87af8d0b3cd` after the PR workflow `Validate backlog dispositions` completed successfully.
 
 ## START gate and architecture preflight
 
@@ -19,7 +21,7 @@ The six required pre-existing commits were confirmed on `worker/taste-dossier-fu
 - `9f50843adae9692bf2c0386bf79ef5d88b9856c8`
 - `83aa9abc2c5d9c96d979f29dee92b8bf1b2e1f5d`
 
-The continuation handoff itself exists only on `main`, so the worker branch legitimately diverges from `main` by one handoff commit while carrying the implementation commits.
+The continuation handoff existed only on `main` while implementation continued on the worker branch. PR `#16` safely reconciled that divergence and integrated the verified implementation.
 
 ## Architecture rationale
 
@@ -35,7 +37,7 @@ are eligible for dossier preparation. Rows whose work is only `resolve_base_supp
 
 The active Taste pin (`data/production/pre_ai/taste_active_work_unit.json`) remains deliberately **downstream-only**. It binds the exact semantic producer input and is not the total dossier-preparation scope. The exact active pin behavior was regression-protected and not changed.
 
-This rationale is now durable in `PROJECT_DECISIONS.md` as `TASTE-004`.
+This rationale is durable in `PROJECT_DECISIONS.md` as `TASTE-004`.
 
 ## Implemented checkpoint model
 
@@ -110,6 +112,8 @@ A separate CLI smoke used 12 synthetic eligible rows and the actual builder/inge
 - second ingest: persisted `2`, `remaining_required_count=0`, `full_backlog_complete=true`;
 - final manifest: `ready_from_fresh_cache`; exactly 12 dossier files were durable.
 
+PR `#16` then ran repository workflow `Validate backlog dispositions` on head `397267c4148354bcb0d071385dbb6c099355d5e0`; job `backlog-disposition` completed successfully before merge.
+
 No real production dossier backlog, Steam review population, Scheduled Task `Run now`, throughput benchmark or production semantic generation was executed during this continuation.
 
 ## Explicitly unchanged
@@ -122,6 +126,8 @@ No real production dossier backlog, Steam review population, Scheduled Task `Run
 - no new production quota/limit was introduced;
 - no real dossier backlog was populated by this worker.
 
-## Integration gate
+## Final state / next user action
 
-The worker branch implementation is validated and ready for a normal pull-request integration into `main`. Per the continuation task, this report must be updated to the final continuation status only after that safe integration succeeds. The next user action after successful `main` integration will be the requested fresh manual `Run now` validation of the existing `Taste Steam Review Dossier` Scheduled Task.
+The verified implementation is now on `main`. The continuation is therefore `complete_ready_for_user_run_now_validation`.
+
+The next action is intentionally user-controlled: perform a fresh manual **Run now** on the existing `Taste Steam Review Dossier` Scheduled Task and validate that the production invocation continues beyond the first checkpoint when eligible work remains. This worker did not perform that production run because the task explicitly prohibited it.
