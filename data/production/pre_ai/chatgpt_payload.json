@@ -72,26 +72,26 @@
     "taste_queue_jsonl": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
     "purchase_context_jsonl": "data/production/pre_ai/chatgpt_purchase_context.jsonl",
     "line_alignment": "taste_queue line N == purchase_context line N for 1..ai_queue_count",
-    "ready_context_start_line": null
+    "ready_context_start_line": 611
   },
   "source_family_count": 649,
   "candidate_description_known_count": 649,
   "candidate_description_missing_count": 0,
   "candidate_description_coverage": 1.0,
-  "ai_queue_count": 613,
-  "ready_without_ai_count": 0,
-  "purchase_context_line_count": 613,
-  "deterministically_excluded_without_ai_count": 36,
+  "ai_queue_count": 610,
+  "ready_without_ai_count": 1,
+  "purchase_context_line_count": 611,
+  "deterministically_excluded_without_ai_count": 38,
   "deterministic_exclusion_counts": {
     "deal_excludes_even_if_strong": 30,
     "deal_excludes_for_valid_cached_fit": 2,
-    "valid_cached_taste_insufficient": 4
+    "valid_cached_taste_insufficient": 6
   },
   "commercial_eligibility_bridge_counts": {},
   "fixed_package_bridge_evidence": {
     "status": "complete",
     "source_aligned": true,
-    "stable_positive_family_count": 85,
+    "stable_positive_family_count": 89,
     "reconsiderable_candidate_count": 0,
     "strict_savings_candidate_count": 0,
     "bridge_family_ids": []
@@ -99,16 +99,16 @@
   "complete_family_partition": true,
   "negative_analysis": {
     "work_code": "resolve_grounded_negative_analysis",
-    "negative_backfill_queue_count": 4,
-    "negative_full_evaluation_queue_count": 609,
-    "negative_ready_without_ai_count": 0,
+    "negative_backfill_queue_count": 7,
+    "negative_full_evaluation_queue_count": 603,
+    "negative_ready_without_ai_count": 1,
     "evidence_backfill_queue_count": 0,
     "normal_ready_requires_confirmed_negative": true
   },
   "sale_end_coverage": 1.0,
   "sale_end_missing_count": 0,
   "sale_end_missing_primary_keys": [],
-  "source_pre_ai_artifact_bytes": 2489629,
+  "source_pre_ai_artifact_bytes": 2492659,
   "deterministically_excluded_primary_keys": [
     "App_2336880",
     "Sub_44162",
@@ -116,6 +116,8 @@
     "Sub_87601",
     "App_1004240",
     "App_10150",
+    "App_1018800",
+    "App_1042550",
     "App_1058450",
     "App_1063420",
     "App_1151380",
@@ -147,17 +149,17 @@
     "App_787480",
     "App_802880"
   ],
-  "elapsed_seconds": 0.205,
+  "elapsed_seconds": 0.101,
   "semantic_completeness": {
     "status": "degraded",
     "scope_partition_complete": true,
     "sufficiently_complete_for_publication": false,
-    "unresolved_semantic_count": 613,
-    "resolved_semantic_count": 0,
-    "total_relevant_semantic_scope": 613,
+    "unresolved_semantic_count": 610,
+    "resolved_semantic_count": 1,
+    "total_relevant_semantic_scope": 611,
     "source_family_count": 649,
     "unresolved_scope_source_mailing_updated_at_utc": "2026-09-11T22:45:29.586278+00:00",
-    "unresolved_scope_age_seconds": 46758,
+    "unresolved_scope_age_seconds": 46954,
     "unresolved_age_basis": "source_mailing_updated_at_utc"
   },
   "semantic_runtime_observability": {
@@ -168,14 +170,14 @@
     "scheduler_platform_enabled_state": "not_exposed_to_repository",
     "expected_cadence_or_next_run_state": "not_exposed_to_repository",
     "latest_runtime_status_path": "data/cache/taste_ingest_receipts/latest_runtime_status.json",
-    "last_successful_semantic_execution_at_utc": "2026-09-12T11:41:26+00:00",
-    "last_accepted_semantic_progress_at_utc": "2026-09-12T11:41:26+00:00",
+    "last_successful_semantic_execution_at_utc": "2026-09-12T11:44:50+00:00",
+    "last_accepted_semantic_progress_at_utc": "2026-09-12T11:44:50+00:00",
     "last_accepted_source_mailing_updated_at_utc": "2026-09-11T22:45:29.586278+00:00",
     "current_scope_source_mailing_updated_at_utc": "2026-09-11T22:45:29.586278+00:00",
     "current_scope_progress_observed": true,
     "last_queue_before_count": 619,
-    "last_queue_after_count": 619,
-    "last_queue_delta_count": 0,
+    "last_queue_after_count": 613,
+    "last_queue_delta_count": 6,
     "queue_presence_is_not_heartbeat": true
   }
 }
