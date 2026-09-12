@@ -11,6 +11,9 @@
       "deduplicate_dossier_scope_by_appid_preserving_canonical_queue_order",
       "decide_fresh_vs_stale",
       "prepare_work_manifest",
+      "prepare_bounded_checkpoint_from_full_required_scope",
+      "advance_checkpoint_after_successful_persistence",
+      "track_full_backlog_completeness_and_resume",
       "validate_submission",
       "persist_compact_dossier",
       "cleanup_expired_out_of_scope_dossiers",
@@ -39,6 +42,22 @@
     "identity": "appid",
     "dedupe": "first_occurrence_by_appid_preserving_canonical_queue_order",
     "active_pin_role": "downstream_semantic_input_only_not_dossier_scope"
+  },
+  "checkpointing": {
+    "owner": "github_control_plane",
+    "checkpoint_size": 10,
+    "semantics": "durability_boundary_not_quota",
+    "completion_scope": "entire_current_required_dossier_scope",
+    "ordering": "canonical_queue_order_after_appid_deduplication",
+    "advance_rule": "after_successful_checkpoint_persistence_rebuild_from_canonical_queue_and_current_dossier_store",
+    "same_invocation_rule": "continue_through_successive_checkpoints_until_exhausted_or_real_platform_runtime_limit",
+    "resume_rule": "later_invocation_rebuilds_and_resumes_only_remaining_required_scope",
+    "forbidden_interpretations": [
+      "daily_cap",
+      "run_quota",
+      "production_limit",
+      "completion_after_first_checkpoint"
+    ]
   },
   "freshness": {
     "default_ttl_days": 20,
