@@ -20,7 +20,7 @@ class SteamReviewDossierCleanupTests(unittest.TestCase):
             self.assertFalse(path.exists())
             self.assertEqual([x["appid"] for x in result["deleted_stale_out_of_scope"]], ["6800"])
 
-    def test_02_stale_in_full_scope_is_preserved_and_refresh_required(self):
+    def test_02_stale_in_full_scope_is_preserved_and_remains_required_even_beyond_current_checkpoint(self):
         queue = _queue(tuple(range(100000, 100121)))
         target = "100115"
         with tempfile.TemporaryDirectory() as td:
@@ -31,7 +31,10 @@ class SteamReviewDossierCleanupTests(unittest.TestCase):
             self.assertEqual(result["unique_appid_count"], 121)
             self.assertEqual([x["appid"] for x in result["preserved_refresh_required"]], [target])
             work = build_work_manifest(queue, CONTRACT, td, now=NOW)
-            item = next(x for x in work["required_items"] if x["appid"] == target)
+            self.assertEqual(work["required_total_count"], 121)
+            self.assertNotIn(target, [x["appid"] for x in work["required_items"]])
+            item = next(x for x in work["items"] if x["appid"] == target)
+            self.assertEqual(item["state"], "stale")
             self.assertEqual(item["reason"], "refresh_required")
 
     def test_03_fresh_out_of_scope_is_preserved_until_ttl_expiry(self):
