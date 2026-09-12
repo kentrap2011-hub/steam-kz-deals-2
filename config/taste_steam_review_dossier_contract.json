@@ -1,0 +1,131 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V1",
+  "version": 1,
+  "status": "active",
+  "purpose": "Prepare compact neutral Steam game dossiers before Taste semantic analysis from Steam store description and Steam user reviews, including a dedicated Russian-review lane.",
+  "ownership": {
+    "control_plane": "github",
+    "semantic_data_plane": "separate_chatgpt_preparer_future_scheduler",
+    "github_responsibilities": [
+      "select_exact_pinned_game_scope",
+      "decide_fresh_vs_stale",
+      "prepare_work_manifest",
+      "validate_submission",
+      "persist_compact_dossier",
+      "build_fail_closed_taste_semantic_input"
+    ],
+    "semantic_worker_responsibilities": [
+      "read_only_the_explicit_work_manifest",
+      "inspect_steam_store_description",
+      "inspect_steam_user_reviews_with_russian_lane",
+      "produce_neutral_compact_synthesis_with_provenance"
+    ],
+    "forbidden": [
+      "invent_scope",
+      "manage_queue_or_retry_policy",
+      "score_personal_fit",
+      "choose_include_or_exclude",
+      "use_price_discount_or_sale_urgency",
+      "archive_raw_review_text",
+      "change_taste_pin_or_taste_ingest_authority"
+    ]
+  },
+  "freshness": {
+    "default_ttl_days": 20,
+    "min_ttl_days": 1,
+    "max_ttl_days": 60,
+    "stale_behavior": "hold_taste_until_refreshed",
+    "replacement_policy": "replace_current_dossier_no_unbounded_history"
+  },
+  "sampling": {
+    "mode": "adaptive_stability",
+    "review_batch_size": 20,
+    "initial_target_per_lane": 20,
+    "max_russian_reviews": 80,
+    "max_non_russian_reviews": 80,
+    "max_total_reviews": 160,
+    "stable_consecutive_batches": 2,
+    "lanes": [
+      "russian",
+      "non_russian"
+    ],
+    "stop_conditions": [
+      "two_consecutive_batches_add_no_material_recurring_theme_or_conflict_change",
+      "source_exhausted_or_sparse",
+      "hard_ceiling_reached"
+    ],
+    "recurrence_guidance": {
+      "strong": "at_least_5_independent_mentions",
+      "moderate": "3_to_4_independent_mentions",
+      "limited": "2_independent_mentions",
+      "anecdotal": "1_mention_only"
+    }
+  },
+  "paths": {
+    "active_pin": "data/production/pre_ai/taste_active_work_unit.json",
+    "dossier_store_dir": "data/cache/taste_steam_review_dossiers",
+    "work_manifest": "data/production/pre_ai/taste_steam_review_dossier_work.json",
+    "semantic_input": "data/production/pre_ai/taste_semantic_dossier_input.json",
+    "submission_inbox_dir": "data/ai_inbox/taste_steam_review_dossiers"
+  },
+  "schemas": {
+    "dossier": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+    "work_manifest": "TASTE-STEAM-REVIEW-DOSSIER-WORK-V1",
+    "submission": "TASTE-STEAM-REVIEW-DOSSIER-SUBMISSION-V1",
+    "semantic_input": "TASTE-SEMANTIC-DOSSIER-INPUT-V1"
+  },
+  "required_dossier_fields": [
+    "appid",
+    "title",
+    "generated_at_utc",
+    "expires_at_utc",
+    "ttl_days",
+    "summary",
+    "observations",
+    "conflicts",
+    "review_sample",
+    "provenance"
+  ],
+  "neutrality": {
+    "allowed_observation_sentiments": [
+      "positive",
+      "negative",
+      "mixed",
+      "neutral"
+    ],
+    "allowed_recurrence": [
+      "strong",
+      "moderate",
+      "limited",
+      "anecdotal"
+    ],
+    "allowed_categories": [
+      "mechanics",
+      "structure",
+      "pacing",
+      "progression",
+      "repetition",
+      "difficulty",
+      "friction",
+      "multiplayer",
+      "coop",
+      "localization",
+      "translation",
+      "voice",
+      "font",
+      "encoding",
+      "regional",
+      "other"
+    ],
+    "forbidden_personal_fields": [
+      "fit_score",
+      "personal_fit",
+      "include",
+      "exclude",
+      "buy_now",
+      "purchase_urgency",
+      "price",
+      "discount"
+    ]
+  }
+}
