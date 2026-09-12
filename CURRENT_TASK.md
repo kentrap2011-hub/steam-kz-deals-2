@@ -1,6 +1,6 @@
 # CURRENT TASK
 
-Последнее обновление: 2026-09-07
+Последнее обновление: 2026-09-12
 
 ## Завершено
 
@@ -187,3 +187,17 @@
 - цель: исправить подтверждённые audit-дефекты positive `why_fit` и consistency negative `risks[]` в текущем canonical producer path;
 - ranking weights, giveaway, duration, translation, package и unrelated UI не меняются;
 - другая параллельная работа F сохраняется без изменений.
+
+### Normal Taste semantic producer 01
+Статус: `blocked_requires_followup`.
+- worker task: `WORKER_TASK_TASTE_NORMAL_SEMANTIC_PRODUCER_01.md`;
+- START gate из актуального `CHAT_PROTOCOL.md` выполнен до task-specific реализации;
+- linked age-priority worker: `WORKER_TASK_TASTE_QUEUE_AGE_PRIORITY_ORDER_01.md`;
+- canonical age authority доказан: `data/cache/taste_fit.json` → accepted entry `evaluated_at_utc`;
+- implementation gate не пройден: текущий active exact-10 pin `31c86e796e2d433aeb27e727226dc8245ec542650263ff631bc7ae64881c3d20` ещё не имеет terminal verified receipt;
+- latest terminal receipt `ba86bfdcf8365dfa0195` относится к предыдущему grandfathered batch и сам зафиксировал этот SHA как `next_work_unit_sha256`;
+- active pin не переупорядочен и не изменён; source/runtime artifacts не менялись;
+- существующий Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` не изменялся, второй producer/scheduler не создавался;
+- age report-first: `reviews/worker_reports/taste-queue-age-priority-order-01.md`, commit `6da7f006497fc6a3d849e14c9b2ed20644d47c44`;
+- parent report: `reviews/worker_reports/taste-normal-semantic-producer-01.md`, initial commit `8fb4eb40b03ec8841013f49af2b7b0d2d301466e`;
+- exact unblock: existing producer must finish and canonically ingest the current exact-10 pin; after terminal receipt, rerun this worker to implement age-ordering for newly constructed pins and prove `complete_ready_for_normal_scheduled_producer` before changing prompt/cadence.
