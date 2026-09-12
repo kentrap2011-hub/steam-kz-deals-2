@@ -99,9 +99,9 @@ No manual queue, cache, receipt or result mutation was performed.
 ## Files changed
 
 Changed by this worker:
-- `reviews/worker_reports/taste-queue-age-priority-order-01.md` — report-first lifecycle/timestamp authority proof; commit `6da7f006497fc6a3d849e14c9b2ed20644d47c44`;
-- `reviews/worker_reports/taste-normal-semantic-producer-01.md` — this parent report;
-- `CURRENT_TASK.md` — worker lifecycle/status record (final closeout commit recorded there when written).
+- `reviews/worker_reports/taste-queue-age-priority-order-01.md` — report-first lifecycle/timestamp authority proof; initial commit `6da7f006497fc6a3d849e14c9b2ed20644d47c44`;
+- `reviews/worker_reports/taste-normal-semantic-producer-01.md` — this parent report; initial commit `8fb4eb40b03ec8841013f49af2b7b0d2d301466e`;
+- `CURRENT_TASK.md` — worker lifecycle/status record; commit `fb9c81e5adfd14b05358838ea866f73edd63334a`.
 
 Production source files changed: **none**.
 Runtime queue/cache/receipt/pin files changed: **none**.
@@ -119,6 +119,13 @@ Read-only canonical verification performed against current `main`:
 - canonical inbox directory has no durable current-pin submission on current `main`;
 - age timestamp authority is available as canonical cache `evaluated_at_utc`;
 - report-first commit changed only `reviews/worker_reports/taste-queue-age-priority-order-01.md`.
+
+Closeout compare `477df2b2ddbcbb76ff2af42d07abc6777aee89dd..fb9c81e5adfd14b05358838ea866f73edd63334a` is ahead by exactly 3 commits and contains exactly 3 changed paths:
+- `CURRENT_TASK.md`;
+- `reviews/worker_reports/taste-normal-semantic-producer-01.md`;
+- `reviews/worker_reports/taste-queue-age-priority-order-01.md`.
+
+That compare contains no production source, workflow, queue, cache, receipt, pin or scheduler file.
 
 ## Proof of singleton producer / no scheduler change
 
