@@ -1,0 +1,89 @@
+{
+  "schema_version": 3,
+  "status": "complete",
+  "batch_id": "7b6be6476172a4505994",
+  "processed_at_utc": "2026-09-12T11:44:50+00:00",
+  "source_mailing_updated_at_utc": "2026-09-11T22:45:29.586278+00:00",
+  "input_files": [
+    "throughput-measurement-2026-09-12-checkpoint-002.json"
+  ],
+  "result_count": 10,
+  "full_evaluation_result_count": 10,
+  "negative_only_result_count": 0,
+  "incomplete_negative_result_count": 9,
+  "keys": [
+    "App_2336880",
+    "App_527070",
+    "Sub_4156",
+    "Sub_44162",
+    "Sub_55062",
+    "Sub_87601",
+    "App_1004240",
+    "App_10150",
+    "App_1015940",
+    "App_1016920"
+  ],
+  "retained_work_after_ingest": {
+    "App_527070": [
+      "resolve_grounded_negative_analysis",
+      "resolve_base_support_condition"
+    ],
+    "Sub_4156": [
+      "resolve_grounded_negative_analysis"
+    ],
+    "App_1015940": [
+      "resolve_grounded_negative_analysis"
+    ],
+    "App_1016920": [
+      "resolve_grounded_negative_analysis"
+    ]
+  },
+  "current_reusable_result_count": 10,
+  "newer_live_pending_result_count": 0,
+  "baseline": {
+    "safe_cache_hit_count": 0,
+    "ai_required_count": 649,
+    "ai_queue_count": 619
+  },
+  "after": {
+    "safe_cache_hit_count": 10,
+    "ai_required_count": 639,
+    "ai_queue_count": 613,
+    "ready_without_ai_count": 0,
+    "negative_analysis": {
+      "work_code": "resolve_grounded_negative_analysis",
+      "negative_backfill_queue_count": 4,
+      "negative_full_evaluation_queue_count": 609,
+      "negative_ready_without_ai_count": 0,
+      "evidence_backfill_queue_count": 0,
+      "normal_ready_requires_confirmed_negative": true
+    },
+    "deterministically_excluded_without_ai_count": 36,
+    "sale_end_coverage": 1.0,
+    "sale_end_missing_count": 0
+  },
+  "pin_lifecycle": {
+    "transition_status": "retired_and_prepared_next_active_pin",
+    "retired_work_unit_sha256": "5d0d4b4f043018bcc8b2686d5f835d888a262f03ec86aaee89213d33ca51d8c0",
+    "retired_profile_blob_sha": "5b8fb3c2571c1be5769b2bd1ce5fb70c90636d0e",
+    "next_work_unit_sha256": "19b27b85765f2d606d763ac847df6afe3a6ce1dce972b1c1f061374b99668123",
+    "next_profile_blob_sha": "5b8fb3c2571c1be5769b2bd1ce5fb70c90636d0e",
+    "legacy_grandfathered_input_does_not_retire_unrelated_active_pin": false
+  },
+  "checks": {
+    "projection_complete": true,
+    "family_partition_complete": true,
+    "sale_end_state_consistent": true,
+    "missing_sale_end_is_nonblocking": true,
+    "safe_hits_increment_only_for_current_reusable_full_eval": true,
+    "ai_required_decrement_only_for_current_reusable_full_eval": true,
+    "after_queue_has_unique_keys": true,
+    "ingested_key_retention_matches_negative_base_support_or_newer_live_state": true,
+    "ai_queue_count_exact": true,
+    "queue_file_count_exact": true,
+    "current_reusable_ingested_keys_are_fit_cache_hits": true,
+    "older_pinned_result_does_not_become_current_live_cache_hit": true,
+    "newer_live_projection_state_is_preserved_for_older_pinned_results": true,
+    "newer_live_work_remains_exact_for_next_work_unit": true
+  }
+}
