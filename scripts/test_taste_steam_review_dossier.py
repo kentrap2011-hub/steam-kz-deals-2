@@ -93,15 +93,19 @@ def _submission(work, dossiers):
 
 
 class SteamReviewDossierTests(unittest.TestCase):
-    def test_01_full_backlog_over_100_rows_is_not_capped_at_pin_size(self):
+    def test_01_full_backlog_over_100_rows_is_not_capped_by_checkpoint(self):
         queue = _queue(tuple(range(100000, 100121)))
         with tempfile.TemporaryDirectory() as td:
             work = build_work_manifest(queue, CONTRACT, td, now=NOW)
         self.assertEqual(work["source_row_count"], 121)
         self.assertEqual(work["unique_appid_count"], 121)
         self.assertEqual(len(work["items"]), 121)
-        self.assertEqual(len(work["required_items"]), 121)
-        self.assertGreater(len(work["items"]), 10)
+        self.assertEqual(work["required_total_count"], 121)
+        self.assertEqual(len(work["required_items"]), 10)
+        self.assertEqual(work["checkpoint"]["checkpoint_size"], 10)
+        self.assertEqual(work["checkpoint"]["remaining_required_count"], 121)
+        self.assertEqual(work["checkpoint"]["remaining_after_checkpoint_count"], 111)
+        self.assertEqual([x["appid"] for x in work["required_items"]], [str(x) for x in range(100000, 100010)])
 
     def test_02_duplicate_appids_collapse_to_first_queue_occurrence(self):
         queue = _queue((527070, 6800, 527070, 6800, 9999))
@@ -119,6 +123,7 @@ class SteamReviewDossierTests(unittest.TestCase):
             Path(td, "App_527070.json").write_text(json.dumps(_dossier(527070)), encoding="utf-8")
             work = build_work_manifest(queue, CONTRACT, td, now=NOW)
             self.assertEqual(work["status"], "ready_from_fresh_cache")
+            self.assertEqual(work["required_total_count"], 0)
             self.assertEqual(work["required_items"], [])
             self.assertEqual(work["items"][0]["state"], "fresh")
 
@@ -187,6 +192,53 @@ class SteamReviewDossierTests(unittest.TestCase):
         validate_dossier(_dossier(527070, ru=80, non_ru=80), CONTRACT)
         with self.assertRaisesRegex(ValueError, "ceiling"):
             validate_dossier(_dossier(527070, ru=81, non_ru=80), CONTRACT)
+
+    def test_12_twenty_five_missing_apps_progress_10_10_5_then_ready(self):
+        appids = tuple(range(200000, 200025))
+        queue = _queue(appids)
+        with tempfile.TemporaryDirectory() as td:
+            first = build_work_manifest(queue, CONTRACT, td, now=NOW)
+            self.assertEqual(first["required_total_count"], 25)
+            self.assertEqual([x["appid"] for x in first["required_items"]], [str(x) for x in appids[:10]])
+            self.assertEqual(first["checkpoint"]["remaining_after_checkpoint_count"], 15)
+            self.assertTrue(first["checkpoint"]["continue_same_invocation"])
+            persist_submission(_submission(first, [_dossier(x) for x in appids[:10]]), first, CONTRACT, td)
+
+            second = build_work_manifest(queue, CONTRACT, td, now=NOW)
+            self.assertEqual(second["required_total_count"], 15)
+            self.assertEqual([x["appid"] for x in second["required_items"]], [str(x) for x in appids[10:20]])
+            self.assertEqual(second["checkpoint"]["remaining_after_checkpoint_count"], 5)
+            self.assertTrue(second["checkpoint"]["continue_same_invocation"])
+            persist_submission(_submission(second, [_dossier(x) for x in appids[10:20]]), second, CONTRACT, td)
+
+            third = build_work_manifest(queue, CONTRACT, td, now=NOW)
+            self.assertEqual(third["required_total_count"], 5)
+            self.assertEqual([x["appid"] for x in third["required_items"]], [str(x) for x in appids[20:]])
+            self.assertEqual(third["checkpoint"]["remaining_after_checkpoint_count"], 0)
+            self.assertFalse(third["checkpoint"]["continue_same_invocation"])
+            persist_submission(_submission(third, [_dossier(x) for x in appids[20:]]), third, CONTRACT, td)
+
+            done = build_work_manifest(queue, CONTRACT, td, now=NOW)
+            self.assertEqual(done["status"], "ready_from_fresh_cache")
+            self.assertEqual(done["required_total_count"], 0)
+            self.assertEqual(done["required_items"], [])
+            self.assertEqual(done["checkpoint"]["remaining_required_count"], 0)
+
+    def test_13_incomplete_or_invalid_checkpoint_fails_before_any_persistence(self):
+        appids = tuple(range(300000, 300012))
+        queue = _queue(appids)
+        with tempfile.TemporaryDirectory() as td:
+            work = build_work_manifest(queue, CONTRACT, td, now=NOW)
+            incomplete = [_dossier(x) for x in appids[:9]]
+            with self.assertRaisesRegex(ValueError, "exactly cover.*checkpoint"):
+                persist_submission(_submission(work, incomplete), work, CONTRACT, td)
+            self.assertEqual(list(Path(td).glob("App_*.json")), [])
+
+            invalid = [_dossier(x) for x in appids[:10]]
+            invalid[-1]["raw_reviews"] = [{"review_text": "must not persist"}]
+            with self.assertRaisesRegex(ValueError, "Raw review archive"):
+                persist_submission(_submission(work, invalid), work, CONTRACT, td)
+            self.assertEqual(list(Path(td).glob("App_*.json")), [])
 
 
 if __name__ == "__main__":
