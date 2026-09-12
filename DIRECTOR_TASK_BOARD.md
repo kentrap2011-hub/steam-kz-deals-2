@@ -24,6 +24,10 @@ Mode:
 Worker slot:
 `ЧАТ 1`
 
+Worker context:
+- use a NEW clean working chat named `ЧАТ 1`;
+- the previous Steam `ЧАТ 1` is closed and must not be reused for this task.
+
 Goal:
 - implement the normal deterministic Taste queue producer for ChatGPT evaluation;
 - process at most 10 games per invocation;
@@ -67,7 +71,7 @@ Verified real production result:
 - 0 system-state problems;
 - production and downstream visual refresh succeeded.
 
-`ЧАТ 1` is free and may be deleted/reused.
+Previous Steam worker chat is closed. Its reusable slot number `ЧАТ 1` has been reassigned to the new clean Taste worker chat above.
 
 ## ACCEPTED — read-only architecture review
 Task:
