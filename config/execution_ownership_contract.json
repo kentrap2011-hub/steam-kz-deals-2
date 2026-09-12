@@ -75,7 +75,8 @@
       "change canonical contracts after verifying source-of-truth hierarchy",
       "edit GitHub workflows/scripts/configuration",
       "inspect bounded samples to verify an implementation",
-      "manually trigger or repair the canonical pipeline when supported"
+      "manually trigger or repair the canonical pipeline when supported",
+      "execute an explicitly user-authorized one-off Taste semantic throughput benchmark against exact GitHub-prepared and Git-durable pinned work-units, when the benchmark preserves GitHub-owned scope/order/pin/retry/ingest authority and persists every counted checkpoint through the canonical repository handoff before continuing"
     ],
     "forbidden": [
       "manually process a large production backlog item by item as a substitute for repairing automation",
@@ -83,7 +84,22 @@
       "continue manual data work after discovering that the intended automated component boundary is broken",
       "declare a production defect fixed solely because partial manual data was accumulated"
     ],
-    "sample_limit_rule": "Manual evidence checks are permitted only as bounded verification of implementation behavior. They must not become the normal mechanism for completing the production scope."
+    "sample_limit_rule": "Manual evidence checks are normally permitted only as bounded verification of implementation behavior. A separately authorized one-off throughput benchmark is the sole exception: it may process successive GitHub-pinned semantic work-units only to measure factual interactive-run capacity, must use the canonical result/ingest path after every checkpoint, must not choose or reorder work, must not create a recurring producer, and must not be treated as normal production execution or as the future production limit.",
+    "one_off_taste_throughput_benchmark": {
+      "allowed": true,
+      "authorization_source": "WORKER_TASK_TASTE_NORMAL_SEMANTIC_PRODUCER_01.md when status is authorized_corrected_resume_chat_1 and mode is IMPLEMENT_AND_MEASURE_THROUGHPUT",
+      "measurement_checkpoint_size": 10,
+      "checkpoint_size_is_production_limit": false,
+      "must_use_existing_canonical_queue_order": true,
+      "must_use_git_durable_pinned_work_unit": true,
+      "must_persist_each_completed_checkpoint_through_canonical_ingest": true,
+      "may_continue_to_next_checkpoint_in_same_interactive_run": true,
+      "may_change_scheduled_task": false,
+      "may_create_second_producer": false,
+      "may_choose_final_production_limit": false,
+      "may_implement_age_priority_ordering": false,
+      "rule": "This exception authorizes semantic execution for measurement only. GitHub remains the control-plane owner for scope, order, pin authority, retry/completeness and canonical persistence. The interactive chat may evaluate only the exact current pinned work-unit, submit its structured result through the existing Taste inbox/ingest route, verify canonical acceptance, then continue with the next GitHub-prepared pin."
+    }
   },
   "architecture_change_gate": {
     "required_before_writes": [
@@ -96,6 +112,6 @@
     "failure_rule": "If ownership is ambiguous, stop implementation changes and resolve the ownership contract first. Do not patch symptoms by moving work into the current chat."
   },
   "completion_definition": {
-    "rule": "A pipeline defect is fixed only when the intended owning component can perform the work automatically and the end-to-end validation succeeds. Manual backlog progress is evidence or temporary recovery data, not proof that the architecture is fixed."
+    "rule": "A pipeline defect is fixed only when the intended owning component can perform the work automatically and the end-to-end validation succeeds. Manual backlog progress is evidence or temporary recovery data, not proof that the architecture is fixed. A one-off throughput benchmark measures capacity only and does not itself prove production architecture completeness or select a production limit."
   }
 }
