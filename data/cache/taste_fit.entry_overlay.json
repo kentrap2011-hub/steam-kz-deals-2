@@ -2,7 +2,7 @@
   "schema_version": 1,
   "purpose": "incremental_per_entry_taste_verdict_overlay",
   "entry_schema_version": 5,
-  "entry_count": 819,
+  "entry_count": 821,
   "entries": {
     "App_241930": {
       "key": "App_241930",
@@ -20920,28 +20920,37 @@
     "App_1061910": {
       "key": "App_1061910",
       "appid": "1061910",
-      "profile_blob_sha": "c478cda9bb7a9b024a30ca188dce4b98a2de24ea",
+      "profile_blob_sha": "5b8fb3c2571c1be5769b2bd1ce5fb70c90636d0e",
       "taste_model_version": "taste-v3",
       "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_sha256": "8b940003bca9ac52eb18714b8f20e6abe2b5466d72c07bdd365fa40d888d2643",
       "taste_fingerprint": "6d6beedddef3e44db147db2e122ff3df13a859503a494f1bfdaa05a1fd08a28e",
       "verdict": "INCLUDE",
-      "fit_level": "strong",
-      "reason_code": "include_strong",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
       "positive_evidence": [
-        "Rhythm-linked shooting directly rewards timing, execution and learnable mechanical mastery.",
-        "A focused infernal journey combines a clear forward objective with a distinctive metal-driven action identity."
+        "Ритм встроен прямо в активный FPS core loop, а свежий опыт Idol Party подтвердил, что хорошо работающая ритмическая механика способна очень сильно удерживать внимание пользователя.",
+        "Стрельба, демоны и оружие дают постоянное непосредственное действие без длинных пассивных промежутков, что совпадает с подтверждённым предпочтением активной механики с частой обратной связью."
       ],
-      "negative_evidence": [
-        "A rhythm-combat loop could become tiring if encounter variety does not keep expanding across the campaign."
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "sufficient",
+      "fit_evidence_confidence": "high",
+      "fit_evidence_basis": [
+        "historical_user_experience",
+        "candidate_specific_positive_match"
       ],
-      "evaluated_at_utc": "2026-09-01T21:03:06+00:00",
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-12T11:50:00+00:00",
       "taste_factors": {
-        "gameplay_mastery": 91,
-        "development_variety": 72,
-        "structure_pacing_direction": 84,
-        "identity_hooks": 90,
-        "breadth_of_match": 84
+        "gameplay_mastery": 88,
+        "development_variety": 65,
+        "structure_pacing_direction": 74,
+        "identity_hooks": 82,
+        "breadth_of_match": 78
       }
     },
     "App_1069230": {
@@ -21676,6 +21685,74 @@
         "structure_pacing_direction": 76,
         "identity_hooks": 84,
         "breadth_of_match": 72
+      }
+    },
+    "App_1058020": {
+      "key": "App_1058020",
+      "appid": "1058020",
+      "profile_blob_sha": "5b8fb3c2571c1be5769b2bd1ce5fb70c90636d0e",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "486dda926ad6285efcb4149d9b35ff56a54e2dfc045fb1dc84b8288f44e5de70",
+      "taste_fingerprint": "dfbe55ffe5873f0c372a519705bd523e3a478d4482f7512c8491032e2a2babf8",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
+      "positive_evidence": [],
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "insufficient",
+      "fit_evidence_confidence": "low",
+      "fit_evidence_basis": [
+        "candidate_information_insufficient"
+      ],
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-12T11:50:00+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 58,
+        "development_variety": 45,
+        "structure_pacing_direction": 52,
+        "identity_hooks": 55,
+        "breadth_of_match": 35
+      }
+    },
+    "App_1063490": {
+      "key": "App_1063490",
+      "appid": "1063490",
+      "profile_blob_sha": "5b8fb3c2571c1be5769b2bd1ce5fb70c90636d0e",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "7e8f09341106e9626f97e74f1d2c4340896ac31fccf6bf806c71bad7b413f596",
+      "taste_fingerprint": "3eca965b343a908a81c323bd8aee28053def5cd0e52b0632c3df371935a8ddd8",
+      "verdict": "INCLUDE",
+      "fit_level": "moderate",
+      "reason_code": "include_moderate",
+      "positive_evidence": [
+        "Психологическая история о горе с загадочным радиосообщением даёт одновременно сюжетный и мистический крючок — оба устойчиво важны для пользователя.",
+        "Технические головоломки встроены в сюжетное приключение, а не существуют как единственный цикл; пользователь отдельно подтверждал, что простые головоломки нравятся как смена активности внутри более широкого приключения."
+      ],
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "sufficient",
+      "fit_evidence_confidence": "high",
+      "fit_evidence_basis": [
+        "historical_user_experience",
+        "candidate_specific_positive_match"
+      ],
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-12T11:50:00+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 62,
+        "development_variety": 70,
+        "structure_pacing_direction": 78,
+        "identity_hooks": 90,
+        "breadth_of_match": 82
       }
     }
   }

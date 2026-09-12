@@ -2,7 +2,7 @@
   "schema": "TASTE-PINNED-WORK-UNIT-V1",
   "status": "active",
   "authority": "canonical_git_pre_semantic_work_unit_pin",
-  "prepared_at_utc": "2026-09-12T11:48:05+00:00",
+  "prepared_at_utc": "2026-09-12T11:50:03+00:00",
   "producer_id": "chatgpt_scheduled_task:6aa032f37e688191a5c9a1a83f91c5d9",
   "producer_generation": 2,
   "profile_identity": {
@@ -85,24 +85,11 @@
       ]
     },
     {
-      "key": "App_1058020",
-      "appid": "1058020",
-      "taste_fingerprint": "dfbe55ffe5873f0c372a519705bd523e3a478d4482f7512c8491032e2a2babf8",
-      "candidate_context_sha256": "486dda926ad6285efcb4149d9b35ff56a54e2dfc045fb1dc84b8288f44e5de70",
-      "work_required": [
-        "evaluate_taste_fit",
-        "evaluate_normalized_taste_factors",
-        "resolve_grounded_negative_analysis"
-      ]
-    },
-    {
       "key": "App_1061910",
       "appid": "1061910",
       "taste_fingerprint": "6d6beedddef3e44db147db2e122ff3df13a859503a494f1bfdaa05a1fd08a28e",
       "candidate_context_sha256": "8b940003bca9ac52eb18714b8f20e6abe2b5466d72c07bdd365fa40d888d2643",
       "work_required": [
-        "evaluate_taste_fit",
-        "evaluate_normalized_taste_factors",
         "resolve_grounded_negative_analysis"
       ]
     },
@@ -112,11 +99,20 @@
       "taste_fingerprint": "3eca965b343a908a81c323bd8aee28053def5cd0e52b0632c3df371935a8ddd8",
       "candidate_context_sha256": "7e8f09341106e9626f97e74f1d2c4340896ac31fccf6bf806c71bad7b413f596",
       "work_required": [
+        "resolve_grounded_negative_analysis"
+      ]
+    },
+    {
+      "key": "App_1066780",
+      "appid": "1066780",
+      "taste_fingerprint": "56b03f1e1660e38f7013796f2831e731953d67d7bc84b89ad72d1df181b75a82",
+      "candidate_context_sha256": "ceeffa2a2e08417e7c9cd43eab09360b820c826db48bd8d96318fa2e405d910f",
+      "work_required": [
         "evaluate_taste_fit",
         "evaluate_normalized_taste_factors",
         "resolve_grounded_negative_analysis"
       ]
     }
   ],
-  "ordered_work_unit_sha256": "d9acb34d0de8b7741c51d78af9e693e9b6e4e0e9a102f0d7af3fa8ba0fad7979"
+  "ordered_work_unit_sha256": "b34f801c046ac1d1955b081501c8cb6e92c75db9e2a9d4f10e2d1967dddc54ce"
 }
