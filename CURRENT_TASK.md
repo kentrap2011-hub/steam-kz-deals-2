@@ -203,10 +203,12 @@
 - exact unblock: existing producer must finish and canonically ingest the current exact-10 pin; after terminal receipt, rerun this worker to implement age-ordering for newly constructed pins and prove `complete_ready_for_normal_scheduled_producer` before changing prompt/cadence.
 
 ### Steam review dossier preparer 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_separate_scheduler_and_clean_throughput_measurement`.
 - worker task: `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_PREPARER_01.md`;
-- mode: `IMPLEMENT_AND_VALIDATE`;
-- цель: отдельный pre-Taste механизм свежих нейтральных Steam dossier из store description + Steam reviews, включая Russian-review evidence;
-- ownership: GitHub определяет exact scope/freshness/validation/persistence; future separate ChatGPT preparer может только собирать/синтезировать evidence для GitHub-prepared work input;
-- существующий Taste Semantic Producer и текущий active pin не изменять; Scheduled Task в этой задаче не создавать;
-- старый Taste throughput measurement не продолжать.
+- mode: `IMPLEMENT_AND_VALIDATE` completed;
+- implemented separate GitHub-owned scope/freshness/validation/persistence + fail-closed Taste dossier handoff;
+- default TTL 20 days, adaptive Russian/non-Russian Steam review sampling contract and compact neutral schema implemented;
+- validation: 11/11 regressions + end-to-end CLI smoke passed;
+- current active pin and `scripts/taste_pinned_work_unit.py` remained unchanged;
+- existing Taste Semantic Producer unchanged; no Scheduled Task created; old throughput measurement not continued;
+- report: `reviews/worker_reports/taste-steam-review-dossier-preparer-01.md`.
