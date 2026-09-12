@@ -24,23 +24,15 @@ Final status:
 Verified real production result:
 - integration reached `main` through PR #15; merge commit `c9980e79d002e84a321d2cff089645f81d91c6b7`;
 - production workflow run `34643249267` completed `success`;
-- partial-publish regression passed;
-- Steam partial-publish collector step passed;
-- production publish step passed;
 - source coverage was complete with 17,299 observed / 17,299 reported;
 - 17,287 items processed successfully;
 - shortlist contained 676 games;
-- 12 unresolved game-level problems, all at `review_enrichment` with root error `Steam Reviews API did not return both required summaries`;
+- 12 unresolved game-level problems at `review_enrichment`;
 - 0 unresolved catalog segments;
 - 0 system-state problems;
-- 0 last-known-good preserved entries in that run;
-- production commit `a73b9ce8e95f464c67ebf733fa8703f801e744cc` reached `main`;
-- downstream visual refresh run `34645306958` completed `success`;
-- refreshed ordinary Steam dataset propagated into the normal downstream feed path.
+- production and downstream visual refresh succeeded.
 
-`ЧАТ 1` is now free and may be deleted/reused.
-
-The 12 problem entries are intentionally left for separate review; do not auto-investigate them without authorization.
+`ЧАТ 1` is free and may be deleted/reused.
 
 ## NEEDS REPORT/FINISH — read-only architecture review
 Task:
@@ -55,19 +47,42 @@ Worker slot:
 Mode:
 `READ_ONLY_REVIEW`
 
-Current Director observation:
-- required report `reviews/worker_reports/code-architect-system-review-01.md` is not yet present on `main`.
+Expected report:
+`reviews/worker_reports/code-architect-system-review-01.md`
 
-Remaining requirement:
-- finish the already-authorized read-only review;
-- write the durable report;
-- do not mutate production code/data/workflows/main beyond adding the review report through the normal worker-report durability mechanism;
-- include the accepted Steam partial-publish structure and current post-integration production structure;
-- if `main` changed during the review, perform only the bounded final architecture check required by the task rather than restarting from zero.
+## QUEUED LATER — reduce Steam catalog before local filtering
+Task:
+`WORKER_TASK_STEAM_SERVER_SIDE_PREFILTER_OPTIMIZATION_01.md`
 
-Expected final status:
-- `review_complete_recommendations_ready`
-- `review_complete_no_material_architecture_change_needed`
+Task ID:
+`steam-server-side-prefilter-optimization-01`
+
+Status:
+`queued_later_do_not_start_now`
+
+Mode when authorized:
+`MEASURE_FIRST_THEN_PROPOSE`
+
+Goal:
+- investigate whether safe Steam-side/coarse prefilters can reduce the ~17,299-item input substantially before expensive local/review processing;
+- do not target exactly 600 items; target the smallest safe candidate set that preserves canonical shortlist recall;
+- use the successful run `34643249267` and its 676-item shortlist as a control baseline;
+- measure candidate strategies instead of guessing;
+- reject filters that can lose currently eligible games;
+- separately measure whether the ~14k review-enrichment candidate gate can be reduced using earlier checks or durable known metadata;
+- prefer bounded/offline comparisons and limited Steam queries rather than repeated full production crawls.
+
+Important:
+- measurement/recommendation first;
+- no production implementation until separate user/Director authorization after measurements;
+- do not change canonical price/discount/tag/review selection rules just to improve speed.
+
+Expected measurement report:
+`reviews/worker_reports/steam-server-side-prefilter-optimization-01.md`
+
+Expected measurement status:
+- `measurement_complete_safe_optimization_found`
+- `measurement_complete_no_safe_material_reduction_found`
 - or `blocked_requires_followup`
 
 ## ACCEPTED — Steam partial publish + failure isolation implementation
@@ -76,9 +91,6 @@ Task:
 
 Task ID:
 `steam-partial-publish-failure-queue-01`
-
-Accepted worker branch:
-`worker/steam-partial-publish-failure-queue-01`
 
 Accepted worker head:
 `5556ce5c763d886a42b3c89ba69df711ba745adb`
@@ -106,9 +118,6 @@ Goal when later authorized:
 - notify only when the unresolved problem set is new or changed;
 - do not repeat the same unchanged alert every hour;
 - do not automatically repair or investigate failures.
-
-Dependency:
-- durable production refresh report now exists.
 
 ## QUEUED LATER — decouple giveaways from Steam commercial crawl
 Task:
