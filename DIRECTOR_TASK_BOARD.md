@@ -34,21 +34,36 @@ Verified real production result:
 
 `ЧАТ 1` is free and may be deleted/reused.
 
-## NEEDS REPORT/FINISH — read-only architecture review
+## ACCEPTED — read-only architecture review
 Task:
 `WORKER_TASK_CODE_ARCHITECT_SYSTEM_REVIEW_01.md`
 
 Task ID:
 `code-architect-system-review-01`
 
-Worker slot:
-`ЧАТ 2`
-
-Mode:
-`READ_ONLY_REVIEW`
-
-Expected report:
+Report:
 `reviews/worker_reports/code-architect-system-review-01.md`
+
+Final status:
+`review_complete_recommendations_ready`
+
+Accepted conclusions:
+- no blocking structural issue was found;
+- current Steam partial-publish path is operationally sound and should remain the canonical production entry point;
+- highest-value Steam cleanup later is to replace the source-text/`exec` loading boundary with a normal importable Steam core, while keeping `steam_partial_publish.py` separate;
+- pair that refactor with direct deterministic tests of the real runner boundary;
+- document canonical entry points/legacy paths before larger cleanup because this has high benefit and low cost;
+- keep large cohesive coordinators such as `build_final_visual_payload.py` and `director_orchestration_controller.py` intact for now, improving navigation with section anchors instead of splitting by size;
+- extract deterministic policy logic from large workflow heredocs later rather than replacing GitHub Actions orchestration wholesale;
+- audit/retire or clearly label legacy Steam/visual execution paths after consumer confirmation;
+- do not mass-reorganize the `scripts/` tree;
+- all structural refactors are non-blocking and may wait while operational speed is the priority.
+
+Evidence notes:
+- architecture report reviewed the accepted Steam head and post-integration `main` state;
+- report commit `9f4e5891ec5ae44e06eb860881e780eed62d4129` added only the architecture report and did not modify production code/workflows/data.
+
+`ЧАТ 2` is now free and may be deleted/reused.
 
 ## QUEUED LATER — reduce Steam catalog before local filtering
 Task:
