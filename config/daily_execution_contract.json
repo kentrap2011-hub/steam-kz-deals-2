@@ -13,7 +13,19 @@
     "github_owns_control_plane": true,
     "interactive_chat_is_production_executor": false,
     "user_correction_requires_architecture_recheck_before_implementation": true,
-    "rule": "The nightly production is one daily production cycle. GitHub owns the control plane, scope, queue/manifests, retry/completeness logic, deterministic processing and downstream orchestration. Scheduled ChatGPT performs only the explicit external/semantic data-plane work assigned by canonical contracts. Interactive user chats are for development/diagnosis and must not become manual production backlog processors. Do not convert checkpoint sizes, legacy task limits, temporary handoff notes or user corrections into architectural changes without canonical contract reconciliation."
+    "rule": "The nightly production is one daily production cycle. GitHub owns the control plane, scope, queue/manifests, retry/completeness logic, deterministic processing and downstream orchestration. Scheduled ChatGPT performs only the explicit external/semantic data-plane work assigned by canonical contracts. Interactive user chats are not normal production executors. A separately authorized one-off Taste throughput benchmark may exercise exact GitHub-pinned work through canonical persistence for capacity measurement only; it does not become a recurring production stage, quota, scheduler or final production limit."
+  },
+  "one_off_taste_throughput_measurement": {
+    "authorization_contract": "config/execution_ownership_contract.json#interactive_chat.one_off_taste_throughput_benchmark",
+    "purpose": "Measure factual semantic throughput of one uninterrupted interactive ChatGPT worker run without changing normal production ownership or choosing a production limit.",
+    "checkpoint_size": 10,
+    "checkpoint_size_is_daily_or_production_quota": false,
+    "use_current_canonical_queue_order_without_reordering": true,
+    "require_durable_canonical_acceptance_before_counting_checkpoint": true,
+    "allow_successive_checkpoints_in_same_authorized_run": true,
+    "scheduled_task_must_remain_unchanged": true,
+    "age_priority_is_out_of_scope": true,
+    "rule": "This measurement is outside the normal nightly execution schedule. It may advance canonical Taste state only through exact GitHub-pinned work-units and the existing validated inbox/ingest path. Its measured maximum is evidence for a later user decision and must not be installed automatically as the Scheduled Task production limit."
   },
   "commercial_refresh": {
     "maximum_frequency": "once_per_day",
