@@ -1,6 +1,6 @@
 # CURRENT TASK
 
-Последнее обновление: 2026-09-12
+Последнее обновление: 2026-09-13
 
 ## Завершено
 
@@ -212,3 +212,12 @@
 - current active pin and `scripts/taste_pinned_work_unit.py` remained unchanged;
 - existing Taste Semantic Producer unchanged; no Scheduled Task created; old throughput measurement not continued;
 - report: `reviews/worker_reports/taste-steam-review-dossier-preparer-01.md`.
+
+### Full Steam review dossier backlog continue 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_FULL_BACKLOG_CONTINUE_01.md`;
+- branch: `worker/taste-dossier-full-backlog-01`;
+- START gate и architecture preflight выполнены; GitHub остаётся владельцем full backlog scope, checkpoint progression, durable persistence и completeness;
+- подтверждены все 6 handoff-коммитов; активный Taste pin остаётся downstream-only и не используется как total dossier scope;
+- реальный production dossier backlog и Scheduled Tasks в этой работе не запускаются и не изменяются;
+- next gate: закрыть Phase A item 7 в `PROJECT_DECISIONS.md`, затем исправить checkpoint progression/eligibility и пройти regression matrix до безопасной интеграции в `main`.
