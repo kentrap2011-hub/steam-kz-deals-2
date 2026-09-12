@@ -2,7 +2,7 @@
   "schema_version": 1,
   "purpose": "incremental_per_entry_taste_verdict_overlay",
   "entry_schema_version": 5,
-  "entry_count": 821,
+  "entry_count": 822,
   "entries": {
     "App_241930": {
       "key": "App_241930",
@@ -21753,6 +21753,38 @@
         "structure_pacing_direction": 78,
         "identity_hooks": 90,
         "breadth_of_match": 82
+      }
+    },
+    "App_1066780": {
+      "key": "App_1066780",
+      "appid": "1066780",
+      "profile_blob_sha": "5b8fb3c2571c1be5769b2bd1ce5fb70c90636d0e",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_sha256": "ceeffa2a2e08417e7c9cd43eab09360b820c826db48bd8d96318fa2e405d910f",
+      "taste_fingerprint": "56b03f1e1660e38f7013796f2831e731953d67d7bc84b89ad72d1df181b75a82",
+      "verdict": "EXCLUDE",
+      "fit_level": "below_moderate",
+      "reason_code": "exclude_insufficient",
+      "positive_evidence": [],
+      "negative_analysis_status": "incomplete_no_confirmed_negative",
+      "negative_findings": [],
+      "negative_evidence": [],
+      "evidence_contract_sha": "0ab967dbfbc781a3722da584c71700982f7bbb71",
+      "fit_evidence_state": "insufficient",
+      "fit_evidence_confidence": "low",
+      "fit_evidence_basis": [
+        "candidate_information_insufficient"
+      ],
+      "historical_negative_context": null,
+      "candidate_quality_findings": [],
+      "evaluated_at_utc": "2026-09-12T11:51:41+00:00",
+      "taste_factors": {
+        "gameplay_mastery": 45,
+        "development_variety": 55,
+        "structure_pacing_direction": 52,
+        "identity_hooks": 35,
+        "breadth_of_match": 30
       }
     }
   }

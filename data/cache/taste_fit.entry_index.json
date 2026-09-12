@@ -16,16 +16,16 @@
   },
   "source_overlay": {
     "path": "data/cache/taste_fit.entry_overlay.json",
-    "blob_sha": "0883fd1ddf59ef97d7ddac057b08f42deb001ba7",
-    "size_bytes": 1033364,
+    "blob_sha": "bcc2c9078990dd98cc101ba3f1104d00b86ac4a0",
+    "size_bytes": 1034711,
     "schema_version": 1,
     "entry_schema_version": 5,
-    "entry_count_declared": 821,
-    "entry_count_actual": 821,
+    "entry_count_declared": 822,
+    "entry_count_actual": 822,
     "entry_count_matches_len_entries": true,
     "required_entry_fields_complete": true,
     "replace_existing_key_count": 137,
-    "new_key_count": 684
+    "new_key_count": 685
   },
   "merge_policy": "overlay_exact_key_wins",
   "entry_fields": [
@@ -39,22 +39,22 @@
     "fit_level",
     "reason_code"
   ],
-  "index_entry_count": 834,
-  "candidate_context_bound_count": 825,
+  "index_entry_count": 835,
+  "candidate_context_bound_count": 826,
   "candidate_context_unbound_count": 9,
-  "taste_factors_present_count": 806,
+  "taste_factors_present_count": 807,
   "taste_factors_missing_count": 28,
-  "taste_factors_coverage": 0.9664,
+  "taste_factors_coverage": 0.9665,
   "negative_readiness_fields": [
     "negative_analysis_status",
     "confirmed_negative_count",
     "negative_analysis_ready"
   ],
   "negative_analysis_ready_count": 2,
-  "negative_analysis_unresolved_count": 832,
+  "negative_analysis_unresolved_count": 833,
   "negative_analysis_status_counts": {
     "complete_with_confirmed_negative": 2,
-    "incomplete_no_confirmed_negative": 18,
+    "incomplete_no_confirmed_negative": 19,
     "legacy_missing": 814
   },
   "negative_readiness": {
@@ -4227,20 +4227,25 @@
       "incomplete_no_confirmed_negative",
       0,
       false
+    ],
+    "App_1066780": [
+      "incomplete_no_confirmed_negative",
+      0,
+      false
     ]
   },
-  "entries_digest_sha256": "ef8ae621b1a1871e9c3e398575b674f65f9f85b95c10951775d0a84ae180a3ed",
+  "entries_digest_sha256": "3643b08ad88d7c54a4eb5ed72b62bb21fe94619cb6b1f2740ce103dbc9a18946",
   "profile_binding_counts": {
-    "5b8fb3c2571c1be5769b2bd1ce5fb70c90636d0e": 19,
+    "5b8fb3c2571c1be5769b2bd1ce5fb70c90636d0e": 20,
     "a9d0c40bb57c6b9183a7aa0d1e096837892ca7cc": 1,
     "c478cda9bb7a9b024a30ca188dce4b98a2de24ea": 814
   },
   "taste_model_counts": {
     "taste-v2": 28,
-    "taste-v3": 806
+    "taste-v3": 807
   },
   "taste_semantics_counts": {
-    "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828": 806,
+    "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828": 807,
     "28177637756ffc4cf51ea8cb7a37b6e3d1173dd11f852deb56966d29261ec13b": 28
   },
   "source_updated_at_utc": "2026-08-29T04:22:11.847802+00:00",
@@ -13418,6 +13423,17 @@
       "INCLUDE",
       "moderate",
       "include_moderate"
+    ],
+    "App_1066780": [
+      "1066780",
+      "5b8fb3c2571c1be5769b2bd1ce5fb70c90636d0e",
+      "taste-v3",
+      "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "ceeffa2a2e08417e7c9cd43eab09360b820c826db48bd8d96318fa2e405d910f",
+      "56b03f1e1660e38f7013796f2831e731953d67d7bc84b89ad72d1df181b75a82",
+      "EXCLUDE",
+      "below_moderate",
+      "exclude_insufficient"
     ]
   }
 }

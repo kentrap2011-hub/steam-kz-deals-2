@@ -72,20 +72,20 @@
     "taste_queue_jsonl": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
     "purchase_context_jsonl": "data/production/pre_ai/chatgpt_purchase_context.jsonl",
     "line_alignment": "taste_queue line N == purchase_context line N for 1..ai_queue_count",
-    "ready_context_start_line": 610
+    "ready_context_start_line": 609
   },
   "source_family_count": 649,
   "candidate_description_known_count": 649,
   "candidate_description_missing_count": 0,
   "candidate_description_coverage": 1.0,
-  "ai_queue_count": 609,
+  "ai_queue_count": 608,
   "ready_without_ai_count": 1,
-  "purchase_context_line_count": 610,
-  "deterministically_excluded_without_ai_count": 39,
+  "purchase_context_line_count": 609,
+  "deterministically_excluded_without_ai_count": 40,
   "deterministic_exclusion_counts": {
     "deal_excludes_even_if_strong": 30,
     "deal_excludes_for_valid_cached_fit": 2,
-    "valid_cached_taste_insufficient": 7
+    "valid_cached_taste_insufficient": 8
   },
   "commercial_eligibility_bridge_counts": {},
   "fixed_package_bridge_evidence": {
@@ -100,7 +100,7 @@
   "negative_analysis": {
     "work_code": "resolve_grounded_negative_analysis",
     "negative_backfill_queue_count": 9,
-    "negative_full_evaluation_queue_count": 600,
+    "negative_full_evaluation_queue_count": 599,
     "negative_ready_without_ai_count": 1,
     "evidence_backfill_queue_count": 0,
     "normal_ready_requires_confirmed_negative": true
@@ -108,7 +108,7 @@
   "sale_end_coverage": 1.0,
   "sale_end_missing_count": 0,
   "sale_end_missing_primary_keys": [],
-  "source_pre_ai_artifact_bytes": 2494151,
+  "source_pre_ai_artifact_bytes": 2494662,
   "deterministically_excluded_primary_keys": [
     "App_2336880",
     "Sub_44162",
@@ -121,6 +121,7 @@
     "App_1058020",
     "App_1058450",
     "App_1063420",
+    "App_1066780",
     "App_1151380",
     "App_1159690",
     "App_1182900",
@@ -150,17 +151,17 @@
     "App_787480",
     "App_802880"
   ],
-  "elapsed_seconds": 0.157,
+  "elapsed_seconds": 0.101,
   "semantic_completeness": {
     "status": "degraded",
     "scope_partition_complete": true,
     "sufficiently_complete_for_publication": false,
-    "unresolved_semantic_count": 609,
+    "unresolved_semantic_count": 608,
     "resolved_semantic_count": 1,
-    "total_relevant_semantic_scope": 610,
+    "total_relevant_semantic_scope": 609,
     "source_family_count": 649,
     "unresolved_scope_source_mailing_updated_at_utc": "2026-09-11T22:45:29.586278+00:00",
-    "unresolved_scope_age_seconds": 47072,
+    "unresolved_scope_age_seconds": 47173,
     "unresolved_age_basis": "source_mailing_updated_at_utc"
   },
   "semantic_runtime_observability": {
@@ -171,14 +172,14 @@
     "scheduler_platform_enabled_state": "not_exposed_to_repository",
     "expected_cadence_or_next_run_state": "not_exposed_to_repository",
     "latest_runtime_status_path": "data/cache/taste_ingest_receipts/latest_runtime_status.json",
-    "last_successful_semantic_execution_at_utc": "2026-09-12T11:48:05+00:00",
-    "last_accepted_semantic_progress_at_utc": "2026-09-12T11:48:05+00:00",
+    "last_successful_semantic_execution_at_utc": "2026-09-12T11:50:03+00:00",
+    "last_accepted_semantic_progress_at_utc": "2026-09-12T11:50:03+00:00",
     "last_accepted_source_mailing_updated_at_utc": "2026-09-11T22:45:29.586278+00:00",
     "current_scope_source_mailing_updated_at_utc": "2026-09-11T22:45:29.586278+00:00",
     "current_scope_progress_observed": true,
-    "last_queue_before_count": 613,
-    "last_queue_after_count": 610,
-    "last_queue_delta_count": 3,
+    "last_queue_before_count": 610,
+    "last_queue_after_count": 609,
+    "last_queue_delta_count": 1,
     "queue_presence_is_not_heartbeat": true
   }
 }
