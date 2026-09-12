@@ -1,7 +1,18 @@
 # ЧАТ — TASTE QUEUE AGE PRIORITY ORDERING
 
 Task ID: `taste-queue-age-priority-order-01`
-Mode: `IMPLEMENT`, but only after the currently in-flight existing-10 ingest reaches a terminal verified state.
+Status: `deferred_separate_do_not_block_throughput_measurement`
+Mode: `IMPLEMENT_LATER_ONLY_AFTER_SEPARATE_AUTHORIZATION`
+
+## Separation from current throughput measurement
+
+This is a separate later task.
+
+It is NOT part of `WORKER_TASK_TASTE_NORMAL_SEMANTIC_PRODUCER_01.md` and must not block, alter, or be invoked by the current normal Taste throughput measurement.
+
+During the current throughput measurement, keep the existing canonical queue/order unchanged.
+
+Start this task only after separate Director/user authorization.
 
 ## Goal
 
@@ -10,7 +21,7 @@ Make future Taste work processing order follow the user's required priority:
 1. games/items that have **never had a canonically accepted successful Taste semantic result**;
 2. then previously checked games/items from **oldest successful canonical Taste evaluation to newest**.
 
-The currently pinned/in-flight exact work-unit must never be reordered mid-flight. Apply the rule when constructing the next canonical queue/work-unit.
+The currently pinned/in-flight exact work-unit must never be reordered mid-flight. Apply the rule when constructing a later new canonical queue/work-unit after this task is separately authorized.
 
 ## Exact semantics of "checked"
 
@@ -57,7 +68,7 @@ If there is no reliable canonical successful-evaluation timestamp, STOP implemen
 - no manual queue/cache mutation;
 - no result regeneration as part of this task;
 - no Scheduled Task cadence/prompt change here;
-- no next semantic batch execution here.
+- no semantic throughput measurement here.
 
 ## Validation
 
