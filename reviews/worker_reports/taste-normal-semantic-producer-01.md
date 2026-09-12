@@ -8,124 +8,101 @@ Mode: `IMPLEMENT_AND_MEASURE_THROUGHPUT`
 
 `in_progress_throughput_measurement`
 
-The earlier `blocked_requires_followup` conclusion based on the deferred age-priority task/current-active-10 gate is superseded by the corrected worker task. `WORKER_TASK_TASTE_QUEUE_AGE_PRIORITY_ORDER_01.md` is not being executed in this run.
+The earlier age-priority-based `blocked_requires_followup` is superseded by the corrected worker task. `WORKER_TASK_TASTE_QUEUE_AGE_PRIORITY_ORDER_01.md` is not being executed in this run.
 
 ## Corrected architecture preflight
 
-The corrected task explicitly authorizes a one-off interactive throughput benchmark, while the previous canonical ownership contract allowed only bounded verification in an interactive chat. Before changing Taste runtime state, that conflict was reconciled canonically:
+The corrected task explicitly authorizes this one-off interactive throughput benchmark. Canonical ownership was reconciled before Taste writes:
 
-- `config/execution_ownership_contract.json` — commit `cc680694cbc2357eef53726b61febdafbc71e015`;
-- `config/daily_execution_contract.json` — commit `fb34396e2b0acd9750b107d373b1a1cc40b0d080`.
+- `config/execution_ownership_contract.json` — `cc680694cbc2357eef53726b61febdafbc71e015`;
+- `config/daily_execution_contract.json` — `fb34396e2b0acd9750b107d373b1a1cc40b0d080`.
 
-The exception is intentionally narrow:
-- GitHub remains control-plane owner for scope, existing queue order, pin authority, retry/completeness and canonical persistence;
-- the interactive chat may execute only exact Git-durable pinned Taste work-units for this explicitly authorized one-off measurement;
-- each completed checkpoint must be accepted through the existing repository inbox/ingest path before it is counted;
-- checkpoint size `10` is measurement-only and is not a production quota or future Scheduled Task limit;
-- no second producer/scheduler may be created;
-- Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` must not be changed;
-- age-priority ordering remains out of scope.
+Invariant: GitHub still owns scope, existing queue order, pin authority, retry/completeness and canonical persistence. This chat may evaluate only exact Git-durable pinned work-units and must persist every counted checkpoint through the canonical inbox/ingest path. Checkpoint size `10` is measurement-only, not a production quota/limit. Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` is unchanged and no second producer exists.
 
 ## Normal mechanism implemented/used
 
-The existing pinned-work-unit architecture remains the normal mechanism:
+Canonical path remains:
 
-1. GitHub-prepared queue: `data/production/pre_ai/chatgpt_taste_queue.jsonl`.
-2. Durable active pin: `data/production/pre_ai/taste_active_work_unit.json` (`TASTE-PINNED-WORK-UNIT-V1`).
-3. Exact semantic/profile binding: `config/taste_result_contract.json` + pin `profile_identity`/`bindings`.
-4. Result handoff: new JSON under `data/ai_inbox/taste/`.
-5. Push to that path triggers `.github/workflows/ingest-taste-batch.yml`.
-6. Workflow runs producer-fence, V3 contract and transactional-proof validators, then `scripts/process_taste_inbox.py` / `scripts/ingest_taste_results.py`.
-7. Accepted results enter canonical Taste state and receipts under `data/cache/taste_ingest_receipts/`; the active pin lifecycle advances to the next GitHub-prepared unit.
+1. `data/production/pre_ai/chatgpt_taste_queue.jsonl`;
+2. durable `data/production/pre_ai/taste_active_work_unit.json`;
+3. exact pin/profile binding under `TASTE-SEMANTIC-RESULT-V5`;
+4. result JSON under `data/ai_inbox/taste/`;
+5. `.github/workflows/ingest-taste-batch.yml`;
+6. producer-fence, V5 and transactional regressions;
+7. `scripts/process_taste_inbox.py` / `scripts/ingest_taste_results.py`;
+8. canonical receipt/state update and next durable pin.
 
-Two Phase-A defects exposed by the real exercise were fixed without creating a parallel producer:
+Phase-A fixes made while exercising this path:
 
-### A. Non-Taste rows in the shared AI queue
+- `scripts/normalize_next_taste_semantic_pin.py` — `14db7b32d54bcb71ebc48175d209b16313ee79bf`: filters shared-AI-queue rows not owned by Taste semantic worker while preserving semantic-row relative order; refuses to rewrite a durable pin.
+- `scripts/validate_taste_normal_semantic_producer.py` — `f10b6d95187eeee795e376e48cdacb49db76a68b`: deterministic filtering/first-10/retry regression.
+- `.github/workflows/ingest-taste-batch.yml` — `f2e05761c6e949dd8c9506cb3d138b44bf4e8c63`: runs focused regression and normalizes only the newly generated next pin before its durable commit.
+- `scripts/process_taste_inbox.py` — `cee58d0c47258fa18f581558c61e1cad3c2cf02c`: allows an exact pre-semantic pinned result to be accepted historically when newer live state removed that key, while forbidding current cache promotion or queue resurrection.
+- `scripts/validate_taste_inbox_transactional_proof.py` — `151de78119d78ec4d3cd45bf9c018b938faaeddf`: regression for that live-queue-removal case.
 
-The shared queue can retain `resolve_base_support_condition`-only rows after Taste ingest. Such rows are not valid Taste-semantic work but the previous next-pin builder could include them because it sliced the shared queue blindly.
+No age-priority ordering or commercial sorting was added.
 
-Fix:
-- `scripts/normalize_next_taste_semantic_pin.py` — commit `14db7b32d54bcb71ebc48175d209b16313ee79bf`;
-- `scripts/validate_taste_normal_semantic_producer.py` — commit `f10b6d95187eeee795e376e48cdacb49db76a68b`;
-- `.github/workflows/ingest-taste-batch.yml` — commit `f2e05761c6e949dd8c9506cb3d138b44bf4e8c63`.
+## Verification
 
-The guard preserves canonical queue order among rows owned by the Taste semantic worker, excludes only rows without `resolve_grounded_negative_analysis`, and may normalize only a newly generated uncommitted next pin. It explicitly refuses to rewrite an already-durable active pin.
-
-### B. Pinned result whose key disappeared from newer live queue
-
-Checkpoint 001 initially failed closed because the live profile/source advanced while the pinned unit was in flight. `App_1016800` was still a valid exact pinned result, but after rebuild it was no longer present in the synchronized current live queue. `process_taste_inbox.py` had an obsolete unconditional membership guard even though the rest of the architecture already distinguishes pinned validity from current reuse.
-
-Fix:
-- `scripts/process_taste_inbox.py` — commit `cee58d0c47258fa18f581558c61e1cad3c2cf02c`;
-- `scripts/validate_taste_inbox_transactional_proof.py` — commit `151de78119d78ec4d3cd45bf9c018b938faaeddf`.
-
-The corrected rule is:
-- exact pre-semantic pinned result may be historically accepted even if newer live state removed its key;
-- such a result gets `current_reusable=false`;
-- it must not become a current cache hit;
-- it must not resurrect the removed key into the live queue;
-- live queue counts change only for inbox keys that actually existed in the live baseline.
-
-## Phase A deterministic verification
-
-Verified before and during the first real checkpoint:
-
-- active producer fence: `chatgpt_scheduled_task:6aa032f37e688191a5c9a1a83f91c5d9`, generation `2`;
-- pinned profile/queue identity is durable and results bind exact `ordered_work_unit_sha256` + pin authority commit;
-- current live queue can move independently from an in-flight pin without redefining that pin;
-- normal semantic-row selection preserves deterministic canonical relative order;
-- focused normal-producer filtering regression passes;
-- producer-fence regression passes;
-- V5 normalized-factor contract regression passes;
-- transactional-proof regression, including `pinned_key_removed_from_live_queue_case`, passes;
-- retry of the same checkpoint does not choose different games or create a second pin;
-- canonical ingest is fail-closed: the first attempt failed before persistence and counted zero;
-- successful retry atomically accepted the exact same 10 results, retired the exact active pin, wrote a receipt and prepared the next pin;
-- mechanism is generic and not hardcoded to Chernobylite.
-
-No permanent `10`-game ceiling is being added to the future normal Scheduled Task. The existing 10-row pin is the durable measurement checkpoint unit only; final production capacity remains a later user decision.
+Repeated workflow checks prove:
+- producer fence/generation exact;
+- ordered pin identity/hash/profile binding exact;
+- V5 normalized factors and price-blind evidence contract valid;
+- duplicate/resurrection/current-reuse transactional checks pass;
+- same failed checkpoint is retryable without selecting different games;
+- accepted checkpoint retires exactly its pin and creates the next durable semantic pin;
+- mechanism is generic, not Chernobylite-hardcoded.
 
 ## Throughput checkpoint log
 
-| Checkpoint | Work-unit SHA | Receipt / canonical proof | Accepted | Cumulative confirmed | State |
+| Checkpoint | Work-unit SHA | Receipt | Accepted | Cumulative confirmed | State |
 |---|---|---|---:|---:|---|
-| 1 | `31c86e796e2d433aeb27e727226dc8245ec542650263ff631bc7ae64881c3d20` | `data/cache/taste_ingest_receipts/cff63983dbb4caba6852.json` | 10/10 | **10** | complete |
+| 1 | `31c86e796e2d433aeb27e727226dc8245ec542650263ff631bc7ae64881c3d20` | `cff63983dbb4caba6852` | 10/10 | **10** | complete |
+| 2 | `5d0d4b4f043018bcc8b2686d5f835d888a262f03ec86aaee89213d33ca51d8c0` | `7b6be6476172a4505994` | 10/10 | **20** | complete |
 
-Checkpoint 001 input file was `throughput-measurement-2026-09-12-checkpoint-001.json` and was removed by canonical ingest after acceptance.
+### Checkpoint 001
 
-Receipt facts:
-- `result_count = 10`;
-- `full_evaluation_result_count = 10`;
-- `transactional checks = all true`;
-- retired pin = `31c86e796e2d433aeb27e727226dc8245ec542650263ff631bc7ae64881c3d20`;
-- next pin before workflow normalization =/ultimately normalized to durable active semantic pin `5d0d4b4f043018bcc8b2686d5f835d888a262f03ec86aaee89213d33ca51d8c0`;
-- next profile blob = `5b8fb3c2571c1be5769b2bd1ce5fb70c90636d0e`;
-- `current_reusable_result_count = 0` because the live profile advanced while checkpoint 001 was in flight;
-- `newer_live_pending_result_count = 10`;
-- no old result was promoted into the newer live cache incorrectly.
+- input: `throughput-measurement-2026-09-12-checkpoint-001.json`;
+- first ingest job `103547484979` failed closed after all pre-ingest regressions passed because newer live state had removed pinned `App_1016800`;
+- no progress was counted on that failure;
+- root cause fixed with regression coverage;
+- same exact checkpoint retried as job `103547957529` and completed successfully;
+- receipt `cff63983dbb4caba6852`: 10 full evaluations, all checks true, `current_reusable_result_count=0`, `newer_live_pending_result_count=10`; old pin retired without incorrectly promoting stale results into the newer live cache.
+
+### Checkpoint 002
+
+- input: `throughput-measurement-2026-09-12-checkpoint-002.json`;
+- pin: `5d0d4b4f043018bcc8b2686d5f835d888a262f03ec86aaee89213d33ca51d8c0`;
+- pin authority: `46ad22acfde006ccda3e77212558c8a3032d24a2`;
+- profile blob: `5b8fb3c2571c1be5769b2bd1ce5fb70c90636d0e`;
+- workflow run `34691833665`, job `103548334915`: all validation, ingest, next-pin normalization and commit/push steps succeeded;
+- receipt `7b6be6476172a4505994`: `result_count=10`, `full_evaluation_result_count=10`, `current_reusable_result_count=10`, `newer_live_pending_result_count=0`;
+- safe current cache hits `0 -> 10`;
+- current AI-required `649 -> 639`;
+- queue `619 -> 613` because four accepted INCLUDE rows legitimately retain grounded-negative/base-support follow-up work;
+- every receipt transactional check is true;
+- retired pin = `5d0d4b4f...`;
+- next pin = `19b27b85765f2d606d763ac847df6afe3a6ce1dce972b1c1f061374b99668123` on the same current profile.
 
 ## Cumulative confirmed throughput
 
-**10 real game evaluations durably accepted** so far in the corrected uninterrupted measurement run.
+**20 real game evaluations durably accepted** in this uninterrupted corrected measurement run.
 
-This is a lower bound only. Measurement continues immediately with the next durable pin; `10` is not the measured limit.
+This remains only a demonstrated lower bound. Measurement continues immediately with the next durable pin; `20` is not the measured limit and must not be installed as a production limit.
 
-## Retries / errors / blockers observed
+## Errors/retries observed
 
-1. Local container clone failed once because the container could not resolve `github.com`; repository work continued through the connected GitHub interface.
-2. Checkpoint 001 attempt 1: canonical ingest job `103547484979` failed closed after all pre-ingest regressions passed. Root cause: obsolete current-live queue membership requirement rejected valid pinned `App_1016800` after live queue drift. No canonical semantic progress was recorded; cumulative count remained 0.
-3. The guard was fixed with regression coverage, then the same workflow job was retried without changing the checkpoint games/results. Retry job `103547957529` completed successfully through validation, ingest, next-pin normalization and commit/push. Cumulative count advanced to 10 only after this durable success.
+- One local clone attempt failed DNS; GitHub connector remained fully usable.
+- Checkpoint 001 first ingest attempt exposed and safely failed on the stale-live membership defect; after canonical fix, retry of the same exact work-unit succeeded.
+- Checkpoint 002 completed without retry.
 
-No canonical blocker is active after checkpoint 001.
+No active canonical blocker after checkpoint 002.
 
 ## Explicit non-changes
 
-- `WORKER_TASK_TASTE_QUEUE_AGE_PRIORITY_ORDER_01.md`: **not executed**.
-- Age-priority sorting: **not implemented**.
-- Existing canonical relative queue order: **not reordered**.
+- Age-priority task: **not executed**.
+- Existing semantic queue relative order: **not reordered**.
 - Second producer/scheduler: **not created**.
 - Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9`: **not changed**.
 - Scheduled Task cadence/prompt/limit: **not changed**.
 - Final production limit: **not selected**.
-
-The measured maximum from this run is factual throughput evidence only and must not automatically become the production limit.
