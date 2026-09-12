@@ -38,8 +38,10 @@ def main():
         "source_row_count": manifest["source_row_count"],
         "unique_appid_count": manifest["unique_appid_count"],
         "deduplicated_row_count": manifest["deduplicated_row_count"],
-        "required_count": len(manifest["required_items"]),
-        "fresh_reuse_count": len(manifest["items"]) - len(manifest["required_items"]),
+        "required_total_count": manifest["required_total_count"],
+        "checkpoint_count": len(manifest["required_items"]),
+        "remaining_after_checkpoint_count": manifest["checkpoint"]["remaining_after_checkpoint_count"],
+        "fresh_reuse_count": len(manifest["items"]) - manifest["required_total_count"],
         "output": args.output,
     }, ensure_ascii=False))
 
