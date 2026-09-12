@@ -8,39 +8,39 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed. Architecture review may run in parallel only when read-only and non-blocking.
 
-## NEEDS REPORT ONLY — real Steam partial-publish production refresh
+## ACCEPTED — real Steam partial-publish production refresh
 Task:
 `WORKER_TASK_STEAM_PARTIAL_PUBLISH_PRODUCTION_REFRESH_01.md`
 
 Task ID:
 `steam-partial-publish-production-refresh-01`
 
-Worker slot:
-`ЧАТ 1`
+Report:
+`reviews/worker_reports/steam-partial-publish-production-refresh-01.md`
+
+Final status:
+`complete_with_problem_entries_for_separate_review`
 
 Verified real production result:
-- integration reached `main`;
+- integration reached `main` through PR #15; merge commit `c9980e79d002e84a321d2cff089645f81d91c6b7`;
 - production workflow run `34643249267` completed `success`;
 - partial-publish regression passed;
 - Steam partial-publish collector step passed;
 - production publish step passed;
-- visual refresh dispatch step passed;
 - source coverage was complete with 17,299 observed / 17,299 reported;
 - 17,287 items processed successfully;
+- shortlist contained 676 games;
 - 12 unresolved game-level problems, all at `review_enrichment` with root error `Steam Reviews API did not return both required summaries`;
 - 0 unresolved catalog segments;
 - 0 system-state problems;
 - 0 last-known-good preserved entries in that run;
-- shortlist contained 676 games;
-- production commit and downstream visual-refresh commits reached `main`.
+- production commit `a73b9ce8e95f464c67ebf733fa8703f801e744cc` reached `main`;
+- downstream visual refresh run `34645306958` completed `success`;
+- refreshed ordinary Steam dataset propagated into the normal downstream feed path.
 
-Remaining requirement:
-- create durable report `reviews/worker_reports/steam-partial-publish-production-refresh-01.md` from already verified evidence;
-- do NOT rerun the real Steam refresh just to create the report;
-- do NOT investigate the 12 games in this report-only follow-up.
+`ЧАТ 1` is now free and may be deleted/reused.
 
-Expected final status:
-`complete_with_problem_entries_for_separate_review`
+The 12 problem entries are intentionally left for separate review; do not auto-investigate them without authorization.
 
 ## NEEDS REPORT/FINISH — read-only architecture review
 Task:
@@ -108,7 +108,7 @@ Goal when later authorized:
 - do not automatically repair or investigate failures.
 
 Dependency:
-- durable production refresh report must exist first.
+- durable production refresh report now exists.
 
 ## QUEUED LATER — decouple giveaways from Steam commercial crawl
 Task:
