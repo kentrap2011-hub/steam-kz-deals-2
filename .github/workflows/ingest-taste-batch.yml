@@ -40,10 +40,16 @@ jobs:
       - name: Validate taste inbox transactional proof regression
         run: python scripts/validate_taste_inbox_transactional_proof.py
 
+      - name: Validate normal Taste semantic producer filtering
+        run: python scripts/validate_taste_normal_semantic_producer.py
+
       - name: Validate, ingest and rebuild taste consumers atomically
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python scripts/process_taste_inbox.py
+
+      - name: Normalize newly prepared next Taste semantic work-unit
+        run: python scripts/normalize_next_taste_semantic_pin.py
 
       - name: Commit processed taste batch and synchronized consumer state
         run: |
