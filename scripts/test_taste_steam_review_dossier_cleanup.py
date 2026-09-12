@@ -20,7 +20,7 @@ class SteamReviewDossierCleanupTests(unittest.TestCase):
             self.assertFalse(path.exists())
             self.assertEqual([x["appid"] for x in result["deleted_stale_out_of_scope"]], ["6800"])
 
-    def test_02_stale_in_full_scope_is_preserved_and_remains_required_even_beyond_current_checkpoint(self):
+    def test_02_stale_in_full_scope_is_preserved_and_refresh_required_even_beyond_current_checkpoint(self):
         queue = _queue(tuple(range(100000, 100121)))
         target = "100115"
         with tempfile.TemporaryDirectory() as td:
@@ -31,11 +31,9 @@ class SteamReviewDossierCleanupTests(unittest.TestCase):
             self.assertEqual(result["unique_appid_count"], 121)
             self.assertEqual([x["appid"] for x in result["preserved_refresh_required"]], [target])
             work = build_work_manifest(queue, CONTRACT, td, now=NOW)
-            self.assertEqual(work["required_total_count"], 121)
-            self.assertNotIn(target, [x["appid"] for x in work["required_items"]])
             item = next(x for x in work["items"] if x["appid"] == target)
-            self.assertEqual(item["state"], "stale")
             self.assertEqual(item["reason"], "refresh_required")
+            self.assertEqual(work["required_total_count"], 121)
 
     def test_03_fresh_out_of_scope_is_preserved_until_ttl_expiry(self):
         queue = _queue((527070,))
@@ -69,6 +67,17 @@ class SteamReviewDossierCleanupTests(unittest.TestCase):
         self.assertEqual(result["source_row_count"], 4)
         self.assertEqual(result["unique_appid_count"], 2)
         self.assertEqual(result["current_scope_appids"], ["527070", "6800"])
+
+    def test_06_stale_base_support_only_dossier_is_out_of_scope_and_deleted(self):
+        queue = _queue((527070,))
+        queue.append(_queue((6800,), work_required=["resolve_base_support_condition"])[0])
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td, "App_6800.json")
+            path.write_text(json.dumps(_dossier(6800, generated=NOW - timedelta(days=21))), encoding="utf-8")
+            result = cleanup_dossier_store(queue, CONTRACT, td, now=NOW)
+            self.assertFalse(path.exists())
+            self.assertEqual(result["current_scope_appids"], ["527070"])
+            self.assertEqual([x["appid"] for x in result["deleted_stale_out_of_scope"]], ["6800"])
 
 
 if __name__ == "__main__":
