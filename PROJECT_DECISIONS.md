@@ -322,3 +322,20 @@
 **Package:** используется существующий fixed-Sub deterministic economics / exact-or-verified purchase equivalence / `strict_current_price_savings`; personalized Complete-the-Set и fuzzy equivalence по-прежнему запрещены. Package value может использовать уже `reconsiderable`, но не создаёт это состояние.
 
 **Основные места:** `config/mailing_policy.json`, `config/deal_quality_contract.json`, `scripts/commercial_reconsideration_bridge.py`, `scripts/build_pre_ai_chatgpt_payload.py`, `scripts/build_visual_feed_v2.py`, `scripts/test_reconsideration_commercial_bridge.py`.
+
+---
+
+## TASTE-004 — Steam review dossier backlog is broader than the active Taste pin; checkpoint size is not a quota
+
+**Дата:** 2026-09-13
+**Статус:** implementation in progress; ownership boundary approved by task contract
+
+**Решение:** canonical Steam review dossier preparation scope is the full current eligible Taste backlog derived by GitHub from `data/production/pre_ai/chatgpt_taste_queue.jsonl`, deduplicated by Steam `appid` in canonical queue order. The bounded active Taste pin remains downstream semantic-work authority only and must not define total dossier-preparation scope. A checkpoint of 10 dossiers is only a bounded submission/persistence unit: after a successful checkpoint GitHub must rebuild remaining work and the same scheduled invocation continues to the next checkpoint until the full eligible dossier backlog is exhausted or a real platform/tool/runtime limit interrupts the run.
+
+**Почему:** the first production population proved that reusing the active exact-10 Taste pin as dossier scope can make the preparer stop after 10 even when more eligible games still need dossiers. Conversely, removing the bound entirely would force one large all-or-nothing submission and would lose durable progress if a later part of a long run fails. Full-scope completeness and bounded durable checkpoints are separate concerns: GitHub owns both the total remaining backlog and each exact checkpoint; the checkpoint exists to preserve verified progress, not to create a daily quota.
+
+**Граница:** fresh dossiers remain reusable; missing/stale in-scope dossiers remain work; stale out-of-scope cleanup uses the full eligible dossier scope; base-support-only/non-Taste rows do not enter dossier scope; exact checkpoint submission validation remains fail-closed. `build_taste_semantic_dossier_input.py` continues to bind only the exact active Taste pin and holds if any pinned dossier is missing/stale/invalid. ChatGPT/Scheduled Task may process only GitHub-prepared checkpoints and may not invent queue order, retry/completeness state, or a production batch limit.
+
+**Сознательно отвергнуто:** active pin as total dossier scope; `10` as per-run/daily quota; a single unbounded all-or-nothing submission for the entire backlog; ChatGPT-owned queue/retry/completeness; changing the existing Taste Semantic Producer or its pin authority.
+
+**Основные места:** `config/taste_steam_review_dossier_contract.json`, `scripts/taste_steam_review_dossier.py`, `scripts/build_taste_steam_review_dossier_work.py`, `scripts/ingest_taste_steam_review_dossiers.py`, `scripts/taste_steam_review_dossier_cleanup.py`, `config/taste_steam_review_dossier_worker_prompt.md`.
