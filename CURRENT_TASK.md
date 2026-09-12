@@ -201,3 +201,12 @@
 - age report-first: `reviews/worker_reports/taste-queue-age-priority-order-01.md`, commit `6da7f006497fc6a3d849e14c9b2ed20644d47c44`;
 - parent report: `reviews/worker_reports/taste-normal-semantic-producer-01.md`, initial commit `8fb4eb40b03ec8841013f49af2b7b0d2d301466e`;
 - exact unblock: existing producer must finish and canonically ingest the current exact-10 pin; after terminal receipt, rerun this worker to implement age-ordering for newly constructed pins and prove `complete_ready_for_normal_scheduled_producer` before changing prompt/cadence.
+
+### Steam review dossier preparer 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_PREPARER_01.md`;
+- mode: `IMPLEMENT_AND_VALIDATE`;
+- цель: отдельный pre-Taste механизм свежих нейтральных Steam dossier из store description + Steam reviews, включая Russian-review evidence;
+- ownership: GitHub определяет exact scope/freshness/validation/persistence; future separate ChatGPT preparer может только собирать/синтезировать evidence для GitHub-prepared work input;
+- существующий Taste Semantic Producer и текущий active pin не изменять; Scheduled Task в этой задаче не создавать;
+- старый Taste throughput measurement не продолжать.
