@@ -56,6 +56,31 @@ def utc_iso(dt):
     return dt.astimezone(timezone.utc).replace(microsecond=0).isoformat()
 
 
+def _scope_policy(contract):
+    scope = contract.get("scope") or {}
+    source = scope.get("source")
+    markers = scope.get("taste_semantic_work_required_any")
+    if source != "full_current_canonical_taste_queue":
+        raise ValueError("Dossier contract full Taste backlog scope source is missing or invalid")
+    if not isinstance(markers, list) or not markers or any(not isinstance(x, str) or not x for x in markers):
+        raise ValueError("Dossier contract Taste semantic work eligibility is missing or invalid")
+    return scope
+
+
+def resolve_checkpoint_size(contract):
+    checkpoint = contract.get("checkpointing") or {}
+    size = checkpoint.get("checkpoint_size")
+    if checkpoint.get("owner") != "github_control_plane":
+        raise ValueError("Dossier checkpoint ownership contract is missing or invalid")
+    if checkpoint.get("semantics") != "durability_boundary_not_quota":
+        raise ValueError("Dossier checkpoint semantics are missing or invalid")
+    if not isinstance(size, int) or size <= 0:
+        raise ValueError("Dossier checkpoint size is invalid")
+    if checkpoint.get("ready_condition") != "remaining_required_count_zero":
+        raise ValueError("Dossier checkpoint ready condition is missing or invalid")
+    return size
+
+
 def load_contract(path):
     doc = json.loads(Path(path).read_text(encoding="utf-8"))
     if doc.get("schema") != CONTRACT_SCHEMA or doc.get("version") != 1 or doc.get("status") != "active":
@@ -64,6 +89,8 @@ def load_contract(path):
     default_ttl = freshness.get("default_ttl_days")
     if not isinstance(default_ttl, int) or default_ttl <= 0:
         raise ValueError("Dossier contract default TTL is invalid")
+    _scope_policy(doc)
+    resolve_checkpoint_size(doc)
     return doc
 
 
@@ -170,8 +197,7 @@ def validate_dossier(dossier, contract, *, expected_appid=None, expected_ttl_day
     title = dossier.get("title")
     if not isinstance(title, str) or not title.strip() or len(title) > 300:
         raise ValueError("dossier title is missing or invalid")
-    ttl = dossier.get("ttl_days")
-    ttl = resolve_ttl_days(contract, ttl)
+    ttl = resolve_ttl_days(contract, dossier.get("ttl_days"))
     if expected_ttl_days is not None and ttl != int(expected_ttl_days):
         raise ValueError("dossier TTL does not match prepared work manifest")
     generated = parse_utc(dossier.get("generated_at_utc"))
@@ -265,78 +291,192 @@ def validate_pin(pin):
     return pin
 
 
-def build_work_manifest(pin, contract, store_dir, *, now=None, ttl_days=None):
-    validate_pin(pin)
+def _row_requires_dossier(work_required, contract):
+    if not isinstance(work_required, list) or not work_required:
+        raise ValueError("canonical Taste queue row has no canonical work_required")
+    markers = set(_scope_policy(contract)["taste_semantic_work_required_any"])
+    return any(isinstance(item, str) and item in markers for item in work_required)
+
+
+def canonical_dossier_scope_rows(queue_rows, contract):
+    """Project full eligible Taste backlog to one deterministic dossier row per appid."""
+    if not isinstance(queue_rows, list):
+        raise ValueError("canonical Taste queue rows must be a list")
+    out = []
+    seen = set()
+    for index, row in enumerate(queue_rows):
+        if not isinstance(row, dict):
+            raise ValueError(f"canonical Taste queue row {index} is malformed")
+        appid = str(row.get("appid") or "")
+        key = row.get("taste_subject_key") if "taste_subject_key" in row else row.get("key")
+        work = row.get("work_required")
+        if not appid.isdigit() or not isinstance(key, str) or not key:
+            raise ValueError(f"canonical Taste queue row {index} lacks appid/taste subject identity")
+        try:
+            eligible = _row_requires_dossier(work, contract)
+        except ValueError as exc:
+            raise ValueError(f"canonical Taste queue row {index} has no canonical work_required") from exc
+        if not eligible:
+            continue
+        if appid in seen:
+            continue
+        seen.add(appid)
+        out.append({
+            "key": key,
+            "appid": appid,
+            "taste_fingerprint": row.get("taste_fingerprint"),
+            "candidate_context_sha256": row.get("candidate_context_sha256"),
+            "work_required": list(work),
+        })
+    return out
+
+
+def build_work_manifest(queue_rows, contract, store_dir, *, now=None, ttl_days=None):
+    scope_rows = canonical_dossier_scope_rows(queue_rows, contract)
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     ttl = resolve_ttl_days(contract, ttl_days)
+    checkpoint_size = resolve_checkpoint_size(contract)
+    eligible_row_count = sum(
+        1 for row in queue_rows
+        if isinstance(row, dict) and _row_requires_dossier(row.get("work_required"), contract)
+    )
     items = []
-    required = []
-    for row in pin["ordered_rows"]:
-        appid = str(row["appid"])
+    all_required = []
+    for row in scope_rows:
+        appid = row["appid"]
         path = dossier_path(store_dir, appid)
         existing = load_dossier_if_present(store_dir, appid)
         try:
             state = dossier_state(existing, contract, now=now, expected_appid=appid)
         except ValueError:
             state = "invalid"
-        item = {
-            "key": row["key"],
-            "appid": appid,
-            "dossier_path": path.as_posix(),
-            "state": state,
-        }
+        item = {"key": row["key"], "appid": appid, "dossier_path": path.as_posix(), "state": state}
         if existing and state == "fresh":
             item["generated_at_utc"] = existing["generated_at_utc"]
             item["expires_at_utc"] = existing["expires_at_utc"]
             item["dossier_sha256"] = canonical_sha256(existing)
         else:
             item["reason"] = "refresh_required" if state in {"stale", "invalid", "invalid_future"} else "missing_dossier"
-            required.append({"key": row["key"], "appid": appid, "dossier_path": path.as_posix(), "reason": item["reason"]})
+            all_required.append({"key": row["key"], "appid": appid, "dossier_path": path.as_posix(), "reason": item["reason"]})
         items.append(item)
+
+    required = all_required[:checkpoint_size]
+    remaining_required_count = len(all_required)
+    source_queue_sha256 = canonical_sha256(queue_rows)
+    scope_source = _scope_policy(contract)["source"]
+    full_required_sha256 = canonical_sha256(all_required)
+    checkpoint = {
+        "owner": "github_control_plane",
+        "semantics": "durability_boundary_not_quota",
+        "checkpoint_size": checkpoint_size,
+        "item_count": len(required),
+        "remaining_required_count": remaining_required_count,
+        "remaining_after_checkpoint_count": remaining_required_count - len(required),
+        "full_required_sha256": full_required_sha256,
+        "continue_same_invocation": remaining_required_count > len(required),
+        "is_final_checkpoint": bool(required) and len(required) == remaining_required_count,
+        "resume_rule": "rebuild_from_canonical_queue_and_current_dossier_store",
+    }
     base = {
         "schema": WORK_SCHEMA,
         "schema_version": 1,
-        "status": "work_required" if required else "ready_from_fresh_cache",
+        "status": "work_required" if all_required else "ready_from_fresh_cache",
         "prepared_at_utc": utc_iso(now),
         "ttl_days": ttl,
-        "pin_work_unit_sha256": pin["ordered_work_unit_sha256"],
-        "pin_producer_id": pin.get("producer_id"),
-        "ordered_keys": [row["key"] for row in pin["ordered_rows"]],
+        "scope_source": scope_source,
+        "source_queue_sha256": source_queue_sha256,
+        "source_row_count": len(queue_rows),
+        "eligible_row_count": eligible_row_count,
+        "excluded_row_count": len(queue_rows) - eligible_row_count,
+        "unique_appid_count": len(scope_rows),
+        "deduplicated_row_count": eligible_row_count - len(scope_rows),
+        "ordered_appids": [row["appid"] for row in scope_rows],
+        "ordered_keys": [row["key"] for row in scope_rows],
         "items": items,
+        "required_total_count": remaining_required_count,
+        "full_required_sha256": full_required_sha256,
+        "full_backlog_complete": remaining_required_count == 0,
         "required_items": required,
+        "checkpoint": checkpoint,
         "sampling_policy": contract["sampling"],
     }
     base["scope_sha256"] = canonical_sha256({
         "schema": base["schema"],
         "ttl_days": ttl,
-        "pin_work_unit_sha256": base["pin_work_unit_sha256"],
-        "ordered_keys": base["ordered_keys"],
+        "scope_source": scope_source,
+        "source_queue_sha256": source_queue_sha256,
+        "ordered_appids": base["ordered_appids"],
+        "required_total_count": remaining_required_count,
+        "full_required_sha256": full_required_sha256,
+        "checkpoint_size": checkpoint_size,
         "required_items": required,
     })
     return base
 
 
+def _validate_manifest_checkpoint(manifest, contract):
+    if not isinstance(manifest, dict) or manifest.get("schema") != WORK_SCHEMA or manifest.get("schema_version") != 1:
+        raise ValueError("GitHub-prepared dossier work manifest is missing or unsupported")
+    checkpoint_size = resolve_checkpoint_size(contract)
+    checkpoint = manifest.get("checkpoint")
+    required = manifest.get("required_items")
+    if not isinstance(checkpoint, dict) or not isinstance(required, list):
+        raise ValueError("GitHub-prepared dossier checkpoint metadata is missing")
+    if checkpoint.get("owner") != "github_control_plane" or checkpoint.get("semantics") != "durability_boundary_not_quota":
+        raise ValueError("GitHub-prepared dossier checkpoint ownership/semantics are invalid")
+    if checkpoint.get("checkpoint_size") != checkpoint_size or len(required) > checkpoint_size:
+        raise ValueError("GitHub-prepared dossier checkpoint size is invalid")
+    required_total_count = manifest.get("required_total_count")
+    if not isinstance(required_total_count, int) or required_total_count < len(required):
+        raise ValueError("GitHub-prepared dossier full-required count is invalid")
+    full_required_sha256 = manifest.get("full_required_sha256")
+    if not isinstance(full_required_sha256, str) or not _HEX64.match(full_required_sha256):
+        raise ValueError("GitHub-prepared dossier full-required binding is invalid")
+    if checkpoint.get("full_required_sha256") != full_required_sha256:
+        raise ValueError("GitHub-prepared dossier checkpoint/full-scope binding mismatch")
+    if checkpoint.get("item_count") != len(required):
+        raise ValueError("GitHub-prepared dossier checkpoint item count mismatch")
+    if checkpoint.get("remaining_required_count") != required_total_count:
+        raise ValueError("GitHub-prepared dossier remaining-required count mismatch")
+    if checkpoint.get("remaining_after_checkpoint_count") != required_total_count - len(required):
+        raise ValueError("GitHub-prepared dossier checkpoint remainder mismatch")
+    if manifest.get("full_backlog_complete") != (required_total_count == 0):
+        raise ValueError("GitHub-prepared dossier full-backlog completion flag mismatch")
+    if manifest.get("status") == "work_required":
+        if required_total_count <= 0 or not required:
+            raise ValueError("work_required manifest must expose a non-empty dossier checkpoint")
+    elif manifest.get("status") == "ready_from_fresh_cache":
+        if required_total_count != 0 or required:
+            raise ValueError("ready dossier manifest cannot expose required checkpoint work")
+    else:
+        raise ValueError("GitHub-prepared dossier work manifest status is unsupported")
+    return required
+
+
 def validate_submission(submission, manifest, contract):
     if not isinstance(submission, dict) or submission.get("schema") != SUBMISSION_SCHEMA or submission.get("schema_version") != 1:
         raise ValueError("unsupported dossier submission schema")
+    required = _validate_manifest_checkpoint(manifest, contract)
+    if manifest.get("status") != "work_required":
+        raise ValueError("no dossier checkpoint work is currently prepared")
     if submission.get("scope_sha256") != manifest.get("scope_sha256"):
         raise ValueError("dossier submission scope does not match GitHub-prepared work manifest")
-    if submission.get("pin_work_unit_sha256") != manifest.get("pin_work_unit_sha256"):
-        raise ValueError("dossier submission pin binding mismatch")
+    if submission.get("scope_source") != manifest.get("scope_source"):
+        raise ValueError("dossier submission scope source mismatch")
+    if submission.get("source_queue_sha256") != manifest.get("source_queue_sha256"):
+        raise ValueError("dossier submission canonical Taste queue binding mismatch")
     docs = submission.get("dossiers")
     if not isinstance(docs, list):
         raise ValueError("dossier submission must contain a dossiers list")
-    expected = [str(x["appid"]) for x in manifest.get("required_items", [])]
-    actual = []
-    validated = []
-    for doc in docs:
-        appid = str(doc.get("appid") or "") if isinstance(doc, dict) else ""
-        actual.append(appid)
-        validated.append(validate_dossier(doc, contract, expected_appid=appid, expected_ttl_days=manifest["ttl_days"]))
+    expected = [str(x["appid"]) for x in required]
+    actual = [str(doc.get("appid") or "") if isinstance(doc, dict) else "" for doc in docs]
     if len(actual) != len(set(actual)):
         raise ValueError("dossier submission contains duplicate appids")
-    if sorted(actual) != sorted(expected):
-        raise ValueError("dossier submission must exactly cover the GitHub-prepared required appid scope")
+    if actual != expected:
+        raise ValueError("dossier submission must exactly cover the GitHub-prepared checkpoint in canonical order")
+    validated = []
+    for doc, appid in zip(docs, expected):
+        validated.append(validate_dossier(doc, contract, expected_appid=appid, expected_ttl_days=manifest["ttl_days"]))
     return validated
 
 
@@ -348,6 +488,33 @@ def persist_submission(submission, manifest, contract, store_dir):
         atomic_write_json(path, doc)
         persisted.append({"appid": str(doc["appid"]), "path": path.as_posix(), "dossier_sha256": canonical_sha256(doc)})
     return persisted
+
+
+def persist_submission_and_rebuild_work(
+    submission,
+    manifest,
+    contract,
+    store_dir,
+    queue_rows,
+    *,
+    manifest_output_path=None,
+    now=None,
+):
+    """Persist one exact checkpoint and deterministically expose the next remaining checkpoint."""
+    current_queue_sha256 = canonical_sha256(queue_rows)
+    if current_queue_sha256 != manifest.get("source_queue_sha256"):
+        raise ValueError("canonical Taste queue changed after dossier work manifest preparation; rebuild work before ingest")
+    persisted = persist_submission(submission, manifest, contract, store_dir)
+    next_manifest = build_work_manifest(
+        queue_rows,
+        contract,
+        store_dir,
+        now=now,
+        ttl_days=manifest["ttl_days"],
+    )
+    if manifest_output_path is not None:
+        atomic_write_json(manifest_output_path, next_manifest)
+    return persisted, next_manifest
 
 
 def build_semantic_input(pin, contract, store_dir, *, now=None):

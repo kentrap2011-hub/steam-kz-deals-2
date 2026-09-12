@@ -7,23 +7,30 @@
     "control_plane": "github",
     "semantic_data_plane": "separate_chatgpt_preparer_future_scheduler",
     "github_responsibilities": [
-      "select_exact_pinned_game_scope",
+      "select_full_current_eligible_taste_backlog_dossier_scope",
+      "deduplicate_dossier_scope_by_appid_preserving_canonical_queue_order",
       "decide_fresh_vs_stale",
       "prepare_work_manifest",
+      "prepare_bounded_checkpoint_from_full_required_scope",
+      "advance_checkpoint_after_successful_persistence",
+      "track_full_backlog_completeness_and_resume",
       "validate_submission",
       "persist_compact_dossier",
       "cleanup_expired_out_of_scope_dossiers",
-      "build_fail_closed_taste_semantic_input"
+      "build_fail_closed_taste_semantic_input_from_active_pin"
     ],
     "semantic_worker_responsibilities": [
       "read_only_the_explicit_work_manifest",
       "inspect_steam_store_description",
       "inspect_steam_user_reviews_with_russian_lane",
-      "produce_neutral_compact_synthesis_with_provenance"
+      "produce_neutral_compact_synthesis_with_provenance",
+      "continue_successive_github_prepared_checkpoints_in_same_run_until_complete_or_real_runtime_limit"
     ],
     "forbidden": [
       "invent_scope",
       "manage_queue_or_retry_policy",
+      "turn_checkpoint_size_into_run_or_daily_quota",
+      "declare_ready_before_full_backlog_exhaustion",
       "score_personal_fit",
       "choose_include_or_exclude",
       "use_price_discount_or_sale_urgency",
@@ -31,20 +38,53 @@
       "change_taste_pin_or_taste_ingest_authority"
     ]
   },
+  "scope": {
+    "source": "full_current_canonical_taste_queue",
+    "source_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
+    "eligibility": "row_requires_at_least_one_canonical_taste_semantic_work_item",
+    "taste_semantic_work_required_any": [
+      "evaluate_taste_fit",
+      "evaluate_normalized_taste_factors",
+      "resolve_grounded_negative_analysis"
+    ],
+    "base_support_only_behavior": "exclude_from_dossier_scope",
+    "identity": "appid",
+    "dedupe": "first_occurrence_by_appid_preserving_canonical_queue_order",
+    "active_pin_role": "downstream_semantic_input_only_not_dossier_scope"
+  },
+  "checkpointing": {
+    "owner": "github_control_plane",
+    "checkpoint_size": 10,
+    "semantics": "durability_boundary_not_quota",
+    "completion_scope": "entire_current_required_dossier_scope",
+    "ordering": "canonical_queue_order_after_appid_deduplication",
+    "advance_rule": "after_successful_checkpoint_persistence_rebuild_from_canonical_queue_and_current_dossier_store",
+    "same_invocation_rule": "continue_through_successive_checkpoints_until_exhausted_or_real_platform_runtime_limit",
+    "resume_rule": "later_invocation_rebuilds_and_resumes_only_remaining_required_scope",
+    "ready_condition": "remaining_required_count_zero",
+    "forbidden_interpretations": [
+      "daily_cap",
+      "run_quota",
+      "production_limit",
+      "completion_after_first_checkpoint"
+    ]
+  },
   "freshness": {
     "default_ttl_days": 20,
     "min_ttl_days": 1,
     "max_ttl_days": 60,
-    "stale_behavior": "hold_taste_until_refreshed",
+    "fresh_behavior": "reuse_without_reanalysis",
+    "stale_behavior": "refresh_required_if_in_current_dossier_scope",
+    "missing_behavior": "create_required",
     "replacement_policy": "replace_current_dossier_no_unbounded_history"
   },
   "cleanup": {
     "owner": "github_control_plane",
     "scheduler": "none_created_by_this_task",
-    "delete_rule": "stale_and_not_in_current_taste_scope",
+    "delete_rule": "stale_and_not_in_current_dossier_scope",
     "preserve_rules": [
       "fresh_regardless_of_scope",
-      "stale_and_in_current_taste_scope_until_successful_refresh",
+      "stale_and_in_current_dossier_scope_until_successful_refresh",
       "invalid_fail_closed_for_manual_or_followup_handling"
     ],
     "in_scope_stale_state": "refresh_required",
@@ -76,6 +116,7 @@
     }
   },
   "paths": {
+    "taste_queue": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
     "active_pin": "data/production/pre_ai/taste_active_work_unit.json",
     "dossier_store_dir": "data/cache/taste_steam_review_dossiers",
     "work_manifest": "data/production/pre_ai/taste_steam_review_dossier_work.json",
