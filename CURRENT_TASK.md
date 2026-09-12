@@ -121,7 +121,7 @@
 - role/start, warnings/risks, ranking weights, giveaway and package-equivalence semantics remain unchanged;
 - current production payload is still degraded on existing V5 backfill (`379`) with `0` current reconsiderable package candidates; canonical final producer fail-closes as expected and no semantic queue was fabricated;
 - report: `reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md`, report commit `1f843dd55edb3811820cf7b616889a7e17fcd84f`;
-- all temporary Step-3 helpers/workflows were removed after validation.
+- all temporary Step-3 helpers/workflows были removed after validation.
 
 ## Завершённые package-инварианты, которые сохраняются
 
@@ -214,10 +214,15 @@
 - report: `reviews/worker_reports/taste-steam-review-dossier-preparer-01.md`.
 
 ### Full Steam review dossier backlog continue 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_user_run_now_validation`.
 - worker task: `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_FULL_BACKLOG_CONTINUE_01.md`;
-- branch: `worker/taste-dossier-full-backlog-01`;
-- START gate и architecture preflight выполнены; GitHub остаётся владельцем full backlog scope, checkpoint progression, durable persistence и completeness;
-- подтверждены все 6 handoff-коммитов; активный Taste pin остаётся downstream-only и не используется как total dossier scope;
-- реальный production dossier backlog и Scheduled Tasks в этой работе не запускаются и не изменяются;
-- next gate: закрыть Phase A item 7 в `PROJECT_DECISIONS.md`, затем исправить checkpoint progression/eligibility и пройти regression matrix до безопасной интеграции в `main`.
+- worker branch: `worker/taste-dossier-full-backlog-01`; safe integration: PR `#16` merged to `main` as `ecde503c6b74aa964e7b331da009f87af8d0b3cd`;
+- START gate, architecture preflight и `PROJECT_DECISIONS.md` rationale (`TASTE-004`) завершены; GitHub остаётся владельцем full eligible backlog scope, deterministic order, checkpoint progression, durable persistence и completeness;
+- checkpoint `10` закреплён только как durability boundary: exact checkpoint ingest автоматически перестраивает следующий checkpoint; READY допустим только при `remaining_required_count=0`;
+- eligibility ограничена canonical Taste-semantic work; base-support-only/non-Taste-only rows исключаются; mixed Taste+support rows сохраняются;
+- cleanup использует тот же full eligible scope; active exact semantic pin остаётся downstream-only и не изменён;
+- focused regressions: `22/22` passed; synthetic CLI smoke: `12 -> 10 -> 2 -> 0`, финал `ready_from_fresh_cache`;
+- PR workflow `Validate backlog dispositions`, job `backlog-disposition`: success перед merge;
+- реальный production dossier backlog не запускался; существующий `Taste Steam Review Dossier` Scheduled Task и Taste Semantic Producer не изменялись и не запускались;
+- report: `reviews/worker_reports/taste-steam-review-dossier-full-backlog-01.md`;
+- next user action: fresh manual `Run now` существующего `Taste Steam Review Dossier` Scheduled Task для production validation поведения beyond first checkpoint.
