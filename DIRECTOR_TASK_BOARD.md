@@ -8,6 +8,41 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed. Architecture review may run in parallel only when read-only and non-blocking.
 
+## ACTIVE — normal ChatGPT/Taste semantic producer
+Task:
+`WORKER_TASK_TASTE_NORMAL_SEMANTIC_PRODUCER_01.md`
+
+Task ID:
+`taste-normal-semantic-producer-01`
+
+Status:
+`authorized_dispatched_chat_1`
+
+Mode:
+`IMPLEMENT_AND_VERIFY_READY_FOR_SCHEDULE`
+
+Worker slot:
+`ЧАТ 1`
+
+Goal:
+- implement the normal deterministic Taste queue producer for ChatGPT evaluation;
+- process at most 10 games per invocation;
+- integrate never-checked-first, then oldest-successfully-checked-first ordering;
+- preserve accepted historical Taste results and provenance;
+- make retry/result ingest durable and idempotent;
+- use short deterministic tests only;
+- do not run a large real semantic batch;
+- do not create a second Scheduled Task;
+- do not change existing Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` yet;
+- prepare the exact prompt contract and recommended cadence for the Director to activate later.
+
+Expected report:
+`reviews/worker_reports/taste-normal-semantic-producer-01.md`
+
+Expected final status:
+- `complete_ready_for_normal_scheduled_producer`
+- or `blocked_requires_followup`
+
 ## ACCEPTED — real Steam partial-publish production refresh
 Task:
 `WORKER_TASK_STEAM_PARTIAL_PUBLISH_PRODUCTION_REFRESH_01.md`
