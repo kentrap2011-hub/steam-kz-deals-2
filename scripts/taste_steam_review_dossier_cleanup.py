@@ -12,8 +12,8 @@ _CANONICAL_NAME = re.compile(r"^App_(\d+)\.json$")
 
 
 def cleanup_dossier_store(queue_rows, contract, store_dir, *, now=None):
-    """Delete only stale dossiers outside the full current canonical Taste dossier scope."""
-    scope_rows = canonical_dossier_scope_rows(queue_rows)
+    """Delete only stale dossiers outside the full current eligible Taste dossier scope."""
+    scope_rows = canonical_dossier_scope_rows(queue_rows, contract)
     cleanup = contract.get("cleanup") or {}
     if cleanup.get("owner") != "github_control_plane":
         raise ValueError("Dossier cleanup ownership contract is missing or invalid")
@@ -59,7 +59,7 @@ def cleanup_dossier_store(queue_rows, contract, store_dir, *, now=None):
         "status": "complete",
         "owner": "github_control_plane",
         "evaluated_at_utc": now.replace(microsecond=0).isoformat(),
-        "scope_source": "canonical_taste_queue",
+        "scope_source": contract["scope"]["source"],
         "source_queue_sha256": canonical_sha256(queue_rows),
         "source_row_count": len(queue_rows),
         "unique_appid_count": len(scope_rows),
