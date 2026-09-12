@@ -23,11 +23,14 @@
       "read_only_the_explicit_work_manifest",
       "inspect_steam_store_description",
       "inspect_steam_user_reviews_with_russian_lane",
-      "produce_neutral_compact_synthesis_with_provenance"
+      "produce_neutral_compact_synthesis_with_provenance",
+      "continue_successive_github_prepared_checkpoints_in_same_run_until_complete_or_real_runtime_limit"
     ],
     "forbidden": [
       "invent_scope",
       "manage_queue_or_retry_policy",
+      "turn_checkpoint_size_into_run_or_daily_quota",
+      "declare_ready_before_full_backlog_exhaustion",
       "score_personal_fit",
       "choose_include_or_exclude",
       "use_price_discount_or_sale_urgency",
@@ -38,7 +41,13 @@
   "scope": {
     "source": "full_current_canonical_taste_queue",
     "source_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
-    "eligibility": "all_rows_already_eligible_in_the_canonical_taste_queue",
+    "eligibility": "row_requires_at_least_one_canonical_taste_semantic_work_item",
+    "taste_semantic_work_required_any": [
+      "evaluate_taste_fit",
+      "evaluate_normalized_taste_factors",
+      "resolve_grounded_negative_analysis"
+    ],
+    "base_support_only_behavior": "exclude_from_dossier_scope",
     "identity": "appid",
     "dedupe": "first_occurrence_by_appid_preserving_canonical_queue_order",
     "active_pin_role": "downstream_semantic_input_only_not_dossier_scope"
@@ -52,6 +61,7 @@
     "advance_rule": "after_successful_checkpoint_persistence_rebuild_from_canonical_queue_and_current_dossier_store",
     "same_invocation_rule": "continue_through_successive_checkpoints_until_exhausted_or_real_platform_runtime_limit",
     "resume_rule": "later_invocation_rebuilds_and_resumes_only_remaining_required_scope",
+    "ready_condition": "remaining_required_count_zero",
     "forbidden_interpretations": [
       "daily_cap",
       "run_quota",
