@@ -184,6 +184,7 @@ def build_transactional_proof_checks(
     after_deals=None,
     baseline_projection=None,
     current_reusable_by_key=None,
+    baseline_current_queue_by_key=None,
 ):
     after_queue_by_key = {row.get('taste_subject_key'): row for row in after_queue}
     duplicate_after_keys = len(after_queue_by_key) != len(after_queue)
@@ -191,6 +192,8 @@ def build_transactional_proof_checks(
         current_reusable_by_key = {key: True for key in all_keys}
     if set(current_reusable_by_key) != set(all_keys):
         raise ValueError('Current-reuse proof must cover every ingested Taste key exactly')
+    if baseline_current_queue_by_key is None:
+        baseline_current_queue_by_key = baseline_queue_by_key
 
     full_eval_count = sum(
         'evaluate_taste_fit' in (baseline_queue_by_key[key].get('work_required') or [])
@@ -215,11 +218,25 @@ def build_transactional_proof_checks(
     retained = {}
     retention_mismatches = {}
     for key in all_keys:
+        current_baseline_row = baseline_current_queue_by_key.get(key)
         if not current_reusable_by_key[key]:
-            expected_work = list(baseline_queue_by_key[key].get('work_required') or [])
+            # A pre-semantic pinned result remains historically valid even when
+            # newer live source/profile state has removed the key from the
+            # current queue. In that case ingest must not resurrect old work.
+            if current_baseline_row is None:
+                actual = after_queue_by_key.get(key)
+                if actual is not None:
+                    retention_mismatches[key] = {
+                        'expected_work_required': [],
+                        'actual_work_required': actual.get('work_required'),
+                        'reason': 'newer_live_state_removed_pinned_key_but_ingest_resurrected_it',
+                    }
+                continue
+
+            expected_work = list(current_baseline_row.get('work_required') or [])
             retained[key] = expected_work
             actual = after_queue_by_key.get(key)
-            if actual is None or _queue_identity(actual) != _queue_identity(baseline_queue_by_key[key]):
+            if actual is None or _queue_identity(actual) != _queue_identity(current_baseline_row):
                 retention_mismatches[key] = {
                     'expected_work_required': expected_work,
                     'actual_work_required': None if actual is None else actual.get('work_required'),
@@ -232,7 +249,7 @@ def build_transactional_proof_checks(
         expected_work = expected_retained_work(
             key,
             result_by_key[key],
-            baseline_queue_by_key[key],
+            current_baseline_row,
             after_projection,
             deterministically_excluded=primary_key in excluded_primary_keys,
             deal_row=deal_entries.get(primary_key) or {},
@@ -251,7 +268,8 @@ def build_transactional_proof_checks(
                 'actual_work_required': actual.get('work_required'),
             }
 
-    expected_ai_queue = baseline_ai_queue - len(all_keys) + len(retained)
+    baseline_present_key_count = sum(key in baseline_current_queue_by_key for key in all_keys)
+    expected_ai_queue = baseline_ai_queue - baseline_present_key_count + len(retained)
     baseline_entries = (baseline_projection or {}).get('entries') or {}
     after_entries = after_projection.get('entries') or {}
     stale_keys = [key for key in all_keys if not current_reusable_by_key[key]]
@@ -266,8 +284,15 @@ def build_transactional_proof_checks(
         for key in stale_keys
     )
     stale_queue_exact = all(
-        key in after_queue_by_key
-        and _queue_identity(after_queue_by_key[key]) == _queue_identity(baseline_queue_by_key[key])
+        (
+            key not in baseline_current_queue_by_key
+            and key not in after_queue_by_key
+        )
+        or (
+            key in baseline_current_queue_by_key
+            and key in after_queue_by_key
+            and _queue_identity(after_queue_by_key[key]) == _queue_identity(baseline_current_queue_by_key[key])
+        )
         for key in stale_keys
     )
     reusable_are_hits = all(
@@ -316,6 +341,7 @@ def main():
     batch_docs = []
     result_by_key = {}
     resolved_pin_by_key = {}
+    resolved_pinned_row_by_key = {}
     resolved_batch_pins = []
     digest = hashlib.sha256()
     for path in inbox_files:
@@ -334,7 +360,7 @@ def main():
         if any(not isinstance(key, str) or not key for key in keys):
             raise SystemExit(f'{path} contains an invalid result key')
         try:
-            resolved_pin, _pinned_projection, _pinned_rows = resolve_pinned_work_unit(
+            resolved_pin, _pinned_projection, pinned_rows = resolve_pinned_work_unit(
                 path,
                 PROJECTION,
                 QUEUE,
@@ -343,26 +369,33 @@ def main():
             )
         except (ValueError, OSError, json.JSONDecodeError) as exc:
             raise SystemExit(f'Pinned Taste work-unit proof failed for {path}: {exc}') from exc
+        pinned_rows_by_key = {row['taste_subject_key']: row for row in pinned_rows}
         resolved_batch_pins.append(resolved_pin)
         batch_docs.append((path, doc, keys, resolved_pin))
         for result in results:
-            result_by_key[result['key']] = result
-            resolved_pin_by_key[result['key']] = resolved_pin
+            key = result['key']
+            result_by_key[key] = result
+            resolved_pin_by_key[key] = resolved_pin
+            pinned_row = pinned_rows_by_key.get(key)
+            if pinned_row is None:
+                raise SystemExit(f'Pinned Taste work-unit rows missing result key: {key}')
+            resolved_pinned_row_by_key[key] = pinned_row
         all_keys.extend(keys)
         total_results += len(results)
 
     if len(set(all_keys)) != len(all_keys):
         raise SystemExit('Duplicate taste key across inbox files')
-    missing_from_queue = sorted(set(all_keys) - set(baseline_queue_by_key))
-    if missing_from_queue:
-        raise SystemExit(f'Inbox keys are not in the synchronized current taste queue: {missing_from_queue[:20]}')
+
+    proof_queue_by_key = dict(baseline_queue_by_key)
+    for key in all_keys:
+        proof_queue_by_key.setdefault(key, resolved_pinned_row_by_key[key])
 
     current_reusable_by_key = {
         key: result_is_reusable_for_current_projection(
             result_by_key[key],
             resolved_pin_by_key[key],
             baseline_projection,
-            baseline_queue_by_key[key],
+            baseline_queue_by_key.get(key),
         )
         for key in all_keys
     }
@@ -389,7 +422,7 @@ def main():
     checks, retained, retention_mismatches, expected_ai_queue, full_eval_count = build_transactional_proof_checks(
         all_keys=all_keys,
         result_by_key=result_by_key,
-        baseline_queue_by_key=baseline_queue_by_key,
+        baseline_queue_by_key=proof_queue_by_key,
         baseline_safe_hits=baseline_safe_hits,
         baseline_ai_required=baseline_ai_required,
         baseline_ai_queue=baseline_ai_queue,
@@ -400,6 +433,7 @@ def main():
         after_deals=after_deals,
         baseline_projection=baseline_projection,
         current_reusable_by_key=current_reusable_by_key,
+        baseline_current_queue_by_key=baseline_queue_by_key,
     )
     failed = [name for name, ok in checks.items() if not ok]
     if failed:
