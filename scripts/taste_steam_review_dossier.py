@@ -13,6 +13,7 @@ SUBMISSION_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-SUBMISSION-V1"
 SEMANTIC_INPUT_SCHEMA = "TASTE-SEMANTIC-DOSSIER-INPUT-V1"
 PIN_SCHEMA = "TASTE-PINNED-WORK-UNIT-V1"
 CONTRACT_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V1"
+SCOPE_SOURCE = "canonical_taste_queue"
 
 _ALLOWED_RECURRENCE = {"strong", "moderate", "limited", "anecdotal"}
 _ALLOWED_SENTIMENT = {"positive", "negative", "mixed", "neutral"}
@@ -170,8 +171,7 @@ def validate_dossier(dossier, contract, *, expected_appid=None, expected_ttl_day
     title = dossier.get("title")
     if not isinstance(title, str) or not title.strip() or len(title) > 300:
         raise ValueError("dossier title is missing or invalid")
-    ttl = dossier.get("ttl_days")
-    ttl = resolve_ttl_days(contract, ttl)
+    ttl = resolve_ttl_days(contract, dossier.get("ttl_days"))
     if expected_ttl_days is not None and ttl != int(expected_ttl_days):
         raise ValueError("dossier TTL does not match prepared work manifest")
     generated = parse_utc(dossier.get("generated_at_utc"))
@@ -265,26 +265,50 @@ def validate_pin(pin):
     return pin
 
 
-def build_work_manifest(pin, contract, store_dir, *, now=None, ttl_days=None):
-    validate_pin(pin)
+def canonical_dossier_scope_rows(queue_rows):
+    """Project the full canonical Taste queue to one deterministic dossier row per appid."""
+    if not isinstance(queue_rows, list):
+        raise ValueError("canonical Taste queue rows must be a list")
+    out = []
+    seen = set()
+    for index, row in enumerate(queue_rows):
+        if not isinstance(row, dict):
+            raise ValueError(f"canonical Taste queue row {index} is malformed")
+        appid = str(row.get("appid") or "")
+        key = row.get("taste_subject_key") if "taste_subject_key" in row else row.get("key")
+        work = row.get("work_required")
+        if not appid.isdigit() or not isinstance(key, str) or not key:
+            raise ValueError(f"canonical Taste queue row {index} lacks appid/taste subject identity")
+        if not isinstance(work, list) or not work:
+            raise ValueError(f"canonical Taste queue row {index} has no canonical work_required")
+        if appid in seen:
+            continue
+        seen.add(appid)
+        out.append({
+            "key": key,
+            "appid": appid,
+            "taste_fingerprint": row.get("taste_fingerprint"),
+            "candidate_context_sha256": row.get("candidate_context_sha256"),
+            "work_required": list(work),
+        })
+    return out
+
+
+def build_work_manifest(queue_rows, contract, store_dir, *, now=None, ttl_days=None):
+    scope_rows = canonical_dossier_scope_rows(queue_rows)
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     ttl = resolve_ttl_days(contract, ttl_days)
     items = []
     required = []
-    for row in pin["ordered_rows"]:
-        appid = str(row["appid"])
+    for row in scope_rows:
+        appid = row["appid"]
         path = dossier_path(store_dir, appid)
         existing = load_dossier_if_present(store_dir, appid)
         try:
             state = dossier_state(existing, contract, now=now, expected_appid=appid)
         except ValueError:
             state = "invalid"
-        item = {
-            "key": row["key"],
-            "appid": appid,
-            "dossier_path": path.as_posix(),
-            "state": state,
-        }
+        item = {"key": row["key"], "appid": appid, "dossier_path": path.as_posix(), "state": state}
         if existing and state == "fresh":
             item["generated_at_utc"] = existing["generated_at_utc"]
             item["expires_at_utc"] = existing["expires_at_utc"]
@@ -293,15 +317,20 @@ def build_work_manifest(pin, contract, store_dir, *, now=None, ttl_days=None):
             item["reason"] = "refresh_required" if state in {"stale", "invalid", "invalid_future"} else "missing_dossier"
             required.append({"key": row["key"], "appid": appid, "dossier_path": path.as_posix(), "reason": item["reason"]})
         items.append(item)
+    source_queue_sha256 = canonical_sha256(queue_rows)
     base = {
         "schema": WORK_SCHEMA,
         "schema_version": 1,
         "status": "work_required" if required else "ready_from_fresh_cache",
         "prepared_at_utc": utc_iso(now),
         "ttl_days": ttl,
-        "pin_work_unit_sha256": pin["ordered_work_unit_sha256"],
-        "pin_producer_id": pin.get("producer_id"),
-        "ordered_keys": [row["key"] for row in pin["ordered_rows"]],
+        "scope_source": SCOPE_SOURCE,
+        "source_queue_sha256": source_queue_sha256,
+        "source_row_count": len(queue_rows),
+        "unique_appid_count": len(scope_rows),
+        "deduplicated_row_count": len(queue_rows) - len(scope_rows),
+        "ordered_appids": [row["appid"] for row in scope_rows],
+        "ordered_keys": [row["key"] for row in scope_rows],
         "items": items,
         "required_items": required,
         "sampling_policy": contract["sampling"],
@@ -309,8 +338,9 @@ def build_work_manifest(pin, contract, store_dir, *, now=None, ttl_days=None):
     base["scope_sha256"] = canonical_sha256({
         "schema": base["schema"],
         "ttl_days": ttl,
-        "pin_work_unit_sha256": base["pin_work_unit_sha256"],
-        "ordered_keys": base["ordered_keys"],
+        "scope_source": base["scope_source"],
+        "source_queue_sha256": source_queue_sha256,
+        "ordered_appids": base["ordered_appids"],
         "required_items": required,
     })
     return base
@@ -321,8 +351,10 @@ def validate_submission(submission, manifest, contract):
         raise ValueError("unsupported dossier submission schema")
     if submission.get("scope_sha256") != manifest.get("scope_sha256"):
         raise ValueError("dossier submission scope does not match GitHub-prepared work manifest")
-    if submission.get("pin_work_unit_sha256") != manifest.get("pin_work_unit_sha256"):
-        raise ValueError("dossier submission pin binding mismatch")
+    if submission.get("scope_source") != manifest.get("scope_source"):
+        raise ValueError("dossier submission scope source mismatch")
+    if submission.get("source_queue_sha256") != manifest.get("source_queue_sha256"):
+        raise ValueError("dossier submission canonical Taste queue binding mismatch")
     docs = submission.get("dossiers")
     if not isinstance(docs, list):
         raise ValueError("dossier submission must contain a dossiers list")
