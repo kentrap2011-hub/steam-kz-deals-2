@@ -1,133 +1,67 @@
 # Taste Steam Review Dossier — Full Backlog
 
-**Task:** `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_FULL_BACKLOG_01.md` + continuation `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_FULL_BACKLOG_CONTINUE_01.md`
+## Task
 
-**Branch:** `worker/taste-dossier-full-backlog-01`
+- task: `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_FULL_BACKLOG_01.md`;
+- continuation: `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_FULL_BACKLOG_CONTINUE_01.md`;
+- implementation branch: `worker/taste-dossier-full-backlog-01`;
+- safe integration: PR `#16`, merge commit `ecde503c6b74aa964e7b331da009f87af8d0b3cd`;
+- final closeout state is on `main` after `49819d0e18404c1279abc41f06c03ab27eea33c2` and `88a9107562bb3a9e3f1852ac076d8b4c4c28361f`.
 
-**Continuation status:** `complete_ready_for_user_run_now_validation`
+## Verified facts
 
-**Main integration:** PR `#16` merged to `main` as `ecde503c6b74aa964e7b331da009f87af8d0b3cd` after the PR workflow `Validate backlog dispositions` completed successfully.
+- START gate and architecture preflight were completed from `main`; all six required handoff commits were confirmed: `66c8901745c7b953d88c20b8de69f1bf8f6549cd`, `28a6cdae17518fb6324332517f139497b2ced450`, `f01845137023189da20abadcec1f8e9ee4bab647`, `131c4629c54af07a9955478af872587e87a6dcc9`, `9f50843adae9692bf2c0386bf79ef5d88b9856c8`, `83aa9abc2c5d9c96d979f29dee92b8bf1b2e1f5d`.
+- The old scope restriction was explicit: before this task, `scripts/build_taste_steam_review_dossier_work.py` read `data/production/pre_ai/taste_active_work_unit.json` through `--pin` and called `build_work_manifest(pin, ...)`, so the active exact Taste pin could be mistaken for the whole dossier backlog.
+- The canonical preparation scope is now the full current eligible Taste backlog from `data/production/pre_ai/chatgpt_taste_queue.jsonl`, preserving canonical queue order and deduplicating by first eligible Steam `appid` occurrence.
+- Eligibility requires at least one canonical Taste-semantic work marker: `evaluate_taste_fit`, `evaluate_normalized_taste_factors`, or `resolve_grounded_negative_analysis`. Base-support-only and other non-Taste-only rows are excluded; mixed Taste+support rows remain eligible.
+- The active Taste pin remains downstream-only for exact semantic input and was not redefined.
+- Checkpoint size remains `10`, strictly as a durability/runtime boundary, never a per-run quota, daily cap, production limit, or completeness threshold.
+- Existing fresh dossiers, including the previously produced first 10 production dossiers, remain reusable and are not regenerated merely because backlog scope changed.
+- Neither existing Scheduled Task was modified, duplicated, deleted, or run by this worker. No real production dossier backlog was executed.
 
-## START gate and architecture preflight
+## Changes
 
-The continuation started by reading `CHAT_PROTOCOL.md` from `main`, then `CHAT_CONTEXT.md`, `PROJECT_ROUTES.md`, `CURRENT_TASK.md`, the continuation/original worker tasks, the relevant ownership contract, and the focused queue/checkpoint pitfall. The architecture preflight confirmed that GitHub remains the control plane for dossier scope, ordering, checkpoint progression, persistence and completeness. ChatGPT remains a constrained semantic data-plane worker and cannot invent scope or turn checkpoint size into a quota.
-
-The six required pre-existing commits were confirmed on `worker/taste-dossier-full-backlog-01` before continuation work:
-
-- `66c8901745c7b953d88c20b8de69f1bf8f6549cd`
-- `28a6cdae17518fb6324332517f139497b2ced450`
-- `f01845137023189da20abadcec1f8e9ee4bab647`
-- `131c4629c54af07a9955478af872587e87a6dcc9`
-- `9f50843adae9692bf2c0386bf79ef5d88b9856c8`
-- `83aa9abc2c5d9c96d979f29dee92b8bf1b2e1f5d`
-
-The continuation handoff existed only on `main` while implementation continued on the worker branch. PR `#16` safely reconciled that divergence and integrated the verified implementation.
-
-## Architecture rationale
-
-The dossier preparation scope is the **full current eligible Taste backlog** derived by GitHub from `data/production/pre_ai/chatgpt_taste_queue.jsonl`, preserving canonical queue order and deduplicating by Steam `appid` on first eligible occurrence.
-
-Eligibility is explicitly Taste-semantic work. Rows whose `work_required` contains at least one of:
-
-- `evaluate_taste_fit`
-- `evaluate_normalized_taste_factors`
-- `resolve_grounded_negative_analysis`
-
-are eligible for dossier preparation. Rows whose work is only `resolve_base_support_condition` or other non-Taste support work are excluded. Mixed rows remain eligible when they also contain a Taste-semantic work item.
-
-The active Taste pin (`data/production/pre_ai/taste_active_work_unit.json`) remains deliberately **downstream-only**. It binds the exact semantic producer input and is not the total dossier-preparation scope. The exact active pin behavior was regression-protected and not changed.
-
-This rationale is durable in `PROJECT_DECISIONS.md` as `TASTE-004`.
-
-## Implemented checkpoint model
-
-Checkpoint size `10` is a durability/runtime boundary, **not** a per-run quota, daily cap, production limit or completion threshold.
-
-GitHub now owns all of the following explicitly:
-
-1. build the entire current required dossier set from the full eligible backlog;
-2. expose only the next bounded checkpoint in `required_items[]`;
-3. require an exact, ordered submission for that checkpoint;
-4. atomically persist accepted dossier files;
-5. immediately rebuild the work manifest from the unchanged canonical queue plus the durable dossier store;
-6. expose the next checkpoint when work remains;
-7. declare full backlog ready only when `remaining_required_count == 0`.
-
-`persist_submission_and_rebuild_work(...)` also binds ingest to the exact canonical queue snapshot used to prepare the manifest. If the queue changes before ingest, the operation fails closed before persistence and requires a fresh work build.
-
-The CLI ingest path rewrites the canonical work manifest after each successful checkpoint, so a scheduled invocation can continue through successive GitHub-prepared checkpoints. If a real platform/tool/runtime limit interrupts the invocation, already accepted checkpoints remain durable and a later invocation deterministically resumes the remaining scope.
-
-## Cleanup and freshness
-
-TTL remains `20` days by default and remains configurable only within the existing contract bounds.
-
-- fresh dossier: reused without reanalysis;
-- missing dossier: create required;
-- stale eligible in-scope dossier: refresh required and preserved until replacement succeeds;
-- stale dossier outside the full eligible dossier scope: cleanup-eligible under the existing GitHub-owned cleanup rule;
-- invalid dossier: preserved fail-closed for follow-up rather than silently deleted.
-
-Cleanup now uses the same full eligible dossier scope as work preparation, not the active checkpoint or active Taste pin.
-
-## Worker contract
-
-The semantic worker prompt now states explicitly that:
-
-- current `required_items[]` is one GitHub-prepared durability checkpoint;
-- normal checkpoint size `10` is not a quota;
-- after successful ingest, the worker continues with the rebuilt GitHub checkpoint in the same invocation while `status=work_required`;
-- normal completion requires `full_backlog_complete=true` / zero remaining work;
-- a real platform/tool/runtime interruption must not be reported as completion;
-- base-support-only/non-Taste rows are outside dossier scope;
-- submissions bind to `scope_sha256`, `scope_source` and `source_queue_sha256` and exactly cover only the current checkpoint.
+- `config/taste_steam_review_dossier_contract.json` now distinguishes full dossier-preparation backlog from bounded downstream Taste pin, records Taste-semantic eligibility, GitHub ownership, checkpoint semantics, resume behavior, and READY only at zero remaining required work.
+- `scripts/taste_steam_review_dossier.py` derives full eligible scope, filters non-Taste work, deduplicates by `appid`, exposes a bounded exact checkpoint while retaining full completeness counts, rejects mismatched/partial submissions fail-closed, persists accepted checkpoints, and deterministically rebuilds the next checkpoint from the unchanged canonical queue plus durable dossier store.
+- `scripts/build_taste_steam_review_dossier_work.py` builds the next checkpoint from the full eligible canonical queue instead of the active pin.
+- `scripts/ingest_taste_steam_review_dossiers.py` persists one exact checkpoint and rewrites the canonical manifest to the next checkpoint automatically.
+- `scripts/taste_steam_review_dossier_cleanup.py` uses the same full eligible dossier scope for stale in-scope refresh versus stale out-of-scope cleanup.
+- `config/taste_steam_review_dossier_worker_prompt.md` explicitly requires same-invocation continuation through successive GitHub-prepared checkpoints until full exhaustion or a genuine runtime/tool limit.
+- Architecture rationale is durable in `PROJECT_DECISIONS.md` as `TASTE-004`.
 
 ## Validation
 
-Focused regression command:
+Focused regression command: `PYTHONPATH=scripts python -m unittest -v test_taste_steam_review_dossier test_taste_steam_review_dossier_cleanup`.
 
-`PYTHONPATH=scripts python -m unittest -v test_taste_steam_review_dossier test_taste_steam_review_dossier_cleanup`
+Result: **22/22 passed**. Coverage includes backlog `>10` and `>100`, deterministic sequence `25 -> 10 -> 10 -> 5 -> READY`, durable partial resume, final remainder below checkpoint size, READY only at full exhaustion, fresh/stale/missing lifecycle, deterministic dedupe/order, exact checkpoint fail-closed validation, queue-snapshot change fail-closed behavior, unchanged exact-10 semantic pin behavior, base-support/non-Taste exclusion, and cleanup eligibility.
 
-Result: **22/22 passed**.
+Synthetic CLI smoke using the actual builder/ingest command paths: `12 -> checkpoint 10 -> checkpoint 2 -> 0`; final manifest `ready_from_fresh_cache`, exactly 12 synthetic dossier files durable.
 
-Coverage includes the required continuation matrix:
+PR `#16` workflow `Validate backlog dispositions`, job `backlog-disposition`, completed successfully on implementation head `397267c4148354bcb0d071385dbb6c099355d5e0` before merge.
 
-- backlog larger than 10 and larger than 100;
-- deterministic sequential progression `25 → 10 → 10 → 5 → READY`;
-- partial durable progress/resume from the first remaining appid;
-- final remainder smaller than checkpoint size;
-- READY only after the entire required backlog is exhausted;
-- exact checkpoint submission fail-closed, with partial checkpoint rejected before persistence;
-- canonical queue snapshot change fail-closed before persistence;
-- fresh reuse, stale refresh, missing create;
-- deterministic appid dedupe and canonical order;
-- unchanged exact active semantic 10-pin behavior and fail-closed semantic input;
-- exclusion of base-support-only and other non-Taste-only rows;
-- stale base-support-only dossier treated as out-of-scope for cleanup;
-- adaptive review ceilings, Russian lane, raw-review/personalized-content guards retained.
+## Unresolved
 
-A separate CLI smoke used 12 synthetic eligible rows and the actual builder/ingest command paths:
+No implementation blocker remains. Real production behavior beyond the first checkpoint is intentionally unvalidated because both worker tasks prohibit running the production dossier backlog or pressing Scheduled Task `Run now` from the worker session.
 
-- initial build: `remaining_required_count=12`, current checkpoint `10`;
-- first ingest: persisted `10`, manifest automatically rebuilt to checkpoint `2`;
-- second ingest: persisted `2`, `remaining_required_count=0`, `full_backlog_complete=true`;
-- final manifest: `ready_from_fresh_cache`; exactly 12 dossier files were durable.
+## Status
 
-PR `#16` then ran repository workflow `Validate backlog dispositions` on head `397267c4148354bcb0d071385dbb6c099355d5e0`; job `backlog-disposition` completed successfully before merge.
+`complete_ready_for_user_run_now_validation`
 
-No real production dossier backlog, Steam review population, Scheduled Task `Run now`, throughput benchmark or production semantic generation was executed during this continuation.
+Verified implementation reached `main` via PR `#16`; `CURRENT_TASK.md` records the same final status.
 
-## Explicitly unchanged
+## Recommended next step
 
-- existing `Taste Steam Review Dossier` Scheduled Task was not modified or triggered;
-- existing Taste Semantic Producer was not modified or triggered;
-- active Taste pin authority was not changed;
-- no second scheduler/producer was created;
-- no age-priority rule was introduced;
-- no new production quota/limit was introduced;
-- no real dossier backlog was populated by this worker.
+Director reviews this report; if accepted, the user performs one fresh manual **Run now / Выполнить сейчас** on the existing `Taste Steam Review Dossier` Scheduled Task and we verify that the single production invocation continues beyond checkpoint 10 when eligible backlog remains, or stops only on a genuine runtime/tool limit with prior checkpoints durable.
 
-## Final state / next user action
+## Exact refs
 
-The verified implementation is now on `main`. The continuation is therefore `complete_ready_for_user_run_now_validation`.
+- implementation branch head before merge: `397267c4148354bcb0d071385dbb6c099355d5e0`;
+- merge: PR `#16` -> `ecde503c6b74aa964e7b331da009f87af8d0b3cd`;
+- post-merge report closeout: `49819d0e18404c1279abc41f06c03ab27eea33c2`;
+- `CURRENT_TASK.md` closeout: `88a9107562bb3a9e3f1852ac076d8b4c4c28361f`;
+- main implementation files: `config/taste_steam_review_dossier_contract.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier.py`, `scripts/build_taste_steam_review_dossier_work.py`, `scripts/ingest_taste_steam_review_dossiers.py`, `scripts/taste_steam_review_dossier_cleanup.py`;
+- regression files: `scripts/test_taste_steam_review_dossier.py`, `scripts/test_taste_steam_review_dossier_cleanup.py`.
 
-The next action is intentionally user-controlled: perform a fresh manual **Run now** on the existing `Taste Steam Review Dossier` Scheduled Task and validate that the production invocation continues beyond the first checkpoint when eligible work remains. This worker did not perform that production run because the task explicitly prohibited it.
+## Efficiency / reusable lesson
+
+For bounded production workers, keep total canonical scope/completeness separate from the current durability checkpoint. A technical batch size must never become an implicit quota; GitHub should persist exact checkpoint progress and deterministically rebuild the next checkpoint from canonical state.
