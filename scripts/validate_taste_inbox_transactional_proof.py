@@ -164,6 +164,56 @@ def post_fit_deal_exclude_drops_negative_case():
     return checks
 
 
+def pinned_key_removed_from_live_queue_case():
+    key = 'App_stale_pinned'
+    pinned_row = {
+        'taste_subject_key': key,
+        'appid': '123',
+        'taste_fingerprint': 'a' * 64,
+        'candidate_context_sha256': 'b' * 64,
+        'work_required': ['evaluate_taste_fit', 'resolve_grounded_negative_analysis'],
+    }
+    baseline_projection = {
+        'complete_coverage': True,
+        'safe_cache_hit_count': 5,
+        'ai_required_count': 3,
+        'entries': {key: {'status': 'not_current_live_work'}},
+    }
+    after_projection = {
+        'complete_coverage': True,
+        'safe_cache_hit_count': 5,
+        'ai_required_count': 3,
+        'entries': {key: {'status': 'not_current_live_work'}},
+    }
+    after_queue = [
+        {'taste_subject_key': 'App_live_1'},
+        {'taste_subject_key': 'App_live_2'},
+        {'taste_subject_key': 'App_live_3'},
+    ]
+    checks, retained, mismatches, expected_queue, full_eval_count = build_transactional_proof_checks(
+        all_keys=[key],
+        result_by_key={key: {}},
+        baseline_queue_by_key={key: pinned_row},
+        baseline_current_queue_by_key={},
+        baseline_safe_hits=5,
+        baseline_ai_required=3,
+        baseline_ai_queue=3,
+        after_projection=after_projection,
+        after_manifest=valid_manifest(3),
+        after_queue=after_queue,
+        baseline_projection=baseline_projection,
+        current_reusable_by_key={key: False},
+    )
+    assert all(checks.values()), checks
+    assert retained == {}
+    assert mismatches == {}
+    assert expected_queue == 3
+    assert full_eval_count == 1
+    assert checks['older_pinned_result_does_not_become_current_live_cache_hit'] is True
+    assert checks['newer_live_work_remains_exact_for_next_work_unit'] is True
+    return checks
+
+
 def illegal_retained_taste_work_case():
     checks, retained, mismatches, expected_queue, full_eval_count = build_transactional_proof_checks(
         all_keys=['App_1'],
@@ -201,12 +251,14 @@ def main():
     legal = legal_retained_base_support_case()
     final_exclude = final_taste_exclude_drops_stale_base_support_case()
     deal_exclude = post_fit_deal_exclude_drops_negative_case()
+    stale_removed = pinned_key_removed_from_live_queue_case()
     illegal_failed = illegal_retained_taste_work_case()
     print(json.dumps({
         'status': 'PASS',
         'legal_retained_base_support_case': all(legal.values()),
         'final_taste_exclude_drops_stale_base_support_case': all(final_exclude.values()),
         'post_fit_deal_exclude_drops_negative_case': all(deal_exclude.values()),
+        'pinned_key_removed_from_live_queue_case': all(stale_removed.values()),
         'illegal_retained_taste_work_failed_checks': illegal_failed,
     }, indent=2))
     print('TASTE_INBOX_TRANSACTIONAL_PROOF_VALIDATION=PASS')
