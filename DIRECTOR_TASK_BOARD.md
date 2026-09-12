@@ -8,7 +8,7 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed. Architecture review may run in parallel only when read-only and non-blocking.
 
-## ACTIVE — normal ChatGPT/Taste semantic producer
+## ACTIVE — normal ChatGPT/Taste mechanism + throughput measurement
 Task:
 `WORKER_TASK_TASTE_NORMAL_SEMANTIC_PRODUCER_01.md`
 
@@ -16,41 +16,51 @@ Task ID:
 `taste-normal-semantic-producer-01`
 
 Status:
-`root_cause_analyzed_ready_to_resume_chat_1`
+`corrected_ready_to_resume_chat_1_throughput_measurement`
 
 Mode:
-`IMPLEMENT_AND_VERIFY_READY_FOR_SCHEDULE`
+`IMPLEMENT_AND_MEASURE_THROUGHPUT`
 
 Worker slot:
 `ЧАТ 1`
 
 Worker context:
-- use the current clean Taste working chat named `ЧАТ 1`;
-- the previous Steam `ЧАТ 1` is closed and must not be reused for this task;
-- first Taste attempt was interrupted before implementation and before writing the required worker report;
-- root-cause review found no GitHub access failure and no ambiguity in the task assignment;
-- primary process failure was excessive preliminary search/re-fetch before fully reading the current task and extracting its checklist;
-- `CHAT_PROTOCOL.md` now enforces task-first execution, bounded path resolution, and precise interruption reporting;
-- required report `reviews/worker_reports/taste-normal-semantic-producer-01.md` is still absent, so the task is not complete and has not reached either allowed final status;
-- safe to resume the same Taste task in the current clean `ЧАТ 1` using the corrected task-first process.
+- continue in the current Taste working chat named `ЧАТ 1`; do not restart from a new chat;
+- the previous `blocked_requires_followup` conclusion was caused by an incorrect task coupling between normal producer work and the separate age-priority task;
+- that age-priority dependency is now removed from the active task;
+- the current active/pinned 10-item state is not, by itself, a reason to stop the normal mechanism/throughput task;
+- `CHAT_PROTOCOL.md` task-first execution rules remain mandatory;
+- the worker must reread the corrected `WORKER_TASK_TASTE_NORMAL_SEMANTIC_PRODUCER_01.md` from `main` and continue from the current chat context.
 
 Goal:
-- implement the normal deterministic Taste queue producer for ChatGPT evaluation;
-- process at most 10 games per invocation;
-- integrate never-checked-first, then oldest-successfully-checked-first ordering;
+- prepare the working normal Taste semantic-processing mechanism;
+- then perform a real throughput measurement in the same uninterrupted `ЧАТ 1` working run;
+- measure in durable checkpoints of 10 real games: 10 processed+saved, then next 10, then next 10, continuing until a genuine execution/context/tool/canonical limit is reached;
+- `10` is only the measurement/checkpoint step size, NOT the future Scheduled Task limit and NOT a permanent per-invocation ceiling;
+- after every completed 10-game checkpoint, durably save/accept the work and update the worker report so already completed work is not lost;
+- the factual measurement result is the cumulative number of real game evaluations durably accepted in that single measurement run;
 - preserve accepted historical Taste results and provenance;
-- make retry/result ingest durable and idempotent;
-- use short deterministic tests only;
-- do not run a large real semantic batch;
+- keep retry/result ingest durable and idempotent;
+- use only short deterministic tests before the real measurement;
+- do not implement or test age-priority sorting in this task;
+- use the current canonical queue/order unchanged during measurement;
 - do not create a second Scheduled Task;
-- do not change existing Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` yet;
-- prepare the exact prompt contract and recommended cadence for the Director to activate later.
+- do not change existing Scheduled Task `6aa032f37e688191a5c9a1a83f91c5d9` during this task;
+- do not choose or install the final production limit after the measurement.
+
+After measurement:
+- Director must first report to the user how many games were actually processed and durably accepted;
+- report where/why the run stopped if it stopped on a limit/blocker;
+- report how stable the completed checkpoints were, including retries/errors;
+- then separately ask/decide with the user what safe production limit to use;
+- the chosen production limit may intentionally be lower than the measured maximum;
+- only after a separate user decision may the existing `Taste Semantic Producer` Scheduled Task be reconfigured.
 
 Expected report:
 `reviews/worker_reports/taste-normal-semantic-producer-01.md`
 
 Expected final status:
-- `complete_ready_for_normal_scheduled_producer`
+- `complete_throughput_measured_ready_for_user_limit_decision`
 - or `blocked_requires_followup`
 
 ## ACCEPTED — real Steam partial-publish production refresh
@@ -218,11 +228,15 @@ Task:
 `WORKER_TASK_TASTE_QUEUE_AGE_PRIORITY_ORDER_01.md`
 
 Status:
-`queued_before_next_new_semantic_batch`
+`deferred_separate_do_not_block_throughput_measurement`
 
-Required ordering for newly constructed Taste work:
+This is a separate later task and is not part of the current throughput measurement.
+
+Required ordering when separately authorized later:
 1. never successfully canonically Taste-checked;
 2. then previously checked from oldest successful canonical Taste evaluation to newest.
+
+Do not invoke, implement, or use this task as a blocker for the current `ЧАТ 1` throughput measurement.
 
 ## Proactive Project Auditor — standing role
 Protocol:
@@ -230,11 +244,15 @@ Protocol:
 
 ## Normal Scheduled Task — still NOT normal producer
 Existing task:
-- title `Taste Semantic Producer`
-- id `6aa032f37e688191a5c9a1a83f91c5d9`
+- title `Taste Semantic Producer`;
+- id `6aa032f37e688191a5c9a1a83f91c5d9`;
 - current prompt is still the old Chernobylite one-game canary prompt.
 
-Keep the stale canary safely DAILY 01:00 Europe/Samara until normal producer implementation is actually ready.
+Keep the stale canary safely DAILY 01:00 Europe/Samara during the mechanism implementation and throughput measurement.
+
+After the measurement, do NOT automatically switch the Scheduled Task to the measured maximum and do NOT automatically carry over the 10-game measurement step as its production limit.
+
+First report the measurement result to the user and obtain a separate decision on the safe production limit. Only then may the existing Scheduled Task be reconfigured. Never create a second task.
 
 ## Other queued work
 - `WORKER_TASK_GIVEAWAY_ITAD_IDENTITY_IMPLEMENT_01.md` remains queued.
