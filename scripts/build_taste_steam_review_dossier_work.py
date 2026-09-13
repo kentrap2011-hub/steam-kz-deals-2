@@ -3,7 +3,8 @@ import argparse
 import json
 from pathlib import Path
 
-from taste_steam_review_dossier import atomic_write_json, build_work_manifest, load_contract
+from taste_steam_review_dossier import atomic_write_json
+from taste_steam_review_dossier_daily import build_daily_work_manifest, load_contract
 
 
 def _read_jsonl(path):
@@ -19,7 +20,7 @@ def _read_jsonl(path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Build the next bounded Steam review dossier checkpoint from the full canonical Taste backlog")
+    parser = argparse.ArgumentParser(description="Build one complete fixed daily Steam review dossier backlog snapshot")
     parser.add_argument("--contract", default="config/taste_steam_review_dossier_contract.json")
     parser.add_argument("--queue", default="data/production/pre_ai/chatgpt_taste_queue.jsonl")
     parser.add_argument("--store-dir", default="data/cache/taste_steam_review_dossiers")
@@ -29,20 +30,20 @@ def main():
 
     contract = load_contract(args.contract)
     queue_rows = _read_jsonl(args.queue)
-    manifest = build_work_manifest(queue_rows, contract, args.store_dir, ttl_days=args.ttl_days)
+    manifest = build_daily_work_manifest(
+        queue_rows, contract, args.store_dir, ttl_days=args.ttl_days, source_queue_path=args.queue
+    )
     atomic_write_json(args.output, manifest)
     print(json.dumps({
         "status": manifest["status"],
-        "scope_sha256": manifest["scope_sha256"],
+        "snapshot_id": manifest["snapshot_id"],
+        "prepared_for_date": manifest["prepared_for_date"],
         "source_queue_sha256": manifest["source_queue_sha256"],
         "source_row_count": manifest["source_row_count"],
-        "eligible_row_count": manifest["eligible_row_count"],
-        "unique_appid_count": manifest["unique_appid_count"],
-        "deduplicated_row_count": manifest["deduplicated_row_count"],
-        "checkpoint_size": manifest["checkpoint"]["checkpoint_size"],
-        "checkpoint_required_count": manifest["checkpoint"]["item_count"],
-        "remaining_required_count": manifest["required_total_count"],
-        "remaining_after_checkpoint_count": manifest["checkpoint"]["remaining_after_checkpoint_count"],
+        "eligible_scope_count": manifest["eligible_scope_count"],
+        "prepared_required_count": manifest["prepared_required_count"],
+        "current_checkpoint_count": manifest["current_checkpoint_count"],
+        "remaining_required_count": manifest["remaining_required_count"],
         "full_backlog_complete": manifest["full_backlog_complete"],
     }, ensure_ascii=False, indent=2))
 
