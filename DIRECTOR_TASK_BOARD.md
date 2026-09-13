@@ -8,38 +8,66 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## ACTIVE — full Steam review dossier backlog
+## ACTIVE — daily full-backlog Steam review dossier control plane
 Task:
-`WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_FULL_BACKLOG_01.md`
+`WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_CONTROL_PLANE_REFRESH_01.md`
 
 Task ID:
-`taste-steam-review-dossier-full-backlog-01`
+`taste-steam-review-dossier-control-plane-refresh-01`
 
 Status:
-`authorized_ready_for_worker`
+`authorized_revised_ready_for_worker`
 
 Mode:
 `IMPLEMENT`
 
 Worker slot:
-`ЧАТ 2` — use a NEW chat because the previous Chat 2 session exhausted context before making repository changes.
+`ЧАТ 2` — continue in the current dossier implementation chat while its context remains useful.
+
+User-approved architecture:
+- GitHub once per day prepares one complete canonical dossier backlog from the current eligible Taste queue;
+- the existing `Taste Steam Review Dossier` Scheduled Task processes that complete prepared backlog;
+- checkpoint size 10 is only a durable persistence/runtime boundary, never the amount of work GitHub exposes and never a quota;
+- no GitHub scope rebuild is required merely to reveal the next 10 items;
+- if the prepared daily backlog is empty, dossier work for that prepared day is complete;
+- if ChatGPT hits a genuine runtime/tool limit, completed checkpoints remain durable and a later invocation resumes the same prepared backlog;
+- manual `Run now` may use the latest prepared daily backlog and does not require an on-demand GitHub refresh; source changes after preparation may wait until the next daily preparation.
 
 Goal:
-- correct dossier scope so one existing `Taste Steam Review Dossier` invocation can continue through the whole current eligible dossier backlog rather than only the current 10-item Taste active pin;
-- keep GitHub as scope/queue/checkpoint/completeness owner;
-- first reconcile `config/taste_steam_review_dossier_contract.json`, whose current `exact_pinned_game_scope` wording is too narrow for the already-authorized full-backlog scheduler behavior;
-- preserve the existing 10 fresh production dossiers;
-- allow small durable checkpoints (10 is acceptable) without treating checkpoint size as a per-run or daily quota;
-- validate with backlog >10 and checkpoint continuation;
-- do not run the real mass backfill in the worker; user validates later with `Run now` on the existing Scheduled Task.
+- replace the overly coupled next-10-manifest production design with one daily GitHub-prepared full backlog;
+- wire preparation into the appropriate existing GitHub daily control-plane route before the dossier task runs;
+- preserve GitHub ownership of scope/order/freshness/completeness and ChatGPT ownership only of evidence collection/synthesis for the prepared list;
+- keep the existing 10 fresh production dossiers reusable;
+- keep `Taste Semantic Producer` unchanged;
+- validate full-list processing and resume semantics without running the real mass backlog in the worker chat.
 
 Expected report:
-`reviews/worker_reports/taste-steam-review-dossier-full-backlog-01.md`
+`reviews/worker_reports/taste-steam-review-dossier-control-plane-refresh-01.md`
 
 Allowed final statuses:
-- `complete_ready_for_user_run_now_full_backlog_validation`
-- `blocked_contract_or_scope_ambiguity`
-- `needs_fix`
+- `complete_ready_for_user_run_now_validation`
+- `needs_user_decision`
+- `blocked`
+
+## ACCEPTED — full Steam review dossier backlog scope implementation
+Task:
+`WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_FULL_BACKLOG_01.md`
+
+Report:
+`reviews/worker_reports/taste-steam-review-dossier-full-backlog-01.md`
+
+Final status:
+`complete_ready_for_user_run_now_validation`
+
+Accepted facts:
+- full eligible Taste dossier scope is no longer limited to the 10-item active Taste semantic pin;
+- semantic pin remains downstream-only;
+- fresh dossiers are reusable;
+- non-Taste/base-support-only rows are excluded;
+- regression coverage proved >10 scope and durable checkpoint continuation;
+- implementation reached `main` via PR #16 / merge `ecde503c6b74aa964e7b331da009f87af8d0b3cd`.
+
+Production validation then exposed a separate orchestration defect: the real Scheduled Task saw a stale pre-merge empty manifest and processed 0. The current active task replaces the next-10-manifest coupling with the simpler daily full-backlog model.
 
 ## ACCEPTED — Steam review dossier preparer mechanism
 Task:
@@ -56,20 +84,20 @@ Accepted facts:
 - Russian + non-Russian review lanes implemented;
 - default TTL 20 days, configurable;
 - GitHub owns validation/persistence/cleanup;
-- downstream Taste input remains fail-closed;
-- current implementation originally scoped dossier work to the current Taste active pin, which is the specific issue now being corrected by the active full-backlog task.
+- downstream Taste input remains fail-closed.
 
 ## LIVE — existing dossier Scheduled Task
 Title:
 `Taste Steam Review Dossier`
 
 State:
-- task exists and the user successfully executed `Run now` once;
-- first real run generated/persisted 10/10 required dossiers and reached `ready_from_fresh_cache` for the then-visible scope;
-- durable checkpoint reported by the run: `0e3a1e425a03466ee841d19e0d9446a04157b4da`;
-- those 10 dossiers must be reused, not discarded;
-- the observed defect is that control-plane scope ended at the current 10-item active pin instead of continuing through the full eligible backlog;
-- do not run it again until the active full-backlog implementation/report is accepted.
+- task exists;
+- first real run generated/persisted 10 dossiers;
+- those 10 dossiers remain reusable;
+- later `Run now` after full-backlog merge processed 0 because the canonical work manifest was stale and still said `ready_from_fresh_cache`;
+- the task correctly refused to invent scope;
+- do not use the 0-result run as evidence that the eligible backlog is empty;
+- next real user validation waits for the active daily full-backlog control-plane task to be accepted.
 
 ## PAUSED — normal ChatGPT/Taste mechanism + clean throughput measurement
 Task:
@@ -84,7 +112,7 @@ Previous measurement evidence:
 - therefore that historical run is not the final clean full-game capacity benchmark.
 
 Status:
-`paused_until_dossier_full_backlog_path_is_ready_and_user_validated`
+`paused_until_dossier_daily_full_backlog_path_is_ready_and_user_validated`
 
 Worker slot:
 `ЧАТ 1` may be reused later with a fresh chat if the old context is no longer useful.
@@ -105,7 +133,7 @@ Existing task:
 - id `6aa032f37e688191a5c9a1a83f91c5d9`;
 - current UI prompt is still the old one-game Chernobylite canary;
 - user screenshot shows daily schedule at 23:00 Samara time;
-- keep unchanged during dossier backlog correction.
+- keep unchanged during dossier control-plane correction.
 
 Do not reconfigure it until dossier production is validated and a later clean throughput measurement plus separate user production-limit decision are complete.
 
