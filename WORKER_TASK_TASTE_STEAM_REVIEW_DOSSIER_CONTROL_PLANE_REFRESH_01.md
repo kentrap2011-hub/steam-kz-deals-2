@@ -1,112 +1,228 @@
-# WORKER TASK — Taste Steam review dossier control-plane refresh 01
+# WORKER TASK — Taste Steam review dossier daily full-backlog control plane 01
 
 Task ID: `taste-steam-review-dossier-control-plane-refresh-01`
 
-Status: `authorized_ready_for_worker`
+Status: `authorized_revised_ready_for_worker`
 
 Mode: `IMPLEMENT`
 
+## User-approved architecture
+
+Use a simple daily two-stage model:
+
+1. **GitHub once per day prepares one complete canonical dossier backlog for that day** from the current eligible Taste queue.
+2. The existing ChatGPT Scheduled Task `Taste Steam Review Dossier` reads that complete GitHub-prepared backlog and processes it from start to finish.
+3. The worker may save progress in small durable checkpoints (10 is acceptable), but checkpoint size is only a persistence/runtime boundary. It must not determine what work GitHub exposes and must not become a per-run or daily quota.
+4. If the prepared daily backlog is empty, dossier work for that prepared day is complete.
+5. If the ChatGPT run hits a genuine runtime/tool limit, already completed checkpoints stay durable and the next invocation resumes the same prepared daily backlog from the remaining items.
+6. A manual `Run now / Выполнить сейчас` is allowed to use the most recently prepared daily GitHub backlog. It does **not** need to force an on-demand GitHub refresh. New source changes that appear after the daily preparation may wait until the next daily GitHub preparation.
+
+This decision intentionally replaces the more complicated design where GitHub exposes only the next 10 items and must rebuild a new manifest after every checkpoint.
+
 ## Goal
-Close the production orchestration gap exposed by the first real `Run now` validation after the full-backlog dossier implementation.
 
-The existing Scheduled Task `Taste Steam Review Dossier` must be able to obtain a current GitHub-prepared dossier work manifest without inventing scope itself and without requiring the user to manually run a separate preparatory GitHub step before every `Run now`.
+Implement this daily full-backlog architecture with GitHub remaining the production control-plane owner and ChatGPT remaining only the bounded semantic/evidence worker.
 
-GitHub/control-plane remains owner of scope derivation, queue construction, checkpoint state, retry/completeness and manifest persistence. Scheduled ChatGPT may only consume the exact GitHub-prepared `required_items[]`, collect Steam evidence and submit results through the canonical path.
+The user must not need to manually run a GitHub Action before the normal daily dossier task.
 
 ## Background
-Full-backlog implementation is already on `main`; durable report:
-`reviews/worker_reports/taste-steam-review-dossier-full-backlog-01.md`
 
-Accepted refs:
-- PR `#16`
-- merge `ecde503c6b74aa964e7b331da009f87af8d0b3cd`
-- closeout `49819d0e18404c1279abc41f06c03ab27eea33c2`
-- `CURRENT_TASK.md` closeout `88a9107562bb3a9e3f1852ac076d8b4c4c28361f`
+The prior full-backlog implementation is already on `main`:
+- report: `reviews/worker_reports/taste-steam-review-dossier-full-backlog-01.md`;
+- PR `#16`;
+- merge `ecde503c6b74aa964e7b331da009f87af8d0b3cd`.
 
-Subsequent real Scheduled Task `Run now` processed 0 new dossiers because `taste_steam_review_dossier_work.json` still had `status="ready_from_fresh_cache"` and `required_items=[]`, generated before the full-backlog merge. The scheduled worker correctly stopped fail-closed instead of deriving its own scope.
+A real `Run now` after that merge processed 0 new dossiers because the canonical `taste_steam_review_dossier_work.json` was still an older `ready_from_fresh_cache` manifest prepared before the merge. The Scheduled Task correctly refused to derive scope by itself.
 
-This is a confirmed orchestration defect: the full-backlog builder exists, but the production control plane does not reliably rebuild/publish the current dossier manifest before the collector needs it.
+Root architectural simplification now authorized by the user:
+- GitHub should not expose only one 10-item work checkpoint;
+- GitHub should prepare the **entire daily eligible dossier backlog** in one canonical manifest/snapshot;
+- ChatGPT should process that fixed prepared backlog sequentially, checkpointing persistence internally as needed.
 
-## Mandatory preflight
-Follow `CHAT_PROTOCOL.md` START gate first. Before writes, verify the minimal relevant route using:
-- `config/execution_ownership_contract.json`
-- `config/taste_steam_review_dossier_contract.json`
-- relevant `PROJECT_ROUTES.md` entry if present
-- exact existing GitHub workflow/control-plane path that creates or refreshes `data/production/pre_ai/chatgpt_taste_queue.jsonl`
-- `scripts/build_taste_steam_review_dossier_work.py`
-- current dossier ingest/rebuild path
+## Mandatory START / architecture preflight
+
+Follow `CHAT_PROTOCOL.md` START gate first.
+
+Before writes, verify the minimal current route and reconcile the canonical contracts. At minimum inspect only what is needed from:
+- `config/execution_ownership_contract.json`;
+- `config/taste_steam_review_dossier_contract.json`;
+- relevant `PROJECT_ROUTES.md` entry if present;
+- `PROJECT_DECISIONS.md` relevant Taste dossier rationale;
+- current GitHub path that creates/refreshes `data/production/pre_ai/chatgpt_taste_queue.jsonl`;
+- current dossier manifest/build/ingest/persistence scripts;
+- existing daily production workflow that can own the once-daily preparation step.
 
 Do not perform a broad repository re-audit.
 
-## Required behavior
-Implement the minimal GitHub-owned orchestration so the canonical dossier work manifest cannot remain silently stale after source Taste backlog changes or dossier-backlog implementation changes.
+If current canonical wording still encodes a next-10 manifest as the production scope, update the contract/rationale first, then implementation.
 
-Required production semantics:
-1. GitHub deterministically prepares dossier work from the current canonical eligible Taste backlog.
-2. `taste_steam_review_dossier_work.json` is bound to current source/provenance strongly enough that stale preparation is detected fail-closed.
-3. Scheduled ChatGPT consumes only the exact current GitHub-prepared checkpoint.
-4. After a checkpoint is ingested, GitHub-owned logic prepares the next exact checkpoint automatically.
-5. Daily schedule and user `Run now` use the same logical production path.
-6. The user must not have to run a separate preparatory GitHub Action before every `Run now`.
+## Ownership invariants
 
-## Route preference
-Prefer wiring dossier manifest preparation into an existing canonical GitHub control-plane path that already owns Taste queue/pre-AI refresh, rather than creating an unrelated new recurring workflow.
+GitHub/control-plane owns:
+- the exact eligible daily dossier scope;
+- source snapshot/provenance binding;
+- fresh/stale/missing determination at preparation time;
+- deterministic order/dedupe;
+- retry/completeness state;
+- validation and canonical persistence;
+- deciding when the prepared daily backlog is fully complete.
 
-For arbitrary manual `Run now`, first determine whether an existing safe GitHub-owned prepare/refresh handshake can be reused. If not, implement only the minimal GitHub-owned trigger/handshake needed so Scheduled ChatGPT can request deterministic preparation while GitHub still derives and publishes scope. ChatGPT must never construct the manifest itself.
+Scheduled ChatGPT owns only:
+- reading the exact prepared daily backlog;
+- collecting Steam store/review evidence for those exact prepared items;
+- producing neutral compact dossiers;
+- submitting/persisting results through the canonical repository-defined interface;
+- proceeding through that already-prepared list until complete or a genuine runtime/tool limit.
 
-Do not create a second recurring ChatGPT task.
+ChatGPT must not add games that are not present in the prepared daily backlog and must not derive scope directly from `chatgpt_taste_queue.jsonl`.
 
-If the manual `Run now` requirement would require materially new architecture not authorized by canonical contracts, stop before that architecture and return `needs_user_decision` with the exact conflict.
+## Required daily preparation behavior
 
-## Stale-manifest guard
-Add a durable guard proving at least:
-- source Taste backlog changes => old dossier manifest is not accepted as current READY;
-- current builder run => manifest reflects current full eligible dossier scope;
-- fresh existing dossiers remain reusable;
-- READY is valid only when current-source remaining required work is actually zero.
+Integrate dossier backlog preparation into the appropriate existing GitHub-owned daily control-plane path whenever possible. Prefer adding a deterministic step to the existing daily/pre-AI production workflow rather than creating an unrelated new recurring workflow.
 
-Do not weaken fail-closed behavior.
+Each daily preparation must:
+1. read the current canonical eligible Taste queue;
+2. exclude non-Taste/base-support-only rows;
+3. deduplicate deterministically by Steam `appid` while preserving canonical queue order;
+4. reuse fresh valid dossiers;
+5. include every currently missing or stale eligible dossier in the **same prepared daily backlog**;
+6. persist source/provenance identity and preparation timestamp strongly enough to identify which daily source state the manifest represents;
+7. publish the complete prepared backlog before the ChatGPT dossier task's normal daily execution time.
+
+If zero items require work, publish a valid current empty daily backlog/READY state.
+
+## Daily backlog semantics
+
+The canonical daily manifest/snapshot must represent the full prepared workset for that day, not merely the first checkpoint.
+
+Example:
+- 37 items need dossiers at daily preparation time;
+- GitHub publishes all 37 as the prepared backlog;
+- ChatGPT processes items 1–10 and durably persists;
+- then 11–20;
+- then 21–30;
+- then 31–37;
+- only then is that prepared backlog complete.
+
+There is no GitHub scope rebuild between those checkpoints merely to reveal the next 10 items.
+
+If a run stops after 20 because of a real runtime/tool limit:
+- the first 20 remain durable;
+- the same prepared backlog records/derives 17 remaining;
+- the next daily or manual invocation resumes those 17 without redoing the first 20.
+
+## Manual Run now semantics
+
+A user-triggered `Run now` consumes the latest valid prepared daily backlog.
+
+It does not need to trigger an immediate GitHub rebuild first.
+
+Therefore:
+- if today's prepared backlog still has remaining items, `Run now` continues them;
+- if today's prepared backlog is complete/empty, `Run now` may correctly do nothing;
+- if the underlying Taste queue changed after today's preparation, those new changes may wait until the next daily GitHub preparation.
+
+This is intentional and should be documented in the durable report.
+
+## Scheduling integration
+
+Ensure the GitHub-owned daily preparation happens before the existing `Taste Steam Review Dossier` Scheduled Task with a safe margin.
+
+Do not change `Taste Semantic Producer`.
+
+Do not change the existing dossier Scheduled Task unless its prompt must be minimally updated to consume the new full daily manifest semantics. If such a prompt change is required, change only that existing dossier task, never create a duplicate, and document the exact change.
+
+If the current GitHub daily workflow timing already guarantees preparation before the dossier task, reuse it.
+
+## Persistence / checkpoint behavior
+
+Preserve durable incremental persistence.
+
+Checkpoint size may remain 10, but:
+- it must not limit the prepared backlog;
+- it must not require a new GitHub scope build after each checkpoint;
+- it must not be interpreted as a daily quota;
+- completed items must not be regenerated on resume;
+- one bad item must not destroy prior successful progress;
+- completion is based on zero remaining items from the prepared daily backlog.
+
+Use the minimal repository-native state representation needed to support resume idempotently.
+
+## Freshness / TTL
+
+Keep existing dossier TTL behavior unless a small compatibility adjustment is required:
+- default TTL 20 days;
+- fresh dossiers reused;
+- stale/missing eligible dossiers included in next daily preparation;
+- existing 10 fresh production dossiers remain reusable.
+
+Do not redesign review semantics.
 
 ## Prohibitions
+
 Do not:
 - change `Taste Semantic Producer`;
 - change Taste production limits;
 - resume Taste throughput measurement;
 - perform age-priority work;
-- redesign review semantics/TTL unless directly required;
 - create a second dossier Scheduled Task;
-- let Scheduled ChatGPT derive scope from `chatgpt_taste_queue.jsonl`;
-- manually construct production manifest as a substitute for fixing orchestration;
-- run the full Steam review backlog in the worker chat.
+- create a second Taste producer;
+- let ChatGPT choose or expand daily scope;
+- require an on-demand GitHub refresh before every manual `Run now`;
+- keep the old next-10-as-manifest architecture merely for compatibility if it conflicts with this approved design;
+- execute the real full Steam review backlog in the worker chat.
 
-Existing 10 fresh production dossiers must remain reusable.
+## Required validation
 
-## Acceptance
-Prove:
-1. stale pre-merge/pre-source-change manifest cannot yield false `ready_from_fresh_cache`;
-2. GitHub-owned preparation rebuilds from current full eligible Taste backlog;
-3. `>10` missing/stale eligible dossiers produce first exact checkpoint with correct total completeness state;
-4. ingest of checkpoint 1 automatically yields next GitHub-prepared checkpoint;
-5. fresh reuse remains correct;
-6. base-support-only/non-Taste rows remain excluded;
-7. exact Taste semantic pin behavior remains unchanged;
-8. Scheduled ChatGPT cannot bypass absent/stale control-plane state;
-9. daily and `Run now` use the same logical path;
-10. no separate recurring ChatGPT task/backlog manager is introduced;
-11. `Taste Semantic Producer` remains unchanged.
+Acceptance must prove at least:
 
-Run focused deterministic regressions plus the smallest safe control-plane smoke. Do not execute the actual Steam review backlog; the user performs the next real `Run now` after Director acceptance.
+1. Daily preparation with 25 missing/stale eligible games publishes one prepared backlog containing all 25, not only 10.
+2. ChatGPT-side/runtime simulation can progress `25 -> save 10 -> save 10 -> save 5 -> complete` without GitHub rebuilding scope between checkpoints.
+3. A runtime stop after the first 10 or 20 resumes the same prepared backlog without redoing completed dossiers.
+4. READY/complete occurs only when zero items remain from that prepared daily backlog.
+5. A current empty daily backlog is a legitimate no-work state.
+6. Fresh dossiers are excluded/reused; stale and missing eligible dossiers are included.
+7. Base-support-only/non-Taste rows are excluded.
+8. Deduplication/order remain deterministic.
+9. Exact downstream Taste semantic pin behavior remains unchanged.
+10. A source queue change after daily preparation does not mutate the already-prepared daily backlog; it is picked up by the next daily preparation.
+11. A manual `Run now` uses the latest prepared daily backlog and does not require an on-demand GitHub rebuild.
+12. GitHub preparation is wired into an actual daily control-plane path that runs before the dossier Scheduled Task.
+13. No new recurring ChatGPT task/backlog manager is introduced.
+14. `Taste Semantic Producer` remains unchanged.
+
+Run focused deterministic regressions and the smallest safe workflow/control-plane smoke needed to prove the daily preparation route.
+
+Do not execute the real Steam review backlog. The user will run the existing Scheduled Task after Director accepts the report.
+
+## Durable decision / routes
+
+Because this is a durable architecture simplification, update the appropriate canonical rationale/route (`PROJECT_DECISIONS.md` and/or `PROJECT_ROUTES.md`) if existing entries would otherwise direct future workers back to the old next-checkpoint manifest design.
 
 ## CURRENT_TASK.md
-Update only for truthful handoff/status bookkeeping; do not erase unrelated active work.
+
+Update only for truthful task handoff/status bookkeeping. Do not erase unrelated active work.
 
 ## Durable report
+
 Write:
 `reviews/worker_reports/taste-steam-review-dossier-control-plane-refresh-01.md`
 
-Include root cause, exact GitHub-owned route, any reused or added trigger/handshake, stale-manifest binding/guard, changed files, focused tests, proof ChatGPT does not own scope, Scheduled Task invariance, and one next step.
+Keep it compact and include:
+- exact old defect;
+- exact daily GitHub preparation route chosen;
+- full-daily-backlog manifest/state semantics;
+- checkpoint/resume semantics;
+- manual `Run now` semantics;
+- any Scheduled Task prompt change, if actually required;
+- changed files;
+- focused tests/workflow smoke;
+- confirmation that GitHub still owns scope and ChatGPT cannot add work;
+- confirmation that `Taste Semantic Producer` remains unchanged;
+- one next step.
 
-Allowed final statuses:
+## Allowed final statuses
+
 - `complete_ready_for_user_run_now_validation`
 - `needs_user_decision`
 - `blocked`
@@ -114,4 +230,5 @@ Allowed final statuses:
 Do not report `blocked` without a concrete verified blocker.
 
 ## Expected next step
-Director reviews the report. If accepted, user presses `Run now / Выполнить сейчас` on the existing `Taste Steam Review Dossier` once more. Success: the same invocation receives current GitHub-prepared work and continues through checkpoints until backlog exhaustion or a genuine runtime/tool limit, with prior checkpoints durable.
+
+Director reviews the durable report. If accepted, the user presses `Run now / Выполнить сейчас` on the existing `Taste Steam Review Dossier` task. Success means it consumes the latest prepared daily backlog, processes more than 10 when more than 10 remain, persists checkpoints durably, and either exhausts that prepared backlog or stops only on a genuine runtime/tool limit with completed progress preserved.
