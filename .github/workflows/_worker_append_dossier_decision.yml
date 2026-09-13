@@ -1,0 +1,38 @@
+name: Worker append dossier decision
+
+on:
+  push:
+    branches:
+      - worker/taste-steam-review-dossier-control-plane-refresh-01
+    paths:
+      - .github/workflows/_worker_append_dossier_decision.yml
+
+permissions:
+  contents: write
+
+jobs:
+  append:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: worker/taste-steam-review-dossier-control-plane-refresh-01
+          fetch-depth: 0
+      - name: Append durable decision once
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('PROJECT_DECISIONS.md')
+          text = path.read_text(encoding='utf-8')
+          if '## TASTE-005 — Fixed daily full Steam-review-dossier snapshot' not in text:
+              text += '''\n\n---\n\n## TASTE-005 — Fixed daily full Steam-review-dossier snapshot\n\n**Дата:** 2026-09-13\n**Статус:** implemented by `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_CONTROL_PLANE_REFRESH_01`; supersedes only the checkpoint-rebuild portion of TASTE-004\n\n**Решение:** GitHub один раз в штатном daily/pre-AI path готовит полный фиксированный Steam-review-dossier backlog snapshot из текущей canonical Taste queue. В snapshot входят все missing/stale eligible appids после deterministic dedupe; fresh dossiers переиспользуются. `checkpoint_size=10` — только внутренняя граница durable persistence. После accepted checkpoint GitHub продвигает `remaining_required_items` внутри того же `snapshot_id` и не перечитывает queue/store для перестроения scope.\n\n**Почему:** прежняя модель `persist checkpoint -> rebuild current scope from current queue/store` позволяла scope меняться посреди одного запуска и делала manual Run now зависимым от свежести/момента rebuild. Это противоречит требованию иметь один полный дневной production scope и делает checkpoint технической квотой вместо durability boundary.\n\n**Resume / Run now:** interruption сохраняет принятые checkpoints; следующий invocation продолжает только remaining того же последнего prepared daily snapshot. Manual `Run now` читает последний опубликованный daily snapshot и не запускает on-demand refresh. Изменения canonical queue после daily preparation попадают только в следующий daily snapshot. Empty snapshot является валидным complete state.\n\n**Граница:** TASTE-004 сохраняется в части `full eligible Taste backlog > active semantic pin` и `10 is not a quota`, но его фраза о rebuild после checkpoint считается superseded этим решением. Downstream `taste_active_work_unit.json` и существующий Taste Semantic Producer этой задачей не меняются.\n\n**Основные места:** `config/taste_steam_review_dossier_contract.json`, `scripts/taste_steam_review_dossier_daily.py`, `scripts/build_taste_steam_review_dossier_work.py`, `scripts/ingest_taste_steam_review_dossiers.py`, `config/taste_steam_review_dossier_worker_prompt.md`, `.github/workflows/build-pre-ai-store-snapshot.yml`.\n'''
+              path.write_text(text, encoding='utf-8')
+          PY
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add PROJECT_DECISIONS.md
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Document fixed daily dossier snapshot decision"
+          git push origin HEAD:worker/taste-steam-review-dossier-control-plane-refresh-01
