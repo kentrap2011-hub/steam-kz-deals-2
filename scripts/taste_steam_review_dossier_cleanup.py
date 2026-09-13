@@ -5,7 +5,8 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
-from taste_steam_review_dossier import canonical_dossier_scope_rows, canonical_sha256, dossier_state, load_contract
+from taste_steam_review_dossier import canonical_sha256, dossier_state
+from taste_steam_review_dossier_daily import canonical_dossier_scope_rows, load_contract
 
 CLEANUP_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-CLEANUP-V1"
 _CANONICAL_NAME = re.compile(r"^App_(\d+)\.json$")
@@ -25,12 +26,7 @@ def cleanup_dossier_store(queue_rows, contract, store_dir, *, now=None):
     store.mkdir(parents=True, exist_ok=True)
     scope_appids = {row["appid"] for row in scope_rows}
 
-    deleted = []
-    refresh_required = []
-    preserved_fresh = []
-    preserved_invalid = []
-    ignored = []
-
+    deleted, refresh_required, preserved_fresh, preserved_invalid, ignored = [], [], [], [], []
     for path in sorted(store.glob("App_*.json"), key=lambda p: p.name):
         match = _CANONICAL_NAME.fullmatch(path.name)
         if not match:
@@ -54,21 +50,13 @@ def cleanup_dossier_store(queue_rows, contract, store_dir, *, now=None):
             preserved_invalid.append({"appid": appid, "path": path.as_posix(), "state": state, "in_current_scope": appid in scope_appids, "action": "preserved_fail_closed"})
 
     return {
-        "schema": CLEANUP_SCHEMA,
-        "schema_version": 1,
-        "status": "complete",
-        "owner": "github_control_plane",
+        "schema": CLEANUP_SCHEMA, "schema_version": 1, "status": "complete", "owner": "github_control_plane",
         "evaluated_at_utc": now.replace(microsecond=0).isoformat(),
-        "scope_source": contract["scope"]["source"],
-        "source_queue_sha256": canonical_sha256(queue_rows),
-        "source_row_count": len(queue_rows),
-        "unique_appid_count": len(scope_rows),
+        "scope_source": contract["scope"]["source"], "source_queue_sha256": canonical_sha256(queue_rows),
+        "source_row_count": len(queue_rows), "unique_appid_count": len(scope_rows),
         "current_scope_appids": [row["appid"] for row in scope_rows],
-        "deleted_stale_out_of_scope": deleted,
-        "preserved_refresh_required": refresh_required,
-        "preserved_fresh": preserved_fresh,
-        "preserved_invalid": preserved_invalid,
-        "ignored": ignored,
+        "deleted_stale_out_of_scope": deleted, "preserved_refresh_required": refresh_required,
+        "preserved_fresh": preserved_fresh, "preserved_invalid": preserved_invalid, "ignored": ignored,
     }
 
 
@@ -91,8 +79,7 @@ def main():
     parser.add_argument("--store-dir", default="data/cache/taste_steam_review_dossiers")
     args = parser.parse_args()
     contract = load_contract(args.contract)
-    queue_rows = _read_jsonl(args.queue)
-    result = cleanup_dossier_store(queue_rows, contract, args.store_dir)
+    result = cleanup_dossier_store(_read_jsonl(args.queue), contract, args.store_dir)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
