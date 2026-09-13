@@ -339,3 +339,21 @@
 **Сознательно отвергнуто:** active pin as total dossier scope; `10` as per-run/daily quota; a single unbounded all-or-nothing submission for the entire backlog; ChatGPT-owned queue/retry/completeness; changing the existing Taste Semantic Producer or its pin authority.
 
 **Основные места:** `config/taste_steam_review_dossier_contract.json`, `scripts/taste_steam_review_dossier.py`, `scripts/build_taste_steam_review_dossier_work.py`, `scripts/ingest_taste_steam_review_dossiers.py`, `scripts/taste_steam_review_dossier_cleanup.py`, `config/taste_steam_review_dossier_worker_prompt.md`.
+
+
+---
+
+## TASTE-005 — Fixed daily full Steam-review-dossier snapshot
+
+**Дата:** 2026-09-13
+**Статус:** implemented by `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_CONTROL_PLANE_REFRESH_01`; supersedes only the checkpoint-rebuild portion of TASTE-004
+
+**Решение:** GitHub один раз в штатном daily/pre-AI path готовит полный фиксированный Steam-review-dossier backlog snapshot из текущей canonical Taste queue. В snapshot входят все missing/stale eligible appids после deterministic dedupe; fresh dossiers переиспользуются. `checkpoint_size=10` — только внутренняя граница durable persistence. После accepted checkpoint GitHub продвигает `remaining_required_items` внутри того же `snapshot_id` и не перечитывает queue/store для перестроения scope.
+
+**Почему:** прежняя модель `persist checkpoint -> rebuild current scope from current queue/store` позволяла scope меняться посреди одного запуска и делала manual Run now зависимым от свежести/момента rebuild. Это противоречит требованию иметь один полный дневной production scope и делает checkpoint технической квотой вместо durability boundary.
+
+**Resume / Run now:** interruption сохраняет принятые checkpoints; следующий invocation продолжает только remaining того же последнего prepared daily snapshot. Manual `Run now` читает последний опубликованный daily snapshot и не запускает on-demand refresh. Изменения canonical queue после daily preparation попадают только в следующий daily snapshot. Empty snapshot является валидным complete state.
+
+**Граница:** TASTE-004 сохраняется в части `full eligible Taste backlog > active semantic pin` и `10 is not a quota`, но его фраза о rebuild после checkpoint считается superseded этим решением. Downstream `taste_active_work_unit.json` и существующий Taste Semantic Producer этой задачей не меняются.
+
+**Основные места:** `config/taste_steam_review_dossier_contract.json`, `scripts/taste_steam_review_dossier_daily.py`, `scripts/build_taste_steam_review_dossier_work.py`, `scripts/ingest_taste_steam_review_dossiers.py`, `config/taste_steam_review_dossier_worker_prompt.md`, `.github/workflows/build-pre-ai-store-snapshot.yml`.
