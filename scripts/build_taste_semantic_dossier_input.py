@@ -3,7 +3,8 @@ import argparse
 import json
 from pathlib import Path
 
-from taste_steam_review_dossier import atomic_write_json, build_semantic_input, load_contract
+from taste_steam_review_dossier import atomic_write_json, build_semantic_input
+from taste_steam_review_dossier_daily import load_contract
 
 
 def main():
