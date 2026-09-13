@@ -5,6 +5,10 @@
 - `ЧАТ 1` and `ЧАТ 2` are reusable worker slots, not historical chat identities.
 - No autonomous IMPLEMENT without separate user approval.
 - Reconcile Board -> exact task -> exact durable report before assigning follow-up work.
+- Every nontrivial worker task must finish with its compact durable report committed to `main` at the task-declared `reviews/worker_reports/...` path before the worker presents the task as complete/ready for Director acceptance.
+- When the user says `Проверь`, `Готово, читай` or equivalent after worker completion, Director reads the expected durable worker-report directly from GitHub. Director may also read `DIRECTOR_TASK_BOARD.md`, `CURRENT_TASK.md`, `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md` and other compact operating rules needed for orchestration.
+- Director must not inspect source code, diffs, workflow implementation, logs, production artifacts or other deep project state to compensate for an incomplete worker-report. If the report is insufficient or internally inconsistent, Director asks the worker to investigate and update the durable report.
+- The user should not need to relay normal worker results between chats; GitHub worker-reports are the normal handoff channel.
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
