@@ -25,6 +25,7 @@ on:
       - "config/taste_candidate_context_contract.json"
       - "config/taste_cache_entry_contract.json"
       - "config/taste_ledger_contract.json"
+      - "config/taste_steam_review_dossier_contract.json"
       - "config/russian_description_translation_contract.json"
       - "config/russian_description_translation_result_contract.json"
       - "config/russian_description_translation_cache_entry_contract.json"
@@ -35,6 +36,7 @@ on:
       - "data/cache/taste_fit.index.json"
       - "data/cache/taste_fit.validation.json"
       - "data/cache/taste_fit.ledger_validation.json"
+      - "data/cache/taste_steam_review_dossiers/**"
       - "data/cache/russian_description_translations.json"
       - "scripts/taste_cache_common.py"
       - "scripts/taste_pinned_work_unit.py"
@@ -53,6 +55,10 @@ on:
       - "scripts/build_pre_ai_history_snapshot.py"
       - "scripts/build_pre_ai_deal_scenarios.py"
       - "scripts/build_pre_ai_chatgpt_payload.py"
+      - "scripts/taste_steam_review_dossier.py"
+      - "scripts/taste_steam_review_dossier_daily.py"
+      - "scripts/build_taste_steam_review_dossier_work.py"
+      - "scripts/test_taste_steam_review_dossier_daily_snapshot.py"
       - "scripts/russian_description_translation_runtime.py"
       - "scripts/build_russian_description_translation_queue.py"
       - "scripts/test_russian_description_translation_runtime.py"
@@ -124,6 +130,12 @@ jobs:
       - name: Build split ChatGPT consumer bundle
         run: python scripts/build_pre_ai_chatgpt_payload.py
 
+      - name: Prepare fixed daily full Steam review dossier backlog
+        run: python scripts/build_taste_steam_review_dossier_work.py
+
+      - name: Regression test fixed daily dossier snapshot control plane
+        run: python scripts/test_taste_steam_review_dossier_daily_snapshot.py
+
       - name: Persist or preserve pre-semantic Taste active pin
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -155,6 +167,7 @@ jobs:
             data/production/pre_ai/deal_scenarios.json \
             data/production/pre_ai/chatgpt_payload.json \
             data/production/pre_ai/chatgpt_taste_queue.jsonl \
+            data/production/pre_ai/taste_steam_review_dossier_work.json \
             data/production/pre_ai/chatgpt_purchase_context.jsonl \
             data/production/pre_ai/chatgpt_ru_description_queue.jsonl \
             data/production/pre_ai/chatgpt_ru_description_status.json
