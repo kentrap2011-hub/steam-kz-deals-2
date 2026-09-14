@@ -226,3 +226,17 @@
 - реальный production dossier backlog не запускался; существующий `Taste Steam Review Dossier` Scheduled Task и Taste Semantic Producer не изменялись и не запускались;
 - report: `reviews/worker_reports/taste-steam-review-dossier-full-backlog-01.md`;
 - next user action: fresh manual `Run now` существующего `Taste Steam Review Dossier` Scheduled Task для production validation поведения beyond first checkpoint.
+
+### Завершено — Taste Steam review dossier persistence bridge 01
+Статус: `complete_ready_for_user_run_now_validation`.
+- worker task: `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_PERSISTENCE_BRIDGE_01.md`;
+- submission transport: connected GitHub Contents create-file to `data/ai_inbox/taste_steam_review_dossiers/{snapshot_id}--{scope_sha256}.json`;
+- GitHub Actions owns validation, canonical dossier persistence, same-snapshot progress and completeness;
+- implementation PR #21, merge `8916348d651afbdeaa13ba71e517bd2a967ce777`;
+- focused validation `34804961025` / `103854918217`: success;
+- hosted synthetic 25-item create-file acceptance: `34805024999`, `34805127448`, `34805164824`, same snapshot `10→10→5→0`;
+- no production Run now and no real 591-item backlog processing;
+- no Taste Semantic Producer / `ingest-taste-batch.yml` scheduling, limit, queue or state changes;
+- durable report: `reviews/worker_reports/taste-steam-review-dossier-persistence-bridge-01.md`;
+- next boundary: Director reads durable report; then user manually presses Run now on existing Taste Steam Review Dossier once and validates.
+
