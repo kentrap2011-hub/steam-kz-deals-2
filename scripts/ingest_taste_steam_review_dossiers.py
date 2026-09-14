@@ -6,6 +6,26 @@ from pathlib import Path
 from taste_steam_review_dossier_daily import load_contract, persist_submission_and_advance_snapshot
 
 
+def ingest_submission(
+    submission_path,
+    *,
+    manifest_path="data/production/pre_ai/taste_steam_review_dossier_work.json",
+    contract_path="config/taste_steam_review_dossier_contract.json",
+    store_dir="data/cache/taste_steam_review_dossiers",
+):
+    """Run the one canonical checkpoint validation/persistence/same-snapshot advance path."""
+    contract = load_contract(contract_path)
+    manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
+    submission = json.loads(Path(submission_path).read_text(encoding="utf-8"))
+    return persist_submission_and_advance_snapshot(
+        submission,
+        manifest,
+        contract,
+        store_dir,
+        manifest_output_path=manifest_path,
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(description="Validate and persist one exact dossier checkpoint, then advance the same fixed daily snapshot")
     parser.add_argument("submission")
@@ -14,15 +34,11 @@ def main():
     parser.add_argument("--store-dir", default="data/cache/taste_steam_review_dossiers")
     args = parser.parse_args()
 
-    contract = load_contract(args.contract)
-    manifest = json.loads(Path(args.manifest).read_text(encoding="utf-8"))
-    submission = json.loads(Path(args.submission).read_text(encoding="utf-8"))
-    persisted, next_manifest = persist_submission_and_advance_snapshot(
-        submission,
-        manifest,
-        contract,
-        args.store_dir,
-        manifest_output_path=args.manifest,
+    persisted, next_manifest = ingest_submission(
+        args.submission,
+        manifest_path=args.manifest,
+        contract_path=args.contract,
+        store_dir=args.store_dir,
     )
     print(json.dumps({
         "status": "full_backlog_exhausted" if next_manifest["full_backlog_complete"] else "checkpoint_persisted_work_remaining",
