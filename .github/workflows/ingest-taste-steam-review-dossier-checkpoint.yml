@@ -40,18 +40,37 @@ jobs:
           prefix = PurePosixPath('data/ai_inbox/taste_steam_review_dossiers')
           head = event.get('head_commit') or {}
           added = [PurePosixPath(p) for p in (head.get('added') or []) if PurePosixPath(p).parent == prefix and p.endswith('.json')]
-          touched = [PurePosixPath(p) for key in ('added', 'modified', 'removed') for p in (head.get(key) or []) if PurePosixPath(p).parent == prefix]
-          if len(added) != 1 or len(touched) != 1:
-              raise SystemExit(f'expected exactly one create-only dossier submission, added={list(map(str, added))}, touched={list(map(str, touched))}')
-          print(f'path={added[0].as_posix()}')
+          modified = [PurePosixPath(p) for p in (head.get('modified') or []) if PurePosixPath(p).parent == prefix]
+          removed = [PurePosixPath(p) for p in (head.get('removed') or []) if PurePosixPath(p).parent == prefix]
+          touched = added + modified + removed
+
+          canonical_cleanup = (
+              head.get('message') == 'Ingest Steam review dossier checkpoint'
+              and not added
+              and not modified
+              and len(removed) == 1
+          )
+          if canonical_cleanup:
+              print('skip=true')
+              print('path=')
+          elif len(added) == 1 and len(touched) == 1:
+              print('skip=false')
+              print(f'path={added[0].as_posix()}')
+          else:
+              raise SystemExit(
+                  'expected exactly one create-only dossier submission or one canonical cleanup; '
+                  f'added={list(map(str, added))}, modified={list(map(str, modified))}, removed={list(map(str, removed))}'
+              )
           PY
 
       - name: Validate and ingest exact checkpoint through canonical persistence
+        if: steps.submission.outputs.skip != 'true'
         run: |
           set -euo pipefail
           python scripts/ingest_taste_steam_review_dossier_inbox.py "${{ steps.submission.outputs.path }}"
 
       - name: Commit dossier artifacts and same-snapshot progress atomically
+        if: steps.submission.outputs.skip != 'true'
         shell: bash
         run: |
           set -euo pipefail
