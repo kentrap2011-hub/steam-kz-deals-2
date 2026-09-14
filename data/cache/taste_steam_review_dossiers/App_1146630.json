@@ -1,0 +1,67 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1146630",
+  "title": "Yokai's Secret",
+  "generated_at_utc": "2026-09-14T11:38:00+00:00",
+  "expires_at_utc": "2026-10-04T11:38:00+00:00",
+  "ttl_days": 20,
+  "summary": "Adult-themed casual puzzle game about arranging colored blocks, with Live2D character scenes and Japanese voice acting.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The color-arrangement puzzles are short and simple, with audio feedback helping indicate correct placement.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "Russian interface and subtitles are listed on the Steam store, while full audio is Japanese.",
+      "sentiment": "neutral",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "store"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 2,
+    "sampled_total": 2,
+    "sample_ids_sha256": "8365f8d060fa9a854c2946bde7e9181e45ea44de93bddada272c95f521b915c4",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_useful_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 2,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1146630/",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "content_sha256": "660c6b9c73093e7cf865574d2e0c16de37fde4d2b4629d1d990543a2e3f2dea6"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1146630/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; adaptive sampling stopped when accessible index was sparse",
+      "source_refs_sha256": "8365f8d060fa9a854c2946bde7e9181e45ea44de93bddada272c95f521b915c4"
+    }
+  }
+}

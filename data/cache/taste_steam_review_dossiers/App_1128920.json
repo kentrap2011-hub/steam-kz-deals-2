@@ -1,0 +1,77 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1128920",
+  "title": "EVERSPACE™ 2",
+  "generated_at_utc": "2026-09-14T11:38:00+00:00",
+  "expires_at_utc": "2026-10-04T11:38:00+00:00",
+  "ttl_days": 20,
+  "summary": "Fast-paced single-player space shooter built around exploration, combat, loot, RPG progression, mining, crafting and handcrafted open-world regions.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Ship combat, exploration and the fly-shoot-loot loop are repeatedly described as core strengths.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Equipment leveling and grind can make progression feel less rewarding.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "Some missions and encounters are described as repetitive.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 1,
+    "sampled_non_russian": 4,
+    "sampled_total": 5,
+    "sample_ids_sha256": "5ca7092e7a9546deda35aae92414e8e6fd7839d928df290e9bbbaef54e88942b",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 1,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 4,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1128920/",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "content_sha256": "13c4645c085062394d783b62411e46bb20e0bd65fceec4706222b9b2703325de"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1128920/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; adaptive sampling stopped when accessible index was sparse",
+      "source_refs_sha256": "5ca7092e7a9546deda35aae92414e8e6fd7839d928df290e9bbbaef54e88942b"
+    }
+  }
+}

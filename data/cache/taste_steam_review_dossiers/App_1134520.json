@@ -1,0 +1,77 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1134520",
+  "title": "Dark Light",
+  "generated_at_utc": "2026-09-14T11:38:00+00:00",
+  "expires_at_utc": "2026-10-04T11:38:00+00:00",
+  "ttl_days": 20,
+  "summary": "Post-apocalyptic cyberpunk action-platformer with souls-like combat, gear drops, weapon upgrades, faction skills, drones and New Game+.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Combat and the dark cyberpunk atmosphere are the main positive themes in accessible reviews.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Movement or combat animations are described as clunky in multiple accessible reviews.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "The Steam store lists no Russian interface or subtitles.",
+      "sentiment": "neutral",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "store"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 2,
+    "sampled_total": 2,
+    "sample_ids_sha256": "abbed7dd1c0fd37d0daa7a8c2525ec6ce13e887c0eb3025680bc1b65f41ff6d9",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_useful_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 2,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1134520/",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "content_sha256": "8538e05d061f3be6d81ddc499d5b38bf5cd873effa2f733d960bfefc90ece2ed"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1134520/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; adaptive sampling stopped when accessible index was sparse",
+      "source_refs_sha256": "abbed7dd1c0fd37d0daa7a8c2525ec6ce13e887c0eb3025680bc1b65f41ff6d9"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1148510",
+  "title": "Pretty Angel",
+  "generated_at_utc": "2026-09-14T11:38:00+00:00",
+  "expires_at_utc": "2026-10-04T11:38:00+00:00",
+  "ttl_days": 20,
+  "summary": "Adult-only casual puzzle game where players swap tiles to restore images, with a gallery and achievement-focused structure.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The game uses a simple tile-swapping image-restoration loop with quick levels.",
+      "sentiment": "neutral",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "store"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 0,
+    "sampled_total": 0,
+    "sample_ids_sha256": "0ec93cd989277aaf6b7490ea4c023b3d87be848a7c99ccdc2485d7e44e08a496",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_useful_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1148510/",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "content_sha256": "40d51cfcf0f0201d872fa5fb55bb9dd2b5a577c5610bf849b773d2fe8f2ea6b7"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1148510/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; adaptive sampling stopped when accessible index was sparse",
+      "source_refs_sha256": "0ec93cd989277aaf6b7490ea4c023b3d87be848a7c99ccdc2485d7e44e08a496"
+    }
+  }
+}

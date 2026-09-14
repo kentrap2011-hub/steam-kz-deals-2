@@ -1,0 +1,90 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1150440",
+  "title": "Aliens: Dark Descent",
+  "generated_at_utc": "2026-09-14T11:38:00+00:00",
+  "expires_at_utc": "2026-10-04T11:38:00+00:00",
+  "ttl_days": 20,
+  "summary": "Squad-based real-time tactical action game in the Alien setting, combining stealth, stress management, marine progression and persistent mission maps.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Reviews repeatedly praise the tense real-time squad tactics, atmosphere and changing balance between stealth and combat.",
+      "sentiment": "positive",
+      "recurrence": "strong",
+      "mention_count": 5,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Bugs and progression-blocking issues are a recurring complaint.",
+      "sentiment": "negative",
+      "recurrence": "strong",
+      "mention_count": 5,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "The campaign timer and recovery pressure create tension but are divisive.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "Russian reviewers confirm Russian text support.",
+      "sentiment": "neutral",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian",
+        "store"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 3,
+    "sampled_non_russian": 6,
+    "sampled_total": 9,
+    "sample_ids_sha256": "ebf11cef4726a28d6d8c62f8e14cf5988ddc1fdb9d3bee07121e204c84b0bc0c",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 3,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 6,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1150440/",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "content_sha256": "3528429215fe98a6aa31d66d77d90c539fe0c6cdfc0ba06842c358538cae7e68"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1150440/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; adaptive sampling stopped when accessible index was sparse",
+      "source_refs_sha256": "ebf11cef4726a28d6d8c62f8e14cf5988ddc1fdb9d3bee07121e204c84b0bc0c"
+    }
+  }
+}

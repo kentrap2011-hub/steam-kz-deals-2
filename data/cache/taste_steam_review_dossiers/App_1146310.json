@@ -1,0 +1,77 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1146310",
+  "title": "Beyond a Steel Sky",
+  "generated_at_utc": "2026-09-14T11:38:00+00:00",
+  "expires_at_utc": "2026-10-04T11:38:00+00:00",
+  "ttl_days": 20,
+  "summary": "3D cyberpunk adventure sequel focused on narrative puzzles, hacking and a reactive Union City setting under AI control.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Puzzle solving, hacking and the hint system are generally viewed as engaging.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "The story and world presentation are repeatedly praised.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Reviews note occasional collision or animation jank and some later puzzle friction.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 4,
+    "sampled_total": 4,
+    "sample_ids_sha256": "e65ccd463f300992cec0d157d335fb665847eeebfbe56d9f7afb25dfebfd74e1",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_useful_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 4,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1146310/",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "content_sha256": "71e4dc24c1ad04c912cf10324560143e8909cbc3f9208aaf0206225756292323"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1146310/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; adaptive sampling stopped when accessible index was sparse",
+      "source_refs_sha256": "e65ccd463f300992cec0d157d335fb665847eeebfbe56d9f7afb25dfebfd74e1"
+    }
+  }
+}

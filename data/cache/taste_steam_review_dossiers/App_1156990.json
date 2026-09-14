@@ -1,0 +1,89 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1156990",
+  "title": "Return to Shironagasu Island",
+  "generated_at_utc": "2026-09-14T11:38:00+00:00",
+  "expires_at_utc": "2026-10-04T11:38:00+00:00",
+  "ttl_days": 20,
+  "summary": "Mystery visual novel and adventure game about a detective and assistant investigating murders and secrets on an isolated island.",
+  "observations": [
+    {
+      "category": "structure",
+      "statement": "The mystery premise, story and character interactions receive repeated praise.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "Timed investigation sections and save restrictions can add friction.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "voice",
+      "statement": "A 2025 update added Japanese voice acting across all languages after earlier voice-availability limitations.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian",
+        "store"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "Russian community evidence indicates Russian text was not available in 2020; current Russian support was not visible in the accessible store listing.",
+      "sentiment": "neutral",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian",
+        "store"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 6,
+    "sampled_total": 6,
+    "sample_ids_sha256": "dfc7c743b203e184492dde2523e97bf57d76ac0635e427e02b0b5f60e71fa21e",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_useful_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 6,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1156990/",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "content_sha256": "8f887f5555f00655a68093912475c00bec5658e51086b8bc2a08e04ac41671c2"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1156990/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T11:38:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; adaptive sampling stopped when accessible index was sparse",
+      "source_refs_sha256": "dfc7c743b203e184492dde2523e97bf57d76ac0635e427e02b0b5f60e71fa21e"
+    }
+  }
+}
