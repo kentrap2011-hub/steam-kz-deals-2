@@ -7,7 +7,9 @@
 `READ-ONLY / RECON`
 
 ## Goal
-Determine, as far as observable evidence permits, what class of failure is causing repeated worker-session interruptions before task completion. Do not resume the interrupted dossier persistence implementation until this diagnostic is complete.
+Determine, as far as observable evidence permits, what class of failure is causing repeated worker-session interruptions before task completion.
+
+Important current-state rule: if `ЧАТ 2` is already actively executing the previously issued continuation of `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_PERSISTENCE_BRIDGE_01.md`, do **not** interrupt that in-flight work merely to start this diagnostic. Let the current execution reach its next safe boundary: either successful task completion/report, or another interruption. Run this diagnostic immediately after that boundary and before any further blind retry if another unknown interruption occurs.
 
 This is not permission to guess a hidden platform limit. The purpose is to collect evidence, compare repeated incidents, narrow the failure class, and define a bounded recovery rule.
 
@@ -21,6 +23,8 @@ Read first:
 Relevant observed incidents:
 1. `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_CONTROL_PLANE_REFRESH_01.md` — worker previously described interruption as context exhaustion, later admitted no system signal/error supported that claim.
 2. `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_PERSISTENCE_BRIDGE_01.md` — implementation existed only in worker branch when execution stopped before validation/merge; worker reported `причина неизвестна`.
+
+If the currently in-flight continuation produces another interruption before this diagnostic starts, include that occurrence as an additional incident and capture its interruption record before any further retry.
 
 ## Scope
 Use only observable evidence from the worker chat/session plus compact GitHub task/report/state needed to identify the last durable progress. Do not investigate application source code or production behavior unrelated to the interruption itself.
@@ -59,8 +63,9 @@ Do not use plain `причина неизвестна` as the final diagnostic c
 
 ## Boundaries
 - READ-ONLY only except for writing this diagnostic report and required `CURRENT_TASK.md` handoff bookkeeping.
-- Do not modify the interrupted implementation branch.
-- Do not run validation, merge, production `Run now`, or the 591-item backlog.
+- Do not interrupt already in-flight persistence-bridge execution solely to start this task.
+- Once this diagnostic begins, do not modify the interrupted implementation branch.
+- Do not run production `Run now` or the 591-item backlog as part of this diagnostic.
 - Do not create a new worker chat solely to bypass the interruption.
 - Do not infer `context limit`, `timeout`, `runtime budget`, or similar without explicit evidence.
 
@@ -75,7 +80,7 @@ Report must include:
 - narrowest defensible failure classification;
 - missing telemetry preventing stronger attribution;
 - future interruption evidence-capture checklist;
-- whether it is safe to resume the persistence-bridge task and under what checkpointing/mitigation conditions;
+- whether it is safe to continue/resume the persistence-bridge task and under what checkpointing/mitigation conditions;
 - exact refs;
 - Status.
 
@@ -86,4 +91,4 @@ Report must include:
 - `blocked`
 
 ## Expected next step
-Director reads the report from `main` and decides whether to resume `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_PERSISTENCE_BRIDGE_01.md` or adjust the worker execution procedure first.
+Director reads the report from `main` and decides whether any worker execution procedure must change before the next persistence-bridge continuation or production validation.
