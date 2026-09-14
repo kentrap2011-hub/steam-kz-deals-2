@@ -240,3 +240,15 @@
 - durable report: `reviews/worker_reports/taste-steam-review-dossier-persistence-bridge-01.md`;
 - next boundary: Director reads durable report; then user manually presses Run now on existing Taste Steam Review Dossier once and validates.
 
+### Worker interruption diagnostic 01
+Статус: `classified_platform_unobservable`.
+- worker task: `WORKER_TASK_WORKER_INTERRUPTION_DIAGNOSTIC_01.md`;
+- два неизвестных обрыва восстановлены по durable/session evidence и проверены controlled replay;
+- control-plane preflight/read replay: `not reproduced`;
+- persistence-bridge byte-exact create-file replay: `not reproduced`, historical/replay blob `c0b78a7d96783a0d049c9ed4df2e9dbae2b25713`;
+- подтверждённого `context limit`, timeout, runtime-budget или terminating GitHub/network error нет;
+- narrow classification: `platform-level interruption with no exposed telemetry`;
+- canonical mitigation уже находится в `KNOWN_WORKER_PITFALLS.md -> PITFALL-004`; не дублировать правило;
+- persistence bridge в рамках этой diagnostic-задачи не продолжался, production Run now не запускался;
+- durable report: `reviews/worker_reports/worker-interruption-diagnostic-01.md`;
+- next boundary: Director reads diagnostic report and applies the trace/replay procedure before any future retry after an unexplained interruption.
