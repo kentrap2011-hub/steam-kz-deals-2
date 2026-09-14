@@ -1,0 +1,67 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "110800",
+  "title": "L.A. Noire",
+  "generated_at_utc": "2026-09-14T04:50:00+00:00",
+  "expires_at_utc": "2026-10-04T04:50:00+00:00",
+  "ttl_days": 20,
+  "summary": "Detective adventure built around crime-scene investigation, clue gathering and suspect interrogation inside a period open world. Reviews continue to value its distinctive investigative structure and tightly directed narrative, while noting that player choices do not substantially alter the main course of events.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Investigation through clues and interrogations is repeatedly identified as the game's distinctive core mechanic.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Accessible reviews describe the narrative as strongly railroaded even when individual investigations involve player judgment.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 4,
+    "sampled_total": 4,
+    "sample_ids_sha256": "f037d0f90c6e40c39766343b57b5ac0b0760156d53b4c95caee55251fd4a15ae",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 4,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/110800/",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "content_sha256": "4891a01516da5ffc8886c9c252f4b81df19d4a9b0be6846731c60d7eed7f5cab"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/110800/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "f037d0f90c6e40c39766343b57b5ac0b0760156d53b4c95caee55251fd4a15ae"
+    }
+  }
+}

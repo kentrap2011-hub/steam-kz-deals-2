@@ -1,0 +1,77 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1123050",
+  "title": "GRIME",
+  "generated_at_utc": "2026-09-14T04:50:00+00:00",
+  "expires_at_utc": "2026-10-04T04:50:00+00:00",
+  "ttl_days": 20,
+  "summary": "Souls-like metroidvania centered on deliberate combat, parrying, boss fights and exploration of a large interconnected world. Reviews often praise its distinctive combat and bosses, while recurring criticism targets labyrinthine areas, backtracking and demanding platforming.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Combat, parrying and boss encounters are repeatedly praised as distinctive strengths of the metroidvania structure.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Several reviews describe the world as large and labyrinthine, with substantial backtracking between progression points.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Multiple reviews emphasize demanding combat or platforming as a significant part of the experience.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 8,
+    "sampled_total": 8,
+    "sample_ids_sha256": "4b0906ff267c758ff3c5769ab33ccbd58a15994e3d55b58a829538e6627bbdc2",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 8,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1123050/",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "content_sha256": "3fe66599f8824230fd55b296ad9bb2a760f37221142ae3a0ed8f37e867c9dc19"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1123050/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "4b0906ff267c758ff3c5769ab33ccbd58a15994e3d55b58a829538e6627bbdc2"
+    }
+  }
+}

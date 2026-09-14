@@ -1,0 +1,77 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1123770",
+  "title": "Curse of the Dead Gods",
+  "generated_at_utc": "2026-09-14T04:50:00+00:00",
+  "expires_at_utc": "2026-10-04T04:50:00+00:00",
+  "ttl_days": 20,
+  "summary": "Skill-focused action roguelike set in a trap-filled temple, using varied weapons, light management and curses that alter each run. Reviews appreciate the combat foundation but some criticize slow meta-progression and grind at standard difficulty.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The weapon variety, traps, light system and double-edged curse mechanics form a deliberate skill-focused roguelike loop.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "More than one accessible review criticizes long-term upgrades as slow or too marginal relative to the required repetition.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Difficulty is repeatedly described as demanding and closely tied to mastery of combat timing and run systems.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 5,
+    "sampled_total": 5,
+    "sample_ids_sha256": "f62d5b36dc7ef2e5070236cd268d2bfb05cb3f557e8a8aecf25924432afef5b2",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 5,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1123770/",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "content_sha256": "e63121338f70afc06605e3d71a18406e7bd835c52edb596a52fc9e8b2ec3ad44"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1123770/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "f62d5b36dc7ef2e5070236cd268d2bfb05cb3f557e8a8aecf25924432afef5b2"
+    }
+  }
+}

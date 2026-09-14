@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1101450",
+  "title": "Miss Neko",
+  "generated_at_utc": "2026-09-14T04:50:00+00:00",
+  "expires_at_utc": "2026-10-04T04:50:00+00:00",
+  "ttl_days": 20,
+  "summary": "Small adult-oriented casual puzzle game centered on assembling character pictures and short minigame interactions. The Steam review aggregate is positive, but the accessible individual-review sample in this pass was too sparse to support recurring claims beyond the simple, low-pressure puzzle structure.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The store describes a simple picture-assembly puzzle loop designed for relaxed, low-pressure play.",
+      "sentiment": "neutral",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "store"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 0,
+    "sampled_total": 0,
+    "sample_ids_sha256": "b5ec8896590de15a28c7c9969308234448c0c21af31e7981a8ef7417a337945e",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1101450/",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "content_sha256": "125d5199baa15c28022b8889741781903468fd1e64ec69be8d54f3eaacfb4f86"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1101450/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "b5ec8896590de15a28c7c9969308234448c0c21af31e7981a8ef7417a337945e"
+    }
+  }
+}

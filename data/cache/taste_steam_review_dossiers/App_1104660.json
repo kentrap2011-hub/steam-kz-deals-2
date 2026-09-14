@@ -1,0 +1,77 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1104660",
+  "title": "MO:Astray",
+  "generated_at_utc": "2026-09-14T04:50:00+00:00",
+  "expires_at_utc": "2026-10-04T04:50:00+00:00",
+  "ttl_days": 20,
+  "summary": "Pixel-art puzzle-platformer combining unusual movement abilities, environmental puzzles, traps and a gradually revealed science-fiction story. Reviews praise the art, soundtrack and inventive mechanics, while some note that precise late-game inputs can become less comfortable.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The platforming abilities and puzzle interactions are repeatedly described as unusual and inventive within the genre.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Art direction and soundtrack are repeatedly praised as strong parts of the game's atmosphere.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "An accessible detailed review reports reduced control responsiveness during some rapid late-game movement sequences.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 4,
+    "sampled_total": 4,
+    "sample_ids_sha256": "2188962ab9ca5a0586a8e1f5567fa72080b29c25ea92510a9947783de2a0a87d",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 4,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1104660/",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "content_sha256": "d79f61ee5089da11cbd90439d20c7855dc20d7be7ea5dd46003ab5d88898c946"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1104660/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "2188962ab9ca5a0586a8e1f5567fa72080b29c25ea92510a9947783de2a0a87d"
+    }
+  }
+}

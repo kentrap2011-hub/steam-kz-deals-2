@@ -1,0 +1,77 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1096530",
+  "title": "Solasta: Crown of the Magister",
+  "generated_at_utc": "2026-09-14T04:50:00+00:00",
+  "expires_at_utc": "2026-10-04T04:50:00+00:00",
+  "ttl_days": 20,
+  "summary": "Turn-based tactical CRPG closely based on the SRD 5.1 ruleset, emphasizing positioning, vertical battlefields, party building and dice-driven outcomes. Reviews often praise the faithful tactical implementation and co-op potential, while some report multiplayer synchronization problems and presentation roughness.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Turn-based combat built around positioning, attacks of opportunity, spells and vertical terrain is repeatedly identified as the game's central strength.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "coop",
+      "statement": "Co-op is valued by some players, but accessible reviews also report synchronization failures that can disrupt multiplayer sessions.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "More than one review describes character presentation or production polish as noticeably rougher than the tactical systems.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 6,
+    "sampled_total": 6,
+    "sample_ids_sha256": "e60b3b148a5ec49abe2d6fda2908dce246f537e0ba22e57ea64e68e444a37524",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 6,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1096530/",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "content_sha256": "a0c00855d7395644404465aad96bbda1f65d9a8057f61f1cef70118095321767"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1096530/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "e60b3b148a5ec49abe2d6fda2908dce246f537e0ba22e57ea64e68e444a37524"
+    }
+  }
+}

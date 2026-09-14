@@ -1,0 +1,67 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1119980",
+  "title": "In Sound Mind",
+  "generated_at_utc": "2026-09-14T04:50:00+00:00",
+  "expires_at_utc": "2026-10-04T04:50:00+00:00",
+  "ttl_days": 20,
+  "summary": "First-person psychological horror combining exploration, puzzles, combat and distinct boss encounters with a story structured around psychological themes. Reviews strongly favor its atmosphere, narrative ideas and soundtrack; the accessible current review sample was sparse but positive.",
+  "observations": [
+    {
+      "category": "structure",
+      "statement": "The game combines psychological-horror storytelling with exploration, puzzles and individualized boss encounters.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Accessible reviews praise the treatment of psychological themes and the soundtrack as memorable parts of the experience.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 3,
+    "sampled_total": 3,
+    "sample_ids_sha256": "5e94364d541d00fd35bc170bef26aef9eff45f20d81bc3f6da4bf3bb3eb768e2",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 3,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1119980/",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "content_sha256": "258e521ca51ddfc5469e2910464c9361d68be04d772548243f84075bf2d0f657"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1119980/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "5e94364d541d00fd35bc170bef26aef9eff45f20d81bc3f6da4bf3bb3eb768e2"
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1127840",
+  "title": "Landlord's Super",
+  "generated_at_utc": "2026-09-14T04:50:00+00:00",
+  "expires_at_utc": "2026-10-04T04:50:00+00:00",
+  "ttl_days": 20,
+  "summary": "First-person construction and life simulation set in fictional 1980s Britain, with hands-on property renovation, jobs, weather, time management and local characters. Reviews praise the unusual manual building loop and progression, while some report punitive setbacks and rough edges.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Hands-on construction tasks such as ordering supplies, mixing cement and building walls are repeatedly described as the game's distinctive simulation appeal.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Accessible reviews praise the grind-and-improve progression of restoring property and expanding what the player can do.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Some reviews report harsh setbacks or rough systems that can erase useful equipment or slow progress unexpectedly.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 5,
+    "sampled_total": 5,
+    "sample_ids_sha256": "829249775cb2a0f00e2b7329a0e8a5dafd885f6b0674929d292a3e71b7d44588",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 5,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1127840/",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "content_sha256": "8042d12e180ea75fa98d8f63ab37bad3696ab4e07ec9e6b8e8991bf0f9912211"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1127840/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "829249775cb2a0f00e2b7329a0e8a5dafd885f6b0674929d292a3e71b7d44588"
+    }
+  }
+}

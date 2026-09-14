@@ -1,0 +1,77 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1116580",
+  "title": "Shady Part of Me",
+  "generated_at_utc": "2026-09-14T04:50:00+00:00",
+  "expires_at_utc": "2026-10-04T04:50:00+00:00",
+  "ttl_days": 20,
+  "summary": "Short narrative puzzle-platformer about a girl and her shadow, using light, perspective and cooperation between two forms to explore emotional themes. Reviews commonly praise the art direction and story while describing the puzzles as approachable rather than precision-heavy.",
+  "observations": [
+    {
+      "category": "structure",
+      "statement": "Reviews repeatedly praise the emotional narrative and visual presentation as central strengths.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "More than one review characterizes the puzzles and platforming as relatively simple and accessible rather than demanding.",
+      "sentiment": "neutral",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "The game is repeatedly described as a compact experience of roughly several hours rather than a long-form platformer.",
+      "sentiment": "neutral",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 4,
+    "sampled_total": 4,
+    "sample_ids_sha256": "96d83a14d29815168717bfc27e9de2cdf3079484ebce1a355f8e59598745ce44",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 4,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1116580/",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "content_sha256": "f03e5898746434831e122af439c66b2f46bfac26925544691dd67f4c8f0f7bee"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1116580/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:50:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "96d83a14d29815168717bfc27e9de2cdf3079484ebce1a355f8e59598745ce44"
+    }
+  }
+}
