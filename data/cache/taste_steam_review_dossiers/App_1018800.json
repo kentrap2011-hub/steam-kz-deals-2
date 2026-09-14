@@ -1,0 +1,67 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1018800",
+  "title": "DEEEER Simulator: Your Average Everyday Deer Game",
+  "generated_at_utc": "2026-09-14T04:40:44+00:00",
+  "expires_at_utc": "2026-10-04T04:40:44+00:00",
+  "ttl_days": 20,
+  "summary": "A short-form physics sandbox whose appeal is absurd destruction, animal gags and emergent chaos rather than deep systems. The accessible reviews strongly reinforce the comedy and destructive freedom; isolated feedback mentions unruly controls.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Reviews repeatedly frame the game's main appeal as chaotic physics, destruction and absurd animal interactions.",
+      "sentiment": "positive",
+      "recurrence": "strong",
+      "mention_count": 5,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "One accessible review found the controls difficult to get comfortable with.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 7,
+    "sampled_total": 7,
+    "sample_ids_sha256": "eb8fd2e6c054b19ee9891d95d5abfe0d8d53854368213f49504085dbf6977b70",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 7,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1018800/",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "content_sha256": "772b3d3be5ba76aa08a83b819ae5ab4236a7c69b3e85617876c8203773be32c6"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1018800/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "eb8fd2e6c054b19ee9891d95d5abfe0d8d53854368213f49504085dbf6977b70"
+    }
+  }
+}

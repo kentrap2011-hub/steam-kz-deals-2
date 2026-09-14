@@ -1,0 +1,92 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1052990",
+  "title": "A Monster's Expedition",
+  "generated_at_utc": "2026-09-14T04:40:44+00:00",
+  "expires_at_utc": "2026-10-04T04:40:44+00:00",
+  "ttl_days": 20,
+  "summary": "Polished open-world puzzle game that builds a large interconnected archipelago from simple log-pushing rules. Reviews strongly praise its puzzle craft, nonlinear exploration and cozy presentation, while also agreeing that optional content can become genuinely difficult and that repetition may wear on some players.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Many reviews praise the way simple log-pushing rules develop into clever, interconnected puzzle mechanics.",
+      "sentiment": "positive",
+      "recurrence": "strong",
+      "mention_count": 6,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Reviews repeatedly value the open map because players can leave a difficult route and explore elsewhere.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Several reviews stress that the calm presentation hides substantial puzzle difficulty, especially in optional or completionist content.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "A minority of reviews find the repeated tree-pushing loop monotonous despite acknowledging the game's polish.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "The core log-pushing loop is celebrated for depth by many reviewers but experienced as repetitive by a smaller group.",
+      "recurrence": "limited"
+    }
+  ],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 10,
+    "sampled_total": 10,
+    "sample_ids_sha256": "4bef7748dfa3ea91c1d35d5d31076cb31b35d01cd06e73843f2384cd55361b30",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 10,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1052990/",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "content_sha256": "0ce7c7ad1992ee3ad6c317731c94ef988a146187b31a1292e7912fc0c88f12d4"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1052990/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "4bef7748dfa3ea91c1d35d5d31076cb31b35d01cd06e73843f2384cd55361b30"
+    }
+  }
+}

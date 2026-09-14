@@ -1,0 +1,67 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1004240",
+  "title": "Hentai Girl Karen",
+  "generated_at_utc": "2026-09-14T04:40:44+00:00",
+  "expires_at_utc": "2026-10-04T04:40:44+00:00",
+  "ttl_days": 20,
+  "summary": "A very simple tile-swapping picture puzzle with no time or score pressure. The small accessible review sample characterizes it as deliberately shallow, repetitive and suited to brief, low-effort play rather than deep puzzle design.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The core interaction is a basic tile-swapping picture puzzle with no time or star limit.",
+      "sentiment": "neutral",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "store"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "One detailed accessible review describes the gameplay as repetitive and lacking depth, while still functioning as a casual time-killer.",
+      "sentiment": "mixed",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 2,
+    "sampled_total": 2,
+    "sample_ids_sha256": "8896961745ec51b996cdcd48d729065f01574b19cffb50afcb253837365440bc",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 2,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1004240/",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "content_sha256": "b75f967da3eb4ffc67df444487a817790793243867629c887194471a025bbf81"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1004240/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "8896961745ec51b996cdcd48d729065f01574b19cffb50afcb253837365440bc"
+    }
+  }
+}

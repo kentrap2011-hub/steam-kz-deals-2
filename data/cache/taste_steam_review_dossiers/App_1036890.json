@@ -1,0 +1,82 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1036890",
+  "title": "Shadow Warrior 3: Definitive Edition",
+  "generated_at_utc": "2026-09-14T04:40:44+00:00",
+  "expires_at_utc": "2026-10-04T04:40:44+00:00",
+  "ttl_days": 20,
+  "summary": "Fast, arena-oriented FPS mixing gunplay, melee combat and movement. Reviews frequently enjoy the combat's speed and spectacle, but a recurring criticism is that the campaign is very short; some also describe arena encounters and enemy use as repetitive.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Accessible reviews describe the combat as fast, energetic and fun, consistent with the store's emphasis on gunplay, melee and movement.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Several highly rated reviews criticize the campaign for being unusually short.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "More than one review describes arena fights or enemy encounters as becoming predictable or repetitive.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "The combat is often praised even by reviewers who criticize the game's length and repetition.",
+      "recurrence": "moderate"
+    }
+  ],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 8,
+    "sampled_total": 8,
+    "sample_ids_sha256": "f8baf27bd072620236714575142d1e9c1b565ea02986f8fe64c097660a0dbe3e",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 8,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1036890/",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "content_sha256": "74fbf15934b725836615fc82053149a6bcc0cae34638fa4d3ee0cb3198c186ee"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1036890/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "f8baf27bd072620236714575142d1e9c1b565ea02986f8fe64c097660a0dbe3e"
+    }
+  }
+}

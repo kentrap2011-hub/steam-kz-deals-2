@@ -1,0 +1,82 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1045720",
+  "title": "The Coma 2: Vicious Sisters",
+  "generated_at_utc": "2026-09-14T04:40:44+00:00",
+  "expires_at_utc": "2026-10-04T04:40:44+00:00",
+  "ttl_days": 20,
+  "summary": "Story-driven 2D Korean survival horror combining exploration, puzzles, resource use and evasion. Accessible reviews often view it as an improvement over the first game and praise pacing, art and atmosphere, though a minority criticize repetitive dialogue, backtracking and underused survival items.",
+  "observations": [
+    {
+      "category": "pacing",
+      "statement": "Multiple accessible reviews praise the sequel's pacing and overall improvement over the first game.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "The game centers on exploration, puzzle-solving, scavenging and evasion across the Sehwa district.",
+      "sentiment": "neutral",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "store"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "One substantial negative review criticizes repeated backtracking and dialogue and argues that some survival items feel unnecessary.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "Most sampled reviews describe a stronger sequel, while an opposing review sees little improvement and more repetition.",
+      "recurrence": "limited"
+    }
+  ],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 4,
+    "sampled_total": 4,
+    "sample_ids_sha256": "f8c2857e15549aed422be9aba2f014d7ae84fe46a130e1f38c30466f2881d41e",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 4,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1045720/",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "content_sha256": "7648c52ba68b3079c51f0b7c46d2a743283e7328e284014eafca1a073e2782a9"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1045720/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "f8c2857e15549aed422be9aba2f014d7ae84fe46a130e1f38c30466f2881d41e"
+    }
+  }
+}

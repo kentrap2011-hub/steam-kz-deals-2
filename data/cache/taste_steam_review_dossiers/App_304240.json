@@ -1,0 +1,82 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "304240",
+  "title": "Resident Evil Deluxe Origins Bundle / Biohazard Deluxe Origins Bundle",
+  "generated_at_utc": "2026-09-14T04:40:44+00:00",
+  "expires_at_utc": "2026-10-04T04:40:44+00:00",
+  "ttl_days": 20,
+  "summary": "Steam app 304240 is the Resident Evil HD remaster: deliberate survival horror built around mansion exploration, puzzles, scarce resources and inventory management. Reviews praise its atmosphere and remake quality, while some players find the inventory limits, backtracking and door transitions dated or tedious.",
+  "observations": [
+    {
+      "category": "structure",
+      "statement": "Multiple reviews praise the mansion's survival-horror design and the remake's preservation of the original game's atmosphere.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Several reviews describe limited inventory, repeated backtracking and room-transition door animations as dated friction.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Resource scarcity and constrained inventory are repeatedly described as central to the game's tension and planning.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "The same old-school constraints are praised as core survival-horror design by some reviewers and criticized as tedious by others.",
+      "recurrence": "moderate"
+    }
+  ],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 10,
+    "sampled_total": 10,
+    "sample_ids_sha256": "8ad321f0f844d4778ff5178715ba6314473a0def692ced5ae38cae32b6e8d5f1",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 10,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/304240/",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "content_sha256": "27a25df112dce02467c3472e061b30e3e9cff2cdd74d21f76c06ead6da5f88ca"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/304240/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "8ad321f0f844d4778ff5178715ba6314473a0def692ced5ae38cae32b6e8d5f1"
+    }
+  }
+}

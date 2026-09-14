@@ -1,0 +1,67 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "2336880",
+  "title": "Destiny 2: The Final Shape",
+  "generated_at_utc": "2026-09-14T04:40:44+00:00",
+  "expires_at_utc": "2026-10-04T04:40:44+00:00",
+  "ttl_days": 20,
+  "summary": "Destiny 2 expansion built around the Prismatic subclass, a campaign in the Pale Heart, and new supers; the accessible Steam review index was too sparse to support recurring user-review themes in this run.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The expansion's defining system is Prismatic, which combines abilities from multiple Light and Darkness subclasses into custom builds.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "store"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "The store description frames the package around a campaign, a new destination, and new supers rather than a standalone game.",
+      "sentiment": "neutral",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "store"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 0,
+    "sampled_total": 0,
+    "sample_ids_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e0dff8cc5bb02486be0b945",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/2336880/",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "content_sha256": "23c2baf746d40bd84726056003281fed88fc1a3e8af08c4de4c18baffc85e44d"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/2336880/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e0dff8cc5bb02486be0b945"
+    }
+  }
+}

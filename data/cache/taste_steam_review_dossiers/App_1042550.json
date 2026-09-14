@@ -1,0 +1,92 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1042550",
+  "title": "Digimon Story Cyber Sleuth: Complete Edition",
+  "generated_at_utc": "2026-09-14T04:40:44+00:00",
+  "expires_at_utc": "2026-10-04T04:40:44+00:00",
+  "ttl_days": 20,
+  "summary": "Large two-game creature-collecting JRPG package with turn-based combat and extensive evolution/team-building systems. Reviews repeatedly praise the roster depth and long-form progression, while also citing grind, reused content, unclear progression and uneven localization as recurring drawbacks.",
+  "observations": [
+    {
+      "category": "progression",
+      "statement": "Reviews repeatedly praise the large Digimon roster and flexible evolution/team-building systems as a major source of long-term engagement.",
+      "sentiment": "positive",
+      "recurrence": "strong",
+      "mention_count": 5,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "Several reviews describe completionist play, evolution requirements and side content as grind-heavy or repetitive.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "translation",
+      "statement": "Multiple reviews call out weak or confusing localization, especially in Cyber Sleuth dialogue and side content.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Some reviews note reused maps or unclear next-step guidance during progression.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "The same volume of collection and progression content is a strength for dedicated players and a source of grind fatigue for completionists.",
+      "recurrence": "moderate"
+    }
+  ],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 12,
+    "sampled_total": 12,
+    "sample_ids_sha256": "224a381f229613097065edb826915f8d4125e06422ed9cc1d260d0c04ec4e5db",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 12,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1042550/",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "content_sha256": "609e5732237a791e9311ea67aa79b5db11ae4d420b396780099114ac71302bc0"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1042550/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "224a381f229613097065edb826915f8d4125e06422ed9cc1d260d0c04ec4e5db"
+    }
+  }
+}

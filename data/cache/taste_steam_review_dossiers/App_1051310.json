@@ -1,0 +1,77 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1051310",
+  "title": "Paper Dolls: Original / 纸人",
+  "generated_at_utc": "2026-09-14T04:40:44+00:00",
+  "expires_at_utc": "2026-10-04T04:40:44+00:00",
+  "ttl_days": 20,
+  "summary": "First-person Chinese horror adventure built around mansion exploration, puzzles, stealth and a distinctly Eastern supernatural atmosphere. Reviews praise presentation and puzzle ideas, while recurring complaints include control/input friction and localization barriers in some puzzles.",
+  "observations": [
+    {
+      "category": "structure",
+      "statement": "Reviews praise the game's Eastern-horror atmosphere and puzzle-driven exploration as distinctive strengths.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "More than one review reports control or input frustration, including keys not responding reliably.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "More than one review notes language or localization barriers that can make some puzzle information harder to use.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 6,
+    "sampled_total": 6,
+    "sample_ids_sha256": "ee54c90381cfab78db5349ee915dc957194b6f750a5e4059e6f9c8f6b35e822c",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 6,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1051310/",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "content_sha256": "79f06e005fdf0eedbcfd239e076511967f02f5c8c7427f0678b04909f9b38521"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1051310/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "ee54c90381cfab78db5349ee915dc957194b6f750a5e4059e6f9c8f6b35e822c"
+    }
+  }
+}

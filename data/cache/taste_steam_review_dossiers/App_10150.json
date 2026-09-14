@@ -1,0 +1,72 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "10150",
+  "title": "Prototype™",
+  "generated_at_utc": "2026-09-14T04:40:44+00:00",
+  "expires_at_utc": "2026-10-04T04:40:44+00:00",
+  "ttl_days": 20,
+  "summary": "Open-world action game focused on aggressive shape-shifting combat and unusually free traversal across the city. Reviews continue to praise movement and power fantasy, but the PC version has recurring technical compatibility and stability complaints, often accompanied by community-fix recommendations.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Recent reviews repeatedly praise the freedom of movement, traversal and shape-shifting combat as the game's strongest enduring qualities.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Multiple Steam reviews report PC-port stability or compatibility problems and point to community fixes or mods.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "The core action is still widely enjoyed, but technical PC issues can materially affect the out-of-box experience.",
+      "recurrence": "moderate"
+    }
+  ],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 6,
+    "sampled_total": 6,
+    "sample_ids_sha256": "5595ccbe6759e34264143d1b4c82b0002ce3ea3eb15e66070336f34ddd57f71b",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 6,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/10150/",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "content_sha256": "0491a1af93d73fce5248ca07479dd3b68dbb3566191955b819e95d4d00b5f2a6"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/10150/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:40:44+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "5595ccbe6759e34264143d1b4c82b0002ce3ea3eb15e66070336f34ddd57f71b"
+    }
+  }
+}
