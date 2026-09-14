@@ -2,14 +2,16 @@ name: Ingest Steam review dossier checkpoint
 
 on:
   push:
+    branches: [main]
     paths:
       - "data/ai_inbox/taste_steam_review_dossiers/*.json"
 
 permissions:
   contents: write
 
+# Shared with daily pre-AI preparation: both can write the canonical dossier work manifest.
 concurrency:
-  group: ingest-taste-steam-review-dossier-${{ github.ref }}
+  group: taste-steam-review-dossier-canonical-writer
   cancel-in-progress: false
 
 jobs:
@@ -19,50 +21,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          # The triggering commit is only a wake-up signal. Always read current
+          # main repository state when this serialized writer actually starts.
+          ref: main
           fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Resolve exactly one newly-created dossier submission
-        id: submission
-        shell: bash
+      - name: Drain maximal valid contiguous dossier prefix from current repository state
         run: |
           set -euo pipefail
-          mapfile -t entries < <(git diff-tree --no-commit-id --name-status -r "$GITHUB_SHA" -- data/ai_inbox/taste_steam_review_dossiers)
-          if [ "${#entries[@]}" -ne 1 ]; then
-            printf 'expected exactly one dossier inbox change, got %s\n' "${#entries[@]}" >&2
-            exit 1
-          fi
-          entry="${entries[0]}"
-          status="${entry%%$'\t'*}"
-          path="${entry#*$'\t'}"
-          subject="$(git show -s --format=%s "$GITHUB_SHA")"
-          case "$path" in
-            data/ai_inbox/taste_steam_review_dossiers/*.json) ;;
-            *) echo "unexpected dossier inbox path: $path" >&2; exit 1 ;;
-          esac
-          if [ "$subject" = "Ingest Steam review dossier checkpoint" ] && [ "$status" = "D" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "path=" >> "$GITHUB_OUTPUT"
-          elif [ "$status" = "A" ]; then
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-            echo "path=$path" >> "$GITHUB_OUTPUT"
-          else
-            echo "expected create-only dossier submission or canonical cleanup; status=$status path=$path" >&2
-            exit 1
-          fi
+          python scripts/ingest_taste_steam_review_dossier_inbox.py
 
-      - name: Validate and ingest exact checkpoint through canonical persistence
-        if: steps.submission.outputs.skip != 'true'
-        run: |
-          set -euo pipefail
-          python scripts/ingest_taste_steam_review_dossier_inbox.py "${{ steps.submission.outputs.path }}"
-
-      - name: Commit dossier artifacts and same-snapshot progress atomically
-        if: steps.submission.outputs.skip != 'true'
+      - name: Commit dossier artifacts and canonical progress atomically
         shell: bash
         run: |
           set -euo pipefail
@@ -74,17 +47,17 @@ jobs:
             data/ai_inbox/taste_steam_review_dossiers
           git diff --cached --check
           if git diff --cached --quiet; then
-            echo "No canonical dossier state changes produced" >&2
-            exit 1
+            echo "No contiguous canonical dossier state changes available"
+            exit 0
           fi
-          git commit -m "Ingest Steam review dossier checkpoint"
+          git commit -m "Drain Steam review dossier buffer"
           for attempt in 1 2 3; do
-            git fetch origin "${GITHUB_REF_NAME}:refs/remotes/origin/${GITHUB_REF_NAME}"
-            if ! git rebase "origin/${GITHUB_REF_NAME}"; then
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
               git rebase --abort || true
               exit 1
             fi
-            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+            if git push origin HEAD:main; then
               exit 0
             fi
             if [ "$attempt" = "3" ]; then
