@@ -1,0 +1,38 @@
+name: Worker append dossier persistence bridge CURRENT_TASK
+
+on:
+  push:
+    branches:
+      - worker/taste-steam-review-dossier-persistence-bridge-01
+    paths:
+      - .github/workflows/_worker_append_current_task_persistence_bridge.yml
+
+permissions:
+  contents: write
+
+jobs:
+  append:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: worker/taste-steam-review-dossier-persistence-bridge-01
+          fetch-depth: 0
+      - name: Append active worker handoff
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('CURRENT_TASK.md')
+          text = p.read_text(encoding='utf-8')
+          marker = '### Taste Steam review dossier persistence bridge 01'
+          if marker not in text:
+              block = '''\n\n### Taste Steam review dossier persistence bridge 01\nСтатус: `in_progress`.\n- worker task: `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_PERSISTENCE_BRIDGE_01.md`;\n- scope: restore the callable Scheduled ChatGPT -> GitHub-owned dossier ingest/persistence bridge only;\n- current fixed daily 591-item snapshot remains authoritative and must not be regenerated or processed by this implementation worker;\n- no Taste Semantic Producer, schedule, limit, queue or `ingest-taste-batch.yml` changes;\n- production `Run now` remains reserved for post-merge user validation.\n'''
+              p.write_text(text.rstrip() + block + '\n', encoding='utf-8')
+          PY
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add CURRENT_TASK.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Mark dossier persistence bridge in progress"
+            git push origin HEAD:worker/taste-steam-review-dossier-persistence-bridge-01
+          fi
