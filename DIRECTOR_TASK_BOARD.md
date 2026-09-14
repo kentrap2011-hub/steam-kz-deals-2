@@ -12,46 +12,67 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## ACTIVE — daily full-backlog Steam review dossier control plane
+## ACTIVE — Steam review dossier persistence bridge
 Task:
-`WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_CONTROL_PLANE_REFRESH_01.md`
+`WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_PERSISTENCE_BRIDGE_01.md`
 
 Task ID:
-`taste-steam-review-dossier-control-plane-refresh-01`
+`taste-steam-review-dossier-persistence-bridge-01`
 
 Status:
-`authorized_revised_ready_for_worker`
+`authorized_ready_for_worker`
 
 Mode:
 `IMPLEMENT`
 
 Worker slot:
-`ЧАТ 2` — continue in the current dossier implementation chat while its context remains useful.
+`ЧАТ 2` — continue in the existing dossier chat because this is the direct follow-up to the failed production validation.
 
-User-approved architecture:
-- GitHub once per day prepares one complete canonical dossier backlog from the current eligible Taste queue;
-- the existing `Taste Steam Review Dossier` Scheduled Task processes that complete prepared backlog;
-- checkpoint size 10 is only a durable persistence/runtime boundary, never the amount of work GitHub exposes and never a quota;
-- no GitHub scope rebuild is required merely to reveal the next 10 items;
-- if the prepared daily backlog is empty, dossier work for that prepared day is complete;
-- if ChatGPT hits a genuine runtime/tool limit, completed checkpoints remain durable and a later invocation resumes the same prepared backlog;
-- manual `Run now` may use the latest prepared daily backlog and does not require an on-demand GitHub refresh; source changes after preparation may wait until the next daily preparation.
+User authorization:
+- user explicitly approved sending the discovered persistence/write-back defect for repair.
+
+Verified production-validation facts:
+- fixed daily full snapshot is now real and contains 591 required dossier items;
+- current durability checkpoint contains 10 items;
+- `full_backlog_complete=false`;
+- scheduled ChatGPT can read/prepare the checkpoint but cannot execute the canonical dossier ingest script through its current GitHub action surface;
+- no partial write occurred, so the same snapshot/checkpoint remains authoritative;
+- `ingest-taste-batch.yml` belongs to Taste Semantic Producer and must remain untouched.
 
 Goal:
-- replace the overly coupled next-10-manifest production design with one daily GitHub-prepared full backlog;
-- wire preparation into the appropriate existing GitHub daily control-plane route before the dossier task runs;
-- preserve GitHub ownership of scope/order/freshness/completeness and ChatGPT ownership only of evidence collection/synthesis for the prepared list;
-- keep the existing 10 fresh production dossiers reusable;
-- keep `Taste Semantic Producer` unchanged;
-- validate full-list processing and resume semantics without running the real mass backlog in the worker chat.
+- add the smallest repository-defined submission bridge that the existing scheduled ChatGPT task can actually call;
+- keep validation, canonical dossier persistence, snapshot advancement and completeness GitHub-owned;
+- reuse canonical dossier ingest logic rather than duplicating it;
+- prove the real bridge shape in GitHub-hosted acceptance before another production `Run now`;
+- do not process the real 591-item backlog in the worker task.
 
 Expected report:
-`reviews/worker_reports/taste-steam-review-dossier-control-plane-refresh-01.md`
+`reviews/worker_reports/taste-steam-review-dossier-persistence-bridge-01.md`
 
 Allowed final statuses:
 - `complete_ready_for_user_run_now_validation`
 - `needs_user_decision`
 - `blocked`
+
+## IMPLEMENTED, PRODUCTION VALIDATION EXPOSED NEXT GAP — daily full-backlog Steam review dossier control plane
+Task:
+`WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_CONTROL_PLANE_REFRESH_01.md`
+
+Report:
+`reviews/worker_reports/taste-steam-review-dossier-control-plane-refresh-01.md`
+
+Implementation status:
+`complete_ready_for_user_run_now_validation`
+
+Accepted implementation facts:
+- one fixed daily GitHub-prepared full backlog replaces checkpoint-as-scope behavior;
+- checkpoint size 10 is durability only, never quota;
+- same-snapshot checkpoint/resume is implemented;
+- daily preparation is wired into the existing pre-AI control-plane path;
+- implementation PR #18 / merge `efc754a094199a8c41ae686494c8f2a5e4741cef`;
+- durable report closeout PR #19 / merge `e64a77f3804832c9b7e16fc642293c5b33b33847`.
+
+Real `Run now` then proved the snapshot/scope layer works but exposed a separate missing write-back bridge: scheduled ChatGPT had no available action to invoke canonical dossier ingest/persistence. The active persistence-bridge task owns that defect.
 
 ## ACCEPTED — full Steam review dossier backlog scope implementation
 Task:
@@ -70,8 +91,6 @@ Accepted facts:
 - non-Taste/base-support-only rows are excluded;
 - regression coverage proved >10 scope and durable checkpoint continuation;
 - implementation reached `main` via PR #16 / merge `ecde503c6b74aa964e7b331da009f87af8d0b3cd`.
-
-Production validation then exposed a separate orchestration defect: the real Scheduled Task saw a stale pre-merge empty manifest and processed 0. The current active task replaces the next-10-manifest coupling with the simpler daily full-backlog model.
 
 ## ACCEPTED — Steam review dossier preparer mechanism
 Task:
@@ -96,12 +115,11 @@ Title:
 
 State:
 - task exists;
-- first real run generated/persisted 10 dossiers;
-- those 10 dossiers remain reusable;
-- later `Run now` after full-backlog merge processed 0 because the canonical work manifest was stale and still said `ready_from_fresh_cache`;
-- the task correctly refused to invent scope;
-- do not use the 0-result run as evidence that the eligible backlog is empty;
-- next real user validation waits for the active daily full-backlog control-plane task to be accepted.
+- first historical real run generated/persisted 10 dossiers under the older route;
+- the latest validation now sees the correct fixed full snapshot: 591 required items, 10-item current checkpoint;
+- latest run did not persist/advance because no callable repository ingest bridge was exposed to the scheduled ChatGPT runtime;
+- no partial write occurred and the same checkpoint remains authoritative;
+- do not press `Run now` again until the active persistence-bridge implementation is accepted by Director.
 
 ## PAUSED — normal ChatGPT/Taste mechanism + clean throughput measurement
 Task:
@@ -116,7 +134,7 @@ Previous measurement evidence:
 - therefore that historical run is not the final clean full-game capacity benchmark.
 
 Status:
-`paused_until_dossier_daily_full_backlog_path_is_ready_and_user_validated`
+`paused_until_dossier_end_to_end_production_path_is_user_validated`
 
 Worker slot:
 `ЧАТ 1` may be reused later with a fresh chat if the old context is no longer useful.
@@ -137,7 +155,7 @@ Existing task:
 - id `6aa032f37e688191a5c9a1a83f91c5d9`;
 - current UI prompt is still the old one-game Chernobylite canary;
 - user screenshot shows daily schedule at 23:00 Samara time;
-- keep unchanged during dossier control-plane correction.
+- keep unchanged during dossier repair.
 
 Do not reconfigure it until dossier production is validated and a later clean throughput measurement plus separate user production-limit decision are complete.
 
