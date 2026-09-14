@@ -1,0 +1,58 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-PERSISTENCE-BRIDGE-V1",
+  "version": 1,
+  "status": "active",
+  "parent_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
+  "ownership": {
+    "submission_producer": "scheduled_chatgpt_dossier_worker",
+    "submission_transport": "connected_github_contents_create_file",
+    "validation_persistence_progress_completeness": "github_actions_control_plane",
+    "direct_semantic_worker_canonical_state_write": false
+  },
+  "submission": {
+    "repository": "kentrap2011-hub/steam-kz-deals-2",
+    "branch": "main",
+    "action": "github_contents_create_file",
+    "mode": "create_only",
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-SUBMISSION-V1",
+    "path_template": "data/ai_inbox/taste_steam_review_dossiers/{snapshot_id}--{scope_sha256}.json",
+    "required_bindings": [
+      "snapshot_id",
+      "scope_sha256",
+      "scope_source",
+      "source_queue_sha256",
+      "exact_current_checkpoint_appids_in_order"
+    ],
+    "existing_path_rule": "reload_canonical_manifest_never_overwrite_or_choose_alternate_filename"
+  },
+  "ingest": {
+    "trigger": "github_push_from_create_file_artifact",
+    "workflow": ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml",
+    "adapter": "scripts/ingest_taste_steam_review_dossier_inbox.py",
+    "canonical_ingest": "scripts/ingest_taste_steam_review_dossiers.py",
+    "same_snapshot_only": true,
+    "source_queue_reread": false,
+    "accepted_submission_cleanup": "delete_inbox_artifact_in_same_canonical_commit",
+    "atomic_git_commit_paths": [
+      "data/cache/taste_steam_review_dossiers/**",
+      "data/production/pre_ai/taste_steam_review_dossier_work.json",
+      "data/ai_inbox/taste_steam_review_dossiers/**"
+    ]
+  },
+  "failure": {
+    "partial_or_mismatched_submission": "fail_closed_no_canonical_commit",
+    "stale_or_replayed_submission": "fail_closed_against_current_manifest_binding",
+    "concurrent_canonical_change": "rebase_conflict_or_push_failure_fails_closed",
+    "retry_loop_created": false
+  },
+  "forbidden": [
+    "workflow_dispatch_as_required_worker_transport",
+    "shell_execution_by_scheduled_chatgpt",
+    "direct_chatgpt_write_to_dossier_store",
+    "direct_chatgpt_write_to_work_manifest",
+    "second_dossier_scheduler",
+    "independent_dossier_queue",
+    "checkpoint_as_quota",
+    "taste_semantic_producer_changes"
+  ]
+}
