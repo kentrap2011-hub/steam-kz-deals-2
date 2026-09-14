@@ -56,8 +56,10 @@ on:
       - "scripts/build_pre_ai_chatgpt_payload.py"
       - "scripts/taste_steam_review_dossier.py"
       - "scripts/taste_steam_review_dossier_daily.py"
+      - "scripts/taste_steam_review_dossier_buffered.py"
       - "scripts/build_taste_steam_review_dossier_work.py"
       - "scripts/test_taste_steam_review_dossier_daily_snapshot.py"
+      - "scripts/test_taste_steam_review_dossier_buffered_submission.py"
       - "scripts/russian_description_translation_runtime.py"
       - "scripts/build_russian_description_translation_queue.py"
       - "scripts/test_russian_description_translation_runtime.py"
@@ -66,8 +68,10 @@ on:
 permissions:
   contents: write
 
+# Shared with the dossier buffer drain because both can mutate
+# data/production/pre_ai/taste_steam_review_dossier_work.json.
 concurrency:
-  group: pre-ai-deterministic-payload
+  group: taste-steam-review-dossier-canonical-writer
   cancel-in-progress: false
 
 jobs:
@@ -133,7 +137,9 @@ jobs:
         run: python scripts/build_taste_steam_review_dossier_work.py
 
       - name: Regression test fixed daily dossier snapshot control plane
-        run: python scripts/test_taste_steam_review_dossier_daily_snapshot.py
+        run: |
+          python scripts/test_taste_steam_review_dossier_daily_snapshot.py
+          python scripts/test_taste_steam_review_dossier_buffered_submission.py
 
       - name: Persist or preserve pre-semantic Taste active pin
         env:
