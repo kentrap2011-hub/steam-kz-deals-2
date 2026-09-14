@@ -1,0 +1,71 @@
+name: Worker prepare synthetic dossier persistence bridge acceptance v2
+
+on:
+  push:
+    branches:
+      - worker/taste-steam-review-dossier-persistence-bridge-01-acceptance-v2
+    paths:
+      - .github/workflows/_worker_prepare_dossier_persistence_bridge_acceptance_v2.yml
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: worker/taste-steam-review-dossier-persistence-bridge-01-acceptance-v2
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Prepare isolated 25-item fixed snapshot
+        run: |
+          python - <<'PY'
+          import json
+          import tempfile
+          from datetime import datetime, timezone
+          from pathlib import Path
+          import sys
+
+          sys.path.insert(0, 'scripts')
+          from taste_steam_review_dossier import canonical_sha256
+          from taste_steam_review_dossier_daily import build_daily_work_manifest, load_contract
+
+          contract = load_contract('config/taste_steam_review_dossier_contract.json')
+          queue = []
+          for i in range(25):
+              appid = str(920000 + i)
+              queue.append({
+                  'key': f'Acceptance_{appid}',
+                  'appid': appid,
+                  'title': f'Bridge Acceptance V2 {i:02d}',
+                  'taste_fingerprint': f'acceptance-v2-taste-{i:02d}',
+                  'candidate_context_sha256': canonical_sha256({'acceptance_v2': i}),
+                  'work_required': ['evaluate_taste_fit'],
+              })
+          with tempfile.TemporaryDirectory() as td:
+              manifest = build_daily_work_manifest(
+                  queue,
+                  contract,
+                  Path(td),
+                  now=datetime(2026, 9, 14, 0, 0, tzinfo=timezone.utc),
+                  source_queue_path=contract['paths']['taste_queue'],
+              )
+          assert manifest['remaining_required_count'] == 25
+          assert manifest['current_checkpoint_count'] == 10
+          Path('data/production/pre_ai/taste_steam_review_dossier_work.json').write_text(
+              json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8'
+          )
+          PY
+      - name: Commit isolated acceptance manifest
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/production/pre_ai/taste_steam_review_dossier_work.json
+          git diff --cached --check
+          git commit -m "Prepare synthetic dossier bridge acceptance snapshot v2"
+          git push origin HEAD:worker/taste-steam-review-dossier-persistence-bridge-01-acceptance-v2
