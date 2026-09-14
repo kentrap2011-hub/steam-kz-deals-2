@@ -1,0 +1,35 @@
+name: Worker validate dossier persistence bridge
+
+on:
+  push:
+    branches:
+      - worker/taste-steam-review-dossier-persistence-bridge-01
+    paths:
+      - .github/workflows/_worker_validate_dossier_persistence_bridge.yml
+      - scripts/ingest_taste_steam_review_dossier_inbox.py
+      - scripts/ingest_taste_steam_review_dossiers.py
+      - scripts/test_taste_steam_review_dossier_persistence_bridge.py
+      - config/taste_steam_review_dossier_persistence_bridge.json
+      - config/taste_steam_review_dossier_worker_prompt.md
+      - .github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile bridge entrypoints
+        run: |
+          python -m py_compile \
+            scripts/ingest_taste_steam_review_dossier_inbox.py \
+            scripts/ingest_taste_steam_review_dossiers.py \
+            scripts/taste_steam_review_dossier_daily.py \
+            scripts/test_taste_steam_review_dossier_persistence_bridge.py
+      - name: Run focused bridge regressions
+        run: python scripts/test_taste_steam_review_dossier_persistence_bridge.py
