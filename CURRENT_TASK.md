@@ -226,3 +226,12 @@
 - реальный production dossier backlog не запускался; существующий `Taste Steam Review Dossier` Scheduled Task и Taste Semantic Producer не изменялись и не запускались;
 - report: `reviews/worker_reports/taste-steam-review-dossier-full-backlog-01.md`;
 - next user action: fresh manual `Run now` существующего `Taste Steam Review Dossier` Scheduled Task для production validation поведения beyond first checkpoint.
+
+### Taste Steam review dossier persistence bridge 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_PERSISTENCE_BRIDGE_01.md`;
+- scope: restore the callable Scheduled ChatGPT -> GitHub-owned dossier ingest/persistence bridge only;
+- current fixed daily 591-item snapshot remains authoritative and must not be regenerated or processed by this implementation worker;
+- no Taste Semantic Producer, schedule, limit, queue or `ingest-taste-batch.yml` changes;
+- production `Run now` remains reserved for post-merge user validation.
+
