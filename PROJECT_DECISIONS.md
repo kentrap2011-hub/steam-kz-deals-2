@@ -357,3 +357,26 @@
 **Граница:** TASTE-004 сохраняется в части `full eligible Taste backlog > active semantic pin` и `10 is not a quota`, но его фраза о rebuild после checkpoint считается superseded этим решением. Downstream `taste_active_work_unit.json` и существующий Taste Semantic Producer этой задачей не меняются.
 
 **Основные места:** `config/taste_steam_review_dossier_contract.json`, `scripts/taste_steam_review_dossier_daily.py`, `scripts/build_taste_steam_review_dossier_work.py`, `scripts/ingest_taste_steam_review_dossiers.py`, `config/taste_steam_review_dossier_worker_prompt.md`, `.github/workflows/build-pre-ai-store-snapshot.yml`.
+
+---
+
+## TASTE-006 — Buffered dossier transport preserves GitHub canonical ownership
+
+**Дата:** 2026-09-14
+**Статус:** contract approved; runtime not activated
+
+**Решение:** для уже фиксированного daily Steam-review-dossier snapshot GitHub заранее определяет неизменяемый ordered group plan поверх `prepared_required_items[]`, обычно группами по `checkpoint_size=10`. Каждая группа получает стабильную identity, включающую `snapshot_id`, `prepared_required_sha256`, `sequence`, диапазон индексов, точные ordered items/appids, `items_sha256`, `group_sha256` и provenance bindings. После успешного create-only сохранения группы N scheduled ChatGPT в будущем buffered mode может сразу обработать только следующую заранее объявленную группу N+1, не ожидая canonical ingest N.
+
+**Почему:** текущий fixed-snapshot contract уже математически определяет весь дневной порядок, но current-checkpoint transport заставляет worker ждать GitHub ingest и manifest advancement после каждой десятки. Immutable per-group transport снимает этот round-trip, не передавая worker-у контроль над scope, retry или canonical progress.
+
+**Buffer / drain:** каждая группа сохраняется отдельным immutable create-only transport artifact; несколько групп одного snapshot могут одновременно ожидать ingest. Buffer не является canonical progress, retry state, очередью ChatGPT или completeness authority. GitHub drain начинает с canonical `expected_sequence`, принимает только maximal valid contiguous prefix и не перескакивает gap. Missing, malformed, stale/wrong-snapshot, reordered, out-of-scope или иначе invalid expected group блокирует последующие группы; replay уже принятой группы не может повторно двигать canonical state. Cleanup принадлежит только GitHub.
+
+**Canonical writer:** все GitHub-процессы, способные менять dossier canonical manifest, обязаны участвовать в одном serialized canonical-writer boundary. Buffer push — только wake-up signal; конкретная workflow/concurrency реализация относится к отдельному IMPLEMENT task.
+
+**Transition:** решение contract-first и не активирует ещё не реализованный путь. Текущие `TASTE-STEAM-REVIEW-DOSSIER-WORK-V2`, current-checkpoint submission path и действующий worker prompt остаются допустимыми и обязательными до отдельного buffered runtime implementation и Director acceptance. `config/execution_ownership_contract.json` не меняется: GitHub по-прежнему control plane, scheduled ChatGPT — constrained semantic/data worker. `checkpoint_size=10` остаётся durability boundary, а не run/day/production quota.
+
+**Миграция текущего snapshot:** будущий IMPLEMENT может сохранить существующий `snapshot_id` и уже принятый progress без rebuild scope, только если group plan строго выводится из существующего `prepared_required_items[]`, а `remaining_required_items[]` доказан как точный suffix после accepted prefix. Уже принятые группы не создаются и не ingest повторно; продолжение начинается с первой непринятой группы. Если точный prefix/suffix или group-boundary proof невозможен — migration fail closed.
+
+**Сознательно отвергнуто:** mutable shared buffer, alternate retry filenames, ChatGPT-owned queue/retry/backlog/completeness, gap skipping, applying stale old-snapshot artifacts to a new snapshot, prompt-only activation before runtime support, изменение Taste Semantic Producer.
+
+**Основные места:** `config/taste_steam_review_dossier_contract.json`, `config/taste_steam_review_dossier_persistence_bridge.json`, `reviews/worker_reports/taste-dossier-buffered-submission-recon-01.md`.
