@@ -31,37 +31,29 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY' >> "$GITHUB_OUTPUT"
-          import json
-          import os
-          from pathlib import PurePosixPath
-
-          event = json.load(open(os.environ['GITHUB_EVENT_PATH'], encoding='utf-8'))
-          prefix = PurePosixPath('data/ai_inbox/taste_steam_review_dossiers')
-          head = event.get('head_commit') or {}
-          added = [PurePosixPath(p) for p in (head.get('added') or []) if PurePosixPath(p).parent == prefix and p.endswith('.json')]
-          modified = [PurePosixPath(p) for p in (head.get('modified') or []) if PurePosixPath(p).parent == prefix]
-          removed = [PurePosixPath(p) for p in (head.get('removed') or []) if PurePosixPath(p).parent == prefix]
-          touched = added + modified + removed
-
-          canonical_cleanup = (
-              head.get('message') == 'Ingest Steam review dossier checkpoint'
-              and not added
-              and not modified
-              and len(removed) == 1
-          )
-          if canonical_cleanup:
-              print('skip=true')
-              print('path=')
-          elif len(added) == 1 and len(touched) == 1:
-              print('skip=false')
-              print(f'path={added[0].as_posix()}')
-          else:
-              raise SystemExit(
-                  'expected exactly one create-only dossier submission or one canonical cleanup; '
-                  f'added={list(map(str, added))}, modified={list(map(str, modified))}, removed={list(map(str, removed))}'
-              )
-          PY
+          mapfile -t entries < <(git diff-tree --no-commit-id --name-status -r "$GITHUB_SHA" -- data/ai_inbox/taste_steam_review_dossiers)
+          if [ "${#entries[@]}" -ne 1 ]; then
+            printf 'expected exactly one dossier inbox change, got %s\n' "${#entries[@]}" >&2
+            exit 1
+          fi
+          entry="${entries[0]}"
+          status="${entry%%$'\t'*}"
+          path="${entry#*$'\t'}"
+          subject="$(git show -s --format=%s "$GITHUB_SHA")"
+          case "$path" in
+            data/ai_inbox/taste_steam_review_dossiers/*.json) ;;
+            *) echo "unexpected dossier inbox path: $path" >&2; exit 1 ;;
+          esac
+          if [ "$subject" = "Ingest Steam review dossier checkpoint" ] && [ "$status" = "D" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "path=" >> "$GITHUB_OUTPUT"
+          elif [ "$status" = "A" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "path=$path" >> "$GITHUB_OUTPUT"
+          else
+            echo "expected create-only dossier submission or canonical cleanup; status=$status path=$path" >&2
+            exit 1
+          fi
 
       - name: Validate and ingest exact checkpoint through canonical persistence
         if: steps.submission.outputs.skip != 'true'
