@@ -1,0 +1,77 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1066780",
+  "title": "Transport Fever 2",
+  "generated_at_utc": "2026-09-14T04:46:00+00:00",
+  "expires_at_utc": "2026-10-04T04:46:00+00:00",
+  "ttl_days": 20,
+  "summary": "Transport and management simulation built around creating passenger and freight networks by land, water and air. Accessible reviews emphasize logistics depth, network optimization and sandbox/modding longevity, while also noting that the systems and difficulty choices can take time to learn.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Reviews repeatedly value the linked passenger, freight and route-management systems as the core source of strategic depth.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Sandbox, map editing and mod support are repeatedly cited as reasons the simulation stays engaging over long campaigns.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "More than one review notes that efficient freight networks and higher difficulty settings require substantial learning and planning.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 6,
+    "sampled_total": 6,
+    "sample_ids_sha256": "83867849e7ded5952f6b190864c95c312309834ab8a7d2ddf420646081c6f38e",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 6,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1066780/",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "content_sha256": "71820c804738ecfa999769add6e2ae6630b9d9882640847c4beeb1cd7368286e"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1066780/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "83867849e7ded5952f6b190864c95c312309834ab8a7d2ddf420646081c6f38e"
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1092660",
+  "title": "Blair Witch",
+  "generated_at_utc": "2026-09-14T04:46:00+00:00",
+  "expires_at_utc": "2026-10-04T04:46:00+00:00",
+  "ttl_days": 20,
+  "summary": "First-person psychological horror set in the Black Hills, combining exploration, story and interaction with the dog companion Bullet. Reviews often praise the oppressive atmosphere and companion relationship, while recurring criticism targets repetitive traversal, clunky interactions and moments of frustration.",
+  "observations": [
+    {
+      "category": "structure",
+      "statement": "Several reviews praise the forest atmosphere and story presentation as the strongest part of the horror experience.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "More than one review reports clunky interactions, frustrating navigation or technical roughness during exploration.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "More than one review describes portions of forest traversal or encounter structure as repetitive.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Bullet, the dog companion, is repeatedly singled out as an emotionally effective part of the experience.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 5,
+    "sampled_total": 5,
+    "sample_ids_sha256": "a2c14e4bd03016d0365d8ee90e7857dff9eacdf11bbdc5ebba4375e420960009",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 5,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1092660/",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "content_sha256": "6ae4d92c0ed9a267e9d825328db1f4df3a3adb81a37e528a52e43190bb3a39a5"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1092660/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "a2c14e4bd03016d0365d8ee90e7857dff9eacdf11bbdc5ebba4375e420960009"
+    }
+  }
+}

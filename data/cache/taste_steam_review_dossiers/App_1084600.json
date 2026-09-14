@@ -1,0 +1,87 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1084600",
+  "title": "My Time at Sandrock",
+  "generated_at_utc": "2026-09-14T04:46:00+00:00",
+  "expires_at_utc": "2026-10-04T04:46:00+00:00",
+  "ttl_days": 20,
+  "summary": "Large crafting and life-simulation RPG about rebuilding a workshop and desert town through gathering, machines, commissions, relationships and exploration. Reviews often praise the expanded systems, characters and progression compared with its predecessor, while some report bugs and comparatively clunky combat.",
+  "observations": [
+    {
+      "category": "progression",
+      "statement": "Reviews repeatedly praise the long-form workshop progression, commissions and town development as a strong engagement loop.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Character relationships and town stories are repeatedly described as a stronger part of the experience than in the predecessor.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "More than one review mentions technical bugs or rough edges that can interrupt otherwise positive progression.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "mechanics",
+      "statement": "Combat is a secondary system and is described by some reviewers as less polished than crafting and social play.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 8,
+    "sampled_total": 8,
+    "sample_ids_sha256": "f855688a189328353bd4a89bc5eb72d7e214e7d2e9ab59646f4cdb03bd91ce7b",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 8,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1084600/",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "content_sha256": "dfe50b798bd67a9a0bdc5134f8c3ad7d50417a59db288f2e254f440cdaf3f96f"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1084600/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "f855688a189328353bd4a89bc5eb72d7e214e7d2e9ab59646f4cdb03bd91ce7b"
+    }
+  }
+}

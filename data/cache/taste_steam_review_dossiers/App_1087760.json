@@ -1,0 +1,89 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1087760",
+  "title": "The Gunk",
+  "generated_at_utc": "2026-09-14T04:46:00+00:00",
+  "expires_at_utc": "2026-10-04T04:46:00+00:00",
+  "ttl_days": 20,
+  "summary": "Compact exploration adventure centered on vacuuming away a corrupting substance and restoring colorful alien environments. Reviews commonly find the cleaning loop satisfying and the presentation pleasant, but repeatedly note the short length, low challenge and some repetition or technical roughness.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Cleaning contaminated areas and watching the environment recover is repeatedly described as the game's most satisfying interaction.",
+      "sentiment": "positive",
+      "recurrence": "strong",
+      "mention_count": 5,
+      "evidence_languages": [
+        "russian",
+        "non_russian",
+        "store"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Multiple reviews describe the campaign as notably short, commonly finishing in only several hours.",
+      "sentiment": "mixed",
+      "recurrence": "strong",
+      "mention_count": 5,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Several reviews characterize puzzles and combat as simple and low-pressure rather than demanding.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "More than one review says the cleaning and traversal loop can become repetitive despite its initially satisfying feedback.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 1,
+    "sampled_non_russian": 9,
+    "sampled_total": 10,
+    "sample_ids_sha256": "d7a213e12d1a9147057f73b2b53c194057702a3135779656bc3521559d470457",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 1,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 9,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1087760/",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "content_sha256": "8d4836a72f86d3a1721ee8e47417254895fb08f01cd7dd56f0da24e85a9a0c3b"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1087760/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "d7a213e12d1a9147057f73b2b53c194057702a3135779656bc3521559d470457"
+    }
+  }
+}

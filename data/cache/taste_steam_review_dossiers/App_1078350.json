@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1078350",
+  "title": "Ambrosia",
+  "generated_at_utc": "2026-09-14T04:46:00+00:00",
+  "expires_at_utc": "2026-10-04T04:46:00+00:00",
+  "ttl_days": 20,
+  "summary": "Adult-oriented role-playing game with a small accessible Steam review footprint in this collection pass. The available substantial user review is positive overall, but the sample is too sparse to support recurring claims about mechanics, pacing or progression.",
+  "observations": [
+    {
+      "category": "other",
+      "statement": "The accessible substantial Steam review expresses a positive overall impression, but the review index is too sparse to establish a recurring gameplay theme.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 1,
+    "sampled_total": 1,
+    "sample_ids_sha256": "7e01fbfa2941e64526d7ce1a87918db0283228168916fd14436e93d8f25c042c",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 1,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1078350/",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "content_sha256": "9750dac3e76c19f41209b17efebf7e00db4f59460a2ac11b2ddd3b6b97233547"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1078350/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "7e01fbfa2941e64526d7ce1a87918db0283228168916fd14436e93d8f25c042c"
+    }
+  }
+}

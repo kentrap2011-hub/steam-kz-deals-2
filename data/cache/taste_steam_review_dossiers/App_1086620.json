@@ -1,0 +1,67 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "1086620",
+  "title": "Selfloss",
+  "generated_at_utc": "2026-09-14T04:46:00+00:00",
+  "expires_at_utc": "2026-10-04T04:46:00+00:00",
+  "ttl_days": 20,
+  "summary": "Atmospheric exploration and action-adventure in a Slavic-inspired fantasy world, following a healer who uses a magical staff for puzzles, traversal and combat. The accessible individual-review index was too sparse in this pass to establish recurring user-review themes.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The magical staff is used across combat, puzzle solving and environmental interaction, making it the central multi-purpose mechanic.",
+      "sentiment": "neutral",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "store"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Exploration alternates between travel on foot and by boat through a melancholy fantasy setting inspired by Slavic folklore.",
+      "sentiment": "neutral",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "store"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 0,
+    "sampled_non_russian": 0,
+    "sampled_total": 0,
+    "sample_ids_sha256": "6883259fe8237f0a95b685fe39cd405f501639536bb02961c79526706419cf1d",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 0,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/1086620/",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "content_sha256": "bf59f7af37693ae047e4fa00287ec05f4ae8433684b9b640f862297490edc93d"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/1086620/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "6883259fe8237f0a95b685fe39cd405f501639536bb02961c79526706419cf1d"
+    }
+  }
+}

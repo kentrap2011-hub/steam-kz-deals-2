@@ -1,0 +1,79 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
+  "schema_version": 1,
+  "appid": "107410",
+  "title": "Arma 3",
+  "generated_at_utc": "2026-09-14T04:46:00+00:00",
+  "expires_at_utc": "2026-10-04T04:46:00+00:00",
+  "ttl_days": 20,
+  "summary": "Large-scale military sandbox centered on realistic combined-arms combat, open terrain, multiplayer scenarios and extensive community-created content. Reviews consistently frame its realism and flexibility as strengths, while the slow pacing, high lethality and steep learning curve are deliberate but demanding.",
+  "observations": [
+    {
+      "category": "multiplayer",
+      "statement": "Multiplayer, co-op scenarios and the large Workshop ecosystem are recurring reasons players describe the game as unusually long-lived.",
+      "sentiment": "positive",
+      "recurrence": "strong",
+      "mention_count": 5,
+      "evidence_languages": [
+        "store_and_reviews"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Reviews repeatedly describe realistic ballistics, high lethality and a steep learning curve that demand patience and tactical play.",
+      "sentiment": "mixed",
+      "recurrence": "strong",
+      "mention_count": 5,
+      "evidence_languages": [
+        "russian",
+        "non_russian",
+        "store"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "The simulation-oriented pace is repeatedly described as much slower and more deliberate than a conventional action shooter.",
+      "sentiment": "neutral",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "review_sample": {
+    "strategy": "adaptive_stability",
+    "sampled_russian": 1,
+    "sampled_non_russian": 6,
+    "sampled_total": 7,
+    "sample_ids_sha256": "16eccf4e69951dd4a78051ccc0559f8562c028e0e09ab697a61864c36412162e",
+    "lanes": [
+      {
+        "language_scope": "russian",
+        "sampled": 1,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      },
+      {
+        "language_scope": "non_russian",
+        "sampled": 6,
+        "batches": 1,
+        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+      }
+    ]
+  },
+  "provenance": {
+    "store_description": {
+      "url": "https://store.steampowered.com/app/107410/",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "content_sha256": "a37a894d6bb05d05ad53d71663f2f4b75ed8981af79896eb3b1e6f0955165431"
+    },
+    "steam_reviews": {
+      "url": "https://store.steampowered.com/app/107410/#app_reviews_hash",
+      "captured_at_utc": "2026-09-14T04:46:00+00:00",
+      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
+      "source_refs_sha256": "16eccf4e69951dd4a78051ccc0559f8562c028e0e09ab697a61864c36412162e"
+    }
+  }
+}
