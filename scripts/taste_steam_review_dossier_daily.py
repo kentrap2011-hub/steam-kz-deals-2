@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Deterministic V2 control plane for the fixed daily Steam-review-dossier snapshot."""
-import hashlib
+import copy
 import json
 from datetime import datetime, timezone
 from pathlib import Path
@@ -19,6 +19,8 @@ from taste_steam_review_dossier import (
 
 CONTRACT_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2"
 WORK_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-WORK-V2"
+GROUP_PLAN_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-GROUP-PLAN-V1"
+BUFFER_GROUP_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1"
 _SAMARA = ZoneInfo("Europe/Samara")
 _HEX64 = set("0123456789abcdef")
 
@@ -101,7 +103,7 @@ def _checkpoint_binding(snapshot_id, remaining_items, checkpoint_items):
     })
 
 
-def _progress_fields(snapshot_id, prepared_items, remaining_items, checkpoint_size):
+def progress_fields(snapshot_id, prepared_items, remaining_items, checkpoint_size):
     current = remaining_items[:checkpoint_size]
     remaining_count = len(remaining_items)
     return {
@@ -116,6 +118,119 @@ def _progress_fields(snapshot_id, prepared_items, remaining_items, checkpoint_si
         "full_backlog_complete": remaining_count == 0,
         "status": "complete" if remaining_count == 0 else "work_required",
     }
+
+
+# Compatibility for existing callers/tests while the public helper is used by the drain.
+_progress_fields = progress_fields
+
+
+def _group_descriptor(*, snapshot_id, prepared_required_sha256, sequence, start_index,
+                      end_index_exclusive, items, scope_source, source_queue_sha256):
+    appids = [str(item.get("appid") or "") for item in items]
+    items_sha256 = canonical_sha256(items)
+    identity = {
+        "snapshot_id": snapshot_id,
+        "prepared_required_sha256": prepared_required_sha256,
+        "sequence": sequence,
+        "start_index": start_index,
+        "end_index_exclusive": end_index_exclusive,
+        "appids": appids,
+        "items_sha256": items_sha256,
+        "scope_source": scope_source,
+        "source_queue_sha256": source_queue_sha256,
+    }
+    return {
+        **identity,
+        "items": copy.deepcopy(items),
+        "group_sha256": canonical_sha256(identity),
+    }
+
+
+def build_submission_group_plan(*, snapshot_id, prepared_required_sha256, prepared_required_items,
+                                checkpoint_size, scope_source, source_queue_sha256):
+    """Partition the immutable prepared scope once; identity never depends on progress."""
+    if not isinstance(prepared_required_items, list):
+        raise ValueError("prepared_required_items must be a list")
+    if prepared_required_sha256 != canonical_sha256(prepared_required_items):
+        raise ValueError("cannot build group plan from an unbound prepared scope")
+    if not isinstance(checkpoint_size, int) or checkpoint_size <= 0:
+        raise ValueError("group plan checkpoint size is invalid")
+    groups = []
+    for start in range(0, len(prepared_required_items), checkpoint_size):
+        end = min(start + checkpoint_size, len(prepared_required_items))
+        groups.append(_group_descriptor(
+            snapshot_id=snapshot_id,
+            prepared_required_sha256=prepared_required_sha256,
+            sequence=len(groups) + 1,
+            start_index=start,
+            end_index_exclusive=end,
+            items=prepared_required_items[start:end],
+            scope_source=scope_source,
+            source_queue_sha256=source_queue_sha256,
+        ))
+    return {
+        "schema": GROUP_PLAN_SCHEMA,
+        "schema_version": 1,
+        "snapshot_id": snapshot_id,
+        "prepared_required_sha256": prepared_required_sha256,
+        "checkpoint_size": checkpoint_size,
+        "group_count": len(groups),
+        "groups": groups,
+        "group_plan_sha256": canonical_sha256(groups),
+    }
+
+
+def validate_group_plan(manifest, contract, *, required=False):
+    plan = manifest.get("submission_group_plan")
+    if plan is None:
+        if required:
+            raise ValueError("immutable buffered submission group plan is missing")
+        return None
+    if not isinstance(plan, dict) or plan.get("schema") != GROUP_PLAN_SCHEMA or plan.get("schema_version") != 1:
+        raise ValueError("buffered submission group plan schema is missing or unsupported")
+    expected = build_submission_group_plan(
+        snapshot_id=manifest["snapshot_id"],
+        prepared_required_sha256=manifest["prepared_required_sha256"],
+        prepared_required_items=manifest["prepared_required_items"],
+        checkpoint_size=int(contract["checkpointing"]["checkpoint_size"]),
+        scope_source=manifest["scope_source"],
+        source_queue_sha256=manifest["source_queue_sha256"],
+    )
+    if plan != expected:
+        raise ValueError("buffered submission group plan does not exactly match immutable prepared scope")
+    return plan
+
+
+def expected_group_sequence(manifest, contract):
+    """Derive canonical expected sequence only from proven canonical progress."""
+    validate_manifest(manifest, contract)
+    if manifest["full_backlog_complete"]:
+        return None
+    size = int(contract["checkpointing"]["checkpoint_size"])
+    completed = int(manifest["completed_required_count"])
+    if completed % size != 0:
+        raise ValueError("canonical progress is not on a buffered group boundary")
+    return completed // size + 1
+
+
+def ensure_submission_group_plan(manifest, contract):
+    """Add the additive plan to an unfinished legacy V2 manifest after migration proof."""
+    validate_manifest(manifest, contract)
+    if manifest.get("submission_group_plan") is not None:
+        validate_group_plan(manifest, contract, required=True)
+        return copy.deepcopy(manifest)
+    migrated = copy.deepcopy(manifest)
+    migrated["submission_group_plan"] = build_submission_group_plan(
+        snapshot_id=migrated["snapshot_id"],
+        prepared_required_sha256=migrated["prepared_required_sha256"],
+        prepared_required_items=migrated["prepared_required_items"],
+        checkpoint_size=int(contract["checkpointing"]["checkpoint_size"]),
+        scope_source=migrated["scope_source"],
+        source_queue_sha256=migrated["source_queue_sha256"],
+    )
+    validate_manifest(migrated, contract)
+    validate_group_plan(migrated, contract, required=True)
+    return migrated
 
 
 def build_daily_work_manifest(queue_rows, contract, store_dir, *, now=None, ttl_days=None, source_queue_path=None):
@@ -169,6 +284,14 @@ def build_daily_work_manifest(queue_rows, contract, store_dir, *, now=None, ttl_
         "ttl_days": ttl,
     })
     source_path = source_queue_path or contract["paths"]["taste_queue"]
+    group_plan = build_submission_group_plan(
+        snapshot_id=snapshot_id,
+        prepared_required_sha256=required_sha,
+        prepared_required_items=required,
+        checkpoint_size=checkpoint_size,
+        scope_source=contract["scope"]["source"],
+        source_queue_sha256=source_queue_sha,
+    )
     manifest = {
         "schema": WORK_SCHEMA,
         "schema_version": 2,
@@ -195,8 +318,10 @@ def build_daily_work_manifest(queue_rows, contract, store_dir, *, now=None, ttl_
         "checkpoint_size": checkpoint_size,
         "checkpoint_semantics": "internal_durability_boundary_not_scope_quota",
         "sampling_policy": contract["sampling"],
+        "submission_group_plan": group_plan,
     }
-    manifest.update(_progress_fields(snapshot_id, required, list(required), checkpoint_size))
+    manifest.update(progress_fields(snapshot_id, required, list(required), checkpoint_size))
+    validate_manifest(manifest, contract)
     return manifest
 
 
@@ -217,16 +342,25 @@ def validate_manifest(manifest, contract):
     if manifest.get("prepared_required_count") != len(prepared) or manifest.get("prepared_required_sha256") != canonical_sha256(prepared):
         raise ValueError("Daily dossier immutable prepared scope binding mismatch")
     checkpoint_size = int(contract["checkpointing"]["checkpoint_size"])
-    expected_progress = _progress_fields(manifest["snapshot_id"], prepared, remaining, checkpoint_size)
+    expected_progress = progress_fields(manifest["snapshot_id"], prepared, remaining, checkpoint_size)
     for key, value in expected_progress.items():
         if manifest.get(key) != value:
             raise ValueError(f"Daily dossier snapshot progress field mismatch: {key}")
+    completed = int(manifest["completed_required_count"])
+    if completed < 0 or completed > len(prepared):
+        raise ValueError("Daily dossier completed progress is outside immutable prepared scope")
+    if remaining != prepared[completed:]:
+        raise ValueError("Daily dossier remaining scope must be the exact prepared suffix after completed prefix")
+    if completed != len(prepared) and completed % checkpoint_size != 0:
+        raise ValueError("Daily dossier accepted prefix must end on a group boundary")
     prepared_appids = [str(x.get("appid") or "") for x in prepared]
     remaining_appids = [str(x.get("appid") or "") for x in remaining]
     if len(prepared_appids) != len(set(prepared_appids)) or len(remaining_appids) != len(set(remaining_appids)):
         raise ValueError("Daily dossier snapshot contains duplicate appids")
-    if any(appid not in prepared_appids for appid in remaining_appids):
-        raise ValueError("Daily dossier remaining scope escaped immutable prepared scope")
+    if any(not appid.isdigit() for appid in prepared_appids):
+        raise ValueError("Daily dossier prepared scope contains invalid appid")
+    if manifest.get("submission_group_plan") is not None:
+        validate_group_plan(manifest, contract, required=True)
     return current
 
 
@@ -253,7 +387,7 @@ def validate_submission(submission, manifest, contract):
 
 
 def persist_submission_and_advance_snapshot(submission, manifest, contract, store_dir, *, manifest_output_path=None):
-    """Persist one valid checkpoint, then advance only progress inside the same snapshot."""
+    """Persist one valid legacy checkpoint, then advance only progress inside the same snapshot."""
     docs = validate_submission(submission, manifest, contract)
     current = list(manifest["current_checkpoint_items"])
     persisted = []
@@ -262,13 +396,13 @@ def persist_submission_and_advance_snapshot(submission, manifest, contract, stor
         atomic_write_json(path, doc)
         persisted.append({"appid": str(doc["appid"]), "path": path.as_posix(), "dossier_sha256": canonical_sha256(doc)})
 
-    next_manifest = json.loads(json.dumps(manifest))
+    next_manifest = copy.deepcopy(manifest)
     remaining = list(manifest["remaining_required_items"])
     expected = [str(x["appid"]) for x in current]
     if [str(x["appid"]) for x in remaining[:len(current)]] != expected:
         raise ValueError("current checkpoint is not the canonical prefix of remaining daily snapshot scope")
     next_remaining = remaining[len(current):]
-    next_manifest.update(_progress_fields(
+    next_manifest.update(progress_fields(
         manifest["snapshot_id"],
         manifest["prepared_required_items"],
         next_remaining,
