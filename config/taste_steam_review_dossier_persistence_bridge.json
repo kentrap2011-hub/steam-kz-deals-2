@@ -2,30 +2,51 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-PERSISTENCE-BRIDGE-V1",
   "version": 1,
   "status": "active",
-  "contract_revision": "buffered-activation-state-aligned-2026-09-15",
+  "contract_revision": "compact-worker-view-implemented-2026-09-15",
   "parent_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "ownership": {
     "submission_producer": "scheduled_chatgpt_dossier_worker",
     "submission_transport": "connected_github_contents_create_file",
+    "worker_read_projection_producer": "github_actions_control_plane",
     "validation_persistence_progress_completeness": "github_actions_control_plane",
     "direct_semantic_worker_canonical_state_write": false,
     "buffer_cleanup": "github_actions_control_plane",
     "gap_retry_stale_replay_interpretation": "github_actions_control_plane"
   },
   "transition": {
-    "rule": "buffered_group_create_only_transport_is_the_active_live_worker_transport;legacy_current_checkpoint_create_only_is_retained_only_as_an_implemented_compatibility_fallback",
+    "rule": "compact_worker_index_and_immutable_group_descriptors_are_the_active_worker_read_surface;buffered_group_create_only_is_the_active_live_worker_transport;legacy_current_checkpoint_create_only_is_retained_only_as_an_implemented_compatibility_fallback",
+    "active_worker_read_mode": "compact_worker_index_and_immutable_group_descriptors_v1",
     "active_transport_mode": "buffered_group_create_only_v1",
     "compatibility_fallback_transport_mode": "current_checkpoint_create_only_v1",
     "buffered_transport_status": "active",
     "legacy_current_checkpoint_path_remains_valid": true,
     "runtime_requirements_met": [
+      "full_canonical_manifest_remains_github_authority",
       "github_published_immutable_group_plan",
+      "github_generated_compact_worker_index_and_per_group_descriptors",
       "buffered_group_validator_and_state_based_contiguous_drain",
       "shared_serialized_dossier_manifest_writer_boundary",
       "worker_prompt_alignment",
       "contract_runtime_regression_validation",
       "director_authorized_live_prompt_installation"
     ]
+  },
+  "worker_read_projection": {
+    "status": "active",
+    "owner": "github_actions_control_plane",
+    "canonical_authority": false,
+    "canonical_source": "data/production/pre_ai/taste_steam_review_dossier_work.json",
+    "index_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V1",
+    "index_path": "data/production/pre_ai/taste_steam_review_dossier_worker_index.json",
+    "group_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+    "descriptor_path_template": "data/production/pre_ai/taste_steam_review_dossier_worker_groups/{snapshot_id}/g{sequence:06d}.json",
+    "source_rule": "index_and_descriptors_are_mechanically_derived_only_from_the_current_full_canonical_manifest_and_its_validated_immutable_group_plan",
+    "same_snapshot_descriptor_rule": "descriptor_bytes_are_immutable_when_canonical_progress_advances",
+    "same_snapshot_progress_rule": "only_index_progress_fields_change_when_the_canonical_manifest_advances",
+    "daily_rollover_rule": "new_snapshot_projection_replaces_the_active_projection_and_old_snapshot_descriptor_directories_are_removed_from_current_tree",
+    "worker_rule": "read_index_then_exact_descriptor_n_then_after_successful_create_only_publish_may_read_n_plus_1_without_waiting_for_canonical_ingest",
+    "liveness_rule": "between_locally_sequential_groups_re_read_index_only_for_snapshot_plan_and_binding_liveness_not_as_a_progress_gate",
+    "failure_rule": "missing_stale_mismatched_or_unreadable_projection_fails_closed_without_full_manifest_reconstruction_fallback"
   },
   "submission": {
     "repository": "kentrap2011-hub/steam-kz-deals-2",
@@ -52,6 +73,7 @@
     "action": "github_contents_create_file",
     "mode": "immutable_create_only_one_file_per_predeclared_group",
     "path_template": "data/ai_inbox/taste_steam_review_dossiers/{snapshot_id}--g{sequence:06d}--{group_sha256}.json",
+    "descriptor_source": "validated_compact_worker_group_descriptor_projected_from_full_canonical_manifest",
     "multiple_pending_groups_same_snapshot_allowed": true,
     "alternate_retry_filenames_allowed": false,
     "worker_overwrite_update_delete_allowed": false,
@@ -69,9 +91,9 @@
       "source_queue_sha256"
     ],
     "group_identity_rule": "must_exactly_match_the_immutable_github_predeclared_group_descriptor_and_must_not_depend_on_mutable_scope_sha256",
-    "successful_create_rule": "within_the_same_invocation_the_worker_may_continue_only_to_the_immediately_next_predeclared_group_without_waiting_for_canonical_ingest",
+    "successful_create_rule": "within_the_same_invocation_the_worker_may_continue_only_to_the_immediately_next_projected_group_without_waiting_for_canonical_ingest",
     "existing_expected_artifact_rule": "if_the_deterministic_artifact_for_the_current_canonical_expected_group_already_exists_and_canonical_progress_has_not_advanced_stop_without_overwrite_rename_skip_or_alternate_filename",
-    "interrupted_invocation_rule": "next_invocation_reloads_github_canonical_expected_group_and_does_not_scan_buffer_to_invent_resume_or_retry_state",
+    "interrupted_invocation_rule": "next_invocation_reloads_github_worker_index_canonical_expected_sequence_and_does_not_scan_buffer_to_invent_resume_or_retry_state",
     "buffer_semantics": {
       "transport_only": true,
       "canonical_progress": false,
@@ -87,10 +109,13 @@
     "canonical_ingest": "scripts/ingest_taste_steam_review_dossiers.py",
     "same_snapshot_only": true,
     "source_queue_reread": false,
+    "canonical_validation_source": "full_canonical_work_manifest_not_worker_projection",
     "accepted_submission_cleanup": "delete_inbox_artifact_in_same_canonical_commit",
     "atomic_git_commit_paths": [
       "data/cache/taste_steam_review_dossiers/**",
       "data/production/pre_ai/taste_steam_review_dossier_work.json",
+      "data/production/pre_ai/taste_steam_review_dossier_worker_index.json",
+      "data/production/pre_ai/taste_steam_review_dossier_worker_groups/**",
       "data/ai_inbox/taste_steam_review_dossiers/**"
     ],
     "runtime_status": "active_state_based_buffered_contiguous_drain_with_legacy_current_checkpoint_compatibility_fallback"
@@ -99,7 +124,8 @@
     "status": "active",
     "owner": "github_actions_control_plane",
     "trigger_semantics": "buffer_push_is_only_a_wake_up_signal_not_the_queue_record",
-    "state_source": "current_repository_canonical_manifest_group_plan_and_buffer",
+    "state_source": "current_repository_full_canonical_manifest_group_plan_and_buffer",
+    "worker_projection_is_acceptance_authority": false,
     "expected_sequence_source": "github_owned_canonical_progress",
     "acceptance_rule": "validate_and_accept_only_the_maximal_valid_contiguous_prefix_starting_at_expected_sequence",
     "gap_rule": "never_skip_a_missing_or_invalid_expected_group",
@@ -134,7 +160,7 @@
     "example_gap": "expected=5;buffer=5,6,8=>accept=5,6;stop_at=7"
   },
   "canonical_writer": {
-    "rule": "all_github_processes_that_can_mutate_the_dossier_canonical_manifest_must_share_one_serialized_canonical_writer_boundary",
+    "rule": "all_github_processes_that_can_mutate_the_dossier_canonical_manifest_or_synchronize_its_worker_projection_must_share_one_serialized_canonical_writer_boundary",
     "includes_at_minimum": [
       "buffered_drain",
       "daily_pre_ai_snapshot_preparation"
@@ -144,11 +170,13 @@
   },
   "daily_rollover": {
     "old_snapshot_buffer_may_mutate_new_snapshot": false,
+    "old_snapshot_worker_projection_may_authorize_current_publication": false,
     "validation_rule": "current_snapshot_binding_is_mandatory_before_any_canonical_persistence",
     "cleanup_owner": "github_actions_control_plane"
   },
   "failure": {
     "partial_or_mismatched_submission": "fail_closed_no_canonical_commit",
+    "missing_or_mismatched_worker_projection": "scheduled_worker_stops_fail_closed_without_reconstructing_from_full_manifest_partial_fields",
     "stale_or_replayed_submission": "fail_closed_against_current_manifest_binding_in_legacy_compatibility_mode;buffered_mode_replay_is_idempotent_no_advance_and_stale_never_mutates_current_snapshot",
     "concurrent_canonical_change": "rebase_conflict_or_push_failure_fails_closed",
     "retry_loop_created": false
@@ -158,6 +186,8 @@
     "shell_execution_by_scheduled_chatgpt",
     "direct_chatgpt_write_to_dossier_store",
     "direct_chatgpt_write_to_work_manifest",
+    "direct_chatgpt_write_to_worker_index_or_descriptors",
+    "full_manifest_partial_field_descriptor_reconstruction_fallback",
     "chatgpt_buffer_cleanup",
     "chatgpt_gap_retry_or_replay_interpretation",
     "alternate_retry_filename",
