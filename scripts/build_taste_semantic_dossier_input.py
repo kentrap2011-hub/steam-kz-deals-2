@@ -3,12 +3,13 @@ import argparse
 import json
 from pathlib import Path
 
-from taste_steam_review_dossier import atomic_write_json, build_semantic_input
+from taste_steam_review_dossier import atomic_write_json
 from taste_steam_review_dossier_daily import load_contract
+from taste_steam_review_dossier_web import build_semantic_input_strict
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Build fail-closed downstream Taste semantic input with fresh Steam dossiers")
+    parser = argparse.ArgumentParser(description="Build fail-closed downstream Taste semantic input with fresh V2 web-evidence dossiers")
     parser.add_argument("--contract", default="config/taste_steam_review_dossier_contract.json")
     parser.add_argument("--pin", default="data/production/pre_ai/taste_active_work_unit.json")
     parser.add_argument("--store-dir", default="data/cache/taste_steam_review_dossiers")
@@ -17,7 +18,7 @@ def main():
 
     contract = load_contract(args.contract)
     pin = json.loads(Path(args.pin).read_text(encoding="utf-8"))
-    doc = build_semantic_input(pin, contract, args.store_dir)
+    doc = build_semantic_input_strict(pin, contract, args.store_dir)
     atomic_write_json(args.output, doc)
     print(json.dumps({
         "status": doc["status"],
