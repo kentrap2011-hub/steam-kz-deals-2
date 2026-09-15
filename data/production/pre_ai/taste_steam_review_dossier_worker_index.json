@@ -1,0 +1,44 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V1",
+  "schema_version": 1,
+  "work_manifest_path": "data/production/pre_ai/taste_steam_review_dossier_work.json",
+  "snapshot_id": "c4b3c29947e926fd2e8cfea0d3cc7a8c5f42baa7e2438d4d16b59857161d9bf3",
+  "prepared_for_date": "2026-09-15",
+  "prepared_required_sha256": "c519c99b165b11f2d64313849517753ca70dbd25ee7910206fd58dd9d929cbd3",
+  "group_plan_sha256": "513a495c947a21b1b7e1958569c76ef67c7dbe76808b0df95ef21be3129676de",
+  "group_count": 60,
+  "canonical_expected_sequence": 1,
+  "prepared_required_count": 594,
+  "completed_required_count": 0,
+  "remaining_required_count": 594,
+  "full_backlog_complete": false,
+  "ttl_days": 20,
+  "sampling_policy": {
+    "mode": "adaptive_stability",
+    "review_batch_size": 20,
+    "initial_target_per_lane": 20,
+    "max_russian_reviews": 80,
+    "max_non_russian_reviews": 80,
+    "max_total_reviews": 160,
+    "stable_consecutive_batches": 2,
+    "lanes": [
+      "russian",
+      "non_russian"
+    ],
+    "stop_conditions": [
+      "two_consecutive_batches_add_no_material_recurring_theme_or_conflict_change",
+      "source_exhausted_or_sparse",
+      "hard_ceiling_reached"
+    ],
+    "recurrence_guidance": {
+      "strong": "at_least_5_independent_mentions",
+      "moderate": "3_to_4_independent_mentions",
+      "limited": "2_independent_mentions",
+      "anecdotal": "1_mention_only"
+    }
+  },
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
+  "source_queue_sha256": "116687b59c35629b2f6e74b79fe0c1f467aac605994ddddd5fc84874a339df0d",
+  "descriptor_path_template": "data/production/pre_ai/taste_steam_review_dossier_worker_groups/{snapshot_id}/g{sequence:06d}.json"
+}
