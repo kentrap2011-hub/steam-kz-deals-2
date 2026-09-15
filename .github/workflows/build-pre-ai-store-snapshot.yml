@@ -26,6 +26,7 @@ on:
       - "config/taste_cache_entry_contract.json"
       - "config/taste_ledger_contract.json"
       - "config/taste_steam_review_dossier_contract.json"
+      - "config/taste_steam_review_dossier_persistence_bridge.json"
       - "config/russian_description_translation_contract.json"
       - "config/russian_description_translation_result_contract.json"
       - "config/russian_description_translation_cache_entry_contract.json"
@@ -57,6 +58,7 @@ on:
       - "scripts/taste_steam_review_dossier.py"
       - "scripts/taste_steam_review_dossier_daily.py"
       - "scripts/taste_steam_review_dossier_buffered.py"
+      - "scripts/taste_steam_review_dossier_worker_projection.py"
       - "scripts/build_taste_steam_review_dossier_work.py"
       - "scripts/test_taste_steam_review_dossier_daily_snapshot.py"
       - "scripts/test_taste_steam_review_dossier_buffered_submission.py"
@@ -69,7 +71,7 @@ permissions:
   contents: write
 
 # Shared with the dossier buffer drain because both can mutate
-# data/production/pre_ai/taste_steam_review_dossier_work.json.
+# data/production/pre_ai/taste_steam_review_dossier_work.json and synchronize its worker projection.
 concurrency:
   group: taste-steam-review-dossier-canonical-writer
   cancel-in-progress: false
@@ -173,9 +175,11 @@ jobs:
             data/production/pre_ai/chatgpt_payload.json \
             data/production/pre_ai/chatgpt_taste_queue.jsonl \
             data/production/pre_ai/taste_steam_review_dossier_work.json \
+            data/production/pre_ai/taste_steam_review_dossier_worker_index.json \
             data/production/pre_ai/chatgpt_purchase_context.jsonl \
             data/production/pre_ai/chatgpt_ru_description_queue.jsonl \
             data/production/pre_ai/chatgpt_ru_description_status.json
+          git add -A data/production/pre_ai/taste_steam_review_dossier_worker_groups
           if [ -e data/production/pre_ai/taste_active_work_unit.json ] || \
              git ls-files --error-unmatch data/production/pre_ai/taste_active_work_unit.json >/dev/null 2>&1; then
             git add -A data/production/pre_ai/taste_active_work_unit.json
