@@ -26,6 +26,8 @@ on:
       - "config/taste_cache_entry_contract.json"
       - "config/taste_ledger_contract.json"
       - "config/taste_steam_review_dossier_contract.json"
+      - "config/taste_steam_review_dossier_schema.json"
+      - "config/taste_steam_review_dossier_recovery_contract.json"
       - "config/taste_steam_review_dossier_persistence_bridge.json"
       - "config/russian_description_translation_contract.json"
       - "config/russian_description_translation_result_contract.json"
@@ -56,12 +58,17 @@ on:
       - "scripts/build_pre_ai_deal_scenarios.py"
       - "scripts/build_pre_ai_chatgpt_payload.py"
       - "scripts/taste_steam_review_dossier.py"
+      - "scripts/taste_steam_review_dossier_strict.py"
       - "scripts/taste_steam_review_dossier_daily.py"
       - "scripts/taste_steam_review_dossier_buffered.py"
+      - "scripts/taste_steam_review_dossier_recovery.py"
       - "scripts/taste_steam_review_dossier_worker_projection.py"
       - "scripts/build_taste_steam_review_dossier_work.py"
+      - "scripts/ingest_taste_steam_review_dossiers.py"
+      - "scripts/ingest_taste_steam_review_dossier_inbox.py"
       - "scripts/test_taste_steam_review_dossier_daily_snapshot.py"
       - "scripts/test_taste_steam_review_dossier_buffered_submission.py"
+      - "scripts/test_taste_steam_review_dossier_strict_recovery.py"
       - "scripts/russian_description_translation_runtime.py"
       - "scripts/build_russian_description_translation_queue.py"
       - "scripts/test_russian_description_translation_runtime.py"
@@ -138,10 +145,14 @@ jobs:
       - name: Prepare fixed daily full Steam review dossier backlog
         run: python scripts/build_taste_steam_review_dossier_work.py
 
+      - name: Reconcile already-present dossier inbox state
+        run: python scripts/ingest_taste_steam_review_dossier_inbox.py --reconcile-nonfatal
+
       - name: Regression test fixed daily dossier snapshot control plane
         run: |
           python scripts/test_taste_steam_review_dossier_daily_snapshot.py
           python scripts/test_taste_steam_review_dossier_buffered_submission.py
+          python scripts/test_taste_steam_review_dossier_strict_recovery.py
 
       - name: Persist or preserve pre-semantic Taste active pin
         env:
@@ -163,6 +174,8 @@ jobs:
           git config user.email "steam-kz-bot@users.noreply.github.com"
           git add \
             data/cache/taste_fit.entry_index.json \
+            data/cache/taste_steam_review_dossiers \
+            data/ai_inbox/taste_steam_review_dossiers \
             data/production/pre_ai/store_snapshot.json \
             data/production/pre_ai/content_metadata.json \
             data/production/pre_ai/fixed_package_options.json \
@@ -180,6 +193,7 @@ jobs:
             data/production/pre_ai/chatgpt_ru_description_queue.jsonl \
             data/production/pre_ai/chatgpt_ru_description_status.json
           git add -A data/production/pre_ai/taste_steam_review_dossier_worker_groups
+          git add -A -- data/quarantine/taste_steam_review_dossier_inbox 2>/dev/null || true
           if [ -e data/production/pre_ai/taste_active_work_unit.json ] || \
              git ls-files --error-unmatch data/production/pre_ai/taste_active_work_unit.json >/dev/null 2>&1; then
             git add -A data/production/pre_ai/taste_active_work_unit.json
