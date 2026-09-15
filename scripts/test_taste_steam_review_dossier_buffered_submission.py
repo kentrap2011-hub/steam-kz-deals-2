@@ -136,13 +136,14 @@ class BufferedSubmissionTests(unittest.TestCase):
     def test_deterministic_group_plan_25_is_10_10_5_and_identity_survives_progress(self):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
-            work = build_daily_work_manifest(queue(range(100000, 100025)), contract, Path(td) / "store", now=NOW)
+            store = Path(td) / "store"
+            work = build_daily_work_manifest(queue(range(100000, 100025)), contract, store, now=NOW)
             plan_before = copy.deepcopy(work["submission_group_plan"])
             self.assertEqual([len(g["items"]) for g in plan_before["groups"]], [10, 10, 5])
             self.assertEqual([g["sequence"] for g in plan_before["groups"]], [1, 2, 3])
-            rebuilt = build_daily_work_manifest(queue(range(100000, 100025)), contract, Path(td) / "store2", now=NOW)
+            rebuilt = build_daily_work_manifest(queue(range(100000, 100025)), contract, store, now=NOW)
             self.assertEqual(rebuilt["submission_group_plan"], plan_before)
-            progressed = advance_legacy(work, contract, Path(td) / "store", 1)
+            progressed = advance_legacy(work, contract, store, 1)
             self.assertEqual(progressed["submission_group_plan"], plan_before)
             self.assertEqual(expected_group_sequence(progressed, contract), 2)
 
