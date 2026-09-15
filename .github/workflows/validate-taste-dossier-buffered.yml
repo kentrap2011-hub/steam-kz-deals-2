@@ -5,18 +5,23 @@ on:
     paths:
       - "config/taste_steam_review_dossier_contract.json"
       - "config/taste_steam_review_dossier_schema.json"
+      - "config/taste_steam_review_dossier_web_evidence_contract.json"
       - "config/taste_steam_review_dossier_recovery_contract.json"
       - "config/taste_steam_review_dossier_persistence_bridge.json"
       - "config/taste_steam_review_dossier_worker_prompt.md"
       - "scripts/taste_steam_review_dossier.py"
       - "scripts/taste_steam_review_dossier_strict.py"
+      - "scripts/taste_steam_review_dossier_web.py"
       - "scripts/taste_steam_review_dossier_daily.py"
       - "scripts/taste_steam_review_dossier_buffered.py"
       - "scripts/taste_steam_review_dossier_recovery.py"
       - "scripts/taste_steam_review_dossier_worker_projection.py"
+      - "scripts/taste_steam_review_dossier_test_fixture.py"
       - "scripts/build_taste_steam_review_dossier_work.py"
       - "scripts/ingest_taste_steam_review_dossiers.py"
       - "scripts/ingest_taste_steam_review_dossier_inbox.py"
+      - "scripts/build_taste_semantic_dossier_input.py"
+      - "scripts/taste_steam_review_dossier_cleanup.py"
       - "scripts/test_taste_steam_review_dossier_daily_snapshot.py"
       - "scripts/test_taste_steam_review_dossier_buffered_submission.py"
       - "scripts/test_taste_steam_review_dossier_same_day_preservation.py"
@@ -37,7 +42,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run fixed-snapshot strict-schema recovery and reconciliation regressions
+      - name: Run fixed-snapshot web-evidence strict-schema recovery and reconciliation regressions
         run: |
           set -euo pipefail
           python scripts/test_taste_steam_review_dossier_daily_snapshot.py
