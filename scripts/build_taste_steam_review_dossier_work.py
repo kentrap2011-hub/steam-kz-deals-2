@@ -7,7 +7,6 @@ from zoneinfo import ZoneInfo
 
 from taste_steam_review_dossier import atomic_write_json
 from taste_steam_review_dossier_daily import (
-    build_daily_work_manifest,
     ensure_submission_group_plan,
     load_contract,
     validate_manifest,
@@ -15,6 +14,10 @@ from taste_steam_review_dossier_daily import (
 from taste_steam_review_dossier_recovery import (
     load_recovery_contract,
     quarantine_stale_snapshot_inbox,
+)
+from taste_steam_review_dossier_web import (
+    build_daily_work_manifest_web,
+    ensure_web_evidence_binding,
 )
 from taste_steam_review_dossier_worker_projection import write_worker_projection
 
@@ -42,7 +45,7 @@ def build_or_preserve_daily_work(
     ttl_days=None,
     now=None,
 ):
-    """Preserve an already-prepared same-day snapshot; build only at the daily boundary."""
+    """Preserve same-day control-plane identity; add only the active worker-contract binding."""
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     prepared_for_date = now.astimezone(_SAMARA).date().isoformat()
     output_path = Path(output_path)
@@ -60,13 +63,16 @@ def build_or_preserve_daily_work(
                 raise ValueError("cannot change TTL inside an already-prepared fixed daily dossier snapshot")
             had_group_plan = existing.get("submission_group_plan") is not None
             manifest = ensure_submission_group_plan(existing, contract)
+            had_binding = manifest.get("web_evidence_contract_binding") is not None
+            manifest = ensure_web_evidence_binding(manifest)
             return manifest, {
                 "mode": "preserved_same_day_snapshot",
                 "group_plan_added": not had_group_plan,
+                "web_evidence_binding_added": not had_binding,
             }
 
     queue_rows = _read_jsonl(queue_path)
-    manifest = build_daily_work_manifest(
+    manifest = build_daily_work_manifest_web(
         queue_rows,
         contract,
         store_dir,
@@ -77,6 +83,7 @@ def build_or_preserve_daily_work(
     return manifest, {
         "mode": "built_new_daily_snapshot",
         "group_plan_added": True,
+        "web_evidence_binding_added": True,
     }
 
 
@@ -93,7 +100,7 @@ def apply_snapshot_rollover_inbox_cleanup(manifest, transition, contract, recove
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Build or preserve one complete fixed daily Steam review dossier backlog snapshot")
+    parser = argparse.ArgumentParser(description="Build or preserve one complete fixed daily web-evidence dossier backlog snapshot")
     parser.add_argument("--contract", default="config/taste_steam_review_dossier_contract.json")
     parser.add_argument("--queue", default="data/production/pre_ai/chatgpt_taste_queue.jsonl")
     parser.add_argument("--store-dir", default="data/cache/taste_steam_review_dossiers")
@@ -115,6 +122,8 @@ def main():
     print(json.dumps({
         "mode": transition["mode"],
         "group_plan_added": transition["group_plan_added"],
+        "web_evidence_binding_added": transition["web_evidence_binding_added"],
+        "web_evidence_contract_binding": manifest["web_evidence_contract_binding"],
         "status": manifest["status"],
         "snapshot_id": manifest["snapshot_id"],
         "prepared_for_date": manifest["prepared_for_date"],
