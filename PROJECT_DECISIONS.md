@@ -97,7 +97,6 @@
 **Основные места:** `PROJECT_RULES.md`, `config/final_ranking_policy.json`, `scripts/refine_visual_ranking.py`, `scripts/priority_ranking.py`, `scripts/validate_priority_ranking.py`.
 
 ---
-
 ## RANK-006 — Wishlist важен, но ограничен
 
 **Дата:** 2026-08-30
@@ -197,7 +196,6 @@
 **Основные места:** `config/final_ranking_policy.json -> score_model.purchase.savings`, `scripts/priority_ranking.py`, `scripts/validate_priority_ranking.py`, `web/app.js`.
 
 ---
-
 ## RANK-012 — Достижения значительно важнее для уже сыгранной игры
 
 **Дата:** 2026-08-31
@@ -297,7 +295,6 @@
 
 **Дата:** 2026-09-05
 **Статус:** implemented as internal Taste step 2; combined independent Taste Review remains pending after step 3.
-
 **Решение:** хранить `play_role` и `relative_start_priority` как отдельный producer-owned semantic/context layer поверх price-blind Taste evidence, но вне commercial urgency/value и вне канонического ranker.
 
 **Почему:** scalar fit/score не умеет одновременно выразить `Sifu = main/high`, `High On Life = main/ordinary`, `Tails of Iron 2 = secondary`, `Trine 4 = family/co-op`. Sale deadline отвечает на вопрос «не пропустить ли покупку», а start priority — «насколько скоро запускать среди подходящих игр».
@@ -380,3 +377,26 @@
 **Сознательно отвергнуто:** mutable shared buffer, alternate retry filenames, ChatGPT-owned queue/retry/backlog/completeness, gap skipping, applying stale old-snapshot artifacts to a new snapshot, prompt-only activation before runtime support, изменение Taste Semantic Producer.
 
 **Основные места:** `config/taste_steam_review_dossier_contract.json`, `config/taste_steam_review_dossier_persistence_bridge.json`, `reviews/worker_reports/taste-dossier-buffered-submission-recon-01.md`.
+
+---
+
+## TASTE-007 — Production dossier evidence uses multi-source player-feedback web research
+
+**Дата:** 2026-09-15
+**Статус:** approved architecture; implementation prepared and CI-green in PR #30; production activation blocked by current task scope
+
+**Решение:** production Taste dossier evidence больше не требует Steam `appreviews` как обязательного корпуса, cursor continuation или фиксированных review-count lanes. Semantic worker выполняет обычный bounded multi-source web research по отзывам и обсуждениям игроков. Идентичность игры сначала связывается с точным work-item title + release year; при неоднозначности добавляются developer/publisher/platform/version/Steam appid или другой канонический corroborator. Нельзя смешивать оригинал, remake, remaster, re-release или одноимённые разные игры.
+
+**Временная семантика:** свежие player-feedback источники имеют приоритет для bugs/performance/compatibility/technical/localization/regional current-state claims. Launch-era проблема, которую свежие данные показывают исправленной или существенно ослабленной, должна сохраняться как `historical`, а не как текущий recurring defect. Старые отзывы остаются допустимыми для durable traits: gameplay, story, pacing, structure, progression, repetition, difficulty и persistent friction. При неразрешённом временном конфликте состояние остаётся `uncertain`.
+
+**Русский evidence:** для каждой игры обязателен отдельный добросовестный поиск русскоязычных мнений, особенно по localization/translation/voice/font/encoding/regional-service проблемам. Допустимы состояния `found_and_used`, `searched_not_found_or_insufficient`, `source_access_unavailable`; отсутствие русского evidence нельзя компенсировать выдуманными данными.
+
+**Storage / ownership:** raw review/post bodies, quotes, usernames и corpus archive в GitHub не сохраняются; хранится только компактный dossier и компактная provenance metadata. GitHub остаётся control plane для scope/order/progress/validation/persistence/recovery/completeness/buffered drain; Scheduled ChatGPT владеет только semantic web research + synthesis. Buffered group size остаётся transport/durability boundary, не semantic quota. Taste Semantic Producer не меняется.
+
+**Versioning / migration:** новый semantic contract и dossier shape версионируются отдельно; legacy V1/empty/store-only placeholders не считаются удовлетворяющими новой evidence policy. Fresh legacy dossiers должны быть rebuilt при следующей canonical freshness evaluation, если они не соответствуют новой версии. Текущие invalid buffered g1/g2 не изменяются этой задачей и остаются для отдельной coordinated recovery + acceptance.
+
+**Сознательно отвергнуто:** обязательный direct Steam appreviews transport; fixed 20/40/80 review sampling quotas; GitHub-prefetched raw review bodies; ChatGPT-owned queue/retry/backlog manager; перенос personal recommendation в neutral dossier; изменение Taste Semantic Producer.
+
+**Текущий blocker:** PR #30 не мержится в этой задаче, потому что merge путей dossier runtime/config автоматически запускает production pre-AI workflow, а текущая task production run не разрешает.
+
+**Основные места:** `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/taste_steam_review_dossier_web.py`, PR #30, `reviews/worker_reports/taste-dossier-web-evidence-redesign-01.md`.
