@@ -1,0 +1,37 @@
+name: Validate buffered Steam review dossier runtime
+
+on:
+  pull_request:
+    paths:
+      - "config/taste_steam_review_dossier_worker_prompt.md"
+      - "scripts/taste_steam_review_dossier.py"
+      - "scripts/taste_steam_review_dossier_daily.py"
+      - "scripts/taste_steam_review_dossier_buffered.py"
+      - "scripts/build_taste_steam_review_dossier_work.py"
+      - "scripts/ingest_taste_steam_review_dossiers.py"
+      - "scripts/ingest_taste_steam_review_dossier_inbox.py"
+      - "scripts/test_taste_steam_review_dossier_daily_snapshot.py"
+      - "scripts/test_taste_steam_review_dossier_buffered_submission.py"
+      - "scripts/test_taste_steam_review_dossier_same_day_preservation.py"
+      - ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
+      - ".github/workflows/build-pre-ai-store-snapshot.yml"
+      - ".github/workflows/validate-taste-dossier-buffered.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run fixed-snapshot and buffered-submission regressions
+        run: |
+          set -euo pipefail
+          python scripts/test_taste_steam_review_dossier_daily_snapshot.py
+          python scripts/test_taste_steam_review_dossier_buffered_submission.py
+          python scripts/test_taste_steam_review_dossier_same_day_preservation.py
