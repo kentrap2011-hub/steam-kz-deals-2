@@ -12,6 +12,7 @@ from taste_steam_review_dossier_daily import (
     load_contract,
     validate_manifest,
 )
+from taste_steam_review_dossier_worker_projection import write_worker_projection
 
 _SAMARA = ZoneInfo("Europe/Samara")
 
@@ -98,6 +99,7 @@ def main():
         ttl_days=args.ttl_days,
     )
     atomic_write_json(args.output, manifest)
+    projection = write_worker_projection(manifest, contract)
     print(json.dumps({
         "mode": transition["mode"],
         "group_plan_added": transition["group_plan_added"],
@@ -112,6 +114,9 @@ def main():
         "current_checkpoint_count": manifest["current_checkpoint_count"],
         "remaining_required_count": manifest["remaining_required_count"],
         "full_backlog_complete": manifest["full_backlog_complete"],
+        "worker_index_path": projection["index_path"],
+        "worker_descriptor_count": projection["descriptor_count"],
+        "worker_canonical_expected_sequence": projection["index"]["canonical_expected_sequence"],
     }, ensure_ascii=False, indent=2))
 
 
