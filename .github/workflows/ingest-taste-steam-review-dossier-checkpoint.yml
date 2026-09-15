@@ -9,7 +9,8 @@ on:
 permissions:
   contents: write
 
-# Shared with daily pre-AI preparation: both can write the canonical dossier work manifest.
+# Shared with daily pre-AI preparation: both can write the canonical dossier work manifest
+# and synchronize its compact worker projection.
 concurrency:
   group: taste-steam-review-dossier-canonical-writer
   cancel-in-progress: false
@@ -35,7 +36,7 @@ jobs:
           set -euo pipefail
           python scripts/ingest_taste_steam_review_dossier_inbox.py
 
-      - name: Commit dossier artifacts and canonical progress atomically
+      - name: Commit dossier artifacts canonical progress and worker projection atomically
         shell: bash
         run: |
           set -euo pipefail
@@ -44,7 +45,9 @@ jobs:
           git add \
             data/cache/taste_steam_review_dossiers \
             data/production/pre_ai/taste_steam_review_dossier_work.json \
+            data/production/pre_ai/taste_steam_review_dossier_worker_index.json \
             data/ai_inbox/taste_steam_review_dossiers
+          git add -A data/production/pre_ai/taste_steam_review_dossier_worker_groups
           git diff --cached --check
           if git diff --cached --quiet; then
             echo "No contiguous canonical dossier state changes available"
