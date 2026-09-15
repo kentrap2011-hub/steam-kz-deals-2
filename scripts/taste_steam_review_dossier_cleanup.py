@@ -5,15 +5,16 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
-from taste_steam_review_dossier import canonical_sha256, dossier_state
+from taste_steam_review_dossier import canonical_sha256
 from taste_steam_review_dossier_daily import canonical_dossier_scope_rows, load_contract
+from taste_steam_review_dossier_strict import dossier_state_strict
 
 CLEANUP_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-CLEANUP-V1"
 _CANONICAL_NAME = re.compile(r"^App_(\d+)\.json$")
 
 
 def cleanup_dossier_store(queue_rows, contract, store_dir, *, now=None):
-    """Delete only stale dossiers outside the full current eligible Taste dossier scope."""
+    """Delete only stale V2 dossiers outside scope; incompatible legacy entries stay fail-closed."""
     scope_rows = canonical_dossier_scope_rows(queue_rows, contract)
     cleanup = contract.get("cleanup") or {}
     if cleanup.get("owner") != "github_control_plane":
@@ -35,7 +36,7 @@ def cleanup_dossier_store(queue_rows, contract, store_dir, *, now=None):
         appid = match.group(1)
         try:
             dossier = json.loads(path.read_text(encoding="utf-8"))
-            state = dossier_state(dossier, contract, now=now, expected_appid=appid)
+            state = dossier_state_strict(dossier, contract, now=now, expected_appid=appid)
         except Exception as exc:
             preserved_invalid.append({"appid": appid, "path": path.as_posix(), "state": "invalid", "reason": str(exc), "in_current_scope": appid in scope_appids})
             continue
@@ -73,7 +74,7 @@ def _read_jsonl(path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Delete expired out-of-scope Steam review dossiers deterministically")
+    parser = argparse.ArgumentParser(description="Delete expired out-of-scope V2 web-evidence dossiers deterministically")
     parser.add_argument("--contract", default="config/taste_steam_review_dossier_contract.json")
     parser.add_argument("--queue", default="data/production/pre_ai/chatgpt_taste_queue.jsonl")
     parser.add_argument("--store-dir", default="data/cache/taste_steam_review_dossiers")
