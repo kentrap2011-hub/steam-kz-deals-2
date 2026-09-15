@@ -157,7 +157,8 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         self.assertIs(self.validate(doc), doc)
 
     def test_russian_found_and_not_found_states_validate(self):
-        self.assertIs(self.validate(dossier(123456, russian_status="found_and_used")), self.validate(dossier(123456, russian_status="found_and_used")))
+        found = dossier(123456, russian_status="found_and_used")
+        self.assertIs(self.validate(found), found)
         no_ru = dossier(123456, russian_status="searched_not_found_or_insufficient")
         self.assertIs(self.validate(no_ru), no_ru)
         self.assertInvalid(lambda d: d["evidence"].__setitem__("russian_attempt", "found_and_used") or d["provenance"]["sources"][2].__setitem__("language", "non_russian"))
