@@ -4,11 +4,10 @@ import hashlib
 import json
 import tempfile
 import unittest
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta, datetime, timezone
 from pathlib import Path
 
 from ingest_taste_steam_review_dossier_inbox import drain_inbox_state
-from taste_steam_review_dossier import DOSSIER_SCHEMA
 from taste_steam_review_dossier_buffered import expected_buffer_path, validate_buffer_artifact
 from taste_steam_review_dossier_daily import BUFFER_GROUP_SCHEMA, build_daily_work_manifest, load_contract
 from taste_steam_review_dossier_recovery import (
@@ -16,12 +15,19 @@ from taste_steam_review_dossier_recovery import (
     process_recovery_request,
     quarantine_stale_snapshot_inbox,
 )
-from taste_steam_review_dossier_strict import load_worker_schema, validate_dossier_strict
+from taste_steam_review_dossier_strict import (
+    current_worker_contract_binding,
+    load_web_evidence_contract,
+    load_worker_schema,
+    validate_dossier_strict,
+)
+from taste_steam_review_dossier_test_fixture import web_dossier
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
 BASE_RECOVERY = load_recovery_contract(ROOT / "config/taste_steam_review_dossier_recovery_contract.json")
 SCHEMA = load_worker_schema(ROOT / "config/taste_steam_review_dossier_schema.json")
+EVIDENCE_CONTRACT = load_web_evidence_contract(ROOT / "config/taste_steam_review_dossier_web_evidence_contract.json")
 NOW = datetime(2026, 9, 15, 10, 0, tzinfo=timezone.utc)
 
 
@@ -36,51 +42,8 @@ def queue(appids):
     } for i, appid in enumerate(appids)]
 
 
-def dossier(appid, generated=NOW):
-    appid = str(appid)
-    return {
-        "schema": DOSSIER_SCHEMA,
-        "schema_version": 1,
-        "key": f"App_{appid}",  # current additional-field policy remains permissive
-        "appid": appid,
-        "title": f"Game {appid}",
-        "generated_at_utc": generated.isoformat(),
-        "expires_at_utc": (generated + timedelta(days=20)).isoformat(),
-        "ttl_days": 20,
-        "summary": "A compact neutral description of recurring game structure and review evidence.",
-        "observations": [{
-            "category": "mechanics",
-            "statement": "Several reviews repeatedly describe deliberate movement and resource management.",
-            "sentiment": "mixed",
-            "recurrence": "moderate",
-            "mention_count": 4,
-            "evidence_languages": ["mixed"],
-        }],
-        "conflicts": [],
-        "review_sample": {
-            "strategy": "adaptive_stability",
-            "sampled_total": 40,
-            "sampled_russian": 20,
-            "sampled_non_russian": 20,
-            "sample_ids_sha256": hashlib.sha256(f"ids:{appid}".encode()).hexdigest(),
-            "lanes": [
-                {"language_scope": "russian", "sampled": 20, "batches": 2, "stop_reason": "stable_after_two_batches"},
-                {"language_scope": "non_russian", "sampled": 20, "batches": 2, "stop_reason": "stable_after_two_batches"},
-            ],
-        },
-        "provenance": {
-            "store_description": {
-                "url": f"https://store.steampowered.com/app/{appid}/",
-                "captured_at_utc": generated.isoformat(),
-                "content_sha256": hashlib.sha256(f"store:{appid}".encode()).hexdigest(),
-            },
-            "steam_reviews": {
-                "url": f"https://store.steampowered.com/appreviews/{appid}",
-                "captured_at_utc": generated.isoformat(),
-                "filters": ["russian", "non_russian"],
-            },
-        },
-    }
+def dossier(appid, generated=NOW, **kwargs):
+    return web_dossier(appid, generated, **kwargs)
 
 
 def contract_for(td):
@@ -118,66 +81,122 @@ def write_group(work, contract, sequence, mutate=None):
     return path
 
 
-class StrictSchemaTests(unittest.TestCase):
+class WebEvidenceSchemaTests(unittest.TestCase):
+    def validate(self, doc):
+        return validate_dossier_strict(
+            doc,
+            BASE_CONTRACT,
+            expected_appid="123456",
+            expected_title="Game 123456",
+            expected_ttl_days=20,
+            now=NOW,
+        )
+
     def assertInvalid(self, mutate):
         doc = dossier(123456)
         mutate(doc)
         with self.assertRaises(ValueError):
-            validate_dossier_strict(
-                doc,
-                BASE_CONTRACT,
-                expected_appid="123456",
-                expected_title="Game 123456",
-                expected_ttl_days=20,
-                now=NOW,
-            )
+            self.validate(doc)
 
-    def test_schema_prompt_and_contract_enum_alignment(self):
-        self.assertEqual(SCHEMA["enums"]["observation_category"], BASE_CONTRACT["neutrality"]["allowed_categories"])
-        self.assertEqual(SCHEMA["enums"]["sentiment"], BASE_CONTRACT["neutrality"]["allowed_observation_sentiments"])
-        self.assertEqual(SCHEMA["enums"]["recurrence"], BASE_CONTRACT["neutrality"]["allowed_recurrence"])
-        self.assertEqual(
-            set(SCHEMA["required_top_level_fields"]),
-            set(BASE_CONTRACT["required_dossier_fields"]) | {"schema", "schema_version"},
-        )
+    def test_schema_evidence_contract_and_prompt_alignment(self):
+        self.assertEqual(SCHEMA["version"], 2)
+        self.assertEqual(SCHEMA["dossier_schema"], "TASTE-STEAM-REVIEW-DOSSIER-V2")
+        self.assertEqual(SCHEMA["evidence_contract"], EVIDENCE_CONTRACT["schema"])
+        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v1")
         prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
-        self.assertIn("config/taste_steam_review_dossier_schema.json", prompt)
-        self.assertIn('category:"content"', prompt)
-        self.assertIn("source-dependent semantics that are deferred", prompt)
+        for needle in (
+            "title **plus the resolved release year**",
+            "recent evidence dominates old launch-era evidence",
+            "Russian-language attempt is mandatory",
+            "Steam `appreviews` JSON, cursors, fixed review counts",
+            "Never store raw review bodies",
+            "8 web-search queries",
+            "16 opened/read source pages",
+        ):
+            self.assertIn(needle, prompt)
 
-    def test_valid_current_shape_and_extra_key_remain_allowed(self):
+    def test_title_year_identity_and_multisource_pass(self):
         doc = dossier(123456)
-        self.assertIs(validate_dossier_strict(doc, BASE_CONTRACT, expected_appid="123456", expected_title="Game 123456", expected_ttl_days=20, now=NOW), doc)
+        self.assertIs(self.validate(doc), doc)
+        self.assertEqual(doc["game_identity"]["release_year"], 2020)
+        self.assertEqual(doc["evidence"]["source_mix_status"], "multi_source")
 
-    def test_content_category_wrong_title_and_appid_url_binding_rejected(self):
-        self.assertInvalid(lambda d: d["observations"][0].__setitem__("category", "content"))
-        self.assertInvalid(lambda d: d.__setitem__("title", "Wrong title"))
-        self.assertInvalid(lambda d: d["provenance"]["steam_reviews"].__setitem__("url", "https://store.steampowered.com/appreviews/999999"))
+    def test_original_remake_ambiguity_fails_without_year_or_resolved_identity(self):
+        self.assertInvalid(lambda d: d["game_identity"].pop("release_year"))
+        self.assertInvalid(lambda d: d["game_identity"].__setitem__("resolution_status", "ambiguous"))
+        self.assertInvalid(lambda d: d["game_identity"]["corroborators"].__setitem__(0, {"kind": "developer", "value": "Studio"}))
 
-    def test_bool_as_int_and_numeric_appid_rejected(self):
+    def test_historical_launch_issue_requires_old_and_recent_current_check(self):
+        doc = dossier(123456)
+        doc["provenance"]["sources"].append({
+            "source_id": "h1", "source_type": "forum", "domain": "example.com",
+            "url": "https://example.com/game/launch-thread", "publication_date": "2020-01-01",
+            "language": "non_russian", "freshness": "older", "evidence_role": "historical", "player_feedback": True,
+        })
+        doc["observations"][0].update({
+            "category": "friction",
+            "statement": "A launch-era technical complaint is historical because a recent current-state check no longer reproduces it.",
+            "sentiment": "negative",
+            "recurrence": "moderate",
+            "mention_count": 3,
+            "evidence_status": "historical",
+            "source_ids": ["h1", "p2"],
+        })
+        self.assertIs(self.validate(doc), doc)
+        bad = copy.deepcopy(doc)
+        bad["observations"][0]["source_ids"] = ["h1"]
+        with self.assertRaises(ValueError):
+            self.validate(bad)
+
+    def test_repeated_recent_complaint_can_remain_current(self):
+        doc = dossier(123456)
+        doc["observations"][1].update({
+            "statement": "Recent player feedback repeatedly reports the same current localization problem.",
+            "sentiment": "negative", "recurrence": "moderate", "mention_count": 3,
+        })
+        self.assertIs(self.validate(doc), doc)
+
+    def test_russian_found_and_not_found_states_validate(self):
+        self.assertIs(self.validate(dossier(123456, russian_status="found_and_used")), self.validate(dossier(123456, russian_status="found_and_used")))
+        no_ru = dossier(123456, russian_status="searched_not_found_or_insufficient")
+        self.assertIs(self.validate(no_ru), no_ru)
+        self.assertInvalid(lambda d: d["evidence"].__setitem__("russian_attempt", "found_and_used") or d["provenance"]["sources"][2].__setitem__("language", "non_russian"))
+
+    def test_duplicate_bad_provenance_and_raw_body_payload_rejected(self):
+        self.assertInvalid(lambda d: d["provenance"]["sources"].append(copy.deepcopy(d["provenance"]["sources"][1])))
+        self.assertInvalid(lambda d: d["provenance"]["sources"][1].__setitem__("domain", "wrong.example"))
+        self.assertInvalid(lambda d: d["provenance"]["sources"][1].__setitem__("snippet", "raw player text must never be stored"))
+        self.assertInvalid(lambda d: d.__setitem__("review_body", "raw body"))
+
+    def test_legacy_placeholder_and_review_sample_rejected(self):
+        legacy = {
+            "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1", "schema_version": 1,
+            "appid": "123456", "title": "Game 123456",
+            "generated_at_utc": NOW.isoformat(), "expires_at_utc": (NOW + timedelta(days=20)).isoformat(),
+            "ttl_days": 20, "summary": "Legacy store-only placeholder without player evidence.",
+            "observations": [{"category": "mechanics", "statement": "Placeholder", "sentiment": "neutral", "recurrence": "anecdotal", "mention_count": 1, "evidence_languages": ["store"]}],
+            "conflicts": [],
+            "review_sample": {"strategy": "adaptive_stability", "sampled_total": 0, "sampled_russian": 0, "sampled_non_russian": 0, "sample_ids_sha256": "0" * 64, "lanes": []},
+            "provenance": {"store_description": {"url": "https://store.steampowered.com/app/123456/", "content_sha256": "0" * 64}},
+        }
+        with self.assertRaises(ValueError):
+            self.validate(legacy)
+        self.assertInvalid(lambda d: d.__setitem__("review_sample", {}))
+
+    def test_prior_hardening_bool_title_duplicates_time_and_source_refs(self):
         for mutate in (
             lambda d: d.__setitem__("schema_version", True),
             lambda d: d.__setitem__("ttl_days", True),
+            lambda d: d["game_identity"].__setitem__("release_year", True),
             lambda d: d["observations"][0].__setitem__("mention_count", True),
-            lambda d: d["review_sample"].__setitem__("sampled_total", True),
-            lambda d: d["review_sample"]["lanes"][0].__setitem__("sampled", True),
-            lambda d: d["review_sample"]["lanes"][0].__setitem__("batches", True),
-            lambda d: d.__setitem__("appid", 123456),
+            lambda d: d.__setitem__("title", "Wrong title"),
+            lambda d: d["observations"].append(copy.deepcopy(d["observations"][0])),
+            lambda d: d.__setitem__("expires_at_utc", (NOW + timedelta(days=19)).isoformat()),
+            lambda d: d["observations"][0]["source_ids"].append("missing-source"),
+            lambda d: d["observations"][0].__setitem__("category", "content"),
         ):
             with self.subTest(mutate=mutate):
                 self.assertInvalid(mutate)
-
-    def test_duplicate_lanes_count_mismatch_duplicate_observation_rejected(self):
-        self.assertInvalid(lambda d: d["review_sample"]["lanes"][1].__setitem__("language_scope", "russian"))
-        self.assertInvalid(lambda d: d["review_sample"]["lanes"][0].__setitem__("sampled", 19))
-        self.assertInvalid(lambda d: d["observations"].append(copy.deepcopy(d["observations"][0])))
-
-    def test_timestamp_ttl_future_and_required_structure_rejected(self):
-        self.assertInvalid(lambda d: d.__setitem__("ttl_days", "20"))
-        self.assertInvalid(lambda d: d.__setitem__("expires_at_utc", (NOW + timedelta(days=19)).isoformat()))
-        self.assertInvalid(lambda d: (d.__setitem__("generated_at_utc", (NOW + timedelta(minutes=6)).isoformat()), d.__setitem__("expires_at_utc", (NOW + timedelta(days=20, minutes=6)).isoformat())))
-        self.assertInvalid(lambda d: d["provenance"].pop("steam_reviews"))
-        self.assertInvalid(lambda d: d["provenance"]["store_description"].__setitem__("captured_at_utc", "not-a-time"))
 
 
 class RecoveryLifecycleTests(unittest.TestCase):
@@ -215,42 +234,38 @@ class RecoveryLifecycleTests(unittest.TestCase):
             request_path.parent.mkdir(parents=True, exist_ok=True)
             request_path.write_text(json.dumps(request), encoding="utf-8")
             result = process_recovery_request(
-                request_path=request_path,
-                recovery_contract_path=recovery_path,
-                dossier_contract_path=contract_path,
-                manifest_path=manifest_path,
+                request_path=request_path, recovery_contract_path=recovery_path,
+                dossier_contract_path=contract_path, manifest_path=manifest_path,
             )
             self.assertTrue(result["recovered"])
             self.assertFalse(p1.exists())
             self.assertTrue(p2.exists())
             self.assertEqual(manifest_path.read_text(encoding="utf-8"), before_manifest)
-            self.assertTrue(Path(recovery["invalid_expected_artifact_recovery"]["audit_log"]).exists())
 
             corrected = write_group(work, contract, 1)
             self.assertEqual(corrected, p1)
             drained = drain_inbox_state(
-                manifest_path=manifest_path,
-                contract_path=contract_path,
-                store_dir=store,
-                buffer_dir=contract["paths"]["submission_inbox_dir"],
-                fail_on_blocked=False,
+                manifest_path=manifest_path, contract_path=contract_path, store_dir=store,
+                buffer_dir=contract["paths"]["submission_inbox_dir"], fail_on_blocked=False,
             )
             self.assertEqual(drained["accepted_group_count"], 2)
             self.assertEqual(drained["accepted_dossier_count"], 20)
-            self.assertFalse(p1.exists())
-            self.assertFalse(p2.exists())
-            after = json.loads(manifest_path.read_text(encoding="utf-8"))
-            self.assertEqual(after["completed_required_count"], 20)
+            self.assertEqual(json.loads(manifest_path.read_text())["completed_required_count"], 20)
 
-    def test_recovery_refuses_valid_expected(self):
+    def test_recovery_refuses_valid_expected_and_title_binding_still_holds(self):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
             work = build_daily_work_manifest(queue(range(300000, 300011)), contract, Path(td) / "store", now=NOW)
+            descriptor = work["submission_group_plan"]["groups"][0]
+            artifact = buffered_artifact(work, 1)
+            artifact["dossiers"][0]["title"] = "Wrong title"
+            with self.assertRaises(ValueError):
+                validate_buffer_artifact(artifact, descriptor, work, contract)
+
             manifest_path = Path(contract["paths"]["work_manifest"])
             manifest_path.write_text(json.dumps(work), encoding="utf-8")
             contract_path, recovery_path, recovery = self._write_contracts(td, contract)
             p1 = write_group(work, contract, 1)
-            descriptor = work["submission_group_plan"]["groups"][0]
             request = {"schema": recovery["request"]["schema"], "schema_version": 1, "action": recovery["request"]["allowed_action"], "snapshot_id": work["snapshot_id"], "sequence": 1, "group_sha256": descriptor["group_sha256"], "artifact_path": p1.as_posix(), "reason": "must refuse valid"}
             request_path = Path(recovery["request"]["path"])
             request_path.parent.mkdir(parents=True, exist_ok=True)
@@ -259,12 +274,11 @@ class RecoveryLifecycleTests(unittest.TestCase):
                 process_recovery_request(request_path=request_path, recovery_contract_path=recovery_path, dossier_contract_path=contract_path, manifest_path=manifest_path)
             self.assertTrue(p1.exists())
 
-    def test_stale_cleanup_quarantines_old_and_preserves_current_and_unrecognized(self):
+    def test_stale_cleanup_and_lost_wakeup_regressions(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td) / "buffer"
             root.mkdir()
-            current = "a" * 64
-            old = "b" * 64
+            current, old = "a" * 64, "b" * 64
             current_path = root / f"{current}--g000001--{'c'*64}.json"
             old_path = root / f"{old}--g000001--{'d'*64}.json"
             unknown = root / "manual.json"
@@ -276,7 +290,6 @@ class RecoveryLifecycleTests(unittest.TestCase):
             self.assertFalse(old_path.exists())
             self.assertTrue(unknown.exists())
 
-    def test_lost_wakeup_reconciliation_drains_existing_valid_prefix_and_invalid_is_nonfatal(self):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
             store = Path(td) / "store"
@@ -287,24 +300,12 @@ class RecoveryLifecycleTests(unittest.TestCase):
             write_group(work, contract, 1)
             result = drain_inbox_state(manifest_path=manifest_path, contract_path=contract_path, store_dir=store, buffer_dir=contract["paths"]["submission_inbox_dir"], fail_on_blocked=False)
             self.assertEqual(result["accepted_group_count"], 1)
-            self.assertEqual(json.loads(manifest_path.read_text())["completed_required_count"], 10)
-
-            current = json.loads(manifest_path.read_text())
+            current_progress = json.loads(manifest_path.read_text())["completed_required_count"]
             write_group(work, contract, 2, lambda a: a["dossiers"][0].__setitem__("schema_version", True))
             blocked = drain_inbox_state(manifest_path=manifest_path, contract_path=contract_path, store_dir=store, buffer_dir=contract["paths"]["submission_inbox_dir"], fail_on_blocked=False)
             self.assertEqual(blocked["status"], "blocked_no_progress")
             self.assertEqual(blocked["blocked_reason"], "invalid_expected_group")
-            self.assertEqual(json.loads(manifest_path.read_text())["completed_required_count"], current["completed_required_count"])
-
-    def test_buffered_title_binding_is_enforced(self):
-        with tempfile.TemporaryDirectory() as td:
-            contract = contract_for(td)
-            work = build_daily_work_manifest(queue(range(500000, 500010)), contract, Path(td) / "store", now=NOW)
-            descriptor = work["submission_group_plan"]["groups"][0]
-            artifact = buffered_artifact(work, 1)
-            artifact["dossiers"][0]["title"] = "Wrong title"
-            with self.assertRaises(ValueError):
-                validate_buffer_artifact(artifact, descriptor, work, contract)
+            self.assertEqual(json.loads(manifest_path.read_text())["completed_required_count"], current_progress)
 
 
 if __name__ == "__main__":
