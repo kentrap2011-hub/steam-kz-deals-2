@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-PERSISTENCE-BRIDGE-V1",
   "version": 1,
   "status": "active",
-  "contract_revision": "buffered-submission-contract-2026-09-14",
+  "contract_revision": "buffered-activation-state-aligned-2026-09-15",
   "parent_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "ownership": {
     "submission_producer": "scheduled_chatgpt_dossier_worker",
@@ -13,18 +13,18 @@
     "gap_retry_stale_replay_interpretation": "github_actions_control_plane"
   },
   "transition": {
-    "rule": "contract_first_change_is_additive_and_must_not_activate_unimplemented_buffered_runtime",
-    "active_transport_mode": "current_checkpoint_create_only_v1",
-    "authorized_future_transport_mode": "buffered_group_create_only_v1",
-    "buffered_transport_status": "authorized_not_activated",
+    "rule": "buffered_group_create_only_transport_is_the_active_live_worker_transport;legacy_current_checkpoint_create_only_is_retained_only_as_an_implemented_compatibility_fallback",
+    "active_transport_mode": "buffered_group_create_only_v1",
+    "compatibility_fallback_transport_mode": "current_checkpoint_create_only_v1",
+    "buffered_transport_status": "active",
     "legacy_current_checkpoint_path_remains_valid": true,
-    "activation_requires": [
+    "runtime_requirements_met": [
       "github_published_immutable_group_plan",
       "buffered_group_validator_and_state_based_contiguous_drain",
       "shared_serialized_dossier_manifest_writer_boundary",
       "worker_prompt_alignment",
       "contract_runtime_regression_validation",
-      "director_acceptance"
+      "director_authorized_live_prompt_installation"
     ]
   },
   "submission": {
@@ -32,7 +32,7 @@
     "branch": "main",
     "action": "github_contents_create_file",
     "mode": "create_only",
-    "runtime_status": "active_transition_legacy_path",
+    "runtime_status": "transitional_compatibility_fallback_not_authoritative_live_worker_transport",
     "schema": "TASTE-STEAM-REVIEW-DOSSIER-SUBMISSION-V1",
     "path_template": "data/ai_inbox/taste_steam_review_dossiers/{snapshot_id}--{scope_sha256}.json",
     "required_bindings": [
@@ -45,8 +45,8 @@
     "existing_path_rule": "reload_canonical_manifest_never_overwrite_or_choose_alternate_filename"
   },
   "buffered_transport": {
-    "status": "authorized_not_activated",
-    "future_schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+    "status": "active",
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
     "repository": "kentrap2011-hub/steam-kz-deals-2",
     "branch": "main",
     "action": "github_contents_create_file",
@@ -93,10 +93,10 @@
       "data/production/pre_ai/taste_steam_review_dossier_work.json",
       "data/ai_inbox/taste_steam_review_dossiers/**"
     ],
-    "runtime_status": "legacy_single_current_checkpoint_ingest_remains_active_until_buffered_implementation"
+    "runtime_status": "active_state_based_buffered_contiguous_drain_with_legacy_current_checkpoint_compatibility_fallback"
   },
-  "future_buffered_drain": {
-    "status": "authorized_not_implemented",
+  "buffered_drain": {
+    "status": "active",
     "owner": "github_actions_control_plane",
     "trigger_semantics": "buffer_push_is_only_a_wake_up_signal_not_the_queue_record",
     "state_source": "current_repository_canonical_manifest_group_plan_and_buffer",
@@ -136,11 +136,11 @@
   "canonical_writer": {
     "rule": "all_github_processes_that_can_mutate_the_dossier_canonical_manifest_must_share_one_serialized_canonical_writer_boundary",
     "includes_at_minimum": [
-      "future_buffered_drain",
+      "buffered_drain",
       "daily_pre_ai_snapshot_preparation"
     ],
     "buffer_push_role": "wake_up_signal_only",
-    "workflow_mechanism": "deferred_to_future_buffered_submission_implement_task"
+    "workflow_mechanism": "github_actions_concurrency_group_taste-steam-review-dossier-canonical-writer_cancel_in_progress_false"
   },
   "daily_rollover": {
     "old_snapshot_buffer_may_mutate_new_snapshot": false,
@@ -149,7 +149,7 @@
   },
   "failure": {
     "partial_or_mismatched_submission": "fail_closed_no_canonical_commit",
-    "stale_or_replayed_submission": "fail_closed_against_current_manifest_binding_in_legacy_mode;buffered_mode_replay_is_idempotent_no_advance_and_stale_never_mutates_current_snapshot",
+    "stale_or_replayed_submission": "fail_closed_against_current_manifest_binding_in_legacy_compatibility_mode;buffered_mode_replay_is_idempotent_no_advance_and_stale_never_mutates_current_snapshot",
     "concurrent_canonical_change": "rebase_conflict_or_push_failure_fails_closed",
     "retry_loop_created": false
   },
