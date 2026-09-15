@@ -7,6 +7,7 @@ from pathlib import Path
 from ingest_taste_steam_review_dossiers import ingest_submission
 from taste_steam_review_dossier_buffered import current_expected_buffer_paths, drain_buffered_groups
 from taste_steam_review_dossier_daily import load_contract, validate_manifest
+from taste_steam_review_dossier_worker_projection import write_worker_projection
 
 
 def expected_submission_path(submission, contract):
@@ -31,7 +32,7 @@ def ingest_inbox_submission(
     store_dir="data/cache/taste_steam_review_dossiers",
     delete_accepted=True,
 ):
-    """Compatibility entry point for the still-live legacy current-checkpoint prompt."""
+    """Compatibility entry point for the retained legacy current-checkpoint path."""
     submission_path = Path(submission_path)
     contract = load_contract(contract_path)
     submission = json.loads(submission_path.read_text(encoding="utf-8"))
@@ -45,6 +46,7 @@ def ingest_inbox_submission(
         contract_path=contract_path,
         store_dir=store_dir,
     )
+    write_worker_projection(next_manifest, contract)
     if delete_accepted:
         submission_path.unlink()
     return {
@@ -76,10 +78,9 @@ def drain_inbox_state(
     legacy_path = expected_legacy_path_from_manifest(manifest, contract)
     legacy_exists = legacy_path.exists() and not manifest["full_backlog_complete"]
 
-    # During the live-transition window the old Scheduled Task can still publish a
-    # legacy checkpoint. If an exact buffered artifact simultaneously claims the
-    # same canonical expected position, choosing one would be control-plane policy;
-    # fail closed instead.
+    # The legacy create-only path is retained only as an exact compatibility fallback.
+    # If legacy and buffered artifacts simultaneously claim the same canonical position,
+    # choosing one would be control-plane policy, so fail closed instead.
     buffered_expected = current_expected_buffer_paths(manifest, contract, inbox) if manifest.get("submission_group_plan") else []
     if legacy_exists and buffered_expected:
         raise ValueError("both legacy and buffered artifacts claim the current canonical expected group")
@@ -92,6 +93,9 @@ def drain_inbox_state(
             store_dir=store_dir,
         )
         if result["accepted_group_count"]:
+            next_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            validate_manifest(next_manifest, contract)
+            write_worker_projection(next_manifest, contract)
             result["mode"] = "buffered_contiguous_drain"
             result["status"] = "full_backlog_exhausted" if result["full_backlog_complete"] else "buffered_prefix_persisted"
             return result
@@ -100,8 +104,6 @@ def drain_inbox_state(
                 f"buffered drain blocked at sequence {result['stop_sequence']}: {result['blocked_reason']}"
             )
 
-    # Backward-compatible landing: until the live Scheduled Task is separately
-    # updated, its legacy deterministic create-only artifact remains accepted.
     if legacy_exists:
         return ingest_inbox_submission(
             legacy_path,

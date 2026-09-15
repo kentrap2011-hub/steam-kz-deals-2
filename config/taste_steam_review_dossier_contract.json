@@ -2,8 +2,8 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "buffered-activation-state-aligned-2026-09-15",
-  "purpose": "Prepare one complete fixed daily neutral Steam review dossier backlog snapshot before Taste semantic analysis, preserve checkpoint-sized durable progress inside that fixed snapshot, and use the active buffered create-only group transport without transferring canonical progress or queue ownership away from GitHub.",
+  "contract_revision": "compact-worker-view-implemented-2026-09-15",
+  "purpose": "Prepare one complete fixed daily neutral Steam review dossier backlog snapshot before Taste semantic analysis, preserve checkpoint-sized durable progress inside that fixed snapshot, expose a bounded GitHub-derived compact read projection for the scheduled worker, and use buffered create-only group transport without transferring canonical progress or queue ownership away from GitHub.",
   "ownership": {
     "control_plane": "github",
     "semantic_data_plane": "scheduled_chatgpt_dossier_worker",
@@ -14,6 +14,8 @@
       "prepare_one_complete_fixed_daily_work_manifest",
       "prepare_internal_checkpoint_from_remaining_daily_snapshot_scope",
       "predeclare_immutable_ordered_group_plan_for_active_buffered_mode",
+      "generate_validate_compact_worker_read_projection_from_canonical_manifest_and_group_plan",
+      "synchronize_compact_worker_index_with_canonical_progress_without_mutating_same_snapshot_descriptors",
       "own_canonical_expected_group_sequence",
       "advance_same_snapshot_progress_only_after_successful_canonical_persistence",
       "track_same_snapshot_backlog_completeness_and_resume",
@@ -28,13 +30,13 @@
       "build_fail_closed_taste_semantic_input_from_active_pin"
     ],
     "semantic_worker_responsibilities": [
-      "read_only_the_latest_prepared_daily_work_manifest",
-      "process_only_exact_predeclared_groups_from_the_immutable_github_group_plan",
+      "read_only_the_github_generated_compact_worker_index_and_exact_group_descriptors",
+      "process_only_exact_group_descriptor_content_projected_by_github_from_the_immutable_canonical_plan",
       "inspect_steam_store_description",
       "inspect_steam_user_reviews_with_russian_lane",
       "produce_neutral_compact_synthesis_with_provenance",
       "publish_each_completed_group_only_through_repository_defined_create_only_transport",
-      "continue_from_group_n_to_the_immediately_next_predeclared_group_after_successful_create_only_publication_without_waiting_for_canonical_ingest"
+      "continue_from_group_n_to_the_immediately_next_projected_group_after_successful_create_only_publication_without_waiting_for_canonical_ingest"
     ],
     "forbidden": [
       "invent_scope",
@@ -45,6 +47,8 @@
       "skip_a_missing_or_invalid_predeclared_group",
       "choose_alternate_retry_filenames",
       "overwrite_update_or_delete_buffer_artifacts_from_chatgpt",
+      "write_or_mutate_worker_index_or_group_descriptors_from_chatgpt",
+      "reconstruct_missing_group_descriptors_from_partial_full_manifest_fields",
       "turn_checkpoint_size_into_run_or_daily_quota",
       "declare_ready_before_same_snapshot_remaining_scope_is_zero",
       "score_personal_fit",
@@ -61,9 +65,9 @@
     "workflow_file": ".github/workflows/build-pre-ai-store-snapshot.yml",
     "queue_build_step": "Build split ChatGPT consumer bundle",
     "manifest_build_position": "after_chatgpt_consumer_bundle_before_atomic_pre_ai_commit",
-    "publication_rule": "publish_complete_manifest_in_same_atomic_pre_ai_commit_before_scheduled_dossier_worker",
+    "publication_rule": "publish_complete_manifest_and_compact_worker_projection_in_same_atomic_pre_ai_commit_before_scheduled_dossier_worker",
     "source_read_rule": "read_current_canonical_taste_queue_once_for_snapshot_preparation",
-    "zero_work_rule": "publish_valid_complete_empty_snapshot",
+    "zero_work_rule": "publish_valid_complete_empty_snapshot_and_complete_worker_index",
     "next_refresh_rule": "queue_changes_after_snapshot_preparation_wait_until_next_daily_preparation"
   },
   "scope": {
@@ -112,7 +116,9 @@
       "status": "active",
       "manifest_requirement": "github_publishes_an_immutable_group_plan_derived_only_from_prepared_required_items_for_buffered_worker_traversal",
       "group_plan_is_canonical_scope_projection": true,
-      "group_plan_is_canonical_progress": false
+      "group_plan_is_canonical_progress": false,
+      "worker_read_surface": "github_derived_compact_index_plus_immutable_per_group_descriptors",
+      "worker_read_surface_is_canonical_authority": false
     }
   },
   "checkpointing": {
@@ -137,15 +143,16 @@
   },
   "buffered_submission": {
     "status": "active",
-    "architecture": "immutable_predeclared_group_plan_plus_create_only_transport_buffer_plus_github_contiguous_drain",
+    "architecture": "immutable_predeclared_group_plan_plus_github_compact_read_projection_plus_create_only_transport_buffer_plus_github_contiguous_drain",
     "activation_gate": {
-      "rule": "buffered_transport_is_active_under_this_contract_and_the_landed_runtime",
+      "rule": "buffered_transport_and_compact_worker_read_projection_are_active_under_this_contract_and_the_landed_runtime",
       "runtime_requirements_met": [
         "manifest_group_plan_representation_and_schema_support",
+        "github_generated_compact_worker_index_and_immutable_group_descriptors",
         "buffered_group_validation_and_state_based_contiguous_drain_runtime",
         "shared_serialized_canonical_writer_workflow_rule",
         "state_based_github_workflow_wake_up_handling",
-        "worker_prompt_alignment_to_buffered_mode",
+        "worker_prompt_alignment_to_compact_buffered_mode",
         "contract_and_runtime_regression_validation",
         "director_authorized_live_prompt_installation"
       ],
@@ -177,15 +184,17 @@
       "immutability_rule": "the_group_plan_for_a_snapshot_cannot_change_when_canonical_progress_advances"
     },
     "worker": {
-      "start_rule": "start_from_the_github_authorized_canonical_expected_group_for_the_current_snapshot",
-      "same_invocation_progression_rule": "after_successful_create_only_publication_of_group_n_the_worker_may_process_only_group_n_plus_1_from_the_same_immutable_predeclared_plan_without_waiting_for_canonical_ingest",
+      "start_rule": "start_from_canonical_expected_sequence_in_the_github_generated_worker_index_then_read_only_that_exact_compact_group_descriptor",
+      "same_invocation_progression_rule": "after_successful_create_only_publication_of_group_n_the_worker_may_process_only_group_n_plus_1_from_the_same_immutable_projected_plan_without_waiting_for_canonical_ingest",
       "same_invocation_progression_is_not_canonical_progress": true,
+      "liveness_rule": "before_each_later_group_re_read_the_tiny_index_only_as_snapshot_plan_and_binding_guard_not_as_a_progress_gate",
       "deterministic_artifact_already_exists_rule": "if_the_deterministic_artifact_for_the_current_canonical_expected_group_already_exists_while_canonical_progress_has_not_advanced_do_not_overwrite_rename_skip_or_create_an_alternate_artifact;stop_and_leave_drain_retry_interpretation_to_github",
-      "interrupted_invocation_rule": "on_a_later_invocation_reload_github_canonical_state_and_start_from_its_expected_group;do_not_scan_pending_buffer_files_to_invent_resume_order_or_retry_state",
-      "snapshot_replacement_rule": "if_a_different_current_snapshot_is_observed_do_not_publish_more_groups_for_the_superseded_snapshot",
+      "interrupted_invocation_rule": "on_a_later_invocation_reload_github_worker_index_and_start_from_its_canonical_expected_sequence;do_not_scan_pending_buffer_files_to_invent_resume_order_or_retry_state",
+      "snapshot_replacement_rule": "if_a_different_current_snapshot_or_group_plan_is_observed_do_not_publish_more_groups_for_the_superseded_projection",
       "forbidden": [
         "derive_new_scope",
         "choose_arbitrary_group_offsets",
+        "reconstruct_descriptor_from_partial_full_manifest_fields",
         "skip_gaps",
         "interpret_replay_or_stale_state",
         "manage_buffer_cleanup",
@@ -207,10 +216,11 @@
       "status": "active",
       "owner": "github_control_plane",
       "wake_up_semantics": "a_buffer_push_is_only_a_wake_up_signal;current_repository_state_is_the_input",
+      "state_source": "full_canonical_work_manifest_and_buffer_not_compact_worker_projection",
       "expected_sequence_source": "canonical_manifest_progress",
       "acceptance_rule": "accept_only_the_maximal_valid_contiguous_prefix_starting_at_expected_sequence",
       "gap_rule": "stop_at_the_first_missing_or_invalid_expected_group_and_never_advance_through_a_gap",
-      "validation_rule": "each_group_must_exactly_match_its_predeclared_descriptor_snapshot_sequence_range_ordered_items_appids_hashes_and_provenance_bindings_and_each_dossier_must_pass_canonical_validation",
+      "validation_rule": "each_group_must_exactly_match_its_predeclared_descriptor_from_the_full_canonical_manifest_snapshot_sequence_range_ordered_items_appids_hashes_and_provenance_bindings_and_each_dossier_must_pass_canonical_validation",
       "malformed_reordered_out_of_scope_rule": "the_first_such_expected_group_blocks_itself_and_every_later_group",
       "wrong_snapshot_rule": "never_apply_to_current_snapshot",
       "replay_rule": "a_group_already_canonically_accepted_must_not_persist_or_advance_again",
@@ -222,7 +232,7 @@
     },
     "canonical_writer_serialization": {
       "owner": "github_control_plane",
-      "rule": "all_github_processes_that_can_mutate_the_dossier_canonical_manifest_must_participate_in_one_serialized_canonical_writer_boundary",
+      "rule": "all_github_processes_that_can_mutate_the_dossier_canonical_manifest_or_its_compact_worker_projection_must_participate_in_one_serialized_canonical_writer_boundary",
       "includes_at_minimum": [
         "buffer_drain",
         "daily_pre_ai_snapshot_preparation"
@@ -230,12 +240,12 @@
       "workflow_implementation": "github_actions_concurrency_group_taste-steam-review-dossier-canonical-writer_cancel_in_progress_false"
     },
     "daily_rollover": {
-      "rule": "artifacts_bound_to_an_old_snapshot_can_never_mutate_a_new_current_snapshot",
+      "rule": "artifacts_or_compact_descriptors_bound_to_an_old_snapshot_can_never_mutate_or_authorize_publication_for_a_new_current_snapshot",
       "stale_buffer_cleanup_owner": "github_control_plane",
-      "worker_rule": "do_not_rebind_old_artifacts_to_new_snapshot"
+      "worker_rule": "do_not_rebind_old_artifacts_or_descriptors_to_new_snapshot"
     },
     "active_snapshot_migration": {
-      "status": "implemented_same_day_preservation_and_additive_group_plan_migration",
+      "status": "implemented_same_day_preservation_additive_group_plan_and_compact_projection_adoption",
       "rebuild_scope": false,
       "preserve_snapshot_id": true,
       "preserve_already_accepted_progress": true,
@@ -252,14 +262,33 @@
       "failure_rule": "if_exact_prefix_suffix_relationship_or_group_boundary_cannot_be_proven_fail_closed_and_do_not_mutate_canonical_snapshot"
     }
   },
+  "worker_read_projection": {
+    "status": "active",
+    "owner": "github_control_plane",
+    "canonical_authority": false,
+    "canonical_source": "data/production/pre_ai/taste_steam_review_dossier_work.json",
+    "index_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V1",
+    "group_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+    "descriptor_path_template": "data/production/pre_ai/taste_steam_review_dossier_worker_groups/{snapshot_id}/g{sequence:06d}.json",
+    "index_rule": "contains_only_o1_snapshot_plan_progress_sampling_and_address_bindings_derived_from_the_full_canonical_manifest",
+    "descriptor_rule": "one_file_per_exact_immutable_canonical_group_with_projection_level_plan_bindings_and_no_worker_recomputation_of_scope_or_identity",
+    "same_snapshot_immutability_rule": "descriptor_files_must_remain_byte_identical_when_only_canonical_progress_advances",
+    "progress_rule": "same_snapshot_progress_changes_update_only_the_mutable_worker_index_progress_fields",
+    "daily_rollover_rule": "github_replaces_the_active_projection_with_the_new_snapshot_projection_and_removes_old_snapshot_directories_from_the_current_tree",
+    "same_day_adoption_rule": "derive_projection_from_the_already_preserved_current_manifest_and_group_plan_without_rebuilding_scope_resetting_progress_or_rewriting_dossier_cache",
+    "worker_liveness_rule": "re_read_index_between_locally_sequential_groups_only_to_guard_snapshot_plan_and_bindings_not_to_wait_for_canonical_progress",
+    "worker_fallback_rule": "no_full_manifest_or_partial_field_descriptor_reconstruction_fallback_is_allowed",
+    "github_validation_rule": "generation_must_validate_the_complete_index_and_descriptor_set_against_the_full_canonical_manifest_before_commit"
+  },
   "transition": {
-    "reason": "align_canonical_activation_state_with_landed_buffered_runtime_while_retaining_the_implemented_legacy_compatibility_fallback",
-    "schema_version_rule": "retain_contract_v2_and_work_v2;buffered_group_plan_and_transport_semantics_are_active_additive_runtime_semantics",
+    "reason": "compact_worker_read_projection_removes_large_manifest_live_reader_dependency_without_changing_buffered_transport_or_canonical_ownership",
+    "schema_version_rule": "retain_contract_v2_and_work_v2;compact_index_and_group_descriptors_are_additive_github_derived_read_projection_schemas",
     "active_transport_mode": "buffered_group_create_only_v1",
+    "active_worker_read_mode": "compact_worker_index_and_immutable_group_descriptors_v1",
     "compatibility_fallback_transport_mode": "current_checkpoint_create_only_v1",
     "legacy_current_checkpoint_role": "transitional_compatibility_fallback_only_not_authoritative_live_worker_transport",
-    "current_worker_prompt": "config/taste_steam_review_dossier_worker_prompt.md_is_the_active_buffered_worker_contract",
-    "current_manifest_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORK-V2_with_immutable_submission_group_plan_is_current_runtime_authority",
+    "current_worker_prompt": "config/taste_steam_review_dossier_worker_prompt.md_is_the_active_compact_buffered_worker_contract",
+    "current_manifest_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORK-V2_with_immutable_submission_group_plan_remains_current_runtime_authority",
     "runtime_change_required_for_current_activation": false
   },
   "freshness": {
@@ -313,12 +342,16 @@
     "active_pin": "data/production/pre_ai/taste_active_work_unit.json",
     "dossier_store_dir": "data/cache/taste_steam_review_dossiers",
     "work_manifest": "data/production/pre_ai/taste_steam_review_dossier_work.json",
+    "worker_index": "data/production/pre_ai/taste_steam_review_dossier_worker_index.json",
+    "worker_groups_root": "data/production/pre_ai/taste_steam_review_dossier_worker_groups",
     "semantic_input": "data/production/pre_ai/taste_semantic_dossier_input.json",
     "submission_inbox_dir": "data/ai_inbox/taste_steam_review_dossiers"
   },
   "schemas": {
     "dossier": "TASTE-STEAM-REVIEW-DOSSIER-V1",
     "work_manifest": "TASTE-STEAM-REVIEW-DOSSIER-WORK-V2",
+    "worker_index": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V1",
+    "worker_group": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
     "submission": "TASTE-STEAM-REVIEW-DOSSIER-SUBMISSION-V1",
     "semantic_input": "TASTE-SEMANTIC-DOSSIER-INPUT-V1",
     "buffered_group_transport": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1"

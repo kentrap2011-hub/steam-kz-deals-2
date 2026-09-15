@@ -3,10 +3,13 @@ name: Validate buffered Steam review dossier runtime
 on:
   pull_request:
     paths:
+      - "config/taste_steam_review_dossier_contract.json"
+      - "config/taste_steam_review_dossier_persistence_bridge.json"
       - "config/taste_steam_review_dossier_worker_prompt.md"
       - "scripts/taste_steam_review_dossier.py"
       - "scripts/taste_steam_review_dossier_daily.py"
       - "scripts/taste_steam_review_dossier_buffered.py"
+      - "scripts/taste_steam_review_dossier_worker_projection.py"
       - "scripts/build_taste_steam_review_dossier_work.py"
       - "scripts/ingest_taste_steam_review_dossiers.py"
       - "scripts/ingest_taste_steam_review_dossier_inbox.py"
@@ -29,7 +32,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run fixed-snapshot and buffered-submission regressions
+      - name: Run fixed-snapshot buffered-submission and compact-worker-view regressions
         run: |
           set -euo pipefail
           python scripts/test_taste_steam_review_dossier_daily_snapshot.py

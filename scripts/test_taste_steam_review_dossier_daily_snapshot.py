@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import copy
 import hashlib
 import json
 import tempfile
@@ -12,6 +13,14 @@ from taste_steam_review_dossier_daily import (
     canonical_dossier_scope_rows,
     load_contract,
     persist_submission_and_advance_snapshot,
+)
+from taste_steam_review_dossier_worker_projection import (
+    WORKER_GROUP_SCHEMA,
+    WORKER_INDEX_SCHEMA,
+    build_worker_projection,
+    validate_worker_projection,
+    validate_worker_projection_files,
+    write_worker_projection,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -64,6 +73,19 @@ def submission(work):
         "scope_source": work["scope_source"], "source_queue_sha256": work["source_queue_sha256"],
         "dossiers": [dossier(x["appid"]) for x in work["current_checkpoint_items"]],
     }
+
+
+def projection_contract(td):
+    contract = copy.deepcopy(CONTRACT)
+    pre_ai = Path(td) / "pre_ai"
+    contract["paths"]["work_manifest"] = (pre_ai / "work.json").as_posix()
+    contract["paths"]["worker_index"] = (pre_ai / "worker_index.json").as_posix()
+    contract["paths"]["worker_groups_root"] = (pre_ai / "worker_groups").as_posix()
+    contract["worker_read_projection"]["canonical_source"] = contract["paths"]["work_manifest"]
+    contract["worker_read_projection"]["descriptor_path_template"] = (
+        contract["paths"]["worker_groups_root"] + "/{snapshot_id}/g{sequence:06d}.json"
+    )
+    return contract
 
 
 class DailySnapshotTests(unittest.TestCase):
@@ -149,7 +171,67 @@ class DailySnapshotTests(unittest.TestCase):
         self.assertEqual(semantic["pin"]["ordered_work_unit_sha256"], pin["ordered_work_unit_sha256"])
         self.assertEqual(canonical_sha256(pin), before)
 
-    def test_workflow_wiring_order(self):
+    def test_compact_worker_projection_25_pointer_advances_without_descriptor_rewrite(self):
+        with tempfile.TemporaryDirectory() as td:
+            contract = projection_contract(td)
+            store = Path(td) / "store"
+            m1 = build_daily_work_manifest(queue(range(400000, 400025)), contract, store, now=NOW)
+            p1 = write_worker_projection(m1, contract)
+            self.assertEqual(p1["index"]["schema"], WORKER_INDEX_SCHEMA)
+            self.assertEqual(p1["index"]["canonical_expected_sequence"], 1)
+            self.assertEqual([len(x["items"]) for x in p1["descriptors"]], [10, 10, 5])
+            self.assertTrue(all(x["schema"] == WORKER_GROUP_SCHEMA for x in p1["descriptors"]))
+            group_dir = Path(contract["paths"]["worker_groups_root"]) / m1["snapshot_id"]
+            before_bytes = {path.name: path.read_bytes() for path in sorted(group_dir.glob("g*.json"))}
+
+            _, m2 = persist_submission_and_advance_snapshot(submission(m1), m1, contract, store)
+            p2 = write_worker_projection(m2, contract)
+            self.assertEqual(p2["index"]["canonical_expected_sequence"], 2)
+            self.assertEqual(before_bytes, {path.name: path.read_bytes() for path in sorted(group_dir.glob("g*.json"))})
+
+            _, m3 = persist_submission_and_advance_snapshot(submission(m2), m2, contract, store)
+            p3 = write_worker_projection(m3, contract)
+            self.assertEqual(p3["index"]["canonical_expected_sequence"], 3)
+            self.assertEqual(before_bytes, {path.name: path.read_bytes() for path in sorted(group_dir.glob("g*.json"))})
+
+            _, m4 = persist_submission_and_advance_snapshot(submission(m3), m3, contract, store)
+            p4 = write_worker_projection(m4, contract)
+            self.assertIsNone(p4["index"]["canonical_expected_sequence"])
+            self.assertTrue(p4["index"]["full_backlog_complete"])
+            self.assertEqual(before_bytes, {path.name: path.read_bytes() for path in sorted(group_dir.glob("g*.json"))})
+
+    def test_compact_worker_projection_fails_closed_on_missing_and_mismatched_content(self):
+        with tempfile.TemporaryDirectory() as td:
+            contract = projection_contract(td)
+            work = build_daily_work_manifest(queue(range(500000, 500025)), contract, Path(td) / "store", now=NOW)
+            projection = write_worker_projection(work, contract)
+            index, descriptors = build_worker_projection(work, contract)
+
+            bad_index = copy.deepcopy(index)
+            bad_index["group_plan_sha256"] = "0" * 64
+            with self.assertRaises(ValueError):
+                validate_worker_projection(bad_index, descriptors, work, contract)
+
+            for field, value in (
+                ("snapshot_id", "0" * 64),
+                ("group_plan_sha256", "1" * 64),
+                ("source_queue_sha256", "2" * 64),
+                ("sequence", 2),
+                ("items_sha256", "3" * 64),
+                ("group_sha256", "4" * 64),
+            ):
+                bad = copy.deepcopy(descriptors)
+                bad[0][field] = value
+                with self.subTest(field=field), self.assertRaises(ValueError):
+                    validate_worker_projection(index, bad, work, contract)
+
+            missing_path = Path(contract["paths"]["worker_groups_root"]) / work["snapshot_id"] / "g000002.json"
+            missing_path.unlink()
+            with self.assertRaises(ValueError):
+                validate_worker_projection_files(work, contract)
+            self.assertEqual(projection["descriptor_count"], 3)
+
+    def test_workflow_wiring_order_and_projection_atomic_paths(self):
         text = (ROOT / ".github/workflows/build-pre-ai-store-snapshot.yml").read_text(encoding="utf-8")
         a = text.index("Build split ChatGPT consumer bundle")
         b = text.index("Prepare fixed daily full Steam review dossier backlog")
@@ -157,6 +239,14 @@ class DailySnapshotTests(unittest.TestCase):
         self.assertLess(a, b)
         self.assertLess(b, c)
         self.assertIn("taste_steam_review_dossier_work.json", text)
+        self.assertIn("taste_steam_review_dossier_worker_index.json", text)
+        self.assertIn("git add -A data/production/pre_ai/taste_steam_review_dossier_worker_groups", text)
+        ingest = (ROOT / ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml").read_text(encoding="utf-8")
+        self.assertIn("taste_steam_review_dossier_worker_index.json", ingest)
+        self.assertIn("git add -A data/production/pre_ai/taste_steam_review_dossier_worker_groups", ingest)
+        drain = (ROOT / "scripts/taste_steam_review_dossier_buffered.py").read_text(encoding="utf-8")
+        self.assertNotIn("taste_steam_review_dossier_worker_index", drain)
+        self.assertIn("validate_group_plan", drain)
 
 
 if __name__ == "__main__":
