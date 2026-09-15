@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from taste_steam_review_dossier_daily import load_contract, persist_submission_and_advance_snapshot
+from taste_steam_review_dossier_strict import validate_dossiers_against_expected_items
 
 
 def ingest_submission(
@@ -17,6 +18,12 @@ def ingest_submission(
     contract = load_contract(contract_path)
     manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
     submission = json.loads(Path(submission_path).read_text(encoding="utf-8"))
+    validate_dossiers_against_expected_items(
+        submission.get("dossiers"),
+        manifest.get("current_checkpoint_items"),
+        contract,
+        expected_ttl_days=manifest["ttl_days"],
+    )
     return persist_submission_and_advance_snapshot(
         submission,
         manifest,

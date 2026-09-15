@@ -10,7 +10,7 @@ import json
 import re
 from pathlib import Path
 
-from taste_steam_review_dossier import atomic_write_json, canonical_sha256, dossier_path, validate_dossier
+from taste_steam_review_dossier import atomic_write_json, canonical_sha256, dossier_path
 from taste_steam_review_dossier_daily import (
     BUFFER_GROUP_SCHEMA,
     expected_group_sequence,
@@ -18,6 +18,7 @@ from taste_steam_review_dossier_daily import (
     validate_group_plan,
     validate_manifest,
 )
+from taste_steam_review_dossier_strict import validate_dossiers_against_expected_items
 
 
 _BUFFER_NAME_RE = re.compile(r"^(?P<snapshot>[0-9a-f]{64})--g(?P<sequence>[0-9]{6})--(?P<group>[0-9a-f]{64})\.json$")
@@ -64,16 +65,12 @@ def validate_buffer_artifact(artifact, descriptor, manifest, contract):
     actual_appids = [str(doc.get("appid") or "") if isinstance(doc, dict) else "" for doc in docs]
     if actual_appids != descriptor["appids"] or len(actual_appids) != len(set(actual_appids)):
         raise ValueError("buffered dossier group dossiers must exactly cover planned appids in order")
-    validated = [
-        validate_dossier(
-            doc,
-            contract,
-            expected_appid=appid,
-            expected_ttl_days=manifest["ttl_days"],
-        )
-        for doc, appid in zip(docs, descriptor["appids"])
-    ]
-    return validated
+    return validate_dossiers_against_expected_items(
+        docs,
+        descriptor["items"],
+        contract,
+        expected_ttl_days=manifest["ttl_days"],
+    )
 
 
 def _current_snapshot_candidates(buffer_dir, snapshot_id):
@@ -90,8 +87,6 @@ def _current_snapshot_candidates(buffer_dir, snapshot_id):
             continue
         match = _BUFFER_NAME_RE.fullmatch(name)
         if not match or match.group("snapshot") != snapshot_id:
-            # If a sequence can still be recovered, attach the invalid path to that
-            # sequence so only reaching that canonical point blocks the drain.
             partial = re.match(rf"^{re.escape(snapshot_id)}--g([0-9]{{6}})--", name)
             if partial:
                 candidates.setdefault(int(partial.group(1)), []).append(path)
@@ -105,7 +100,7 @@ def _current_snapshot_candidates(buffer_dir, snapshot_id):
 def current_expected_buffer_paths(manifest, contract, buffer_dir=None):
     """Return files claiming the current canonical expected sequence."""
     validate_manifest(manifest, contract)
-    plan = validate_group_plan(manifest, contract, required=True)
+    validate_group_plan(manifest, contract, required=True)
     sequence = expected_group_sequence(manifest, contract)
     if sequence is None:
         return []
@@ -209,8 +204,6 @@ def apply_buffered_drain(plan, *, manifest_path, store_dir):
     if not accepted:
         return []
     persisted = []
-    # All group validation happened before this point. If local I/O fails, the
-    # workflow never pushes; remote canonical state therefore remains unchanged.
     for entry in accepted:
         for doc in entry["dossiers"]:
             path = dossier_path(store_dir, str(doc["appid"]))
@@ -237,7 +230,7 @@ def drain_buffered_groups(
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     plan = plan_buffered_drain(manifest, contract, buffer_dir)
     persisted = apply_buffered_drain(plan, manifest_path=manifest_path, store_dir=store_dir)
-    result = {
+    return {
         "accepted_group_count": plan["accepted_count"],
         "accepted_dossier_count": plan["accepted_dossier_count"],
         "accepted_sequences": [entry["descriptor"]["sequence"] for entry in plan["accepted"]],
@@ -248,4 +241,3 @@ def drain_buffered_groups(
         "remaining_required_count": plan["next_manifest"]["remaining_required_count"],
         "full_backlog_complete": plan["next_manifest"]["full_backlog_complete"],
     }
-    return result

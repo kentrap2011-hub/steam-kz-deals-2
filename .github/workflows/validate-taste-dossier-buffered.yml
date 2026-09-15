@@ -4,11 +4,15 @@ on:
   pull_request:
     paths:
       - "config/taste_steam_review_dossier_contract.json"
+      - "config/taste_steam_review_dossier_schema.json"
+      - "config/taste_steam_review_dossier_recovery_contract.json"
       - "config/taste_steam_review_dossier_persistence_bridge.json"
       - "config/taste_steam_review_dossier_worker_prompt.md"
       - "scripts/taste_steam_review_dossier.py"
+      - "scripts/taste_steam_review_dossier_strict.py"
       - "scripts/taste_steam_review_dossier_daily.py"
       - "scripts/taste_steam_review_dossier_buffered.py"
+      - "scripts/taste_steam_review_dossier_recovery.py"
       - "scripts/taste_steam_review_dossier_worker_projection.py"
       - "scripts/build_taste_steam_review_dossier_work.py"
       - "scripts/ingest_taste_steam_review_dossiers.py"
@@ -16,6 +20,7 @@ on:
       - "scripts/test_taste_steam_review_dossier_daily_snapshot.py"
       - "scripts/test_taste_steam_review_dossier_buffered_submission.py"
       - "scripts/test_taste_steam_review_dossier_same_day_preservation.py"
+      - "scripts/test_taste_steam_review_dossier_strict_recovery.py"
       - ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
       - ".github/workflows/validate-taste-dossier-buffered.yml"
@@ -32,9 +37,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run fixed-snapshot buffered-submission and compact-worker-view regressions
+      - name: Run fixed-snapshot strict-schema recovery and reconciliation regressions
         run: |
           set -euo pipefail
           python scripts/test_taste_steam_review_dossier_daily_snapshot.py
           python scripts/test_taste_steam_review_dossier_buffered_submission.py
           python scripts/test_taste_steam_review_dossier_same_day_preservation.py
+          python scripts/test_taste_steam_review_dossier_strict_recovery.py

@@ -12,6 +12,10 @@ from taste_steam_review_dossier_daily import (
     load_contract,
     validate_manifest,
 )
+from taste_steam_review_dossier_recovery import (
+    load_recovery_contract,
+    quarantine_stale_snapshot_inbox,
+)
 from taste_steam_review_dossier_worker_projection import write_worker_projection
 
 _SAMARA = ZoneInfo("Europe/Samara")
@@ -38,12 +42,7 @@ def build_or_preserve_daily_work(
     ttl_days=None,
     now=None,
 ):
-    """Preserve an already-prepared same-day snapshot; build only at the daily boundary.
-
-    The daily snapshot is immutable once prepared. An additive buffered-schema migration
-    may attach the deterministic full group plan, but it must not rebuild scope or reset
-    accepted progress from current queue/store state.
-    """
+    """Preserve an already-prepared same-day snapshot; build only at the daily boundary."""
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     prepared_for_date = now.astimezone(_SAMARA).date().isoformat()
     output_path = Path(output_path)
@@ -81,6 +80,18 @@ def build_or_preserve_daily_work(
     }
 
 
+def apply_snapshot_rollover_inbox_cleanup(manifest, transition, contract, recovery_contract=None):
+    """Quarantine only old-snapshot inbox artifacts after an actual daily rollover."""
+    if transition.get("mode") != "built_new_daily_snapshot":
+        return {"moved": [], "preserved_unrecognized": []}
+    recovery_contract = recovery_contract or load_recovery_contract()
+    return quarantine_stale_snapshot_inbox(
+        contract["paths"]["submission_inbox_dir"],
+        manifest["snapshot_id"],
+        recovery_contract["invalid_expected_artifact_recovery"]["quarantine_dir"],
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(description="Build or preserve one complete fixed daily Steam review dossier backlog snapshot")
     parser.add_argument("--contract", default="config/taste_steam_review_dossier_contract.json")
@@ -98,6 +109,7 @@ def main():
         output_path=args.output,
         ttl_days=args.ttl_days,
     )
+    stale_cleanup = apply_snapshot_rollover_inbox_cleanup(manifest, transition, contract)
     atomic_write_json(args.output, manifest)
     projection = write_worker_projection(manifest, contract)
     print(json.dumps({
@@ -117,6 +129,7 @@ def main():
         "worker_index_path": projection["index_path"],
         "worker_descriptor_count": projection["descriptor_count"],
         "worker_canonical_expected_sequence": projection["index"]["canonical_expected_sequence"],
+        "stale_inbox_quarantined_count": len(stale_cleanup["moved"]),
     }, ensure_ascii=False, indent=2))
 
 

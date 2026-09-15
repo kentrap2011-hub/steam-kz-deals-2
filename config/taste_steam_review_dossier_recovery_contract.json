@@ -1,0 +1,55 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-RECOVERY-CONTRACT-V1",
+  "version": 1,
+  "status": "active",
+  "owner": "github_control_plane",
+  "canonical_writer_concurrency_group": "taste-steam-review-dossier-canonical-writer",
+  "request": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-RECOVERY-REQUEST-V1",
+    "schema_version": 1,
+    "path": "data/control/taste_steam_review_dossier_recovery_request.json",
+    "allowed_action": "quarantine_invalid_expected",
+    "required_fields": [
+      "schema",
+      "schema_version",
+      "action",
+      "snapshot_id",
+      "sequence",
+      "group_sha256",
+      "artifact_path",
+      "reason"
+    ]
+  },
+  "invalid_expected_artifact_recovery": {
+    "worker_authority": false,
+    "github_authority": true,
+    "only_current_canonical_expected_sequence": true,
+    "only_exact_deterministic_path": true,
+    "requires_canonical_validator_failure": true,
+    "valid_artifact_recovery_forbidden": true,
+    "alternate_retry_filename_allowed": false,
+    "later_pending_groups_preserved": true,
+    "recovery_advances_canonical_progress": false,
+    "same_deterministic_path_may_be_created_after_recovery": true,
+    "quarantine_dir": "data/quarantine/taste_steam_review_dossier_inbox",
+    "audit_log": "data/audit/taste_steam_review_dossier_recovery.jsonl"
+  },
+  "stale_snapshot_cleanup": {
+    "owner": "github_control_plane",
+    "trigger": "new_daily_snapshot_preparation_inside_existing_serialized_pre_ai_writer",
+    "remove_only_recognized_old_snapshot_inbox_artifacts": true,
+    "preserve_active_snapshot_artifacts": true,
+    "preserve_unrecognized_files_fail_closed": true,
+    "advances_canonical_progress": false
+  },
+  "lost_wakeup_reconciliation": {
+    "owner": "github_control_plane",
+    "trigger": "existing_serialized_pre_ai_writer_after_daily_manifest_prepare_or_preserve",
+    "state_based": true,
+    "idempotent": true,
+    "uses_same_contiguous_drain": true,
+    "invalid_or_gap_is_nonfatal_for_pre_ai_reconciliation": true,
+    "worker_retry_artifact_required": false,
+    "new_scheduler_created": false
+  }
+}
