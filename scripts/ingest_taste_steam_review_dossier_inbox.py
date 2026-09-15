@@ -62,14 +62,36 @@ def ingest_inbox_submission(
     }
 
 
+def _blocked_result(manifest, reason, sequence, mode):
+    return {
+        "mode": mode,
+        "status": "blocked_no_progress",
+        "snapshot_id": manifest["snapshot_id"],
+        "persisted": [],
+        "persisted_count": 0,
+        "accepted_group_count": 0,
+        "accepted_dossier_count": 0,
+        "blocked_reason": reason,
+        "stop_sequence": sequence,
+        "remaining_required_count": manifest["remaining_required_count"],
+        "full_backlog_complete": manifest["full_backlog_complete"],
+    }
+
+
 def drain_inbox_state(
     *,
     manifest_path="data/production/pre_ai/taste_steam_review_dossier_work.json",
     contract_path="config/taste_steam_review_dossier_contract.json",
     store_dir="data/cache/taste_steam_review_dossiers",
     buffer_dir=None,
+    fail_on_blocked=True,
 ):
-    """Drain current repository state; the push event is only a wake-up signal."""
+    """Drain current repository state; the push event is only a wake-up signal.
+
+    With fail_on_blocked=False this is the existing-writer lost-wakeup reconciliation
+    mode: an invalid/gapped pending state is reported without mutating progress or
+    failing the unrelated pre-AI build.
+    """
     contract = load_contract(contract_path)
     manifest_path = Path(manifest_path)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -78,12 +100,11 @@ def drain_inbox_state(
     legacy_path = expected_legacy_path_from_manifest(manifest, contract)
     legacy_exists = legacy_path.exists() and not manifest["full_backlog_complete"]
 
-    # The legacy create-only path is retained only as an exact compatibility fallback.
-    # If legacy and buffered artifacts simultaneously claim the same canonical position,
-    # choosing one would be control-plane policy, so fail closed instead.
     buffered_expected = current_expected_buffer_paths(manifest, contract, inbox) if manifest.get("submission_group_plan") else []
     if legacy_exists and buffered_expected:
-        raise ValueError("both legacy and buffered artifacts claim the current canonical expected group")
+        if fail_on_blocked:
+            raise ValueError("both legacy and buffered artifacts claim the current canonical expected group")
+        return _blocked_result(manifest, "legacy_and_buffered_claim_same_position", None, "state_based_reconciliation")
 
     if manifest.get("submission_group_plan") is not None:
         result = drain_buffered_groups(
@@ -96,25 +117,37 @@ def drain_inbox_state(
             next_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
             validate_manifest(next_manifest, contract)
             write_worker_projection(next_manifest, contract)
-            result["mode"] = "buffered_contiguous_drain"
+            result["mode"] = "buffered_contiguous_drain" if fail_on_blocked else "state_based_reconciliation"
             result["status"] = "full_backlog_exhausted" if result["full_backlog_complete"] else "buffered_prefix_persisted"
             return result
         if result["blocked_reason"] not in (None, "gap"):
-            raise ValueError(
-                f"buffered drain blocked at sequence {result['stop_sequence']}: {result['blocked_reason']}"
+            if fail_on_blocked:
+                raise ValueError(
+                    f"buffered drain blocked at sequence {result['stop_sequence']}: {result['blocked_reason']}"
+                )
+            return _blocked_result(
+                manifest,
+                result["blocked_reason"],
+                result["stop_sequence"],
+                "state_based_reconciliation",
             )
 
     if legacy_exists:
-        return ingest_inbox_submission(
-            legacy_path,
-            manifest_path=manifest_path,
-            contract_path=contract_path,
-            store_dir=store_dir,
-            delete_accepted=True,
-        )
+        try:
+            return ingest_inbox_submission(
+                legacy_path,
+                manifest_path=manifest_path,
+                contract_path=contract_path,
+                store_dir=store_dir,
+                delete_accepted=True,
+            )
+        except (ValueError, FileNotFoundError, json.JSONDecodeError) as exc:
+            if fail_on_blocked:
+                raise
+            return _blocked_result(manifest, f"invalid_legacy_expected:{exc}", None, "state_based_reconciliation")
 
     return {
-        "mode": "state_based_noop",
+        "mode": "state_based_noop" if fail_on_blocked else "state_based_reconciliation",
         "status": "no_contiguous_work_available",
         "snapshot_id": manifest["snapshot_id"],
         "persisted": [],
@@ -132,9 +165,12 @@ def main():
     parser.add_argument("--store-dir", default="data/cache/taste_steam_review_dossiers")
     parser.add_argument("--buffer-dir", default=None)
     parser.add_argument("--keep-accepted-submission", action="store_true")
+    parser.add_argument("--reconcile-nonfatal", action="store_true")
     args = parser.parse_args()
     try:
         if args.submission:
+            if args.reconcile_nonfatal:
+                raise ValueError("--reconcile-nonfatal is state-based and cannot be combined with a submission path")
             result = ingest_inbox_submission(
                 args.submission,
                 manifest_path=args.manifest,
@@ -148,6 +184,7 @@ def main():
                 contract_path=args.contract,
                 store_dir=args.store_dir,
                 buffer_dir=args.buffer_dir,
+                fail_on_blocked=not args.reconcile_nonfatal,
             )
     except (ValueError, FileNotFoundError, json.JSONDecodeError) as exc:
         raise SystemExit(f"TASTE_STEAM_REVIEW_DOSSIER_INBOX_INVALID: {exc}")
