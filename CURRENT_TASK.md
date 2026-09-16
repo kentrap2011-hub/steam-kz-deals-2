@@ -121,7 +121,7 @@
 - role/start, warnings/risks, ranking weights, giveaway and package-equivalence semantics remain unchanged;
 - current production payload is still degraded on existing V5 backfill (`379`) with `0` current reconsiderable package candidates; canonical final producer fail-closes as expected and no semantic queue was fabricated;
 - report: `reviews/worker_reports/reconsideration-commercial-bridge-and-wishlist-implement-01.md`, report commit `1f843dd55edb3811820cf7b616889a7e17fcd84f`;
-- all temporary Step-3 helpers/workflows were removed after validation.
+- all temporary Step-3 helpers/workflows были removed after validation.
 
 ## Завершённые package-инварианты, которые сохраняются
 
@@ -264,3 +264,15 @@
 - PR validation run `35050852244`, job `104650688665`: success, all `36` dossier regressions passed including package identity `4/4`;
 - no production workflow dispatch, Scheduled Task Run now, Scheduled Task UI change, Taste Semantic Producer change, queue/cache/receipt rewrite, deploy, or merge was performed;
 - durable report: `reviews/worker_reports/taste-dossier-package-identity-fix-01.md`.
+
+## Worker in progress — 2026-09-16
+
+### Taste package member dossier aggregation 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_PACKAGE_MEMBER_DOSSIER_AGGREGATION_01.md`;
+- correction target: existing open PR `#31`; PR merge remains Director-owned and is forbidden in this worker;
+- START gate and architecture preflight completed against current `main` before runtime edits;
+- GitHub remains owner of package-member identity expansion, appid dossier dedupe, Taste-member aggregation and durable progress; dossier worker remains exact single-game research only; existing Taste Semantic Producer remains unchanged;
+- implementation rule under work: authoritative `semantic_condition.base_appids` expand a package into exact member-game dossiers, deduped globally by appid; package Taste eligibility is derived from the best qualifying independent member signal without averaging and without moving package-quality penalties into Taste;
+- DLC/non-game scope, ranking/package economics, UI, giveaway, duration and translation remain out of scope;
+- no production workflow dispatch, Scheduled Task Run now/settings change, cache/receipt/queue rewrite, deploy or PR merge is permitted.
