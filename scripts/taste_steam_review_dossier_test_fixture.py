@@ -43,6 +43,36 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "player_feedback": True,
         },
     ]
+    feedback_records = [
+        {
+            "feedback_id": "pf1",
+            "source_id": "p1",
+            "public_ref": f"steam-review-{appid}-1",
+            "publication_date": older_date,
+            "language": "non_russian",
+        },
+        {
+            "feedback_id": "pf2",
+            "source_id": "p1",
+            "public_ref": f"steam-review-{appid}-2",
+            "publication_date": older_date,
+            "language": "non_russian",
+        },
+        {
+            "feedback_id": "pf3",
+            "source_id": "p1",
+            "public_ref": f"steam-review-{appid}-3",
+            "publication_date": older_date,
+            "language": "non_russian",
+        },
+        {
+            "feedback_id": "pf4",
+            "source_id": "p2",
+            "url": f"https://www.reddit.com/r/games/comments/test{appid}/game_{appid}/comment1/",
+            "publication_date": recent_date,
+            "language": "russian" if russian_status == "found_and_used" else "non_russian",
+        },
+    ]
     observations = [
         {
             "category": "mechanics",
@@ -53,6 +83,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "evidence_languages": ["non_russian"],
             "evidence_status": "durable",
             "source_ids": ["p1"],
+            "player_feedback_ids": ["pf1", "pf2", "pf3"],
         }
     ]
     if russian_status == "found_and_used":
@@ -65,6 +96,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "evidence_languages": ["russian"],
             "evidence_status": "current",
             "source_ids": ["p2"],
+            "player_feedback_ids": ["pf4"],
         })
     else:
         observations.append({
@@ -76,6 +108,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "evidence_languages": ["non_russian"],
             "evidence_status": "current",
             "source_ids": ["p2"],
+            "player_feedback_ids": ["pf4"],
         })
     return {
         "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
@@ -105,5 +138,5 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "overall_strength": "moderate",
             "stop_reason": "evidence_stable",
         },
-        "provenance": {"sources": sources},
+        "provenance": {"sources": sources, "player_feedback_records": feedback_records},
     }
