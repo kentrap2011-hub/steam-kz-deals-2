@@ -2,12 +2,13 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "version": 2,
   "status": "active",
-  "evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V1",
-  "evidence_contract_version": 1,
+  "schema_revision": "auditable-feedback-record-binding-2026-09-16",
+  "evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+  "evidence_contract_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "purpose": "Exact worker-facing neutral multi-source web-evidence dossier shape shared with canonical ingress validation.",
-  "unknown_fields_policy": "top_level_and_observation_extras_remain_permissive_but_raw_body_like_and_personal_or_commercial_fields_are_forbidden;provenance_source_records_are_strict",
+  "purpose": "Exact worker-facing neutral multi-source web-evidence dossier shape shared with canonical ingress validation, with auditable observation-to-player-feedback record binding.",
+  "unknown_fields_policy": "top_level_and_observation_extras_remain_permissive_but_raw_body_like_and_personal_or_commercial_fields_are_forbidden;provenance_source_and_player_feedback_record_records_are_strict",
   "required_top_level_fields": [
     "schema",
     "schema_version",
@@ -102,7 +103,10 @@
       "anecdotal": 1
     },
     "anecdotal_exact_mentions": 1,
+    "mention_count_equals_distinct_bound_player_feedback_records": true,
+    "bound_player_feedback_record_source_must_be_in_observation_source_ids": true,
     "all_source_ids_must_resolve": true,
+    "all_player_feedback_ids_must_resolve": true,
     "current_requires_recent_current_state_source": true,
     "historical_requires_historical_and_recent_current_state_sources": true,
     "durable_requires_durable_trait_source": true
@@ -110,12 +114,14 @@
   "evidence_invariants": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "at_least_one_player_feedback_source": true,
-    "multi_source_requires_at_least_two_distinct_player_source_refs": true,
+    "at_least_one_bound_player_feedback_record": true,
+    "multi_source_requires_at_least_two_distinct_used_player_source_refs": true,
     "single_source_only_requires_reason": true,
-    "russian_found_requires_russian_player_source_used_by_observation": true,
+    "russian_found_requires_russian_player_feedback_record_used_by_observation": true,
     "professional_context_cannot_be_player_feedback": true,
     "official_metadata_cannot_be_player_feedback": true,
+    "steam_store_app_page_cannot_be_player_feedback": true,
+    "aggregate_storefront_statistics_cannot_populate_mention_count": true,
     "legacy_review_sample_field_forbidden": true,
     "legacy_store_only_or_zero_evidence_placeholder_forbidden": true
   },
@@ -140,6 +146,20 @@
     "freshness",
     "evidence_role",
     "player_feedback"
+  ],
+  "player_feedback_record_required_fields": [
+    "feedback_id",
+    "source_id",
+    "publication_date",
+    "language"
+  ],
+  "player_feedback_record_allowed_fields": [
+    "feedback_id",
+    "source_id",
+    "url",
+    "public_ref",
+    "publication_date",
+    "language"
   ],
   "json_schema": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -179,7 +199,7 @@
         "minItems": 1,
         "items": {
           "type": "object",
-          "required": ["category", "statement", "sentiment", "recurrence", "mention_count", "evidence_languages", "evidence_status", "source_ids"],
+          "required": ["category", "statement", "sentiment", "recurrence", "mention_count", "evidence_languages", "evidence_status", "source_ids", "player_feedback_ids"],
           "additionalProperties": true
         }
       },
@@ -191,10 +211,11 @@
       },
       "provenance": {
         "type": "object",
-        "required": ["sources"],
+        "required": ["sources", "player_feedback_records"],
         "additionalProperties": false,
         "properties": {
-          "sources": {"type": "array", "minItems": 1}
+          "sources": {"type": "array", "minItems": 1},
+          "player_feedback_records": {"type": "array", "minItems": 1}
         }
       }
     }

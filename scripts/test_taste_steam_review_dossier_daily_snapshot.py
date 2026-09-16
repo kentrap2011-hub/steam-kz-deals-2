@@ -26,6 +26,7 @@ from taste_steam_review_dossier_worker_projection import (
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
 NOW = datetime(2026, 9, 13, 0, 0, tzinfo=timezone.utc)
+GROUP_SIZE = int(CONTRACT["checkpointing"]["checkpoint_size"])
 
 
 def queue(appids, work=None):
@@ -82,28 +83,27 @@ def projection_contract(td):
     contract["paths"]["worker_index"] = (pre_ai / "worker_index.json").as_posix()
     contract["paths"]["worker_groups_root"] = (pre_ai / "worker_groups").as_posix()
     contract["worker_read_projection"]["canonical_source"] = contract["paths"]["work_manifest"]
-    contract["worker_read_projection"]["descriptor_path_template"] = (
-        contract["paths"]["worker_groups_root"] + "/{snapshot_id}/g{sequence:06d}.json"
-    )
+    contract["worker_read_projection"]["descriptor_path_template"] = contract["paths"]["worker_groups_root"] + "/{snapshot_id}/g{sequence:06d}.json"
     return contract
 
 
 class DailySnapshotTests(unittest.TestCase):
-    def test_full_25_manifest_and_10_10_5_same_snapshot(self):
-        q = queue(range(100000, 100025))
+    def test_full_7_manifest_and_3_3_1_same_snapshot(self):
+        q = queue(range(100000, 100007))
         with tempfile.TemporaryDirectory() as td:
             m1 = build_daily_work_manifest(q, CONTRACT, td, now=NOW)
             sid = m1["snapshot_id"]
-            self.assertEqual(m1["prepared_required_count"], 25)
-            self.assertEqual(len(m1["prepared_required_items"]), 25)
-            self.assertEqual(m1["current_checkpoint_count"], 10)
+            self.assertEqual(GROUP_SIZE, 3)
+            self.assertEqual(m1["prepared_required_count"], 7)
+            self.assertEqual(len(m1["prepared_required_items"]), 7)
+            self.assertEqual(m1["current_checkpoint_count"], 3)
             _, m2 = persist_submission_and_advance_snapshot(submission(m1), m1, CONTRACT, td)
             _, m3 = persist_submission_and_advance_snapshot(submission(m2), m2, CONTRACT, td)
             self.assertEqual(m2["snapshot_id"], sid)
             self.assertEqual(m3["snapshot_id"], sid)
-            self.assertEqual(m2["remaining_required_count"], 15)
-            self.assertEqual(m3["remaining_required_count"], 5)
-            self.assertEqual(m3["current_checkpoint_count"], 5)
+            self.assertEqual(m2["remaining_required_count"], 4)
+            self.assertEqual(m3["remaining_required_count"], 1)
+            self.assertEqual(m3["current_checkpoint_count"], 1)
             _, m4 = persist_submission_and_advance_snapshot(submission(m3), m3, CONTRACT, td)
             self.assertEqual(m4["snapshot_id"], sid)
             self.assertEqual(m4["remaining_required_count"], 0)
@@ -116,11 +116,11 @@ class DailySnapshotTests(unittest.TestCase):
             path = Path(td, "work.json")
             m1 = build_daily_work_manifest(q, CONTRACT, td, now=NOW)
             path.write_text(json.dumps(m1), encoding="utf-8")
-            _, m2 = persist_submission_and_advance_snapshot(submission(m1), m1, CONTRACT, td, manifest_output_path=path)
+            _, _ = persist_submission_and_advance_snapshot(submission(m1), m1, CONTRACT, td, manifest_output_path=path)
             reloaded = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual(reloaded["snapshot_id"], m1["snapshot_id"])
-            self.assertEqual(reloaded["remaining_required_count"], 15)
-            self.assertEqual(reloaded["current_checkpoint_items"][0]["appid"], "200010")
+            self.assertEqual(reloaded["remaining_required_count"], 22)
+            self.assertEqual(reloaded["current_checkpoint_items"][0]["appid"], "200003")
             q.append(queue((999999,))[0])
             self.assertEqual(reloaded, json.loads(path.read_text(encoding="utf-8")))
             next_daily = build_daily_work_manifest(q, CONTRACT, td, now=NOW + timedelta(days=1))
@@ -158,7 +158,7 @@ class DailySnapshotTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 persist_submission_and_advance_snapshot(bad, m2, CONTRACT, td)
             self.assertEqual(m2, before)
-            self.assertEqual(m2["completed_required_count"], 10)
+            self.assertEqual(m2["completed_required_count"], GROUP_SIZE)
 
     def test_semantic_input_remains_exact_active_pin_bound(self):
         pin_rows = [{"key": "App_7", "appid": "7", "taste_fingerprint": "x", "candidate_context_sha256": "y", "work_required": ["resolve_grounded_negative_analysis"]}]
@@ -171,29 +171,26 @@ class DailySnapshotTests(unittest.TestCase):
         self.assertEqual(semantic["pin"]["ordered_work_unit_sha256"], pin["ordered_work_unit_sha256"])
         self.assertEqual(canonical_sha256(pin), before)
 
-    def test_compact_worker_projection_25_pointer_advances_without_descriptor_rewrite(self):
+    def test_compact_worker_projection_7_pointer_advances_without_descriptor_rewrite(self):
         with tempfile.TemporaryDirectory() as td:
             contract = projection_contract(td)
             store = Path(td) / "store"
-            m1 = build_daily_work_manifest(queue(range(400000, 400025)), contract, store, now=NOW)
+            m1 = build_daily_work_manifest(queue(range(400000, 400007)), contract, store, now=NOW)
             p1 = write_worker_projection(m1, contract)
             self.assertEqual(p1["index"]["schema"], WORKER_INDEX_SCHEMA)
             self.assertEqual(p1["index"]["canonical_expected_sequence"], 1)
-            self.assertEqual([len(x["items"]) for x in p1["descriptors"]], [10, 10, 5])
+            self.assertEqual([len(x["items"]) for x in p1["descriptors"]], [3, 3, 1])
             self.assertTrue(all(x["schema"] == WORKER_GROUP_SCHEMA for x in p1["descriptors"]))
             group_dir = Path(contract["paths"]["worker_groups_root"]) / m1["snapshot_id"]
             before_bytes = {path.name: path.read_bytes() for path in sorted(group_dir.glob("g*.json"))}
-
             _, m2 = persist_submission_and_advance_snapshot(submission(m1), m1, contract, store)
             p2 = write_worker_projection(m2, contract)
             self.assertEqual(p2["index"]["canonical_expected_sequence"], 2)
             self.assertEqual(before_bytes, {path.name: path.read_bytes() for path in sorted(group_dir.glob("g*.json"))})
-
             _, m3 = persist_submission_and_advance_snapshot(submission(m2), m2, contract, store)
             p3 = write_worker_projection(m3, contract)
             self.assertEqual(p3["index"]["canonical_expected_sequence"], 3)
             self.assertEqual(before_bytes, {path.name: path.read_bytes() for path in sorted(group_dir.glob("g*.json"))})
-
             _, m4 = persist_submission_and_advance_snapshot(submission(m3), m3, contract, store)
             p4 = write_worker_projection(m4, contract)
             self.assertIsNone(p4["index"]["canonical_expected_sequence"])
@@ -203,28 +200,18 @@ class DailySnapshotTests(unittest.TestCase):
     def test_compact_worker_projection_fails_closed_on_missing_and_mismatched_content(self):
         with tempfile.TemporaryDirectory() as td:
             contract = projection_contract(td)
-            work = build_daily_work_manifest(queue(range(500000, 500025)), contract, Path(td) / "store", now=NOW)
+            work = build_daily_work_manifest(queue(range(500000, 500007)), contract, Path(td) / "store", now=NOW)
             projection = write_worker_projection(work, contract)
             index, descriptors = build_worker_projection(work, contract)
-
             bad_index = copy.deepcopy(index)
             bad_index["group_plan_sha256"] = "0" * 64
             with self.assertRaises(ValueError):
                 validate_worker_projection(bad_index, descriptors, work, contract)
-
-            for field, value in (
-                ("snapshot_id", "0" * 64),
-                ("group_plan_sha256", "1" * 64),
-                ("source_queue_sha256", "2" * 64),
-                ("sequence", 2),
-                ("items_sha256", "3" * 64),
-                ("group_sha256", "4" * 64),
-            ):
+            for field, value in (("snapshot_id", "0" * 64), ("group_plan_sha256", "1" * 64), ("source_queue_sha256", "2" * 64), ("sequence", 2), ("items_sha256", "3" * 64), ("group_sha256", "4" * 64)):
                 bad = copy.deepcopy(descriptors)
                 bad[0][field] = value
                 with self.subTest(field=field), self.assertRaises(ValueError):
                     validate_worker_projection(index, bad, work, contract)
-
             missing_path = Path(contract["paths"]["worker_groups_root"]) / work["snapshot_id"] / "g000002.json"
             missing_path.unlink()
             with self.assertRaises(ValueError):

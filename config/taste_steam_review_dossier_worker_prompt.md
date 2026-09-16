@@ -9,7 +9,7 @@ Before evidence work, read both:
 - `config/taste_steam_review_dossier_schema.json`
 - `config/taste_steam_review_dossier_web_evidence_contract.json`
 
-Require schema `TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2`, version `2`, status `active`, dossier schema `TASTE-STEAM-REVIEW-DOSSIER-V2`, version `2`, and evidence contract `TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V1`, version `1`, status `active`.
+Require schema `TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2`, version `2`, status `active`, dossier schema `TASTE-STEAM-REVIEW-DOSSIER-V2`, version `2`, and evidence contract `TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2`, version `2`, status `active`.
 
 The active semantic evidence contract is ordinary bounded multi-source web research of player feedback. Steam `appreviews` JSON, cursors, fixed review counts, the old 20-review batching rule, and the old 80/80/160 ceilings are **not required**. If an existing compact index still contains a legacy `sampling_policy` field from the preserved V2 control-plane snapshot, treat that field as inactive compatibility metadata and do not use it as a semantic quota.
 
@@ -59,7 +59,17 @@ Use ordinary web research. Useful player-feedback surfaces include Steam review/
 
 Prefer multiple independent player-feedback sources when practical. If only one usable player source exists after bounded research, persist `source_mix_status:"single_source_only"` with a compact factual reason. Do not fabricate a second source.
 
-For every persisted source store only compact provenance: source id, URL or stable public reference, domain, source type, approximate publication date when available, language, freshness classification, evidence role and whether it is player feedback. Do not copy bodies/snippets/quotes into the dossier.
+For every persisted source store only compact source-level provenance: source id, URL or stable public reference, domain, source type, approximate publication date when available, language, freshness classification, evidence role and whether it is player feedback. Do not copy bodies/snippets/quotes into the dossier.
+
+### Auditable player-feedback records and `mention_count`
+
+For every individual player review, post, discussion contribution or other attributable player-feedback item that actually supports an observation, persist one compact record in `provenance.player_feedback_records`. A record contains only `feedback_id`, its parent `source_id`, one plain HTTPS `url` or stable `public_ref`, approximate publication date when available, and language. Do not store its body, quote, snippet, username or profile.
+
+Every observation must list the exact distinct supporting record ids in `player_feedback_ids`. `mention_count` is **exactly** the number of distinct `player_feedback_ids` bound to that observation. The corresponding records must belong to player-feedback sources also listed in that observation's `source_ids`.
+
+Do not convert aggregate statistics into records or mentions. Overall Steam review totals, positive-review counts, language-filtered totals, percentages, rating counts, curator totals, or any other storefront aggregate number are context only. In particular, a visible count such as `523` never means `mention_count:523` unless 523 distinct attributable player-feedback records were actually inspected, compactly persisted and bound to the observation. Do not fabricate records merely to reach a recurrence threshold.
+
+Recurrence follows the bound records mechanically: `anecdotal=1`, `limited>=2`, `moderate>=3`, `strong>=5`. One attributable item therefore remains `anecdotal` with `mention_count:1`. `overall_strength:"moderate"` or `"strong"` also requires at least one observation whose mechanically supported recurrence reaches that level; otherwise use `limited` or `conflicted` as appropriate.
 
 ## Recency and temporal truth
 
@@ -75,17 +85,21 @@ The V2 validator requires:
 - `historical` observations to cite both historical evidence and a recent current-state check;
 - `durable` observations to cite durable-trait evidence.
 
+Context-only/official sources may support identity or current-state context, but they never create player-sentiment mentions and never raise recurrence.
+
 ## Russian-language attempt is mandatory
 
 For every game, explicitly attempt to find Russian-language player feedback, especially for localization, translation, voice, font/encoding and regional/service issues.
 
 Persist exactly one Russian attempt state:
 
-- `found_and_used` — usable Russian player feedback was found and actually supports at least one observation;
-- `searched_not_found_or_insufficient` — the attempt was made but useful Russian evidence was absent or too weak;
+- `found_and_used` — at least one attributable Russian- or mixed-language player-feedback record was actually inspected, persisted compactly, and bound through `player_feedback_ids` to an observation;
+- `searched_not_found_or_insufficient` — the attempt was made but useful attributable Russian player feedback was absent or too weak, including cases where only a Russian Steam Store UI, `?l=russian`, or language-filtered aggregate counts were found;
 - `source_access_unavailable` — relevant Russian source access was unavailable.
 
-Never infer Russian-specific problems from non-Russian evidence and never fabricate Russian findings.
+A Steam Store app page rendered in Russian, including a URL with `?l=russian`, is metadata/context and **not** a player-feedback record. Do not mark such a page `player_feedback:true`, do not use it to satisfy `found_and_used`, and do not let it create `multi_source` status. Real attributable Russian Steam user reviews or Steam Community posts remain valid player feedback.
+
+Never infer Russian-specific localization, translation, voice, font/encoding or regional findings from non-Russian evidence and never fabricate Russian findings.
 
 ## Adaptive bounded stopping
 
@@ -97,7 +111,7 @@ Hard operational bounds per game are finite and mandatory: at most **8 web-searc
 
 Preserve the established semantic topics: play, mechanics, structure, pacing, progression, repetition, difficulty, friction, multiplayer/co-op dependence, recurring positives, recurring complaints, Russian localization/regional issues, conflicts and evidence strength.
 
-Use only schema enums for category, sentiment, recurrence, evidence language and evidence status. A single player mention is `anecdotal`; do not promote it to a recurring claim. Do not duplicate observations to inflate support.
+Use only schema enums for category, sentiment, recurrence, evidence language and evidence status. Do not duplicate observations or feedback records to inflate support.
 
 Do not mention Dmitry or infer whether the user will like the game. Do not output Taste fit, personal positives/negatives, include/exclude, rank, price, discount or sale urgency. Downstream Taste analysis owns all personal interpretation.
 

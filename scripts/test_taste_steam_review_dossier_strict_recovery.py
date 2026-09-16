@@ -29,6 +29,7 @@ BASE_RECOVERY = load_recovery_contract(ROOT / "config/taste_steam_review_dossier
 SCHEMA = load_worker_schema(ROOT / "config/taste_steam_review_dossier_schema.json")
 EVIDENCE_CONTRACT = load_web_evidence_contract(ROOT / "config/taste_steam_review_dossier_web_evidence_contract.json")
 NOW = datetime(2026, 9, 15, 10, 0, tzinfo=timezone.utc)
+GROUP_SIZE = int(BASE_CONTRACT["checkpointing"]["checkpoint_size"])
 
 
 def queue(appids):
@@ -54,9 +55,7 @@ def contract_for(td):
     contract["paths"]["worker_index"] = (root / "worker_index.json").as_posix()
     contract["paths"]["worker_groups_root"] = (root / "worker_groups").as_posix()
     contract["worker_read_projection"]["canonical_source"] = contract["paths"]["work_manifest"]
-    contract["worker_read_projection"]["descriptor_path_template"] = (
-        contract["paths"]["worker_groups_root"] + "/{snapshot_id}/g{sequence:06d}.json"
-    )
+    contract["worker_read_projection"]["descriptor_path_template"] = contract["paths"]["worker_groups_root"] + "/{snapshot_id}/g{sequence:06d}.json"
     return contract
 
 
@@ -101,8 +100,10 @@ class WebEvidenceSchemaTests(unittest.TestCase):
     def test_schema_evidence_contract_and_prompt_alignment(self):
         self.assertEqual(SCHEMA["version"], 2)
         self.assertEqual(SCHEMA["dossier_schema"], "TASTE-STEAM-REVIEW-DOSSIER-V2")
+        self.assertEqual(EVIDENCE_CONTRACT["schema"], "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2")
+        self.assertEqual(EVIDENCE_CONTRACT["version"], 2)
         self.assertEqual(SCHEMA["evidence_contract"], EVIDENCE_CONTRACT["schema"])
-        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v1")
+        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2")
         prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
         for needle in (
             "title **plus the resolved release year**",
@@ -110,6 +111,8 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "Russian-language attempt is mandatory",
             "Steam `appreviews` JSON, cursors, fixed review counts",
             "Never store raw review bodies",
+            "mention_count` is **exactly**",
+            "?l=russian",
             "8 web-search queries",
             "16 opened/read source pages",
         ):
@@ -120,6 +123,57 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         self.assertIs(self.validate(doc), doc)
         self.assertEqual(doc["game_identity"]["release_year"], 2020)
         self.assertEqual(doc["evidence"]["source_mix_status"], "multi_source")
+
+    def test_aggregate_523_cannot_become_523_mentions(self):
+        self.assertInvalid(lambda d: d["observations"][0].__setitem__("mention_count", 523))
+
+    def test_one_player_record_cannot_support_moderate_or_strong_recurrence(self):
+        def mutate(doc):
+            doc["observations"][0]["player_feedback_ids"] = ["pf1"]
+            doc["observations"][0]["mention_count"] = 1
+            doc["observations"][0]["recurrence"] = "moderate"
+        self.assertInvalid(mutate)
+        def mutate_strong(doc):
+            doc["observations"][0]["player_feedback_ids"] = ["pf1"]
+            doc["observations"][0]["mention_count"] = 1
+            doc["observations"][0]["recurrence"] = "strong"
+        self.assertInvalid(mutate_strong)
+
+    def test_russian_store_ui_is_not_player_feedback_or_multisource(self):
+        def mutate(doc):
+            doc["provenance"]["sources"][2] = {
+                "source_id": "p2",
+                "source_type": "steam_reviews",
+                "domain": "store.steampowered.com",
+                "url": "https://store.steampowered.com/app/123456/?l=russian",
+                "publication_date": NOW.date().isoformat(),
+                "language": "russian",
+                "freshness": "recent",
+                "evidence_role": "current_state",
+                "player_feedback": True,
+            }
+            doc["provenance"]["player_feedback_records"][3]["source_id"] = "p2"
+        self.assertInvalid(mutate)
+
+        doc = dossier(123456, russian_status="searched_not_found_or_insufficient")
+        doc["provenance"]["sources"].append({
+            "source_id": "ru_store",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/123456/?l=russian",
+            "publication_date": None,
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "current_state",
+            "player_feedback": False,
+        })
+        self.assertIs(self.validate(doc), doc)
+        self.assertEqual(doc["evidence"]["russian_attempt"], "searched_not_found_or_insufficient")
+
+    def test_real_russian_player_record_satisfies_found_and_used(self):
+        found = dossier(123456, russian_status="found_and_used")
+        self.assertIs(self.validate(found), found)
+        self.assertIn("pf4", found["observations"][1]["player_feedback_ids"])
 
     def test_original_remake_ambiguity_fails_without_year_or_resolved_identity(self):
         self.assertInvalid(lambda d: d["game_identity"].pop("release_year"))
@@ -133,6 +187,11 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "url": "https://example.com/game/launch-thread", "publication_date": "2020-01-01",
             "language": "non_russian", "freshness": "older", "evidence_role": "historical", "player_feedback": True,
         })
+        for n in range(1, 4):
+            doc["provenance"]["player_feedback_records"].append({
+                "feedback_id": f"hpf{n}", "source_id": "h1", "public_ref": f"launch-post-{n}",
+                "publication_date": "2020-01-01", "language": "non_russian",
+            })
         doc["observations"][0].update({
             "category": "friction",
             "statement": "A launch-era technical complaint is historical because a recent current-state check no longer reproduces it.",
@@ -141,6 +200,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "mention_count": 3,
             "evidence_status": "historical",
             "source_ids": ["h1", "p2"],
+            "player_feedback_ids": ["hpf1", "hpf2", "hpf3"],
         })
         self.assertIs(self.validate(doc), doc)
         bad = copy.deepcopy(doc)
@@ -148,26 +208,30 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.validate(bad)
 
-    def test_repeated_recent_complaint_can_remain_current(self):
+    def test_repeated_recent_complaint_requires_three_distinct_records(self):
         doc = dossier(123456)
+        for n in (5, 6):
+            doc["provenance"]["player_feedback_records"].append({
+                "feedback_id": f"pf{n}", "source_id": "p2", "public_ref": f"reddit-current-{n}",
+                "publication_date": NOW.date().isoformat(), "language": "russian",
+            })
         doc["observations"][1].update({
             "statement": "Recent player feedback repeatedly reports the same current localization problem.",
             "sentiment": "negative", "recurrence": "moderate", "mention_count": 3,
+            "player_feedback_ids": ["pf4", "pf5", "pf6"],
         })
         self.assertIs(self.validate(doc), doc)
 
-    def test_russian_found_and_not_found_states_validate(self):
-        found = dossier(123456, russian_status="found_and_used")
-        self.assertIs(self.validate(found), found)
-        no_ru = dossier(123456, russian_status="searched_not_found_or_insufficient")
-        self.assertIs(self.validate(no_ru), no_ru)
-        self.assertInvalid(lambda d: d["evidence"].__setitem__("russian_attempt", "found_and_used") or d["provenance"]["sources"][2].__setitem__("language", "non_russian"))
+    def test_markdown_wrapped_url_is_rejected(self):
+        self.assertInvalid(lambda d: d["provenance"]["sources"][1].__setitem__("url", "[Steam](https://steamcommunity.com/app/123456/reviews/)"))
+        self.assertInvalid(lambda d: d["provenance"]["player_feedback_records"][0].__setitem__("url", "[review](https://steamcommunity.com/review/1)"))
 
     def test_duplicate_bad_provenance_and_raw_body_payload_rejected(self):
         self.assertInvalid(lambda d: d["provenance"]["sources"].append(copy.deepcopy(d["provenance"]["sources"][1])))
         self.assertInvalid(lambda d: d["provenance"]["sources"][1].__setitem__("domain", "wrong.example"))
         self.assertInvalid(lambda d: d["provenance"]["sources"][1].__setitem__("snippet", "raw player text must never be stored"))
         self.assertInvalid(lambda d: d.__setitem__("review_body", "raw body"))
+        self.assertInvalid(lambda d: d["provenance"]["player_feedback_records"].append(copy.deepcopy(d["provenance"]["player_feedback_records"][0])))
 
     def test_legacy_placeholder_and_review_sample_rejected(self):
         legacy = {
@@ -175,10 +239,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "appid": "123456", "title": "Game 123456",
             "generated_at_utc": NOW.isoformat(), "expires_at_utc": (NOW + timedelta(days=20)).isoformat(),
             "ttl_days": 20, "summary": "Legacy store-only placeholder without player evidence.",
-            "observations": [{"category": "mechanics", "statement": "Placeholder", "sentiment": "neutral", "recurrence": "anecdotal", "mention_count": 1, "evidence_languages": ["store"]}],
-            "conflicts": [],
-            "review_sample": {"strategy": "adaptive_stability", "sampled_total": 0, "sampled_russian": 0, "sampled_non_russian": 0, "sample_ids_sha256": "0" * 64, "lanes": []},
-            "provenance": {"store_description": {"url": "https://store.steampowered.com/app/123456/", "content_sha256": "0" * 64}},
+            "observations": [], "conflicts": [], "review_sample": {}, "provenance": {},
         }
         with self.assertRaises(ValueError):
             self.validate(legacy)
@@ -234,24 +295,17 @@ class RecoveryLifecycleTests(unittest.TestCase):
             request_path = Path(recovery["request"]["path"])
             request_path.parent.mkdir(parents=True, exist_ok=True)
             request_path.write_text(json.dumps(request), encoding="utf-8")
-            result = process_recovery_request(
-                request_path=request_path, recovery_contract_path=recovery_path,
-                dossier_contract_path=contract_path, manifest_path=manifest_path,
-            )
+            result = process_recovery_request(request_path=request_path, recovery_contract_path=recovery_path, dossier_contract_path=contract_path, manifest_path=manifest_path)
             self.assertTrue(result["recovered"])
             self.assertFalse(p1.exists())
             self.assertTrue(p2.exists())
             self.assertEqual(manifest_path.read_text(encoding="utf-8"), before_manifest)
-
             corrected = write_group(work, contract, 1)
             self.assertEqual(corrected, p1)
-            drained = drain_inbox_state(
-                manifest_path=manifest_path, contract_path=contract_path, store_dir=store,
-                buffer_dir=contract["paths"]["submission_inbox_dir"], fail_on_blocked=False,
-            )
+            drained = drain_inbox_state(manifest_path=manifest_path, contract_path=contract_path, store_dir=store, buffer_dir=contract["paths"]["submission_inbox_dir"], fail_on_blocked=False)
             self.assertEqual(drained["accepted_group_count"], 2)
-            self.assertEqual(drained["accepted_dossier_count"], 20)
-            self.assertEqual(json.loads(manifest_path.read_text())["completed_required_count"], 20)
+            self.assertEqual(drained["accepted_dossier_count"], GROUP_SIZE * 2)
+            self.assertEqual(json.loads(manifest_path.read_text())["completed_required_count"], GROUP_SIZE * 2)
 
     def test_recovery_refuses_valid_expected_and_title_binding_still_holds(self):
         with tempfile.TemporaryDirectory() as td:
@@ -262,7 +316,6 @@ class RecoveryLifecycleTests(unittest.TestCase):
             artifact["dossiers"][0]["title"] = "Wrong title"
             with self.assertRaises(ValueError):
                 validate_buffer_artifact(artifact, descriptor, work, contract)
-
             manifest_path = Path(contract["paths"]["work_manifest"])
             manifest_path.write_text(json.dumps(work), encoding="utf-8")
             contract_path, recovery_path, recovery = self._write_contracts(td, contract)

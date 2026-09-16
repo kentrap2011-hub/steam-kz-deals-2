@@ -19,6 +19,7 @@ from taste_steam_review_dossier_web import (
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
 NOW = datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc)
+GROUP_SIZE = int(CONTRACT["checkpointing"]["checkpoint_size"])
 
 
 def queue(appids):
@@ -49,7 +50,7 @@ def write_queue(path, rows):
 
 
 class SameDayPreservationTests(unittest.TestCase):
-    def test_same_day_legacy_manifest_migrates_binding_without_resetting_progress(self):
+    def test_same_day_incompatible_evidence_binding_rebuilds_instead_of_preserving_progress(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             store = root / "store"
@@ -60,10 +61,14 @@ class SameDayPreservationTests(unittest.TestCase):
 
             prepared = build_daily_work_manifest_web(initial_rows, CONTRACT, store, now=NOW, source_queue_path=str(queue_path))
             _, progressed = persist_submission_and_advance_snapshot_strict(submission(prepared), prepared, CONTRACT, store)
-            legacy = copy.deepcopy(progressed)
-            legacy.pop("submission_group_plan")
-            legacy.pop("web_evidence_contract_binding")
-            output.write_text(json.dumps(legacy), encoding="utf-8")
+            incompatible = copy.deepcopy(progressed)
+            incompatible["web_evidence_contract_binding"] = {
+                **progressed["web_evidence_contract_binding"],
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V1",
+                "evidence_contract_version": 1,
+                "worker_prompt_revision": "web-evidence-v1",
+            }
+            output.write_text(json.dumps(incompatible), encoding="utf-8")
 
             changed_rows = initial_rows + queue((999999,))
             write_queue(queue_path, changed_rows)
@@ -72,16 +77,12 @@ class SameDayPreservationTests(unittest.TestCase):
                 now=NOW + timedelta(hours=2),
             )
 
-            self.assertEqual(transition["mode"], "preserved_same_day_snapshot")
-            self.assertTrue(transition["group_plan_added"])
-            self.assertTrue(transition["web_evidence_binding_added"])
-            self.assertEqual(manifest["snapshot_id"], legacy["snapshot_id"])
-            self.assertEqual(manifest["prepared_required_sha256"], legacy["prepared_required_sha256"])
-            self.assertEqual(manifest["prepared_required_items"], legacy["prepared_required_items"])
-            self.assertEqual(manifest["completed_required_count"], 10)
-            self.assertEqual(manifest["remaining_required_items"], legacy["prepared_required_items"][10:])
-            self.assertNotIn("999999", [item["appid"] for item in manifest["prepared_required_items"]])
-            self.assertEqual(manifest["web_evidence_contract_binding"]["dossier_schema_version"], 2)
+            self.assertEqual(transition["mode"], "built_new_daily_snapshot")
+            self.assertEqual(manifest["completed_required_count"], 0)
+            self.assertIn("999999", manifest["ordered_appids"])
+            self.assertEqual(manifest["checkpoint_size"], 3)
+            self.assertEqual(manifest["web_evidence_contract_binding"]["evidence_contract_version"], 2)
+            self.assertNotEqual(manifest["snapshot_id"], incompatible["snapshot_id"])
 
     def test_same_day_pre_identity_policy_manifest_rebuilds_from_current_queue(self):
         with tempfile.TemporaryDirectory() as td:
@@ -108,7 +109,7 @@ class SameDayPreservationTests(unittest.TestCase):
             self.assertIn("359999", manifest["ordered_appids"])
             self.assertEqual(manifest["completed_required_count"], 0)
 
-    def test_same_day_existing_buffered_manifest_keeps_identity_and_binding(self):
+    def test_same_day_compatible_buffered_manifest_keeps_identity_and_binding(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             store = root / "store"
@@ -128,6 +129,7 @@ class SameDayPreservationTests(unittest.TestCase):
             self.assertFalse(transition["group_plan_added"])
             self.assertFalse(transition["web_evidence_binding_added"])
             self.assertEqual(manifest, progressed)
+            self.assertEqual(manifest["completed_required_count"], GROUP_SIZE)
 
     def test_next_day_rebuilds_with_v2_freshness_and_current_queue(self):
         with tempfile.TemporaryDirectory() as td:
