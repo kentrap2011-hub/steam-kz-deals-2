@@ -83,6 +83,31 @@ class SameDayPreservationTests(unittest.TestCase):
             self.assertNotIn("999999", [item["appid"] for item in manifest["prepared_required_items"]])
             self.assertEqual(manifest["web_evidence_contract_binding"]["dossier_schema_version"], 2)
 
+    def test_same_day_pre_identity_policy_manifest_rebuilds_from_current_queue(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            store = root / "store"
+            queue_path = root / "queue.jsonl"
+            output = root / "work.json"
+            initial_rows = queue(range(350000, 350003))
+            write_queue(queue_path, initial_rows)
+
+            legacy = build_daily_work_manifest_web(initial_rows, CONTRACT, store, now=NOW, source_queue_path=str(queue_path))
+            legacy.pop("identity_policy_revision")
+            output.write_text(json.dumps(legacy), encoding="utf-8")
+
+            changed_rows = initial_rows + queue((359999,))
+            write_queue(queue_path, changed_rows)
+            manifest, transition = build_or_preserve_daily_work(
+                contract=CONTRACT, queue_path=str(queue_path), store_dir=str(store), output_path=str(output),
+                now=NOW + timedelta(hours=1),
+            )
+
+            self.assertEqual(transition["mode"], "built_new_daily_snapshot")
+            self.assertEqual(manifest["identity_policy_revision"], "package-member-dossier-aggregation-v1")
+            self.assertIn("359999", manifest["ordered_appids"])
+            self.assertEqual(manifest["completed_required_count"], 0)
+
     def test_same_day_existing_buffered_manifest_keeps_identity_and_binding(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
