@@ -16,6 +16,7 @@ from taste_steam_review_dossier_recovery import (
     quarantine_stale_snapshot_inbox,
 )
 from taste_steam_review_dossier_web import (
+    _PACKAGE_IDENTITY_POLICY_REVISION,
     build_daily_work_manifest_web,
     ensure_web_evidence_binding,
 )
@@ -45,7 +46,7 @@ def build_or_preserve_daily_work(
     ttl_days=None,
     now=None,
 ):
-    """Preserve same-day control-plane identity; add only the active worker-contract binding."""
+    """Preserve same-day control-plane identity unless the active identity policy revision changed."""
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     prepared_for_date = now.astimezone(_SAMARA).date().isoformat()
     output_path = Path(output_path)
@@ -58,7 +59,10 @@ def build_or_preserve_daily_work(
             raise ValueError(
                 f"existing dossier snapshot date {existing_date} is ahead of current Samara date {prepared_for_date}"
             )
-        if existing_date == prepared_for_date:
+        if (
+            existing_date == prepared_for_date
+            and existing.get("identity_policy_revision") == _PACKAGE_IDENTITY_POLICY_REVISION
+        ):
             if ttl_days is not None and int(existing["ttl_days"]) != int(ttl_days):
                 raise ValueError("cannot change TTL inside an already-prepared fixed daily dossier snapshot")
             had_group_plan = existing.get("submission_group_plan") is not None
