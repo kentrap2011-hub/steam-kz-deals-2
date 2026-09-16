@@ -3,6 +3,10 @@
 import copy
 from datetime import datetime, timezone
 
+from taste_package_member_aggregation import (
+    PACKAGE_AI_CONDITION,
+    ordered_unique_numeric,
+)
 from taste_steam_review_dossier import (
     SEMANTIC_INPUT_SCHEMA,
     atomic_write_json,
@@ -26,8 +30,7 @@ from taste_steam_review_dossier_strict import (
     validate_dossiers_against_expected_items,
 )
 
-_PACKAGE_AI_CONDITION = "bundle_or_package_taste_evaluation_required"
-_PACKAGE_IDENTITY_POLICY_REVISION = "package-single-game-dossier-identity-v1"
+_PACKAGE_IDENTITY_POLICY_REVISION = "package-member-dossier-aggregation-v1"
 
 
 def ensure_web_evidence_binding(manifest):
@@ -42,7 +45,7 @@ def ensure_web_evidence_binding(manifest):
 
 
 def _offer_identity(row, key, source_row_appid):
-    """Keep the commercial/store subject separate from a single-game dossier target."""
+    """Keep the commercial/store subject separate from per-game dossier targets."""
     return {
         "key": key,
         "family_id": row.get("family_id"),
@@ -51,106 +54,139 @@ def _offer_identity(row, key, source_row_appid):
     }
 
 
-def _ordered_unique_numeric(values):
-    out = []
-    seen = set()
-    for value in values if isinstance(values, list) else []:
-        appid = str(value or "")
-        if not appid.isdigit() or appid in seen:
+def _member_titles_by_appid(bundle_members):
+    out = {}
+    for member in bundle_members if isinstance(bundle_members, list) else []:
+        if not isinstance(member, dict):
             continue
-        seen.add(appid)
-        out.append(appid)
+        appid = str(member.get("appid") or "")
+        title = str(member.get("name") or "").strip()
+        if not appid.isdigit() or not title:
+            continue
+        titles = out.setdefault(appid, [])
+        if title not in titles:
+            titles.append(title)
     return out
 
 
-def _resolve_queue_row_dossier_identity(row, index):
-    """Resolve one eligible queue row to one real game, or return a machine-readable block."""
+def _resolve_queue_row_dossier_identities(row, index):
+    """Resolve one eligible queue row to exact game dossier identities.
+
+    A package offer is not itself a dossier identity.  Its authoritative
+    semantic_condition.base_appids are expanded to member games, while
+    arbitrary bundle members (for example costume DLC) are ignored.
+    """
     source_row_appid = str(row.get("appid") or "")
     key = row.get("taste_subject_key") if "taste_subject_key" in row else row.get("key")
     if not source_row_appid.isdigit() or not isinstance(key, str) or not key:
         raise ValueError(f"canonical Taste queue row {index} lacks appid/taste subject identity")
 
     condition = row.get("semantic_condition") if isinstance(row.get("semantic_condition"), dict) else {}
-    bundle_members = row.get("bundle_members") if isinstance(row.get("bundle_members"), list) else []
-    is_package_offer = (
-        key.startswith("Sub_")
-        or condition.get("ai_condition") == _PACKAGE_AI_CONDITION
-        or bool(bundle_members)
-    )
-
-    base_appids = _ordered_unique_numeric(condition.get("base_appids"))
+    is_package_offer = key.startswith("Sub_") or condition.get("ai_condition") == PACKAGE_AI_CONDITION
     if not is_package_offer:
         return {
             "status": "resolved",
-            "row": {
+            "rows": [{
                 "key": key,
                 "appid": source_row_appid,
                 "title": str(row.get("title") or ""),
                 "taste_fingerprint": row.get("taste_fingerprint"),
                 "candidate_context_sha256": row.get("candidate_context_sha256"),
                 "work_required": list(row["work_required"]),
-            },
+                "source_kind": "direct",
+            }],
+            "package_mapping": None,
         }
 
     offer = _offer_identity(row, key, source_row_appid)
-    if len(base_appids) != 1:
-        reason = (
-            "ambiguous_multi_game_offer_no_single_dossier_identity"
-            if len(base_appids) > 1
-            else "package_offer_has_no_canonical_single_game_identity"
-        )
+    base_appids = ordered_unique_numeric(condition.get("base_appids"))
+    if not base_appids:
         return {
             "status": "blocked",
             "blocked": {
                 "key": key,
-                "reason": reason,
+                "reason": "package_offer_has_no_authoritative_game_members",
                 "offer_identity": offer,
-                "candidate_game_appids": base_appids,
+                "candidate_game_appids": [],
             },
         }
 
-    target_appid = base_appids[0]
-    member_titles = []
-    for member in bundle_members:
-        if not isinstance(member, dict) or str(member.get("appid") or "") != target_appid:
+    member_titles = _member_titles_by_appid(row.get("bundle_members"))
+    targets = []
+    unresolved = []
+    mapping_members = []
+    for appid in base_appids:
+        titles = member_titles.get(appid) or []
+        if len(titles) != 1:
+            unresolved.append({"appid": appid, "candidate_titles": titles})
             continue
-        title = str(member.get("name") or "").strip()
-        if title and title not in member_titles:
-            member_titles.append(title)
-    if len(member_titles) != 1:
+        title = titles[0]
+        targets.append({
+            "key": f"App_{appid}",
+            "appid": appid,
+            "title": title,
+            "taste_fingerprint": row.get("taste_fingerprint"),
+            "candidate_context_sha256": row.get("candidate_context_sha256"),
+            "work_required": list(row["work_required"]),
+            "source_kind": "package_member",
+            "offer_identity": offer,
+            "package_member_title": title,
+        })
+        mapping_members.append({
+            "appid": appid,
+            "title": title,
+            "dossier_key": f"App_{appid}",
+            "dossier_path": None,
+        })
+
+    if unresolved:
         return {
             "status": "blocked",
             "blocked": {
                 "key": key,
-                "reason": "canonical_single_game_title_unresolved",
+                "reason": "authoritative_package_member_title_unresolved",
                 "offer_identity": offer,
-                "candidate_game_appids": [target_appid],
+                "candidate_game_appids": base_appids,
+                "unresolved_members": unresolved,
             },
         }
 
     return {
         "status": "resolved",
-        "row": {
-            "key": key,
-            "appid": target_appid,
-            "title": member_titles[0],
-            "taste_fingerprint": row.get("taste_fingerprint"),
-            "candidate_context_sha256": row.get("candidate_context_sha256"),
-            "work_required": list(row["work_required"]),
+        "rows": targets,
+        "package_mapping": {
             "offer_identity": offer,
-            "dossier_identity_resolution": "single_canonical_base_appid_and_bundle_member_title",
+            "member_count": len(mapping_members),
+            "member_appids": list(base_appids),
+            "members": mapping_members,
+            "aggregation_semantics": "per_game_dossier_reuse_by_appid",
         },
     }
 
 
+def _merge_offer_identity(target, offer):
+    if not isinstance(offer, dict):
+        return
+    offers = target.setdefault("offer_identities", [])
+    identity_key = (offer.get("key"), offer.get("family_id"), offer.get("title"), offer.get("source_row_appid"))
+    for existing in offers:
+        existing_key = (
+            existing.get("key"), existing.get("family_id"), existing.get("title"), existing.get("source_row_appid")
+        )
+        if existing_key == identity_key:
+            return
+    offers.append(copy.deepcopy(offer))
+
+
 def resolve_dossier_scope_identities(queue_rows, contract):
-    """Return actionable single-game dossier rows plus package rows blocked before semantic work."""
+    """Expand packages to member games and dedupe globally to one dossier node per appid."""
     if not isinstance(queue_rows, list):
         raise ValueError("canonical Taste queue rows must be a list")
     markers = set(contract["scope"]["taste_semantic_work_required_any"])
-    rows = []
+    rows_by_appid = {}
+    order = []
     blocked = []
-    seen_appids = set()
+    package_mappings = []
     eligible_row_count = 0
     deduplicated_row_count = 0
 
@@ -163,20 +199,66 @@ def resolve_dossier_scope_identities(queue_rows, contract):
         if not any(item in markers for item in work):
             continue
         eligible_row_count += 1
-        resolved = _resolve_queue_row_dossier_identity(row, index)
+        resolved = _resolve_queue_row_dossier_identities(row, index)
         if resolved["status"] == "blocked":
             blocked.append(resolved["blocked"])
             continue
-        target = resolved["row"]
-        if target["appid"] in seen_appids:
+        if resolved.get("package_mapping") is not None:
+            package_mappings.append(resolved["package_mapping"])
+
+        for target in resolved["rows"]:
+            appid = target["appid"]
+            existing = rows_by_appid.get(appid)
+            if existing is None:
+                canonical = copy.deepcopy(target)
+                canonical["dossier_identity_resolution"] = (
+                    "authoritative_package_base_appid_member"
+                    if target.get("source_kind") == "package_member"
+                    else "direct_queue_game_identity"
+                )
+                canonical["offer_identities"] = []
+                _merge_offer_identity(canonical, target.get("offer_identity"))
+                rows_by_appid[appid] = canonical
+                order.append(appid)
+                continue
+
             deduplicated_row_count += 1
-            continue
-        seen_appids.add(target["appid"])
-        rows.append(target)
+            _merge_offer_identity(existing, target.get("offer_identity"))
+            if target.get("source_kind") == "direct":
+                # A direct App row is the canonical title/key authority for the
+                # same appid.  Package membership survives as separate metadata.
+                existing.update({
+                    "key": target["key"],
+                    "title": target["title"],
+                    "taste_fingerprint": target.get("taste_fingerprint"),
+                    "candidate_context_sha256": target.get("candidate_context_sha256"),
+                    "work_required": list(target["work_required"]),
+                    "source_kind": "direct",
+                    "dossier_identity_resolution": (
+                        "direct_appid_reused_by_package_member"
+                        if existing.get("offer_identities")
+                        else "direct_queue_game_identity"
+                    ),
+                })
+
+    rows = []
+    for appid in order:
+        row = rows_by_appid[appid]
+        if row.get("source_kind") == "package_member" and row.get("offer_identities"):
+            row["dossier_identity_resolution"] = "package_member_appid_dossier_node"
+        row.pop("offer_identity", None)
+        row.pop("package_member_title", None)
+        row.pop("source_kind", None)
+        rows.append(row)
+
+    for mapping in package_mappings:
+        for member in mapping["members"]:
+            member["dossier_path"] = dossier_path(contract["paths"]["dossier_store"], member["appid"]).as_posix()
 
     return {
         "rows": rows,
         "identity_blocked_items": blocked,
+        "package_member_mappings": package_mappings,
         "eligible_row_count": eligible_row_count,
         "deduplicated_row_count": deduplicated_row_count,
     }
@@ -192,6 +274,7 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
     resolution = resolve_dossier_scope_identities(queue_rows, contract)
     scope_rows = resolution["rows"]
     identity_blocked_items = resolution["identity_blocked_items"]
+    package_member_mappings = resolution["package_member_mappings"]
     eligible_row_count = resolution["eligible_row_count"]
     items = []
     required = []
@@ -213,9 +296,6 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
             "key": row["key"], "appid": appid, "title": row["title"],
             "dossier_path": dossier_path(store_dir, appid).as_posix(), "state": state,
         }
-        if row.get("offer_identity") is not None:
-            item["offer_identity"] = copy.deepcopy(row["offer_identity"])
-            item["dossier_identity_resolution"] = row["dossier_identity_resolution"]
         if existing and state == "fresh":
             item.update({
                 "generated_at_utc": existing["generated_at_utc"],
@@ -225,26 +305,24 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
         else:
             reason = "refresh_required" if state in {"stale", "invalid", "invalid_future"} else "missing_dossier"
             item["reason"] = reason
-            required_item = {
+            required.append({
                 "key": row["key"], "appid": appid, "title": row["title"],
                 "dossier_path": item["dossier_path"], "reason": reason,
-            }
-            if row.get("offer_identity") is not None:
-                required_item["offer_identity"] = copy.deepcopy(row["offer_identity"])
-                required_item["dossier_identity_resolution"] = row["dossier_identity_resolution"]
-            required.append(required_item)
+            })
         items.append(item)
 
     prepared_date = now.astimezone(ZoneInfo("Europe/Samara")).date().isoformat()
     eligible_binding = [{"key": r["key"], "appid": r["appid"]} for r in scope_rows]
     eligible_sha = canonical_sha256(eligible_binding)
     identity_blocked_sha = canonical_sha256(identity_blocked_items)
+    package_mapping_sha = canonical_sha256(package_member_mappings)
     required_sha = canonical_sha256(required)
     snapshot_id = canonical_sha256({
         "prepared_for_date": prepared_date,
         "source_queue_sha256": source_queue_sha,
         "eligible_scope_sha256": eligible_sha,
         "identity_blocked_sha256": identity_blocked_sha,
+        "package_member_mapping_sha256": package_mapping_sha,
         "prepared_required_sha256": required_sha,
         "ttl_days": ttl,
     })
@@ -277,6 +355,9 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
         "identity_blocked_count": len(identity_blocked_items),
         "identity_blocked_sha256": identity_blocked_sha,
         "identity_blocked_items": identity_blocked_items,
+        "package_member_mapping_count": len(package_member_mappings),
+        "package_member_mapping_sha256": package_mapping_sha,
+        "package_member_mappings": package_member_mappings,
         "eligible_scope_count": len(scope_rows),
         "eligible_scope_sha256": eligible_sha,
         "ordered_appids": [r["appid"] for r in scope_rows],
