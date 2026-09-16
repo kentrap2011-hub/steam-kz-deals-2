@@ -175,7 +175,6 @@ jobs:
           git add \
             data/cache/taste_fit.entry_index.json \
             data/cache/taste_steam_review_dossiers \
-            data/ai_inbox/taste_steam_review_dossiers \
             data/production/pre_ai/store_snapshot.json \
             data/production/pre_ai/content_metadata.json \
             data/production/pre_ai/fixed_package_options.json \
@@ -192,6 +191,7 @@ jobs:
             data/production/pre_ai/chatgpt_purchase_context.jsonl \
             data/production/pre_ai/chatgpt_ru_description_queue.jsonl \
             data/production/pre_ai/chatgpt_ru_description_status.json
+          git add -A -- data/ai_inbox/taste_steam_review_dossiers 2>/dev/null || true
           git add -A data/production/pre_ai/taste_steam_review_dossier_worker_groups
           git add -A -- data/quarantine/taste_steam_review_dossier_inbox 2>/dev/null || true
           if [ -e data/production/pre_ai/taste_active_work_unit.json ] || \
