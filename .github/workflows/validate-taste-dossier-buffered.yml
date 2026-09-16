@@ -26,6 +26,7 @@ on:
       - "scripts/test_taste_steam_review_dossier_buffered_submission.py"
       - "scripts/test_taste_steam_review_dossier_same_day_preservation.py"
       - "scripts/test_taste_steam_review_dossier_strict_recovery.py"
+      - "scripts/test_taste_dossier_package_identity_fix.py"
       - ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
       - ".github/workflows/validate-taste-dossier-buffered.yml"
@@ -49,3 +50,4 @@ jobs:
           python scripts/test_taste_steam_review_dossier_buffered_submission.py
           python scripts/test_taste_steam_review_dossier_same_day_preservation.py
           python scripts/test_taste_steam_review_dossier_strict_recovery.py
+          python scripts/test_taste_dossier_package_identity_fix.py
