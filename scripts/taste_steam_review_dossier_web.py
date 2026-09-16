@@ -72,7 +72,7 @@ def _member_titles_by_appid(bundle_members):
 def _resolve_queue_row_dossier_identities(row, index):
     """Resolve one eligible queue row to exact game dossier identities.
 
-    A package offer is not itself a dossier identity.  Its authoritative
+    A package offer is not itself a dossier identity. Its authoritative
     semantic_condition.base_appids are expanded to member games, while
     arbitrary bundle members (for example costume DLC) are ignored.
     """
@@ -225,8 +225,6 @@ def resolve_dossier_scope_identities(queue_rows, contract):
             deduplicated_row_count += 1
             _merge_offer_identity(existing, target.get("offer_identity"))
             if target.get("source_kind") == "direct":
-                # A direct App row is the canonical title/key authority for the
-                # same appid.  Package membership survives as separate metadata.
                 existing.update({
                     "key": target["key"],
                     "title": target["title"],
@@ -253,7 +251,7 @@ def resolve_dossier_scope_identities(queue_rows, contract):
 
     for mapping in package_mappings:
         for member in mapping["members"]:
-            member["dossier_path"] = dossier_path(contract["paths"]["dossier_store"], member["appid"]).as_posix()
+            member["dossier_path"] = dossier_path(contract["paths"]["dossier_store_dir"], member["appid"]).as_posix()
 
     return {
         "rows": rows,
