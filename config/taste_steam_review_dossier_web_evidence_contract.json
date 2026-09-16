@@ -2,13 +2,13 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "evidence-record-binding-2026-09-16",
+  "contract_revision": "prepublication-privacy-guard-2026-09-17",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2",
+  "worker_prompt_revision": "web-evidence-v2-prepublication-v1",
   "purpose": "Define the active semantic evidence policy for neutral Taste dossiers while leaving GitHub-owned scope, buffered transport, validation/persistence ownership, recovery and completeness in the existing control-plane contract.",
   "supersedes": {
     "steam_appreviews_required": false,
@@ -45,6 +45,52 @@
     "aggregate_storefront_statistics_may_raise_recurrence": false,
     "steam_store_app_page_is_player_feedback_record": false,
     "steam_store_language_parameter_is_player_feedback_evidence": false
+  },
+  "compact_provenance": {
+    "author_identity_allowed": false,
+    "profile_scoped_urls_allowed": false,
+    "review_or_post_content_in_locator_metadata_allowed": false,
+    "raw_body_or_body_like_fields_allowed": false,
+    "public_ref_url_text_allowed": false,
+    "forbidden_profile_url_path_regexes": [
+      "^/(?:id|profiles?|users?|u|authors?)/[^/]+(?:/|$)"
+    ],
+    "forbidden_profile_url_query_keys": [
+      "author",
+      "author_id",
+      "user",
+      "user_id",
+      "userid",
+      "username",
+      "profile",
+      "profile_id",
+      "steamid"
+    ],
+    "forbidden_public_ref_regexes": [
+      "\\b(?:contribution|comment|post|review|entry|record)\\s+by\\s+[^,;]+",
+      "\\b(?:username|display[ _-]?name|author|contributor|profile)\\s*[:=]",
+      "(?<![A-Za-z0-9_])@[A-Za-z0-9_][A-Za-z0-9_.-]{1,}",
+      "\\b(?:u|user)/[A-Za-z0-9_][A-Za-z0-9_.-]{1,}",
+      "\\b(?:summarized|summarised|summary)\\s+(?:as|:)"
+    ],
+    "neutral_locator_examples": [
+      "Steam discussion 729153699965901699 opening contribution, 2026-01-19",
+      "Hellish Quart Steam negative review posted 2025-12-20, 101.7h record",
+      "reddit-thread:ve5i0a:2022-06-17"
+    ],
+    "rule": "Persist only non-identifying locator metadata. Author/display identity and review/post content are unnecessary for this product and must be omitted rather than pseudonymized."
+  },
+  "prepublication_validation": {
+    "status": "active",
+    "mode": "shared_canonical_buffer_validator",
+    "canonical_entrypoint": "scripts/taste_steam_review_dossier_buffered.py::validate_buffer_artifact",
+    "worker_entrypoint": "scripts/taste_steam_review_dossier_prepublication.py",
+    "validate_complete_group_before_create_only_publication": true,
+    "independent_rule_list_forbidden": true,
+    "on_validation_failure": "publish_nothing_for_group_and_stop_without_later_groups",
+    "on_validator_execution_unavailable": "publish_nothing_for_group_and_stop_fail_closed",
+    "canonical_truth_owner": "github_control_plane",
+    "worker_check_role": "publication_guard_only"
   },
   "mention_binding": {
     "definition": "mention_count is the number of distinct attributable player-feedback records actually inspected and bound to the exact observation",

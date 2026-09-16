@@ -13,7 +13,9 @@ Require schema `TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2`, version `2`, statu
 
 The active semantic evidence contract is ordinary bounded multi-source web research of player feedback. Steam `appreviews` JSON, cursors, fixed review counts, the old 20-review batching rule, and the old 80/80/160 ceilings are **not required**. If an existing compact index still contains a legacy `sampling_policy` field from the preserved V2 control-plane snapshot, treat that field as inactive compatibility metadata and do not use it as a semantic quota.
 
-Do not infer enum values from prose or invent synonyms. `category:"content"` remains invalid. Never store raw review bodies, post bodies, quotes/excerpts, usernames, author profiles, or a per-review archive.
+Do not infer enum values from prose or invent synonyms. `category:"content"` remains invalid. Never store raw review bodies, post bodies, quotes/excerpts, usernames, display names, author attribution, author profiles, or a per-review archive.
+
+The evidence contract's `compact_provenance` section is mechanically enforced by the same canonical buffered validator used at ingestion. A persisted URL must not be author/profile-scoped. A `public_ref` must be neutral locator metadata only: it must not contain author/user identity or a review/post excerpt, quote, paraphrase, content summary, or URL disguised as text. Do not hash or otherwise pseudonymize usernames as a workaround; omit author identity entirely.
 
 ## Start and traversal
 
@@ -36,7 +38,7 @@ Read only descriptor `g{N:06d}.json` through the exact index template. Validate 
 
 Never reconstruct a missing descriptor from the full manifest or partial fields. Missing/unreadable/inconsistent projection is a GitHub-side defect: stop fail-closed.
 
-After group N is completely researched and the connected GitHub **create-file** action successfully creates its deterministic buffered artifact, set the local traversal target only to `N+1`. Do not wait for canonical ingest N. Before each later group, re-read the tiny worker index only as a snapshot/plan liveness guard. The same snapshot/plan bindings must remain current. It is valid for canonical progress to remain at N or advance to exactly the immediate local next sequence. If the snapshot/plan changes or canonical progress advances beyond the immediate local next sequence, stop.
+After group N passes mandatory pre-publication validation and the connected GitHub **create-file** action successfully creates its deterministic buffered artifact, set the local traversal target only to `N+1`. Do not wait for canonical ingest N. Before each later group, re-read the tiny worker index only as a snapshot/plan liveness guard. The same snapshot/plan bindings must remain current. It is valid for canonical progress to remain at N or advance to exactly the immediate local next sequence. If the snapshot/plan changes or canonical progress advances beyond the immediate local next sequence, stop.
 
 A successful create-only write is transport durability, not canonical acceptance. If any create action fails, stop. On a later invocation reload the index and start from GitHub's canonical expected sequence. If the deterministic artifact for the expected group already exists while canonical progress has not advanced, do not overwrite, rename, skip, or create an alternate file; stop and leave GitHub recovery/drain logic to resolve it.
 
@@ -59,11 +61,11 @@ Use ordinary web research. Useful player-feedback surfaces include Steam review/
 
 Prefer multiple independent player-feedback sources when practical. If only one usable player source exists after bounded research, persist `source_mix_status:"single_source_only"` with a compact factual reason. Do not fabricate a second source.
 
-For every persisted source store only compact source-level provenance: source id, URL or stable public reference, domain, source type, approximate publication date when available, language, freshness classification, evidence role and whether it is player feedback. Do not copy bodies/snippets/quotes into the dossier.
+For every persisted source store only compact source-level provenance: source id, URL or stable public reference, domain, source type, approximate publication date when available, language, freshness classification, evidence role and whether it is player feedback. Do not copy bodies/snippets/quotes into the dossier. Do not use an author/profile page or a profile-scoped direct review URL as a source locator; use a non-identifying public discussion/review page or neutral locator metadata instead.
 
 ### Auditable player-feedback records and `mention_count`
 
-For every individual player review, post, discussion contribution or other attributable player-feedback item that actually supports an observation, persist one compact record in `provenance.player_feedback_records`. A record contains only `feedback_id`, its parent `source_id`, one plain HTTPS `url` or stable `public_ref`, approximate publication date when available, and language. Do not store its body, quote, snippet, username or profile.
+For every individual player review, post, discussion contribution or other attributable player-feedback item that actually supports an observation, persist one compact record in `provenance.player_feedback_records`. A record contains only `feedback_id`, its parent `source_id`, one plain HTTPS non-profile `url` or stable neutral `public_ref`, approximate publication date when available, and language. Do not store its body, quote, snippet, paraphrase, content summary, username, display name, author attribution or profile.
 
 Every observation must list the exact distinct supporting record ids in `player_feedback_ids`. `mention_count` is **exactly** the number of distinct `player_feedback_ids` bound to that observation. The corresponding records must belong to player-feedback sources also listed in that observation's `source_ids`.
 
@@ -119,7 +121,19 @@ Do not mention Dmitry or infer whether the user will like the game. Do not outpu
 
 For each completed group produce one `TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1` JSON object with `schema_version:1`. Copy the immutable group descriptor fields exactly and add `dossiers`, containing exactly one `TASTE-STEAM-REVIEW-DOSSIER-V2` dossier per planned item in the same order. Every dossier must use the exact descriptor `appid` and exact descriptor `title`, preserve the index TTL, and satisfy the V2 identity/evidence/provenance contract.
 
-Publish each group only through the connected GitHub **create-file** action. Repository: `kentrap2011-hub/steam-kz-deals-2`. Branch: `main`. Deterministic path:
+### Mandatory pre-publication validation
+
+Before **any** GitHub create-file action, construct the entire candidate buffered group locally/ephemerally and run the repository-defined pre-publication validator:
+
+`python scripts/taste_steam_review_dossier_prepublication.py --artifact <ephemeral-candidate-group.json>`
+
+The pre-publication entrypoint imports and calls `taste_steam_review_dossier_buffered.validate_buffer_artifact`, which is the same canonical buffered validator used by GitHub ingestion. It is therefore a publication guard over the current canonical implementation, not a separately maintained checklist and not a second source of truth.
+
+Publication is allowed only if this exact complete-group validation returns `status:"valid"`. If it returns `status:"invalid"`, publish nothing for that group, report the exact returned `reason`, and stop the invocation without attempting any later group. If the exact repository validator cannot be executed in the current Scheduled ChatGPT environment, fail closed: publish nothing, report `prepublication_validator_unavailable`, and stop. Do not replace code execution with a shortened hand-written rule list or with a self-authored `pass` claim.
+
+After a validation failure, never create an alternate filename, corrected duplicate, overwrite, rename or delete. A corrected candidate may only be published in a later invocation when the deterministic path is free under GitHub-owned canonical state/recovery.
+
+Publish each validated group only through the connected GitHub **create-file** action. Repository: `kentrap2011-hub/steam-kz-deals-2`. Branch: `main`. Deterministic path:
 
 `data/ai_inbox/taste_steam_review_dossiers/{snapshot_id}--g{sequence:06d}--{group_sha256}.json`
 
