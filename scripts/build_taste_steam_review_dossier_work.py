@@ -17,6 +17,7 @@ from taste_steam_review_dossier_recovery import (
     load_recovery_contract,
     quarantine_stale_snapshot_inbox,
 )
+from taste_steam_review_dossier_strict import current_worker_contract_binding
 from taste_steam_review_dossier_web import (
     _PACKAGE_IDENTITY_POLICY_REVISION,
     build_daily_work_manifest_web,
@@ -49,6 +50,46 @@ def _ordered_unique_numeric(values):
         seen.add(appid)
         out.append(appid)
     return out
+
+
+def _snapshot_identity(manifest, contract):
+    """Bind snapshot identity to semantic evidence contract and canonical group boundary."""
+    return canonical_sha256({
+        "prepared_for_date": manifest["prepared_for_date"],
+        "source_queue_sha256": manifest["source_queue_sha256"],
+        "eligible_scope_sha256": manifest["eligible_scope_sha256"],
+        "identity_blocked_sha256": manifest["identity_blocked_sha256"],
+        "package_member_mapping_sha256": manifest["package_member_mapping_sha256"],
+        "prepared_required_sha256": manifest["prepared_required_sha256"],
+        "ttl_days": manifest["ttl_days"],
+        "web_evidence_contract_binding": current_worker_contract_binding(),
+        "canonical_group_size": int(contract["checkpointing"]["checkpoint_size"]),
+    })
+
+
+def _rebind_snapshot_and_plan(manifest, contract):
+    """Create the immutable snapshot/group binding after all package mappings are known."""
+    checkpoint_size = int(contract["checkpointing"]["checkpoint_size"])
+    manifest["web_evidence_contract_binding"] = current_worker_contract_binding()
+    manifest["checkpoint_size"] = checkpoint_size
+    snapshot_id = _snapshot_identity(manifest, contract)
+    manifest["snapshot_id"] = snapshot_id
+    manifest["submission_group_plan"] = build_submission_group_plan(
+        snapshot_id=snapshot_id,
+        prepared_required_sha256=manifest["prepared_required_sha256"],
+        prepared_required_items=manifest["prepared_required_items"],
+        checkpoint_size=checkpoint_size,
+        scope_source=manifest["scope_source"],
+        source_queue_sha256=manifest["source_queue_sha256"],
+    )
+    manifest.update(progress_fields(
+        snapshot_id,
+        manifest["prepared_required_items"],
+        list(manifest["prepared_required_items"]),
+        checkpoint_size,
+    ))
+    validate_manifest(manifest, contract)
+    return manifest
 
 
 def bind_package_member_mappings(manifest, contract, family_graph):
@@ -108,37 +149,10 @@ def bind_package_member_mappings(manifest, contract, family_graph):
             "aggregation_semantics": "per_game_dossier_reuse_by_appid",
         })
 
-    mapping_sha = canonical_sha256(mappings)
     manifest["package_member_mapping_count"] = len(mappings)
-    manifest["package_member_mapping_sha256"] = mapping_sha
+    manifest["package_member_mapping_sha256"] = canonical_sha256(mappings)
     manifest["package_member_mappings"] = mappings
-    snapshot_id = canonical_sha256({
-        "prepared_for_date": manifest["prepared_for_date"],
-        "source_queue_sha256": manifest["source_queue_sha256"],
-        "eligible_scope_sha256": manifest["eligible_scope_sha256"],
-        "identity_blocked_sha256": manifest["identity_blocked_sha256"],
-        "package_member_mapping_sha256": mapping_sha,
-        "prepared_required_sha256": manifest["prepared_required_sha256"],
-        "ttl_days": manifest["ttl_days"],
-    })
-    manifest["snapshot_id"] = snapshot_id
-    checkpoint_size = int(contract["checkpointing"]["checkpoint_size"])
-    manifest["submission_group_plan"] = build_submission_group_plan(
-        snapshot_id=snapshot_id,
-        prepared_required_sha256=manifest["prepared_required_sha256"],
-        prepared_required_items=manifest["prepared_required_items"],
-        checkpoint_size=checkpoint_size,
-        scope_source=manifest["scope_source"],
-        source_queue_sha256=manifest["source_queue_sha256"],
-    )
-    manifest.update(progress_fields(
-        snapshot_id,
-        manifest["prepared_required_items"],
-        list(manifest["prepared_required_items"]),
-        checkpoint_size,
-    ))
-    validate_manifest(manifest, contract)
-    return manifest
+    return _rebind_snapshot_and_plan(manifest, contract)
 
 
 def build_or_preserve_daily_work(
@@ -151,23 +165,28 @@ def build_or_preserve_daily_work(
     ttl_days=None,
     now=None,
 ):
-    """Preserve same-day control-plane identity unless the active identity policy revision changed."""
+    """Preserve only a same-day snapshot whose identity and evidence/group binding are still compatible."""
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     prepared_for_date = now.astimezone(_SAMARA).date().isoformat()
     output_path = Path(output_path)
+    expected_binding = current_worker_contract_binding()
+    expected_group_size = int(contract["checkpointing"]["checkpoint_size"])
 
     if output_path.exists():
         existing = json.loads(output_path.read_text(encoding="utf-8"))
-        validate_manifest(existing, contract)
         existing_date = str(existing.get("prepared_for_date") or "")
         if existing_date > prepared_for_date:
             raise ValueError(
                 f"existing dossier snapshot date {existing_date} is ahead of current Samara date {prepared_for_date}"
             )
-        if (
+        compatible_same_day = (
             existing_date == prepared_for_date
             and existing.get("identity_policy_revision") == _PACKAGE_IDENTITY_POLICY_REVISION
-        ):
+            and existing.get("web_evidence_contract_binding") == expected_binding
+            and existing.get("checkpoint_size") == expected_group_size
+        )
+        if compatible_same_day:
+            validate_manifest(existing, contract)
             if ttl_days is not None and int(existing["ttl_days"]) != int(ttl_days):
                 raise ValueError("cannot change TTL inside an already-prepared fixed daily dossier snapshot")
             had_group_plan = existing.get("submission_group_plan") is not None
@@ -192,6 +211,8 @@ def build_or_preserve_daily_work(
     if family_graph_path is not None:
         family_graph = json.loads(Path(family_graph_path).read_text(encoding="utf-8"))
         manifest = bind_package_member_mappings(manifest, contract, family_graph)
+    else:
+        manifest = _rebind_snapshot_and_plan(manifest, contract)
     return manifest, {
         "mode": "built_new_daily_snapshot",
         "group_plan_added": True,
@@ -200,7 +221,7 @@ def build_or_preserve_daily_work(
 
 
 def apply_snapshot_rollover_inbox_cleanup(manifest, transition, contract, recovery_contract=None):
-    """Quarantine only old-snapshot inbox artifacts after an actual daily rollover."""
+    """Quarantine only old-snapshot inbox artifacts after an actual daily rollover or contract rebuild."""
     if transition.get("mode") != "built_new_daily_snapshot":
         return {"moved": [], "preserved_unrecognized": []}
     recovery_contract = recovery_contract or load_recovery_contract()
