@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import copy
+import hashlib
 import json
 import tempfile
 import unittest
@@ -14,7 +15,7 @@ from taste_steam_review_dossier_test_fixture import web_dossier
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
-NOW = datetime(2026, 9, 17, 0, 30, tzinfo=timezone.utc)
+NOW = datetime(2026, 9, 16, 20, 0, tzinfo=timezone.utc)
 
 
 def queue(appids):
@@ -24,8 +25,8 @@ def queue(appids):
             "taste_subject_key": f"App_{appid}_{i}",
             "appid": str(appid),
             "title": f"Game {appid}",
-            "taste_fingerprint": f"taste-{appid}-{i}",
-            "candidate_context_sha256": f"ctx-{appid}-{i}",
+            "taste_fingerprint": hashlib.sha256(f"taste:{appid}:{i}".encode()).hexdigest(),
+            "candidate_context_sha256": hashlib.sha256(f"ctx:{appid}:{i}".encode()).hexdigest(),
             "work_required": ["resolve_grounded_negative_analysis"],
         })
     return rows
