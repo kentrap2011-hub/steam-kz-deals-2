@@ -17,7 +17,6 @@ from taste_steam_review_dossier import (
 from taste_steam_review_dossier_daily import (
     WORK_SCHEMA,
     build_submission_group_plan,
-    canonical_dossier_scope_rows,
     progress_fields,
     validate_manifest,
 )
@@ -26,6 +25,9 @@ from taste_steam_review_dossier_strict import (
     dossier_state_strict,
     validate_dossiers_against_expected_items,
 )
+
+_PACKAGE_AI_CONDITION = "bundle_or_package_taste_evaluation_required"
+_PACKAGE_IDENTITY_POLICY_REVISION = "package-single-game-dossier-identity-v1"
 
 
 def ensure_web_evidence_binding(manifest):
@@ -39,6 +41,147 @@ def ensure_web_evidence_binding(manifest):
     return out
 
 
+def _offer_identity(row, key, source_row_appid):
+    """Keep the commercial/store subject separate from a single-game dossier target."""
+    return {
+        "key": key,
+        "family_id": row.get("family_id"),
+        "title": str(row.get("title") or ""),
+        "source_row_appid": source_row_appid,
+    }
+
+
+def _ordered_unique_numeric(values):
+    out = []
+    seen = set()
+    for value in values if isinstance(values, list) else []:
+        appid = str(value or "")
+        if not appid.isdigit() or appid in seen:
+            continue
+        seen.add(appid)
+        out.append(appid)
+    return out
+
+
+def _resolve_queue_row_dossier_identity(row, index):
+    """Resolve one eligible queue row to one real game, or return a machine-readable block."""
+    source_row_appid = str(row.get("appid") or "")
+    key = row.get("taste_subject_key") if "taste_subject_key" in row else row.get("key")
+    if not source_row_appid.isdigit() or not isinstance(key, str) or not key:
+        raise ValueError(f"canonical Taste queue row {index} lacks appid/taste subject identity")
+
+    condition = row.get("semantic_condition") if isinstance(row.get("semantic_condition"), dict) else {}
+    bundle_members = row.get("bundle_members") if isinstance(row.get("bundle_members"), list) else []
+    is_package_offer = (
+        key.startswith("Sub_")
+        or condition.get("ai_condition") == _PACKAGE_AI_CONDITION
+        or bool(bundle_members)
+    )
+
+    base_appids = _ordered_unique_numeric(condition.get("base_appids"))
+    if not is_package_offer:
+        return {
+            "status": "resolved",
+            "row": {
+                "key": key,
+                "appid": source_row_appid,
+                "title": str(row.get("title") or ""),
+                "taste_fingerprint": row.get("taste_fingerprint"),
+                "candidate_context_sha256": row.get("candidate_context_sha256"),
+                "work_required": list(row["work_required"]),
+            },
+        }
+
+    offer = _offer_identity(row, key, source_row_appid)
+    if len(base_appids) != 1:
+        reason = (
+            "ambiguous_multi_game_offer_no_single_dossier_identity"
+            if len(base_appids) > 1
+            else "package_offer_has_no_canonical_single_game_identity"
+        )
+        return {
+            "status": "blocked",
+            "blocked": {
+                "key": key,
+                "reason": reason,
+                "offer_identity": offer,
+                "candidate_game_appids": base_appids,
+            },
+        }
+
+    target_appid = base_appids[0]
+    member_titles = []
+    for member in bundle_members:
+        if not isinstance(member, dict) or str(member.get("appid") or "") != target_appid:
+            continue
+        title = str(member.get("name") or "").strip()
+        if title and title not in member_titles:
+            member_titles.append(title)
+    if len(member_titles) != 1:
+        return {
+            "status": "blocked",
+            "blocked": {
+                "key": key,
+                "reason": "canonical_single_game_title_unresolved",
+                "offer_identity": offer,
+                "candidate_game_appids": [target_appid],
+            },
+        }
+
+    return {
+        "status": "resolved",
+        "row": {
+            "key": key,
+            "appid": target_appid,
+            "title": member_titles[0],
+            "taste_fingerprint": row.get("taste_fingerprint"),
+            "candidate_context_sha256": row.get("candidate_context_sha256"),
+            "work_required": list(row["work_required"]),
+            "offer_identity": offer,
+            "dossier_identity_resolution": "single_canonical_base_appid_and_bundle_member_title",
+        },
+    }
+
+
+def resolve_dossier_scope_identities(queue_rows, contract):
+    """Return actionable single-game dossier rows plus package rows blocked before semantic work."""
+    if not isinstance(queue_rows, list):
+        raise ValueError("canonical Taste queue rows must be a list")
+    markers = set(contract["scope"]["taste_semantic_work_required_any"])
+    rows = []
+    blocked = []
+    seen_appids = set()
+    eligible_row_count = 0
+    deduplicated_row_count = 0
+
+    for index, row in enumerate(queue_rows):
+        if not isinstance(row, dict):
+            raise ValueError(f"canonical Taste queue row {index} is malformed")
+        work = row.get("work_required")
+        if not isinstance(work, list):
+            raise ValueError(f"canonical Taste queue row {index} has no canonical work_required")
+        if not any(item in markers for item in work):
+            continue
+        eligible_row_count += 1
+        resolved = _resolve_queue_row_dossier_identity(row, index)
+        if resolved["status"] == "blocked":
+            blocked.append(resolved["blocked"])
+            continue
+        target = resolved["row"]
+        if target["appid"] in seen_appids:
+            deduplicated_row_count += 1
+            continue
+        seen_appids.add(target["appid"])
+        rows.append(target)
+
+    return {
+        "rows": rows,
+        "identity_blocked_items": blocked,
+        "eligible_row_count": eligible_row_count,
+        "deduplicated_row_count": deduplicated_row_count,
+    }
+
+
 def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, ttl_days=None, source_queue_path=None):
     """Prepare a fixed daily snapshot while treating legacy/non-V2 cache entries as invalid."""
     from zoneinfo import ZoneInfo
@@ -46,14 +189,10 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
     ttl = resolve_ttl_days(contract, ttl_days)
     checkpoint_size = int(contract["checkpointing"]["checkpoint_size"])
     source_queue_sha = canonical_sha256(queue_rows)
-    scope_rows = canonical_dossier_scope_rows(queue_rows, contract)
-    eligible_row_count = sum(
-        1 for row in queue_rows
-        if isinstance(row, dict) and any(
-            item in set(contract["scope"]["taste_semantic_work_required_any"])
-            for item in (row.get("work_required") or [])
-        )
-    )
+    resolution = resolve_dossier_scope_identities(queue_rows, contract)
+    scope_rows = resolution["rows"]
+    identity_blocked_items = resolution["identity_blocked_items"]
+    eligible_row_count = resolution["eligible_row_count"]
     items = []
     required = []
     for row in scope_rows:
@@ -74,6 +213,9 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
             "key": row["key"], "appid": appid, "title": row["title"],
             "dossier_path": dossier_path(store_dir, appid).as_posix(), "state": state,
         }
+        if row.get("offer_identity") is not None:
+            item["offer_identity"] = copy.deepcopy(row["offer_identity"])
+            item["dossier_identity_resolution"] = row["dossier_identity_resolution"]
         if existing and state == "fresh":
             item.update({
                 "generated_at_utc": existing["generated_at_utc"],
@@ -83,20 +225,26 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
         else:
             reason = "refresh_required" if state in {"stale", "invalid", "invalid_future"} else "missing_dossier"
             item["reason"] = reason
-            required.append({
+            required_item = {
                 "key": row["key"], "appid": appid, "title": row["title"],
                 "dossier_path": item["dossier_path"], "reason": reason,
-            })
+            }
+            if row.get("offer_identity") is not None:
+                required_item["offer_identity"] = copy.deepcopy(row["offer_identity"])
+                required_item["dossier_identity_resolution"] = row["dossier_identity_resolution"]
+            required.append(required_item)
         items.append(item)
 
     prepared_date = now.astimezone(ZoneInfo("Europe/Samara")).date().isoformat()
     eligible_binding = [{"key": r["key"], "appid": r["appid"]} for r in scope_rows]
     eligible_sha = canonical_sha256(eligible_binding)
+    identity_blocked_sha = canonical_sha256(identity_blocked_items)
     required_sha = canonical_sha256(required)
     snapshot_id = canonical_sha256({
         "prepared_for_date": prepared_date,
         "source_queue_sha256": source_queue_sha,
         "eligible_scope_sha256": eligible_sha,
+        "identity_blocked_sha256": identity_blocked_sha,
         "prepared_required_sha256": required_sha,
         "ttl_days": ttl,
     })
@@ -124,7 +272,11 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
         "eligible_row_count": eligible_row_count,
         "excluded_row_count": len(queue_rows) - eligible_row_count,
         "unique_appid_count": len(scope_rows),
-        "deduplicated_row_count": eligible_row_count - len(scope_rows),
+        "deduplicated_row_count": resolution["deduplicated_row_count"],
+        "identity_policy_revision": _PACKAGE_IDENTITY_POLICY_REVISION,
+        "identity_blocked_count": len(identity_blocked_items),
+        "identity_blocked_sha256": identity_blocked_sha,
+        "identity_blocked_items": identity_blocked_items,
         "eligible_scope_count": len(scope_rows),
         "eligible_scope_sha256": eligible_sha,
         "ordered_appids": [r["appid"] for r in scope_rows],
