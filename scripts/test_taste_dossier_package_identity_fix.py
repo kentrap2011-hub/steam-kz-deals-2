@@ -82,17 +82,28 @@ class PackageIdentityFixTests(unittest.TestCase):
         })
         self.assertEqual(target["dossier_identity_resolution"], "single_canonical_base_appid_and_bundle_member_title")
 
-    def test_sub_87601_is_blocked_before_worker_projection_and_offer_is_preserved(self):
+    def test_sub_87601_is_blocked_before_dedupe_and_worker_projection(self):
         queue_path = ROOT / "data/production/pre_ai/chatgpt_taste_queue.jsonl"
-        queue_rows = [json.loads(line) for line in queue_path.read_text(encoding="utf-8").splitlines()[:4]]
+        all_rows = [json.loads(line) for line in queue_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+        first_rows = all_rows[:4]
+        coherent_app_304240 = next(row for row in all_rows if row["taste_subject_key"] == "App_304240")
+        queue_rows = first_rows + [coherent_app_304240]
         original = copy.deepcopy(queue_rows)
+
         sub = next(row for row in queue_rows if row["taste_subject_key"] == "Sub_87601")
         self.assertEqual(sub["appid"], "304240")
         self.assertIn("Deluxe Origins Bundle", sub["title"])
         self.assertEqual(sub["semantic_condition"]["base_appids"], ["304240", "339340"])
+        self.assertEqual((coherent_app_304240["appid"], coherent_app_304240["title"]), ("304240", "Resident Evil"))
 
         resolution = resolve_dossier_scope_identities(queue_rows, CONTRACT)
-        self.assertNotIn("Sub_87601", [row["key"] for row in resolution["rows"]])
+        resolved_by_key = {row["key"]: row for row in resolution["rows"]}
+        self.assertNotIn("Sub_87601", resolved_by_key)
+        self.assertEqual(
+            (resolved_by_key["App_304240"]["appid"], resolved_by_key["App_304240"]["title"]),
+            ("304240", "Resident Evil"),
+            "blocked package must not consume appid dedupe identity before the coherent App row",
+        )
         blocked = next(item for item in resolution["identity_blocked_items"] if item["key"] == "Sub_87601")
         self.assertEqual(blocked["reason"], "ambiguous_multi_game_offer_no_single_dossier_identity")
         self.assertEqual(blocked["candidate_game_appids"], ["304240", "339340"])
@@ -104,19 +115,27 @@ class PackageIdentityFixTests(unittest.TestCase):
             manifest = build_daily_work_manifest_web(queue_rows, CONTRACT, td, now=NOW)
             _, descriptors = build_worker_projection(manifest, CONTRACT)
 
-        self.assertEqual(manifest["source_row_count"], 4)
-        self.assertEqual(manifest["eligible_row_count"], 4)
+        self.assertEqual(manifest["source_row_count"], 5)
+        self.assertEqual(manifest["eligible_row_count"], 5)
         self.assertEqual(manifest["identity_blocked_count"], 1)
         self.assertEqual(manifest["completed_required_count"], 0)
-        self.assertEqual(manifest["prepared_required_count"], 3)
+        self.assertEqual(manifest["prepared_required_count"], 4)
         self.assertEqual([item["key"] for item in manifest["prepared_required_items"][:3]], [
             "App_2378500", "App_1000360", "App_1003590",
         ])
+        self.assertEqual(
+            (manifest["prepared_required_items"][3]["key"], manifest["prepared_required_items"][3]["appid"], manifest["prepared_required_items"][3]["title"]),
+            ("App_304240", "304240", "Resident Evil"),
+        )
         first_items = descriptors[0]["items"]
         self.assertEqual([(item["key"], item["appid"], item["title"]) for item in first_items[:3]], [
             ("App_2378500", "2378500", "Baldur's Gate 3 - Digital Deluxe Edition DLC"),
             ("App_1000360", "1000360", "Hellish Quart"),
             ("App_1003590", "1003590", "Tetris® Effect: Connected"),
+        ])
+        self.assertIn(("App_304240", "304240", "Resident Evil"), [
+            (item["key"], item["appid"], item["title"])
+            for descriptor in descriptors for item in descriptor["items"]
         ])
         self.assertFalse(any(
             item["appid"] == "304240" and "Deluxe Origins Bundle" in item["title"]
