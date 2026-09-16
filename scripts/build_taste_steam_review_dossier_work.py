@@ -5,10 +5,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from taste_steam_review_dossier import atomic_write_json
+from taste_steam_review_dossier import atomic_write_json, canonical_sha256, dossier_path
 from taste_steam_review_dossier_daily import (
+    build_submission_group_plan,
     ensure_submission_group_plan,
     load_contract,
+    progress_fields,
     validate_manifest,
 )
 from taste_steam_review_dossier_recovery import (
@@ -37,12 +39,115 @@ def _read_jsonl(path):
     return rows
 
 
+def _ordered_unique_numeric(values):
+    out = []
+    seen = set()
+    for value in values if isinstance(values, list) else []:
+        appid = str(value or "")
+        if not appid.isdigit() or appid in seen:
+            continue
+        seen.add(appid)
+        out.append(appid)
+    return out
+
+
+def bind_package_member_mappings(manifest, contract, family_graph):
+    """Bind commercial package identity without reintroducing package semantic work."""
+    if not isinstance(family_graph, dict) or not isinstance(family_graph.get("families"), list):
+        raise ValueError("canonical family graph is missing or malformed")
+    if int(manifest.get("completed_required_count") or 0) != 0:
+        raise ValueError("package identity binding may only be applied to a freshly prepared snapshot")
+
+    scope_appids = set(str(appid) for appid in manifest.get("ordered_appids") or [])
+    title_by_appid = {}
+    for family in family_graph["families"]:
+        if not isinstance(family, dict) or family.get("family_type") != "base_game":
+            continue
+        appids = _ordered_unique_numeric(family.get("base_appids"))
+        if len(appids) != 1:
+            continue
+        title = str(family.get("primary_title") or "").strip()
+        if title:
+            title_by_appid[appids[0]] = title
+
+    mappings = []
+    for family in family_graph["families"]:
+        if not isinstance(family, dict) or family.get("family_type") != "franchise_bundle":
+            continue
+        member_appids = _ordered_unique_numeric(family.get("base_appids"))
+        if not member_appids or not scope_appids.intersection(member_appids):
+            continue
+        package_key = str(family.get("taste_subject_key") or "")
+        package_title = str(family.get("primary_title") or "").strip()
+        family_id = str(family.get("family_id") or "")
+        if not package_key.startswith("Sub_") or not package_title or not family_id:
+            raise ValueError("canonical franchise bundle identity is incomplete")
+
+        members = []
+        for appid in member_appids:
+            title = title_by_appid.get(appid)
+            if not title:
+                raise ValueError(f"canonical package member title unresolved for {package_key} appid {appid}")
+            members.append({
+                "appid": appid,
+                "title": title,
+                "dossier_key": f"App_{appid}",
+                "dossier_path": dossier_path(contract["paths"]["dossier_store_dir"], appid).as_posix(),
+            })
+
+        mappings.append({
+            "offer_identity": {
+                "key": package_key,
+                "family_id": family_id,
+                "title": package_title,
+                "source_row_appid": None,
+            },
+            "member_count": len(members),
+            "member_appids": member_appids,
+            "members": members,
+            "aggregation_semantics": "per_game_dossier_reuse_by_appid",
+        })
+
+    mapping_sha = canonical_sha256(mappings)
+    manifest["package_member_mapping_count"] = len(mappings)
+    manifest["package_member_mapping_sha256"] = mapping_sha
+    manifest["package_member_mappings"] = mappings
+    snapshot_id = canonical_sha256({
+        "prepared_for_date": manifest["prepared_for_date"],
+        "source_queue_sha256": manifest["source_queue_sha256"],
+        "eligible_scope_sha256": manifest["eligible_scope_sha256"],
+        "identity_blocked_sha256": manifest["identity_blocked_sha256"],
+        "package_member_mapping_sha256": mapping_sha,
+        "prepared_required_sha256": manifest["prepared_required_sha256"],
+        "ttl_days": manifest["ttl_days"],
+    })
+    manifest["snapshot_id"] = snapshot_id
+    checkpoint_size = int(contract["checkpointing"]["checkpoint_size"])
+    manifest["submission_group_plan"] = build_submission_group_plan(
+        snapshot_id=snapshot_id,
+        prepared_required_sha256=manifest["prepared_required_sha256"],
+        prepared_required_items=manifest["prepared_required_items"],
+        checkpoint_size=checkpoint_size,
+        scope_source=manifest["scope_source"],
+        source_queue_sha256=manifest["source_queue_sha256"],
+    )
+    manifest.update(progress_fields(
+        snapshot_id,
+        manifest["prepared_required_items"],
+        list(manifest["prepared_required_items"]),
+        checkpoint_size,
+    ))
+    validate_manifest(manifest, contract)
+    return manifest
+
+
 def build_or_preserve_daily_work(
     *,
     contract,
     queue_path,
     store_dir,
     output_path,
+    family_graph_path=None,
     ttl_days=None,
     now=None,
 ):
@@ -84,6 +189,9 @@ def build_or_preserve_daily_work(
         ttl_days=ttl_days,
         source_queue_path=queue_path,
     )
+    if family_graph_path is not None:
+        family_graph = json.loads(Path(family_graph_path).read_text(encoding="utf-8"))
+        manifest = bind_package_member_mappings(manifest, contract, family_graph)
     return manifest, {
         "mode": "built_new_daily_snapshot",
         "group_plan_added": True,
@@ -107,6 +215,7 @@ def main():
     parser = argparse.ArgumentParser(description="Build or preserve one complete fixed daily web-evidence dossier backlog snapshot")
     parser.add_argument("--contract", default="config/taste_steam_review_dossier_contract.json")
     parser.add_argument("--queue", default="data/production/pre_ai/chatgpt_taste_queue.jsonl")
+    parser.add_argument("--family-graph", default="data/production/pre_ai/family_graph.json")
     parser.add_argument("--store-dir", default="data/cache/taste_steam_review_dossiers")
     parser.add_argument("--output", default="data/production/pre_ai/taste_steam_review_dossier_work.json")
     parser.add_argument("--ttl-days", type=int)
@@ -116,6 +225,7 @@ def main():
     manifest, transition = build_or_preserve_daily_work(
         contract=contract,
         queue_path=args.queue,
+        family_graph_path=args.family_graph,
         store_dir=args.store_dir,
         output_path=args.output,
         ttl_days=args.ttl_days,
@@ -139,6 +249,7 @@ def main():
         "current_checkpoint_count": manifest["current_checkpoint_count"],
         "remaining_required_count": manifest["remaining_required_count"],
         "full_backlog_complete": manifest["full_backlog_complete"],
+        "package_member_mapping_count": manifest["package_member_mapping_count"],
         "worker_index_path": projection["index_path"],
         "worker_descriptor_count": projection["descriptor_count"],
         "worker_canonical_expected_sequence": projection["index"]["canonical_expected_sequence"],
