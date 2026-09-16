@@ -1,14 +1,14 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "schema_version": 2,
-  "appid": "1018800",
-  "title": "DEEEER Simulator: Your Average Everyday Deer Game",
+  "appid": "2378500",
+  "title": "Baldur's Gate 3 - Digital Deluxe Edition DLC",
   "generated_at_utc": "2026-09-16T13:33:00Z",
   "expires_at_utc": "2026-10-06T13:33:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "DEEEER Simulator: Your Average Everyday Deer Game",
-    "release_year": 2021,
+    "work_title": "Baldur's Gate 3 - Digital Deluxe Edition DLC",
+    "release_year": 2023,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "identity"
@@ -16,29 +16,29 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1018800"
+        "value": "2378500"
       }
     ]
   },
-  "summary": "Players generally respond positively to the deliberately absurd physics, destruction sandbox and short-form comedy. Russian-language Steam feedback is strongly positive, broadly matching the positive English-language aggregate.",
+  "summary": "Steam user feedback is overwhelmingly positive for this DLC; the product is explicitly additional content requiring the base game. Russian-language Steam feedback is also overwhelmingly positive, while the page confirms Russian interface/subtitles support.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Players generally respond positively to the deliberately absurd physics, destruction sandbox and short-form comedy.",
+      "category": "other",
+      "statement": "Steam user feedback is overwhelmingly positive for this DLC; the product is explicitly additional content requiring the base game.",
       "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
-        "non_russian"
+        "russian"
       ],
-      "evidence_status": "durable",
+      "evidence_status": "current",
       "source_ids": [
-        "community"
+        "steam_ru"
       ]
     },
     {
       "category": "localization",
-      "statement": "Russian-language Steam feedback is strongly positive, broadly matching the positive English-language aggregate.",
+      "statement": "Russian-language Steam feedback is also overwhelmingly positive, while the page confirms Russian interface/subtitles support.",
       "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
@@ -55,8 +55,8 @@
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "multi_source",
-    "single_source_reason": null,
+    "source_mix_status": "single_source_only",
+    "single_source_reason": "Only the Steam user-review surface yielded sufficiently attributable player feedback within bounded research.",
     "russian_attempt": "found_and_used",
     "overall_strength": "moderate",
     "stop_reason": "evidence_stable"
@@ -67,7 +67,7 @@
         "source_id": "identity",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1018800/Simulyator_OLEEEENYA_DEEEER_Simulator/",
+        "url": "https://store.steampowered.com/app/2378500/",
         "publication_date": null,
         "language": "non_russian",
         "freshness": "recent",
@@ -78,22 +78,11 @@
         "source_id": "steam_ru",
         "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1018800/DEEEER_Simulator/?l=russian",
+        "url": "https://store.steampowered.com/app/2378500/Baldurs_Gate_3/?l=russian",
         "publication_date": null,
         "language": "russian",
         "freshness": "recent",
         "evidence_role": "current_state",
-        "player_feedback": true
-      },
-      {
-        "source_id": "community",
-        "source_type": "steam_community",
-        "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1018800/reviews/",
-        "publication_date": null,
-        "language": "non_russian",
-        "freshness": "older",
-        "evidence_role": "durable_trait",
         "player_feedback": true
       }
     ]

@@ -1,72 +1,101 @@
 {
-  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
-  "schema_version": 1,
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
   "appid": "10150",
   "title": "Prototype™",
-  "generated_at_utc": "2026-09-14T04:40:44+00:00",
-  "expires_at_utc": "2026-10-04T04:40:44+00:00",
+  "generated_at_utc": "2026-09-16T13:33:00Z",
+  "expires_at_utc": "2026-10-06T13:33:00Z",
   "ttl_days": 20,
-  "summary": "Open-world action game focused on aggressive shape-shifting combat and unusually free traversal across the city. Reviews continue to praise movement and power fantasy, but the PC version has recurring technical compatibility and stability complaints, often accompanied by community-fix recommendations.",
-  "observations": [
-    {
-      "category": "mechanics",
-      "statement": "Recent reviews repeatedly praise the freedom of movement, traversal and shape-shifting combat as the game's strongest enduring qualities.",
-      "sentiment": "positive",
-      "recurrence": "moderate",
-      "mention_count": 3,
-      "evidence_languages": [
-        "store_and_reviews"
-      ]
-    },
-    {
-      "category": "friction",
-      "statement": "Multiple Steam reviews report PC-port stability or compatibility problems and point to community fixes or mods.",
-      "sentiment": "negative",
-      "recurrence": "moderate",
-      "mention_count": 3,
-      "evidence_languages": [
-        "non_russian"
-      ]
-    }
-  ],
-  "conflicts": [
-    {
-      "statement": "The core action is still widely enjoyed, but technical PC issues can materially affect the out-of-box experience.",
-      "recurrence": "moderate"
-    }
-  ],
-  "review_sample": {
-    "strategy": "adaptive_stability",
-    "sampled_russian": 0,
-    "sampled_non_russian": 6,
-    "sampled_total": 6,
-    "sample_ids_sha256": "5595ccbe6759e34264143d1b4c82b0002ce3ea3eb15e66070336f34ddd57f71b",
-    "lanes": [
+  "game_identity": {
+    "work_title": "Prototype™",
+    "release_year": 2009,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "identity"
+    ],
+    "corroborators": [
       {
-        "language_scope": "russian",
-        "sampled": 0,
-        "batches": 1,
-        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
-      },
-      {
-        "language_scope": "non_russian",
-        "sampled": 6,
-        "batches": 1,
-        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+        "kind": "appid",
+        "value": "10150"
       }
     ]
   },
-  "provenance": {
-    "store_description": {
-      "url": "https://store.steampowered.com/app/10150/",
-      "captured_at_utc": "2026-09-14T04:40:44+00:00",
-      "content_sha256": "0491a1af93d73fce5248ca07479dd3b68dbb3566191955b819e95d4d00b5f2a6"
+  "summary": "Players commonly highlight fast traversal, shape-shifting powers and destructive open-world movement as the durable core appeal. Russian-language Steam feedback is strongly positive; the Steam listing itself does not provide Russian localization support.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Players commonly highlight fast traversal, shape-shifting powers and destructive open-world movement as the durable core appeal.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "community"
+      ]
     },
-    "steam_reviews": {
-      "url": "https://store.steampowered.com/app/10150/#app_reviews_hash",
-      "captured_at_utc": "2026-09-14T04:40:44+00:00",
-      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
-      "source_refs_sha256": "5595ccbe6759e34264143d1b4c82b0002ce3ea3eb15e66070336f34ddd57f71b"
+    {
+      "category": "localization",
+      "statement": "Russian-language Steam feedback is strongly positive; the Steam listing itself does not provide Russian localization support.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "steam_ru"
+      ]
     }
+  ],
+  "conflicts": [],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable"
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "identity",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/10150/Prototype",
+        "publication_date": null,
+        "language": "non_russian",
+        "freshness": "recent",
+        "evidence_role": "identity",
+        "player_feedback": false
+      },
+      {
+        "source_id": "steam_ru",
+        "source_type": "steam_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/10150/Prototype/get?l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "freshness": "recent",
+        "evidence_role": "current_state",
+        "player_feedback": true
+      },
+      {
+        "source_id": "community",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/patientgamers/comments/16dfagx",
+        "publication_date": null,
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "durable_trait",
+        "player_feedback": true
+      }
+    ]
   }
 }

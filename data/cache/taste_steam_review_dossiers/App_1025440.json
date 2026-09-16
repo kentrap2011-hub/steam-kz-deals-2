@@ -1,14 +1,14 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "schema_version": 2,
-  "appid": "1015940",
-  "title": "Welcome to Elk",
+  "appid": "1025440",
+  "title": "Fantasy General II",
   "generated_at_utc": "2026-09-16T13:33:00Z",
   "expires_at_utc": "2026-10-06T13:33:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Welcome to Elk",
-    "release_year": 2020,
+    "work_title": "Fantasy General II",
+    "release_year": 2019,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "identity"
@@ -16,15 +16,15 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1015940"
+        "value": "1025440"
       }
     ]
   },
-  "summary": "Player feedback emphasizes the short, story-led experience, distinctive art direction and emotional mix of humor and dark true-story material. A Russian-language evidence attempt found the Russian Steam storefront, but the product explicitly does not support Russian and usable Russian player feedback was insufficient.",
+  "summary": "Player feedback is broadly positive around turn-based tactical combat, unit progression and campaign strategy. Russian is supported for the interface and Russian-language Steam feedback is available; older community discussion records disagreement about translation quality.",
   "observations": [
     {
-      "category": "structure",
-      "statement": "Player feedback emphasizes the short, story-led experience, distinctive art direction and emotional mix of humor and dark true-story material.",
+      "category": "mechanics",
+      "statement": "Player feedback is broadly positive around turn-based tactical combat, unit progression and campaign strategy.",
       "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
@@ -35,6 +35,20 @@
       "source_ids": [
         "community"
       ]
+    },
+    {
+      "category": "localization",
+      "statement": "Russian is supported for the interface and Russian-language Steam feedback is available; older community discussion records disagreement about translation quality.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "steam_ru"
+      ]
     }
   ],
   "conflicts": [],
@@ -43,7 +57,7 @@
     "research_state": "sufficient",
     "source_mix_status": "multi_source",
     "single_source_reason": null,
-    "russian_attempt": "searched_not_found_or_insufficient",
+    "russian_attempt": "found_and_used",
     "overall_strength": "moderate",
     "stop_reason": "evidence_stable"
   },
@@ -53,7 +67,7 @@
         "source_id": "identity",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1015940/Welcome_To_Elk/",
+        "url": "https://store.steampowered.com/app/1025440/",
         "publication_date": null,
         "language": "non_russian",
         "freshness": "recent",
@@ -64,7 +78,7 @@
         "source_id": "steam_ru",
         "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1015940?l=russian",
+        "url": "https://store.steampowered.com/app/1025440/?l=russian",
         "publication_date": null,
         "language": "russian",
         "freshness": "recent",
@@ -75,7 +89,7 @@
         "source_id": "community",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/IndieGaming/comments/kgtkya",
+        "url": "https://www.reddit.com/r/FreeGameFindings/comments/1lwhzfm",
         "publication_date": null,
         "language": "non_russian",
         "freshness": "older",

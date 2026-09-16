@@ -1,1 +1,101 @@
-{"schema":"TASTE-STEAM-REVIEW-DOSSIER-V1","schema_version":1,"appid":"1029690","title":"Sniper Elite 5","generated_at_utc":"2026-09-12T20:51:01+00:00","expires_at_utc":"2026-10-02T20:51:01+00:00","ttl_days":20,"summary":"World War II stealth-action shooter centered on long-range sniping, large infiltration maps and flexible objectives, with co-op and more direct combat options alongside the sniper systems.","observations":[{"category":"structure","statement":"Reviews support the large-map infiltration structure and broad freedom to approach objectives with stealth, sniping or more direct action.","sentiment":"positive","recurrence":"moderate","mention_count":3,"evidence_languages":["non_russian"]},{"category":"mechanics","statement":"Some veteran feedback describes the game as leaning more toward general commando-style action and making sniping easier than earlier entries.","sentiment":"mixed","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"]},{"category":"pacing","statement":"At least one reviewed comparison found the campaign's later levels and story less compelling than its stronger opening missions.","sentiment":"mixed","recurrence":"anecdotal","mention_count":1,"evidence_languages":["non_russian"]}],"conflicts":[{"statement":"Players can value the broader, more flexible action sandbox while series veterans may prefer the tighter sniping emphasis of earlier entries.","recurrence":"limited"}],"review_sample":{"strategy":"adaptive_stability","sampled_russian":1,"sampled_non_russian":4,"sampled_total":5,"sample_ids_sha256":"c82852fddaffd54daf2aaec2eb4c9cc733dfa56745f814bc52efb80668924f6d","lanes":[{"language_scope":"russian","sampled":1,"batches":1,"stop_reason":"source_sparse_in_accessible_steam_review_index"},{"language_scope":"non_russian","sampled":4,"batches":1,"stop_reason":"source_sparse_in_accessible_steam_review_index"}]},"provenance":{"store_description":{"url":"https://store.steampowered.com/app/1029690/","captured_at_utc":"2026-09-12T20:51:01+00:00","content_sha256":"b8a567d97cdd686a8ffc1bf00ec9e837b3b31302a252cf2faa355e7cdf77c76c"},"steam_reviews":{"url":"https://store.steampowered.com/app/1029690/#app_reviews_hash","captured_at_utc":"2026-09-12T20:51:01+00:00","query":"Steam Community review pages; Russian and non-Russian lanes attempted; accessible index was sparse","source_refs_sha256":"c82852fddaffd54daf2aaec2eb4c9cc733dfa56745f814bc52efb80668924f6d"}}}
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "appid": "1029690",
+  "title": "Sniper Elite 5",
+  "generated_at_utc": "2026-09-16T13:33:00Z",
+  "expires_at_utc": "2026-10-06T13:33:00Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Sniper Elite 5",
+    "release_year": 2022,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "identity"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1029690"
+      }
+    ]
+  },
+  "summary": "Players generally praise the large stealth/sniping sandboxes and flexible mission approach, with some complaints about AI behavior and movement friction. Russian-language Steam feedback is strongly positive and consistent with the current all-language positive trend.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Players generally praise the large stealth/sniping sandboxes and flexible mission approach, with some complaints about AI behavior and movement friction.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "community"
+      ]
+    },
+    {
+      "category": "localization",
+      "statement": "Russian-language Steam feedback is strongly positive and consistent with the current all-language positive trend.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "steam_ru"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable"
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "identity",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1029690/5/?l=german",
+        "publication_date": null,
+        "language": "non_russian",
+        "freshness": "recent",
+        "evidence_role": "identity",
+        "player_feedback": false
+      },
+      {
+        "source_id": "steam_ru",
+        "source_type": "steam_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1029690?l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "freshness": "recent",
+        "evidence_role": "current_state",
+        "player_feedback": true
+      },
+      {
+        "source_id": "community",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/XboxGamePass/comments/uzkeyo",
+        "publication_date": null,
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "durable_trait",
+        "player_feedback": true
+      }
+    ]
+  }
+}

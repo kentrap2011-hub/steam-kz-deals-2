@@ -1,14 +1,14 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "schema_version": 2,
-  "appid": "1015940",
-  "title": "Welcome to Elk",
+  "appid": "1000360",
+  "title": "Hellish Quart",
   "generated_at_utc": "2026-09-16T13:33:00Z",
   "expires_at_utc": "2026-10-06T13:33:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Welcome to Elk",
-    "release_year": 2020,
+    "work_title": "Hellish Quart",
+    "release_year": 2021,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "identity"
@@ -16,15 +16,15 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1015940"
+        "value": "1000360"
       }
     ]
   },
-  "summary": "Player feedback emphasizes the short, story-led experience, distinctive art direction and emotional mix of humor and dark true-story material. A Russian-language evidence attempt found the Russian Steam storefront, but the product explicitly does not support Russian and usable Russian player feedback was insufficient.",
+  "summary": "Player feedback centers on the physics-driven, realistic sword-dueling system and its distinctive one-clean-hit lethality. Russian Steam feedback is strongly positive even though the store lists Russian as unsupported for the game interface.",
   "observations": [
     {
-      "category": "structure",
-      "statement": "Player feedback emphasizes the short, story-led experience, distinctive art direction and emotional mix of humor and dark true-story material.",
+      "category": "mechanics",
+      "statement": "Player feedback centers on the physics-driven, realistic sword-dueling system and its distinctive one-clean-hit lethality.",
       "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
@@ -35,6 +35,20 @@
       "source_ids": [
         "community"
       ]
+    },
+    {
+      "category": "localization",
+      "statement": "Russian Steam feedback is strongly positive even though the store lists Russian as unsupported for the game interface.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "steam_ru"
+      ]
     }
   ],
   "conflicts": [],
@@ -43,7 +57,7 @@
     "research_state": "sufficient",
     "source_mix_status": "multi_source",
     "single_source_reason": null,
-    "russian_attempt": "searched_not_found_or_insufficient",
+    "russian_attempt": "found_and_used",
     "overall_strength": "moderate",
     "stop_reason": "evidence_stable"
   },
@@ -53,7 +67,7 @@
         "source_id": "identity",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1015940/Welcome_To_Elk/",
+        "url": "https://store.steampowered.com/app/1000360/",
         "publication_date": null,
         "language": "non_russian",
         "freshness": "recent",
@@ -64,7 +78,7 @@
         "source_id": "steam_ru",
         "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1015940?l=russian",
+        "url": "https://store.steampowered.com/app/1000360Hellish?l=russian",
         "publication_date": null,
         "language": "russian",
         "freshness": "recent",
@@ -75,7 +89,7 @@
         "source_id": "community",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/IndieGaming/comments/kgtkya",
+        "url": "https://www.reddit.com/r/Games/comments/ks8uno",
         "publication_date": null,
         "language": "non_russian",
         "freshness": "older",

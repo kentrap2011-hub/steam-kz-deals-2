@@ -1,14 +1,14 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "schema_version": 2,
-  "appid": "1015940",
-  "title": "Welcome to Elk",
+  "appid": "1003890",
+  "title": "Blacksad: Under the Skin",
   "generated_at_utc": "2026-09-16T13:33:00Z",
   "expires_at_utc": "2026-10-06T13:33:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Welcome to Elk",
-    "release_year": 2020,
+    "work_title": "Blacksad: Under the Skin",
+    "release_year": 2019,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "identity"
@@ -16,16 +16,16 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1015940"
+        "value": "1003890"
       }
     ]
   },
-  "summary": "Player feedback emphasizes the short, story-led experience, distinctive art direction and emotional mix of humor and dark true-story material. A Russian-language evidence attempt found the Russian Steam storefront, but the product explicitly does not support Russian and usable Russian player feedback was insufficient.",
+  "summary": "Players value the noir detective story and comic-inspired atmosphere, but technical roughness remains a recurring friction point. Russian Steam feedback is substantially more positive than the English-language aggregate, despite recent all-language reviews being mixed.",
   "observations": [
     {
       "category": "structure",
-      "statement": "Player feedback emphasizes the short, story-led experience, distinctive art direction and emotional mix of humor and dark true-story material.",
-      "sentiment": "positive",
+      "statement": "Players value the noir detective story and comic-inspired atmosphere, but technical roughness remains a recurring friction point.",
+      "sentiment": "mixed",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
@@ -35,6 +35,20 @@
       "source_ids": [
         "community"
       ]
+    },
+    {
+      "category": "localization",
+      "statement": "Russian Steam feedback is substantially more positive than the English-language aggregate, despite recent all-language reviews being mixed.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "steam_ru"
+      ]
     }
   ],
   "conflicts": [],
@@ -43,7 +57,7 @@
     "research_state": "sufficient",
     "source_mix_status": "multi_source",
     "single_source_reason": null,
-    "russian_attempt": "searched_not_found_or_insufficient",
+    "russian_attempt": "found_and_used",
     "overall_strength": "moderate",
     "stop_reason": "evidence_stable"
   },
@@ -53,7 +67,7 @@
         "source_id": "identity",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1015940/Welcome_To_Elk/",
+        "url": "https://store.steampowered.com/app/1003890/Blacksad__Under_the_Skin/",
         "publication_date": null,
         "language": "non_russian",
         "freshness": "recent",
@@ -64,7 +78,7 @@
         "source_id": "steam_ru",
         "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1015940?l=russian",
+        "url": "https://store.steampowered.com/app/1003890/Blacksad_Under_the_Skin/?curator_clanid=35076420&l=russian",
         "publication_date": null,
         "language": "russian",
         "freshness": "recent",
@@ -73,9 +87,9 @@
       },
       {
         "source_id": "community",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/IndieGaming/comments/kgtkya",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1003890/discussions/0/3368153731099552345/",
         "publication_date": null,
         "language": "non_russian",
         "freshness": "older",
