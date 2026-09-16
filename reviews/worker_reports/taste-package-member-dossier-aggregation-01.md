@@ -2,7 +2,7 @@
 
 Task: `WORKER_TASK_TASTE_PACKAGE_MEMBER_DOSSIER_AGGREGATION_01.md`  
 Mode: `IMPLEMENT_AND_VALIDATE`  
-Status: `complete_ready_for_director_review`  
+Status: `complete_ready_for_activation`  
 Repository: `kentrap2011-hub/steam-kz-deals-2`  
 Source of truth: `main`  
 Correction target: open PR `#31`  
