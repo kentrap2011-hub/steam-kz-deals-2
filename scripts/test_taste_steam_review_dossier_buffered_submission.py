@@ -27,6 +27,7 @@ from taste_steam_review_dossier_web import (
 ROOT = Path(__file__).resolve().parents[1]
 BASE_CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
 NOW = datetime(2026, 9, 14, 12, 0, tzinfo=timezone.utc)
+GROUP_SIZE = int(BASE_CONTRACT["checkpointing"]["checkpoint_size"])
 
 
 def queue(appids):
@@ -93,13 +94,14 @@ def advance(work, contract, store_dir, groups):
 
 
 class BufferedSubmissionTests(unittest.TestCase):
-    def test_deterministic_group_plan_25_is_10_10_5_and_identity_survives_progress(self):
+    def test_deterministic_group_plan_25_is_groups_of_three_plus_tail_and_identity_survives_progress(self):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
             store = Path(td) / "store"
             work = build_daily_work_manifest_web(queue(range(100000, 100025)), contract, store, now=NOW)
             plan_before = copy.deepcopy(work["submission_group_plan"])
-            self.assertEqual([len(g["items"]) for g in plan_before["groups"]], [10, 10, 5])
+            self.assertEqual(GROUP_SIZE, 3)
+            self.assertEqual([len(g["items"]) for g in plan_before["groups"]], [3] * 8 + [1])
             progressed = advance(work, contract, store, 1)
             self.assertEqual(progressed["submission_group_plan"], plan_before)
             self.assertEqual(expected_group_sequence(progressed, contract), 2)
@@ -133,7 +135,7 @@ class BufferedSubmissionTests(unittest.TestCase):
             self.assertFalse(p4.exists())
             self.assertFalse(p5.exists())
             self.assertTrue(p7.exists())
-            self.assertEqual(json.loads(manifest_path.read_text())["completed_required_count"], 50)
+            self.assertEqual(json.loads(manifest_path.read_text())["completed_required_count"], GROUP_SIZE * 5)
 
     def test_invalid_expected_group_blocks_later_groups(self):
         with tempfile.TemporaryDirectory() as td:
@@ -181,13 +183,13 @@ class BufferedSubmissionTests(unittest.TestCase):
             replay = plan_buffered_drain(current, contract, contract["paths"]["submission_inbox_dir"])
             self.assertEqual(replay["accepted_count"], 0)
             self.assertEqual(replay["stop_sequence"], 2)
-            self.assertEqual(replay["next_manifest"]["completed_required_count"], 10)
+            self.assertEqual(replay["next_manifest"]["completed_required_count"], GROUP_SIZE)
 
     def test_atomic_multi_group_apply_and_restart_before_apply(self):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
             store = Path(td) / "store"
-            work = build_daily_work_manifest_web(queue(range(170000, 170025)), contract, store, now=NOW)
+            work = build_daily_work_manifest_web(queue(range(170000, 170009)), contract, store, now=NOW)
             for sequence in (1, 2, 3):
                 write_group(work, contract, sequence)
             manifest_path = Path(td) / "work.json"
@@ -221,10 +223,10 @@ class BufferedSubmissionTests(unittest.TestCase):
             sid = legacy["snapshot_id"]
             migrated = ensure_submission_group_plan(legacy, contract)
             self.assertEqual(migrated["snapshot_id"], sid)
-            self.assertEqual(migrated["completed_required_count"], 20)
+            self.assertEqual(migrated["completed_required_count"], GROUP_SIZE * 2)
             broken = copy.deepcopy(legacy)
-            broken["remaining_required_items"] = broken["prepared_required_items"][15:]
-            broken.update(progress_fields(broken["snapshot_id"], broken["prepared_required_items"], broken["remaining_required_items"], 10))
+            broken["remaining_required_items"] = broken["prepared_required_items"][5:]
+            broken.update(progress_fields(broken["snapshot_id"], broken["prepared_required_items"], broken["remaining_required_items"], GROUP_SIZE))
             with self.assertRaises(ValueError):
                 ensure_submission_group_plan(broken, contract)
 
