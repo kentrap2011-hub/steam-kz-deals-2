@@ -157,7 +157,7 @@ class PackageMemberDossierAggregationTests(unittest.TestCase):
         self.assertEqual(len({item["dossier_path"] for item in manifest["prepared_required_items"]}), 2)
         self.assertEqual(
             manifest["package_member_mappings"][0]["members"][0]["dossier_path"],
-            (Path(CONTRACT["paths"]["dossier_store"]) / "App_304240.json").as_posix(),
+            (Path(CONTRACT["paths"]["dossier_store_dir"]) / "App_304240.json").as_posix(),
         )
         descriptor_items = [item for descriptor in descriptors for item in descriptor["items"]]
         self.assertEqual([(item["appid"], item["title"]) for item in descriptor_items], [
@@ -198,7 +198,6 @@ class PackageMemberDossierAggregationTests(unittest.TestCase):
         })
         self.assertNotIn("average", aggregate)
 
-        # Unknown second member must not negate a known qualifying member.
         taste["App_339340"] = {"status": "ai_required"}
         aggregate_unknown = aggregate_package_member_taste(families[2], taste, index)
         self.assertTrue(aggregate_unknown["package_taste_eligible"])
