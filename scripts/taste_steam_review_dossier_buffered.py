@@ -11,6 +11,10 @@ import re
 from pathlib import Path
 
 from taste_steam_review_dossier import atomic_write_json, canonical_sha256, dossier_path
+from taste_steam_review_dossier_compact_provenance import (
+    load_compact_provenance_policy,
+    validate_compact_provenance,
+)
 from taste_steam_review_dossier_daily import (
     BUFFER_GROUP_SCHEMA,
     expected_group_sequence,
@@ -65,12 +69,16 @@ def validate_buffer_artifact(artifact, descriptor, manifest, contract):
     actual_appids = [str(doc.get("appid") or "") if isinstance(doc, dict) else "" for doc in docs]
     if actual_appids != descriptor["appids"] or len(actual_appids) != len(set(actual_appids)):
         raise ValueError("buffered dossier group dossiers must exactly cover planned appids in order")
-    return validate_dossiers_against_expected_items(
+    docs = validate_dossiers_against_expected_items(
         docs,
         descriptor["items"],
         contract,
         expected_ttl_days=manifest["ttl_days"],
     )
+    compact_policy = load_compact_provenance_policy()
+    for doc in docs:
+        validate_compact_provenance(doc, compact_policy)
+    return docs
 
 
 def _current_snapshot_candidates(buffer_dir, snapshot_id):
