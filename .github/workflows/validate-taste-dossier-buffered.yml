@@ -17,6 +17,8 @@ on:
       - "scripts/taste_steam_review_dossier_recovery.py"
       - "scripts/taste_steam_review_dossier_worker_projection.py"
       - "scripts/taste_steam_review_dossier_test_fixture.py"
+      - "scripts/taste_package_member_aggregation.py"
+      - "scripts/build_pre_ai_chatgpt_payload.py"
       - "scripts/build_taste_steam_review_dossier_work.py"
       - "scripts/ingest_taste_steam_review_dossiers.py"
       - "scripts/ingest_taste_steam_review_dossier_inbox.py"
@@ -43,9 +45,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run fixed-snapshot web-evidence strict-schema recovery and reconciliation regressions
+      - name: Run fixed-snapshot web-evidence strict-schema recovery and package-member aggregation regressions
         run: |
           set -euo pipefail
+          python -m py_compile scripts/taste_package_member_aggregation.py scripts/build_pre_ai_chatgpt_payload.py scripts/taste_steam_review_dossier_web.py
           python scripts/test_taste_steam_review_dossier_daily_snapshot.py
           python scripts/test_taste_steam_review_dossier_buffered_submission.py
           python scripts/test_taste_steam_review_dossier_same_day_preservation.py
