@@ -204,9 +204,160 @@ This provides two important activation proofs. First, group size is actually 3 i
 
 The previous rejected live snapshot was `6e4f851cd4c9e6d6f5a6c265ba30b80ee0d338b6477401453111be06109c8f53`. The new snapshot has a different identity and starts from canonical progress 0. Activation reconciliation completed successfully without advancing the new snapshot, so no stale old-snapshot buffered artifact was accepted as progress for the new plan. The old snapshot identity is not present in the active main projection, and the current dossier inbox path contains no pending old transport artifact after activation.
 
+## Scope delta audit: 618 -> 591
+
+Follow-up audit result: `SAFE_EXPECTED_CANONICAL_SCOPE_DELTA`.
+
+The 27-game reduction is fully explained by the canonical upstream source/eligibility pipeline. It is not caused by dossier migration, the new evidence-contract binding, dossier cache/freshness logic, identity handling, deduplication, or the group-size change.
+
+### Dossier manifest boundary proves the delta already existed in the source queue
+
+Old fresh snapshot `6e4f851cd4c9e6d6f5a6c265ba30b80ee0d338b6477401453111be06109c8f53`, prepared at `2026-09-16T12:51:02Z`:
+
+- `source_queue_sha256`: `9260ea6c22621cc46b53eda894f1eafd7b398d0d290e861e34697d60b4b9757b`
+- `source_row_count`: `618`
+- `eligible_row_count`: `618`
+- `excluded_row_count`: `0`
+- `unique_appid_count`: `618`
+- `deduplicated_row_count`: `0`
+- `identity_blocked_count`: `0`
+- `prepared_required_count`: `618`
+
+Fresh activation snapshot `d45430762377a5de89ab2705585f5e6d6674af0a5b1882611e0852a376ef6973`, prepared at `2026-09-16T17:59:11Z`:
+
+- `source_queue_sha256`: `f69df37779c9b4c2c6eae5e075054098789c514e7d2cc5127d85620060ca7c50`
+- `source_row_count`: `591`
+- `eligible_row_count`: `591`
+- `excluded_row_count`: `0`
+- `unique_appid_count`: `591`
+- `deduplicated_row_count`: `0`
+- `identity_blocked_count`: `0`
+- `prepared_required_count`: `591`
+- `completed_required_count`: `0`
+
+Therefore no 27 rows entered the dossier builder and were then dropped. The input `chatgpt_taste_queue.jsonl` itself changed from 618 rows to 591 rows. The atomic activation commit records that queue file as `0 additions / 27 deletions`. Every row present in the new canonical queue was accepted into dossier scope and became required work.
+
+### Exact canonical decomposition
+
+The upstream ChatGPT consumer payload provides a complete arithmetic partition.
+
+Old canonical state:
+
+- `source_family_count = 655`
+- `deterministically_excluded_without_ai_count = 37`
+- therefore `ai_queue_count = 655 - 37 = 618`
+
+New canonical state:
+
+- `source_family_count = 638`
+- `deterministically_excluded_without_ai_count = 47`
+- therefore `ai_queue_count = 638 - 47 = 591`
+
+The delta is therefore exactly:
+
+- `-17` families removed before AI-queue construction because their paid offers became canonically inactive;
+- `-10` still-current families newly rejected by the existing deterministic deal gate;
+- total `-27`.
+
+No third category is required to reconcile the counts.
+
+### The 17 source-family removals are exact inactive paid offers
+
+The upstream mailing source itself did not shrink: both family-graph builds use the same `source_updated_at_utc = 2026-09-15T23:20:27.167463Z` and `source_item_count = 685`. `mechanically_excluded_count` also remains exactly `16`.
+
+The relevant change is the existing current-offer expiry guard:
+
+- old family graph: `inactive_paid_offer_count = 0`, `family_count = 655`;
+- new family graph: `inactive_paid_offer_count = 17`, `family_count = 638`.
+
+The new canonical `inactive_paid_offer_keys` are exactly:
+
+1. `App_1048540`
+2. `App_1070550`
+3. `App_1266840`
+4. `App_1271300`
+5. `App_1601970`
+6. `App_1949030`
+7. `App_2243110`
+8. `App_296490`
+9. `App_325120`
+10. `App_3382300`
+11. `App_481180`
+12. `App_589290`
+13. `App_604240`
+14. `App_611760`
+15. `App_615530`
+16. `App_679900`
+17. `App_750130`
+
+These rows were removed before family construction because the current build classified the known paid offer as inactive under the existing sale-end/current-offer guard. This is time-sensitive canonical source normalization, not dossier logic. The source mailing timestamp can remain unchanged while the active-offer set changes because a known sale end may pass between two pre-AI builds; the contract explicitly forbids reusing current-offer state past a known sale end.
+
+### The additional 10 are existing deterministic deal exclusions
+
+The second change occurs after family construction and before the Taste AI queue. The deterministic exclusion partition changed from:
+
+- old: `deal_excludes_even_if_strong = 36`, `package_member_taste_pending = 1`;
+- new: `deal_excludes_even_if_strong = 46`, `package_member_taste_pending = 1`.
+
+Thus exactly 10 additional current families became non-AI work because the precomputed deal scenarios exclude them even under the strongest Taste assumption. The exact newly excluded keys, obtained as the set difference between the old and new canonical `deterministically_excluded_primary_keys`, are:
+
+1. `App_1052990`
+2. `App_1472660`
+3. `App_1669420`
+4. `App_1669980`
+5. `App_1684350`
+6. `App_1766740`
+7. `App_2464530`
+8. `App_275390`
+9. `App_534550`
+10. `App_889910`
+
+The package-member pending bucket did not grow, so package-member migration/aggregation did not account for any part of the -27 delta.
+
+### Why the IMPLEMENT did not remove these games
+
+PR #35 changed only the dossier evidence/control-plane contract, worker prompt, dossier builder/validator, fixture, and dossier-specific regression tests. It did not change the upstream family-graph, Store/deal-scenario, or ChatGPT Taste queue selection implementation.
+
+The IMPLEMENT did have one indirect timing effect: because the prior same-day dossier snapshot had an incompatible evidence binding/group size, activation correctly rebuilt a fresh snapshot through the normal GitHub-owned pre-AI path instead of preserving the older 618-row snapshot. That normal rebuild consumed the then-current canonical upstream state. The rebuild therefore **observed** the 17 inactive offers and 10 deterministic deal exclusions; it did not create those eligibility decisions.
+
+### Migration, evidence binding and cache/freshness did not drop scope
+
+The evidence-contract migration deliberately makes incompatible old dossiers require rebuild/refresh. It does not make current canonical source rows disappear.
+
+The decisive invariants are:
+
+- old dossier manifest: `source_row_count = eligible_row_count = prepared_required_count = 618`;
+- new dossier manifest: `source_row_count = eligible_row_count = prepared_required_count = 591`;
+- both: `excluded_row_count = 0`, `deduplicated_row_count = 0`, `identity_blocked_count = 0`;
+- new snapshot: `completed_required_count = 0`.
+
+Thus the dossier layer neither filtered nor silently reused any of the 591 current queue games. Incompatible cached dossiers can only turn a current row into `refresh_required`; they cannot account for the 27 rows that are absent from the upstream queue.
+
+### Group size 3 cannot and did not change scope
+
+`checkpoint_size` is applied only after the immutable `prepared_required_items` list has been established. It partitions that fixed list into transport/durability groups and has no role in source-family selection, deal eligibility, dossier freshness, dedupe, or identity resolution.
+
+For the activated scope:
+
+`591 prepared items / 3 = 197 canonical groups`
+
+No remainder exists in this particular snapshot. Regression coverage separately proves non-divisible scopes retain every item and only change the final tail size (for example `7 -> 3 + 3 + 1`).
+
+Changing the group boundary from 10 to 3 therefore changes only group count/hash/transport layout. It cannot explain a change from 618 games to 591 games.
+
+### Final safety conclusion
+
+`618 -> 591` is safe and expected.
+
+The exact reconciliation is:
+
+`618 - 17 inactive paid offers - 10 deterministic deal exclusions = 591`
+
+All 27 removals are upstream canonical source/eligibility outcomes produced by the ordinary pre-AI rebuild. No current canonical Taste row was lost through dossier migration, evidence binding, cache/freshness handling, identity resolution, deduplication, or the new group size. The implementation therefore remains safe for final live acceptance with respect to this scope delta.
+
 ## Scheduled Task Run now
 
-No Scheduled Task Run now was started during IMPLEMENT, ACTIVATE or VALIDATE. The only activation execution was the ordinary GitHub `push`-triggered pre-AI build described above.
+No Scheduled Task Run now was started during IMPLEMENT, ACTIVATE, VALIDATE or this scope-delta follow-up. The only activation execution was the ordinary GitHub `push`-triggered pre-AI build described above.
 
 ## Residual risks / follow-up boundary
 
