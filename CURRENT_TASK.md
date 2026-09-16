@@ -274,14 +274,17 @@
 - START gate and architecture preflight completed against current `main` before runtime edits;
 - GitHub remains owner of package-member identity expansion, appid dossier dedupe, Taste-member aggregation and durable progress; dossier worker remains exact single-game research only; existing Taste Semantic Producer remains unchanged;
 - implementation rule under work: authoritative `semantic_condition.base_appids` expand a package into exact member-game dossiers, deduped globally by appid; package Taste eligibility is derived from the best qualifying independent member signal without averaging and without moving package-quality penalties into Taste;
-- DLC/non-game scope, ranking/package economics, UI, giveaway, duration and translation remain out of scope;
+- DLC/non-game scope, ranking/package economics, UI, giveaway, duration и translation remain out of scope;
 - no production workflow dispatch, Scheduled Task Run now/settings change, cache/receipt/queue rewrite, deploy or PR merge is permitted.
 
 ### Taste dossier prepublication validation + recovery implement 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_PREPUBLICATION_RECOVERY_IMPLEMENT_01.md`;
-- branch: `worker/taste-dossier-prepublication-recovery-implement-01`, implementation PR `#36`;
-- scope ограничен shared canonical pre-publication validation, compact-provenance privacy/content guard, GitHub-owned immutable-safe snapshot recovery и focused validation;
-- canonical group size остаётся `3`; evidence guard не ослабляется;
-- immutable published group artifacts, queue/cache/progress/receipts не правятся вручную;
-- Scheduled Task `Run now` запрещён до отдельной live acceptance после завершения этой задачи.
+- implementation PR `#36` merged to `main` as `3940fcf9de12519316938dbc723141023781aa05`;
+- canonical pre-publication entrypoint now calls the same `validate_buffer_artifact` implementation used by GitHub ingest; validation unavailable/failing means publish nothing and stop fail-closed;
+- compact provenance mechanically rejects usernames/display names/author attribution, profile-scoped URLs and review/post content-like refs; evidence guard remains intact;
+- PR validation run `35157709471`, job `105000977445`: success; focused prepublication suite `8/8` plus existing dossier/evidence/recovery/package regressions passed;
+- auto GitHub-owned activation/recovery run `35157755703`, job `105001126796`: success; fresh snapshot `adaccfbc4cd43faf4d7ea52e1a018adb66c785468959d5a6f8a64c1f8ade139d` created with progress `0/591`, expected group `1`, group size `3`;
+- three old immutable `d4543076…` group artifacts were moved by normal GitHub stale-snapshot quarantine as `100%` renames; no manual rewrite/delete/rename and no artificial progress advance;
+- Scheduled Task `Run now` was not launched; remaining boundary is one separate live acceptance of the existing task/runtime;
+- durable report: `reviews/worker_reports/taste-dossier-prepublication-recovery-implement-01.md`.

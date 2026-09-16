@@ -201,86 +201,27 @@ Production validator проверяет:
 
 ---
 
-## Русские описания / semantic translation contract
+## Taste Steam review dossier: prepublication validation and immutable-safe recovery
 
-**Что ищем:** каноническую границу между GitHub-owned unresolved scope и scheduled ChatGPT как constrained semantic translation worker.
+**Что ищем:** как worker проверяет полный buffered group до create-only публикации, где находится тот же canonical validator для GitHub ingest и как безопасно восстанавливать заблокированный snapshot без ручной правки immutable artifacts/progress.
 
-**Последняя проверка:** 2026-09-01
-
-**Канонические контракты:**
-- `config/russian_description_translation_contract.json` — scope, immutable request identity, runtime reuse, retry/completeness ownership и reserved artifact paths;
-- `config/russian_description_translation_result_contract.json` — translation-specific worker result schema и strict echo/quality rules;
-- `config/russian_description_translation_cache_entry_contract.json` — GitHub-owned cache-entry binding и invalidation;
-- ownership: `config/execution_ownership_contract.json`;
-- nightly cycle: `config/daily_execution_contract.json`.
+**Последняя проверка:** 2026-09-17.
 
 **Быстрая точка входа:**
-1. Сначала читать `config/russian_description_translation_contract.json`.
-2. Для worker output — `config/russian_description_translation_result_contract.json`.
-3. Для cache reuse/invalidation — `config/russian_description_translation_cache_entry_contract.json`.
-4. Contract consistency/regression — `scripts/validate_russian_description_translation_contract.py`.
-5. Финальный existing quality gate остаётся `scripts/validate_russian_descriptions.py`; классификация текста — `scripts/russian_description_quality.py`.
+1. `config/taste_steam_review_dossier_contract.json` — canonical control-plane/group contract; `checkpoint_size` остаётся `3`.
+2. `config/taste_steam_review_dossier_schema.json` + `config/taste_steam_review_dossier_web_evidence_contract.json` + `config/taste_steam_review_dossier_worker_prompt.md` — worker/evidence binding, compact provenance и обязательный publication guard.
+3. `scripts/taste_steam_review_dossier_prepublication.py` → `scripts/taste_steam_review_dossier_buffered.py::validate_buffer_artifact` — worker-side prepublication вызывает тот же canonical buffered validator, а не отдельный список правил.
+4. `scripts/taste_steam_review_dossier_strict.py` + `scripts/taste_steam_review_dossier_compact_provenance.py` — strict dossier/evidence validation и machine privacy/content guard для compact provenance.
+5. `scripts/build_taste_steam_review_dossier_work.py` — worker/evidence binding входит в snapshot identity; несовместимое binding требует normal GitHub-owned fresh snapshot даже в тот же день.
+6. `scripts/taste_steam_review_dossier_recovery.py` — same-snapshot invalid expected artifact recovery и stale-snapshot quarantine; progress вручную не продвигается.
+7. `.github/workflows/validate-taste-dossier-buffered.yml` — PR regression gate.
+8. `.github/workflows/build-pre-ai-store-snapshot.yml` — штатная activation/rebuild/reconcile/recovery после merge.
 
-**Ключевые инварианты:**
-- GitHub владеет exact current scope, queue/order, retry, completeness, validation, cache merge и downstream rebuild;
-- scheduled ChatGPT только переводит exact immutable requests; новые игры и retry loop не выбирает;
-- используется существующий nightly scheduled ChatGPT runtime; отдельный recurring translation schedule запрещён;
-- Taste-specific result schema не переиспользуется;
-- semantic scope ограничен `needs_translation` / `needs_ru_rewrite` с source quality `non_ru` / `weak_ru`;
-- identity: `App_<appid>` + SHA-256 нормализованного source text; source hash одновременно является version binding;
-- stale/mismatched/unknown/placeholder/technical/non-Russian result не попадает в cache и остаётся unresolved;
-- unchanged source не переводится заново без причины; current direct `ready_ru` source имеет приоритет над cache;
-- interactive chat не переводит production catalog item-by-item и не заполняет cache вручную.
+**Recovery-инварианты:**
+- опубликованный deterministic group нельзя overwrite/update/rename/delete через worker/chat;
+- invalid текущий expected artifact может быть quarantined только GitHub-owned recovery после canonical validator proof;
+- при новом snapshot старые snapshot artifacts становятся inert и уходят в stale quarantine штатным rebuild path;
+- очередь/cache/progress/receipts вручную не чинить;
+- prepublication validator недоступен Scheduled ChatGPT runtime → fail closed, publish nothing; не заменять код сокращённым hand-written checklist.
 
-**Reserved paths для следующего bounded IMPLEMENT:**
-- request work input: `data/production/pre_ai/chatgpt_ru_description_queue.jsonl`;
-- status manifest: `data/production/pre_ai/chatgpt_ru_description_status.json`;
-- runtime submissions: `data/ai_inbox/russian_descriptions/*.json`;
-- canonical cache: `data/cache/russian_description_translations.json`.
-
-**Текущее состояние:** contract/schema wiring завершён. Producer, runtime ingest и production cache population намеренно **не реализованы в этой contract-only задаче**; это следующий отдельный bounded IMPLEMENT согласно `WORKER_TASK_RU_TRANSLATION_CONTRACT_01.md`.
-
-
----
-
-## Taste V5 / evidence state and reconsideration
-
-**Что ищем:** price-blind distinction between `sufficient`, `insufficient`, `reconsiderable`, and `confirmed_negative` without invalidating reusable fit verdicts.
-
-**Канонические контракты:**
-- `config/mailing_policy.json -> taste_evidence_state`;
-- `config/taste_result_contract.json` (`TASTE-SEMANTIC-RESULT-V5`);
-- `config/taste_cache_entry_contract.json` (`TASTE-CACHE-ENTRY-BINDING-V5`);
-- `config/taste_ledger_contract.json` keeps the binary fit ledger as compatibility/eligibility only.
-
-**Быстрая точка входа:**
-1. `scripts/taste_evidence_contract.py` — state/confidence/history/candidate-quality validation + legacy compatibility.
-2. `scripts/taste_negative_contract.py` — V5 personal-negative provenance/strength; legacy V4 accepted only for migration.
-3. `scripts/ingest_taste_results.py` — GitHub stamps exact `evidence_contract_sha`; evidence-only backfill preserves fit semantics.
-4. `scripts/build_pre_ai_chatgpt_payload.py` — reuses `resolve_grounded_negative_analysis`; ambiguous legacy excludes are queued for evidence backfill before being interpreted as dislike.
-5. `scripts/refine_visual_ranking.py` — exact V5 state uses structured personal negatives; legacy free text remains only until backfill, preventing migration-time loss of real negatives.
-6. `scripts/test_taste_evidence_states.py` — Haven Moon / BioShock / HighFleet and evidence-boundary controls.
-
-**Архитектурный инвариант:** evidence-state binding is orthogonal to the existing fit semantic digest. No new scheduler, queue authority, ranking authority, wishlist override, or play-role logic is introduced.
-
-## Taste play-role / start-priority context
-
-- contract: `config/play_priority_context_contract.json`;
-- deterministic helper: `scripts/play_priority_context.py`;
-- focused controls/regression: `scripts/test_play_priority_context.py`;
-- canonical visual attachment: `scripts/build_final_visual_payload.py`;
-- compact diagnostics: `scripts/build_ranking_lookup.py`;
-- focused regression: `scripts/test_play_priority_context.py`; existing recurring workflows/schedulers remain unchanged;
-- semantics: role/start are separate from fit, wishlist and sale urgency; no second ranker/sorter; `confirmed_negative` cannot receive high start priority.
-
-## Taste reconsideration / wishlist commercial bridge
-
-- canonical policy: `config/mailing_policy.json -> commercial_reconsideration_bridge`;
-- implementation contract alignment: `config/deal_quality_contract.json`;
-- deterministic helper: `scripts/commercial_reconsideration_bridge.py`;
-- first eligibility application: `scripts/build_pre_ai_chatgpt_payload.py` cache-hit EXCLUDE boundary;
-- visual revalidation: `scripts/build_visual_feed_v2.py` without fake promotion to moderate;
-- final downstream revalidation: `scripts/refine_visual_ranking.py` + `scripts/build_final_visual_payload.py` preserve the explicit bridge through final fit/commercial recheck;
-- fixed package source: existing `scripts/apply_fixed_package_purchase_options.py` economics and exact/verified purchase-equivalence rules;
-- focused regression: `scripts/test_reconsideration_commercial_bridge.py`;
-- no new scheduler, ranker, giveaway path, discount threshold, or Taste evaluator.
+**Проверенный production recovery:** implementation PR `#36` → merge `3940fcf9de12519316938dbc723141023781aa05`; auto pre-AI run `35157755703` / job `105001126796` создал fresh snapshot `adaccfbc4cd43faf4d7ea52e1a018adb66c785468959d5a6f8a64c1f8ade139d`, сохранил progress `0/591`, group size `3` и GitHub-owned перенёс три старых `d4543076…` artifacts в `data/quarantine/taste_steam_review_dossier_inbox/stale/d4543076…/`.
