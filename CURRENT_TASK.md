@@ -1,6 +1,6 @@
 # CURRENT TASK
 
-Последнее обновление: 2026-09-16
+Последнее обновление: 2026-09-17
 
 ## Завершено
 
@@ -276,3 +276,12 @@
 - implementation rule under work: authoritative `semantic_condition.base_appids` expand a package into exact member-game dossiers, deduped globally by appid; package Taste eligibility is derived from the best qualifying independent member signal without averaging and without moving package-quality penalties into Taste;
 - DLC/non-game scope, ranking/package economics, UI, giveaway, duration and translation remain out of scope;
 - no production workflow dispatch, Scheduled Task Run now/settings change, cache/receipt/queue rewrite, deploy or PR merge is permitted.
+
+### Taste dossier prepublication validation + recovery implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_PREPUBLICATION_RECOVERY_IMPLEMENT_01.md`;
+- branch: `worker/taste-dossier-prepublication-recovery-implement-01`, implementation PR `#36`;
+- scope ограничен shared canonical pre-publication validation, compact-provenance privacy/content guard, GitHub-owned immutable-safe snapshot recovery и focused validation;
+- canonical group size остаётся `3`; evidence guard не ослабляется;
+- immutable published group artifacts, queue/cache/progress/receipts не правятся вручную;
+- Scheduled Task `Run now` запрещён до отдельной live acceptance после завершения этой задачи.
