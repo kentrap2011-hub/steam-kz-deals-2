@@ -1,14 +1,14 @@
 {
-  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V1",
-  "version": 1,
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+  "version": 2,
   "status": "active",
-  "contract_revision": "web-evidence-redesign-2026-09-15",
+  "contract_revision": "evidence-record-binding-2026-09-16",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v1",
+  "worker_prompt_revision": "web-evidence-v2",
   "purpose": "Define the active semantic evidence policy for neutral Taste dossiers while leaving GitHub-owned scope, buffered transport, validation/persistence ownership, recovery and completeness in the existing control-plane contract.",
   "supersedes": {
     "steam_appreviews_required": false,
@@ -40,7 +40,21 @@
     "professional_context_may_substitute_for_player_feedback": false,
     "prefer_multiple_independent_player_sources_when_practical": true,
     "single_source_allowed_only_with_compact_reason": true,
-    "raw_review_or_post_bodies_may_be_persisted": false
+    "raw_review_or_post_bodies_may_be_persisted": false,
+    "aggregate_storefront_statistics_are_player_feedback_mentions": false,
+    "aggregate_storefront_statistics_may_raise_recurrence": false,
+    "steam_store_app_page_is_player_feedback_record": false,
+    "steam_store_language_parameter_is_player_feedback_evidence": false
+  },
+  "mention_binding": {
+    "definition": "mention_count is the number of distinct attributable player-feedback records actually inspected and bound to the exact observation",
+    "observation_binding_field": "player_feedback_ids",
+    "record_container": "provenance.player_feedback_records",
+    "count_rule": "mention_count_must_equal_number_of_distinct_bound_player_feedback_ids",
+    "record_rule": "every_bound_feedback_id_must_resolve_to_one_unique_compact_player_feedback_record_whose_source_is_player_feedback_true_and_is_also_referenced_by_the_observation",
+    "aggregate_count_rule": "overall_review_totals_positive_counts_language_filtered_counts_percentages_ratings_curator_totals_and_other_aggregate_statistics_never_create_feedback_records_or_mentions",
+    "one_record_rule": "one_attributable_player_feedback_record_requires_anecdotal_recurrence_and_mention_count_1",
+    "raw_body_storage": false
   },
   "recency": {
     "search_recent_first": true,
@@ -60,6 +74,10 @@
       "source_access_unavailable"
     ],
     "priority_topics": ["localization", "translation", "voice", "font", "encoding", "regional_service"],
+    "found_and_used_rule": "requires_at_least_one_attributable_russian_or_mixed_language_player_feedback_record_bound_to_an_observation",
+    "steam_store_russian_ui_rule": "store_page_rendered_in_russian_or_with_l_russian_is_context_only_and_cannot_satisfy_found_and_used_or_multi_source_without_an_attributable_player_feedback_record",
+    "aggregate_only_search_result": "searched_not_found_or_insufficient",
+    "russian_specific_claim_rule": "do_not_infer_localization_translation_voice_font_encoding_or_regional_findings_from_non_russian_feedback",
     "fabrication_forbidden": true
   },
   "adaptive_research": {
@@ -80,8 +98,10 @@
     "legacy_dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
     "legacy_dossier_accepted_as_web_evidence_v2": false,
     "legacy_zero_evidence_or_store_only_placeholder_accepted": false,
+    "prior_web_evidence_v1_binding_accepted_as_v2": false,
     "fresh_legacy_cache_rule": "treat_as_incompatible_and_rebuild_when_next_canonically_evaluated_for_freshness",
-    "same_day_fixed_snapshot_rule": "control_plane_snapshot_and_group_plan_may_be_preserved_while_worker_contract_binding_is_upgraded_additively",
-    "current_invalid_buffered_g1_g2_rule": "leave_untouched_for_separate_coordinated_recovery_and_acceptance"
+    "same_day_fixed_snapshot_rule": "an_incompatible_worker_evidence_binding_or_canonical_group_size_requires_a_normal_github_owned_snapshot_rebuild_even_on_the_same_calendar_date",
+    "stale_buffer_rule": "old_snapshot_or_old_group_plan_buffer_artifacts_can_never_be_rebound_to_the_new_snapshot",
+    "manual_progress_migration_forbidden": true
   }
 }
