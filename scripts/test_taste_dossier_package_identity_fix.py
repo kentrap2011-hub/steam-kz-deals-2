@@ -6,6 +6,11 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
+from taste_package_member_aggregation import (
+    PACKAGE_MEMBER_AGGREGATION_POLICY,
+    aggregate_package_member_taste,
+    build_member_subject_index,
+)
 from taste_steam_review_dossier_daily import load_contract
 from taste_steam_review_dossier_web import (
     build_daily_work_manifest_web,
@@ -36,22 +41,40 @@ def _app_row(appid, title):
     }
 
 
-class PackageIdentityFixTests(unittest.TestCase):
+def _taste_row(appid, verdict, fit_level, *, ready=True):
+    return {
+        "status": "cache_hit",
+        "appid": str(appid),
+        "taste_subject_title": f"Game {appid}",
+        "taste_fingerprint": "c" * 64,
+        "candidate_context_sha256": "d" * 64,
+        "negative_analysis_ready": ready,
+        "fit_evidence_backfill_required": False,
+        "cached_taste": {
+            "verdict": verdict,
+            "fit_level": fit_level,
+            "reason_code": "include_strong" if fit_level == "strong" else (
+                "include_moderate" if fit_level == "moderate" else "exclude_insufficient"
+            ),
+        },
+    }
+
+
+class PackageMemberDossierAggregationTests(unittest.TestCase):
     def test_ordinary_app_row_identity_is_unchanged(self):
         row = _app_row("1000360", "Hellish Quart")
         resolution = resolve_dossier_scope_identities([copy.deepcopy(row)], CONTRACT)
         self.assertEqual(resolution["identity_blocked_items"], [])
+        self.assertEqual(resolution["package_member_mappings"], [])
         self.assertEqual(resolution["deduplicated_row_count"], 0)
-        self.assertEqual(resolution["rows"], [{
-            "key": "App_1000360",
-            "appid": "1000360",
-            "title": "Hellish Quart",
-            "taste_fingerprint": "a" * 64,
-            "candidate_context_sha256": "b" * 64,
-            "work_required": ["evaluate_taste_fit"],
-        }])
+        target = resolution["rows"][0]
+        self.assertEqual((target["key"], target["appid"], target["title"]), (
+            "App_1000360", "1000360", "Hellish Quart",
+        ))
+        self.assertEqual(target["offer_identities"], [])
+        self.assertEqual(target["dossier_identity_resolution"], "direct_queue_game_identity")
 
-    def test_single_game_package_maps_to_exact_game_and_retains_offer_identity(self):
+    def test_single_game_package_maps_to_member_dossier_and_retains_offer_mapping(self):
         row = {
             "family_id": "bundle:Sub_123",
             "taste_subject_key": "Sub_123",
@@ -72,75 +95,139 @@ class PackageIdentityFixTests(unittest.TestCase):
         }
         resolution = resolve_dossier_scope_identities([copy.deepcopy(row)], CONTRACT)
         self.assertEqual(resolution["identity_blocked_items"], [])
+        self.assertEqual(len(resolution["rows"]), 1)
         target = resolution["rows"][0]
-        self.assertEqual((target["appid"], target["title"]), ("222222", "Canonical Example Game"))
-        self.assertEqual(target["offer_identity"], {
-            "key": "Sub_123",
-            "family_id": "bundle:Sub_123",
-            "title": "Example Deluxe Package",
-            "source_row_appid": "999999",
-        })
-        self.assertEqual(target["dossier_identity_resolution"], "single_canonical_base_appid_and_bundle_member_title")
+        self.assertEqual((target["key"], target["appid"], target["title"]), (
+            "App_222222", "222222", "Canonical Example Game",
+        ))
+        self.assertEqual(target["offer_identities"][0]["key"], "Sub_123")
+        mapping = resolution["package_member_mappings"][0]
+        self.assertEqual(mapping["member_appids"], ["222222"])
+        self.assertEqual(mapping["members"][0]["dossier_key"], "App_222222")
 
-    def test_sub_87601_is_blocked_before_dedupe_and_worker_projection(self):
+    def test_sub_87601_expands_to_two_game_dossiers_and_reuses_direct_app_nodes(self):
         queue_path = ROOT / "data/production/pre_ai/chatgpt_taste_queue.jsonl"
         all_rows = [json.loads(line) for line in queue_path.read_text(encoding="utf-8").splitlines() if line.strip()]
-        first_rows = all_rows[:4]
-        coherent_app_304240 = next(row for row in all_rows if row["taste_subject_key"] == "App_304240")
-        queue_rows = first_rows + [coherent_app_304240]
+        sub = next(row for row in all_rows if row["taste_subject_key"] == "Sub_87601")
+        direct_304240 = next(row for row in all_rows if row["taste_subject_key"] == "App_304240")
+        direct_339340 = next(row for row in all_rows if row["taste_subject_key"] == "App_339340")
+        queue_rows = [sub, direct_304240, direct_339340]
         original = copy.deepcopy(queue_rows)
 
-        sub = next(row for row in queue_rows if row["taste_subject_key"] == "Sub_87601")
-        self.assertEqual(sub["appid"], "304240")
-        self.assertIn("Deluxe Origins Bundle", sub["title"])
         self.assertEqual(sub["semantic_condition"]["base_appids"], ["304240", "339340"])
-        self.assertEqual((coherent_app_304240["appid"], coherent_app_304240["title"]), ("304240", "Resident Evil"))
+        self.assertEqual([member["appid"] for member in sub["bundle_members"]], [
+            "304240", "339340", "381710", "381711", "381712", "381713",
+        ])
 
         resolution = resolve_dossier_scope_identities(queue_rows, CONTRACT)
-        resolved_by_key = {row["key"]: row for row in resolution["rows"]}
-        self.assertNotIn("Sub_87601", resolved_by_key)
-        self.assertEqual(
-            (resolved_by_key["App_304240"]["appid"], resolved_by_key["App_304240"]["title"]),
-            ("304240", "Resident Evil"),
-            "blocked package must not consume appid dedupe identity before the coherent App row",
-        )
-        blocked = next(item for item in resolution["identity_blocked_items"] if item["key"] == "Sub_87601")
-        self.assertEqual(blocked["reason"], "ambiguous_multi_game_offer_no_single_dossier_identity")
-        self.assertEqual(blocked["candidate_game_appids"], ["304240", "339340"])
-        self.assertEqual(blocked["offer_identity"]["source_row_appid"], "304240")
-        self.assertIn("Deluxe Origins Bundle", blocked["offer_identity"]["title"])
-        self.assertEqual(queue_rows, original, "dossier projection must not mutate/remove the package offer")
+        self.assertEqual(resolution["identity_blocked_items"], [])
+        self.assertEqual(resolution["eligible_row_count"], 3)
+        self.assertEqual(resolution["deduplicated_row_count"], 2)
+        self.assertEqual(queue_rows, original, "package expansion must not mutate/remove the commercial offer row")
+
+        by_appid = {row["appid"]: row for row in resolution["rows"]}
+        self.assertEqual(set(by_appid), {"304240", "339340"})
+        self.assertEqual((by_appid["304240"]["key"], by_appid["304240"]["title"]), (
+            "App_304240", "Resident Evil",
+        ))
+        self.assertEqual((by_appid["339340"]["key"], by_appid["339340"]["title"]), (
+            "App_339340", "Resident Evil 0",
+        ))
+        self.assertEqual(by_appid["304240"]["offer_identities"][0]["key"], "Sub_87601")
+        self.assertEqual(by_appid["339340"]["offer_identities"][0]["key"], "Sub_87601")
+        self.assertFalse(set(by_appid).intersection({"381710", "381711", "381712", "381713"}))
+
+        mapping = resolution["package_member_mappings"][0]
+        self.assertEqual(mapping["offer_identity"]["key"], "Sub_87601")
+        self.assertEqual(mapping["member_appids"], ["304240", "339340"])
+        self.assertEqual([(m["appid"], m["title"], m["dossier_key"]) for m in mapping["members"]], [
+            ("304240", "Resident Evil", "App_304240"),
+            ("339340", "Resident Evil 0", "App_339340"),
+        ])
 
         with tempfile.TemporaryDirectory() as td:
             manifest = build_daily_work_manifest_web(queue_rows, CONTRACT, td, now=NOW)
             _, descriptors = build_worker_projection(manifest, CONTRACT)
 
-        self.assertEqual(manifest["source_row_count"], 5)
-        self.assertEqual(manifest["eligible_row_count"], 5)
-        self.assertEqual(manifest["identity_blocked_count"], 1)
-        self.assertEqual(manifest["completed_required_count"], 0)
-        self.assertEqual(manifest["prepared_required_count"], 4)
-        self.assertEqual([item["key"] for item in manifest["prepared_required_items"][:3]], [
-            "App_2378500", "App_1000360", "App_1003590",
-        ])
+        self.assertEqual(manifest["identity_blocked_count"], 0)
+        self.assertEqual(manifest["package_member_mapping_count"], 1)
+        self.assertEqual(manifest["prepared_required_count"], 2)
+        self.assertEqual(manifest["ordered_appids"], ["304240", "339340"])
+        self.assertEqual([item["appid"] for item in manifest["prepared_required_items"]], ["304240", "339340"])
+        self.assertEqual(len({item["dossier_path"] for item in manifest["prepared_required_items"]}), 2)
         self.assertEqual(
-            (manifest["prepared_required_items"][3]["key"], manifest["prepared_required_items"][3]["appid"], manifest["prepared_required_items"][3]["title"]),
-            ("App_304240", "304240", "Resident Evil"),
+            manifest["package_member_mappings"][0]["members"][0]["dossier_path"],
+            (Path(CONTRACT["paths"]["dossier_store"]) / "App_304240.json").as_posix(),
         )
-        first_items = descriptors[0]["items"]
-        self.assertEqual([(item["key"], item["appid"], item["title"]) for item in first_items[:3]], [
-            ("App_2378500", "2378500", "Baldur's Gate 3 - Digital Deluxe Edition DLC"),
-            ("App_1000360", "1000360", "Hellish Quart"),
-            ("App_1003590", "1003590", "Tetris® Effect: Connected"),
+        descriptor_items = [item for descriptor in descriptors for item in descriptor["items"]]
+        self.assertEqual([(item["appid"], item["title"]) for item in descriptor_items], [
+            ("304240", "Resident Evil"),
+            ("339340", "Resident Evil 0"),
         ])
-        self.assertIn(("App_304240", "304240", "Resident Evil"), [
-            (item["key"], item["appid"], item["title"])
-            for descriptor in descriptors for item in descriptor["items"]
-        ])
-        self.assertFalse(any(
-            item["appid"] == "304240" and "Deluxe Origins Bundle" in item["title"]
-            for descriptor in descriptors for item in descriptor["items"]
-        ))
+        self.assertFalse(any("Deluxe Origins Bundle" in item["title"] for item in descriptor_items))
+
+    def test_best_qualifying_member_keeps_package_eligible_without_average(self):
+        families = [
+            {
+                "family_id": "game:304240", "family_type": "base_game",
+                "taste_subject_key": "App_304240", "base_appids": ["304240"],
+            },
+            {
+                "family_id": "game:339340", "family_type": "base_game",
+                "taste_subject_key": "App_339340", "base_appids": ["339340"],
+            },
+            {
+                "family_id": "bundle:Sub_87601", "family_type": "franchise_bundle",
+                "taste_subject_key": "Sub_87601", "base_appids": ["304240", "339340"],
+            },
+        ]
+        index = build_member_subject_index(families)
+        taste = {
+            "App_304240": _taste_row("304240", "INCLUDE", "strong"),
+            "App_339340": _taste_row("339340", "EXCLUDE", "below_moderate"),
+        }
+        aggregate = aggregate_package_member_taste(families[2], taste, index)
+        self.assertEqual(aggregate["policy"], PACKAGE_MEMBER_AGGREGATION_POLICY)
+        self.assertEqual(aggregate["status"], "resolved_eligible")
+        self.assertTrue(aggregate["package_taste_eligible"])
+        self.assertEqual(aggregate["selected_member"], {
+            "appid": "304240",
+            "taste_subject_key": "App_304240",
+            "verdict": "INCLUDE",
+            "fit_level": "strong",
+        })
+        self.assertNotIn("average", aggregate)
+
+        # Unknown second member must not negate a known qualifying member.
+        taste["App_339340"] = {"status": "ai_required"}
+        aggregate_unknown = aggregate_package_member_taste(families[2], taste, index)
+        self.assertTrue(aggregate_unknown["package_taste_eligible"])
+        self.assertEqual(aggregate_unknown["selected_member"]["appid"], "304240")
+
+    def test_no_qualifying_member_with_unresolved_member_waits_on_member_semantics(self):
+        families = [
+            {
+                "family_id": "game:1", "family_type": "base_game",
+                "taste_subject_key": "App_1", "base_appids": ["1"],
+            },
+            {
+                "family_id": "game:2", "family_type": "base_game",
+                "taste_subject_key": "App_2", "base_appids": ["2"],
+            },
+            {
+                "family_id": "bundle:Sub_9", "family_type": "franchise_bundle",
+                "taste_subject_key": "Sub_9", "base_appids": ["1", "2"],
+            },
+        ]
+        taste = {
+            "App_1": _taste_row("1", "EXCLUDE", "below_moderate"),
+            "App_2": {"status": "ai_required"},
+        }
+        aggregate = aggregate_package_member_taste(families[2], taste, build_member_subject_index(families))
+        self.assertEqual(aggregate["status"], "member_semantic_pending")
+        self.assertIsNone(aggregate["package_taste_eligible"])
+        self.assertIsNone(aggregate["effective_taste_row"])
+        self.assertTrue(aggregate["semantic_dependency_pending"])
 
     def test_v2_descriptor_identity_contract_remains_exact_title_and_appid(self):
         contract = json.loads((ROOT / "config/taste_steam_review_dossier_web_evidence_contract.json").read_text(encoding="utf-8"))
