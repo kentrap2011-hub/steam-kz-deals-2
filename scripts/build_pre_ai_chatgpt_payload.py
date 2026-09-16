@@ -9,6 +9,11 @@ from pathlib import Path
 from taste_negative_contract import negative_readiness
 from taste_evidence_contract import evidence_readiness
 from semantic_runtime_completion import apply_payload_status
+from taste_package_member_aggregation import (
+    PACKAGE_MEMBER_AGGREGATION_POLICY,
+    aggregate_package_member_taste,
+    build_member_subject_index,
+)
 import apply_fixed_package_purchase_options as fixed_packages
 import commercial_reconsideration_bridge as commercial_bridge
 
@@ -202,6 +207,20 @@ def annotate_negative_readiness(taste_doc, effective_entries):
     return ready_count, unresolved_cache_hit_count
 
 
+def _compact_package_aggregation(aggregation):
+    if not aggregation:
+        return None
+    return {
+        'policy': aggregation['policy'],
+        'status': aggregation['status'],
+        'package_taste_eligible': aggregation['package_taste_eligible'],
+        'base_appids': list(aggregation['base_appids']),
+        'members': [dict(member) for member in aggregation['members']],
+        'selected_member': None if aggregation['selected_member'] is None else dict(aggregation['selected_member']),
+        'semantic_dependency_pending': bool(aggregation['semantic_dependency_pending']),
+    }
+
+
 def main():
     started = time.monotonic()
     mailing = load(MAILING)
@@ -247,6 +266,10 @@ def main():
         raise SystemExit('Invalid FX rate in pre-AI snapshot')
     if len(families) != int(family_doc['family_count']):
         raise SystemExit('Family count mismatch')
+    try:
+        member_subject_index = build_member_subject_index(families)
+    except ValueError as exc:
+        raise SystemExit(f'Package member Taste subject index invalid: {exc}') from exc
 
     purchase_equivalence = fixed_packages.load_purchase_equivalence()
     package_bridge_by_family, package_bridge_stats = commercial_bridge.build_package_bridge_index(
@@ -272,6 +295,7 @@ def main():
     negative_ready_without_ai_count = 0
     evidence_backfill_queue_count = 0
     commercial_bridge_counts = Counter()
+    package_member_aggregation_counts = Counter()
 
     for family in families:
         primary_key = family['primary_key']
@@ -283,7 +307,18 @@ def main():
 
         store_row = store[primary_key]
         fx_row = fx[primary_key]
-        taste_row = taste[taste_key]
+        source_taste_row = taste[taste_key]
+        taste_row = source_taste_row
+        package_aggregation = None
+        if family.get('family_type') == 'franchise_bundle':
+            try:
+                package_aggregation = aggregate_package_member_taste(family, taste, member_subject_index)
+            except ValueError as exc:
+                raise SystemExit(f'Package member Taste aggregation invalid for {primary_key}: {exc}') from exc
+            package_member_aggregation_counts[package_aggregation['status']] += 1
+            if package_aggregation['effective_taste_row'] is not None:
+                taste_row = package_aggregation['effective_taste_row']
+
         history_row = history[primary_key]
         deal_row = deals[primary_key]
         feed_row = feed[taste_key]
@@ -312,6 +347,19 @@ def main():
             exclusion_counts['deal_excludes_even_if_strong'] += 1
             continue
 
+        if package_aggregation and package_aggregation['status'] == 'member_semantic_pending':
+            # The member game families already own the missing semantic work.
+            # Do not enqueue the package as a second semantic subject.
+            excluded_keys.append(primary_key)
+            exclusion_counts['package_member_taste_pending'] += 1
+            continue
+        if package_aggregation and package_aggregation['semantic_dependency_pending']:
+            # A selected member has a fit signal but still needs its existing
+            # evidence/negative backfill.  That exact game family owns the work.
+            excluded_keys.append(primary_key)
+            exclusion_counts['package_member_semantic_dependency_pending'] += 1
+            continue
+
         semantic_condition = {
             'ai_condition': family['ai_condition'],
             'requires_ai_base_support': bool(family.get('requires_ai_base_support')),
@@ -337,7 +385,10 @@ def main():
             'deal_if_strong': strong_scenario,
             'deal_if_moderate': moderate_scenario,
             'context_only': {
-                'wishlist': str(taste_row['appid']) in wishlist['appids'],
+                # Preserve the historical package subject appid behavior for
+                # wishlist/commercial context; member Taste selection is kept
+                # separate and price blind.
+                'wishlist': str(source_taste_row['appid']) in wishlist['appids'],
                 'reviews': {
                     'global_positive_percent': feed_row['global_review_positive'],
                     'global_count': feed_row['global_review_count'],
@@ -348,6 +399,8 @@ def main():
             },
             'semantic_condition': semantic_condition,
         }
+        if package_aggregation:
+            context['package_member_taste_aggregation'] = _compact_package_aggregation(package_aggregation)
 
         cache_hit = taste_row['status'] == 'cache_hit'
         cached_taste = taste_row.get('cached_taste') if cache_hit else None
@@ -355,7 +408,12 @@ def main():
             evidence_backfill = bool(taste_row.get('fit_evidence_backfill_required'))
             eligibility_bridge = None
             if cached_taste['verdict'] != 'INCLUDE' and not evidence_backfill:
-                effective_taste = effective_entries.get(taste_key) or cached_taste
+                effective_key = (
+                    package_aggregation['selected_member']['taste_subject_key']
+                    if package_aggregation and package_aggregation.get('selected_member')
+                    else taste_key
+                )
+                effective_taste = effective_entries.get(effective_key) or cached_taste
                 eligibility_bridge = commercial_bridge.resolve_bridge(
                     taste_entry=effective_taste,
                     wishlist=bool((context.get('context_only') or {}).get('wishlist')),
@@ -368,6 +426,8 @@ def main():
                     commercial_bridge_counts[eligibility_bridge['kind']] += 1
             if cached_taste['verdict'] != 'INCLUDE' and not eligibility_bridge:
                 if evidence_backfill:
+                    if package_aggregation:
+                        raise SystemExit('Package aggregation attempted to own member evidence backfill')
                     work = [NEGATIVE_WORK_CODE]
                     if family.get('requires_ai_base_support'):
                         work.append('resolve_base_support_condition')
@@ -423,6 +483,8 @@ def main():
                 work.append('resolve_base_support_condition')
 
             if work:
+                if package_aggregation:
+                    raise SystemExit('Package aggregation attempted to create package semantic work')
                 ai_queue.append({
                     'family_id': family['family_id'],
                     'taste_subject_key': taste_key,
@@ -459,6 +521,8 @@ def main():
                 ready_context.append(context)
             continue
 
+        if package_aggregation:
+            raise SystemExit('Package aggregation fell through to package semantic evaluation')
         work = ['evaluate_taste_fit', 'evaluate_normalized_taste_factors', NEGATIVE_WORK_CODE]
         negative_full_eval_queue_count += 1
         if family.get('requires_ai_base_support'):
@@ -564,6 +628,9 @@ def main():
             'legacy_exclude_direct_conflict_reason_alone_is_not_v5_confirmation': True,
             'wishlist_is_strong_but_bounded_priority_bonus': True,
             'reviews_and_discovery_flags_are_not_positive_taste_proof': True,
+            'multi_game_package_taste_aggregation': PACKAGE_MEMBER_AGGREGATION_POLICY,
+            'multi_game_package_never_creates_second_semantic_subject': True,
+            'multi_game_package_quality_penalties_remain_outside_taste': True,
         },
         'files': {
             'taste_queue_jsonl': str(TASTE_QUEUE_OUT),
@@ -582,6 +649,7 @@ def main():
         'deterministic_exclusion_counts': dict(sorted(exclusion_counts.items())),
         'commercial_eligibility_bridge_counts': dict(sorted(commercial_bridge_counts.items())),
         'fixed_package_bridge_evidence': package_bridge_stats,
+        'package_member_taste_aggregation_counts': dict(sorted(package_member_aggregation_counts.items())),
         'complete_family_partition': partition_count == len(families),
         'negative_analysis': {
             'work_code': NEGATIVE_WORK_CODE,
@@ -617,6 +685,7 @@ def main():
         'deterministic_exclusion_counts': manifest['deterministic_exclusion_counts'],
         'commercial_eligibility_bridge_counts': manifest['commercial_eligibility_bridge_counts'],
         'fixed_package_bridge_evidence': package_bridge_stats,
+        'package_member_taste_aggregation_counts': manifest['package_member_taste_aggregation_counts'],
         'complete_family_partition': manifest['complete_family_partition'],
         'negative_backfill_queue_count': negative_backfill_queue_count,
         'negative_full_evaluation_queue_count': negative_full_eval_queue_count,
