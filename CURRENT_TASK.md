@@ -1,6 +1,6 @@
 # CURRENT TASK
 
-Последнее обновление: 2026-09-13
+Последнее обновление: 2026-09-16
 
 ## Завершено
 
@@ -252,3 +252,15 @@
 - persistence bridge в рамках этой diagnostic-задачи не продолжался, production Run now не запускался;
 - durable report: `reviews/worker_reports/worker-interruption-diagnostic-01.md`;
 - next boundary: Director reads diagnostic report and applies the trace/replay procedure before any future retry after an unexplained interruption.
+
+## Worker closeout — 2026-09-16
+
+### Taste dossier package identity fix 01
+Статус: `complete_ready_for_activation`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_PACKAGE_IDENTITY_FIX_01.md`;
+- implementation PR: `#31`, branch `worker/taste-dossier-package-identity-fix-01`, validated head `dd4dd9d9a048aa7308199815078ab3ae0c568ce7`;
+- `Sub_87601` no longer reaches a single-game descriptor as bundle title + contained `appid=304240`; the multi-game package is retained as offer-side metadata but blocked from dossier work with a machine-readable ambiguity reason;
+- deterministic single-game package mapping is allowed only for exactly one canonical base app plus exactly one matching member title; ordinary `App_...` dossier identity remains unchanged;
+- PR validation run `35050852244`, job `104650688665`: success, all `36` dossier regressions passed including package identity `4/4`;
+- no production workflow dispatch, Scheduled Task Run now, Scheduled Task UI change, Taste Semantic Producer change, queue/cache/receipt rewrite, deploy, or merge was performed;
+- durable report: `reviews/worker_reports/taste-dossier-package-identity-fix-01.md`.
