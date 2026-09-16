@@ -6,6 +6,7 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
+from build_taste_steam_review_dossier_work import bind_package_member_mappings
 from taste_package_member_aggregation import (
     PACKAGE_MEMBER_AGGREGATION_POLICY,
     aggregate_package_member_taste,
@@ -105,26 +106,19 @@ class PackageMemberDossierAggregationTests(unittest.TestCase):
         self.assertEqual(mapping["member_appids"], ["222222"])
         self.assertEqual(mapping["members"][0]["dossier_key"], "App_222222")
 
-    def test_sub_87601_expands_to_two_game_dossiers_and_reuses_direct_app_nodes(self):
+    def test_sub_87601_live_queue_uses_only_game_subjects_and_manifest_binds_package_mapping(self):
         queue_path = ROOT / "data/production/pre_ai/chatgpt_taste_queue.jsonl"
         all_rows = [json.loads(line) for line in queue_path.read_text(encoding="utf-8").splitlines() if line.strip()]
-        sub = next(row for row in all_rows if row["taste_subject_key"] == "Sub_87601")
-        direct_304240 = next(row for row in all_rows if row["taste_subject_key"] == "App_304240")
-        direct_339340 = next(row for row in all_rows if row["taste_subject_key"] == "App_339340")
-        queue_rows = [sub, direct_304240, direct_339340]
-        original = copy.deepcopy(queue_rows)
-
-        self.assertEqual(sub["semantic_condition"]["base_appids"], ["304240", "339340"])
-        self.assertEqual([member["appid"] for member in sub["bundle_members"]], [
-            "304240", "339340", "381710", "381711", "381712", "381713",
-        ])
+        by_key = {row["taste_subject_key"]: row for row in all_rows}
+        self.assertNotIn("Sub_87601", by_key, "package must not be reintroduced as a second semantic subject")
+        direct_304240 = by_key["App_304240"]
+        direct_339340 = by_key["App_339340"]
+        queue_rows = [direct_304240, direct_339340]
 
         resolution = resolve_dossier_scope_identities(queue_rows, CONTRACT)
         self.assertEqual(resolution["identity_blocked_items"], [])
-        self.assertEqual(resolution["eligible_row_count"], 3)
-        self.assertEqual(resolution["deduplicated_row_count"], 2)
-        self.assertEqual(queue_rows, original, "package expansion must not mutate/remove the commercial offer row")
-
+        self.assertEqual(resolution["eligible_row_count"], 2)
+        self.assertEqual(resolution["deduplicated_row_count"], 0)
         by_appid = {row["appid"]: row for row in resolution["rows"]}
         self.assertEqual(set(by_appid), {"304240", "339340"})
         self.assertEqual((by_appid["304240"]["key"], by_appid["304240"]["title"]), (
@@ -133,20 +127,14 @@ class PackageMemberDossierAggregationTests(unittest.TestCase):
         self.assertEqual((by_appid["339340"]["key"], by_appid["339340"]["title"]), (
             "App_339340", "Resident Evil 0",
         ))
-        self.assertEqual(by_appid["304240"]["offer_identities"][0]["key"], "Sub_87601")
-        self.assertEqual(by_appid["339340"]["offer_identities"][0]["key"], "Sub_87601")
-        self.assertFalse(set(by_appid).intersection({"381710", "381711", "381712", "381713"}))
 
-        mapping = resolution["package_member_mappings"][0]
-        self.assertEqual(mapping["offer_identity"]["key"], "Sub_87601")
-        self.assertEqual(mapping["member_appids"], ["304240", "339340"])
-        self.assertEqual([(m["appid"], m["title"], m["dossier_key"]) for m in mapping["members"]], [
-            ("304240", "Resident Evil", "App_304240"),
-            ("339340", "Resident Evil 0", "App_339340"),
-        ])
+        family_graph = json.loads((ROOT / "data/production/pre_ai/family_graph.json").read_text(encoding="utf-8"))
+        package = next(family for family in family_graph["families"] if family["taste_subject_key"] == "Sub_87601")
+        self.assertEqual(package["base_appids"], ["304240", "339340"])
 
         with tempfile.TemporaryDirectory() as td:
             manifest = build_daily_work_manifest_web(queue_rows, CONTRACT, td, now=NOW)
+            manifest = bind_package_member_mappings(manifest, CONTRACT, family_graph)
             _, descriptors = build_worker_projection(manifest, CONTRACT)
 
         self.assertEqual(manifest["identity_blocked_count"], 0)
@@ -155,8 +143,17 @@ class PackageMemberDossierAggregationTests(unittest.TestCase):
         self.assertEqual(manifest["ordered_appids"], ["304240", "339340"])
         self.assertEqual([item["appid"] for item in manifest["prepared_required_items"]], ["304240", "339340"])
         self.assertEqual(len({item["dossier_path"] for item in manifest["prepared_required_items"]}), 2)
+
+        mapping = manifest["package_member_mappings"][0]
+        self.assertEqual(mapping["offer_identity"]["key"], "Sub_87601")
+        self.assertIsNone(mapping["offer_identity"]["source_row_appid"])
+        self.assertEqual(mapping["member_appids"], ["304240", "339340"])
+        self.assertEqual([(m["appid"], m["title"], m["dossier_key"]) for m in mapping["members"]], [
+            ("304240", "Resident Evil", "App_304240"),
+            ("339340", "Resident Evil 0", "App_339340"),
+        ])
         self.assertEqual(
-            manifest["package_member_mappings"][0]["members"][0]["dossier_path"],
+            mapping["members"][0]["dossier_path"],
             (Path(CONTRACT["paths"]["dossier_store_dir"]) / "App_304240.json").as_posix(),
         )
         descriptor_items = [item for descriptor in descriptors for item in descriptor["items"]]
@@ -165,6 +162,9 @@ class PackageMemberDossierAggregationTests(unittest.TestCase):
             ("339340", "Resident Evil 0"),
         ])
         self.assertFalse(any("Deluxe Origins Bundle" in item["title"] for item in descriptor_items))
+        self.assertFalse(set(item["appid"] for item in descriptor_items).intersection({
+            "381710", "381711", "381712", "381713",
+        }))
 
     def test_best_qualifying_member_keeps_package_eligible_without_average(self):
         families = [
