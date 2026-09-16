@@ -1,0 +1,117 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "d45430762377a5de89ab2705585f5e6d6674af0a5b1882611e0852a376ef6973",
+  "prepared_required_sha256": "0e4444fe7fe2e34df70bb98362f785207af43e1ac8c047732640f6b188fbb641",
+  "group_plan_sha256": "64bcf06228f279f0db5cf9ea4406e48484cf9b95b801f4b11d03fd7770138ae2",
+  "group_count": 197,
+  "sequence": 1,
+  "start_index": 0,
+  "end_index_exclusive": 3,
+  "appids": ["2378500", "1000360", "1003590"],
+  "items_sha256": "48256e357c57025236475a74cadcc1c2c64b72cbd199287869abe454712ab6bf",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "f69df37779c9b4c2c6eae5e075054098789c514e7d2cc5127d85620060ca7c50",
+  "items": [
+    {"key":"App_2378500","appid":"2378500","title":"Baldur's Gate 3 - Digital Deluxe Edition DLC","dossier_path":"data/cache/taste_steam_review_dossiers/App_2378500.json","reason":"refresh_required"},
+    {"key":"App_1000360","appid":"1000360","title":"Hellish Quart","dossier_path":"data/cache/taste_steam_review_dossiers/App_1000360.json","reason":"refresh_required"},
+    {"key":"App_1003590","appid":"1003590","title":"Tetris® Effect: Connected","dossier_path":"data/cache/taste_steam_review_dossiers/App_1003590.json","reason":"refresh_required"}
+  ],
+  "group_sha256": "83d91127ece346690fb62af453938d80be6707c19ae6019ab85de6404b11d021",
+  "dossiers": [
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,"appid":"2378500","title":"Baldur's Gate 3 - Digital Deluxe Edition DLC","generated_at_utc":"2026-09-16T19:33:00Z","expires_at_utc":"2026-10-06T19:33:00Z","ttl_days":20,
+      "game_identity":{"work_title":"Baldur's Gate 3 - Digital Deluxe Edition DLC","release_year":2023,"resolution_status":"resolved","identity_source_ids":["bg3_store"],"corroborators":[{"kind":"appid","value":"2378500"},{"kind":"developer","value":"Larian Studios"},{"kind":"version","value":"Digital Deluxe Edition DLC"}]},
+      "summary":"Player feedback characterizes this as a small extras pack rather than substantial new game content. The soundtrack, artbook and themed items are appreciated, while several players emphasize that most in-game additions are cosmetic or low-impact; the shapeshifter mask is the clearest practical exception.",
+      "observations":[
+        {"category":"other","statement":"Players repeatedly describe the package as mostly cosmetic or otherwise nonessential to the core game, with little effect on a normal playthrough.","sentiment":"neutral","recurrence":"moderate","mention_count":4,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["bg3_review","bg3_discussion"],"player_feedback_ids":["bg3_f1","bg3_f2","bg3_f3","bg3_f4"]},
+        {"category":"other","statement":"The digital soundtrack is a specifically appreciated part of the package for players interested in the game's music.","sentiment":"positive","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["bg3_review","bg3_discussion"],"player_feedback_ids":["bg3_f1","bg3_f5"]},
+        {"category":"mechanics","statement":"The Mask of the Shapeshifter is noted as having genuine gameplay utility, although players generally describe its impact as modest rather than essential.","sentiment":"mixed","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["bg3_review","bg3_discussion"],"player_feedback_ids":["bg3_f1","bg3_f2"]}
+      ],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"multi_source","single_source_reason":null,"russian_attempt":"searched_not_found_or_insufficient","overall_strength":"moderate","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"bg3_store","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/2378500/","publication_date":"2023-08-03","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"bg3_review","source_type":"steam_reviews","domain":"steamcommunity.com","url":"https://steamcommunity.com/id/maihasegawa/recommended/2378500","publication_date":"2026-01-08","language":"non_russian","freshness":"recent","evidence_role":"durable_trait","player_feedback":true},
+        {"source_id":"bg3_discussion","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1086940/discussions/0/6504942507064908210/","publication_date":"2023-09-16","language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true}
+      ],"player_feedback_records":[
+        {"feedback_id":"bg3_f1","source_id":"bg3_review","url":"https://steamcommunity.com/id/maihasegawa/recommended/2378500","publication_date":"2026-01-08","language":"non_russian"},
+        {"feedback_id":"bg3_f2","source_id":"bg3_discussion","public_ref":"Steam discussion 6504942507064908210 contribution by Sugarwolf, 2023-09-16 13:54","publication_date":"2023-09-16","language":"non_russian"},
+        {"feedback_id":"bg3_f3","source_id":"bg3_discussion","public_ref":"Steam discussion 6504942507064908210 contribution by Galiäna Krüger, 2023-09-16 13:56","publication_date":"2023-09-16","language":"non_russian"},
+        {"feedback_id":"bg3_f4","source_id":"bg3_discussion","public_ref":"Steam discussion 6504942507064908210 contribution by Moonbane, 2023-09-16 14:02","publication_date":"2023-09-16","language":"non_russian"},
+        {"feedback_id":"bg3_f5","source_id":"bg3_discussion","public_ref":"Steam discussion 6504942507064908210 contribution by Gilmund, 2023-09-16 13:58","publication_date":"2023-09-16","language":"non_russian"}
+      ]}
+    },
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,"appid":"1000360","title":"Hellish Quart","generated_at_utc":"2026-09-16T19:33:00Z","expires_at_utc":"2026-10-06T19:33:00Z","ttl_days":20,
+      "game_identity":{"work_title":"Hellish Quart","release_year":2021,"resolution_status":"resolved","identity_source_ids":["hq_store"],"corroborators":[{"kind":"appid","value":"1000360"},{"kind":"developer","value":"Kubold"},{"kind":"version","value":"Early Access"}]},
+      "summary":"Players consistently identify the physics-driven, high-lethality fencing as Hellish Quart's distinctive strength, especially its weapon interactions and historical martial-arts feel. Current feedback is more divided about polish: hit detection, sluggish or inconsistent responses and unfinished systems remain complaints, while native online multiplayer is still absent and remote-play solutions are used instead.",
+      "observations":[
+        {"category":"mechanics","statement":"The physics-driven fencing, weapon interaction and high lethality are repeatedly praised as unusually close to the feel and tactical considerations of real or historical sword fighting.","sentiment":"positive","recurrence":"strong","mention_count":5,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["hq_old_reviews","hq_recent_reviews"],"player_feedback_ids":["hq_f1","hq_f2","hq_f3","hq_f4","hq_f5"]},
+        {"category":"friction","statement":"Recent players report continuing roughness in hit detection, responsiveness, stamina or physics behavior, so Early Access jank remains a current concern rather than only a launch-era issue.","sentiment":"negative","recurrence":"moderate","mention_count":4,"evidence_languages":["non_russian"],"evidence_status":"current","source_ids":["hq_recent_negative","hq_2025_discussion","hq_2026_discussion"],"player_feedback_ids":["hq_f6","hq_f7","hq_f8","hq_f9"]},
+        {"category":"multiplayer","statement":"Native online matchmaking remains absent; players who want remote PvP rely on Steam Remote Play, Parsec or community coordination instead.","sentiment":"negative","recurrence":"moderate","mention_count":3,"evidence_languages":["non_russian"],"evidence_status":"current","source_ids":["hq_recent_reviews","hq_recent_negative"],"player_feedback_ids":["hq_f5","hq_f10","hq_f11"]},
+        {"category":"structure","statement":"Some players consider the story/adventure portions substantially weaker or clunkier than the core fencing and would prefer development effort focused on fighting systems and characters.","sentiment":"negative","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"current","source_ids":["hq_2025_discussion"],"player_feedback_ids":["hq_f12","hq_f13"]}
+      ],
+      "conflicts":[{"statement":"Current feedback combines strong admiration for the unique fencing model with substantial disagreement over whether ongoing physics and polish problems undermine that model.","recurrence":"moderate","source_ids":["hq_recent_reviews","hq_recent_negative","hq_2026_discussion"]}],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"multi_source","single_source_reason":null,"russian_attempt":"searched_not_found_or_insufficient","overall_strength":"strong","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"hq_store","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/1000360/Hellish_Quart/","publication_date":"2021-02-16","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"hq_old_reviews","source_type":"steam_reviews","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1000360/positivereviews/?browsefilter=toprated","publication_date":null,"language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true},
+        {"source_id":"hq_recent_reviews","source_type":"steam_reviews","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1000360/reviews/","publication_date":null,"language":"non_russian","freshness":"recent","evidence_role":"current_state","player_feedback":true},
+        {"source_id":"hq_recent_negative","source_type":"steam_reviews","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1000360/negativereviews/?browsefilter=toprated","publication_date":null,"language":"non_russian","freshness":"recent","evidence_role":"current_state","player_feedback":true},
+        {"source_id":"hq_2025_discussion","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1000360/discussions/0/594011209257255948/","publication_date":"2025-01-03","language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true},
+        {"source_id":"hq_2026_discussion","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1000360/discussions/0/729153699965901699/","publication_date":"2026-01-19","language":"non_russian","freshness":"recent","evidence_role":"current_state","player_feedback":true}
+      ],"player_feedback_records":[
+        {"feedback_id":"hq_f1","source_id":"hq_old_reviews","public_ref":"Hellish Quart Steam positive review posted 2021-04-11, 122.6h record","publication_date":"2021-04-11","language":"non_russian"},
+        {"feedback_id":"hq_f2","source_id":"hq_old_reviews","public_ref":"Hellish Quart Steam positive review posted 2021-02-19, 8.5h record","publication_date":"2021-02-19","language":"non_russian"},
+        {"feedback_id":"hq_f3","source_id":"hq_old_reviews","public_ref":"Hellish Quart Steam positive review posted 2023-11-05, 20.6h record","publication_date":"2023-11-05","language":"non_russian"},
+        {"feedback_id":"hq_f4","source_id":"hq_recent_reviews","public_ref":"Hellish Quart Steam recent review posted 2026-06-13, 63.9h record","publication_date":"2026-06-13","language":"non_russian"},
+        {"feedback_id":"hq_f5","source_id":"hq_recent_reviews","public_ref":"Hellish Quart Steam recent review posted 2026-06-16, 3.9h record","publication_date":"2026-06-16","language":"non_russian"},
+        {"feedback_id":"hq_f6","source_id":"hq_recent_negative","public_ref":"Hellish Quart Steam negative review posted 2025-12-20, 101.7h record","publication_date":"2025-12-20","language":"non_russian"},
+        {"feedback_id":"hq_f7","source_id":"hq_recent_negative","public_ref":"Hellish Quart Steam negative review posted 2025-12-27, 361.1h record","publication_date":"2025-12-27","language":"non_russian"},
+        {"feedback_id":"hq_f8","source_id":"hq_2026_discussion","public_ref":"Steam discussion 729153699965901699 opening contribution, 2026-01-19","publication_date":"2026-01-19","language":"non_russian"},
+        {"feedback_id":"hq_f9","source_id":"hq_2025_discussion","public_ref":"Steam discussion 594011209257255948 opening contribution, 2025-01-03","publication_date":"2025-01-03","language":"non_russian"},
+        {"feedback_id":"hq_f10","source_id":"hq_recent_negative","public_ref":"Hellish Quart Steam negative review posted 2025-12-20 multiplayer section","publication_date":"2025-12-20","language":"non_russian"},
+        {"feedback_id":"hq_f11","source_id":"hq_recent_reviews","public_ref":"Hellish Quart Steam recent negative review posted 2026-08-22, 6.9h record","publication_date":"2026-08-22","language":"non_russian"},
+        {"feedback_id":"hq_f12","source_id":"hq_2025_discussion","public_ref":"Steam discussion 594011209257255948 contribution by Kamamura, 2025-01-12","publication_date":"2025-01-12","language":"non_russian"},
+        {"feedback_id":"hq_f13","source_id":"hq_2025_discussion","public_ref":"Steam discussion 594011209257255948 contribution by Only Zuul, 2025-01-18","publication_date":"2025-01-18","language":"non_russian"}
+      ]}
+    },
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,"appid":"1003590","title":"Tetris® Effect: Connected","generated_at_utc":"2026-09-16T19:33:00Z","expires_at_utc":"2026-10-06T19:33:00Z","ttl_days":20,
+      "game_identity":{"work_title":"Tetris® Effect: Connected","release_year":2021,"resolution_status":"resolved","identity_source_ids":["tec_store"],"corroborators":[{"kind":"appid","value":"1003590"},{"kind":"developer","value":"Monstars Inc., Resonair, Stage Games"},{"kind":"version","value":"Connected Steam release"}]},
+      "summary":"Player feedback strongly centers on the audiovisual presentation: music, reactive sound and vivid effects turn familiar Tetris rules into a distinctive sensory experience, and the Connected modes add substantial multiplayer variety. The same presentation can sometimes distract from the board. Recent Steam feedback also documents platform-specific performance concerns, particularly on Linux/Steam Deck, despite an official 2026 support patch addressing a related framerate regression.",
+      "observations":[
+        {"category":"other","statement":"Music, visuals and reactive presentation are repeatedly praised as the defining layer that makes familiar Tetris feel unusually immersive and emotionally affecting.","sentiment":"positive","recurrence":"strong","mention_count":7,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["tec_top_reviews","tec_recent_reviews","tec_reddit"],"player_feedback_ids":["tec_f1","tec_f2","tec_f3","tec_f4","tec_f5","tec_f6","tec_f7"]},
+        {"category":"multiplayer","statement":"Players value the Connected multiplayer modes and community play as a meaningful expansion beyond the single-player Tetris experience.","sentiment":"positive","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["tec_top_reviews","tec_reddit2"],"player_feedback_ids":["tec_f8","tec_f9"]},
+        {"category":"friction","statement":"The dense visual effects can distract from reading the board or feel excessive for players who mainly want straightforward Tetris.","sentiment":"negative","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["tec_recent_reviews","tec_reddit"],"player_feedback_ids":["tec_f10","tec_f11"]},
+        {"category":"friction","statement":"Recent player reports identify Linux and Steam Deck performance regressions as a current platform-specific issue; an official July 2026 patch addressed a related framerate problem, but later community reports indicate problems can persist in some configurations.","sentiment":"negative","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"current","source_ids":["tec_recent_reviews","tec_community_current","tec_patch"],"player_feedback_ids":["tec_f12","tec_f13"]}
+      ],
+      "conflicts":[{"statement":"The audiovisual intensity is the game's most repeated strength but is also described by some players as distracting or excessive during play.","recurrence":"limited","source_ids":["tec_top_reviews","tec_recent_reviews","tec_reddit"]}],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"multi_source","single_source_reason":null,"russian_attempt":"searched_not_found_or_insufficient","overall_strength":"strong","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"tec_store","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/1003590/","publication_date":"2021-08-17","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"tec_top_reviews","source_type":"steam_reviews","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1003590/reviews?browsefilter=toprated","publication_date":null,"language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true},
+        {"source_id":"tec_recent_reviews","source_type":"steam_reviews","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1003590/reviews/","publication_date":null,"language":"non_russian","freshness":"recent","evidence_role":"current_state","player_feedback":true},
+        {"source_id":"tec_reddit","source_type":"reddit","domain":"reddit.com","url":"https://www.reddit.com/r/patientgamers/comments/1muld3p/tetris_effect_connected_is_a_game_ill_likely/","publication_date":"2025-08-19","language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true},
+        {"source_id":"tec_reddit2","source_type":"reddit","domain":"reddit.com","url":"https://www.reddit.com/r/Tetris/comments/ro1i4f/","publication_date":"2021-12-25","language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true},
+        {"source_id":"tec_community_current","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1003590","publication_date":null,"language":"non_russian","freshness":"recent","evidence_role":"current_state","player_feedback":true},
+        {"source_id":"tec_patch","source_type":"official_metadata","domain":"steamcommunity.com","public_ref":"Official Tetris Effect: Connected Steam Community support patch post dated 2026-07-14 addressing Steam Deck framerate issues","publication_date":"2026-07-14","language":"non_russian","freshness":"recent","evidence_role":"current_state","player_feedback":false}
+      ],"player_feedback_records":[
+        {"feedback_id":"tec_f1","source_id":"tec_top_reviews","public_ref":"Tetris Effect Connected Steam review posted 2021-08-17, 442.9h record","publication_date":"2021-08-17","language":"non_russian"},
+        {"feedback_id":"tec_f2","source_id":"tec_top_reviews","public_ref":"Tetris Effect Connected Steam review posted 2021-08-22, 27.9h record","publication_date":"2021-08-22","language":"non_russian"},
+        {"feedback_id":"tec_f3","source_id":"tec_top_reviews","public_ref":"Tetris Effect Connected Steam review posted 2021-11-24, 102.9h record","publication_date":"2021-11-24","language":"non_russian"},
+        {"feedback_id":"tec_f4","source_id":"tec_recent_reviews","public_ref":"Tetris Effect Connected Steam review posted 2026-09-05, 22.6h record","publication_date":"2026-09-05","language":"non_russian"},
+        {"feedback_id":"tec_f5","source_id":"tec_recent_reviews","public_ref":"Tetris Effect Connected Steam review posted 2026-09-06, 16.6h record","publication_date":"2026-09-06","language":"non_russian"},
+        {"feedback_id":"tec_f6","source_id":"tec_recent_reviews","public_ref":"Tetris Effect Connected Steam review posted 2026-09-07, 69.8h record","publication_date":"2026-09-07","language":"non_russian"},
+        {"feedback_id":"tec_f7","source_id":"tec_reddit","url":"https://www.reddit.com/r/patientgamers/comments/1muld3p/tetris_effect_connected_is_a_game_ill_likely/","publication_date":"2025-08-19","language":"non_russian"},
+        {"feedback_id":"tec_f8","source_id":"tec_top_reviews","public_ref":"Tetris Effect Connected Steam review posted 2021-11-24, 102.9h record, multiplayer discussion","publication_date":"2021-11-24","language":"non_russian"},
+        {"feedback_id":"tec_f9","source_id":"tec_reddit2","url":"https://www.reddit.com/r/Tetris/comments/ro1i4f/","publication_date":"2021-12-25","language":"non_russian"},
+        {"feedback_id":"tec_f10","source_id":"tec_recent_reviews","public_ref":"Tetris Effect Connected Steam review posted 2026-09-03, 5.3h record","publication_date":"2026-09-03","language":"non_russian"},
+        {"feedback_id":"tec_f11","source_id":"tec_reddit","public_ref":"Reddit patientgamers thread 1muld3p opening contribution, 2025-08-19","publication_date":"2025-08-19","language":"non_russian"},
+        {"feedback_id":"tec_f12","source_id":"tec_recent_reviews","public_ref":"Tetris Effect Connected Steam review posted 2026-04-29, 7.0h record, Linux performance complaint","publication_date":"2026-04-29","language":"non_russian"},
+        {"feedback_id":"tec_f13","source_id":"tec_community_current","public_ref":"Tetris Effect Connected Steam Community discussion by Seamus, 2026-08-30, Steam Deck performance complaint","publication_date":"2026-08-30","language":"non_russian"}
+      ]}
+    }
+  ]
+}
