@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "d7c882f8e9663573584c8a9d65b9183d60e4189173e1cf12db735eb7f1ae0f71",
+  "prepared_required_sha256": "a73cb560704b79bf1069191dd1bd8d52af7e2c7969f619e3e9be11c7351fb95d",
+  "group_plan_sha256": "2d5453942dd473f73c18c6484ca57d1d4bca40a7c8dcce5f70766bfa3c378c45",
+  "group_count": 211,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "parallel-buffer-validation-2026-09-17",
+    "evidence_contract_sha256": "f12bd44759b52197f4908e0d0f8cadfcf0ceceec38cdee17df422da37c2e871a",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-gaps-2026-09-17",
+    "worker_schema_sha256": "683c310bf9ea7364485f5e39456bcde0f5fb4a8cdf0106bb96d6aa9ea25b73be",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-prepublication-v1",
+    "worker_prompt_sha256": "deb6d68227f47766c9f159d1461341f540a0f360e848e1c230eb6bf6e32a6478"
+  },
+  "sequence": 88,
+  "start_index": 261,
+  "end_index_exclusive": 264,
+  "appids": [
+    "237850",
+    "2379910",
+    "238090"
+  ],
+  "items_sha256": "d2c2d0f87a5b61840a29d5d081e7281097a81b0fd01a3add5e24d9b1423df054",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "cda060dbcdbbf104fc87766bad7a35775ccaead0762e0678fb397f871e485cfa",
+  "items": [
+    {
+      "key": "App_237850",
+      "appid": "237850",
+      "title": "Dreamfall Chapters",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_237850.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2379910",
+      "appid": "2379910",
+      "title": "Dystopika",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2379910.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_238090",
+      "appid": "238090",
+      "title": "Sniper Elite 3",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_238090.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "5475c67877b938429502ea7eb2809317fa397f73400258074288917de033d155"
+}

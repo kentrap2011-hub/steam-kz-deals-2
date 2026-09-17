@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "d7c882f8e9663573584c8a9d65b9183d60e4189173e1cf12db735eb7f1ae0f71",
+  "prepared_required_sha256": "a73cb560704b79bf1069191dd1bd8d52af7e2c7969f619e3e9be11c7351fb95d",
+  "group_plan_sha256": "2d5453942dd473f73c18c6484ca57d1d4bca40a7c8dcce5f70766bfa3c378c45",
+  "group_count": 211,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "parallel-buffer-validation-2026-09-17",
+    "evidence_contract_sha256": "f12bd44759b52197f4908e0d0f8cadfcf0ceceec38cdee17df422da37c2e871a",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-gaps-2026-09-17",
+    "worker_schema_sha256": "683c310bf9ea7364485f5e39456bcde0f5fb4a8cdf0106bb96d6aa9ea25b73be",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-prepublication-v1",
+    "worker_prompt_sha256": "deb6d68227f47766c9f159d1461341f540a0f360e848e1c230eb6bf6e32a6478"
+  },
+  "sequence": 159,
+  "start_index": 474,
+  "end_index_exclusive": 477,
+  "appids": [
+    "481110",
+    "483980",
+    "485510"
+  ],
+  "items_sha256": "0cb5a093aa6a16f578f81c40196342f95b49480ff5aec0e85d25dd7b154fbb5f",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "cda060dbcdbbf104fc87766bad7a35775ccaead0762e0678fb397f871e485cfa",
+  "items": [
+    {
+      "key": "App_481110",
+      "appid": "481110",
+      "title": "The Bunker",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_481110.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_483980",
+      "appid": "483980",
+      "title": "Mad Father",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_483980.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_485510",
+      "appid": "485510",
+      "title": "Nioh: Complete Edition",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_485510.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "a3aaea5b11a63ae5a2c0a749ad57d57a152893a333f17667a93fc214165a162d"
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "d7c882f8e9663573584c8a9d65b9183d60e4189173e1cf12db735eb7f1ae0f71",
+  "prepared_required_sha256": "a73cb560704b79bf1069191dd1bd8d52af7e2c7969f619e3e9be11c7351fb95d",
+  "group_plan_sha256": "2d5453942dd473f73c18c6484ca57d1d4bca40a7c8dcce5f70766bfa3c378c45",
+  "group_count": 211,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "parallel-buffer-validation-2026-09-17",
+    "evidence_contract_sha256": "f12bd44759b52197f4908e0d0f8cadfcf0ceceec38cdee17df422da37c2e871a",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-gaps-2026-09-17",
+    "worker_schema_sha256": "683c310bf9ea7364485f5e39456bcde0f5fb4a8cdf0106bb96d6aa9ea25b73be",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-prepublication-v1",
+    "worker_prompt_sha256": "deb6d68227f47766c9f159d1461341f540a0f360e848e1c230eb6bf6e32a6478"
+  },
+  "sequence": 15,
+  "start_index": 42,
+  "end_index_exclusive": 45,
+  "appids": [
+    "1135690",
+    "1136370",
+    "1137350"
+  ],
+  "items_sha256": "dee1f7a36fbce46dde52bd05673039e1abd08d94b7f121704fb55ccb8dfd3cc3",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "cda060dbcdbbf104fc87766bad7a35775ccaead0762e0678fb397f871e485cfa",
+  "items": [
+    {
+      "key": "App_1135690",
+      "appid": "1135690",
+      "title": "Unpacking",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1135690.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1136370",
+      "appid": "1136370",
+      "title": "Bear and Breakfast",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1136370.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1137350",
+      "appid": "1137350",
+      "title": "Filament",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1137350.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "42ae290b5fa6eba8dbe0ec365000701f40f5ae1a4918c43809adab53235d251b"
+}

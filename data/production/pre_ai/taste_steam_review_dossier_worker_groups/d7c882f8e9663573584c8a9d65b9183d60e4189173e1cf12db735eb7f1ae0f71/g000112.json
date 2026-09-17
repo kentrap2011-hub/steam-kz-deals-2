@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "d7c882f8e9663573584c8a9d65b9183d60e4189173e1cf12db735eb7f1ae0f71",
+  "prepared_required_sha256": "a73cb560704b79bf1069191dd1bd8d52af7e2c7969f619e3e9be11c7351fb95d",
+  "group_plan_sha256": "2d5453942dd473f73c18c6484ca57d1d4bca40a7c8dcce5f70766bfa3c378c45",
+  "group_count": 211,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "parallel-buffer-validation-2026-09-17",
+    "evidence_contract_sha256": "f12bd44759b52197f4908e0d0f8cadfcf0ceceec38cdee17df422da37c2e871a",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-gaps-2026-09-17",
+    "worker_schema_sha256": "683c310bf9ea7364485f5e39456bcde0f5fb4a8cdf0106bb96d6aa9ea25b73be",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-prepublication-v1",
+    "worker_prompt_sha256": "deb6d68227f47766c9f159d1461341f540a0f360e848e1c230eb6bf6e32a6478"
+  },
+  "sequence": 112,
+  "start_index": 333,
+  "end_index_exclusive": 336,
+  "appids": [
+    "299460",
+    "3020",
+    "303610"
+  ],
+  "items_sha256": "1b0c566d00ec8bf82b7a44cd8a2fb63c49a0313f305885c42d7381d8b963960c",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "cda060dbcdbbf104fc87766bad7a35775ccaead0762e0678fb397f871e485cfa",
+  "items": [
+    {
+      "key": "App_299460",
+      "appid": "299460",
+      "title": "Woodle Tree Adventures",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_299460.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_3020",
+      "appid": "3020",
+      "title": "Call of Juarez",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_3020.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_303610",
+      "appid": "303610",
+      "title": "Suicide Guy",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_303610.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "b19f8b495de3bb2535b317a4e8fdf1a198126927b81a900bc89bfbdc6f11851f"
+}
