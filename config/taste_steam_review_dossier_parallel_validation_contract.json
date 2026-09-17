@@ -1,0 +1,51 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
+  "version": 1,
+  "status": "active",
+  "owner": "github_control_plane",
+  "parent_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
+  "purpose": "Define asynchronous GitHub-owned validation of immutable create-only Taste dossier candidate groups without making Scheduled ChatGPT execute repository code or wait for canonical acceptance.",
+  "candidate_publication": {
+    "owner": "scheduled_chatgpt_dossier_worker",
+    "mode": "immutable_create_only_group_candidate",
+    "group_size_source": "parent_contract.checkpointing.checkpoint_size",
+    "required_group_size": 3,
+    "scheduled_worker_repository_code_execution_required": false,
+    "scheduled_worker_manual_validator_required": false,
+    "publication_means_canonical_acceptance": false,
+    "same_invocation_rule": "after_successful_create_only_publication_the_worker_may_continue_only_to_the_next_predeclared_group_while_snapshot_group_plan_and_compatibility_binding_remain_live_without_waiting_for_github_acceptance"
+  },
+  "github_validation": {
+    "owner": "github_control_plane",
+    "validator": "scripts/taste_steam_review_dossier_buffered.py::validate_buffer_artifact",
+    "trigger": "candidate_buffer_push_wakes_serialized_github_ingest_workflow",
+    "scope": "complete_group_only",
+    "partial_per_game_acceptance": false,
+    "strict_validation_may_be_weakened": false,
+    "independent_candidate_validation": "all_current_snapshot_candidate_groups_may_be_strict_validated_for_observability_even_when_an_earlier_group_blocks_canonical_progress",
+    "canonical_acceptance_rule": "accept_only_the_maximal_valid_contiguous_prefix_starting_at_the_current_canonical_expected_sequence",
+    "invalid_expected_group_rule": "canonical_progress_stops_at_the_invalid_group_and_later_buffered_groups_remain_unpromoted",
+    "candidate_mutation_on_failure": false,
+    "automatic_semantic_retry_or_healing": false,
+    "alternate_retry_filename": false
+  },
+  "validation_status": {
+    "schema": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-STATUS-V1",
+    "schema_version": 1,
+    "path": "data/production/pre_ai/taste_steam_review_dossier_validation_status.json",
+    "role": "observational_only_not_queue_retry_or_progress_authority",
+    "required_binding": [
+      "snapshot_id",
+      "group_sequence",
+      "group_sha256",
+      "web_evidence_contract_binding"
+    ],
+    "candidate_states": ["valid", "invalid"],
+    "new_snapshot_supersedes_prior_status": true
+  },
+  "error_philosophy": {
+    "invalid_group_is_production_readiness_failure": true,
+    "repair_owner": "future_contract_prompt_validator_change_not_runtime_auto_retry",
+    "old_incompatible_candidates": "stale_inert_or_quarantined_through_existing_snapshot_binding_and_recovery_mechanism"
+  }
+}

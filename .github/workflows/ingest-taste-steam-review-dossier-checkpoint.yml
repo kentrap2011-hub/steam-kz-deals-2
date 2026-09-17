@@ -40,9 +40,19 @@ jobs:
       - name: Drain maximal valid contiguous dossier prefix from current repository state
         run: |
           set -euo pipefail
-          python scripts/ingest_taste_steam_review_dossier_inbox.py
+          # A semantic-invalid candidate is a durable blocked state, not an
+          # infrastructure failure or an automatic retry request. The drain still
+          # applies only the maximal valid contiguous prefix and never crosses it.
+          python scripts/ingest_taste_steam_review_dossier_inbox.py --reconcile-nonfatal
 
-      - name: Commit dossier recovery transport canonical progress and worker projection atomically
+      - name: Record strict validation status for all current-snapshot candidate groups
+        run: |
+          set -euo pipefail
+          # This pass is observational only. It may validate later buffered groups
+          # independently for visibility, but it cannot advance canonical progress.
+          python scripts/taste_steam_review_dossier_parallel_validation.py
+
+      - name: Commit dossier recovery transport validation canonical progress and worker projection atomically
         shell: bash
         run: |
           set -euo pipefail
@@ -52,15 +62,16 @@ jobs:
             data/cache/taste_steam_review_dossiers \
             data/production/pre_ai/taste_steam_review_dossier_work.json \
             data/production/pre_ai/taste_steam_review_dossier_worker_index.json \
+            data/production/pre_ai/taste_steam_review_dossier_validation_status.json \
             data/ai_inbox/taste_steam_review_dossiers
           git add -A data/production/pre_ai/taste_steam_review_dossier_worker_groups
           git add -A -- data/control data/quarantine data/audit 2>/dev/null || true
           git diff --cached --check
           if git diff --cached --quiet; then
-            echo "No contiguous canonical dossier or recovery state changes available"
+            echo "No contiguous canonical dossier recovery or validation state changes available"
             exit 0
           fi
-          git commit -m "Drain Steam review dossier buffer"
+          git commit -m "Drain and validate Steam review dossier buffer"
           for attempt in 1 2 3; do
             git fetch origin main:refs/remotes/origin/main
             if ! git rebase origin/main; then
