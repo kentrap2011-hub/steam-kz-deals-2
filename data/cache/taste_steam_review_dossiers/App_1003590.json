@@ -1,53 +1,81 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "parallel-buffer-validation-2026-09-17",
+    "evidence_contract_sha256": "f12bd44759b52197f4908e0d0f8cadfcf0ceceec38cdee17df422da37c2e871a",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-gaps-2026-09-17",
+    "worker_schema_sha256": "683c310bf9ea7364485f5e39456bcde0f5fb4a8cdf0106bb96d6aa9ea25b73be",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-prepublication-v1",
+    "worker_prompt_sha256": "deb6d68227f47766c9f159d1461341f540a0f360e848e1c230eb6bf6e32a6478"
+  },
   "appid": "1003590",
   "title": "Tetris® Effect: Connected",
-  "generated_at_utc": "2026-09-16T13:33:00Z",
-  "expires_at_utc": "2026-10-06T13:33:00Z",
+  "generated_at_utc": "2026-09-17T07:10:00Z",
+  "expires_at_utc": "2026-10-07T07:10:00Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Tetris® Effect: Connected",
     "release_year": 2021,
     "resolution_status": "resolved",
     "identity_source_ids": [
-      "identity"
+      "tec_store"
     ],
     "corroborators": [
       {
         "kind": "appid",
         "value": "1003590"
+      },
+      {
+        "kind": "developer",
+        "value": "Monstars Inc., Resonair, Stage Games"
       }
     ]
   },
-  "summary": "Players repeatedly praise the audiovisual presentation and the breadth of single-player and multiplayer Tetris modes. Russian Steam feedback is strongly positive; individual recent feedback also shows some control/input complaints.",
+  "summary": "Player feedback repeatedly highlights the audiovisual presentation as a defining part of the experience, with music, reactive effects and stylized stages tightly integrated with Tetris play. The same sensory density can be distracting or overwhelming for some players, while the game also offers a broad mix of solo, cooperative and competitive modes.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Players repeatedly praise the audiovisual presentation and the breadth of single-player and multiplayer Tetris modes.",
+      "category": "other",
+      "statement": "Players repeatedly praise the stylized visuals, music and reactive audiovisual presentation as a defining strength of the experience.",
       "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
         "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "community"
+        "tec_patient",
+        "tec_players"
+      ],
+      "player_feedback_ids": [
+        "tec_f1",
+        "tec_f2"
       ]
     },
     {
-      "category": "localization",
-      "statement": "Russian Steam feedback is strongly positive; individual recent feedback also shows some control/input complaints.",
+      "category": "friction",
+      "statement": "The dense visual and audio effects can distract or overwhelm some players even though others value the same presentation highly.",
       "sentiment": "mixed",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
-        "russian"
+        "non_russian"
       ],
-      "evidence_status": "current",
+      "evidence_status": "durable",
       "source_ids": [
-        "steam_ru"
+        "tec_patient",
+        "tec_players"
+      ],
+      "player_feedback_ids": [
+        "tec_f1",
+        "tec_f3"
       ]
     }
   ],
@@ -57,44 +85,67 @@
     "research_state": "sufficient",
     "source_mix_status": "multi_source",
     "single_source_reason": null,
-    "russian_attempt": "found_and_used",
-    "overall_strength": "moderate",
+    "russian_attempt": "searched_not_found_or_insufficient",
+    "overall_strength": "limited",
     "stop_reason": "evidence_stable"
   },
   "provenance": {
     "sources": [
       {
-        "source_id": "identity",
+        "source_id": "tec_store",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1003590",
-        "publication_date": null,
+        "url": "https://store.steampowered.com/app/1003590/",
+        "publication_date": "2021-08-17",
         "language": "non_russian",
-        "freshness": "recent",
+        "freshness": "older",
         "evidence_role": "identity",
         "player_feedback": false
       },
       {
-        "source_id": "steam_ru",
-        "source_type": "steam_reviews",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1003590/Tetris_Effect_Connected/?curator_clanid=33964734&l=russian",
-        "publication_date": null,
-        "language": "russian",
-        "freshness": "recent",
-        "evidence_role": "current_state",
-        "player_feedback": true
-      },
-      {
-        "source_id": "community",
+        "source_id": "tec_patient",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/Tetris/comments/qd16yr",
-        "publication_date": null,
+        "url": "https://www.reddit.com/r/patientgamers/comments/1muld3p/tetris_effect_connected_is_a_game_ill_likely/",
+        "publication_date": "2025-08-19",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "durable_trait",
         "player_feedback": true
+      },
+      {
+        "source_id": "tec_players",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/Tetris/comments/1n51hrd/do_any_of_yall_play_teris_effect_connected/",
+        "publication_date": "2025-08-31",
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "durable_trait",
+        "player_feedback": true
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "tec_f1",
+        "source_id": "tec_patient",
+        "url": "https://www.reddit.com/r/patientgamers/comments/1muld3p/tetris_effect_connected_is_a_game_ill_likely/",
+        "publication_date": "2025-08-19",
+        "language": "non_russian"
+      },
+      {
+        "feedback_id": "tec_f2",
+        "source_id": "tec_players",
+        "public_ref": "reddit-post:1n51hrd",
+        "publication_date": "2025-08-31",
+        "language": "non_russian"
+      },
+      {
+        "feedback_id": "tec_f3",
+        "source_id": "tec_players",
+        "public_ref": "reddit-comment:1n51hrd:overwhelming-stimuli",
+        "publication_date": "2025-08-31",
+        "language": "non_russian"
       }
     ]
   }

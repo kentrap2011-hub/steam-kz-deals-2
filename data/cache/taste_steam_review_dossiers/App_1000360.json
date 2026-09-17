@@ -1,31 +1,68 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "parallel-buffer-validation-2026-09-17",
+    "evidence_contract_sha256": "f12bd44759b52197f4908e0d0f8cadfcf0ceceec38cdee17df422da37c2e871a",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-gaps-2026-09-17",
+    "worker_schema_sha256": "683c310bf9ea7364485f5e39456bcde0f5fb4a8cdf0106bb96d6aa9ea25b73be",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-prepublication-v1",
+    "worker_prompt_sha256": "deb6d68227f47766c9f159d1461341f540a0f360e848e1c230eb6bf6e32a6478"
+  },
   "appid": "1000360",
   "title": "Hellish Quart",
-  "generated_at_utc": "2026-09-16T13:33:00Z",
-  "expires_at_utc": "2026-10-06T13:33:00Z",
+  "generated_at_utc": "2026-09-17T07:10:00Z",
+  "expires_at_utc": "2026-10-07T07:10:00Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Hellish Quart",
     "release_year": 2021,
     "resolution_status": "resolved",
     "identity_source_ids": [
-      "identity"
+      "hq_store"
     ],
     "corroborators": [
       {
         "kind": "appid",
         "value": "1000360"
+      },
+      {
+        "kind": "developer",
+        "value": "Kubold"
       }
     ]
   },
-  "summary": "Player feedback centers on the physics-driven, realistic sword-dueling system and its distinctive one-clean-hit lethality. Russian Steam feedback is strongly positive even though the store lists Russian as unsupported for the game interface.",
+  "summary": "Recent player feedback still praises the distinctive high-lethality sword-fighting concept, but also reports rough edges in hit detection, movement or responsiveness and other Early Access polish. Beginner-oriented feedback describes a meaningful learning curve and encourages experimenting with fighters and attack options rather than relying on simple repeated attacks.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Player feedback centers on the physics-driven, realistic sword-dueling system and its distinctive one-clean-hit lethality.",
-      "sentiment": "positive",
+      "category": "friction",
+      "statement": "Recent players report inconsistent hit detection or damage registration and sluggish or unreliable combat responses as ongoing polish issues.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "hq_hit_2026",
+        "hq_sluggish_2026"
+      ],
+      "player_feedback_ids": [
+        "hq_f1",
+        "hq_f2"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Learning the combat can take time, with player guidance emphasizing experimentation across fighters, stances and attack options.",
+      "sentiment": "mixed",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
@@ -33,21 +70,10 @@
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "community"
-      ]
-    },
-    {
-      "category": "localization",
-      "statement": "Russian Steam feedback is strongly positive even though the store lists Russian as unsupported for the game interface.",
-      "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "russian"
+        "hq_beginner"
       ],
-      "evidence_status": "current",
-      "source_ids": [
-        "steam_ru"
+      "player_feedback_ids": [
+        "hq_f3"
       ]
     }
   ],
@@ -57,44 +83,78 @@
     "research_state": "sufficient",
     "source_mix_status": "multi_source",
     "single_source_reason": null,
-    "russian_attempt": "found_and_used",
-    "overall_strength": "moderate",
+    "russian_attempt": "searched_not_found_or_insufficient",
+    "overall_strength": "limited",
     "stop_reason": "evidence_stable"
   },
   "provenance": {
     "sources": [
       {
-        "source_id": "identity",
+        "source_id": "hq_store",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
         "url": "https://store.steampowered.com/app/1000360/",
-        "publication_date": null,
+        "publication_date": "2021-02-16",
         "language": "non_russian",
-        "freshness": "recent",
+        "freshness": "older",
         "evidence_role": "identity",
         "player_feedback": false
       },
       {
-        "source_id": "steam_ru",
-        "source_type": "steam_reviews",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1000360Hellish?l=russian",
-        "publication_date": null,
-        "language": "russian",
+        "source_id": "hq_hit_2026",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1000360/discussions/0/729153699965901699/",
+        "publication_date": "2026-01-19",
+        "language": "non_russian",
         "freshness": "recent",
         "evidence_role": "current_state",
         "player_feedback": true
       },
       {
-        "source_id": "community",
+        "source_id": "hq_sluggish_2026",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1000360/discussions/0/806848596440909621/",
+        "publication_date": "2026-04-16",
+        "language": "non_russian",
+        "freshness": "recent",
+        "evidence_role": "current_state",
+        "player_feedback": true
+      },
+      {
+        "source_id": "hq_beginner",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/Games/comments/ks8uno",
-        "publication_date": null,
+        "url": "https://www.reddit.com/r/HellishQuart/comments/1llby63/",
+        "publication_date": "2025-06-26",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "durable_trait",
         "player_feedback": true
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "hq_f1",
+        "source_id": "hq_hit_2026",
+        "public_ref": "steam-discussion:729153699965901699:post-1",
+        "publication_date": "2026-01-19",
+        "language": "non_russian"
+      },
+      {
+        "feedback_id": "hq_f2",
+        "source_id": "hq_sluggish_2026",
+        "public_ref": "steam-discussion:806848596440909621:post-1",
+        "publication_date": "2026-04-16",
+        "language": "non_russian"
+      },
+      {
+        "feedback_id": "hq_f3",
+        "source_id": "hq_beginner",
+        "url": "https://www.reddit.com/r/HellishQuart/comments/1llby63/",
+        "publication_date": "2025-06-26",
+        "language": "non_russian"
       }
     ]
   }
