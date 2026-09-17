@@ -2,13 +2,13 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "prepublication-privacy-guard-2026-09-17",
+  "contract_revision": "contract-gaps-2026-09-17",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2-prepublication-v1",
+  "worker_prompt_revision": "web-evidence-v2-contract-gaps-v1",
   "purpose": "Define the active semantic evidence policy for neutral Taste dossiers while leaving GitHub-owned scope, buffered transport, validation/persistence ownership, recovery and completeness in the existing control-plane contract.",
   "supersedes": {
     "steam_appreviews_required": false,
@@ -44,7 +44,8 @@
     "aggregate_storefront_statistics_are_player_feedback_mentions": false,
     "aggregate_storefront_statistics_may_raise_recurrence": false,
     "steam_store_app_page_is_player_feedback_record": false,
-    "steam_store_language_parameter_is_player_feedback_evidence": false
+    "steam_store_language_parameter_is_player_feedback_evidence": false,
+    "source_diversity_identity": "canonicalized_physical_source_locator_not_worker_source_id"
   },
   "compact_provenance": {
     "author_identity_allowed": false,
@@ -74,11 +75,34 @@
       "\\b(?:summarized|summarised|summary)\\s+(?:as|:)"
     ],
     "neutral_locator_examples": [
-      "Steam discussion 729153699965901699 opening contribution, 2026-01-19",
-      "Hellish Quart Steam negative review posted 2025-12-20, 101.7h record",
-      "reddit-thread:ve5i0a:2022-06-17"
+      "steam-discussion:729153699965901699:comment-442019",
+      "steam-recommendation:185290437",
+      "reddit-comment:ve5i0a:k3mz12"
     ],
     "rule": "Persist only non-identifying locator metadata. Author/display identity and review/post content are unnecessary for this product and must be omitted rather than pseudonymized."
+  },
+  "feedback_item_identity": {
+    "definition": "one deterministic physical player-feedback item identity derived from the persisted non-identifying item-level URL or stable public_ref",
+    "url_normalization": [
+      "lowercase_and_www_normalize_host",
+      "collapse_repeated_path_slashes",
+      "ignore_trailing_path_slash",
+      "drop_fragment",
+      "drop_utm_and_known_tracking_query_parameters",
+      "sort_remaining_query_parameters"
+    ],
+    "public_ref_rule": "must be a stable machine-like or explicit review/post/comment/thread/item locator token; human date/playtime descriptions alone are not item identities",
+    "collection_surfaces_forbidden_as_feedback_records": true,
+    "known_collection_examples": [
+      "steam_app_reviews_list",
+      "steam_discussions_index_without_thread_item",
+      "reddit_subreddit_index",
+      "search_result_page",
+      "generic_reviews_or_index_page"
+    ],
+    "duplicate_alias_rule": "two feedback records resolving to the same canonical physical item identity are one item and the dossier is invalid rather than double-counted",
+    "source_alias_rule": "obvious URL/public_ref aliases resolving to one parent player source cannot create source diversity",
+    "distinct_valid_items_same_thread_allowed": true
   },
   "prepublication_validation": {
     "status": "active",
@@ -93,18 +117,30 @@
     "worker_check_role": "publication_guard_only"
   },
   "mention_binding": {
-    "definition": "mention_count is the number of distinct attributable player-feedback records actually inspected and bound to the exact observation",
+    "definition": "mention_count is the number of distinct physical attributable player-feedback records actually inspected and bound to the exact observation or conflict",
     "observation_binding_field": "player_feedback_ids",
+    "conflict_binding_field": "player_feedback_ids",
     "record_container": "provenance.player_feedback_records",
-    "count_rule": "mention_count_must_equal_number_of_distinct_bound_player_feedback_ids",
-    "record_rule": "every_bound_feedback_id_must_resolve_to_one_unique_compact_player_feedback_record_whose_source_is_player_feedback_true_and_is_also_referenced_by_the_observation",
+    "count_rule": "mention_count_must_equal_number_of_distinct_bound_player_feedback_ids_after_physical_item_identity_validation",
+    "record_rule": "every_bound_feedback_id_must_resolve_to_one_unique_compact_item_level_player_feedback_record_whose_source_is_player_feedback_true_and_is_also_referenced_by_the_observation_or_conflict",
     "aggregate_count_rule": "overall_review_totals_positive_counts_language_filtered_counts_percentages_ratings_curator_totals_and_other_aggregate_statistics_never_create_feedback_records_or_mentions",
     "one_record_rule": "one_attributable_player_feedback_record_requires_anecdotal_recurrence_and_mention_count_1",
     "raw_body_storage": false
   },
+  "conflicts": {
+    "model": "player_feedback_bound_recurrence",
+    "required_fields": ["statement", "recurrence", "mention_count", "source_ids", "player_feedback_ids"],
+    "count_and_recurrence_rules": "same_as_observations",
+    "official_or_professional_context_may_support_interpretation": true,
+    "official_or_professional_context_alone_may_establish_recurrence": false,
+    "physical_item_alias_and_source_diversity_rules_apply": true
+  },
   "recency": {
     "search_recent_first": true,
     "recent_target": "prefer_feedback_from_the_last_12_months_when_available_then_expand_if_sparse",
+    "recent_max_age_days": 365,
+    "dated_source_rule": "when publication_date is known, freshness must be recent at age <=365 days and older at age >365 days relative to generated_at_utc date",
+    "undated_source_rule": "publication_date=null remains allowed; freshness then remains a worker evidence classification and current_state still requires recent",
     "current_state_topics": ["bugs", "performance", "compatibility", "technical_state", "localization", "regional_service_state"],
     "current_state_requires_recent_support": true,
     "recent_evidence_dominates_old_evidence_for_current_state": true,
@@ -120,11 +156,28 @@
       "source_access_unavailable"
     ],
     "priority_topics": ["localization", "translation", "voice", "font", "encoding", "regional_service"],
-    "found_and_used_rule": "requires_at_least_one_attributable_russian_or_mixed_language_player_feedback_record_bound_to_an_observation",
+    "found_and_used_rule": "requires_at_least_one_attributable_russian_or_mixed_language_player_feedback_record bound to an observation or conflict",
+    "inverse_rule": "if any russian_or_mixed player-feedback record is actually bound to an observation or conflict, russian_attempt must be found_and_used",
     "steam_store_russian_ui_rule": "store_page_rendered_in_russian_or_with_l_russian_is_context_only_and_cannot_satisfy_found_and_used_or_multi_source_without_an_attributable_player_feedback_record",
     "aggregate_only_search_result": "searched_not_found_or_insufficient",
     "russian_specific_claim_rule": "do_not_infer_localization_translation_voice_font_encoding_or_regional_findings_from_non_russian_feedback",
     "fabrication_forbidden": true
+  },
+  "compatibility_binding": {
+    "snapshot_binding_must_include": [
+      "schema_and_version_names",
+      "schema_revision",
+      "schema_content_sha256",
+      "contract_revision",
+      "contract_content_sha256",
+      "worker_prompt_revision",
+      "worker_prompt_content_sha256"
+    ],
+    "dossier_must_copy_exact_binding": true,
+    "worker_index_and_each_group_descriptor_must_expose_exact_binding": true,
+    "same_day_binding_change_requires_github_owned_fresh_snapshot": true,
+    "old_binding_dossier_reuse_forbidden": true,
+    "old_snapshot_buffer_rebinding_forbidden": true
   },
   "adaptive_research": {
     "strategy": "adaptive_multi_source_web",
