@@ -122,7 +122,7 @@ class ContractGapRegressionTests(unittest.TestCase):
         distinct["provenance"]["player_feedback_records"].append({
             "feedback_id": "pf5",
             "source_id": "p2",
-            "url": f"https://www.reddit.com/r/games/comments/test520002/game_520002/comment2/",
+            "url": "https://www.reddit.com/r/games/comments/test520002/game_520002/comment2/",
             "publication_date": now.date().isoformat(),
             "language": "russian",
         })
@@ -271,7 +271,7 @@ class ContractGapRegressionTests(unittest.TestCase):
             output = root / "work.json"
             first, first_transition = build_or_preserve_daily_work(
                 contract=contract,
-                queue_path=queue_path,
+                queue_path=queue_path.as_posix(),
                 store_dir=root / "store",
                 output_path=output,
                 family_graph_path=None,
@@ -285,7 +285,7 @@ class ContractGapRegressionTests(unittest.TestCase):
             with patch("build_taste_steam_review_dossier_work.current_worker_contract_binding", return_value=changed_binding):
                 second, transition = build_or_preserve_daily_work(
                     contract=contract,
-                    queue_path=queue_path,
+                    queue_path=queue_path.as_posix(),
                     store_dir=root / "store",
                     output_path=output,
                     family_graph_path=None,
