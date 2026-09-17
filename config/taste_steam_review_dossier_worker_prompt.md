@@ -87,6 +87,20 @@ Do not convert aggregate statistics into records or mentions. Overall Steam revi
 
 Recurrence follows the bound records mechanically: `anecdotal=1`, `limited>=2`, `moderate>=3`, `strong>=5`. One attributable item therefore remains `anecdotal` with `mention_count:1`.
 
+### Language binding — bind records first, derive claims second
+
+Treat feedback-record language as evidence only after the exact records are bound to a specific observation or conflict. The order is mandatory:
+
+1. Classify each persisted `provenance.player_feedback_records[]` record language as the schema enum actually supported by that item.
+2. Bind the exact supporting `player_feedback_ids` to the observation or conflict.
+3. Read language support **only from those bound records**. Do not use a search-query language, a Russian-rendered page, a store locale, a parent source's general language, or other unbound records.
+4. For an observation, derive `evidence_languages` as the ordered distinct union of support from the bound records: record `russian` -> `russian`; record `non_russian` -> `non_russian`; record `mixed` -> both `russian` and `non_russian`; record `unknown` -> `unknown`. Emit the resulting tokens in canonical order `russian`, `non_russian`, `unknown`. Do **not** emit `mixed` in `evidence_languages`; `mixed` is an input record language that expands to both support classes.
+5. For a conflict, there is no separate language-summary field. Any wording in `statement` that claims Russian, non-Russian, or mixed-language/population evidence must be supported by that conflict's exact bound `player_feedback_ids` under the same projection.
+
+This is a generation invariant, not a post-hoc label choice. In particular, if every record bound to an observation is `non_russian`, its `evidence_languages` must be exactly `["non_russian"]`; adding `"russian"` because a Russian search was attempted is invalid. A Russian/mixed record that was found during research but is **not bound to that observation or conflict** gives that entry no Russian support.
+
+Before serializing each observation/conflict, perform the derivation from its final `player_feedback_ids` again. Do not preserve an earlier language label after changing the bound record set.
+
 ### Conflicts use the same attributable evidence model
 
 Every `conflicts[]` entry must contain `statement`, `recurrence`, `mention_count`, `source_ids`, and `player_feedback_ids`. Conflict `mention_count` and recurrence use exactly the same physical-item/count thresholds as observations. Official metadata or professional context may help interpret a conflict but cannot by itself establish `limited`, `moderate`, or `strong` recurrence. Do not assign `strong` merely because an official/context page is persuasive.
