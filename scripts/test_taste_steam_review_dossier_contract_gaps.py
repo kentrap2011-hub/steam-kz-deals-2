@@ -182,7 +182,8 @@ class ContractGapRegressionTests(unittest.TestCase):
 
     def test_gap05_russian_attempt_is_bidirectional(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
-        self.assertIs(self.validate(web_dossier(550001, now), now=now).get("evidence"), web_dossier(550001, now)["evidence"])
+        valid = web_dossier(550001, now)
+        self.assertIs(self.validate(valid, now=now), valid)
         for state in ("searched_not_found_or_insufficient", "source_access_unavailable"):
             doc = web_dossier(550002, now)
             doc["evidence"]["russian_attempt"] = state
