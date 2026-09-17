@@ -290,11 +290,13 @@
 - durable report: `reviews/worker_reports/taste-dossier-prepublication-recovery-implement-01.md`.
 
 ### Taste dossier language binding fix implement 01
-Статус: `in_progress_green_pr`.
+Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_LANGUAGE_BINDING_FIX_IMPLEMENT_01.md`;
-- target: close live `g000002` / Blacksad language-binding defect at generation-contract level;
-- preserve strict GitHub validation, parallel immutable buffer, contiguous-prefix acceptance and group size `3`;
-- old invalid candidate/snapshot must become stale/inert only through normal content-complete compatibility activation; no manual repair or Scheduled Task `Run now`;
-- PR `#42`, head `16e9e5007113e1534206d40317af2618fe968ae7`;
-- profile CI run `35260938917`: success including language-binding, package identity and parallel contiguous-prefix regressions;
-- backlog-disposition run `35260938887`: success.
+- implementation PR `#42` merged to `main` as `76b00c4af4769cbaf04f30f40d6947d1b6ab21e0`;
+- profile CI run `35261100326`, job `105336731038`: success; backlog-disposition run `35261100450`, job `105336731176`: success;
+- generation contract now derives observation language support from exact bound `player_feedback_ids`; strict validator remains fail-closed and unchanged;
+- automatic activation run `35261291584`, job `105337381143`: success; activation commit `b6deb67178392f85a858adc7b0db7ac7a2797e5d`;
+- fresh snapshot `e2fe16341be5bdfdb314a668c2152703e2db7f20f0a4bf769f179818b090fc59`: progress `0/564`, expected group `1`, `188` groups, group size `3`, binding revision `language-binding-2026-09-17`;
+- old `d7c882f8…` `g000002` / `g000003` artifacts became stale/inert through normal GitHub-owned quarantine with original blobs preserved; no manual repair/rebind occurred;
+- Scheduled Task `Run now` was not launched;
+- durable report: `reviews/worker_reports/taste-dossier-language-binding-fix-implement-01.md`.
