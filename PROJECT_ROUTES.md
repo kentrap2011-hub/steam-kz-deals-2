@@ -201,27 +201,30 @@ Production validator проверяет:
 
 ---
 
-## Taste Steam review dossier: prepublication validation and immutable-safe recovery
+## Taste Steam review dossier: parallel buffered validation and immutable-safe recovery
 
-**Что ищем:** как worker проверяет полный buffered group до create-only публикации, где находится тот же canonical validator для GitHub ingest и как безопасно восстанавливать заблокированный snapshot без ручной правки immutable artifacts/progress.
+**Что ищем:** как Scheduled ChatGPT публикует immutable candidate groups без локального Python, где GitHub выполняет authoritative strict validation, как canonical progress принимает только максимальный непрерывный валидный префикс и как несовместимый snapshot становится stale/inert без ручной правки artifacts/progress.
 
 **Последняя проверка:** 2026-09-17.
 
 **Быстрая точка входа:**
-1. `config/taste_steam_review_dossier_contract.json` — canonical control-plane/group contract; `checkpoint_size` остаётся `3`.
-2. `config/taste_steam_review_dossier_schema.json` + `config/taste_steam_review_dossier_web_evidence_contract.json` + `config/taste_steam_review_dossier_worker_prompt.md` — worker/evidence binding, compact provenance и обязательный publication guard.
-3. `scripts/taste_steam_review_dossier_prepublication.py` → `scripts/taste_steam_review_dossier_buffered.py::validate_buffer_artifact` — worker-side prepublication вызывает тот же canonical buffered validator, а не отдельный список правил.
-4. `scripts/taste_steam_review_dossier_strict.py` + `scripts/taste_steam_review_dossier_compact_provenance.py` — strict dossier/evidence validation и machine privacy/content guard для compact provenance.
-5. `scripts/build_taste_steam_review_dossier_work.py` — worker/evidence binding входит в snapshot identity; несовместимое binding требует normal GitHub-owned fresh snapshot даже в тот же день.
-6. `scripts/taste_steam_review_dossier_recovery.py` — same-snapshot invalid expected artifact recovery и stale-snapshot quarantine; progress вручную не продвигается.
-7. `.github/workflows/validate-taste-dossier-buffered.yml` — PR regression gate.
-8. `.github/workflows/build-pre-ai-store-snapshot.yml` — штатная activation/rebuild/reconcile/recovery после merge.
+1. `config/taste_steam_review_dossier_contract.json` — canonical control-plane/group contract; `checkpoint_size` остаётся `3`, transport — parallel immutable candidate buffer.
+2. `config/taste_steam_review_dossier_schema.json` + `config/taste_steam_review_dossier_web_evidence_contract.json` + `config/taste_steam_review_dossier_worker_prompt.md` — worker/evidence compatibility binding и generation invariants, включая bound-record language derivation.
+3. `scripts/taste_steam_review_dossier_buffered.py::validate_buffer_artifact` + `scripts/taste_steam_review_dossier_strict.py` — authoritative GitHub-side strict validation после create-only candidate publication.
+4. `scripts/taste_steam_review_dossier_prepublication.py` — только optional CI/developer parity utility; Scheduled ChatGPT не обязан и не должен запускать repository Python перед публикацией.
+5. `scripts/taste_steam_review_dossier_parallel_validation.py` — observational validation status и contiguous-prefix planning; более поздние валидные группы могут оставаться buffered за более ранней invalid group.
+6. `scripts/build_taste_steam_review_dossier_work.py` — content-complete worker/evidence binding входит в snapshot identity; semantic contract/prompt change требует normal GitHub-owned fresh snapshot даже в тот же день.
+7. `scripts/taste_steam_review_dossier_recovery.py` — stale-snapshot quarantine/reconcile; old artifacts не rebind-ятся и canonical progress вручную не продвигается.
+8. `.github/workflows/validate-taste-dossier-buffered.yml` — PR regression gate.
+9. `.github/workflows/build-pre-ai-store-snapshot.yml` — штатная GitHub-owned activation/rebuild/reconcile после merge.
 
-**Recovery-инварианты:**
-- опубликованный deterministic group нельзя overwrite/update/rename/delete через worker/chat;
-- invalid текущий expected artifact может быть quarantined только GitHub-owned recovery после canonical validator proof;
-- при новом snapshot старые snapshot artifacts становятся inert и уходят в stale quarantine штатным rebuild path;
-- очередь/cache/progress/receipts вручную не чинить;
-- prepublication validator недоступен Scheduled ChatGPT runtime → fail closed, publish nothing; не заменять код сокращённым hand-written checklist.
+**Runtime / recovery-инварианты:**
+- Scheduled ChatGPT собирает полный predeclared 3-game group и публикует его create-only; successful write означает только `candidate buffered`, не canonical acceptance;
+- GitHub асинхронно валидирует candidates и продвигает canonical progress только через maximal contiguous valid prefix от текущего expected sequence;
+- invalid group N останавливает canonical promotion на N, но не требует worker ждать GitHub acceptance перед публикацией уже подготовленных N+1/N+2 по immutable plan;
+- локальный repository Python не является Scheduled runtime prerequisite; отсутствие локального Python не является причиной fail-closed для candidate publication;
+- опубликованный deterministic group нельзя overwrite/update/rename/delete через worker/chat и нельзя «лечить» retry/per-game replacement;
+- при content-complete binding change GitHub создаёт fresh snapshot; artifacts старого snapshot становятся stale/inert и могут быть перемещены только штатным GitHub-owned stale-quarantine path;
+- очередь/cache/progress/receipts вручную не чинить.
 
-**Проверенный production recovery:** implementation PR `#36` → merge `3940fcf9de12519316938dbc723141023781aa05`; auto pre-AI run `35157755703` / job `105001126796` создал fresh snapshot `adaccfbc4cd43faf4d7ea52e1a018adb66c785468959d5a6f8a64c1f8ade139d`, сохранил progress `0/591`, group size `3` и GitHub-owned перенёс три старых `d4543076…` artifacts в `data/quarantine/taste_steam_review_dossier_inbox/stale/d4543076…/`.
+**Проверенный parallel-buffer факт:** live acceptance `g000002` был correctly rejected strict validator, а уже опубликованный `g000003` мог оставаться buffered за ним; это ожидаемое доказательство contiguous-prefix архитектуры, а не повод возвращать synchronous local validation.

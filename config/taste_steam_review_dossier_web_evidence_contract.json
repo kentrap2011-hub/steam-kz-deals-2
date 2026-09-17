@@ -2,14 +2,14 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "parallel-buffer-validation-2026-09-17",
+  "contract_revision": "language-binding-2026-09-17",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "parallel_validation_contract": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2-prepublication-v1",
+  "worker_prompt_revision": "web-evidence-v2-language-binding-v1",
   "purpose": "Define the active semantic evidence policy for neutral Taste dossiers while leaving GitHub-owned scope, buffered transport, asynchronous strict validation/persistence, recovery and completeness in the existing control-plane contracts.",
   "supersedes": {
     "steam_appreviews_required": false,
@@ -132,6 +132,36 @@
     "aggregate_count_rule": "overall_review_totals_positive_counts_language_filtered_counts_percentages_ratings_curator_totals_and_other_aggregate_statistics_never_create_feedback_records_or_mentions",
     "one_record_rule": "one_attributable_player_feedback_record_requires_anecdotal_recurrence_and_mention_count_1",
     "raw_body_storage": false
+  },
+  "language_binding": {
+    "record_language_source": "provenance.player_feedback_records[].language",
+    "observation_binding_field": "player_feedback_ids",
+    "observation_summary_field": "evidence_languages",
+    "conflict_binding_field": "player_feedback_ids",
+    "conflict_language_summary_field": null,
+    "bind_records_before_language_summary": true,
+    "observation_summary_is_free_form": false,
+    "record_language_support_projection": {
+      "russian": ["russian"],
+      "non_russian": ["non_russian"],
+      "mixed": ["russian", "non_russian"],
+      "unknown": ["unknown"]
+    },
+    "observation_summary_rule": "evidence_languages must equal the ordered distinct union of record_language_support_projection for exactly the player_feedback_ids bound to that observation",
+    "canonical_output_order": ["russian", "non_russian", "unknown"],
+    "mixed_summary_token_policy": "do_not_emit_mixed_as_an_observation_summary_token; mixed is a feedback-record input language that deterministically expands to russian and non_russian support",
+    "russian_claim_rule": "russian may appear in an observation language summary only when at least one bound player-feedback record language is russian or mixed",
+    "non_russian_claim_rule": "non_russian may appear in an observation language summary only when at least one bound player-feedback record language is non_russian or mixed",
+    "unknown_claim_rule": "unknown may appear only when at least one bound player-feedback record language is unknown and must not be used as a substitute for russian or non_russian support",
+    "search_attempt_is_language_evidence": false,
+    "source_page_or_locale_is_language_evidence": false,
+    "conflict_statement_rule": "conflicts have no separate language-summary field; any Russian/non-Russian population or language-evidence assertion in conflict.statement must be supported by the languages of that conflict's exact bound player_feedback_ids using the same projection",
+    "generation_order": [
+      "classify_each_feedback_record_language",
+      "bind_exact_player_feedback_ids_to_observation_or_conflict",
+      "derive_language_support_only_from_those_bound_records",
+      "write_observation_evidence_languages_or_language-specific_conflict_wording"
+    ]
   },
   "conflicts": {
     "model": "player_feedback_bound_recurrence",
