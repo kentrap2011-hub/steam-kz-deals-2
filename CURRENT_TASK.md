@@ -288,3 +288,10 @@
 - three old immutable `d4543076…` group artifacts were moved by normal GitHub stale-snapshot quarantine as `100%` renames; no manual rewrite/delete/rename and no artificial progress advance;
 - Scheduled Task `Run now` was not launched; remaining boundary is one separate live acceptance of the existing task/runtime;
 - durable report: `reviews/worker_reports/taste-dossier-prepublication-recovery-implement-01.md`.
+
+### Taste dossier language binding fix implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_LANGUAGE_BINDING_FIX_IMPLEMENT_01.md`;
+- target: close live `g000002` / Blacksad language-binding defect at generation-contract level;
+- preserve strict GitHub validation, parallel immutable buffer, contiguous-prefix acceptance and group size `3`;
+- old invalid candidate/snapshot must become stale/inert only through normal content-complete compatibility activation; no manual repair or Scheduled Task `Run now`.
