@@ -281,6 +281,7 @@ class RecoveryLifecycleTests(unittest.TestCase):
             contract = contract_for(td)
             store = Path(td) / "store"
             work = build_daily_work_manifest(queue(range(200000, 200025)), contract, store, now=NOW)
+            work["web_evidence_contract_binding"] = current_worker_contract_binding()
             manifest_path = Path(contract["paths"]["work_manifest"])
             manifest_path.write_text(json.dumps(work), encoding="utf-8")
             contract_path, recovery_path, recovery = self._write_contracts(td, contract)
@@ -313,6 +314,7 @@ class RecoveryLifecycleTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
             work = build_daily_work_manifest(queue(range(300000, 300011)), contract, Path(td) / "store", now=NOW)
+            work["web_evidence_contract_binding"] = current_worker_contract_binding()
             descriptor = work["submission_group_plan"]["groups"][0]
             artifact = buffered_artifact(work, 1)
             artifact["dossiers"][0]["title"] = "Wrong title"
@@ -350,6 +352,7 @@ class RecoveryLifecycleTests(unittest.TestCase):
             contract = contract_for(td)
             store = Path(td) / "store"
             work = build_daily_work_manifest(queue(range(400000, 400025)), contract, store, now=NOW)
+            work["web_evidence_contract_binding"] = current_worker_contract_binding()
             manifest_path = Path(contract["paths"]["work_manifest"])
             manifest_path.write_text(json.dumps(work), encoding="utf-8")
             contract_path, _, _ = self._write_contracts(td, contract)
