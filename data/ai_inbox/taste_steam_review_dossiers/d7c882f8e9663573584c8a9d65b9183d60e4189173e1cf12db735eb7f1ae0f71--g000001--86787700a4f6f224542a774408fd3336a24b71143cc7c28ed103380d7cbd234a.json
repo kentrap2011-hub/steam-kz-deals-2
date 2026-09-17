@@ -1,0 +1,89 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "d7c882f8e9663573584c8a9d65b9183d60e4189173e1cf12db735eb7f1ae0f71",
+  "prepared_required_sha256": "a73cb560704b79bf1069191dd1bd8d52af7e2c7969f619e3e9be11c7351fb95d",
+  "sequence": 1,
+  "start_index": 0,
+  "end_index_exclusive": 3,
+  "items": [
+    {"key":"App_2378500","appid":"2378500","title":"Baldur's Gate 3 - Digital Deluxe Edition DLC","dossier_path":"data/cache/taste_steam_review_dossiers/App_2378500.json","reason":"refresh_required"},
+    {"key":"App_1000360","appid":"1000360","title":"Hellish Quart","dossier_path":"data/cache/taste_steam_review_dossiers/App_1000360.json","reason":"refresh_required"},
+    {"key":"App_1003590","appid":"1003590","title":"Tetris® Effect: Connected","dossier_path":"data/cache/taste_steam_review_dossiers/App_1003590.json","reason":"refresh_required"}
+  ],
+  "appids": ["2378500","1000360","1003590"],
+  "items_sha256": "48256e357c57025236475a74cadcc1c2c64b72cbd199287869abe454712ab6bf",
+  "group_sha256": "86787700a4f6f224542a774408fd3336a24b71143cc7c28ed103380d7cbd234a",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "cda060dbcdbbf104fc87766bad7a35775ccaead0762e0678fb397f871e485cfa",
+  "dossiers": [
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,
+      "web_evidence_contract_binding":{"evidence_contract_schema":"TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2","evidence_contract_version":2,"evidence_contract_revision":"parallel-buffer-validation-2026-09-17","evidence_contract_sha256":"f12bd44759b52197f4908e0d0f8cadfcf0ceceec38cdee17df422da37c2e871a","worker_schema":"TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2","worker_schema_version":2,"worker_schema_revision":"contract-gaps-2026-09-17","worker_schema_sha256":"683c310bf9ea7364485f5e39456bcde0f5fb4a8cdf0106bb96d6aa9ea25b73be","dossier_schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","dossier_schema_version":2,"worker_prompt_revision":"web-evidence-v2-prepublication-v1","worker_prompt_sha256":"deb6d68227f47766c9f159d1461341f540a0f360e848e1c230eb6bf6e32a6478"},
+      "appid":"2378500","title":"Baldur's Gate 3 - Digital Deluxe Edition DLC","generated_at_utc":"2026-09-17T07:10:00Z","expires_at_utc":"2026-10-07T07:10:00Z","ttl_days":20,
+      "game_identity":{"work_title":"Baldur's Gate 3 - Digital Deluxe Edition DLC","release_year":2023,"resolution_status":"resolved","identity_source_ids":["bg3_store"],"corroborators":[{"kind":"appid","value":"2378500"},{"kind":"developer","value":"Larian Studios"}]},
+      "summary":"Player discussion characterizes this package primarily as bonus in-game items plus digital extras rather than additional missions. Separate discussion indicates the in-game bonus items are intended to appear across campaigns, while older reports of missing content were often resolved by locating the camp chest or the install-directory extras.",
+      "observations":[
+        {"category":"other","statement":"The package is discussed primarily as bonus items and digital extras rather than additional missions or a separate gameplay campaign.","sentiment":"neutral","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["bg3_contents"],"player_feedback_ids":["bg3_c1","bg3_c2"]},
+        {"category":"other","statement":"Players report that Digital Deluxe in-game items can be available in multiple campaigns rather than being permanently limited to one save.","sentiment":"positive","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["bg3_saves"],"player_feedback_ids":["bg3_s1","bg3_s2"]}
+      ],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"multi_source","single_source_reason":null,"russian_attempt":"searched_not_found_or_insufficient","overall_strength":"limited","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"bg3_store","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/2378500/","publication_date":"2023-08-03","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"bg3_contents","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1086940/discussions/0/842879295914262085/","publication_date":"2026-05-05","language":"non_russian","freshness":"recent","evidence_role":"durable_trait","player_feedback":true},
+        {"source_id":"bg3_saves","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1086940/discussions/0/4140564660381668234/","publication_date":"2024-01-24","language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true}
+      ],"player_feedback_records":[
+        {"feedback_id":"bg3_c1","source_id":"bg3_contents","public_ref":"steam-discussion:842879295914262085:comment-1","publication_date":"2026-05-05","language":"non_russian"},
+        {"feedback_id":"bg3_c2","source_id":"bg3_contents","public_ref":"steam-discussion:842879295914262085:comment-2","publication_date":"2026-05-05","language":"non_russian"},
+        {"feedback_id":"bg3_s1","source_id":"bg3_saves","public_ref":"steam-discussion:4140564660381668234:comment-2","publication_date":"2024-01-24","language":"non_russian"},
+        {"feedback_id":"bg3_s2","source_id":"bg3_saves","public_ref":"steam-discussion:4140564660381668234:comment-4","publication_date":"2024-01-24","language":"non_russian"}
+      ]}
+    },
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,
+      "web_evidence_contract_binding":{"evidence_contract_schema":"TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2","evidence_contract_version":2,"evidence_contract_revision":"parallel-buffer-validation-2026-09-17","evidence_contract_sha256":"f12bd44759b52197f4908e0d0f8cadfcf0ceceec38cdee17df422da37c2e871a","worker_schema":"TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2","worker_schema_version":2,"worker_schema_revision":"contract-gaps-2026-09-17","worker_schema_sha256":"683c310bf9ea7364485f5e39456bcde0f5fb4a8cdf0106bb96d6aa9ea25b73be","dossier_schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","dossier_schema_version":2,"worker_prompt_revision":"web-evidence-v2-prepublication-v1","worker_prompt_sha256":"deb6d68227f47766c9f159d1461341f540a0f360e848e1c230eb6bf6e32a6478"},
+      "appid":"1000360","title":"Hellish Quart","generated_at_utc":"2026-09-17T07:10:00Z","expires_at_utc":"2026-10-07T07:10:00Z","ttl_days":20,
+      "game_identity":{"work_title":"Hellish Quart","release_year":2021,"resolution_status":"resolved","identity_source_ids":["hq_store"],"corroborators":[{"kind":"appid","value":"1000360"},{"kind":"developer","value":"Kubold"}]},
+      "summary":"Recent player feedback still praises the distinctive high-lethality sword-fighting concept, but also reports rough edges in hit detection, movement or responsiveness and other Early Access polish. Beginner-oriented feedback describes a meaningful learning curve and encourages experimenting with fighters and attack options rather than relying on simple repeated attacks.",
+      "observations":[
+        {"category":"friction","statement":"Recent players report inconsistent hit detection or damage registration and sluggish or unreliable combat responses as ongoing polish issues.","sentiment":"negative","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"current","source_ids":["hq_hit_2026","hq_sluggish_2026"],"player_feedback_ids":["hq_f1","hq_f2"]},
+        {"category":"difficulty","statement":"Learning the combat can take time, with player guidance emphasizing experimentation across fighters, stances and attack options.","sentiment":"mixed","recurrence":"anecdotal","mention_count":1,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["hq_beginner"],"player_feedback_ids":["hq_f3"]}
+      ],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"multi_source","single_source_reason":null,"russian_attempt":"searched_not_found_or_insufficient","overall_strength":"limited","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"hq_store","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/1000360/","publication_date":"2021-02-16","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"hq_hit_2026","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1000360/discussions/0/729153699965901699/","publication_date":"2026-01-19","language":"non_russian","freshness":"recent","evidence_role":"current_state","player_feedback":true},
+        {"source_id":"hq_sluggish_2026","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1000360/discussions/0/806848596440909621/","publication_date":"2026-04-16","language":"non_russian","freshness":"recent","evidence_role":"current_state","player_feedback":true},
+        {"source_id":"hq_beginner","source_type":"reddit","domain":"reddit.com","url":"https://www.reddit.com/r/HellishQuart/comments/1llby63/","publication_date":"2025-06-26","language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true}
+      ],"player_feedback_records":[
+        {"feedback_id":"hq_f1","source_id":"hq_hit_2026","public_ref":"steam-discussion:729153699965901699:post-1","publication_date":"2026-01-19","language":"non_russian"},
+        {"feedback_id":"hq_f2","source_id":"hq_sluggish_2026","public_ref":"steam-discussion:806848596440909621:post-1","publication_date":"2026-04-16","language":"non_russian"},
+        {"feedback_id":"hq_f3","source_id":"hq_beginner","url":"https://www.reddit.com/r/HellishQuart/comments/1llby63/","publication_date":"2025-06-26","language":"non_russian"}
+      ]}
+    },
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,
+      "web_evidence_contract_binding":{"evidence_contract_schema":"TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2","evidence_contract_version":2,"evidence_contract_revision":"parallel-buffer-validation-2026-09-17","evidence_contract_sha256":"f12bd44759b52197f4908e0d0f8cadfcf0ceceec38cdee17df422da37c2e871a","worker_schema":"TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2","worker_schema_version":2,"worker_schema_revision":"contract-gaps-2026-09-17","worker_schema_sha256":"683c310bf9ea7364485f5e39456bcde0f5fb4a8cdf0106bb96d6aa9ea25b73be","dossier_schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","dossier_schema_version":2,"worker_prompt_revision":"web-evidence-v2-prepublication-v1","worker_prompt_sha256":"deb6d68227f47766c9f159d1461341f540a0f360e848e1c230eb6bf6e32a6478"},
+      "appid":"1003590","title":"Tetris® Effect: Connected","generated_at_utc":"2026-09-17T07:10:00Z","expires_at_utc":"2026-10-07T07:10:00Z","ttl_days":20,
+      "game_identity":{"work_title":"Tetris® Effect: Connected","release_year":2021,"resolution_status":"resolved","identity_source_ids":["tec_store"],"corroborators":[{"kind":"appid","value":"1003590"},{"kind":"developer","value":"Monstars Inc., Resonair, Stage Games"}]},
+      "summary":"Player feedback repeatedly highlights the audiovisual presentation as a defining part of the experience, with music, reactive effects and stylized stages tightly integrated with Tetris play. The same sensory density can be distracting or overwhelming for some players, while the game also offers a broad mix of solo, cooperative and competitive modes.",
+      "observations":[
+        {"category":"other","statement":"Players repeatedly praise the stylized visuals, music and reactive audiovisual presentation as a defining strength of the experience.","sentiment":"positive","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["tec_patient","tec_players"],"player_feedback_ids":["tec_f1","tec_f2"]},
+        {"category":"friction","statement":"The dense visual and audio effects can distract or overwhelm some players even though others value the same presentation highly.","sentiment":"mixed","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["tec_patient","tec_players"],"player_feedback_ids":["tec_f1","tec_f3"]}
+      ],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"multi_source","single_source_reason":null,"russian_attempt":"searched_not_found_or_insufficient","overall_strength":"limited","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"tec_store","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/1003590/","publication_date":"2021-08-17","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"tec_patient","source_type":"reddit","domain":"reddit.com","url":"https://www.reddit.com/r/patientgamers/comments/1muld3p/tetris_effect_connected_is_a_game_ill_likely/","publication_date":"2025-08-19","language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true},
+        {"source_id":"tec_players","source_type":"reddit","domain":"reddit.com","url":"https://www.reddit.com/r/Tetris/comments/1n51hrd/do_any_of_yall_play_teris_effect_connected/","publication_date":"2025-08-31","language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true}
+      ],"player_feedback_records":[
+        {"feedback_id":"tec_f1","source_id":"tec_patient","url":"https://www.reddit.com/r/patientgamers/comments/1muld3p/tetris_effect_connected_is_a_game_ill_likely/","publication_date":"2025-08-19","language":"non_russian"},
+        {"feedback_id":"tec_f2","source_id":"tec_players","public_ref":"reddit-post:1n51hrd","publication_date":"2025-08-31","language":"non_russian"},
+        {"feedback_id":"tec_f3","source_id":"tec_players","public_ref":"reddit-comment:1n51hrd:overwhelming-stimuli","publication_date":"2025-08-31","language":"non_russian"}
+      ]}
+    }
+  ]
+}
