@@ -155,6 +155,7 @@ class ParallelValidationTests(unittest.TestCase):
             parallel["validation_status"]["required_binding"],
             ["snapshot_id", "sequence", "group_sha256", "web_evidence_contract_binding"],
         )
+        self.assertTrue(parallel["validation_status"]["new_snapshot_supersedes_prior_status"])
 
     def test_ingest_workflow_records_status_and_treats_semantic_block_as_state_not_retry(self):
         workflow = (ROOT / ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml").read_text(encoding="utf-8")
