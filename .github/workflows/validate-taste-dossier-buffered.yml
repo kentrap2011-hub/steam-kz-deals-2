@@ -56,17 +56,19 @@ jobs:
         run: |
           set -euo pipefail
           python -m py_compile scripts/taste_package_member_aggregation.py scripts/build_pre_ai_chatgpt_payload.py scripts/taste_steam_review_dossier_web.py scripts/taste_steam_review_dossier_strict.py scripts/taste_steam_review_dossier_worker_projection.py scripts/taste_steam_review_dossier_compact_provenance.py scripts/taste_steam_review_dossier_prepublication.py scripts/taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_contract_gaps.py scripts/test_taste_steam_review_dossier_parallel_validation.py
-      - name: Run existing fixed-snapshot strict-schema recovery contract-gap and package regressions
-        run: |
-          set -euo pipefail
-          python scripts/test_taste_steam_review_dossier_daily_snapshot.py
-          python scripts/test_taste_steam_review_dossier_buffered_submission.py
-          python scripts/test_taste_steam_review_dossier_same_day_preservation.py
-          python scripts/test_taste_steam_review_dossier_strict_recovery.py
-          python scripts/test_taste_steam_review_dossier_prepublication.py
-          python scripts/test_taste_steam_review_dossier_contract_gaps.py
-          python scripts/test_taste_dossier_package_identity_fix.py
-      - name: Run parallel candidate validation and contiguous-prefix regression
-        run: |
-          set -euo pipefail
-          python scripts/test_taste_steam_review_dossier_parallel_validation.py
+      - name: Daily snapshot regression
+        run: python scripts/test_taste_steam_review_dossier_daily_snapshot.py
+      - name: Buffered submission regression
+        run: python scripts/test_taste_steam_review_dossier_buffered_submission.py
+      - name: Same-day preservation regression
+        run: python scripts/test_taste_steam_review_dossier_same_day_preservation.py
+      - name: Strict recovery regression
+        run: python scripts/test_taste_steam_review_dossier_strict_recovery.py
+      - name: Prepublication parity regression
+        run: python scripts/test_taste_steam_review_dossier_prepublication.py
+      - name: Contract-gap regression
+        run: python scripts/test_taste_steam_review_dossier_contract_gaps.py
+      - name: Package identity regression
+        run: python scripts/test_taste_dossier_package_identity_fix.py
+      - name: Parallel candidate validation and contiguous-prefix regression
+        run: python scripts/test_taste_steam_review_dossier_parallel_validation.py
