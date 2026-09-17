@@ -6,6 +6,7 @@ on:
       - "config/taste_steam_review_dossier_contract.json"
       - "config/taste_steam_review_dossier_schema.json"
       - "config/taste_steam_review_dossier_web_evidence_contract.json"
+      - "config/taste_steam_review_dossier_parallel_validation_contract.json"
       - "config/taste_steam_review_dossier_recovery_contract.json"
       - "config/taste_steam_review_dossier_persistence_bridge.json"
       - "config/taste_steam_review_dossier_worker_prompt.md"
@@ -16,6 +17,7 @@ on:
       - "scripts/taste_steam_review_dossier_compact_provenance.py"
       - "scripts/taste_steam_review_dossier_prepublication.py"
       - "scripts/taste_steam_review_dossier_buffered.py"
+      - "scripts/taste_steam_review_dossier_parallel_validation.py"
       - "scripts/taste_steam_review_dossier_recovery.py"
       - "scripts/taste_steam_review_dossier_worker_projection.py"
       - "scripts/taste_steam_review_dossier_test_fixture.py"
@@ -32,6 +34,7 @@ on:
       - "scripts/test_taste_steam_review_dossier_strict_recovery.py"
       - "scripts/test_taste_steam_review_dossier_prepublication.py"
       - "scripts/test_taste_steam_review_dossier_contract_gaps.py"
+      - "scripts/test_taste_steam_review_dossier_parallel_validation.py"
       - "scripts/test_taste_dossier_package_identity_fix.py"
       - ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
@@ -49,14 +52,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run fixed-snapshot web-evidence strict-schema recovery, prepublication, contract-gap, and package-member aggregation regressions
+      - name: Run fixed-snapshot web-evidence strict-schema recovery, parallel-buffer, contract-gap, and package-member aggregation regressions
         run: |
           set -euo pipefail
-          python -m py_compile scripts/taste_package_member_aggregation.py scripts/build_pre_ai_chatgpt_payload.py scripts/taste_steam_review_dossier_web.py scripts/taste_steam_review_dossier_strict.py scripts/taste_steam_review_dossier_worker_projection.py scripts/taste_steam_review_dossier_compact_provenance.py scripts/taste_steam_review_dossier_prepublication.py scripts/test_taste_steam_review_dossier_contract_gaps.py
+          python -m py_compile scripts/taste_package_member_aggregation.py scripts/build_pre_ai_chatgpt_payload.py scripts/taste_steam_review_dossier_web.py scripts/taste_steam_review_dossier_strict.py scripts/taste_steam_review_dossier_worker_projection.py scripts/taste_steam_review_dossier_compact_provenance.py scripts/taste_steam_review_dossier_prepublication.py scripts/taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_contract_gaps.py scripts/test_taste_steam_review_dossier_parallel_validation.py
           python scripts/test_taste_steam_review_dossier_daily_snapshot.py
           python scripts/test_taste_steam_review_dossier_buffered_submission.py
           python scripts/test_taste_steam_review_dossier_same_day_preservation.py
           python scripts/test_taste_steam_review_dossier_strict_recovery.py
           python scripts/test_taste_steam_review_dossier_prepublication.py
           python scripts/test_taste_steam_review_dossier_contract_gaps.py
+          python scripts/test_taste_steam_review_dossier_parallel_validation.py
           python scripts/test_taste_dossier_package_identity_fix.py
