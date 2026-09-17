@@ -4,7 +4,7 @@ from datetime import timedelta
 
 
 def web_dossier(appid, generated, *, title=None, release_year=2020, russian_status="found_and_used"):
-    from taste_steam_review_dossier_strict import current_worker_contract_binding
+    from taste_steam_review_dossier_strict import current_worker_contract_binding, derive_dossier_summary
 
     appid = str(appid)
     title = title or f"Game {appid}"
@@ -112,6 +112,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "source_ids": ["p2"],
             "player_feedback_ids": ["pf4"],
         })
+    conflicts = []
     return {
         "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
         "schema_version": 2,
@@ -129,9 +130,9 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "identity_source_ids": ["m1"],
             "corroborators": [{"kind": "appid", "value": appid}],
         },
-        "summary": "A compact neutral synthesis of multi-source player feedback with temporal and language provenance.",
+        "summary": derive_dossier_summary(observations, conflicts),
         "observations": observations,
-        "conflicts": [],
+        "conflicts": conflicts,
         "evidence": {
             "strategy": "adaptive_multi_source_web",
             "research_state": "sufficient",
