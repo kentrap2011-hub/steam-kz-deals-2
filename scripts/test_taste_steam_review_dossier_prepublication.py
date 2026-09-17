@@ -105,7 +105,7 @@ class PrepublicationParityTests(unittest.TestCase):
     def test_username_display_name_compact_refs_are_rejected(self):
         def mutate(artifact):
             artifact["dossiers"][0]["provenance"]["player_feedback_records"][0]["public_ref"] = (
-                "steam-discussion:6504942507064908210:comment-42; contribution by Sugarwolf"
+                "steam-recommendation:6504942507064908210; contribution by Sugarwolf"
             )
         self.assert_same_failure(mutate, "public_ref contains author/user identity attribution")
 
