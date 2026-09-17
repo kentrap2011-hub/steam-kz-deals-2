@@ -149,11 +149,11 @@ Use only schema enums. Do not duplicate observations, conflicts, feedback record
 
 `evidence.overall_strength` uses the canonical observation-based derivation already enforced by strict validation: `strong` requires at least one `observations[]` entry with `recurrence:"strong"`; `moderate` requires at least one observation with `recurrence:"moderate"` or `strong`. Conflict recurrence does not promote `overall_strength`; a `strong` conflict by itself is not permission to emit `overall_strength:"strong"`.
 
-The top-level `summary` is not free-form evidence. Serialize it exactly from the already structured findings using this deterministic form, with the first observation statement stripped of outer whitespace and integer counts from the final arrays:
+The top-level `summary` is not free-form evidence. After the final observations array is fixed, serialize it exactly as:
 
-`Evidence summary: {first_observation.statement} Observations recorded: {observation_count}. Conflicts recorded: {conflict_count}.`
+`Evidence summary: {observation_count} validated structured observations; consult observations and conflicts for supported findings.`
 
-Do not add a second sentence, interpretation, conflict claim, Russian-attempt claim, or other factual assertion outside that exact derivation. All substantive facts remain in validated `observations` and `conflicts`.
+`observation_count` is the integer length of the final validated `observations` array. Do not add or repeat observation text, conflict text, Russian-attempt wording, interpretation, or any other factual assertion in `summary`. All substantive facts remain in validated `observations` and `conflicts`.
 
 Do not mention Dmitry or infer whether the user will like the game. Do not output Taste fit, personal positives/negatives, include/exclude, rank, price, discount or sale urgency. Downstream Taste analysis owns all personal interpretation.
 
