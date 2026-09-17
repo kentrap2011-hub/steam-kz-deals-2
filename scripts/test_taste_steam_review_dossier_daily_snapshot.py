@@ -14,6 +14,7 @@ from taste_steam_review_dossier_daily import (
     load_contract,
     persist_submission_and_advance_snapshot,
 )
+from taste_steam_review_dossier_strict import current_worker_contract_binding
 from taste_steam_review_dossier_worker_projection import (
     WORKER_GROUP_SCHEMA,
     WORKER_INDEX_SCHEMA,
@@ -176,6 +177,7 @@ class DailySnapshotTests(unittest.TestCase):
             contract = projection_contract(td)
             store = Path(td) / "store"
             m1 = build_daily_work_manifest(queue(range(400000, 400007)), contract, store, now=NOW)
+            m1["web_evidence_contract_binding"] = current_worker_contract_binding()
             p1 = write_worker_projection(m1, contract)
             self.assertEqual(p1["index"]["schema"], WORKER_INDEX_SCHEMA)
             self.assertEqual(p1["index"]["canonical_expected_sequence"], 1)
@@ -201,6 +203,7 @@ class DailySnapshotTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             contract = projection_contract(td)
             work = build_daily_work_manifest(queue(range(500000, 500007)), contract, Path(td) / "store", now=NOW)
+            work["web_evidence_contract_binding"] = current_worker_contract_binding()
             projection = write_worker_projection(work, contract)
             index, descriptors = build_worker_projection(work, contract)
             bad_index = copy.deepcopy(index)
