@@ -174,7 +174,7 @@
       "classify_each_feedback_record_language",
       "bind_exact_player_feedback_ids_to_observation_or_conflict",
       "derive_language_support_only_from_those_bound_records",
-      "write_observation_evidence_languages_or_language-specific_conflict-wording"
+      "write_observation_evidence_languages_or_language-specific_conflict_wording"
     ]
   },
   "conflicts": {
@@ -189,10 +189,11 @@
   "summary_binding": {
     "mode": "mechanically_derived_from_validated_structured_findings",
     "free_form_summary_allowed": false,
-    "canonical_format": "Evidence summary: {first_observation.statement.strip()} Observations recorded: {observation_count}. Conflicts recorded: {conflict_count}.",
+    "canonical_format": "Evidence summary: {observation_count} validated structured observations; consult observations and conflicts for supported findings.",
+    "observation_count_source": "final_validated_observations_array_length",
     "new_factual_claims_allowed": false,
-    "conflict_body_repeated_in_summary": false,
-    "reason": "the full structured dossier already carries all observations and conflicts; the top-level summary is only a deterministic compact projection and cannot become a second factual authority"
+    "observation_or_conflict_body_repeated_in_summary": false,
+    "reason": "the full structured dossier already carries all observations and conflicts; the top-level summary is only a deterministic compact pointer and cannot become a second factual authority"
   },
   "overall_strength_binding": {
     "source": "observations_only_for_strong_and_moderate_thresholds",
@@ -268,7 +269,7 @@
     "legacy_zero_evidence_or_store_only_placeholder_accepted": false,
     "prior_web_evidence_v1_binding_accepted_as_v2": false,
     "fresh_legacy_cache_rule": "treat_as_incompatible_and_rebuild_when_next_canonically_evaluated_for_freshness",
-    "same_day_fixed_snapshot_rule": "an_incompatible_worker_evidence_binding_or canonical_group_size_requires_a_normal_github_owned_snapshot_rebuild_even_on_the_same_calendar_date",
+    "same_day_fixed_snapshot_rule": "an_incompatible_worker_evidence_binding_or_canonical_group_size_requires_a_normal_github_owned_snapshot_rebuild_even_on_the_same_calendar_date",
     "stale_buffer_rule": "old_snapshot_or_old_group_plan_buffer_artifacts_can_never_be_rebound_to_the_new_snapshot",
     "manual_progress_migration_forbidden": true
   }
