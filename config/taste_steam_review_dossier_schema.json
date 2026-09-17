@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "version": 2,
   "status": "active",
-  "schema_revision": "contract-gaps-2026-09-17",
+  "schema_revision": "semantic-consistency-gaps-2026-09-17",
   "evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "evidence_contract_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
@@ -97,6 +97,13 @@
     "appid_corroborator_must_equal_dossier_appid": true,
     "resolved_identity_only": true
   },
+  "summary_invariants": {
+    "free_form_factual_claims_allowed": false,
+    "derived_from_validated_structured_findings": true,
+    "canonical_derivation": "Evidence summary: {first_observation.statement.strip()} Observations recorded: {observation_count}. Conflicts recorded: {conflict_count}.",
+    "first_observation_required": true,
+    "conflict_text_is_not_repeated_in_summary": true
+  },
   "observation_invariants": {
     "non_empty": true,
     "exact_duplicate_objects_allowed": false,
@@ -117,10 +124,30 @@
   },
   "conflict_invariants": {
     "required_fields": ["statement", "recurrence", "mention_count", "source_ids", "player_feedback_ids"],
+    "exact_duplicate_objects_allowed": false,
     "mention_count_equals_distinct_bound_player_feedback_records": true,
     "recurrence_thresholds_equal_observation_thresholds": true,
     "bound_player_feedback_record_source_must_be_in_conflict_source_ids": true,
     "official_or_professional_context_alone_cannot_establish_recurrence": true
+  },
+  "overall_strength_invariants": {
+    "strong_requires_at_least_one_strong_observation": true,
+    "moderate_requires_at_least_one_moderate_or_strong_observation": true,
+    "conflict_recurrence_may_promote_overall_strength": false,
+    "conflicts_remain_separate_structured_evidence": true
+  },
+  "provenance_relationship_invariants": {
+    "feedback_item_must_match_parent_physical_surface": true,
+    "same_thread_distinct_feedback_items_allowed": true,
+    "reddit_parent_subreddit_and_thread_scope_must_contain_child_when_resolvable": true,
+    "steam_review_and_discussion_surfaces_must_not_be_cross_bound": true,
+    "known_older_child_cannot_inherit_recent_parent_freshness": true,
+    "unknown_child_publication_date_preserves_existing_undated_behavior": true,
+    "parent_child_language_containment": {
+      "russian_child_parent_languages": ["russian", "mixed"],
+      "non_russian_child_parent_languages": ["non_russian", "mixed"],
+      "mixed_or_unknown_child_additional_containment_rule": false
+    }
   },
   "evidence_invariants": {
     "strategy": "adaptive_multi_source_web",
