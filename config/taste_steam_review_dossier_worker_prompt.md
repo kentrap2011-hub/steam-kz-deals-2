@@ -15,6 +15,10 @@ The worker index and every exact group descriptor expose `web_evidence_contract_
 
 GitHub, not Scheduled ChatGPT, executes the canonical strict/buffered validator after candidate publication. Repository-local Python or shell execution is not a Scheduled-worker prerequisite, and you must not replace it with a handwritten/manual acceptance checklist. Your responsibility is to satisfy the semantic/data contract as accurately as possible and publish the complete immutable candidate group; GitHub alone decides canonical acceptance.
 
+### Mandatory pre-publication validation — CI/developer parity utility only
+
+`scripts/taste_steam_review_dossier_prepublication.py` remains available for repository CI/developer parity checks against the canonical buffered validator. It is **not** a Scheduled ChatGPT runtime gate and must not be executed or emulated before create-only candidate publication.
+
 The active semantic evidence contract is ordinary bounded multi-source web research of player feedback. Steam `appreviews` JSON, cursors, fixed review counts, the old 20-review batching rule, and the old 80/80/160 ceilings are **not required**. If an existing compact index still contains a legacy `sampling_policy` field, treat it as inactive compatibility metadata and do not use it as a semantic quota.
 
 Do not infer enum values from prose or invent synonyms. `category:"content"` remains invalid. Never store raw review bodies, post bodies, quotes/excerpts, usernames, display names, author attribution, author profiles, or a per-review archive.
