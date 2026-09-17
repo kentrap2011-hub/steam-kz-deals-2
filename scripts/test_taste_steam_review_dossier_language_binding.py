@@ -87,9 +87,14 @@ class LanguageBindingRegressionTests(unittest.TestCase):
         self.assertIn("Before serializing each observation/conflict, perform the derivation from its final `player_feedback_ids` again.", PROMPT)
 
     def test_parallel_buffer_and_group_size_contract_are_unchanged(self):
+        buffered = CONTROL["buffered_submission"]
         self.assertEqual(int(CONTROL["checkpointing"]["checkpoint_size"]), 3)
-        self.assertEqual(CONTROL["worker_transport"]["mode"], "parallel_immutable_candidate_buffer")
-        self.assertEqual(CONTROL["worker_transport"]["canonical_acceptance_owner"], "github_control_plane_only")
+        self.assertTrue(buffered["buffer"]["multiple_pending_groups_same_snapshot_allowed"])
+        self.assertEqual(
+            buffered["drain"]["acceptance_rule"],
+            "accept_only_the_maximal_valid_contiguous_prefix_starting_at_expected_sequence",
+        )
+        self.assertEqual(buffered["drain"]["owner"], "github_control_plane")
 
 
 if __name__ == "__main__":
