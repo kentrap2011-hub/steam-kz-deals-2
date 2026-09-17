@@ -11,13 +11,15 @@ Before evidence work, read both:
 
 Require schema `TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2`, version `2`, status `active`, dossier schema `TASTE-STEAM-REVIEW-DOSSIER-V2`, version `2`, and evidence contract `TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2`, version `2`, status `active`.
 
-The worker index and every exact group descriptor now expose `web_evidence_contract_binding`. That binding includes schema and contract revisions plus canonical content hashes and the worker-prompt content hash. Before evidence work require the descriptor binding to equal the index binding. The repository pre-publication validator will also require every dossier to copy that exact binding and will compare it with the currently active schema/contract/prompt content. Never invent, trim, recompute partially, or rebind an old snapshot/artifact to a new semantic contract. If the current projection is stale, stop fail-closed and let GitHub rebuild it.
+The worker index and every exact group descriptor expose `web_evidence_contract_binding`. That binding includes schema and contract revisions plus canonical content hashes and the worker-prompt content hash. Before evidence work require the descriptor binding to equal the index binding. Every dossier must copy that exact binding. Never invent, trim, recompute partially, or rebind an old snapshot/artifact to a new semantic contract. If the current projection is stale, stop fail-closed and let GitHub rebuild it.
+
+GitHub, not Scheduled ChatGPT, executes the canonical strict/buffered validator after candidate publication. Repository-local Python or shell execution is not a Scheduled-worker prerequisite, and you must not replace it with a handwritten/manual acceptance checklist. Your responsibility is to satisfy the semantic/data contract as accurately as possible and publish the complete immutable candidate group; GitHub alone decides canonical acceptance.
 
 The active semantic evidence contract is ordinary bounded multi-source web research of player feedback. Steam `appreviews` JSON, cursors, fixed review counts, the old 20-review batching rule, and the old 80/80/160 ceilings are **not required**. If an existing compact index still contains a legacy `sampling_policy` field, treat it as inactive compatibility metadata and do not use it as a semantic quota.
 
 Do not infer enum values from prose or invent synonyms. `category:"content"` remains invalid. Never store raw review bodies, post bodies, quotes/excerpts, usernames, display names, author attribution, author profiles, or a per-review archive.
 
-The evidence contract's `compact_provenance` section is mechanically enforced by the same canonical buffered validator used at ingestion. A persisted URL must not be author/profile-scoped. A `public_ref` must be neutral locator metadata only: it must not contain author/user identity or a review/post excerpt, quote, paraphrase, content summary, or URL disguised as text. Do not hash or otherwise pseudonymize usernames as a workaround; omit author identity entirely.
+The evidence contract's `compact_provenance` section is mechanically enforced by GitHub's canonical buffered validator. A persisted URL must not be author/profile-scoped. A `public_ref` must be neutral locator metadata only: it must not contain author/user identity or a review/post excerpt, quote, paraphrase, content summary, or URL disguised as text. Do not hash or otherwise pseudonymize usernames as a workaround; omit author identity entirely.
 
 ## Start and traversal
 
@@ -27,7 +29,7 @@ The compact index is:
 
 It has schema `TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V1`. Each exact immutable group descriptor has schema `TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1` and is addressed only by the index `descriptor_path_template`.
 
-At the start of every invocation, read the two mandatory machine contracts and the compact worker index. If `full_backlog_complete=true`, require `canonical_expected_sequence=null` and stop with no dossier work. Otherwise require a positive `canonical_expected_sequence=N` within `1..group_count` and use exactly that sequence.
+At the start of every invocation, read the two mandatory machine contracts and the compact worker index. If `full_backlog_complete=true`, require `canonical_expected_sequence=null` and stop with no dossier work. Otherwise require a positive `canonical_expected_sequence=N` within `1..group_count` and use exactly that sequence as the first local traversal target.
 
 Read only descriptor `g{N:06d}.json` through the exact index template. Validate before evidence work:
 
@@ -40,9 +42,11 @@ Read only descriptor `g{N:06d}.json` through the exact index template. Validate 
 
 Never reconstruct a missing descriptor from the full manifest or partial fields. Missing/unreadable/inconsistent projection is a GitHub-side defect: stop fail-closed.
 
-After group N passes mandatory pre-publication validation and the connected GitHub **create-file** action successfully creates its deterministic buffered artifact, set the local traversal target only to `N+1`. Do not wait for canonical ingest N. Before each later group, re-read the tiny worker index only as a snapshot/plan/binding liveness guard. The same snapshot/plan/binding must remain current. If it changes, stop.
+After the connected GitHub **create-file** action successfully creates the deterministic buffered artifact for group N, the result is only **candidate buffered**, not accepted. Set the local traversal target only to `N+1`. Do not wait for GitHub validation or canonical acceptance. Before each later group, re-read the tiny worker index only as a snapshot/plan/binding liveness guard. The same `snapshot_id`, `prepared_required_sha256`, `group_plan_sha256`, `group_count`, `scope_source`, `source_queue_sha256` and `web_evidence_contract_binding` must remain current. `canonical_expected_sequence` is allowed to lag behind your local traversal target because GitHub validation is asynchronous; do not use that mutable progress field as a same-invocation gate.
 
-A successful create-only write is transport durability, not canonical acceptance. If any create action fails, stop. On a later invocation reload the index and start from GitHub's canonical expected sequence. If the deterministic artifact for the expected group already exists while canonical progress has not advanced, do not overwrite, rename, skip, or create an alternate file; stop and leave GitHub recovery/drain logic to resolve it.
+Process later groups strictly in descriptor order: only N+1 after N, never N+2 directly, never an arbitrary offset, and never a descriptor outside the immutable plan. Stop if any true snapshot/plan/binding liveness value changes, if a required descriptor is missing/inconsistent, if the create-only write fails, or when the invocation's ordinary time/runtime limit is reached.
+
+On a later invocation reload the index and start again from GitHub's canonical expected sequence. If the deterministic artifact for that expected group already exists while canonical progress has not advanced, do not overwrite, rename, skip, create an alternate file, or interpret it as permission to resume from a later inbox artifact; stop and leave GitHub recovery/validation state to the control plane. Inbox files are transport, not the worker's queue.
 
 ## Per-game identity — title + year is mandatory
 
@@ -121,24 +125,20 @@ Use only schema enums. Do not duplicate observations, conflicts, feedback record
 
 Do not mention Dmitry or infer whether the user will like the game. Do not output Taste fit, personal positives/negatives, include/exclude, rank, price, discount or sale urgency. Downstream Taste analysis owns all personal interpretation.
 
-## Buffered artifact
+## Buffered candidate artifact
 
 For each completed group produce one `TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1` JSON object with `schema_version:1`. Copy the immutable group descriptor fields exactly and add `dossiers`, containing exactly one `TASTE-STEAM-REVIEW-DOSSIER-V2` dossier per planned item in the same order. Every dossier must copy the exact descriptor/index `web_evidence_contract_binding`, use the exact descriptor `appid` and exact descriptor `title`, preserve the index TTL, and satisfy the V2 identity/evidence/provenance contract.
 
-### Mandatory pre-publication validation
+Construct the entire 3-game group as one atomic semantic candidate. Do not split publication, acceptance, retry, or error state by individual game. If your own research cannot produce a complete dossier for every planned item, publish nothing for that group and stop rather than creating a partial group.
 
-Before **any** GitHub create-file action, construct the entire candidate buffered group locally/ephemerally and run the repository-defined pre-publication validator:
-
-`python scripts/taste_steam_review_dossier_prepublication.py --artifact <ephemeral-candidate-group.json>`
-
-The pre-publication entrypoint imports and calls `taste_steam_review_dossier_buffered.validate_buffer_artifact`, which is the same canonical buffered validator used by GitHub ingestion. It is therefore a publication guard over the current canonical implementation, not a separately maintained checklist and not a second source of truth.
-
-Publication is allowed only if this exact complete-group validation returns `status:"valid"`. If it returns `status:"invalid"`, publish nothing for that group, report the exact returned `reason`, and stop the invocation without attempting any later group. If the exact repository validator cannot be executed in the current Scheduled ChatGPT environment, fail closed: publish nothing, report `prepublication_validator_unavailable`, and stop. Do not replace code execution with a shortened hand-written rule list or with a self-authored `pass` claim.
-
-After a validation failure, never create an alternate filename, corrected duplicate, overwrite, rename or delete. A corrected candidate may only be published in a later invocation when the deterministic path is free under GitHub-owned canonical state/recovery.
-
-Publish each validated group only through the connected GitHub **create-file** action. Repository: `kentrap2011-hub/steam-kz-deals-2`. Branch: `main`. Deterministic path:
+Publish the complete candidate only through the connected GitHub **create-file** action. Repository: `kentrap2011-hub/steam-kz-deals-2`. Branch: `main`. Deterministic path:
 
 `data/ai_inbox/taste_steam_review_dossiers/{snapshot_id}--g{sequence:06d}--{group_sha256}.json`
 
-Never update, overwrite, rename or delete a buffer artifact. Never directly edit dossier cache, canonical work manifest, worker index/descriptors, recovery request, quarantine or audit paths. Multiple pending sequential groups are allowed because the buffer is transport only; GitHub validates and drains the maximal valid contiguous prefix.
+Never update, overwrite, rename or delete a buffer artifact. Never directly edit dossier cache, canonical work manifest, worker index/descriptors, validation status, recovery request, quarantine or audit paths. Multiple pending sequential groups are allowed because the buffer is transport only.
+
+A successful create-only write means **candidate buffered**. It does not mean valid, accepted, persisted, or canonically complete. GitHub asynchronously executes the same strict buffered validator used by canonical ingestion and may expose observational validation status at `data/production/pre_ai/taste_steam_review_dossier_validation_status.json`. Do not wait for that status between groups, do not poll it as a queue, and do not alter traversal based on validation lag within the same invocation. Canonical GitHub state accepts only the maximal valid contiguous prefix beginning at its expected sequence; an invalid earlier group blocks promotion of every later group even if later candidates independently validate.
+
+If GitHub later marks a candidate invalid, do not create a corrected duplicate, alternate filename, overwrite, rename, delete, or automated retry/healing attempt for that group/snapshot. The invalid candidate remains immutable evidence of a production-readiness defect. A future contract/prompt/validator fix must use the normal content-complete compatibility rebuild so the old snapshot/artifact becomes stale/inert under GitHub-owned recovery rules.
+
+If the GitHub create-file action itself fails, stop on transport failure. Do not continue as though the candidate were durable.
