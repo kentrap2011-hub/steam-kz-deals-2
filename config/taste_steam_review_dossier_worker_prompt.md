@@ -79,6 +79,8 @@ For every individual player review, post, discussion contribution or other attri
 
 A review-list page, subreddit/community index, search page, generic `/reviews/` page, or vague label such as "Steam review found on 2026-09-16" is **not** an attributable feedback item and must not become a feedback record. Prefer stable non-identifying item tokens such as `steam-recommendation:185290437`, `steam-discussion:729153699965901699:comment-442019`, `reddit-comment:ve5i0a:k3mz12`, or a direct non-profile item URL.
 
+The feedback record's `source_id` is a physical provenance relationship, not a same-host bucket. When a Reddit parent locator exposes a subreddit, every child URL under that source must resolve to the same subreddit; when it exposes a thread id, the child must resolve to that same thread. Distinct comments/posts in the same valid parent thread remain distinct items. A parent such as `r/sniperelite` must never own a child item from `r/XboxSeriesX` merely because both are on `reddit.com`. For Steam, a `steam-discussion:*` item must not be bound under an explicitly review `/reviews/` parent surface, and a review/recommendation item must not be bound under an explicitly discussion parent surface. Stable public-ref namespaces must agree with the parent source type/surface whenever that relationship is deterministically resolvable.
+
 Obvious URL aliases of one physical item remain one item. Tracking parameters, fragments, superficial trailing-slash differences and equivalent `www` host forms must never be used to count the same feedback twice. Distinct valid comments/posts within the same thread remain distinct when they have distinct stable item locators.
 
 Every observation must list the exact distinct supporting record ids in `player_feedback_ids`. `mention_count` is **exactly** the number of distinct physical `player_feedback_ids` bound to that observation after canonical item-identity validation. The corresponding records must belong to player-feedback sources also listed in that observation's `source_ids`.
@@ -97,17 +99,21 @@ Treat feedback-record language as evidence only after the exact records are boun
 4. For an observation, derive `evidence_languages` as the ordered distinct union of support from the bound records: record `russian` -> `russian`; record `non_russian` -> `non_russian`; record `mixed` -> both `russian` and `non_russian`; record `unknown` -> `unknown`. Emit the resulting tokens in canonical order `russian`, `non_russian`, `unknown`. Do **not** emit `mixed` in `evidence_languages`; `mixed` is an input record language that expands to both support classes.
 5. For a conflict, there is no separate language-summary field. Any wording in `statement` that claims Russian, non-Russian, or mixed-language/population evidence must be supported by that conflict's exact bound `player_feedback_ids` under the same projection.
 
+Parent-source language containment is a separate mandatory invariant from observation language derivation. A child feedback record with `language:"russian"` requires its parent source `language` to be `russian` or `mixed`; a child with `language:"non_russian"` requires parent `non_russian` or `mixed`. `mixed` and `unknown` child records add no extra containment rule beyond the existing strict contract. Use `mixed` for a parent only when the physical source genuinely contains both supported language classes; never widen the parent merely to bypass validation.
+
 This is a generation invariant, not a post-hoc label choice. In particular, if every record bound to an observation is `non_russian`, its `evidence_languages` must be exactly `["non_russian"]`; adding `"russian"` because a Russian search was attempted is invalid. A Russian/mixed record that was found during research but is **not bound to that observation or conflict** gives that entry no Russian support.
 
 Before serializing each observation/conflict, perform the derivation from its final `player_feedback_ids` again. Do not preserve an earlier language label after changing the bound record set.
 
 ### Conflicts use the same attributable evidence model
 
-Every `conflicts[]` entry must contain `statement`, `recurrence`, `mention_count`, `source_ids`, and `player_feedback_ids`. Conflict `mention_count` and recurrence use exactly the same physical-item/count thresholds as observations. Official metadata or professional context may help interpret a conflict but cannot by itself establish `limited`, `moderate`, or `strong` recurrence. Do not assign `strong` merely because an official/context page is persuasive.
+Every `conflicts[]` entry must contain `statement`, `recurrence`, `mention_count`, `source_ids`, and `player_feedback_ids`. Conflict `mention_count` and recurrence use exactly the same physical-item/count thresholds as observations. Official metadata or professional context may help interpret a conflict but cannot by itself establish `limited`, `moderate`, or `strong` recurrence. Do not assign `strong` merely because an official/context page is persuasive. Byte-for-byte equivalent conflict objects are invalid duplicates; do not repeat the same conflict to increase apparent weight.
 
 ## Recency and temporal truth
 
 Search recent feedback first. Prefer material from roughly the last 12 months when available, then expand older if evidence is sparse. The canonical dated-source boundary is mechanical: **365 days or less is `recent`; more than 365 days is `older`**, measured from the dossier `generated_at_utc` date. A dated source must use the matching freshness value. Undated sources may use `publication_date:null`; that preserves the explicit unknown/undated path rather than inventing a date.
+
+If an exact bound feedback record has a known `publication_date` older than 365 days, its parent player-feedback source must not be labeled `freshness:"recent"` or used as `evidence_role:"current_state"` merely because the parent source date is null. The known child date resolves that physical item as old. If the child `publication_date` is genuinely null, preserve the existing undated source/item behavior and do not invent a date.
 
 For current bugs, performance, compatibility, technical state, localization or regional/service issues, recent evidence dominates old launch-era evidence. A complaint that was common at launch but recent evidence shows fixed or materially reduced must be represented as `evidence_status:"historical"`, not as a current defect. When old and recent evidence conflict and the present state cannot be resolved, use `uncertain`.
 
@@ -140,6 +146,14 @@ Hard operational bounds per game are finite and mandatory: at most **8 web-searc
 Preserve the established semantic topics: play, mechanics, structure, pacing, progression, repetition, difficulty, friction, multiplayer/co-op dependence, recurring positives, recurring complaints, Russian localization/regional issues, conflicts and evidence strength.
 
 Use only schema enums. Do not duplicate observations, conflicts, feedback records, physical items, or aliased sources to inflate support.
+
+`evidence.overall_strength` uses the canonical observation-based derivation already enforced by strict validation: `strong` requires at least one `observations[]` entry with `recurrence:"strong"`; `moderate` requires at least one observation with `recurrence:"moderate"` or `strong`. Conflict recurrence does not promote `overall_strength`; a `strong` conflict by itself is not permission to emit `overall_strength:"strong"`.
+
+The top-level `summary` is not free-form evidence. After the final observations array is fixed, serialize it exactly as:
+
+`Evidence summary: {observation_count} validated structured observations; consult observations and conflicts for supported findings.`
+
+`observation_count` is the integer length of the final validated `observations` array. Do not add or repeat observation text, conflict text, Russian-attempt wording, interpretation, or any other factual assertion in `summary`. All substantive facts remain in validated `observations` and `conflicts`.
 
 Do not mention Dmitry or infer whether the user will like the game. Do not output Taste fit, personal positives/negatives, include/exclude, rank, price, discount or sale urgency. Downstream Taste analysis owns all personal interpretation.
 

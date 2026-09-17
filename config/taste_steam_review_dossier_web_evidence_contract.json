@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "language-binding-2026-09-17",
+  "contract_revision": "semantic-consistency-gaps-2026-09-17",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "parallel_validation_contract": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
@@ -105,6 +105,15 @@
     "source_alias_rule": "obvious URL/public_ref aliases resolving to one parent player source cannot create source diversity",
     "distinct_valid_items_same_thread_allowed": true
   },
+  "parent_item_binding": {
+    "rule": "every player_feedback_record must resolve to the physical surface represented by its parent source_id rather than merely sharing a host",
+    "reddit_rule": "when parent and child locators expose a subreddit or thread identity, the child subreddit must equal the parent subreddit and a parent thread id must equal the child thread id; distinct stable child items inside that same thread remain valid",
+    "steam_surface_rule": "Steam review/recommendation items must not be bound under an explicitly discussion parent surface and Steam discussion items must not be bound under an explicitly review parent surface",
+    "public_ref_surface_rule": "stable public_ref namespaces such as steam-recommendation, steam-review, steam-discussion and reddit-comment are reconciled with the parent source type/locator",
+    "host_match_alone_is_sufficient": false,
+    "same_thread_distinct_items_allowed": true,
+    "unknown_generic_surface_behavior": "retain_existing_host_and_item_level_guards_when_no_supported_surface_identity_can_be_deterministically_resolved"
+  },
   "prepublication_validation": {
     "status": "not_required_for_scheduled_worker",
     "mode": "github_postpublication_canonical_validation",
@@ -147,6 +156,11 @@
       "mixed": ["russian", "non_russian"],
       "unknown": ["unknown"]
     },
+    "parent_source_language_containment": {
+      "russian_child_requires_parent_language": ["russian", "mixed"],
+      "non_russian_child_requires_parent_language": ["non_russian", "mixed"],
+      "mixed_or_unknown_child_additional_constraint": false
+    },
     "observation_summary_rule": "evidence_languages must equal the ordered distinct union of record_language_support_projection for exactly the player_feedback_ids bound to that observation",
     "canonical_output_order": ["russian", "non_russian", "unknown"],
     "mixed_summary_token_policy": "do_not_emit_mixed_as_an_observation_summary_token; mixed is a feedback-record input language that deterministically expands to russian and non_russian support",
@@ -169,7 +183,25 @@
     "count_and_recurrence_rules": "same_as_observations",
     "official_or_professional_context_may_support_interpretation": true,
     "official_or_professional_context_alone_may_establish_recurrence": false,
-    "physical_item_alias_and_source_diversity_rules_apply": true
+    "physical_item_alias_and_source_diversity_rules_apply": true,
+    "exact_duplicate_objects_allowed": false
+  },
+  "summary_binding": {
+    "mode": "mechanically_derived_from_validated_structured_findings",
+    "free_form_summary_allowed": false,
+    "canonical_format": "Evidence summary: {observation_count} validated structured observations; consult observations and conflicts for supported findings.",
+    "observation_count_source": "final_validated_observations_array_length",
+    "new_factual_claims_allowed": false,
+    "observation_or_conflict_body_repeated_in_summary": false,
+    "reason": "the full structured dossier already carries all observations and conflicts; the top-level summary is only a deterministic compact pointer and cannot become a second factual authority"
+  },
+  "overall_strength_binding": {
+    "source": "observations_only_for_strong_and_moderate_thresholds",
+    "strong_rule": "overall_strength=strong requires at least one observation with recurrence=strong",
+    "moderate_rule": "overall_strength=moderate requires at least one observation with recurrence=moderate or strong",
+    "conflict_recurrence_promotes_overall_strength": false,
+    "strong_conflict_only_rule": "a strong conflict does not by itself permit overall_strength=strong",
+    "scope": "preserve_existing_strict_semantics_without_redesigning_limited_or_conflicted_scoring"
   },
   "recency": {
     "search_recent_first": true,
@@ -177,6 +209,8 @@
     "recent_max_age_days": 365,
     "dated_source_rule": "when publication_date is known, freshness must be recent at age <=365 days and older at age >365 days relative to generated_at_utc date",
     "undated_source_rule": "publication_date=null remains allowed; freshness then remains a worker evidence classification and current_state still requires recent",
+    "known_child_date_parent_coherence_rule": "when a bound feedback record has a known date older than recent_max_age_days, its parent player source must not be labeled freshness=recent or used as current_state support merely because the parent publication_date is null",
+    "unknown_child_date_behavior": "when the feedback record publication_date is genuinely null, preserve the existing undated source/item path without inventing a date",
     "current_state_topics": ["bugs", "performance", "compatibility", "technical_state", "localization", "regional_service_state"],
     "current_state_requires_recent_support": true,
     "recent_evidence_dominates_old_evidence_for_current_state": true,

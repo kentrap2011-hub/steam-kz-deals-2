@@ -216,6 +216,99 @@ def _feedback_item_identity(record, source, label):
     return f"public:{_normalize_domain(source.get('domain'))}:{_normalized_public_ref(public_ref)}"
 
 
+def _reddit_locator_parts(url):
+    if not url:
+        return None, None
+    parsed = urlparse(str(url))
+    if _normalize_domain(parsed.hostname) != "reddit.com":
+        return None, None
+    segments = [segment.casefold() for segment in re.sub(r"/+", "/", parsed.path or "/").split("/") if segment]
+    subreddit = None
+    thread_id = None
+    if "r" in segments:
+        index = segments.index("r")
+        if index + 1 < len(segments):
+            subreddit = segments[index + 1]
+    if "comments" in segments:
+        index = segments.index("comments")
+        if index + 1 < len(segments):
+            thread_id = segments[index + 1]
+    return subreddit, thread_id
+
+
+def _public_ref_surface(value):
+    text = _normalized_public_ref(value)
+    if not text:
+        return None
+    if re.match(r"^steam-(?:review|recommendation)(?::|-)", text):
+        return "steam_review"
+    if re.match(r"^steam-discussion(?::|-)", text):
+        return "steam_discussion"
+    if re.match(r"^reddit-(?:comment|post|thread)(?::|-)", text):
+        return "reddit"
+    return None
+
+
+def _url_surface(value):
+    if not value:
+        return None
+    parsed = urlparse(str(value))
+    host = _normalize_domain(parsed.hostname)
+    path = re.sub(r"/+", "/", parsed.path or "/").casefold()
+    if host == "reddit.com":
+        return "reddit"
+    if host == "steamcommunity.com":
+        if "/discussions/" in path or path.rstrip("/").endswith("/discussions"):
+            return "steam_discussion"
+        if "/reviews/" in path or path.rstrip("/").endswith("/reviews"):
+            return "steam_review"
+    return None
+
+
+def _record_surface(record):
+    return _url_surface(record.get("url")) or _public_ref_surface(record.get("public_ref"))
+
+
+def _source_surface(source):
+    surface = _url_surface(source.get("url")) or _public_ref_surface(source.get("public_ref"))
+    if surface:
+        return surface
+    if source.get("source_type") == "reddit":
+        return "reddit"
+    if source.get("source_type") == "steam_reviews":
+        return "steam_review"
+    return None
+
+
+def _validate_parent_item_relationship(record, source, label):
+    source_type = source.get("source_type")
+    parent_surface = _source_surface(source)
+    child_surface = _record_surface(record)
+
+    if source_type == "reddit":
+        if child_surface and child_surface != "reddit":
+            raise ValueError(f"{label} feedback item surface conflicts with its Reddit parent source")
+        if record.get("url") and source.get("url"):
+            parent_subreddit, parent_thread = _reddit_locator_parts(source["url"])
+            child_subreddit, child_thread = _reddit_locator_parts(record["url"])
+            if parent_subreddit and child_subreddit and parent_subreddit != child_subreddit:
+                raise ValueError(f"{label} child Reddit item does not belong to its parent Reddit source locator")
+            if parent_thread and child_thread and parent_thread != child_thread:
+                raise ValueError(f"{label} child Reddit item does not belong to its parent Reddit thread")
+        return
+
+    if child_surface == "reddit" and source_type != "reddit":
+        raise ValueError(f"{label} Reddit feedback item cannot use a non-Reddit parent source")
+
+    if source_type == "steam_reviews" and child_surface == "steam_discussion":
+        raise ValueError(f"{label} Steam discussion item cannot use an explicit Steam reviews parent source")
+    if source_type in {"community_discussion"} and child_surface == "steam_review":
+        raise ValueError(f"{label} Steam review item cannot use an explicit discussion parent source")
+    if parent_surface in {"steam_review", "steam_discussion"} and child_surface in {"steam_review", "steam_discussion"}:
+        if parent_surface != child_surface:
+            raise ValueError(f"{label} Steam feedback item surface conflicts with its parent source locator")
+
+
 def _validate_publication_date(value, generated_date, label):
     if value is None:
         return None
@@ -305,7 +398,7 @@ def _validate_source(source, index, enums, schema_doc, generated_date, evidence_
     return source_id, _source_locator_identity(source)
 
 
-def _validate_feedback_record(record, index, source_map, enums, schema_doc, generated_date):
+def _validate_feedback_record(record, index, source_map, enums, schema_doc, generated_date, evidence_contract):
     label = f"provenance.player_feedback_records[{index}]"
     _require_fields(record, schema_doc["player_feedback_record_required_fields"], label)
     allowed = set(schema_doc["player_feedback_record_allowed_fields"])
@@ -332,7 +425,12 @@ def _validate_feedback_record(record, index, source_map, enums, schema_doc, gene
     elif not isinstance(record.get("public_ref"), str) or not 3 <= len(record["public_ref"]) <= 500:
         raise ValueError(f"{label}.public_ref is invalid")
     item_identity = _feedback_item_identity(record, source, label)
-    _validate_publication_date(record.get("publication_date"), generated_date, label)
+    _validate_parent_item_relationship(record, source, label)
+    publication_date = _validate_publication_date(record.get("publication_date"), generated_date, label)
+    if publication_date is not None:
+        threshold = int(evidence_contract["recency"]["recent_max_age_days"])
+        if (generated_date - publication_date).days > threshold and source.get("freshness") == "recent":
+            raise ValueError(f"{label} older feedback cannot inherit recent parent-source freshness")
     language = record.get("language")
     if language not in enums["source_language"]:
         raise ValueError(f"{label}.language is invalid")
@@ -458,6 +556,7 @@ def _validate_conflicts(dossier, source_map, feedback_map, enums, schema_doc):
         raise ValueError("dossier conflicts must be a list")
     recurrence_min = schema_doc["observation_invariants"]["recurrence_minimum_mentions"]
     used_feedback_ids = set()
+    seen = set()
     for index, conflict in enumerate(conflicts):
         _require_fields(
             conflict,
@@ -490,8 +589,22 @@ def _validate_conflicts(dossier, source_map, feedback_map, enums, schema_doc):
                 raise ValueError(f"conflict {index} anecdotal recurrence must be one mention")
         elif mention_count < int(recurrence_min[recurrence]):
             raise ValueError(f"conflict {index} recurrence exceeds bound player-feedback support")
+        digest = canonical_sha256(conflict)
+        if digest in seen:
+            raise ValueError("dossier contains an exact duplicate conflict")
+        seen.add(digest)
         used_feedback_ids.update(feedback_ids)
     return used_feedback_ids
+
+
+def derive_dossier_summary(observations, conflicts):
+    """Return the only canonical top-level summary projection from validated structured findings."""
+    if not isinstance(observations, list) or not observations or not isinstance(conflicts, list):
+        raise ValueError("canonical dossier summary requires observations and conflicts")
+    return (
+        f"Evidence summary: {len(observations)} validated structured observations; "
+        "consult observations and conflicts for supported findings."
+    )
 
 
 def validate_dossier_strict(
@@ -579,7 +692,15 @@ def validate_dossier_strict(
     for index, record in enumerate(feedback_records):
         if not isinstance(record, dict):
             raise ValueError(f"provenance.player_feedback_records[{index}] must be an object")
-        feedback_id, item_identity = _validate_feedback_record(record, index, source_map, enums, schema_doc, generated.date())
+        feedback_id, item_identity = _validate_feedback_record(
+            record,
+            index,
+            source_map,
+            enums,
+            schema_doc,
+            generated.date(),
+            evidence_contract,
+        )
         if feedback_id in feedback_map:
             raise ValueError("player-feedback feedback_id values must be unique")
         if item_identity in feedback_item_identities:
@@ -590,6 +711,10 @@ def validate_dossier_strict(
     _validate_game_identity(dossier.get("game_identity"), dossier, source_map, enums, schema_doc, generated)
     observations, used_feedback_ids = _validate_observations(dossier, source_map, feedback_map, enums, schema_doc)
     used_feedback_ids.update(_validate_conflicts(dossier, source_map, feedback_map, enums, schema_doc))
+
+    expected_summary = derive_dossier_summary(observations, dossier["conflicts"])
+    if summary != expected_summary:
+        raise ValueError("dossier summary must equal canonical structured-finding derivation")
 
     evidence = dossier.get("evidence")
     _require_fields(evidence, ("strategy", "research_state", "source_mix_status", "single_source_reason", "russian_attempt", "overall_strength", "stop_reason"), "evidence")

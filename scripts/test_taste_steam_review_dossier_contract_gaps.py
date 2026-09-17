@@ -163,8 +163,12 @@ class ContractGapRegressionTests(unittest.TestCase):
     def test_gap04_dated_freshness_is_mechanical_at_365_day_boundary(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         exact = web_dossier(540001, now)
-        exact["provenance"]["sources"][1]["publication_date"] = (now.date() - timedelta(days=365)).isoformat()
+        exact_date = (now.date() - timedelta(days=365)).isoformat()
+        exact["provenance"]["sources"][1]["publication_date"] = exact_date
         exact["provenance"]["sources"][1]["freshness"] = "recent"
+        for record in exact["provenance"]["player_feedback_records"]:
+            if record["source_id"] == "p1":
+                record["publication_date"] = exact_date
         self.assertIs(self.validate(exact, now=now), exact)
 
         too_old = web_dossier(540002, now)
