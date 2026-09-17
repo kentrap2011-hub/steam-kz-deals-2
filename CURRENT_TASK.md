@@ -1,6 +1,6 @@
 # CURRENT TASK
 
-Последнее обновление: 2026-09-17
+Последнее обновление: 2026-09-18
 
 ## Завершено
 
@@ -300,3 +300,19 @@
 - old `d7c882f8…` `g000002` / `g000003` artifacts became stale/inert through normal GitHub-owned quarantine with original blobs preserved; no manual repair/rebind occurred;
 - Scheduled Task `Run now` was not launched;
 - durable report: `reviews/worker_reports/taste-dossier-language-binding-fix-implement-01.md`.
+
+## Worker closeout — 2026-09-18
+
+### Taste dossier semantic consistency gaps implement 01
+Статус: `complete_ready_for_live_acceptance`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_SEMANTIC_CONSISTENCY_GAPS_IMPLEMENT_01.md`;
+- SCG-01..SCG-06 individually reconciled against fresh `main`; all six classified `implemented_now` and deterministically closed;
+- implementation PR `#44` merged to `main` as `80d6fc3adb9689f99ad5f30b729c6c1d36379d7d`;
+- focused validation run `35269544646`, job `105365093134`: success, including ownership, SCG-01..06 semantic consistency, package identity and parallel/maximal-contiguous-prefix regressions;
+- post-merge activation run `35269588293`: success; activation commit `23fa46e0a07a3b1f0a8e7a53876ec93f49c9a235`;
+- current compatible snapshot `00072072b0b382e6b973f448ce00b4aaaeccb2dbe355ca323de1785ccc0bd34c`: progress `0/564`, expected group `1`, `188` groups, canonical group size `3`, binding revision `semantic-consistency-gaps-2026-09-17`;
+- post-merge execution ownership run `35269588327`: success;
+- strict validator was extended, not weakened; one canonical validator truth source and existing immutable parallel-buffer/maximal-contiguous-prefix architecture remain unchanged;
+- Scheduled Task `Run now` was not launched and settings were not changed;
+- durable report: `reviews/worker_reports/taste-dossier-semantic-consistency-gaps-implement-01.md`;
+- next boundary: one separate live acceptance of the existing `Taste Steam Review Dossier` Scheduled Task against the current compatible snapshot, followed by a separate READ / VALIDATE report.
