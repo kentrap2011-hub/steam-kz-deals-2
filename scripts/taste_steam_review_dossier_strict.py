@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Strict V2 validation for neutral multi-source web-evidence Taste dossiers."""
+import hashlib
 import json
 import re
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 from taste_steam_review_dossier import (
     _validate_no_raw_or_personal_payload,
@@ -15,6 +16,7 @@ from taste_steam_review_dossier import (
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCHEMA_PATH = ROOT / "config/taste_steam_review_dossier_schema.json"
 DEFAULT_EVIDENCE_CONTRACT_PATH = ROOT / "config/taste_steam_review_dossier_web_evidence_contract.json"
+DEFAULT_WORKER_PROMPT_PATH = ROOT / "config/taste_steam_review_dossier_worker_prompt.md"
 _DOMAIN_RE = re.compile(r"^[a-z0-9.-]+$")
 _RAW_BODY_LIKE_KEYS = {
     "raw_reviews", "review_text", "review_body", "review_bodies", "reviews_raw",
@@ -23,6 +25,25 @@ _RAW_BODY_LIKE_KEYS = {
     "usernames", "authors",
 }
 _RECURRENCE_RANK = {"anecdotal": 1, "limited": 2, "moderate": 3, "strong": 4}
+_TRACKING_QUERY_KEYS = {
+    "fbclid", "gclid", "mc_cid", "mc_eid", "ref", "referrer", "source", "share",
+    "share_id", "tracking", "tracking_id",
+}
+_ITEM_QUERY_KEYS = {
+    "comment", "comment_id", "commentid", "entry", "entry_id", "id", "item", "item_id",
+    "post", "post_id", "postid", "recommendationid", "review", "review_id", "reviewid",
+    "thread", "thread_id", "threadid",
+}
+_GENERIC_COLLECTION_BASENAMES = {
+    "community", "comments", "discussion", "discussions", "forum", "forums", "index", "list",
+    "listing", "posts", "review", "reviews", "search",
+}
+_STABLE_PUBLIC_REF_TOKEN_RE = re.compile(
+    r"(?:^|[\s:/#_-])(?:review|recommendation|post|comment|contribution|entry|item|record|discussion|thread)"
+    r"[:#/_-][a-z0-9][a-z0-9._:-]{1,}",
+    re.IGNORECASE,
+)
+_MACHINE_PUBLIC_REF_RE = re.compile(r"^[a-z0-9][a-z0-9._:/#-]{2,}$", re.IGNORECASE)
 
 
 def load_worker_schema(path=DEFAULT_SCHEMA_PATH):
@@ -51,17 +72,28 @@ def load_web_evidence_contract(path=DEFAULT_EVIDENCE_CONTRACT_PATH):
     return doc
 
 
-def current_worker_contract_binding(schema_doc=None, evidence_contract=None):
+def current_worker_contract_binding(schema_doc=None, evidence_contract=None, *, worker_prompt_text=None):
+    """Content-complete semantic compatibility binding for snapshot/cache/worker projection use."""
     schema_doc = schema_doc or load_worker_schema()
     evidence_contract = evidence_contract or load_web_evidence_contract()
+    prompt_text = (
+        DEFAULT_WORKER_PROMPT_PATH.read_text(encoding="utf-8")
+        if worker_prompt_text is None
+        else str(worker_prompt_text)
+    )
     return {
         "evidence_contract_schema": evidence_contract["schema"],
         "evidence_contract_version": evidence_contract["version"],
+        "evidence_contract_revision": evidence_contract.get("contract_revision"),
+        "evidence_contract_sha256": canonical_sha256(evidence_contract),
         "worker_schema": schema_doc["schema"],
         "worker_schema_version": schema_doc["version"],
+        "worker_schema_revision": schema_doc.get("schema_revision"),
+        "worker_schema_sha256": canonical_sha256(schema_doc),
         "dossier_schema": schema_doc["dossier_schema"],
         "dossier_schema_version": schema_doc["dossier_schema_version"],
         "worker_prompt_revision": evidence_contract["worker_prompt_revision"],
+        "worker_prompt_sha256": hashlib.sha256(prompt_text.encode("utf-8")).hexdigest(),
     }
 
 
@@ -108,6 +140,82 @@ def _source_ref(source):
     return str(url or public_ref)
 
 
+def _canonical_url_identity(value):
+    parsed = urlparse(str(value))
+    host = _normalize_domain(parsed.hostname)
+    path = re.sub(r"/+", "/", parsed.path or "/")
+    if path != "/":
+        path = path.rstrip("/")
+    query = []
+    for key, val in parse_qsl(parsed.query, keep_blank_values=True):
+        normalized_key = key.strip().lower()
+        if normalized_key.startswith("utm_") or normalized_key in _TRACKING_QUERY_KEYS:
+            continue
+        query.append((normalized_key, val.strip()))
+    query.sort()
+    return urlunparse(("https", host, path, "", urlencode(query, doseq=True), ""))
+
+
+def _normalized_public_ref(value):
+    return re.sub(r"\s+", " ", str(value or "")).strip().casefold()
+
+
+def _source_locator_identity(source):
+    if source.get("url"):
+        return "url:" + _canonical_url_identity(source["url"])
+    return f"public:{_normalize_domain(source.get('domain'))}:{_normalized_public_ref(source.get('public_ref'))}"
+
+
+def _has_stable_public_item_ref(value):
+    text = str(value or "").strip()
+    if not text:
+        return False
+    if _STABLE_PUBLIC_REF_TOKEN_RE.search(text):
+        return True
+    if not any(ch.isdigit() for ch in text):
+        return False
+    return bool(_MACHINE_PUBLIC_REF_RE.fullmatch(text) and any(sep in text for sep in ("-", ":", "/", "#")))
+
+
+def _has_item_level_url_locator(url, source):
+    parsed = urlparse(str(url))
+    path = re.sub(r"/+", "/", parsed.path or "/").rstrip("/") or "/"
+    lower_path = path.casefold()
+    query = {key.casefold(): val for key, val in parse_qsl(parsed.query, keep_blank_values=True)}
+    if any(key in _ITEM_QUERY_KEYS and str(val).strip() for key, val in query.items()):
+        return True
+    source_type = source.get("source_type")
+    if source_type in {"steam_reviews", "steam_community"}:
+        if re.fullmatch(r"/app/[0-9]+/(?:reviews?|discussions?)", lower_path):
+            return False
+        if re.search(r"/discussions/[0-9]+/[a-z0-9_-]+(?:/|$)", lower_path):
+            return True
+    if source_type == "reddit":
+        if lower_path == "/search" or re.fullmatch(r"/r/[^/]+", lower_path):
+            return False
+        if re.search(r"/comments/[a-z0-9]+(?:/|$)", lower_path):
+            return True
+    segments = [segment for segment in lower_path.split("/") if segment]
+    if not segments:
+        return False
+    if segments[-1] in _GENERIC_COLLECTION_BASENAMES:
+        return False
+    if "search" in segments:
+        return False
+    return True
+
+
+def _feedback_item_identity(record, source, label):
+    if record.get("url"):
+        if not _has_item_level_url_locator(record["url"], source):
+            raise ValueError(f"{label}.url must identify one attributable feedback item, not a collection/search/index surface")
+        return "url:" + _canonical_url_identity(record["url"])
+    public_ref = record.get("public_ref")
+    if not _has_stable_public_item_ref(public_ref):
+        raise ValueError(f"{label}.public_ref must contain a stable non-identifying feedback item locator")
+    return f"public:{_normalize_domain(source.get('domain'))}:{_normalized_public_ref(public_ref)}"
+
+
 def _validate_publication_date(value, generated_date, label):
     if value is None:
         return None
@@ -120,6 +228,18 @@ def _validate_publication_date(value, generated_date, label):
     if parsed > generated_date + timedelta(days=1):
         raise ValueError(f"{label}.publication_date cannot be materially future-dated")
     return parsed
+
+
+def _validate_dated_freshness(publication_date, freshness, generated_date, evidence_contract, label):
+    if publication_date is None:
+        return
+    threshold = int(evidence_contract["recency"]["recent_max_age_days"])
+    age_days = (generated_date - publication_date).days
+    expected = "recent" if age_days <= threshold else "older"
+    if freshness != expected:
+        raise ValueError(
+            f"{label}.freshness is incoherent with publication_date: expected {expected} at {age_days} days old"
+        )
 
 
 def _is_steam_store_app_page(source):
@@ -147,7 +267,7 @@ def _validate_source(source, index, enums, schema_doc, generated_date, evidence_
     if not domain or not _DOMAIN_RE.fullmatch(domain) or "." not in domain:
         raise ValueError(f"{label}.domain is invalid")
 
-    ref = _source_ref(source)
+    _source_ref(source)
     if source.get("url"):
         if not isinstance(source["url"], str):
             raise ValueError(f"{label}.url must be a plain HTTPS URL string")
@@ -159,15 +279,17 @@ def _validate_source(source, index, enums, schema_doc, generated_date, evidence_
     elif not isinstance(source.get("public_ref"), str) or not 3 <= len(source["public_ref"]) <= 500:
         raise ValueError(f"{label}.public_ref is invalid")
 
-    _validate_publication_date(source.get("publication_date"), generated_date, label)
+    publication_date = _validate_publication_date(source.get("publication_date"), generated_date, label)
     if source.get("language") not in enums["source_language"]:
         raise ValueError(f"{label}.language is invalid")
-    if source.get("freshness") not in enums["source_freshness"]:
+    freshness = source.get("freshness")
+    if freshness not in enums["source_freshness"]:
         raise ValueError(f"{label}.freshness is invalid")
+    _validate_dated_freshness(publication_date, freshness, generated_date, evidence_contract, label)
     role = source.get("evidence_role")
     if role not in enums["source_evidence_role"]:
         raise ValueError(f"{label}.evidence_role is invalid")
-    if role == "current_state" and source.get("freshness") != "recent":
+    if role == "current_state" and freshness != "recent":
         raise ValueError(f"{label} current_state evidence must be classified recent")
     if type(source.get("player_feedback")) is not bool:
         raise ValueError(f"{label}.player_feedback must be JSON boolean")
@@ -180,7 +302,7 @@ def _validate_source(source, index, enums, schema_doc, generated_date, evidence_
         raise ValueError(f"{label} context-only source cannot be marked player feedback")
     if _is_steam_store_app_page(source) and (source["player_feedback"] is True or source_type in player_types):
         raise ValueError(f"{label} Steam Store app page is metadata/context, not attributable player feedback")
-    return source_id, ref
+    return source_id, _source_locator_identity(source)
 
 
 def _validate_feedback_record(record, index, source_map, enums, schema_doc, generated_date):
@@ -196,28 +318,30 @@ def _validate_feedback_record(record, index, source_map, enums, schema_doc, gene
     source_id = record.get("source_id")
     if source_id not in source_map or source_map[source_id].get("player_feedback") is not True:
         raise ValueError(f"{label}.source_id must resolve to a player-feedback source")
-    ref = _source_ref(record)
+    source = source_map[source_id]
+    _source_ref(record)
     if record.get("url"):
         if not isinstance(record["url"], str):
             raise ValueError(f"{label}.url must be a plain HTTPS URL string")
         parsed = urlparse(record["url"])
         if parsed.scheme != "https" or not parsed.netloc:
             raise ValueError(f"{label}.url must be an HTTPS public URL")
-        source_domain = _normalize_domain(source_map[source_id].get("domain"))
+        source_domain = _normalize_domain(source.get("domain"))
         if _normalize_domain(parsed.hostname) != source_domain:
             raise ValueError(f"{label}.url host must match its player-feedback source domain")
     elif not isinstance(record.get("public_ref"), str) or not 3 <= len(record["public_ref"]) <= 500:
         raise ValueError(f"{label}.public_ref is invalid")
+    item_identity = _feedback_item_identity(record, source, label)
     _validate_publication_date(record.get("publication_date"), generated_date, label)
     language = record.get("language")
     if language not in enums["source_language"]:
         raise ValueError(f"{label}.language is invalid")
-    source_language = source_map[source_id].get("language")
+    source_language = source.get("language")
     if language == "russian" and source_language not in {"russian", "mixed"}:
         raise ValueError(f"{label} Russian feedback conflicts with source language")
     if language == "non_russian" and source_language not in {"non_russian", "mixed"}:
         raise ValueError(f"{label} non-Russian feedback conflicts with source language")
-    return feedback_id, ref
+    return feedback_id, item_identity
 
 
 def _validate_game_identity(identity, dossier, source_map, enums, schema_doc, generated):
@@ -328,24 +452,60 @@ def _validate_observations(dossier, source_map, feedback_map, enums, schema_doc)
     return observations, used_feedback_ids
 
 
-def _validate_conflicts(dossier, source_map, enums):
+def _validate_conflicts(dossier, source_map, feedback_map, enums, schema_doc):
     conflicts = dossier.get("conflicts")
     if not isinstance(conflicts, list):
         raise ValueError("dossier conflicts must be a list")
+    recurrence_min = schema_doc["observation_invariants"]["recurrence_minimum_mentions"]
+    used_feedback_ids = set()
     for index, conflict in enumerate(conflicts):
-        _require_fields(conflict, ("statement", "recurrence", "source_ids"), f"conflict {index}")
+        _require_fields(
+            conflict,
+            ("statement", "recurrence", "mention_count", "source_ids", "player_feedback_ids"),
+            f"conflict {index}",
+        )
         if not isinstance(conflict["statement"], str) or not 4 <= len(conflict["statement"].strip()) <= 600:
             raise ValueError(f"conflict {index} statement is invalid")
-        if conflict["recurrence"] not in enums["recurrence"]:
+        recurrence = conflict["recurrence"]
+        if recurrence not in enums["recurrence"]:
             raise ValueError(f"conflict {index} recurrence is invalid")
         source_ids = conflict["source_ids"]
         if not isinstance(source_ids, list) or not source_ids or len(source_ids) != len(set(source_ids)):
             raise ValueError(f"conflict {index} source_ids are invalid")
         if any(source_id not in source_map for source_id in source_ids):
             raise ValueError(f"conflict {index} references unknown provenance source")
+        feedback_ids = conflict["player_feedback_ids"]
+        if not isinstance(feedback_ids, list) or not feedback_ids or len(feedback_ids) != len(set(feedback_ids)):
+            raise ValueError(f"conflict {index} player_feedback_ids must be a non-empty unique list")
+        if any(feedback_id not in feedback_map for feedback_id in feedback_ids):
+            raise ValueError(f"conflict {index} references unknown player-feedback record")
+        records = [feedback_map[feedback_id] for feedback_id in feedback_ids]
+        if any(record["source_id"] not in source_ids for record in records):
+            raise ValueError(f"conflict {index} bound player-feedback source must also appear in source_ids")
+        mention_count = conflict["mention_count"]
+        if not _json_int(mention_count) or mention_count != len(feedback_ids):
+            raise ValueError(f"conflict {index} mention_count must exactly equal distinct bound player-feedback records")
+        if recurrence == "anecdotal":
+            if mention_count != 1:
+                raise ValueError(f"conflict {index} anecdotal recurrence must be one mention")
+        elif mention_count < int(recurrence_min[recurrence]):
+            raise ValueError(f"conflict {index} recurrence exceeds bound player-feedback support")
+        used_feedback_ids.update(feedback_ids)
+    return used_feedback_ids
 
 
-def validate_dossier_strict(dossier, contract, *, expected_appid=None, expected_title=None, expected_ttl_days=None, now=None, schema_doc=None, evidence_contract=None):
+def validate_dossier_strict(
+    dossier,
+    contract,
+    *,
+    expected_appid=None,
+    expected_title=None,
+    expected_ttl_days=None,
+    now=None,
+    schema_doc=None,
+    evidence_contract=None,
+    require_fresh_at_acceptance=True,
+):
     """Validate the active V2 web-evidence dossier and all prior hardening invariants."""
     schema_doc = schema_doc or load_worker_schema()
     evidence_contract = evidence_contract or load_web_evidence_contract()
@@ -358,6 +518,9 @@ def validate_dossier_strict(dossier, contract, *, expected_appid=None, expected_
         raise ValueError("unsupported web evidence dossier schema")
     if not _json_int(dossier.get("schema_version")) or dossier["schema_version"] != schema_doc["dossier_schema_version"]:
         raise ValueError("dossier schema_version must be canonical JSON integer 2")
+    expected_binding = current_worker_contract_binding(schema_doc, evidence_contract)
+    if dossier.get("web_evidence_contract_binding") != expected_binding:
+        raise ValueError("dossier web-evidence compatibility binding is missing or stale")
     appid = dossier.get("appid")
     if not isinstance(appid, str) or not appid.isdigit():
         raise ValueError("dossier appid must be a numeric string")
@@ -382,6 +545,8 @@ def validate_dossier_strict(dossier, contract, *, expected_appid=None, expected_
     max_future = int(schema_doc["timestamp_rules"]["maximum_future_skew_minutes_at_ingest"])
     if generated > now_utc + timedelta(minutes=max_future):
         raise ValueError("future-generated dossier cannot be canonically ingested")
+    if require_fresh_at_acceptance and now_utc >= expires:
+        raise ValueError("already-expired dossier cannot be canonically ingested")
     summary = dossier.get("summary")
     if not isinstance(summary, str) or not 20 <= len(summary.strip()) <= 1200:
         raise ValueError("dossier neutral summary is missing or too long")
@@ -394,36 +559,37 @@ def validate_dossier_strict(dossier, contract, *, expected_appid=None, expected_
     if not isinstance(sources, list) or not sources:
         raise ValueError("provenance.sources must be a non-empty list")
     enums = schema_doc["enums"]
-    source_map, source_refs = {}, set()
+    source_map, source_refs, source_identity_map = {}, set(), {}
     for index, source in enumerate(sources):
         if not isinstance(source, dict):
             raise ValueError(f"provenance.sources[{index}] must be an object")
-        source_id, ref = _validate_source(source, index, enums, schema_doc, generated.date(), evidence_contract)
+        source_id, ref_identity = _validate_source(source, index, enums, schema_doc, generated.date(), evidence_contract)
         if source_id in source_map:
             raise ValueError("provenance source_id values must be unique")
-        if ref in source_refs:
-            raise ValueError("duplicate provenance source reference is forbidden")
-        source_refs.add(ref)
+        if ref_identity in source_refs:
+            raise ValueError("duplicate or aliased provenance source reference is forbidden")
+        source_refs.add(ref_identity)
         source_map[source_id] = source
+        source_identity_map[source_id] = ref_identity
 
     feedback_records = provenance["player_feedback_records"]
     if not isinstance(feedback_records, list) or not feedback_records:
         raise ValueError("provenance.player_feedback_records must be a non-empty list")
-    feedback_map, feedback_refs = {}, set()
+    feedback_map, feedback_item_identities = {}, set()
     for index, record in enumerate(feedback_records):
         if not isinstance(record, dict):
             raise ValueError(f"provenance.player_feedback_records[{index}] must be an object")
-        feedback_id, ref = _validate_feedback_record(record, index, source_map, enums, schema_doc, generated.date())
+        feedback_id, item_identity = _validate_feedback_record(record, index, source_map, enums, schema_doc, generated.date())
         if feedback_id in feedback_map:
             raise ValueError("player-feedback feedback_id values must be unique")
-        if ref in feedback_refs:
-            raise ValueError("duplicate attributable player-feedback record reference is forbidden")
-        feedback_refs.add(ref)
+        if item_identity in feedback_item_identities:
+            raise ValueError("duplicate or aliased attributable player-feedback item is forbidden")
+        feedback_item_identities.add(item_identity)
         feedback_map[feedback_id] = record
 
     _validate_game_identity(dossier.get("game_identity"), dossier, source_map, enums, schema_doc, generated)
     observations, used_feedback_ids = _validate_observations(dossier, source_map, feedback_map, enums, schema_doc)
-    _validate_conflicts(dossier, source_map, enums)
+    used_feedback_ids.update(_validate_conflicts(dossier, source_map, feedback_map, enums, schema_doc))
 
     evidence = dossier.get("evidence")
     _require_fields(evidence, ("strategy", "research_state", "source_mix_status", "single_source_reason", "russian_attempt", "overall_strength", "stop_reason"), "evidence")
@@ -443,24 +609,26 @@ def validate_dossier_strict(dossier, contract, *, expected_appid=None, expected_
         raise ValueError("evidence stop_reason is invalid")
 
     used_records = [feedback_map[feedback_id] for feedback_id in used_feedback_ids]
-    used_player_source_ids = {record["source_id"] for record in used_records}
-    if not used_player_source_ids:
+    used_player_source_identities = {source_identity_map[record["source_id"]] for record in used_records}
+    if not used_player_source_identities:
         raise ValueError("at least one bound player-feedback record is required")
     if evidence["source_mix_status"] == "multi_source":
-        if len(used_player_source_ids) < 2:
-            raise ValueError("multi_source evidence requires at least two distinct used player-feedback sources")
+        if len(used_player_source_identities) < 2:
+            raise ValueError("multi_source evidence requires at least two distinct physical used player-feedback sources")
         if evidence["single_source_reason"] is not None:
             raise ValueError("multi_source evidence must not carry a single-source reason")
     else:
         reason = evidence["single_source_reason"]
         if not isinstance(reason, str) or not reason.strip() or len(reason) > 500:
             raise ValueError("single_source_only evidence requires a compact reason")
-        if len(used_player_source_ids) != 1:
-            raise ValueError("single_source_only must have exactly one used player-feedback source")
+        if len(used_player_source_identities) != 1:
+            raise ValueError("single_source_only must have exactly one distinct physical used player-feedback source")
 
-    if evidence["russian_attempt"] == "found_and_used":
-        if not any(record["language"] in {"russian", "mixed"} for record in used_records):
-            raise ValueError("russian found_and_used requires a bound Russian player-feedback record")
+    used_russian = any(record["language"] in {"russian", "mixed"} for record in used_records)
+    if evidence["russian_attempt"] == "found_and_used" and not used_russian:
+        raise ValueError("russian found_and_used requires a bound Russian player-feedback record")
+    if evidence["russian_attempt"] != "found_and_used" and used_russian:
+        raise ValueError("used Russian/mixed player feedback requires russian_attempt=found_and_used")
 
     max_recurrence_rank = max(_RECURRENCE_RANK[observation["recurrence"]] for observation in observations)
     if evidence["overall_strength"] == "strong" and max_recurrence_rank < _RECURRENCE_RANK["strong"]:
@@ -477,7 +645,15 @@ def dossier_state_strict(dossier, contract, *, now=None, expected_appid=None, ex
     if dossier is None:
         return "missing"
     now_utc = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
-    validate_dossier_strict(dossier, contract, expected_appid=expected_appid, expected_title=expected_title, expected_ttl_days=expected_ttl_days, now=now_utc)
+    validate_dossier_strict(
+        dossier,
+        contract,
+        expected_appid=expected_appid,
+        expected_title=expected_title,
+        expected_ttl_days=expected_ttl_days,
+        now=now_utc,
+        require_fresh_at_acceptance=False,
+    )
     expires = parse_utc(dossier["expires_at_utc"])
     return "fresh" if now_utc < expires else "stale"
 
@@ -502,5 +678,6 @@ def validate_dossiers_against_expected_items(dossiers, expected_items, contract,
             now=now,
             schema_doc=schema_doc,
             evidence_contract=evidence_contract,
+            require_fresh_at_acceptance=True,
         ))
     return validated
