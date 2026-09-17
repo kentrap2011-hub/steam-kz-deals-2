@@ -4,6 +4,8 @@ from datetime import timedelta
 
 
 def web_dossier(appid, generated, *, title=None, release_year=2020, russian_status="found_and_used"):
+    from taste_steam_review_dossier_strict import current_worker_contract_binding
+
     appid = str(appid)
     title = title or f"Game {appid}"
     recent_date = generated.date().isoformat()
@@ -113,6 +115,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
     return {
         "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
         "schema_version": 2,
+        "web_evidence_contract_binding": current_worker_contract_binding(),
         "key": f"App_{appid}",
         "appid": appid,
         "title": title,

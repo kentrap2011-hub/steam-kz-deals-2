@@ -2,18 +2,19 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "version": 2,
   "status": "active",
-  "schema_revision": "prepublication-privacy-guard-2026-09-17",
+  "schema_revision": "contract-gaps-2026-09-17",
   "evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "evidence_contract_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "purpose": "Exact worker-facing neutral multi-source web-evidence dossier shape shared with canonical ingress validation, with auditable observation-to-player-feedback record binding.",
+  "purpose": "Exact worker-facing neutral multi-source web-evidence dossier shape shared with canonical ingress validation, with content-complete compatibility binding and auditable physical player-feedback identity/count support.",
   "unknown_fields_policy": "top_level_and_observation_extras_remain_permissive_but_raw_body_like_and_personal_or_commercial_fields_are_forbidden;provenance_source_and_player_feedback_record_records_are_strict",
   "compact_provenance_policy_source": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2#compact_provenance",
   "prepublication_validation_policy_source": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2#prepublication_validation",
   "required_top_level_fields": [
     "schema",
     "schema_version",
+    "web_evidence_contract_binding",
     "appid",
     "title",
     "generated_at_utc",
@@ -83,6 +84,7 @@
     "type": "string",
     "format": "iso8601_timezone_aware",
     "expires_equals_generated_plus_ttl_days": true,
+    "fresh_at_canonical_ingest_required": true,
     "maximum_future_skew_minutes_at_ingest": 5
   },
   "identity_rules": {
@@ -113,17 +115,27 @@
     "historical_requires_historical_and_recent_current_state_sources": true,
     "durable_requires_durable_trait_source": true
   },
+  "conflict_invariants": {
+    "required_fields": ["statement", "recurrence", "mention_count", "source_ids", "player_feedback_ids"],
+    "mention_count_equals_distinct_bound_player_feedback_records": true,
+    "recurrence_thresholds_equal_observation_thresholds": true,
+    "bound_player_feedback_record_source_must_be_in_conflict_source_ids": true,
+    "official_or_professional_context_alone_cannot_establish_recurrence": true
+  },
   "evidence_invariants": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "at_least_one_bound_player_feedback_record": true,
-    "multi_source_requires_at_least_two_distinct_used_player_source_refs": true,
+    "multi_source_requires_at_least_two_distinct_physical_used_player_source_refs": true,
     "single_source_only_requires_reason": true,
-    "russian_found_requires_russian_player_feedback_record_used_by_observation": true,
+    "russian_found_requires_russian_player_feedback_record_used_by_observation_or_conflict": true,
+    "russian_used_requires_found_and_used_status": true,
     "professional_context_cannot_be_player_feedback": true,
     "official_metadata_cannot_be_player_feedback": true,
     "steam_store_app_page_cannot_be_player_feedback": true,
     "aggregate_storefront_statistics_cannot_populate_mention_count": true,
+    "player_feedback_record_requires_item_level_stable_locator": true,
+    "obvious_url_aliases_do_not_create_distinct_feedback_or_source_identity": true,
     "legacy_review_sample_field_forbidden": true,
     "legacy_store_only_or_zero_evidence_placeholder_forbidden": true
   },
@@ -169,6 +181,7 @@
     "required": [
       "schema",
       "schema_version",
+      "web_evidence_contract_binding",
       "appid",
       "title",
       "generated_at_utc",
@@ -185,6 +198,7 @@
     "properties": {
       "schema": {"const": "TASTE-STEAM-REVIEW-DOSSIER-V2"},
       "schema_version": {"type": "integer", "const": 2},
+      "web_evidence_contract_binding": {"type": "object"},
       "appid": {"type": "string", "pattern": "^[0-9]+$"},
       "title": {"type": "string", "minLength": 1, "maxLength": 300},
       "generated_at_utc": {"type": "string", "minLength": 1},
@@ -205,7 +219,14 @@
           "additionalProperties": true
         }
       },
-      "conflicts": {"type": "array"},
+      "conflicts": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["statement", "recurrence", "mention_count", "source_ids", "player_feedback_ids"],
+          "additionalProperties": true
+        }
+      },
       "evidence": {
         "type": "object",
         "required": ["strategy", "research_state", "source_mix_status", "single_source_reason", "russian_attempt", "overall_strength", "stop_reason"],

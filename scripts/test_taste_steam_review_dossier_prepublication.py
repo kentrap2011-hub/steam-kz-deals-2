@@ -83,14 +83,14 @@ class PrepublicationParityTests(unittest.TestCase):
             source = artifact["dossiers"][0]["provenance"]["sources"][2]
             source["freshness"] = "older"
             source["evidence_role"] = "durable_trait"
-        self.assert_same_failure(mutate, "current claim lacks recent current-state evidence")
+        self.assert_same_failure(mutate, "freshness is incoherent with publication_date")
 
     def test_deeeer_live_single_source_shape_rejected_before_publication(self):
         def mutate(artifact):
             evidence = artifact["dossiers"][0]["evidence"]
             evidence["source_mix_status"] = "single_source_only"
             evidence["single_source_reason"] = "Only one player-feedback source was judged sufficient."
-        self.assert_same_failure(mutate, "single_source_only must have exactly one used player-feedback source")
+        self.assert_same_failure(mutate, "single_source_only must have exactly one distinct physical used player-feedback source")
 
     def test_sniper_live_unbound_russian_shape_rejected_before_publication(self):
         def mutate(artifact):
@@ -103,7 +103,7 @@ class PrepublicationParityTests(unittest.TestCase):
     def test_username_display_name_compact_refs_are_rejected(self):
         def mutate(artifact):
             artifact["dossiers"][0]["provenance"]["player_feedback_records"][0]["public_ref"] = (
-                "Steam discussion 6504942507064908210 contribution by Sugarwolf, 2023-09-16"
+                "steam-discussion:6504942507064908210:comment-42; contribution by Sugarwolf"
             )
         self.assert_same_failure(mutate, "public_ref contains author/user identity attribution")
 
@@ -122,14 +122,14 @@ class PrepublicationParityTests(unittest.TestCase):
 
     def test_review_content_like_ref_rejected_while_neutral_locator_allowed(self):
         artifact = build_group(self.work)
-        neutral = "Steam discussion 729153699965901699 opening contribution, 2026-01-19"
+        neutral = "steam-discussion:729153699965901699:comment-442019"
         artifact["dossiers"][0]["provenance"]["player_feedback_records"][0]["public_ref"] = neutral
         self.assertEqual(
             validate_prepublication_artifact(copy.deepcopy(artifact), self.work, self.contract)["status"],
             "valid",
         )
         artifact["dossiers"][0]["provenance"]["player_feedback_records"][0]["public_ref"] = (
-            "DEEEER Simulator Steam review summarized as chaos/10 on top-rated page"
+            "steam-review:710001:record-42 summarized as chaos/10 on top-rated page"
         )
         with self.assertRaisesRegex(ValueError, "public_ref contains review/post content-like summary"):
             validate_prepublication_artifact(artifact, self.work, self.contract)

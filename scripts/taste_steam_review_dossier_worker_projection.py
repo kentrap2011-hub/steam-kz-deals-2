@@ -37,11 +37,19 @@ def _serialized_json(value):
     return json.dumps(value, ensure_ascii=False, indent=2) + "\n"
 
 
+def _manifest_binding(manifest):
+    binding = manifest.get("web_evidence_contract_binding")
+    if not isinstance(binding, dict) or not binding:
+        raise ValueError("canonical manifest is missing the active web-evidence compatibility binding")
+    return copy.deepcopy(binding)
+
+
 def build_worker_projection(manifest, contract):
     """Derive the complete worker read projection only from canonical manifest state."""
     validate_manifest(manifest, contract)
     plan = validate_group_plan(manifest, contract, required=True)
     projection = _projection_contract(contract)
+    binding = _manifest_binding(manifest)
     if manifest.get("sampling_policy") != contract.get("sampling"):
         raise ValueError("canonical manifest sampling policy no longer matches the active contract")
 
@@ -61,6 +69,7 @@ def build_worker_projection(manifest, contract):
         "full_backlog_complete": manifest["full_backlog_complete"],
         "ttl_days": manifest["ttl_days"],
         "sampling_policy": copy.deepcopy(manifest["sampling_policy"]),
+        "web_evidence_contract_binding": binding,
         "scope_source": manifest["scope_source"],
         "source_queue_path": manifest["source_queue_path"],
         "source_queue_sha256": manifest["source_queue_sha256"],
@@ -76,6 +85,7 @@ def build_worker_projection(manifest, contract):
             "prepared_required_sha256": manifest["prepared_required_sha256"],
             "group_plan_sha256": plan["group_plan_sha256"],
             "group_count": plan["group_count"],
+            "web_evidence_contract_binding": copy.deepcopy(binding),
             **copy.deepcopy(group),
         }
         descriptors.append(descriptor)
@@ -88,6 +98,7 @@ def validate_worker_projection(index, descriptors, manifest, contract):
     validate_manifest(manifest, contract)
     plan = validate_group_plan(manifest, contract, required=True)
     projection = _projection_contract(contract)
+    binding = _manifest_binding(manifest)
     if not isinstance(index, dict) or index.get("schema") != WORKER_INDEX_SCHEMA or index.get("schema_version") != 1:
         raise ValueError("compact dossier worker index is missing or unsupported")
     if not isinstance(descriptors, list) or len(descriptors) != plan["group_count"]:
@@ -109,6 +120,7 @@ def validate_worker_projection(index, descriptors, manifest, contract):
         "full_backlog_complete": manifest["full_backlog_complete"],
         "ttl_days": manifest["ttl_days"],
         "sampling_policy": copy.deepcopy(manifest["sampling_policy"]),
+        "web_evidence_contract_binding": binding,
         "scope_source": manifest["scope_source"],
         "source_queue_path": manifest["source_queue_path"],
         "source_queue_sha256": manifest["source_queue_sha256"],
@@ -125,6 +137,7 @@ def validate_worker_projection(index, descriptors, manifest, contract):
             "prepared_required_sha256": manifest["prepared_required_sha256"],
             "group_plan_sha256": plan["group_plan_sha256"],
             "group_count": plan["group_count"],
+            "web_evidence_contract_binding": copy.deepcopy(binding),
             **copy.deepcopy(group),
         }
         if actual != expected:
