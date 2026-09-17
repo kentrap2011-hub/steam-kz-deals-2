@@ -2,14 +2,14 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "language-binding-2026-09-17",
+  "contract_revision": "semantic-consistency-gaps-2026-09-17",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "parallel_validation_contract": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2-language-binding-v1",
+  "worker_prompt_revision": "web-evidence-v2-semantic-consistency-v1",
   "purpose": "Define the active semantic evidence policy for neutral Taste dossiers while leaving GitHub-owned scope, buffered transport, asynchronous strict validation/persistence, recovery and completeness in the existing control-plane contracts.",
   "supersedes": {
     "steam_appreviews_required": false,
@@ -105,6 +105,15 @@
     "source_alias_rule": "obvious URL/public_ref aliases resolving to one parent player source cannot create source diversity",
     "distinct_valid_items_same_thread_allowed": true
   },
+  "parent_item_binding": {
+    "rule": "every player_feedback_record must resolve to the physical surface represented by its parent source_id rather than merely sharing a host",
+    "reddit_rule": "when parent and child locators expose a subreddit or thread identity, the child subreddit must equal the parent subreddit and a parent thread id must equal the child thread id; distinct stable child items inside that same thread remain valid",
+    "steam_surface_rule": "Steam review/recommendation items must not be bound under an explicitly discussion parent surface and Steam discussion items must not be bound under an explicitly review parent surface",
+    "public_ref_surface_rule": "stable public_ref namespaces such as steam-recommendation, steam-review, steam-discussion and reddit-comment are reconciled with the parent source type/locator",
+    "host_match_alone_is_sufficient": false,
+    "same_thread_distinct_items_allowed": true,
+    "unknown_generic_surface_behavior": "retain_existing_host_and_item_level_guards_when_no_supported_surface_identity_can_be_deterministically_resolved"
+  },
   "prepublication_validation": {
     "status": "not_required_for_scheduled_worker",
     "mode": "github_postpublication_canonical_validation",
@@ -147,6 +156,11 @@
       "mixed": ["russian", "non_russian"],
       "unknown": ["unknown"]
     },
+    "parent_source_language_containment": {
+      "russian_child_requires_parent_language": ["russian", "mixed"],
+      "non_russian_child_requires_parent_language": ["non_russian", "mixed"],
+      "mixed_or_unknown_child_additional_constraint": false
+    },
     "observation_summary_rule": "evidence_languages must equal the ordered distinct union of record_language_support_projection for exactly the player_feedback_ids bound to that observation",
     "canonical_output_order": ["russian", "non_russian", "unknown"],
     "mixed_summary_token_policy": "do_not_emit_mixed_as_an_observation_summary_token; mixed is a feedback-record input language that deterministically expands to russian and non_russian support",
@@ -160,7 +174,7 @@
       "classify_each_feedback_record_language",
       "bind_exact_player_feedback_ids_to_observation_or_conflict",
       "derive_language_support_only_from_those_bound_records",
-      "write_observation_evidence_languages_or_language-specific_conflict_wording"
+      "write_observation_evidence_languages_or_language-specific_conflict-wording"
     ]
   },
   "conflicts": {
@@ -169,7 +183,24 @@
     "count_and_recurrence_rules": "same_as_observations",
     "official_or_professional_context_may_support_interpretation": true,
     "official_or_professional_context_alone_may_establish_recurrence": false,
-    "physical_item_alias_and_source_diversity_rules_apply": true
+    "physical_item_alias_and_source_diversity_rules_apply": true,
+    "exact_duplicate_objects_allowed": false
+  },
+  "summary_binding": {
+    "mode": "mechanically_derived_from_validated_structured_findings",
+    "free_form_summary_allowed": false,
+    "canonical_format": "Evidence summary: {first_observation.statement.strip()} Observations recorded: {observation_count}. Conflicts recorded: {conflict_count}.",
+    "new_factual_claims_allowed": false,
+    "conflict_body_repeated_in_summary": false,
+    "reason": "the full structured dossier already carries all observations and conflicts; the top-level summary is only a deterministic compact projection and cannot become a second factual authority"
+  },
+  "overall_strength_binding": {
+    "source": "observations_only_for_strong_and_moderate_thresholds",
+    "strong_rule": "overall_strength=strong requires at least one observation with recurrence=strong",
+    "moderate_rule": "overall_strength=moderate requires at least one observation with recurrence=moderate or strong",
+    "conflict_recurrence_promotes_overall_strength": false,
+    "strong_conflict_only_rule": "a strong conflict does not by itself permit overall_strength=strong",
+    "scope": "preserve_existing_strict_semantics_without_redesigning_limited_or_conflicted_scoring"
   },
   "recency": {
     "search_recent_first": true,
@@ -177,6 +208,8 @@
     "recent_max_age_days": 365,
     "dated_source_rule": "when publication_date is known, freshness must be recent at age <=365 days and older at age >365 days relative to generated_at_utc date",
     "undated_source_rule": "publication_date=null remains allowed; freshness then remains a worker evidence classification and current_state still requires recent",
+    "known_child_date_parent_coherence_rule": "when a bound feedback record has a known date older than recent_max_age_days, its parent player source must not be labeled freshness=recent or used as current_state support merely because the parent publication_date is null",
+    "unknown_child_date_behavior": "when the feedback record publication_date is genuinely null, preserve the existing undated source/item path without inventing a date",
     "current_state_topics": ["bugs", "performance", "compatibility", "technical_state", "localization", "regional_service_state"],
     "current_state_requires_recent_support": true,
     "recent_evidence_dominates_old_evidence_for_current_state": true,
@@ -235,7 +268,7 @@
     "legacy_zero_evidence_or_store_only_placeholder_accepted": false,
     "prior_web_evidence_v1_binding_accepted_as_v2": false,
     "fresh_legacy_cache_rule": "treat_as_incompatible_and_rebuild_when_next_canonically_evaluated_for_freshness",
-    "same_day_fixed_snapshot_rule": "an_incompatible_worker_evidence_binding_or_canonical_group_size_requires_a_normal_github_owned_snapshot_rebuild_even_on_the_same_calendar_date",
+    "same_day_fixed_snapshot_rule": "an_incompatible_worker_evidence_binding_or canonical_group_size_requires_a_normal_github_owned_snapshot_rebuild_even_on_the_same_calendar_date",
     "stale_buffer_rule": "old_snapshot_or_old_group_plan_buffer_artifacts_can_never_be_rebound_to_the_new_snapshot",
     "manual_progress_migration_forbidden": true
   }
