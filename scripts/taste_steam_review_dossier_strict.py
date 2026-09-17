@@ -601,12 +601,9 @@ def derive_dossier_summary(observations, conflicts):
     """Return the only canonical top-level summary projection from validated structured findings."""
     if not isinstance(observations, list) or not observations or not isinstance(conflicts, list):
         raise ValueError("canonical dossier summary requires observations and conflicts")
-    first_statement = observations[0].get("statement") if isinstance(observations[0], dict) else None
-    if not isinstance(first_statement, str) or not first_statement.strip():
-        raise ValueError("canonical dossier summary requires a first observation statement")
     return (
-        f"Evidence summary: {first_statement.strip()} "
-        f"Observations recorded: {len(observations)}. Conflicts recorded: {len(conflicts)}."
+        f"Evidence summary: {len(observations)} validated structured observations; "
+        "consult observations and conflicts for supported findings."
     )
 
 
