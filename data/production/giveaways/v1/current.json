@@ -2,8 +2,8 @@
   "contract": "CROSS-PLATFORM-GIVEAWAY-V1",
   "schema_version": 1,
   "country_code": "KZ",
-  "generated_at_utc": "2026-09-16T23:21:25.433925Z",
-  "fresh_until_utc": "2026-09-18T05:21:25.433925Z",
+  "generated_at_utc": "2026-09-17T23:21:42.898826Z",
+  "fresh_until_utc": "2026-09-19T05:21:42.898826Z",
   "snapshot_status": "incomplete",
   "required_sources": [
     "steam",
@@ -15,21 +15,21 @@
       "required": true,
       "status": "failed",
       "complete": false,
-      "observed_at_utc": "2026-09-16T23:21:25.433925Z",
+      "observed_at_utc": "2026-09-17T23:21:42.898826Z",
       "endpoint": "existing KZ Steam catalog + targeted first-party validation",
       "candidate_count": 0,
       "accepted_count": 0,
       "rejected_count": 0,
       "unverified_count": 0,
       "error_code": "SOURCE_STALE",
-      "error": "Steam candidate snapshot is stale: 194.6h",
+      "error": "Steam candidate snapshot is stale: 218.6h",
       "details": {}
     },
     "epic": {
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-09-16T23:21:25.433925Z",
+      "observed_at_utc": "2026-09-17T23:21:42.898826Z",
       "endpoint": "https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions",
       "candidate_count": 2,
       "accepted_count": 2,
@@ -49,7 +49,7 @@
       "required": true,
       "status": "ok",
       "complete": true,
-      "observed_at_utc": "2026-09-16T23:21:25.433925Z",
+      "observed_at_utc": "2026-09-17T23:21:42.898826Z",
       "endpoint": "https://catalog.gog.com/v1/catalog",
       "candidate_count": 0,
       "accepted_count": 0,
@@ -73,27 +73,27 @@
   "unverified_offer_count": 0,
   "games": [
     {
-      "canonical_game_key": "meta-v1:e62b1acbda04c72763d95dfa",
+      "canonical_game_key": "meta-v1:45dbf633bdb236fa49321608",
       "identity_confidence": "high",
       "identity_evidence": {
         "basis": "exact_normalized_title_and_publishers",
         "publishers": [
-          "hibernian workshop"
+          "plug in digital sas"
         ]
       },
-      "title": "Astral Ascent",
+      "title": "Mindcop",
       "offers": [
         {
           "source_id": "epic",
-          "source_offer_id": "epic:0cb5817d554740e8bedf9ceea32522bd:e9bb092228f544c582e2c9395fae96f3:2026-09-17T15:00:00Z:2026-09-10T15:00:00Z",
-          "source_product_id": "0cb5817d554740e8bedf9ceea32522bd:e9bb092228f544c582e2c9395fae96f3",
+          "source_offer_id": "epic:f20a4eda0f2d486ea73cab8af1224e31:8a20c6c8d5b5417e800c687e9d72013e:2026-09-24T15:00:00Z:2026-09-17T15:00:00Z",
+          "source_product_id": "f20a4eda0f2d486ea73cab8af1224e31:8a20c6c8d5b5417e800c687e9d72013e",
           "storefront": "epic",
-          "title": "Astral Ascent",
-          "claim_url": "https://store.epicgames.com/en-US/p/astral-ascent-b33bc2",
-          "promotion_start_utc": "2026-09-10T15:00:00Z",
-          "promotion_end_utc": "2026-09-17T15:00:00Z",
-          "observed_at_utc": "2026-09-16T23:21:25.433925Z",
-          "base_price": 640000,
+          "title": "Mindcop",
+          "claim_url": "https://store.epicgames.com/en-US/p/mindcop-78e6c1",
+          "promotion_start_utc": "2026-09-17T15:00:00Z",
+          "promotion_end_utc": "2026-09-24T15:00:00Z",
+          "observed_at_utc": "2026-09-17T23:21:42.898826Z",
+          "base_price": 370000,
           "final_price": 0,
           "currency": "KZT",
           "discount_percent": 100,
@@ -111,27 +111,27 @@
       ]
     },
     {
-      "canonical_game_key": "meta-v1:ed75f67ddc977b985321a844",
+      "canonical_game_key": "meta-v1:7c06c8417b334b56c6be4667",
       "identity_confidence": "high",
       "identity_evidence": {
         "basis": "exact_normalized_title_and_publishers",
         "publishers": [
-          "devolver digital inc"
+          "goblinz studio sas"
         ]
       },
-      "title": "Luftrausers",
+      "title": "Shogun Showdown",
       "offers": [
         {
           "source_id": "epic",
-          "source_offer_id": "epic:639daf403b554ee9b02eee5eedafc302:c76046dddcdb43619c33ce0395941033:2026-09-17T15:00:00Z:2026-09-10T15:00:00Z",
-          "source_product_id": "639daf403b554ee9b02eee5eedafc302:c76046dddcdb43619c33ce0395941033",
+          "source_offer_id": "epic:59ff4d481277487d8c073166ba7612d3:b9ff3f98367a45cdac289dff6683a2bc:2026-09-24T15:00:00Z:2026-09-17T15:00:00Z",
+          "source_product_id": "59ff4d481277487d8c073166ba7612d3:b9ff3f98367a45cdac289dff6683a2bc",
           "storefront": "epic",
-          "title": "Luftrausers",
-          "claim_url": "https://store.epicgames.com/en-US/p/luftrausers-51e5e9",
-          "promotion_start_utc": "2026-09-10T15:00:00Z",
-          "promotion_end_utc": "2026-09-17T15:00:00Z",
-          "observed_at_utc": "2026-09-16T23:21:25.433925Z",
-          "base_price": 185000,
+          "title": "Shogun Showdown",
+          "claim_url": "https://store.epicgames.com/en-US/p/shogun-showdown-61832d",
+          "promotion_start_utc": "2026-09-17T15:00:00Z",
+          "promotion_end_utc": "2026-09-24T15:00:00Z",
+          "observed_at_utc": "2026-09-17T23:21:42.898826Z",
+          "base_price": 278000,
           "final_price": 0,
           "currency": "KZT",
           "discount_percent": 100,
