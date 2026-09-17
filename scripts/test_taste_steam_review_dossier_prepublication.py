@@ -11,6 +11,7 @@ from taste_steam_review_dossier_buffered import plan_buffered_drain, validate_bu
 from taste_steam_review_dossier_daily import BUFFER_GROUP_SCHEMA, build_daily_work_manifest, load_contract
 from taste_steam_review_dossier_prepublication import validate_prepublication_artifact
 from taste_steam_review_dossier_recovery import quarantine_stale_snapshot_inbox
+from taste_steam_review_dossier_strict import derive_dossier_summary
 from taste_steam_review_dossier_test_fixture import web_dossier
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -96,6 +97,7 @@ class PrepublicationParityTests(unittest.TestCase):
         def mutate(artifact):
             dossier = artifact["dossiers"][0]
             dossier["observations"] = [dossier["observations"][0]]
+            dossier["summary"] = derive_dossier_summary(dossier["observations"], dossier["conflicts"])
             dossier["evidence"]["source_mix_status"] = "single_source_only"
             dossier["evidence"]["single_source_reason"] = "Only one used player-feedback source remains bound."
         self.assert_same_failure(mutate, "russian found_and_used requires a bound Russian player-feedback record")
@@ -122,7 +124,7 @@ class PrepublicationParityTests(unittest.TestCase):
 
     def test_review_content_like_ref_rejected_while_neutral_locator_allowed(self):
         artifact = build_group(self.work)
-        neutral = "steam-discussion:729153699965901699:comment-442019"
+        neutral = "steam-recommendation:185290437"
         artifact["dossiers"][0]["provenance"]["player_feedback_records"][0]["public_ref"] = neutral
         self.assertEqual(
             validate_prepublication_artifact(copy.deepcopy(artifact), self.work, self.contract)["status"],
