@@ -39,13 +39,24 @@ class LanguageBindingRegressionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "claims Russian evidence without Russian player-feedback record"):
             self.validate(doc, now)
 
-    def test_non_russian_only_bound_feedback_cannot_gain_russian_from_russian_source_or_search_attempt(self):
+    def test_non_russian_only_bound_feedback_cannot_gain_russian_from_russian_context_or_search_attempt(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         doc = web_dossier(729041, now, russian_status="searched_not_found_or_insufficient")
-        doc["provenance"]["sources"][2]["language"] = "russian"
+        doc["provenance"]["sources"].append({
+            "source_id": "ru_context",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/729041/?l=russian",
+            "publication_date": None,
+            "language": "russian",
+            "freshness": "unknown",
+            "evidence_role": "identity",
+            "player_feedback": False,
+        })
         observation = doc["observations"][1]
         self.assertEqual(observation["player_feedback_ids"], ["pf4"])
         self.assertEqual(doc["provenance"]["player_feedback_records"][3]["language"], "non_russian")
+        self.assertEqual(doc["evidence"]["russian_attempt"], "searched_not_found_or_insufficient")
         observation["evidence_languages"] = ["russian"]
         with self.assertRaisesRegex(ValueError, "claims Russian evidence without Russian player-feedback record"):
             self.validate(doc, now)
