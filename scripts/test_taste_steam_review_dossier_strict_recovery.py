@@ -158,7 +158,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
                 "evidence_role": "current_state",
                 "player_feedback": True,
             }
-            doc["provenance"]["player_feedback_records"][3]["source_id"] = "p2"
+            doc["provenance"]["player_feedback_records"][3]["source_id"] = "source-003"
         self.assertInvalid(mutate)
 
         doc = dossier(123456, russian_status="searched_no_existence_signal")
