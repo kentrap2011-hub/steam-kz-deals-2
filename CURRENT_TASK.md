@@ -374,3 +374,14 @@
 - active binding revisions: evidence/schema `russian-existence-retrieval-gate-2026-09-18`, prompt `web-evidence-v2-russian-retrieval-gate-v1`;
 - Scheduled Task `Run now` was not launched;
 - durable report: `reviews/worker_reports/taste-dossier-russian-existence-retrieval-gate-implement-01.md`.
+
+
+## Worker in progress — 2026-09-18
+
+### Taste story DLC scope policy implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_STORY_DLC_SCOPE_POLICY_IMPLEMENT_01.md`;
+- architecture preflight: GitHub remains the control-plane owner of Taste/dossier scope; canonical policy is `config/mailing_policy.json` with dossier scope contract consuming the GitHub-built queue;
+- target: positive-evidence-only story DLC semantic eligibility; non-story and unproven DLC fail closed before dossier work;
+- BG3 Digital Deluxe appid `2378500` is the explicit regression case;
+- no Scheduled Task Run now/settings change; no Crown Trick/Hellish Quart locator work.
