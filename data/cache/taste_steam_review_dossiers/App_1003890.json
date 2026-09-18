@@ -1,53 +1,81 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
+    "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
+  },
   "appid": "1003890",
   "title": "Blacksad: Under the Skin",
-  "generated_at_utc": "2026-09-16T13:33:00Z",
-  "expires_at_utc": "2026-10-06T13:33:00Z",
+  "generated_at_utc": "2026-09-18T20:24:09Z",
+  "expires_at_utc": "2026-10-08T20:24:09Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Blacksad: Under the Skin",
     "release_year": 2019,
     "resolution_status": "resolved",
     "identity_source_ids": [
-      "identity"
+      "source-001"
     ],
     "corroborators": [
       {
         "kind": "appid",
         "value": "1003890"
+      },
+      {
+        "kind": "developer",
+        "value": "Pendulo Studios, YS Interactive"
       }
     ]
   },
-  "summary": "Players value the noir detective story and comic-inspired atmosphere, but technical roughness remains a recurring friction point. Russian Steam feedback is substantially more positive than the English-language aggregate, despite recent all-language reviews being mixed.",
+  "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "structure",
-      "statement": "Players value the noir detective story and comic-inspired atmosphere, but technical roughness remains a recurring friction point.",
-      "sentiment": "mixed",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "community"
-      ]
-    },
-    {
-      "category": "localization",
-      "statement": "Russian Steam feedback is substantially more positive than the English-language aggregate, despite recent all-language reviews being mixed.",
-      "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "category": "friction",
+      "statement": "Recent Russian player feedback repeatedly reports control, performance, visual or bug-related roughness as an ongoing technical drawback.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
         "russian"
       ],
       "evidence_status": "current",
       "source_ids": [
-        "steam_ru"
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "fallback-001",
+        "fallback-002"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Players value the detective narrative, characters, atmosphere and choice-driven investigation despite the technical roughness.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "fallback-002"
       ]
     }
   ],
@@ -58,43 +86,68 @@
     "source_mix_status": "multi_source",
     "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "moderate",
+    "overall_strength": "limited",
     "stop_reason": "evidence_stable"
   },
   "provenance": {
     "sources": [
       {
-        "source_id": "identity",
+        "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1003890/Blacksad__Under_the_Skin/",
-        "publication_date": null,
+        "url": "https://store.steampowered.com/app/1003890/Blacksad_Under_the_Skin/",
+        "publication_date": "2019-11-14",
         "language": "non_russian",
-        "freshness": "recent",
+        "freshness": "older",
         "evidence_role": "identity",
         "player_feedback": false
       },
       {
-        "source_id": "steam_ru",
+        "source_id": "source-002",
         "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1003890/Blacksad_Under_the_Skin/?curator_clanid=35076420&l=russian",
+        "url": "https://store.steampowered.com/app/1003890/Blacksad_Under_the_Skin/?l=russian",
         "publication_date": null,
         "language": "russian",
         "freshness": "recent",
         "evidence_role": "current_state",
-        "player_feedback": true
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
       },
       {
-        "source_id": "community",
-        "source_type": "steam_community",
-        "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1003890/discussions/0/3368153731099552345/",
-        "publication_date": null,
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/Gaming4Gamers/comments/g7n4z6/",
+        "publication_date": "2020-04-25",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "durable_trait",
         "player_feedback": true
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-003",
+        "url": "https://www.reddit.com/r/Gaming4Gamers/comments/g7n4z6/",
+        "publication_date": "2020-04-25",
+        "language": "non_russian",
+        "identity_mode": "stable_locator"
+      },
+      {
+        "feedback_id": "fallback-001",
+        "source_id": "source-002",
+        "publication_date": "2026-05-13",
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
+      },
+      {
+        "feedback_id": "fallback-002",
+        "source_id": "source-002",
+        "publication_date": "2026-05-12",
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
       }
     ]
   }

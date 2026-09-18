@@ -1,53 +1,81 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
+    "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
+  },
   "appid": "1025440",
   "title": "Fantasy General II",
-  "generated_at_utc": "2026-09-16T13:33:00Z",
-  "expires_at_utc": "2026-10-06T13:33:00Z",
+  "generated_at_utc": "2026-09-18T20:24:09Z",
+  "expires_at_utc": "2026-10-08T20:24:09Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Fantasy General II",
     "release_year": 2019,
     "resolution_status": "resolved",
     "identity_source_ids": [
-      "identity"
+      "source-001"
     ],
     "corroborators": [
       {
         "kind": "appid",
         "value": "1025440"
+      },
+      {
+        "kind": "developer",
+        "value": "Owned by Gravity"
       }
     ]
   },
-  "summary": "Player feedback is broadly positive around turn-based tactical combat, unit progression and campaign strategy. Russian is supported for the interface and Russian-language Steam feedback is available; older community discussion records disagreement about translation quality.",
+  "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Player feedback is broadly positive around turn-based tactical combat, unit progression and campaign strategy.",
+      "statement": "Recent Russian player feedback praises the tactical decision-making, campaign choices and strategic planning available during play.",
       "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "uncertain",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "fallback-002",
+        "fallback-003"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "Some players criticize battle presentation or pacing as rushed, visually awkward or tedious despite finding parts of the underlying strategy interesting.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
         "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "community"
-      ]
-    },
-    {
-      "category": "localization",
-      "statement": "Russian is supported for the interface and Russian-language Steam feedback is available; older community discussion records disagreement about translation quality.",
-      "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "russian"
+        "source-002",
+        "source-003"
       ],
-      "evidence_status": "current",
-      "source_ids": [
-        "steam_ru"
+      "player_feedback_ids": [
+        "feedback-001",
+        "fallback-001"
       ]
     }
   ],
@@ -58,43 +86,75 @@
     "source_mix_status": "multi_source",
     "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "moderate",
+    "overall_strength": "limited",
     "stop_reason": "evidence_stable"
   },
   "provenance": {
     "sources": [
       {
-        "source_id": "identity",
+        "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1025440/",
-        "publication_date": null,
+        "url": "https://store.steampowered.com/app/1025440/Fantasy_General_II/",
+        "publication_date": "2019-09-05",
         "language": "non_russian",
-        "freshness": "recent",
+        "freshness": "older",
         "evidence_role": "identity",
         "player_feedback": false
       },
       {
-        "source_id": "steam_ru",
+        "source_id": "source-002",
         "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1025440/?l=russian",
+        "url": "https://store.steampowered.com/app/1025440/Fantasy_General_II/?l=russian",
         "publication_date": null,
         "language": "russian",
-        "freshness": "recent",
-        "evidence_role": "current_state",
-        "player_feedback": true
+        "freshness": "unknown",
+        "evidence_role": "uncertain",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
       },
       {
-        "source_id": "community",
+        "source_id": "source-003",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/FreeGameFindings/comments/1lwhzfm",
-        "publication_date": null,
+        "url": "https://www.reddit.com/r/u_loki1942/comments/d4f67g/",
+        "publication_date": "2019-09-15",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "durable_trait",
         "player_feedback": true
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-003",
+        "url": "https://www.reddit.com/r/u_loki1942/comments/d4f67g/",
+        "publication_date": "2019-09-15",
+        "language": "non_russian",
+        "identity_mode": "stable_locator"
+      },
+      {
+        "feedback_id": "fallback-001",
+        "source_id": "source-002",
+        "publication_date": "2026-03-24",
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
+      },
+      {
+        "feedback_id": "fallback-002",
+        "source_id": "source-002",
+        "publication_date": "2026-02-24",
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
+      },
+      {
+        "feedback_id": "fallback-003",
+        "source_id": "source-002",
+        "publication_date": "2026-02-02",
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
       }
     ]
   }

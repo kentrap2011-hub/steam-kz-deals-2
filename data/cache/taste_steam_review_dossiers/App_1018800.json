@@ -1,53 +1,83 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
+    "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
+  },
   "appid": "1018800",
   "title": "DEEEER Simulator: Your Average Everyday Deer Game",
-  "generated_at_utc": "2026-09-16T13:33:00Z",
-  "expires_at_utc": "2026-10-06T13:33:00Z",
+  "generated_at_utc": "2026-09-18T20:24:09Z",
+  "expires_at_utc": "2026-10-08T20:24:09Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "DEEEER Simulator: Your Average Everyday Deer Game",
     "release_year": 2021,
     "resolution_status": "resolved",
     "identity_source_ids": [
-      "identity"
+      "source-001"
     ],
     "corroborators": [
       {
         "kind": "appid",
         "value": "1018800"
+      },
+      {
+        "kind": "developer",
+        "value": "Gibier Games"
       }
     ]
   },
-  "summary": "Players generally respond positively to the deliberately absurd physics, destruction sandbox and short-form comedy. Russian-language Steam feedback is strongly positive, broadly matching the positive English-language aggregate.",
+  "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Players generally respond positively to the deliberately absurd physics, destruction sandbox and short-form comedy.",
-      "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "category": "structure",
+      "statement": "Players describe the game as a deliberately short experience that can be completed quickly, which works as a brief novelty but limits its overall scope.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
+        "russian",
         "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "community"
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "fallback-001"
       ]
     },
     {
-      "category": "localization",
-      "statement": "Russian-language Steam feedback is strongly positive, broadly matching the positive English-language aggregate.",
+      "category": "other",
+      "statement": "Players enjoy the absurd humor, unexpected set pieces and chaotic novelty as a compact diversion.",
       "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
-        "russian"
+        "russian",
+        "non_russian"
       ],
-      "evidence_status": "current",
+      "evidence_status": "durable",
       "source_ids": [
-        "steam_ru"
+        "source-002",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "fallback-002"
       ]
     }
   ],
@@ -58,43 +88,87 @@
     "source_mix_status": "multi_source",
     "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "moderate",
+    "overall_strength": "limited",
     "stop_reason": "evidence_stable"
   },
   "provenance": {
     "sources": [
       {
-        "source_id": "identity",
+        "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1018800/Simulyator_OLEEEENYA_DEEEER_Simulator/",
-        "publication_date": null,
+        "url": "https://store.steampowered.com/app/1018800/DEEEER_Simulator_Your_Average_Everyday_Deer_Game/",
+        "publication_date": "2021-11-23",
         "language": "non_russian",
-        "freshness": "recent",
+        "freshness": "older",
         "evidence_role": "identity",
         "player_feedback": false
       },
       {
-        "source_id": "steam_ru",
+        "source_id": "source-002",
         "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1018800/DEEEER_Simulator/?l=russian",
+        "url": "https://store.steampowered.com/app/1018800/DEEEER_Simulator_Your_Average_Everyday_Deer_Game/?l=russian",
         "publication_date": null,
         "language": "russian",
-        "freshness": "recent",
-        "evidence_role": "current_state",
-        "player_feedback": true
+        "freshness": "unknown",
+        "evidence_role": "uncertain",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
       },
       {
-        "source_id": "community",
-        "source_type": "steam_community",
-        "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1018800/reviews/",
-        "publication_date": null,
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/Trophies/comments/1912hjv/",
+        "publication_date": "2024-01-07",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "durable_trait",
         "player_feedback": true
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/XboxSeriesX/comments/r1j5mc/",
+        "publication_date": "2021-11-25",
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "durable_trait",
+        "player_feedback": true
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-003",
+        "url": "https://www.reddit.com/r/Trophies/comments/1912hjv/",
+        "publication_date": "2024-01-07",
+        "language": "non_russian",
+        "identity_mode": "stable_locator"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-004",
+        "url": "https://www.reddit.com/r/XboxSeriesX/comments/r1j5mc/",
+        "publication_date": "2021-11-25",
+        "language": "non_russian",
+        "identity_mode": "stable_locator"
+      },
+      {
+        "feedback_id": "fallback-001",
+        "source_id": "source-002",
+        "publication_date": "2026-03-17",
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
+      },
+      {
+        "feedback_id": "fallback-002",
+        "source_id": "source-002",
+        "publication_date": "2026-03-14",
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
       }
     ]
   }
