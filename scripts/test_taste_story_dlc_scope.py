@@ -4,6 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from build_pre_ai_chatgpt_payload import classify_independent_dlc_semantic_scope
 from taste_steam_review_dossier_daily import load_contract
 from taste_steam_review_dossier_web import (
     build_daily_work_manifest_web,
@@ -39,18 +40,34 @@ def row(appid, title, description, *, addon=True):
 
 
 class StoryDlcScopeTests(unittest.TestCase):
-    def test_story_dlc_01_current_bg3_digital_deluxe_excluded(self):
-        queue_path = ROOT / "data/production/pre_ai/chatgpt_taste_queue.jsonl"
-        current = [
-            json.loads(line)
-            for line in queue_path.read_text(encoding="utf-8").splitlines()
-            if line.strip()
-        ]
-        bg3 = next(x for x in current if str(x.get("appid")) == "2378500")
+    def test_story_dlc_01_bg3_digital_deluxe_excluded_before_taste_queue(self):
+        bg3 = row(
+            2378500,
+            "Baldur's Gate 3 - Digital Deluxe Edition DLC",
+            "The Digital Deluxe Edition includes both practical and cosmetic in-game items, "
+            "such as a unique custom dice skin and the Mask of the Shapeshifter from Divinity: "
+            "Original Sin 2. As well as the Original Game Soundtrack for Baldur's Gate 3, "
+            "digital Artbook and printable pre-made Origin character sheets",
+        )
         classified = classify_story_dlc_scope(bg3)
         self.assertEqual(classified["classification"], "non_story_dlc_excluded")
         self.assertFalse(classified["eligible"])
         self.assertIn("digital_deluxe", classified["matched_signals"])
+
+        family = {
+            "family_id": "addon:App_2378500",
+            "ai_condition": "addon_taste_include_and_base_support_required",
+            "requires_ai_base_support": True,
+            "base_appids": ["1086940"],
+        }
+        taste_row = {
+            "appid": "2378500",
+            "taste_subject_title": bg3["title"],
+            "short_description": bg3["short_description"],
+        }
+        upstream = classify_independent_dlc_semantic_scope(family, taste_row)
+        self.assertEqual(upstream["classification"], "non_story_dlc_excluded")
+        self.assertFalse(upstream["eligible"])
 
     def test_story_dlc_02_obvious_non_story_addons_excluded(self):
         fixtures = [
@@ -70,12 +87,38 @@ class StoryDlcScopeTests(unittest.TestCase):
         self.assertTrue(classified["eligible"])
         resolution = resolve_dossier_scope_identities([item], CONTRACT)
         self.assertEqual([x["appid"] for x in resolution["rows"]], ["3001"])
+        family = {
+            "family_id": item["family_id"],
+            "ai_condition": item["semantic_condition"]["ai_condition"],
+            "requires_ai_base_support": True,
+            "base_appids": ["100"],
+        }
+        taste_row = {
+            "appid": item["appid"],
+            "taste_subject_title": item["title"],
+            "short_description": item["short_description"],
+        }
+        self.assertTrue(classify_independent_dlc_semantic_scope(family, taste_row)["eligible"])
 
     def test_story_dlc_04_ambiguous_addon_fails_closed(self):
         item = row(4001, "Arena Add-on", "Adds new maps, characters and weapons for an additional mode.")
         classified = classify_story_dlc_scope(item)
         self.assertEqual(classified["classification"], "story_content_unproven_excluded")
         self.assertFalse(classified["eligible"])
+        family = {
+            "family_id": item["family_id"],
+            "ai_condition": item["semantic_condition"]["ai_condition"],
+            "requires_ai_base_support": True,
+            "base_appids": ["100"],
+        }
+        taste_row = {
+            "appid": item["appid"],
+            "taste_subject_title": item["title"],
+            "short_description": item["short_description"],
+        }
+        upstream = classify_independent_dlc_semantic_scope(family, taste_row)
+        self.assertEqual(upstream["classification"], "story_content_unproven_excluded")
+        self.assertFalse(upstream["eligible"])
 
     def test_story_dlc_05_mixed_story_and_cosmetics_remains_eligible(self):
         item = row(5001, "Story & Bonus Pack", "Adds a new story campaign and questline, plus cosmetic skins and a soundtrack.")
@@ -93,6 +136,18 @@ class StoryDlcScopeTests(unittest.TestCase):
     def test_story_dlc_07_base_game_unaffected(self):
         item = row(7001, "Base Game", "A competitive action game with maps and weapons.", addon=False)
         self.assertIsNone(classify_story_dlc_scope(item))
+        family = {
+            "family_id": item["family_id"],
+            "ai_condition": item["semantic_condition"]["ai_condition"],
+            "requires_ai_base_support": False,
+            "base_appids": [item["appid"]],
+        }
+        taste_row = {
+            "appid": item["appid"],
+            "taste_subject_title": item["title"],
+            "short_description": item["short_description"],
+        }
+        self.assertIsNone(classify_independent_dlc_semantic_scope(family, taste_row))
         resolution = resolve_dossier_scope_identities([item], CONTRACT)
         self.assertEqual([x["appid"] for x in resolution["rows"]], ["7001"])
 
@@ -112,11 +167,17 @@ class StoryDlcScopeTests(unittest.TestCase):
             for appid in group["appids"]
         ]
         self.assertNotIn("2378500", group_appids)
+
+        # Before activation the checked-in queue may still contain the old BG3 row;
+        # after activation it must not. The dossier gate remains defense in depth
+        # in either state, so this regression is intentionally count-agnostic.
         summary = manifest["story_dlc_scope"]
-        self.assertEqual(summary["considered_count"], 1)
-        self.assertEqual(summary["story_eligible_count"], 0)
-        self.assertEqual(summary["non_story_excluded_count"], 1)
-        self.assertEqual(summary["ambiguous_excluded_count"], 0)
+        self.assertEqual(
+            summary["considered_count"],
+            summary["story_eligible_count"]
+            + summary["non_story_excluded_count"]
+            + summary["ambiguous_excluded_count"],
+        )
 
 
 if __name__ == "__main__":
