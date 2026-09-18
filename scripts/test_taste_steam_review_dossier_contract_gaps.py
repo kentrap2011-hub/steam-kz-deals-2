@@ -109,8 +109,8 @@ class ContractGapRegressionTests(unittest.TestCase):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         alias = web_dossier(520001, now)
         alias["provenance"]["player_feedback_records"].append({
-            "feedback_id": "pf5",
-            "source_id": "p2",
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
             "url": alias["provenance"]["player_feedback_records"][3]["url"] + "?utm_source=share#fragment",
             "publication_date": now.date().isoformat(),
             "language": "russian",
@@ -120,22 +120,22 @@ class ContractGapRegressionTests(unittest.TestCase):
 
         distinct = web_dossier(520002, now)
         distinct["provenance"]["player_feedback_records"].append({
-            "feedback_id": "pf5",
-            "source_id": "p2",
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
             "url": "https://www.reddit.com/r/games/comments/test520002/game_520002/comment2/",
             "publication_date": now.date().isoformat(),
             "language": "russian",
         })
         distinct["observations"][1]["recurrence"] = "limited"
         distinct["observations"][1]["mention_count"] = 2
-        distinct["observations"][1]["player_feedback_ids"] = ["pf4", "pf5"]
+        distinct["observations"][1]["player_feedback_ids"] = ["feedback-004", "feedback-005"]
         self.assertIs(self.validate(distinct, now=now), distinct)
 
     def test_gap02_source_aliases_cannot_fake_multi_source_diversity(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         doc = web_dossier(520003, now)
         alias_source = copy.deepcopy(doc["provenance"]["sources"][2])
-        alias_source["source_id"] = "p2_alias"
+        alias_source["source_id"] = "source-004"
         alias_source["url"] += "?utm_campaign=x#top"
         doc["provenance"]["sources"].append(alias_source)
         with self.assertRaisesRegex(ValueError, "duplicate or aliased provenance source"):
@@ -167,7 +167,7 @@ class ContractGapRegressionTests(unittest.TestCase):
         exact["provenance"]["sources"][1]["publication_date"] = exact_date
         exact["provenance"]["sources"][1]["freshness"] = "recent"
         for record in exact["provenance"]["player_feedback_records"]:
-            if record["source_id"] == "p1":
+            if record["source_id"] == "source-002":
                 record["publication_date"] = exact_date
         self.assertIs(self.validate(exact, now=now), exact)
 
@@ -200,8 +200,8 @@ class ContractGapRegressionTests(unittest.TestCase):
             "statement": "Players report materially different experiences with the same durable mechanic.",
             "recurrence": "moderate",
             "mention_count": 3,
-            "source_ids": ["p1"],
-            "player_feedback_ids": ["pf1", "pf2", "pf3"],
+            "source_ids": ["source-002"],
+            "player_feedback_ids": ["feedback-001", "feedback-002", "feedback-003"],
         }]
         self.assertIs(self.validate(valid, now=now), valid)
 
@@ -210,8 +210,8 @@ class ContractGapRegressionTests(unittest.TestCase):
             "statement": "Official context alone must not establish strong player conflict recurrence.",
             "recurrence": "strong",
             "mention_count": 3,
-            "source_ids": ["m1"],
-            "player_feedback_ids": ["pf1", "pf2", "pf3"],
+            "source_ids": ["source-001"],
+            "player_feedback_ids": ["feedback-001", "feedback-002", "feedback-003"],
         }]
         with self.assertRaises(ValueError):
             self.validate(official_only, now=now)
@@ -221,8 +221,8 @@ class ContractGapRegressionTests(unittest.TestCase):
             "statement": "Three player records cannot mechanically establish strong recurrence.",
             "recurrence": "strong",
             "mention_count": 3,
-            "source_ids": ["p1"],
-            "player_feedback_ids": ["pf1", "pf2", "pf3"],
+            "source_ids": ["source-002"],
+            "player_feedback_ids": ["feedback-001", "feedback-002", "feedback-003"],
         }]
         with self.assertRaisesRegex(ValueError, "recurrence exceeds bound player-feedback support"):
             self.validate(inflated, now=now)
