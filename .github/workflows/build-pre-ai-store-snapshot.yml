@@ -75,6 +75,7 @@ on:
       - "scripts/test_taste_steam_review_dossier_strict_recovery.py"
       - "scripts/test_taste_steam_review_dossier_prepublication.py"
       - "scripts/test_taste_steam_review_dossier_contract_gaps.py"
+      - "scripts/test_taste_story_dlc_scope.py"
       - "scripts/russian_description_translation_runtime.py"
       - "scripts/build_russian_description_translation_queue.py"
       - "scripts/test_russian_description_translation_runtime.py"
@@ -161,6 +162,7 @@ jobs:
           python scripts/test_taste_steam_review_dossier_strict_recovery.py
           python scripts/test_taste_steam_review_dossier_prepublication.py
           python scripts/test_taste_steam_review_dossier_contract_gaps.py
+          python scripts/test_taste_story_dlc_scope.py
 
       - name: Persist or preserve pre-semantic Taste active pin
         env:
