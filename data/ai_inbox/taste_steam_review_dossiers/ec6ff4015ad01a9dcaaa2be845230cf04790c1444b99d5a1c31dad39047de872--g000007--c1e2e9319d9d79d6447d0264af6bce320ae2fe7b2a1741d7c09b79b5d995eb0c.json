@@ -1,0 +1,392 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872",
+  "prepared_required_sha256": "048841e89b8aab1f2276c5e747d04183d6d5f323386d2a93c697f287eb04ee1a",
+  "group_plan_sha256": "8931aff2a475ab621702d9a0f4f61a70db7bfd277c69591ada1e5d376b62bbb2",
+  "group_count": 234,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+    "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+  },
+  "sequence": 7,
+  "start_index": 18,
+  "end_index_exclusive": 21,
+  "appids": [
+    "107310",
+    "1075740",
+    "1077970"
+  ],
+  "items_sha256": "d56ec50111eaf9552391fe2f7d86691579680615ab53a0b5b84769c7abb78e4c",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "68b9702e61e8157e065fb526c8a472b9eb61ac1ef1de1d2b3d65f30c0f7072a9",
+  "items": [
+    {
+      "key": "App_107310",
+      "appid": "107310",
+      "title": "Cthulhu Saves the World",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_107310.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1075740",
+      "appid": "1075740",
+      "title": "Banners of Ruin",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1075740.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1077970",
+      "appid": "1077970",
+      "title": "Dry Drowning",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1077970.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "c1e2e9319d9d79d6447d0264af6bce320ae2fe7b2a1741d7c09b79b5d995eb0c",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+      },
+      "appid": "107310",
+      "title": "Cthulhu Saves the World",
+      "generated_at_utc": "2026-09-18T21:33:02Z",
+      "expires_at_utc": "2026-10-08T21:33:02Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Cthulhu Saves the World",
+        "release_year": 2011,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "107310"
+          },
+          {
+            "kind": "developer",
+            "value": "Zeboyd Digital Entertainment LLC"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Recent Russian player feedback praises the game's parody humor, brisk turn-based battles, and accessible progression while noting its deliberately simple retro presentation.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "fallback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/107310/",
+            "publication_date": "2011-07-13",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/107310/Cthulhu_Saves_the_World/?cc=br&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2025-05-19",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+      },
+      "appid": "1075740",
+      "title": "Banners of Ruin",
+      "generated_at_utc": "2026-09-18T21:33:02Z",
+      "expires_at_utc": "2026-10-08T21:33:02Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Banners of Ruin",
+        "release_year": 2021,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1075740"
+          },
+          {
+            "kind": "developer",
+            "value": "MonteBearo"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Russian player feedback describes Banners of Ruin as a difficult turn-based card game where party abilities and positioning matter at least as much as card play.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bounded research yielded one contract-usable Russian player-feedback discussion item used for the validated finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1075740/",
+            "publication_date": "2021-07-29",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/discussions/forum/26/4362372998091901072/",
+            "publication_date": "2024-03-31",
+            "language": "russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "url": "https://steamcommunity.com/discussions/forum/26/4362372998091901072/",
+            "publication_date": "2024-03-31",
+            "language": "russian",
+            "identity_mode": "stable_locator"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+      },
+      "appid": "1077970",
+      "title": "Dry Drowning",
+      "generated_at_utc": "2026-09-18T21:33:02Z",
+      "expires_at_utc": "2026-10-08T21:33:02Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Dry Drowning",
+        "release_year": 2019,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1077970"
+          },
+          {
+            "kind": "developer",
+            "value": "Studio V, VLG"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "localization",
+          "statement": "Russian player feedback historically criticized the absence of Russian localization, and current Steam metadata still lists Russian as unsupported.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "fallback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1077970/",
+            "publication_date": "2019-08-02",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1077970/Dry_Drowning/?l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "older",
+            "evidence_role": "historical",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1077970/Dry_Drowning?l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "current_state",
+            "player_feedback": false
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2019-12-01",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    }
+  ]
+}
