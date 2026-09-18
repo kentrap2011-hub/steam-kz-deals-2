@@ -191,6 +191,23 @@ Use a bounded **search-indexed exact-app collection recovery** path while budget
 
 This recovery is an adaptive retrieval technique inside the existing 8-search / 16-page ceilings, not a new website quota, required Steam lane, retry loop, or evidence semantic. It does not count as a materially different feedback surface class by itself; source-agnostic diversification still applies when the safe exact-app Steam recovery does not yield a usable item.
 
+### Steam Community child traversal after Store recovery
+
+When the exact dossier appid is established, reliable Russian player-feedback existence is established, Store recovery is aggregate-only or unusable, and a safe non-profile exact-app Steam Community collection/index exposes a Russian row/card/index lead, traverse that concrete lead before spending another broad search query.
+
+- Open/read the safe exact-app Community collection/index representation and inspect the actual child targets it exposes. When a numbered/clickable discussion thread, review/recommendation, post/comment, or other accepted player-feedback child target is exposed, follow that child with the available open/click path before issuing another materially equivalent broad search.
+- Prefer a neutral non-profile item-level child URL/ref. When the exposed child locator is a stable accepted item identity, use the ordinary `stable_locator` path.
+- Verify the opened child remains bound to the exact dossier appid/product and physically belongs to the inspected Community parent/container. Same host, same broad surface class, matching title text, or a nearby row is not enough.
+- Determine Russian/mixed language from the opened concrete child content. Row locale, UI language, search language, or a Russian-looking index title alone does not establish feedback-record language.
+- If the safe Community parent/container itself exposes an actually inspected concrete Russian/mixed feedback card/item but no acceptable neutral item id, the existing `transient_author_deduped` fallback may be used only when all current prerequisites are satisfied. Persist no author/profile identity.
+- A collection/list/index row that has not been resolved to an opened concrete child is discovery metadata only. It is not a player-feedback record, mention, observation support, or `found_and_used`.
+- Never synthesize, guess, brute-force, or infer a Steam thread/review/recommendation id or child URL that the current web/search/open/click environment did not expose.
+- A profile-scoped Russian hit remains discovery-only and must not be persisted or re-parented to a Community parent unless that same concrete item is independently inspected on the safe non-profile parent.
+- If the collection row exposes no child target, one bounded search-engine follow-up constrained by the exact appid plus the exact parent row/title/thread wording may be used to surface a safe non-profile child. Do not loop over equivalent index queries. After a genuine child-target extraction failure, resume source-agnostic diversification toward a materially different public player-feedback surface class when one is reasonably discoverable.
+- This traversal consumes the existing per-game budget only: at most 8 web-search queries and 16 opened/read pages. It creates no Steam-only quota, additional retry stage, or new production budget.
+
+The Store indexed recovery above remains the earlier Steam recovery path when it yields a concrete safe card. Community-child traversal is the next generic Steam recovery step only when Store recovery is aggregate-only/unusable and a safe exact-app Community lead is actually exposed.
+
 ## Adaptive bounded stopping
 
 ChatGPT decides when evidence is sufficient. Do not chase a fixed review count or cursor. Expand research when evidence is sparse, divergent, temporally conflicted, localization-specific, or identity is uncertain. Stop when additional searching is unlikely to materially change the neutral dossier.
