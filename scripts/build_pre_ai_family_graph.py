@@ -435,12 +435,18 @@ def main():
         for key in family['all_member_keys']
     }
 
-    story_dlc_items = [
-        item
-        for family in families
-        for item in (family.get('addon_story_scope') or [])
-    ]
+    story_dlc_items = []
+    for key in sorted(feed):
+        if key not in store or meta[key].get('app_type') != 'dlc':
+            continue
+        story_dlc_items.append({
+            'key': key,
+            'appid': str(feed[key].get('appid') or ''),
+            'title': feed[key]['title'],
+            'classification': classify_story_dlc(meta[key], mechanical_kind='dlc'),
+        })
     story_dlc_scope_summary = summarize_story_dlc_classifications(story_dlc_items)
+    story_dlc_scope_summary['scope_basis'] = 'active_store_backed_app_type_dlc_before_family_semantic_gate'
 
     out = {
         'schema_version': 1,
