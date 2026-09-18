@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "evidence-guard-batch3-2026-09-16",
+  "contract_revision": "story-dlc-scope-positive-evidence-2026-09-18",
   "purpose": "Prepare one complete fixed daily neutral Steam review dossier backlog snapshot before Taste semantic analysis, preserve checkpoint-sized durable progress inside that fixed snapshot, expose a bounded GitHub-derived compact read projection for the scheduled worker, and use buffered create-only group transport without transferring canonical progress or queue ownership away from GitHub.",
   "ownership": {
     "control_plane": "github",
@@ -10,6 +10,7 @@
     "github_responsibilities": [
       "select_full_current_eligible_taste_backlog_dossier_scope_once_per_daily_pre_ai_preparation",
       "deduplicate_dossier_scope_by_appid_preserving_canonical_queue_order",
+      "classify_addon_story_eligibility_from_github_accessible_steam_product_metadata_before_dossier_scope_projection",
       "decide_fresh_vs_stale_at_daily_preparation_time",
       "prepare_one_complete_fixed_daily_work_manifest",
       "prepare_internal_checkpoint_from_remaining_daily_snapshot_scope",
@@ -40,6 +41,7 @@
       "continue_from_group_n_to_the_immediately_next_projected_group_after_successful_create_only_publication_without_waiting_for_canonical_ingest"
     ],
     "forbidden": [
+      "treat_all_dlc_or_addons_as_independent_taste_semantic_scope",
       "invent_scope",
       "refresh_or_rebuild_scope_on_manual_run_now",
       "refresh_or_rebuild_scope_after_checkpoint_persistence",
@@ -74,7 +76,7 @@
   "scope": {
     "source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
     "source_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
-    "eligibility": "row_requires_at_least_one_canonical_taste_semantic_work_item",
+    "eligibility": "row_requires_at_least_one_canonical_taste_semantic_work_item_and_if_addon_has_positive_substantial_playable_story_evidence",
     "taste_semantic_work_required_any": [
       "evaluate_taste_fit",
       "evaluate_normalized_taste_factors",
@@ -85,7 +87,34 @@
     "dedupe": "first_occurrence_by_appid_preserving_canonical_queue_order",
     "active_pin_role": "downstream_semantic_input_only_not_dossier_scope",
     "snapshot_membership_rule": "fixed_from_daily_preparation_until_next_daily_preparation",
-    "manual_run_now_rule": "consume_latest_prepared_daily_snapshot_without_on_demand_scope_refresh"
+    "manual_run_now_rule": "consume_latest_prepared_daily_snapshot_without_on_demand_scope_refresh",
+    "story_dlc_policy": {
+      "revision": "story-dlc-positive-evidence-v1",
+      "applies_to": "canonical_taste_queue_rows_identified_as_addon_by_family_or_addon_semantic_condition",
+      "base_game_behavior": "unchanged",
+      "positive_evidence_source": "canonical_taste_queue.short_description_derived_from_steam_storebrowse_or_steam_appdetails_product_metadata",
+      "positive_rule": "include_only_when_product_metadata_positively_confirms_substantial_playable_narrative_content_such_as_a_story_campaign_story_expansion_story_chapter_or_episode_story_questline_or_separate_playable_adventure",
+      "title_rule": "title_may_support_negative_classification_but_must_not_be_the_only_positive_story_truth_source",
+      "mixed_content_rule": "story_plus_cosmetics_or_bonus_content_is_eligible_only_when_the_story_component_is_independently_positive_and_substantial",
+      "non_story_examples": [
+        "digital_deluxe_or_deluxe_upgrade",
+        "soundtrack_or_ost",
+        "digital_artbook",
+        "cosmetic_or_skin_pack",
+        "weapon_item_equipment_pack",
+        "currency_or_resource_pack",
+        "bonus_songs",
+        "wallpapers_or_avatars",
+        "supporter_or_founder_pack_without_story"
+      ],
+      "container_rule": "season_pass_or_container_entitlement_is_not_itself_story_dlc_only_because_it_grants_story_dlc_children",
+      "ambiguity_rule": "exclude_fail_closed_when_positive_story_content_cannot_be_proven_from_available_canonical_product_metadata",
+      "machine_classifications": [
+        "story_dlc_eligible",
+        "non_story_dlc_excluded",
+        "story_content_unproven_excluded"
+      ]
+    }
   },
   "manifest": {
     "preparation_mode": "daily_fixed_full_backlog",
@@ -100,7 +129,10 @@
       "eligible_scope_sha256",
       "prepared_required_items",
       "prepared_required_count",
-      "prepared_required_sha256"
+      "prepared_required_sha256",
+      "story_dlc_scope_policy_revision",
+      "story_dlc_scope_sha256",
+      "story_dlc_scope"
     ],
     "mutable_progress_fields": [
       "remaining_required_items",
