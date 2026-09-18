@@ -437,3 +437,14 @@
 - active prompt revision: `web-evidence-v2-steam-russian-review-retrieval-improvement-v1`; evidence/schema revisions remain `contract-contradictions-fix-2026-09-18`;
 - no production dossier candidate or canonical progress was manually changed; Scheduled Task `Run now` and settings were not used/changed;
 - durable report: `reviews/worker_reports/taste-dossier-steam-russian-review-retrieval-improvement-01.md`.
+
+
+## Worker in progress — 2026-09-19
+
+### Taste dossier Steam Community child retrieval implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_STEAM_COMMUNITY_CHILD_RETRIEVAL_IMPLEMENT_01.md`;
+- scope: generic Scheduled-worker traversal from safe exact-app Steam Community collection/index row to an exposed neutral child thread/review locator and concrete item;
+- exact live proof target: MO:Astray appid `1104660`; success requires PROOF-C or PROOF-D in the current web environment;
+- evidence/privacy/provenance semantics and production 8-search / 16-page ceilings must not be weakened or increased;
+- production candidate/progress/buffered artifacts, `g000011`, `g000012`, and Scheduled Task `Run now`/settings are out of scope.
