@@ -347,3 +347,12 @@
 - Scheduled Task `Run now` was not launched; no prompt/schema/contract/validator/runtime or production state was changed;
 - durable report: `reviews/worker_reports/taste-dossier-russian-discovery-audit-01.md`;
 - report commit: `158b9910621781a92fd644ef5883e229c62dbd48`.
+
+## Worker in progress — 2026-09-18
+
+### Taste dossier Russian existence/retrieval gate implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_RUSSIAN_EXISTENCE_RETRIEVAL_GATE_IMPLEMENT_01.md`;
+- scope: machine-readable distinction between genuine no-existence-signal Russian search and proven-existence retrieval/access failure;
+- implementation must preserve exact product identity, strict validator authority, group size 3, buffered/maximal-contiguous-prefix architecture and GitHub ownership;
+- Scheduled Task `Run now` is forbidden for this task.
