@@ -33,7 +33,7 @@ from taste_steam_review_dossier_strict import (
 
 _PACKAGE_IDENTITY_POLICY_REVISION = "package-member-dossier-aggregation-v1"
 
-_STORY_DLC_SCOPE_POLICY_REVISION = "story-dlc-positive-evidence-v1"
+_STORY_DLC_SCOPE_POLICY_REVISION = "story-dlc-positive-evidence-v2-upstream-taste-gate"
 
 _STORY_DLC_POSITIVE_SIGNALS = (
     ("story_campaign", r"\b(?:all[- ]new|new|additional|standalone|separate|full)\s+(?:story(?:-driven)?\s+)?campaign\b"),
