@@ -175,3 +175,12 @@ Two bounded routes are canonical. First: Steam wishlist + `fit_evidence_state=in
 Second: `fit_evidence_state=reconsiderable` may become purchase-worthy through an existing verified fixed Steam `Sub_` package only when the existing fixed-package economics produce `strict_current_price_savings=true` with aligned sources. The package route may set commercial purchase advice to `МОЖНО БРАТЬ`, but the Taste verdict remains `EXCLUDE / below_moderate / reconsiderable`.
 
 Exact V5 `fit_evidence_state=confirmed_negative` — including a direct conflict that V5 has actually confirmed — is non-overridable regardless of wishlist, discount, package savings, or other paid commercial signals. A legacy `reason_code=exclude_direct_conflict` alone is not confirmation: ambiguous legacy rows remain fail-closed until V5 backfill, while an exact V5 `reconsiderable` row may use the bounded package bridge. Existing content/store/sale/symbolic/budget gates, package equivalence rules, risk/warning visibility, giveaway path, and the single final ranking authority remain unchanged.
+
+
+## Story DLC semantic scope
+
+В Taste/recommendation/dossier semantic scope самостоятельным DLC-объектом считается только DLC, для которого надёжные product metadata положительно подтверждают существенный playable narrative content: новую сюжетную кампанию, главу/эпизод, сюжетную линию, story quests/questline, narrative/story expansion, отдельное сюжетное приключение или эквивалентный содержательный сюжетный игровой контент.
+
+Digital Deluxe/upgrade, OST/soundtrack, artbook, cosmetic/skin, weapon/item/equipment, currency/resource, bonus-song/digital-extra, supporter/founder packs без сюжетного контента и season-pass/bundle entitlement containers не создают самостоятельную Taste/dossier obligation. Если положительное подтверждение сюжетности отсутствует, DLC исключается fail-closed как непроверенный, а не включается по одному типу `DLC` или названию. Смешанный DLC с косметикой допустим только когда существенный playable story component подтверждён независимо.
+
+Base games, exact appid identity и package/member purchase-family semantics от этого правила не меняются: non-story DLC может оставаться purchase metadata/member, но не отдельным Taste semantic subject.
