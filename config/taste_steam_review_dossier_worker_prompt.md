@@ -74,21 +74,33 @@ Prefer multiple independent physical player-feedback sources when practical. Wor
 
 For every persisted source store only compact source-level provenance: source id, URL or stable public reference, domain, source type, approximate publication date when available, language, freshness classification, evidence role and whether it is player feedback. Do not copy bodies/snippets/quotes into the dossier.
 
-### Individual feedback item identity and `mention_count`
+### Individual feedback identity, transient-author fallback and `mention_count`
 
-For every individual player review, post, discussion contribution or other attributable player-feedback item that actually supports an observation or conflict, persist one compact record in `provenance.player_feedback_records`. A record contains only `feedback_id`, its parent `source_id`, one plain HTTPS non-profile item URL or stable neutral item-level `public_ref`, approximate publication date when available, and language.
+Use the strongest privacy-preserving identity path available, in this exact order.
 
-A review-list page, subreddit/community index, search page, generic `/reviews/` page, or vague label such as "Steam review found on 2026-09-16" is **not** an attributable feedback item and must not become a feedback record. Prefer stable non-identifying item tokens such as `steam-recommendation:185290437`, `steam-discussion:729153699965901699:comment-442019`, `reddit-comment:ve5i0a:k3mz12`, or a direct non-profile item URL.
+1. **Preferred stable path.** First try to obtain a neutral stable item identity: Steam `recommendationid`, a direct non-profile item URL, a stable neutral comment/post/review token, or another already accepted item-level `public_ref`. Serialize this as the normal `stable_locator` record. All existing item-level locator, parent/child, alias and exact-product rules remain unchanged.
+2. **Fallback only after the stable path fails.** If no acceptable neutral item locator is obtainable, but one concrete individual review/post/comment card is visibly inspectable on a reliable exact-product player-feedback collection/source and a stable author/account/profile identity is visible strongly enough to distinguish authors, you may read that author identity **transiently in worker memory only** for same-product dedupe.
+3. **Never persist the author identity.** Do not serialize, quote, log intentionally, hash, pseudonymize, or place in any URL, `public_ref`, `source_id`, `feedback_id`, report or other artifact any username/display name, SteamID/account id, vanity id, profile URL, direct unsalted hash, or predictable token derived from that public identity.
+4. **Serialize only an opaque local fallback record.** Use `identity_mode:"transient_author_deduped"`, omit item `url` and `public_ref`, and assign sequential dossier-local ids `fallback-001`, `fallback-002`, ... in serialized fallback-record order. The parent source must persist a non-profile exact-product HTTPS collection/source URL and `feedback_surface_mode:"concrete_item_collection"`. This parent is provenance for where the concrete card was inspected; it is not itself a feedback item or mention.
+5. **No cross-run identity claim.** A fallback id identifies only this dossier's inspected record. It must never be treated as a reviewer identity, a stable cross-run item locator, or a key for reviewer mapping.
 
-The feedback record's `source_id` is a physical provenance relationship, not a same-host bucket. When a Reddit parent locator exposes a subreddit, every child URL under that source must resolve to the same subreddit; when it exposes a thread id, the child must resolve to that same thread. Distinct comments/posts in the same valid parent thread remain distinct items. A parent such as `r/sniperelite` must never own a child item from `r/XboxSeriesX` merely because both are on `reddit.com`. For Steam, a `steam-discussion:*` item must not be bound under an explicitly review `/reviews/` parent surface, and a review/recommendation item must not be bound under an explicitly discussion parent surface. Stable public-ref namespaces must agree with the parent source type/surface whenever that relationship is deterministically resolvable.
+Same-product transient dedupe is mandatory before serialization: if the same transient author is seen more than once, create only one fallback feedback record unless a normal neutral stable item locator proves that multiple distinct physical feedback items exist. Two fallback records are allowed only when the worker actually observed distinct authors on distinct concrete items. Once serialization is complete, discard the transient author values.
 
-Obvious URL aliases of one physical item remain one item. Tracking parameters, fragments, superficial trailing-slash differences and equivalent `www` host forms must never be used to count the same feedback twice. Distinct valid comments/posts within the same thread remain distinct when they have distinct stable item locators.
+A collection/list/search page by itself, aggregate review count, language count, rating percentage, generic `/reviews/` page with no concrete inspected item, or vague label such as "Steam review found on 2026-09-16" is still **not** a feedback record. The fallback does not convert aggregate statistics into player feedback. It is allowed only for a concrete individual card/item that was actually inspected and transiently deduped.
 
-Every observation must list the exact distinct supporting record ids in `player_feedback_ids`. `mention_count` is **exactly** the number of distinct physical `player_feedback_ids` bound to that observation after canonical item-identity validation. The corresponding records must belong to player-feedback sources also listed in that observation's `source_ids`.
+For stable records, the feedback record's `source_id` remains a physical provenance relationship, not a same-host bucket. Reddit parent/thread containment, Steam review-vs-discussion surface matching, stable `public_ref` namespace checks, URL alias normalization and all existing exact-item validation remain unchanged. A fallback never relaxes those rules for `stable_locator` records.
 
-Do not convert aggregate statistics into records or mentions. Overall Steam review totals, positive-review counts, language-filtered totals, percentages, rating counts, curator totals, or any other storefront aggregate number are context only. Do not fabricate records merely to reach a recurrence threshold.
+Every observation must list the exact distinct supporting record ids in `player_feedback_ids`. `mention_count` is exactly the number of distinct bound records, including valid fallback records. The corresponding records must belong to player-feedback sources also listed in that observation's `source_ids`.
 
-Recurrence follows the bound records mechanically: `anecdotal=1`, `limited>=2`, `moderate>=3`, `strong>=5`. One attributable item therefore remains `anecdotal` with `mention_count:1`.
+Recurrence uses a reduced-strength deterministic rule:
+- `anecdotal` requires exactly 1 total bound record;
+- `limited` requires at least 2 total distinct bound records, and fallback records may contribute;
+- `moderate` requires at least 3 bound **stable_locator** records;
+- `strong` requires at least 5 bound **stable_locator** records.
+
+Therefore fallback-only evidence is capped at `limited`, no matter whether 2, 3 or 50 fallback cards were inspected. In a mixed set, fallback records count in `mention_count` and may help reach `limited`, but they never count toward the stable-locator threshold for `moderate` or `strong`. Example: 2 stable + 3 fallback remains at most `limited`; 3 stable + any fallback may support `moderate`; 5 stable + any fallback may support `strong`.
+
+Do not spend the entire bounded budget repeatedly chasing a neutral locator after a valid fallback is available. Continue seeking stronger stable-locator evidence only when it is reasonably obtainable within the remaining budget; otherwise retain the privacy-preserving fallback with its reduced strength.
 
 ### Language binding — bind records first, derive claims second
 
@@ -126,7 +138,7 @@ For every game, explicitly attempt to find Russian-language **player** feedback,
 
 Persist exactly one machine state in `evidence.russian_attempt`:
 
-- `found_and_used` — at least one attributable item-level Russian- or mixed-language player-feedback record was actually inspected, persisted compactly, and bound to an observation or conflict;
+- `found_and_used` — at least one Russian- or mixed-language concrete player-feedback record was actually inspected, persisted compactly, and bound to an observation or conflict; this may be either a normal `stable_locator` item or a valid `transient_author_deduped` fallback;
 - `searched_no_existence_signal` — a bounded good-faith Russian search was completed and did **not** establish a reliable exact-product/exact-appid signal that Russian player feedback exists; this is a valid terminal state for an otherwise sufficient dossier;
 - `existence_established_retrieval_unresolved` — reliable exact-product Russian player-feedback existence was established, but no contract-usable attributable item-level Russian/mixed record was obtained within the hard bounds;
 - `existence_established_access_unresolved` — reliable exact-product Russian player-feedback existence was established, but access to the required player-feedback surface prevented item-level resolution.
@@ -163,7 +175,7 @@ All exact-product safeguards remain unchanged. For an exact DLC/edition such as 
 
 ChatGPT decides when evidence is sufficient. Do not chase a fixed review count or cursor. Expand research when evidence is sparse, divergent, temporally conflicted, localization-specific, or identity is uncertain. Stop when additional searching is unlikely to materially change the neutral dossier.
 
-For the Russian attempt, begin from the exact descriptor title plus release year and/or exact appid and use Russian-language query variants. If ordinary search has not resolved the attempt and budget remains, try a relevant site-specific player-feedback/community search. Exact-product Steam Community discussion/review surfaces are a natural option when they exist; this is guidance, not a Steam-only rule or fixed website quota. Once a reliable exact-product Russian existence signal is established, spend the remaining bounded search on obtaining an attributable item-level Russian/mixed record instead of repeating aggregate/list lookups.
+For the Russian attempt, begin from the exact descriptor title plus release year and/or exact appid and use Russian-language query variants. If ordinary search has not resolved the attempt and budget remains, try a relevant site-specific player-feedback/community search. Exact-product Steam Community discussion/review surfaces are a natural option when they exist; this is guidance, not a Steam-only rule or fixed website quota. Once a reliable exact-product Russian existence signal is established, spend the remaining bounded search on obtaining a usable Russian/mixed concrete record instead of repeating aggregate/list lookups. Prefer a neutral stable item locator; when it is unavailable but a concrete item plus transiently distinguishable author is visible, use the fallback rather than exhausting the budget on repeated locator chasing.
 
 Hard operational bounds per game are finite and mandatory: at most **8 web-search queries** and at most **16 opened/read source pages**. These are safety ceilings, not targets or source quotas. Stop earlier when stable. If the hard bound is reached while identity or critical evidence remains insufficient — including proven Russian existence whose usable item-level retrieval remains unresolved — fail closed and do not publish an incomplete dossier.
 
