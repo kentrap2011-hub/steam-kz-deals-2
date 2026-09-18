@@ -15,13 +15,13 @@
     "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
     "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
   },
-  "appid": "1066780",
-  "title": "Transport Fever 2",
+  "appid": "1072150",
+  "title": "Hedon Bloodrite",
   "generated_at_utc": "2026-09-18T20:30:08Z",
   "expires_at_utc": "2026-10-08T20:30:08Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Transport Fever 2",
+    "work_title": "Hedon Bloodrite",
     "release_year": 2019,
     "resolution_status": "resolved",
     "identity_source_ids": [
@@ -30,19 +30,19 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1066780"
+        "value": "1072150"
       },
       {
         "kind": "developer",
-        "value": "Urban Games"
+        "value": "Zan_HedonDev"
       }
     ]
   },
   "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Players value the detailed transport-network building and logistics focus, including freight and passenger systems that support long-running sandbox play.",
+      "category": "other",
+      "statement": "Players praise the dark-fantasy atmosphere, sound design and environmental presentation as a distinctive strength.",
       "sentiment": "positive",
       "recurrence": "limited",
       "mention_count": 2,
@@ -61,19 +61,22 @@
       ]
     },
     {
-      "category": "friction",
-      "statement": "Recent Russian player feedback notes that optimization can worsen as route counts and network complexity grow.",
-      "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "category": "structure",
+      "statement": "Players describe the game as combining retro shooter combat with exploration, key hunting and adventure-game-style progression; this mix can be satisfying but sometimes frustrating to navigate.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
-        "russian"
+        "russian",
+        "non_russian"
       ],
-      "evidence_status": "current",
+      "evidence_status": "durable",
       "source_ids": [
-        "source-002"
+        "source-002",
+        "source-004"
       ],
       "player_feedback_ids": [
+        "feedback-002",
         "fallback-002"
       ]
     }
@@ -94,8 +97,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1066780/Transport_Fever_2/",
-        "publication_date": "2019-12-11",
+        "url": "https://store.steampowered.com/app/1072150/Hedon_Bloodrite/",
+        "publication_date": "2019-05-16",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "identity",
@@ -105,11 +108,11 @@
         "source_id": "source-002",
         "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1066780/Transport_Fever_2/?l=russian",
+        "url": "https://store.steampowered.com/app/1072150/Hedon_Bloodrite/?l=russian",
         "publication_date": null,
         "language": "russian",
-        "freshness": "recent",
-        "evidence_role": "current_state",
+        "freshness": "unknown",
+        "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection"
       },
@@ -117,10 +120,21 @@
         "source_id": "source-003",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/TransportFever2/comments/1ubq527/as_a_longtime_openttd_fan_i_finally_decided_to/",
-        "publication_date": "2026-06-21",
+        "url": "https://www.reddit.com/r/boomershooters/comments/1djfedo",
+        "publication_date": "2024-06-19",
         "language": "non_russian",
-        "freshness": "recent",
+        "freshness": "older",
+        "evidence_role": "durable_trait",
+        "player_feedback": true
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/boomershooters/comments/1axtvt6",
+        "publication_date": "2024-02-23",
+        "language": "non_russian",
+        "freshness": "older",
         "evidence_role": "durable_trait",
         "player_feedback": true
       }
@@ -129,22 +143,30 @@
       {
         "feedback_id": "feedback-001",
         "source_id": "source-003",
-        "url": "https://www.reddit.com/r/TransportFever2/comments/1ubq527/as_a_longtime_openttd_fan_i_finally_decided_to/",
-        "publication_date": "2026-06-21",
+        "url": "https://www.reddit.com/r/boomershooters/comments/1djfedo",
+        "publication_date": "2024-06-19",
+        "language": "non_russian",
+        "identity_mode": "stable_locator"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-004",
+        "url": "https://www.reddit.com/r/boomershooters/comments/1axtvt6",
+        "publication_date": "2024-02-23",
         "language": "non_russian",
         "identity_mode": "stable_locator"
       },
       {
         "feedback_id": "fallback-001",
         "source_id": "source-002",
-        "publication_date": "2026-03-28",
+        "publication_date": "2019-06-22",
         "language": "russian",
         "identity_mode": "transient_author_deduped"
       },
       {
         "feedback_id": "fallback-002",
         "source_id": "source-002",
-        "publication_date": "2026-04-02",
+        "publication_date": "2019-07-21",
         "language": "russian",
         "identity_mode": "transient_author_deduped"
       }
