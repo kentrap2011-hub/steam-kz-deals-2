@@ -421,3 +421,14 @@
 - active snapshot: `d253b195701e74c9c00fc8b669f84655341601faf11e09a7edfb353a8b7f2bbb`, prepared/completed/remaining `702/0/702`, expected group `g000001` = Crown Trick / Hellish Quart / Tetris® Effect: Connected;
 - Scheduled Task `Run now` and settings were not used or changed;
 - durable report: `reviews/worker_reports/taste-dossier-contract-contradictions-fix-01.md`.
+
+
+## Worker in progress — 2026-09-19
+
+### Taste dossier Steam Russian review retrieval improvement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_STEAM_RUSSIAN_REVIEW_RETRIEVAL_IMPROVEMENT_01.md`;
+- scope: retrieval-only improvement for the existing Scheduled ChatGPT dossier worker; no evidence/privacy/provenance weakening;
+- accepted baseline: Cthulhu Saves the World appid `107310` is retrieval-limited, not contract-blocked;
+- production candidate/progress/buffered artifacts are out of scope and must not be changed;
+- Scheduled Task `Run now` and settings are out of scope.
