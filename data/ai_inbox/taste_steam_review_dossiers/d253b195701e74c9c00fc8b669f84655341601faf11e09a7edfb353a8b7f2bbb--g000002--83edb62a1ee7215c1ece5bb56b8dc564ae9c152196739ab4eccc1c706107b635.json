@@ -1,0 +1,549 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "d253b195701e74c9c00fc8b669f84655341601faf11e09a7edfb353a8b7f2bbb",
+  "prepared_required_sha256": "437e25c814244f17d7dd5d83110d3655364a30cb7e25173f3885e9c0d8c923df",
+  "group_plan_sha256": "8a533f1bc28ebb64ff303c9c1e1371ebe080642a8a13b058a98687a955f61566",
+  "group_count": 234,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
+    "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
+  },
+  "sequence": 2,
+  "start_index": 3,
+  "end_index_exclusive": 6,
+  "appids": [
+    "1003890",
+    "1018800",
+    "1025440"
+  ],
+  "items_sha256": "d971524f612137abfaf7e39be9db6da5c5eb5eac36f3251a9d3324297db8fc51",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "68b9702e61e8157e065fb526c8a472b9eb61ac1ef1de1d2b3d65f30c0f7072a9",
+  "items": [
+    {
+      "key": "App_1003890",
+      "appid": "1003890",
+      "title": "Blacksad: Under the Skin",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1003890.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1018800",
+      "appid": "1018800",
+      "title": "DEEEER Simulator: Your Average Everyday Deer Game",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1018800.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1025440",
+      "appid": "1025440",
+      "title": "Fantasy General II",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1025440.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "83edb62a1ee7215c1ece5bb56b8dc564ae9c152196739ab4eccc1c706107b635",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
+        "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
+      },
+      "appid": "1003890",
+      "title": "Blacksad: Under the Skin",
+      "generated_at_utc": "2026-09-18T20:24:09Z",
+      "expires_at_utc": "2026-10-08T20:24:09Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Blacksad: Under the Skin",
+        "release_year": 2019,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1003890"
+          },
+          {
+            "kind": "developer",
+            "value": "Pendulo Studios, YS Interactive"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "friction",
+          "statement": "Recent Russian player feedback repeatedly reports control, performance, visual or bug-related roughness as an ongoing technical drawback.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "fallback-001",
+            "fallback-002"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Players value the detective narrative, characters, atmosphere and choice-driven investigation despite the technical roughness.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "fallback-002"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1003890/Blacksad_Under_the_Skin/",
+            "publication_date": "2019-11-14",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1003890/Blacksad_Under_the_Skin/?l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/Gaming4Gamers/comments/g7n4z6/",
+            "publication_date": "2020-04-25",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-003",
+            "url": "https://www.reddit.com/r/Gaming4Gamers/comments/g7n4z6/",
+            "publication_date": "2020-04-25",
+            "language": "non_russian",
+            "identity_mode": "stable_locator"
+          },
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2026-05-13",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          },
+          {
+            "feedback_id": "fallback-002",
+            "source_id": "source-002",
+            "publication_date": "2026-05-12",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
+        "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
+      },
+      "appid": "1018800",
+      "title": "DEEEER Simulator: Your Average Everyday Deer Game",
+      "generated_at_utc": "2026-09-18T20:24:09Z",
+      "expires_at_utc": "2026-10-08T20:24:09Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "DEEEER Simulator: Your Average Everyday Deer Game",
+        "release_year": 2021,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1018800"
+          },
+          {
+            "kind": "developer",
+            "value": "Gibier Games"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "structure",
+          "statement": "Players describe the game as a deliberately short experience that can be completed quickly, which works as a brief novelty but limits its overall scope.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "fallback-001"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Players enjoy the absurd humor, unexpected set pieces and chaotic novelty as a compact diversion.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "fallback-002"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1018800/DEEEER_Simulator_Your_Average_Everyday_Deer_Game/",
+            "publication_date": "2021-11-23",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1018800/DEEEER_Simulator_Your_Average_Everyday_Deer_Game/?l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "unknown",
+            "evidence_role": "uncertain",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/Trophies/comments/1912hjv/",
+            "publication_date": "2024-01-07",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/XboxSeriesX/comments/r1j5mc/",
+            "publication_date": "2021-11-25",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-003",
+            "url": "https://www.reddit.com/r/Trophies/comments/1912hjv/",
+            "publication_date": "2024-01-07",
+            "language": "non_russian",
+            "identity_mode": "stable_locator"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-004",
+            "url": "https://www.reddit.com/r/XboxSeriesX/comments/r1j5mc/",
+            "publication_date": "2021-11-25",
+            "language": "non_russian",
+            "identity_mode": "stable_locator"
+          },
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2026-03-17",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          },
+          {
+            "feedback_id": "fallback-002",
+            "source_id": "source-002",
+            "publication_date": "2026-03-14",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
+        "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
+      },
+      "appid": "1025440",
+      "title": "Fantasy General II",
+      "generated_at_utc": "2026-09-18T20:24:09Z",
+      "expires_at_utc": "2026-10-08T20:24:09Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Fantasy General II",
+        "release_year": 2019,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1025440"
+          },
+          {
+            "kind": "developer",
+            "value": "Owned by Gravity"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Recent Russian player feedback praises the tactical decision-making, campaign choices and strategic planning available during play.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "uncertain",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "fallback-002",
+            "fallback-003"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "Some players criticize battle presentation or pacing as rushed, visually awkward or tedious despite finding parts of the underlying strategy interesting.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "fallback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1025440/Fantasy_General_II/",
+            "publication_date": "2019-09-05",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1025440/Fantasy_General_II/?l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "unknown",
+            "evidence_role": "uncertain",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/u_loki1942/comments/d4f67g/",
+            "publication_date": "2019-09-15",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-003",
+            "url": "https://www.reddit.com/r/u_loki1942/comments/d4f67g/",
+            "publication_date": "2019-09-15",
+            "language": "non_russian",
+            "identity_mode": "stable_locator"
+          },
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2026-03-24",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          },
+          {
+            "feedback_id": "fallback-002",
+            "source_id": "source-002",
+            "publication_date": "2026-02-24",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          },
+          {
+            "feedback_id": "fallback-003",
+            "source_id": "source-002",
+            "publication_date": "2026-02-02",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    }
+  ]
+}
