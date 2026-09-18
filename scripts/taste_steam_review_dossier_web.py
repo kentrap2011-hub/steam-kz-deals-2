@@ -142,6 +142,31 @@ def classify_story_dlc_scope(row):
 
 
 
+
+def summarize_story_dlc_scope(classifications):
+    """Build one canonical compact audit summary from story-DLC classifications."""
+    if not isinstance(classifications, list):
+        raise ValueError("story DLC classifications must be a list")
+    allowed = {
+        "story_dlc_eligible",
+        "non_story_dlc_excluded",
+        "story_content_unproven_excluded",
+    }
+    for item in classifications:
+        if not isinstance(item, dict) or item.get("classification") not in allowed:
+            raise ValueError("story DLC classification is missing or unsupported")
+        if bool(item.get("eligible")) != (item.get("classification") == "story_dlc_eligible"):
+            raise ValueError("story DLC classification eligibility is inconsistent")
+    return {
+        "policy_revision": _STORY_DLC_SCOPE_POLICY_REVISION,
+        "considered_count": len(classifications),
+        "story_eligible_count": sum(x["classification"] == "story_dlc_eligible" for x in classifications),
+        "non_story_excluded_count": sum(x["classification"] == "non_story_dlc_excluded" for x in classifications),
+        "ambiguous_excluded_count": sum(x["classification"] == "story_content_unproven_excluded" for x in classifications),
+        "classifications": copy.deepcopy(classifications),
+    }
+
+
 def ensure_web_evidence_binding(manifest):
     """Add/validate semantic worker version metadata without changing snapshot/group identity."""
     out = copy.deepcopy(manifest)
@@ -368,14 +393,7 @@ def resolve_dossier_scope_identities(queue_rows, contract):
         for member in mapping["members"]:
             member["dossier_path"] = dossier_path(contract["paths"]["dossier_store_dir"], member["appid"]).as_posix()
 
-    story_dlc_scope = {
-        "policy_revision": _STORY_DLC_SCOPE_POLICY_REVISION,
-        "considered_count": len(story_dlc_classifications),
-        "story_eligible_count": sum(x["classification"] == "story_dlc_eligible" for x in story_dlc_classifications),
-        "non_story_excluded_count": sum(x["classification"] == "non_story_dlc_excluded" for x in story_dlc_classifications),
-        "ambiguous_excluded_count": sum(x["classification"] == "story_content_unproven_excluded" for x in story_dlc_classifications),
-        "classifications": story_dlc_classifications,
-    }
+    story_dlc_scope = summarize_story_dlc_scope(story_dlc_classifications)
     return {
         "rows": rows,
         "identity_blocked_items": blocked,
