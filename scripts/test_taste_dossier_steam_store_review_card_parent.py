@@ -37,8 +37,10 @@ class SteamStoreReviewCardParentRegressionTests(unittest.TestCase):
         record = doc["provenance"]["player_feedback_records"][0]
         record.update({
             "identity_mode": "stable_locator",
+            "feedback_id": "feedback-001",
             "public_ref": "120-russian-reviews",
         })
+        doc["observations"][0]["player_feedback_ids"] = ["feedback-001"]
         with self.assertRaisesRegex(ValueError, "stable-locator path cannot rely on a collection-only Steam Store parent"):
             self.validate(doc, now)
         self.assertTrue(SCHEMA["evidence_invariants"]["steam_store_app_page_cannot_be_player_feedback_record"])
