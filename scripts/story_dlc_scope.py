@@ -22,7 +22,17 @@ _STATUS_VALUES = {
 _CONTAINER_PATTERNS = (
     ("digital_deluxe_or_upgrade", re.compile(r"\b(?:digital\s+deluxe|deluxe\s+(?:edition\s+)?(?:upgrade|pack)|upgrade\s+pack)\b", re.I)),
     ("season_pass_or_entitlement_container", re.compile(r"\b(?:season\s+pass|expansion\s+pass|dlc\s+pass)\b", re.I)),
-    ("supporter_or_founder_pack", re.compile(r"\b(?:supporter|founder(?:'s)?)\s+(?:pack|bundle)\b", re.I)),
+)
+
+_HARD_NON_STORY_TITLE_PATTERNS = (
+    ("soundtrack_or_ost_product", re.compile(r"\b(?:soundtrack|ost)\b", re.I)),
+    ("digital_artbook_product", re.compile(r"\b(?:digital\s+)?art\s*book\b", re.I)),
+    ("cosmetic_or_skin_pack_product", re.compile(r"\b(?:cosmetic|skin|costume|outfit|appearance)\s+(?:pack|bundle)\b", re.I)),
+    ("item_or_equipment_pack_product", re.compile(r"\b(?:weapon|item|equipment|gear)\s+(?:pack|bundle)\b", re.I)),
+    ("currency_or_resource_pack_product", re.compile(r"\b(?:currency|resource|credits?|coins?|gems?)\s+(?:pack|bundle)\b", re.I)),
+    ("music_or_song_pack_product", re.compile(r"\b(?:bonus\s+song|song|music)\s+(?:pack|bundle)\b", re.I)),
+    ("digital_extras_product", re.compile(r"\b(?:wallpaper|avatar|digital\s+extras?)\s+(?:pack|bundle)?\b", re.I)),
+    ("upgrade_or_bonus_pack_product", re.compile(r"\b(?:upgrade|bonus)\s+(?:pack|bundle)\b", re.I)),
 )
 
 _EXPLICIT_NON_STORY_PATTERNS = (
@@ -103,6 +113,19 @@ def classify_story_dlc(metadata, *, mechanical_kind="dlc"):
             "eligible": False,
             "reason_code": "entitlement_or_upgrade_container_not_independent_story_content",
             "evidence": container_hits,
+        })
+
+    hard_title_hits = []
+    for signal, pattern in _HARD_NON_STORY_TITLE_PATTERNS:
+        if pattern.search(title):
+            hard_title_hits.append(_evidence(source, "store_name", signal))
+    if hard_title_hits:
+        return validate_classification({
+            "policy_revision": POLICY_REVISION,
+            "status": NON_STORY_DLC_EXCLUDED,
+            "eligible": False,
+            "reason_code": "product_identity_is_non_story_bonus_content",
+            "evidence": hard_title_hits,
         })
 
     positive = []
