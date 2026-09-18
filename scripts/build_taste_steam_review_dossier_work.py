@@ -20,6 +20,7 @@ from taste_steam_review_dossier_recovery import (
 from taste_steam_review_dossier_strict import current_worker_contract_binding
 from taste_steam_review_dossier_web import (
     _PACKAGE_IDENTITY_POLICY_REVISION,
+    _STORY_DLC_SCOPE_POLICY_REVISION,
     build_daily_work_manifest_web,
     ensure_web_evidence_binding,
 )
@@ -60,6 +61,8 @@ def _snapshot_identity(manifest, contract):
         "eligible_scope_sha256": manifest["eligible_scope_sha256"],
         "identity_blocked_sha256": manifest["identity_blocked_sha256"],
         "package_member_mapping_sha256": manifest["package_member_mapping_sha256"],
+        "story_dlc_scope_policy_revision": manifest["story_dlc_scope_policy_revision"],
+        "story_dlc_scope_sha256": manifest["story_dlc_scope_sha256"],
         "prepared_required_sha256": manifest["prepared_required_sha256"],
         "ttl_days": manifest["ttl_days"],
         "web_evidence_contract_binding": current_worker_contract_binding(),
@@ -182,6 +185,7 @@ def build_or_preserve_daily_work(
         compatible_same_day = (
             existing_date == prepared_for_date
             and existing.get("identity_policy_revision") == _PACKAGE_IDENTITY_POLICY_REVISION
+            and existing.get("story_dlc_scope_policy_revision") == _STORY_DLC_SCOPE_POLICY_REVISION
             and existing.get("web_evidence_contract_binding") == expected_binding
             and existing.get("checkpoint_size") == expected_group_size
         )
@@ -271,6 +275,10 @@ def main():
         "remaining_required_count": manifest["remaining_required_count"],
         "full_backlog_complete": manifest["full_backlog_complete"],
         "package_member_mapping_count": manifest["package_member_mapping_count"],
+        "story_dlc_considered_count": manifest["story_dlc_scope"]["considered_count"],
+        "story_dlc_story_eligible_count": manifest["story_dlc_scope"]["story_eligible_count"],
+        "story_dlc_non_story_excluded_count": manifest["story_dlc_scope"]["non_story_excluded_count"],
+        "story_dlc_ambiguous_excluded_count": manifest["story_dlc_scope"]["ambiguous_excluded_count"],
         "worker_index_path": projection["index_path"],
         "worker_descriptor_count": projection["descriptor_count"],
         "worker_canonical_expected_sequence": projection["index"]["canonical_expected_sequence"],
