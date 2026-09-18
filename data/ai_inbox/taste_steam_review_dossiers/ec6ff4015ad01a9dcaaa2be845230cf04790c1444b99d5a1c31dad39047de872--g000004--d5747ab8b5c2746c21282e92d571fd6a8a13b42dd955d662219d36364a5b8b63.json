@@ -1,0 +1,404 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872",
+  "prepared_required_sha256": "048841e89b8aab1f2276c5e747d04183d6d5f323386d2a93c697f287eb04ee1a",
+  "group_plan_sha256": "8931aff2a475ab621702d9a0f4f61a70db7bfd277c69591ada1e5d376b62bbb2",
+  "group_count": 234,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+    "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+  },
+  "sequence": 4,
+  "start_index": 9,
+  "end_index_exclusive": 12,
+  "appids": [
+    "1047010",
+    "1051310",
+    "1051690"
+  ],
+  "items_sha256": "85ee736fa34f14467299661446156a040cbbfb423e15fd2b2a1dc53a05df9328",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "68b9702e61e8157e065fb526c8a472b9eb61ac1ef1de1d2b3d65f30c0f7072a9",
+  "items": [
+    {
+      "key": "App_1047010",
+      "appid": "1047010",
+      "title": "Synergia",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1047010.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1051310",
+      "appid": "1051310",
+      "title": "Paper Dolls: Original / 纸人",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1051310.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1051690",
+      "appid": "1051690",
+      "title": "Nightmare Reaper",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1051690.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "d5747ab8b5c2746c21282e92d571fd6a8a13b42dd955d662219d36364a5b8b63",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+      },
+      "appid": "1047010",
+      "title": "Synergia",
+      "generated_at_utc": "2026-09-18T21:33:02Z",
+      "expires_at_utc": "2026-10-08T21:33:02Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Synergia",
+        "release_year": 2020,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1047010"
+          },
+          {
+            "kind": "developer",
+            "value": "Radi Art"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "localization",
+          "statement": "Russian player feedback requested Russian-language support, while current Steam metadata still lists Russian as unsupported.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback item used for the validated finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1047010/",
+            "publication_date": "2020-07-27",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1047010/discussions/0/2967271684651103296/",
+            "publication_date": "2020-11-24",
+            "language": "russian",
+            "freshness": "older",
+            "evidence_role": "historical",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1047010/Synergia?l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "current_state",
+            "player_feedback": false
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "url": "https://steamcommunity.com/app/1047010/discussions/0/2967271684651103296/",
+            "publication_date": "2020-11-24",
+            "language": "russian",
+            "identity_mode": "stable_locator"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+      },
+      "appid": "1051310",
+      "title": "Paper Dolls: Original / 纸人",
+      "generated_at_utc": "2026-09-18T21:33:02Z",
+      "expires_at_utc": "2026-10-08T21:33:02Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Paper Dolls: Original / 纸人",
+        "release_year": 2019,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1051310"
+          },
+          {
+            "kind": "developer",
+            "value": "Beijing Litchi Culture Media Co., Ltd."
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "localization",
+          "statement": "Russian player feedback explicitly requested Russian-language support, and current Steam metadata still lists Russian as unsupported.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "fallback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback item used for the validated finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1051310/",
+            "publication_date": "2019-04-19",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1051310/Paper_Dolls_Original/?curator_clanid=37576654&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "older",
+            "evidence_role": "historical",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1051310/___Paper_Dolls_Original/Paper?l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "current_state",
+            "player_feedback": false
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2019-04-19",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+      },
+      "appid": "1051690",
+      "title": "Nightmare Reaper",
+      "generated_at_utc": "2026-09-18T21:33:02Z",
+      "expires_at_utc": "2026-10-08T21:33:02Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Nightmare Reaper",
+        "release_year": 2022,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1051690"
+          },
+          {
+            "kind": "developer",
+            "value": "Blazing Bit Games"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Russian player feedback praises Nightmare Reaper as a strong roguelike shooter with satisfying gunplay while noting that its progression can feel grind-heavy.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback item used for the validated finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1051690/",
+            "publication_date": "2022-03-28",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "forum",
+            "domain": "m2ch.hk",
+            "url": "https://m2ch.hk/vg/res/44995381.html",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "unknown",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "public_ref": "m2ch-post:45092127",
+            "publication_date": null,
+            "language": "russian",
+            "identity_mode": "stable_locator"
+          }
+        ]
+      }
+    }
+  ]
+}
