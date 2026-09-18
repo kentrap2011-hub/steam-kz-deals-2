@@ -437,3 +437,18 @@
 - active prompt revision: `web-evidence-v2-steam-russian-review-retrieval-improvement-v1`; evidence/schema revisions remain `contract-contradictions-fix-2026-09-18`;
 - no production dossier candidate or canonical progress was manually changed; Scheduled Task `Run now` and settings were not used/changed;
 - durable report: `reviews/worker_reports/taste-dossier-steam-russian-review-retrieval-improvement-01.md`.
+
+
+## Worker closeout — 2026-09-19
+
+### Taste dossier Steam Community child retrieval implement 01
+Статус: `blocked_external_transport`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_STEAM_COMMUNITY_CHILD_RETRIEVAL_IMPLEMENT_01.md`;
+- architecture preflight confirmed Scheduled ChatGPT owns bounded public-web retrieval while GitHub remains control plane; the only repo-owned runtime lever is the consumed worker prompt/content-complete binding;
+- a bounded candidate prompt/regression change was prepared on unmerged branch `worker/taste-dossier-steam-community-child-retrieval-implement-01`, but no PR was opened because required live COMMUNITY-CHILD-11 failed;
+- current web environment can expose safe exact-app Steam Community child thread URLs when search indexing returns them, but the exact Russian MO:Astray discussion row is rendered without an exposed topic child href/ref; bounded exact-row search follow-up also did not surface the child;
+- MO:Astray appid `1104660`: PROOF-C failed; PROOF-D failed; search budget reached `8/8` without guessing IDs or weakening provenance;
+- canonical snapshot remains `ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872`, prepared/completed/remaining `702/18/684`; `g000011` remains Monster Train / The Room VR: A Dark Matter / MO:Astray;
+- no production candidate, canonical progress repair, `g000011`/`g000012` publication, Scheduled Task `Run now`, settings change, PR, merge or activation occurred;
+- durable report: `reviews/worker_reports/taste-dossier-steam-community-child-retrieval-implement-01.md`;
+- exact next boundary: one bounded architecture decision on whether Scheduled runtime should gain a public-web retrieval capability/provider that exposes the actual neutral Steam Community topic href for an indexed collection row.
