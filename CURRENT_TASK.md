@@ -389,13 +389,20 @@
 - Scheduled Task Run now/settings were not used/changed;
 - durable report: `reviews/worker_reports/taste-story-dlc-scope-policy-implement-01.md`.
 
-## Worker in progress — 2026-09-18
+## Worker closeout — 2026-09-18
 
 ### Taste dossier Steam Store review-card parent fix 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_STEAM_STORE_REVIEW_CARD_PARENT_FIX_01.md`;
-- scope: narrow parent/child source-semantics fix for concrete individual review cards visibly inspected on exact-product Steam Store app pages;
-- stable-locator rules, transient-author privacy/recurrence caps, exact appid identity, Story-DLC policy, group size 3, atomic buffered semantics and GitHub control-plane ownership remain unchanged;
-- Scheduled Task `Run now` and settings are out of scope and must not be used/changed;
-- implementation is confined to the bounded worker branch/PR until green validation and normal GitHub-owned activation.
+- implementation PR #59 merged as `355e93452636415e8b5f8ba84d197883315b566f`;
+- final dossier CI run `35372210241` (#83), job `105688590510`: success, including STORE-CARD-01..11 and ownership validation;
+- backlog-disposition run `35372210373` (#754): success;
+- normal GitHub-owned activation commit: `6137ef1e7210eaa1b693a40237f638ddadbba178`;
+- compatible snapshot: `2db923b8171bcf30caa2a6a0b2e36f4bc21c63143265a92648969d3748f79319`, prepared/completed/remaining `702/0/702`, expected `g000001`, `234` groups of 3;
+- exact `g000001`: Crown Trick (`1000010`) / Hellish Quart (`1000360`) / Tetris® Effect: Connected (`1003590`);
+- active evidence/schema revision: `steam-store-review-card-parent-fix-2026-09-18`; prompt revision: `web-evidence-v2-steam-store-review-card-parent-v1`;
+- Steam Store exact-app page remains non-mention aggregate/storefront provenance, but may parent transient-author fallback children when concrete individual review cards are actually inspected; stable-locator preference, privacy, recurrence caps and exact-appid identity remain unchanged;
+- Scheduled Task `Run now` and settings were not used/changed;
+- durable report: `reviews/worker_reports/taste-dossier-steam-store-review-card-parent-fix-01.md`;
+- exact next step: return to Director; Director decides whether to perform one live acceptance against the compatible `g000001`.
 
