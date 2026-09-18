@@ -38,6 +38,7 @@ on:
       - "scripts/test_taste_steam_review_dossier_language_binding.py"
       - "scripts/test_taste_steam_review_dossier_semantic_consistency.py"
       - "scripts/test_taste_dossier_package_identity_fix.py"
+      - "scripts/test_taste_story_dlc_scope.py"
       - ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
       - ".github/workflows/validate-taste-dossier-buffered.yml"
@@ -78,5 +79,7 @@ jobs:
         run: python scripts/test_taste_steam_review_dossier_semantic_consistency.py
       - name: Package identity regression
         run: python scripts/test_taste_dossier_package_identity_fix.py
+      - name: Story DLC semantic scope regression
+        run: python scripts/test_taste_story_dlc_scope.py
       - name: Parallel candidate validation and contiguous-prefix regression
         run: python scripts/test_taste_steam_review_dossier_parallel_validation.py
