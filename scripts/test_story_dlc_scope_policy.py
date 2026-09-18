@@ -149,8 +149,8 @@ def test_story_dlc_08_group_plan_regeneration_excludes_bg3():
     assert manifest["story_scope_excluded_items"][0]["appid"] == "2378500"
     assert manifest["story_scope_excluded_items"][0]["reason"] == "story_dlc_classification_missing_or_invalid"
     assert manifest["prepared_required_count"] == 3
-    assert len(manifest["submission_group_plan"]) == 1
-    assert [item["appid"] for item in manifest["submission_group_plan"][0]["items"]] == ["111", "222", "333"]
+    assert manifest["submission_group_plan"]["group_count"] == 1
+    assert [item["appid"] for item in manifest["submission_group_plan"]["groups"][0]["items"]] == ["111", "222", "333"]
 
 
 def test_machine_readable_summary():
