@@ -2,14 +2,14 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "russian-existence-retrieval-gate-2026-09-18",
+  "contract_revision": "russian-multi-source-retrieval-2026-09-18",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "parallel_validation_contract": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2-russian-retrieval-gate-v1",
+  "worker_prompt_revision": "web-evidence-v2-russian-multi-source-retrieval-v1",
   "purpose": "Define the active semantic evidence policy for neutral Taste dossiers while leaving GitHub-owned scope, buffered transport, asynchronous strict validation/persistence, recovery and completeness in the existing control-plane contracts.",
   "supersedes": {
     "steam_appreviews_required": false,
@@ -359,7 +359,30 @@
       "steam_community_guidance": "exact_product_steam_community_discussion_or_review_surfaces_are_a_natural_option_when_they_exist",
       "after_existence_signal": "direct_remaining_bounded_search_toward_contract_usable_attributable_item_level_russian_or_mixed_records_instead_of_repeating_aggregate_or_list_lookups",
       "fixed_source_quota": false,
-      "bounds_are_safety_ceilings_not_targets": true
+      "bounds_are_safety_ceilings_not_targets": true,
+      "retrieval_diversification": {
+        "phase_trigger": "reliable_exact_product_russian_player_feedback_existence_established_and_no_usable_russian_or_mixed_item_yet",
+        "goal": "obtain_contract_usable_attributable_item_level_russian_or_mixed_player_feedback_without_weakening_exact_product_identity",
+        "surface_class_examples": [
+          "steam_community_or_user_review_items",
+          "reddit_exact_product_threads_or_comments",
+          "public_russian_language_game_forums",
+          "public_community_discussions_or_comment_threads",
+          "public_store_user_review_items",
+          "pikabu_or_analogous_public_user_generated_discussions",
+          "other_credible_public_player_feedback"
+        ],
+        "first_failed_surface_rule": "if_the_first_reasonable_retrieval_surface_yields_only_aggregate_list_non_item_or_otherwise_unusable_evidence_and_query_or_page_budget_remains_the_worker_must_try_at_least_one_materially_different_public_player_feedback_surface_class_when_reasonably_discoverable",
+        "continued_diversification_rule": "after_the_first_materially_different_surface_if_retrieval_is_still_unresolved_and_budget_remains_continue_adaptively_to_the_most_promising_reasonably_discoverable_distinct_player_feedback_surface_classes_until_a_usable_item_is_found_a_hard_bound_is_reached_or_no_reasonably_discoverable_distinct_surface_class_remains",
+        "same_surface_diminishing_return_rule": "repeated_same_domain_or_same_surface_aggregate_list_index_query_variants_after_existence_proof_have_diminishing_return_and_must_not_consume_budget_ahead_of_reasonably_discoverable_distinct_item_level_player_feedback_surfaces",
+        "materially_different_rule": "a_surface_class_must_represent_a_different_public_player_feedback_mechanism_or_community_context_not_merely_another_query_variant_or_collection_page_on_the_same_surface",
+        "professional_or_editorial_counts_as_player_feedback_surface": false,
+        "steam_required_as_retrieval_source": false,
+        "fixed_named_website_quota": false,
+        "visit_all_surface_classes_required": false,
+        "premature_unresolved_allowed_with_budget_and_reasonably_discoverable_distinct_surface": false,
+        "exact_product_identity_rules_still_apply": true
+      }
     }
   },
   "accepted_evidence_statuses": [

@@ -279,6 +279,139 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             EVIDENCE["russian_evidence"]["complete_dossier_allowed_states"],
         )
 
+    def test_rus_ms_01_steam_existence_then_non_steam_usable_russian_item(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = web_dossier(680001, now, russian_status="found_and_used")
+        doc["provenance"]["sources"].append({
+            "source_id": "ru_existence",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/680001/?l=russian",
+            "publication_date": None,
+            "language": "russian",
+            "freshness": "unknown",
+            "evidence_role": "identity",
+            "player_feedback": False,
+        })
+        self.assertEqual(doc["provenance"]["sources"][2]["source_type"], "reddit")
+        self.assertEqual(doc["provenance"]["player_feedback_records"][3]["language"], "russian")
+        self.assertIs(self.validate(doc, now), doc)
+
+        diversification = EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"]
+        self.assertIn("existence_established", diversification["phase_trigger"])
+        self.assertIn("materially_different", diversification["first_failed_surface_rule"])
+        self.assertFalse(diversification["steam_required_as_retrieval_source"])
+
+    def test_rus_ms_02_do_not_stop_after_one_failed_surface_when_distinct_surface_is_discoverable(self):
+        diversification = EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"]
+        self.assertFalse(
+            diversification["premature_unresolved_allowed_with_budget_and_reasonably_discoverable_distinct_surface"]
+        )
+        self.assertIn("must_try_at_least_one_materially_different", diversification["first_failed_surface_rule"])
+        self.assertIn("do **not** immediately classify retrieval unresolved", PROMPT)
+        self.assertIn("Try at least one such different class", PROMPT)
+
+    def test_rus_ms_03_diversified_search_can_remain_unresolved_and_fail_closed(self):
+        attempted_surface_classes = [
+            "steam_community_or_user_review_items",
+            "reddit_exact_product_threads_or_comments",
+        ]
+        diversification = EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"]
+        self.assertEqual(len(set(attempted_surface_classes)), 2)
+        self.assertTrue(all(name in diversification["surface_class_examples"] for name in attempted_surface_classes))
+        self.assertIn("hard_bound_is_reached", diversification["continued_diversification_rule"])
+        self.assertIn("no_reasonably_discoverable_distinct_surface_class_remains", diversification["continued_diversification_rule"])
+
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = web_dossier(680003, now, russian_status="searched_no_existence_signal")
+        doc["evidence"]["russian_attempt"] = "existence_established_retrieval_unresolved"
+        with self.assertRaisesRegex(
+            ValueError,
+            "existence is established but attributable item-level retrieval is unresolved",
+        ):
+            self.validate(doc, now)
+
+    def test_rus_ms_04_non_steam_forum_provenance_is_accepted(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = web_dossier(680004, now, russian_status="found_and_used")
+        doc["provenance"]["sources"][2].update({
+            "source_type": "forum",
+            "domain": "forum.example.com",
+            "url": "https://forum.example.com/topic/exact-game-680004/",
+            "language": "russian",
+        })
+        doc["provenance"]["player_feedback_records"][3]["url"] = (
+            "https://forum.example.com/topic/exact-game-680004/post-42"
+        )
+        self.assertIs(self.validate(doc, now), doc)
+        self.assertEqual(doc["evidence"]["russian_attempt"], "found_and_used")
+        self.assertFalse(any(
+            source["source_type"] in {"steam_reviews", "steam_community"}
+            and source["language"] in {"russian", "mixed"}
+            for source in doc["provenance"]["sources"]
+        ))
+
+    def test_rus_ms_05_professional_journalism_does_not_satisfy_player_feedback_gate(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = web_dossier(680005, now, russian_status="searched_no_existence_signal")
+        doc["provenance"]["sources"].append({
+            "source_id": "ru_editorial",
+            "source_type": "professional_context",
+            "domain": "example.com",
+            "url": "https://example.com/reviews/exact-game-680005",
+            "publication_date": now.date().isoformat(),
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "current_state",
+            "player_feedback": False,
+        })
+        doc["evidence"]["russian_attempt"] = "found_and_used"
+        with self.assertRaisesRegex(ValueError, "found_and_used requires a bound Russian player-feedback record"):
+            self.validate(doc, now)
+        self.assertFalse(EVIDENCE["source_policy"]["professional_context_may_substitute_for_player_feedback"])
+        self.assertFalse(
+            EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"][
+                "professional_or_editorial_counts_as_player_feedback_surface"
+            ]
+        )
+
+    def test_rus_ms_06_exact_dlc_identity_stays_strict_during_diversification(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = web_dossier(
+            2378500,
+            now,
+            title="Baldur's Gate 3 - Digital Deluxe Edition DLC",
+            russian_status="found_and_used",
+        )
+        doc["provenance"]["sources"][2].update({
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1086940/discussions/0/9999999999/",
+            "language": "russian",
+        })
+        doc["provenance"]["player_feedback_records"][3]["url"] = (
+            "https://steamcommunity.com/app/1086940/discussions/0/9999999999/?ctp=1"
+        )
+        with self.assertRaisesRegex(ValueError, "Steam player-feedback source appid does not match exact dossier appid"):
+            self.validate(doc, now)
+        self.assertFalse(EVIDENCE["identity"]["base_game_feedback_may_satisfy_dlc_gate"])
+        self.assertTrue(
+            EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"][
+                "exact_product_identity_rules_still_apply"
+            ]
+        )
+
+    def test_rus_ms_07_adaptive_diversification_has_no_fixed_website_quota_or_steam_requirement(self):
+        diversification = EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"]
+        self.assertFalse(diversification["fixed_named_website_quota"])
+        self.assertFalse(diversification["visit_all_surface_classes_required"])
+        self.assertFalse(diversification["steam_required_as_retrieval_source"])
+        self.assertGreaterEqual(len(diversification["surface_class_examples"]), 5)
+        self.assertIn("fixed site quota", PROMPT)
+        self.assertIn("never required to provide the usable record", PROMPT)
+        self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_web_search_queries"], 8)
+        self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_opened_or_read_source_pages"], 16)
+
     def test_worker_facing_contract_covers_all_six_without_changing_buffer_architecture(self):
         self.assertFalse(EVIDENCE["parent_item_binding"]["host_match_alone_is_sufficient"])
         self.assertTrue(EVIDENCE["parent_item_binding"]["same_thread_distinct_items_allowed"])
