@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "version": 2,
   "status": "active",
-  "schema_revision": "transient-author-dedupe-fallback-2026-09-18",
+  "schema_revision": "steam-store-review-card-parent-fix-2026-09-18",
   "evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "evidence_contract_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
@@ -260,7 +260,6 @@
     "russian_used_requires_found_and_used_status": true,
     "professional_context_cannot_be_player_feedback": true,
     "official_metadata_cannot_be_player_feedback": true,
-    "steam_store_app_page_cannot_be_player_feedback": true,
     "aggregate_storefront_statistics_cannot_populate_mention_count": true,
     "player_feedback_record_requires_item_level_stable_locator": false,
     "obvious_url_aliases_do_not_create_distinct_feedback_or_source_identity": true,
@@ -278,7 +277,10 @@
     "stable_locator_record_requires_item_level_stable_locator": true,
     "transient_author_deduped_record_requires_concrete_item_collection_parent": true,
     "transient_author_deduped_record_has_no_persisted_item_or_profile_locator": true,
-    "transient_author_deduped_cross_run_identity": false
+    "transient_author_deduped_cross_run_identity": false,
+    "steam_store_app_page_cannot_be_player_feedback_record": true,
+    "steam_store_exact_app_page_may_parent_transient_author_deduped_concrete_review_cards": true,
+    "steam_store_parent_aggregate_metadata_is_non_mention_provenance_only": true
   },
   "provenance_source_required_fields": [
     "source_id",
