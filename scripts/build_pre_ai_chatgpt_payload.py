@@ -9,6 +9,7 @@ from pathlib import Path
 from taste_negative_contract import negative_readiness
 from taste_evidence_contract import evidence_readiness
 from semantic_runtime_completion import apply_payload_status
+from taste_steam_review_dossier_web import classify_story_dlc_scope, summarize_story_dlc_scope
 from taste_package_member_aggregation import (
     PACKAGE_MEMBER_AGGREGATION_POLICY,
     aggregate_package_member_taste,
@@ -36,6 +37,23 @@ PREREQUISITES = [STORE, FX, FAMILIES, TASTE, HISTORY, DEALS]
 WISHLIST_URL = 'https://raw.githubusercontent.com/kentrap2011-hub/stopgame-ratings-data/main/steam_wishlist.json'
 NEGATIVE_WORK_CODE = 'resolve_grounded_negative_analysis'
 
+
+
+
+def classify_independent_dlc_semantic_scope(family, taste_row):
+    """Apply the canonical story-DLC gate before creating Taste semantic work."""
+    probe = {
+        "family_id": family.get("family_id"),
+        "appid": str(taste_row.get("appid") or ""),
+        "title": str(taste_row.get("taste_subject_title") or ""),
+        "short_description": taste_row.get("short_description"),
+        "semantic_condition": {
+            "ai_condition": family.get("ai_condition"),
+            "requires_ai_base_support": bool(family.get("requires_ai_base_support")),
+            "base_appids": family.get("base_appids") or [],
+        },
+    }
+    return classify_story_dlc_scope(probe)
 
 def load(path):
     return json.loads(path.read_text(encoding='utf-8'))
@@ -296,6 +314,7 @@ def main():
     evidence_backfill_queue_count = 0
     commercial_bridge_counts = Counter()
     package_member_aggregation_counts = Counter()
+    story_dlc_classifications = []
 
     for family in families:
         primary_key = family['primary_key']
@@ -327,6 +346,14 @@ def main():
         sale_end_local = store_row.get('discount_end_europe_berlin')
         if not sale_end_utc or not sale_end_local:
             sale_end_missing.append(primary_key)
+
+        story_dlc_scope = classify_independent_dlc_semantic_scope(family, source_taste_row)
+        if story_dlc_scope is not None:
+            story_dlc_classifications.append(story_dlc_scope)
+            if not story_dlc_scope['eligible']:
+                excluded_keys.append(primary_key)
+                exclusion_counts[f"story_dlc_scope:{story_dlc_scope['classification']}"] += 1
+                continue
 
         hist_min_kzt = history_row.get('historical_min_kzt')
         hist_min_rub = None if hist_min_kzt is None else float(hist_min_kzt) / rate
@@ -571,6 +598,7 @@ def main():
     purchase_context = ai_context + ready_context
     write_jsonl(PURCHASE_CONTEXT_OUT, purchase_context)
 
+    story_dlc_scope_summary = summarize_story_dlc_scope(story_dlc_classifications)
     source_bytes = sum(path.stat().st_size for path in PREREQUISITES)
     manifest = {
         'schema_version': 5,
@@ -631,6 +659,8 @@ def main():
             'multi_game_package_taste_aggregation': PACKAGE_MEMBER_AGGREGATION_POLICY,
             'multi_game_package_never_creates_second_semantic_subject': True,
             'multi_game_package_quality_penalties_remain_outside_taste': True,
+            'independent_dlc_requires_positive_story_evidence_before_taste_queue': True,
+            'non_story_or_unproven_dlc_creates_no_independent_taste_semantic_obligation': True,
         },
         'files': {
             'taste_queue_jsonl': str(TASTE_QUEUE_OUT),
@@ -647,6 +677,7 @@ def main():
         'purchase_context_line_count': len(purchase_context),
         'deterministically_excluded_without_ai_count': len(excluded_keys),
         'deterministic_exclusion_counts': dict(sorted(exclusion_counts.items())),
+        'story_dlc_scope': story_dlc_scope_summary,
         'commercial_eligibility_bridge_counts': dict(sorted(commercial_bridge_counts.items())),
         'fixed_package_bridge_evidence': package_bridge_stats,
         'package_member_taste_aggregation_counts': dict(sorted(package_member_aggregation_counts.items())),
@@ -683,6 +714,7 @@ def main():
         'ready_without_ai_count': manifest['ready_without_ai_count'],
         'deterministically_excluded_without_ai_count': manifest['deterministically_excluded_without_ai_count'],
         'deterministic_exclusion_counts': manifest['deterministic_exclusion_counts'],
+        'story_dlc_scope': manifest['story_dlc_scope'],
         'commercial_eligibility_bridge_counts': manifest['commercial_eligibility_bridge_counts'],
         'fixed_package_bridge_evidence': package_bridge_stats,
         'package_member_taste_aggregation_counts': manifest['package_member_taste_aggregation_counts'],

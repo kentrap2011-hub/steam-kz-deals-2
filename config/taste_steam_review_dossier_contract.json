@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "story-dlc-scope-positive-evidence-2026-09-18",
+  "contract_revision": "story-dlc-upstream-taste-scope-2026-09-18",
   "purpose": "Prepare one complete fixed daily neutral Steam review dossier backlog snapshot before Taste semantic analysis, preserve checkpoint-sized durable progress inside that fixed snapshot, expose a bounded GitHub-derived compact read projection for the scheduled worker, and use buffered create-only group transport without transferring canonical progress or queue ownership away from GitHub.",
   "ownership": {
     "control_plane": "github",
@@ -76,7 +76,7 @@
   "scope": {
     "source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
     "source_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
-    "eligibility": "row_requires_at_least_one_canonical_taste_semantic_work_item_and_if_addon_has_positive_substantial_playable_story_evidence",
+    "eligibility": "canonical_taste_queue_must_already_exclude_non_story_or_unproven_independent_addons; dossier_scope_revalidates_positive_story_eligibility_defense_in_depth",
     "taste_semantic_work_required_any": [
       "evaluate_taste_fit",
       "evaluate_normalized_taste_factors",
@@ -89,8 +89,8 @@
     "snapshot_membership_rule": "fixed_from_daily_preparation_until_next_daily_preparation",
     "manual_run_now_rule": "consume_latest_prepared_daily_snapshot_without_on_demand_scope_refresh",
     "story_dlc_policy": {
-      "revision": "story-dlc-positive-evidence-v1",
-      "applies_to": "canonical_taste_queue_rows_identified_as_addon_by_family_or_addon_semantic_condition",
+      "revision": "story-dlc-positive-evidence-v2-upstream-taste-gate",
+      "applies_to": "independent_addon_semantic_candidates_before_chatgpt_taste_queue_publication_and_again_at_dossier_identity_projection",
       "base_game_behavior": "unchanged",
       "positive_evidence_source": "canonical_taste_queue.short_description_derived_from_steam_storebrowse_or_steam_appdetails_product_metadata",
       "positive_rule": "include_only_when_product_metadata_positively_confirms_substantial_playable_narrative_content_such_as_a_story_campaign_story_expansion_story_chapter_or_episode_story_questline_or_separate_playable_adventure",
@@ -113,7 +113,9 @@
         "story_dlc_eligible",
         "non_story_dlc_excluded",
         "story_content_unproven_excluded"
-      ]
+      ],
+      "upstream_taste_queue_rule": "non_story_dlc_excluded_or_story_content_unproven_excluded_must_not_be_published_as_independent_Taste_semantic_work",
+      "dossier_rule": "repeat_the_same_canonical_classifier_as_defense_in_depth_for_any_addon_row_that_reaches_dossier_projection"
     }
   },
   "manifest": {

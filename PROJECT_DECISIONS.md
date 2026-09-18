@@ -439,4 +439,6 @@
 
 **Regression control:** appid `2378500` (`Baldur's Gate 3 - Digital Deluxe Edition DLC`) должен классифицироваться `non_story_dlc_excluded` и отсутствовать в required dossier group plan.
 
-**Основные места:** `config/taste_steam_review_dossier_contract.json`, `scripts/taste_steam_review_dossier_web.py`, `scripts/build_taste_steam_review_dossier_work.py`, `scripts/test_taste_story_dlc_scope.py`, `.github/workflows/validate-taste-dossier-buffered.yml`, `.github/workflows/build-pre-ai-store-snapshot.yml`.
+**Corrective route clarification (2026-09-18):** product rule applies before independent Taste work is published, not only before dossier research. `build_pre_ai_chatgpt_payload.py` therefore invokes the same canonical story-DLC classifier before writing `chatgpt_taste_queue.jsonl`; `non_story_dlc_excluded` and `story_content_unproven_excluded` rows are deterministic exclusions and cannot enter the active pin as new work. The dossier projection repeats the same classifier only as defense in depth.
+
+**Основные места:** `config/taste_steam_review_dossier_contract.json`, `scripts/build_pre_ai_chatgpt_payload.py`, `scripts/taste_steam_review_dossier_web.py`, `scripts/build_taste_steam_review_dossier_work.py`, `scripts/test_taste_story_dlc_scope.py`, `.github/workflows/validate-taste-dossier-buffered.yml`, `.github/workflows/build-pre-ai-store-snapshot.yml`.
