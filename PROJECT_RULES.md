@@ -175,3 +175,12 @@ Two bounded routes are canonical. First: Steam wishlist + `fit_evidence_state=in
 Second: `fit_evidence_state=reconsiderable` may become purchase-worthy through an existing verified fixed Steam `Sub_` package only when the existing fixed-package economics produce `strict_current_price_savings=true` with aligned sources. The package route may set commercial purchase advice to `МОЖНО БРАТЬ`, but the Taste verdict remains `EXCLUDE / below_moderate / reconsiderable`.
 
 Exact V5 `fit_evidence_state=confirmed_negative` — including a direct conflict that V5 has actually confirmed — is non-overridable regardless of wishlist, discount, package savings, or other paid commercial signals. A legacy `reason_code=exclude_direct_conflict` alone is not confirmation: ambiguous legacy rows remain fail-closed until V5 backfill, while an exact V5 `reconsiderable` row may use the bounded package bridge. Existing content/store/sale/symbolic/budget gates, package equivalence rules, risk/warning visibility, giveaway path, and the single final ranking authority remain unchanged.
+
+
+## DLC в Taste / dossier semantic scope
+
+В Taste/recommendation и Steam-review-dossier semantic scope самостоятельным объектом считается только DLC, для которого канонические Steam product metadata положительно подтверждают существенный playable narrative content: отдельную сюжетную кампанию/главу/эпизод, сюжетную линию или questline, narrative/story expansion либо эквивалентное самостоятельное приключение.
+
+Digital Deluxe/Deluxe Upgrade, OST/soundtrack, artbook, cosmetics/skins, weapon/item/equipment/currency/resource packs, bonus songs, digital extras, supporter/founder packs без отдельного сюжета и иные bonus-content add-ons не создают самостоятельную Taste obligation. Season pass/package/container не становится сюжетным DLC только потому, что предоставляет доступ к сюжетным дочерним DLC.
+
+Если положительная сюжетность не доказана доступной канонической product metadata, DLC исключается fail-closed. Название может быть отрицательным hint, но не является достаточным положительным доказательством. Смешанное DLC «сюжет + косметика» допустимо только когда сюжетный playable component отдельно и существенно подтверждён. Base games и действующая package/member aggregation не меняются.
