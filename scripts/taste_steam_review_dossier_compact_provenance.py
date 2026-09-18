@@ -8,6 +8,10 @@ from urllib.parse import parse_qsl, urlparse
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_EVIDENCE_CONTRACT = ROOT / "config/taste_steam_review_dossier_web_evidence_contract.json"
 
+_SOURCE_ID_RE = re.compile(r"^source-[0-9]{3}$")
+_STABLE_FEEDBACK_ID_RE = re.compile(r"^feedback-[0-9]{3}$")
+_FALLBACK_FEEDBACK_ID_RE = re.compile(r"^fallback-[0-9]{3}$")
+
 
 def load_compact_provenance_policy(path=DEFAULT_EVIDENCE_CONTRACT):
     doc = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -38,6 +42,9 @@ def load_compact_provenance_policy(path=DEFAULT_EVIDENCE_CONTRACT):
         values = policy.get(key)
         if not isinstance(values, list) or not values or any(not isinstance(v, str) or not v for v in values):
             raise ValueError(f"compact provenance policy {key} is missing or invalid")
+    internal_ids = policy.get("internal_join_ids")
+    if not isinstance(internal_ids, dict) or internal_ids.get("author_identity_independent") is not True:
+        raise ValueError("compact provenance internal join-id policy is missing or not author-independent")
     return policy
 
 
@@ -87,6 +94,16 @@ def validate_compact_provenance(dossier, policy=None):
             if not isinstance(record, dict):
                 raise ValueError(f"provenance.{container_key}[{index}] must be an object")
             label = f"provenance.{container_key}[{index}]"
+            source_id = record.get("source_id")
+            if not isinstance(source_id, str) or not _SOURCE_ID_RE.fullmatch(source_id):
+                raise ValueError(f"{label}.source_id must be a dossier-local source-NNN token")
+            if container_key == "player_feedback_records":
+                feedback_id = record.get("feedback_id")
+                identity_mode = str(record.get("identity_mode") or "stable_locator")
+                pattern = _FALLBACK_FEEDBACK_ID_RE if identity_mode == "transient_author_deduped" else _STABLE_FEEDBACK_ID_RE
+                if not isinstance(feedback_id, str) or not pattern.fullmatch(feedback_id):
+                    expected = "fallback-NNN" if identity_mode == "transient_author_deduped" else "feedback-NNN"
+                    raise ValueError(f"{label}.feedback_id must be a dossier-local {expected} token")
             if record.get("url") is not None:
                 _validate_url(record["url"], label, policy)
             if record.get("public_ref") is not None:
