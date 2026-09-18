@@ -374,3 +374,12 @@
 - active binding revisions: evidence/schema `russian-existence-retrieval-gate-2026-09-18`, prompt `web-evidence-v2-russian-retrieval-gate-v1`;
 - Scheduled Task `Run now` was not launched;
 - durable report: `reviews/worker_reports/taste-dossier-russian-existence-retrieval-gate-implement-01.md`.
+
+
+### Taste story DLC scope policy implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_STORY_DLC_SCOPE_POLICY_IMPLEMENT_01.md`;
+- scope: canonical Taste/dossier eligibility for DLC; only positively confirmed substantial playable story DLC may enter semantic dossier scope;
+- BG3 Digital Deluxe appid `2378500` must be excluded;
+- Crown Trick/Hellish Quart item-level locator issue is explicitly out of scope;
+- Scheduled Task Run now/settings must remain unchanged.
