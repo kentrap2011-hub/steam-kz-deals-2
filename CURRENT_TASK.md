@@ -145,6 +145,14 @@
 
 ## Запланировано / выполняется
 
+### Taste dossier Russian multi-source retrieval implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_RUSSIAN_MULTI_SOURCE_RETRIEVAL_IMPLEMENT_01.md`;
+- scope: source-agnostic bounded adaptive Russian player-feedback retrieval after exact-product existence proof, without weakening the existing fail-closed gate;
+- hard bounds remain <=8 search queries / <=16 opened-read pages per game; group size remains 3;
+- no Scheduled Task Run now, scheduler/settings, retry manager, queue, crawler, pricing/ranking/UI or manual production-state repair changes.
+
+
 ### Taste pre-AI deal contract guard fix implement 01
 Статус: `in_progress`.
 - worker task: `WORKER_TASK_TASTE_PRE_AI_DEAL_CONTRACT_GUARD_FIX_IMPLEMENT_01.md`;
