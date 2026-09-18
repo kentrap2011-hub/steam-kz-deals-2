@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "2db923b8171bcf30caa2a6a0b2e36f4bc21c63143265a92648969d3748f79319",
+  "prepared_required_sha256": "437e25c814244f17d7dd5d83110d3655364a30cb7e25173f3885e9c0d8c923df",
+  "group_plan_sha256": "0ec5ac9f7127b4952303fd860ed8c348d8125b588acf9a1bd62945dc25aea83a",
+  "group_count": 234,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "steam-store-review-card-parent-fix-2026-09-18",
+    "evidence_contract_sha256": "b1cffdf1379c7c9b934e59923780c49d5bdc03002a75d4d48b2d3e0d053a9451",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "steam-store-review-card-parent-fix-2026-09-18",
+    "worker_schema_sha256": "473c7a89ebbdca526f962710740185278ee5b46295154dd90712492de72ca340",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-steam-store-review-card-parent-v1",
+    "worker_prompt_sha256": "380fb106ffbddd51b0e3ad76528e168894851cd4bed56fb356f7ce52a30adc1b"
+  },
+  "sequence": 136,
+  "start_index": 405,
+  "end_index_exclusive": 408,
+  "appids": [
+    "322190",
+    "3226530",
+    "322770"
+  ],
+  "items_sha256": "590a4194478c1ea543d1cdcc1a896d01e6529eab4376272529d8aa757ff1d6d9",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "68b9702e61e8157e065fb526c8a472b9eb61ac1ef1de1d2b3d65f30c0f7072a9",
+  "items": [
+    {
+      "key": "App_322190",
+      "appid": "322190",
+      "title": "SteamWorld Heist",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_322190.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_3226530",
+      "appid": "3226530",
+      "title": "Tower Dominion",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_3226530.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_322770",
+      "appid": "322770",
+      "title": "Vanishing Realms™",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_322770.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "3eb5c714cee0a29eedc7ba815cf0cd5e3c59da1615faee921e5492d3ddfc491f"
+}

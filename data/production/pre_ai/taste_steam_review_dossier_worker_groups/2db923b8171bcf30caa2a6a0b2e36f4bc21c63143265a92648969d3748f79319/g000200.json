@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "2db923b8171bcf30caa2a6a0b2e36f4bc21c63143265a92648969d3748f79319",
+  "prepared_required_sha256": "437e25c814244f17d7dd5d83110d3655364a30cb7e25173f3885e9c0d8c923df",
+  "group_plan_sha256": "0ec5ac9f7127b4952303fd860ed8c348d8125b588acf9a1bd62945dc25aea83a",
+  "group_count": 234,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "steam-store-review-card-parent-fix-2026-09-18",
+    "evidence_contract_sha256": "b1cffdf1379c7c9b934e59923780c49d5bdc03002a75d4d48b2d3e0d053a9451",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "steam-store-review-card-parent-fix-2026-09-18",
+    "worker_schema_sha256": "473c7a89ebbdca526f962710740185278ee5b46295154dd90712492de72ca340",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-steam-store-review-card-parent-v1",
+    "worker_prompt_sha256": "380fb106ffbddd51b0e3ad76528e168894851cd4bed56fb356f7ce52a30adc1b"
+  },
+  "sequence": 200,
+  "start_index": 597,
+  "end_index_exclusive": 600,
+  "appids": [
+    "6220",
+    "629650",
+    "629820"
+  ],
+  "items_sha256": "6f261956e820dc283232639df8b553a00ce38b661040eb23d1a3ec270115a7e2",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "68b9702e61e8157e065fb526c8a472b9eb61ac1ef1de1d2b3d65f30c0f7072a9",
+  "items": [
+    {
+      "key": "App_6220",
+      "appid": "6220",
+      "title": "FlatOut",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_6220.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_629650",
+      "appid": "629650",
+      "title": "Symphonic Rain",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_629650.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_629820",
+      "appid": "629820",
+      "title": "Maneater",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_629820.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "a1214964a7b189360fbeb62262513ab019547e89c5e93ccd1edaf08a1ad78eba"
+}

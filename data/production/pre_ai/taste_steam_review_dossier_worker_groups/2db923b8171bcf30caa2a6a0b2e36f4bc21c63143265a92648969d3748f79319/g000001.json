@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "2db923b8171bcf30caa2a6a0b2e36f4bc21c63143265a92648969d3748f79319",
+  "prepared_required_sha256": "437e25c814244f17d7dd5d83110d3655364a30cb7e25173f3885e9c0d8c923df",
+  "group_plan_sha256": "0ec5ac9f7127b4952303fd860ed8c348d8125b588acf9a1bd62945dc25aea83a",
+  "group_count": 234,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "steam-store-review-card-parent-fix-2026-09-18",
+    "evidence_contract_sha256": "b1cffdf1379c7c9b934e59923780c49d5bdc03002a75d4d48b2d3e0d053a9451",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "steam-store-review-card-parent-fix-2026-09-18",
+    "worker_schema_sha256": "473c7a89ebbdca526f962710740185278ee5b46295154dd90712492de72ca340",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-steam-store-review-card-parent-v1",
+    "worker_prompt_sha256": "380fb106ffbddd51b0e3ad76528e168894851cd4bed56fb356f7ce52a30adc1b"
+  },
+  "sequence": 1,
+  "start_index": 0,
+  "end_index_exclusive": 3,
+  "appids": [
+    "1000010",
+    "1000360",
+    "1003590"
+  ],
+  "items_sha256": "aa0c0ee7ae1107a29ec803d95badbae744a8c800083c01a6059b65ccc1d5da9e",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "68b9702e61e8157e065fb526c8a472b9eb61ac1ef1de1d2b3d65f30c0f7072a9",
+  "items": [
+    {
+      "key": "App_1000010",
+      "appid": "1000010",
+      "title": "Crown Trick",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1000010.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1000360",
+      "appid": "1000360",
+      "title": "Hellish Quart",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1000360.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1003590",
+      "appid": "1003590",
+      "title": "Tetris® Effect: Connected",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1003590.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "a3945f582c2c5bdabd269e2bcea6f48d5417a5bcd9631353d717c9dc28b671a7"
+}
