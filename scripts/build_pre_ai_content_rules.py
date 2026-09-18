@@ -182,7 +182,7 @@ def main():
                 'mechanical_kind': 'dlc',
                 'mechanical_action': 'keep_for_ai_then_resolve_condition',
                 'base_appid': str(m.get('fullgame_appid') or '') or None,
-                'ai_condition_after_self_taste_include': 'base_is_same_run_taste_include_or_profile_supports_base_or_content_is_proven_standalone_game_like',
+                'ai_condition_after_self_taste_include': 'positive_story_scope_required_before_independent_taste_semantic_work_then_existing_base_support_condition_applies',
             }
         elif entity_kind == 'app' and app_type in {'software', 'demo', 'mod', 'movie', 'guide', 'video', 'series', 'episode', 'hardware', 'music', 'beta', 'tool', 'advertising'}:
             rule = {
