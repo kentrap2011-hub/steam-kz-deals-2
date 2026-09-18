@@ -226,6 +226,8 @@ Production validator проверяет:
 - опубликованный deterministic group нельзя overwrite/update/rename/delete через worker/chat и нельзя «лечить» retry/per-game replacement;
 - при content-complete binding change GitHub создаёт fresh snapshot; artifacts старого snapshot становятся stale/inert и могут быть перемещены только штатным GitHub-owned stale-quarantine path;
 - очередь/cache/progress/receipts вручную не чинить.
+- **Story-DLC scope gate:** до dossier identity projection `scripts/taste_steam_review_dossier_web.py::classify_story_dlc_scope` классифицирует только add-on rows по canonical Steam `short_description`; positive story evidence включает DLC, explicit non-story metadata исключает, отсутствие positive proof исключает fail-closed. Policy revision входит в snapshot identity/preservation guard через `scripts/build_taste_steam_review_dossier_work.py`.
+- Для audit использовать `taste_steam_review_dossier_work.json.story_dlc_scope`; не искать DLC вручную по backlog. `appid 2378500` является обязательной non-story regression.
 - Russian retrieval gate: `evidence.russian_attempt` различает `found_and_used`, genuine `searched_no_existence_signal` и два proven-existence unresolved failure state; точные machine semantics живут в web-evidence contract/schema, а strict enforcement — только в `scripts/taste_steam_review_dossier_strict.py`.
 - После exact-product Russian existence proof worker prompt/web-evidence contract требуют bounded source-agnostic diversification: не зацикливаться на Steam/одном surface, при неудаче первого retrieval surface и оставшемся budget попробовать хотя бы один materially different public player-feedback surface class, если он reasonably discoverable; fixed website quota и Steam-only retrieval запрещены.
 

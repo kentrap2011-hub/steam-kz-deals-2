@@ -109,6 +109,34 @@ class SameDayPreservationTests(unittest.TestCase):
             self.assertIn("359999", manifest["ordered_appids"])
             self.assertEqual(manifest["completed_required_count"], 0)
 
+    def test_same_day_pre_story_dlc_policy_manifest_rebuilds(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            store = root / "store"
+            queue_path = root / "queue.jsonl"
+            output = root / "work.json"
+            rows = queue(range(360000, 360003))
+            write_queue(queue_path, rows)
+
+            legacy = build_daily_work_manifest_web(rows, CONTRACT, store, now=NOW, source_queue_path=str(queue_path))
+            legacy.pop("story_dlc_scope_policy_revision")
+            legacy.pop("story_dlc_scope_sha256")
+            legacy.pop("story_dlc_scope")
+            output.write_text(json.dumps(legacy), encoding="utf-8")
+
+            changed_rows = rows + queue((369999,))
+            write_queue(queue_path, changed_rows)
+            manifest, transition = build_or_preserve_daily_work(
+                contract=CONTRACT, queue_path=str(queue_path), store_dir=str(store), output_path=str(output),
+                now=NOW + timedelta(hours=1),
+            )
+
+            self.assertEqual(transition["mode"], "built_new_daily_snapshot")
+            self.assertEqual(manifest["story_dlc_scope_policy_revision"], "story-dlc-positive-evidence-v1")
+            self.assertIn("369999", manifest["ordered_appids"])
+            self.assertEqual(manifest["completed_required_count"], 0)
+
+
     def test_same_day_compatible_buffered_manifest_keeps_identity_and_binding(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)

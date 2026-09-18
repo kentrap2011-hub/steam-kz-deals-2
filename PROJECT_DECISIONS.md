@@ -422,3 +422,21 @@
 
 **Основные места:** `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/test_taste_steam_review_dossier_semantic_consistency.py`.
 
+
+
+---
+
+## TASTE-009 — Story DLC only in independent Taste/dossier scope
+
+**Дата:** 2026-09-18  
+**Статус:** implemented by `WORKER_TASK_TASTE_STORY_DLC_SCOPE_POLICY_IMPLEMENT_01.md`
+
+**Решение:** independent Taste/Steam-review-dossier scope включает add-on/DLC только при положительном подтверждении существенного playable narrative content из уже канонически полученной Steam product metadata. Non-story bonus content и DLC с недоказанной сюжетностью исключяются до dossier identity projection; неоднозначность fail-closed. Machine states: `story_dlc_eligible`, `non_story_dlc_excluded`, `story_content_unproven_excluded`.
+
+**Почему:** Taste model оценивает meaningful playable products, а не merchandising/digital bonus packs. Dossier research на Digital Deluxe/OST/artbook/cosmetic add-ons расходует evidence budget и создаёт ложную semantic obligation. Для пользовательского recommendation workflow independently meaningful DLC — только сюжетное.
+
+**Граница:** base games не меняются; mixed story+cosmetics остаётся допустимым только при отдельном положительном story evidence; season pass/container не наследует semantic identity дочерних story DLC; package/member aggregation, exact appid identity, pricing/package economics, Russian retrieval/provenance, group size 3 и GitHub control-plane ownership не меняются.
+
+**Regression control:** appid `2378500` (`Baldur's Gate 3 - Digital Deluxe Edition DLC`) должен классифицироваться `non_story_dlc_excluded` и отсутствовать в required dossier group plan.
+
+**Основные места:** `config/taste_steam_review_dossier_contract.json`, `scripts/taste_steam_review_dossier_web.py`, `scripts/build_taste_steam_review_dossier_work.py`, `scripts/test_taste_story_dlc_scope.py`, `.github/workflows/validate-taste-dossier-buffered.yml`, `.github/workflows/build-pre-ai-store-snapshot.yml`.

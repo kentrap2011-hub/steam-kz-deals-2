@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """V2 web-evidence helpers layered on the unchanged GitHub dossier control plane."""
 import copy
+import re
 from datetime import datetime, timezone
 
 from taste_package_member_aggregation import (
@@ -31,6 +32,114 @@ from taste_steam_review_dossier_strict import (
 )
 
 _PACKAGE_IDENTITY_POLICY_REVISION = "package-member-dossier-aggregation-v1"
+
+_STORY_DLC_SCOPE_POLICY_REVISION = "story-dlc-positive-evidence-v1"
+
+_STORY_DLC_POSITIVE_SIGNALS = (
+    ("story_campaign", r"\b(?:all[- ]new|new|additional|standalone|separate|full)\s+(?:story(?:-driven)?\s+)?campaign\b"),
+    ("story_expansion", r"\b(?:story|narrative)\s+expansion\b"),
+    ("story_chapter_or_episode", r"\b(?:all[- ]new|new|additional|standalone|separate)\s+(?:story\s+)?(?:chapter|episode)\b"),
+    ("story_questline", r"\b(?:all[- ]new|new|additional|standalone|separate)\s+(?:story\s+)?(?:questline|quest line|quests?)\b"),
+    ("storyline", r"\b(?:all[- ]new|new|additional|standalone|separate)\s+(?:storyline|story line)\b"),
+    ("playable_adventure", r"\b(?:all[- ]new|new|additional|standalone|separate)\s+(?:playable\s+)?adventure\b"),
+)
+
+_STORY_DLC_NON_STORY_SIGNALS = (
+    ("digital_deluxe", r"\bdigital deluxe(?: edition)?\b|\bdeluxe (?:edition )?(?:upgrade|content|pack)\b"),
+    ("soundtrack", r"\bsoundtrack\b|\bost\b"),
+    ("artbook", r"\bart ?book\b"),
+    ("cosmetic", r"\bcosmetics?\b|\bskins?\b"),
+    ("weapon_item_equipment_pack", r"\b(?:weapon|item|equipment|currency|resource)\s+packs?\b"),
+    ("bonus_songs", r"\bbonus songs?\b|\bmusic packs?\b"),
+    ("digital_extras", r"\bwallpapers?\b|\bavatars?\b|\bcharacter sheets?\b"),
+    ("supporter_founder_pack", r"\b(?:supporter|founder)\s+packs?\b"),
+)
+
+_STORY_DLC_CONTAINER_SIGNALS = (
+    ("season_pass_container", r"\bseason pass\b"),
+    ("expansion_pass_container", r"\bexpansion pass\b"),
+    ("dlc_collection_container", r"\bdlc collection\b"),
+)
+
+
+def _story_signal_matches(text, signals):
+    return [
+        name for name, pattern in signals
+        if re.search(pattern, text or "", flags=re.IGNORECASE)
+    ]
+
+
+def _is_addon_semantic_row(row):
+    family_id = str(row.get("family_id") or "")
+    condition = row.get("semantic_condition") if isinstance(row.get("semantic_condition"), dict) else {}
+    ai_condition = str(condition.get("ai_condition") or "")
+    return family_id.startswith("addon:") or ai_condition.startswith("addon_")
+
+
+def classify_story_dlc_scope(row):
+    """Classify one canonical add-on row before dossier identity projection.
+
+    Positive inclusion is grounded only in canonical Steam product-description
+    metadata already carried by the Taste queue. Missing or inconclusive story
+    evidence fails closed.
+    """
+    if not _is_addon_semantic_row(row):
+        return None
+    appid = str(row.get("appid") or "")
+    title = str(row.get("title") or "").strip()
+    description = str(row.get("short_description") or "").strip()
+    title_and_description = " ".join(x for x in (title, description) if x)
+    evidence_source = (
+        "canonical_taste_queue.short_description_from_steam_product_metadata"
+        if description else "canonical_taste_queue.no_positive_story_product_metadata"
+    )
+
+    container = _story_signal_matches(title_and_description, _STORY_DLC_CONTAINER_SIGNALS)
+    if container:
+        return {
+            "appid": appid,
+            "title": title,
+            "classification": "non_story_dlc_excluded",
+            "eligible": False,
+            "reason": "container_entitlement_is_not_independent_story_identity",
+            "evidence_source": evidence_source,
+            "matched_signals": container,
+        }
+
+    positive = _story_signal_matches(description, _STORY_DLC_POSITIVE_SIGNALS)
+    if positive:
+        return {
+            "appid": appid,
+            "title": title,
+            "classification": "story_dlc_eligible",
+            "eligible": True,
+            "reason": "positive_substantial_playable_story_content_confirmed",
+            "evidence_source": evidence_source,
+            "matched_signals": positive,
+        }
+
+    non_story = _story_signal_matches(description, _STORY_DLC_NON_STORY_SIGNALS)
+    if non_story:
+        return {
+            "appid": appid,
+            "title": title,
+            "classification": "non_story_dlc_excluded",
+            "eligible": False,
+            "reason": "product_metadata_confirms_bonus_or_non_story_addon_content",
+            "evidence_source": evidence_source,
+            "matched_signals": non_story,
+        }
+
+    return {
+        "appid": appid,
+        "title": title,
+        "classification": "story_content_unproven_excluded",
+        "eligible": False,
+        "reason": "positive_story_content_not_proven",
+        "evidence_source": evidence_source,
+        "matched_signals": [],
+    }
+
 
 
 def ensure_web_evidence_binding(manifest):
@@ -187,6 +296,7 @@ def resolve_dossier_scope_identities(queue_rows, contract):
     order = []
     blocked = []
     package_mappings = []
+    story_dlc_classifications = []
     eligible_row_count = 0
     deduplicated_row_count = 0
 
@@ -199,6 +309,11 @@ def resolve_dossier_scope_identities(queue_rows, contract):
         if not any(item in markers for item in work):
             continue
         eligible_row_count += 1
+        story_dlc = classify_story_dlc_scope(row)
+        if story_dlc is not None:
+            story_dlc_classifications.append(story_dlc)
+            if not story_dlc["eligible"]:
+                continue
         resolved = _resolve_queue_row_dossier_identities(row, index)
         if resolved["status"] == "blocked":
             blocked.append(resolved["blocked"])
@@ -253,10 +368,19 @@ def resolve_dossier_scope_identities(queue_rows, contract):
         for member in mapping["members"]:
             member["dossier_path"] = dossier_path(contract["paths"]["dossier_store_dir"], member["appid"]).as_posix()
 
+    story_dlc_scope = {
+        "policy_revision": _STORY_DLC_SCOPE_POLICY_REVISION,
+        "considered_count": len(story_dlc_classifications),
+        "story_eligible_count": sum(x["classification"] == "story_dlc_eligible" for x in story_dlc_classifications),
+        "non_story_excluded_count": sum(x["classification"] == "non_story_dlc_excluded" for x in story_dlc_classifications),
+        "ambiguous_excluded_count": sum(x["classification"] == "story_content_unproven_excluded" for x in story_dlc_classifications),
+        "classifications": story_dlc_classifications,
+    }
     return {
         "rows": rows,
         "identity_blocked_items": blocked,
         "package_member_mappings": package_mappings,
+        "story_dlc_scope": story_dlc_scope,
         "eligible_row_count": eligible_row_count,
         "deduplicated_row_count": deduplicated_row_count,
     }
@@ -273,6 +397,8 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
     scope_rows = resolution["rows"]
     identity_blocked_items = resolution["identity_blocked_items"]
     package_member_mappings = resolution["package_member_mappings"]
+    story_dlc_scope = resolution["story_dlc_scope"]
+    story_dlc_scope_sha = canonical_sha256(story_dlc_scope)
     eligible_row_count = resolution["eligible_row_count"]
     items = []
     required = []
@@ -321,6 +447,8 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
         "eligible_scope_sha256": eligible_sha,
         "identity_blocked_sha256": identity_blocked_sha,
         "package_member_mapping_sha256": package_mapping_sha,
+        "story_dlc_scope_policy_revision": _STORY_DLC_SCOPE_POLICY_REVISION,
+        "story_dlc_scope_sha256": story_dlc_scope_sha,
         "prepared_required_sha256": required_sha,
         "ttl_days": ttl,
     })
@@ -356,6 +484,9 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
         "package_member_mapping_count": len(package_member_mappings),
         "package_member_mapping_sha256": package_mapping_sha,
         "package_member_mappings": package_member_mappings,
+        "story_dlc_scope_policy_revision": _STORY_DLC_SCOPE_POLICY_REVISION,
+        "story_dlc_scope_sha256": story_dlc_scope_sha,
+        "story_dlc_scope": story_dlc_scope,
         "eligible_scope_count": len(scope_rows),
         "eligible_scope_sha256": eligible_sha,
         "ordered_appids": [r["appid"] for r in scope_rows],
