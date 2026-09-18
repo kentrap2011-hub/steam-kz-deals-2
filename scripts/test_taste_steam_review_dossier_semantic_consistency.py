@@ -50,15 +50,15 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
 
         same_thread = web_dossier(610003, now)
         same_thread["provenance"]["player_feedback_records"].append({
-            "feedback_id": "pf5",
-            "source_id": "p2",
+            "feedback_id": "feedback-005",
+            "source_id": "source-003",
             "url": "https://www.reddit.com/r/games/comments/test610003/game_610003/comment2/",
             "publication_date": now.date().isoformat(),
             "language": "russian",
         })
         same_thread["observations"][1]["recurrence"] = "limited"
         same_thread["observations"][1]["mention_count"] = 2
-        same_thread["observations"][1]["player_feedback_ids"] = ["pf4", "pf5"]
+        same_thread["observations"][1]["player_feedback_ids"] = ["feedback-004", "feedback-005"]
         self.assertIs(self.validate(same_thread, now), same_thread)
 
     def test_scg02_old_known_child_cannot_be_laundered_by_undated_recent_parent_but_unknown_child_is_preserved(self):
@@ -100,8 +100,8 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "statement": "Players report materially different experiences with the same durable mechanic.",
             "recurrence": "moderate",
             "mention_count": 3,
-            "source_ids": ["p1"],
-            "player_feedback_ids": ["pf1", "pf2", "pf3"],
+            "source_ids": ["source-002"],
+            "player_feedback_ids": ["feedback-001", "feedback-002", "feedback-003"],
         }
         doc["conflicts"] = [conflict, copy.deepcopy(conflict)]
         self.refresh_summary(doc)
@@ -114,8 +114,8 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         older_date = (now.date() - timedelta(days=400)).isoformat()
         for suffix in (5, 6):
             doc["provenance"]["player_feedback_records"].append({
-                "feedback_id": f"pf{suffix}",
-                "source_id": "p1",
+                "feedback_id": f"feedback-{suffix:03d}",
+                "source_id": "source-002",
                 "public_ref": f"steam-review-650001-{suffix}",
                 "publication_date": older_date,
                 "language": "non_russian",
@@ -124,8 +124,8 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "statement": "A strong recurring conflict is present without any strongly recurring observation.",
             "recurrence": "strong",
             "mention_count": 5,
-            "source_ids": ["p1"],
-            "player_feedback_ids": ["pf1", "pf2", "pf3", "pf5", "pf6"],
+            "source_ids": ["source-002"],
+            "player_feedback_ids": ["feedback-001", "feedback-002", "feedback-003", "feedback-005", "feedback-006"],
         }]
         doc["evidence"]["overall_strength"] = "strong"
         self.refresh_summary(doc)
@@ -208,7 +208,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         doc = web_dossier(670004, now, russian_status="searched_no_existence_signal")
         doc["provenance"]["sources"].append({
-            "source_id": "ru_aggregate",
+            "source_id": "source-004",
             "source_type": "official_metadata",
             "domain": "store.steampowered.com",
             "url": "https://store.steampowered.com/app/670004/?l=russian",
@@ -224,7 +224,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
 
         misuse = web_dossier(670005, now, russian_status="searched_no_existence_signal")
         misuse["provenance"]["sources"].append({
-            "source_id": "ru_aggregate",
+            "source_id": "source-004",
             "source_type": "steam_reviews",
             "domain": "store.steampowered.com",
             "url": "https://store.steampowered.com/app/670005/?l=russian",
@@ -283,7 +283,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         doc = web_dossier(680001, now, russian_status="found_and_used")
         doc["provenance"]["sources"].append({
-            "source_id": "ru_existence",
+            "source_id": "source-004",
             "source_type": "official_metadata",
             "domain": "store.steampowered.com",
             "url": "https://store.steampowered.com/app/680001/?l=russian",
@@ -355,7 +355,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         doc = web_dossier(680005, now, russian_status="searched_no_existence_signal")
         doc["provenance"]["sources"].append({
-            "source_id": "ru_editorial",
+            "source_id": "source-004",
             "source_type": "professional_context",
             "domain": "example.com",
             "url": "https://example.com/reviews/exact-game-680005",

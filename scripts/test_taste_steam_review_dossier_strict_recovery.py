@@ -103,7 +103,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         self.assertEqual(EVIDENCE_CONTRACT["schema"], "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2")
         self.assertEqual(EVIDENCE_CONTRACT["version"], 2)
         self.assertEqual(SCHEMA["evidence_contract"], EVIDENCE_CONTRACT["schema"])
-        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-steam-store-review-card-parent-v1")
+        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-contract-contradictions-fix-v1")
         prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
         for needle in (
             "title **plus the resolved release year**",
@@ -135,12 +135,12 @@ class WebEvidenceSchemaTests(unittest.TestCase):
 
     def test_one_player_record_cannot_support_moderate_or_strong_recurrence(self):
         def mutate(doc):
-            doc["observations"][0]["player_feedback_ids"] = ["pf1"]
+            doc["observations"][0]["player_feedback_ids"] = ["feedback-001"]
             doc["observations"][0]["mention_count"] = 1
             doc["observations"][0]["recurrence"] = "moderate"
         self.assertInvalid(mutate)
         def mutate_strong(doc):
-            doc["observations"][0]["player_feedback_ids"] = ["pf1"]
+            doc["observations"][0]["player_feedback_ids"] = ["feedback-001"]
             doc["observations"][0]["mention_count"] = 1
             doc["observations"][0]["recurrence"] = "strong"
         self.assertInvalid(mutate_strong)
@@ -148,7 +148,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
     def test_russian_store_ui_is_not_player_feedback_or_multisource(self):
         def mutate(doc):
             doc["provenance"]["sources"][2] = {
-                "source_id": "p2",
+                "source_id": "source-003",
                 "source_type": "steam_reviews",
                 "domain": "store.steampowered.com",
                 "url": "https://store.steampowered.com/app/123456/?l=russian",
@@ -158,12 +158,12 @@ class WebEvidenceSchemaTests(unittest.TestCase):
                 "evidence_role": "current_state",
                 "player_feedback": True,
             }
-            doc["provenance"]["player_feedback_records"][3]["source_id"] = "p2"
+            doc["provenance"]["player_feedback_records"][3]["source_id"] = "source-003"
         self.assertInvalid(mutate)
 
         doc = dossier(123456, russian_status="searched_no_existence_signal")
         doc["provenance"]["sources"].append({
-            "source_id": "ru_store",
+            "source_id": "source-004",
             "source_type": "official_metadata",
             "domain": "store.steampowered.com",
             "url": "https://store.steampowered.com/app/123456/?l=russian",
@@ -179,7 +179,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
     def test_real_russian_player_record_satisfies_found_and_used(self):
         found = dossier(123456, russian_status="found_and_used")
         self.assertIs(self.validate(found), found)
-        self.assertIn("pf4", found["observations"][1]["player_feedback_ids"])
+        self.assertIn("feedback-004", found["observations"][1]["player_feedback_ids"])
 
     def test_original_remake_ambiguity_fails_without_year_or_resolved_identity(self):
         self.assertInvalid(lambda d: d["game_identity"].pop("release_year"))
@@ -189,13 +189,13 @@ class WebEvidenceSchemaTests(unittest.TestCase):
     def test_historical_launch_issue_requires_old_and_recent_current_check(self):
         doc = dossier(123456)
         doc["provenance"]["sources"].append({
-            "source_id": "h1", "source_type": "forum", "domain": "example.com",
+            "source_id": "source-004", "source_type": "forum", "domain": "example.com",
             "url": "https://example.com/game/launch-thread", "publication_date": "2020-01-01",
             "language": "non_russian", "freshness": "older", "evidence_role": "historical", "player_feedback": True,
         })
         for n in range(1, 4):
             doc["provenance"]["player_feedback_records"].append({
-                "feedback_id": f"hpf{n}", "source_id": "h1", "public_ref": f"launch-post-{n}",
+                "feedback_id": f"feedback-{n + 4:03d}", "source_id": "source-004", "public_ref": f"launch-post-{n}",
                 "publication_date": "2020-01-01", "language": "non_russian",
             })
         doc["observations"][0].update({
@@ -205,12 +205,12 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "recurrence": "moderate",
             "mention_count": 3,
             "evidence_status": "historical",
-            "source_ids": ["h1", "p2"],
-            "player_feedback_ids": ["hpf1", "hpf2", "hpf3"],
+            "source_ids": ["source-004", "source-003"],
+            "player_feedback_ids": ["feedback-005", "feedback-006", "feedback-007"],
         })
         self.assertIs(self.validate(doc), doc)
         bad = copy.deepcopy(doc)
-        bad["observations"][0]["source_ids"] = ["h1"]
+        bad["observations"][0]["source_ids"] = ["source-004"]
         with self.assertRaises(ValueError):
             self.validate(bad)
 
@@ -218,13 +218,13 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         doc = dossier(123456)
         for n in (5, 6):
             doc["provenance"]["player_feedback_records"].append({
-                "feedback_id": f"pf{n}", "source_id": "p2", "public_ref": f"reddit-current-{n}",
+                "feedback_id": f"feedback-{n:03d}", "source_id": "source-003", "public_ref": f"reddit-current-{n}",
                 "publication_date": NOW.date().isoformat(), "language": "russian",
             })
         doc["observations"][1].update({
             "statement": "Recent player feedback repeatedly reports the same current localization problem.",
             "sentiment": "negative", "recurrence": "moderate", "mention_count": 3,
-            "player_feedback_ids": ["pf4", "pf5", "pf6"],
+            "player_feedback_ids": ["feedback-004", "feedback-005", "feedback-006"],
         })
         self.assertIs(self.validate(doc), doc)
 

@@ -39,6 +39,7 @@ on:
       - "scripts/test_taste_steam_review_dossier_semantic_consistency.py"
       - "scripts/test_taste_dossier_transient_author_fallback.py"
       - "scripts/test_taste_dossier_steam_store_review_card_parent.py"
+      - "scripts/test_taste_dossier_contract_contradictions_fix.py"
       - "scripts/test_taste_dossier_package_identity_fix.py"
       - "scripts/test_taste_story_dlc_scope.py"
       - ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
@@ -60,7 +61,7 @@ jobs:
       - name: Compile Taste dossier runtime and focused regressions
         run: |
           set -euo pipefail
-          python -m py_compile scripts/taste_package_member_aggregation.py scripts/build_pre_ai_chatgpt_payload.py scripts/taste_steam_review_dossier_web.py scripts/taste_steam_review_dossier_strict.py scripts/taste_steam_review_dossier_worker_projection.py scripts/taste_steam_review_dossier_compact_provenance.py scripts/taste_steam_review_dossier_prepublication.py scripts/taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_contract_gaps.py scripts/test_taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_language_binding.py scripts/test_taste_steam_review_dossier_semantic_consistency.py scripts/test_taste_dossier_transient_author_fallback.py scripts/test_taste_dossier_steam_store_review_card_parent.py
+          python -m py_compile scripts/taste_package_member_aggregation.py scripts/build_pre_ai_chatgpt_payload.py scripts/taste_steam_review_dossier_web.py scripts/taste_steam_review_dossier_strict.py scripts/taste_steam_review_dossier_worker_projection.py scripts/taste_steam_review_dossier_compact_provenance.py scripts/taste_steam_review_dossier_prepublication.py scripts/taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_contract_gaps.py scripts/test_taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_language_binding.py scripts/test_taste_steam_review_dossier_semantic_consistency.py scripts/test_taste_dossier_transient_author_fallback.py scripts/test_taste_dossier_steam_store_review_card_parent.py scripts/test_taste_dossier_contract_contradictions_fix.py
       - name: Validate execution ownership boundaries
         run: python scripts/validate_execution_ownership.py
       - name: Daily snapshot regression
@@ -83,6 +84,8 @@ jobs:
         run: python scripts/test_taste_dossier_transient_author_fallback.py
       - name: Steam Store review-card parent regression
         run: python scripts/test_taste_dossier_steam_store_review_card_parent.py
+      - name: Contract contradiction closeout regression
+        run: python scripts/test_taste_dossier_contract_contradictions_fix.py
       - name: Package identity regression
         run: python scripts/test_taste_dossier_package_identity_fix.py
       - name: Story DLC semantic scope regression

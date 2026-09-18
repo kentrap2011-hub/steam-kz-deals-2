@@ -2,14 +2,14 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "steam-store-review-card-parent-fix-2026-09-18",
+  "contract_revision": "contract-contradictions-fix-2026-09-18",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "parallel_validation_contract": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2-steam-store-review-card-parent-v1",
+  "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
   "purpose": "Define the active semantic evidence policy for neutral Taste dossiers while leaving GitHub-owned scope, buffered transport, asynchronous strict validation/persistence, recovery and completeness in the existing control-plane contracts.",
   "supersedes": {
     "steam_appreviews_required": false,
@@ -107,7 +107,16 @@
     "rule": "Persist only non-identifying locator/provenance metadata. Author/display identity, SteamID/account/profile identity and direct hashes or predictable pseudonyms derived from them must never persist. A transient author identity may be read only in worker memory to dedupe concrete fallback items before serialization.",
     "direct_author_identity_hash_as_anonymization_allowed": false,
     "transient_author_identity_use": "dedupe_only_within_current_worker_run_and_current_product",
-    "transient_author_identity_persistence_allowed": false
+    "transient_author_identity_persistence_allowed": false,
+    "internal_join_ids": {
+      "source_id_pattern": "^source-[0-9]{3}$",
+      "stable_feedback_id_pattern": "^feedback-[0-9]{3}$",
+      "fallback_feedback_id_pattern": "^fallback-[0-9]{3}$",
+      "assignment": "sequential_dossier_local_join_keys_in_serialized_record_order_by_namespace",
+      "author_identity_independent": true,
+      "direct_hash_or_predictable_author_pseudonym_forbidden": true,
+      "stable_item_identity_source": "validated_safe_item_url_or_public_ref_not_internal_join_id"
+    }
   },
   "feedback_item_identity": {
     "definition": "one player-feedback record using the preferred persisted stable non-identifying item locator, or a dossier-local opaque transient-author-deduped fallback record when a concrete item was actually inspected on an exact-product player-feedback collection but no acceptable neutral item locator was obtainable",
@@ -139,7 +148,8 @@
     "fallback_forbidden_when_neutral_item_locator_available": true,
     "collection_surface_fallback_parent_allowed_only_for_concrete_inspected_items": true,
     "steam_store_exact_app_parent_allowed_for_identity_mode": "transient_author_deduped",
-    "steam_store_exact_app_parent_allowed_for_stable_locator": false
+    "steam_store_exact_app_parent_allowed_for_stable_locator": false,
+    "stable_internal_join_id_rule": "stable feedback_id is a sequential dossier-local feedback-NNN key only; physical identity remains in the validated safe item URL/public_ref"
   },
   "parent_item_binding": {
     "rule": "every player_feedback_record must resolve to the physical surface represented by its parent source_id rather than merely sharing a host",
@@ -148,7 +158,9 @@
     "public_ref_surface_rule": "stable public_ref namespaces such as steam-recommendation, steam-review, steam-discussion and reddit-comment are reconciled with the parent source type/locator",
     "host_match_alone_is_sufficient": false,
     "same_thread_distinct_items_allowed": true,
-    "unknown_generic_surface_behavior": "retain_existing_host_and_item_level_guards_when_no_supported_surface_identity_can_be_deterministically_resolved"
+    "unknown_generic_surface_behavior": "retain_existing_host_and_item_level_guards_when_no_supported_surface_identity_can_be_deterministically_resolved",
+    "steam_exact_product_rule": "for stable_locator Steam children, any deterministically exposed Steam appid in child URL/public_ref must equal the exact dossier appid",
+    "steam_container_rule": "when both Steam parent and stable child expose deterministically resolvable discussion/container identity, every commonly exposed container/thread component must match; host or surface-class match alone is insufficient"
   },
   "prepublication_validation": {
     "status": "not_required_for_scheduled_worker",
@@ -238,7 +250,8 @@
       "bind_exact_player_feedback_ids_to_observation_or_conflict",
       "derive_language_support_only_from_those_bound_records",
       "write_observation_evidence_languages_or_language-specific_conflict_wording"
-    ]
+    ],
+    "strict_exact_equality_required": true
   },
   "conflicts": {
     "model": "player_feedback_bound_recurrence",
@@ -455,6 +468,7 @@
     "direct_hash_or_predictable_pseudonym_persistence_allowed": false,
     "cross_run_identity_claim_allowed": false,
     "aggregate_only_page_can_create_fallback_record": false,
-    "russian_or_mixed_fallback_may_satisfy_found_and_used": true
+    "russian_or_mixed_fallback_may_satisfy_found_and_used": true,
+    "parent_source_id_pattern": "^source-[0-9]{3}$"
   }
 }

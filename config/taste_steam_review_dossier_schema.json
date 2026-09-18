@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "version": 2,
   "status": "active",
-  "schema_revision": "steam-store-review-card-parent-fix-2026-09-18",
+  "schema_revision": "contract-contradictions-fix-2026-09-18",
   "evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "evidence_contract_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
@@ -61,7 +61,6 @@
     "evidence_languages": [
       "russian",
       "non_russian",
-      "mixed",
       "unknown"
     ],
     "evidence_status": [
@@ -248,7 +247,9 @@
         "mixed"
       ],
       "mixed_or_unknown_child_additional_containment_rule": false
-    }
+    },
+    "stable_steam_child_exposed_appid_must_equal_dossier_appid": true,
+    "deterministic_steam_parent_child_container_identity_must_match": true
   },
   "evidence_invariants": {
     "strategy": "adaptive_multi_source_web",
@@ -464,6 +465,21 @@
     "transient_author_deduped_parent_feedback_surface_mode": "concrete_item_collection",
     "transient_author_deduped_parent_requires_non_profile_https_url": true,
     "same_transient_author_per_product_must_dedupe_before_serialization": true,
-    "direct_hash_or_identity_derived_ids_forbidden": true
+    "direct_hash_or_identity_derived_ids_forbidden": true,
+    "stable_locator_feedback_id_pattern": "^feedback-[0-9]{3}$",
+    "all_source_id_pattern": "^source-[0-9]{3}$",
+    "internal_join_ids_are_author_independent": true
+  },
+  "provenance_internal_id_invariants": {
+    "source_id_pattern": "^source-[0-9]{3}$",
+    "source_ids_are_sequential_in_serialized_source_order": true,
+    "stable_feedback_id_pattern": "^feedback-[0-9]{3}$",
+    "stable_feedback_ids_are_sequential_in_serialized_stable_record_order": true,
+    "fallback_feedback_id_pattern": "^fallback-[0-9]{3}$",
+    "fallback_feedback_ids_are_sequential_in_serialized_fallback_record_order": true,
+    "ids_are_dossier_local_only": true,
+    "ids_are_author_independent": true,
+    "author_identity_or_direct_hash_or_predictable_pseudonym_in_ids_forbidden": true,
+    "stable_physical_item_identity_lives_in_safe_url_or_public_ref": true
   }
 }

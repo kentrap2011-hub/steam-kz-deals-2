@@ -32,7 +32,7 @@ def fallback_dossier(appid, now, *, title=None, transient_author_tokens=("epheme
         unique_item_count += 1
 
     collection = {
-        "source_id": "source-001",
+        "source_id": "source-002",
         "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
         "url": f"https://store.steampowered.com/app/{appid}/?l=russian",
@@ -46,7 +46,7 @@ def fallback_dossier(appid, now, *, title=None, transient_author_tokens=("epheme
     records = [
         {
             "feedback_id": f"fallback-{index:03d}",
-            "source_id": "source-001",
+            "source_id": "source-002",
             "publication_date": now.date().isoformat(),
             "language": "russian",
             "identity_mode": "transient_author_deduped",
@@ -62,7 +62,7 @@ def fallback_dossier(appid, now, *, title=None, transient_author_tokens=("epheme
         "mention_count": unique_item_count,
         "evidence_languages": ["russian"],
         "evidence_status": "durable",
-        "source_ids": ["source-001"],
+        "source_ids": ["source-002"],
         "player_feedback_ids": [record["feedback_id"] for record in records],
     }
     doc["observations"] = [observation]
@@ -83,7 +83,7 @@ def fallback_dossier(appid, now, *, title=None, transient_author_tokens=("epheme
 
 def add_stable_records(doc, appid, now, count):
     source = {
-        "source_id": "pstable",
+        "source_id": "source-003",
         "source_type": "steam_community",
         "domain": "steamcommunity.com",
         "url": f"https://steamcommunity.com/app/{appid}/reviews/",
@@ -96,18 +96,18 @@ def add_stable_records(doc, appid, now, count):
     doc["provenance"]["sources"].append(source)
     stable_ids = []
     for index in range(1, count + 1):
-        feedback_id = f"stable-{index:03d}"
+        feedback_id = f"feedback-{index:03d}"
         stable_ids.append(feedback_id)
         doc["provenance"]["player_feedback_records"].append({
             "feedback_id": feedback_id,
-            "source_id": "pstable",
+            "source_id": "source-003",
             "public_ref": f"steam-recommendation:{appid}{index:03d}",
             "publication_date": now.date().isoformat(),
             "language": "russian",
             "identity_mode": "stable_locator",
         })
     observation = doc["observations"][0]
-    observation["source_ids"].append("pstable")
+    observation["source_ids"].append("source-003")
     observation["player_feedback_ids"] = stable_ids + observation["player_feedback_ids"]
     observation["mention_count"] = len(observation["player_feedback_ids"])
     doc["evidence"]["source_mix_status"] = "multi_source"

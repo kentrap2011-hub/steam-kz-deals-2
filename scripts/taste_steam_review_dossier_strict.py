@@ -44,8 +44,9 @@ _STABLE_PUBLIC_REF_TOKEN_RE = re.compile(
     re.IGNORECASE,
 )
 _MACHINE_PUBLIC_REF_RE = re.compile(r"^[a-z0-9][a-z0-9._:/#-]{2,}$", re.IGNORECASE)
+_SOURCE_ID_RE = re.compile(r"^source-[0-9]{3}$")
+_STABLE_FEEDBACK_ID_RE = re.compile(r"^feedback-[0-9]{3}$")
 _FALLBACK_FEEDBACK_ID_RE = re.compile(r"^fallback-[0-9]{3}$")
-_FALLBACK_SOURCE_ID_RE = re.compile(r"^source-[0-9]{3}$")
 _FALLBACK_FORBIDDEN_AUTHOR_KEYS = {
     "username", "displayname", "author", "authorid", "userid", "steamid",
     "steamaccountid", "accountid", "profile", "profileid", "profileurl",
@@ -350,6 +351,16 @@ def _validate_parent_item_relationship(record, source, label):
     if parent_surface in {"steam_review", "steam_discussion"} and child_surface in {"steam_review", "steam_discussion"}:
         if parent_surface != child_surface:
             raise ValueError(f"{label} Steam feedback item surface conflicts with its parent source locator")
+    parent_discussion = _steam_discussion_locator_parts(source)
+    child_discussion = _steam_discussion_locator_parts(record)
+    if parent_discussion and child_discussion:
+        for component in ("appid", "forum", "thread"):
+            parent_value = parent_discussion.get(component)
+            child_value = child_discussion.get(component)
+            if parent_value is not None and child_value is not None and parent_value != child_value:
+                raise ValueError(
+                    f"{label} Steam feedback item does not belong to its parent Steam discussion/container"
+                )
 
 
 def _validate_publication_date(value, generated_date, label):
@@ -395,6 +406,42 @@ def _steam_appid_from_url(value):
     return match.group(1) if match else None
 
 
+def _steam_appid_from_public_ref(value):
+    text = _normalized_public_ref(value)
+    if not text:
+        return None
+    for pattern in (
+        r"^steam-(?:review|recommendation|discussion):app(?:id)?[-:=]([0-9]+)(?:[:/#_-]|$)",
+        r"^steam-app[-:=]([0-9]+)(?:[:/#_-]|$)",
+    ):
+        match = re.match(pattern, text)
+        if match:
+            return match.group(1)
+    return None
+
+
+def _steam_appid_from_record(record):
+    return _steam_appid_from_url(record.get("url")) or _steam_appid_from_public_ref(record.get("public_ref"))
+
+
+def _steam_discussion_locator_parts(record):
+    """Return only deterministically exposed Steam discussion/container components."""
+    value = record.get("url")
+    if value:
+        parsed = urlparse(str(value))
+        if _normalize_domain(parsed.hostname) == "steamcommunity.com":
+            path = re.sub(r"/+", "/", parsed.path or "")
+            match = re.match(r"^/app/([0-9]+)/discussions/([0-9]+)/([0-9]+)(?:/|$)", path, flags=re.IGNORECASE)
+            if match:
+                return {"appid": match.group(1), "forum": match.group(2), "thread": match.group(3)}
+    text = _normalized_public_ref(record.get("public_ref"))
+    if text:
+        match = re.match(r"^steam-discussion(?::|-)([0-9]+)(?::|-)", text)
+        if match:
+            return {"appid": None, "forum": None, "thread": match.group(1)}
+    return None
+
+
 def _validate_source(source, index, enums, schema_doc, generated_date, evidence_contract, *, exact_appid=None):
     label = f"provenance.sources[{index}]"
     _require_fields(source, schema_doc["provenance_source_required_fields"], label)
@@ -404,8 +451,8 @@ def _validate_source(source, index, enums, schema_doc, generated_date, evidence_
         raise ValueError(f"{label} contains unsupported fields: {', '.join(extras)}")
 
     source_id = source.get("source_id")
-    if not isinstance(source_id, str) or not 1 <= len(source_id) <= 80:
-        raise ValueError(f"{label}.source_id is invalid")
+    if not isinstance(source_id, str) or not _SOURCE_ID_RE.fullmatch(source_id):
+        raise ValueError(f"{label}.source_id must be a dossier-local source-NNN token")
     source_type = source.get("source_type")
     if source_type not in enums["source_type"]:
         raise ValueError(f"{label}.source_type is invalid")
@@ -463,13 +510,16 @@ def _validate_source(source, index, enums, schema_doc, generated_date, evidence_
                 f"{label} Steam Store concrete-item fallback parent must use a review-surface source type"
             )
     if source["player_feedback"] is True and exact_appid is not None:
-        exposed_steam_appid = _steam_appid_from_url(source.get("url"))
+        exposed_steam_appid = (
+            _steam_appid_from_url(source.get("url"))
+            or _steam_appid_from_public_ref(source.get("public_ref"))
+        )
         if exposed_steam_appid is not None and exposed_steam_appid != str(exact_appid):
             raise ValueError(f"{label} Steam player-feedback source appid does not match exact dossier appid")
     return source_id, _source_locator_identity(source)
 
 
-def _validate_feedback_record(record, index, source_map, enums, schema_doc, generated_date, evidence_contract):
+def _validate_feedback_record(record, index, source_map, enums, schema_doc, generated_date, evidence_contract, *, exact_appid=None):
     label = f"provenance.player_feedback_records[{index}]"
     _require_fields(record, schema_doc["player_feedback_record_required_fields"], label)
     allowed = set(schema_doc["player_feedback_record_allowed_fields"])
@@ -489,6 +539,8 @@ def _validate_feedback_record(record, index, source_map, enums, schema_doc, gene
         raise ValueError(f"{label}.identity_mode is invalid")
 
     if identity_mode == "stable_locator":
+        if not _STABLE_FEEDBACK_ID_RE.fullmatch(str(feedback_id)):
+            raise ValueError(f"{label} stable-locator feedback_id must be a dossier-local feedback-NNN token")
         _source_ref(record)
         if source.get("feedback_surface_mode") == "concrete_item_collection" and _is_steam_store_app_page(source):
             raise ValueError(f"{label} stable-locator path cannot rely on a collection-only Steam Store parent")
@@ -503,6 +555,9 @@ def _validate_feedback_record(record, index, source_map, enums, schema_doc, gene
                 raise ValueError(f"{label}.url host must match its player-feedback source domain")
         elif not isinstance(record.get("public_ref"), str) or not 3 <= len(record["public_ref"]) <= 500:
             raise ValueError(f"{label}.public_ref is invalid")
+        exposed_steam_appid = _steam_appid_from_record(record)
+        if exposed_steam_appid is not None and exact_appid is not None and exposed_steam_appid != str(exact_appid):
+            raise ValueError(f"{label} Steam stable child appid does not match exact dossier appid")
         item_identity = _feedback_item_identity(record, source, label)
         _validate_parent_item_relationship(record, source, label)
     else:
@@ -510,7 +565,7 @@ def _validate_feedback_record(record, index, source_map, enums, schema_doc, gene
             raise ValueError(f"{label} transient-author fallback must not persist item/profile url or public_ref")
         if not _FALLBACK_FEEDBACK_ID_RE.fullmatch(feedback_id):
             raise ValueError(f"{label} transient-author fallback feedback_id must be dossier-local fallback-NNN")
-        if not _FALLBACK_SOURCE_ID_RE.fullmatch(str(source_id)):
+        if not _SOURCE_ID_RE.fullmatch(str(source_id)):
             raise ValueError(f"{label} transient-author fallback source_id must be a neutral dossier-local source-NNN token")
         if source.get("feedback_surface_mode") != "concrete_item_collection":
             raise ValueError(f"{label} transient-author fallback requires a concrete-item collection parent")
@@ -619,11 +674,22 @@ def _validate_observations(dossier, source_map, feedback_map, enums, schema_doc)
         languages = observation["evidence_languages"]
         if not isinstance(languages, list) or not languages or any(x not in enums["evidence_languages"] for x in languages):
             raise ValueError(f"observation {index} evidence_languages are invalid")
-        record_languages = {record["language"] for record in feedback_records}
-        if "russian" in languages and not record_languages.intersection({"russian", "mixed"}):
-            raise ValueError(f"observation {index} claims Russian evidence without Russian player-feedback record")
-        if "non_russian" in languages and not record_languages.intersection({"non_russian", "mixed"}):
-            raise ValueError(f"observation {index} claims non-Russian evidence without non-Russian player-feedback record")
+        projected = set()
+        for record in feedback_records:
+            record_language = record["language"]
+            if record_language == "russian":
+                projected.add("russian")
+            elif record_language == "non_russian":
+                projected.add("non_russian")
+            elif record_language == "mixed":
+                projected.update(("russian", "non_russian"))
+            elif record_language == "unknown":
+                projected.add("unknown")
+        expected_languages = [token for token in ("russian", "non_russian", "unknown") if token in projected]
+        if languages != expected_languages:
+            raise ValueError(
+                f"observation {index} evidence_languages must exactly equal the canonical bound-record language projection"
+            )
         referenced = [source_map[source_id] for source_id in source_ids]
         status = observation["evidence_status"]
         if status not in enums["evidence_status"]:
@@ -789,6 +855,11 @@ def validate_dossier_strict(
         source_map[source_id] = source
         source_identity_map[source_id] = ref_identity
 
+    serialized_source_ids = [source["source_id"] for source in sources]
+    expected_source_ids = [f"source-{index:03d}" for index in range(1, len(serialized_source_ids) + 1)]
+    if serialized_source_ids != expected_source_ids:
+        raise ValueError("provenance source ids must be sequential dossier-local source-NNN tokens")
+
     feedback_records = provenance["player_feedback_records"]
     if not isinstance(feedback_records, list) or not feedback_records:
         raise ValueError("provenance.player_feedback_records must be a non-empty list")
@@ -804,6 +875,7 @@ def validate_dossier_strict(
             schema_doc,
             generated.date(),
             evidence_contract,
+            exact_appid=appid,
         )
         if feedback_id in feedback_map:
             raise ValueError("player-feedback feedback_id values must be unique")
@@ -811,6 +883,15 @@ def validate_dossier_strict(
             raise ValueError("duplicate or aliased attributable player-feedback item is forbidden")
         feedback_item_identities.add(item_identity)
         feedback_map[feedback_id] = record
+
+    stable_ids = [
+        record["feedback_id"]
+        for record in feedback_records
+        if _feedback_identity_mode(record) == "stable_locator"
+    ]
+    expected_stable_ids = [f"feedback-{index:03d}" for index in range(1, len(stable_ids) + 1)]
+    if stable_ids != expected_stable_ids:
+        raise ValueError("stable-locator feedback ids must be sequential dossier-local feedback-NNN tokens")
 
     fallback_ids = [
         record["feedback_id"]

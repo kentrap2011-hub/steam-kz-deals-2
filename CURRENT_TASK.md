@@ -406,3 +406,14 @@
 - durable report: `reviews/worker_reports/taste-dossier-steam-store-review-card-parent-fix-01.md`;
 - exact next step: return to Director; Director decides whether to perform one live acceptance against the compatible `g000001`.
 
+
+
+## Worker in progress — 2026-09-18
+
+### Taste dossier contract contradictions fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_CONTRACT_CONTRADICTIONS_FIX_01.md`;
+- scope: только CONTRA-01 exact Steam stable-child product/physical-parent binding, CONTRA-02 author-independent dossier-local internal IDs, CONTRA-03 exact bound-record language projection;
+- accepted Steam Store review-card parent fallback, transient-author privacy/recurrence, Story-DLC, ranking/pricing/package/UI и retry architecture должны остаться без изменений;
+- Scheduled Task `Run now` и settings не трогать;
+- durable report: `reviews/worker_reports/taste-dossier-contract-contradictions-fix-01.md`.

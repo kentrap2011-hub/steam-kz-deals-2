@@ -30,20 +30,20 @@ class LanguageBindingRegressionTests(unittest.TestCase):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         doc = web_dossier(729040, now, title="Blacksad: Under the Skin", russian_status="searched_no_existence_signal")
         observation = doc["observations"][0]
-        self.assertEqual(observation["player_feedback_ids"], ["pf1", "pf2", "pf3"])
+        self.assertEqual(observation["player_feedback_ids"], ["feedback-001", "feedback-002", "feedback-003"])
         self.assertEqual(
             {record["language"] for record in doc["provenance"]["player_feedback_records"] if record["feedback_id"] in observation["player_feedback_ids"]},
             {"non_russian"},
         )
         observation["evidence_languages"] = ["russian"]
-        with self.assertRaisesRegex(ValueError, "claims Russian evidence without Russian player-feedback record"):
+        with self.assertRaisesRegex(ValueError, "canonical bound-record language projection"):
             self.validate(doc, now)
 
     def test_non_russian_only_bound_feedback_cannot_gain_russian_from_russian_context_or_search_attempt(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         doc = web_dossier(729041, now, russian_status="searched_no_existence_signal")
         doc["provenance"]["sources"].append({
-            "source_id": "ru_context",
+            "source_id": "source-004",
             "source_type": "official_metadata",
             "domain": "store.steampowered.com",
             "url": "https://store.steampowered.com/app/729041/?l=russian",
@@ -54,11 +54,11 @@ class LanguageBindingRegressionTests(unittest.TestCase):
             "player_feedback": False,
         })
         observation = doc["observations"][1]
-        self.assertEqual(observation["player_feedback_ids"], ["pf4"])
+        self.assertEqual(observation["player_feedback_ids"], ["feedback-004"])
         self.assertEqual(doc["provenance"]["player_feedback_records"][3]["language"], "non_russian")
         self.assertEqual(doc["evidence"]["russian_attempt"], "searched_no_existence_signal")
         observation["evidence_languages"] = ["russian"]
-        with self.assertRaisesRegex(ValueError, "claims Russian evidence without Russian player-feedback record"):
+        with self.assertRaisesRegex(ValueError, "canonical bound-record language projection"):
             self.validate(doc, now)
 
     def test_russian_bound_record_permits_russian_claim(self):
@@ -87,6 +87,7 @@ class LanguageBindingRegressionTests(unittest.TestCase):
         self.assertEqual(binding["canonical_output_order"], ["russian", "non_russian", "unknown"])
         self.assertFalse(binding["search_attempt_is_language_evidence"])
         self.assertFalse(binding["source_page_or_locale_is_language_evidence"])
+        self.assertTrue(binding["strict_exact_equality_required"])
         self.assertIsNone(binding["conflict_language_summary_field"])
         self.assertIn("bound player_feedback_ids", binding["conflict_statement_rule"])
 
