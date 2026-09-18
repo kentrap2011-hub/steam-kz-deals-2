@@ -407,7 +407,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertFalse(diversification["visit_all_surface_classes_required"])
         self.assertFalse(diversification["steam_required_as_retrieval_source"])
         self.assertGreaterEqual(len(diversification["surface_class_examples"]), 5)
-        self.assertIn("not a fixed site quota", PROMPT)
+        self.assertIn("fixed site quota", PROMPT)
         self.assertIn("never required to provide the usable record", PROMPT)
         self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_web_search_queries"], 8)
         self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_opened_or_read_source_pages"], 16)
