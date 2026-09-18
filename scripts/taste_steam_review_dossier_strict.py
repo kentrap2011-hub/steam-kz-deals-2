@@ -342,7 +342,17 @@ def _is_steam_store_app_page(source):
     return bool(re.match(r"^/app/[0-9]+(?:/|$)", parsed.path or ""))
 
 
-def _validate_source(source, index, enums, schema_doc, generated_date, evidence_contract):
+def _steam_appid_from_url(value):
+    if not value:
+        return None
+    parsed = urlparse(str(value))
+    if _normalize_domain(parsed.hostname) not in {"steamcommunity.com", "store.steampowered.com"}:
+        return None
+    match = re.match(r"^/app/([0-9]+)(?:/|$)", parsed.path or "")
+    return match.group(1) if match else None
+
+
+def _validate_source(source, index, enums, schema_doc, generated_date, evidence_contract, *, exact_appid=None):
     label = f"provenance.sources[{index}]"
     _require_fields(source, schema_doc["provenance_source_required_fields"], label)
     allowed = set(schema_doc["provenance_source_allowed_fields"])
@@ -395,6 +405,10 @@ def _validate_source(source, index, enums, schema_doc, generated_date, evidence_
         raise ValueError(f"{label} context-only source cannot be marked player feedback")
     if _is_steam_store_app_page(source) and (source["player_feedback"] is True or source_type in player_types):
         raise ValueError(f"{label} Steam Store app page is metadata/context, not attributable player feedback")
+    if source["player_feedback"] is True and exact_appid is not None:
+        exposed_steam_appid = _steam_appid_from_url(source.get("url"))
+        if exposed_steam_appid is not None and exposed_steam_appid != str(exact_appid):
+            raise ValueError(f"{label} Steam player-feedback source appid does not match exact dossier appid")
     return source_id, _source_locator_identity(source)
 
 
@@ -676,7 +690,15 @@ def validate_dossier_strict(
     for index, source in enumerate(sources):
         if not isinstance(source, dict):
             raise ValueError(f"provenance.sources[{index}] must be an object")
-        source_id, ref_identity = _validate_source(source, index, enums, schema_doc, generated.date(), evidence_contract)
+        source_id, ref_identity = _validate_source(
+            source,
+            index,
+            enums,
+            schema_doc,
+            generated.date(),
+            evidence_contract,
+            exact_appid=appid,
+        )
         if source_id in source_map:
             raise ValueError("provenance source_id values must be unique")
         if ref_identity in source_refs:
@@ -749,10 +771,23 @@ def validate_dossier_strict(
         if len(used_player_source_identities) != 1:
             raise ValueError("single_source_only must have exactly one distinct physical used player-feedback source")
 
+    russian_attempt = evidence["russian_attempt"]
+    complete_russian_states = set(evidence_contract["russian_evidence"]["complete_dossier_allowed_states"])
+    if russian_attempt == "existence_established_retrieval_unresolved":
+        raise ValueError(
+            "Russian exact-product existence is established but attributable item-level retrieval is unresolved"
+        )
+    if russian_attempt == "existence_established_access_unresolved":
+        raise ValueError(
+            "Russian exact-product existence is established but access prevents attributable item-level retrieval"
+        )
+    if russian_attempt not in complete_russian_states:
+        raise ValueError("russian_attempt is not a complete-dossier state")
+
     used_russian = any(record["language"] in {"russian", "mixed"} for record in used_records)
-    if evidence["russian_attempt"] == "found_and_used" and not used_russian:
+    if russian_attempt == "found_and_used" and not used_russian:
         raise ValueError("russian found_and_used requires a bound Russian player-feedback record")
-    if evidence["russian_attempt"] != "found_and_used" and used_russian:
+    if russian_attempt != "found_and_used" and used_russian:
         raise ValueError("used Russian/mixed player feedback requires russian_attempt=found_and_used")
 
     max_recurrence_rank = max(_RECURRENCE_RANK[observation["recurrence"]] for observation in observations)
