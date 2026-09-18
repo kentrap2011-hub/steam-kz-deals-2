@@ -103,15 +103,15 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         self.assertEqual(EVIDENCE_CONTRACT["schema"], "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2")
         self.assertEqual(EVIDENCE_CONTRACT["version"], 2)
         self.assertEqual(SCHEMA["evidence_contract"], EVIDENCE_CONTRACT["schema"])
-        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-russian-multi-source-retrieval-v1")
+        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-transient-author-fallback-v1")
         prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
         for needle in (
             "title **plus the resolved release year**",
             "recent evidence dominates old launch-era evidence",
             "Russian-language attempt is mandatory",
             "Steam `appreviews` JSON, cursors, fixed review counts",
-            "Never store raw review bodies",
-            "mention_count` is **exactly**",
+            "Never persist raw review bodies",
+            "`mention_count` is exactly",
             "?l=russian",
             "8 web-search queries",
             "16 opened/read source pages",
@@ -119,6 +119,8 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "taste_steam_review_dossier_prepublication.py",
             "Language binding — bind records first, derive claims second",
             "Russian retrieval diversification after existence proof",
+            "transient_author_deduped",
+            "fallback-only evidence is capped",
         ):
             self.assertIn(needle, prompt)
 

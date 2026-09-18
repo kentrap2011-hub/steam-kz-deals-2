@@ -440,3 +440,20 @@
 **Regression control:** appid `2378500` (`Baldur's Gate 3 - Digital Deluxe Edition DLC`) должен классифицироваться `non_story_dlc_excluded` и отсутствовать в required dossier group plan.
 
 **Основные места:** `config/taste_steam_review_dossier_contract.json`, `scripts/taste_steam_review_dossier_web.py`, `scripts/build_taste_steam_review_dossier_work.py`, `scripts/test_taste_story_dlc_scope.py`, `.github/workflows/validate-taste-dossier-buffered.yml`, `.github/workflows/build-pre-ai-store-snapshot.yml`.
+
+---
+
+## TASTE-010 — Transient author identity may dedupe concrete feedback when neutral item identity is unavailable
+
+**Дата:** 2026-09-18  
+**Статус:** implemented by `WORKER_TASK_TASTE_DOSSIER_TRANSIENT_AUTHOR_DEDUPE_FALLBACK_IMPLEMENT_01.md`.
+
+**Решение:** neutral stable item locator остаётся предпочтительной и более сильной identity. Если конкретный exact-product player-feedback item реально виден и инспектирован, но acceptable neutral item locator получить нельзя, Scheduled worker может временно прочитать stable author/account/profile identity только в памяти текущего запуска для dedupe. После dedupe сохраняется только dossier-local `transient_author_deduped` record без item/profile URL, username, SteamID/account/vanity id, profile identity, прямого hash или предсказуемого pseudonym. Author identity не получает persistent registry и не заявляется как cross-run identity.
+
+**Почему:** strict/open diagnostics для Crown Trick и Hellish Quart показали реальные конкретные русскоязычные review cards, которые прежняя модель выбрасывала только из-за отсутствия доступного neutral recommendation/item id. Сохранение profile URL решало бы locator-проблему ценой ухудшения privacy, а прямой hash публичного SteamID/username не является надёжной анонимизацией из-за enumerability/re-identification. Transient dedupe использует достаточный сигнал для разделения видимых карточек, но не переносит reviewer identity в GitHub.
+
+**Evidence strength:** fallback records считаются реальными player-feedback mentions, но из-за отсутствия независимо переоткрываемого item locator имеют сниженный auditability. `limited` может опираться на >=2 total bound records; `moderate` требует >=3 bound `stable_locator` records; `strong` требует >=5 bound `stable_locator` records. Поэтому fallback-only evidence всегда максимум `limited`; в mixed set fallback увеличивает `mention_count` и может помочь только до `limited`, но не входит в stable threshold для `moderate/strong`.
+
+**Граница:** aggregate/list/count surface без конкретно инспектированного item по-прежнему не является feedback record. Exact appid/product identity остаётся fail-closed. Story-DLC policy `story-dlc-positive-evidence-v1`, group size 3, buffered maximal-contiguous-prefix architecture, GitHub control-plane ownership, source-agnostic Russian discovery и hard 8/16 bounds не меняются. Валидный Russian/mixed fallback может закрыть `russian_attempt=found_and_used`.
+
+**Основные места:** `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/test_taste_dossier_transient_author_fallback.py`.

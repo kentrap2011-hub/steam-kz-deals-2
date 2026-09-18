@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "version": 2,
   "status": "active",
-  "schema_revision": "russian-existence-retrieval-gate-2026-09-18",
+  "schema_revision": "transient-author-dedupe-fallback-2026-09-18",
   "evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "evidence_contract_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
@@ -135,6 +135,13 @@
       "platform",
       "version",
       "other_identifier"
+    ],
+    "feedback_identity_mode": [
+      "stable_locator",
+      "transient_author_deduped"
+    ],
+    "source_feedback_surface_mode": [
+      "concrete_item_collection"
     ]
   },
   "integer_rules": {
@@ -194,7 +201,14 @@
     "all_player_feedback_ids_must_resolve": true,
     "current_requires_recent_current_state_source": true,
     "historical_requires_historical_and_recent_current_state_sources": true,
-    "durable_requires_durable_trait_source": true
+    "durable_requires_durable_trait_source": true,
+    "recurrence_identity_strength": {
+      "stable_locator_moderate_minimum": 3,
+      "stable_locator_strong_minimum": 5,
+      "fallback_contributes_above_limited": false,
+      "limited_uses_total_distinct_bound_records": true,
+      "rule": "moderate_or_strong_recurrence_requires_the_same_numeric_threshold_of_stable_locator_records;fallback_records_may_raise_support_only_to_limited"
+    }
   },
   "conflict_invariants": {
     "required_fields": [
@@ -208,7 +222,8 @@
     "mention_count_equals_distinct_bound_player_feedback_records": true,
     "recurrence_thresholds_equal_observation_thresholds": true,
     "bound_player_feedback_record_source_must_be_in_conflict_source_ids": true,
-    "official_or_professional_context_alone_cannot_establish_recurrence": true
+    "official_or_professional_context_alone_cannot_establish_recurrence": true,
+    "recurrence_identity_strength": "same_as_observations"
   },
   "overall_strength_invariants": {
     "strong_requires_at_least_one_strong_observation": true,
@@ -247,7 +262,7 @@
     "official_metadata_cannot_be_player_feedback": true,
     "steam_store_app_page_cannot_be_player_feedback": true,
     "aggregate_storefront_statistics_cannot_populate_mention_count": true,
-    "player_feedback_record_requires_item_level_stable_locator": true,
+    "player_feedback_record_requires_item_level_stable_locator": false,
     "obvious_url_aliases_do_not_create_distinct_feedback_or_source_identity": true,
     "legacy_review_sample_field_forbidden": true,
     "legacy_store_only_or_zero_evidence_placeholder_forbidden": true,
@@ -255,7 +270,15 @@
     "existence_established_retrieval_unresolved_is_complete_dossier": false,
     "existence_established_access_unresolved_is_complete_dossier": false,
     "existence_signal_is_player_feedback_record": false,
-    "existence_signal_may_support_observation_or_conflict": false
+    "existence_signal_may_support_observation_or_conflict": false,
+    "player_feedback_record_identity_modes": [
+      "stable_locator",
+      "transient_author_deduped"
+    ],
+    "stable_locator_record_requires_item_level_stable_locator": true,
+    "transient_author_deduped_record_requires_concrete_item_collection_parent": true,
+    "transient_author_deduped_record_has_no_persisted_item_or_profile_locator": true,
+    "transient_author_deduped_cross_run_identity": false
   },
   "provenance_source_required_fields": [
     "source_id",
@@ -277,7 +300,8 @@
     "language",
     "freshness",
     "evidence_role",
-    "player_feedback"
+    "player_feedback",
+    "feedback_surface_mode"
   ],
   "player_feedback_record_required_fields": [
     "feedback_id",
@@ -291,7 +315,8 @@
     "url",
     "public_ref",
     "publication_date",
-    "language"
+    "language",
+    "identity_mode"
   ],
   "json_schema": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -427,5 +452,16 @@
         }
       }
     }
+  },
+  "player_feedback_identity_invariants": {
+    "identity_mode_default": "stable_locator",
+    "stable_locator_requires_exactly_one_item_url_or_public_ref": true,
+    "transient_author_deduped_requires_no_item_url_or_public_ref": true,
+    "transient_author_deduped_feedback_id_pattern": "^fallback-[0-9]{3}$",
+    "transient_author_deduped_ids_are_dossier_local_only": true,
+    "transient_author_deduped_parent_feedback_surface_mode": "concrete_item_collection",
+    "transient_author_deduped_parent_requires_non_profile_https_url": true,
+    "same_transient_author_per_product_must_dedupe_before_serialization": true,
+    "direct_hash_or_identity_derived_ids_forbidden": true
   }
 }
