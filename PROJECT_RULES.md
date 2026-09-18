@@ -175,3 +175,12 @@ Two bounded routes are canonical. First: Steam wishlist + `fit_evidence_state=in
 Second: `fit_evidence_state=reconsiderable` may become purchase-worthy through an existing verified fixed Steam `Sub_` package only when the existing fixed-package economics produce `strict_current_price_savings=true` with aligned sources. The package route may set commercial purchase advice to `МОЖНО БРАТЬ`, but the Taste verdict remains `EXCLUDE / below_moderate / reconsiderable`.
 
 Exact V5 `fit_evidence_state=confirmed_negative` — including a direct conflict that V5 has actually confirmed — is non-overridable regardless of wishlist, discount, package savings, or other paid commercial signals. A legacy `reason_code=exclude_direct_conflict` alone is not confirmation: ambiguous legacy rows remain fail-closed until V5 backfill, while an exact V5 `reconsiderable` row may use the bounded package bridge. Existing content/store/sale/symbolic/budget gates, package equivalence rules, risk/warning visibility, giveaway path, and the single final ranking authority remain unchanged.
+
+## Taste / dossier scope для DLC
+
+Самостоятельным Taste/dossier semantic object считается только DLC, для которого канонические product metadata **положительно подтверждают существенный игровой сюжетный контент**: отдельную сюжетную кампанию, chapter/episode, сюжетную линию, story quests/questline, narrative/story expansion, отдельное игровое приключение или эквивалентный substantial playable narrative content.
+
+Digital Deluxe / Deluxe Upgrade, soundtrack/OST, digital artbook, cosmetic/skin packs, weapon/item/equipment/resource packs, bonus songs и другие digital extras не создают самостоятельную Taste/dossier obligation. Season pass / bundle entitlement / container сам по себе также не становится story DLC из-за того, что даёт доступ к сюжетным дочерним DLC.
+
+Для DLC действует fail-closed правило: если по доступной канонической product metadata самостоятельный сюжетный игровой контент положительно не доказан, DLC исключается из Taste/dossier semantic scope. Для смешанного DLC story + bonuses inclusion допустим, только если substantial playable story content подтверждён независимо. Обычные base games этим правилом не меняются; package/member identity и pricing economics остаются отдельными существующими механизмами.
+
