@@ -5,20 +5,20 @@
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
     "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-    "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
+    "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
     "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
     "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
-    "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
+    "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+    "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
   },
   "appid": "1003890",
   "title": "Blacksad: Under the Skin",
-  "generated_at_utc": "2026-09-18T20:24:09Z",
-  "expires_at_utc": "2026-10-08T20:24:09Z",
+  "generated_at_utc": "2026-09-18T21:33:02Z",
+  "expires_at_utc": "2026-10-08T21:33:02Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Blacksad: Under the Skin",
@@ -38,14 +38,14 @@
       }
     ]
   },
-  "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "friction",
-      "statement": "Recent Russian player feedback repeatedly reports control, performance, visual or bug-related roughness as an ongoing technical drawback.",
-      "sentiment": "negative",
-      "recurrence": "limited",
-      "mention_count": 2,
+      "statement": "A recent Russian player review praises the story and atmosphere while reporting frequent technical problems, performance drops, bugs, and awkward controls.",
+      "sentiment": "mixed",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
       "evidence_languages": [
         "russian"
       ],
@@ -54,28 +54,7 @@
         "source-002"
       ],
       "player_feedback_ids": [
-        "fallback-001",
-        "fallback-002"
-      ]
-    },
-    {
-      "category": "structure",
-      "statement": "Players value the detective narrative, characters, atmosphere and choice-driven investigation despite the technical roughness.",
-      "sentiment": "positive",
-      "recurrence": "limited",
-      "mention_count": 2,
-      "evidence_languages": [
-        "russian",
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-003"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
-        "fallback-002"
+        "fallback-001"
       ]
     }
   ],
@@ -83,8 +62,8 @@
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "multi_source",
-    "single_source_reason": null,
+    "source_mix_status": "single_source_only",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback collection used for the validated finding.",
     "russian_attempt": "found_and_used",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
@@ -95,7 +74,7 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1003890/Blacksad_Under_the_Skin/",
+        "url": "https://store.steampowered.com/app/1003890/",
         "publication_date": "2019-11-14",
         "language": "non_russian",
         "freshness": "older",
@@ -104,48 +83,22 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "steam_reviews",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1003890/Blacksad_Under_the_Skin/?l=russian",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1003890?l=russian",
         "publication_date": null,
         "language": "russian",
         "freshness": "recent",
         "evidence_role": "current_state",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection"
-      },
-      {
-        "source_id": "source-003",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/Gaming4Gamers/comments/g7n4z6/",
-        "publication_date": "2020-04-25",
-        "language": "non_russian",
-        "freshness": "older",
-        "evidence_role": "durable_trait",
-        "player_feedback": true
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "feedback-001",
-        "source_id": "source-003",
-        "url": "https://www.reddit.com/r/Gaming4Gamers/comments/g7n4z6/",
-        "publication_date": "2020-04-25",
-        "language": "non_russian",
-        "identity_mode": "stable_locator"
-      },
-      {
         "feedback_id": "fallback-001",
         "source_id": "source-002",
-        "publication_date": "2026-05-13",
-        "language": "russian",
-        "identity_mode": "transient_author_deduped"
-      },
-      {
-        "feedback_id": "fallback-002",
-        "source_id": "source-002",
-        "publication_date": "2026-05-12",
+        "publication_date": "2026-08-10",
         "language": "russian",
         "identity_mode": "transient_author_deduped"
       }
