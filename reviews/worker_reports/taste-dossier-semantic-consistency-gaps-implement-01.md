@@ -60,6 +60,15 @@ Unchanged:
 - Merge: squash commit `80d6fc3adb9689f99ad5f30b729c6c1d36379d7d` on `main`.
 - Post-merge execution ownership: run `35269588327` — `success`.
 
+## Closeout guard and CURRENT_TASK finalization
+
+- Durable closeout PR: `#45` — `Close Taste dossier semantic consistency task`.
+- Closeout merge: squash commit `e8e5f3f65555f9b2ec14a8dfd85de1b1aafaeb41` on `main`.
+- Required backlog-disposition / closeout guard: workflow `Validate backlog dispositions`, run `35272360456`, job `105374575676` (`backlog-disposition`) — `success`.
+- The successful guard job explicitly completed both `Run backlog disposition regressions` and `Validate backlog deletion dispositions` with `success` before PR #45 was merged.
+- `CURRENT_TASK.md` is in the required final state on `main`: it contains the task under `Worker closeout — 2026-09-18` with status `complete_ready_for_live_acceptance`, the implementation/activation refs, current snapshot/group-size state, the no-`Run now` statement, durable report path, and the separate live-acceptance boundary.
+- Preservation of unrelated concurrent work was verified from the PR #45 diff: the PR changed exactly two files (this report and `CURRENT_TASK.md`); inside `CURRENT_TASK.md`, the only pre-existing line replaced was `Последнее обновление: 2026-09-17` → `2026-09-18`, and the task-specific closeout block was appended. No unrelated task block or concurrent work entry was deleted or rewritten.
+
 ## Post-merge compatibility / activation
 
 A fresh snapshot was required because schema/contract/prompt content-complete compatibility hashes changed. Activation used only the normal GitHub-owned pre-AI path.
