@@ -194,7 +194,39 @@ Exact activated `g000001`:
 
 Descriptor snapshot id and binding exactly match the worker index/work manifest.
 
-The rebuilt canonical scope currently reports 730 prepared items rather than the prior 731. This report records the canonical GitHub-owned activation result as produced; no manual scope adjustment was made in this task.
+### Scope-count closeout: why prepared scope changed 731 → 730
+
+The count change is a **normal independent canonical current-offer/Taste-queue change**, not a side effect of the transient-author implementation.
+
+Exact removed item:
+- `App_1944060` — **Super Alloy Ranger**.
+
+Before fallback activation, at implementation merge commit `96834ac23950196b31c0a791c15391fbe83eb711`:
+- dossier snapshot: `43e76bafd2ca0fe1dbe9a2edead920d335d55859b80038222279394b68bfb7aa`;
+- source Taste queue rows: `732`;
+- eligible dossier scope: `731`;
+- prepared dossier scope: `731`;
+- `App_1944060` was present in `chatgpt_taste_queue.jsonl` with `ai_required_reason: "taste_cache_key_missing"`;
+- its canonical Store row was active at 55% discount, 1080 KZT;
+- canonical sale end was `2026-09-18T16:00:00+00:00` (`2026-09-18T18:00:00+02:00`);
+- that Store snapshot had been observed at `2026-09-18T15:22:58.058129+00:00`, before the sale end.
+
+During the normal GitHub-owned activation rebuild, the new Store snapshot was observed at `2026-09-18T16:02:26.886958+00:00`, after that sale end. The same discovery source timestamp remained `2026-09-17T23:21:42.271350+00:00`, but the live/current Store classification moved `App_1944060` out of active entries into:
+- `store_snapshot.inactive_entries.App_1944060`;
+- canonical reason: `no_active_discounted_purchase_option`;
+- retained discovery values: source discount 55%, source final price 1080 KZT.
+
+That inactive current-offer state removed `App_1944060` from the active family graph; consequently it was absent from the rebuilt Taste projection, deal scenarios, and `chatgpt_taste_queue.jsonl`. The rebuilt queue therefore changed from `732` to `731` rows, and after the unchanged single Story-DLC exclusion the dossier eligible/prepared count changed from `731` to `730`.
+
+Set comparison of the two canonical dossier scopes found exactly one removed appid and no additions:
+- removed: `1944060` — Super Alloy Ranger;
+- added: none.
+
+The Story-DLC classification itself did not change: both snapshots still classify only `2378500` — Baldur's Gate 3 - Digital Deluxe Edition DLC — as `non_story_dlc_excluded`.
+
+The fallback implementation commit diff also did **not** modify Store eligibility or Taste-queue construction paths: it changed only dossier evidence/provenance schema/contract/prompt/validator/tests plus task/decision documentation. In particular, it did not change `scripts/build_pre_ai_store_snapshot.py`, family-graph/taste-projection/deal-scenario builders, or `scripts/build_pre_ai_chatgpt_payload.py`.
+
+Conclusion: the 731 → 730 scope change was caused by **Super Alloy Ranger's discounted purchase option expiring during the interval between the two canonical Store observations**, so it stopped being an active candidate that required Taste/dossier work. No transient-author defect is indicated, and no implementation fix is required.
 
 ## 16. PROJECT_DECISIONS ref
 
@@ -217,6 +249,8 @@ Scheduled Task settings were not changed.
 No live Scheduled worker acceptance run was launched by this implementation task.
 
 ## 18. Unresolved
+
+The previously unexplained 731 → 730 scope-count change is resolved: `App_1944060` — Super Alloy Ranger — left the active canonical Taste queue because its discounted purchase option expired, independently of the transient-author implementation.
 
 No implementation, CI, activation, binding or snapshot blocker remains.
 
