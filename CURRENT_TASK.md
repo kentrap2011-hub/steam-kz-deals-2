@@ -346,4 +346,4 @@
 - previous worker contract-misread fix remains required; next bounded IMPLEMENT should combine that correction with minimal adaptive Russian discovery guidance, without new quotas/retries/stages or ownership changes;
 - Scheduled Task `Run now` was not launched; no prompt/schema/contract/validator/runtime or production state was changed;
 - durable report: `reviews/worker_reports/taste-dossier-russian-discovery-audit-01.md`;
-- report commit: `902253b6ea624fe4a049618b3d6c7bc568a173a1`.
+- report commit: `158b9910621781a92fd644ef5883e229c62dbd48`.
