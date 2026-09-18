@@ -423,12 +423,17 @@
 - durable report: `reviews/worker_reports/taste-dossier-contract-contradictions-fix-01.md`.
 
 
-## Worker in progress — 2026-09-19
+## Worker closeout — 2026-09-19
 
 ### Taste dossier Steam Russian review retrieval improvement 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_STEAM_RUSSIAN_REVIEW_RETRIEVAL_IMPROVEMENT_01.md`;
-- scope: retrieval-only improvement for the existing Scheduled ChatGPT dossier worker; no evidence/privacy/provenance weakening;
-- accepted baseline: Cthulhu Saves the World appid `107310` is retrieval-limited, not contract-blocked;
-- production candidate/progress/buffered artifacts are out of scope and must not be changed;
-- Scheduled Task `Run now` and settings are out of scope.
+- implementation PR #64 merged as `6ab36a6d9343a9670882bc2946b04dc5a58f7147`;
+- focused dossier CI run `35394492496`, job `105760111426`: success; backlog-disposition run `35394492546`, job `105760120515`: success;
+- existing Scheduled-worker prompt now adaptively pivots from inaccessible/aggregate-only direct Steam language-filter routes to search-indexed non-profile exact-app Store/Community collection variants, while stable neutral item identity remains preferred and transient-author fallback remains privacy-safe;
+- Cthulhu Saves the World appid `107310` live proof: PROOF-B satisfied in the current web environment by a concrete Russian Steam review card inspected on a non-profile exact-app Store parent; no profile/author identity is persisted;
+- normal GitHub-owned activation commit: `57243ab6da5acfeb6dc20070d74b7e6f1b61e55d`;
+- compatible snapshot: `ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872`, prepared/completed/remaining `702/0/702`, expected `g000001`, `234` groups of 3;
+- active prompt revision: `web-evidence-v2-steam-russian-review-retrieval-improvement-v1`; evidence/schema revisions remain `contract-contradictions-fix-2026-09-18`;
+- no production dossier candidate or canonical progress was manually changed; Scheduled Task `Run now` and settings were not used/changed;
+- durable report: `reviews/worker_reports/taste-dossier-steam-russian-review-retrieval-improvement-01.md`.
