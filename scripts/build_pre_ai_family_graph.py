@@ -5,6 +5,12 @@ import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
+from story_dlc_scope import (
+    STORY_DLC_ELIGIBLE,
+    classify_story_dlc,
+    summarize_story_dlc_classifications,
+)
+
 MAILING = Path('data/production/mailing/index.json')
 STORE = Path('data/production/pre_ai/store_snapshot.json')
 META = Path('data/production/pre_ai/content_metadata.json')
@@ -198,12 +204,28 @@ def resolve(allowed_keys, feed, store, meta, rules, contract):
         assigned.extend(members)
         addons = [key for key in members if rules[key].get('mechanical_kind') == 'dlc']
         base_candidates = [key for key in members if key not in addons]
+        addon_story_scope = []
+        for addon_key in addons:
+            classification = classify_story_dlc(meta[addon_key], mechanical_kind='dlc')
+            addon_story_scope.append({
+                'key': addon_key,
+                'appid': str(feed[addon_key].get('appid') or ''),
+                'title': feed[addon_key]['title'],
+                'classification': classification,
+            })
 
         if fam['family_type'] == 'external_base_addon':
             primary = members[0]
-            selection_reason = 'standalone_addon_purchase_family_requires_ai_base_support'
             taste_subject = primary
-            ai_condition = 'addon_taste_include_and_base_support_required'
+            if len(addon_story_scope) != 1 or addon_story_scope[0]['key'] != primary:
+                raise SystemExit(f'External addon family story-scope identity mismatch: {fid}')
+            story_scope = addon_story_scope[0]['classification']
+            if story_scope['status'] == STORY_DLC_ELIGIBLE and story_scope['eligible'] is True:
+                selection_reason = 'standalone_story_addon_purchase_family_requires_ai_base_support'
+                ai_condition = 'story_addon_taste_include_and_base_support_required'
+            else:
+                selection_reason = 'addon_purchase_family_excluded_from_independent_taste_story_scope'
+                ai_condition = 'addon_excluded_from_taste_story_scope'
         elif fam['family_type'] in {'franchise_bundle', 'package_without_candidate_base'}:
             primary = members[0]
             selection_reason = 'bundle_or_external_package_is_own_family'
@@ -287,6 +309,11 @@ def resolve(allowed_keys, feed, store, meta, rules, contract):
             'primary_selection_reason': selection_reason,
             'alternative_purchase_keys': alternatives,
             'addon_keys': addons,
+            'addon_story_scope': addon_story_scope,
+            'taste_semantic_eligible': not (
+                fam['family_type'] == 'external_base_addon'
+                and ai_condition == 'addon_excluded_from_taste_story_scope'
+            ),
             'all_member_keys': members,
             'relationship_evidence': fam['relationship_evidence'],
         })
@@ -408,6 +435,13 @@ def main():
         for key in family['all_member_keys']
     }
 
+    story_dlc_items = [
+        item
+        for family in families
+        for item in (family.get('addon_story_scope') or [])
+    ]
+    story_dlc_scope_summary = summarize_story_dlc_classifications(story_dlc_items)
+
     out = {
         'schema_version': 1,
         'purpose': 'pre_ai_purchase_family_graph',
@@ -423,7 +457,11 @@ def main():
         'assigned_item_count': len(assigned),
         'family_count': len(families),
         'complete_coverage_of_nonexcluded_candidates': assigned == allowed,
-        'taste_subject_count': len({family['taste_subject_key'] for family in families}),
+        'taste_subject_count': len({
+            family['taste_subject_key'] for family in families
+            if family.get('taste_semantic_eligible', True)
+        }),
+        'story_dlc_scope_summary': story_dlc_scope_summary,
         'family_type_counts': dict(sorted(__import__('collections').Counter(family['family_type'] for family in families).items())),
         'validated_control_comparison': control,
         'elapsed_seconds': round(time.monotonic() - started, 3),
@@ -441,6 +479,7 @@ def main():
         'families': out['family_count'],
         'taste_subjects': out['taste_subject_count'],
         'family_types': out['family_type_counts'],
+        'story_dlc_scope_summary': out['story_dlc_scope_summary'],
         'control': out['validated_control_comparison'],
         'elapsed_seconds': out['elapsed_seconds'],
     }, ensure_ascii=False, indent=2))
