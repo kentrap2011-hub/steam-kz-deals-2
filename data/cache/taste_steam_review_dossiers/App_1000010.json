@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
     "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
   },
-  "appid": "1000360",
-  "title": "Hellish Quart",
+  "appid": "1000010",
+  "title": "Crown Trick",
   "generated_at_utc": "2026-09-18T20:22:05Z",
   "expires_at_utc": "2026-10-08T20:22:05Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Hellish Quart",
-    "release_year": 2021,
+    "work_title": "Crown Trick",
+    "release_year": 2020,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,20 +30,39 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1000360"
+        "value": "1000010"
       },
       {
         "kind": "developer",
-        "value": "Kubold"
+        "value": "NEXT Studios"
       }
     ]
   },
-  "summary": "Evidence summary: 3 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Russian player feedback praises the physics-driven fencing, varied bouts, and the importance of timing and distance in successful attacks.",
+      "statement": "Players describe the turn-based room combat as tactical, with positioning, weapon and familiar choices, and environmental interactions creating meaningful decisions.",
       "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Recent Russian player feedback reports weak long-term build depth or limited content variety after the initial concept has been understood.",
+      "sentiment": "negative",
       "recurrence": "limited",
       "mention_count": 2,
       "evidence_languages": [
@@ -56,40 +75,6 @@
       "player_feedback_ids": [
         "fallback-001",
         "fallback-002"
-      ]
-    },
-    {
-      "category": "difficulty",
-      "statement": "Player guidance describes a meaningful learning curve and recommends experimenting with different fighters and play styles.",
-      "sentiment": "mixed",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-003"
-      ],
-      "player_feedback_ids": [
-        "feedback-001"
-      ]
-    },
-    {
-      "category": "friction",
-      "statement": "A player discussion reports clunky controls, inconsistent responses, and other combat-polish problems despite finding the core concept enjoyable.",
-      "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-004"
-      ],
-      "player_feedback_ids": [
-        "feedback-002"
       ]
     }
   ],
@@ -109,8 +94,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1000360/Hellish_Quart/",
-        "publication_date": "2021-02-16",
+        "url": "https://store.steampowered.com/app/1000010/Crown_Trick/",
+        "publication_date": "2020-10-16",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "identity",
@@ -120,9 +105,9 @@
         "source_id": "source-002",
         "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1000360/Hellish_Quart/?l=russian",
+        "url": "https://store.steampowered.com/app/1000010/Crown_Trick/?l=russian",
         "publication_date": null,
-        "language": "mixed",
+        "language": "russian",
         "freshness": "unknown",
         "evidence_role": "uncertain",
         "player_feedback": true,
@@ -132,19 +117,19 @@
         "source_id": "source-003",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/HellishQuart/comments/1llby63/",
-        "publication_date": "2025-06-26",
+        "url": "https://www.reddit.com/r/roguelikes/comments/1g0rcui/",
+        "publication_date": null,
         "language": "non_russian",
-        "freshness": "older",
+        "freshness": "unknown",
         "evidence_role": "durable_trait",
         "player_feedback": true
       },
       {
         "source_id": "source-004",
-        "source_type": "steam_community",
-        "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1000360/discussions/0/603031430877955466/",
-        "publication_date": "2025-05-26",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/NintendoSwitch/comments/jc4pcu/",
+        "publication_date": "2020-10-16",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "durable_trait",
@@ -155,30 +140,30 @@
       {
         "feedback_id": "feedback-001",
         "source_id": "source-003",
-        "url": "https://www.reddit.com/r/HellishQuart/comments/1llby63/",
-        "publication_date": "2025-06-26",
+        "url": "https://www.reddit.com/r/roguelikes/comments/1g0rcui/",
+        "publication_date": null,
         "language": "non_russian",
         "identity_mode": "stable_locator"
       },
       {
         "feedback_id": "feedback-002",
         "source_id": "source-004",
-        "public_ref": "steam-discussion:603031430877955466:post-1",
-        "publication_date": "2025-05-26",
+        "url": "https://www.reddit.com/r/NintendoSwitch/comments/jc4pcu/",
+        "publication_date": "2020-10-16",
         "language": "non_russian",
         "identity_mode": "stable_locator"
       },
       {
         "feedback_id": "fallback-001",
         "source_id": "source-002",
-        "publication_date": "2026-03-17",
+        "publication_date": "2026-03-15",
         "language": "russian",
         "identity_mode": "transient_author_deduped"
       },
       {
         "feedback_id": "fallback-002",
         "source_id": "source-002",
-        "publication_date": "2026-01-04",
+        "publication_date": "2025-12-02",
         "language": "russian",
         "identity_mode": "transient_author_deduped"
       }

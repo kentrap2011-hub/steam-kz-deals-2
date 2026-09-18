@@ -1,90 +1,32 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-STATUS-V1",
   "schema_version": 1,
-  "snapshot_id": "d7c882f8e9663573584c8a9d65b9183d60e4189173e1cf12db735eb7f1ae0f71",
-  "prepared_required_sha256": "a73cb560704b79bf1069191dd1bd8d52af7e2c7969f619e3e9be11c7351fb95d",
-  "group_plan_sha256": "2d5453942dd473f73c18c6484ca57d1d4bca40a7c8dcce5f70766bfa3c378c45",
+  "snapshot_id": "d253b195701e74c9c00fc8b669f84655341601faf11e09a7edfb353a8b7f2bbb",
+  "prepared_required_sha256": "437e25c814244f17d7dd5d83110d3655364a30cb7e25173f3885e9c0d8c923df",
+  "group_plan_sha256": "8a533f1bc28ebb64ff303c9c1e1371ebe080642a8a13b058a98687a955f61566",
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "parallel-buffer-validation-2026-09-17",
-    "evidence_contract_sha256": "f12bd44759b52197f4908e0d0f8cadfcf0ceceec38cdee17df422da37c2e871a",
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "contract-gaps-2026-09-17",
-    "worker_schema_sha256": "683c310bf9ea7364485f5e39456bcde0f5fb4a8cdf0106bb96d6aa9ea25b73be",
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-prepublication-v1",
-    "worker_prompt_sha256": "deb6d68227f47766c9f159d1461341f540a0f360e848e1c230eb6bf6e32a6478"
+    "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
+    "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
   },
   "canonical_expected_sequence": 2,
   "completed_required_count": 3,
-  "remaining_required_count": 630,
+  "remaining_required_count": 699,
   "full_backlog_complete": false,
-  "candidate_count": 2,
-  "valid_candidate_count": 1,
-  "invalid_candidate_count": 1,
-  "invalid_expected_group": {
-    "sequence": 2,
-    "group_sha256": "aaf90ecbc631b2629dad2daf961878d646fe3599b294eb2d4131614b03ec786a",
-    "artifact_sha256": "b3f3029b2c1331dbf256a01a9aea7866bdeab6caadd112cdd0ceb9740971a8e4",
-    "validator_error": "observation 1 claims Russian evidence without Russian player-feedback record"
-  },
-  "candidate_groups": [
-    {
-      "snapshot_id": "d7c882f8e9663573584c8a9d65b9183d60e4189173e1cf12db735eb7f1ae0f71",
-      "sequence": 2,
-      "group_sha256": "aaf90ecbc631b2629dad2daf961878d646fe3599b294eb2d4131614b03ec786a",
-      "web_evidence_contract_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "parallel-buffer-validation-2026-09-17",
-        "evidence_contract_sha256": "f12bd44759b52197f4908e0d0f8cadfcf0ceceec38cdee17df422da37c2e871a",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "contract-gaps-2026-09-17",
-        "worker_schema_sha256": "683c310bf9ea7364485f5e39456bcde0f5fb4a8cdf0106bb96d6aa9ea25b73be",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-prepublication-v1",
-        "worker_prompt_sha256": "deb6d68227f47766c9f159d1461341f540a0f360e848e1c230eb6bf6e32a6478"
-      },
-      "validation": "invalid",
-      "canonical_position": "expected",
-      "artifact_paths": [
-        "data/ai_inbox/taste_steam_review_dossiers/d7c882f8e9663573584c8a9d65b9183d60e4189173e1cf12db735eb7f1ae0f71--g000002--aaf90ecbc631b2629dad2daf961878d646fe3599b294eb2d4131614b03ec786a.json"
-      ],
-      "artifact_sha256": "b3f3029b2c1331dbf256a01a9aea7866bdeab6caadd112cdd0ceb9740971a8e4",
-      "validator_error": "observation 1 claims Russian evidence without Russian player-feedback record"
-    },
-    {
-      "snapshot_id": "d7c882f8e9663573584c8a9d65b9183d60e4189173e1cf12db735eb7f1ae0f71",
-      "sequence": 3,
-      "group_sha256": "1b2506a5a231a1b220e437ef909e52b5293758026192d9bf484e7c498fd258a1",
-      "web_evidence_contract_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "parallel-buffer-validation-2026-09-17",
-        "evidence_contract_sha256": "f12bd44759b52197f4908e0d0f8cadfcf0ceceec38cdee17df422da37c2e871a",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "contract-gaps-2026-09-17",
-        "worker_schema_sha256": "683c310bf9ea7364485f5e39456bcde0f5fb4a8cdf0106bb96d6aa9ea25b73be",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-prepublication-v1",
-        "worker_prompt_sha256": "deb6d68227f47766c9f159d1461341f540a0f360e848e1c230eb6bf6e32a6478"
-      },
-      "validation": "valid",
-      "canonical_position": "later_buffered",
-      "artifact_paths": [
-        "data/ai_inbox/taste_steam_review_dossiers/d7c882f8e9663573584c8a9d65b9183d60e4189173e1cf12db735eb7f1ae0f71--g000003--1b2506a5a231a1b220e437ef909e52b5293758026192d9bf484e7c498fd258a1.json"
-      ],
-      "artifact_sha256": "7456f4f1d64bea786783bf563f75ffba801941437b8b34e8776a71d7481f06fa",
-      "validator_error": null
-    }
-  ],
+  "candidate_count": 0,
+  "valid_candidate_count": 0,
+  "invalid_candidate_count": 0,
+  "invalid_expected_group": null,
+  "candidate_groups": [],
   "malformed_current_snapshot_artifacts": [],
   "canonical_progress_authority": false,
   "retry_state": false
