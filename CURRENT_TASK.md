@@ -411,9 +411,13 @@
 ## Worker in progress — 2026-09-18
 
 ### Taste dossier contract contradictions fix 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_CONTRACT_CONTRADICTIONS_FIX_01.md`;
-- scope: только CONTRA-01 exact Steam stable-child product/physical-parent binding, CONTRA-02 author-independent dossier-local internal IDs, CONTRA-03 exact bound-record language projection;
-- accepted Steam Store review-card parent fallback, transient-author privacy/recurrence, Story-DLC, ranking/pricing/package/UI и retry architecture должны остаться без изменений;
-- Scheduled Task `Run now` и settings не трогать;
+- исправлены ровно CONTRA-01 / CONTRA-02 / CONTRA-03: exact Steam stable-child appid/container binding, author-independent dossier-local `source-NNN` / `feedback-NNN` join keys и exact canonical observation language projection;
+- accepted Steam Store review-card parent fallback, transient-author privacy/recurrence, Story-DLC, ranking/pricing/package/UI и retry architecture сохранены;
+- implementation PR: #62; merge: `46acb0aad3606c0bcf84a9a9798f5a5b6854d950`;
+- PR dossier CI: run #85 success; backlog dispositions: run #763 success;
+- normal GitHub activation: run #137 success; atomic snapshot commit `c87e35b1fbbbb8fadd563acfd4f8e1473af7eaf9`;
+- active snapshot: `d253b195701e74c9c00fc8b669f84655341601faf11e09a7edfb353a8b7f2bbb`, prepared/completed/remaining `702/0/702`, expected group `g000001` = Crown Trick / Hellish Quart / Tetris® Effect: Connected;
+- Scheduled Task `Run now` and settings were not used or changed;
 - durable report: `reviews/worker_reports/taste-dossier-contract-contradictions-fix-01.md`.
