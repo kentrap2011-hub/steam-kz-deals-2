@@ -227,5 +227,6 @@ Production validator проверяет:
 - при content-complete binding change GitHub создаёт fresh snapshot; artifacts старого snapshot становятся stale/inert и могут быть перемещены только штатным GitHub-owned stale-quarantine path;
 - очередь/cache/progress/receipts вручную не чинить.
 - Russian retrieval gate: `evidence.russian_attempt` различает `found_and_used`, genuine `searched_no_existence_signal` и два proven-existence unresolved failure state; точные machine semantics живут в web-evidence contract/schema, а strict enforcement — только в `scripts/taste_steam_review_dossier_strict.py`.
+- После exact-product Russian existence proof worker prompt/web-evidence contract требуют bounded source-agnostic diversification: не зацикливаться на Steam/одном surface, при неудаче первого retrieval surface и оставшемся budget попробовать хотя бы один materially different public player-feedback surface class, если он reasonably discoverable; fixed website quota и Steam-only retrieval запрещены.
 
 **Проверенный parallel-buffer факт:** live acceptance `g000002` был correctly rejected strict validator, а уже опубликованный `g000003` мог оставаться buffered за ним; это ожидаемое доказательство contiguous-prefix архитектуры, а не повод возвращать synchronous local validation.
