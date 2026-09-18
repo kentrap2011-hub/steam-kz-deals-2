@@ -1,0 +1,380 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872",
+  "prepared_required_sha256": "048841e89b8aab1f2276c5e747d04183d6d5f323386d2a93c697f287eb04ee1a",
+  "group_plan_sha256": "8931aff2a475ab621702d9a0f4f61a70db7bfd277c69591ada1e5d376b62bbb2",
+  "group_count": 234,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+    "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+  },
+  "sequence": 1,
+  "start_index": 0,
+  "end_index_exclusive": 3,
+  "appids": [
+    "1000010",
+    "1000360",
+    "1003590"
+  ],
+  "items_sha256": "f9b5c5c44fb43a240955911b7299e70ecd059b51027e2280d5d758e526ef7254",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "68b9702e61e8157e065fb526c8a472b9eb61ac1ef1de1d2b3d65f30c0f7072a9",
+  "items": [
+    {
+      "key": "App_1000010",
+      "appid": "1000010",
+      "title": "Crown Trick",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1000010.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1000360",
+      "appid": "1000360",
+      "title": "Hellish Quart",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1000360.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1003590",
+      "appid": "1003590",
+      "title": "Tetris® Effect: Connected",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1003590.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "42ad6a5e29a68e8241f8571882c7768749a551cccc6194f7eeecb7257e2f8750",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+      },
+      "appid": "1000010",
+      "title": "Crown Trick",
+      "generated_at_utc": "2026-09-18T21:33:02Z",
+      "expires_at_utc": "2026-10-08T21:33:02Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Crown Trick",
+        "release_year": 2020,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1000010"
+          },
+          {
+            "kind": "developer",
+            "value": "NEXT Studios"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "progression",
+          "statement": "A recent Russian Steam review reports that the core idea is appealing but the game feels short and light on long-term roguelike content.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "fallback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback collection used for the validated finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1000010/",
+            "publication_date": "2020-01-01",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1000010/Crown_Trick/?cc=us&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2026-03-15",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+      },
+      "appid": "1000360",
+      "title": "Hellish Quart",
+      "generated_at_utc": "2026-09-18T21:33:02Z",
+      "expires_at_utc": "2026-10-08T21:33:02Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Hellish Quart",
+        "release_year": 2021,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1000360"
+          },
+          {
+            "kind": "developer",
+            "value": "Kubold"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "A recent Russian Steam review praises the physics-driven fencing and the variety of matches when playing with friends.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "fallback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback collection used for the validated finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1000360/",
+            "publication_date": "2021-01-01",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1000360/Hellish_Quart/?cc=gb&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2026-03-17",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+      },
+      "appid": "1003590",
+      "title": "Tetris® Effect: Connected",
+      "generated_at_utc": "2026-09-18T21:33:02Z",
+      "expires_at_utc": "2026-10-08T21:33:02Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Tetris® Effect: Connected",
+        "release_year": 2021,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1003590"
+          },
+          {
+            "kind": "developer",
+            "value": "Monstars Inc., Resonair, Stage Games"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "friction",
+          "statement": "A recent Russian Steam review reports a keyboard-input limitation when attempting simultaneous bindings across both hands.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "fallback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback collection used for the validated finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1003590/",
+            "publication_date": "2021-01-01",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1003590/Tetris_Effect_Connected/?curator_clanid=33964734&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2026-05-25",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    }
+  ]
+}
