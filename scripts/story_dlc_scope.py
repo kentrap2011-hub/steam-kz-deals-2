@@ -153,6 +153,26 @@ def classify_story_dlc(metadata, *, mechanical_kind="dlc"):
     })
 
 
+
+def external_addon_story_scope(family):
+    """Return the validated classification for one independent addon family."""
+    if not isinstance(family, dict) or family.get("family_type") != "external_base_addon":
+        return None
+    items = family.get("addon_story_scope")
+    if not isinstance(items, list) or len(items) != 1:
+        raise ValueError("external addon family must have exactly one story-DLC classification")
+    item = items[0]
+    if not isinstance(item, dict) or item.get("key") != family.get("taste_subject_key"):
+        raise ValueError("external addon family story-DLC classification identity mismatch")
+    return validate_classification(item.get("classification"))
+
+
+def external_addon_taste_semantic_eligible(family):
+    classification = external_addon_story_scope(family)
+    if classification is None:
+        return True
+    return classification["status"] == STORY_DLC_ELIGIBLE and classification["eligible"] is True
+
 def summarize_story_dlc_classifications(classified_items, *, example_limit=5):
     """Return compact audit/debug summary for the complete classified DLC scope."""
     counts = {
