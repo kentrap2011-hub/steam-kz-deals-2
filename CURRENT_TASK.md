@@ -374,3 +374,14 @@
 - active binding revisions: evidence/schema `russian-existence-retrieval-gate-2026-09-18`, prompt `web-evidence-v2-russian-retrieval-gate-v1`;
 - Scheduled Task `Run now` was not launched;
 - durable report: `reviews/worker_reports/taste-dossier-russian-existence-retrieval-gate-implement-01.md`.
+
+## Worker in progress — 2026-09-18
+
+### Taste story DLC scope policy implement 01 (chat 1 bounded branch B)
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_STORY_DLC_SCOPE_POLICY_IMPLEMENT_01.md`;
+- branch: `worker/taste-story-dlc-scope-policy-implement-01-b`;
+- architecture preflight passed: GitHub remains owner of dossier semantic scope; implementation stays in the existing daily dossier preparation path; no new queue/stage/retry/ownership transfer;
+- required rule: only DLC with positively confirmed substantial playable story content may create independent Taste/dossier semantic obligations; non-story and unproven DLC fail closed;
+- Scheduled Task Run now/settings and Crown Trick/Hellish Quart locator/provenance issue remain untouched.
+
