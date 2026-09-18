@@ -377,9 +377,14 @@
 
 
 ### Taste story DLC scope policy implement 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_STORY_DLC_SCOPE_POLICY_IMPLEMENT_01.md`;
-- scope: canonical Taste/dossier eligibility for DLC; only positively confirmed substantial playable story DLC may enter semantic dossier scope;
-- BG3 Digital Deluxe appid `2378500` must be excluded;
-- Crown Trick/Hellish Quart item-level locator issue is explicitly out of scope;
-- Scheduled Task Run now/settings must remain unchanged.
+- implementation PR #51 merged as `9bb7e481cbf55bc4f8e511f596ce7e4b8c19e812`;
+- canonical activation run `35362043187` (#134): success; atomic pre-AI commit `d9c93c64dc24b4e4a0edac98d84619aac1629f45`;
+- active snapshot: `43e76bafd2ca0fe1dbe9a2edead920d335d55859b80038222279394b68bfb7aa`, prepared/completed/remaining `731/0/731`, expected `g000001`, 244 groups of 3;
+- BG3 Digital Deluxe appid `2378500` is `non_story_dlc_excluded` and absent from the canonical group plan;
+- current DLC classification summary: considered/story/non-story/ambiguous `1/0/1/0`;
+- exact new `g000001`: Crown Trick / Hellish Quart / Tetris® Effect: Connected;
+- Crown Trick/Hellish Quart item-level locator issue remains explicitly out of scope and unchanged;
+- Scheduled Task Run now/settings were not used/changed;
+- durable report: `reviews/worker_reports/taste-story-dlc-scope-policy-implement-01.md`.
