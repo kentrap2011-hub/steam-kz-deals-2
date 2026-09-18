@@ -2,14 +2,14 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "semantic-consistency-gaps-2026-09-17",
+  "contract_revision": "russian-existence-retrieval-gate-2026-09-18",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "parallel_validation_contract": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2-language-binding-v1",
+  "worker_prompt_revision": "web-evidence-v2-russian-retrieval-gate-v1",
   "purpose": "Define the active semantic evidence policy for neutral Taste dossiers while leaving GitHub-owned scope, buffered transport, asynchronous strict validation/persistence, recovery and completeness in the existing control-plane contracts.",
   "supersedes": {
     "steam_appreviews_required": false,
@@ -19,13 +19,28 @@
     "ordinary_multi_source_player_feedback_web_research_is_active": true
   },
   "identity": {
-    "required_work_binding": ["exact_descriptor_title", "exact_descriptor_appid"],
-    "required_research_identity": ["title", "release_year"],
+    "required_work_binding": [
+      "exact_descriptor_title",
+      "exact_descriptor_appid"
+    ],
+    "required_research_identity": [
+      "title",
+      "release_year"
+    ],
     "release_year_source": "reliable_public_metadata_resolved_by_semantic_worker",
-    "additional_corroborators_when_needed": ["developer", "publisher", "platform", "version", "appid", "other_identifier"],
+    "additional_corroborators_when_needed": [
+      "developer",
+      "publisher",
+      "platform",
+      "version",
+      "appid",
+      "other_identifier"
+    ],
     "appid_corroborator_required_when_available_in_work_item": true,
     "ambiguous_identity_behavior": "fail_closed_no_dossier",
-    "cross_release_combination_forbidden": true
+    "cross_release_combination_forbidden": true,
+    "steam_player_feedback_url_appid_must_match_exact_dossier_appid_when_exposed": true,
+    "base_game_feedback_may_satisfy_dlc_gate": false
   },
   "source_policy": {
     "player_feedback_source_types": [
@@ -37,7 +52,10 @@
       "community_discussion",
       "other_player_feedback"
     ],
-    "context_only_source_types": ["official_metadata", "professional_context"],
+    "context_only_source_types": [
+      "official_metadata",
+      "professional_context"
+    ],
     "professional_context_may_substitute_for_player_feedback": false,
     "prefer_multiple_independent_player_sources_when_practical": true,
     "single_source_allowed_only_with_compact_reason": true,
@@ -151,18 +169,37 @@
     "bind_records_before_language_summary": true,
     "observation_summary_is_free_form": false,
     "record_language_support_projection": {
-      "russian": ["russian"],
-      "non_russian": ["non_russian"],
-      "mixed": ["russian", "non_russian"],
-      "unknown": ["unknown"]
+      "russian": [
+        "russian"
+      ],
+      "non_russian": [
+        "non_russian"
+      ],
+      "mixed": [
+        "russian",
+        "non_russian"
+      ],
+      "unknown": [
+        "unknown"
+      ]
     },
     "parent_source_language_containment": {
-      "russian_child_requires_parent_language": ["russian", "mixed"],
-      "non_russian_child_requires_parent_language": ["non_russian", "mixed"],
+      "russian_child_requires_parent_language": [
+        "russian",
+        "mixed"
+      ],
+      "non_russian_child_requires_parent_language": [
+        "non_russian",
+        "mixed"
+      ],
       "mixed_or_unknown_child_additional_constraint": false
     },
     "observation_summary_rule": "evidence_languages must equal the ordered distinct union of record_language_support_projection for exactly the player_feedback_ids bound to that observation",
-    "canonical_output_order": ["russian", "non_russian", "unknown"],
+    "canonical_output_order": [
+      "russian",
+      "non_russian",
+      "unknown"
+    ],
     "mixed_summary_token_policy": "do_not_emit_mixed_as_an_observation_summary_token; mixed is a feedback-record input language that deterministically expands to russian and non_russian support",
     "russian_claim_rule": "russian may appear in an observation language summary only when at least one bound player-feedback record language is russian or mixed",
     "non_russian_claim_rule": "non_russian may appear in an observation language summary only when at least one bound player-feedback record language is non_russian or mixed",
@@ -179,7 +216,13 @@
   },
   "conflicts": {
     "model": "player_feedback_bound_recurrence",
-    "required_fields": ["statement", "recurrence", "mention_count", "source_ids", "player_feedback_ids"],
+    "required_fields": [
+      "statement",
+      "recurrence",
+      "mention_count",
+      "source_ids",
+      "player_feedback_ids"
+    ],
     "count_and_recurrence_rules": "same_as_observations",
     "official_or_professional_context_may_support_interpretation": true,
     "official_or_professional_context_alone_may_establish_recurrence": false,
@@ -211,25 +254,64 @@
     "undated_source_rule": "publication_date=null remains allowed; freshness then remains a worker evidence classification and current_state still requires recent",
     "known_child_date_parent_coherence_rule": "when a bound feedback record has a known date older than recent_max_age_days, its parent player source must not be labeled freshness=recent or used as current_state support merely because the parent publication_date is null",
     "unknown_child_date_behavior": "when the feedback record publication_date is genuinely null, preserve the existing undated source/item path without inventing a date",
-    "current_state_topics": ["bugs", "performance", "compatibility", "technical_state", "localization", "regional_service_state"],
+    "current_state_topics": [
+      "bugs",
+      "performance",
+      "compatibility",
+      "technical_state",
+      "localization",
+      "regional_service_state"
+    ],
     "current_state_requires_recent_support": true,
     "recent_evidence_dominates_old_evidence_for_current_state": true,
     "launch_only_issue_with_recent_fix_or_material_reduction": "historical",
-    "old_feedback_remains_valid_for": ["gameplay", "story", "pacing", "structure", "progression", "repetition", "difficulty", "durable_friction"],
+    "old_feedback_remains_valid_for": [
+      "gameplay",
+      "story",
+      "pacing",
+      "structure",
+      "progression",
+      "repetition",
+      "difficulty",
+      "durable_friction"
+    ],
     "conflicting_or_insufficient_temporal_evidence": "uncertain"
   },
   "russian_evidence": {
     "attempt_required": true,
     "statuses": [
       "found_and_used",
-      "searched_not_found_or_insufficient",
-      "source_access_unavailable"
+      "searched_no_existence_signal",
+      "existence_established_retrieval_unresolved",
+      "existence_established_access_unresolved"
     ],
-    "priority_topics": ["localization", "translation", "voice", "font", "encoding", "regional_service"],
-    "found_and_used_rule": "requires_at_least_one_attributable_russian_or_mixed_language_player_feedback_record bound to an observation or conflict",
-    "inverse_rule": "if any russian_or_mixed player-feedback record is actually bound to an observation or conflict, russian_attempt must be found_and_used",
-    "steam_store_russian_ui_rule": "store_page_rendered_in_russian_or_with_l_russian_is_context_only_and_cannot_satisfy_found_and_used_or_multi_source_without_an_attributable_player_feedback_record",
-    "aggregate_only_search_result": "searched_not_found_or_insufficient",
+    "complete_dossier_allowed_states": [
+      "found_and_used",
+      "searched_no_existence_signal"
+    ],
+    "priority_topics": [
+      "localization",
+      "translation",
+      "voice",
+      "font",
+      "encoding",
+      "regional_service"
+    ],
+    "found_and_used_rule": "requires_at_least_one_attributable_russian_or_mixed_language_player_feedback_record_bound_to_an_observation_or_conflict",
+    "inverse_rule": "if_any_russian_or_mixed_player_feedback_record_is_actually_bound_to_an_observation_or_conflict_russian_attempt_must_be_found_and_used",
+    "no_existence_signal_rule": "searched_no_existence_signal_is_allowed_only_after_bounded_good_faith_search_finds_no_reliable_exact_product_player_feedback_existence_signal_and_no_russian_or_mixed_record_is_bound",
+    "retrieval_unresolved_rule": "if_reliable_exact_product_russian_player_feedback_existence_is_established_but_no_contract_usable_attributable_item_level_russian_or_mixed_record_is_obtained_within_hard_bounds_classify_existence_established_retrieval_unresolved_and_do_not_publish_a_complete_dossier",
+    "access_unresolved_rule": "if_reliable_exact_product_russian_player_feedback_existence_is_established_but_access_to_required_player_feedback_surface_prevents_item_level_resolution_classify_existence_established_access_unresolved_and_do_not_publish_a_complete_dossier",
+    "existence_signal_definition": "reliable_exact_product_or_exact_appid_player_activity_evidence_such_as_nonzero_language_review_population_or_exact_product_community_player_activity;signal_is_discovery_state_only_not_player_feedback_record",
+    "existence_signal_exact_identity_required": true,
+    "russian_rendered_ui_alone_is_existence_signal": false,
+    "professional_russian_content_is_player_feedback_existence_signal": false,
+    "professional_russian_content_may_substitute_for_player_feedback": false,
+    "existence_signal_is_player_feedback_record": false,
+    "existence_signal_may_create_mention_count": false,
+    "existence_signal_may_raise_recurrence": false,
+    "existence_signal_may_support_observation_or_conflict": false,
+    "steam_store_russian_ui_rule": "store_page_rendered_in_russian_or_with_l_russian_is_context_only_and_cannot_prove_player_feedback_existence_or_satisfy_found_and_used",
     "russian_specific_claim_rule": "do_not_infer_localization_translation_voice_font_encoding_or_regional_findings_from_non_russian_feedback",
     "fabrication_forbidden": true
   },
@@ -252,17 +334,40 @@
   "adaptive_research": {
     "strategy": "adaptive_multi_source_web",
     "semantic_worker_decides_sufficiency": true,
-    "expand_when": ["evidence_sparse", "source_divergent", "temporal_conflict", "localization_specific", "identity_ambiguous"],
+    "expand_when": [
+      "evidence_sparse",
+      "source_divergent",
+      "temporal_conflict",
+      "localization_specific",
+      "identity_ambiguous"
+    ],
     "stop_when": "additional_search_is_unlikely_to_materially_change_the_dossier",
-    "accepted_stop_reasons": ["evidence_stable", "bounded_limit_reached"],
+    "accepted_stop_reasons": [
+      "evidence_stable",
+      "bounded_limit_reached"
+    ],
     "hard_bounds_per_game": {
       "max_web_search_queries": 8,
       "max_opened_or_read_source_pages": 16
     },
     "critical_insufficiency_behavior": "fail_closed_no_dossier",
-    "fixed_review_count_or_cursor_requirement": false
+    "fixed_review_count_or_cursor_requirement": false,
+    "russian_discovery": {
+      "exact_identity_query": "use_exact_descriptor_title_plus_release_year_and_or_exact_appid",
+      "russian_query_variants_required": true,
+      "site_specific_escalation": "if_ordinary_search_does_not_resolve_the_russian_attempt_and_budget_remains_try_a_relevant_site_specific_player_feedback_or_community_search",
+      "steam_community_guidance": "exact_product_steam_community_discussion_or_review_surfaces_are_a_natural_option_when_they_exist",
+      "after_existence_signal": "direct_remaining_bounded_search_toward_contract_usable_attributable_item_level_russian_or_mixed_records_instead_of_repeating_aggregate_or_list_lookups",
+      "fixed_source_quota": false,
+      "bounds_are_safety_ceilings_not_targets": true
+    }
   },
-  "accepted_evidence_statuses": ["current", "historical", "durable", "uncertain"],
+  "accepted_evidence_statuses": [
+    "current",
+    "historical",
+    "durable",
+    "uncertain"
+  ],
   "migration": {
     "legacy_dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
     "legacy_dossier_accepted_as_web_evidence_v2": false,

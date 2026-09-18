@@ -205,7 +205,7 @@ Production validator проверяет:
 
 **Что ищем:** как Scheduled ChatGPT публикует immutable candidate groups без локального Python, где GitHub выполняет authoritative strict validation, как canonical progress принимает только максимальный непрерывный валидный префикс и как несовместимый snapshot становится stale/inert без ручной правки artifacts/progress.
 
-**Последняя проверка:** 2026-09-17.
+**Последняя проверка:** 2026-09-18.
 
 **Быстрая точка входа:**
 1. `config/taste_steam_review_dossier_contract.json` — canonical control-plane/group contract; `checkpoint_size` остаётся `3`, transport — parallel immutable candidate buffer.
@@ -226,5 +226,6 @@ Production validator проверяет:
 - опубликованный deterministic group нельзя overwrite/update/rename/delete через worker/chat и нельзя «лечить» retry/per-game replacement;
 - при content-complete binding change GitHub создаёт fresh snapshot; artifacts старого snapshot становятся stale/inert и могут быть перемещены только штатным GitHub-owned stale-quarantine path;
 - очередь/cache/progress/receipts вручную не чинить.
+- Russian retrieval gate: `evidence.russian_attempt` различает `found_and_used`, genuine `searched_no_existence_signal` и два proven-existence unresolved failure state; точные machine semantics живут в web-evidence contract/schema, а strict enforcement — только в `scripts/taste_steam_review_dossier_strict.py`.
 
 **Проверенный parallel-buffer факт:** live acceptance `g000002` был correctly rejected strict validator, а уже опубликованный `g000003` мог оставаться buffered за ним; это ожидаемое доказательство contiguous-prefix архитектуры, а не повод возвращать synchronous local validation.

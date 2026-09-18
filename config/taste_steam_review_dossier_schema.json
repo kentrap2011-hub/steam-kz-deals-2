@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "version": 2,
   "status": "active",
-  "schema_revision": "semantic-consistency-gaps-2026-09-17",
+  "schema_revision": "russian-existence-retrieval-gate-2026-09-18",
   "evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "evidence_contract_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
@@ -46,10 +46,30 @@
       "regional",
       "other"
     ],
-    "sentiment": ["positive", "negative", "mixed", "neutral"],
-    "recurrence": ["strong", "moderate", "limited", "anecdotal"],
-    "evidence_languages": ["russian", "non_russian", "mixed", "unknown"],
-    "evidence_status": ["current", "historical", "durable", "uncertain"],
+    "sentiment": [
+      "positive",
+      "negative",
+      "mixed",
+      "neutral"
+    ],
+    "recurrence": [
+      "strong",
+      "moderate",
+      "limited",
+      "anecdotal"
+    ],
+    "evidence_languages": [
+      "russian",
+      "non_russian",
+      "mixed",
+      "unknown"
+    ],
+    "evidence_status": [
+      "current",
+      "historical",
+      "durable",
+      "uncertain"
+    ],
     "source_type": [
       "steam_reviews",
       "steam_community",
@@ -61,24 +81,78 @@
       "official_metadata",
       "professional_context"
     ],
-    "source_language": ["russian", "non_russian", "mixed", "unknown"],
-    "source_freshness": ["recent", "older", "unknown"],
-    "source_evidence_role": ["current_state", "historical", "durable_trait", "uncertain", "identity"],
-    "russian_attempt_status": ["found_and_used", "searched_not_found_or_insufficient", "source_access_unavailable"],
-    "source_mix_status": ["multi_source", "single_source_only"],
-    "research_state": ["sufficient"],
-    "research_strategy": ["adaptive_multi_source_web"],
-    "research_stop_reason": ["evidence_stable", "bounded_limit_reached"],
-    "overall_strength": ["strong", "moderate", "limited", "conflicted"],
-    "identity_resolution_status": ["resolved"],
-    "identity_corroborator_kind": ["appid", "developer", "publisher", "platform", "version", "other_identifier"]
+    "source_language": [
+      "russian",
+      "non_russian",
+      "mixed",
+      "unknown"
+    ],
+    "source_freshness": [
+      "recent",
+      "older",
+      "unknown"
+    ],
+    "source_evidence_role": [
+      "current_state",
+      "historical",
+      "durable_trait",
+      "uncertain",
+      "identity"
+    ],
+    "russian_attempt_status": [
+      "found_and_used",
+      "searched_no_existence_signal",
+      "existence_established_retrieval_unresolved",
+      "existence_established_access_unresolved"
+    ],
+    "source_mix_status": [
+      "multi_source",
+      "single_source_only"
+    ],
+    "research_state": [
+      "sufficient"
+    ],
+    "research_strategy": [
+      "adaptive_multi_source_web"
+    ],
+    "research_stop_reason": [
+      "evidence_stable",
+      "bounded_limit_reached"
+    ],
+    "overall_strength": [
+      "strong",
+      "moderate",
+      "limited",
+      "conflicted"
+    ],
+    "identity_resolution_status": [
+      "resolved"
+    ],
+    "identity_corroborator_kind": [
+      "appid",
+      "developer",
+      "publisher",
+      "platform",
+      "version",
+      "other_identifier"
+    ]
   },
   "integer_rules": {
     "json_boolean_is_integer": false,
-    "schema_version": {"const": 2},
-    "ttl_days": {"minimum": 1, "maximum": 60},
-    "release_year": {"minimum": 1970, "maximum": 2100},
-    "mention_count": {"minimum": 1}
+    "schema_version": {
+      "const": 2
+    },
+    "ttl_days": {
+      "minimum": 1,
+      "maximum": 60
+    },
+    "release_year": {
+      "minimum": 1970,
+      "maximum": 2100
+    },
+    "mention_count": {
+      "minimum": 1
+    }
   },
   "timestamp_rules": {
     "type": "string",
@@ -123,7 +197,13 @@
     "durable_requires_durable_trait_source": true
   },
   "conflict_invariants": {
-    "required_fields": ["statement", "recurrence", "mention_count", "source_ids", "player_feedback_ids"],
+    "required_fields": [
+      "statement",
+      "recurrence",
+      "mention_count",
+      "source_ids",
+      "player_feedback_ids"
+    ],
     "exact_duplicate_objects_allowed": false,
     "mention_count_equals_distinct_bound_player_feedback_records": true,
     "recurrence_thresholds_equal_observation_thresholds": true,
@@ -144,8 +224,14 @@
     "known_older_child_cannot_inherit_recent_parent_freshness": true,
     "unknown_child_publication_date_preserves_existing_undated_behavior": true,
     "parent_child_language_containment": {
-      "russian_child_parent_languages": ["russian", "mixed"],
-      "non_russian_child_parent_languages": ["non_russian", "mixed"],
+      "russian_child_parent_languages": [
+        "russian",
+        "mixed"
+      ],
+      "non_russian_child_parent_languages": [
+        "non_russian",
+        "mixed"
+      ],
       "mixed_or_unknown_child_additional_containment_rule": false
     }
   },
@@ -164,7 +250,12 @@
     "player_feedback_record_requires_item_level_stable_locator": true,
     "obvious_url_aliases_do_not_create_distinct_feedback_or_source_identity": true,
     "legacy_review_sample_field_forbidden": true,
-    "legacy_store_only_or_zero_evidence_placeholder_forbidden": true
+    "legacy_store_only_or_zero_evidence_placeholder_forbidden": true,
+    "no_existence_signal_state_requires_no_bound_russian_mixed_record": true,
+    "existence_established_retrieval_unresolved_is_complete_dossier": false,
+    "existence_established_access_unresolved_is_complete_dossier": false,
+    "existence_signal_is_player_feedback_record": false,
+    "existence_signal_may_support_observation_or_conflict": false
   },
   "provenance_source_required_fields": [
     "source_id",
@@ -223,26 +314,70 @@
     ],
     "additionalProperties": true,
     "properties": {
-      "schema": {"const": "TASTE-STEAM-REVIEW-DOSSIER-V2"},
-      "schema_version": {"type": "integer", "const": 2},
-      "web_evidence_contract_binding": {"type": "object"},
-      "appid": {"type": "string", "pattern": "^[0-9]+$"},
-      "title": {"type": "string", "minLength": 1, "maxLength": 300},
-      "generated_at_utc": {"type": "string", "minLength": 1},
-      "expires_at_utc": {"type": "string", "minLength": 1},
-      "ttl_days": {"type": "integer", "minimum": 1, "maximum": 60},
+      "schema": {
+        "const": "TASTE-STEAM-REVIEW-DOSSIER-V2"
+      },
+      "schema_version": {
+        "type": "integer",
+        "const": 2
+      },
+      "web_evidence_contract_binding": {
+        "type": "object"
+      },
+      "appid": {
+        "type": "string",
+        "pattern": "^[0-9]+$"
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 300
+      },
+      "generated_at_utc": {
+        "type": "string",
+        "minLength": 1
+      },
+      "expires_at_utc": {
+        "type": "string",
+        "minLength": 1
+      },
+      "ttl_days": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 60
+      },
       "game_identity": {
         "type": "object",
-        "required": ["work_title", "release_year", "resolution_status", "identity_source_ids", "corroborators"],
+        "required": [
+          "work_title",
+          "release_year",
+          "resolution_status",
+          "identity_source_ids",
+          "corroborators"
+        ],
         "additionalProperties": true
       },
-      "summary": {"type": "string", "minLength": 20, "maxLength": 1200},
+      "summary": {
+        "type": "string",
+        "minLength": 20,
+        "maxLength": 1200
+      },
       "observations": {
         "type": "array",
         "minItems": 1,
         "items": {
           "type": "object",
-          "required": ["category", "statement", "sentiment", "recurrence", "mention_count", "evidence_languages", "evidence_status", "source_ids", "player_feedback_ids"],
+          "required": [
+            "category",
+            "statement",
+            "sentiment",
+            "recurrence",
+            "mention_count",
+            "evidence_languages",
+            "evidence_status",
+            "source_ids",
+            "player_feedback_ids"
+          ],
           "additionalProperties": true
         }
       },
@@ -250,22 +385,45 @@
         "type": "array",
         "items": {
           "type": "object",
-          "required": ["statement", "recurrence", "mention_count", "source_ids", "player_feedback_ids"],
+          "required": [
+            "statement",
+            "recurrence",
+            "mention_count",
+            "source_ids",
+            "player_feedback_ids"
+          ],
           "additionalProperties": true
         }
       },
       "evidence": {
         "type": "object",
-        "required": ["strategy", "research_state", "source_mix_status", "single_source_reason", "russian_attempt", "overall_strength", "stop_reason"],
+        "required": [
+          "strategy",
+          "research_state",
+          "source_mix_status",
+          "single_source_reason",
+          "russian_attempt",
+          "overall_strength",
+          "stop_reason"
+        ],
         "additionalProperties": false
       },
       "provenance": {
         "type": "object",
-        "required": ["sources", "player_feedback_records"],
+        "required": [
+          "sources",
+          "player_feedback_records"
+        ],
         "additionalProperties": false,
         "properties": {
-          "sources": {"type": "array", "minItems": 1},
-          "player_feedback_records": {"type": "array", "minItems": 1}
+          "sources": {
+            "type": "array",
+            "minItems": 1
+          },
+          "player_feedback_records": {
+            "type": "array",
+            "minItems": 1
+          }
         }
       }
     }

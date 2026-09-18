@@ -103,7 +103,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         self.assertEqual(EVIDENCE_CONTRACT["schema"], "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2")
         self.assertEqual(EVIDENCE_CONTRACT["version"], 2)
         self.assertEqual(SCHEMA["evidence_contract"], EVIDENCE_CONTRACT["schema"])
-        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-language-binding-v1")
+        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-russian-retrieval-gate-v1")
         prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
         for needle in (
             "title **plus the resolved release year**",
@@ -158,7 +158,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             doc["provenance"]["player_feedback_records"][3]["source_id"] = "p2"
         self.assertInvalid(mutate)
 
-        doc = dossier(123456, russian_status="searched_not_found_or_insufficient")
+        doc = dossier(123456, russian_status="searched_no_existence_signal")
         doc["provenance"]["sources"].append({
             "source_id": "ru_store",
             "source_type": "official_metadata",
@@ -171,7 +171,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "player_feedback": False,
         })
         self.assertIs(self.validate(doc), doc)
-        self.assertEqual(doc["evidence"]["russian_attempt"], "searched_not_found_or_insufficient")
+        self.assertEqual(doc["evidence"]["russian_attempt"], "searched_no_existence_signal")
 
     def test_real_russian_player_record_satisfies_found_and_used(self):
         found = dossier(123456, russian_status="found_and_used")

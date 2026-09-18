@@ -28,7 +28,7 @@ class LanguageBindingRegressionTests(unittest.TestCase):
 
     def test_live_blacksad_non_russian_bound_records_cannot_claim_russian(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
-        doc = web_dossier(729040, now, title="Blacksad: Under the Skin", russian_status="searched_not_found_or_insufficient")
+        doc = web_dossier(729040, now, title="Blacksad: Under the Skin", russian_status="searched_no_existence_signal")
         observation = doc["observations"][0]
         self.assertEqual(observation["player_feedback_ids"], ["pf1", "pf2", "pf3"])
         self.assertEqual(
@@ -41,7 +41,7 @@ class LanguageBindingRegressionTests(unittest.TestCase):
 
     def test_non_russian_only_bound_feedback_cannot_gain_russian_from_russian_context_or_search_attempt(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
-        doc = web_dossier(729041, now, russian_status="searched_not_found_or_insufficient")
+        doc = web_dossier(729041, now, russian_status="searched_no_existence_signal")
         doc["provenance"]["sources"].append({
             "source_id": "ru_context",
             "source_type": "official_metadata",
@@ -56,7 +56,7 @@ class LanguageBindingRegressionTests(unittest.TestCase):
         observation = doc["observations"][1]
         self.assertEqual(observation["player_feedback_ids"], ["pf4"])
         self.assertEqual(doc["provenance"]["player_feedback_records"][3]["language"], "non_russian")
-        self.assertEqual(doc["evidence"]["russian_attempt"], "searched_not_found_or_insufficient")
+        self.assertEqual(doc["evidence"]["russian_attempt"], "searched_no_existence_signal")
         observation["evidence_languages"] = ["russian"]
         with self.assertRaisesRegex(ValueError, "claims Russian evidence without Russian player-feedback record"):
             self.validate(doc, now)

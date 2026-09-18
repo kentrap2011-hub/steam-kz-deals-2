@@ -154,6 +154,131 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         )
         self.assertIn('A child feedback record with `language:"russian"` requires its parent source `language` to be `russian` or `mixed`', PROMPT)
 
+    def test_rus_gate_01_tetris_discovery_guidance_preserves_a_reasonable_bounded_path(self):
+        audited_shape = {
+            "appid": "1003590",
+            "title": "Tetris® Effect: Connected",
+            "query_pattern": 'site:steamcommunity.com/app/1003590/discussions "русский"',
+            "item_url": "https://steamcommunity.com/app/1003590/discussions/0/603016087419883875/",
+            "language": "russian",
+        }
+        self.assertIn(audited_shape["appid"], audited_shape["query_pattern"])
+        self.assertIn(audited_shape["appid"], audited_shape["item_url"])
+        self.assertEqual(audited_shape["language"], "russian")
+
+        guidance = EVIDENCE["adaptive_research"]["russian_discovery"]
+        self.assertIn("exact_descriptor_title", guidance["exact_identity_query"])
+        self.assertTrue(guidance["russian_query_variants_required"])
+        self.assertIn("site_specific", "site_specific")
+        self.assertIn("site_specific", guidance["site_specific_escalation"])
+        self.assertIn("steam_community", guidance["steam_community_guidance"])
+        self.assertIn("attributable_item_level", guidance["after_existence_signal"])
+        self.assertFalse(guidance["fixed_source_quota"])
+        self.assertTrue(guidance["bounds_are_safety_ceilings_not_targets"])
+        self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_web_search_queries"], 8)
+        self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_opened_or_read_source_pages"], 16)
+        self.assertIn("site-specific player-feedback/community search", PROMPT)
+        self.assertIn("Exact-product Steam Community discussion/review surfaces", PROMPT)
+
+    def test_rus_gate_02_proven_existence_item_unresolved_rejects_complete_dossier(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        for appid, title in (
+            (2378500, "Baldur's Gate 3 - Digital Deluxe Edition DLC"),
+            (1000360, "Hellish Quart"),
+        ):
+            doc = web_dossier(appid, now, title=title, russian_status="searched_no_existence_signal")
+            doc["evidence"]["russian_attempt"] = "existence_established_retrieval_unresolved"
+            with self.subTest(appid=appid), self.assertRaisesRegex(
+                ValueError,
+                "existence is established but attributable item-level retrieval is unresolved",
+            ):
+                self.validate(doc, now)
+
+    def test_rus_gate_03_genuine_no_existence_signal_is_valid_when_other_evidence_is_sufficient(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = web_dossier(670003, now, russian_status="searched_no_existence_signal")
+        self.assertIs(self.validate(doc, now), doc)
+        self.assertEqual(doc["evidence"]["russian_attempt"], "searched_no_existence_signal")
+        self.assertIn(
+            "searched_no_existence_signal",
+            EVIDENCE["russian_evidence"]["complete_dossier_allowed_states"],
+        )
+
+    def test_rus_gate_04_existence_signal_is_not_player_feedback_or_observation_support(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = web_dossier(670004, now, russian_status="searched_no_existence_signal")
+        doc["provenance"]["sources"].append({
+            "source_id": "ru_aggregate",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/670004/?l=russian",
+            "publication_date": None,
+            "language": "russian",
+            "freshness": "unknown",
+            "evidence_role": "identity",
+            "player_feedback": False,
+        })
+        doc["evidence"]["russian_attempt"] = "existence_established_retrieval_unresolved"
+        with self.assertRaisesRegex(ValueError, "existence is established but attributable item-level retrieval is unresolved"):
+            self.validate(doc, now)
+
+        misuse = web_dossier(670005, now, russian_status="searched_no_existence_signal")
+        misuse["provenance"]["sources"].append({
+            "source_id": "ru_aggregate",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/670005/?l=russian",
+            "publication_date": now.date().isoformat(),
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "current_state",
+            "player_feedback": True,
+        })
+        with self.assertRaisesRegex(ValueError, "Steam Store app page is metadata/context, not attributable player feedback"):
+            self.validate(misuse, now)
+
+        russian = EVIDENCE["russian_evidence"]
+        self.assertFalse(russian["existence_signal_is_player_feedback_record"])
+        self.assertFalse(russian["existence_signal_may_create_mention_count"])
+        self.assertFalse(russian["existence_signal_may_raise_recurrence"])
+        self.assertFalse(russian["existence_signal_may_support_observation_or_conflict"])
+
+    def test_rus_gate_05_base_game_steam_feedback_cannot_satisfy_exact_dlc_identity(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = web_dossier(
+            2378500,
+            now,
+            title="Baldur's Gate 3 - Digital Deluxe Edition DLC",
+            russian_status="found_and_used",
+        )
+        doc["provenance"]["sources"][2].update({
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1086940/discussions/0/1234567890/",
+            "language": "russian",
+        })
+        doc["provenance"]["player_feedback_records"][3]["url"] = (
+            "https://steamcommunity.com/app/1086940/discussions/0/1234567890/?ctp=1"
+        )
+        with self.assertRaisesRegex(ValueError, "Steam player-feedback source appid does not match exact dossier appid"):
+            self.validate(doc, now)
+        self.assertFalse(EVIDENCE["identity"]["base_game_feedback_may_satisfy_dlc_gate"])
+        self.assertTrue(EVIDENCE["identity"]["steam_player_feedback_url_appid_must_match_exact_dossier_appid_when_exposed"])
+
+    def test_rus_gate_06_proven_existence_access_failure_is_not_ordinary_absence(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = web_dossier(670006, now, russian_status="searched_no_existence_signal")
+        doc["evidence"]["russian_attempt"] = "existence_established_access_unresolved"
+        with self.assertRaisesRegex(
+            ValueError,
+            "existence is established but access prevents attributable item-level retrieval",
+        ):
+            self.validate(doc, now)
+        self.assertNotIn(
+            "existence_established_access_unresolved",
+            EVIDENCE["russian_evidence"]["complete_dossier_allowed_states"],
+        )
+
     def test_worker_facing_contract_covers_all_six_without_changing_buffer_architecture(self):
         self.assertFalse(EVIDENCE["parent_item_binding"]["host_match_alone_is_sufficient"])
         self.assertTrue(EVIDENCE["parent_item_binding"]["same_thread_distinct_items_allowed"])
