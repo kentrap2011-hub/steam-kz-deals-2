@@ -427,5 +427,49 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         )
 
 
+    def test_retrieve_ru_01_stable_route_is_preferred(self):
+        self.assertEqual(
+            EVIDENCE["feedback_item_identity"]["preferred_identity_order"],
+            ["stable_locator", "transient_author_deduped"],
+        )
+        stable_text = "Prefer a result that exposes a neutral stable review/recommendation identity"
+        fallback_text = "If no neutral stable item locator is exposed"
+        self.assertIn(stable_text, PROMPT)
+        self.assertIn(fallback_text, PROMPT)
+        self.assertLess(PROMPT.index(stable_text), PROMPT.index(fallback_text))
+
+    def test_retrieve_ru_02_safe_collection_fallback_is_explicit(self):
+        self.assertTrue(EVIDENCE["source_policy"]["steam_store_exact_app_review_collection_may_be_fallback_parent"])
+        self.assertIn("search-indexed exact-app collection recovery", PROMPT)
+        self.assertIn("returned representation itself visibly exposes a concrete individual Russian/mixed review card", PROMPT)
+        self.assertIn("Persist only the safe exact-app collection parent and opaque dossier-local fallback record", PROMPT)
+
+    def test_retrieve_ru_03_profile_hit_is_discovery_only_and_cannot_be_rebound(self):
+        self.assertFalse(EVIDENCE["compact_provenance"]["profile_scoped_urls_allowed"])
+        self.assertIn("A profile-scoped Russian review hit is discovery signal only", PROMPT)
+        self.assertIn("Never persist its profile URL, author identity, or re-parent that item", PROMPT)
+        self.assertIn("use fallback only if a concrete Russian/mixed card is actually inspected on that non-profile parent", PROMPT)
+
+    def test_retrieve_ru_04_aggregate_and_locale_remain_non_evidence(self):
+        self.assertFalse(EVIDENCE["source_policy"]["aggregate_storefront_statistics_are_player_feedback_mentions"])
+        self.assertFalse(EVIDENCE["source_policy"]["steam_store_language_parameter_is_player_feedback_evidence"])
+        self.assertIn("They do not prove item language, do not create a feedback record", PROMPT)
+
+    def test_retrieve_ru_05_exact_appid_is_preserved(self):
+        self.assertTrue(EVIDENCE["identity"]["steam_player_feedback_url_appid_must_match_exact_dossier_appid_when_exposed"])
+        self.assertIn("exact descriptor title, exact dossier appid", PROMPT)
+        self.assertIn("Keep exact appid binding fail-closed", PROMPT)
+        self.assertIn("another appid, base game, DLC, edition, sequel, remake, or remaster cannot satisfy the target dossier", PROMPT)
+
+    def test_retrieve_ru_06_bounded_adaptive_search_avoids_inaccessible_endpoint_retries(self):
+        bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
+        self.assertEqual(bounds["max_web_search_queries"], 8)
+        self.assertEqual(bounds["max_opened_or_read_source_pages"], 16)
+        self.assertFalse(EVIDENCE["adaptive_research"]["russian_discovery"]["fixed_source_quota"])
+        self.assertIn("do not keep retrying materially equivalent forms of that inaccessible endpoint family", PROMPT)
+        self.assertIn("not a new website quota, required Steam lane, retry loop, or evidence semantic", PROMPT)
+
+
+
 if __name__ == "__main__":
     unittest.main()
