@@ -85,7 +85,105 @@
     "dedupe": "first_occurrence_by_appid_preserving_canonical_queue_order",
     "active_pin_role": "downstream_semantic_input_only_not_dossier_scope",
     "snapshot_membership_rule": "fixed_from_daily_preparation_until_next_daily_preparation",
-    "manual_run_now_rule": "consume_latest_prepared_daily_snapshot_without_on_demand_scope_refresh"
+    "manual_run_now_rule": "consume_latest_prepared_daily_snapshot_without_on_demand_scope_refresh",
+    "story_dlc_policy": {
+      "status": "active",
+      "policy_revision": "story-dlc-positive-evidence-v1",
+      "purpose": "Only independently meaningful DLC with positively confirmed substantial playable story content may create a Taste/Steam-review-dossier semantic obligation.",
+      "dlc_identity_markers": {
+        "family_id_prefixes": [
+          "addon:"
+        ],
+        "family_types": [
+          "addon"
+        ],
+        "semantic_ai_conditions": [
+          "addon_taste_include_and_base_support_required"
+        ],
+        "rule": "DLC identity is determined from canonical normalized family/semantic metadata, never from title text alone."
+      },
+      "positive_story_evidence": {
+        "required": true,
+        "source_field": "short_description",
+        "source_semantics": "canonical Steam Store product short description already carried in the price-blind Taste queue",
+        "title_only_positive_evidence_allowed": false,
+        "phrases": [
+          "new story campaign",
+          "story campaign",
+          "new campaign",
+          "new story chapter",
+          "story chapter",
+          "new story episode",
+          "story episode",
+          "new storyline",
+          "new story line",
+          "new story",
+          "new story quests",
+          "story quests",
+          "new quests",
+          "questline",
+          "narrative expansion",
+          "story expansion",
+          "standalone adventure",
+          "new adventure",
+          "new story missions",
+          "story missions"
+        ]
+      },
+      "entitlement_container_negative_hints": {
+        "title_or_description_phrases": [
+          "season pass",
+          "expansion pass",
+          "dlc bundle",
+          "content bundle",
+          "grants access to",
+          "includes access to",
+          "entitles you to"
+        ],
+        "rule": "A pass/container is not itself story-eligible solely because it grants story-DLC children."
+      },
+      "explicit_non_story_negative_hints": {
+        "title_or_description_phrases": [
+          "digital deluxe",
+          "deluxe edition",
+          "soundtrack",
+          "digital artbook",
+          "artbook",
+          "cosmetic",
+          "skin",
+          "weapon pack",
+          "item pack",
+          "equipment pack",
+          "currency pack",
+          "resource pack",
+          "bonus song",
+          "wallpaper",
+          "avatar",
+          "supporter pack",
+          "founder pack",
+          "upgrade pack",
+          "bonus content",
+          "character sheets",
+          "new weapon",
+          "new weapons",
+          "new map",
+          "new maps",
+          "new character",
+          "new characters",
+          "new mode",
+          "new modes"
+        ]
+      },
+      "classification_values": [
+        "story_dlc_eligible",
+        "non_story_dlc_excluded",
+        "story_content_unproven_excluded"
+      ],
+      "mixed_content_rule": "Positive substantial playable story evidence wins over cosmetic/bonus hints, except entitlement/container products remain excluded as containers.",
+      "ambiguity_rule": "fail_closed_story_content_unproven_excluded",
+      "base_game_rule": "Base games are unaffected by this policy.",
+      "package_rule": "Package/member aggregation and exact appid identity are preserved; package/container identity is not promoted to story DLC because member DLC has story content."
+    }
   },
   "manifest": {
     "preparation_mode": "daily_fixed_full_backlog",
@@ -100,7 +198,9 @@
       "eligible_scope_sha256",
       "prepared_required_items",
       "prepared_required_count",
-      "prepared_required_sha256"
+      "prepared_required_sha256",
+      "story_dlc_scope_policy_revision",
+      "story_dlc_scope_classification_sha256"
     ],
     "mutable_progress_fields": [
       "remaining_required_items",
