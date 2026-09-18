@@ -333,12 +333,17 @@
 
 
 
-## Worker active — 2026-09-18
+## Worker closeout — 2026-09-18
 
 ### Taste dossier Russian discovery audit 01
-Статус: `in_progress`.
+Статус: `mixed_discovery_failure_and_scarcity`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_RUSSIAN_DISCOVERY_AUDIT_01.md`;
-- mode: READ / VALIDATE / BOUNDED WEB EVIDENCE AUDIT;
-- exact scope: current snapshot `00072072b0b382e6b973f448ce00b4aaaeccb2dbe355ca323de1785ccc0bd34c`, `g000001` only;
-- no Scheduled Task Run now and no IMPLEMENT changes;
-- durable report target: `reviews/worker_reports/taste-dossier-russian-discovery-audit-01.md`.
+- exact snapshot/group: `00072072b0b382e6b973f448ce00b4aaaeccb2dbe355ca323de1785ccc0bd34c` / `g000001`;
+- bounded audit used exactly 8 web-search queries per game and stayed within the 16-page ceiling;
+- Tetris® Effect: Connected: `usable_russian_feedback_found` via an exact-appid Russian Steam Community discussion;
+- Baldur's Gate 3 - Digital Deluxe Edition DLC and Hellish Quart: `russian_feedback_found_but_not_contract_usable`; exact-product Steam surfaces expose Russian review activity, but no V2-usable item-level provenance was proven within bounds;
+- overall: mixed discovery weakness plus item-level evidence scarcity; no live runtime search trace, so the exact cause of the original miss is not claimed;
+- previous worker contract-misread fix remains required; next bounded IMPLEMENT should combine that correction with minimal adaptive Russian discovery guidance, without new quotas/retries/stages or ownership changes;
+- Scheduled Task `Run now` was not launched; no prompt/schema/contract/validator/runtime or production state was changed;
+- durable report: `reviews/worker_reports/taste-dossier-russian-discovery-audit-01.md`;
+- report commit: `902253b6ea624fe4a049618b3d6c7bc568a173a1`.
