@@ -12,7 +12,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
     older_date = (generated.date() - timedelta(days=400)).isoformat()
     sources = [
         {
-            "source_id": "m1",
+            "source_id": "source-001",
             "source_type": "official_metadata",
             "domain": "store.steampowered.com",
             "url": f"https://store.steampowered.com/app/{appid}/",
@@ -23,7 +23,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "player_feedback": False,
         },
         {
-            "source_id": "p1",
+            "source_id": "source-002",
             "source_type": "steam_community",
             "domain": "steamcommunity.com",
             "url": f"https://steamcommunity.com/app/{appid}/reviews/",
@@ -34,7 +34,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "player_feedback": True,
         },
         {
-            "source_id": "p2",
+            "source_id": "source-003",
             "source_type": "reddit",
             "domain": "reddit.com",
             "url": f"https://www.reddit.com/r/games/comments/test{appid}/game_{appid}/",
@@ -47,29 +47,29 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
     ]
     feedback_records = [
         {
-            "feedback_id": "pf1",
-            "source_id": "p1",
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
             "public_ref": f"steam-review-{appid}-1",
             "publication_date": older_date,
             "language": "non_russian",
         },
         {
-            "feedback_id": "pf2",
-            "source_id": "p1",
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
             "public_ref": f"steam-review-{appid}-2",
             "publication_date": older_date,
             "language": "non_russian",
         },
         {
-            "feedback_id": "pf3",
-            "source_id": "p1",
+            "feedback_id": "feedback-003",
+            "source_id": "source-002",
             "public_ref": f"steam-review-{appid}-3",
             "publication_date": older_date,
             "language": "non_russian",
         },
         {
-            "feedback_id": "pf4",
-            "source_id": "p2",
+            "feedback_id": "feedback-004",
+            "source_id": "source-003",
             "url": f"https://www.reddit.com/r/games/comments/test{appid}/game_{appid}/comment1/",
             "publication_date": recent_date,
             "language": "russian" if russian_status == "found_and_used" else "non_russian",
@@ -84,8 +84,8 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "mention_count": 3,
             "evidence_languages": ["non_russian"],
             "evidence_status": "durable",
-            "source_ids": ["p1"],
-            "player_feedback_ids": ["pf1", "pf2", "pf3"],
+            "source_ids": ["source-002"],
+            "player_feedback_ids": ["feedback-001", "feedback-002", "feedback-003"],
         }
     ]
     if russian_status == "found_and_used":
@@ -97,8 +97,8 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "mention_count": 1,
             "evidence_languages": ["russian"],
             "evidence_status": "current",
-            "source_ids": ["p2"],
-            "player_feedback_ids": ["pf4"],
+            "source_ids": ["source-003"],
+            "player_feedback_ids": ["feedback-004"],
         })
     else:
         observations.append({
@@ -109,8 +109,8 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "mention_count": 1,
             "evidence_languages": ["non_russian"],
             "evidence_status": "current",
-            "source_ids": ["p2"],
-            "player_feedback_ids": ["pf4"],
+            "source_ids": ["source-003"],
+            "player_feedback_ids": ["feedback-004"],
         })
     conflicts = []
     return {
@@ -127,7 +127,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "work_title": title,
             "release_year": release_year,
             "resolution_status": "resolved",
-            "identity_source_ids": ["m1"],
+            "identity_source_ids": ["source-001"],
             "corroborators": [{"kind": "appid", "value": appid}],
         },
         "summary": derive_dossier_summary(observations, conflicts),
