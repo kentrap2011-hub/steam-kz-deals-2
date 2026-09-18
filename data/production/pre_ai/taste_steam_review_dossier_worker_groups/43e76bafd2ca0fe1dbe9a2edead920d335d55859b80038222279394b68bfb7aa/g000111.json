@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "43e76bafd2ca0fe1dbe9a2edead920d335d55859b80038222279394b68bfb7aa",
+  "prepared_required_sha256": "0599a9b082d70e1dea01c506a44da857befc2517a1b4156da11e66f44b22996a",
+  "group_plan_sha256": "3df2dc72435ccb13f941a6eca15c3c05e2c78ca915e51cb71234757c4fa9fa42",
+  "group_count": 244,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "russian-multi-source-retrieval-2026-09-18",
+    "evidence_contract_sha256": "048d95df10b949568b68a71b2eef3a2c4f95300ddfe6575cb7a682e92fed6938",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "russian-existence-retrieval-gate-2026-09-18",
+    "worker_schema_sha256": "75e0b74e7ccadfa34d4905479ee4eec3b60816941be0d9bc3a30dc52fb1d08ad",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-russian-multi-source-retrieval-v1",
+    "worker_prompt_sha256": "59d2a650c0db25a6de2b7b3b40eb050e062d3e135e394622a4fcc3f72b9ef8d7"
+  },
+  "sequence": 111,
+  "start_index": 330,
+  "end_index_exclusive": 333,
+  "appids": [
+    "2420350",
+    "2421410",
+    "2432100"
+  ],
+  "items_sha256": "4962bc46a15ddedaf60402da46ccca302ef96d6538c6b8829d6dc6f5dfb33d84",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "a59da542b35a89b6ffa981f6e02647382dc28c51246c0c1cd205ea57cdb09831",
+  "items": [
+    {
+      "key": "App_2420350",
+      "appid": "2420350",
+      "title": "The Mildew Children",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2420350.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2421410",
+      "appid": "2421410",
+      "title": "Cyber Manhunt 2: New World - The Hacking Simulator",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2421410.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2432100",
+      "appid": "2432100",
+      "title": "ONE.",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2432100.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "7208554803250c2ae62113e2d0c72c5e18a4118c5159e76ab937e31e4de695c1"
+}

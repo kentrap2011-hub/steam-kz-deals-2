@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "43e76bafd2ca0fe1dbe9a2edead920d335d55859b80038222279394b68bfb7aa",
+  "prepared_required_sha256": "0599a9b082d70e1dea01c506a44da857befc2517a1b4156da11e66f44b22996a",
+  "group_plan_sha256": "3df2dc72435ccb13f941a6eca15c3c05e2c78ca915e51cb71234757c4fa9fa42",
+  "group_count": 244,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "russian-multi-source-retrieval-2026-09-18",
+    "evidence_contract_sha256": "048d95df10b949568b68a71b2eef3a2c4f95300ddfe6575cb7a682e92fed6938",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "russian-existence-retrieval-gate-2026-09-18",
+    "worker_schema_sha256": "75e0b74e7ccadfa34d4905479ee4eec3b60816941be0d9bc3a30dc52fb1d08ad",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-russian-multi-source-retrieval-v1",
+    "worker_prompt_sha256": "59d2a650c0db25a6de2b7b3b40eb050e062d3e135e394622a4fcc3f72b9ef8d7"
+  },
+  "sequence": 181,
+  "start_index": 540,
+  "end_index_exclusive": 543,
+  "appids": [
+    "45770",
+    "460120",
+    "460430"
+  ],
+  "items_sha256": "2a0a4be612ad66f3387a4745a8a14a0eefe773a113c9500f78c2d7419a3b340b",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "a59da542b35a89b6ffa981f6e02647382dc28c51246c0c1cd205ea57cdb09831",
+  "items": [
+    {
+      "key": "App_45770",
+      "appid": "45770",
+      "title": "Dead Rising 2: Off the Record",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_45770.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_460120",
+      "appid": "460120",
+      "title": "Megadimension Neptunia VII",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_460120.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_460430",
+      "appid": "460430",
+      "title": "The Letter - Horror Visual Novel",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_460430.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "d63e0160f6343d6d3fc431edd809d9f8092a2657c19af5fb55d2c3d2e65091bd"
+}
