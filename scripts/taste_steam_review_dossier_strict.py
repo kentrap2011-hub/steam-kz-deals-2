@@ -454,7 +454,14 @@ def _validate_source(source, index, enums, schema_doc, generated_date, evidence_
         raise ValueError(f"{label} context-only source cannot be marked player feedback")
     if _is_steam_store_app_page(source) and (source["player_feedback"] is True or source_type in player_types):
         if feedback_surface_mode != "concrete_item_collection":
-            raise ValueError(f"{label} Steam Store app page is metadata/context unless explicitly used as a concrete-item fallback collection parent")
+            raise ValueError(
+                f"{label} Steam Store app page is not a player-feedback item; "
+                "it may only classify as a player-feedback surface when explicitly used as a concrete-item fallback collection parent"
+            )
+        if source_type not in {"steam_reviews", "store_user_reviews"}:
+            raise ValueError(
+                f"{label} Steam Store concrete-item fallback parent must use a review-surface source type"
+            )
     if source["player_feedback"] is True and exact_appid is not None:
         exposed_steam_appid = _steam_appid_from_url(source.get("url"))
         if exposed_steam_appid is not None and exposed_steam_appid != str(exact_appid):
