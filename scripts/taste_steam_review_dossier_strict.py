@@ -510,7 +510,10 @@ def _validate_source(source, index, enums, schema_doc, generated_date, evidence_
                 f"{label} Steam Store concrete-item fallback parent must use a review-surface source type"
             )
     if source["player_feedback"] is True and exact_appid is not None:
-        exposed_steam_appid = _steam_appid_from_url(source.get("url"))
+        exposed_steam_appid = (
+            _steam_appid_from_url(source.get("url"))
+            or _steam_appid_from_public_ref(source.get("public_ref"))
+        )
         if exposed_steam_appid is not None and exposed_steam_appid != str(exact_appid):
             raise ValueError(f"{label} Steam player-feedback source appid does not match exact dossier appid")
     return source_id, _source_locator_identity(source)
