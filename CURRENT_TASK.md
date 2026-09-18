@@ -388,3 +388,14 @@
 - Crown Trick/Hellish Quart item-level locator issue remains explicitly out of scope and unchanged;
 - Scheduled Task Run now/settings were not used/changed;
 - durable report: `reviews/worker_reports/taste-story-dlc-scope-policy-implement-01.md`.
+
+## Worker in progress — 2026-09-18
+
+### Taste dossier Steam Store review-card parent fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_STEAM_STORE_REVIEW_CARD_PARENT_FIX_01.md`;
+- scope: narrow parent/child source-semantics fix for concrete individual review cards visibly inspected on exact-product Steam Store app pages;
+- stable-locator rules, transient-author privacy/recurrence caps, exact appid identity, Story-DLC policy, group size 3, atomic buffered semantics and GitHub control-plane ownership remain unchanged;
+- Scheduled Task `Run now` and settings are out of scope and must not be used/changed;
+- implementation is confined to the bounded worker branch/PR until green validation and normal GitHub-owned activation.
+
