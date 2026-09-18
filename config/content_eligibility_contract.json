@@ -2,7 +2,7 @@
   "contract": "CONTENT-ELIGIBILITY-V1",
   "version": "1.0",
   "status": "implementation_only",
-  "purpose": "Apply the canonical DLC/addon/content eligibility rules after the mandatory taste checkpoint using cached Steam content metadata, without using price, discount, reviews or SteamDB as taste evidence.",
+  "purpose": "Apply canonical DLC/addon/content eligibility while keeping purchase-family membership separate from independent Taste/dossier semantic scope.",
   "authority": {
     "canonical_policy_path": "config/mailing_policy.json",
     "never_overrides_canonical_policy": true,
@@ -19,9 +19,13 @@
   "rules": {
     "game_app": "eligible",
     "sub_package": "eligible_for_family_resolution only when at least one contained app or the feed representative app is taste-include in the same run; otherwise unresolved and fail closed",
-    "dlc_with_same_run_taste_include_base": "eligible_for_family_resolution unless obvious cosmetic/soundtrack/artbook/non-game addon",
-    "dlc_without_same_run_taste_include_base": "requires canonical-profile/current-user-context support for the base game or proof that the addon is effectively standalone game-like content; otherwise unresolved and fail closed",
-    "obvious_non_game_addon": "exclude",
+    "dlc_purchase_family_membership": "may preserve exact Steam base/addon purchase relationships without creating an independent Taste semantic subject",
+    "dlc_independent_taste_dossier_scope": "eligible only after reliable product metadata positively confirms substantial playable narrative/story content",
+    "dlc_story_scope_ambiguous": "exclude from independent Taste/dossier scope as story_content_unproven_excluded",
+    "dlc_confirmed_non_story": "exclude from independent Taste/dossier scope as non_story_dlc_excluded",
+    "story_dlc_after_scope_gate": "existing base-support/final recommendation condition remains downstream and separate from story-scope classification",
+    "obvious_non_game_addon": "exclude from independent Taste/dossier scope",
+    "season_pass_or_entitlement_container": "not an independent story DLC semantic object solely because it grants story DLC children",
     "unknown_or_missing_steam_type": "unresolved and fail closed"
   },
   "obvious_non_game_title_patterns": [
@@ -48,6 +52,15 @@
       "all exclusions use canonical content eligibility reason codes",
       "no wishlist ownership inference",
       "checkpoint proof is current and complete"
+    ]
+  },
+  "story_dlc_scope": {
+    "policy_revision": "story-dlc-positive-evidence-v1",
+    "positive_evidence_source": "GitHub-accessible Steam product metadata; title alone cannot prove eligibility",
+    "machine_statuses": [
+      "story_dlc_eligible",
+      "non_story_dlc_excluded",
+      "story_content_unproven_excluded"
     ]
   }
 }
