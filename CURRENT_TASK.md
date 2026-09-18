@@ -316,3 +316,18 @@
 - Scheduled Task `Run now` was not launched and settings were not changed;
 - durable report: `reviews/worker_reports/taste-dossier-semantic-consistency-gaps-implement-01.md`;
 - next boundary: one separate live acceptance of the existing `Taste Steam Review Dossier` Scheduled Task against the current compatible snapshot, followed by a separate READ / VALIDATE report.
+
+### Taste dossier post-SCG live acceptance 01
+Статус: `rejected_worker_contract_misread`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_POST_SCG_LIVE_ACCEPTANCE_01.md`;
+- authoritative manual UI-result accepted as observed live behavior; Scheduled Task повторно не запускался;
+- current snapshot confirmed: `00072072b0b382e6b973f448ce00b4aaaeccb2dbe355ca323de1785ccc0bd34c`, expected `g000001`, remaining `564`;
+- partial 3-game publication correctly avoided: buffered validator requires exact planned appid coverage in order;
+- active V2 contract explicitly allows Russian attempt states `searched_not_found_or_insufficient` and `source_access_unavailable`; absence of Russian attributable feedback alone is not a dossier-completeness blocker;
+- live worker therefore misread the contract when it treated insufficient Russian feedback as the reason full V2 group could not be completed;
+- no separate general evidence/identity insufficiency for BG3 DLC, Hellish Quart or Tetris is proven by the bounded acceptance evidence;
+- no prompt/contract/validator/runtime implementation change was made;
+- report: `reviews/worker_reports/taste-dossier-post-scg-live-acceptance-01.md`;
+- report commit: `7356c26e1f83ffe429414bfea41dd5a2a9aa9ca4`;
+- next boundary: one separate Director-authorized runtime/prompt-interpretation fix task; this acceptance worker does not begin the fix.
+
