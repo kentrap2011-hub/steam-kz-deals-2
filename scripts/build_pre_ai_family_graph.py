@@ -222,10 +222,10 @@ def resolve(allowed_keys, feed, store, meta, rules, contract):
             story_scope = addon_story_scope[0]['classification']
             if story_scope['status'] == STORY_DLC_ELIGIBLE and story_scope['eligible'] is True:
                 selection_reason = 'standalone_story_addon_purchase_family_requires_ai_base_support'
-                ai_condition = 'story_addon_taste_include_and_base_support_required'
+                ai_condition = 'addon_taste_include_and_base_support_required'
             else:
                 selection_reason = 'addon_purchase_family_excluded_from_independent_taste_story_scope'
-                ai_condition = 'addon_excluded_from_taste_story_scope'
+                ai_condition = 'addon_taste_include_and_base_support_required'
         elif fam['family_type'] in {'franchise_bundle', 'package_without_candidate_base'}:
             primary = members[0]
             selection_reason = 'bundle_or_external_package_is_own_family'
@@ -312,7 +312,7 @@ def resolve(allowed_keys, feed, store, meta, rules, contract):
             'addon_story_scope': addon_story_scope,
             'taste_semantic_eligible': not (
                 fam['family_type'] == 'external_base_addon'
-                and ai_condition == 'addon_excluded_from_taste_story_scope'
+                and addon_story_scope[0]['classification']['status'] != STORY_DLC_ELIGIBLE
             ),
             'all_member_keys': members,
             'relationship_evidence': fam['relationship_evidence'],
@@ -457,7 +457,8 @@ def main():
         'assigned_item_count': len(assigned),
         'family_count': len(families),
         'complete_coverage_of_nonexcluded_candidates': assigned == allowed,
-        'taste_subject_count': len({
+        'taste_subject_count': len({family['taste_subject_key'] for family in families}),
+        'taste_semantic_eligible_subject_count': len({
             family['taste_subject_key'] for family in families
             if family.get('taste_semantic_eligible', True)
         }),
@@ -478,6 +479,7 @@ def main():
         'family_candidates': out['family_candidate_item_count'],
         'families': out['family_count'],
         'taste_subjects': out['taste_subject_count'],
+        'taste_semantic_eligible_subjects': out['taste_semantic_eligible_subject_count'],
         'family_types': out['family_type_counts'],
         'story_dlc_scope_summary': out['story_dlc_scope_summary'],
         'control': out['validated_control_comparison'],
