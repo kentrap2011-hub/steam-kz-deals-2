@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """V2 web-evidence helpers layered on the unchanged GitHub dossier control plane."""
 import copy
+
+from story_dlc_scope import STORY_DLC_ELIGIBLE, validate_classification
 from datetime import datetime, timezone
 
 from taste_package_member_aggregation import (
@@ -30,7 +32,7 @@ from taste_steam_review_dossier_strict import (
     validate_dossiers_against_expected_items,
 )
 
-_PACKAGE_IDENTITY_POLICY_REVISION = "package-member-dossier-aggregation-v1"
+_PACKAGE_IDENTITY_POLICY_REVISION = "package-member-dossier-aggregation-v1+story-dlc-scope-v1"
 
 
 def ensure_web_evidence_binding(manifest):
@@ -84,6 +86,32 @@ def _resolve_queue_row_dossier_identities(row, index):
     condition = row.get("semantic_condition") if isinstance(row.get("semantic_condition"), dict) else {}
     is_package_offer = key.startswith("Sub_") or condition.get("ai_condition") == PACKAGE_AI_CONDITION
     if not is_package_offer:
+        if str(row.get("family_id") or "").startswith("addon:"):
+            classification = condition.get("story_dlc_scope")
+            try:
+                classification = validate_classification(classification)
+            except ValueError as exc:
+                return {
+                    "status": "excluded",
+                    "excluded": {
+                        "key": key,
+                        "appid": source_row_appid,
+                        "title": str(row.get("title") or ""),
+                        "reason": "story_dlc_classification_missing_or_invalid",
+                        "detail": str(exc),
+                    },
+                }
+            if classification["status"] != STORY_DLC_ELIGIBLE or classification["eligible"] is not True:
+                return {
+                    "status": "excluded",
+                    "excluded": {
+                        "key": key,
+                        "appid": source_row_appid,
+                        "title": str(row.get("title") or ""),
+                        "reason": classification["status"],
+                        "classification": classification,
+                    },
+                }
         return {
             "status": "resolved",
             "rows": [{
@@ -186,6 +214,7 @@ def resolve_dossier_scope_identities(queue_rows, contract):
     rows_by_appid = {}
     order = []
     blocked = []
+    story_scope_excluded = []
     package_mappings = []
     eligible_row_count = 0
     deduplicated_row_count = 0
@@ -202,6 +231,9 @@ def resolve_dossier_scope_identities(queue_rows, contract):
         resolved = _resolve_queue_row_dossier_identities(row, index)
         if resolved["status"] == "blocked":
             blocked.append(resolved["blocked"])
+            continue
+        if resolved["status"] == "excluded":
+            story_scope_excluded.append(resolved["excluded"])
             continue
         if resolved.get("package_mapping") is not None:
             package_mappings.append(resolved["package_mapping"])
@@ -256,6 +288,7 @@ def resolve_dossier_scope_identities(queue_rows, contract):
     return {
         "rows": rows,
         "identity_blocked_items": blocked,
+        "story_scope_excluded_items": story_scope_excluded,
         "package_member_mappings": package_mappings,
         "eligible_row_count": eligible_row_count,
         "deduplicated_row_count": deduplicated_row_count,
@@ -272,6 +305,7 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
     resolution = resolve_dossier_scope_identities(queue_rows, contract)
     scope_rows = resolution["rows"]
     identity_blocked_items = resolution["identity_blocked_items"]
+    story_scope_excluded_items = resolution["story_scope_excluded_items"]
     package_member_mappings = resolution["package_member_mappings"]
     eligible_row_count = resolution["eligible_row_count"]
     items = []
@@ -313,6 +347,7 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
     eligible_binding = [{"key": r["key"], "appid": r["appid"]} for r in scope_rows]
     eligible_sha = canonical_sha256(eligible_binding)
     identity_blocked_sha = canonical_sha256(identity_blocked_items)
+    story_scope_excluded_sha = canonical_sha256(story_scope_excluded_items)
     package_mapping_sha = canonical_sha256(package_member_mappings)
     required_sha = canonical_sha256(required)
     snapshot_id = canonical_sha256({
@@ -353,6 +388,9 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
         "identity_blocked_count": len(identity_blocked_items),
         "identity_blocked_sha256": identity_blocked_sha,
         "identity_blocked_items": identity_blocked_items,
+        "story_scope_excluded_count": len(story_scope_excluded_items),
+        "story_scope_excluded_sha256": story_scope_excluded_sha,
+        "story_scope_excluded_items": story_scope_excluded_items,
         "package_member_mapping_count": len(package_member_mappings),
         "package_member_mapping_sha256": package_mapping_sha,
         "package_member_mappings": package_member_mappings,
