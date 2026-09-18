@@ -21,9 +21,9 @@ GitHub, not Scheduled ChatGPT, executes the canonical strict/buffered validator 
 
 The active semantic evidence contract is ordinary bounded multi-source web research of player feedback. Steam `appreviews` JSON, cursors, fixed review counts, the old 20-review batching rule, and the old 80/80/160 ceilings are **not required**. If an existing compact index still contains a legacy `sampling_policy` field, treat it as inactive compatibility metadata and do not use it as a semantic quota.
 
-Do not infer enum values from prose or invent synonyms. `category:"content"` remains invalid. Never store raw review bodies, post bodies, quotes/excerpts, usernames, display names, author attribution, author profiles, or a per-review archive.
+Do not infer enum values from prose or invent synonyms. `category:"content"` remains invalid. Never persist raw review bodies, post bodies, quotes/excerpts, usernames, display names, author attribution, author profiles, or a per-review archive. Author/account/profile identity may exist only transiently in worker memory under the fallback dedupe rule below.
 
-The evidence contract's `compact_provenance` section is mechanically enforced by GitHub's canonical buffered validator. A persisted URL must not be author/profile-scoped. A `public_ref` must be neutral locator metadata only: it must not contain author/user identity or a review/post excerpt, quote, paraphrase, content summary, or URL disguised as text. Do not hash or otherwise pseudonymize usernames as a workaround; omit author identity entirely.
+The evidence contract's `compact_provenance` section is mechanically enforced by GitHub's canonical buffered validator. A persisted URL must not be author/profile-scoped. A `public_ref` must be neutral locator metadata only: it must not contain author/user identity or a review/post excerpt, quote, paraphrase, content summary, or URL disguised as text. Do not hash or otherwise pseudonymize usernames as a workaround; omit author identity entirely from every persisted artifact.
 
 ## Start and traversal
 
