@@ -162,7 +162,30 @@ Current compatible activation state after the GitHub-owned rebuild:
   2. Hellish Quart — appid `1000360`;
   3. Tetris® Effect: Connected — appid `1003590`.
 
-The activation rebuild recomputed the current canonical source scope at 702 rather than the earlier live-acceptance 730. This implementation did not alter Taste eligibility, Story-DLC eligibility, group sizing or progress semantics, and it performed no manual scope/progress repair. The independent source-queue delta was not part of this narrow source-rule task; importantly, the exact first group remained unchanged and the new snapshot is bound to the new contract/schema/prompt hashes.
+The activation rebuild recomputed the current canonical dossier scope at 702 rather than the earlier 730. This delta is now fully closed and is **not** caused by the Steam Store review-card parent implementation.
+
+The implementation merge commit `355e93452636415e8b5f8ba84d197883315b566f` still carried the pre-existing snapshot `99c3601ff39f62af05be2b529854516dcd7e9ba3570948aa6e8c257d62bba8b8` with `730/730` prepared/remaining and source queue SHA `674bba67f999c5ecb58de647e3134fa2881773d84c017cf8f2185a3d45acbd88`. The count changed only in the subsequent normal GitHub-owned activation commit `6137ef1e7210eaa1b693a40237f638ddadbba178`, whose Store snapshot was freshly observed at `2026-09-18T17:05:35.036065+00:00`.
+
+The previous Store snapshot had been observed at `2026-09-18T16:02:26.886958+00:00`. The 28 removed dossier items all belonged to offers whose previous canonical discounted option ended at exactly `2026-09-18T17:00:00+00:00`. After the activation-time Store refresh:
+- 20 of those 28 no longer had any active discounted purchase option and were removed before family/Taste queue construction with canonical reason `no_active_discounted_purchase_option`;
+- 8 still had a discounted purchase option, but Store selected a different current option via `current_lowest_discounted_option_after_source_change`; all 8 then failed the canonical deal gate even for assumed strong Taste (7 by absolute price/budget gate, 1 by symbolic-discount gate);
+- additions to dossier scope were exactly `0`.
+
+The arithmetic also reconciles exactly:
+- family count `791 -> 770` because 21 previously active paid-offer families became inactive;
+- one of those 21, `App_2903950` (Master Detective Archives: RAIN CODE Plus), was already excluded from the old AI/Taste queue by `deal_excludes_even_if_strong`, so only 20 of those 21 affected dossier scope;
+- 8 still-active families became newly `deal_excludes_even_if_strong`;
+- therefore dossier source queue `731 -> 703` and eligible dossier scope `730 -> 702`, a net `-28`;
+- deterministic exclusions changed `60 -> 67` because the already-excluded `App_2903950` left the family partition (-1) while 8 newly changed current offers entered the deal-excluded bucket (+8), net +7.
+
+No Taste eligibility rule, mailing source population, mechanical eligibility rule or Story-DLC policy changed across this boundary:
+- mailing source timestamp stayed `2026-09-17T23:21:42.271350+00:00`;
+- mailing source item count stayed `826`;
+- mechanically excluded count stayed `20`;
+- Story-DLC policy revision stayed `story-dlc-positive-evidence-v1`;
+- Story-DLC scope SHA stayed `71acd585e2b86d17187db0dae6668f0b7fa9e5da3d206ac982d5fa6bbff41a7a`.
+
+Therefore the `730 -> 702` movement is a normal independent current-offer/deal recomputation caused by the 17:00 UTC sale boundary, not a side effect of this implementation.
 
 ## 15. PROJECT_DECISIONS ref
 
@@ -185,7 +208,7 @@ No implementation, CI, merge, binding or snapshot blocker remains.
 
 The only remaining acceptance boundary is live runtime behavior of the existing Scheduled Task against the new compatible `g000001`; this task intentionally does not perform that live run.
 
-The activation-time source-scope movement from the earlier 730 to current 702 was observed but not audited because it belongs to canonical source recomputation rather than this parent-source semantics fix. It does not change the exact live-acceptance target group.
+The earlier activation-time scope-count question `730 -> 702` is now resolved. Machine-derived before/after comparison proves the delta came from normal current-offer refresh and downstream deal gating at the 17:00 UTC sale boundary, not from the Steam Store review-card parent fix. No scope-count blocker remains.
 
 ## 18. Status
 
@@ -200,3 +223,75 @@ Return to Director. Director decides whether to perform one live acceptance of t
 The main avoidable detour was that two older regressions asserted the exact previous prompt revision/error text rather than the semantic fail-closed behavior. CI exposed those stale assertions sequentially before the new STORE-CARD suite could run. The reusable rule already exists in `KNOWN_WORKER_PITFALLS.md -> PITFALL-001`: when changing implementation/copy/contract markers, update dependent static guards atomically and prefer observable semantic behavior over brittle exact-string checks.
 
 This task now has a dedicated STORE-CARD-01..11 suite wired into the canonical dossier CI, so future changes to Store parent/child semantics, exact appid, privacy or recurrence rules will fail in one focused place instead of requiring live rediscovery.
+
+## 21. Scope-count closeout — machine-derived 730 -> 702 appendix
+
+### 21.1 Canonical before/after boundary
+
+| Field | Before activation | After activation |
+|---|---:|---:|
+| commit carrying state | `355e93452636415e8b5f8ba84d197883315b566f` | `6137ef1e7210eaa1b693a40237f638ddadbba178` |
+| dossier snapshot | `99c3601ff39f62af05be2b529854516dcd7e9ba3570948aa6e8c257d62bba8b8` | `2db923b8171bcf30caa2a6a0b2e36f4bc21c63143265a92648969d3748f79319` |
+| source queue rows | 731 | 703 |
+| eligible dossier scope | 730 | 702 |
+| additions | 0 | — |
+| removed | — | 28 |
+| Store snapshot observed_at_utc | `2026-09-18T16:02:26.886958+00:00` | `2026-09-18T17:05:35.036065+00:00` |
+| active paid discounted Store entries | 825 | 804 |
+| inactive source candidates | 1 | 22 |
+| family count | 791 | 770 |
+| deterministic exclusions | 60 | 67 |
+
+### 21.2 Reason groups
+
+- **20 dossier items — current offer ended with no replacement discounted option.** All 20 had previous canonical discount end `2026-09-18T17:00:00+00:00`; the 17:05 Store refresh classified them `no_active_discounted_purchase_option`, so they never reached the new family/Taste queue.
+- **8 dossier items — current offer changed, but replacement offer failed canonical deal gating.** All 8 had previous source deals ending at `2026-09-18T17:00:00+00:00`; the refresh selected a new current discounted option with `selection_method:"current_lowest_discounted_option_after_source_change"`. Seven failed `price_clearly_unreasonable_after_soft_target_evaluation`; one (Woodle Tree Adventures) failed `symbolic_discount_not_worth_mailing_attention`.
+- **No additions.** Exact set comparison of old/new dossier work items produced `added_count=0`.
+
+### 21.3 Full removed list
+
+| AppID | Title | Canonical removal reason | Machine evidence |
+|---:|---|---|---|
+| 1186220 | Wire Lips | inactive current paid offer | old sale 91% / 261 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 1240590 | Sir Whoopass™: Immortal Death | inactive current paid offer | old sale 50% / 1250 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 1271710 | LEWDAPOCALYPSE Hentai Evil | replacement offer excluded even if strong | source 80% / 198 KZT -> current 10% / 8705 KZT (1651 RUB); `price_clearly_unreasonable_after_soft_target_evaluation` |
+| 1318690 | shapez | inactive current paid offer | old sale 90% / 290 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 1324340 | Made in Abyss: Binary Star Falling into Darkness | inactive current paid offer | old sale 85% / 1065 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 1449200 | AI: THE SOMNIUM FILES - nirvanA Initiative | inactive current paid offer | old sale 85% / 1395 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 2066020 | Soulstone Survivors | replacement offer excluded even if strong | source 30% / 2870 KZT -> current 21% / 4995 KZT (947 RUB); `price_clearly_unreasonable_after_soft_target_evaluation` |
+| 2162800 | shapez 2 - Factory | replacement offer excluded even if strong | source 50% / 2750 KZT -> current 9% / 8873 KZT (1683 RUB); `price_clearly_unreasonable_after_soft_target_evaluation` |
+| 2218750 | Halls of Torment | replacement offer excluded even if strong | source 25% / 1425 KZT -> current 9% / 14868 KZT (2820 RUB); `price_clearly_unreasonable_after_soft_target_evaluation` |
+| 2532550 | LIZARDS MUST DIE | inactive current paid offer | old sale 75% / 249 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 299460 | Woodle Tree Adventures | replacement offer excluded even if strong | source 81% / 228 KZT -> current 2% / 18305 KZT (3472 RUB); `symbolic_discount_not_worth_mailing_attention` |
+| 311240 | Zero Escape: Zero Time Dilemma | inactive current paid offer | old sale 80% / 530 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 3187010 | Dinocop | inactive current paid offer | old sale 30% / 2450 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 3391500 | 侦探，请守护我的秘密吧！ | replacement offer excluded even if strong | source 65% / 1388 KZT -> current 14% / 4705 KZT (892 RUB); `price_clearly_unreasonable_after_soft_target_evaluation` |
+| 3612850 | The Lightkeeper | inactive current paid offer | old sale 30% / 1610 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 391540 | Undertale | inactive current paid offer | old sale 75% / 462 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 4000 | Garry's Mod | replacement offer excluded even if strong | source 50% / 1125 KZT -> current 40% / 14862 KZT (2819 RUB); `price_clearly_unreasonable_after_soft_target_evaluation` |
+| 413410 | Danganronpa: Trigger Happy Havoc | inactive current paid offer | old sale 90% / 265 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 413420 | Danganronpa 2: Goodbye Despair | inactive current paid offer | old sale 50% / 1325 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 473950 | Manifold Garden | inactive current paid offer | old sale 75% / 1300 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 477740 | Zero Escape: The Nonary Games | inactive current paid offer | old sale 80% / 780 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 555950 | Danganronpa Another Episode: Ultra Despair Girls | inactive current paid offer | old sale 80% / 780 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 564230 | Fire Pro Wrestling World | inactive current paid offer | old sale 80% / 780 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 567640 | Danganronpa V3: Killing Harmony | inactive current paid offer | old sale 70% / 1410 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 590380 | Into the Breach | replacement offer excluded even if strong | source 80% / 820 KZT -> current 33% / 4212 KZT (799 RUB); `price_clearly_unreasonable_after_soft_target_evaluation` |
+| 648580 | 428: Shibuya Scramble | inactive current paid offer | old sale 80% / 1200 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 912450 | YU-NO: A girl who chants love at the bound of this world | inactive current paid offer | old sale 85% / 900 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+| 948740 | AI: The Somnium Files | inactive current paid offer | old sale 80% / 1040 KZT ended 17:00 UTC; activation Store snapshot => `no_active_discounted_purchase_option` |
+
+### 21.4 Reconciliation of the extra family-graph removal
+
+Family count fell by 21, while only 20 of those newly inactive families were present in the old dossier source queue. The remaining newly inactive family was:
+
+- `App_2903950` — Master Detective Archives: RAIN CODE Plus. Its old 50% / 3950 KZT offer also ended at 17:00 UTC, but it was **already absent from the old dossier queue** because both strong and moderate deal scenarios were `EXCLUDE` with `price_clearly_unreasonable_after_soft_target_evaluation`. When that offer became inactive, it moved out of the family partition but did not remove an additional dossier item.
+
+This explains why family count changed by -21 while dossier scope changed by -28 through the combined -20 inactive-queue effect plus -8 newly deal-excluded active replacements.
+
+### 21.5 Closeout conclusion
+
+Classification: **normal independent current-offer/deal recomputation; not an implementation side effect**.
+
+Status remains `complete_ready_for_live_acceptance`. No new implementation is warranted from the `730 -> 702` observation. CONTRA-01..03 remain untouched and belong to their separate follow-up task. Scheduled Task `Run now` was not launched.
+
