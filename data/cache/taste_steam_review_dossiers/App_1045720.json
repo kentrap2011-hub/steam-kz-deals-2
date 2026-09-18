@@ -1,82 +1,156 @@
 {
-  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
-  "schema_version": 1,
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
+    "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
+  },
   "appid": "1045720",
   "title": "The Coma 2: Vicious Sisters",
-  "generated_at_utc": "2026-09-14T04:40:44+00:00",
-  "expires_at_utc": "2026-10-04T04:40:44+00:00",
+  "generated_at_utc": "2026-09-18T20:25:51Z",
+  "expires_at_utc": "2026-10-08T20:25:51Z",
   "ttl_days": 20,
-  "summary": "Story-driven 2D Korean survival horror combining exploration, puzzles, resource use and evasion. Accessible reviews often view it as an improvement over the first game and praise pacing, art and atmosphere, though a minority criticize repetitive dialogue, backtracking and underused survival items.",
-  "observations": [
-    {
-      "category": "pacing",
-      "statement": "Multiple accessible reviews praise the sequel's pacing and overall improvement over the first game.",
-      "sentiment": "positive",
-      "recurrence": "moderate",
-      "mention_count": 3,
-      "evidence_languages": [
-        "non_russian"
-      ]
-    },
-    {
-      "category": "structure",
-      "statement": "The game centers on exploration, puzzle-solving, scavenging and evasion across the Sehwa district.",
-      "sentiment": "neutral",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "store"
-      ]
-    },
-    {
-      "category": "repetition",
-      "statement": "One substantial negative review criticizes repeated backtracking and dialogue and argues that some survival items feel unnecessary.",
-      "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ]
-    }
-  ],
-  "conflicts": [
-    {
-      "statement": "Most sampled reviews describe a stronger sequel, while an opposing review sees little improvement and more repetition.",
-      "recurrence": "limited"
-    }
-  ],
-  "review_sample": {
-    "strategy": "adaptive_stability",
-    "sampled_russian": 0,
-    "sampled_non_russian": 4,
-    "sampled_total": 4,
-    "sample_ids_sha256": "f8c2857e15549aed422be9aba2f014d7ae84fe46a130e1f38c30466f2881d41e",
-    "lanes": [
+  "game_identity": {
+    "work_title": "The Coma 2: Vicious Sisters",
+    "release_year": 2020,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
       {
-        "language_scope": "russian",
-        "sampled": 0,
-        "batches": 1,
-        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
+        "kind": "appid",
+        "value": "1045720"
       },
       {
-        "language_scope": "non_russian",
-        "sampled": 4,
-        "batches": 1,
-        "stop_reason": "source_sparse_in_accessible_steam_review_index"
+        "kind": "developer",
+        "value": "Dvora Studio Co., Ltd."
       }
     ]
   },
-  "provenance": {
-    "store_description": {
-      "url": "https://store.steampowered.com/app/1045720/",
-      "captured_at_utc": "2026-09-14T04:40:44+00:00",
-      "content_sha256": "7648c52ba68b3079c51f0b7c46d2a743283e7328e284014eafca1a073e2782a9"
+  "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "structure",
+      "statement": "Players describe the sequel as a strong expansion of the first game, with more locations, improved presentation and a broader story while retaining the same core exploration-and-escape structure.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "fallback-001"
+      ]
     },
-    "steam_reviews": {
-      "url": "https://store.steampowered.com/app/1045720/#app_reviews_hash",
-      "captured_at_utc": "2026-09-14T04:40:44+00:00",
-      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
-      "source_refs_sha256": "f8c2857e15549aed422be9aba2f014d7ae84fe46a130e1f38c30466f2881d41e"
+    {
+      "category": "friction",
+      "statement": "Some player feedback notes that repeated pursuit encounters become less frightening over time even though the atmosphere and chase tension remain central to the experience.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "fallback-002"
+      ]
     }
+  ],
+  "conflicts": [],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "limited",
+    "stop_reason": "evidence_stable"
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1045720/The_Coma_2_Vicious_Sisters/",
+        "publication_date": "2020-01-28",
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "identity",
+        "player_feedback": false
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1045720/reviews/?browsefilter=toprated&l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "freshness": "unknown",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/HorrorGaming/comments/ln81rx/",
+        "publication_date": "2021-02-19",
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "durable_trait",
+        "player_feedback": true
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-003",
+        "url": "https://www.reddit.com/r/HorrorGaming/comments/ln81rx/",
+        "publication_date": "2021-02-19",
+        "language": "non_russian",
+        "identity_mode": "stable_locator"
+      },
+      {
+        "feedback_id": "fallback-001",
+        "source_id": "source-002",
+        "publication_date": "2023-12-10",
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
+      },
+      {
+        "feedback_id": "fallback-002",
+        "source_id": "source-002",
+        "publication_date": "2024-01-17",
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
+      }
+    ]
   }
 }
