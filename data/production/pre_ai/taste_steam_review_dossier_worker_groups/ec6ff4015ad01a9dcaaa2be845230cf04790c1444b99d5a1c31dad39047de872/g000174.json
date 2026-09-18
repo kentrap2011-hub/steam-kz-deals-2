@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872",
+  "prepared_required_sha256": "048841e89b8aab1f2276c5e747d04183d6d5f323386d2a93c697f287eb04ee1a",
+  "group_plan_sha256": "8931aff2a475ab621702d9a0f4f61a70db7bfd277c69591ada1e5d376b62bbb2",
+  "group_count": 234,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+    "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+  },
+  "sequence": 174,
+  "start_index": 519,
+  "end_index_exclusive": 522,
+  "appids": [
+    "45740",
+    "45770",
+    "460120"
+  ],
+  "items_sha256": "97b1511357eae7e16b3ca1aaef71870f21ff6b1e582f5aebf9b1df11bf3abae6",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "68b9702e61e8157e065fb526c8a472b9eb61ac1ef1de1d2b3d65f30c0f7072a9",
+  "items": [
+    {
+      "key": "App_45740",
+      "appid": "45740",
+      "title": "Dead Rising® 2",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_45740.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_45770",
+      "appid": "45770",
+      "title": "Dead Rising 2: Off the Record",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_45770.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_460120",
+      "appid": "460120",
+      "title": "Megadimension Neptunia VII",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_460120.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "07fe98663549a46d7e7311093b183b30c18da7887d42c651ab3e350407d94668"
+}

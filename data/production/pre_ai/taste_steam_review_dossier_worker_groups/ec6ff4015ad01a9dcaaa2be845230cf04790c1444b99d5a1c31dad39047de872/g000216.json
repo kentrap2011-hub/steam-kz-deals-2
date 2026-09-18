@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872",
+  "prepared_required_sha256": "048841e89b8aab1f2276c5e747d04183d6d5f323386d2a93c697f287eb04ee1a",
+  "group_plan_sha256": "8931aff2a475ab621702d9a0f4f61a70db7bfd277c69591ada1e5d376b62bbb2",
+  "group_count": 234,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+    "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+  },
+  "sequence": 216,
+  "start_index": 645,
+  "end_index_exclusive": 648,
+  "appids": [
+    "788100",
+    "793460",
+    "798460"
+  ],
+  "items_sha256": "aaca365ad1f7b0794c44153fea97903537cf73897df9e7af755d921b3244f07b",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "68b9702e61e8157e065fb526c8a472b9eb61ac1ef1de1d2b3d65f30c0f7072a9",
+  "items": [
+    {
+      "key": "App_788100",
+      "appid": "788100",
+      "title": "Neon Abyss",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_788100.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_793460",
+      "appid": "793460",
+      "title": "112 Operator",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_793460.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_798460",
+      "appid": "798460",
+      "title": "Ni no Kuni Wrath of the White Witch™ Remastered",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_798460.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "3a10286e5e7bc2687033f54891dfa4144dcd41286b414184a8bf2fbf21e9e133"
+}
