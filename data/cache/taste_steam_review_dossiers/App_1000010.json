@@ -5,20 +5,20 @@
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
     "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-    "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
+    "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
     "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
     "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
-    "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
+    "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+    "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
   },
   "appid": "1000010",
   "title": "Crown Trick",
-  "generated_at_utc": "2026-09-18T20:22:05Z",
-  "expires_at_utc": "2026-10-08T20:22:05Z",
+  "generated_at_utc": "2026-09-18T21:33:02Z",
+  "expires_at_utc": "2026-10-08T21:33:02Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Crown Trick",
@@ -38,43 +38,23 @@
       }
     ]
   },
-  "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Players describe the turn-based room combat as tactical, with positioning, weapon and familiar choices, and environmental interactions creating meaningful decisions.",
-      "sentiment": "positive",
-      "recurrence": "limited",
-      "mention_count": 2,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-003",
-        "source-004"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
-        "feedback-002"
-      ]
-    },
-    {
       "category": "progression",
-      "statement": "Recent Russian player feedback reports weak long-term build depth or limited content variety after the initial concept has been understood.",
+      "statement": "A recent Russian Steam review reports that the core idea is appealing but the game feels short and light on long-term roguelike content.",
       "sentiment": "negative",
-      "recurrence": "limited",
-      "mention_count": 2,
+      "recurrence": "anecdotal",
+      "mention_count": 1,
       "evidence_languages": [
         "russian"
       ],
-      "evidence_status": "uncertain",
+      "evidence_status": "durable",
       "source_ids": [
         "source-002"
       ],
       "player_feedback_ids": [
-        "fallback-001",
-        "fallback-002"
+        "fallback-001"
       ]
     }
   ],
@@ -82,8 +62,8 @@
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "multi_source",
-    "single_source_reason": null,
+    "source_mix_status": "single_source_only",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback collection used for the validated finding.",
     "russian_attempt": "found_and_used",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
@@ -94,8 +74,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1000010/Crown_Trick/",
-        "publication_date": "2020-10-16",
+        "url": "https://store.steampowered.com/app/1000010/",
+        "publication_date": "2020-01-01",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "identity",
@@ -105,65 +85,20 @@
         "source_id": "source-002",
         "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1000010/Crown_Trick/?l=russian",
+        "url": "https://store.steampowered.com/app/1000010/Crown_Trick/?cc=us&l=russian",
         "publication_date": null,
         "language": "russian",
-        "freshness": "unknown",
-        "evidence_role": "uncertain",
+        "freshness": "recent",
+        "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection"
-      },
-      {
-        "source_id": "source-003",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/roguelikes/comments/1g0rcui/",
-        "publication_date": null,
-        "language": "non_russian",
-        "freshness": "unknown",
-        "evidence_role": "durable_trait",
-        "player_feedback": true
-      },
-      {
-        "source_id": "source-004",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/NintendoSwitch/comments/jc4pcu/",
-        "publication_date": "2020-10-16",
-        "language": "non_russian",
-        "freshness": "older",
-        "evidence_role": "durable_trait",
-        "player_feedback": true
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "feedback-001",
-        "source_id": "source-003",
-        "url": "https://www.reddit.com/r/roguelikes/comments/1g0rcui/",
-        "publication_date": null,
-        "language": "non_russian",
-        "identity_mode": "stable_locator"
-      },
-      {
-        "feedback_id": "feedback-002",
-        "source_id": "source-004",
-        "url": "https://www.reddit.com/r/NintendoSwitch/comments/jc4pcu/",
-        "publication_date": "2020-10-16",
-        "language": "non_russian",
-        "identity_mode": "stable_locator"
-      },
-      {
         "feedback_id": "fallback-001",
         "source_id": "source-002",
         "publication_date": "2026-03-15",
-        "language": "russian",
-        "identity_mode": "transient_author_deduped"
-      },
-      {
-        "feedback_id": "fallback-002",
-        "source_id": "source-002",
-        "publication_date": "2025-12-02",
         "language": "russian",
         "identity_mode": "transient_author_deduped"
       }
