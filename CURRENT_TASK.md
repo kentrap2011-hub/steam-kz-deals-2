@@ -146,11 +146,17 @@
 ## Запланировано / выполняется
 
 ### Taste dossier Russian multi-source retrieval implement 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_RUSSIAN_MULTI_SOURCE_RETRIEVAL_IMPLEMENT_01.md`;
-- scope: source-agnostic bounded adaptive Russian player-feedback retrieval after exact-product existence proof, without weakening the existing fail-closed gate;
-- hard bounds remain <=8 search queries / <=16 opened-read pages per game; group size remains 3;
-- no Scheduled Task Run now, scheduler/settings, retry manager, queue, crawler, pricing/ranking/UI or manual production-state repair changes.
+- implementation PR #49 merged as `2d098c74889ddd30990f171fea2d1e8a0b09b6ce`;
+- focused dossier validation run `35352803497` (#71): success, including RUS-MS-01..07 and execution ownership;
+- normal GitHub-owned activation run `35352856938` (#133): success; atomic pre-AI commit `f805fc1628a9e2eed8c989a3195ea0f903951509`;
+- active snapshot: `cc99c7e33c2094de955c14c2fdfcf8a39eb9836f22afb9313ac01ff2fc4ecc86`, prepared/completed/remaining `732/0/732`, expected `g000001`, `244` groups of 3;
+- active evidence revision: `russian-multi-source-retrieval-2026-09-18`; prompt revision: `web-evidence-v2-russian-multi-source-retrieval-v1`;
+- source-agnostic bounded diversification is active after exact-product Russian existence proof; existing fail-closed gate, exact identity, 8/16 bounds and GitHub ownership remain unchanged;
+- Scheduled Task Run now and settings were not used/changed;
+- durable report: `reviews/worker_reports/taste-dossier-russian-multi-source-retrieval-implement-01.md`;
+- exact next step: one separate live acceptance of the existing `Taste Steam Review Dossier` Scheduled Task against the compatible snapshot, with UI result supplied manually; do not run Proactive Auditor first.
 
 
 ### Taste pre-AI deal contract guard fix implement 01
