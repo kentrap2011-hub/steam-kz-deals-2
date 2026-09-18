@@ -2,14 +2,14 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "transient-author-dedupe-fallback-2026-09-18",
+  "contract_revision": "steam-store-review-card-parent-fix-2026-09-18",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "parallel_validation_contract": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2-transient-author-fallback-v1",
+  "worker_prompt_revision": "web-evidence-v2-steam-store-review-card-parent-v1",
   "purpose": "Define the active semantic evidence policy for neutral Taste dossiers while leaving GitHub-owned scope, buffered transport, asynchronous strict validation/persistence, recovery and completeness in the existing control-plane contracts.",
   "supersedes": {
     "steam_appreviews_required": false,
@@ -66,7 +66,11 @@
     "steam_store_language_parameter_is_player_feedback_evidence": false,
     "source_diversity_identity": "canonicalized_physical_source_locator_not_worker_source_id",
     "steam_store_exact_app_review_collection_may_be_fallback_parent": true,
-    "fallback_parent_is_not_itself_a_feedback_record_or_mention": true
+    "fallback_parent_is_not_itself_a_feedback_record_or_mention": true,
+    "steam_store_parent_feedback_surface_mode": "concrete_item_collection",
+    "steam_store_parent_player_feedback_flag_semantics": "surface_contains_inspected_player_feedback_children_not_page_as_feedback_item",
+    "steam_store_parent_aggregate_metadata_is_feedback": false,
+    "steam_store_parent_aggregate_metadata_may_satisfy_russian_found_and_used": false
   },
   "compact_provenance": {
     "author_identity_allowed": false,
@@ -133,7 +137,9 @@
     ],
     "stable_locator_rule": "stable_locator remains the preferred and strongest path and retains all existing item-level URL/public_ref physical-identity validation",
     "fallback_forbidden_when_neutral_item_locator_available": true,
-    "collection_surface_fallback_parent_allowed_only_for_concrete_inspected_items": true
+    "collection_surface_fallback_parent_allowed_only_for_concrete_inspected_items": true,
+    "steam_store_exact_app_parent_allowed_for_identity_mode": "transient_author_deduped",
+    "steam_store_exact_app_parent_allowed_for_stable_locator": false
   },
   "parent_item_binding": {
     "rule": "every player_feedback_record must resolve to the physical surface represented by its parent source_id rather than merely sharing a host",
