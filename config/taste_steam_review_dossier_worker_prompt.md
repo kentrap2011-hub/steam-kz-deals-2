@@ -141,6 +141,24 @@ The relationship with used evidence remains bidirectional: if any Russian/mixed 
 
 Never infer Russian-specific localization, translation, voice, font/encoding or regional findings from non-Russian evidence and never fabricate Russian findings.
 
+## Russian retrieval diversification after existence proof
+
+When a reliable exact-product Russian player-feedback existence signal is established and no contract-usable Russian/mixed item has yet been obtained, enter an explicit **retrieval diversification phase**. Existence proof creates an item-level retrieval obligation, but that obligation is source-agnostic: Steam may provide the existence signal or one retrieval surface, and it is never required to provide the usable record.
+
+Use the remaining bounded search/page budget to discover attributable item-level player feedback across materially different public surface classes when reasonably discoverable. Candidate classes include exact-product Steam Community/review items, Reddit exact-product threads/comments, public Russian-language gaming forums, public community discussions/comment threads, public store user-review items, Pikabu or analogous public user-generated discussion surfaces, and other credible public player-feedback surfaces. This list is adaptive guidance, **not** a fixed site quota and not a requirement to visit every class.
+
+If the first reasonable retrieval surface yields only aggregate/list/index/non-item evidence or otherwise no usable item, and budget remains, do **not** immediately classify retrieval unresolved when at least one materially different player-feedback surface class is reasonably discoverable. Try at least one such different class. A materially different class is a different player-feedback mechanism/community context, not another query wording, locale, list page, or aggregate view on the same surface.
+
+If the first diversified step is still unresolved and budget remains, continue adaptively toward the most promising reasonably discoverable distinct player-feedback surface classes until one of these conditions is met:
+
+- a contract-usable exact-product Russian/mixed item is found;
+- a hard search/page bound is reached;
+- no reasonably discoverable distinct player-feedback surface class remains.
+
+After existence proof, repeated same-domain/same-surface aggregate/list/index variants are diminishing-return work and must yield priority to distinct item-level player-feedback discovery. Professional/editorial/journalistic Russian material remains context only: it is not a player-feedback surface for this phase and cannot satisfy `found_and_used`.
+
+All exact-product safeguards remain unchanged. For an exact DLC/edition such as `Baldur's Gate 3 - Digital Deluxe Edition DLC`, base-game feedback does not become usable merely because it is Russian or mentions the base title; the item must be bound to the exact DLC/edition under the active identity contract.
+
 ## Adaptive bounded stopping
 
 ChatGPT decides when evidence is sufficient. Do not chase a fixed review count or cursor. Expand research when evidence is sparse, divergent, temporally conflicted, localization-specific, or identity is uncertain. Stop when additional searching is unlikely to materially change the neutral dossier.
