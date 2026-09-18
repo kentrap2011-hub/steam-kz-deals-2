@@ -400,3 +400,23 @@
 **Текущий blocker:** PR #30 не мержится в этой задаче, потому что merge путей dossier runtime/config автоматически запускает production pre-AI workflow, а текущая task production run не разрешает.
 
 **Основные места:** `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/taste_steam_review_dossier_web.py`, PR #30, `reviews/worker_reports/taste-dossier-web-evidence-redesign-01.md`.
+
+---
+
+## TASTE-008 — Russian existence proof creates an item-level retrieval gate
+
+**Дата:** 2026-09-18
+**Статус:** implemented by `WORKER_TASK_TASTE_DOSSIER_RUSSIAN_EXISTENCE_RETRIEVAL_GATE_IMPLEMENT_01.md`.
+
+**Решение:** отдельный поиск русскоязычного player feedback остаётся обязательным, потому что релевантность для русскоязычного пользователя является частью evidence-задачи. При этом exact-product **existence proof** и contract-usable attributable item-level feedback — разные уровни доказательства. `evidence.russian_attempt` является единственным machine-readable состоянием gate: `found_and_used`, `searched_no_existence_signal`, `existence_established_retrieval_unresolved`, `existence_established_access_unresolved`.
+
+**Почему:** bounded audit показал два разных случая, которые прежний `searched_not_found_or_insufficient` смешивал. Для Tetris® Effect: Connected usable Russian item был нормально discoverable через exact appid/title + Russian term + Steam Community; для BG3 Digital Deluxe DLC и Hellish Quart exact-product surfaces доказывали Russian review activity, но usable item-level provenance в bounds не был получен. Поэтому доказанное существование + неудача item retrieval — discovery/retrieval defect и должно fail closed, а не изображать отсутствие русских отзывов.
+
+**Граница:** `searched_no_existence_signal` допустим только когда bounded good-faith search не установил надёжный exact-product player-activity existence signal. Existence aggregate/list/community signal сам не является player-feedback record, не поддерживает observation/conflict, не создаёт mention_count/recurrence и не удовлетворяет `found_and_used`. Russian-rendered UI без player activity не является existence proof. Профессиональный/журналистский русский материал может быть context/relevance evidence, но не заменяет player feedback и не закрывает retrieval gate.
+
+**Discovery:** fixed website quota и Steam-only requirement не вводятся. Используются exact title + release year/appid, Russian-language variants и, если attempt ещё не разрешён и budget остаётся, релевантный site-specific player-feedback/community search. После existence signal оставшийся bounded search направляется на attributable item-level retrieval. Hard bounds остаются <=8 search queries и <=16 opened/read pages на игру и являются safety ceilings, не targets.
+
+**Identity / architecture:** base game, DLC, edition, sequel/remaster и другой appid не смешиваются; когда Steam feedback URL явно содержит `/app/{appid}/`, он должен совпадать с exact dossier appid. GitHub остаётся control plane и единственным strict validation authority; Scheduled ChatGPT остаётся bounded evidence worker. Новые queue/retry/healing/recurring stages не создаются; group size 3 и buffered maximal-contiguous-prefix architecture не меняются.
+
+**Основные места:** `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/test_taste_steam_review_dossier_semantic_consistency.py`.
+
