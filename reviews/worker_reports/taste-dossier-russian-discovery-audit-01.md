@@ -43,13 +43,13 @@ Method:
 - did not persist raw player text, quotes, usernames, display names or profile URLs;
 - did not broaden beyond the three exact `g000001` products.
 
-Counts below count the 8 web-search queries separately from material source documents/pages inspected or access-attempted; search-result clutter/aliases not used for the decision are not counted as additional source-page reads.
+Counts below count web-search queries separately from explicit source-page open/click/read attempts. Page counts include repeated/access-failed opens used for verification; search-result cards remain part of the query count and are not counted again as opened source pages.
 
 | Exact product | Web-search queries | Material source pages/documents inspected or access-attempted | Bound respected |
 |---|---:|---:|---|
 | Baldur's Gate 3 - Digital Deluxe Edition DLC | 8 | 5 | yes, <=8 / <=16 |
-| Hellish Quart | 8 | 8 | yes, <=8 / <=16 |
-| Tetris® Effect: Connected | 8 | 4 | yes, <=8 / <=16 |
+| Hellish Quart | 8 | 10 | yes, <=8 / <=16 |
+| Tetris® Effect: Connected | 8 | 2 | yes, <=8 / <=16 |
 
 Minimal effective discovery pattern for the usable Tetris item was an ordinary exact-appid/exact-title Steam Community search with a Russian-language term (equivalent to `site:steamcommunity.com/app/1003590/discussions "рус"` / `"русский"`). No exotic source or backlog-wide crawling was required.
 
