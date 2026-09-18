@@ -9,6 +9,10 @@ from pathlib import Path
 from taste_negative_contract import negative_readiness
 from taste_evidence_contract import evidence_readiness
 from semantic_runtime_completion import apply_payload_status
+from story_dlc_scope import (
+    external_addon_story_scope,
+    external_addon_taste_semantic_eligible,
+)
 from taste_package_member_aggregation import (
     PACKAGE_MEMBER_AGGREGATION_POLICY,
     aggregate_package_member_taste,
@@ -300,6 +304,15 @@ def main():
     for family in families:
         primary_key = family['primary_key']
         taste_key = family['taste_subject_key']
+        try:
+            addon_story_scope = external_addon_story_scope(family)
+            addon_story_eligible = external_addon_taste_semantic_eligible(family)
+        except ValueError as exc:
+            raise SystemExit(f'Invalid story-DLC scope classification for {primary_key}: {exc}') from exc
+        if not addon_story_eligible:
+            excluded_keys.append(primary_key)
+            exclusion_counts[f"story_dlc_scope:{addon_story_scope['status']}"] += 1
+            continue
         if primary_key not in store or primary_key not in fx or primary_key not in history or primary_key not in deals:
             raise SystemExit(f'Missing primary prerequisite for {primary_key}')
         if taste_key not in taste or taste_key not in feed:
@@ -365,6 +378,8 @@ def main():
             'requires_ai_base_support': bool(family.get('requires_ai_base_support')),
             'base_appids': family.get('base_appids') or [],
         }
+        if addon_story_scope is not None:
+            semantic_condition['story_dlc_scope'] = addon_story_scope
         context = {
             'family_id': family['family_id'],
             'family_type': family['family_type'],
@@ -631,6 +646,8 @@ def main():
             'multi_game_package_taste_aggregation': PACKAGE_MEMBER_AGGREGATION_POLICY,
             'multi_game_package_never_creates_second_semantic_subject': True,
             'multi_game_package_quality_penalties_remain_outside_taste': True,
+            'independent_dlc_requires_positive_playable_story_evidence': True,
+            'non_story_or_unproven_dlc_is_excluded_before_semantic_work': True,
         },
         'files': {
             'taste_queue_jsonl': str(TASTE_QUEUE_OUT),
