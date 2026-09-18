@@ -157,7 +157,7 @@ The old live run had published no candidate artifact. The current repository tre
 
 ## Validation conclusion
 
-Status: **implemented_activated_validated**
+Status: **complete_ready_for_live_acceptance**
 
 The requested production rule is active in machine contract, worker prompt and canonical strict validation:
 
@@ -167,7 +167,11 @@ No Scheduled Task live run was launched, as required.
 
 ## Unresolved
 
-None within this IMPLEMENT / ACTIVATE / VALIDATE task. A future live Scheduled-worker acceptance, if desired, is a separate task and was intentionally not started here.
+None within this IMPLEMENT / ACTIVATE / VALIDATE task.
+
+## Recommended next step
+
+Run exactly one separate live acceptance of the existing `Taste Steam Review Dossier` Scheduled Task against the current compatible snapshot, with the user supplying the Scheduled Task UI result manually; make no implementation changes and do not run Proactive Auditor before that clean live acceptance.
 
 ## Efficiency / reusable lesson
 
