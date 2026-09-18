@@ -3,6 +3,8 @@ name: Validate buffered Steam review dossier runtime
 on:
   pull_request:
     paths:
+      - "config/mailing_policy.json"
+      - "config/content_eligibility_contract.json"
       - "config/taste_steam_review_dossier_contract.json"
       - "config/taste_steam_review_dossier_schema.json"
       - "config/taste_steam_review_dossier_web_evidence_contract.json"
