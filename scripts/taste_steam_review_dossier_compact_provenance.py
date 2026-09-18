@@ -26,6 +26,7 @@ def load_compact_provenance_policy(path=DEFAULT_EVIDENCE_CONTRACT):
         "review_or_post_content_in_locator_metadata_allowed",
         "raw_body_or_body_like_fields_allowed",
         "public_ref_url_text_allowed",
+        "direct_author_identity_hash_as_anonymization_allowed",
     )
     if any(policy.get(key) is not False for key in required_false):
         raise ValueError("compact provenance policy is not fail-closed")
