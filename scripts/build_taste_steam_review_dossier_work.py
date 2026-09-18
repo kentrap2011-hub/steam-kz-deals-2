@@ -58,6 +58,8 @@ def _snapshot_identity(manifest, contract):
         "prepared_for_date": manifest["prepared_for_date"],
         "source_queue_sha256": manifest["source_queue_sha256"],
         "eligible_scope_sha256": manifest["eligible_scope_sha256"],
+        "story_dlc_scope_policy_revision": manifest["story_dlc_scope_policy_revision"],
+        "story_dlc_scope_classification_sha256": manifest["story_dlc_scope_classification_sha256"],
         "identity_blocked_sha256": manifest["identity_blocked_sha256"],
         "package_member_mapping_sha256": manifest["package_member_mapping_sha256"],
         "prepared_required_sha256": manifest["prepared_required_sha256"],
@@ -171,6 +173,7 @@ def build_or_preserve_daily_work(
     output_path = Path(output_path)
     expected_binding = current_worker_contract_binding()
     expected_group_size = int(contract["checkpointing"]["checkpoint_size"])
+    expected_story_dlc_scope_revision = contract["scope"]["story_dlc_policy"]["policy_revision"]
 
     if output_path.exists():
         existing = json.loads(output_path.read_text(encoding="utf-8"))
@@ -182,6 +185,7 @@ def build_or_preserve_daily_work(
         compatible_same_day = (
             existing_date == prepared_for_date
             and existing.get("identity_policy_revision") == _PACKAGE_IDENTITY_POLICY_REVISION
+            and existing.get("story_dlc_scope_policy_revision") == expected_story_dlc_scope_revision
             and existing.get("web_evidence_contract_binding") == expected_binding
             and existing.get("checkpoint_size") == expected_group_size
         )
@@ -271,6 +275,8 @@ def main():
         "remaining_required_count": manifest["remaining_required_count"],
         "full_backlog_complete": manifest["full_backlog_complete"],
         "package_member_mapping_count": manifest["package_member_mapping_count"],
+        "story_dlc_scope_policy_revision": manifest["story_dlc_scope_policy_revision"],
+        "story_dlc_scope_summary": manifest["story_dlc_scope_summary"],
         "worker_index_path": projection["index_path"],
         "worker_descriptor_count": projection["descriptor_count"],
         "worker_canonical_expected_sequence": projection["index"]["canonical_expected_sequence"],
