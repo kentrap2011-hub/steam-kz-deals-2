@@ -422,3 +422,20 @@
 
 **Основные места:** `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/test_taste_steam_review_dossier_semantic_consistency.py`.
 
+---
+
+## TASTE-009 — Only positively confirmed story DLC creates independent Taste/dossier scope
+
+**Дата:** 2026-09-18
+**Статус:** implemented by `WORKER_TASK_TASTE_STORY_DLC_SCOPE_POLICY_IMPLEMENT_01.md`.
+
+**Решение:** DLC допускается как самостоятельный Taste/Steam-review-dossier semantic object только при положительном подтверждении substantial playable narrative content в уже доступной канонической Steam product metadata. Digital Deluxe/OST/artbook/cosmetic/item/bonus content и entitlement/container products исключаются; DLC без положительного story proof исключается fail-closed как `story_content_unproven_excluded`. Смешанный story + cosmetic DLC остаётся допустимым, если story component независимо и существенно подтверждён.
+
+**Почему:** Taste model должен расходовать semantic/dossier research на meaningful playable narrative products, а не на merchandising/digital bonus packs. Простое `type=DLC => include` создало ложную semantic obligation для `appid=2378500` Baldur's Gate 3 - Digital Deluxe Edition DLC. Для этого workflow false negative у неподтверждённого DLC безопаснее, чем отдельный dossier на косметику/саундтрек/артбук.
+
+**Evidence / fail-closed:** DLC identity определяется структурной normalized family/semantic metadata, не названием. Положительная story eligibility требует содержательного сигнала в canonical Steam Store short description, уже передаваемом в price-blind Taste queue. Title/negative hints допустимы только для явного exclusion; отсутствие positive story evidence никогда не превращается в inclusion.
+
+**Граница:** base games не меняются. Existing package/member aggregation и exact appid identity сохраняются; package/season-pass/container не наследует story identity дочерних members. Pricing/package economics, Russian evidence/retrieval, item-level locator/provenance, group size 3, parallel buffer/maximal contiguous prefix, Taste Semantic Producer и Scheduled Task ownership не меняются.
+
+**Основные места:** `config/taste_steam_review_dossier_contract.json`, `scripts/taste_steam_review_dossier_web.py`, `scripts/build_taste_steam_review_dossier_work.py`, `scripts/test_taste_story_dlc_scope.py`.
+
