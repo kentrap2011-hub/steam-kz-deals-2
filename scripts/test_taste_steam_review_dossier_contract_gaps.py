@@ -188,11 +188,10 @@ class ContractGapRegressionTests(unittest.TestCase):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         valid = web_dossier(550001, now)
         self.assertIs(self.validate(valid, now=now), valid)
-        for state in ("searched_not_found_or_insufficient", "source_access_unavailable"):
-            doc = web_dossier(550002, now)
-            doc["evidence"]["russian_attempt"] = state
-            with self.subTest(state=state), self.assertRaisesRegex(ValueError, "requires russian_attempt=found_and_used"):
-                self.validate(doc, now=now)
+        doc = web_dossier(550002, now)
+        doc["evidence"]["russian_attempt"] = "searched_no_existence_signal"
+        with self.assertRaisesRegex(ValueError, "requires russian_attempt=found_and_used"):
+            self.validate(doc, now=now)
 
     def test_gap06_conflict_recurrence_requires_bound_player_feedback(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
