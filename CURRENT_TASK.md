@@ -383,3 +383,21 @@
 - BG3 Digital Deluxe appid `2378500` must be excluded;
 - Crown Trick/Hellish Quart item-level locator issue is explicitly out of scope;
 - Scheduled Task Run now/settings must remain unchanged.
+
+## Worker closeout — 2026-09-18
+
+### Taste story DLC scope policy implement 01
+Статус: `complete_ready_for_live_acceptance`.
+- worker task: `WORKER_TASK_TASTE_STORY_DLC_SCOPE_POLICY_IMPLEMENT_01.md`;
+- implementation PR: #51, merged `9bb7e481cbf55bc4f8e511f596ce7e4b8c19e812`;
+- focused dossier CI: run `35361991694` — success, including ownership and STORY-DLC-01..08 (8/8);
+- GitHub-owned activation: run `35362043187` — success; atomic pre-AI commit `d9c93c64dc24b4e4a0edac98d84619aac1629f45`;
+- active snapshot: `43e76bafd2ca0fe1dbe9a2edead920d335d55859b80038222279394b68bfb7aa`, prepared/completed/remaining `731/0/731`, expected `g000001`, group size `3`, group count `244`;
+- active story-DLC summary: considered `1`, story-eligible `0`, non-story excluded `1`, ambiguous excluded `0`;
+- `2378500` BG3 Digital Deluxe is `non_story_dlc_excluded` and absent from the required group plan;
+- new `g000001`: Crown Trick `1000010`, Hellish Quart `1000360`, Tetris® Effect: Connected `1003590`;
+- Crown Trick/Hellish Quart locator/provenance issue remains unchanged and out of scope;
+- Scheduled Task `Run now` was not launched and settings were not changed;
+- durable report: `reviews/worker_reports/taste-story-dlc-scope-policy-implement-01.md`;
+- next boundary: return to Director for the single decision whether to live-test new `g000001` or resolve the locator-contract issue first.
+
