@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "evidence-guard-batch3-2026-09-16",
+  "contract_revision": "story-dlc-scope-policy-2026-09-18",
   "purpose": "Prepare one complete fixed daily neutral Steam review dossier backlog snapshot before Taste semantic analysis, preserve checkpoint-sized durable progress inside that fixed snapshot, expose a bounded GitHub-derived compact read projection for the scheduled worker, and use buffered create-only group transport without transferring canonical progress or queue ownership away from GitHub.",
   "ownership": {
     "control_plane": "github",
@@ -85,7 +85,22 @@
     "dedupe": "first_occurrence_by_appid_preserving_canonical_queue_order",
     "active_pin_role": "downstream_semantic_input_only_not_dossier_scope",
     "snapshot_membership_rule": "fixed_from_daily_preparation_until_next_daily_preparation",
-    "manual_run_now_rule": "consume_latest_prepared_daily_snapshot_without_on_demand_scope_refresh"
+    "manual_run_now_rule": "consume_latest_prepared_daily_snapshot_without_on_demand_scope_refresh",
+    "independent_dlc_semantic_scope": {
+      "policy_revision": "story-dlc-positive-evidence-v1",
+      "positive_story_evidence_required": true,
+      "classification_source": "GitHub-built family graph using reliable Steam product metadata",
+      "allowed_status": "story_dlc_eligible",
+      "excluded_statuses": [
+        "non_story_dlc_excluded",
+        "story_content_unproven_excluded"
+      ],
+      "fail_closed_on_missing_or_invalid_classification": true,
+      "title_alone_cannot_prove_positive_eligibility": true,
+      "package_or_season_pass_container_never_inherits_story_eligibility_from_children": true
+    },
+    "base_game_behavior": "unchanged",
+    "non_story_dlc_behavior": "excluded_before_dossier_semantic_work"
   },
   "manifest": {
     "preparation_mode": "daily_fixed_full_backlog",
