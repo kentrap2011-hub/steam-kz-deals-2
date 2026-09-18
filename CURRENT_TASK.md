@@ -388,3 +388,13 @@
 - Crown Trick/Hellish Quart item-level locator issue remains explicitly out of scope and unchanged;
 - Scheduled Task Run now/settings were not used/changed;
 - durable report: `reviews/worker_reports/taste-story-dlc-scope-policy-implement-01.md`.
+
+
+## Worker corrective continuation — 2026-09-18
+
+### Taste story DLC scope policy implement 01 — upstream corrective
+Статус: `in_progress`.
+- post-merge validation of PR #51 found appid `2378500` absent from dossier group plan but still present in `chatgpt_taste_queue.jsonl` with Taste semantic work;
+- `taste_pinned_work_unit.py` consumes that queue directly, so the task's stronger rule “non-story DLC must not create an independent Taste semantic obligation” is not yet fully satisfied;
+- corrective scope is bounded to upstream Taste queue formation plus compatible regression/report updates, reusing the already-canonical story-DLC classifier from PR #51;
+- no Taste Semantic Producer change, no Crown Trick/Hellish Quart locator change, no Scheduled Task Run now/settings change.
