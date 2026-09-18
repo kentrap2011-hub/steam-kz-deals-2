@@ -471,5 +471,63 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
 
 
 
+
+    def test_community_child_01_store_recovery_remains_earlier(self):
+        store_text = "search-indexed exact-app collection recovery"
+        child_text = "Steam Community child traversal after Store recovery"
+        self.assertIn(store_text, PROMPT)
+        self.assertIn(child_text, PROMPT)
+        self.assertLess(PROMPT.index(store_text), PROMPT.index(child_text))
+
+    def test_community_child_02_exact_app_row_traversal_prefers_open_click(self):
+        self.assertIn("inspect the actual child targets it exposes", PROMPT)
+        self.assertIn("follow that child with the available open/click path before issuing another materially equivalent broad search", PROMPT)
+
+    def test_community_child_03_neutral_child_uses_stable_path(self):
+        self.assertEqual(
+            EVIDENCE["feedback_item_identity"]["preferred_identity_order"],
+            ["stable_locator", "transient_author_deduped"],
+        )
+        self.assertIn("neutral non-profile item-level child URL/ref", PROMPT)
+        self.assertIn("use the ordinary `stable_locator` path", PROMPT)
+
+    def test_community_child_04_safe_parent_fallback_is_preserved(self):
+        self.assertIn("actually inspected concrete Russian/mixed feedback card/item", PROMPT)
+        self.assertIn("existing `transient_author_deduped` fallback", PROMPT)
+        self.assertFalse(EVIDENCE["compact_provenance"]["persist_author_identity"])
+
+    def test_community_child_05_row_alone_is_not_evidence(self):
+        self.assertIn("collection/list/index row that has not been resolved to an opened concrete child is discovery metadata only", PROMPT)
+        self.assertIn("It is not a player-feedback record, mention, observation support, or `found_and_used`", PROMPT)
+
+    def test_community_child_06_no_guessed_ids(self):
+        self.assertIn("Never synthesize, guess, brute-force, or infer a Steam thread/review/recommendation id", PROMPT)
+
+    def test_community_child_07_profile_hit_remains_discovery_only(self):
+        self.assertFalse(EVIDENCE["compact_provenance"]["profile_scoped_urls_allowed"])
+        self.assertIn("profile-scoped Russian hit remains discovery-only", PROMPT)
+        self.assertIn("must not be persisted or re-parented", PROMPT)
+
+    def test_community_child_08_exact_appid_and_physical_parent_are_preserved(self):
+        self.assertTrue(EVIDENCE["identity"]["steam_player_feedback_url_appid_must_match_exact_dossier_appid_when_exposed"])
+        self.assertIn("exact dossier appid/product and physically belongs to the inspected Community parent/container", PROMPT)
+        self.assertIn("Same host, same broad surface class, matching title text, or a nearby row is not enough", PROMPT)
+
+    def test_community_child_09_bounded_adaptive_route_keeps_existing_budget(self):
+        bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
+        self.assertEqual(bounds["max_web_search_queries"], 8)
+        self.assertEqual(bounds["max_opened_or_read_source_pages"], 16)
+        self.assertFalse(EVIDENCE["adaptive_research"]["russian_discovery"]["fixed_source_quota"])
+        self.assertIn("one bounded search-engine follow-up constrained by the exact appid plus the exact parent row/title/thread wording", PROMPT)
+        self.assertIn("creates no Steam-only quota, additional retry stage, or new production budget", PROMPT)
+
+    def test_community_child_10_prior_contract_guards_unchanged(self):
+        self.assertEqual(EVIDENCE["contract_revision"], "contract-contradictions-fix-2026-09-18")
+        self.assertEqual(SCHEMA["schema_revision"], "contract-contradictions-fix-2026-09-18")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-steam-community-child-retrieval-v1")
+        self.assertTrue(EVIDENCE["language_binding"]["strict_exact_equality_required"])
+        self.assertEqual(SCHEMA["enums"]["evidence_languages"], ["russian", "non_russian", "unknown"])
+
+
 if __name__ == "__main__":
     unittest.main()
