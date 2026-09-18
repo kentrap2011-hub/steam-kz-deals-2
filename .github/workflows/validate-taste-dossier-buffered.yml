@@ -38,6 +38,7 @@ on:
       - "scripts/test_taste_steam_review_dossier_language_binding.py"
       - "scripts/test_taste_steam_review_dossier_semantic_consistency.py"
       - "scripts/test_taste_dossier_package_identity_fix.py"
+      - "scripts/test_taste_story_dlc_scope.py"
       - ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
       - ".github/workflows/validate-taste-dossier-buffered.yml"
@@ -57,7 +58,7 @@ jobs:
       - name: Compile Taste dossier runtime and focused regressions
         run: |
           set -euo pipefail
-          python -m py_compile scripts/taste_package_member_aggregation.py scripts/build_pre_ai_chatgpt_payload.py scripts/taste_steam_review_dossier_web.py scripts/taste_steam_review_dossier_strict.py scripts/taste_steam_review_dossier_worker_projection.py scripts/taste_steam_review_dossier_compact_provenance.py scripts/taste_steam_review_dossier_prepublication.py scripts/taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_contract_gaps.py scripts/test_taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_language_binding.py scripts/test_taste_steam_review_dossier_semantic_consistency.py
+          python -m py_compile scripts/taste_package_member_aggregation.py scripts/build_pre_ai_chatgpt_payload.py scripts/taste_steam_review_dossier_web.py scripts/taste_steam_review_dossier_strict.py scripts/taste_steam_review_dossier_worker_projection.py scripts/taste_steam_review_dossier_compact_provenance.py scripts/taste_steam_review_dossier_prepublication.py scripts/taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_contract_gaps.py scripts/test_taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_language_binding.py scripts/test_taste_steam_review_dossier_semantic_consistency.py scripts/test_taste_story_dlc_scope.py
       - name: Validate execution ownership boundaries
         run: python scripts/validate_execution_ownership.py
       - name: Daily snapshot regression
@@ -78,5 +79,7 @@ jobs:
         run: python scripts/test_taste_steam_review_dossier_semantic_consistency.py
       - name: Package identity regression
         run: python scripts/test_taste_dossier_package_identity_fix.py
+      - name: Story DLC scope policy regression
+        run: python scripts/test_taste_story_dlc_scope.py
       - name: Parallel candidate validation and contiguous-prefix regression
         run: python scripts/test_taste_steam_review_dossier_parallel_validation.py
