@@ -348,11 +348,15 @@
 - durable report: `reviews/worker_reports/taste-dossier-russian-discovery-audit-01.md`;
 - report commit: `158b9910621781a92fd644ef5883e229c62dbd48`.
 
-## Worker in progress — 2026-09-18
+## Worker closeout — 2026-09-18
 
 ### Taste dossier Russian existence/retrieval gate implement 01
-Статус: `in_progress`.
+Статус: `implemented_activated_validated`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_RUSSIAN_EXISTENCE_RETRIEVAL_GATE_IMPLEMENT_01.md`;
-- scope: machine-readable distinction between genuine no-existence-signal Russian search and proven-existence retrieval/access failure;
-- implementation must preserve exact product identity, strict validator authority, group size 3, buffered/maximal-contiguous-prefix architecture and GitHub ownership;
-- Scheduled Task `Run now` is forbidden for this task.
+- implementation PR: #47, merged `e50f0f93e73ea7c17fadf8684dfce27d4b2052c1`;
+- focused dossier CI: run `35340626056` — success, including ownership and RUS-GATE-01..06 regressions;
+- GitHub-owned activation: run `35340697550` — success; atomic pre-AI commit `2c5da1ecfd53268e340edc91f47c199d4ddd6018`;
+- active snapshot: `093952f414cc1020388559e4f390593d921df2b96fd64df831450feec3258296`, expected `g000001`, group size 3, 732 remaining;
+- active binding revisions: evidence/schema `russian-existence-retrieval-gate-2026-09-18`, prompt `web-evidence-v2-russian-retrieval-gate-v1`;
+- Scheduled Task `Run now` was not launched;
+- durable report: `reviews/worker_reports/taste-dossier-russian-existence-retrieval-gate-implement-01.md`.
