@@ -331,3 +331,14 @@
 - report commit: `7356c26e1f83ffe429414bfea41dd5a2a9aa9ca4`;
 - next boundary: one separate Director-authorized runtime/prompt-interpretation fix task; this acceptance worker does not begin the fix.
 
+
+
+## Worker active — 2026-09-18
+
+### Taste dossier Russian discovery audit 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_RUSSIAN_DISCOVERY_AUDIT_01.md`;
+- mode: READ / VALIDATE / BOUNDED WEB EVIDENCE AUDIT;
+- exact scope: current snapshot `00072072b0b382e6b973f448ce00b4aaaeccb2dbe355ca323de1785ccc0bd34c`, `g000001` only;
+- no Scheduled Task Run now and no IMPLEMENT changes;
+- durable report target: `reviews/worker_reports/taste-dossier-russian-discovery-audit-01.md`.
