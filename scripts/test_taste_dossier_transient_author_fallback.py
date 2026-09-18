@@ -243,7 +243,7 @@ class TransientAuthorFallbackRegressionTests(unittest.TestCase):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         doc = fallback_dossier(710009, now)
         del doc["provenance"]["sources"][1]["feedback_surface_mode"]
-        with self.assertRaisesRegex(ValueError, "Steam Store app page is metadata/context"):
+        with self.assertRaisesRegex(ValueError, "Steam Store app page is not a player-feedback item"):
             self.validate(doc, now)
 
     def test_author_fb_09_valid_russian_fallback_satisfies_found_and_used(self):
