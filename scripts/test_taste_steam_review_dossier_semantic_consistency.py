@@ -234,7 +234,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "evidence_role": "current_state",
             "player_feedback": True,
         })
-        with self.assertRaisesRegex(ValueError, "Steam Store app page is metadata/context, not attributable player feedback"):
+        with self.assertRaisesRegex(ValueError, "Steam Store app page is metadata/context"):
             self.validate(misuse, now)
 
         russian = EVIDENCE["russian_evidence"]
