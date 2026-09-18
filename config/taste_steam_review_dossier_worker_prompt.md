@@ -175,6 +175,22 @@ After existence proof, repeated same-domain/same-surface aggregate/list/index va
 
 All exact-product safeguards remain unchanged. For an exact DLC/edition such as `Baldur's Gate 3 - Digital Deluxe Edition DLC`, base-game feedback does not become usable merely because it is Russian or mentions the base title; the item must be bound to the exact DLC/edition under the active identity contract.
 
+### Exact-app Steam Russian card recovery in the existing web transport
+
+When reliable exact-product Russian player-feedback existence is established but a direct Steam Store/Community language-filter route is aggregate-only, dynamically unavailable, or otherwise fails to expose concrete cards in the current web transport, do not keep retrying materially equivalent forms of that inaccessible endpoint family.
+
+Use a bounded **search-indexed exact-app collection recovery** path while budget remains:
+
+- Search with the exact descriptor title, exact dossier appid, and Russian-language player-review terms. When useful, constrain discovery to non-profile exact-app Steam Store or Steam Community collection surfaces.
+- Prefer a result that exposes a neutral stable review/recommendation identity such as a `recommendationid`, safe non-profile direct item URL, or another accepted neutral item-level `public_ref`.
+- If no neutral stable item locator is exposed, a search-indexed non-profile exact-app collection result may support the existing transient-author fallback only when the returned representation itself visibly exposes a concrete individual Russian/mixed review card and an author/account identity is distinguishable transiently for same-product dedupe. Persist only the safe exact-app collection parent and opaque dossier-local fallback record; persist no author/profile identity.
+- Localized Store/Community rendering or routing parameters such as `l=russian` or ordinary country/locale parameters are retrieval hints only. They do not prove item language, do not create a feedback record, and do not replace inspection of the concrete card.
+- A profile-scoped Russian review hit is discovery signal only. Never persist its profile URL, author identity, or re-parent that item to a safe collection merely because host/title/appid match. Instead pivot to safe exact-app collection variants; use fallback only if a concrete Russian/mixed card is actually inspected on that non-profile parent.
+- Keep exact appid binding fail-closed. A Store/Community collection route for another appid, base game, DLC, edition, sequel, remake, or remaster cannot satisfy the target dossier.
+- Once an endpoint family has proved inaccessible in the current invocation, prioritize the indexed exact-app recovery path or a materially different public player-feedback surface instead of consuming the remaining budget on equivalent retries.
+
+This recovery is an adaptive retrieval technique inside the existing 8-search / 16-page ceilings, not a new website quota, required Steam lane, retry loop, or evidence semantic. It does not count as a materially different feedback surface class by itself; source-agnostic diversification still applies when the safe exact-app Steam recovery does not yield a usable item.
+
 ## Adaptive bounded stopping
 
 ChatGPT decides when evidence is sufficient. Do not chase a fixed review count or cursor. Expand research when evidence is sparse, divergent, temporally conflicted, localization-specific, or identity is uncertain. Stop when additional searching is unlikely to materially change the neutral dossier.
