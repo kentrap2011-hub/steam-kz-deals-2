@@ -5,20 +5,20 @@
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
     "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-    "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
+    "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
     "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
     "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
-    "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
+    "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
+    "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
   },
   "appid": "1034860",
   "title": "GRANDIA HD Remaster",
-  "generated_at_utc": "2026-09-18T20:25:51Z",
-  "expires_at_utc": "2026-10-08T20:25:51Z",
+  "generated_at_utc": "2026-09-18T21:33:02Z",
+  "expires_at_utc": "2026-10-08T21:33:02Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "GRANDIA HD Remaster",
@@ -34,48 +34,27 @@
       },
       {
         "kind": "developer",
-        "value": "GAME ARTS Co., Ltd; Sickhead Games, LLC"
+        "value": "GAME ARTS Co., Ltd, Sickhead Games, LLC"
       }
     ]
   },
-  "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Players praise the classic JRPG combat system and adventure structure, describing the battle system as distinctive and strategically engaging.",
-      "sentiment": "positive",
-      "recurrence": "limited",
-      "mention_count": 2,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-003"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
-        "feedback-002"
-      ]
-    },
-    {
-      "category": "friction",
-      "statement": "Players report that the remaster retains presentation or camera issues that can make the port less comfortable than the underlying game.",
+      "category": "localization",
+      "statement": "A recent Russian Steam review reports that the lack of Russian localization prevented the player from meaningfully engaging with the game.",
       "sentiment": "negative",
-      "recurrence": "limited",
-      "mention_count": 2,
+      "recurrence": "anecdotal",
+      "mention_count": 1,
       "evidence_languages": [
-        "non_russian"
+        "russian"
       ],
-      "evidence_status": "durable",
+      "evidence_status": "current",
       "source_ids": [
-        "source-003",
-        "source-004"
+        "source-002"
       ],
       "player_feedback_ids": [
-        "feedback-002",
-        "feedback-003"
+        "fallback-001"
       ]
     }
   ],
@@ -83,9 +62,9 @@
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "multi_source",
-    "single_source_reason": null,
-    "russian_attempt": "searched_no_existence_signal",
+    "source_mix_status": "single_source_only",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback surface used for the validated finding.",
+    "russian_attempt": "found_and_used",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
   },
@@ -95,7 +74,7 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1034860/GRANDIA_HD_Remaster/",
+        "url": "https://store.steampowered.com/app/1034860/",
         "publication_date": "2019-10-15",
         "language": "non_russian",
         "freshness": "older",
@@ -104,70 +83,24 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/grandia/comments/1hd61m8/",
-        "publication_date": "2024-12-13",
-        "language": "non_russian",
-        "freshness": "older",
-        "evidence_role": "durable_trait",
-        "player_feedback": true
-      },
-      {
-        "source_id": "source-003",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/grandia/comments/18c63sl/",
-        "publication_date": "2023-12-06",
-        "language": "non_russian",
-        "freshness": "older",
-        "evidence_role": "durable_trait",
-        "player_feedback": true
-      },
-      {
-        "source_id": "source-004",
         "source_type": "steam_reviews",
-        "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1034860/reviews?browsefilter=toprated",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1034860/GRANDIA_HD_Remaster/?curator_clanid=2140873&l=russian",
         "publication_date": null,
-        "language": "non_russian",
-        "freshness": "unknown",
-        "evidence_role": "durable_trait",
+        "language": "russian",
+        "freshness": "recent",
+        "evidence_role": "current_state",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection"
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "feedback-001",
-        "source_id": "source-002",
-        "url": "https://www.reddit.com/r/grandia/comments/1hd61m8/",
-        "publication_date": "2024-12-13",
-        "language": "non_russian",
-        "identity_mode": "stable_locator"
-      },
-      {
-        "feedback_id": "feedback-002",
-        "source_id": "source-003",
-        "url": "https://www.reddit.com/r/grandia/comments/18c63sl/",
-        "publication_date": "2023-12-06",
-        "language": "non_russian",
-        "identity_mode": "stable_locator"
-      },
-      {
         "feedback_id": "fallback-001",
-        "source_id": "source-004",
-        "publication_date": "2023-11-21",
-        "language": "non_russian",
+        "source_id": "source-002",
+        "publication_date": "2025-12-27",
+        "language": "russian",
         "identity_mode": "transient_author_deduped"
-      },
-      {
-        "feedback_id": "feedback-003",
-        "source_id": "source-003",
-        "public_ref": "reddit-post:18c63sl",
-        "publication_date": "2023-12-06",
-        "language": "non_russian",
-        "identity_mode": "stable_locator"
       }
     ]
   }
