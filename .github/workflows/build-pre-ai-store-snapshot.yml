@@ -55,6 +55,8 @@ on:
       - "scripts/build_pre_ai_fx_snapshot.py"
       - "scripts/build_pre_ai_content_rules.py"
       - "scripts/build_pre_ai_family_graph.py"
+      - "scripts/story_dlc_scope.py"
+      - "scripts/test_story_dlc_scope_policy.py"
       - "scripts/build_pre_ai_taste_projection.py"
       - "scripts/build_pre_ai_history_snapshot.py"
       - "scripts/build_pre_ai_deal_scenarios.py"
@@ -132,6 +134,9 @@ jobs:
 
       - name: Build mechanical content rules
         run: python scripts/build_pre_ai_content_rules.py
+
+      - name: Validate story DLC semantic scope policy
+        run: python scripts/test_story_dlc_scope_policy.py
 
       - name: Build purchase-family graph
         run: python scripts/build_pre_ai_family_graph.py
