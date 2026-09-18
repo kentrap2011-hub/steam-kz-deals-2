@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "cc99c7e33c2094de955c14c2fdfcf8a39eb9836f22afb9313ac01ff2fc4ecc86",
+  "prepared_required_sha256": "7d90e38a68923a7dd1bdb059ebc925c79fc10f09c2e18d91121c1773bc516c55",
+  "group_plan_sha256": "532d5ac15f5c9d91b0e955e692341441e415ef7932875a328c4a29c8513a1df3",
+  "group_count": 244,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "russian-multi-source-retrieval-2026-09-18",
+    "evidence_contract_sha256": "048d95df10b949568b68a71b2eef3a2c4f95300ddfe6575cb7a682e92fed6938",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "russian-existence-retrieval-gate-2026-09-18",
+    "worker_schema_sha256": "75e0b74e7ccadfa34d4905479ee4eec3b60816941be0d9bc3a30dc52fb1d08ad",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-russian-multi-source-retrieval-v1",
+    "worker_prompt_sha256": "59d2a650c0db25a6de2b7b3b40eb050e062d3e135e394622a4fcc3f72b9ef8d7"
+  },
+  "sequence": 7,
+  "start_index": 18,
+  "end_index_exclusive": 21,
+  "appids": [
+    "1072150",
+    "107310",
+    "1075740"
+  ],
+  "items_sha256": "f8095bb0b6600fadcc6492cb001cb1003856469596d2fe8ca9a8fa1ed906c86d",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "2ee6948f2c404bd7c297e7a3fb492122721256a6a4fe1d0eb639e98de4ee80d5",
+  "items": [
+    {
+      "key": "App_1072150",
+      "appid": "1072150",
+      "title": "Hedon Bloodrite",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1072150.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_107310",
+      "appid": "107310",
+      "title": "Cthulhu Saves the World",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_107310.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1075740",
+      "appid": "1075740",
+      "title": "Banners of Ruin",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1075740.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "4c299184037eace1236f1a9f607737661f70fbb61c6e201879c3779dbc30869b"
+}

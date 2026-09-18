@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "cc99c7e33c2094de955c14c2fdfcf8a39eb9836f22afb9313ac01ff2fc4ecc86",
+  "prepared_required_sha256": "7d90e38a68923a7dd1bdb059ebc925c79fc10f09c2e18d91121c1773bc516c55",
+  "group_plan_sha256": "532d5ac15f5c9d91b0e955e692341441e415ef7932875a328c4a29c8513a1df3",
+  "group_count": 244,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "russian-multi-source-retrieval-2026-09-18",
+    "evidence_contract_sha256": "048d95df10b949568b68a71b2eef3a2c4f95300ddfe6575cb7a682e92fed6938",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "russian-existence-retrieval-gate-2026-09-18",
+    "worker_schema_sha256": "75e0b74e7ccadfa34d4905479ee4eec3b60816941be0d9bc3a30dc52fb1d08ad",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-russian-multi-source-retrieval-v1",
+    "worker_prompt_sha256": "59d2a650c0db25a6de2b7b3b40eb050e062d3e135e394622a4fcc3f72b9ef8d7"
+  },
+  "sequence": 21,
+  "start_index": 60,
+  "end_index_exclusive": 63,
+  "appids": [
+    "1172450",
+    "1178830",
+    "1179080"
+  ],
+  "items_sha256": "78bed28e92a11feddb753fedb01842124b4a0eba18398426992c45e758db9029",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "2ee6948f2c404bd7c297e7a3fb492122721256a6a4fe1d0eb639e98de4ee80d5",
+  "items": [
+    {
+      "key": "App_1172450",
+      "appid": "1172450",
+      "title": "Carto",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1172450.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1178830",
+      "appid": "1178830",
+      "title": "Bright Memory: Infinite",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1178830.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1179080",
+      "appid": "1179080",
+      "title": "FAITH: The Unholy Trinity",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1179080.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "366761c5d05fc35f9d3961582b7f8dc6ab25c84241072f7048941fee86fe6440"
+}

@@ -2,10 +2,10 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V1",
   "schema_version": 1,
   "work_manifest_path": "data/production/pre_ai/taste_steam_review_dossier_work.json",
-  "snapshot_id": "093952f414cc1020388559e4f390593d921df2b96fd64df831450feec3258296",
+  "snapshot_id": "cc99c7e33c2094de955c14c2fdfcf8a39eb9836f22afb9313ac01ff2fc4ecc86",
   "prepared_for_date": "2026-09-18",
   "prepared_required_sha256": "7d90e38a68923a7dd1bdb059ebc925c79fc10f09c2e18d91121c1773bc516c55",
-  "group_plan_sha256": "39d015f78c5910e0107ba0ef1a28a2e6724e9235d1190ade18e2cc78cbfbcf4a",
+  "group_plan_sha256": "532d5ac15f5c9d91b0e955e692341441e415ef7932875a328c4a29c8513a1df3",
   "group_count": 244,
   "canonical_expected_sequence": 1,
   "prepared_required_count": 732,
@@ -38,19 +38,19 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "russian-existence-retrieval-gate-2026-09-18",
-    "evidence_contract_sha256": "1da08c1b2996cb7940848cb35d08ed54726a807008c6d136c870b6ad875c1d2c",
+    "evidence_contract_revision": "russian-multi-source-retrieval-2026-09-18",
+    "evidence_contract_sha256": "048d95df10b949568b68a71b2eef3a2c4f95300ddfe6575cb7a682e92fed6938",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
     "worker_schema_revision": "russian-existence-retrieval-gate-2026-09-18",
     "worker_schema_sha256": "75e0b74e7ccadfa34d4905479ee4eec3b60816941be0d9bc3a30dc52fb1d08ad",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-russian-retrieval-gate-v1",
-    "worker_prompt_sha256": "271f81aa995d082010dd3f60a861252c5a650cb153ea678d93305cd01debac7b"
+    "worker_prompt_revision": "web-evidence-v2-russian-multi-source-retrieval-v1",
+    "worker_prompt_sha256": "59d2a650c0db25a6de2b7b3b40eb050e062d3e135e394622a4fcc3f72b9ef8d7"
   },
   "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
   "source_queue_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
-  "source_queue_sha256": "a59da542b35a89b6ffa981f6e02647382dc28c51246c0c1cd205ea57cdb09831",
+  "source_queue_sha256": "2ee6948f2c404bd7c297e7a3fb492122721256a6a4fe1d0eb639e98de4ee80d5",
   "descriptor_path_template": "data/production/pre_ai/taste_steam_review_dossier_worker_groups/{snapshot_id}/g{sequence:06d}.json"
 }
