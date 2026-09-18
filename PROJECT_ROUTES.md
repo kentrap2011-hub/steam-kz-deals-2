@@ -209,6 +209,7 @@ Production validator проверяет:
 
 **Быстрая точка входа:**
 1. `config/taste_steam_review_dossier_contract.json` — canonical control-plane/group contract; `checkpoint_size` остаётся `3`, transport — parallel immutable candidate buffer.
+   - Story-DLC scope: `scope.story_dlc_policy` + `scripts/taste_steam_review_dossier_web.py::classify_story_dlc_scope` / `resolve_dossier_scope_identities`; DLC fail closed до формирования `prepared_required_items[]`, поэтому downstream worker уже не получает non-story/unproven add-ons. Проверенный implementation ref: `worker/taste-story-dlc-scope-policy-implement-01-b` (2026-09-18).
 2. `config/taste_steam_review_dossier_schema.json` + `config/taste_steam_review_dossier_web_evidence_contract.json` + `config/taste_steam_review_dossier_worker_prompt.md` — worker/evidence compatibility binding и generation invariants, включая bound-record language derivation.
 3. `scripts/taste_steam_review_dossier_buffered.py::validate_buffer_artifact` + `scripts/taste_steam_review_dossier_strict.py` — authoritative GitHub-side strict validation после create-only candidate publication.
 4. `scripts/taste_steam_review_dossier_prepublication.py` — только optional CI/developer parity utility; Scheduled ChatGPT не обязан и не должен запускать repository Python перед публикацией.
