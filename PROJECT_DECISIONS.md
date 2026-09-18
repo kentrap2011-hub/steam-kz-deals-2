@@ -422,3 +422,19 @@
 
 **Основные места:** `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/test_taste_steam_review_dossier_semantic_consistency.py`.
 
+
+
+---
+
+## TASTE-009 — Positive story evidence gates independent DLC semantic scope
+
+**Дата:** 2026-09-18
+**Статус:** implementation in progress in `taste-story-dlc-scope-policy-implement-01`.
+
+**Решение:** independent DLC may enter Taste/dossier semantic scope only when GitHub-accessible reliable product metadata positively confirms substantial playable narrative content. Machine states are `story_dlc_eligible`, `non_story_dlc_excluded`, and `story_content_unproven_excluded`; missing/ambiguous evidence fails closed. Title heuristics may support obvious negative classification but cannot create positive story eligibility.
+
+**Почему:** Taste evaluates meaningful playable products, not merchandising/digital bonus packs. Deluxe/OST/artbook/cosmetic/item/bonus/container DLC wastes dossier research budget and creates misleading independent Taste obligations. A false negative for an ambiguous DLC is preferable to treating non-story bonus content as a game-like semantic subject.
+
+**Граница:** base games remain unchanged; story DLC may remain an independent exact-appid semantic object; non-story DLC may still remain purchase-family/member metadata without creating a semantic obligation; season-pass/package containers do not inherit story eligibility from story-DLC children. Pricing/package economics, ranking, Russian retrieval/provenance, group size, buffered/maximal-contiguous-prefix transport, Scheduled ChatGPT ownership and Taste Semantic Producer are unchanged.
+
+**Основные места:** `config/mailing_policy.json`, `config/content_eligibility_contract.json`, `scripts/story_dlc_scope.py`, `scripts/build_pre_ai_family_graph.py`, `scripts/build_pre_ai_chatgpt_payload.py`, `config/taste_steam_review_dossier_contract.json`, `scripts/taste_steam_review_dossier_web.py`.
