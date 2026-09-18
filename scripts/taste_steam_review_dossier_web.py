@@ -69,6 +69,94 @@ def _member_titles_by_appid(bundle_members):
     return out
 
 
+def _normalized_policy_text(value):
+    return " ".join(str(value or "").casefold().split())
+
+
+def _matching_policy_phrases(text, phrases):
+    return [
+        phrase for phrase in phrases if _normalized_policy_text(phrase) and _normalized_policy_text(phrase) in text
+    ]
+
+
+def classify_story_dlc_scope(row, contract):
+    """Classify only canonical DLC/add-on rows; positive story evidence is required."""
+    policy = contract["scope"]["story_dlc_policy"]
+    markers = policy["dlc_identity_markers"]
+    family_id = str(row.get("family_id") or "")
+    family_type = str(row.get("family_type") or "")
+    condition = row.get("semantic_condition") if isinstance(row.get("semantic_condition"), dict) else {}
+    is_dlc_like = (
+        any(family_id.startswith(prefix) for prefix in markers["family_id_prefixes"])
+        or family_type in set(markers["family_types"])
+        or condition.get("ai_condition") in set(markers["semantic_ai_conditions"])
+    )
+    if not is_dlc_like:
+        return None
+
+    key = row.get("taste_subject_key") if "taste_subject_key" in row else row.get("key")
+    appid = str(row.get("appid") or "")
+    title = str(row.get("title") or "")
+    source_field = policy["positive_story_evidence"]["source_field"]
+    description = _normalized_policy_text(row.get(source_field))
+    title_text = _normalized_policy_text(title)
+    combined = f"{title_text} {description}".strip()
+
+    story_hits = _matching_policy_phrases(description, policy["positive_story_evidence"]["phrases"])
+    container_hits = _matching_policy_phrases(
+        combined, policy["entitlement_container_negative_hints"]["title_or_description_phrases"]
+    )
+    non_story_hits = _matching_policy_phrases(
+        combined, policy["explicit_non_story_negative_hints"]["title_or_description_phrases"]
+    )
+
+    if container_hits:
+        classification = "non_story_dlc_excluded"
+        reason_code = "entitlement_container_not_independent_story_content"
+    elif story_hits:
+        classification = "story_dlc_eligible"
+        reason_code = "positive_story_content_evidence"
+    elif non_story_hits:
+        classification = "non_story_dlc_excluded"
+        reason_code = "explicit_non_story_product_metadata"
+    else:
+        classification = "story_content_unproven_excluded"
+        reason_code = "positive_story_content_evidence_missing"
+
+    return {
+        "key": key,
+        "appid": appid,
+        "title": title,
+        "classification": classification,
+        "reason_code": reason_code,
+        "evidence_source": f"canonical_taste_queue.{source_field}",
+        "identity_source": "canonical_family_and_semantic_metadata",
+        "matched_story_signals": story_hits,
+        "matched_container_signals": container_hits,
+        "matched_non_story_signals": non_story_hits,
+    }
+
+
+def _story_dlc_scope_summary(classifications):
+    counts = {
+        "dlc_like_considered": len(classifications),
+        "story_eligible": 0,
+        "non_story_excluded": 0,
+        "ambiguous_excluded": 0,
+    }
+    for item in classifications:
+        value = item["classification"]
+        if value == "story_dlc_eligible":
+            counts["story_eligible"] += 1
+        elif value == "non_story_dlc_excluded":
+            counts["non_story_excluded"] += 1
+        elif value == "story_content_unproven_excluded":
+            counts["ambiguous_excluded"] += 1
+        else:
+            raise ValueError(f"unsupported story DLC classification: {value}")
+    return counts
+
+
 def _resolve_queue_row_dossier_identities(row, index):
     """Resolve one eligible queue row to exact game dossier identities.
 
@@ -187,6 +275,7 @@ def resolve_dossier_scope_identities(queue_rows, contract):
     order = []
     blocked = []
     package_mappings = []
+    story_dlc_classifications = []
     eligible_row_count = 0
     deduplicated_row_count = 0
 
@@ -198,6 +287,11 @@ def resolve_dossier_scope_identities(queue_rows, contract):
             raise ValueError(f"canonical Taste queue row {index} has no canonical work_required")
         if not any(item in markers for item in work):
             continue
+        story_dlc = classify_story_dlc_scope(row, contract)
+        if story_dlc is not None:
+            story_dlc_classifications.append(story_dlc)
+            if story_dlc["classification"] != "story_dlc_eligible":
+                continue
         eligible_row_count += 1
         resolved = _resolve_queue_row_dossier_identities(row, index)
         if resolved["status"] == "blocked":
@@ -257,6 +351,8 @@ def resolve_dossier_scope_identities(queue_rows, contract):
         "rows": rows,
         "identity_blocked_items": blocked,
         "package_member_mappings": package_mappings,
+        "story_dlc_classifications": story_dlc_classifications,
+        "story_dlc_scope_summary": _story_dlc_scope_summary(story_dlc_classifications),
         "eligible_row_count": eligible_row_count,
         "deduplicated_row_count": deduplicated_row_count,
     }
@@ -273,6 +369,10 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
     scope_rows = resolution["rows"]
     identity_blocked_items = resolution["identity_blocked_items"]
     package_member_mappings = resolution["package_member_mappings"]
+    story_dlc_classifications = resolution["story_dlc_classifications"]
+    story_dlc_scope_summary = resolution["story_dlc_scope_summary"]
+    story_dlc_policy_revision = contract["scope"]["story_dlc_policy"]["policy_revision"]
+    story_dlc_classification_sha = canonical_sha256(story_dlc_classifications)
     eligible_row_count = resolution["eligible_row_count"]
     items = []
     required = []
@@ -319,6 +419,8 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
         "prepared_for_date": prepared_date,
         "source_queue_sha256": source_queue_sha,
         "eligible_scope_sha256": eligible_sha,
+        "story_dlc_scope_policy_revision": story_dlc_policy_revision,
+        "story_dlc_scope_classification_sha256": story_dlc_classification_sha,
         "identity_blocked_sha256": identity_blocked_sha,
         "package_member_mapping_sha256": package_mapping_sha,
         "prepared_required_sha256": required_sha,
@@ -350,6 +452,11 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
         "unique_appid_count": len(scope_rows),
         "deduplicated_row_count": resolution["deduplicated_row_count"],
         "identity_policy_revision": _PACKAGE_IDENTITY_POLICY_REVISION,
+        "story_dlc_scope_policy_revision": story_dlc_policy_revision,
+        "story_dlc_scope_classification_count": len(story_dlc_classifications),
+        "story_dlc_scope_classification_sha256": story_dlc_classification_sha,
+        "story_dlc_scope_classifications": story_dlc_classifications,
+        "story_dlc_scope_summary": story_dlc_scope_summary,
         "identity_blocked_count": len(identity_blocked_items),
         "identity_blocked_sha256": identity_blocked_sha,
         "identity_blocked_items": identity_blocked_items,
