@@ -43,6 +43,7 @@ _EXPLICIT_NON_STORY_PATTERNS = (
     ("currency_or_resource_pack", re.compile(r"\b(?:currency|resource|credits?|coins?|gems?)\s+(?:pack|bundle)\b", re.I)),
     ("bonus_song_pack", re.compile(r"\b(?:bonus\s+song|song\s+pack|music\s+pack)\b", re.I)),
     ("digital_extras", re.compile(r"\b(?:wallpapers?|avatars?|character\s+sheets?|digital\s+extras?)\b", re.I)),
+    ("supporter_or_founder_pack", re.compile(r"\b(?:supporter|founder(?:'s)?)\s+(?:pack|bundle)\b", re.I)),
 )
 
 # Each match must describe playable narrative content, not merely a theme.
