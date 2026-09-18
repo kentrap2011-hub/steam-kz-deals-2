@@ -297,13 +297,46 @@
   "content_eligibility": {
     "required": true,
     "dlc_is_not_independent_recommendation_by_default": true,
-    "dlc_or_chapter_include_only_if": [
-      "base_game_family_is_taste_include_in_same_run",
-      "canonical_profile_or_current_user_context_directly_supports_base_game",
-      "addon_is_effectively_standalone_game_like_content_and_itself_meets_taste_threshold"
-    ],
+    "independent_dlc_taste_semantic_scope": {
+      "policy_revision": "story-dlc-positive-evidence-v1",
+      "positive_story_evidence_required": true,
+      "reliable_product_metadata_required_for_positive_eligibility": true,
+      "include_only_when_metadata_confirms_substantial_playable_narrative_content": [
+        "new_story_campaign",
+        "standalone_story_chapter_or_episode",
+        "new_storyline",
+        "story_quests_or_questline",
+        "narrative_or_story_expansion",
+        "separate_playable_story_or_adventure",
+        "equivalent_substantial_playable_narrative_content"
+      ],
+      "mixed_story_and_bonus_content": "eligible_only_when_substantial_playable_story_content_is_independently_confirmed",
+      "non_story_categories_excluded": [
+        "digital_deluxe_or_deluxe_upgrade",
+        "soundtrack_or_ost",
+        "digital_artbook",
+        "cosmetic_or_skin_pack",
+        "weapon_item_or_equipment_pack",
+        "currency_or_resource_pack",
+        "bonus_song_pack",
+        "wallpaper_avatar_or_digital_extras",
+        "supporter_or_founder_pack_without_story_content",
+        "season_pass_or_bundle_entitlement_container",
+        "upgrade_or_bonus_content_pack"
+      ],
+      "ambiguity_rule": "fail_closed_as_story_content_unproven_excluded",
+      "machine_statuses": [
+        "story_dlc_eligible",
+        "non_story_dlc_excluded",
+        "story_content_unproven_excluded"
+      ],
+      "title_heuristics_may_prove_positive_story_eligibility": false,
+      "false_negative_preferred_to_non_story_semantic_obligation": true
+    },
+    "story_dlc_after_scope_gate_preserves_existing_base_support_condition": true,
+    "attached_non_story_dlc_may_remain_purchase_family_metadata_without_independent_taste_obligation": true,
     "wishlist_not_ownership": true,
-    "cosmetic_soundtrack_artbook_and_non_game_addons_excluded": true,
+    "cosmetic_soundtrack_artbook_and_non_game_addons_excluded_from_independent_taste_scope": true,
     "bundle_with_base_game_may_be_purchase_variant_of_included_family": true
   },
   "offer_family_resolution": {
