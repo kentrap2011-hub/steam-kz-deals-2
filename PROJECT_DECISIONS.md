@@ -459,3 +459,19 @@
 **Дополнение — Steam Store parent collection (2026-09-18):** exact-app Steam Store page остаётся storefront/aggregate provenance и сама не является feedback item, mention или stable item locator. Но если на ней реально видны и инспектированы конкретные individual review cards, страница может быть parent collection surface для `transient_author_deduped` child records через `feedback_surface_mode:"concrete_item_collection"`. Aggregate counts, percent positive, rating, language totals и review-summary block остаются non-evidence/non-mention metadata и сами не закрывают `found_and_used`. Source-level `player_feedback:true` для такого parent означает наличие инспектированных player-feedback children, а не превращает Store URL в отзыв. Stable neutral locator по-прежнему предпочтителен; privacy, no-direct-hash и recurrence caps TASTE-010 не меняются.
 
 **Основные места:** `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/test_taste_dossier_transient_author_fallback.py`.
+
+
+---
+
+## TASTE-011 — Dossier stable-child binding, local join IDs and exact language projection are strict acceptance invariants
+
+**Дата:** 2026-09-18  
+**Статус:** implemented by `WORKER_TASK_TASTE_DOSSIER_CONTRACT_CONTRADICTIONS_FIX_01.md`.
+
+**Решение:** canonical strict acceptance enforces three previously worker-facing invariants end to end. First, a stable Steam child whose URL/public reference deterministically exposes an appid must match the exact dossier appid; when both Steam parent and child expose a deterministic discussion/container/thread identity, the shared resolvable identity components must match physically, not merely by host or broad surface class. Second, every persisted `source_id` and stable `feedback_id` is an author-independent dossier-local sequence key (`source-NNN`, `feedback-NNN`); fallback retains its independent `fallback-NNN` sequence. Stable physical item identity remains only in the validated safe URL/`public_ref`, never in an internal join key. Third, observation `evidence_languages` must exactly equal the canonical ordered distinct projection of its final bound feedback-record languages: `russian`, then `non_russian`, then `unknown`; record-level `mixed` expands to `russian + non_russian` and is never an observation-summary token.
+
+**Почему:** the prior contracts already required exact-product/physical-parent binding, no persisted reviewer identity, and deterministic language derivation, but strict acceptance enforced only weaker subsets. That left silent wrong-product/container evidence, a privacy leak through arbitrary internal IDs, and stale/non-canonical language summaries structurally acceptable.
+
+**Граница:** the accepted Steam Store exact-app concrete-card parent exception remains fallback-only and unchanged; `transient_author_deduped` records still persist no child item/profile locator or author identity and retain the same reduced recurrence semantics. Unknown/unresolvable Steam identity is not guessed. Story-DLC, source-agnostic Russian discovery, group size 3, buffered maximal-contiguous-prefix publication, retry/recovery, ranking/pricing/package/UI and GitHub control-plane ownership do not change.
+
+**Основные места:** `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/taste_steam_review_dossier_compact_provenance.py`, `scripts/test_taste_dossier_contract_contradictions_fix.py`.
