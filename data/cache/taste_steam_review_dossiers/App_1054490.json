@@ -1,0 +1,191 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "97c24bdfb8a249167cf9395b4aa91f59b1035ce25301dea5f60426b0a6ef1c02",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-contract-contradictions-fix-v1",
+    "worker_prompt_sha256": "22d702f30d3b021e2115cb3caf4e5798a703c7775471d891b1b574d891de39cf"
+  },
+  "appid": "1054490",
+  "title": "Wingspan",
+  "generated_at_utc": "2026-09-18T20:29:03Z",
+  "expires_at_utc": "2026-10-08T20:29:03Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Wingspan",
+    "release_year": 2020,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1054490"
+      },
+      {
+        "kind": "developer",
+        "value": "Monster Couch"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 3 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Players praise the digital implementation for automating scoring and bookkeeping while preserving the board game's engine-building decisions.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002"
+      ]
+    },
+    {
+      "category": "multiplayer",
+      "statement": "Players value online or asynchronous play and describe the digital version as a convenient way to play with friends.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "fallback-001"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "A recent Russian player review reports optimization problems despite otherwise positive impressions of the digital adaptation.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "fallback-002"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "limited",
+    "stop_reason": "evidence_stable"
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1054490/Wingspan/",
+        "publication_date": "2020-09-17",
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "identity",
+        "player_feedback": false
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1054490/Wingspan/?l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "freshness": "recent",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/digitaltabletop/comments/md70gj",
+        "publication_date": "2021-03-25",
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "durable_trait",
+        "player_feedback": true
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/wingspan/comments/iyjwsa",
+        "publication_date": "2020-09-23",
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "durable_trait",
+        "player_feedback": true
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-003",
+        "url": "https://www.reddit.com/r/digitaltabletop/comments/md70gj",
+        "publication_date": "2021-03-25",
+        "language": "non_russian",
+        "identity_mode": "stable_locator"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-004",
+        "url": "https://www.reddit.com/r/wingspan/comments/iyjwsa",
+        "publication_date": "2020-09-23",
+        "language": "non_russian",
+        "identity_mode": "stable_locator"
+      },
+      {
+        "feedback_id": "fallback-001",
+        "source_id": "source-002",
+        "publication_date": "2025-11-29",
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
+      },
+      {
+        "feedback_id": "fallback-002",
+        "source_id": "source-002",
+        "publication_date": "2026-01-10",
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
+      }
+    ]
+  }
+}
