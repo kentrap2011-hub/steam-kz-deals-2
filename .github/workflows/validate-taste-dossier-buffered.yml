@@ -22,6 +22,9 @@ on:
       - "scripts/taste_steam_review_dossier_worker_projection.py"
       - "scripts/taste_steam_review_dossier_test_fixture.py"
       - "scripts/taste_package_member_aggregation.py"
+      - "scripts/story_dlc_scope.py"
+      - "scripts/build_pre_ai_family_graph.py"
+      - "scripts/test_story_dlc_scope_policy.py"
       - "scripts/build_pre_ai_chatgpt_payload.py"
       - "scripts/build_taste_steam_review_dossier_work.py"
       - "scripts/ingest_taste_steam_review_dossiers.py"
@@ -57,9 +60,11 @@ jobs:
       - name: Compile Taste dossier runtime and focused regressions
         run: |
           set -euo pipefail
-          python -m py_compile scripts/taste_package_member_aggregation.py scripts/build_pre_ai_chatgpt_payload.py scripts/taste_steam_review_dossier_web.py scripts/taste_steam_review_dossier_strict.py scripts/taste_steam_review_dossier_worker_projection.py scripts/taste_steam_review_dossier_compact_provenance.py scripts/taste_steam_review_dossier_prepublication.py scripts/taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_contract_gaps.py scripts/test_taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_language_binding.py scripts/test_taste_steam_review_dossier_semantic_consistency.py
+          python -m py_compile scripts/story_dlc_scope.py scripts/build_pre_ai_family_graph.py scripts/test_story_dlc_scope_policy.py scripts/taste_package_member_aggregation.py scripts/build_pre_ai_chatgpt_payload.py scripts/taste_steam_review_dossier_web.py scripts/taste_steam_review_dossier_strict.py scripts/taste_steam_review_dossier_worker_projection.py scripts/taste_steam_review_dossier_compact_provenance.py scripts/taste_steam_review_dossier_prepublication.py scripts/taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_contract_gaps.py scripts/test_taste_steam_review_dossier_parallel_validation.py scripts/test_taste_steam_review_dossier_language_binding.py scripts/test_taste_steam_review_dossier_semantic_consistency.py
       - name: Validate execution ownership boundaries
         run: python scripts/validate_execution_ownership.py
+      - name: Story DLC semantic scope regression
+        run: python scripts/test_story_dlc_scope_policy.py
       - name: Daily snapshot regression
         run: python scripts/test_taste_steam_review_dossier_daily_snapshot.py
       - name: Buffered submission regression
