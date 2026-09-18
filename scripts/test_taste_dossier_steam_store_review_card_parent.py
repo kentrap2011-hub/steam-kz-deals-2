@@ -118,7 +118,7 @@ class SteamStoreReviewCardParentRegressionTests(unittest.TestCase):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         doc = fallback_dossier(1000010, now, title="Crown Trick")
         doc["provenance"]["player_feedback_records"] = []
-        with self.assertRaisesRegex(ValueError, "references unknown player-feedback record"):
+        with self.assertRaisesRegex(ValueError, "provenance.player_feedback_records must be a non-empty list"):
             self.validate(doc, now)
 
     def test_store_card_11_current_g000001_three_game_candidate_shape_validates(self):
