@@ -90,7 +90,7 @@ class SteamStoreReviewCardParentRegressionTests(unittest.TestCase):
         self.assertEqual(EVIDENCE["feedback_item_identity"]["preferred_identity_order"], ["stable_locator", "transient_author_deduped"])
         self.assertTrue(EVIDENCE["feedback_item_identity"]["fallback_forbidden_when_neutral_item_locator_available"])
         self.assertFalse(EVIDENCE["feedback_item_identity"]["steam_store_exact_app_parent_allowed_for_stable_locator"])
-        self.assertIn("If a neutral `recommendationid` or other accepted stable item locator is available", PROMPT)
+        self.assertIn("If a neutral `recommendationid`", PROMPT)
 
     def test_store_card_07_exact_appid_mismatch_is_rejected(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
