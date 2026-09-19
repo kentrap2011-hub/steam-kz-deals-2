@@ -470,6 +470,86 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertIn("not a new website quota, required Steam lane, retry loop, or evidence semantic", PROMPT)
 
 
+    def test_diversify_early_01_steam_remains_preferred_when_cheap_usable_item_is_exposed(self):
+        steam_first = "Prefer a cheap exact-product Steam item-level path when it is already exposed or immediately reachable"
+        cross_source = "Pivot early to generic cross-source discovery"
+        self.assertIn(steam_first, PROMPT)
+        self.assertIn(cross_source, PROMPT)
+        self.assertLess(PROMPT.index(steam_first), PROMPT.index(cross_source))
+        self.assertIn(
+            "do not leave Steam merely because one attempt failed when a cheap usable concrete Steam item is already exposed",
+            PROMPT,
+        )
+
+    def test_diversify_early_02_aggregate_only_steam_shape_triggers_early_diversification(self):
+        self.assertIn("aggregate/count-only evidence", PROMPT)
+        self.assertIn("they are a signal to diversify", PROMPT)
+        self.assertIn("rather than spend most of the remaining budget", PROMPT)
+
+    def test_diversify_early_03_profile_only_steam_shape_triggers_safe_diversification(self):
+        self.assertFalse(EVIDENCE["compact_provenance"]["profile_scoped_urls_allowed"])
+        self.assertIn("a profile-scoped item", PROMPT)
+        self.assertIn("Never persist its profile URL, author identity, or re-parent that item", PROMPT)
+
+    def test_diversify_early_04_non_russian_steam_cards_do_not_block_cross_source_pivot(self):
+        self.assertIn("concrete Steam cards that are non-Russian", PROMPT)
+        self.assertIn("non-Russian-card", PROMPT)
+        self.assertIn("prioritize a generic non-site-constrained cross-source query", PROMPT)
+
+    def test_diversify_early_05_index_row_only_does_not_monopolize_budget(self):
+        self.assertIn("a collection/index row without a concrete child item", PROMPT)
+        self.assertIn("index/collection row without a usable child", PROMPT)
+        self.assertIn("distinct public player-feedback discovery gets priority", PROMPT)
+
+    def test_diversify_early_06_generic_discovery_has_no_product_or_named_site_hardcoding(self):
+        self.assertIn("non-site-constrained search", PROMPT)
+        self.assertIn("exact descriptor title, release year when helpful", PROMPT)
+        self.assertIn("Russian player-review/discussion wording", PROMPT)
+        self.assertIn("Use site-specific follow-up only after discovery makes a source promising", PROMPT)
+        self.assertNotIn("MO:Astray", PROMPT)
+        self.assertNotIn("StopGame", PROMPT)
+        diversification = EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"]
+        self.assertFalse(diversification["fixed_named_website_quota"])
+        self.assertFalse(diversification["steam_required_as_retrieval_source"])
+
+    def test_diversify_early_07_stable_non_steam_player_feedback_remains_accepted(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = web_dossier(680007, now, russian_status="found_and_used")
+        doc["provenance"]["sources"][2].update({
+            "source_type": "forum",
+            "domain": "community.example.com",
+            "url": "https://community.example.com/games/exact-game-680007/reviews/",
+            "language": "russian",
+        })
+        doc["provenance"]["player_feedback_records"][3]["url"] = (
+            "https://community.example.com/games/exact-game-680007/reviews/item-42"
+        )
+        self.assertIs(self.validate(doc, now), doc)
+        self.assertEqual(doc["evidence"]["russian_attempt"], "found_and_used")
+
+    def test_diversify_early_08_language_and_recency_semantics_are_unchanged(self):
+        self.assertTrue(EVIDENCE["language_binding"]["strict_exact_equality_required"])
+        self.assertEqual(EVIDENCE["recency"]["recent_max_age_days"], 365)
+        self.assertTrue(EVIDENCE["recency"]["current_state_requires_recent_support"])
+        self.assertIn("gameplay", EVIDENCE["recency"]["old_feedback_remains_valid_for"])
+        self.assertIn("story", EVIDENCE["recency"]["old_feedback_remains_valid_for"])
+        self.assertIn("It changes retrieval priority only; it does not change what counts as evidence", PROMPT)
+
+    def test_diversify_early_09_production_ceilings_and_no_fixed_steam_quota_are_unchanged(self):
+        bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
+        self.assertEqual(bounds["max_web_search_queries"], 8)
+        self.assertEqual(bounds["max_opened_or_read_source_pages"], 16)
+        self.assertFalse(EVIDENCE["adaptive_research"]["russian_discovery"]["fixed_source_quota"])
+        self.assertIn("There is **no fixed number of Steam queries or pages** before diversification", PROMPT)
+
+    def test_diversify_early_10_privacy_and_provenance_guards_remain_unchanged(self):
+        self.assertFalse(EVIDENCE["compact_provenance"]["profile_scoped_urls_allowed"])
+        self.assertFalse(EVIDENCE["compact_provenance"]["direct_author_identity_hash_as_anonymization_allowed"])
+        self.assertTrue(EVIDENCE["compact_provenance"]["internal_join_ids"]["author_identity_independent"])
+        self.assertFalse(EVIDENCE["parent_item_binding"]["host_match_alone_is_sufficient"])
+        self.assertIn("Never persist its profile URL, author identity, or re-parent that item", PROMPT)
+
+
 
 if __name__ == "__main__":
     unittest.main()
