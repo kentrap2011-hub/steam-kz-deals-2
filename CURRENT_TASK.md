@@ -474,8 +474,14 @@
 ## Worker in progress — 2026-09-19
 
 ### Taste dossier temporal pre-stop retrieval gate implement 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_TEMPORAL_PRESTOP_RETRIEVAL_GATE_IMPLEMENT_01.md`;
-- accepted diagnosis: 60 Seconds! Reatomized appid `1012880` failed because Scheduled worker stopped at `research_state:sufficient / evidence_stable` before the existing recent current-state obligation for a historical technical observation was satisfied;
-- architecture preflight: GitHub remains control plane/strict authority; existing Scheduled ChatGPT worker remains bounded external retrieval + semantic synthesis owner; implementation is limited to repo-owned prompt/binding + focused regressions, with no new queue/scheduler/retry/quota;
-- old immutable `593378be…/g000002` remains untouchable; production candidate publication and Scheduled Task Run now are forbidden in this task.
+- accepted root cause: `recent_source_retrieval_miss`; strict validator gap не подтверждён;
+- implementation merged via PR #66 as `6b032457e5373402d55633ea0a39da7f036151d6`;
+- normal GitHub-owned activation: `Build pre-AI deterministic payload` run 141 succeeded and emitted `ca2904b770dc431efdc386279841aeb452b89bc1`;
+- active dossier snapshot: `bbb40469f96be618ec10fa7fc6b9edca8ccd56e8f2e73442529a47de76164902`, expected sequence `g000001`, `734/0/734` prepared/completed/remaining, binding `web-evidence-v2-temporal-prestop-retrieval-gate-v1`;
+- live proof for 60 Seconds! Reatomized appid `1012880`: recent exact-product current-state retrieval occurred before any `evidence_stable` decision and used `2/8` searches plus `2/16` page reads;
+- old immutable `593378be…/g000002` was not edited, replaced, or reissued; ordinary activation quarantined the stale artifact by a Git rename with `0 additions / 0 deletions / 0 changes`;
+- evidence semantics, strict validator, privacy/provenance/language guards, early multi-source diversification, and 8/16 ceilings remain unchanged;
+- no production candidate was published; Scheduled Task `Run now` was not invoked and its settings were not changed;
+- durable report: `reviews/worker_reports/taste-dossier-temporal-prestop-retrieval-gate-implement-01.md`.
