@@ -15,13 +15,13 @@
     "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
     "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
   },
-  "appid": "1119980",
-  "title": "In Sound Mind",
+  "appid": "1118240",
+  "title": "Lake",
   "generated_at_utc": "2026-09-19T11:00:00Z",
   "expires_at_utc": "2026-10-09T11:00:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "In Sound Mind",
+    "work_title": "Lake",
     "release_year": 2021,
     "resolution_status": "resolved",
     "identity_source_ids": [
@@ -30,19 +30,19 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1119980"
+        "value": "1118240"
       },
       {
         "kind": "developer",
-        "value": "We Create Stuff"
+        "value": "Gamious"
       }
     ]
   },
   "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Russian player feedback praises the variety of mechanics introduced across the campaign together with the story presentation, graphics, and musical score.",
+      "category": "pacing",
+      "statement": "Russian player feedback describes the mail-delivery loop around the lake as pleasant and relaxing.",
       "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
@@ -54,7 +54,7 @@
         "source-002"
       ],
       "player_feedback_ids": [
-        "feedback-001"
+        "fallback-001"
       ]
     }
   ],
@@ -63,7 +63,7 @@
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "single_source_only",
-    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player review used for the validated durable finding.",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
     "russian_attempt": "found_and_used",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
@@ -74,8 +74,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1119980/",
-        "publication_date": "2021-09-28",
+        "url": "https://store.steampowered.com/app/1118240/",
+        "publication_date": "2021-09-01",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "identity",
@@ -83,24 +83,24 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "other_player_feedback",
-        "domain": "stopgame.ru",
-        "url": "https://stopgame.ru/game/in_sound_mind/review/1942",
-        "publication_date": "2022-12-29",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1118240/positivereviews/?browsefilter=toprated&l=russian",
+        "publication_date": null,
         "language": "russian",
         "freshness": "older",
         "evidence_role": "durable_trait",
-        "player_feedback": true
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "feedback-001",
+        "feedback_id": "fallback-001",
         "source_id": "source-002",
-        "url": "https://stopgame.ru/game/in_sound_mind/review/1942",
-        "publication_date": "2022-12-29",
+        "publication_date": "2022-12-31",
         "language": "russian",
-        "identity_mode": "stable_locator"
+        "identity_mode": "transient_author_deduped"
       }
     ]
   }
