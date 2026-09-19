@@ -550,6 +550,84 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertIn("Never persist its profile URL, author identity, or re-parent that item", PROMPT)
 
 
+    def test_temporal_prestop_01_historical_technical_requires_recent_check_before_stop(self):
+        self.assertIn("## Temporal pre-stop completeness gate", PROMPT)
+        self.assertIn('do **not** use `stop_reason:"evidence_stable"`', PROMPT)
+        self.assertIn('do **not** set `research_state:"sufficient"`', PROMPT)
+        self.assertIn("at least one bound source with `evidence_role:\"current_state\"` and `freshness:\"recent\"`", PROMPT)
+
+    def test_temporal_prestop_02_missing_recent_support_continues_bounded_retrieval(self):
+        self.assertIn("continue bounded exact-product recent player-feedback retrieval", PROMPT)
+        self.assertIn("If that recent current-state support is missing and either web-search or page-read budget remains", PROMPT)
+
+    def test_temporal_prestop_03_historical_semantics_are_unchanged(self):
+        self.assertTrue(SCHEMA["observation_invariants"]["historical_requires_historical_and_recent_current_state_sources"])
+        self.assertEqual(EVIDENCE["recency"]["launch_only_issue_with_recent_fix_or_material_reduction"], "historical")
+        self.assertEqual(set(EVIDENCE["accepted_evidence_statuses"]), {"current", "historical", "durable", "uncertain"})
+
+    def test_temporal_prestop_04_unresolved_uses_existing_uncertain_path(self):
+        self.assertEqual(EVIDENCE["recency"]["conflicting_or_insufficient_temporal_evidence"], "uncertain")
+        self.assertIn("use the existing `uncertain` path when the old-vs-current state remains unresolved", PROMPT)
+        self.assertIn("never force `historical` merely because the available complaint is old", PROMPT)
+
+    def test_temporal_prestop_05_current_still_requires_recent_support(self):
+        self.assertTrue(SCHEMA["observation_invariants"]["current_requires_recent_current_state_source"])
+        self.assertTrue(EVIDENCE["recency"]["current_state_requires_recent_support"])
+        self.assertIn("unchanged requirement for recent current-state support", PROMPT)
+
+    def test_temporal_prestop_06_durable_traits_are_not_over_tightened(self):
+        durable = set(EVIDENCE["recency"]["old_feedback_remains_valid_for"])
+        self.assertTrue({"gameplay", "story", "structure", "difficulty"}.issubset(durable))
+        self.assertIn("Do not apply this extra stop gate to durable gameplay/story/art/music/structure traits", PROMPT)
+
+    def test_temporal_prestop_07_recent_retrieval_preserves_early_multi_source_diversification(self):
+        self.assertIn("Apply the active early multi-source diversification strategy", PROMPT)
+        self.assertIn("diversify source-agnostically after an unusable stop-shape", PROMPT)
+        self.assertIn("never turn the recent check into a Steam-only lane", PROMPT)
+        diversification = EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"]
+        self.assertFalse(diversification["steam_required_as_retrieval_source"])
+        self.assertFalse(diversification["fixed_named_website_quota"])
+
+    def test_temporal_prestop_08_production_ceilings_are_unchanged(self):
+        bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
+        self.assertEqual(bounds["max_web_search_queries"], 8)
+        self.assertEqual(bounds["max_opened_or_read_source_pages"], 16)
+        self.assertIn("existing 8-search / 16-page ceilings", PROMPT)
+        self.assertIn("not a Steam-only lane, fixed site quota, new retry loop", PROMPT)
+
+    def test_temporal_prestop_09_strict_validator_semantics_remain_authoritative(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = web_dossier(690009, now)
+        historical = copy.deepcopy(doc["observations"][0])
+        historical.update({
+            "category": "friction",
+            "statement": "Older exact-product feedback records a launch-era technical issue.",
+            "evidence_status": "historical",
+            "source_ids": ["source-002"],
+            "player_feedback_ids": ["feedback-001", "feedback-002", "feedback-003"],
+            "evidence_languages": ["non_russian"],
+        })
+        doc["provenance"]["sources"][1]["evidence_role"] = "historical"
+        doc["observations"] = [historical]
+        self.refresh_summary(doc)
+        with self.assertRaisesRegex(ValueError, "historical/fixed claim lacks recent current-state check"):
+            self.validate(doc, now)
+
+    def test_temporal_prestop_10_privacy_provenance_and_language_guards_are_unchanged(self):
+        self.assertFalse(EVIDENCE["compact_provenance"]["profile_scoped_urls_allowed"])
+        self.assertFalse(EVIDENCE["compact_provenance"]["direct_author_identity_hash_as_anonymization_allowed"])
+        self.assertTrue(EVIDENCE["language_binding"]["strict_exact_equality_required"])
+        self.assertTrue(EVIDENCE["compact_provenance"]["internal_join_ids"]["author_identity_independent"])
+
+    def test_temporal_prestop_11_existing_stop_order_is_explicit_without_product_hardcoding(self):
+        order = "collect evidence -> draft/plan observations -> temporal completeness check -> targeted recent retrieval if required -> re-evaluate temporal status -> only then decide sufficient/evidence_stable -> serialize candidate"
+        self.assertIn(order, PROMPT)
+        self.assertNotIn("60 Seconds! Reatomized", PROMPT)
+        self.assertNotIn("1012880", PROMPT)
+        self.assertNotIn("steamcommunity.com/app/1012880", PROMPT)
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-temporal-prestop-retrieval-gate-v1")
+
+
 
 if __name__ == "__main__":
     unittest.main()
