@@ -469,3 +469,13 @@
 - Scheduled Task Run now не запускался; settings не менялись;
 - durable report: `reviews/worker_reports/taste-dossier-early-multi-source-diversification-implement-01.md`;
 - next step: Director выполняет одну clean production live acceptance существующего `Taste Steam Review Dossier` Scheduled Task на новом snapshot без manual progress repair.
+
+
+## Worker in progress — 2026-09-19
+
+### Taste dossier temporal pre-stop retrieval gate implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_TEMPORAL_PRESTOP_RETRIEVAL_GATE_IMPLEMENT_01.md`;
+- accepted diagnosis: 60 Seconds! Reatomized appid `1012880` failed because Scheduled worker stopped at `research_state:sufficient / evidence_stable` before the existing recent current-state obligation for a historical technical observation was satisfied;
+- architecture preflight: GitHub remains control plane/strict authority; existing Scheduled ChatGPT worker remains bounded external retrieval + semantic synthesis owner; implementation is limited to repo-owned prompt/binding + focused regressions, with no new queue/scheduler/retry/quota;
+- old immutable `593378be…/g000002` remains untouchable; production candidate publication and Scheduled Task Run now are forbidden in this task.
