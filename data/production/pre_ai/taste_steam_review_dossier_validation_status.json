@@ -1,142 +1,32 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-STATUS-V1",
   "schema_version": 1,
-  "snapshot_id": "ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872",
-  "prepared_required_sha256": "048841e89b8aab1f2276c5e747d04183d6d5f323386d2a93c697f287eb04ee1a",
-  "group_plan_sha256": "8931aff2a475ab621702d9a0f4f61a70db7bfd277c69591ada1e5d376b62bbb2",
+  "snapshot_id": "593378be74141105830ebe7f1fb94d8942f7427bc1abb7f05430b6bfccc69a26",
+  "prepared_required_sha256": "15fdd22e1dd861fd49ca8fd76155d8655d166267133b192fd09d0d288143237d",
+  "group_plan_sha256": "4ea24ba4d1aae5aacb1578c3cf51fa7a053ac6963729ee972be60ffe52e080c8",
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
     "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-    "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
+    "evidence_contract_sha256": "a50c3e18c3401ce0e1c414aa2d5fb12cfd007a425da10f368342384c65d98d45",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
     "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
     "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
-    "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
+    "worker_prompt_revision": "web-evidence-v2-early-multi-source-diversification-v1",
+    "worker_prompt_sha256": "2cecbdfe523d5be03d9d0e7c02be0c5487c9d8b5e2f821e6a08f10cf57fe3ea0"
   },
-  "canonical_expected_sequence": 7,
-  "completed_required_count": 18,
-  "remaining_required_count": 684,
+  "canonical_expected_sequence": 2,
+  "completed_required_count": 3,
+  "remaining_required_count": 731,
   "full_backlog_complete": false,
-  "candidate_count": 4,
-  "valid_candidate_count": 3,
-  "invalid_candidate_count": 1,
-  "invalid_expected_group": {
-    "sequence": 7,
-    "group_sha256": "c1e2e9319d9d79d6447d0264af6bce320ae2fe7b2a1741d7c09b79b5d995eb0c",
-    "artifact_sha256": "ac5bed3e7be58f1b6388b3a59d647c71d04128f2b543377c0a54174eae670ee9",
-    "validator_error": "provenance.player_feedback_records[0] older feedback cannot inherit recent parent-source freshness"
-  },
-  "candidate_groups": [
-    {
-      "snapshot_id": "ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872",
-      "sequence": 7,
-      "group_sha256": "c1e2e9319d9d79d6447d0264af6bce320ae2fe7b2a1741d7c09b79b5d995eb0c",
-      "web_evidence_contract_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
-        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
-        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
-      },
-      "validation": "invalid",
-      "canonical_position": "expected",
-      "artifact_paths": [
-        "data/ai_inbox/taste_steam_review_dossiers/ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872--g000007--c1e2e9319d9d79d6447d0264af6bce320ae2fe7b2a1741d7c09b79b5d995eb0c.json"
-      ],
-      "artifact_sha256": "ac5bed3e7be58f1b6388b3a59d647c71d04128f2b543377c0a54174eae670ee9",
-      "validator_error": "provenance.player_feedback_records[0] older feedback cannot inherit recent parent-source freshness"
-    },
-    {
-      "snapshot_id": "ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872",
-      "sequence": 8,
-      "group_sha256": "8539da3472732e5af21afdc4dbc513efa2d4e9ea4c1880b748bfd8110ade33e6",
-      "web_evidence_contract_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
-        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
-        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
-      },
-      "validation": "valid",
-      "canonical_position": "later_buffered",
-      "artifact_paths": [
-        "data/ai_inbox/taste_steam_review_dossiers/ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872--g000008--8539da3472732e5af21afdc4dbc513efa2d4e9ea4c1880b748bfd8110ade33e6.json"
-      ],
-      "artifact_sha256": "9ee7c53a3a5261ddbf8170e9319843d6af81f45d4283787e3414aefd5e28a947",
-      "validator_error": null
-    },
-    {
-      "snapshot_id": "ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872",
-      "sequence": 9,
-      "group_sha256": "7a0295cede7805f208cd8c8aa877af41f5ea0def9e484caf06cd42ea05138d52",
-      "web_evidence_contract_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
-        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
-        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
-      },
-      "validation": "valid",
-      "canonical_position": "later_buffered",
-      "artifact_paths": [
-        "data/ai_inbox/taste_steam_review_dossiers/ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872--g000009--7a0295cede7805f208cd8c8aa877af41f5ea0def9e484caf06cd42ea05138d52.json"
-      ],
-      "artifact_sha256": "19eb702d2ef44219a7ab4de84b35803c38823543b7bcf2690d6a14281fcfd208",
-      "validator_error": null
-    },
-    {
-      "snapshot_id": "ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872",
-      "sequence": 10,
-      "group_sha256": "3a697ea8f5be5d16b8655840c518e62f38c30c99efb75ae2e775feaf3c29ef5b",
-      "web_evidence_contract_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-        "evidence_contract_sha256": "7c133ed616ca12c7a45c465bacebcaa1ff070fc2ecd4fe0097c08e413c9a7eb7",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
-        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-steam-russian-review-retrieval-improvement-v1",
-        "worker_prompt_sha256": "d086a58bc69c3b7c69f2033e30eec09589799cbfd2c02e514deddafe8ca3c912"
-      },
-      "validation": "valid",
-      "canonical_position": "later_buffered",
-      "artifact_paths": [
-        "data/ai_inbox/taste_steam_review_dossiers/ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872--g000010--3a697ea8f5be5d16b8655840c518e62f38c30c99efb75ae2e775feaf3c29ef5b.json"
-      ],
-      "artifact_sha256": "b9dd539cdfc65fdd5ad99bc8a60101af5f03d7e5b4f22506fa4e9a0cc4b05aaa",
-      "validator_error": null
-    }
-  ],
+  "candidate_count": 0,
+  "valid_candidate_count": 0,
+  "invalid_candidate_count": 0,
+  "invalid_expected_group": null,
+  "candidate_groups": [],
   "malformed_current_snapshot_artifacts": [],
   "canonical_progress_authority": false,
   "retry_state": false
