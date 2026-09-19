@@ -136,6 +136,31 @@ For current bugs, performance, compatibility, technical state, localization or r
 
 The V2 validator requires current observations to cite recent current-state support, historical observations to cite historical evidence plus a recent current-state check, and durable observations to cite durable-trait evidence. Context-only/official sources may support identity or current-state context, but they never create player-sentiment mentions and never raise recurrence.
 
+## Temporal pre-stop completeness gate
+
+Before deciding that research is sufficient, before setting `research_state:"sufficient"`, and before using `stop_reason:"evidence_stable"`, perform a structured temporal completeness check over the exact observations you currently intend to serialize.
+
+Use this order:
+
+`collect evidence -> draft/plan observations -> temporal completeness check -> targeted recent retrieval if required -> re-evaluate temporal status -> only then decide sufficient/evidence_stable -> serialize candidate`
+
+For each proposed observation, first determine whether its topic is current-state-sensitive. This includes bugs, performance, compatibility, technical state, localization, and regional/service state. Do not apply this extra stop gate to durable gameplay/story/art/music/structure traits that remain valid under the existing durable-trait rules.
+
+If a current-state-sensitive observation is proposed as `evidence_status:"historical"`, it is temporally complete only when its final bound sources include **both**:
+
+1. historical evidence for the older issue; and
+2. at least one bound source with `evidence_role:"current_state"` and `freshness:"recent"` under the existing <=365-day rule.
+
+If that recent current-state support is missing and either web-search or page-read budget remains, continue bounded exact-product recent player-feedback retrieval. Do **not** set `research_state:"sufficient"` and do **not** use `stop_reason:"evidence_stable"` while this required recent check is still missing. Apply the active early multi-source diversification strategy to this targeted recent retrieval: prefer a cheap usable exact-product player-feedback path when exposed, but diversify source-agnostically after an unusable stop-shape; never turn the recent check into a Steam-only lane, fixed site quota, new retry loop, or a reason to exceed the existing 8-search / 16-page ceilings.
+
+After the bounded recent check, re-evaluate the temporal state rather than preserving the draft label mechanically:
+
+- use `historical` only when recent current-state evidence supports a fixed or materially reduced interpretation of the older issue;
+- use the existing `current` semantics when recent evidence supports that the issue is still current, including the unchanged requirement for recent current-state support;
+- use the existing `uncertain` path when the old-vs-current state remains unresolved after bounded research; never force `historical` merely because the available complaint is old.
+
+A hard-bound stop does not waive this gate. If the temporal state is still unresolved, serialize it only through the existing `uncertain` semantics when the dossier is otherwise valid; do not fabricate a historical resolution. This gate changes retrieval/stopping order only. It does not change the definitions of `current`, `historical`, `durable`, `uncertain`, recency, admissible sources, recurrence, privacy, provenance, or strict validation.
+
 ## Russian-language attempt is mandatory
 
 For every game, explicitly attempt to find Russian-language **player** feedback, especially for localization, translation, voice, font/encoding and regional/service issues. The attempt is an exact-product retrieval gate, not a requirement to manufacture Russian evidence.
