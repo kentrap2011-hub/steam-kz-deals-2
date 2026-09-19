@@ -1,0 +1,392 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "bbb40469f96be618ec10fa7fc6b9edca8ccd56e8f2e73442529a47de76164902",
+  "prepared_required_sha256": "15fdd22e1dd861fd49ca8fd76155d8655d166267133b192fd09d0d288143237d",
+  "group_plan_sha256": "7caf9a05bdf6406249f34af6676667e44dc0df67d744690ad680126a0bb1fb33",
+  "group_count": 245,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
+    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+  },
+  "sequence": 14,
+  "start_index": 39,
+  "end_index_exclusive": 42,
+  "appids": [
+    "1127840",
+    "113020",
+    "1134520"
+  ],
+  "items_sha256": "4fc2192b74a66ff1cbe37586304ba094b6c71b602ccac273441e8f1aed21a7fe",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "a48a7f9c1631a9df322aa3dafd20e8011a03c3a56e2725e4a3433ad75b14ff56",
+  "items": [
+    {
+      "key": "App_1127840",
+      "appid": "1127840",
+      "title": "Landlord's Super",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1127840.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_113020",
+      "appid": "113020",
+      "title": "Monaco: What's Yours Is Mine",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_113020.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1134520",
+      "appid": "1134520",
+      "title": "Dark Light",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1134520.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "93e6e089eb1108a1a0474d5ad9d9e24da5ea5ec4444e4a6f734dec849724f57e",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
+        "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+      },
+      "appid": "1127840",
+      "title": "Landlord's Super",
+      "generated_at_utc": "2026-09-19T11:00:00Z",
+      "expires_at_utc": "2026-10-09T11:00:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Landlord's Super",
+        "release_year": 2023,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1127840"
+          },
+          {
+            "kind": "developer",
+            "value": "Minskworks"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "localization",
+          "statement": "Russian-speaking players requested Russian localization, and current Steam metadata still lists Russian as unsupported.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "fallback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bounded research yielded one exact-product Russian player-feedback discussion; current-state localization status is corroborated by current Steam metadata.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1127840/",
+            "publication_date": "2023-05-25",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1127840/discussions/0/2270320616975477743/",
+            "publication_date": "2023-06-10",
+            "language": "mixed",
+            "freshness": "older",
+            "evidence_role": "historical",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1127840?l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "current_state",
+            "player_feedback": false
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2023-06-10",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
+        "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+      },
+      "appid": "113020",
+      "title": "Monaco: What's Yours Is Mine",
+      "generated_at_utc": "2026-09-19T11:00:00Z",
+      "expires_at_utc": "2026-10-09T11:00:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Monaco: What's Yours Is Mine",
+        "release_year": 2013,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "113020"
+          },
+          {
+            "kind": "developer",
+            "value": "Pocketwatch Games"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "coop",
+          "statement": "Russian player feedback praises varied ways to clear locations, unlockable characters and replayability, with co-op as a particular strength while solo play remains viable.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "fallback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/113020/",
+            "publication_date": "2013-04-24",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/113020?curator_clanid=6858543&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2021-11-26",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
+        "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+      },
+      "appid": "1134520",
+      "title": "Dark Light",
+      "generated_at_utc": "2026-09-19T11:00:00Z",
+      "expires_at_utc": "2026-10-09T11:00:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Dark Light",
+        "release_year": 2022,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1134520"
+          },
+          {
+            "kind": "developer",
+            "value": "Mirari&Co."
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "other",
+          "statement": "Russian player feedback praises the dark science-fiction atmosphere, music, smooth animation and approachable combat feel.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "fallback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1134520/",
+            "publication_date": "2022-09-29",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1134520/Dark_Light/?curator_clanid=31503082&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2024-03-22",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    }
+  ]
+}
