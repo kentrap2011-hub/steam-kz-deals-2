@@ -454,12 +454,18 @@
 - exact next boundary: one bounded architecture decision on whether Scheduled runtime should gain a public-web retrieval capability/provider that exposes the actual neutral Steam Community topic href for an indexed collection row.
 
 
-## Worker in progress — 2026-09-19
+## Worker completed — 2026-09-19
 
 ### Taste dossier early multi-source diversification implement 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_EARLY_MULTI_SOURCE_DIVERSIFICATION_IMPLEMENT_01.md`;
-- scope: изменить только ordering/prioritization retrieval после exact-product Russian existence proof: короткий предпочтительный Steam item-level path, затем ранняя generic non-Steam diversification при unusable Steam shape;
-- hard bounds остаются 8 search / 16 opened pages; evidence/privacy/provenance/schema semantics не ослабляются;
-- обязательный live proof: MO:Astray appid `1104660` должен generic strategy вывести на contract-usable Russian/mixed non-Steam item без production publication и без Scheduled Task Run now;
-- active pre-change snapshot/binding: `ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872`, prompt `web-evidence-v2-steam-russian-review-retrieval-improvement-v1`.
+- implementation: ранний generic cross-source pivot после unusable Steam stop-shape, при сохранении дешёвого usable Steam item-level path первым;
+- production prompt не hardcode-ит MO:Astray/StopGame; hard bounds остаются 8 search / 16 opened pages; evidence/privacy/provenance/schema/strict semantics не ослаблены;
+- MO:Astray appid `1104660` live proof: generic discovery rediscovered stable Russian non-Steam item в `2/8` search queries и `3/16` page reads, без production publication;
+- PR #65; final green dossier CI #88 (`35425499924`), backlog CI #783 (`35425499921`); merge `f8fae3bd41bfd19e1f4a70e7f3b3aa8eef5ddf32`;
+- GitHub-owned activation #140 (`35425523716`) succeeded; activation commit `f239455a930b56d349c1fd3b17d8a6063eb4dd8d`;
+- active snapshot: `593378be74141105830ebe7f1fb94d8942f7427bc1abb7f05430b6bfccc69a26`, prepared/completed/remaining `734/0/734`, expected sequence `1`, group count `245`, group size `3`;
+- prompt binding: `web-evidence-v2-early-multi-source-diversification-v1`;
+- Scheduled Task Run now не запускался; settings не менялись;
+- durable report: `reviews/worker_reports/taste-dossier-early-multi-source-diversification-implement-01.md`;
+- next step: Director выполняет одну clean production live acceptance существующего `Taste Steam Review Dossier` Scheduled Task на новом snapshot без manual progress repair.
