@@ -486,7 +486,7 @@
 ## TASTE-012 — Temporal completeness is a pre-stop retrieval gate
 
 **Дата:** 2026-09-19  
-**Статус:** implementation pending merge/activation by `WORKER_TASK_TASTE_DOSSIER_TEMPORAL_PRESTOP_RETRIEVAL_GATE_IMPLEMENT_01.md`.
+**Статус:** implementation governed by `WORKER_TASK_TASTE_DOSSIER_TEMPORAL_PRESTOP_RETRIEVAL_GATE_IMPLEMENT_01.md`; final activation status is recorded in its durable worker report.
 
 **Решение:** для current-state-sensitive dossier observations (bugs, performance, compatibility, technical state, localization, regional/service state) уже существующая temporal evidence semantics проверяется **до** решения `research_state:sufficient` / `stop_reason:evidence_stable`. Draft `historical` observation без bound `historical` evidence + <=365-day `current_state/recent` source не может остановить research, пока остаётся bounded budget. Worker продолжает exact-product recent retrieval с уже активной early multi-source diversification, затем заново выбирает существующий `historical/current/uncertain` state. Durable traits не затягиваются этим gate.
 
