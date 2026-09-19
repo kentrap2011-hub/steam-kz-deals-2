@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "bbb40469f96be618ec10fa7fc6b9edca8ccd56e8f2e73442529a47de76164902",
+  "prepared_required_sha256": "15fdd22e1dd861fd49ca8fd76155d8655d166267133b192fd09d0d288143237d",
+  "group_plan_sha256": "7caf9a05bdf6406249f34af6676667e44dc0df67d744690ad680126a0bb1fb33",
+  "group_count": 245,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
+    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+  },
+  "sequence": 103,
+  "start_index": 306,
+  "end_index_exclusive": 309,
+  "appids": [
+    "2317640",
+    "232910",
+    "233130"
+  ],
+  "items_sha256": "f15c65ccdbffa5ab9bbb2e3172670a85337f292449ddbcf97163ffa8b3ac601d",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "a48a7f9c1631a9df322aa3dafd20e8011a03c3a56e2725e4a3433ad75b14ff56",
+  "items": [
+    {
+      "key": "App_2317640",
+      "appid": "2317640",
+      "title": "JUMP KING QUEST",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2317640.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_232910",
+      "appid": "232910",
+      "title": "TrackMania² Stadium",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_232910.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_233130",
+      "appid": "233130",
+      "title": "Shadow Warrior",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_233130.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "7112c7c00af0f2da3cd11bf9620499144e0920944a7aa70e3add3592b33185a2"
+}

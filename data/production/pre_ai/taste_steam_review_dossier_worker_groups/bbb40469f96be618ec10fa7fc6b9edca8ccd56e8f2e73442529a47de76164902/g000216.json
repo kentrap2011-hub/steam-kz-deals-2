@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "bbb40469f96be618ec10fa7fc6b9edca8ccd56e8f2e73442529a47de76164902",
+  "prepared_required_sha256": "15fdd22e1dd861fd49ca8fd76155d8655d166267133b192fd09d0d288143237d",
+  "group_plan_sha256": "7caf9a05bdf6406249f34af6676667e44dc0df67d744690ad680126a0bb1fb33",
+  "group_count": 245,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
+    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+  },
+  "sequence": 216,
+  "start_index": 645,
+  "end_index_exclusive": 648,
+  "appids": [
+    "682990",
+    "6860",
+    "687800"
+  ],
+  "items_sha256": "8ab170592755058a0c3899d00a98c81f4c2e2b5c887f75ae477692442f4d01c5",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "a48a7f9c1631a9df322aa3dafd20e8011a03c3a56e2725e4a3433ad75b14ff56",
+  "items": [
+    {
+      "key": "App_682990",
+      "appid": "682990",
+      "title": "Drug Dealer Simulator",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_682990.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_6860",
+      "appid": "6860",
+      "title": "Hitman: Blood Money",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_6860.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_687800",
+      "appid": "687800",
+      "title": "Heads Will Roll: Reforged",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_687800.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "30c8a63b646e578d2c623f293644f435d7cf1feb64195ba9a4fdf3c6d873c082"
+}
