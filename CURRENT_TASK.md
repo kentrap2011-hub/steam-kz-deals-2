@@ -452,3 +452,14 @@
 - no production candidate, canonical progress repair, `g000011`/`g000012` publication, Scheduled Task `Run now`, settings change, PR, merge or activation occurred;
 - durable report: `reviews/worker_reports/taste-dossier-steam-community-child-retrieval-implement-01.md`;
 - exact next boundary: one bounded architecture decision on whether Scheduled runtime should gain a public-web retrieval capability/provider that exposes the actual neutral Steam Community topic href for an indexed collection row.
+
+
+## Worker in progress — 2026-09-19
+
+### Taste dossier early multi-source diversification implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_EARLY_MULTI_SOURCE_DIVERSIFICATION_IMPLEMENT_01.md`;
+- scope: изменить только ordering/prioritization retrieval после exact-product Russian existence proof: короткий предпочтительный Steam item-level path, затем ранняя generic non-Steam diversification при unusable Steam shape;
+- hard bounds остаются 8 search / 16 opened pages; evidence/privacy/provenance/schema semantics не ослабляются;
+- обязательный live proof: MO:Astray appid `1104660` должен generic strategy вывести на contract-usable Russian/mixed non-Steam item без production publication и без Scheduled Task Run now;
+- active pre-change snapshot/binding: `ec6ff4015ad01a9dcaaa2be845230cf04790c1444b99d5a1c31dad39047de872`, prompt `web-evidence-v2-steam-russian-review-retrieval-improvement-v1`.
