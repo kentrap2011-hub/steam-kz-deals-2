@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
     "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
   },
-  "appid": "1137350",
-  "title": "Filament",
+  "appid": "1135690",
+  "title": "Unpacking",
   "generated_at_utc": "2026-09-19T11:00:00Z",
   "expires_at_utc": "2026-10-09T11:00:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Filament",
-    "release_year": 2020,
+    "work_title": "Unpacking",
+    "release_year": 2021,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,31 +30,31 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1137350"
+        "value": "1135690"
       },
       {
         "kind": "developer",
-        "value": "Beard Envy"
+        "value": "Witch Beam"
       }
     ]
   },
   "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "difficulty",
-      "statement": "Player feedback describes the cable-routing puzzle concept as intuitive at first but says the difficulty escalates sharply into very demanding puzzles.",
-      "sentiment": "mixed",
+      "category": "pacing",
+      "statement": "Recent Russian player feedback describes the unpacking and organizing loop as cozy and relaxing.",
+      "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
-        "non_russian"
+        "russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
         "source-002"
       ],
       "player_feedback_ids": [
-        "feedback-001"
+        "fallback-001"
       ]
     }
   ],
@@ -63,8 +63,8 @@
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "single_source_only",
-    "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback discussion used for the validated durable finding.",
-    "russian_attempt": "searched_no_existence_signal",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
+    "russian_attempt": "found_and_used",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
   },
@@ -74,8 +74,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1137350/",
-        "publication_date": "2020-04-23",
+        "url": "https://store.steampowered.com/app/1135690/",
+        "publication_date": "2021-11-01",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "identity",
@@ -85,22 +85,22 @@
         "source_id": "source-002",
         "source_type": "steam_community",
         "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1137350/discussions/0/2260187970833619104/",
-        "publication_date": "2020-04-28",
-        "language": "non_russian",
-        "freshness": "older",
+        "url": "https://steamcommunity.com/app/1135690/reviews/?l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "freshness": "recent",
         "evidence_role": "durable_trait",
-        "player_feedback": true
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "feedback-001",
+        "feedback_id": "fallback-001",
         "source_id": "source-002",
-        "url": "https://steamcommunity.com/app/1137350/discussions/0/2260187970833619104/",
-        "publication_date": "2020-04-28",
-        "language": "non_russian",
-        "identity_mode": "stable_locator"
+        "publication_date": "2026-08-29",
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
       }
     ]
   }
