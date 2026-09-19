@@ -1,67 +1,107 @@
 {
-  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
-  "schema_version": 1,
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
+    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+  },
   "appid": "110800",
   "title": "L.A. Noire",
-  "generated_at_utc": "2026-09-14T04:50:00+00:00",
-  "expires_at_utc": "2026-10-04T04:50:00+00:00",
+  "generated_at_utc": "2026-09-19T11:00:00Z",
+  "expires_at_utc": "2026-10-09T11:00:00Z",
   "ttl_days": 20,
-  "summary": "Detective adventure built around crime-scene investigation, clue gathering and suspect interrogation inside a period open world. Reviews continue to value its distinctive investigative structure and tightly directed narrative, while noting that player choices do not substantially alter the main course of events.",
+  "game_identity": {
+    "work_title": "L.A. Noire",
+    "release_year": 2011,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "110800"
+      },
+      {
+        "kind": "developer",
+        "value": "Team Bondi, Rockstar Leeds"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Investigation through clues and interrogations is repeatedly identified as the game's distinctive core mechanic.",
+      "statement": "Russian player feedback emphasizes the deliberate detective loop of examining crime scenes, collecting clues, and challenging inconsistencies during interrogations rather than relying on action.",
       "sentiment": "positive",
-      "recurrence": "moderate",
-      "mention_count": 3,
+      "recurrence": "anecdotal",
+      "mention_count": 1,
       "evidence_languages": [
-        "store_and_reviews"
-      ]
-    },
-    {
-      "category": "structure",
-      "statement": "Accessible reviews describe the narrative as strongly railroaded even when individual investigations involve player judgment.",
-      "sentiment": "mixed",
-      "recurrence": "limited",
-      "mention_count": 2,
-      "evidence_languages": [
-        "non_russian"
+        "russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "fallback-001"
       ]
     }
   ],
   "conflicts": [],
-  "review_sample": {
-    "strategy": "adaptive_stability",
-    "sampled_russian": 0,
-    "sampled_non_russian": 4,
-    "sampled_total": 4,
-    "sample_ids_sha256": "f037d0f90c6e40c39766343b57b5ac0b0760156d53b4c95caee55251fd4a15ae",
-    "lanes": [
-      {
-        "language_scope": "russian",
-        "sampled": 0,
-        "batches": 1,
-        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
-      },
-      {
-        "language_scope": "non_russian",
-        "sampled": 4,
-        "batches": 1,
-        "stop_reason": "source_sparse_in_accessible_steam_review_index"
-      }
-    ]
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "single_source_only",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
+    "russian_attempt": "found_and_used",
+    "overall_strength": "limited",
+    "stop_reason": "evidence_stable"
   },
   "provenance": {
-    "store_description": {
-      "url": "https://store.steampowered.com/app/110800/",
-      "captured_at_utc": "2026-09-14T04:50:00+00:00",
-      "content_sha256": "4891a01516da5ffc8886c9c252f4b81df19d4a9b0be6846731c60d7eed7f5cab"
-    },
-    "steam_reviews": {
-      "url": "https://store.steampowered.com/app/110800/#app_reviews_hash",
-      "captured_at_utc": "2026-09-14T04:50:00+00:00",
-      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
-      "source_refs_sha256": "f037d0f90c6e40c39766343b57b5ac0b0760156d53b4c95caee55251fd4a15ae"
-    }
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/110800/",
+        "publication_date": "2011-11-08",
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "identity",
+        "player_feedback": false
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/110800/reviews/?browsefilter=trendsixmonths&filterLanguage=russian&l=russian&p=1",
+        "publication_date": null,
+        "language": "russian",
+        "freshness": "unknown",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "fallback-001",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
+      }
+    ]
   }
 }
