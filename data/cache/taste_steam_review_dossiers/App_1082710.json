@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
     "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
   },
-  "appid": "1086620",
-  "title": "Selfloss",
+  "appid": "1082710",
+  "title": "Bug Fables: The Everlasting Sapling",
   "generated_at_utc": "2026-09-19T11:00:00Z",
   "expires_at_utc": "2026-10-09T11:00:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Selfloss",
-    "release_year": 2024,
+    "work_title": "Bug Fables: The Everlasting Sapling",
+    "release_year": 2019,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,24 +30,24 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1086620"
+        "value": "1082710"
       },
       {
         "kind": "developer",
-        "value": "Goodwin Games"
+        "value": "Moonsprout Games"
       }
     ]
   },
   "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "friction",
-      "statement": "Russian player feedback praises the visual locations but criticizes the final boss encounter as overly long and frustrating because of the arena and weak-point design.",
-      "sentiment": "mixed",
+      "category": "mechanics",
+      "statement": "Recent player feedback praises the Paper Mario-inspired combat, build variety, optional difficulty, charm, story, and substantial side content.",
+      "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
-        "russian"
+        "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
@@ -63,8 +63,8 @@
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "single_source_only",
-    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
-    "russian_attempt": "found_and_used",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback collection used for the validated durable finding.",
+    "russian_attempt": "searched_no_existence_signal",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
   },
@@ -74,8 +74,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1086620/",
-        "publication_date": "2024-09-05",
+        "url": "https://store.steampowered.com/app/1082710/",
+        "publication_date": "2019-11-21",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "identity",
@@ -83,12 +83,12 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "steam_reviews",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1086620/Selfloss/?curator_clanid=11116029&l=russian",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1082710/reviews/",
         "publication_date": null,
-        "language": "russian",
-        "freshness": "unknown",
+        "language": "non_russian",
+        "freshness": "recent",
         "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection"
@@ -98,8 +98,8 @@
       {
         "feedback_id": "fallback-001",
         "source_id": "source-002",
-        "publication_date": null,
-        "language": "russian",
+        "publication_date": "2026-09-01",
+        "language": "non_russian",
         "identity_mode": "transient_author_deduped"
       }
     ]
