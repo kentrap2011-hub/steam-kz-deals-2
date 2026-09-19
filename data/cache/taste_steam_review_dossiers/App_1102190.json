@@ -1,67 +1,107 @@
 {
-  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
-  "schema_version": 1,
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
+    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+  },
   "appid": "1102190",
   "title": "Monster Train",
-  "generated_at_utc": "2026-09-14T04:50:00+00:00",
-  "expires_at_utc": "2026-10-04T04:50:00+00:00",
+  "generated_at_utc": "2026-09-19T11:00:00Z",
+  "expires_at_utc": "2026-10-09T11:00:00Z",
   "ttl_days": 20,
-  "summary": "Roguelike deckbuilder built around defending multiple vertical floors of a train, combining clan synergies, tactical card play and high replayability. Accessible reviews praise its distinctive deckbuilding systems and depth, especially as an alternative rather than a copy of other major deckbuilders.",
+  "game_identity": {
+    "work_title": "Monster Train",
+    "release_year": 2020,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1102190"
+      },
+      {
+        "kind": "developer",
+        "value": "Shiny Shoe"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Reviews repeatedly praise the multi-floor combat and clan/deck interactions for creating a distinctive tactical deckbuilding loop.",
+      "statement": "Russian player feedback praises the large number of viable builds and interacting deck-building mechanics.",
       "sentiment": "positive",
-      "recurrence": "moderate",
-      "mention_count": 4,
+      "recurrence": "anecdotal",
+      "mention_count": 1,
       "evidence_languages": [
-        "store_and_reviews"
-      ]
-    },
-    {
-      "category": "progression",
-      "statement": "Run variety and repeated deck construction are frequently described as supporting strong replayability.",
-      "sentiment": "positive",
-      "recurrence": "moderate",
-      "mention_count": 3,
-      "evidence_languages": [
-        "store_and_reviews"
+        "russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "fallback-001"
       ]
     }
   ],
   "conflicts": [],
-  "review_sample": {
-    "strategy": "adaptive_stability",
-    "sampled_russian": 0,
-    "sampled_non_russian": 5,
-    "sampled_total": 5,
-    "sample_ids_sha256": "92c0917341053092b85977b5f1d888b46235358646d028b221d7b92776710c62",
-    "lanes": [
-      {
-        "language_scope": "russian",
-        "sampled": 0,
-        "batches": 1,
-        "stop_reason": "no_russian_reviews_exposed_by_accessible_steam_review_index"
-      },
-      {
-        "language_scope": "non_russian",
-        "sampled": 5,
-        "batches": 1,
-        "stop_reason": "source_sparse_in_accessible_steam_review_index"
-      }
-    ]
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "single_source_only",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
+    "russian_attempt": "found_and_used",
+    "overall_strength": "limited",
+    "stop_reason": "evidence_stable"
   },
   "provenance": {
-    "store_description": {
-      "url": "https://store.steampowered.com/app/1102190/",
-      "captured_at_utc": "2026-09-14T04:50:00+00:00",
-      "content_sha256": "7bdcb778994b6f243f69a0bd75e52257f5074d5b889e4fdb4f3c4d5b1e17a3ca"
-    },
-    "steam_reviews": {
-      "url": "https://store.steampowered.com/app/1102190/#app_reviews_hash",
-      "captured_at_utc": "2026-09-14T04:50:00+00:00",
-      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
-      "source_refs_sha256": "92c0917341053092b85977b5f1d888b46235358646d028b221d7b92776710c62"
-    }
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1102190/",
+        "publication_date": "2020-05-21",
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "identity",
+        "player_feedback": false
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1102190/Monster_Train/?curator_clanid=34462908&l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "freshness": "unknown",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "fallback-001",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
+      }
+    ]
   }
 }

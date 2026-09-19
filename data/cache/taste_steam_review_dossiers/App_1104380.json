@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
     "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
   },
-  "appid": "1096530",
-  "title": "Solasta: Crown of the Magister",
+  "appid": "1104380",
+  "title": "The Room VR: A Dark Matter",
   "generated_at_utc": "2026-09-19T11:00:00Z",
   "expires_at_utc": "2026-10-09T11:00:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Solasta: Crown of the Magister",
-    "release_year": 2021,
+    "work_title": "The Room VR: A Dark Matter",
+    "release_year": 2020,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,31 +30,32 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1096530"
+        "value": "1104380"
       },
       {
         "kind": "developer",
-        "value": "Tactical Adventures"
+        "value": "Fireproof Games"
       }
     ]
   },
   "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Russian player feedback describes the tactical combat as demanding and strongly rewards learning the rules, positioning, and party capabilities.",
-      "sentiment": "positive",
+      "category": "localization",
+      "statement": "Russian-language support was absent at launch and requested by players, but current Steam metadata shows Russian interface support is now available.",
+      "sentiment": "neutral",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
         "russian"
       ],
-      "evidence_status": "durable",
+      "evidence_status": "historical",
       "source_ids": [
-        "source-002"
+        "source-002",
+        "source-003"
       ],
       "player_feedback_ids": [
-        "fallback-001"
+        "feedback-001"
       ]
     }
   ],
@@ -63,7 +64,7 @@
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "single_source_only",
-    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
+    "single_source_reason": "Bounded research yielded one exact-product Russian player-feedback discussion for the historical finding; current-state resolution is corroborated by current official Steam metadata.",
     "russian_attempt": "found_and_used",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
@@ -74,8 +75,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1096530/",
-        "publication_date": "2021-05-27",
+        "url": "https://store.steampowered.com/app/1104380/",
+        "publication_date": "2020-03-26",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "identity",
@@ -85,22 +86,33 @@
         "source_id": "source-002",
         "source_type": "steam_community",
         "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1096530/positivereviews/?browsefilter=toprated&l=russian",
-        "publication_date": null,
+        "url": "https://steamcommunity.com/app/1104380/discussions/0/1747898210747066212/",
+        "publication_date": "2020-02-28",
         "language": "russian",
         "freshness": "older",
-        "evidence_role": "durable_trait",
-        "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
+        "evidence_role": "historical",
+        "player_feedback": true
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1104380?l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "freshness": "recent",
+        "evidence_role": "current_state",
+        "player_feedback": false
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "fallback-001",
+        "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": "2023-07-28",
+        "url": "https://steamcommunity.com/app/1104380/discussions/0/1747898210747066212/",
+        "publication_date": "2020-02-28",
         "language": "russian",
-        "identity_mode": "transient_author_deduped"
+        "identity_mode": "stable_locator"
       }
     ]
   }
