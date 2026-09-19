@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
     "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
   },
-  "appid": "1127840",
-  "title": "Landlord's Super",
+  "appid": "113020",
+  "title": "Monaco: What's Yours Is Mine",
   "generated_at_utc": "2026-09-19T11:00:00Z",
   "expires_at_utc": "2026-10-09T11:00:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Landlord's Super",
-    "release_year": 2023,
+    "work_title": "Monaco: What's Yours Is Mine",
+    "release_year": 2013,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,29 +30,28 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1127840"
+        "value": "113020"
       },
       {
         "kind": "developer",
-        "value": "Minskworks"
+        "value": "Pocketwatch Games"
       }
     ]
   },
   "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "localization",
-      "statement": "Russian-speaking players requested Russian localization, and current Steam metadata still lists Russian as unsupported.",
-      "sentiment": "negative",
+      "category": "coop",
+      "statement": "Russian player feedback praises varied ways to clear locations, unlockable characters and replayability, with co-op as a particular strength while solo play remains viable.",
+      "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
         "russian"
       ],
-      "evidence_status": "current",
+      "evidence_status": "durable",
       "source_ids": [
-        "source-002",
-        "source-003"
+        "source-002"
       ],
       "player_feedback_ids": [
         "fallback-001"
@@ -64,7 +63,7 @@
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "single_source_only",
-    "single_source_reason": "Bounded research yielded one exact-product Russian player-feedback discussion; current-state localization status is corroborated by current Steam metadata.",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
     "russian_attempt": "found_and_used",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
@@ -75,8 +74,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1127840/",
-        "publication_date": "2023-05-25",
+        "url": "https://store.steampowered.com/app/113020/",
+        "publication_date": "2013-04-24",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "identity",
@@ -84,33 +83,22 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "steam_community",
-        "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1127840/discussions/0/2270320616975477743/",
-        "publication_date": "2023-06-10",
-        "language": "mixed",
-        "freshness": "older",
-        "evidence_role": "historical",
-        "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
-      },
-      {
-        "source_id": "source-003",
-        "source_type": "official_metadata",
+        "source_type": "steam_reviews",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1127840?l=russian",
+        "url": "https://store.steampowered.com/app/113020?curator_clanid=6858543&l=russian",
         "publication_date": null,
         "language": "russian",
-        "freshness": "recent",
-        "evidence_role": "current_state",
-        "player_feedback": false
+        "freshness": "older",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
       }
     ],
     "player_feedback_records": [
       {
         "feedback_id": "fallback-001",
         "source_id": "source-002",
-        "publication_date": "2023-06-10",
+        "publication_date": "2021-11-26",
         "language": "russian",
         "identity_mode": "transient_author_deduped"
       }
