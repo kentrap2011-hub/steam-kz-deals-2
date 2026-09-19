@@ -1,89 +1,107 @@
 {
-  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V1",
-  "schema_version": 1,
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
+    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+  },
   "appid": "1087760",
   "title": "The Gunk",
-  "generated_at_utc": "2026-09-14T04:46:00+00:00",
-  "expires_at_utc": "2026-10-04T04:46:00+00:00",
+  "generated_at_utc": "2026-09-19T11:00:00Z",
+  "expires_at_utc": "2026-10-09T11:00:00Z",
   "ttl_days": 20,
-  "summary": "Compact exploration adventure centered on vacuuming away a corrupting substance and restoring colorful alien environments. Reviews commonly find the cleaning loop satisfying and the presentation pleasant, but repeatedly note the short length, low challenge and some repetition or technical roughness.",
+  "game_identity": {
+    "work_title": "The Gunk",
+    "release_year": 2022,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1087760"
+      },
+      {
+        "kind": "developer",
+        "value": "Image & Form Games"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Cleaning contaminated areas and watching the environment recover is repeatedly described as the game's most satisfying interaction.",
-      "sentiment": "positive",
-      "recurrence": "strong",
-      "mention_count": 5,
-      "evidence_languages": [
-        "russian",
-        "non_russian",
-        "store"
-      ]
-    },
-    {
-      "category": "structure",
-      "statement": "Multiple reviews describe the campaign as notably short, commonly finishing in only several hours.",
+      "category": "friction",
+      "statement": "Russian player feedback says the otherwise meditative exploration and cleaning loop is undermined by frequent character chatter.",
       "sentiment": "mixed",
-      "recurrence": "strong",
-      "mention_count": 5,
+      "recurrence": "anecdotal",
+      "mention_count": 1,
       "evidence_languages": [
-        "non_russian"
-      ]
-    },
-    {
-      "category": "difficulty",
-      "statement": "Several reviews characterize puzzles and combat as simple and low-pressure rather than demanding.",
-      "sentiment": "mixed",
-      "recurrence": "moderate",
-      "mention_count": 3,
-      "evidence_languages": [
-        "non_russian"
-      ]
-    },
-    {
-      "category": "repetition",
-      "statement": "More than one review says the cleaning and traversal loop can become repetitive despite its initially satisfying feedback.",
-      "sentiment": "negative",
-      "recurrence": "limited",
-      "mention_count": 2,
-      "evidence_languages": [
-        "non_russian"
+        "russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "fallback-001"
       ]
     }
   ],
   "conflicts": [],
-  "review_sample": {
-    "strategy": "adaptive_stability",
-    "sampled_russian": 1,
-    "sampled_non_russian": 9,
-    "sampled_total": 10,
-    "sample_ids_sha256": "d7a213e12d1a9147057f73b2b53c194057702a3135779656bc3521559d470457",
-    "lanes": [
-      {
-        "language_scope": "russian",
-        "sampled": 1,
-        "batches": 1,
-        "stop_reason": "source_sparse_in_accessible_steam_review_index"
-      },
-      {
-        "language_scope": "non_russian",
-        "sampled": 9,
-        "batches": 1,
-        "stop_reason": "source_sparse_in_accessible_steam_review_index"
-      }
-    ]
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "single_source_only",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
+    "russian_attempt": "found_and_used",
+    "overall_strength": "limited",
+    "stop_reason": "evidence_stable"
   },
   "provenance": {
-    "store_description": {
-      "url": "https://store.steampowered.com/app/1087760/",
-      "captured_at_utc": "2026-09-14T04:46:00+00:00",
-      "content_sha256": "8d4836a72f86d3a1721ee8e47417254895fb08f01cd7dd56f0da24e85a9a0c3b"
-    },
-    "steam_reviews": {
-      "url": "https://store.steampowered.com/app/1087760/#app_reviews_hash",
-      "captured_at_utc": "2026-09-14T04:46:00+00:00",
-      "query": "Steam Community review pages; Russian and non-Russian lanes attempted; accessible index sampled without archiving raw review text",
-      "source_refs_sha256": "d7a213e12d1a9147057f73b2b53c194057702a3135779656bc3521559d470457"
-    }
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1087760/",
+        "publication_date": "2022-04-29",
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "identity",
+        "player_feedback": false
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1087760/The_Gunk/?curator_clanid=41553298&l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "freshness": "unknown",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "fallback-001",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "identity_mode": "transient_author_deduped"
+      }
+    ]
   }
 }
