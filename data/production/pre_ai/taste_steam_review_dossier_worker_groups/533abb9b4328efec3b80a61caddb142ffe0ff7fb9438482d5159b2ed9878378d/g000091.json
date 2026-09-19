@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "533abb9b4328efec3b80a61caddb142ffe0ff7fb9438482d5159b2ed9878378d",
+  "prepared_required_sha256": "5e1317437af9c588df1eb4fc7f7ec972c23b3374ef7f7559c49e54e3659a8779",
+  "group_plan_sha256": "025cd20432e829b252481eb6cfe8e13b372ca8b504f6ec85560e1a9c97ae52c5",
+  "group_count": 229,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
+    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+  },
+  "sequence": 91,
+  "start_index": 270,
+  "end_index_exclusive": 273,
+  "appids": [
+    "237850",
+    "2378620",
+    "2379910"
+  ],
+  "items_sha256": "8c369b484698828e6bed28b638d9034a0d59358384a9f535437ddfb3838d7732",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "ac0d6e07a309c7900ac5cd26105d912824f2efd8e7b854507d6a0b3ec6e6cd0c",
+  "items": [
+    {
+      "key": "App_237850",
+      "appid": "237850",
+      "title": "Dreamfall Chapters",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_237850.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2378620",
+      "appid": "2378620",
+      "title": "Anomaly Agent",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2378620.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_2379910",
+      "appid": "2379910",
+      "title": "Dystopika",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_2379910.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "5c84babfd134157dc495f9b83317aa478b43533883679b6f552cfe4978c78b29"
+}
