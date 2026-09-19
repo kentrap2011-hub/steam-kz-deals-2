@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
     "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
   },
-  "appid": "1072150",
-  "title": "Hedon Bloodrite",
+  "appid": "1075740",
+  "title": "Banners of Ruin",
   "generated_at_utc": "2026-09-19T11:00:00Z",
   "expires_at_utc": "2026-10-09T11:00:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Hedon Bloodrite",
-    "release_year": 2019,
+    "work_title": "Banners of Ruin",
+    "release_year": 2021,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,24 +30,24 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1072150"
+        "value": "1075740"
       },
       {
         "kind": "developer",
-        "value": "Zan_HedonDev"
+        "value": "MonteBearo"
       }
     ]
   },
   "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Player feedback praises the gunplay, movement, level design, lore, music, and puzzle variety.",
-      "sentiment": "positive",
+      "category": "other",
+      "statement": "Russian player feedback praises the lore, visuals, and atmospheric soundtrack while criticizing linear story structure and limited replay value.",
+      "sentiment": "mixed",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
-        "non_russian"
+        "russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
@@ -63,8 +63,8 @@
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "single_source_only",
-    "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback collection used for the validated durable finding.",
-    "russian_attempt": "searched_no_existence_signal",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
+    "russian_attempt": "found_and_used",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
   },
@@ -74,8 +74,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1072150/",
-        "publication_date": "2019-05-16",
+        "url": "https://store.steampowered.com/app/1075740/",
+        "publication_date": "2021-07-29",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "identity",
@@ -83,12 +83,12 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "steam_community",
-        "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1072150/reviews/?browsefilter=toprated",
+        "source_type": "store_user_reviews",
+        "domain": "steambuy.com",
+        "url": "https://steambuy.com/steam/banners-of-ruin/",
         "publication_date": null,
-        "language": "non_russian",
-        "freshness": "recent",
+        "language": "russian",
+        "freshness": "unknown",
         "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection"
@@ -98,8 +98,8 @@
       {
         "feedback_id": "fallback-001",
         "source_id": "source-002",
-        "publication_date": "2026-08-27",
-        "language": "non_russian",
+        "publication_date": null,
+        "language": "russian",
         "identity_mode": "transient_author_deduped"
       }
     ]
