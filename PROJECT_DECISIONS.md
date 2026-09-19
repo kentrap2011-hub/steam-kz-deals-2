@@ -479,3 +479,19 @@
 **Граница:** the accepted Steam Store exact-app concrete-card parent exception remains fallback-only and unchanged; `transient_author_deduped` records still persist no child item/profile locator or author identity and retain the same reduced recurrence semantics. Unknown/unresolvable Steam identity is not guessed. Story-DLC, source-agnostic Russian discovery, group size 3, buffered maximal-contiguous-prefix publication, retry/recovery, ranking/pricing/package/UI and GitHub control-plane ownership do not change.
 
 **Основные места:** `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/taste_steam_review_dossier_compact_provenance.py`, `scripts/test_taste_dossier_contract_contradictions_fix.py`.
+
+
+---
+
+## TASTE-012 — Temporal completeness is a pre-stop retrieval gate
+
+**Дата:** 2026-09-19  
+**Статус:** implementation pending merge/activation by `WORKER_TASK_TASTE_DOSSIER_TEMPORAL_PRESTOP_RETRIEVAL_GATE_IMPLEMENT_01.md`.
+
+**Решение:** для current-state-sensitive dossier observations (bugs, performance, compatibility, technical state, localization, regional/service state) уже существующая temporal evidence semantics проверяется **до** решения `research_state:sufficient` / `stop_reason:evidence_stable`. Draft `historical` observation без bound `historical` evidence + <=365-day `current_state/recent` source не может остановить research, пока остаётся bounded budget. Worker продолжает exact-product recent retrieval с уже активной early multi-source diversification, затем заново выбирает существующий `historical/current/uncertain` state. Durable traits не затягиваются этим gate.
+
+**Почему:** immutable `593378be…/g000002` по `60 Seconds! Reatomized` показал не validator gap, а более раннюю stopping ошибку: worker нашёл 2019 technical complaint, пометил её `historical` и остановился до обязательного recent current-state check. Strict validator уже корректно отверг candidate. Bounded diagnostic/live retrieval показывает, что recent exact-product technical player feedback доступен внутри существующего 8-search / 16-page ceiling, поэтому исправлять нужно pre-stop retrieval ordering, а не evidence meanings или validator strictness.
+
+**Граница:** meanings `historical/current/durable/uncertain`, <=365-day recency, source admissibility, privacy/provenance/language, exact-product identity, strict validator, 8/16 bounds, group size, buffered transport и GitHub ownership не меняются. Не создаются queue, scheduler, retry daemon, fixed website quota или Steam-only lane. Старый immutable `g000002` не ремонтируется и не переиздаётся; prompt binding change активируется только normal GitHub-owned compatible snapshot rebuild.
+
+**Основные места:** `config/taste_steam_review_dossier_worker_prompt.md`, `config/taste_steam_review_dossier_web_evidence_contract.json#worker_prompt_revision`, `scripts/test_taste_steam_review_dossier_semantic_consistency.py`, `scripts/taste_steam_review_dossier_strict.py` (authority unchanged).
