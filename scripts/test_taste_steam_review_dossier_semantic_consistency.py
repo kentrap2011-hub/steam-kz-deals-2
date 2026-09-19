@@ -553,7 +553,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
     def test_temporal_prestop_01_historical_technical_requires_recent_check_before_stop(self):
         self.assertIn("## Temporal pre-stop completeness gate", PROMPT)
         self.assertIn('do **not** use `stop_reason:"evidence_stable"`', PROMPT)
-        self.assertIn('do **not** set `research_state:"sufficient"`', PROMPT)
+        self.assertIn('Do **not** set `research_state:"sufficient"`', PROMPT)
         self.assertIn("at least one bound source with `evidence_role:\"current_state\"` and `freshness:\"recent\"`", PROMPT)
 
     def test_temporal_prestop_02_missing_recent_support_continues_bounded_retrieval(self):
@@ -593,7 +593,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertEqual(bounds["max_web_search_queries"], 8)
         self.assertEqual(bounds["max_opened_or_read_source_pages"], 16)
         self.assertIn("existing 8-search / 16-page ceilings", PROMPT)
-        self.assertIn("not a Steam-only lane, fixed site quota, new retry loop", PROMPT)
+        self.assertIn("never turn the recent check into a Steam-only lane, fixed site quota, new retry loop", PROMPT)
 
     def test_temporal_prestop_09_strict_validator_semantics_remain_authoritative(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
