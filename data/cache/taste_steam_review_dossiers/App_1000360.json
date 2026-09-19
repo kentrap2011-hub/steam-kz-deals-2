@@ -5,20 +5,20 @@
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
     "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-    "evidence_contract_sha256": "a50c3e18c3401ce0e1c414aa2d5fb12cfd007a425da10f368342384c65d98d45",
+    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
     "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
     "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-early-multi-source-diversification-v1",
-    "worker_prompt_sha256": "2cecbdfe523d5be03d9d0e7c02be0c5487c9d8b5e2f821e6a08f10cf57fe3ea0"
+    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
+    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
   },
   "appid": "1000360",
   "title": "Hellish Quart",
-  "generated_at_utc": "2026-09-19T08:29:00Z",
-  "expires_at_utc": "2026-10-09T08:29:00Z",
+  "generated_at_utc": "2026-09-19T11:00:00Z",
+  "expires_at_utc": "2026-10-09T11:00:00Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Hellish Quart",
@@ -42,7 +42,7 @@
   "observations": [
     {
       "category": "mechanics",
-      "statement": "A recent Russian Steam review praises the physics-driven fencing and the variety of matches, especially when playing with friends.",
+      "statement": "Recent Russian player feedback praises the physics-driven fencing, timing and distance decisions, and the variety produced by different bouts.",
       "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
@@ -63,7 +63,7 @@
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "single_source_only",
-    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated finding.",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
     "russian_attempt": "found_and_used",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
