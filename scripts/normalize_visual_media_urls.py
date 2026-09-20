@@ -98,7 +98,7 @@ def apply_grounded_negative_if_ready():
         return False, {
             'mapped_finding_count': 0,
             'visible_item_count': 0,
-        }, 'pending_ai_queue'
+        }, 'source_not_ready'
     changed, stats = grounded_negative_visual.apply_to_current_visual()
     return changed, stats, 'applied'
 
