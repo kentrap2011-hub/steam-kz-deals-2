@@ -12,6 +12,47 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
+## ACTIVE — Taste dossier validator ↔ generator parity fix
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_VALIDATOR_GENERATOR_PARITY_FIX_01.md`
+
+Task ID:
+`taste-dossier-validator-generator-parity-fix-01`
+
+Status:
+`authorized_ready_for_worker`
+
+Mode:
+`IMPLEMENT / ACTIVATE / VALIDATE`
+
+Worker slot:
+`ЧАТ 1` — continue in the existing parity-audit worker chat because this is the direct bounded follow-up and its current context is useful.
+
+User authorization:
+- user explicitly approved fixing the three confirmed parity findings.
+
+Scope:
+- PARITY-01: source locator exact-one / HTTPS / exact normalized host equality;
+- PARITY-02: `multi_source` requires `single_source_reason:null`;
+- PARITY-03: exact-app Steam Store fallback parent allows only `steam_reviews` or `store_user_reviews`.
+
+Boundaries:
+- no validator semantic changes;
+- no new retrieval/source strategy;
+- no ownership, queue, retry or checkpoint changes;
+- no production Scheduled Task run;
+- normal GitHub-owned activation only.
+
+Expected report:
+`reviews/worker_reports/taste-dossier-validator-generator-parity-fix-01.md`
+
+Allowed final statuses:
+- `complete_ready_for_live_acceptance`
+- `needs_fix`
+- `needs_user_decision`
+- `blocked_external`
+
 ## ACCEPTED — Taste dossier validator ↔ generator parity audit
 
 Task:
