@@ -9,6 +9,7 @@ import duration_enrichment
 import giveaway_visual_handoff
 import play_priority_context
 import priority_ranking
+import progressive_personalization
 import refine_visual_ranking as refiner
 import refresh_visual_commercial_fields as commercial_refresh
 from semantic_runtime_completion import apply_visual_semantic_status
@@ -52,6 +53,9 @@ SEMANTIC_PRESERVED_FIELDS = (
     'play_role',
     'start_priority',
     'play_priority_context',
+    'analysis_state',
+    'analysis_tier',
+    'analysis_issue_code',
 )
 
 
@@ -176,7 +180,7 @@ def apply_card_explanation_policy(game, taste_entry, projection, update_scoring=
 def current_explanation_context():
     context_by_family = {
         str(row.get('family_id')): row
-        for row in base_builder.load_jsonl(base_builder.PURCHASE_CONTEXT)
+        for row in progressive_personalization.load_jsonl(progressive_personalization.PROGRESSIVE_CONTEXT)
         if row.get('family_id')
     }
     taste_entries = refiner.effective_taste_entries()
@@ -206,11 +210,15 @@ def apply_deterministic_purchase_refresh(ready):
     accepted visual snapshot and is safe while semantic Taste work is still queued.
     """
     package_stats = package_options.apply_current_artifacts_to_visual(ready)
-    ranked, final_priority_order = priority_ranking.apply_final_priority_order(
-        ready.get('items') or []
-    )
+    items = ready.get('items') or []
+    if any(game.get('analysis_state') for game in items):
+        ranked, final_priority_order = progressive_personalization.apply_progressive_order(items)
+    else:
+        ranked, final_priority_order = priority_ranking.apply_final_priority_order(items)
     ready['items'] = ranked
     ready['item_count'] = len(ranked)
+    if any(game.get('analysis_state') for game in ranked):
+        progressive_personalization.stamp_processing_status(ready)
 
     contract = ready.setdefault('production_contract', {})
     contract.update({
