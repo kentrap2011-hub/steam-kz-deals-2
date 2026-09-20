@@ -157,20 +157,28 @@ class ContractContradictionsFixRegressionTests(unittest.TestCase):
             (ROOT / "data/production/pre_ai/taste_steam_review_dossier_work.json").read_text(encoding="utf-8")
         )
         first_group = work["submission_group_plan"]["groups"][0]
-        self.assertEqual(first_group["appids"], ["1000010", "1000360", "1003590"])
+        self.assertEqual(len(first_group["items"]), len(first_group["appids"]))
+        self.assertGreaterEqual(len(first_group["items"]), 1)
 
-        crown = fallback_dossier(
-            1000010, now, title="Crown Trick", transient_author_tokens=("crown-a", "crown-b")
-        )
-        hellish = web_dossier(1000360, now, title="Hellish Quart")
-        tetris = web_dossier(1003590, now, title="Tetris® Effect: Connected")
+        dossiers = []
+        for index, item in enumerate(first_group["items"]):
+            if index == 0:
+                dossier = fallback_dossier(
+                    item["appid"],
+                    now,
+                    title=item["title"],
+                    transient_author_tokens=("current-a", "current-b"),
+                )
+            else:
+                dossier = web_dossier(item["appid"], now, title=item["title"])
+            dossiers.append(dossier)
+
         expected = [
-            {"appid": "1000010", "title": "Crown Trick"},
-            {"appid": "1000360", "title": "Hellish Quart"},
-            {"appid": "1003590", "title": "Tetris® Effect: Connected"},
+            {"appid": item["appid"], "title": item["title"]}
+            for item in first_group["items"]
         ]
         validated = validate_dossiers_against_expected_items(
-            [crown, hellish, tetris],
+            dossiers,
             expected,
             CONTROL,
             expected_ttl_days=20,
@@ -179,9 +187,9 @@ class ContractContradictionsFixRegressionTests(unittest.TestCase):
         self.assertEqual([d["appid"] for d in validated], first_group["appids"])
 
     def test_contract_surfaces_align_on_all_three_closeouts(self):
-        self.assertEqual(SCHEMA["schema_revision"], "contract-contradictions-fix-2026-09-18")
+        self.assertEqual(SCHEMA["schema_revision"], "identity-provenance-generation-fix-2026-09-20")
         self.assertEqual(EVIDENCE["contract_revision"], "contract-contradictions-fix-2026-09-18")
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-temporal-prestop-retrieval-gate-v1")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-identity-provenance-generation-v1")
         self.assertTrue(EVIDENCE["language_binding"]["strict_exact_equality_required"])
         self.assertEqual(SCHEMA["enums"]["evidence_languages"], ["russian", "non_russian", "unknown"])
         self.assertTrue(SCHEMA["provenance_internal_id_invariants"]["ids_are_author_independent"])

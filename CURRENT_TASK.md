@@ -485,3 +485,13 @@
 - evidence semantics, strict validator, privacy/provenance/language guards, early multi-source diversification, and 8/16 ceilings remain unchanged;
 - no production candidate was published; Scheduled Task `Run now` was not invoked and its settings were not changed;
 - durable report: `reviews/worker_reports/taste-dossier-temporal-prestop-retrieval-gate-implement-01.md`.
+
+
+## Worker in progress — 2026-09-20
+
+### Taste dossier identity provenance generation fix 01
+Статус: `implementing`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_IDENTITY_PROVENANCE_GENERATION_FIX_01.md`;
+- scope: align Scheduled dossier generation prompt/schema with the existing strict identity-role provenance invariant; preserve validator, buffered transport, ownership and recovery semantics;
+- branch: `worker/taste-dossier-identity-provenance-generation-fix-01`;
+- no Scheduled Task Run now/settings change permitted in this task.
