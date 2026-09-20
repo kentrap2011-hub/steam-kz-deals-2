@@ -12,6 +12,44 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
+## ACTIVE — Progressive personalized deals Phase A implementation
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_IMPLEMENT_01.md`
+
+Task ID:
+`progressive-personalized-deals-phase-a-implement-01`
+
+Mode:
+`IMPLEMENT / ACTIVATE / VALIDATE`
+
+Worker slot:
+`ЧАТ 2` — direct continuation of the accepted architecture amendment.
+
+User authorization:
+- explicit approval given after Director accepted the progressive architecture.
+
+Scope:
+- implement progressive current-catalogue display;
+- implement canonical per-item analysis state projection and counts;
+- publish all deterministic-eligible unresolved games as Tier 2/3 instead of waiting for semantic queue closure;
+- preserve compatible Tier 1 personalization and exclude trustworthy not-fit;
+- implement tier-first sorting and site status labels/counters;
+- update normal deterministic build/deploy path as needed;
+- do not redesign/run PASS 1 or PASS 2 semantic processing.
+
+Expected report:
+`reviews/worker_reports/progressive-personalized-deals-phase-a-implement-01.md`
+
+Production restrictions:
+- no Scheduled ChatGPT run;
+- no manual semantic backlog processing;
+- no Dossier/Taste recovery surgery;
+- hard source/business/identity gates remain strict.
+
+Next decision:
+- Director acceptance of Phase A live result before any Phase B implementation.
+
 ## ACCEPTED — Progressive personalized deals architecture amendment
 
 Task:
