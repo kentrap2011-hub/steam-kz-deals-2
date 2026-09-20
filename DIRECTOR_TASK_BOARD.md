@@ -12,46 +12,34 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## ACTIVE — Taste dossier validator ↔ generator parity fix
+## ACCEPTED — Taste dossier validator ↔ generator parity fix
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_VALIDATOR_GENERATOR_PARITY_FIX_01.md`
 
-Task ID:
-`taste-dossier-validator-generator-parity-fix-01`
-
-Status:
-`authorized_ready_for_worker`
-
-Mode:
-`IMPLEMENT / ACTIVATE / VALIDATE`
-
-Worker slot:
-`ЧАТ 1` — continue in the existing parity-audit worker chat because this is the direct bounded follow-up and its current context is useful.
-
-User authorization:
-- user explicitly approved fixing the three confirmed parity findings.
-
-Scope:
-- PARITY-01: source locator exact-one / HTTPS / exact normalized host equality;
-- PARITY-02: `multi_source` requires `single_source_reason:null`;
-- PARITY-03: exact-app Steam Store fallback parent allows only `steam_reviews` or `store_user_reviews`.
-
-Boundaries:
-- no validator semantic changes;
-- no new retrieval/source strategy;
-- no ownership, queue, retry or checkpoint changes;
-- no production Scheduled Task run;
-- normal GitHub-owned activation only.
-
-Expected report:
+Report:
 `reviews/worker_reports/taste-dossier-validator-generator-parity-fix-01.md`
 
-Allowed final statuses:
-- `complete_ready_for_live_acceptance`
-- `needs_fix`
-- `needs_user_decision`
-- `blocked_external`
+Final status:
+`complete_ready_for_live_acceptance`
+
+Accepted facts:
+- PARITY-01..03 are now explicitly aligned generator-side;
+- source locator exact-one / HTTPS / normalized host equality is machine-encoded;
+- `multi_source` now explicitly requires `single_source_reason:null`;
+- exact-app Steam Store fallback parent now allows only `steam_reviews` or `store_user_reviews`;
+- strict validator semantics were unchanged;
+- PARITY-FIX-01..12 and prior focused dossier suites passed;
+- PR #70 merged as `505c1adbd48eeaa2100148947cbe56bd881f4f76`;
+- normal activation succeeded via run `35500644784`, commit `cf8467d65691312efe55efd76979cc74ff50c50d`;
+- fresh active snapshot is `3bd2085e4a4a157aa0edadfeabbdcc36786228787016f373189d71d12da8d99b`, expected `g000001`;
+- previous snapshot became stale/inert through normal binding compatibility;
+- no manual progress/recovery surgery occurred;
+- Scheduled Task was not run during implementation.
+
+Next step:
+- one clean production `Run now` acceptance on the active snapshot;
+- keep the worker chat until live acceptance is observed.
 
 ## ACCEPTED — Taste dossier validator ↔ generator parity audit
 
