@@ -8,11 +8,13 @@ from pathlib import Path
 
 import achievement_quality
 import build_visual_feed_v2 as visual_builder
+import progressive_personalization
 
 ROOT = Path('.')
 PAYLOAD = ROOT / 'data/production/pre_ai/chatgpt_payload.json'
 TASTE_QUEUE = ROOT / 'data/production/pre_ai/chatgpt_taste_queue.jsonl'
 PURCHASE_CONTEXT = ROOT / 'data/production/pre_ai/chatgpt_purchase_context.jsonl'
+PROGRESSIVE_CONTEXT = ROOT / 'data/production/pre_ai/progressive_candidate_context.jsonl'
 HISTORY_SNAPSHOT = ROOT / 'data/production/pre_ai/history_snapshot.json'
 TASTE_CACHE = ROOT / 'data/cache/taste_fit.json'
 TASTE_PROJECTION = ROOT / 'data/production/pre_ai/taste_projection.json'
@@ -145,8 +147,12 @@ def enrich_history_and_remove_expired(ready, context_by_family, payload):
     now = datetime.now(timezone.utc)
     kept = []
     expired_family_count = 0
+    expired_family_ids = []
 
     for game in ready.get('items') or []:
+        if game.get('analysis_state') not in {None, 'analyzed_fit'}:
+            progressive_personalization.strip_unresolved_personalization(game)
+            continue
         row = context_by_family.get(str(game.get('id'))) or {}
         purchase = row.get('purchase') or {}
         primary_key = purchase.get('key')
@@ -163,6 +169,7 @@ def enrich_history_and_remove_expired(ready, context_by_family, payload):
 
         if not active_offers:
             expired_family_count += 1
+            expired_family_ids.append(str(game.get('id') or ''))
             continue
 
         primary = next((x for x in active_offers if x.get('key') == primary_key), None)
@@ -192,6 +199,7 @@ def enrich_history_and_remove_expired(ready, context_by_family, payload):
     ready['items'] = kept
     ready['item_count'] = len(kept)
     ready['expired_family_count_removed_at_build'] = expired_family_count
+    ready['expired_family_ids_removed_at_build'] = expired_family_ids
     return ready
 
 
@@ -332,12 +340,19 @@ def current_production_readiness():
     source_key = payload.get('source_mailing_updated_at_utc')
     if not source_key:
         raise SystemExit('Production payload has no source_mailing_updated_at_utc')
-    if ai_queue_count != 0:
-        return None, payload
-    if payload_status != 'complete':
-        raise SystemExit('ChatGPT production payload is not complete')
-    if ready_count != purchase_context_count:
-        raise SystemExit('Closed AI queue must leave one purchase-context row per ready family: ' f'ready={ready_count} purchase_context={purchase_context_count}')
+
+    progressive_count = int(payload.get('progressive_candidate_count') or 0)
+    actual_progressive_count = nonempty_line_count(PROGRESSIVE_CONTEXT) if PROGRESSIVE_CONTEXT.exists() else 0
+    if progressive_count <= 0 and source_count - excluded_count > 0:
+        raise SystemExit('Production payload has no progressive candidate projection')
+    if progressive_count != actual_progressive_count:
+        raise SystemExit(
+            f'Progressive candidate count mismatch: payload={progressive_count} actual={actual_progressive_count}'
+        )
+
+    # Phase A intentionally allows an open semantic queue. The deterministic
+    # candidate projection and source partition remain strict; semantic completeness
+    # is surfaced separately instead of being a global publication gate.
     return source_key, payload
 
 
@@ -358,6 +373,13 @@ def existing_identity():
 
 
 def apply_canonical_priority_order(ready, context_by_family):
+    items = ready.get('items') or []
+    if any(game.get('analysis_state') for game in items):
+        items, _ = progressive_personalization.apply_progressive_order(items)
+        ready['items'] = items
+        ready['item_count'] = len(items)
+        return ready
+
     def key(game):
         row = context_by_family.get(str(game.get('id'))) or {}
         history = row.get('history') or {}
@@ -376,7 +398,6 @@ def apply_canonical_priority_order(ready, context_by_family):
             (game.get('title') or '').casefold(),
         )
 
-    items = ready.get('items') or []
     items.sort(key=key)
     for index, game in enumerate(items, 1):
         game['priority_rank'] = index
@@ -432,6 +453,8 @@ def main():
         'achievement_quality_builder_blob_sha': achievement_builder_sha,
         'source_chatgpt_payload_blob_sha': git_sha('data/production/pre_ai/chatgpt_payload.json'),
         'source_purchase_context_blob_sha': git_sha('data/production/pre_ai/chatgpt_purchase_context.jsonl'),
+        'source_progressive_candidate_context_blob_sha': git_sha('data/production/pre_ai/progressive_candidate_context.jsonl'),
+        'progressive_personalization_contract_blob_sha': git_sha('config/progressive_personalization_contract.json'),
         'source_taste_queue_blob_sha': git_sha('data/production/pre_ai/chatgpt_taste_queue.jsonl'),
         'source_history_snapshot_blob_sha': git_sha('data/production/pre_ai/history_snapshot.json'),
         'source_family_count': payload.get('source_family_count'),
