@@ -12,6 +12,48 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
+## ACTIVE — Taste dossier fail-closed execution ledger
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_FAIL_CLOSED_EXECUTION_LEDGER_IMPLEMENT_01.md`
+
+Task ID:
+`taste-dossier-fail-closed-execution-ledger-implement-01`
+
+Status:
+`authorized_ready_for_worker`
+
+Mode:
+`IMPLEMENT / ACTIVATE / VALIDATE`
+
+Worker slot:
+`ЧАТ 1` — use a new worker chat. This is the direct operational follow-up to the accepted Hellish Quart observability diagnosis.
+
+User authorization:
+- user explicitly approved making fail-closed Scheduled Task stops explainable through structured observable execution facts.
+
+Goal:
+- require a compact `FAIL_CLOSED_EXECUTION_LEDGER_V1` in the Scheduled worker final response whenever the current target stops fail-closed before publication;
+- record exact gate, material attempted routes/actions, observable results, retrieval budget, last completed stage, next required step and factual reason it could not execute;
+- forbid guessed causes and distinguish unknown causes explicitly;
+- require accounting for still-mandatory recovery routes so evidence retrieval cannot silently stop early while budget/liveness/tool availability still permit the next required route;
+- preserve privacy and explicitly exclude chain-of-thought/internal reasoning.
+
+Architecture boundary:
+- final-response observability only;
+- no new durable logging service, queue, scheduler, retry loop, checkpoint or progress owner;
+- GitHub remains canonical control plane;
+- evidence/validator semantics unchanged.
+
+Expected report:
+`reviews/worker_reports/taste-dossier-fail-closed-execution-ledger-implement-01.md`
+
+Allowed final statuses:
+- `complete_ready_for_live_acceptance`
+- `needs_fix`
+- `needs_user_decision`
+- `blocked_external`
+
 ## ACCEPTED — Hellish Quart Russian retrieval diagnostic
 
 Task:
