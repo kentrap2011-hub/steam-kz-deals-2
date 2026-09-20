@@ -11,11 +11,12 @@ from pathlib import Path
 
 import apply_fixed_package_purchase_options as package_options
 import priority_ranking
+import progressive_personalization
 import refine_visual_ranking as refiner
 from taste_negative_contract import negative_readiness, structured_grounded_risks
 
 VISUAL = Path('data/production/visual/current.json')
-PURCHASE_CONTEXT = Path('data/production/pre_ai/chatgpt_purchase_context.jsonl')
+PURCHASE_CONTEXT = Path('data/production/pre_ai/progressive_candidate_context.jsonl')
 TASTE_PROJECTION = Path('data/production/pre_ai/taste_projection.json')
 
 
@@ -132,6 +133,10 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
     removed_after_structured_fit = 0
 
     for game in ready.get('items') or []:
+        if game.get('analysis_state') in {'analysis_incomplete', 'not_analyzed'}:
+            progressive_personalization.strip_unresolved_personalization(game)
+            corrected.append(game)
+            continue
         family_id = str(game.get('id') or '')
         context = contexts.get(family_id) or {}
         taste_key = context.get('taste_subject_key')
@@ -187,9 +192,10 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
     ready['items'] = corrected
     ready['item_count'] = len(corrected)
     package_options.apply_current_artifacts_to_visual(ready)
-    ranked, final_priority_order = priority_ranking.apply_final_priority_order(ready.get('items') or [])
+    ranked, final_priority_order = progressive_personalization.apply_progressive_order(ready.get('items') or [])
     ready['items'] = ranked
     ready['item_count'] = len(ranked)
+    progressive_personalization.stamp_processing_status(ready)
 
     contract = ready.setdefault('production_contract', {})
     contract['grounded_negative_contract'] = 'TASTE-SEMANTIC-RESULT-V4'
