@@ -404,6 +404,8 @@ def refresh_existing_media():
     )
     wanted_appids = set()
     for game in items:
+        if game.get('analysis_state') not in {None, 'analyzed_fit'}:
+            continue
         for appid in game.get('base_appids') or []:
             appid = str(appid)
             if appid.isdigit():
@@ -452,28 +454,31 @@ def refresh_existing_media():
                 game[key] = value
                 changed = True
 
-        if apply_duration_resolution(game, {}, duration_entries, preserve_existing_fallback=True):
-            duration_touched += 1
-            changed = True
+        if game.get('analysis_state') in {None, 'analyzed_fit'}:
+            if apply_duration_resolution(game, {}, duration_entries, preserve_existing_fallback=True):
+                duration_touched += 1
+                changed = True
 
-        taste_entry, projection = explanation_inputs_for_game(
-            game,
-            context_by_family,
-            taste_entries,
-            projections,
-        )
-        explanation_changed, _ = apply_card_explanation_policy(
-            game,
-            taste_entry,
-            projection,
-            update_scoring=True,
-        )
-        if explanation_changed:
-            explanation_touched += 1
-            changed = True
+            taste_entry, projection = explanation_inputs_for_game(
+                game,
+                context_by_family,
+                taste_entries,
+                projections,
+            )
+            explanation_changed, _ = apply_card_explanation_policy(
+                game,
+                taste_entry,
+                projection,
+                update_scoring=True,
+            )
+            if explanation_changed:
+                explanation_touched += 1
+                changed = True
 
-        if play_priority_context.apply_to_game(game, taste_entry):
-            changed = True
+            if play_priority_context.apply_to_game(game, taste_entry):
+                changed = True
+        else:
+            progressive_personalization.strip_unresolved_personalization(game)
 
         if changed:
             touched += 1
@@ -565,7 +570,7 @@ def main():
 
     context_by_family = {
         str(row.get('family_id')): row
-        for row in base_builder.load_jsonl(base_builder.PURCHASE_CONTEXT)
+        for row in progressive_personalization.load_jsonl(progressive_personalization.PROGRESSIVE_CONTEXT)
         if row.get('family_id')
     }
 
@@ -586,8 +591,15 @@ def main():
         else {}
     )
     duration_entries = load_duration_entries()
-    profile, profile_error = refiner.fetch_bound_profile(payload)
-    direct_index = refiner.direct_profile_index(profile)
+    has_personalized_items = any(
+        game.get('analysis_state') in {None, 'analyzed_fit'}
+        for game in ready.get('items') or []
+    )
+    if has_personalized_items:
+        profile, profile_error = refiner.fetch_bound_profile(payload)
+        direct_index = refiner.direct_profile_index(profile)
+    else:
+        profile, profile_error, direct_index = None, None, {}
 
     fit_changes = 0
     removed = 0
@@ -597,6 +609,11 @@ def main():
     for game in ready.get('items') or []:
         family_id = str(game.get('id') or '')
         context = context_by_family.get(family_id) or {}
+
+        if game.get('analysis_state') not in {None, 'analyzed_fit'}:
+            progressive_personalization.strip_unresolved_personalization(game)
+            refined.append(game)
+            continue
         taste_key = context.get('taste_subject_key')
         taste_entry = taste_entries.get(taste_key) if taste_key else {}
         projection = projections.get(taste_key) if taste_key else {}
@@ -639,15 +656,21 @@ def main():
     package_stats = package_options.apply_current_artifacts_to_visual(ready)
     refined = ready.get('items') or []
 
-    # taste_rank is diagnostic only. It is deliberately not the source of priority_rank.
-    taste_sorted = sorted(refined, key=refiner.taste_sort_key)
+    # taste_rank remains diagnostic only and exists only for trustworthy Tier 1.
+    taste_items = [
+        game for game in refined
+        if game.get('analysis_state') in {None, 'analyzed_fit'}
+    ]
+    taste_sorted = sorted(taste_items, key=refiner.taste_sort_key)
     for index, game in enumerate(taste_sorted, 1):
         game['taste_rank'] = index
 
-    refined, final_priority_order = priority_ranking.apply_final_priority_order(refined)
+    refined, final_priority_order = progressive_personalization.apply_progressive_order(refined)
 
     ready['items'] = refined
     ready['item_count'] = len(refined)
+    processing_status = progressive_personalization.stamp_processing_status(ready)
+    refined = ready.get('items') or []
     with_screenshots = sum(bool(game.get('screenshots')) for game in refined)
     with_any_image = sum(bool(game.get('screenshots') or game.get('header_image')) for game in refined)
     ready['media_coverage'] = {
@@ -662,7 +685,7 @@ def main():
     contract = ready.setdefault('production_contract', {})
     contract.clear()
     contract.update({
-        'schema_version': 7,
+        'schema_version': 8,
         'mode': 'daily_precomputed_read_only_for_ui',
         'heavy_calculation_allowed_in_ui': False,
         'external_lookup_allowed_in_ui': False,
@@ -683,6 +706,8 @@ def main():
         'purchase_equivalence_blob_sha': package_options.git_blob_sha(package_options.PURCHASE_EQUIVALENCE),
         'source_chatgpt_payload_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_payload.json'),
         'source_purchase_context_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_purchase_context.jsonl'),
+        'source_progressive_candidate_context_blob_sha': base_builder.git_sha('data/production/pre_ai/progressive_candidate_context.jsonl'),
+        'progressive_personalization_contract_blob_sha': base_builder.git_sha('config/progressive_personalization_contract.json'),
         'source_taste_queue_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_taste_queue.jsonl'),
         'source_history_snapshot_blob_sha': base_builder.git_sha('data/production/pre_ai/history_snapshot.json'),
         'giveaway_visual_handoff_blob_sha': base_builder.git_sha('scripts/giveaway_visual_handoff.py'),
@@ -696,7 +721,8 @@ def main():
         'complete_family_partition': payload.get('complete_family_partition'),
         'canonical_profile_blob_sha': (payload.get('profile_binding') or {}).get('canonical_profile_blob_sha'),
         'taste_model_version': (payload.get('profile_binding') or {}).get('taste_model_version'),
-        'ranking_stage': 'single_final_sort_after_all_refinement_and_purchase_option_enrichment',
+        'ranking_stage': 'analysis_tier_first_then_tier_specific_score_after_purchase_option_enrichment',
+        'progressive_processing_status': processing_status,
         'priority_factors': final_priority_order,
         'priority_ranking_contract': 'FINAL-PRIORITY-RANKING-V2',
         'card_explanation_rule': 'positive requires specific Taste evidence; visible negative requires grounded provenance; scoring/ranking semantics unchanged',
