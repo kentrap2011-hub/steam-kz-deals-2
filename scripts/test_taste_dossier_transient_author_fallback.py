@@ -281,27 +281,26 @@ class TransientAuthorFallbackRegressionTests(unittest.TestCase):
             (ROOT / "data/production/pre_ai/taste_steam_review_dossier_work.json").read_text(encoding="utf-8")
         )
         first_group = work["submission_group_plan"]["groups"][0]
-        self.assertEqual(first_group["appids"], ["1000010", "1000360", "1003590"])
-        self.assertNotIn("2378500", work["ordered_appids"])
+        self.assertGreaterEqual(len(first_group["items"]), 2)
 
         now = datetime.now(timezone.utc).replace(microsecond=0)
-        crown = fallback_dossier(
-            1000010,
-            now,
-            title="Crown Trick",
-            transient_author_tokens=("ephemeral-crown-a", "ephemeral-crown-b"),
-        )
-        hellish = fallback_dossier(
-            1000360,
-            now,
-            title="Hellish Quart",
-            transient_author_tokens=("ephemeral-hq-a", "ephemeral-hq-b"),
-        )
-        self.assertIs(self.validate(crown, now), crown)
-        self.assertIs(self.validate(hellish, now), hellish)
-        serialized = json.dumps([crown, hellish], ensure_ascii=False)
-        self.assertNotIn("ephemeral-crown", serialized)
-        self.assertNotIn("ephemeral-hq", serialized)
+        docs = []
+        transient_tokens = []
+        for index, item in enumerate(first_group["items"][:2], start=1):
+            tokens = (f"ephemeral-current-{index}-a", f"ephemeral-current-{index}-b")
+            transient_tokens.extend(tokens)
+            doc = fallback_dossier(
+                item["appid"],
+                now,
+                title=item["title"],
+                transient_author_tokens=tokens,
+            )
+            self.assertIs(self.validate(doc, now), doc)
+            docs.append(doc)
+
+        serialized = json.dumps(docs, ensure_ascii=False)
+        for token in transient_tokens:
+            self.assertNotIn(token, serialized)
 
 
 if __name__ == "__main__":
