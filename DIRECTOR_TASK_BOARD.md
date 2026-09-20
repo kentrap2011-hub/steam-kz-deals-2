@@ -12,6 +12,36 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
+## ACTIVE — Production architecture simplification review
+
+Task:
+`WORKER_TASK_PRODUCTION_ARCHITECTURE_SIMPLIFICATION_REVIEW_01.md`
+
+Task ID:
+`production-architecture-simplification-review-01`
+
+Mode:
+`READ-ONLY / ARCHITECTURE REVIEW`
+
+Worker slot:
+`ЧАТ 2` — independent clean-context architecture review.
+
+Purpose:
+- reconsider the entire production approach from first principles;
+- prioritize reliable daily visible discounted games over preservation of existing machinery;
+- identify which LLM/Taste/Dossier stages should be removed from the daily critical path;
+- compare hardened-current vs split-core/enrichment vs cache-first vs minimal-recovery designs;
+- recommend exactly one target architecture plus Phase 0..3 recovery/migration plan;
+- no implementation or production run.
+
+Expected report:
+`reviews/worker_reports/production-architecture-simplification-review-01.md`
+
+Coordination:
+- may run in parallel with `ЧАТ 1` observability preflight;
+- do not let the narrow observability task constrain the broader architecture recommendation;
+- Director will compare both reports before any IMPLEMENT authorization.
+
 ## ACTIVE — Taste dossier Scheduled entrypoint observability preflight
 
 Task:
