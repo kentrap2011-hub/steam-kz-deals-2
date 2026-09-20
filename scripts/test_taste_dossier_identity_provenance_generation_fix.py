@@ -74,7 +74,7 @@ class IdentityProvenanceGenerationFixTests(unittest.TestCase):
         self.assertTrue(rules["identity_source_ids_require_at_least_one_identity_role_source"])
         self.assertTrue(rules["identity_role_source_must_resolve_to_exact_intended_product"])
         self.assertTrue(rules["identity_role_source_must_support_resolved_title_release_year_and_appid_under_current_rules"])
-        self.assertFalse(rules["ordinary_player_feedback_source_must_not_masquerade_as_identity_provenance"] is False)
+        self.assertTrue(rules["ordinary_player_feedback_source_must_not_masquerade_as_identity_provenance"])
         self.assertFalse(rules["identity_only_source_may_count_as_player_feedback_support"])
         self.assertIn(
             'Every resolved game identity must reference at least one provenance source with `evidence_role:"identity"`.',
