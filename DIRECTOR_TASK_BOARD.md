@@ -12,6 +12,45 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
+## ACTIVE — Progressive personalized deals Phase A unresolved-row preservation fix
+
+Parent task:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_IMPLEMENT_01.md`
+
+Continuation task:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_UNRESOLVED_ROW_PRESERVATION_FIX_01.md`
+
+Task ID:
+`progressive-personalized-deals-phase-a-unresolved-row-preservation-fix-01`
+
+Mode:
+`IMPLEMENT / ACTIVATE / VALIDATE`
+
+Worker slot:
+`ЧАТ 2`.
+
+User authorization:
+- explicit approval given for this bounded Phase A producer fix.
+
+Accepted blocker:
+- activation routing is already fixed and full build/deploy works;
+- unresolved Tier 2/3 rows are currently dropped by history/expiry enrichment after unsupported personalization is stripped;
+- deployed progressive payload is empty despite 719 current progressive candidates.
+
+Narrow scope:
+- preserve valid `analysis_incomplete` and `not_analyzed` rows through history/expiry enrichment;
+- keep unsupported personalized fields stripped;
+- retain legitimate deterministic expiry/source removals;
+- rerun full build, UI regressions and Pages deploy;
+- update the existing Phase A report only.
+
+Expected report:
+`reviews/worker_reports/progressive-personalized-deals-phase-a-implement-01.md`
+
+Next decision:
+- if Phase A becomes functionally live, Director acceptance before Phase B;
+- if another blocker appears, stop and record it without scope expansion.
+
 ## NEEDS FIX — Progressive personalized deals Phase A
 
 Parent task:
