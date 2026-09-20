@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "04298ca0b80d00cd819af116323de3d1c4906d6ed71e84f40c15c6978d0d08d8",
+  "prepared_required_sha256": "271d2a484f3c644e9a53687b60385ad3c89dbbc654ba3c9247d9e829b0e0b174",
+  "group_plan_sha256": "d8f7108270c55575f100ce4e8ccb1d0d38366a9eebadf581aaa764628f6078ed",
+  "group_count": 240,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+    "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+    "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+  },
+  "sequence": 228,
+  "start_index": 681,
+  "end_index_exclusive": 684,
+  "appids": [
+    "866140",
+    "883710",
+    "888530"
+  ],
+  "items_sha256": "4a0a6684e5979d6059bcbcd4934e4c532f78061ca3e09c1a343d64de4d9f9592",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "6ea2c5b7f764df720c35187116d3ce137484a436f37d4b12c7674c9fa5c40db8",
+  "items": [
+    {
+      "key": "App_866140",
+      "appid": "866140",
+      "title": "Arise: A Simple Story",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_866140.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_883710",
+      "appid": "883710",
+      "title": "Resident Evil 2",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_883710.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_888530",
+      "appid": "888530",
+      "title": "Yaga",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_888530.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "1643415836f17338feb3ca56f39cc69d8328c7d98c035e4d98b13d52f35fa0e5"
+}
