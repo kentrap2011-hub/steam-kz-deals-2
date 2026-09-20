@@ -160,6 +160,7 @@ jobs:
               'why_fit_provenance', 'risks', 'risk_codes', 'risk_status',
               'risk_provenance', 'risk_level', 'risk_penalty', 'direct_user_evidence',
               'taste_rank', 'play_role', 'start_priority', 'play_priority_context',
+              'analysis_state', 'analysis_tier', 'analysis_issue_code',
               'summary', 'description_status', 'description_source_locale',
               'description_source_quality', 'description_source_appid',
               'description_source_path', 'description_source_text',
@@ -245,6 +246,7 @@ jobs:
           node web/score-details-ui.test.js
           node web/giveaway-ui.test.js
           node web/paid-freshness-ui.test.js
+          node web/progressive-personalization-ui.test.js
           node scripts/test_feed_bootstrap_cache_identity.js
 
       - name: Stage precomputed visual payload

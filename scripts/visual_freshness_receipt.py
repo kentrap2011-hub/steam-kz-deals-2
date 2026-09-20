@@ -78,6 +78,22 @@ def _commercial_intent_ready(commercial: dict[str, Any]) -> bool:
     return all(commercial.get(key) for key in COMMERCIAL_BLOB_BINDINGS)
 
 
+def _progressive_phase_a_publication(repo: Path) -> bool:
+    visual, visual_error = _read_json_optional(repo / VISUAL_PATH)
+    if visual_error:
+        return False
+    progressive = visual.get("progressive_personalization") or {}
+    processing = visual.get("processing_status") or {}
+    return bool(
+        visual.get("status") == "complete"
+        and progressive.get("contract") == "PROGRESSIVE-PERSONALIZED-DEALS-V1"
+        and progressive.get("phase") == "phase_a"
+        and progressive.get("publication_status") == "current_deterministic_catalogue"
+        and processing.get("contract") == "PROGRESSIVE-PERSONALIZED-DEALS-V1"
+        and processing.get("semantic_queue_zero_required_for_publication") is False
+    )
+
+
 def capture_intent(repo: Path) -> dict[str, Any]:
     history_file = repo / HISTORY_PATH
     history_blob_sha = _git_optional("rev-parse", f"HEAD:{HISTORY_PATH}", cwd=repo)
@@ -220,6 +236,7 @@ def create_receipt(
         pending_semantic_queue = int(semantic_state.get("ai_queue_count") or 0) > 0
     except (TypeError, ValueError):
         pending_semantic_queue = False
+    progressive_phase_a = _progressive_phase_a_publication(repo)
 
     # Scoped publication is a real bounded build but must never claim the unrelated
     # visual domains are globally fresh. Likewise, a FORCE deterministic refresh
@@ -235,13 +252,13 @@ def create_receipt(
             build_reported
             and persisted
             and intended_history
-            and not pending_semantic_queue
+            and (not pending_semantic_queue or progressive_phase_a)
         )
 
     observed_visual: dict[str, Any] | None = None
     if scoped_giveaway or scoped_commercial:
         reason = None
-    elif pending_semantic_queue and build_reported and persisted:
+    elif pending_semantic_queue and build_reported and persisted and not progressive_phase_a:
         reason = DETERMINISTIC_REFRESH_REASON
     else:
         reason = reason_override

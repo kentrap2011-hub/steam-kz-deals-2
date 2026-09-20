@@ -530,3 +530,13 @@
 - Scheduled Task `Taste Steam Review Dossier` was not run and settings were not changed;
 - durable report: `reviews/worker_reports/taste-dossier-fail-closed-execution-ledger-implement-01.md`, report commit `baed28ed185715dffaa10dcdd29181ee65a1547b`;
 - exact next step: Director performs one production `Run now` acceptance against the active snapshot; any new fail-closed stop must include the structured ledger.
+
+
+### Progressive Personalized Deals Phase A implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_IMPLEMENT_01.md`;
+- scope: Phase A only — progressive display/state/count/tier projection and normal deploy;
+- GitHub remains owner of candidate state/counts/publication/order inputs;
+- Scheduled ChatGPT must not be run or changed;
+- PASS 1/PASS 2 execution is explicitly out of scope;
+- hard source/business/identity gates and existing manual end-of-queue semantics must remain strict.

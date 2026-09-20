@@ -89,21 +89,21 @@
         "min": -6,
         "played_confirmation": "numeric_direct_user_evidence_rating",
         "played_quality_points": {
-          "5": 3,
-          "4": 2.5,
-          "3": 2,
+          "1": -4,
           "2": -2,
-          "1": -4
+          "3": 2,
+          "4": 2.5,
+          "5": 3
         },
         "played_present_quality_unknown_points": 0,
         "played_status_unknown_points": 0,
         "played_absent_points": -6,
         "new_or_unconfirmed_quality_points": {
-          "5": 1.5,
-          "4": 1.25,
-          "3": 1,
+          "1": 0.25,
           "2": 0.5,
-          "1": 0.25
+          "3": 1,
+          "4": 1.25,
+          "5": 1.5
         },
         "new_or_unconfirmed_present_quality_unknown_points": 0.75,
         "new_or_unconfirmed_status_unknown_points": 0,
@@ -148,18 +148,66 @@
         "max": 20,
         "calculation": "max(0, original_price_rub - current_price_rub)",
         "bands": [
-          {"min": 0, "max": 49, "points": 0},
-          {"min": 50, "max": 99, "points": 1},
-          {"min": 100, "max": 199, "points": 3},
-          {"min": 200, "max": 349, "points": 5},
-          {"min": 350, "max": 499, "points": 7},
-          {"min": 500, "max": 749, "points": 10},
-          {"min": 750, "max": 999, "points": 12},
-          {"min": 1000, "max": 1499, "points": 14},
-          {"min": 1500, "max": 1999, "points": 16},
-          {"min": 2000, "max": 2999, "points": 18},
-          {"min": 3000, "max": 4999, "points": 19},
-          {"min": 5000, "max": 999999, "points": 20}
+          {
+            "min": 0,
+            "max": 49,
+            "points": 0
+          },
+          {
+            "min": 50,
+            "max": 99,
+            "points": 1
+          },
+          {
+            "min": 100,
+            "max": 199,
+            "points": 3
+          },
+          {
+            "min": 200,
+            "max": 349,
+            "points": 5
+          },
+          {
+            "min": 350,
+            "max": 499,
+            "points": 7
+          },
+          {
+            "min": 500,
+            "max": 749,
+            "points": 10
+          },
+          {
+            "min": 750,
+            "max": 999,
+            "points": 12
+          },
+          {
+            "min": 1000,
+            "max": 1499,
+            "points": 14
+          },
+          {
+            "min": 1500,
+            "max": 1999,
+            "points": 16
+          },
+          {
+            "min": 2000,
+            "max": 2999,
+            "points": 18
+          },
+          {
+            "min": 3000,
+            "max": 4999,
+            "points": 19
+          },
+          {
+            "min": 5000,
+            "max": 999999,
+            "points": 20
+          }
         ],
         "unknown_points": 0
       },
@@ -167,13 +215,41 @@
         "label": "Текущая цена",
         "max": 12,
         "bands": [
-          {"min": 0, "max": 100, "points": 12},
-          {"min": 101, "max": 250, "points": 11},
-          {"min": 251, "max": 400, "points": 10},
-          {"min": 401, "max": 500, "points": 9},
-          {"min": 501, "max": 550, "points": 7},
-          {"min": 551, "max": 650, "points": 4},
-          {"min": 651, "max": 750, "points": 1}
+          {
+            "min": 0,
+            "max": 100,
+            "points": 12
+          },
+          {
+            "min": 101,
+            "max": 250,
+            "points": 11
+          },
+          {
+            "min": 251,
+            "max": 400,
+            "points": 10
+          },
+          {
+            "min": 401,
+            "max": 500,
+            "points": 9
+          },
+          {
+            "min": 501,
+            "max": 550,
+            "points": 7
+          },
+          {
+            "min": 551,
+            "max": 650,
+            "points": 4
+          },
+          {
+            "min": 651,
+            "max": 750,
+            "points": 1
+          }
         ],
         "unknown_points": 0
       },
@@ -199,13 +275,41 @@
           "label": "Экономия набора против покупки игр отдельно",
           "max": 16,
           "bands": [
-            {"min": 0, "max": 4.99, "points": 0},
-            {"min": 5, "max": 9.99, "points": 2},
-            {"min": 10, "max": 19.99, "points": 4},
-            {"min": 20, "max": 29.99, "points": 8},
-            {"min": 30, "max": 39.99, "points": 11},
-            {"min": 40, "max": 49.99, "points": 14},
-            {"min": 50, "max": 100, "points": 16}
+            {
+              "min": 0,
+              "max": 4.99,
+              "points": 0
+            },
+            {
+              "min": 5,
+              "max": 9.99,
+              "points": 2
+            },
+            {
+              "min": 10,
+              "max": 19.99,
+              "points": 4
+            },
+            {
+              "min": 20,
+              "max": 29.99,
+              "points": 8
+            },
+            {
+              "min": 30,
+              "max": 39.99,
+              "points": 11
+            },
+            {
+              "min": 40,
+              "max": 49.99,
+              "points": 14
+            },
+            {
+              "min": 50,
+              "max": 100,
+              "points": 16
+            }
           ],
           "unknown_points": 0
         },
@@ -213,13 +317,41 @@
           "label": "Цена за одну игру в наборе",
           "max": 12,
           "bands": [
-            {"min": 0, "max": 100, "points": 12},
-            {"min": 101, "max": 250, "points": 11},
-            {"min": 251, "max": 400, "points": 10},
-            {"min": 401, "max": 500, "points": 9},
-            {"min": 501, "max": 550, "points": 7},
-            {"min": 551, "max": 650, "points": 4},
-            {"min": 651, "max": 750, "points": 1}
+            {
+              "min": 0,
+              "max": 100,
+              "points": 12
+            },
+            {
+              "min": 101,
+              "max": 250,
+              "points": 11
+            },
+            {
+              "min": 251,
+              "max": 400,
+              "points": 10
+            },
+            {
+              "min": 401,
+              "max": 500,
+              "points": 9
+            },
+            {
+              "min": 501,
+              "max": 550,
+              "points": 7
+            },
+            {
+              "min": 551,
+              "max": 650,
+              "points": 4
+            },
+            {
+              "min": 651,
+              "max": 750,
+              "points": 1
+            }
           ],
           "unknown_points": 0
         },
@@ -239,7 +371,10 @@
   "taste_factor_contract": {
     "price_blind": true,
     "normalized_values_are_weight_independent": true,
-    "normalized_value_range": [0, 100],
+    "normalized_value_range": [
+      0,
+      100
+    ],
     "changing_final_weights_must_not_require_ai_reevaluation": true,
     "legacy_entries_without_factor_vector_may_use_explicit_coarse_fallback": true,
     "legacy_fallback_must_be_visible_to_user": true
@@ -256,5 +391,15 @@
     "stored_locally": true,
     "production_priority_rank_must_not_be_mutated_by_ui": true,
     "reason": "An explicit user queue decision overrides every automatic priority, including a deal expiring today."
+  },
+  "progressive_personalization": {
+    "contract": "config/progressive_personalization_contract.json",
+    "tier_precedes_score": true,
+    "tier_1_uses_existing_personalized_order": true,
+    "tier_2_3_use_total_score": false,
+    "tier_2_3_sort_key": "deterministic_purchase_score_0_40",
+    "purchase_component_semantics_reused": true,
+    "urgency_operates_inside_tier": true,
+    "manual_end_of_queue_override_preserved": true
   }
 }

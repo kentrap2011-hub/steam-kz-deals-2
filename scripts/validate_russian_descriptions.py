@@ -33,7 +33,11 @@ def validate(path):
 
     failures = []
     counts = {}
+    validated_count = 0
     for game in items:
+        if game.get('analysis_state') in {'analysis_incomplete', 'not_analyzed'}:
+            continue
+        validated_count += 1
         summary = game.get('summary')
         category = classify_description(summary)
         counts[category] = counts.get(category, 0) + 1
@@ -49,13 +53,15 @@ def validate(path):
     print(json.dumps({
         'path': str(path),
         'item_count': len(items),
+        'validated_personalized_item_count': validated_count,
+        'progressive_unresolved_item_count': len(items) - validated_count,
         'category_counts': counts,
         'invalid_count': len(failures),
         'invalid_examples': failures[:20],
     }, ensure_ascii=False, indent=2))
     if failures:
         raise SystemExit(
-            f'Russian description validation failed: {len(failures)}/{len(items)} visible cards are not meaningful Russian'
+            f'Russian description validation failed: {len(failures)}/{validated_count} personalized cards are not meaningful Russian'
         )
 
 

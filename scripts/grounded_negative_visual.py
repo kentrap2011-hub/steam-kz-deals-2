@@ -11,11 +11,12 @@ from pathlib import Path
 
 import apply_fixed_package_purchase_options as package_options
 import priority_ranking
+import progressive_personalization
 import refine_visual_ranking as refiner
 from taste_negative_contract import negative_readiness, structured_grounded_risks
 
 VISUAL = Path('data/production/visual/current.json')
-PURCHASE_CONTEXT = Path('data/production/pre_ai/chatgpt_purchase_context.jsonl')
+PURCHASE_CONTEXT = Path('data/production/pre_ai/progressive_candidate_context.jsonl')
 TASTE_PROJECTION = Path('data/production/pre_ai/taste_projection.json')
 
 
@@ -126,12 +127,17 @@ def canonical_fit_from_structured_risks(game, risks):
 def apply_to_document(ready, *, contexts, taste_entries, projections):
     unresolved = []
     corrected = []
+    negative_pending_count = 0
     mapped_count = 0
     neutral_other_count = 0
     fit_change_count = 0
     removed_after_structured_fit = 0
 
     for game in ready.get('items') or []:
+        if game.get('analysis_state') in {'analysis_incomplete', 'not_analyzed'}:
+            progressive_personalization.strip_unresolved_personalization(game)
+            corrected.append(game)
+            continue
         family_id = str(game.get('id') or '')
         context = contexts.get(family_id) or {}
         taste_key = context.get('taste_subject_key')
@@ -143,7 +149,7 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
         readiness = negative_readiness(taste_entry)
         current_bound = projection.get('status') == 'cache_hit'
         verdict = taste_entry.get('verdict')
-        if not current_bound or verdict != 'INCLUDE' or not readiness['negative_analysis_ready']:
+        if not current_bound or verdict != 'INCLUDE':
             unresolved.append({
                 'family_id': family_id,
                 'taste_subject_key': taste_key,
@@ -151,6 +157,14 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
                 'verdict': verdict,
                 **readiness,
             })
+            continue
+        if not readiness['negative_analysis_ready']:
+            # Progressive Phase A allows a trustworthy fit card before richer
+            # grounded-negative enrichment completes. Do not invent "no risk".
+            for field in ('risks','risk_codes','risk_status','risk_provenance','risk_penalty','risk_level'):
+                game.pop(field, None)
+            negative_pending_count += 1
+            corrected.append(game)
             continue
 
         risks = all_risk_candidates(taste_entry, projection, game.get('practical') or {})
@@ -180,21 +194,24 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
     if unresolved:
         sample = unresolved[:10]
         raise RuntimeError(
-            'grounded negative readiness incomplete for normal paid visual: '
+            'personalized card binding is not current/INCLUDE: '
             + json.dumps(sample, ensure_ascii=False, separators=(',', ':'))
         )
 
     ready['items'] = corrected
     ready['item_count'] = len(corrected)
     package_options.apply_current_artifacts_to_visual(ready)
-    ranked, final_priority_order = priority_ranking.apply_final_priority_order(ready.get('items') or [])
+    ranked, final_priority_order = progressive_personalization.apply_progressive_order(ready.get('items') or [])
     ready['items'] = ranked
     ready['item_count'] = len(ranked)
+    progressive_personalization.stamp_processing_status(ready)
 
     contract = ready.setdefault('production_contract', {})
     contract['grounded_negative_contract'] = 'TASTE-SEMANTIC-RESULT-V4'
     contract['grounded_negative_mapper'] = 'structured_code_category_no_keyword_admission'
-    contract['normal_paid_card_requires_grounded_taste_negative_witness'] = True
+    contract['normal_paid_card_requires_grounded_taste_negative_witness'] = False
+    contract['progressive_fit_may_publish_before_optional_negative_enrichment'] = True
+    contract['grounded_negative_pending_count'] = negative_pending_count
     contract['legacy_free_text_keyword_mapper_is_readiness_critical'] = False
     contract['other_grounded_taste_risk_ranking_score'] = 0
     contract['grounded_negative_mapped_finding_count'] = mapped_count
@@ -208,6 +225,7 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
         'neutral_other_count': neutral_other_count,
         'fit_change_count': fit_change_count,
         'removed_after_structured_fit_count': removed_after_structured_fit,
+        'negative_pending_count': negative_pending_count,
     }
 
 

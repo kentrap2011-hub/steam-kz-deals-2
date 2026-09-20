@@ -58,33 +58,34 @@ def validate_item(game):
     risk_status = game.get('risk_status') or {}
     risk_provenance = game.get('risk_provenance') or []
 
-    # Normal paid-card readiness is intentionally strict: absence of a grounded
-    # downside means analysis is incomplete upstream, never "no risks found".
-    if not risks:
-        errors.append(f'{title}: normal paid card has no visible grounded negative')
-    if risk_status.get('has_described_risk') is not True:
-        errors.append(f'{title}: normal paid card lacks described-risk status')
-    if risk_status.get('grounded_taste_negative_witness') is not True:
-        errors.append(f'{title}: normal paid card lacks grounded Taste negative witness status')
-    if len(risk_codes) != len(risks):
-        errors.append(f'{title}: visible risk count and risk_codes count differ')
-    if len(risk_provenance) != len(risks):
-        errors.append(f'{title}: visible risk count and provenance count differ')
+    # In Progressive Phase A a trustworthy fit may publish before optional
+    # grounded-negative enrichment. If a risk is shown it must still be fully grounded.
+    if risks:
+        if risk_status.get('has_described_risk') is not True:
+            errors.append(f'{title}: visible risks lack described-risk status')
+        if risk_status.get('grounded_taste_negative_witness') is not True:
+            errors.append(f'{title}: visible risks lack grounded Taste negative witness status')
+        if len(risk_codes) != len(risks):
+            errors.append(f'{title}: visible risk count and risk_codes count differ')
+        if len(risk_provenance) != len(risks):
+            errors.append(f'{title}: visible risk count and provenance count differ')
 
-    taste_witnesses = 0
-    for row in risk_provenance:
-        source = row.get('source')
-        if source not in GROUNDED_RISK_SOURCES or not row.get('code'):
-            errors.append(f'{title}: visible risk lacks grounded provenance')
-            continue
-        if source == 'taste_negative_evidence':
-            taste_witnesses += 1
-            if not str(row.get('category') or '').strip():
-                errors.append(f'{title}: Taste negative provenance lacks category')
-            if not str(row.get('evidence') or '').strip():
-                errors.append(f'{title}: Taste negative provenance lacks raw grounded evidence')
-    if taste_witnesses < 1:
-        errors.append(f'{title}: visible risks contain no grounded Taste negative provenance')
+        taste_witnesses = 0
+        for row in risk_provenance:
+            source = row.get('source')
+            if source not in GROUNDED_RISK_SOURCES or not row.get('code'):
+                errors.append(f'{title}: visible risk lacks grounded provenance')
+                continue
+            if source == 'taste_negative_evidence':
+                taste_witnesses += 1
+                if not str(row.get('category') or '').strip():
+                    errors.append(f'{title}: Taste negative provenance lacks category')
+                if not str(row.get('evidence') or '').strip():
+                    errors.append(f'{title}: Taste negative provenance lacks raw grounded evidence')
+        if taste_witnesses < 1:
+            errors.append(f'{title}: visible risks contain no grounded Taste negative provenance')
+    elif risk_codes or risk_provenance or risk_status.get('has_described_risk') is True:
+        errors.append(f'{title}: risk metadata exists without a visible supported risk')
 
     return errors
 
@@ -99,16 +100,34 @@ def main():
             'path': path,
             'sample_size': min(len(items), sample_limit),
             'item_count': len(items),
+        'personalized_item_count': len(personalized),
+        'unresolved_item_count': len(unresolved),
             'validation_mode': 'preserve_existing_semantics',
             'reason': 'pending_ai_queue',
         }, ensure_ascii=False, indent=2))
         print('CARD_EXPLANATION_VALIDATION=SKIP reason=pending_ai_queue_preserve_existing_semantics')
         return
 
-    sample = items[:sample_limit]
+    personalized = [
+        game for game in items
+        if game.get('analysis_state') in {None, 'analyzed_fit'}
+    ]
+    unresolved = [
+        game for game in items
+        if game.get('analysis_state') in {'analysis_incomplete', 'not_analyzed'}
+    ]
+    sample = personalized[:sample_limit]
     errors = []
     for game in sample:
         errors.extend(validate_item(game))
+    for game in unresolved:
+        title = str(game.get('title') or game.get('id') or '<unknown>')
+        if game.get('total_score') is not None or game.get('score_breakdown') is not None:
+            errors.append(f'{title}: unresolved progressive card exposes personalized score')
+        if game.get('why_fit'):
+            errors.append(f'{title}: unresolved progressive card exposes why_fit')
+        if game.get('risks') or game.get('risk_status') or game.get('risk_provenance'):
+            errors.append(f'{title}: unresolved progressive card exposes personal risk conclusion')
 
     summary = {
         'path': path,

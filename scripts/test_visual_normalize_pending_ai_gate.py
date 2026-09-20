@@ -13,11 +13,11 @@ try:
     normalizer.grounded_negative_visual.apply_to_current_visual = lambda: calls.append('grounded')
     changed, stats, mode = normalizer.apply_grounded_negative_if_ready()
     assert changed is False
-    assert mode == 'pending_ai_queue'
+    assert mode == 'source_not_ready'
     assert calls == []
     assert stats['mapped_finding_count'] == 0
 
-    normalizer.readiness_builder.current_production_readiness = lambda: ('cycle-key', {'status': 'complete'})
+    normalizer.readiness_builder.current_production_readiness = lambda: ('cycle-key', {'status': 'degraded', 'ai_queue_count': 10})
     normalizer.grounded_negative_visual.apply_to_current_visual = lambda: (
         True,
         {'mapped_finding_count': 3, 'visible_item_count': 2},
@@ -30,4 +30,4 @@ finally:
     normalizer.readiness_builder.current_production_readiness = original_readiness
     normalizer.grounded_negative_visual.apply_to_current_visual = original_apply
 
-print('visual normalize pending-AI gate regression: ok')
+print('visual normalize progressive-source gate regression: ok')

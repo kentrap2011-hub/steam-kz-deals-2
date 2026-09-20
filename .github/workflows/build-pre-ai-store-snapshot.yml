@@ -21,6 +21,7 @@ on:
       - "config/fixed_package_purchase_option_contract.json"
       - "config/deal_quality_contract.json"
       - "config/mailing_policy.json"
+      - "config/progressive_personalization_contract.json"
       - "config/taste_fingerprint_contract.json"
       - "config/taste_candidate_context_contract.json"
       - "config/taste_cache_entry_contract.json"
@@ -59,6 +60,8 @@ on:
       - "scripts/build_pre_ai_history_snapshot.py"
       - "scripts/build_pre_ai_deal_scenarios.py"
       - "scripts/build_pre_ai_chatgpt_payload.py"
+      - "scripts/progressive_personalization.py"
+      - "scripts/test_progressive_personalization.py"
       - "scripts/taste_steam_review_dossier.py"
       - "scripts/taste_steam_review_dossier_strict.py"
       - "scripts/taste_steam_review_dossier_daily.py"
@@ -149,6 +152,9 @@ jobs:
       - name: Build split ChatGPT consumer bundle
         run: python scripts/build_pre_ai_chatgpt_payload.py
 
+      - name: Regression test progressive personalization Phase A
+        run: python scripts/test_progressive_personalization.py
+
       - name: Prepare fixed daily full Steam review dossier backlog
         run: python scripts/build_taste_steam_review_dossier_work.py
 
@@ -199,6 +205,7 @@ jobs:
             data/production/pre_ai/taste_steam_review_dossier_work.json \
             data/production/pre_ai/taste_steam_review_dossier_worker_index.json \
             data/production/pre_ai/chatgpt_purchase_context.jsonl \
+            data/production/pre_ai/progressive_candidate_context.jsonl \
             data/production/pre_ai/chatgpt_ru_description_queue.jsonl \
             data/production/pre_ai/chatgpt_ru_description_status.json
           git add -A -- data/ai_inbox/taste_steam_review_dossiers 2>/dev/null || true

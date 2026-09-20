@@ -10,6 +10,7 @@ from card_explanation_policy import positive_reasons
 from semantic_runtime_completion import apply_visual_semantic_status
 from russian_description_quality import classify_description
 import commercial_reconsideration_bridge as commercial_bridge
+import progressive_personalization
 from russian_description_translation_runtime import (
     load_translation_cache,
     resolve_description_for_appids as resolve_description_with_translation_cache,
@@ -339,7 +340,10 @@ def achievements_rank(value):
 
 
 def main():
-    rows = load_jsonl(PURCHASE_CONTEXT)
+    # Phase A reads a GitHub-only deterministic candidate projection. It is separate
+    # from ChatGPT purchase context so unresolved candidates can be published without
+    # exposing commercial signals to the semantic worker.
+    rows = progressive_personalization.load_jsonl(progressive_personalization.PROGRESSIVE_CONTEXT)
     store_entries = load_json(STORE_SNAPSHOT).get('entries') or {}
     content_metadata_by_appid = load_content_metadata_by_appid()
     family_obj = load_json(FAMILY_GRAPH)
@@ -347,10 +351,22 @@ def main():
     family_by_id = {x.get('family_id'): x for x in families if isinstance(x, dict)}
     history_entries = load_json(HISTORY_SNAPSHOT).get('entries') or {}
     taste_entries = effective_taste_entries()
-    projection_entries = load_json(TASTE_PROJECTION).get('entries') or {}
+    projection_doc = load_json(TASTE_PROJECTION)
+    projection_entries = projection_doc.get('entries') or {}
     payload = load_json(CHATGPT_PAYLOAD)
     translation_cache = load_translation_cache(TRANSLATION_CACHE)
     rate = (payload.get('fx_binding') or {}).get('kzt_per_rub')
+
+    state_index = progressive_personalization.build_state_index(
+        context_rows=rows,
+        projection_doc=projection_doc,
+        taste_entries=taste_entries,
+    )
+    expected_progressive = int(payload.get('progressive_candidate_count') or len(rows))
+    if len(rows) != expected_progressive:
+        raise SystemExit(
+            f'Progressive candidate context mismatch: payload={expected_progressive} actual={len(rows)}'
+        )
 
     family_base_map = {}
     for fam in families:
@@ -359,32 +375,52 @@ def main():
                 family_base_map.setdefault(str(appid), []).append(fam)
 
     prepared = []
-    wanted_appids = set()
-    for row in rows:
-        fit, scenario, eligibility_bridge = get_visual_eligibility(row, taste_entries)
-        if fit not in {'strong', 'moderate', 'below_moderate'} or not isinstance(scenario, dict):
-            continue
-        if scenario.get('disposition') != 'INCLUDE':
-            continue
-        purchase = row.get('purchase') or {}
-        family_id = row.get('family_id')
-        fam = family_by_id.get(family_id) or {}
-        base_appids = [str(x) for x in ((row.get('semantic_condition') or {}).get('base_appids') or fam.get('base_appids') or [])]
-        wanted_appids.update(x for x in base_appids if x.isdigit())
-        prepared.append((row, fit, scenario, purchase, family_id, fam, base_appids, eligibility_bridge))
+    wanted_personalized_appids = set()
+    business_excluded_family_ids = []
 
-    media = storebrowse_media(wanted_appids)
-    facts = practical_facts(wanted_appids)
+    for row in rows:
+        family_id = str(row.get('family_id') or '')
+        state = state_index.get(family_id)
+        if not state:
+            raise SystemExit(f'Missing progressive state for {family_id}')
+        if state['analysis_state'] == 'analyzed_not_fit':
+            continue
+
+        fam = family_by_id.get(family_id) or {}
+        base_appids = [
+            str(x)
+            for x in ((row.get('semantic_condition') or {}).get('base_appids') or fam.get('base_appids') or [])
+        ]
+        fit = state.get('fit')
+        scenario = progressive_personalization.selected_scenario(row, fit)
+
+        if state['analysis_state'] == 'analyzed_fit':
+            if scenario.get('disposition') != 'INCLUDE':
+                # Existing hard business/deal gate remains authoritative after fit is known.
+                business_excluded_family_ids.append(family_id)
+                continue
+            wanted_personalized_appids.update(x for x in base_appids if x.isdigit())
+
+        prepared.append((row, state, scenario, family_id, fam, base_appids))
+
+    # External media/practical lookups remain limited to already-personalized Tier 1.
+    # Tier 2/3 cards use deterministic local artifacts and never block publication.
+    media = storebrowse_media(wanted_personalized_appids) if wanted_personalized_appids else {}
+    facts = practical_facts(wanted_personalized_appids) if wanted_personalized_appids else {}
     visible = []
 
-    for row, fit, scenario, purchase, family_id, fam, base_appids, eligibility_bridge in prepared:
+    for row, state, scenario, family_id, fam, base_appids in prepared:
+        purchase = row.get('purchase') or {}
         main_key = purchase.get('key')
         offers = []
         seen_offer_keys = set()
         candidate_offer_keys = [main_key]
         candidate_offer_keys += list(fam.get('alternative_purchase_keys') or [])
         candidate_offer_keys += [x.get('primary_key') for appid in base_appids for x in family_base_map.get(appid, [])]
-        candidate_offer_keys += [k for k, s in store_entries.items() if isinstance(s, dict) and str(s.get('appid') or '') in base_appids]
+        candidate_offer_keys += [
+            k for k, s in store_entries.items()
+            if isinstance(s, dict) and str(s.get('appid') or '') in base_appids
+        ]
         for key in candidate_offer_keys:
             if not key or key in seen_offer_keys:
                 continue
@@ -392,9 +428,13 @@ def main():
             offer = offer_from_store(key, store_entries, history_entries, rate)
             if offer:
                 offers.append(offer)
-        offers.sort(key=lambda x: (x['current_price_rub'], -x['discount_percent'], x['title'].lower()))
+        offers.sort(key=lambda x: (
+            int(x.get('current_price_rub') or 999999),
+            -int(x.get('discount_percent') or 0),
+            str(x.get('title') or '').casefold(),
+        ))
 
-        primary_offer = next((x for x in offers if x['key'] == main_key), None)
+        primary_offer = next((x for x in offers if x.get('key') == main_key), None)
         if not primary_offer:
             primary_offer = {
                 'key': main_key,
@@ -410,15 +450,19 @@ def main():
             }
             offers.insert(0, primary_offer)
 
-        screenshots, header = [], None
-        for appid in base_appids:
-            m = media.get(appid) or {}
-            header = header or m.get('header_image')
-            for url in m.get('screenshots') or []:
-                if url not in screenshots:
-                    screenshots.append(url)
-                if len(screenshots) >= 5:
-                    break
+        screenshots = []
+        header = None
+        if state['analysis_state'] == 'analyzed_fit':
+            for appid in base_appids:
+                m = media.get(appid) or {}
+                header = header or m.get('header_image')
+                for url in m.get('screenshots') or []:
+                    if url not in screenshots:
+                        screenshots.append(url)
+                    if len(screenshots) >= 5:
+                        break
+        if header is None and base_appids:
+            header = f'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/{base_appids[0]}/header.jpg'
 
         description_resolution = resolve_description_for_appids(
             base_appids,
@@ -427,43 +471,68 @@ def main():
             translation_cache,
         )
 
-        taste_key = row.get('taste_subject_key')
-        taste_entry = taste_entries.get(taste_key) if isinstance(taste_entries, dict) else {}
-        projection = projection_entries.get(taste_key) if isinstance(projection_entries, dict) else {}
-        taste_entry = taste_entry if isinstance(taste_entry, dict) else {}
-        projection = projection if isinstance(projection, dict) else {}
-        tags = projection.get('fit_tags') or []
-        taste_description = projection.get('short_description') or ''
-        reasons, why_fit_provenance = positive_reasons(taste_entry.get('positive_evidence') or [])
+        analysis_state = state['analysis_state']
+        taste_entry = state.get('taste_entry') or {}
+        projection = projection_entries.get(row.get('taste_subject_key')) or {}
+        if analysis_state == 'analyzed_fit':
+            tags = projection.get('fit_tags') or []
+            taste_description = projection.get('short_description') or ''
+            reasons, why_fit_provenance = positive_reasons(taste_entry.get('positive_evidence') or [])
+            base_facts = [facts.get(appid) or {} for appid in base_appids]
+            statuses = [x.get('windows_status') for x in base_facts]
+            windows_status = (
+                'legacy' if 'legacy' in statuses
+                else ('modern' if 'modern' in statuses
+                      else ('older_but_plausible' if 'older_but_plausible' in statuses else 'unknown'))
+            )
+            achievement_values = [
+                x.get('steam_achievements')
+                for x in base_facts
+                if x.get('steam_achievements') is not None
+            ]
+            steam_achievements = (
+                True if True in achievement_values
+                else (False if achievement_values and all(x is False for x in achievement_values) else None)
+            )
+            achievement_total = next(
+                (x.get('achievement_total') for x in base_facts if x.get('achievement_total') is not None),
+                None,
+            )
+            practical = {
+                'windows_status': windows_status,
+                'steam_achievements': steam_achievements,
+                'achievement_total': achievement_total,
+            }
+            risks = derive_risks(
+                taste_entry.get('negative_evidence') or [],
+                tags,
+                taste_description,
+                projection.get('release_date'),
+                practical,
+            )
+            decision, priority_bucket = commercial_bridge.effective_purchase_fields(None, scenario)
+        else:
+            reasons, why_fit_provenance, risks = [], [], []
+            practical = {
+                'windows_status': 'unknown',
+                'steam_achievements': None,
+                'achievement_total': None,
+            }
+            decision, priority_bucket = 'Ожидает персонального разбора', None
 
-        base_facts = [facts.get(appid) or {} for appid in base_appids]
-        statuses = [x.get('windows_status') for x in base_facts]
-        windows_status = 'legacy' if 'legacy' in statuses else ('modern' if 'modern' in statuses else ('older_but_plausible' if 'older_but_plausible' in statuses else 'unknown'))
-        achievement_values = [x.get('steam_achievements') for x in base_facts if x.get('steam_achievements') is not None]
-        steam_achievements = True if True in achievement_values else (False if achievement_values and all(x is False for x in achievement_values) else None)
-        achievement_total = next((x.get('achievement_total') for x in base_facts if x.get('achievement_total') is not None), None)
-        practical = {'windows_status': windows_status, 'steam_achievements': steam_achievements, 'achievement_total': achievement_total}
-        risks = derive_risks(taste_entry.get('negative_evidence') or [], tags, taste_description, projection.get('release_date'), practical)
-
-        final_decision, final_bucket = commercial_bridge.effective_purchase_fields(eligibility_bridge, scenario)
-        visible.append({
+        game = {
             'id': family_id,
             'family_type': row.get('family_type'),
             'title': purchase.get('title'),
             'base_appids': base_appids,
-            'fit': fit,
-            'taste_factors': taste_entry.get('taste_factors'),
-            'decision': final_decision,
-            'priority_bucket': final_bucket,
-            'fit_evidence_state': (eligibility_bridge or {}).get('fit_evidence_state') if eligibility_bridge else None,
-            'fit_evidence_confidence': (eligibility_bridge or {}).get('fit_evidence_confidence') if eligibility_bridge else None,
-            'eligibility_override': (eligibility_bridge or {}).get('kind') if eligibility_bridge else None,
-            'commercial_eligibility_bridge': eligibility_bridge,
+            'decision': decision,
+            'priority_bucket': priority_bucket,
             'wishlist': bool((row.get('context_only') or {}).get('wishlist')),
             'current_price_rub': primary_offer.get('current_price_rub'),
             'original_price_rub': primary_offer.get('original_price_rub'),
             'discount_percent': primary_offer.get('discount_percent'),
             'historical_minimum_rub': primary_offer.get('historical_minimum_rub'),
+            'history_quality': (row.get('history') or {}).get('quality') or 'unverified',
             'previously_free': primary_offer.get('previously_free'),
             'sale_end_utc': primary_offer.get('sale_end_utc'),
             'summary': description_resolution.get('summary'),
@@ -477,45 +546,81 @@ def main():
             'description_translation_source_text_sha256': description_resolution.get('description_translation_source_text_sha256'),
             'description_translation_source_version': description_resolution.get('description_translation_source_version'),
             'gameplay_points': [],
-            'why_fit': reasons[:2],
-            'why_fit_status': {
-                'has_described_fit': bool(reasons),
-                'grounding': 'grounded' if reasons else 'insufficient_evidence',
-            },
-            'why_fit_provenance': why_fit_provenance[:2],
-            'risks': risks,
             'practical': practical,
             'offers': offers,
             'screenshots': screenshots,
             'header_image': header,
-            'steam_url': primary_offer.get('steam_url') or (f'steam://store/{base_appids[0]}' if base_appids else None),
-            'web_url': primary_offer.get('web_url') or (f'https://store.steampowered.com/app/{base_appids[0]}/' if base_appids else None),
-        })
+            'steam_url': primary_offer.get('steam_url') or (
+                f'steam://store/{base_appids[0]}' if base_appids else None
+            ),
+            'web_url': primary_offer.get('web_url') or (
+                f'https://store.steampowered.com/app/{base_appids[0]}/' if base_appids else None
+            ),
+        }
 
+        if analysis_state == 'analyzed_fit':
+            game.update({
+                'fit': state.get('fit'),
+                'source_fit': state.get('fit'),
+                'taste_factors': taste_entry.get('taste_factors'),
+                'fit_evidence_state': projection.get('fit_evidence_state'),
+                'fit_evidence_confidence': projection.get('fit_evidence_confidence'),
+                'why_fit': reasons[:2],
+                'why_fit_status': {
+                    'has_described_fit': bool(reasons),
+                    'grounding': 'grounded' if reasons else 'insufficient_evidence',
+                },
+                'why_fit_provenance': why_fit_provenance[:2],
+                'risks': risks,
+            })
+
+        progressive_personalization.apply_state_fields(game, state)
+        visible.append(game)
+
+    # The final producer applies the canonical Tier-1 ranking and purchase-only
+    # ordering after deterministic package enrichment. Keep this base order stable.
     visible.sort(key=lambda x: (
-        int(x.get('priority_bucket') or 99),
-        windows_rank((x.get('practical') or {}).get('windows_status')),
-        achievements_rank((x.get('practical') or {}).get('steam_achievements')),
-        -int(bool(x.get('wishlist'))),
-        -int(x.get('discount_percent') or 0),
-        int(x.get('current_price_rub') or 999999),
-        (x.get('title') or '').casefold(),
+        int(x.get('analysis_tier') or 99),
+        str(x.get('title') or '').casefold(),
     ))
-    for index, game in enumerate(visible, 1):
-        game['priority_rank'] = index
+
+    processing = progressive_personalization.build_processing_status(
+        state_index,
+        visible,
+        business_excluded_family_ids=business_excluded_family_ids,
+    )
+    progressive_personalization.validate_processing_status(processing)
 
     output = {
-        'schema_version': 3,
+        'schema_version': 5,
         'status': 'complete',
         'generated_at_utc': datetime.now(timezone.utc).isoformat(),
         'source_mailing_updated_at_utc': payload.get('source_mailing_updated_at_utc'),
         'item_count': len(visible),
         'items': visible,
+        'processing_status': processing,
+        'progressive_personalization': {
+            'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
+            'phase': 'phase_a',
+            'publication_status': 'current_deterministic_catalogue',
+            'semantic_queue_zero_required_for_publication': False,
+            'pass1_active': False,
+            'pass2_active': False,
+        },
     }
     apply_visual_semantic_status(output, payload)
+    # Semantic completeness remains separately observable; it no longer defines
+    # whether the deterministic current catalogue itself is publishable.
+    output['status'] = 'complete'
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(output, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
-    print(f'visual items: {len(visible)}; media items: {len(media)}; practical facts: {len(facts)}')
+    print(
+        f'visual progressive items={len(visible)} '
+        f'total={processing.get("total_current_candidates")} '
+        f'fit={processing.get("analyzed_fit_count")} '
+        f'incomplete={processing.get("analysis_incomplete_count")} '
+        f'not_analyzed={processing.get("not_analyzed_count")}'
+    )
 
 
 if __name__ == '__main__':
