@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "ad93a4484f1c6ceba4ba3d4ef0de681f65fe670ec1ee600e2abc0822b0eec54a",
+  "prepared_required_sha256": "29f2991c94b02163f42cd3e65b754cb0924133b52e25512aa2fb675e6f1b86b8",
+  "group_plan_sha256": "797f2eee942fefda89c5f9cac6bd7b7d1a16c03ff21aae4f7d4697cceb2bb2e5",
+  "group_count": 245,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+    "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+    "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+  },
+  "sequence": 85,
+  "start_index": 252,
+  "end_index_exclusive": 255,
+  "appids": [
+    "1969080",
+    "1983260",
+    "1989270"
+  ],
+  "items_sha256": "366c13133247ad3d6caff1ec7391722c30cbdf39409649d4bbc24951216d879d",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "ac0d6e07a309c7900ac5cd26105d912824f2efd8e7b854507d6a0b3ec6e6cd0c",
+  "items": [
+    {
+      "key": "App_1969080",
+      "appid": "1969080",
+      "title": "A Building Full of Cats",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1969080.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1983260",
+      "appid": "1983260",
+      "title": "Dungeons of Hinterberg",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1983260.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1989270",
+      "appid": "1989270",
+      "title": "Slay the Princess — The Pristine Cut",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1989270.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "47146b4b986a60f1129dce66df9ba1dc99cba4d7328709a2b3628c60e7b98040"
+}

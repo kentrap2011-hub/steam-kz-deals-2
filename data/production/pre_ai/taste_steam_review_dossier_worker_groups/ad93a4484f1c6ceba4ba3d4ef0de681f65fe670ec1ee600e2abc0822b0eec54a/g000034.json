@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "ad93a4484f1c6ceba4ba3d4ef0de681f65fe670ec1ee600e2abc0822b0eec54a",
+  "prepared_required_sha256": "29f2991c94b02163f42cd3e65b754cb0924133b52e25512aa2fb675e6f1b86b8",
+  "group_plan_sha256": "797f2eee942fefda89c5f9cac6bd7b7d1a16c03ff21aae4f7d4697cceb2bb2e5",
+  "group_count": 245,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+    "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+    "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+  },
+  "sequence": 34,
+  "start_index": 99,
+  "end_index_exclusive": 102,
+  "appids": [
+    "1237980",
+    "1238040",
+    "1238060"
+  ],
+  "items_sha256": "8b133e17c78be5ab1319c22bb110d1b0524e1dee7d378ca1f8c7079a9194b793",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "ac0d6e07a309c7900ac5cd26105d912824f2efd8e7b854507d6a0b3ec6e6cd0c",
+  "items": [
+    {
+      "key": "App_1237980",
+      "appid": "1237980",
+      "title": "STAR WARS™ Battlefront",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1237980.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1238040",
+      "appid": "1238040",
+      "title": "Dragon Age II: Ultimate Edition",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1238040.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1238060",
+      "appid": "1238060",
+      "title": "Dead Space™ 3",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1238060.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "d98df8f6e79085803091a0b388fa9ca9066953eabf7ea7e9e4cf166726d53e1c"
+}
