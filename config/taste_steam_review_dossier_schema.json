@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "version": 2,
   "status": "active",
-  "schema_revision": "contract-contradictions-fix-2026-09-18",
+  "schema_revision": "identity-provenance-generation-fix-2026-09-20",
   "evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "evidence_contract_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
@@ -175,7 +175,12 @@
     "release_year_required": true,
     "identity_source_ids_required": true,
     "appid_corroborator_must_equal_dossier_appid": true,
-    "resolved_identity_only": true
+    "resolved_identity_only": true,
+    "identity_source_ids_require_at_least_one_identity_role_source": true,
+    "identity_role_source_must_resolve_to_exact_intended_product": true,
+    "identity_role_source_must_support_resolved_title_release_year_and_appid_under_current_rules": true,
+    "ordinary_player_feedback_source_must_not_masquerade_as_identity_provenance": true,
+    "identity_only_source_may_count_as_player_feedback_support": false
   },
   "summary_invariants": {
     "free_form_factual_claims_allowed": false,
