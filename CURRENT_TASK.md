@@ -518,8 +518,15 @@
 
 
 ### Taste dossier fail-closed execution ledger implement 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_FAIL_CLOSED_EXECUTION_LEDGER_IMPLEMENT_01.md`;
-- scope: fail-closed final-response execution ledger + required-route completion accounting only;
-- ownership/evidence semantics remain unchanged; no new durable logging/queue/retry service;
-- implementation branch: `worker/taste-dossier-fail-closed-execution-ledger-implement-01`.
+- implementation PR #73 merged as `a5d53a58d92de9066890755b2bb6ae6c19409e80`;
+- focused dossier CI run `35510820950` (#104), job `106078302940`: success; backlog disposition run `35510820931` (#831), job `106078303078`: success;
+- fail-closed pre-publication responses now require `FAIL_CLOSED_EXECUTION_LEDGER_V1` with observable attempt/gate/budget/next-step accounting; private chain-of-thought, raw feedback, author/profile identity, secrets and unsupported causal guesses are forbidden;
+- required-route guard prevents silent evidence exhaustion while an already-required recovery route remains executable within budget and live binding;
+- evidence/schema/validator semantics and GitHub ownership remain unchanged; no durable logging service, queue, scheduler, recurring stage, retry daemon or manual canonical progress was added;
+- GitHub-owned activation commit `924673f2a788b52ccd61dbac4b2a844118a6bdf8`; active snapshot `ad93a4484f1c6ceba4ba3d4ef0de681f65fe670ec1ee600e2abc0822b0eec54a`, prepared/completed/remaining `733/0/733`, expected `g000001`, prompt binding `web-evidence-v2-fail-closed-execution-ledger-v1`;
+- exact active `g000001`: Crown Trick / Hellish Quart / Tetris® Effect: Connected; descriptor/index binding matches;
+- Scheduled Task `Taste Steam Review Dossier` was not run and settings were not changed;
+- durable report: `reviews/worker_reports/taste-dossier-fail-closed-execution-ledger-implement-01.md`, report commit `baed28ed185715dffaa10dcdd29181ee65a1547b`;
+- exact next step: Director performs one production `Run now` acceptance against the active snapshot; any new fail-closed stop must include the structured ledger.
