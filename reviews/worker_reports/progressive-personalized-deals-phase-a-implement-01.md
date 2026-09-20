@@ -1,4 +1,4 @@
-# Progressive Personalized Deals Phase A Implement 01 — checkpoint
+# Progressive Personalized Deals Phase A Implement 01 — activation status
 
 ## 1. Task / repo / mode
 
@@ -9,7 +9,7 @@
 - Checkpoint request: stop further implementation expansion and record factual state only.
 - Checkpoint status: `needs_fix`
 
-Phase A is **not complete**. Code and contract work were merged, but the normal activation path has not produced/deployed the progressive current visual payload.
+Phase A is **not complete**. The activation-routing defect is fixed and the normal full-build/deploy path now runs, but that full build exposed a separate producer defect: all unresolved Tier 2/3 rows are dropped during history/expiry enrichment, so the deployed progressive payload is empty despite 719 current progressive candidates.
 
 ## 2. Architecture preflight confirmation
 
@@ -320,15 +320,38 @@ Not implemented or run:
 
 ## 15. Exact current mandatory point and blocker
 
-The implementation has reached the **normal activation / full progressive visual build** requirement.
+The activation-routing defect itself is fixed.
 
-Concrete blocker:
+On main run `35532554751`, the scope job selected the existing **full build** for the real checkpoint state:
+- active progressive context: 719 rows;
+- current visual before build: legacy/incompatible;
+- `commercial_refresh`: skipped;
+- `giveaway_refresh`: skipped;
+- `build`: executed and succeeded.
 
-After the successful Phase A pre-AI refresh created the 719-row progressive candidate artifact, the normal `Build daily visual payload` scope classifier selected `commercial_refresh`. That job succeeded but the full `build` job was skipped. As a result the pipeline refreshed only the existing three legacy cards instead of building the 719-candidate progressive visual.
+That full build exposed a separate producer defect outside this narrow routing task:
 
-So this is not merely “the task is larger than expected”; there is a specific activation-path defect that must be corrected or otherwise routed through the canonical full-build path.
+`scripts/build_daily_visual_payload.py::enrich_history_and_remove_expired()` currently does:
 
-The earlier full-build run `35526751716` also failed at its build step before the new pre-AI artifact had been committed. That initial ordering problem is no longer the main state: the progressive pre-AI artifact now exists on main. The remaining observable blocker is that the next daily visual run chooses commercial-only refresh rather than the progressive full build.
+```python
+if game.get('analysis_state') not in {None, 'analyzed_fit'}:
+    progressive_personalization.strip_unresolved_personalization(game)
+    continue
+```
+
+The unresolved `analysis_incomplete` / `not_analyzed` row is stripped correctly, but the function immediately `continue`s **without appending the game to `kept`**. Therefore all unresolved Phase A rows disappear after the base progressive producer.
+
+Observed result after the successful full build:
+- progressive candidate context: 719;
+- AI queue: 719;
+- current visual `item_count`: 0;
+- `processing_status.total_current_candidates`: 0;
+- `processing_status.normal_visible_count`: 0;
+- progressive state block is present;
+- source is current;
+- no unresolved fake personalized fields exist only because no unresolved cards survived.
+
+This is the exact new blocker. Per `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_ACTIVATION_ROUTING_FIX_01.md`, this task stops here and does not broaden into fixing that producer defect.
 
 ## 16. Out-of-Phase-A impact check
 
@@ -351,13 +374,13 @@ The first four are collateral existing workflow refreshes caused by the merge pu
 
 `needs_fix`
 
-Reason: merged implementation is incomplete in activation. The current canonical/deployed visual has not been rebuilt into the progressive catalogue, and the normal deploy path has not accepted/deployed Phase A.
+Reason: routing is fixed and normal full build + Pages deploy now succeed, but the resulting progressive payload is functionally invalid for Phase A because unresolved Tier 2/3 candidates are dropped by `enrich_history_and_remove_expired()`; the current deployed visual has 0 items while the active progressive candidate context has 719.
 
 ## 18. Exactly one recommended next step
 
-Fix the **daily visual scope/trigger decision only** so that a newly generated or stale/missing progressive catalogue forces the canonical full progressive build instead of `commercial_refresh`; then use the existing validation/deploy path to prove the resulting current payload and site.
+Return to Director with this exact new blocker and authorize one bounded Phase A producer fix: preserve unresolved Tier 2/3 rows in `enrich_history_and_remove_expired()` after stripping unsupported personalization, then rerun the already-working full build/deploy path.
 
-Do not start PASS 1/PASS 2 as part of that fix.
+Do not start PASS 1/PASS 2.
 
 ## 19. Exact commit / PR / run refs
 
@@ -379,3 +402,101 @@ Key implementation refs:
 The Phase A change crossed more surfaces than the initial bounded producer change suggested because publication freshness, full-vs-commercial scope classification, validators, UI and deploy acceptance all encode assumptions about the old “semantic-complete before fresh publication” model.
 
 The reusable lesson for the remaining fix is to avoid another broad sweep: the state model, producer, UI and focused tests are already in place. The minimum remaining work is the activation routing condition that decides whether the daily workflow performs a full progressive build or a bounded commercial refresh.
+
+
+## 21. Activation routing fix 01 — final evidence
+
+### Exact routing defect
+
+The prior scope classifier independently detected commercial staleness and set `commercial_only=true` even when the current visual had no compatible progressive state/count/provenance for the active progressive candidate context. That bounded job then pre-empted the full build.
+
+### Exact narrow fix
+
+PR #76 added one compatibility predicate and one focused regression:
+
+- `scripts/progressive_visual_activation_routing.py`
+- `scripts/test_progressive_visual_activation_routing.py`
+- `.github/workflows/build-daily-visual-payload.yml`
+- `CURRENT_TASK.md`
+
+Behavior:
+- when deterministic source integrity is valid and the current visual is missing/stale/incompatible versus the active progressive candidate context, bounded giveaway/commercial flags are cleared so the existing full `build` job owns the cycle;
+- when the visual is already progressive-compatible, the existing commercial-only classifier remains available;
+- invalid deterministic source is not converted into a bounded refresh success.
+
+No state model, sorting, UI feature, Taste/Dossier, business/source eligibility, PASS 1/PASS 2 or Scheduled ChatGPT behavior was changed.
+
+### ROUTE-01..10
+
+- ROUTE-01 — **PASS**. Main run `35532554751`: real 719-row progressive context + incompatible legacy visual selected full `build`; `commercial_refresh` and `giveaway_refresh` were skipped.
+- ROUTE-02 — **PASS in focused regression**. Compatible progressive visual remains compatible; commercial-only freshness remains decided by the pre-existing commercial classifier.
+- ROUTE-03 — **PASS in focused regression**. Missing processing block and stale progressive provenance are incompatible and require full build.
+- ROUTE-04 — **PASS in focused regression and existing build validations**. Source-integrity mismatch is not accepted as a bounded progressive-compatible refresh.
+- ROUTE-05 — **FAIL due newly exposed producer blocker**. Full build produced the progressive blocks but 0 visible items / 0 current candidates instead of the 719 unresolved candidates.
+- ROUTE-06 — **PASS technically**. Deploy run `35532579278` reached and passed UI regressions, staged payload binding, Pages artifact upload and Pages deployment.
+- ROUTE-07 — **PASS**. `Run UI regressions` passed in deploy run `35532579278`, covering the committed urgency/tier regression suite.
+- ROUTE-08 — **FAIL**. The current visual is no longer the legacy 3-row payload, but it is now an invalid empty progressive payload while deterministic progressive input contains 719 candidates.
+- ROUTE-09 — **PASS**. No Scheduled ChatGPT run/configuration and no PASS 1/PASS 2 execution occurred.
+- ROUTE-10 — **PASS**. PR #76 changed exactly the routing helper/test, the daily workflow routing, and temporary task handoff.
+
+### Full build / current payload evidence
+
+Routing-fix merge:
+- PR #76
+- branch head `b7ba5800db63d967a52f621bcbe1e5b84aa6ed7b`
+- merge commit `b7727266543121a62b16fc532eb7e557c251f2fc`
+
+Full build:
+- run `35532554751` — success
+- scope regression — success
+- canonical build step — success
+- generated card explanation validation — success
+- giveaway validation — success
+- Russian description validation — success
+- ranking review/export — success
+- visual commit `03f065b58de160dd226cc33bb232304cacd49565`
+
+Deploy:
+- run `35532579278` — success
+- UI regressions — success
+- freshness receipt binding — success
+- Pages artifact upload — success
+- Pages deployment — success
+
+Current source:
+- `source_mailing_updated_at_utc = 2026-09-19T22:47:44.410194+00:00`
+- `progressive_candidate_count = 719`
+- `ai_queue_count = 719`
+
+Current visual after full build:
+- `status = complete`
+- `source_mailing_updated_at_utc = 2026-09-19T22:47:44.410194+00:00`
+- `item_count = 0`
+- `processing_status.total_current_candidates = 0`
+- `processing_status.normal_visible_count = 0`
+- progressive Phase A state block present.
+
+Pages is technically deployed, but Phase A is **not functionally live/acceptable** because the deployed payload is empty.
+
+### Final PHASEA-01..16 status
+
+- PHASEA-01 — **PASS**.
+- PHASEA-02 — **PARTIAL**: open semantic queue no longer blocks the full build, but the resulting catalogue is empty due the producer defect.
+- PHASEA-03 — **FAIL**: unresolved current candidates are not visible.
+- PHASEA-04 — **PASS in regression; live acceptance blocked by empty payload**.
+- PHASEA-05 — **PASS in code/regression; live ordering cannot be meaningfully observed with 0 items**.
+- PHASEA-06 — **PASS**: UI regression passed in normal deploy.
+- PHASEA-07 — **PASS in focused regression; deployed unresolved cards absent because of blocker**.
+- PHASEA-08 — **PARTIAL**: counters surface is deployed, but current counts are incorrectly zero.
+- PHASEA-09 — **PASS**.
+- PHASEA-10 — **PASS**.
+- PHASEA-11 — **PASS in regression**.
+- PHASEA-12 — **PASS in regression**.
+- PHASEA-13 — **PASS**.
+- PHASEA-14 — **PARTIAL**: routing, build validations and deploy regressions pass; functional current-catalogue acceptance fails.
+- PHASEA-15 — **PARTIAL**: normal activation/deploy technically succeeds, but the deployed Phase A payload is not functionally correct.
+- PHASEA-16 — **PASS after this report update is committed and reread from main**.
+
+### Final allowed status
+
+`needs_fix`
