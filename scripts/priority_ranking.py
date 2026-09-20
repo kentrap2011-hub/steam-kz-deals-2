@@ -616,22 +616,12 @@ def _fixed_package_route(game, policy):
     }
 
 
-def build_score_breakdown(game, policy):
+def build_purchase_breakdown(game, policy=None):
+    """Build the deterministic 0-40 purchase component without any Taste/personal score."""
+    policy = policy or load_final_policy()
     model = policy['score_model']
     digits = int(model.get('round_digits', 1))
-    personal_cfg = model['personal']
     purchase_cfg = model['purchase']
-
-    taste = _taste_component(game, policy)
-    personal_components = [
-        taste,
-        _wishlist_component(game, policy),
-        _achievement_component(game, policy),
-        _duration_component(game, policy),
-        _risk_component(game, policy),
-    ]
-    personal_raw = sum(_as_number(row.get('points')) for row in personal_components)
-    personal_score = _round(_clamp(personal_raw, 0, _as_number(personal_cfg.get('max'))), digits)
 
     standalone_components = [
         _savings_component(game, policy),
@@ -659,27 +649,12 @@ def build_score_breakdown(game, policy):
         purchase_components = standalone_components
         purchase_score = standalone_score
 
-    total = _round(
-        _clamp(personal_score + purchase_score, 0, _as_number(model.get('total_max'))),
-        digits,
-    )
-    precision = {
-        'code': taste['source'],
-        'label': taste['source_label'],
-        'is_coarse_legacy': taste['source'] == 'legacy_coarse_fit',
-    }
     standalone_savings = next(row for row in standalone_components if row['id'] == 'savings')
     package_delta = None
     if package_score is not None:
         package_delta = _round(float(package_score) - float(standalone_score), digits)
 
     return {
-        'contract': policy['contract'],
-        'total_score': total,
-        'total_max': _as_number(model.get('total_max')),
-        'personal_score': personal_score,
-        'personal_max': _as_number(personal_cfg.get('max')),
-        'personal_label': personal_cfg.get('label') or 'Насколько подходит тебе',
         'purchase_score': purchase_score,
         'purchase_max': _as_number(purchase_cfg.get('max')),
         'purchase_label': purchase_cfg.get('label') or 'Выгодность покупки',
@@ -691,8 +666,46 @@ def build_score_breakdown(game, policy):
         'package_route': package_route,
         'standalone_purchase_components': standalone_components,
         'standalone_savings_rub': standalone_savings.get('savings_rub'),
-        'personal_components': personal_components,
         'purchase_components': purchase_components,
+    }
+
+
+def build_score_breakdown(game, policy):
+    model = policy['score_model']
+    digits = int(model.get('round_digits', 1))
+    personal_cfg = model['personal']
+
+    taste = _taste_component(game, policy)
+    personal_components = [
+        taste,
+        _wishlist_component(game, policy),
+        _achievement_component(game, policy),
+        _duration_component(game, policy),
+        _risk_component(game, policy),
+    ]
+    personal_raw = sum(_as_number(row.get('points')) for row in personal_components)
+    personal_score = _round(_clamp(personal_raw, 0, _as_number(personal_cfg.get('max'))), digits)
+
+    purchase = build_purchase_breakdown(game, policy)
+    total = _round(
+        _clamp(personal_score + purchase['purchase_score'], 0, _as_number(model.get('total_max'))),
+        digits,
+    )
+    precision = {
+        'code': taste['source'],
+        'label': taste['source_label'],
+        'is_coarse_legacy': taste['source'] == 'legacy_coarse_fit',
+    }
+
+    return {
+        'contract': policy['contract'],
+        'total_score': total,
+        'total_max': _as_number(model.get('total_max')),
+        'personal_score': personal_score,
+        'personal_max': _as_number(personal_cfg.get('max')),
+        'personal_label': personal_cfg.get('label') or 'Насколько подходит тебе',
+        **purchase,
+        'personal_components': personal_components,
         'precision': precision,
     }
 
