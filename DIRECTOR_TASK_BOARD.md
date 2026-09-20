@@ -12,6 +12,48 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
+## ACTIVE — Taste dossier identity provenance generation fix
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_IDENTITY_PROVENANCE_GENERATION_FIX_01.md`
+
+Task ID:
+`taste-dossier-identity-provenance-generation-fix-01`
+
+Status:
+`authorized_ready_for_worker`
+
+Mode:
+`IMPLEMENT / ACTIVATE / VALIDATE`
+
+Worker slot:
+`ЧАТ 1` — use a new worker chat; clean context is preferred because the production diagnosis is already durable in the task file and current GitHub validation state.
+
+User authorization:
+- user explicitly approved fixing the confirmed identity-provenance generation blocker.
+
+Verified blocker:
+- active snapshot `533abb9b...8378d` remains canonical expected `g000001`;
+- `g000001` and buffered `g000002` are both canonical-validator invalid;
+- exact validator error: `game identity requires an identity-role provenance source`;
+- strict validator is correct; the generation contract/prompt failed to ensure at least one `identity_source_ids` source has `evidence_role:"identity"`;
+- do not run Scheduled Task again until this fix is accepted and activated.
+
+Goal:
+- align worker prompt/machine contract with the existing strict identity-provenance invariant;
+- preserve validator semantics and GitHub-owned control plane;
+- activate through normal binding/snapshot refresh;
+- leave old immutable invalid artifacts untouched and let existing stale/inert compatibility behavior handle them.
+
+Expected report:
+`reviews/worker_reports/taste-dossier-identity-provenance-generation-fix-01.md`
+
+Allowed final statuses:
+- `complete_ready_for_live_acceptance`
+- `needs_fix`
+- `needs_user_decision`
+- `blocked_external`
+
 ## ACTIVE — Steam review dossier persistence bridge
 Task:
 `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_PERSISTENCE_BRIDGE_01.md`
