@@ -111,3 +111,15 @@
 
 **Evidence refs:** `WORKER_TASK_TASTE_DOSSIER_IDENTITY_PROVENANCE_GENERATION_FIX_01.md`; `reviews/worker_reports/taste-dossier-identity-provenance-generation-fix-01.md`; fixes to `scripts/test_taste_dossier_transient_author_fallback.py` and `scripts/test_taste_dossier_contract_contradictions_fix.py`.
 
+---
+
+## PITFALL-006 — Content-binding revision change leaves stale exact-string regression assertions
+
+**Trigger / symptom:** a legitimate content-complete contract/schema/prompt change intentionally advances `contract_revision`, `schema_revision` or `worker_prompt_revision`, while focused regression suites still assert the previous exact revision string. CI then fails on a stale binding expectation even though the semantic guard itself is still valid.
+
+**Do not repeat:** do not wait for CI to discover old exact revision literals one test at a time, and do not weaken semantic assertions merely to make the revision update pass.
+
+**Correct move:** before the final PR run for any intentional dossier binding revision, perform one bounded scan of the focused dossier regression files for exact `contract_revision`, `schema_revision` and `worker_prompt_revision` expectations. Update only stale expected binding literals to the new canonical values; keep behavioral/semantic assertions unchanged. Then run the normal focused dossier gate once. When useful, pin unchanged semantic authorities separately (for example the strict-validator Git blob SHA) so a binding-only update cannot hide a semantic change.
+
+**Evidence refs:** `WORKER_TASK_TASTE_DOSSIER_VALIDATOR_GENERATOR_PARITY_FIX_01.md`; `reviews/worker_reports/taste-dossier-validator-generator-parity-fix-01.md`; PR #70, where the first dossier CI pass exposed a stale strict-recovery `worker_prompt_revision` assertion after the intentional parity binding update.
+
