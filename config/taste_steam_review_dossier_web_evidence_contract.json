@@ -2,14 +2,14 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "contract-contradictions-fix-2026-09-18",
+  "contract_revision": "validator-generator-parity-fix-2026-09-20",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "parallel_validation_contract": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2-identity-provenance-generation-v1",
+  "worker_prompt_revision": "web-evidence-v2-validator-generator-parity-fix-v1",
   "purpose": "Define the active semantic evidence policy for neutral Taste dossiers while leaving GitHub-owned scope, buffered transport, asynchronous strict validation/persistence, recovery and completeness in the existing control-plane contracts.",
   "supersedes": {
     "steam_appreviews_required": false,
@@ -70,7 +70,23 @@
     "steam_store_parent_feedback_surface_mode": "concrete_item_collection",
     "steam_store_parent_player_feedback_flag_semantics": "surface_contains_inspected_player_feedback_children_not_page_as_feedback_item",
     "steam_store_parent_aggregate_metadata_is_feedback": false,
-    "steam_store_parent_aggregate_metadata_may_satisfy_russian_found_and_used": false
+    "steam_store_parent_aggregate_metadata_may_satisfy_russian_found_and_used": false,
+    "provenance_source_locator": {
+      "exactly_one_of": [
+        "url",
+        "public_ref"
+      ],
+      "both_forbidden": true,
+      "neither_forbidden": true,
+      "url_requires_public_https": true,
+      "domain_must_equal_normalized_url_hostname_exactly": true,
+      "domain_normalization": "str(value or '').strip().lower().rstrip('.'); if normalized text starts with 'www.' remove that prefix"
+    },
+    "steam_store_exact_app_fallback_parent_allowed_source_types": [
+      "steam_reviews",
+      "store_user_reviews"
+    ],
+    "steam_store_exact_app_fallback_parent_source_type_set_is_exclusive": true
   },
   "compact_provenance": {
     "author_identity_allowed": false,
@@ -470,5 +486,11 @@
     "aggregate_only_page_can_create_fallback_record": false,
     "russian_or_mixed_fallback_may_satisfy_found_and_used": true,
     "parent_source_id_pattern": "^source-[0-9]{3}$"
+  },
+  "source_mix_policy": {
+    "diversity_identity": "canonicalized_physical_source_locator_not_worker_source_id",
+    "multi_source_requires_at_least_two_distinct_physical_used_player_sources": true,
+    "multi_source_requires_single_source_reason_null": true,
+    "single_source_only_requires_compact_reason": true
   }
 }

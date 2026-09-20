@@ -625,7 +625,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("60 Seconds! Reatomized", PROMPT)
         self.assertNotIn("1012880", PROMPT)
         self.assertNotIn("steamcommunity.com/app/1012880", PROMPT)
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-identity-provenance-generation-v1")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-validator-generator-parity-fix-v1")
 
 
 
