@@ -12,47 +12,30 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## ACTIVE — Taste dossier identity provenance generation fix
+## ACCEPTED — Taste dossier identity provenance generation fix
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_IDENTITY_PROVENANCE_GENERATION_FIX_01.md`
 
-Task ID:
-`taste-dossier-identity-provenance-generation-fix-01`
-
-Status:
-`authorized_ready_for_worker`
-
-Mode:
-`IMPLEMENT / ACTIVATE / VALIDATE`
-
-Worker slot:
-`ЧАТ 1` — use a new worker chat; clean context is preferred because the production diagnosis is already durable in the task file and current GitHub validation state.
-
-User authorization:
-- user explicitly approved fixing the confirmed identity-provenance generation blocker.
-
-Verified blocker:
-- active snapshot `533abb9b...8378d` remains canonical expected `g000001`;
-- `g000001` and buffered `g000002` are both canonical-validator invalid;
-- exact validator error: `game identity requires an identity-role provenance source`;
-- strict validator is correct; the generation contract/prompt failed to ensure at least one `identity_source_ids` source has `evidence_role:"identity"`;
-- do not run Scheduled Task again until this fix is accepted and activated.
-
-Goal:
-- align worker prompt/machine contract with the existing strict identity-provenance invariant;
-- preserve validator semantics and GitHub-owned control plane;
-- activate through normal binding/snapshot refresh;
-- leave old immutable invalid artifacts untouched and let existing stale/inert compatibility behavior handle them.
-
-Expected report:
+Report:
 `reviews/worker_reports/taste-dossier-identity-provenance-generation-fix-01.md`
 
-Allowed final statuses:
-- `complete_ready_for_live_acceptance`
-- `needs_fix`
-- `needs_user_decision`
-- `blocked_external`
+Final status:
+`complete_ready_for_live_acceptance`
+
+Accepted facts:
+- worker prompt/schema now explicitly require at least one exact-product identity provenance source with `evidence_role:"identity"`;
+- strict validator was not weakened and remains authoritative;
+- focused and prior dossier guard suites passed;
+- implementation PR #67 merged as `f0a42cd2c870bbc013c07901b86ae21bfef4bc98`;
+- normal activation succeeded via run `35493204897`, commit `d174f1652581b3ef0c633fc9da22d0533b5abdd6`;
+- fresh active snapshot is `905bddbce50fc8fd319465e3e68450e9cd7f0b2edc53c8a1a687466372f4d384`, expected `g000001`;
+- old invalid snapshot `533abb9b...8378d` candidates were quarantined unchanged by GitHub-owned activation/recovery;
+- Scheduled Task was not run during implementation.
+
+Next step:
+- one clean production `Run now` acceptance on the active snapshot;
+- keep the worker chat until that live acceptance is observed.
 
 ## ACTIVE — Steam review dossier persistence bridge
 Task:
