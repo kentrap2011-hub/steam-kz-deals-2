@@ -12,48 +12,32 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## ACTIVE — Hellish Quart Russian retrieval diagnostic
+## ACCEPTED — Hellish Quart Russian retrieval diagnostic
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_HELLISH_QUART_RUSSIAN_RETRIEVAL_DIAGNOSTIC_01.md`
 
-Task ID:
-`taste-dossier-hellish-quart-russian-retrieval-diagnostic-01`
-
-Status:
-`authorized_ready_for_worker`
-
-Mode:
-`READ-ONLY / RECON`
-
-Worker slot:
-`ЧАТ 1` — use a new worker chat; this diagnosis compares a fresh live production failure against the already accepted Cthulhu retrieval implementation.
-
-User authorization:
-- user explicitly approved the bounded diagnostic.
-
-Accepted live blocker:
-- active snapshot `3bd2085e...d99b`, expected `g000001`;
-- no candidate was published;
-- Hellish Quart exact-product Russian review existence was established (566 shown in the live run);
-- only aggregate existence signal was retrieved, not a legal concrete Russian review item;
-- aggregate count correctly did not become a mention;
-- production stopped fail-closed before `g000002`.
-
-Goal:
-- reproduce the current Hellish Quart route with ordinary Scheduled-worker web/search/open capabilities;
-- identify the first confirmed divergence from the already implemented Cthulhu search-indexed exact-app recovery path;
-- distinguish worker execution gap from retrieval-strategy gap from current transport/representation limitation;
-- do not implement fixes or rerun production.
-
-Expected report:
+Report:
 `reviews/worker_reports/taste-dossier-hellish-quart-russian-retrieval-diagnostic-01.md`
 
-Allowed final statuses:
-- `complete_diagnosis_fix_candidate_ready`
-- `complete_no_repro_current_route_available`
-- `needs_bounded_followup`
-- `blocked_external`
+Final status:
+`complete_no_repro_current_route_available`
+
+Accepted facts:
+- active snapshot remains `3bd2085e...d99b`, expected `g000001`;
+- the accepted generic Steam recovery route is still present in the active prompt and applies to Hellish Quart;
+- current Steam Store representation reproduces aggregate-only Russian evidence, while Community exposes non-Russian cards;
+- direct Russian-filter endpoint variants are not usable through the current direct-open transport;
+- the prompt-required generic cross-source pivot currently succeeds for exact appid `1000360`;
+- non-profile exact-product `steamstat.io/ru/app/1000360` exposes concrete Russian review cards;
+- no stable item locator was exposed, but the existing legal transient-author fallback shape is available without persisting identity;
+- Cthulhu vs Hellish first divergence is Steam Store card rendering, not exact-product identity;
+- the prior production trace is insufficient to prove whether that invocation actually reached the required cross-source pivot;
+- no generic prompt/retrieval-strategy defect was reproduced.
+
+Next step:
+- one clean production acceptance retry against the unchanged active snapshot;
+- no prompt/contract/runtime change and no manual candidate/progress repair before that retry.
 
 ## ACCEPTED — Taste dossier validator ↔ generator parity fix
 
