@@ -14,6 +14,8 @@ on:
       - "scripts/build_final_visual_payload.py"
       - "scripts/progressive_personalization.py"
       - "scripts/test_progressive_personalization.py"
+      - "scripts/progressive_visual_activation_routing.py"
+      - "scripts/test_progressive_visual_activation_routing.py"
       - "scripts/build_daily_visual_payload.py"
       - "scripts/build_visual_feed_v2.py"
       - "scripts/card_explanation_policy.py"
@@ -81,6 +83,9 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+
+      - name: Validate progressive activation routing
+        run: python scripts/test_progressive_visual_activation_routing.py
 
       - name: Classify bounded visual refresh scopes
         id: classify
@@ -191,6 +196,16 @@ jobs:
                 echo "VISUAL_SCOPE commercial_only=true reason=bounded_commercial_implementation_push"
               fi
             fi
+          fi
+
+          full_progressive_required=$(python scripts/progressive_visual_activation_routing.py)
+          if [ "$full_progressive_required" = "true" ]; then
+            # A stale/missing/incompatible progressive visual must be rebuilt as a
+            # whole. Full build already refreshes giveaway and commercial fields,
+            # so bounded refresh scopes must not pre-empt it.
+            giveaway_needed=false
+            commercial_needed=false
+            echo "VISUAL_SCOPE full_progressive_build=true reason=progressive_visual_incompatible"
           fi
 
           echo "giveaway_only=$giveaway_needed" >> "$GITHUB_OUTPUT"
