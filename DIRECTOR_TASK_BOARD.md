@@ -12,6 +12,26 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
+## ACTIVE — Taste dossier Scheduled entrypoint ledger diagnostic
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_SCHEDULED_ENTRYPOINT_LEDGER_DIAGNOSTIC_01.md`
+
+Mode:
+`READ-ONLY / RECON`
+
+Purpose:
+- localize the exact first divergence in
+  `Scheduled Task entrypoint -> canonical prompt load -> early fail-closed path -> final response`;
+- distinguish entrypoint mismatch, canonical conflict, exposed runtime/tool blocker, live noncompliance without exposed cause, or insufficient observability;
+- no production retry and no implementation in this task.
+
+Report:
+`reviews/worker_reports/taste-dossier-scheduled-entrypoint-ledger-diagnostic-01.md`
+
+Production state:
+- keep `Run now` paused until Director accepts this diagnostic.
+
 ## LIVE ACCEPTANCE FAILED — fail-closed ledger not emitted
 
 Observed production result:
