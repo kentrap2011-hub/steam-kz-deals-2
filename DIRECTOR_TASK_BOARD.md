@@ -12,40 +12,29 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## ACTIVE — Taste dossier validator ↔ generator parity audit
+## ACCEPTED — Taste dossier validator ↔ generator parity audit
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_VALIDATOR_GENERATOR_PARITY_AUDIT_01.md`
 
-Task ID:
-`taste-dossier-validator-generator-parity-audit-01`
-
-Status:
-`authorized_ready_for_worker`
-
-Mode:
-`READ-ONLY / RECON`
-
-Worker slot:
-`ЧАТ 1` — use a new worker chat. This is a bounded independent audit after the accepted identity-provenance fix; clean context is preferred.
-
-User authorization:
-- user explicitly approved one bounded parity audit before the next production run.
-
-Goal:
-- compare current canonical strict dossier validation against worker-facing prompt/schema/evidence contract;
-- identify only confirmed current-main gaps where validator requires a worker-generated invariant that generator-facing layers do not state strongly enough;
-- classify intentional GitHub-only defensive checks separately;
-- do not implement fixes or invent speculative future failure modes.
-
-Expected report:
+Report:
 `reviews/worker_reports/taste-dossier-validator-generator-parity-audit-01.md`
 
-Allowed final statuses:
-- `complete_no_confirmed_parity_gaps`
-- `complete_confirmed_parity_gaps`
-- `needs_bounded_followup`
-- `blocked`
+Final status:
+`complete_confirmed_parity_gaps`
+
+Accepted findings:
+- PARITY-01: source locator serialization is under-specified generator-side; strict requires exactly one of `url/public_ref`, HTTPS for URL, and exact normalized URL host equality in `domain`;
+- PARITY-02: for `source_mix_status:"multi_source"`, strict requires `single_source_reason:null`, but generator-facing layers do not state the converse-null invariant;
+- PARITY-03: exact-app Steam Store fallback parent is accepted only with `source_type:"steam_reviews"` or `"store_user_reviews"`; current generator-facing wording leaves other player-feedback source types seemingly legal;
+- identity-provenance control case is now aligned and was not reopened;
+- GitHub-only transport/progress defensive checks were correctly excluded;
+- no speculative future/retrieval findings were promoted.
+
+Recommended next step:
+- one bounded IMPLEMENT covering only PARITY-01..03, aligning generator-facing contracts/tests to existing strict validator semantics;
+- do not change validator semantics, ownership, queue/retry/checkpoint architecture or production state;
+- keep production `Run now` paused until that bounded fix is accepted.
 
 ## ACCEPTED — Taste dossier identity provenance generation fix
 
