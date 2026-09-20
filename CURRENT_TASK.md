@@ -515,3 +515,11 @@
 - Scheduled Task `Taste Steam Review Dossier` was not run and settings were not changed;
 - durable report: `reviews/worker_reports/taste-dossier-validator-generator-parity-fix-01.md`;
 - exact next step: Director performs one clean production `Run now` acceptance against the active compatible snapshot.
+
+
+### Taste dossier fail-closed execution ledger implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_FAIL_CLOSED_EXECUTION_LEDGER_IMPLEMENT_01.md`;
+- scope: fail-closed final-response execution ledger + required-route completion accounting only;
+- ownership/evidence semantics remain unchanged; no new durable logging/queue/retry service;
+- implementation branch: `worker/taste-dossier-fail-closed-execution-ledger-implement-01`.

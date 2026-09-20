@@ -239,6 +239,75 @@ For the Russian attempt, begin from the exact descriptor title plus release year
 
 Hard operational bounds per game are finite and mandatory: at most **8 web-search queries** and at most **16 opened/read source pages**. These are safety ceilings, not targets or source quotas. Stop earlier when stable. If the hard bound is reached while identity or critical evidence remains insufficient — including proven Russian existence whose usable item-level retrieval remains unresolved — fail closed and do not publish an incomplete dossier.
 
+## Fail-closed execution ledger — observable execution facts only
+
+Maintain a compact **ephemeral** record of material retrieval/action attempts while working on the current local target group. This record exists only so a fail-closed final response can state what was actually attempted and observed. It is not dossier evidence, is not a new GitHub persistence surface, is not retry state, and must not become a queue, scheduler, backlog manager, or logging service.
+
+On **every fail-closed stop before the current local target group is successfully created through the connected GitHub create-file action**, the final user-visible response must include the exact marker:
+
+`FAIL_CLOSED_EXECUTION_LEDGER_V1`
+
+Immediately after the marker, output one compact structured object with these fields:
+
+- `snapshot_id`: exact current snapshot id;
+- `sequence`: exact current group sequence;
+- `group_sha256`: exact current group hash;
+- `blocked_game`: `null` for a group/global stop, otherwise exactly `{"title":"...","appid":"..."}` for the game-specific stop;
+- `last_completed_stage`: the last material stage that actually completed;
+- `stop_gate`: the exact contract/evidence/identity/liveness/transport gate that prevented publication, not a generic interpretation;
+- `publication_state`: normally `not_attempted` or `create_attempt_failed` for a pre-publication fail-closed stop. If a different state is directly exposed by the current action, use a short factual state; do not invent one;
+- `canonical_progress_claim`: exactly `no canonical completion claimed; GitHub canonical state remains authoritative`;
+- `material_attempts`: ordered material-attempt entries described below;
+- `budget_state`: applicable bounded-retrieval counters and required-route state described below;
+- `next_required_step`;
+- `next_required_step_status`: exactly one of `none_all_required_routes_exhausted`, `not_executed`, or `blocked`;
+- `why_not_executed`;
+- `visible_system_or_tool_error`: the exact visible system/tool error text when one was exposed, otherwise `null`.
+
+Record one object in `material_attempts` per **material** retrieval/action attempt, not every trivial UI/tool interaction. Each material attempt must contain:
+
+- sequential `step`;
+- `stage`;
+- `action_kind` such as `search`, `open/read`, `github_read`, or `github_create`;
+- safe `route_class`;
+- safe `target_summary`, limited to product/appid plus domain/surface class or repository/path/ref when useful;
+- `started`: true/false;
+- `response_received`: true/false;
+- `observable_result`.
+
+Prefer compact factual `observable_result` values when they fit, including `exact_product_confirmed`, `aggregate_only`, `concrete_russian_card_visible`, `concrete_non_russian_cards_only`, `stable_locator_available`, `transient_fallback_available`, `profile_scoped_discovery_only`, `exact_product_mismatch`, `no_results`, `inaccessible_or_dynamic`, `tool_error`, `binding_changed`, and `candidate_create_failed`. If none fits, use short factual text describing only what the tool/result exposed. Never guess a cause.
+
+For an evidence/retrieval stop, `budget_state` must include actual `search_queries_used`, `search_query_limit`, `opened_pages_used`, and `opened_page_limit`. It must also include `required_route_state` for the active Russian, source-diversification, temporal, and identity routes, using only `exhausted`, `pending`, or `not_applicable`. For a non-web stop, omit inapplicable counters rather than fabricating zeros. The existing hard ceilings remain 8 search queries and 16 opened/read source pages per game.
+
+### Required-route completion guard
+
+Before declaring an evidence/retrieval route exhausted or emitting a fail-closed response, account for every recovery route that the active prompt already requires. If a mandatory next material route is still `pending`, budget remains, the snapshot/plan/binding is still live, and no exposed tool/runtime blocker prevents the action, **do not stop** and do not label the route exhausted. Execute that required route first.
+
+If the required next route cannot be executed, keep it explicit in `next_required_step` and record:
+
+- `next_required_step_status:"blocked"` when a directly observed blocker prevents it; or
+- `next_required_step_status:"not_executed"` when it was not run and no blocker was exposed.
+
+Use `none_all_required_routes_exhausted` only when no mandatory material route remains under the active prompt.
+
+For the current Russian gate, aggregate exact-product Russian existence is never terminal. If Steam retrieval has an unusable stop-shape and the active prompt requires a generic cross-source pivot while budget remains, the worker must either execute that pivot or ledger the exact exposed blocker that prevented it. A final response must not collapse “pivot not executed”, “pivot executed but no legal item returned”, and “pivot blocked by an exposed tool/runtime error” into the same statement.
+
+`why_not_executed` must name only a directly observed reason, such as search budget exhausted, page/open budget exhausted, exact visible tool error, current snapshot/plan/binding changed, current runtime ended before the step could execute **when that condition was explicitly exposed**, required route unavailable/inaccessible in the current tool result, or create-only write failed. When no factual system/tool cause is known, write exactly:
+
+`why_not_executed: unknown — no system/tool cause exposed`
+
+Do not infer or claim “probably timeout”, “likely context limit”, “Steam blocked it”, or any other unobserved platform/root cause.
+
+### Privacy and reasoning boundary
+
+The fail-closed ledger contains **observable execution facts and contract-gate state only**. It must never contain private chain-of-thought, hidden reasoning, internal deliberation, raw review/post bodies, quotes/excerpts from player content, usernames/display names, SteamID/account identifiers, author-derived hashes or pseudonyms, profile URLs, secrets, or tokens. Profile-scoped discovery may be summarized only as `profile_scoped_discovery_only` without reproducing the profile locator.
+
+Do not expose a raw search target that contains author/profile identity. A safe target summary may identify a route as `Steam Store exact-app`, `Steam Community exact-app`, `cross-source exact-product player feedback`, `steamstat.io exact-app`, or another surface class **only when actually attempted**.
+
+### Success-path behavior
+
+A successful create-only publication of the current local target remains concise. Do **not** emit the full fail-closed execution ledger after successful candidate creation; keep the existing candidate-buffered/progress reporting. The ephemeral attempt record is not persisted and does not become canonical progress or retry state.
+
 ## Neutral synthesis
 
 Preserve the established semantic topics: play, mechanics, structure, pacing, progression, repetition, difficulty, friction, multiplayer/co-op dependence, recurring positives, recurring complaints, Russian localization/regional issues, conflicts and evidence strength.

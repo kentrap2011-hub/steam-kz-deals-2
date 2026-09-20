@@ -15,6 +15,7 @@ CONTROL = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json"
 SCHEMA = json.loads((ROOT / "config/taste_steam_review_dossier_schema.json").read_text(encoding="utf-8"))
 EVIDENCE = json.loads((ROOT / "config/taste_steam_review_dossier_web_evidence_contract.json").read_text(encoding="utf-8"))
 PROMPT = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
+OWNERSHIP = json.loads((ROOT / "config/execution_ownership_contract.json").read_text(encoding="utf-8"))
 
 
 class SemanticConsistencyRegressionTests(unittest.TestCase):
@@ -625,7 +626,191 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("60 Seconds! Reatomized", PROMPT)
         self.assertNotIn("1012880", PROMPT)
         self.assertNotIn("steamcommunity.com/app/1012880", PROMPT)
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-validator-generator-parity-fix-v1")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-fail-closed-execution-ledger-v1")
+
+
+    def test_ledger_01_marker_binding_and_core_fields(self):
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-fail-closed-execution-ledger-v1")
+        self.assertIn("FAIL_CLOSED_EXECUTION_LEDGER_V1", PROMPT)
+        for field in (
+            "snapshot_id",
+            "sequence",
+            "group_sha256",
+            "blocked_game",
+            "last_completed_stage",
+            "stop_gate",
+            "publication_state",
+            "canonical_progress_claim",
+            "material_attempts",
+            "budget_state",
+            "next_required_step",
+            "next_required_step_status",
+            "why_not_executed",
+            "visible_system_or_tool_error",
+        ):
+            self.assertIn(f"`{field}`", PROMPT)
+        self.assertIn(
+            "no canonical completion claimed; GitHub canonical state remains authoritative",
+            PROMPT,
+        )
+
+    def test_ledger_02_material_attempts_are_observable_not_reasoning(self):
+        for field in (
+            "step",
+            "stage",
+            "action_kind",
+            "route_class",
+            "target_summary",
+            "started",
+            "response_received",
+            "observable_result",
+        ):
+            self.assertIn(f"`{field}`", PROMPT)
+        for result in (
+            "aggregate_only",
+            "concrete_russian_card_visible",
+            "concrete_non_russian_cards_only",
+            "stable_locator_available",
+            "transient_fallback_available",
+            "profile_scoped_discovery_only",
+            "exact_product_mismatch",
+            "no_results",
+            "inaccessible_or_dynamic",
+            "tool_error",
+            "binding_changed",
+            "candidate_create_failed",
+        ):
+            self.assertIn(f"`{result}`", PROMPT)
+        self.assertIn("observable execution facts and contract-gate state only", PROMPT)
+        self.assertIn("must never contain private chain-of-thought", PROMPT)
+
+    def test_ledger_03_exact_stop_gate_and_budget_accounting(self):
+        self.assertIn("the exact contract/evidence/identity/liveness/transport gate", PROMPT)
+        for field in (
+            "search_queries_used",
+            "search_query_limit",
+            "opened_pages_used",
+            "opened_page_limit",
+            "required_route_state",
+        ):
+            self.assertIn(f"`{field}`", PROMPT)
+        self.assertIn("active Russian, source-diversification, temporal, and identity routes", PROMPT)
+        bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
+        self.assertEqual(bounds["max_web_search_queries"], 8)
+        self.assertEqual(bounds["max_opened_or_read_source_pages"], 16)
+
+    def test_ledger_04_required_next_step_and_no_silent_early_stop(self):
+        for status in (
+            "none_all_required_routes_exhausted",
+            "not_executed",
+            "blocked",
+        ):
+            self.assertIn(f"`{status}`", PROMPT)
+        self.assertIn("If a mandatory next material route is still `pending`, budget remains", PROMPT)
+        self.assertIn("do not stop", PROMPT)
+        self.assertIn("execute that pivot or ledger the exact exposed blocker", PROMPT)
+        self.assertIn(
+            "pivot not executed”, “pivot executed but no legal item returned”, and “pivot blocked by an exposed tool/runtime error",
+            PROMPT,
+        )
+
+    def test_ledger_05_unknown_cause_stays_unknown(self):
+        self.assertIn(
+            "why_not_executed: unknown — no system/tool cause exposed",
+            PROMPT,
+        )
+        for prohibited in ("probably timeout", "likely context limit", "Steam blocked it"):
+            self.assertIn(prohibited, PROMPT)
+        self.assertIn("Never guess a cause.", PROMPT)
+
+    def test_ledger_06_privacy_and_no_chain_of_thought_boundary(self):
+        for forbidden in (
+            "raw review/post bodies",
+            "usernames/display names",
+            "SteamID/account identifiers",
+            "author-derived hashes or pseudonyms",
+            "profile URLs",
+            "secrets",
+            "hidden reasoning",
+            "internal deliberation",
+        ):
+            self.assertIn(forbidden, PROMPT)
+        self.assertIn("profile_scoped_discovery_only", PROMPT)
+
+    def test_ledger_07_success_path_remains_compact(self):
+        self.assertIn("Do **not** emit the full fail-closed execution ledger after successful candidate creation", PROMPT)
+        self.assertIn("existing candidate-buffered/progress reporting", PROMPT)
+        self.assertIn("ephemeral attempt record is not persisted", PROMPT)
+
+    def test_ledger_08_hellish_control_shape_distinguishes_a_b_c_without_product_hardcoding(self):
+        def signature(ledger):
+            return (
+                tuple((a["route_class"], a["observable_result"]) for a in ledger["material_attempts"]),
+                ledger["next_required_step_status"],
+                ledger["why_not_executed"],
+                ledger["visible_system_or_tool_error"],
+            )
+
+        case_a = {
+            "material_attempts": [
+                {"route_class": "Steam Store exact-app", "observable_result": "aggregate_only"},
+                {"route_class": "Steam Community exact-app", "observable_result": "concrete_non_russian_cards_only"},
+            ],
+            "next_required_step_status": "not_executed",
+            "why_not_executed": "unknown — no system/tool cause exposed",
+            "visible_system_or_tool_error": None,
+        }
+        case_b = {
+            "material_attempts": [
+                {"route_class": "Steam Store exact-app", "observable_result": "aggregate_only"},
+                {"route_class": "cross-source exact-product player feedback", "observable_result": "no_results"},
+            ],
+            "next_required_step_status": "none_all_required_routes_exhausted",
+            "why_not_executed": "all required routes exhausted",
+            "visible_system_or_tool_error": None,
+        }
+        case_c = {
+            "material_attempts": [
+                {"route_class": "Steam Store exact-app", "observable_result": "aggregate_only"},
+                {"route_class": "cross-source exact-product player feedback", "observable_result": "tool_error"},
+            ],
+            "next_required_step_status": "blocked",
+            "why_not_executed": "exact visible tool error",
+            "visible_system_or_tool_error": "synthetic exposed transport error",
+        }
+        self.assertEqual(len({signature(case_a), signature(case_b), signature(case_c)}), 3)
+        self.assertNotIn("Hellish Quart", PROMPT)
+        self.assertNotIn("1000360", PROMPT)
+
+    def test_ledger_09_current_retrieval_semantics_remain_unchanged(self):
+        self.assertEqual(SCHEMA["schema_revision"], "validator-generator-parity-fix-2026-09-20")
+        self.assertEqual(EVIDENCE["contract_revision"], "validator-generator-parity-fix-2026-09-20")
+        self.assertEqual(
+            EVIDENCE["russian_evidence"]["complete_dossier_allowed_states"],
+            ["found_and_used", "searched_no_existence_signal"],
+        )
+        self.assertFalse(
+            EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"][
+                "premature_unresolved_allowed_with_budget_and_reasonably_discoverable_distinct_surface"
+            ]
+        )
+        self.assertTrue(EVIDENCE["language_binding"]["strict_exact_equality_required"])
+        self.assertTrue(EVIDENCE["compact_provenance"]["internal_join_ids"]["author_identity_independent"])
+
+    def test_ledger_10_current_ownership_remains_unchanged(self):
+        self.assertEqual(OWNERSHIP["github_control_plane"]["owner"], "GitHub repository and GitHub Actions")
+        self.assertEqual(
+            OWNERSHIP["scheduled_chatgpt_runtime_data_plane"]["owner"],
+            "scheduled ChatGPT production task",
+        )
+        self.assertIn("own retry state and unresolved-item state", OWNERSHIP["github_control_plane"]["responsibilities"])
+        self.assertIn(
+            "replace GitHub retry/completeness logic with conversational iteration",
+            OWNERSHIP["scheduled_chatgpt_runtime_data_plane"]["forbidden"],
+        )
+        self.assertIn("not a new GitHub persistence surface", PROMPT)
+        self.assertIn("must not become a queue, scheduler, backlog manager, or logging service", PROMPT)
+
 
 
 

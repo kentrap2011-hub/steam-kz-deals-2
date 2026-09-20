@@ -84,7 +84,7 @@ class IdentityProvenanceGenerationFixTests(unittest.TestCase):
         self.assertIn("never relabel an ordinary player-feedback source as `identity` merely to satisfy validation", PROMPT)
         self.assertEqual(
             EVIDENCE["worker_prompt_revision"],
-            "web-evidence-v2-validator-generator-parity-fix-v1",
+            "web-evidence-v2-fail-closed-execution-ledger-v1",
         )
 
     def test_id_prov_03_valid_identity_source_passes_strict_prepublication_and_buffered_validation(self):
