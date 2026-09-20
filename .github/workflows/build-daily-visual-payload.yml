@@ -12,6 +12,8 @@ on:
     branches: [main]
     paths:
       - "scripts/build_final_visual_payload.py"
+      - "scripts/progressive_personalization.py"
+      - "scripts/test_progressive_personalization.py"
       - "scripts/build_daily_visual_payload.py"
       - "scripts/build_visual_feed_v2.py"
       - "scripts/card_explanation_policy.py"
@@ -43,6 +45,7 @@ on:
       - "scripts/test_visual_freshness_receipt.py"
       - "config/duration_enrichment_contract.json"
       - "config/final_ranking_policy.json"
+      - "config/progressive_personalization_contract.json"
       - "config/fixed_package_purchase_option_contract.json"
       - "config/purchase_equivalence_overrides.json"
       - "config/taste_result_contract.json"
@@ -721,6 +724,7 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/validate_priority_ranking.py
+          python scripts/test_progressive_personalization.py
 
       - name: Validate canonical duration enrichment contract
         shell: bash
