@@ -98,3 +98,16 @@
 **Recovery after diagnostic:** если выявлена техническая причина — исправить или обойти именно её в отдельном разрешённом scope. Если остался класс `platform-level interruption with no exposed telemetry`, продолжение допускается только с сохранённым reproduction recipe и более частыми durable checkpoints, чтобы следующий инцидент можно было сравнить и воспроизвести. Это mitigation, а не утверждение, что root cause известен.
 
 **Evidence refs:** повторные прерывания `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_CONTROL_PLANE_REFRESH_01.md` и `WORKER_TASK_TASTE_STEAM_REVIEW_DOSSIER_PERSISTENCE_BRIDGE_01.md`, где платформа не предоставила worker-у подтверждённый код причины; прежняя формулировка про «исчерпанный контекст» была впоследствии признана неподтверждённой.
+
+---
+
+## PITFALL-005 — Regression test hardcodes yesterday's canonical live group
+
+**Trigger / symptom:** a regression intended to prove a generic dossier invariant reads the current production work manifest but also asserts exact historical appids/titles for `g000001`. A legitimate GitHub-owned snapshot refresh changes the canonical expected group, so CI fails even though the semantic invariant under test is still correct.
+
+**Do not repeat:** do not bind generic runtime/contract regressions to one historical snapshot id, group sequence payload, appid set, title set or specific current game unless the task is explicitly a regression for that immutable production incident.
+
+**Correct move:** when a test deliberately exercises the current canonical descriptor, derive appid/title/order from that descriptor and assert the invariant against those immutable descriptor values. Keep incident-specific appids/snapshots only in dedicated incident fixtures/reports. This preserves fail-closed semantic checks without turning normal daily snapshot rotation into a false failure.
+
+**Evidence refs:** `WORKER_TASK_TASTE_DOSSIER_IDENTITY_PROVENANCE_GENERATION_FIX_01.md`; `reviews/worker_reports/taste-dossier-identity-provenance-generation-fix-01.md`; fixes to `scripts/test_taste_dossier_transient_author_fallback.py` and `scripts/test_taste_dossier_contract_contradictions_fix.py`.
+
