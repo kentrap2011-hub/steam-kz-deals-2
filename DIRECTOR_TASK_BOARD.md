@@ -12,43 +12,47 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## ACTIVE — Progressive personalized deals Phase A implementation
+## ACTIVE — Progressive personalized deals Phase A activation routing fix
 
-Task:
+Parent task:
 `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_IMPLEMENT_01.md`
 
+Continuation task:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_ACTIVATION_ROUTING_FIX_01.md`
+
 Task ID:
-`progressive-personalized-deals-phase-a-implement-01`
+`progressive-personalized-deals-phase-a-activation-routing-fix-01`
 
 Mode:
 `IMPLEMENT / ACTIVATE / VALIDATE`
 
 Worker slot:
-`ЧАТ 2` — direct continuation of the accepted architecture amendment.
+`ЧАТ 2`.
 
-User authorization:
-- explicit approval given after Director accepted the progressive architecture.
+Checkpoint status:
+`needs_fix`
 
-Scope:
-- implement progressive current-catalogue display;
-- implement canonical per-item analysis state projection and counts;
-- publish all deterministic-eligible unresolved games as Tier 2/3 instead of waiting for semantic queue closure;
-- preserve compatible Tier 1 personalization and exclude trustworthy not-fit;
-- implement tier-first sorting and site status labels/counters;
-- update normal deterministic build/deploy path as needed;
-- do not redesign/run PASS 1 or PASS 2 semantic processing.
+Accepted checkpoint facts:
+- Phase A contracts/state projection/counts/sorting/UI are merged;
+- progressive candidate context is generated on main with 719 candidates;
+- focused Phase A regressions passed;
+- current canonical visual remains the legacy 3-row payload;
+- exact blocker is the daily visual scope classifier selecting `commercial_refresh` instead of the required full progressive build;
+- no PASS 1/PASS 2/Scheduled ChatGPT execution occurred.
+
+Narrow continuation scope:
+- fix only the activation routing decision;
+- prove legacy 3-row visual + current progressive context forces full build;
+- preserve commercial-only refresh when a compatible progressive visual already exists;
+- run normal build/deploy/UI regressions;
+- finalize the existing Phase A durable report.
 
 Expected report:
 `reviews/worker_reports/progressive-personalized-deals-phase-a-implement-01.md`
 
-Production restrictions:
-- no Scheduled ChatGPT run;
-- no manual semantic backlog processing;
-- no Dossier/Taste recovery surgery;
-- hard source/business/identity gates remain strict.
-
 Next decision:
-- Director acceptance of Phase A live result before any Phase B implementation.
+- if Phase A becomes live, Director acceptance before any Phase B implementation;
+- if another blocker appears, stop and record it without broadening scope.
 
 ## ACCEPTED — Progressive personalized deals architecture amendment
 
