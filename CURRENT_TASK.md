@@ -543,8 +543,12 @@
 
 
 ### Progressive Personalized Deals Phase A activation routing fix 01
-Статус: `in_progress`.
+Статус: `routing_fixed_phase_a_needs_fix`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_ACTIVATION_ROUTING_FIX_01.md`;
-- scope is limited to daily visual routing: incompatible/missing/stale progressive visual must force the existing full progressive build instead of `commercial_refresh`;
-- no state-model, sorting, UI feature, Taste/Dossier, PASS 1/PASS 2 or Scheduled ChatGPT changes are authorized;
-- after the routing fix, use the normal build/validation/deploy path and update the existing Phase A report only.
+- PR #76 merged as `b7727266543121a62b16fc532eb7e557c251f2fc`;
+- main daily run `35532554751` selected full build; `commercial_refresh` and `giveaway_refresh` were skipped; full build succeeded;
+- Pages deploy run `35532579278` succeeded including UI regressions;
+- new blocker: `scripts/build_daily_visual_payload.py::enrich_history_and_remove_expired()` strips unresolved personalization and then `continue`s without appending Tier 2/3 rows to `kept`;
+- result: active progressive context 719 rows, deployed/current visual 0 rows and zero processing counts;
+- no PASS 1/PASS 2 or Scheduled ChatGPT work occurred;
+- exact next step belongs to a new bounded Phase A producer-fix task; do not broaden this routing task.
