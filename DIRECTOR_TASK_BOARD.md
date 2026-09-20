@@ -12,6 +12,45 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
+## ACTIVE — Progressive personalized deals architecture amendment
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_ARCHITECTURE_AMENDMENT_01.md`
+
+Task ID:
+`progressive-personalized-deals-architecture-amendment-01`
+
+Mode:
+`READ-ONLY / ARCHITECTURE AMENDMENT`
+
+Worker slot:
+`ЧАТ 2` — direct continuation of the accepted production architecture simplification review.
+
+User-approved correction:
+- product remains personalized deal discovery;
+- all deterministic-eligible current games must be visible before analysis completes;
+- sort tiers are:
+  1. analyzed + fits user;
+  2. analysis incomplete/error;
+  3. not analyzed yet;
+- analyzed + not-fit games are excluded from the normal list;
+- first pass attempts every game without one failure blocking the rest;
+- second pass retries only incomplete/error items;
+- site must expose machine-owned processing counters/status so the user can monitor progress directly.
+
+Purpose:
+- amend Design B into a progressive personalized architecture rather than a generic deterministic-deals fallback;
+- define exact per-item state machine, two-pass semantics, tiered sorting, site counters and item-level acceptance;
+- decide whether PASS 1 requires full Dossier or a lighter semantic path;
+- preserve GitHub ownership of state/order/retry/counts;
+- no implementation or production run.
+
+Expected report:
+`reviews/worker_reports/progressive-personalized-deals-architecture-amendment-01.md`
+
+Next decision:
+- after Director accepts this amendment, authorize only the first bounded IMPLEMENT phase.
+
 ## ACCEPTED — Production architecture simplification review
 
 Task:
