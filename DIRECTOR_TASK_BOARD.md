@@ -12,59 +12,57 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## ACTIVE — Production architecture simplification review
+## ACCEPTED — Production architecture simplification review
 
 Task:
 `WORKER_TASK_PRODUCTION_ARCHITECTURE_SIMPLIFICATION_REVIEW_01.md`
 
-Task ID:
-`production-architecture-simplification-review-01`
-
-Mode:
-`READ-ONLY / ARCHITECTURE REVIEW`
-
-Worker slot:
-`ЧАТ 2` — independent clean-context architecture review.
-
-Purpose:
-- reconsider the entire production approach from first principles;
-- prioritize reliable daily visible discounted games over preservation of existing machinery;
-- identify which LLM/Taste/Dossier stages should be removed from the daily critical path;
-- compare hardened-current vs split-core/enrichment vs cache-first vs minimal-recovery designs;
-- recommend exactly one target architecture plus Phase 0..3 recovery/migration plan;
-- no implementation or production run.
-
-Expected report:
+Report:
 `reviews/worker_reports/production-architecture-simplification-review-01.md`
 
-Coordination:
-- may run in parallel with `ЧАТ 1` observability preflight;
-- do not let the narrow observability task constrain the broader architecture recommendation;
-- Director will compare both reports before any IMPLEMENT authorization.
+Final status:
+`complete_architecture_recommendation`
 
-## ACTIVE — Taste dossier Scheduled entrypoint observability preflight
+Director acceptance:
+- accept target architecture `Design B — split core deals from enrichment` as the preferred strategic direction;
+- core daily deal publication must not require Scheduled ChatGPT/Taste/Dossier completion;
+- Dossier/Taste become asynchronous per-item enrichment with explicit pending/stale states;
+- one bad enrichment item must not block unrelated deals;
+- core availability completeness and enrichment completeness must be separate machine concepts;
+- Phase 0 is the priority recovery step: build/publish fresh deterministic core rows even while semantic queue remains open, with no fabricated personalization;
+- preserve strict source-integrity/current-offer/business gates and exact validation for any semantic claim actually published;
+- use Design C cache-first semantics inside enrichment; use Design D only as Phase 0 recovery posture;
+- do not preserve Design A as the target merely by adding more observability/guards.
+
+Important current-state diagnosis from report:
+- current pre-AI state has a large unresolved semantic queue while the visible payload contains only a tiny older semantic set refreshed commercially;
+- the current global semantic publication gate is therefore structurally capable of withholding useful current deal output while enrichment remains incomplete.
+
+Next step:
+- obtain explicit user approval for a bounded Phase 0 IMPLEMENT restoring current deterministic deal publication before deeper enrichment refactor.
+
+## ACCEPTED — Taste dossier Scheduled entrypoint observability preflight
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_SCHEDULED_ENTRYPOINT_OBSERVABILITY_PREFLIGHT_01.md`
 
-Task ID:
-`taste-dossier-scheduled-entrypoint-observability-preflight-01`
-
-Mode:
-`READ-ONLY / ARCHITECTURE PREFLIGHT`
-
-Purpose:
-- compare prompt-only attestation, existing candidate binding proof, create-only invocation/fail receipts, and manifest-bound challenge approaches;
-- select exactly one minimal GitHub-verifiable mechanism that distinguishes missing handshake from later worker failure;
-- preserve GitHub ownership of validation/progress/retry/completeness;
-- do not implement or run production.
-
-Expected report:
+Report:
 `reviews/worker_reports/taste-dossier-scheduled-entrypoint-observability-preflight-01.md`
 
-Production state:
-- `Run now` remains paused;
-- no implementation until Director reviews the architecture report and user separately approves IMPLEMENT.
+Final status:
+`complete_architecture_recommendation`
+
+Director acceptance:
+- the proposed create-only entry/fail runtime-receipt family is ownership-compatible in principle;
+- it would provide GitHub-verifiable binding/terminal observability for the background dossier worker;
+- it correctly does not claim to prove full semantic prompt comprehension;
+- it requires explicit contract/persistence/workflow changes before implementation;
+- it must remain non-authoritative for canonical progress/retry/completeness.
+
+Priority decision:
+- do NOT implement this observability mechanism as the next production recovery step;
+- under the accepted simplification direction, Scheduled/Dossier work should first be removed from the daily core critical path;
+- after Phase 0/Phase 1 architecture is settled, reassess whether this receipt machinery is still needed for background enrichment health, and simplify it if possible.
 
 ## ACCEPTED — Taste dossier Scheduled entrypoint ledger diagnostic
 
