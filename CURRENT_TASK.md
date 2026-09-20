@@ -499,3 +499,13 @@
 - Scheduled Task `Run now` was not invoked and its settings were not changed;
 - durable report: `reviews/worker_reports/taste-dossier-identity-provenance-generation-fix-01.md`;
 - exactly one next step: Director performs one clean production `Run now` acceptance on the active compatible snapshot.
+
+## Worker in progress — 2026-09-20
+
+### Taste dossier validator ↔ generator parity fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_VALIDATOR_GENERATOR_PARITY_FIX_01.md`;
+- scope ограничен принятыми PARITY-01..03: source locator serialization, multi-source reason nullability, Steam Store fallback-parent exclusive source types;
+- strict validator semantics должны остаться неизменными;
+- implementation branch: `worker/taste-dossier-validator-generator-parity-fix-01`;
+- Scheduled Task `Taste Steam Review Dossier` не запускать и settings не менять.
