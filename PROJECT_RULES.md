@@ -184,3 +184,16 @@ Exact V5 `fit_evidence_state=confirmed_negative` — including a direct conflict
 Digital Deluxe/Deluxe Upgrade, OST/soundtrack, artbook, cosmetics/skins, weapon/item/equipment/currency/resource packs, bonus songs, digital extras, supporter/founder packs без отдельного сюжета и иные bonus-content add-ons не создают самостоятельную Taste obligation. Season pass/package/container не становится сюжетным DLC только потому, что предоставляет доступ к сюжетным дочерним DLC.
 
 Если положительная сюжетность не доказана доступной канонической product metadata, DLC исключается fail-closed. Название может быть отрицательным hint, но не является достаточным положительным доказательством. Смешанное DLC «сюжет + косметика» допустимо только когда сюжетный playable component отдельно и существенно подтверждён. Base games и действующая package/member aggregation не меняются.
+## Progressive Personalized Deals — Phase A
+
+Текущая витрина персонализированных скидок обязана показывать все актуальные deterministic-eligible кандидаты до завершения семантического анализа, если их не исключает уже подтверждённое hard source/business/identity правило.
+
+Автоматический порядок всегда начинается с состояния анализа:
+1. `analyzed_fit` — разобранные и подходящие игры; внутри этого слоя сохраняется действующий персонализированный рейтинг.
+2. `analysis_incomplete` — текущий разбор был подтверждённо неполным/ошибочным; персональный `total_score`, неподтверждённые `why_fit` и персональные риски не показываются.
+3. `not_analyzed` — текущего достоверного результата анализа нет; игра остаётся видимой в самом конце автоматического списка.
+4. `analyzed_not_fit` — достоверно разобранные неподходящие игры исключаются из обычного списка, но входят в агрегированные счётчики обработки.
+
+Нижние слои нельзя сравнивать с `analyzed_fit` через один и тот же персональный балл. Для Tier 2/3 разрешён отдельный GitHub-produced purchase-only sort key, использующий уже существующие детерминированные purchase-компоненты. Срочность действует только внутри каждого analysis tier. Явное локальное действие пользователя «В конец очереди» сохраняет абсолютный приоритет после автоматической сортировки.
+
+Отсутствие semantic evidence, несовместимый старый Taste или нехватка информации не являются доказательством `not_fit`. Browser остаётся read-only consumer; все состояния и агрегированные счётчики производит GitHub. Phase A не запускает и не меняет PASS 1/PASS 2 и Scheduled ChatGPT.
