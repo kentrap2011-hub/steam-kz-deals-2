@@ -1,9 +1,9 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-STATUS-V1",
   "schema_version": 1,
-  "snapshot_id": "bbb40469f96be618ec10fa7fc6b9edca8ccd56e8f2e73442529a47de76164902",
-  "prepared_required_sha256": "15fdd22e1dd861fd49ca8fd76155d8655d166267133b192fd09d0d288143237d",
-  "group_plan_sha256": "7caf9a05bdf6406249f34af6676667e44dc0df67d744690ad680126a0bb1fb33",
+  "snapshot_id": "533abb9b4328efec3b80a61caddb142ffe0ff7fb9438482d5159b2ed9878378d",
+  "prepared_required_sha256": "5e1317437af9c588df1eb4fc7f7ec972c23b3374ef7f7559c49e54e3659a8779",
+  "group_plan_sha256": "025cd20432e829b252481eb6cfe8e13b372ca8b504f6ec85560e1a9c97ae52c5",
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
@@ -18,15 +18,47 @@
     "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
     "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
   },
-  "canonical_expected_sequence": 17,
-  "completed_required_count": 48,
+  "canonical_expected_sequence": 1,
+  "completed_required_count": 0,
   "remaining_required_count": 686,
   "full_backlog_complete": false,
-  "candidate_count": 0,
+  "candidate_count": 1,
   "valid_candidate_count": 0,
-  "invalid_candidate_count": 0,
-  "invalid_expected_group": null,
-  "candidate_groups": [],
+  "invalid_candidate_count": 1,
+  "invalid_expected_group": {
+    "sequence": 1,
+    "group_sha256": "1bf7b03cbd90fd29ff9da33b04e058671b959b540b8fd303074d6188ed0d3fe0",
+    "artifact_sha256": "ec3d5a1e09846a251c907656404ca50591109afa85930cc5fb1754ff8e65745c",
+    "validator_error": "game identity requires an identity-role provenance source"
+  },
+  "candidate_groups": [
+    {
+      "snapshot_id": "533abb9b4328efec3b80a61caddb142ffe0ff7fb9438482d5159b2ed9878378d",
+      "sequence": 1,
+      "group_sha256": "1bf7b03cbd90fd29ff9da33b04e058671b959b540b8fd303074d6188ed0d3fe0",
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+        "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
+        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
+        "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+      },
+      "validation": "invalid",
+      "canonical_position": "expected",
+      "artifact_paths": [
+        "data/ai_inbox/taste_steam_review_dossiers/533abb9b4328efec3b80a61caddb142ffe0ff7fb9438482d5159b2ed9878378d--g000001--1bf7b03cbd90fd29ff9da33b04e058671b959b540b8fd303074d6188ed0d3fe0.json"
+      ],
+      "artifact_sha256": "ec3d5a1e09846a251c907656404ca50591109afa85930cc5fb1754ff8e65745c",
+      "validator_error": "game identity requires an identity-role provenance source"
+    }
+  ],
   "malformed_current_snapshot_artifacts": [],
   "canonical_progress_authority": false,
   "retry_state": false
