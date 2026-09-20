@@ -12,47 +12,36 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## ACTIVE — Taste dossier fail-closed execution ledger
+## ACCEPTED — Taste dossier fail-closed execution ledger
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_FAIL_CLOSED_EXECUTION_LEDGER_IMPLEMENT_01.md`
 
-Task ID:
-`taste-dossier-fail-closed-execution-ledger-implement-01`
-
-Status:
-`authorized_ready_for_worker`
-
-Mode:
-`IMPLEMENT / ACTIVATE / VALIDATE`
-
-Worker slot:
-`ЧАТ 1` — use a new worker chat. This is the direct operational follow-up to the accepted Hellish Quart observability diagnosis.
-
-User authorization:
-- user explicitly approved making fail-closed Scheduled Task stops explainable through structured observable execution facts.
-
-Goal:
-- require a compact `FAIL_CLOSED_EXECUTION_LEDGER_V1` in the Scheduled worker final response whenever the current target stops fail-closed before publication;
-- record exact gate, material attempted routes/actions, observable results, retrieval budget, last completed stage, next required step and factual reason it could not execute;
-- forbid guessed causes and distinguish unknown causes explicitly;
-- require accounting for still-mandatory recovery routes so evidence retrieval cannot silently stop early while budget/liveness/tool availability still permit the next required route;
-- preserve privacy and explicitly exclude chain-of-thought/internal reasoning.
-
-Architecture boundary:
-- final-response observability only;
-- no new durable logging service, queue, scheduler, retry loop, checkpoint or progress owner;
-- GitHub remains canonical control plane;
-- evidence/validator semantics unchanged.
-
-Expected report:
+Report:
 `reviews/worker_reports/taste-dossier-fail-closed-execution-ledger-implement-01.md`
 
-Allowed final statuses:
-- `complete_ready_for_live_acceptance`
-- `needs_fix`
-- `needs_user_decision`
-- `blocked_external`
+Final status:
+`complete_ready_for_live_acceptance`
+
+Accepted facts:
+- fail-closed final response now requires `FAIL_CLOSED_EXECUTION_LEDGER_V1`;
+- ledger records current binding, exact stop gate, material attempts, observable results, budget state, next required step and factual non-execution reason;
+- evidence retrieval cannot be declared exhausted while a mandatory recovery route remains executable with remaining budget/live binding/no exposed blocker;
+- unknown causes remain explicitly unknown; inferred timeout/context/platform blame is forbidden;
+- ledger excludes raw feedback, author/profile identity, secrets and private chain-of-thought;
+- success path remains compact;
+- evidence/schema/strict-validator semantics are unchanged;
+- no new durable logging service, queue, retry loop, scheduler or progress owner was added;
+- synthetic A/B/C proof distinguishes route-not-run vs route-run-no-item vs route-blocked-by-error;
+- LEDGER-01..15 and relevant prior dossier suites passed;
+- PR #73 merged as `a5d53a58d92de9066890755b2bb6ae6c19409e80`;
+- activation produced atomic pre-AI commit `924673f2a788b52ccd61dbac4b2a844118a6bdf8`;
+- fresh active snapshot is `ad93a4484f1c6ceba4ba3d4ef0de681f65fe670ec1ee600e2abc0822b0eec54a`, expected `g000001`;
+- Scheduled Task was not run during implementation.
+
+Next step:
+- one production `Run now` acceptance on the active snapshot;
+- if it stops fail-closed, use the emitted ledger as the authoritative observable execution trace for the next diagnosis.
 
 ## ACCEPTED — Hellish Quart Russian retrieval diagnostic
 
