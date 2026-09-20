@@ -341,6 +341,9 @@ def current_production_readiness():
     if not source_key:
         raise SystemExit('Production payload has no source_mailing_updated_at_utc')
 
+    if payload_status not in {'complete', 'degraded'}:
+        raise SystemExit('ChatGPT production payload status is not recognized for progressive publication')
+
     progressive_count = int(payload.get('progressive_candidate_count') or 0)
     actual_progressive_count = nonempty_line_count(PROGRESSIVE_CONTEXT) if PROGRESSIVE_CONTEXT.exists() else 0
     if progressive_count <= 0 and source_count - excluded_count > 0:
