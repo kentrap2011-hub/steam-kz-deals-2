@@ -495,3 +495,19 @@
 **Граница:** meanings `historical/current/durable/uncertain`, <=365-day recency, source admissibility, privacy/provenance/language, exact-product identity, strict validator, 8/16 bounds, group size, buffered transport и GitHub ownership не меняются. Не создаются queue, scheduler, retry daemon, fixed website quota или Steam-only lane. Старый immutable `g000002` не ремонтируется и не переиздаётся; prompt binding change активируется только normal GitHub-owned compatible snapshot rebuild.
 
 **Основные места:** `config/taste_steam_review_dossier_worker_prompt.md`, `config/taste_steam_review_dossier_web_evidence_contract.json#worker_prompt_revision`, `scripts/test_taste_steam_review_dossier_semantic_consistency.py`, `scripts/taste_steam_review_dossier_strict.py` (authority unchanged).
+---
+
+## PPD-001 — Progressive personalized publication is tier-first and no longer waits for semantic closure
+
+**Дата:** 2026-09-20  
+**Статус:** approved for Phase A implementation
+
+**Решение:** текущий deterministic-eligible каталог публикуется до закрытия semantic queue. GitHub канонически проецирует четыре состояния: `analyzed_fit`, `analysis_incomplete`, `not_analyzed`, `analyzed_not_fit`. Видимый автоматический порядок строго tier-first: fit → incomplete/error → not analyzed; not-fit скрывается из обычного списка, но учитывается в processing counts. `analysis_in_progress` не является durable state.
+
+**Почему:** глобальное ожидание Taste/Dossier делало одну незавершённую semantic цепочку блокером всего продукта. При этом показ неразобранной игры не требует притворяться, что она персонально рекомендована. Явный analysis tier сохраняет персонализированную природу продукта и честность данных одновременно.
+
+**Не делать:** не присваивать Tier 2/3 фиктивный `total_score`; не скрывать игру из-за отсутствия evidence; не превращать `insufficient` из-за нехватки информации в завершённый not-fit; не переносить state/count/retry ownership из GitHub в browser или ChatGPT.
+
+**Граница Phase A:** PASS 1/PASS 2 execution, retry/recovery и изменение Scheduled ChatGPT не входят в это решение. Для Phase A активируется только state projection, publication, ordering и site progress visibility.
+
+**Основные места:** `config/progressive_personalization_contract.json`, `config/daily_execution_contract.json`, `config/mailing_policy.json`, `config/final_ranking_policy.json`, visual producer и read-only UI.
