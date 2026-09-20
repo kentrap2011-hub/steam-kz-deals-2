@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "905bddbce50fc8fd319465e3e68450e9cd7f0b2edc53c8a1a687466372f4d384",
+  "prepared_required_sha256": "29f2991c94b02163f42cd3e65b754cb0924133b52e25512aa2fb675e6f1b86b8",
+  "group_plan_sha256": "6644b7ec1b632ece17dd36aae859fdbe8a280d741bda3d7028b3048ba1ba4397",
+  "group_count": 245,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
+    "evidence_contract_sha256": "2adc57a346067a438a009f8503bb07c66f207f4c2b299581e96e9e8921b7d61e",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "identity-provenance-generation-fix-2026-09-20",
+    "worker_schema_sha256": "3f163b41449232c5fc73532e87147c101d48fe42ffcb0081b64569a4e36f4a9e",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-identity-provenance-generation-v1",
+    "worker_prompt_sha256": "247d3ab7ad6c208cbf209f4df0aea63dab443b62997f067305abf9d1ceec4a98"
+  },
+  "sequence": 21,
+  "start_index": 60,
+  "end_index_exclusive": 63,
+  "appids": [
+    "1172380",
+    "1172450",
+    "1173770"
+  ],
+  "items_sha256": "665a5c9c5098db6500d994a407b946af0044bfbb7c87bc6199d287bf5590a455",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "ac0d6e07a309c7900ac5cd26105d912824f2efd8e7b854507d6a0b3ec6e6cd0c",
+  "items": [
+    {
+      "key": "App_1172380",
+      "appid": "1172380",
+      "title": "STAR WARS Jedi: Fallen Order™",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1172380.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1172450",
+      "appid": "1172450",
+      "title": "Carto",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1172450.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1173770",
+      "appid": "1173770",
+      "title": "FINAL FANTASY",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1173770.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "bec8381cb60047e5763ed30e0eeacaec34ae2b2ec94db480abebc5695150c8c5"
+}
