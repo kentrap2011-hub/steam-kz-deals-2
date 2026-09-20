@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "version": 2,
   "status": "active",
-  "schema_revision": "identity-provenance-generation-fix-2026-09-20",
+  "schema_revision": "validator-generator-parity-fix-2026-09-20",
   "evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "evidence_contract_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
@@ -286,7 +286,13 @@
     "transient_author_deduped_cross_run_identity": false,
     "steam_store_app_page_cannot_be_player_feedback_record": true,
     "steam_store_exact_app_page_may_parent_transient_author_deduped_concrete_review_cards": true,
-    "steam_store_parent_aggregate_metadata_is_non_mention_provenance_only": true
+    "steam_store_parent_aggregate_metadata_is_non_mention_provenance_only": true,
+    "multi_source_requires_single_source_reason_null": true,
+    "steam_store_exact_app_fallback_parent_allowed_source_types": [
+      "steam_reviews",
+      "store_user_reviews"
+    ],
+    "steam_store_exact_app_fallback_parent_source_type_set_is_exclusive": true
   },
   "provenance_source_required_fields": [
     "source_id",
@@ -439,7 +445,113 @@
           "overall_strength",
           "stop_reason"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "properties": {
+          "strategy": {
+            "type": "string",
+            "enum": [
+              "adaptive_multi_source_web"
+            ]
+          },
+          "research_state": {
+            "type": "string",
+            "enum": [
+              "sufficient"
+            ]
+          },
+          "source_mix_status": {
+            "type": "string",
+            "enum": [
+              "multi_source",
+              "single_source_only"
+            ]
+          },
+          "single_source_reason": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              }
+            ]
+          },
+          "russian_attempt": {
+            "type": "string",
+            "enum": [
+              "found_and_used",
+              "searched_no_existence_signal",
+              "existence_established_retrieval_unresolved",
+              "existence_established_access_unresolved"
+            ]
+          },
+          "overall_strength": {
+            "type": "string",
+            "enum": [
+              "strong",
+              "moderate",
+              "limited",
+              "conflicted"
+            ]
+          },
+          "stop_reason": {
+            "type": "string",
+            "enum": [
+              "evidence_stable",
+              "bounded_limit_reached"
+            ]
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "source_mix_status": {
+                  "const": "multi_source"
+                }
+              },
+              "required": [
+                "source_mix_status"
+              ]
+            },
+            "then": {
+              "properties": {
+                "single_source_reason": {
+                  "const": null
+                }
+              },
+              "required": [
+                "single_source_reason"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "source_mix_status": {
+                  "const": "single_source_only"
+                }
+              },
+              "required": [
+                "source_mix_status"
+              ]
+            },
+            "then": {
+              "properties": {
+                "single_source_reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                }
+              },
+              "required": [
+                "single_source_reason"
+              ]
+            }
+          }
+        ]
       },
       "provenance": {
         "type": "object",
@@ -451,7 +563,154 @@
         "properties": {
           "sources": {
             "type": "array",
-            "minItems": 1
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "source_id",
+                "source_type",
+                "domain",
+                "publication_date",
+                "language",
+                "freshness",
+                "evidence_role",
+                "player_feedback"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "source_id": {
+                  "type": "string",
+                  "pattern": "^source-[0-9]{3}$"
+                },
+                "source_type": {
+                  "type": "string",
+                  "enum": [
+                    "steam_reviews",
+                    "steam_community",
+                    "reddit",
+                    "forum",
+                    "store_user_reviews",
+                    "community_discussion",
+                    "other_player_feedback",
+                    "official_metadata",
+                    "professional_context"
+                  ]
+                },
+                "domain": {
+                  "type": "string",
+                  "minLength": 3
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https://[^/?#\\\\s]+(?:[/?#]|$)"
+                },
+                "public_ref": {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 500
+                },
+                "publication_date": {
+                  "anyOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "language": {
+                  "type": "string",
+                  "enum": [
+                    "russian",
+                    "non_russian",
+                    "mixed",
+                    "unknown"
+                  ]
+                },
+                "freshness": {
+                  "type": "string",
+                  "enum": [
+                    "recent",
+                    "older",
+                    "unknown"
+                  ]
+                },
+                "evidence_role": {
+                  "type": "string",
+                  "enum": [
+                    "current_state",
+                    "historical",
+                    "durable_trait",
+                    "uncertain",
+                    "identity"
+                  ]
+                },
+                "player_feedback": {
+                  "type": "boolean"
+                },
+                "feedback_surface_mode": {
+                  "type": "string",
+                  "enum": [
+                    "concrete_item_collection"
+                  ]
+                }
+              },
+              "oneOf": [
+                {
+                  "required": [
+                    "url"
+                  ],
+                  "not": {
+                    "required": [
+                      "public_ref"
+                    ]
+                  }
+                },
+                {
+                  "required": [
+                    "public_ref"
+                  ],
+                  "not": {
+                    "required": [
+                      "url"
+                    ]
+                  }
+                }
+              ],
+              "allOf": [
+                {
+                  "if": {
+                    "required": [
+                      "url",
+                      "player_feedback",
+                      "feedback_surface_mode"
+                    ],
+                    "properties": {
+                      "url": {
+                        "pattern": "^https://(?:www\\\\.)?store\\\\.steampowered\\\\.com/app/[0-9]+(?:/|[?#]|$)"
+                      },
+                      "player_feedback": {
+                        "const": true
+                      },
+                      "feedback_surface_mode": {
+                        "const": "concrete_item_collection"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "source_type": {
+                        "enum": [
+                          "steam_reviews",
+                          "store_user_reviews"
+                        ]
+                      }
+                    }
+                  }
+                }
+              ]
+            }
           },
           "player_feedback_records": {
             "type": "array",
@@ -486,5 +745,28 @@
     "ids_are_author_independent": true,
     "author_identity_or_direct_hash_or_predictable_pseudonym_in_ids_forbidden": true,
     "stable_physical_item_identity_lives_in_safe_url_or_public_ref": true
+  },
+  "provenance_source_invariants": {
+    "locator_fields": [
+      "url",
+      "public_ref"
+    ],
+    "locator_cardinality": "exactly_one",
+    "both_locators_forbidden": true,
+    "missing_locator_forbidden": true,
+    "url_requires_public_https": true,
+    "url_domain_must_equal_normalized_hostname_exactly": true,
+    "domain_normalization": {
+      "strip_outer_whitespace": true,
+      "lowercase": true,
+      "strip_all_trailing_dots": true,
+      "strip_single_leading_www_dot": true,
+      "rule": "str(value or '').strip().lower().rstrip('.'); if normalized text starts with 'www.' remove that prefix"
+    },
+    "steam_store_exact_app_fallback_parent_allowed_source_types": [
+      "steam_reviews",
+      "store_user_reviews"
+    ],
+    "steam_store_exact_app_fallback_parent_source_type_set_is_exclusive": true
   }
 }
