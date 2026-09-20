@@ -297,6 +297,47 @@ def build_processing_status(state_index, visible_items, business_excluded_family
     }
 
 
+
+def business_excluded_family_ids(state_index):
+    excluded = set()
+    for family_id, state in state_index.items():
+        if state.get('analysis_state') != 'analyzed_fit':
+            continue
+        scenario = selected_scenario(state.get('context') or {}, state.get('fit'))
+        if scenario.get('disposition') != 'INCLUDE':
+            excluded.add(str(family_id))
+    return excluded
+
+
+def stamp_processing_status(visual, state_index=None):
+    state_index = state_index if state_index is not None else build_state_index()
+    visible_items = visual.get('items') or []
+    visible_ids = {str(game.get('id') or '') for game in visible_items}
+    hard_excluded = business_excluded_family_ids(state_index)
+    for family_id, state in state_index.items():
+        if state.get('analysis_state') in VISIBLE_STATES and str(family_id) not in visible_ids:
+            hard_excluded.add(str(family_id))
+
+    status = build_processing_status(
+        state_index,
+        visible_items,
+        business_excluded_family_ids=hard_excluded,
+    )
+    validate_processing_status(status)
+    visual['processing_status'] = status
+    visual['progressive_personalization'] = {
+        'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
+        'phase': 'phase_a',
+        'publication_status': 'current_deterministic_catalogue',
+        'semantic_queue_zero_required_for_publication': False,
+        'pass1_active': False,
+        'pass2_active': False,
+    }
+    # Overall visual availability reflects the deterministic current catalogue.
+    # Semantic completeness remains separately available in semantic_completeness.
+    visual['status'] = 'complete'
+    return status
+
 def validate_processing_status(status):
     required = {
         'total_current_candidates', 'analyzed_success_count', 'analyzed_fit_count',
