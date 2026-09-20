@@ -540,3 +540,11 @@
 - Scheduled ChatGPT must not be run or changed;
 - PASS 1/PASS 2 execution is explicitly out of scope;
 - hard source/business/identity gates and existing manual end-of-queue semantics must remain strict.
+
+
+### Progressive Personalized Deals Phase A activation routing fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_ACTIVATION_ROUTING_FIX_01.md`;
+- scope is limited to daily visual routing: incompatible/missing/stale progressive visual must force the existing full progressive build instead of `commercial_refresh`;
+- no state-model, sorting, UI feature, Taste/Dossier, PASS 1/PASS 2 or Scheduled ChatGPT changes are authorized;
+- after the routing fix, use the normal build/validation/deploy path and update the existing Phase A report only.
