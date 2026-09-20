@@ -12,6 +12,41 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
+## ACTIVE — Taste dossier validator ↔ generator parity audit
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_VALIDATOR_GENERATOR_PARITY_AUDIT_01.md`
+
+Task ID:
+`taste-dossier-validator-generator-parity-audit-01`
+
+Status:
+`authorized_ready_for_worker`
+
+Mode:
+`READ-ONLY / RECON`
+
+Worker slot:
+`ЧАТ 1` — use a new worker chat. This is a bounded independent audit after the accepted identity-provenance fix; clean context is preferred.
+
+User authorization:
+- user explicitly approved one bounded parity audit before the next production run.
+
+Goal:
+- compare current canonical strict dossier validation against worker-facing prompt/schema/evidence contract;
+- identify only confirmed current-main gaps where validator requires a worker-generated invariant that generator-facing layers do not state strongly enough;
+- classify intentional GitHub-only defensive checks separately;
+- do not implement fixes or invent speculative future failure modes.
+
+Expected report:
+`reviews/worker_reports/taste-dossier-validator-generator-parity-audit-01.md`
+
+Allowed final statuses:
+- `complete_no_confirmed_parity_gaps`
+- `complete_confirmed_parity_gaps`
+- `needs_bounded_followup`
+- `blocked`
+
 ## ACCEPTED — Taste dossier identity provenance generation fix
 
 Task:
