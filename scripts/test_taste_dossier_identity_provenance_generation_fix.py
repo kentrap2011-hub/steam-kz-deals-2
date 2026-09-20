@@ -26,6 +26,7 @@ def queue(appids):
     for i, appid in enumerate(appids):
         appid = str(appid)
         rows.append({
+            "taste_subject_key": f"App_{appid}_{i}",
             "appid": appid,
             "title": f"Game {appid}",
             "taste_fingerprint": hashlib.sha256(f"taste:{appid}:{i}".encode()).hexdigest(),
