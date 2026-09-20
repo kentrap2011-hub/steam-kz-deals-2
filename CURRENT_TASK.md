@@ -500,12 +500,18 @@
 - durable report: `reviews/worker_reports/taste-dossier-identity-provenance-generation-fix-01.md`;
 - exactly one next step: Director performs one clean production `Run now` acceptance on the active compatible snapshot.
 
-## Worker in progress — 2026-09-20
+## Worker closeout — 2026-09-20
 
 ### Taste dossier validator ↔ generator parity fix 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_VALIDATOR_GENERATOR_PARITY_FIX_01.md`;
-- scope ограничен принятыми PARITY-01..03: source locator serialization, multi-source reason nullability, Steam Store fallback-parent exclusive source types;
-- strict validator semantics должны остаться неизменными;
-- implementation branch: `worker/taste-dossier-validator-generator-parity-fix-01`;
-- Scheduled Task `Taste Steam Review Dossier` не запускать и settings не менять.
+- PARITY-01..03 aligned generator-side: exact-one source locator + HTTPS/normalized host equality, `multi_source -> single_source_reason:null`, exact Steam Store fallback-parent source types `steam_reviews|store_user_reviews`;
+- strict validator remained unchanged at Git blob `81126b87db7542512221a82f1ece4b846abe1af7`;
+- implementation PR #70 merged as `505c1adbd48eeaa2100148947cbe56bd881f4f76`; final dossier CI #103 and backlog CI #820 succeeded;
+- normal GitHub activation run #144 succeeded; atomic pre-AI commit `cf8467d65691312efe55efd76979cc74ff50c50d`;
+- active snapshot `3bd2085e4a4a157aa0edadfeabbdcc36786228787016f373189d71d12da8d99b`: prepared/completed/remaining `733/0/733`, expected `g000001`, 245 groups, normal group size 3;
+- active binding: evidence/schema revision `validator-generator-parity-fix-2026-09-20`, prompt `web-evidence-v2-validator-generator-parity-fix-v1`;
+- prior snapshot `905bddbce50fc8fd319465e3e68450e9cd7f0b2edc53c8a1a687466372f4d384` is stale/inert under exact content-binding compatibility; no manual progress/recovery surgery occurred;
+- Scheduled Task `Taste Steam Review Dossier` was not run and settings were not changed;
+- durable report: `reviews/worker_reports/taste-dossier-validator-generator-parity-fix-01.md`;
+- exact next step: Director performs one clean production `Run now` acceptance against the active compatible snapshot.
