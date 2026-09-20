@@ -1,0 +1,109 @@
+{
+  "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
+  "version": 1,
+  "status": "canonical",
+  "phase": "phase_a",
+  "purpose": "Publish the current deterministic-eligible Steam KZ deal catalogue before semantic closure while preserving honest personalized-state tiers and GitHub-owned progress accounting.",
+  "ownership": {
+    "control_plane": "github",
+    "state_projection": "github",
+    "aggregate_counts": "github",
+    "validation": "github",
+    "publication": "github",
+    "browser": "read_only_presentation",
+    "scheduled_chatgpt": "unchanged_semantic_data_plane",
+    "interactive_chat": "development_only_not_production_worker"
+  },
+  "durable_states": {
+    "analyzed_fit": {
+      "visible": true,
+      "tier": 1,
+      "successfully_analyzed": true,
+      "personalized_score_allowed": true,
+      "personalized_claims_allowed": "supported_only"
+    },
+    "analysis_incomplete": {
+      "visible": true,
+      "tier": 2,
+      "successfully_analyzed": false,
+      "personalized_score_allowed": false,
+      "personalized_claims_allowed": false
+    },
+    "not_analyzed": {
+      "visible": true,
+      "tier": 3,
+      "successfully_analyzed": false,
+      "personalized_score_allowed": false,
+      "personalized_claims_allowed": false
+    },
+    "analyzed_not_fit": {
+      "visible": false,
+      "tier": null,
+      "successfully_analyzed": true,
+      "personalized_score_allowed": false,
+      "personalized_claims_allowed": false
+    }
+  },
+  "durable_in_progress_state": false,
+  "tier_precedence": [
+    "analyzed_fit",
+    "analysis_incomplete",
+    "not_analyzed"
+  ],
+  "state_projection": {
+    "analyzed_fit": "exact-compatible trustworthy accepted INCLUDE with fit strong or moderate and the selected existing business scenario still INCLUDE",
+    "analyzed_not_fit": "exact-compatible trustworthy completed semantic EXCLUDE where current fit-evidence semantics establish a completed not-fit rather than missing evidence",
+    "analysis_incomplete": "only when current canonical evidence proves an attempt/outcome is incomplete without trustworthy fit/not-fit",
+    "not_analyzed": "default for no trustworthy current semantic outcome, including stale/incompatible results",
+    "insufficient_information_rule": "missing or insufficient candidate evidence is unresolved and must not be hidden as analyzed_not_fit",
+    "stale_or_incompatible_rule": "never present stale or incompatible Taste as current fit/not-fit"
+  },
+  "sorting": {
+    "tier_first": true,
+    "tier_1": "existing FINAL-PRIORITY-RANKING-V2 personalized semantics",
+    "tier_2_3": "producer-owned deterministic purchase-only score from the existing purchase component semantics; never total_score",
+    "urgency_off": [
+      "analysis_tier_asc",
+      "tier_specific_score_desc",
+      "title_asc"
+    ],
+    "urgency_on": [
+      "analysis_tier_asc",
+      "sale_expiry_urgency_asc",
+      "tier_specific_score_desc",
+      "title_asc"
+    ],
+    "manual_end_at_override": "preserved_absolute_local_override_after_automatic_order"
+  },
+  "aggregate_fields": [
+    "total_current_candidates",
+    "analyzed_success_count",
+    "analyzed_fit_count",
+    "analyzed_not_fit_count",
+    "analysis_incomplete_count",
+    "not_analyzed_count",
+    "normal_visible_count",
+    "last_accepted_analysis_at_utc"
+  ],
+  "invariants": [
+    "total_current_candidates = analyzed_fit_count + analyzed_not_fit_count + analysis_incomplete_count + not_analyzed_count",
+    "analyzed_success_count = analyzed_fit_count + analyzed_not_fit_count",
+    "normal_visible_count = analyzed_fit_count + analysis_incomplete_count + not_analyzed_count"
+  ],
+  "publication": {
+    "semantic_queue_may_be_nonzero": true,
+    "zero_semantic_results_is_publishable": true,
+    "current_deterministic_catalogue_required": true,
+    "hard_global_source_integrity_still_fail_closed": true,
+    "hard_business_source_identity_rules_unchanged": true,
+    "browser_must_not_recalculate_semantics_or_external_facts": true,
+    "last_known_good_on_source_failure": "preserve_existing_behavior"
+  },
+  "phase_a_execution": {
+    "pass1_active": false,
+    "pass2_active": false,
+    "creates_semantic_attempts": false,
+    "creates_retry_loop": false,
+    "changes_scheduled_chatgpt": false
+  }
+}
