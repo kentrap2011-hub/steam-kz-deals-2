@@ -31,6 +31,7 @@ LATEST_RUNTIME_STATUS = Path('data/cache/taste_ingest_receipts/latest_runtime_st
 MANIFEST_OUT = Path('data/production/pre_ai/chatgpt_payload.json')
 TASTE_QUEUE_OUT = Path('data/production/pre_ai/chatgpt_taste_queue.jsonl')
 PURCHASE_CONTEXT_OUT = Path('data/production/pre_ai/chatgpt_purchase_context.jsonl')
+PROGRESSIVE_CONTEXT_OUT = Path('data/production/pre_ai/progressive_candidate_context.jsonl')
 
 PREREQUISITES = [STORE, FX, FAMILIES, TASTE, HISTORY, DEALS]
 WISHLIST_URL = 'https://raw.githubusercontent.com/kentrap2011-hub/stopgame-ratings-data/main/steam_wishlist.json'
@@ -287,6 +288,7 @@ def main():
     ai_queue = []
     ai_context = []
     ready_context = []
+    progressive_context = []
     excluded_keys = []
     exclusion_counts = Counter()
     sale_end_missing = []
@@ -401,6 +403,11 @@ def main():
         }
         if package_aggregation:
             context['package_member_taste_aggregation'] = _compact_package_aggregation(package_aggregation)
+
+        # Phase A progressive publication needs every pre-semantic deterministic candidate
+        # without exposing purchase context to the semantic worker. This sibling artifact is
+        # GitHub-owned and is consumed only by the visual producer.
+        progressive_context.append(json.loads(json.dumps(context, ensure_ascii=False)))
 
         cache_hit = taste_row['status'] == 'cache_hit'
         cached_taste = taste_row.get('cached_taste') if cache_hit else None
@@ -570,6 +577,7 @@ def main():
     # Fully ready cached rows follow after them.
     purchase_context = ai_context + ready_context
     write_jsonl(PURCHASE_CONTEXT_OUT, purchase_context)
+    write_jsonl(PROGRESSIVE_CONTEXT_OUT, progressive_context)
 
     source_bytes = sum(path.stat().st_size for path in PREREQUISITES)
     manifest = {
@@ -637,6 +645,7 @@ def main():
             'purchase_context_jsonl': str(PURCHASE_CONTEXT_OUT),
             'line_alignment': 'taste_queue line N == purchase_context line N for 1..ai_queue_count',
             'ready_context_start_line': len(ai_queue) + 1 if ready_context else None,
+            'progressive_candidate_context_jsonl': str(PROGRESSIVE_CONTEXT_OUT),
         },
         'source_family_count': len(families),
         'candidate_description_known_count': taste_doc['candidate_context']['description_known_count'],
@@ -645,6 +654,7 @@ def main():
         'ai_queue_count': len(ai_queue),
         'ready_without_ai_count': len(ready_context),
         'purchase_context_line_count': len(purchase_context),
+        'progressive_candidate_count': len(progressive_context),
         'deterministically_excluded_without_ai_count': len(excluded_keys),
         'deterministic_exclusion_counts': dict(sorted(exclusion_counts.items())),
         'commercial_eligibility_bridge_counts': dict(sorted(commercial_bridge_counts.items())),
@@ -674,13 +684,15 @@ def main():
 
     taste_bytes = TASTE_QUEUE_OUT.stat().st_size
     context_bytes = PURCHASE_CONTEXT_OUT.stat().st_size
+    progressive_bytes = PROGRESSIVE_CONTEXT_OUT.stat().st_size
     manifest_bytes = MANIFEST_OUT.stat().st_size
-    consumer_bytes = taste_bytes + context_bytes + manifest_bytes
+    consumer_bytes = taste_bytes + context_bytes + progressive_bytes + manifest_bytes
     print(json.dumps({
         'status': manifest['status'],
         'source_family_count': manifest['source_family_count'],
         'ai_queue_count': manifest['ai_queue_count'],
         'ready_without_ai_count': manifest['ready_without_ai_count'],
+        'progressive_candidate_count': manifest['progressive_candidate_count'],
         'deterministically_excluded_without_ai_count': manifest['deterministically_excluded_without_ai_count'],
         'deterministic_exclusion_counts': manifest['deterministic_exclusion_counts'],
         'commercial_eligibility_bridge_counts': manifest['commercial_eligibility_bridge_counts'],
