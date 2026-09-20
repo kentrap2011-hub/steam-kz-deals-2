@@ -12,6 +12,24 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
+## LIVE ACCEPTANCE FAILED — fail-closed ledger not emitted
+
+Observed production result:
+- active snapshot `ad93a4484f1c6ceba4ba3d4ef0de681f65fe670ec1ee600e2abc0822b0eec54a`;
+- expected sequence remains `g000001`;
+- production stopped fail-closed before publication;
+- no deterministic artifact was created and canonical progress did not advance;
+- worker correctly refused to reuse/rebind evidence from the prior incompatible snapshot;
+- worker identified active binding `web-evidence-v2-fail-closed-execution-ledger-v1`;
+- however the final response omitted mandatory marker `FAIL_CLOSED_EXECUTION_LEDGER_V1` and omitted the structured material-attempt/budget/next-step accounting required by the active canonical prompt.
+
+Director conclusion:
+- repository activation/binding is confirmed current;
+- live acceptance of the fail-closed ledger requirement FAILED;
+- exact cause of Scheduled Task non-compliance is not yet established;
+- do not blind-retry production;
+- next work must localize the Scheduled Task entrypoint/prompt-application failure before another production run.
+
 ## ACCEPTED — Taste dossier fail-closed execution ledger
 
 Task:
