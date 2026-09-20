@@ -58,33 +58,34 @@ def validate_item(game):
     risk_status = game.get('risk_status') or {}
     risk_provenance = game.get('risk_provenance') or []
 
-    # Normal paid-card readiness is intentionally strict: absence of a grounded
-    # downside means analysis is incomplete upstream, never "no risks found".
-    if not risks:
-        errors.append(f'{title}: normal paid card has no visible grounded negative')
-    if risk_status.get('has_described_risk') is not True:
-        errors.append(f'{title}: normal paid card lacks described-risk status')
-    if risk_status.get('grounded_taste_negative_witness') is not True:
-        errors.append(f'{title}: normal paid card lacks grounded Taste negative witness status')
-    if len(risk_codes) != len(risks):
-        errors.append(f'{title}: visible risk count and risk_codes count differ')
-    if len(risk_provenance) != len(risks):
-        errors.append(f'{title}: visible risk count and provenance count differ')
+    # In Progressive Phase A a trustworthy fit may publish before optional
+    # grounded-negative enrichment. If a risk is shown it must still be fully grounded.
+    if risks:
+        if risk_status.get('has_described_risk') is not True:
+            errors.append(f'{title}: visible risks lack described-risk status')
+        if risk_status.get('grounded_taste_negative_witness') is not True:
+            errors.append(f'{title}: visible risks lack grounded Taste negative witness status')
+        if len(risk_codes) != len(risks):
+            errors.append(f'{title}: visible risk count and risk_codes count differ')
+        if len(risk_provenance) != len(risks):
+            errors.append(f'{title}: visible risk count and provenance count differ')
 
-    taste_witnesses = 0
-    for row in risk_provenance:
-        source = row.get('source')
-        if source not in GROUNDED_RISK_SOURCES or not row.get('code'):
-            errors.append(f'{title}: visible risk lacks grounded provenance')
-            continue
-        if source == 'taste_negative_evidence':
-            taste_witnesses += 1
-            if not str(row.get('category') or '').strip():
-                errors.append(f'{title}: Taste negative provenance lacks category')
-            if not str(row.get('evidence') or '').strip():
-                errors.append(f'{title}: Taste negative provenance lacks raw grounded evidence')
-    if taste_witnesses < 1:
-        errors.append(f'{title}: visible risks contain no grounded Taste negative provenance')
+        taste_witnesses = 0
+        for row in risk_provenance:
+            source = row.get('source')
+            if source not in GROUNDED_RISK_SOURCES or not row.get('code'):
+                errors.append(f'{title}: visible risk lacks grounded provenance')
+                continue
+            if source == 'taste_negative_evidence':
+                taste_witnesses += 1
+                if not str(row.get('category') or '').strip():
+                    errors.append(f'{title}: Taste negative provenance lacks category')
+                if not str(row.get('evidence') or '').strip():
+                    errors.append(f'{title}: Taste negative provenance lacks raw grounded evidence')
+        if taste_witnesses < 1:
+            errors.append(f'{title}: visible risks contain no grounded Taste negative provenance')
+    elif risk_codes or risk_provenance or risk_status.get('has_described_risk') is True:
+        errors.append(f'{title}: risk metadata exists without a visible supported risk')
 
     return errors
 
