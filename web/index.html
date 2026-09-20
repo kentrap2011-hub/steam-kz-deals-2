@@ -8,7 +8,7 @@
   <title>Игры со скидками</title>
   <link rel="icon" href="icon.svg?v=shortcut-icon-1" type="image/svg+xml" sizes="any">
   <link rel="manifest" href="manifest.webmanifest?v=shortcut-icon-1">
-  <link rel="stylesheet" href="styles.css?v=score-collapse-1">
+  <link rel="stylesheet" href="styles.css?v=progressive-personalization-phase-a-01">
   <link rel="stylesheet" href="giveaway-ui.css?v=giveaway-separate-view-fix-01">
   <link rel="stylesheet" href="purchase-options.css?v=compact-purchase-options-1">
   <link rel="stylesheet" href="score-details.css?v=detailed-score-ui-fix-1">
@@ -25,6 +25,10 @@
       </div>
 
       <div id="stats" class="stats" aria-label="Статистика"></div>
+      <section class="processing-summary" aria-label="Прогресс персонального разбора">
+        <div id="processingStats" class="processing-stats"></div>
+        <div id="processingUpdated" class="muted small processing-updated"></div>
+      </section>
 
       <nav class="tabs" aria-label="Разделы">
         <button class="tab active" data-tab="feed" type="button">Лента <span id="feedCount"></span></button>
@@ -65,6 +69,7 @@
           </div>
 
           <div class="content">
+            <div id="analysisBadge" class="analysis-badge"></div>
             <div id="decision" class="decision-pill"></div>
             <h2 id="title"></h2>
             <div id="deadline" class="deadline"></div>
@@ -79,7 +84,7 @@
               <ul id="gameplay" class="compact-list"></ul>
             </section>
 
-            <div class="two-col">
+            <div id="personalizationSection" class="two-col">
               <section class="info-box">
                 <div class="label">✓ ПОЧЕМУ МОЖЕТ ЗАЙТИ</div>
                 <div id="whyFit"></div>
@@ -148,7 +153,8 @@
   <div id="toast" class="toast" aria-live="polite"></div>
   <script src="feed-bootstrap.js?v=mobile-feed-instant-cache-fix-01"></script>
   <script src="giveaway-ui.js?v=giveaway-separate-view-fix-01"></script>
-  <script src="app.js?v=giveaway-separate-view-fix-01"></script>
+  <script src="progressive-personalization-ui.js?v=phase-a-01"></script>
+  <script src="app.js?v=progressive-personalization-phase-a-01"></script>
   <script src="paid-freshness-ui.js?v=visual-main-list-refresh-handoff-implement-01"></script>
   <script src="image-swipe-sync.js?v=image-swipe-sync-1"></script>
   <script src="package-deal-ui.js?v=compact-purchase-options-1"></script>
