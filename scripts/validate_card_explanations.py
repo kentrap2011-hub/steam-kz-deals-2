@@ -99,16 +99,34 @@ def main():
             'path': path,
             'sample_size': min(len(items), sample_limit),
             'item_count': len(items),
+        'personalized_item_count': len(personalized),
+        'unresolved_item_count': len(unresolved),
             'validation_mode': 'preserve_existing_semantics',
             'reason': 'pending_ai_queue',
         }, ensure_ascii=False, indent=2))
         print('CARD_EXPLANATION_VALIDATION=SKIP reason=pending_ai_queue_preserve_existing_semantics')
         return
 
-    sample = items[:sample_limit]
+    personalized = [
+        game for game in items
+        if game.get('analysis_state') in {None, 'analyzed_fit'}
+    ]
+    unresolved = [
+        game for game in items
+        if game.get('analysis_state') in {'analysis_incomplete', 'not_analyzed'}
+    ]
+    sample = personalized[:sample_limit]
     errors = []
     for game in sample:
         errors.extend(validate_item(game))
+    for game in unresolved:
+        title = str(game.get('title') or game.get('id') or '<unknown>')
+        if game.get('total_score') is not None or game.get('score_breakdown') is not None:
+            errors.append(f'{title}: unresolved progressive card exposes personalized score')
+        if game.get('why_fit'):
+            errors.append(f'{title}: unresolved progressive card exposes why_fit')
+        if game.get('risks') or game.get('risk_status') or game.get('risk_provenance'):
+            errors.append(f'{title}: unresolved progressive card exposes personal risk conclusion')
 
     summary = {
         'path': path,
