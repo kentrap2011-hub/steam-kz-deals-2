@@ -54,21 +54,9 @@ function sourceLabel(){
   return `Данные: ${new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}).format(d)}`;
 }
 function urgencyFirstEnabled(){return !!state.settings?.urgency_first}
-function scoreOf(g){const n=Number(g?.total_score);return Number.isFinite(n)?n:-Infinity}
-function titleCompare(a,b){return String(a?.title||'').localeCompare(String(b?.title||''),'ru',{sensitivity:'base'})}
-function automaticOrderGames(){
-  const ordered=[...items];
-  if(urgencyFirstEnabled()){
-    return ordered.sort((a,b)=>{
-      const ar=Number(a.priority_rank),br=Number(b.priority_rank);
-      if(Number.isFinite(ar)&&Number.isFinite(br)&&ar!==br)return ar-br;
-      const scoreDiff=scoreOf(b)-scoreOf(a);if(scoreDiff)return scoreDiff;
-      return titleCompare(a,b);
-    });
-  }
-  return ordered.sort((a,b)=>{const scoreDiff=scoreOf(b)-scoreOf(a);return scoreDiff||titleCompare(a,b)});
-}
-function rankingSignature(){return `urgency:${urgencyFirstEnabled()?1:0}|`+items.map(g=>`${g.id}:${g.priority_rank??''}:${g.total_score??''}`).join('|')}
+function progressiveUi(){return window.ProgressivePersonalizationUI}
+function automaticOrderGames(){return progressiveUi().sortItems(items,urgencyFirstEnabled())}
+function rankingSignature(){return `urgency:${urgencyFirstEnabled()?1:0}|`+items.map(g=>`${g.id}:${g.analysis_state??''}:${g.analysis_tier??''}:${g.priority_rank??''}:${g.total_score??''}:${g.deterministic_purchase_score??''}`).join('|')}
 function canonicalQueueIds(){
   const normal=[],manual=[];
   for(const g of automaticOrderGames()){
@@ -112,11 +100,19 @@ function counts(){
   for(const g of items){const r=rec(g.id);if(r.status==='liked')liked++;if(r.status==='final')final++;if(g.wishlist)wishlist++;if(isNew(g.id))newCount++;if((r.seen||0)>0)repeat++;else unseen++}
   return {liked,final,wishlist,newCount,repeat,unseen};
 }
+function renderProcessingStatus(){
+  const status=data.processing_status||{};
+  const lines=progressiveUi().processingLines(status);
+  $('processingStats').innerHTML=lines.map(([label,value])=>`<div class="processing-stat"><b>${value}</b><span>${escapeHtml(label)}</span></div>`).join('');
+  const stamp=status.last_accepted_analysis_at_utc?fmtDate(status.last_accepted_analysis_at_utc):null;
+  $('processingUpdated').textContent=stamp?`Последний успешный разбор: ${stamp}`:'Последний успешный разбор: пока нет';
+}
 function renderStats(){
   const c=counts();
   $('stats').innerHTML=`<div class="stat"><b>${c.newCount}</b><span>🆕 новые</span></div><div class="stat"><b>${c.unseen}</b><span>не смотрел</span></div><div class="stat"><b>${c.liked}</b><span>♡ интересно</span></div><div class="stat"><b>${c.repeat}</b><span>🔁 видел</span></div>`;
   $('feedCount').textContent=`(${queueCount()})`;$('wishlistCount').textContent=c.wishlist?`(${c.wishlist})`:'';$('likedCount').textContent=c.liked?`(${c.liked})`:'';$('finalCount').textContent=c.final?`(${c.final})`:'';
   $('freshness').textContent=sourceLabel();
+  renderProcessingStatus();
 }
 function renderTabs(){
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===currentTab));
@@ -167,7 +163,7 @@ function renderPackageDeal(g){
   const savings=p.savings_rub;
   const savingsPct=p.savings_percent_vs_standalone;
   const titles=(p.covered_visible_titles||[]).filter(Boolean).map(escapeHtml).join(', ');
-  const drivesRank=g.score_breakdown?.purchase_route==='fixed_package';
+  const drivesRank=g.score_breakdown?.purchase_route==='fixed_package'||g.progressive_purchase_breakdown?.purchase_route==='fixed_package';
   const rankNote=drivesRank?'Этот набор сейчас определяет балл выгодности покупки и поднимает игру в рейтинге.':'Набор выгоднее покупки этих игр по отдельности, но текущий балл покупки выше или равен у одиночного варианта.';
   const economics=[
     standalone!=null?`по отдельности ${fmtRub(standalone)}`:null,
@@ -250,12 +246,19 @@ function renderFeed(){
   currentShot=0;setShot(g,0);preloadNearby();
   const r=rec(g.id);$('newBadge').classList.toggle('hidden',!isNew(g.id));$('repeatBadge').classList.toggle('hidden',!(r.seen>0));$('repeatBadge').textContent=r.seen?`🔁 Показ №${r.seen+1}`:'';
   const p=g.better_purchase_option;const packageBadge=p&&p.package_price_rub!=null?` · 🎁 ${Number(p.covered_visible_game_count)||0} игр за ${fmtRub(p.package_price_rub)}`:'';
+  const personalized=g.analysis_state==='analyzed_fit';
+  $('analysisBadge').textContent=progressiveUi().labelFor(g);
+  $('analysisBadge').className=`analysis-badge ${g.analysis_state||'unknown'}`;
   $('title').textContent=g.title;$('decision').textContent=`${g.decision||''}${packageBadge}`;$('price').textContent=fmtRub(g.current_price_rub);$('oldPrice').textContent=fmtRub(g.original_price_rub);$('discount').textContent=`−${g.discount_percent}%`;
   $('histPrice').textContent=g.previously_free?'Ранее была бесплатной':`Ист. минимум: ${g.historical_minimum_rub==null?'нет данных':fmtRub(g.historical_minimum_rub)}`;
   $('deadline').textContent=deadlineText(g.sale_end_utc);$('summary').textContent=g.summary||'Краткое описание пока недоступно.';
   const gp=(g.gameplay_points||[]).filter(Boolean);$('gameplaySection').classList.toggle('hidden',!gp.length);$('gameplay').innerHTML=gp.map(x=>`<li>${escapeHtml(x)}</li>`).join('');
-  textList($('whyFit'),g.why_fit,'Персональная причина пока не подготовлена.');renderRisk(g);renderPriority(g);
-  $('fit').textContent=`Соответствие вкусу: ${g.fit==='strong'?'сильное':'умеренное'}`;$('wishlist').classList.toggle('hidden',!g.wishlist);renderOffers(g);
+  $('personalizationSection').classList.toggle('hidden',!personalized);
+  if(personalized){textList($('whyFit'),g.why_fit,'Персональная причина пока не подготовлена.');renderRisk(g);renderPriority(g)}
+  else{$('prioritySection').classList.add('hidden');$('riskStatus').classList.add('hidden');$('whyFit').textContent='';$('risks').textContent=''}
+  $('fit').classList.toggle('hidden',!personalized);
+  $('fit').textContent=personalized?`Соответствие вкусу: ${g.fit==='strong'?'сильное':'умеренное'}`:'';
+  $('wishlist').classList.toggle('hidden',!g.wishlist);renderOffers(g);
   $('likeBtn').textContent=r.status==='liked'?'♡ Уже интересно':'♡ Интересно';
   $('finalBtn').textContent=r.status==='final'?'🏆 Уже в финале':'🏆 В финал';
 }
@@ -299,7 +302,7 @@ function toggleUrgencyFirst(){
   buildQueue();
   saveState();
   render();
-  notify(urgencyFirstEnabled()?'Срочные игры подняты вверх':'Срочность отключена — порядок по баллам');
+  notify(urgencyFirstEnabled()?'Срочность включена внутри каждого уровня разбора':'Срочность отключена — порядок внутри уровней по баллам');
 }
 function focusGame(id){
   const idx=state.queue.ids.indexOf(id);if(idx<0)return;state.queue.cursor=idx;currentTab='feed';$('searchDialog').open&&$('searchDialog').close();render();window.scrollTo({top:0,behavior:'smooth'});
