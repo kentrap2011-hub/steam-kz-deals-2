@@ -68,7 +68,7 @@
   "visualization_consumption": {
     "mode": "pull_on_demand",
     "scheduled_delivery": false,
-    "user_behavior": "The user opens the visualization at any convenient time during the day and sees the already prepared frozen daily snapshot.",
+    "user_behavior": "The user opens the visualization at any convenient time and sees the current GitHub-prepared deterministic catalogue with a progressively updated semantic overlay; opening the site never starts semantic or commercial work.",
     "source_artifact": "data/production/visual/current.json",
     "allowed_work": [
       "read the prepared visual payload",
@@ -125,5 +125,15 @@
     "legacy_ready_text": "data/production/daily_ready/latest.md",
     "legacy_ready_manifest": "data/production/daily_ready/latest.json",
     "legacy_failure_status": "data/production/daily_ready/preparation_status.json"
+  },
+  "progressive_personalization_phase_a": {
+    "contract": "config/progressive_personalization_contract.json",
+    "status": "active",
+    "deterministic_catalogue_publishable_before_semantic_closure": true,
+    "semantic_queue_zero_required_for_publication": false,
+    "rule": "The current deterministic catalogue may be published before semantic closure. GitHub projects per-item progressive state and counts; semantic completeness remains observable but is not a global availability gate. Hard source-integrity, current-offer, business and identity gates remain fail-closed.",
+    "ui_rule": "The site remains a read-only consumer of the GitHub-produced progressive payload.",
+    "pass1_active": false,
+    "pass2_active": false
   }
 }
