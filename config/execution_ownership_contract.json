@@ -113,5 +113,21 @@
   },
   "completion_definition": {
     "rule": "A pipeline defect is fixed only when the intended owning component can perform the work automatically and the end-to-end validation succeeds. Manual backlog progress is evidence or temporary recovery data, not proof that the architecture is fixed. A one-off throughput benchmark measures capacity only and does not itself prove production architecture completeness or select a production limit."
+  },
+  "progressive_personalization_phase_a": {
+    "contract": "config/progressive_personalization_contract.json",
+    "owner": "github_control_plane",
+    "github_owns": [
+      "current_candidate_scope",
+      "analysis_state_projection",
+      "aggregate_processing_counts",
+      "tier_ordering_inputs",
+      "validation",
+      "persistence",
+      "publication"
+    ],
+    "browser_role": "read_only_presentation",
+    "scheduled_chatgpt_change": false,
+    "pass1_pass2_queue_or_retry_added": false
   }
 }
