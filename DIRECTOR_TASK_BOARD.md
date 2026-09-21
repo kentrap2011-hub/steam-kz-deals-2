@@ -27,63 +27,42 @@ Immediate active work:
 - bounded CONFIGURE task for a dedicated Progressive PASS 1 Scheduled Task is assigned to `СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`;
 - PASS 1 production execution and PASS 2 remain paused until that configuration is accepted and live acceptance is separately resumed.
 
-## ACTIVE — Progressive PASS 1 Scheduled worker dedup fix
+## ACCEPTED — Progressive PASS 1 Scheduled worker dedup fix
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_WORKER_DEDUP_FIX_01.md`
 
-Mode:
-`IMPLEMENT / RUNTIME FIX — NO PRODUCTION RUN`
-
-Worker slot:
-`СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`
-
-Trigger:
-- user Active Scheduled Tasks UI shows three active `Progressive PASS 1 Worker` entries;
-- previous configure report claimed exactly one;
-- configure acceptance is suspended until deduplication is verified.
-
-Goal:
-- inspect all three task IDs/configs;
-- keep exactly one correctly configured task;
-- disable/delete only the duplicate Progressive PASS 1 tasks;
-- no `Run now`, no PASS 1, no PASS 2.
-
-Expected report:
+Report:
 `reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-dedup-fix-01.md`
 
-## ACTIVE — Progressive PASS 1 Scheduled worker configure
+Final status:
+`complete_deduplicated_not_run`
+
+Director acceptance:
+- user discovered three active `Progressive PASS 1 Worker` entries;
+- user manually deleted two duplicates;
+- user confirmed exactly one active `Progressive PASS 1 Worker` remains;
+- deleted duplicate IDs were unavailable and were not invented;
+- no `Run now`, PASS 1, PASS 2, or Taste/Nightly mutation occurred;
+- repository PASS 1 state remained unattempted at closeout.
+
+Next step:
+- bounded live acceptance may proceed with a single manual `Run now`;
+- after that run completes, verify PASS 1 artifacts/state before any second manual run.
+
+## ACCEPTED — Progressive PASS 1 Scheduled worker configure
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_WORKER_CONFIGURE_01.md`
 
-Mode:
-`CONFIGURE / VALIDATE — NO PRODUCTION RUN`
-
-Worker slot:
-`СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`
-
-User authorization:
-- explicit authorization received to hand this bounded CONFIGURE task to ЧАТ 1.
-
-Director classification:
-- owner-scope user UI observation resolved the runtime branch as `missing_runtime_entrypoint` for an active dedicated Progressive PASS 1 Scheduled Task;
-- historical/completed/paused tasks are not to be repurposed.
-
-Goal:
-- create exactly one dedicated `Progressive PASS 1 Worker` Scheduled Task bound by loader to the canonical PASS 1 prompt/contract;
-- validate identity/state/schedule/prompt binding;
-- do not run it.
-
-Expected report:
+Report:
 `reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-configure-01.md`
 
-Production boundary:
-- no `Run now`;
-- no Tower Dominion semantic execution;
-- no PASS 1 result/attempt;
-- no retry/backlog drain;
-- no PASS 2.
+State:
+- dedicated Progressive PASS 1 Scheduled Task exists;
+- duplicate cardinality issue discovered after configure was resolved by DEDUP FIX 01;
+- exactly one active worker remains by user confirmation;
+- no production run occurred during configure/dedup.
 
 ## ACCEPTED — PASS 1 Scheduled worker entrypoint audit
 
