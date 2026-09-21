@@ -135,5 +135,17 @@
     "ui_rule": "The site remains a read-only consumer of the GitHub-produced progressive payload.",
     "pass1_active": false,
     "pass2_active": false
+  },
+  "progressive_personalization_phase_b_pass1": {
+    "contract": "config/progressive_pass1_contract.json",
+    "status": "active",
+    "pass1_active": true,
+    "pass2_active": false,
+    "publication_waits_for_pass1_completion": false,
+    "item_level_progress": true,
+    "one_attempt_per_current_item_binding": true,
+    "commercial_refresh_does_not_reset_semantic_attempts": true,
+    "phase_a_catalogue_remains_fallback": true,
+    "rule": "GitHub prepares and accepts independent PASS 1 item work while the current deterministic catalogue remains publishable. Accepted progress may rebuild the visual immediately; remaining PASS 1 work never blocks publication."
   }
 }
