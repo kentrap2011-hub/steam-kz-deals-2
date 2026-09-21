@@ -14,14 +14,13 @@
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 - Director project state must be reconstructed from canonical compact state, not from conversational momentum. After a Director chat is retired, continue only in a NEW physical Director conversation using `DIRECTOR_BOOTSTRAP.md`.
 
-## DIRECTOR CHAT ROTATION — READY
+## DIRECTOR CHAT ROTATION — COMPLETED
 
 State:
-- the current physical Director conversation is retired after issuing the restart handoff;
-- continue project orchestration only in a NEW physical Director chat;
-- bootstrap entrypoint: `DIRECTOR_BOOTSTRAP.md`;
-- the new Director starts with latest `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, `DIRECTOR_BOOTSTRAP.md`, and `DIRECTOR_TASK_BOARD.md`;
-- do not reconstruct state from the old Director transcript unless canonical compact state is genuinely insufficient.
+- the previous physical Director conversation is retired;
+- the current Director conversation was started from `DIRECTOR_BOOTSTRAP.md` and canonical compact state;
+- continue orchestration from the current Director conversation while its state remains consistent;
+- do not reconstruct project truth from the retired Director transcript unless canonical compact state is genuinely insufficient.
 
 Immediate active work after restart:
 - PASS 1 Scheduled worker entrypoint audit is complete with `complete_insufficient_observability`;
