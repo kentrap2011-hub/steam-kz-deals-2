@@ -4,7 +4,7 @@
 - Repository: `kentrap2011-hub/steam-kz-deals-2`
 - Source of truth: `main`
 - Mode: `CANONICAL RULE AMENDMENT / NO PASS2 IMPLEMENTATION`
-- Worker slot: `СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`
+- Worker slot: `НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
 
 ## User-authoritative correction
 PASS 2 must not evaluate an `analysis_incomplete` item before Taste Steam Review Dossier has produced current, exact-compatible accepted dossier evidence for that same game/work identity.
@@ -25,11 +25,11 @@ A stale, mismatched, wrong-app, wrong-work, or incompatible dossier must not unl
 ## Goal
 Amend the canonical Progressive Personalized Deals architecture/rules so the Dossier-ready prerequisite above is explicit and machine-designable before PASS 2 implementation.
 
-Also reconcile the prior rule that PASS 2 starts only after full PASS 1 coverage with the newer Director/user direction that PASS 2 may run opportunistically in parallel with ongoing PASS 1, provided:
-- PASS 1 coverage remains higher priority;
-- only already-incomplete items are candidates;
-- the Dossier-ready gate is satisfied;
-- PASS 2 cannot starve PASS 1;
+Also reconcile the prior rule that PASS 2 starts only after full PASS 1 coverage with the newer Director/user direction that PASS 1 and PASS 2 operate independently in parallel:
+- PASS 1 continues processing not-yet-attempted items;
+- PASS 2 considers only already-incomplete items;
+- the Dossier-ready gate must be satisfied before a specific item becomes PASS 2 eligible;
+- neither pass waits for or blocks the other;
 - one automatic PASS 2 recovery attempt per eligible semantic generation/work identity remains bounded;
 - no infinite retry loop exists.
 
@@ -40,7 +40,7 @@ Also reconcile the prior rule that PASS 2 starts only after full PASS 1 coverage
 4. Persist the user-authoritative rule in the appropriate canonical contract/rules/decision documentation.
 5. Define exact PASS 2 eligibility in GitHub-owned terms, including exact-compatible accepted Dossier binding and attempt-budget behavior.
 6. Define how Dossier acceptance makes a pending incomplete item eligible without requiring interactive intervention.
-7. Define precedence so PASS 1 remains coverage-first and PASS 2 cannot starve it.
+7. Define independent parallel ownership so PASS 1 and PASS 2 do not wait for or block each other.
 8. Do NOT implement or activate PASS 2 runtime, scheduler, worker, queue processor, or production execution in this task.
 9. Do NOT change PASS 1 worker behavior or Dossier evidence semantics except where documentation references need reconciliation.
 10. Do NOT run Scheduled Tasks.
@@ -50,7 +50,7 @@ Also reconcile the prior rule that PASS 2 starts only after full PASS 1 coverage
 - PASS2-GATE-02: waiting for Dossier consumes zero PASS 2 attempts.
 - PASS2-GATE-03: accepted exact-compatible Dossier unlocks only the matching incomplete item/work identity.
 - PASS2-GATE-04: stale/mismatched Dossier cannot unlock recovery.
-- PASS2-GATE-05: PASS 2 may operate opportunistically while PASS 1 continues, but PASS 1 has priority.
+- PASS2-GATE-05: PASS 1 and PASS 2 may operate independently in parallel; neither waits for or blocks the other.
 - PASS2-GATE-06: no PASS 2 infinite retry; bounded automatic attempt budget remains explicit.
 - PASS2-GATE-07: GitHub owns eligibility/order/state/attempt accounting.
 - PASS2-GATE-08: no runtime implementation or production execution occurred.
