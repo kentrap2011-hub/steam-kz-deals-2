@@ -147,7 +147,10 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
         projection = projection if isinstance(projection, dict) else {}
 
         readiness = negative_readiness(taste_entry)
-        current_bound = projection.get('status') == 'cache_hit'
+        current_bound = (
+            projection.get('status') == 'cache_hit'
+            or game.get('analysis_semantic_source') == 'progressive_pass1'
+        )
         verdict = taste_entry.get('verdict')
         if not current_bound or verdict != 'INCLUDE':
             unresolved.append({
@@ -238,7 +241,7 @@ def apply_to_current_visual():
         for row in load_jsonl(PURCHASE_CONTEXT)
         if row.get('family_id')
     }
-    taste_entries = refiner.effective_taste_entries()
+    taste_entries = progressive_personalization.effective_taste_entries()
     projections = (load_json(TASTE_PROJECTION).get('entries') or {}) if TASTE_PROJECTION.exists() else {}
 
     before = json.dumps(ready, ensure_ascii=False, sort_keys=True, separators=(',', ':'))
