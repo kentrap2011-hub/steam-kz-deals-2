@@ -22,9 +22,9 @@
   "completed_required_count": 12,
   "remaining_required_count": 708,
   "full_backlog_complete": false,
-  "candidate_count": 1,
+  "candidate_count": 2,
   "valid_candidate_count": 0,
-  "invalid_candidate_count": 1,
+  "invalid_candidate_count": 2,
   "invalid_expected_group": {
     "sequence": 5,
     "group_sha256": "c7df88a7b625aa61cf040abe21ce79e51b287066818abf5ca149657b5dde4cbd",
@@ -57,6 +57,32 @@
       ],
       "artifact_sha256": "0de2550d2b9284fc4de987e579d52e7cf3ffb9adf6d7beca7bfddd14de1753d9",
       "validator_error": "observation 0 evidence_languages must exactly equal the canonical bound-record language projection"
+    },
+    {
+      "snapshot_id": "04298ca0b80d00cd819af116323de3d1c4906d6ed71e84f40c15c6978d0d08d8",
+      "sequence": 6,
+      "group_sha256": "363ec7386730ac089c2987d8e424349f8068a3a60db8ef40d6f271973a48fffd",
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "validation": "invalid",
+      "canonical_position": "later_buffered",
+      "artifact_paths": [
+        "data/ai_inbox/taste_steam_review_dossiers/04298ca0b80d00cd819af116323de3d1c4906d6ed71e84f40c15c6978d0d08d8--g000006--363ec7386730ac089c2987d8e424349f8068a3a60db8ef40d6f271973a48fffd.json"
+      ],
+      "artifact_sha256": "6459658100bb895ffb9d970261fe6aba6bbc8349ca9a5b3151d47ce96276a188",
+      "validator_error": "provenance.player_feedback_records[0] older feedback cannot inherit recent parent-source freshness"
     }
   ],
   "malformed_current_snapshot_artifacts": [],
