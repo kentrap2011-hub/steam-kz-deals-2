@@ -26,11 +26,11 @@ def compatible_visual(source='S'):
         ],
         'progressive_personalization': {
             'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
-            'phase': 'phase_a',
+            'phase': 'phase_b',
         },
         'processing_status': {
             'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
-            'phase': 'phase_a',
+            'phase': 'phase_b',
             'total_current_candidates': 4,
             'analyzed_success_count': 2,
             'analyzed_fit_count': 1,
@@ -38,10 +38,16 @@ def compatible_visual(source='S'):
             'analysis_incomplete_count': 1,
             'not_analyzed_count': 1,
             'normal_visible_count': 3,
+            'pass1_active': True,
+            'pass1_total_scope': 4,
+            'pass1_attempted_count': 3,
+            'pass1_remaining_count': 1,
+            'pass2_active': False,
         },
         'production_contract': {
             'source_progressive_candidate_context_blob_sha': 'CTX',
             'progressive_personalization_contract_blob_sha': 'CONTRACT',
+            'progressive_pass1_state_blob_sha': 'PASS1',
         },
     }
 
@@ -60,6 +66,7 @@ def classify(visual, *, source='S', count=719, context_count=719, store_source='
         progressive_context_count=context_count,
         progressive_context_blob='CTX',
         progressive_contract_blob='CONTRACT',
+        pass1_state_blob='PASS1',
     )
     return integrity, compatible, reason
 
@@ -99,6 +106,16 @@ def main():
     assert integrity is True
     assert compatible is False
     assert reason == 'progressive_context_provenance_mismatch'
+
+
+    # Phase B semantic progress must force a full rebuild when the accepted
+    # PASS 1 state blob changes, even if commercial lineage is otherwise fresh.
+    stale_pass1 = compatible_visual()
+    stale_pass1['production_contract']['progressive_pass1_state_blob_sha'] = 'OLD-PASS1'
+    integrity, compatible, reason = classify(stale_pass1)
+    assert integrity is True
+    assert compatible is False
+    assert reason == 'progressive_pass1_state_provenance_mismatch'
 
     # ROUTE-04: invalid source identity remains fail-closed and must never be
     # treated as a compatible bounded-refresh candidate.
