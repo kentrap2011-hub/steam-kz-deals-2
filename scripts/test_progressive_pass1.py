@@ -226,16 +226,38 @@ def main():
     assert replay_state == state
     assert replay_receipts[0]['status'] == 'replay_ignored'
 
-    # PASS1-09: stale/mismatched identity is rejected without mutating state.
+    # PASS1-09: an artifact outside the current deterministic path is stale and
+    # cannot mutate the current item. Wrong content published at the exact current
+    # path is the item's one attempt and becomes invalid_semantic_result.
     stale = dict(fit, taste_fingerprint='wrong')
     stale_state, stale_receipts = progressive_pass1.process_submission_documents(
+        work,
+        initial_state,
+        [('old-generation--old-work.json', stale, None)],
+        accepted_at_utc='2026-09-21T00:00:00+00:00',
+    )
+    assert stale_state == initial_state
+    assert stale_receipts[0]['status'] == 'rejected_stale_or_mismatched'
+
+    wrong_identity_state, wrong_identity_receipts = progressive_pass1.process_submission_documents(
         work,
         initial_state,
         [(Path(by_family['game:1']['submission_path']).name, stale, None)],
         accepted_at_utc='2026-09-21T00:00:00+00:00',
     )
-    assert stale_state == initial_state
-    assert stale_receipts[0]['status'] == 'rejected_stale_or_mismatched'
+    assert wrong_identity_state['entries']['game:1']['outcome'] == 'analysis_incomplete'
+    assert wrong_identity_state['entries']['game:1']['analysis_issue_code'] == 'invalid_semantic_result'
+    assert wrong_identity_receipts[0]['status'] == 'accepted_as_incomplete_invalid_result'
+
+    malformed_state, malformed_receipts = progressive_pass1.process_submission_documents(
+        work,
+        initial_state,
+        [(Path(by_family['game:4']['submission_path']).name, None, 'JSONDecodeError:test')],
+        accepted_at_utc='2026-09-21T00:00:00+00:00',
+    )
+    assert malformed_state['entries']['game:4']['outcome'] == 'analysis_incomplete'
+    assert malformed_state['entries']['game:4']['analysis_issue_code'] == 'invalid_semantic_result'
+    assert malformed_receipts[0]['status'] == 'accepted_as_incomplete_invalid_result'
 
     # Worker/tool failure is a typed incomplete outcome and does not require retry.
     worker_failure = submission(
