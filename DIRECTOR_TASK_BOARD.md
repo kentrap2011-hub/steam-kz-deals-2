@@ -28,6 +28,22 @@ Immediate active work:
 - current published projection reflects accepted PASS 1 results;
 - PASS 2 remains inactive and requires separate authorization.
 
+## ACTIVE — Progressive PASS 2 Dossier-ready gate amendment
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PASS2_DOSSIER_READY_GATE_AMENDMENT_01.md`
+
+Mode:
+`CANONICAL RULE AMENDMENT / NO PASS2 IMPLEMENTATION`
+
+User-authoritative correction:
+- PASS 2 may evaluate an incomplete item only after current exact-compatible accepted Dossier evidence exists for that same work identity;
+- waiting for Dossier consumes no PASS 2 attempt;
+- PASS 2 may later run opportunistically alongside ongoing PASS 1, with PASS 1 priority and no starvation.
+
+Expected report:
+`reviews/worker_reports/progressive-pass2-dossier-ready-gate-amendment-01.md`
+
 ## ACCEPTED — Progressive PASS 1 Scheduled worker dedup fix
 
 Task:
