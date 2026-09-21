@@ -603,11 +603,14 @@
 
 
 ### Progressive PASS 1 visual rebuild trigger fix 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_director_acceptance`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_VISUAL_REBUILD_TRIGGER_FIX_01.md`;
-- scope: только missing GitHub-owned downstream edge accepted PASS 1 ingest -> existing progressive visual rebuild/publication;
-- architecture preflight: PASS 1 ingest, visual projection/rebuild и publication остаются GitHub-owned; existing build/deploy workflows must be reused;
-- Scheduled PASS 1 worker, incomplete retry и PASS 2 не запускать;
+- root cause: existing `Build daily visual payload` had progressive state-provenance rebuild logic but did not subscribe to completed `Ingest Progressive PASS 1 item` workflow runs;
+- implementation commit: `831e39109e6175abb3883be596691d039efc2baf`; existing GitHub-owned build workflow now includes PASS 1 ingest in its `workflow_run` upstream list, with ROUTE-00 regression;
+- activation build run `35642575257` succeeded and rebuilt current accepted state to visual commit `22cc8c47635fb8a6521446a4395eac22460e7e95`;
+- deploy run `35642669590` succeeded with `VISUAL_PUBLICATION_OUTCOME=fresh`;
+- current scope remains total `493`, attempted `5`, remaining `488`, expired-before-PASS1 `228`; current projection is 3 fit / 2 incomplete / 488 not-analyzed; PASS 2 inactive;
+- PASS 1 state/work blobs were unchanged by activation, no semantic result artifact was created, Scheduled PASS 1 worker/incomplete retry/PASS 2 were not run;
 - durable report: `reviews/worker_reports/progressive-personalized-deals-pass1-visual-rebuild-trigger-fix-01.md`.
 
 ## Worker in progress — 2026-09-21
