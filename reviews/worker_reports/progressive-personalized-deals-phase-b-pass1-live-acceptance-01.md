@@ -13,7 +13,11 @@ The previous `blocked_external` status is superseded. The user invoked exactly o
 
 The scheduled semantic path is therefore externally invocable and the former execution-interface blocker is resolved.
 
-However, the completed invocation did not satisfy this acceptance task's bounded end-to-end contract: it processed multiple PASS 1 items in one invocation, and the accepted PASS 1 state did not trigger a post-ingest progressive visual rebuild.
+The invocation processed multiple consecutive PASS 1 items. This is **valid current production behavior**, because the canonical `config/progressive_pass1_worker_prompt.md` explicitly permits multiple consecutive items in one invocation while budget safely permits.
+
+The older LIVE ACCEPTANCE task's "exactly one item" boundedness requirement is therefore classified as an **acceptance-criterion mismatch with the newer canonical production worker contract**, not as a production defect and not as a reason to introduce a one-item production mode.
+
+The actual confirmed defect is separate: accepted PASS 1 state did not trigger a post-ingest progressive visual rebuild, so the published visual/site state remained stale.
 
 ## 2. Baseline
 
@@ -63,15 +67,19 @@ That single Scheduled Task invocation produced multiple consecutive create-only 
 5. Star Traders: Frontiers — result commit `efa967e73e019ccf714929f9b0ce4aefe0a958d8`;
 6. Lucid Blocks — result commit `6b49999bc634ba47f5a6723b159732b751521773`.
 
-This is consistent with the normal production worker prompt, which explicitly allows multiple consecutive items per invocation while budget permits.
+This is consistent with the current canonical production worker prompt, which explicitly states:
 
-It is **not** consistent with this LIVE ACCEPTANCE task, whose critical boundedness requires exactly one real PASS 1 item and explicitly prohibits processing a second item or backlog drain.
+`You may process multiple consecutive items in one invocation for efficiency`
+
+and also states that there is no fixed batch quota and processing may continue sequentially while invocation/tool budget safely permits.
 
 Therefore:
 
 - exactly one manual Scheduled Task invocation occurred;
-- more than one PASS 1 item attempt occurred inside that invocation;
-- LIVE-02 and LIVE-12 are not satisfied.
+- multiple consecutive PASS 1 item attempts inside that invocation are **contract-valid production behavior**;
+- the older LIVE-02 / LIVE-12 one-item boundedness checks are stale relative to the canonical production worker contract;
+- this mismatch is an acceptance-task specification issue, **not** a production runtime defect;
+- no new one-item production mode is required or recommended.
 
 No retry of an incomplete item occurred and PASS 2 was not started.
 
@@ -228,17 +236,17 @@ The pre-existing site/visual baseline remains available, but LIVE-10's required 
 ## 9. LIVE-01..12
 
 - LIVE-01 — **PASS**: Tower Dominion was the exact GitHub-owned head item at acceptance start.
-- LIVE-02 — **FAIL / NEEDS_FIX**: one manual `Run now` produced multiple real PASS 1 item attempts; acceptance required exactly one item attempt.
+- LIVE-02 — **ACCEPTANCE-CRITERION MISMATCH / NOT A PRODUCTION DEFECT**: the older task expected exactly one item attempt, but the current canonical worker contract explicitly permits multiple consecutive items in one invocation.
 - LIVE-03 — **PASS**: PASS 2 remained inactive; no retry loop or incomplete-item retry occurred.
 - LIVE-04 — **PASS**: Tower Dominion result was created at the exact prepared create-only path.
 - LIVE-05 — **PASS**: GitHub ingest workflow validated the PASS 1 contract/item semantics and accepted the result.
 - LIVE-06 — **PASS**: Tower Dominion has a durable `pass1_attempted=true` entry for the exact generation/work_id.
 - LIVE-07 — **PASS**: Tower Dominion's durable outcome is valid typed `analysis_incomplete / insufficient_evidence`.
-- LIVE-08 — **PASS, but outside acceptance bound**: unrelated later work remained runnable; subsequent items were in fact processed. That proves non-blocking item independence but also demonstrates the LIVE-02/LIVE-12 boundedness violation.
+- LIVE-08 — **PASS**: unrelated later work remained runnable and subsequent items were processed independently, consistent with the canonical multi-item worker contract.
 - LIVE-09 — **PASS**: current manifest counts reconcile, `493 = 5 attempted + 488 remaining`; expired count is separately `228`.
 - LIVE-10 — **FAIL / NEEDS_FIX**: no post-ingest progressive visual rebuild occurred; current visual still reports zero attempts and zero analyzed items.
 - LIVE-11 — **NOT ACCEPTED AS POST-RUN PROOF**: the current visual still shows all 720 cards as Tier 3 because it is the pre-run visual, not a post-ingest projection.
-- LIVE-12 — **FAIL / NEEDS_FIX**: a second and additional item executions occurred inside the single Scheduled Task invocation.
+- LIVE-12 — **ACCEPTANCE-CRITERION MISMATCH / NOT A PRODUCTION DEFECT**: the older task prohibited a second item, while the current canonical production worker explicitly allows sequential multi-item processing within one invocation.
 
 ## 10. Blocker / defect classification
 
@@ -246,12 +254,14 @@ The old `blocked_external` classification is resolved.
 
 Current classification: `needs_fix`.
 
-The existing normal Scheduled PASS 1 production path is not compatible with the exact bounded live-acceptance contract in two concrete ways:
+The Director-reviewed classification separates two different issues:
 
-1. the production worker prompt intentionally allows multiple consecutive items per invocation, while LIVE ACCEPTANCE 01 requires exactly one item and forbids a second;
-2. successful PASS 1 ingest updates durable state/work but does not trigger an incremental progressive visual rebuild, leaving the published visual stale relative to accepted state.
+1. **Acceptance-spec mismatch, not a production defect.** LIVE ACCEPTANCE 01 was written with an older "exactly one item" boundedness criterion. The current canonical `config/progressive_pass1_worker_prompt.md` explicitly allows multiple consecutive items in one invocation. The observed multi-item run is therefore valid production behavior. It does not justify a new one-item production mode.
+2. **Confirmed production defect.** Successful PASS 1 ingest updates durable state/work but does not trigger an incremental progressive visual/site rebuild. The published visual therefore remains stale relative to accepted PASS 1 state.
 
-No additional production run is authorized or required to establish these findings.
+Only item 2 is the reason for `needs_fix`.
+
+No additional production run is authorized or required to establish this finding.
 
 ## 11. Status
 
@@ -260,24 +270,26 @@ No additional production run is authorized or required to establish these findin
 What is proven successfully:
 
 - real Scheduled Task invocation works;
-- exact GitHub-owned item selection works;
+- exact GitHub-owned item selection/order works;
+- canonical multi-item sequential processing works;
 - exact create-only result transport works;
 - GitHub ingest/validation works;
 - durable PASS 1 state works;
-- one-attempt state is persisted;
+- one-attempt-per-work-id state is persisted;
 - later work remains independently runnable;
 - PASS 2 remains inactive.
 
-What prevents `complete_live_acceptance`:
+The older one-item acceptance requirement is superseded for production-defect classification by the current canonical worker contract and does **not** block production acceptance by itself.
 
-- the acceptance run was not one-item bounded;
-- the accepted durable state was not reflected by a post-ingest visual/site rebuild.
+What prevents `complete_live_acceptance` is one confirmed defect only:
+
+- accepted durable PASS 1 state was not reflected by a post-ingest progressive visual/site rebuild.
 
 ## 12. Exactly one recommended next step
 
-Return to Director with one bounded follow-up task to reconcile the **live-acceptance execution path** before any further acceptance run: define a canonical one-item acceptance mode that cannot continue to a second item, and ensure accepted PASS 1 ingest triggers the GitHub-owned incremental progressive visual rebuild/publication path.
+Return to Director with one bounded follow-up fix for the **confirmed downstream defect only**: make accepted Progressive PASS 1 ingest trigger the existing GitHub-owned incremental progressive visual rebuild/publication path, then validate that the published visual reflects accepted PASS 1 state.
 
-Do not perform another `Run now`, do not retry incomplete items, and do not start PASS 2 until that bounded path is fixed and validated.
+Do **not** introduce a special one-item production mode merely to satisfy the older acceptance-task wording. Do not perform another `Run now`, retry incomplete items, or start PASS 2 as part of this correction.
 
 ## 13. Exact refs
 
