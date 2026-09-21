@@ -635,3 +635,13 @@
 - current PASS 1 repository state: attempted `0`, remaining `721`, durable state entries `0`, PASS 2 inactive;
 - durable report: `reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-dedup-fix-01.md`.
 
+
+
+## Worker in progress — 2026-09-21
+
+### Progressive PASS 2 dossier-ready gate amendment 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_PROGRESSIVE_PASS2_DOSSIER_READY_GATE_AMENDMENT_01.md`;
+- scope: canonical rule amendment only; no PASS 2 runtime/scheduler/worker/production execution;
+- target: exact-compatible accepted Dossier gate, zero attempt consumption while waiting, independent parallel PASS 1/PASS 2 ownership, bounded one-shot PASS 2 recovery per current semantic generation/work identity;
+- durable report target: `reviews/worker_reports/progressive-pass2-dossier-ready-gate-amendment-01.md`.
