@@ -12,13 +12,16 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## ACTIVE — Progressive personalized deals Phase B / PASS 1
+## ACTIVE — Progressive personalized deals Phase B / PASS 1 freshness activation fix
 
-Task:
+Parent task:
 `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_IMPLEMENT_01.md`
 
+Continuation task:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_FRESHNESS_ACTIVATION_FIX_01.md`
+
 Task ID:
-`progressive-personalized-deals-phase-b-pass1-implement-01`
+`progressive-personalized-deals-phase-b-pass1-freshness-activation-fix-01`
 
 Mode:
 `IMPLEMENT / ACTIVATE / VALIDATE`
@@ -26,44 +29,34 @@ Mode:
 Worker slot:
 `ЧАТ 2`.
 
-User authorization:
-- explicit approval given after Director accepted Phase A.
+Checkpoint status:
+`needs_fix`
 
-Accepted baseline:
-- Phase A is live;
-- 720 current visible games are `not_analyzed` / Tier 3;
-- site publication is independent of semantic queue closure;
-- Phase A remains the required fallback throughout Phase B.
+Accepted checkpoint facts:
+- canonical PASS 1 contracts/state/work/ingest are merged;
+- real GitHub-owned PASS 1 manifest exists with 721 items;
+- attempted = 0, remaining = 721;
+- item-level independent acceptance is proven synthetically;
+- no real PASS 1 item has yet been accepted;
+- no Scheduled PASS 1 worker run is evidenced;
+- Phase A fallback remains live with 720 visible Tier 3 cards;
+- current exact blocker is one freshness regression that prevents Phase B visual activation.
 
-Scope:
-- implement GitHub-owned item-level PASS 1;
-- one first-pass attempt per item/semantic generation;
-- independent item outcomes: `analyzed_fit`, `analyzed_not_fit`, `analysis_incomplete`;
-- compatible cache skips work;
-- coverage-first deterministic order;
-- lightweight semantic analysis only;
-- Dossier/deep recovery not universal PASS 1 prerequisites;
-- transport may batch only if child acceptance/progress is independent;
-- valid siblings/later items cannot be blocked by one invalid child;
-- partial accepted progress must incrementally update the live progressive visual;
-- no PASS 2 implementation or retry loop.
-
-Production safety:
-- Phase A current catalogue must remain publishable if PASS 1 stalls/fails;
-- Scheduled ChatGPT remains bounded data plane; GitHub owns scope/order/state/retry/validation/persistence/counts;
-- do not process the full backlog manually in the worker task.
+Narrow continuation scope:
+- fix only freshness-receipt compatibility for valid Phase A fallback / open Phase B work;
+- rerun normal full visual build/deploy;
+- prove Phase B visual state can be active with remaining work > 0;
+- do not run Scheduled ChatGPT;
+- do not accept a real PASS 1 item in this fix;
+- do not start PASS 2.
 
 Expected report:
 `reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-implement-01.md`
 
-Checkpoint requested after prolonged execution:
-- no durable Phase B report was present on `main` at Director check time;
-- worker must stop scope expansion and write factual checkpoint into the existing expected report path;
-- do not start new implementation surfaces until that checkpoint is committed and reread.
-
 Next decision:
-- Director will inspect the checkpoint and either accept, narrow the remaining blocker, or split Phase B further;
-- PASS 2 remains forbidden.
+- if freshness activation is green, Director authorizes one bounded real PASS 1 item acceptance;
+- if another blocker appears, stop and record it without broadening scope.
+
 
 ## ACCEPTED — Progressive personalized deals Phase A
 
