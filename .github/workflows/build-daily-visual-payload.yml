@@ -14,6 +14,7 @@ on:
       - "scripts/build_final_visual_payload.py"
       - "scripts/progressive_personalization.py"
       - "scripts/test_progressive_personalization.py"
+      - "scripts/test_progressive_unresolved_row_preservation.py"
       - "scripts/progressive_visual_activation_routing.py"
       - "scripts/test_progressive_visual_activation_routing.py"
       - "scripts/build_daily_visual_payload.py"
@@ -740,6 +741,7 @@ jobs:
           set -euo pipefail
           python scripts/validate_priority_ranking.py
           python scripts/test_progressive_personalization.py
+          python scripts/test_progressive_unresolved_row_preservation.py
 
       - name: Validate canonical duration enrichment contract
         shell: bash
