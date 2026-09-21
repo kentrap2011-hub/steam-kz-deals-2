@@ -49,18 +49,20 @@ def cache_entries(doc):
     return entries if isinstance(entries, dict) else {}
 
 
-def effective_taste_entries():
-    """Effective semantic entries for downstream Tier-1 rendering.
-
-    Existing exact-compatible Taste cache remains the fast path. Current PASS 1
-    fit outcomes are a separate lightweight semantic source and may supply a
-    minimal Tier-1 semantic view without mutating the canonical V5 Taste cache.
-    """
+def canonical_taste_entries():
     merged = dict(cache_entries(load_json(TASTE_CACHE))) if TASTE_CACHE.exists() else {}
     if TASTE_OVERLAY.exists():
         merged.update(cache_entries(load_json(TASTE_OVERLAY)))
-    if progressive_pass1.STATE.exists():
-        merged.update(progressive_pass1.current_fit_semantic_entries())
+    return merged
+
+
+def effective_taste_entries():
+    """Tier-1 rendering view with canonical cache precedence over PASS 1."""
+    canonical = canonical_taste_entries()
+    pass1 = progressive_pass1.current_fit_semantic_entries() if progressive_pass1.STATE.exists() else {}
+    merged = dict(pass1)
+    # Exact-compatible canonical Taste remains the stronger reusable source.
+    merged.update(canonical)
     return merged
 
 
@@ -147,7 +149,7 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
     load_contract()
     context_rows = context_rows if context_rows is not None else load_jsonl(PROGRESSIVE_CONTEXT)
     projection_doc = projection_doc if projection_doc is not None else load_json(TASTE_PROJECTION)
-    taste_entries = taste_entries if taste_entries is not None else effective_taste_entries()
+    taste_entries = taste_entries if taste_entries is not None else canonical_taste_entries()
     projections = projection_doc.get('entries') or {}
     pass1_state_doc = progressive_pass1.load_state()
     queue_rows = progressive_pass1.load_jsonl(progressive_pass1.TASTE_QUEUE)
