@@ -72,34 +72,35 @@ Known facts from that acceptance:
 
 Important: the existence of an actual correctly-bound Scheduled PASS 1 runtime entrypoint is NOT yet accepted as fact.
 
-## Active audit
+## Completed PASS 1 entrypoint audit
 
-Prepared task:
+Task:
 `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_WORKER_ENTRYPOINT_AUDIT_01.md`
 
-Mode:
-`READ-ONLY / ENTRYPOINT + OWNERSHIP AUDIT`
-
-Assigned slot:
-`НОВЫЙ ЧАТ — ЧАТ 2`
-
-The previous physical ЧАТ 2 is retired/overloaded and must not be reused.
-
-The audit must distinguish:
-1. repository PASS 1 worker contract/prompt;
-2. actual Scheduled Task/runtime entrypoint;
-3. actual callable execution surface.
-
-It must compare Progressive PASS 1 with:
-- `Taste Semantic Producer`;
-- `Taste Steam Review Dossier`.
-
-No Scheduled Task run, reconfiguration, PASS 1 attempt, Tower Dominion analysis, backlog drain or PASS 2 is allowed in the audit.
-
-Expected report:
+Report:
 `reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-entrypoint-audit-01.md`
 
-As of this bootstrap refresh, creation of the audit task is confirmed; execution of that new ЧАТ 2 audit has not been confirmed by the user yet.
+Final status:
+`complete_insufficient_observability`
+
+Accepted result:
+- the repository PASS 1 contract/prompt exists;
+- Phase B created no new independent scheduler;
+- an actual compatible Progressive PASS 1 Scheduled Task/runtime entrypoint is not yet proven to exist or be absent;
+- `existing authorized Scheduled PASS 1 worker` is an unproven runtime-existence premise;
+- Taste Semantic Producer and Taste Steam Review Dossier cannot be treated as PASS 1 workers unchanged;
+- current overall blocker is `insufficient_observability`;
+- no production attempt/state change occurred.
+
+Exact unresolved fact:
+- owner-scope Scheduled Tasks inventory must be inspected read-only for any Progressive PASS 1 candidate task, including title, task ID, enabled state, schedule/timezone and effective prompt/loader binding.
+
+Until that is resolved:
+- do not press `Run now`;
+- do not create/reconfigure a Scheduled Task;
+- do not resume PASS 1 production;
+- do not start PASS 2.
+
 
 ## Existing Scheduled workers: do not conflate
 
@@ -117,17 +118,16 @@ They are separate mechanisms with separate contracts. Do not call either one the
 
 ## Immediate Director sequence
 
-1. In the new Director conversation, read latest `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, this file and `DIRECTOR_TASK_BOARD.md`.
-2. Reconcile the active audit assignment.
-3. If the audit has not been launched, provide its launch only to `НОВЫЙ ЧАТ — ЧАТ 2`, using a copyable block.
-4. When the user says the audit is complete / asks to check it, read its exact durable report first.
-5. Classify the blocker from evidence:
-   - existing compatible worker;
-   - missing runtime task/setup;
+1. Treat the PASS 1 entrypoint audit as completed and accepted with `complete_insufficient_observability`.
+2. Obtain one read-only owner-scope Scheduled Tasks inventory observation.
+3. Classify exactly one branch:
+   - compatible existing Progressive PASS 1 worker;
    - wrong runtime binding;
-   - insufficient observability.
-6. Only then choose the next bounded step.
-7. Do not start PASS 2.
+   - missing runtime entrypoint/setup;
+   - still insufficient observability.
+4. Only then choose the next bounded task/action.
+5. Do not start PASS 1 production or PASS 2 before this classification.
+
 
 ## Director reliability rule
 
