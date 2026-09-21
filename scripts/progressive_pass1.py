@@ -381,7 +381,12 @@ def process_submission_documents(work_doc, state_doc, documents, accepted_at_utc
 
         work_id = doc.get('work_id')
         work_item = work_items.get(work_id)
-        if not work_item or not identity_matches_submission(doc, work_item):
+        expected_name = Path((work_item or {}).get('submission_path') or '').name
+        if (
+            not work_item
+            or artifact_name != expected_name
+            or not identity_matches_submission(doc, work_item)
+        ):
             receipt.update({'status': 'rejected_stale_or_mismatched', 'work_id': work_id})
             receipts.append(receipt)
             continue
