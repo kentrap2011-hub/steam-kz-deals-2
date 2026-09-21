@@ -362,6 +362,9 @@ def process_submission_documents(work_doc, state_doc, documents, accepted_at_utc
     """Process independent item artifacts without sibling rollback.
 
     documents is an iterable of (artifact_name, parsed_doc_or_none, parse_error_or_none).
+    Publishing the exact deterministic current item path consumes that item's one
+    PASS 1 attempt even when the semantic payload is malformed. Artifacts outside
+    current prepared paths are stale/unbound and never mutate current state.
     """
     state = deepcopy(state_doc)
     state.setdefault('entries', {})
@@ -370,34 +373,53 @@ def process_submission_documents(work_doc, state_doc, documents, accepted_at_utc
         for item in (work_doc.get('items') or [])
         if isinstance(item, dict) and item.get('work_id')
     }
+    work_by_name = {
+        Path(item.get('submission_path') or '').name: item
+        for item in work_items.values()
+        if item.get('submission_path')
+    }
     receipts = []
 
     for artifact_name, doc, parse_error in documents:
         receipt = {'artifact': artifact_name}
-        if parse_error is not None or not isinstance(doc, dict):
-            receipt.update({'status': 'rejected_unbound', 'reason': 'malformed_json'})
-            receipts.append(receipt)
-            continue
-
-        work_id = doc.get('work_id')
-        work_item = work_items.get(work_id)
-        expected_name = Path((work_item or {}).get('submission_path') or '').name
-        if (
-            not work_item
-            or artifact_name != expected_name
-            or not identity_matches_submission(doc, work_item)
-        ):
-            receipt.update({'status': 'rejected_stale_or_mismatched', 'work_id': work_id})
+        work_item = work_by_name.get(artifact_name)
+        if work_item is None:
+            work_id = doc.get('work_id') if isinstance(doc, dict) else None
+            receipt.update({
+                'status': 'rejected_stale_or_mismatched',
+                'work_id': work_id,
+                'reason': 'artifact_path_not_current',
+            })
             receipts.append(receipt)
             continue
 
         existing = matching_state_entry(work_item, state)
         if existing is not None:
-            receipt.update({'status': 'replay_ignored', 'work_id': work_id, 'outcome': existing.get('outcome')})
+            receipt.update({
+                'status': 'replay_ignored',
+                'work_id': work_item['work_id'],
+                'outcome': existing.get('outcome'),
+            })
+            receipts.append(receipt)
+            continue
+
+        if parse_error is not None or not isinstance(doc, dict):
+            entry = invalid_result_entry(work_item, accepted_at_utc=accepted_at_utc)
+            state['entries'][work_item['family_id']] = entry
+            receipt.update({
+                'status': 'accepted_as_incomplete_invalid_result',
+                'work_id': work_item['work_id'],
+                'family_id': work_item['family_id'],
+                'outcome': entry['outcome'],
+                'analysis_issue_code': entry['analysis_issue_code'],
+                'validation_error': parse_error or 'malformed_json',
+            })
             receipts.append(receipt)
             continue
 
         try:
+            if not identity_matches_submission(doc, work_item):
+                raise ValueError('submission identity does not exactly match prepared PASS 1 work')
             entry = normalize_submission(doc, work_item, accepted_at_utc=accepted_at_utc)
             status = 'accepted'
         except ValueError as exc:
@@ -408,7 +430,7 @@ def process_submission_documents(work_doc, state_doc, documents, accepted_at_utc
         state['entries'][work_item['family_id']] = entry
         receipt.update({
             'status': status,
-            'work_id': work_id,
+            'work_id': work_item['work_id'],
             'family_id': work_item['family_id'],
             'outcome': entry['outcome'],
             'analysis_issue_code': entry.get('analysis_issue_code'),
