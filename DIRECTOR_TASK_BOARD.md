@@ -116,6 +116,28 @@ Next step:
 - do not introduce a one-item production mode;
 - do not run PASS 2 or retry incomplete items as part of that fix.
 
+## ACTIVE — Progressive PASS 1 visual rebuild trigger fix
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_VISUAL_REBUILD_TRIGGER_FIX_01.md`
+
+Mode:
+`IMPLEMENT / ACTIVATE / VALIDATE`
+
+Worker slot:
+`СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`
+
+User authorization:
+- explicit approval received after Director identified the confirmed stale-visual defect.
+
+Goal:
+- connect accepted PASS 1 ingest to the existing GitHub-owned progressive visual/site rebuild/publication path;
+- activate and validate current already-accepted PASS 1 state in the visual/site;
+- no semantic `Run now`, no incomplete retry, no PASS 2.
+
+Expected report:
+`reviews/worker_reports/progressive-personalized-deals-pass1-visual-rebuild-trigger-fix-01.md`
+
 ## ACCEPTED — Progressive personalized deals Phase A
 
 Parent task:
