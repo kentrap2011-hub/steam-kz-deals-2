@@ -269,6 +269,8 @@ def test_progressive_open_semantic_queue_is_fresh_current_catalogue() -> None:
                     "phase": "phase_a",
                     "publication_status": "current_deterministic_catalogue",
                     "semantic_queue_zero_required_for_publication": False,
+                    "pass1_active": False,
+                    "pass2_active": False,
                 },
                 "processing_status": {
                     "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
@@ -308,6 +310,126 @@ def test_progressive_open_semantic_queue_is_fresh_current_catalogue() -> None:
         assert receipt["full_visual_freshness"] is True
         assert receipt["reason"] is None
         assert receipt["produced_visual"] is not None
+
+
+
+def test_phase_b_open_pass1_is_fresh_current_catalogue() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        repo, _ = make_repo(Path(td))
+        write_json(
+            repo / freshness.COMMERCIAL_PAYLOAD_PATH,
+            {
+                "source_mailing_updated_at_utc": SOURCE,
+                "fx_binding": {"kzt_per_rub": 5.0},
+                "status": "degraded",
+                "ai_queue_count": 3,
+                "complete_family_partition": True,
+            },
+        )
+        commit_all(repo, "open semantic queue phase b")
+        intent = freshness.capture_intent(repo)
+        history_blob = intent["history_snapshot_blob_sha"]
+        write_json(
+            repo / freshness.VISUAL_PATH,
+            {
+                "status": "complete",
+                "production_contract": {
+                    "source_history_snapshot_blob_sha": history_blob,
+                    "source_giveaway_snapshot_blob_sha": "old-giveaway",
+                },
+                "progressive_personalization": {
+                    "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
+                    "phase": "phase_b",
+                    "publication_status": "current_deterministic_catalogue_with_incremental_pass1",
+                    "semantic_queue_zero_required_for_publication": False,
+                    "pass1_active": True,
+                    "pass2_active": False,
+                },
+                "processing_status": {
+                    "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
+                    "semantic_queue_zero_required_for_publication": False,
+                    "pass1_active": True,
+                    "pass2_active": False,
+                    "pass1_total_scope": 3,
+                    "pass1_attempted_count": 0,
+                    "pass1_remaining_count": 3,
+                    "total_current_candidates": 3,
+                    "analyzed_success_count": 0,
+                    "analyzed_fit_count": 0,
+                    "analyzed_not_fit_count": 0,
+                    "analysis_incomplete_count": 0,
+                    "not_analyzed_count": 3,
+                    "normal_visible_count": 3,
+                },
+                "items": [
+                    {"id": "A", "analysis_state": "not_analyzed", "analysis_tier": 3},
+                    {"id": "B", "analysis_state": "not_analyzed", "analysis_tier": 3},
+                    {"id": "C", "analysis_state": "not_analyzed", "analysis_tier": 3},
+                ],
+            },
+        )
+        commit_all(repo, "phase b progressive visual")
+        receipt = freshness.create_receipt(
+            repo,
+            intent,
+            run_id="192",
+            run_attempt="1",
+            event_name="push",
+            workflow_head_sha=run(repo, "git", "rev-parse", "HEAD"),
+            upstream_run_id=None,
+            upstream_head_sha=None,
+            build_reported=True,
+            persisted=True,
+            history_ready=True,
+            reason_override=None,
+        )
+        assert receipt["fresh_build"] is True
+        assert receipt["freshness_scope"] == freshness.FULL_SCOPE
+        assert receipt["full_visual_freshness"] is True
+        assert receipt["reason"] is None
+
+
+def test_contradictory_progressive_flags_fail_closed() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        repo, _ = make_repo(Path(td))
+        write_json(
+            repo / freshness.COMMERCIAL_PAYLOAD_PATH,
+            {
+                "source_mailing_updated_at_utc": SOURCE,
+                "fx_binding": {"kzt_per_rub": 5.0},
+                "status": "degraded",
+                "ai_queue_count": 3,
+                "complete_family_partition": True,
+            },
+        )
+        commit_all(repo, "open semantic queue contradictory")
+        intent = freshness.capture_intent(repo)
+        history_blob = intent["history_snapshot_blob_sha"]
+        write_json(
+            repo / freshness.VISUAL_PATH,
+            {
+                "status": "complete",
+                "production_contract": {"source_history_snapshot_blob_sha": history_blob},
+                "progressive_personalization": {
+                    "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
+                    "phase": "phase_a",
+                    "publication_status": "current_deterministic_catalogue",
+                    "semantic_queue_zero_required_for_publication": False,
+                    "pass1_active": True,
+                    "pass2_active": False,
+                },
+                "items": [{"id": "A", "analysis_state": "not_analyzed", "analysis_tier": 3}],
+            },
+        )
+        commit_all(repo, "contradictory progressive visual")
+        receipt = freshness.create_receipt(
+            repo, intent, run_id="193", run_attempt="1", event_name="push",
+            workflow_head_sha=run(repo, "git", "rev-parse", "HEAD"),
+            upstream_run_id=None, upstream_head_sha=None,
+            build_reported=True, persisted=True, history_ready=True, reason_override=None,
+        )
+        assert receipt["fresh_build"] is False
+        assert receipt["reason"] == freshness.DETERMINISTIC_REFRESH_REASON
 
 
 def test_degraded_no_build() -> None:
@@ -450,11 +572,13 @@ if __name__ == "__main__":
     test_fresh_giveaway_only_path_does_not_claim_full_visual_freshness()
     test_fresh_commercial_only_path_does_not_claim_full_visual_freshness()
     test_progressive_open_semantic_queue_is_fresh_current_catalogue()
+    test_phase_b_open_pass1_is_fresh_current_catalogue()
+    test_contradictory_progressive_flags_fail_closed()
     test_degraded_no_build()
     test_stale_mismatch_fails_closed()
     test_giveaway_source_mismatch_fails_closed()
     test_commercial_source_mismatch_fails_closed()
     print(
         "VISUAL_FRESHNESS_RECEIPT_TESTS=PASS "
-        "cases=fresh_full,fresh_giveaway,fresh_commercial,progressive_open_queue,degraded,stale_mismatch,giveaway_mismatch,commercial_mismatch"
+        "cases=fresh_full,fresh_giveaway,fresh_commercial,phase_a_open_queue,phase_b_open_pass1,contradictory_progressive,degraded,stale_mismatch,giveaway_mismatch,commercial_mismatch"
     )
