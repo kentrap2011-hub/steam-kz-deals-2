@@ -156,3 +156,23 @@ Return to Director for a separately authorized bounded live acceptance. Do not p
 - `reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-entrypoint-audit-01.md`
 - `data/production/pre_ai/progressive_pass1_work.json`
 - `data/cache/progressive_pass1_state.json`
+
+
+## 13. Post-hoc scheduler cardinality correction
+
+Subsequent owner-scope Active Scheduled Tasks UI verification discovered that the runtime state after CONFIGURE was not actually a single active entrypoint: **three active tasks titled `Progressive PASS 1 Worker` were visible**.
+
+Therefore the earlier statements in this report that "exactly one dedicated task was created" and that scheduler cardinality had been validated as exactly one are superseded as historical cardinality claims. They describe the intended configuration and the one recorded task ID available to CONFIGURE, not a reliable proof that no duplicate scheduler entries were created.
+
+DEDUP FIX 01 closeout records the corrected history:
+
+- the user discovered three active `Progressive PASS 1 Worker` tasks;
+- two duplicates were manually deleted by the user;
+- after deletion, the user confirmed exactly one active `Progressive PASS 1 Worker` remains;
+- the IDs of the two deleted duplicate tasks were not recoverable through the available scheduler observability and are intentionally **not invented**;
+- no `Run now`, PASS 1 execution, PASS 2 execution, or Taste/Nightly task modification occurred as part of deduplication.
+
+Canonical correction report:
+`reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-dedup-fix-01.md`.
+
+This correction does not change the intended worker contract, loader binding, daily **02:00 Europe/Samara** schedule, or the no-production-run boundary of CONFIGURE 01.
