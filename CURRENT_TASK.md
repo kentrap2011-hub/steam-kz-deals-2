@@ -568,7 +568,7 @@
 
 
 ### Progressive Personalized Deals Phase B PASS 1 implement 01
-Статус: `in_progress`.
+Статус: `complete_code_waiting_external_live_acceptance`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_IMPLEMENT_01.md`;
 - GitHub remains control-plane owner of semantic generation, item scope/order, attempt budget, immutable work, validation, persistence and visual rebuild triggers;
 - PASS 1 is item-level with one attempt per current semantic item binding; no maximal-prefix/group progress authority;
@@ -578,9 +578,12 @@
 
 
 ### Progressive Personalized Deals Phase B PASS 1 freshness activation fix 01
-Статус: `in_progress`.
+Статус: `complete_code_waiting_external_live_acceptance`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_FRESHNESS_ACTIVATION_FIX_01.md`;
-- scope is limited to the freshness-receipt compatibility blocker preventing normal Phase B visual activation;
-- PASS 1 queue/order/attempt state/worker prompt/ingest remain unchanged;
-- no Scheduled ChatGPT invocation, real PASS 1 item acceptance, PASS 2, UI feature, or source/business rule changes are authorized;
-- after the bounded freshness fix, run focused freshness regression and the existing normal full visual build/deploy path, then update the existing Phase B report.
+- PR #81 merged as `2bb36ebb9cfb3bcdd84510c86978e69ee97a7501`;
+- focused freshness regression passed without weakening the runtime helper;
+- normal full visual build run `35590588101` succeeded;
+- current visual commit `78746c6c5071d205ec799861ece63a0f0bb26e7a` is Phase B with PASS 1 active and 720 remaining visible current items;
+- deploy run `35590629152` passed UI regressions and Pages deployment;
+- PASS 1 accepted ledger remains empty; Scheduled ChatGPT, real item ingest and PASS 2 were not run;
+- exact next step: Director performs one bounded real Scheduled PASS 1 item acceptance.
