@@ -122,6 +122,11 @@ def semantic_game(fid, title, appid):
         'duration_preference_band': 'unknown',
         'estimated_duration_hours': None,
         'direct_user_evidence': {'level': 'none'},
+        'analysis_state': 'analyzed_fit',
+        'analysis_tier': 1,
+        'analysis_semantic_source': 'progressive_pass1',
+        'analysis_semantic_generation_id': 'generation-1',
+        'pass1_attempted': True,
         'practical': {
             'modern_windows_friction': 'unknown',
             'steam_achievements': True,
@@ -155,6 +160,11 @@ def test_commercial_refresh_changes_only_commercial_state():
     assert game['taste_factors'] == before['taste_factors']
     assert game['why_fit'] == before['why_fit']
     assert game['risks'] == before['risks']
+    assert game['analysis_state'] == before['analysis_state']
+    assert game['analysis_tier'] == before['analysis_tier']
+    assert game['analysis_semantic_source'] == before['analysis_semantic_source']
+    assert game['analysis_semantic_generation_id'] == before['analysis_semantic_generation_id']
+    assert game['pass1_attempted'] is True
 
     assert game['current_price_kzt'] == 500.0
     assert game['current_price_rub'] == 100

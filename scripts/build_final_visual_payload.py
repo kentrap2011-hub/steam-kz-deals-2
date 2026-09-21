@@ -56,6 +56,9 @@ SEMANTIC_PRESERVED_FIELDS = (
     'analysis_state',
     'analysis_tier',
     'analysis_issue_code',
+    'analysis_semantic_source',
+    'analysis_semantic_generation_id',
+    'pass1_attempted',
 )
 
 
@@ -183,7 +186,7 @@ def current_explanation_context():
         for row in progressive_personalization.load_jsonl(progressive_personalization.PROGRESSIVE_CONTEXT)
         if row.get('family_id')
     }
-    taste_entries = refiner.effective_taste_entries()
+    taste_entries = progressive_personalization.effective_taste_entries()
     projections = (
         (refiner.load_json(refiner.TASTE_PROJECTION).get('entries') or {})
         if refiner.TASTE_PROJECTION.exists()
@@ -584,7 +587,7 @@ def main():
     ready = base_builder.enrich_history_and_remove_expired(ready, context_by_family, payload)
     achievement_distribution = base_builder.achievement_quality_distribution(ready.get('items') or [])
 
-    taste_entries = refiner.effective_taste_entries()
+    taste_entries = progressive_personalization.effective_taste_entries()
     projections = (
         (refiner.load_json(refiner.TASTE_PROJECTION).get('entries') or {})
         if refiner.TASTE_PROJECTION.exists()
@@ -708,6 +711,8 @@ def main():
         'source_purchase_context_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_purchase_context.jsonl'),
         'source_progressive_candidate_context_blob_sha': base_builder.git_sha('data/production/pre_ai/progressive_candidate_context.jsonl'),
         'progressive_personalization_contract_blob_sha': base_builder.git_sha('config/progressive_personalization_contract.json'),
+        'progressive_pass1_contract_blob_sha': base_builder.git_sha('config/progressive_pass1_contract.json'),
+        'progressive_pass1_state_blob_sha': base_builder.git_sha('data/cache/progressive_pass1_state.json'),
         'source_taste_queue_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_taste_queue.jsonl'),
         'source_history_snapshot_blob_sha': base_builder.git_sha('data/production/pre_ai/history_snapshot.json'),
         'giveaway_visual_handoff_blob_sha': base_builder.git_sha('scripts/giveaway_visual_handoff.py'),

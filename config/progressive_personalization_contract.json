@@ -1,9 +1,9 @@
 {
   "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
-  "version": 1,
+  "version": 2,
   "status": "canonical",
-  "phase": "phase_a",
-  "purpose": "Publish the current deterministic-eligible Steam KZ deal catalogue before semantic closure while preserving honest personalized-state tiers and GitHub-owned progress accounting.",
+  "phase": "phase_b",
+  "purpose": "Publish the current deterministic-eligible Steam KZ deal catalogue continuously while GitHub-owned item-level PASS 1 progressively resolves current semantic fit.",
   "ownership": {
     "control_plane": "github",
     "state_projection": "github",
@@ -11,7 +11,7 @@
     "validation": "github",
     "publication": "github",
     "browser": "read_only_presentation",
-    "scheduled_chatgpt": "unchanged_semantic_data_plane",
+    "scheduled_chatgpt": "bounded_pass1_semantic_data_plane",
     "interactive_chat": "development_only_not_production_worker"
   },
   "durable_states": {
@@ -56,7 +56,8 @@
     "analysis_incomplete": "only when current canonical evidence proves an attempt/outcome is incomplete without trustworthy fit/not-fit",
     "not_analyzed": "default for no trustworthy current semantic outcome, including stale/incompatible results",
     "insufficient_information_rule": "missing or insufficient candidate evidence is unresolved and must not be hidden as analyzed_not_fit",
-    "stale_or_incompatible_rule": "never present stale or incompatible Taste as current fit/not-fit"
+    "stale_or_incompatible_rule": "never present stale or incompatible Taste as current fit/not-fit",
+    "pass1_current_exact_result": "current exact-bound PASS 1 outcome may project analyzed_fit, analyzed_not_fit, or analysis_incomplete without mutating the canonical V5 Taste cache"
   },
   "sorting": {
     "tier_first": true,
@@ -83,12 +84,16 @@
     "analysis_incomplete_count",
     "not_analyzed_count",
     "normal_visible_count",
-    "last_accepted_analysis_at_utc"
+    "last_accepted_analysis_at_utc",
+    "pass1_total_scope",
+    "pass1_attempted_count",
+    "pass1_remaining_count"
   ],
   "invariants": [
     "total_current_candidates = analyzed_fit_count + analyzed_not_fit_count + analysis_incomplete_count + not_analyzed_count",
     "analyzed_success_count = analyzed_fit_count + analyzed_not_fit_count",
-    "normal_visible_count = analyzed_fit_count + analysis_incomplete_count + not_analyzed_count"
+    "normal_visible_count = analyzed_fit_count + analysis_incomplete_count + not_analyzed_count",
+    "pass1_total_scope = pass1_attempted_count + pass1_remaining_count"
   ],
   "publication": {
     "semantic_queue_may_be_nonzero": true,
@@ -97,13 +102,21 @@
     "hard_global_source_integrity_still_fail_closed": true,
     "hard_business_source_identity_rules_unchanged": true,
     "browser_must_not_recalculate_semantics_or_external_facts": true,
-    "last_known_good_on_source_failure": "preserve_existing_behavior"
+    "last_known_good_on_source_failure": "preserve_existing_behavior",
+    "pass1_remaining_may_be_nonzero": true,
+    "phase_a_fallback_remains_valid": true
   },
-  "phase_a_execution": {
-    "pass1_active": false,
+  "phase_b_execution": {
+    "pass1_active": true,
+    "pass1_contract": "config/progressive_pass1_contract.json",
+    "item_level_progress": true,
+    "maximum_attempts_per_item_generation": 1,
+    "compatible_cache_fast_path": true,
+    "insufficient_information_outcome": "analysis_incomplete",
+    "publication_waits_for_pass1_completion": false,
+    "dossier_required_for_pass1": false,
+    "deep_recovery_in_pass1": false,
     "pass2_active": false,
-    "creates_semantic_attempts": false,
-    "creates_retry_loop": false,
-    "changes_scheduled_chatgpt": false
+    "creates_automatic_pass1_retry_loop": false
   }
 }

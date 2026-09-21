@@ -565,3 +565,13 @@
 - deploy run `35558698003` passed UI regressions and Pages deployment;
 - no PASS 1/PASS 2 or Scheduled ChatGPT execution/change occurred;
 - exact next step: Director acceptance before Phase B.
+
+
+### Progressive Personalized Deals Phase B PASS 1 implement 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_IMPLEMENT_01.md`;
+- GitHub remains control-plane owner of semantic generation, item scope/order, attempt budget, immutable work, validation, persistence and visual rebuild triggers;
+- PASS 1 is item-level with one attempt per current semantic item binding; no maximal-prefix/group progress authority;
+- compatible cache is reused before new PASS 1 work; insufficient/invalid/worker-failure outcomes become `analysis_incomplete`;
+- Phase A progressive publication remains fallback while PASS 1 is open;
+- PASS 2, automatic PASS 1 retry, universal Dossier/deep recovery and manual backlog processing are out of scope.

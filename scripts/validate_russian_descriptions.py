@@ -42,6 +42,21 @@ def validate(path):
         category = classify_description(summary)
         counts[category] = counts.get(category, 0) + 1
         status = game.get('description_status')
+        pass1_pending_translation = (
+            game.get('analysis_semantic_source') == 'progressive_pass1'
+            and not summary
+            and status in {
+                'needs_translation',
+                'needs_ru_rewrite',
+                'technical_source',
+                'missing_source',
+            }
+        )
+        if pass1_pending_translation:
+            counts['progressive_pass1_translation_pending'] = (
+                counts.get('progressive_pass1_translation_pending', 0) + 1
+            )
+            continue
         if category != 'good_ru' or (status is not None and status != 'ready_ru'):
             failures.append({
                 'id': game.get('id'),

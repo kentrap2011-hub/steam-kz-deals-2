@@ -42,6 +42,18 @@ def projection(key, status='ai_required', verdict=None, fit=None, evidence_state
     return row
 
 
+
+def projection_doc(entries):
+    return {
+        'current_profile': {'blob_sha': 'test-profile-blob'},
+        'current_binding': {
+            'taste_model_version': 'taste-v3',
+            'taste_semantics_sha256': 'test-semantics-sha',
+            'candidate_context_contract_blob_sha': 'test-context-contract-blob',
+        },
+        'entries': entries,
+    }
+
 def taste(key, verdict, fit):
     return {
         'appid': key.split('_')[-1],
@@ -83,7 +95,7 @@ def main():
 
     # A. Zero semantic results -> every current deterministic candidate is Tier 3.
     contexts = [context('A', 'App_1'), context('B', 'App_2'), context('C', 'App_3')]
-    proj = {'entries': {r['taste_subject_key']: projection(r['taste_subject_key']) for r in contexts}}
+    proj = projection_doc({r['taste_subject_key']: projection(r['taste_subject_key']) for r in contexts})
     states = progressive.build_state_index(contexts, proj, {})
     assert {s['analysis_state'] for s in states.values()} == {'not_analyzed'}
     visible = [game(fid, 'not_analyzed', 3) for fid in states]
@@ -116,7 +128,7 @@ def main():
         'App_14': taste('App_14', 'EXCLUDE', 'below_moderate'),
         'App_15': taste('App_15', 'INCLUDE', 'strong'),
     }
-    states = progressive.build_state_index(rows, {'entries': projections}, tastes)
+    states = progressive.build_state_index(rows, projection_doc(projections), tastes)
     assert states['fit']['analysis_state'] == 'analyzed_fit'
     assert states['incomplete']['analysis_state'] == 'analysis_incomplete'
     assert states['untouched']['analysis_state'] == 'not_analyzed'
@@ -184,7 +196,7 @@ def main():
     else:
         raise AssertionError('counter mismatch must fail validation')
 
-    print('progressive personalization Phase A regression: ok')
+    print('progressive personalization Phase A fallback / Phase B regression: ok')
 
 
 if __name__ == '__main__':

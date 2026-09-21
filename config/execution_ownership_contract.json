@@ -129,5 +129,27 @@
     "browser_role": "read_only_presentation",
     "scheduled_chatgpt_change": false,
     "pass1_pass2_queue_or_retry_added": false
+  },
+  "progressive_personalization_phase_b_pass1": {
+    "contract": "config/progressive_pass1_contract.json",
+    "owner": "github_control_plane",
+    "github_owns": [
+      "semantic_generation_identity",
+      "current_pass1_scope",
+      "deterministic_item_order",
+      "per_item_attempt_state",
+      "immutable_work_identity",
+      "validation",
+      "accepted_outcome_persistence",
+      "retry_eligibility",
+      "processing_counts",
+      "visual_rebuild_trigger"
+    ],
+    "scheduled_chatgpt_role": "bounded_lightweight_semantic_execution_only",
+    "item_level_progress": true,
+    "one_attempt_per_current_item_binding": true,
+    "commercial_refresh_resets_attempt_state": false,
+    "pass2_owner": "not_active",
+    "new_independent_scheduler_created": false
   }
 }

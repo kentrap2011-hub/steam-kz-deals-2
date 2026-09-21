@@ -48,9 +48,9 @@ def cache_entries(obj):
 
 
 def effective_taste_entries():
-    merged = dict(cache_entries(load_json(TASTE_CACHE)))
-    merged.update(cache_entries(load_json(TASTE_OVERLAY)))
-    return merged
+    # State projection must consult canonical Taste cache first. PASS 1 semantic
+    # entries are attached by progressive_personalization only after cache miss.
+    return progressive_personalization.canonical_taste_entries()
 
 
 def get_fit(row, taste_entries):
