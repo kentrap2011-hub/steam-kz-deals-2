@@ -591,12 +591,15 @@
 ## Worker in progress — 2026-09-21
 
 ### Progressive Personalized Deals Phase B PASS 1 live acceptance 01
-Статус: `blocked_external`.
+Статус: `needs_fix`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_LIVE_ACCEPTANCE_01.md`;
-- scope: ровно одна текущая GitHub-owned PASS 1 item attempt через существующий Scheduled semantic worker path;
-- без retry, второй игры, backlog drain, PASS 2 и ручной semantic repair;
+- пользователь выполнил ровно один `Run now` существующего `Progressive PASS 1 Worker`; прежний external invocation blocker снят;
+- exact Tower Dominion result был создан по подготовленному path, GitHub ingest/validation прошёл success и durable PASS 1 state обновился;
+- один Scheduled invocation обработал несколько последовательных PASS 1 items, поэтому acceptance-инварианты "ровно один item" / "no second item" не выполнены;
+- current durable state: 6 entries; current manifest: total `493`, attempted `5`, remaining `488`, expired-before-PASS1 `228`, PASS 2 inactive;
+- post-ingest progressive visual rebuild не произошёл: current visual остаётся pre-run и показывает attempted `0` / 720 Tier 3;
+- повторный `Run now`, incomplete retry и PASS 2 не выполнять до bounded fix live-acceptance path;
 - durable report: `reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-live-acceptance-01.md`.
-- blocker: existing authorized Scheduled PASS 1 worker is not invocable from this environment; no semantic result was fabricated and no PASS 1 attempt was consumed.
 
 ## Worker in progress — 2026-09-21
 
