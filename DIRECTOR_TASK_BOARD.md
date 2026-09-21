@@ -24,9 +24,9 @@ State:
 
 Immediate active work:
 - Progressive PASS 1 Scheduled worker is configured, deduplicated, and proven invocable;
-- first live PASS 1 invocation completed and durable semantic ingest works;
-- one confirmed defect remains: PASS 1 ingest does not trigger progressive visual/site rebuild, leaving published visual stale;
-- no second manual `Run now` and no PASS 2 until that downstream publication defect is fixed and validated.
+- live PASS 1 semantic execution, ingest, durable state, automatic progressive visual rebuild, and site deployment are now proven end-to-end;
+- current published projection reflects accepted PASS 1 results;
+- PASS 2 remains inactive and requires separate authorization.
 
 ## ACCEPTED — Progressive PASS 1 Scheduled worker dedup fix
 
@@ -91,52 +91,51 @@ Next step:
 - do not press `Run now`, edit, enable/disable, clone, or create anything.
 
 
-## NEEDS FIX — Progressive personalized deals Phase B / PASS 1 live acceptance
+## ACCEPTED — Progressive personalized deals Phase B / PASS 1 live acceptance
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_LIVE_ACCEPTANCE_01.md`
 
-Report:
+Primary report:
 `reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-live-acceptance-01.md`
 
-Final status:
-`needs_fix`
+Closing fix:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_VISUAL_REBUILD_TRIGGER_FIX_01.md`
 
 Director acceptance:
-- Scheduled `Progressive PASS 1 Worker` is externally invocable and completed one real invocation;
-- multiple consecutive items per invocation are valid under the current canonical worker prompt and are not a production defect;
-- create-only submission, GitHub ingest/validation, durable PASS 1 state, queue progression, and PASS2=false behavior are proven;
-- six durable PASS 1 entries were accepted during the invocation;
-- current manifest reconciles at 493 total = 5 attempted + 488 remaining, with 228 expired-before-PASS1;
-- the confirmed production defect is downstream publication: accepted PASS 1 state does not trigger progressive visual/site rebuild, so the published visual remains stale;
-- no second manual `Run now` is authorized before this defect is fixed and validated.
+- Scheduled PASS 1 invocation works;
+- canonical multi-item sequential behavior is valid;
+- create-only submission, GitHub ingest/validation, durable state, queue progression, and PASS2=false are proven;
+- the downstream stale-visual defect found by live acceptance was fixed and validated by the visual rebuild trigger task;
+- accepted PASS 1 state now automatically rebuilds and publishes through the existing GitHub-owned visual/site path;
+- no special one-item production mode was introduced.
 
-Next step:
-- after explicit user approval, assign one bounded follow-up IMPLEMENT task for the PASS 1 ingest -> progressive visual/site rebuild edge only;
-- do not introduce a one-item production mode;
-- do not run PASS 2 or retry incomplete items as part of that fix.
-
-## ACTIVE — Progressive PASS 1 visual rebuild trigger fix
+## ACCEPTED — Progressive PASS 1 visual rebuild trigger fix
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_VISUAL_REBUILD_TRIGGER_FIX_01.md`
 
-Mode:
-`IMPLEMENT / ACTIVATE / VALIDATE`
-
-Worker slot:
-`СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`
-
-User authorization:
-- explicit approval received after Director identified the confirmed stale-visual defect.
-
-Goal:
-- connect accepted PASS 1 ingest to the existing GitHub-owned progressive visual/site rebuild/publication path;
-- activate and validate current already-accepted PASS 1 state in the visual/site;
-- no semantic `Run now`, no incomplete retry, no PASS 2.
-
-Expected report:
+Report:
 `reviews/worker_reports/progressive-personalized-deals-pass1-visual-rebuild-trigger-fix-01.md`
+
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- PASS 1 ingest now triggers the existing GitHub-owned visual rebuild path;
+- rebuild occurs after durable ingest completion and reads current canonical state;
+- existing concurrency protects closely spaced multi-item ingests from stale overwrite;
+- already accepted results were rebuilt and published without another semantic run;
+- current visual reconciles at 493 items: 3 fit + 2 incomplete + 488 not-analyzed;
+- PASS 1 state/work blobs did not change during activation, proving no new semantic attempts;
+- PASS 2 remained inactive;
+- normal deployment completed successfully.
+
+Key refs:
+- implementation commit `831e39109e6175abb3883be596691d039efc2baf`;
+- visual commit `22cc8c47635fb8a6521446a4395eac22460e7e95`;
+- build run `35642575257`;
+- deploy run `35642669590`.
 
 ## ACCEPTED — Progressive personalized deals Phase A
 
