@@ -414,41 +414,42 @@ This proves the fallback safety property even though Phase B visual activation i
 
 ## 21. Exact mandatory point reached
 
-The task has reached:
+The freshness activation blocker is resolved.
 
-**normal Phase B visual activation after successful GitHub PASS 1 work preparation.**
-
-Completed immediately before the blocker:
+Completed:
 - canonical PASS 1 contracts merged;
 - item-level state/work/ingest machinery merged;
 - 721-item work manifest generated on `main`;
-- focused PASS 1 regression green in successful pre-AI run `35560931327`.
+- focused PASS 1 regression green;
+- focused freshness regression green;
+- normal full visual build green;
+- current visual activated as Phase B / PASS 1 active with nonzero remaining work;
+- UI regressions and GitHub Pages deployment green.
 
 Current mandatory point:
-- make the existing normal daily visual validation accept the current Phase A fallback / Phase B open-work semantics, then rerun the existing full visual build/deploy path.
+- one bounded real Scheduled PASS 1 item acceptance is still required to prove the external semantic data-plane end to end.
 
-The task is not stopped because 721 items are too many. It is stopped at one concrete activation regression.
+No backlog processing is authorized inside this implementation task.
 
 ## 22. Minimal next work
 
-Exactly one bounded next chunk:
+Exactly one next step:
 
-Fix only the current freshness-receipt regression/fixture compatibility that blocks `35561024940`, then rerun the already-existing normal daily full visual build/deploy path and verify the visual is Phase B with PASS 1 remaining nonzero.
+Return to Director for one bounded real Scheduled PASS 1 item acceptance using the already-active GitHub-owned work manifest.
 
-Do not process the PASS 1 backlog and do not begin PASS 2 in that fix.
-
-Only after the normal Phase B visual path is green should the project perform one bounded real Scheduled PASS 1 item acceptance to prove the external semantic data-plane end to end.
+Do not process the backlog and do not begin PASS 2.
 
 ## 23. Status
 
-`needs_fix`
+`complete_code_waiting_external_live_acceptance`
 
 Reason:
 - implementation and real work manifest exist;
-- PASS 1 attempt state is still zero;
-- no real item-level result has been accepted;
-- current visual remains Phase A;
-- normal daily build is blocked by a known freshness regression.
+- normal Phase B visual activation now succeeds;
+- current visual reports PASS 1 active with remaining work and remains non-empty;
+- UI/Pages deployment succeeds;
+- PASS 1 attempt state is intentionally still zero because this freshness task did not run Scheduled ChatGPT or ingest a real semantic item;
+- one bounded external live item acceptance remains before full end-to-end production acceptance.
 
 ## 24. Exact refs
 
@@ -470,3 +471,140 @@ Reason:
 The implementation already contains the major Phase B surfaces; continuing broad feature work would be counterproductive. The remaining activation problem is now narrow and reproducible in a deterministic regression before any semantic worker is needed.
 
 Future continuation should start from the exact failing freshness test and avoid reopening queue/state/worker architecture unless that bounded fix proves the current contract itself inconsistent.
+
+
+## 26. Freshness activation fix 01
+
+### Exact freshness defect
+
+The normal daily full visual build was blocked by
+`scripts/test_visual_freshness_receipt.py::test_progressive_open_semantic_queue_is_fresh_current_catalogue`.
+
+The runtime helper already required explicit, non-contradictory progressive phase flags:
+- Phase A fallback: `pass1_active=false`, `pass2_active=false`;
+- Phase B active publication: `pass1_active=true`, `pass2_active=false`.
+
+The old Phase A fallback fixture omitted those explicit flags, so a valid fallback
+was rejected by the regression before the canonical Phase B visual build could run.
+
+### Exact fix
+
+PR #81 changed only:
+- `scripts/test_visual_freshness_receipt.py`;
+- `CURRENT_TASK.md`.
+
+The runtime freshness helper was not relaxed.
+
+The focused freshness test now:
+- gives the Phase A fallback explicit inactive PASS flags;
+- proves active Phase B with open/nonzero PASS 1 remaining work is fresh/publishable;
+- proves contradictory progressive flags remain fail-closed.
+
+No PASS 1 queue/order/attempt-state/worker/ingest/UI/source/business behavior changed.
+
+### FRESH-01..10
+
+- FRESH-01 — **PASS**. Previously failing progressive-open-queue freshness regression is green.
+- FRESH-02 — **PASS**. Explicit Phase A fallback with `pass1_active=false` / `pass2_active=false` remains accepted.
+- FRESH-03 — **PASS**. Focused Phase B case with active PASS 1 and remaining work is fresh/publishable.
+- FRESH-04 — **PASS**. Contradictory Phase A + `pass1_active=true` state remains fail-closed.
+- FRESH-05 — **PASS**. Existing stale/commercial/giveaway source-mismatch freshness tests remain green.
+- FRESH-06 — **PASS**. Normal full visual build run `35590588101` succeeded.
+- FRESH-07 — **PASS**. Current visual is Phase B, `pass1_active=true`, `pass1_remaining_count=720`, non-empty with 720 visible Tier 3 items.
+- FRESH-08 — **PASS**. No PASS 1 result exists, all untouched current items remain visible; Phase A fallback safety invariant remains intact.
+- FRESH-09 — **PASS**. Deploy run `35590629152` passed UI regressions, staged publication binding, Pages artifact upload and Pages deployment.
+- FRESH-10 — **PASS**. No Scheduled ChatGPT invocation, no real PASS 1 semantic item ingest, and no PASS 2 execution occurred.
+
+Focused build log evidence:
+`VISUAL_FRESHNESS_RECEIPT_TESTS=PASS cases=fresh_full,fresh_giveaway,fresh_commercial,phase_a_open_queue,phase_b_open_pass1,contradictory_progressive,degraded,stale_mismatch,giveaway_mismatch,commercial_mismatch`
+
+### Current PASS 1 control-plane / visual state
+
+GitHub-owned work manifest:
+- semantic generation: `334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d`
+- total scope: 721
+- attempted: 0
+- remaining: 721
+- compatible-cache resolved: 0
+- PASS 2 inactive.
+
+Durable accepted PASS 1 state:
+- accepted entries: 0
+- attempted entries: 0
+- no fit/not-fit/incomplete production outcome has yet been accepted.
+
+Current visual after normal full build:
+- visual commit: `78746c6c5071d205ec799861ece63a0f0bb26e7a`
+- `status = complete`
+- `phase = phase_b`
+- publication status = `current_deterministic_catalogue_with_incremental_pass1`
+- `pass1_active = true`
+- `pass2_active = false`
+- `item_count = 720`
+- `total_current_candidates = 720`
+- `not_analyzed_count = 720`
+- `normal_visible_count = 720`
+- `pass1_total_scope = 720`
+- `pass1_attempted_count = 0`
+- `pass1_remaining_count = 720`
+
+The work manifest has 721 current candidates before the visual's deterministic expiry filter.
+The visual removes one legitimately expired item and therefore reports 720 current visible PASS 1 scope items.
+
+### Updated PASS1-01..20
+
+- PASS1-01 — **PASS in focused regression**: fit child independently persists as Tier 1.
+- PASS1-02 — **PASS in focused regression**: trustworthy not-fit persists independently and is hidden/countable.
+- PASS1-03 — **PASS in focused regression**: insufficient evidence becomes incomplete.
+- PASS1-04 — **PASS in focused regression**: invalid child does not block valid sibling/later child.
+- PASS1-05 — **PASS**: per-item create-only transport, no batch atomicity.
+- PASS1-06 — **PASS**: maximal-contiguous-prefix does not control PASS 1.
+- PASS1-07 — **PASS in focused regression**: one attempt per work ID.
+- PASS1-08 — **PASS in code/control-plane; no live cache-hit example in this generation**: compatible cache is skipped before new work.
+- PASS1-09 — **PASS in focused regression**: stale/unprepared result rejected without blocking current work.
+- PASS1-10 — **PASS live**: current Phase B visual publishes with `pass1_remaining_count=720`.
+- PASS1-11 — **PASS in focused regression and live zero-progress arithmetic**.
+- PASS1-12 — **PASS in focused regression**: accepted fit projects Tier 1.
+- PASS1-13 — **PASS in focused regression**: incomplete projects Tier 2.
+- PASS1-14 — **PASS in focused regression**: not-fit hidden from normal list but remains counted.
+- PASS1-15 — **PASS live**: absent Scheduled worker results leave 720 untouched Tier 3 cards published.
+- PASS1-16 — **PASS in focused regression**: commercial refresh does not reset generation/work identity and preserves PASS 1 metadata.
+- PASS1-17 — **PASS**: no PASS 2/deep recovery loop.
+- PASS1-18 — **PASS**: GitHub remains sole control-plane owner.
+- PASS1-19 — **PASS**: normal full/current publication and UI/Pages regressions are green again.
+- PASS1-20 — **PASS after this report update is committed and reread from `main`**.
+
+### Exact activation refs
+
+Freshness fix:
+- PR #81
+- branch head: `33b819d98eebdf2c912d082c70659d9496bae7e3`
+- merge commit: `2bb36ebb9cfb3bcdd84510c86978e69ee97a7501`
+
+Normal full visual build:
+- run `35590588101` — success
+- freshness regression — success
+- PASS 1 item-level regression — success
+- visual build — success
+- visual commit `78746c6c5071d205ec799861ece63a0f0bb26e7a`
+
+Deploy:
+- workflow-run deploy `35590629152` — success
+- UI regressions — success
+- publication freshness outcome — fresh
+- Pages deployment — success
+- Pages URL reported by GitHub Actions:
+  `https://kentrap2011-hub.github.io/steam-kz-deals-2/`
+
+### External live-acceptance boundary
+
+No real PASS 1 item was accepted during this task by design.
+
+Therefore Phase B code/control-plane/visual activation is ready, but the external
+Scheduled semantic data-plane has not yet been proven end to end on one real item.
+
+Final status:
+`complete_code_waiting_external_live_acceptance`
+
+Exactly one next step:
+return to Director for one bounded real Scheduled PASS 1 item acceptance.
