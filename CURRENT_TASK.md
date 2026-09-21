@@ -601,11 +601,22 @@
 ## Worker in progress — 2026-09-21
 
 ### Progressive PASS 1 Scheduled worker configure 01
-Статус: `needs_user_decision`.
+Статус: `complete_scheduler_ready_for_bounded_live_acceptance`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_WORKER_CONFIGURE_01.md`;
-- mode: CONFIGURE only; PASS 1/PASS 2 не запускались, `Run now` не использовался;
-- canonical cadence: daily;
-- canonical timezone: `Europe/Samara`;
-- blocker: exact safe recurring clock не задан канонически; Scheduled Task не создан и существующие Taste/Dossier/Nightly tasks не изменялись;
+- accepted schedule decision: daily at `02:00 Europe/Samara`;
+- intended dedicated title: `Progressive PASS 1 Worker`;
+- later owner-scope UI verification found three active entries with that title, so the configure report now contains a post-hoc cardinality correction;
+- PASS 1/PASS 2 не запускались, `Run now` не использовался;
 - durable report: `reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-configure-01.md`.
+
+### Progressive PASS 1 Scheduled worker dedup fix 01
+Статус: `complete_deduplicated_not_run`.
+- worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_WORKER_DEDUP_FIX_01.md`;
+- пользователь обнаружил три active `Progressive PASS 1 Worker` и вручную удалил два дубля;
+- после удаления пользователь подтвердил, что active остался ровно один `Progressive PASS 1 Worker`;
+- ID двух удалённых дублей не удалось получить через доступную scheduler observability; они не выдумывались;
+- worker не повторял scheduler mutations после ручного исправления;
+- `Run now`, PASS 1 и PASS 2 не запускались; Taste/Nightly задачи не менялись;
+- current PASS 1 repository state: attempted `0`, remaining `721`, durable state entries `0`, PASS 2 inactive;
+- durable report: `reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-dedup-fix-01.md`.
 
