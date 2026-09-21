@@ -22,11 +22,43 @@ State:
 - continue orchestration from the current Director conversation while its state remains consistent;
 - do not reconstruct project truth from the retired Director transcript unless canonical compact state is genuinely insufficient.
 
-Immediate active work after restart:
-- PASS 1 Scheduled worker entrypoint audit is complete with `complete_insufficient_observability`;
-- the repository PASS 1 contract/prompt is proven, but an actual compatible Scheduled PASS 1 runtime entrypoint remains unproven;
-- the next required fact is one read-only owner-scope Scheduled Tasks inspection;
-- PASS 1 production execution and PASS 2 remain paused until that runtime-existence/binding fact is resolved.
+Immediate active work:
+- owner-scope UI observation has resolved the active runtime branch as `missing_runtime_entrypoint`;
+- bounded CONFIGURE task for a dedicated Progressive PASS 1 Scheduled Task is assigned to `СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`;
+- PASS 1 production execution and PASS 2 remain paused until that configuration is accepted and live acceptance is separately resumed.
+
+## ACTIVE — Progressive PASS 1 Scheduled worker configure
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_WORKER_CONFIGURE_01.md`
+
+Mode:
+`CONFIGURE / VALIDATE — NO PRODUCTION RUN`
+
+Worker slot:
+`СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`
+
+User authorization:
+- explicit authorization received to hand this bounded CONFIGURE task to ЧАТ 1.
+
+Director classification:
+- owner-scope user UI observation resolved the runtime branch as `missing_runtime_entrypoint` for an active dedicated Progressive PASS 1 Scheduled Task;
+- historical/completed/paused tasks are not to be repurposed.
+
+Goal:
+- create exactly one dedicated `Progressive PASS 1 Worker` Scheduled Task bound by loader to the canonical PASS 1 prompt/contract;
+- validate identity/state/schedule/prompt binding;
+- do not run it.
+
+Expected report:
+`reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-configure-01.md`
+
+Production boundary:
+- no `Run now`;
+- no Tower Dominion semantic execution;
+- no PASS 1 result/attempt;
+- no retry/backlog drain;
+- no PASS 2.
 
 ## ACCEPTED — PASS 1 Scheduled worker entrypoint audit
 
