@@ -56,9 +56,14 @@ Production safety:
 Expected report:
 `reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-implement-01.md`
 
+Checkpoint requested after prolonged execution:
+- no durable Phase B report was present on `main` at Director check time;
+- worker must stop scope expansion and write factual checkpoint into the existing expected report path;
+- do not start new implementation surfaces until that checkpoint is committed and reread.
+
 Next decision:
-- Director acceptance of Phase B before PASS 2;
-- if live worker invocation is externally unavailable, record exact bounded live-acceptance boundary instead of faking completion.
+- Director will inspect the checkpoint and either accept, narrow the remaining blocker, or split Phase B further;
+- PASS 2 remains forbidden.
 
 ## ACCEPTED — Progressive personalized deals Phase A
 
