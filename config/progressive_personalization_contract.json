@@ -1,9 +1,9 @@
 {
   "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
-  "version": 2,
+  "version": 3,
   "status": "canonical",
   "phase": "phase_b",
-  "purpose": "Publish the current deterministic-eligible Steam KZ deal catalogue continuously while GitHub-owned item-level PASS 1 progressively resolves current semantic fit.",
+  "purpose": "Publish the current deterministic-eligible Steam KZ deal catalogue continuously while GitHub-owned item-level PASS 1 progressively resolves current semantic fit and a separately implemented future PASS 2 may recover only dossier-ready incomplete items without waiting for global PASS 1 completion.",
   "ownership": {
     "control_plane": "github",
     "state_projection": "github",
@@ -12,7 +12,11 @@
     "publication": "github",
     "browser": "read_only_presentation",
     "scheduled_chatgpt": "bounded_pass1_semantic_data_plane",
-    "interactive_chat": "development_only_not_production_worker"
+    "interactive_chat": "development_only_not_production_worker",
+    "pass2_eligibility": "github",
+    "pass2_order": "github",
+    "pass2_state": "github",
+    "pass2_attempt_accounting": "github"
   },
   "durable_states": {
     "analyzed_fit": {
@@ -117,6 +121,89 @@
     "dossier_required_for_pass1": false,
     "deep_recovery_in_pass1": false,
     "pass2_active": false,
-    "creates_automatic_pass1_retry_loop": false
+    "creates_automatic_pass1_retry_loop": false,
+    "pass2_implemented": false,
+    "pass2_activation_requires_separate_implementation": true,
+    "pass2_global_pass1_completion_gate": false,
+    "pass2_requires_current_exact_compatible_accepted_dossier": true
+  },
+  "phase_c_pass2_design": {
+    "status": "canonical_design_only_not_implemented",
+    "active": false,
+    "implemented": false,
+    "purpose": "One bounded automatic recovery attempt for a current analysis_incomplete item only after GitHub can prove a current exact-compatible canonically accepted Taste Steam Review Dossier for the same item/work identity.",
+    "ownership": {
+      "eligibility": "github_control_plane",
+      "queue_scope_and_order": "github_control_plane",
+      "state_projection": "github_control_plane",
+      "dossier_acceptance_truth": "github_control_plane",
+      "attempt_budget_and_receipts": "github_control_plane",
+      "scheduled_chatgpt": "bounded_pass2_semantic_data_plane_only_after_github_prepares_eligible_work",
+      "interactive_chat": "no_production_role"
+    },
+    "parallelism": {
+      "pass1_and_pass2_independent": true,
+      "pass1_waits_for_pass2": false,
+      "pass2_waits_for_global_pass1_completion": false,
+      "pass2_may_consider_only_current_analysis_incomplete_items": true,
+      "pass1_continues_current_not_analyzed_items_while_pass2_recovers_eligible_incomplete_items": true,
+      "one_pass_failure_must_not_block_the_other": true
+    },
+    "eligibility_predicate": {
+      "all_required": true,
+      "conditions": [
+        "current_progressive_state == analysis_incomplete",
+        "current_pass1_state.semantic_generation_id == current_progressive_semantic_generation_id",
+        "current_pass1_state.work_id == current_item_work_id",
+        "automatic_pass2_attempts_consumed_for(current_semantic_generation_id,current_work_id) == 0",
+        "a dossier exists in the canonical GitHub-owned dossier store and was persisted by canonical dossier ingest/validation rather than merely buffered or worker-produced",
+        "dossier.appid == current_item.appid",
+        "dossier.game_identity.work_title == current_item.semantic_input.title",
+        "when the current item exposes a release year, dossier.game_identity.release_year == current_item.release_year",
+        "dossier identity is resolved under the current Dossier identity rules with cross-release combination forbidden",
+        "dossier.web_evidence_contract_binding exactly equals the current active content-complete Dossier compatibility binding required by the canonical Dossier schema/evidence/prompt contracts",
+        "dossier is fresh at eligibility evaluation time and has not expired",
+        "GitHub binds the emitted PASS 2 work immutably to the current semantic_generation_id, work_id, appid, exact dossier content sha256, and current Dossier compatibility binding"
+      ],
+      "false_if_any": [
+        "no canonically accepted dossier",
+        "dossier only exists as an unaccepted buffered candidate",
+        "stale or expired dossier",
+        "wrong appid",
+        "wrong work title or release identity",
+        "cross-release or ambiguous identity",
+        "old or mismatched Dossier compatibility binding",
+        "current semantic_generation_id or work_id differs from the incomplete PASS 1 state",
+        "the automatic PASS 2 attempt budget for the current semantic_generation_id/work_id is already consumed"
+      ]
+    },
+    "dossier_ready_transition": {
+      "waiting_state": "analysis_incomplete",
+      "waiting_is_pass2_eligible": false,
+      "waiting_consumes_pass2_attempts": 0,
+      "acceptance_event": "canonical GitHub Dossier persistence/acceptance becomes an input to GitHub PASS 2 eligibility projection",
+      "automatic_effect": "GitHub re-evaluates pending analysis_incomplete items and may add only the exact matching current semantic_generation_id/work_id item to future PASS 2 work",
+      "interactive_intervention_required": false,
+      "dossier_worker_may_enqueue_pass2_directly": false
+    },
+    "attempt_budget": {
+      "maximum_automatic_attempts_per_semantic_generation_and_work_id": 1,
+      "waiting_for_dossier_consumes_attempt": false,
+      "stale_or_mismatched_dossier_consumes_attempt": false,
+      "eligibility_projection_or_queue_presence_consumes_attempt": false,
+      "budget_reset_by_price_or_commercial_refresh": false,
+      "budget_reset_by_new_dossier_for_same_semantic_generation_and_work_id": false,
+      "budget_may_reset_only_when_current_semantic_generation_id_or_work_id_changes_under_the_existing_semantic_generation_rules": true,
+      "terminal_unresolved_behavior": "remain analysis_incomplete, remain visible in Tier 2, and leave automatic PASS 2 eligibility for that semantic_generation_id/work_id after the single automatic attempt is consumed",
+      "attempt_consumption_rule": "The future PASS 2 implementation must let GitHub consume the one automatic attempt only from an exact-bound accepted PASS 2 result or an explicit GitHub-owned terminal execution receipt proving that the authorized eligible attempt actually ran; mere Dossier waiting, eligibility, enqueueing, stale work, or unbound artifacts consume zero."
+    },
+    "dossier_contract_dependencies": {
+      "canonical_contract": "config/taste_steam_review_dossier_contract.json",
+      "persistence_bridge": "config/taste_steam_review_dossier_persistence_bridge.json",
+      "schema": "config/taste_steam_review_dossier_schema.json",
+      "web_evidence_contract": "config/taste_steam_review_dossier_web_evidence_contract.json",
+      "rule": "PASS 2 consumes only canonical accepted dossier truth and does not redefine Dossier evidence, identity, freshness, or compatibility semantics."
+    },
+    "activation_guard": "No PASS 2 runtime, scheduler, worker prompt, queue processor, or production execution is authorized by this design block. A separate implementation task must create and validate the GitHub-owned runtime path."
   }
 }
