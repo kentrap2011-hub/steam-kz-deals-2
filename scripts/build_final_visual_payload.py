@@ -56,6 +56,9 @@ SEMANTIC_PRESERVED_FIELDS = (
     'analysis_state',
     'analysis_tier',
     'analysis_issue_code',
+    'analysis_semantic_source',
+    'analysis_semantic_generation_id',
+    'pass1_attempted',
 )
 
 
