@@ -27,7 +27,8 @@ Mode:
 `LIVE ACCEPTANCE / BOUNDED PRODUCTION VALIDATION`
 
 Worker routing:
-- use a FRESH worker chat, not the long-running ЧАТ 2 implementation context.
+- use a FRESH ЧАТ 1 worker chat;
+- do not use the long-running ЧАТ 2 implementation context.
 
 Accepted baseline:
 - Phase B code/control-plane is ready;
