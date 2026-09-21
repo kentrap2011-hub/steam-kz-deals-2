@@ -1,0 +1,79 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "04298ca0b80d00cd819af116323de3d1c4906d6ed71e84f40c15c6978d0d08d8",
+  "prepared_required_sha256": "271d2a484f3c644e9a53687b60385ad3c89dbbc654ba3c9247d9e829b0e0b174",
+  "group_plan_sha256": "d8f7108270c55575f100ce4e8ccb1d0d38366a9eebadf581aaa764628f6078ed",
+  "group_count": 240,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+    "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+    "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+  },
+  "sequence": 1,
+  "start_index": 0,
+  "end_index_exclusive": 3,
+  "appids": ["1000010", "1000360", "1003590"],
+  "items_sha256": "f9b5c5c44fb43a240955911b7299e70ecd059b51027e2280d5d758e526ef7254",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "6ea2c5b7f764df720c35187116d3ce137484a436f37d4b12c7674c9fa5c40db8",
+  "items": [
+    {"key":"App_1000010","appid":"1000010","title":"Crown Trick","dossier_path":"data/cache/taste_steam_review_dossiers/App_1000010.json","reason":"refresh_required"},
+    {"key":"App_1000360","appid":"1000360","title":"Hellish Quart","dossier_path":"data/cache/taste_steam_review_dossiers/App_1000360.json","reason":"refresh_required"},
+    {"key":"App_1003590","appid":"1003590","title":"Tetris® Effect: Connected","dossier_path":"data/cache/taste_steam_review_dossiers/App_1003590.json","reason":"refresh_required"}
+  ],
+  "group_sha256": "bdcb38ed26f03abe022525f16b2e8bdeef0130540ade0641a0bfd54a5101ac28",
+  "dossiers": [
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,
+      "web_evidence_contract_binding":{"evidence_contract_schema":"TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2","evidence_contract_version":2,"evidence_contract_revision":"validator-generator-parity-fix-2026-09-20","evidence_contract_sha256":"be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac","worker_schema":"TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2","worker_schema_version":2,"worker_schema_revision":"validator-generator-parity-fix-2026-09-20","worker_schema_sha256":"d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98","dossier_schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","dossier_schema_version":2,"worker_prompt_revision":"web-evidence-v2-fail-closed-execution-ledger-v1","worker_prompt_sha256":"6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"},
+      "appid":"1000010","title":"Crown Trick","generated_at_utc":"2026-09-21T04:30:00Z","expires_at_utc":"2026-10-11T04:30:00Z","ttl_days":20,
+      "game_identity":{"work_title":"Crown Trick","release_year":2020,"resolution_status":"resolved","identity_source_ids":["source-001"],"corroborators":[{"kind":"appid","value":"1000010"},{"kind":"developer","value":"NEXT Studios"}]},
+      "summary":"Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations":[{"category":"structure","statement":"Russian community material documents multiple hidden secrets that players can discover and unlock during play.","sentiment":"neutral","recurrence":"anecdotal","mention_count":1,"evidence_languages":["russian"],"evidence_status":"durable","source_ids":["source-002"],"player_feedback_ids":["fallback-001"]}],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"single_source_only","single_source_reason":"Bounded research produced one contract-usable exact-product Russian community feedback surface for the serialized durable finding.","russian_attempt":"found_and_used","overall_strength":"limited","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"source-001","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/1000010/","publication_date":"2020-10-16","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"source-002","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1000010","publication_date":null,"language":"mixed","freshness":"unknown","evidence_role":"durable_trait","player_feedback":true,"feedback_surface_mode":"concrete_item_collection"}
+      ],"player_feedback_records":[{"feedback_id":"fallback-001","source_id":"source-002","publication_date":null,"language":"russian","identity_mode":"transient_author_deduped"}]}
+    },
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,
+      "web_evidence_contract_binding":{"evidence_contract_schema":"TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2","evidence_contract_version":2,"evidence_contract_revision":"validator-generator-parity-fix-2026-09-20","evidence_contract_sha256":"be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac","worker_schema":"TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2","worker_schema_version":2,"worker_schema_revision":"validator-generator-parity-fix-2026-09-20","worker_schema_sha256":"d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98","dossier_schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","dossier_schema_version":2,"worker_prompt_revision":"web-evidence-v2-fail-closed-execution-ledger-v1","worker_prompt_sha256":"6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"},
+      "appid":"1000360","title":"Hellish Quart","generated_at_utc":"2026-09-21T04:30:00Z","expires_at_utc":"2026-10-11T04:30:00Z","ttl_days":20,
+      "game_identity":{"work_title":"Hellish Quart","release_year":2021,"resolution_status":"resolved","identity_source_ids":["source-001"],"corroborators":[{"kind":"appid","value":"1000360"},{"kind":"developer","value":"Kubold"}]},
+      "summary":"Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations":[{"category":"mechanics","statement":"Russian player feedback describes the physics-based sword fighting as intuitive and enjoyable while noting that bouts can end from a single successful strike.","sentiment":"positive","recurrence":"anecdotal","mention_count":1,"evidence_languages":["russian"],"evidence_status":"durable","source_ids":["source-002"],"player_feedback_ids":["feedback-001"]}],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"single_source_only","single_source_reason":"Bounded research found one directly addressable Russian exact-product player post suitable for the serialized durable finding.","russian_attempt":"found_and_used","overall_strength":"limited","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"source-001","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/1000360/","publication_date":"2021-02-16","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"source-002","source_type":"other_player_feedback","domain":"pikabu.ru","url":"https://pikabu.ru/story/samaya_realistichnaya_igra_pro_fekhtovanie_9866120","publication_date":null,"language":"russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true}
+      ],"player_feedback_records":[{"feedback_id":"feedback-001","source_id":"source-002","url":"https://pikabu.ru/story/samaya_realistichnaya_igra_pro_fekhtovanie_9866120","publication_date":null,"language":"russian","identity_mode":"stable_locator"}]}
+    },
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,
+      "web_evidence_contract_binding":{"evidence_contract_schema":"TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2","evidence_contract_version":2,"evidence_contract_revision":"validator-generator-parity-fix-2026-09-20","evidence_contract_sha256":"be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac","worker_schema":"TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2","worker_schema_version":2,"worker_schema_revision":"validator-generator-parity-fix-2026-09-20","worker_schema_sha256":"d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98","dossier_schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","dossier_schema_version":2,"worker_prompt_revision":"web-evidence-v2-fail-closed-execution-ledger-v1","worker_prompt_sha256":"6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"},
+      "appid":"1003590","title":"Tetris® Effect: Connected","generated_at_utc":"2026-09-21T04:30:00Z","expires_at_utc":"2026-10-11T04:30:00Z","ttl_days":20,
+      "game_identity":{"work_title":"Tetris® Effect: Connected","release_year":2021,"resolution_status":"resolved","identity_source_ids":["source-001"],"corroborators":[{"kind":"appid","value":"1003590"},{"kind":"developer","value":"Monstars Inc., Resonair, Stage Games"}]},
+      "summary":"Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations":[{"category":"localization","statement":"Recent Russian player feedback reports that the game still lacks a Russian interface translation and that this can make navigation harder for players with limited English.","sentiment":"negative","recurrence":"anecdotal","mention_count":1,"evidence_languages":["russian"],"evidence_status":"current","source_ids":["source-002"],"player_feedback_ids":["fallback-001"]}],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"single_source_only","single_source_reason":"Bounded research found a current exact-product Steam discussion with concrete Russian player feedback used for the localization finding.","russian_attempt":"found_and_used","overall_strength":"limited","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"source-001","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/1003590/","publication_date":"2021-08-17","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"source-002","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1003590/discussions/0/603016087419883875/","publication_date":null,"language":"mixed","freshness":"recent","evidence_role":"current_state","player_feedback":true,"feedback_surface_mode":"concrete_item_collection"}
+      ],"player_feedback_records":[{"feedback_id":"fallback-001","source_id":"source-002","publication_date":"2026-02-03","language":"russian","identity_mode":"transient_author_deduped"}]}
+    }
+  ]
+}
