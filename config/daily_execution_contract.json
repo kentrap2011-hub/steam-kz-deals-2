@@ -128,10 +128,10 @@
   },
   "progressive_personalization_phase_a": {
     "contract": "config/progressive_personalization_contract.json",
-    "status": "active",
+    "status": "fallback",
     "deterministic_catalogue_publishable_before_semantic_closure": true,
     "semantic_queue_zero_required_for_publication": false,
-    "rule": "The current deterministic catalogue may be published before semantic closure. GitHub projects per-item progressive state and counts; semantic completeness remains observable but is not a global availability gate. Hard source-integrity, current-offer, business and identity gates remain fail-closed.",
+    "rule": "Phase A deterministic progressive publication remains the fallback availability model underneath active Phase B PASS 1. It must remain publishable whenever PASS 1 is open or partially progressed.",
     "ui_rule": "The site remains a read-only consumer of the GitHub-produced progressive payload.",
     "pass1_active": false,
     "pass2_active": false
