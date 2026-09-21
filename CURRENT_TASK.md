@@ -640,8 +640,10 @@
 ## Worker in progress — 2026-09-21
 
 ### Progressive PASS 2 dossier-ready gate amendment 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_director_acceptance`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PASS2_DOSSIER_READY_GATE_AMENDMENT_01.md`;
-- scope: canonical rule amendment only; no PASS 2 runtime/scheduler/worker/production execution;
-- target: exact-compatible accepted Dossier gate, zero attempt consumption while waiting, independent parallel PASS 1/PASS 2 ownership, bounded one-shot PASS 2 recovery per current semantic generation/work identity;
-- durable report target: `reviews/worker_reports/progressive-pass2-dossier-ready-gate-amendment-01.md`.
+- canonical Progressive contract now requires current exact-compatible canonically accepted Dossier before a specific `analysis_incomplete` item becomes PASS 2 eligible;
+- PASS 1 and PASS 2 are independent GitHub-owned flows; the old global full-PASS-1 start barrier is superseded;
+- waiting for Dossier consumes zero PASS 2 attempts; automatic PASS 2 remains bounded to one attempt per current semantic generation/work identity;
+- PASS 2 runtime/scheduler/worker/production execution were not implemented or run;
+- durable report: `reviews/worker_reports/progressive-pass2-dossier-ready-gate-amendment-01.md`.
