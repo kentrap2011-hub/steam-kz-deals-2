@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import priority_ranking
+import progressive_pass1
 
 ROOT = Path('.')
 CONTRACT = ROOT / 'config/progressive_personalization_contract.json'
@@ -49,9 +50,17 @@ def cache_entries(doc):
 
 
 def effective_taste_entries():
+    """Effective semantic entries for downstream Tier-1 rendering.
+
+    Existing exact-compatible Taste cache remains the fast path. Current PASS 1
+    fit outcomes are a separate lightweight semantic source and may supply a
+    minimal Tier-1 semantic view without mutating the canonical V5 Taste cache.
+    """
     merged = dict(cache_entries(load_json(TASTE_CACHE))) if TASTE_CACHE.exists() else {}
     if TASTE_OVERLAY.exists():
         merged.update(cache_entries(load_json(TASTE_OVERLAY)))
+    if progressive_pass1.STATE.exists():
+        merged.update(progressive_pass1.current_fit_semantic_entries())
     return merged
 
 
@@ -59,28 +68,36 @@ def load_contract(path=CONTRACT):
     contract = load_json(path)
     if contract.get('contract') != 'PROGRESSIVE-PERSONALIZED-DEALS-V1':
         raise ValueError('progressive personalization contract mismatch')
-    if contract.get('status') != 'canonical' or contract.get('phase') != 'phase_a':
-        raise ValueError('progressive personalization Phase A is not canonical')
+    if contract.get('status') != 'canonical' or contract.get('phase') != 'phase_b':
+        raise ValueError('progressive personalization Phase B is not canonical')
     if contract.get('durable_in_progress_state') is not False:
-        raise ValueError('Phase A must not add a durable analysis_in_progress state')
+        raise ValueError('Progressive publication must not add durable analysis_in_progress')
     if contract.get('tier_precedence') != ['analyzed_fit', 'analysis_incomplete', 'not_analyzed']:
         raise ValueError('progressive tier precedence mismatch')
-    phase = contract.get('phase_a_execution') or {}
-    if phase.get('pass1_active') is not False or phase.get('pass2_active') is not False:
-        raise ValueError('Phase A must not activate PASS 1/PASS 2')
+    phase = contract.get('phase_b_execution') or {}
+    if phase.get('pass1_active') is not True or phase.get('pass2_active') is not False:
+        raise ValueError('Phase B must activate PASS 1 and keep PASS 2 inactive')
+    progressive_pass1.load_contract()
     return contract
 
 
+def _base_state(analysis_state='not_analyzed', *, issue=None, fit=None, evaluated_at=None, source=None):
+    return {
+        'analysis_state': analysis_state,
+        'analysis_tier': STATE_TIER[analysis_state],
+        'analysis_issue_code': issue,
+        'fit': fit,
+        'evaluated_at_utc': evaluated_at,
+        'analysis_semantic_source': source,
+        'semantic_generation_id': None,
+        'pass1_attempted': False,
+    }
+
+
 def projection_state(projection, taste_entry):
-    """Map only current exact-compatible semantic data into a durable Phase A state."""
+    """Map only current exact-compatible canonical Taste cache into progressive state."""
     if not isinstance(projection, dict) or projection.get('status') != 'cache_hit':
-        return {
-            'analysis_state': 'not_analyzed',
-            'analysis_tier': 3,
-            'analysis_issue_code': None,
-            'fit': None,
-            'evaluated_at_utc': None,
-        }
+        return _base_state()
 
     cached = projection.get('cached_taste') or {}
     verdict = str(cached.get('verdict') or '').upper()
@@ -90,65 +107,40 @@ def projection_state(projection, taste_entry):
     backfill = projection.get('fit_evidence_backfill_required') is True
 
     if not isinstance(taste_entry, dict):
-        return {
-            'analysis_state': 'not_analyzed',
-            'analysis_tier': 3,
-            'analysis_issue_code': None,
-            'fit': None,
-            'evaluated_at_utc': None,
-        }
+        return _base_state()
     if (
         str(taste_entry.get('verdict') or '').upper() != verdict
         or taste_entry.get('fit_level') != fit
         or taste_entry.get('taste_fingerprint') != projection.get('taste_fingerprint')
         or taste_entry.get('candidate_context_sha256') != projection.get('candidate_context_sha256')
     ):
-        return {
-            'analysis_state': 'not_analyzed',
-            'analysis_tier': 3,
-            'analysis_issue_code': None,
-            'fit': None,
-            'evaluated_at_utc': None,
-        }
+        return _base_state()
 
     evaluated_at = taste_entry.get('evaluated_at_utc')
 
     if verdict == 'INCLUDE' and fit in {'strong', 'moderate'}:
-        return {
-            'analysis_state': 'analyzed_fit',
-            'analysis_tier': 1,
-            'analysis_issue_code': None,
-            'fit': fit,
-            'evaluated_at_utc': evaluated_at,
-        }
+        return _base_state(
+            'analyzed_fit',
+            fit=fit,
+            evaluated_at=evaluated_at,
+            source='compatible_cache',
+        )
 
     if verdict == 'EXCLUDE':
-        # V5 "insufficient" means evidence was not enough to establish a trustworthy
-        # fit/not-fit conclusion for Progressive Personalized Deals. It remains visible.
         if evidence_state == 'insufficient' or backfill or not evidence_ready:
-            return {
-                'analysis_state': 'analysis_incomplete',
-                'analysis_tier': 2,
-                'analysis_issue_code': 'insufficient_current_semantic_evidence',
-                'fit': None,
-                'evaluated_at_utc': None,
-            }
+            return _base_state(
+                'analysis_incomplete',
+                issue='insufficient_current_semantic_evidence',
+                source='compatible_cache',
+            )
         if evidence_state in {'confirmed_negative', 'reconsiderable'}:
-            return {
-                'analysis_state': 'analyzed_not_fit',
-                'analysis_tier': None,
-                'analysis_issue_code': None,
-                'fit': None,
-                'evaluated_at_utc': evaluated_at,
-            }
+            return _base_state(
+                'analyzed_not_fit',
+                evaluated_at=evaluated_at,
+                source='compatible_cache',
+            )
 
-    return {
-        'analysis_state': 'not_analyzed',
-        'analysis_tier': 3,
-        'analysis_issue_code': None,
-        'fit': None,
-        'evaluated_at_utc': None,
-    }
+    return _base_state()
 
 
 def build_state_index(context_rows=None, projection_doc=None, taste_entries=None):
@@ -157,6 +149,13 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
     projection_doc = projection_doc if projection_doc is not None else load_json(TASTE_PROJECTION)
     taste_entries = taste_entries if taste_entries is not None else effective_taste_entries()
     projections = projection_doc.get('entries') or {}
+    pass1_state_doc = progressive_pass1.load_state()
+    queue_rows = progressive_pass1.load_jsonl(progressive_pass1.TASTE_QUEUE)
+    generation, pass1_bindings, _queue_by_family = progressive_pass1.current_bindings(
+        context_rows,
+        projection_doc,
+        queue_rows,
+    )
 
     index = {}
     for row in context_rows:
@@ -166,18 +165,36 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
             raise ValueError('progressive candidate context requires family_id and taste_subject_key')
         if family_id in index:
             raise ValueError(f'duplicate progressive family_id: {family_id}')
+
         projection = projections.get(taste_key) or {}
-        entry = taste_entries.get(taste_key) or {}
-        state = projection_state(projection, entry)
+        canonical_entry = taste_entries.get(taste_key) or {}
+        state = projection_state(projection, canonical_entry)
+        binding = pass1_bindings.get(family_id)
+        pass1_entry = progressive_pass1.matching_state_entry(binding, pass1_state_doc) if binding else None
+
+        if state['analysis_state'] == 'not_analyzed' and pass1_entry is not None:
+            pass1_state = progressive_pass1.project_state(binding, pass1_state_doc)
+            if pass1_state is not None:
+                state = pass1_state
+
+        if state['analysis_state'] == 'analyzed_fit' and state.get('analysis_semantic_source') == 'progressive_pass1':
+            semantic_entry = progressive_pass1.semantic_taste_entry(pass1_entry)
+        elif state['analysis_state'] == 'analyzed_fit':
+            semantic_entry = canonical_entry
+        else:
+            semantic_entry = {}
+
         index[family_id] = {
             **state,
             'taste_subject_key': taste_key,
-            'taste_entry': entry if state['analysis_state'] == 'analyzed_fit' else {},
+            'taste_entry': semantic_entry,
             'projection': projection,
             'context': row,
+            'pass1_scope_eligible': bool(binding) and state.get('analysis_semantic_source') != 'compatible_cache',
+            'pass1_work_id': binding.get('work_id') if binding else None,
+            'pass1_current_generation_id': generation['semantic_generation_id'] if binding else None,
         }
     return index
-
 
 def selected_scenario(context, fit):
     if fit == 'strong':
@@ -203,6 +220,17 @@ def apply_state_fields(game, state):
         game['analysis_issue_code'] = issue
     else:
         game.pop('analysis_issue_code', None)
+    source = state.get('analysis_semantic_source')
+    if source:
+        game['analysis_semantic_source'] = source
+    else:
+        game.pop('analysis_semantic_source', None)
+    generation = state.get('semantic_generation_id')
+    if generation:
+        game['analysis_semantic_generation_id'] = generation
+    else:
+        game.pop('analysis_semantic_generation_id', None)
+    game['pass1_attempted'] = bool(state.get('pass1_attempted'))
     if analysis_state != 'analyzed_fit':
         strip_unresolved_personalization(game)
     return game
@@ -258,6 +286,9 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'not_analyzed': 0,
     }
     accepted_times = []
+    pass1_total_scope = 0
+    pass1_attempted = 0
+
     for family_id, state in state_index.items():
         if family_id in business_excluded:
             continue
@@ -265,8 +296,12 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         if key not in counts:
             raise ValueError(f'unknown analysis state: {key}')
         counts[key] += 1
-        if key in {'analyzed_fit', 'analyzed_not_fit'} and state.get('evaluated_at_utc'):
+        if state.get('evaluated_at_utc'):
             accepted_times.append(str(state['evaluated_at_utc']))
+        if state.get('pass1_scope_eligible'):
+            pass1_total_scope += 1
+            if state.get('pass1_attempted'):
+                pass1_attempted += 1
 
     total = sum(counts.values())
     analyzed_success = counts['analyzed_fit'] + counts['analyzed_not_fit']
@@ -278,11 +313,14 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         )
     if total != analyzed_success + counts['analysis_incomplete'] + counts['not_analyzed']:
         raise ValueError('progressive total arithmetic mismatch')
+    pass1_remaining = pass1_total_scope - pass1_attempted
+    if pass1_remaining < 0:
+        raise ValueError('PASS 1 progress arithmetic mismatch')
 
     return {
-        'schema_version': 1,
+        'schema_version': 2,
         'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
-        'phase': 'phase_a',
+        'phase': 'phase_b',
         'total_current_candidates': total,
         'analyzed_success_count': analyzed_success,
         'analyzed_fit_count': counts['analyzed_fit'],
@@ -291,7 +329,10 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'not_analyzed_count': counts['not_analyzed'],
         'normal_visible_count': normal_visible,
         'last_accepted_analysis_at_utc': max(accepted_times) if accepted_times else None,
-        'pass1_active': False,
+        'pass1_active': True,
+        'pass1_total_scope': pass1_total_scope,
+        'pass1_attempted_count': pass1_attempted,
+        'pass1_remaining_count': pass1_remaining,
         'pass2_active': False,
         'semantic_queue_zero_required_for_publication': False,
     }
@@ -327,10 +368,10 @@ def stamp_processing_status(visual, state_index=None):
     visual['processing_status'] = status
     visual['progressive_personalization'] = {
         'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
-        'phase': 'phase_a',
-        'publication_status': 'current_deterministic_catalogue',
+        'phase': 'phase_b',
+        'publication_status': 'current_deterministic_catalogue_with_incremental_pass1',
         'semantic_queue_zero_required_for_publication': False,
-        'pass1_active': False,
+        'pass1_active': True,
         'pass2_active': False,
     }
     # Overall visual availability reflects the deterministic current catalogue.
@@ -342,7 +383,8 @@ def validate_processing_status(status):
     required = {
         'total_current_candidates', 'analyzed_success_count', 'analyzed_fit_count',
         'analyzed_not_fit_count', 'analysis_incomplete_count', 'not_analyzed_count',
-        'normal_visible_count',
+        'normal_visible_count', 'pass1_total_scope', 'pass1_attempted_count',
+        'pass1_remaining_count',
     }
     if not required.issubset(status):
         raise ValueError('progressive processing status missing required counters')
@@ -359,4 +401,11 @@ def validate_processing_status(status):
         raise ValueError('analyzed_success_count invariant failed')
     if visible != fit + incomplete + untouched:
         raise ValueError('normal_visible_count invariant failed')
+    pass1_total = int(status['pass1_total_scope'])
+    pass1_attempted = int(status['pass1_attempted_count'])
+    pass1_remaining = int(status['pass1_remaining_count'])
+    if pass1_total != pass1_attempted + pass1_remaining:
+        raise ValueError('PASS 1 scope invariant failed')
+    if status.get('pass1_active') is not True or status.get('pass2_active') is not False:
+        raise ValueError('PASS 1/PASS 2 activation flags invalid')
     return True
