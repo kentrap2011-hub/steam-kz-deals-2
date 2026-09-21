@@ -36,10 +36,13 @@ Task:
 Mode:
 `CANONICAL RULE AMENDMENT / NO PASS2 IMPLEMENTATION`
 
+Worker slot:
+`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
+
 User-authoritative correction:
 - PASS 2 may evaluate an incomplete item only after current exact-compatible accepted Dossier evidence exists for that same work identity;
 - waiting for Dossier consumes no PASS 2 attempt;
-- PASS 2 may later run opportunistically alongside ongoing PASS 1, with PASS 1 priority and no starvation.
+- PASS 1 and PASS 2 operate independently in parallel; neither waits for or blocks the other.
 
 Expected report:
 `reviews/worker_reports/progressive-pass2-dossier-ready-gate-amendment-01.md`
