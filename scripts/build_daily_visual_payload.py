@@ -151,8 +151,10 @@ def enrich_history_and_remove_expired(ready, context_by_family, payload):
 
     for game in ready.get('items') or []:
         if game.get('analysis_state') not in {None, 'analyzed_fit'}:
+            # Tier 2/3 must remain visible in Phase A. Strip unsupported
+            # personalization, then keep running the same deterministic
+            # offer-expiry/history path used by analyzed-fit rows.
             progressive_personalization.strip_unresolved_personalization(game)
-            continue
         row = context_by_family.get(str(game.get('id'))) or {}
         purchase = row.get('purchase') or {}
         primary_key = purchase.get('key')
