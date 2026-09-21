@@ -12,6 +12,22 @@
 - The user should not need to relay normal worker results between chats; GitHub worker-reports are the normal handoff channel.
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
+- Director project state must be reconstructed from canonical compact state, not from conversational momentum. After a Director chat is retired, continue only in a NEW physical Director conversation using `DIRECTOR_BOOTSTRAP.md`.
+
+## DIRECTOR CHAT ROTATION — READY
+
+State:
+- the current physical Director conversation is retired after issuing the restart handoff;
+- continue project orchestration only in a NEW physical Director chat;
+- bootstrap entrypoint: `DIRECTOR_BOOTSTRAP.md`;
+- the new Director starts with latest `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, `DIRECTOR_BOOTSTRAP.md`, and `DIRECTOR_TASK_BOARD.md`;
+- do not reconstruct state from the old Director transcript unless canonical compact state is genuinely insufficient.
+
+Immediate active work after restart:
+- PASS 1 Scheduled worker entrypoint audit;
+- assigned to `НОВЫЙ ЧАТ — ЧАТ 2`;
+- audit execution is not yet confirmed by the user;
+- PASS 1 production execution and PASS 2 remain paused pending that audit.
 
 ## ACTIVE — PASS 1 Scheduled worker entrypoint audit
 
