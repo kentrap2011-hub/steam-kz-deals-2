@@ -78,7 +78,8 @@ def load_contract(path=CONTRACT):
     return contract
 
 
-def load_state(path=STATE):
+def load_state(path=None):
+    path = STATE if path is None else path
     doc = load_json(path)
     if not doc:
         return {'schema_version': 1, 'contract': 'PROGRESSIVE-PASS1-STATE-V1', 'entries': {}}
