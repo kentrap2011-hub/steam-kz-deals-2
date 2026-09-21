@@ -27,6 +27,31 @@ Immediate active work:
 - bounded CONFIGURE task for a dedicated Progressive PASS 1 Scheduled Task is assigned to `СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`;
 - PASS 1 production execution and PASS 2 remain paused until that configuration is accepted and live acceptance is separately resumed.
 
+## ACTIVE — Progressive PASS 1 Scheduled worker dedup fix
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_WORKER_DEDUP_FIX_01.md`
+
+Mode:
+`IMPLEMENT / RUNTIME FIX — NO PRODUCTION RUN`
+
+Worker slot:
+`СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`
+
+Trigger:
+- user Active Scheduled Tasks UI shows three active `Progressive PASS 1 Worker` entries;
+- previous configure report claimed exactly one;
+- configure acceptance is suspended until deduplication is verified.
+
+Goal:
+- inspect all three task IDs/configs;
+- keep exactly one correctly configured task;
+- disable/delete only the duplicate Progressive PASS 1 tasks;
+- no `Run now`, no PASS 1, no PASS 2.
+
+Expected report:
+`reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-dedup-fix-01.md`
+
 ## ACTIVE — Progressive PASS 1 Scheduled worker configure
 
 Task:
