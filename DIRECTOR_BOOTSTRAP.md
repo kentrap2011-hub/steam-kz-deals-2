@@ -108,13 +108,14 @@ Known existing historical tasks include:
 - `Taste Steam Review Dossier`;
 - `Taste Semantic Producer`.
 
-They are separate mechanisms with separate contracts. Do not call either one the Progressive PASS 1 worker without the active audit proving compatibility/binding.
+They are separate mechanisms with separate contracts. Do not call either one the Progressive PASS 1 worker without owner-scope runtime inventory and binding proof.
 
 ## Worker conversation state
 
-- Previous physical ЧАТ 2: retired/overloaded. Never route work there as an existing chat.
-- Slot `ЧАТ 2`: reusable only through a NEW physical chat for the active entrypoint audit.
-- ЧАТ 1: contains the bounded PASS 1 live-acceptance attempt that ended `blocked_external`; do not resume production execution there until the entrypoint audit is accepted by Director.
+- The retired/overloaded historical physical ЧАТ 2 remains retired.
+- The NEW physical ЧАТ 2 used for the entrypoint audit has completed its task and its durable report is accepted; no continuation is currently required.
+- Slot `ЧАТ 2` is free for a future task; use a NEW physical chat unless a future task explicitly benefits from the completed audit conversation.
+- ЧАТ 1 contains the bounded PASS 1 live-acceptance attempt that ended `blocked_external`; do not resume production execution there until owner-scope runtime existence/binding is classified.
 
 ## Immediate Director sequence
 
