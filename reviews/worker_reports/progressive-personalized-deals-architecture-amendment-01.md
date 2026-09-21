@@ -221,6 +221,8 @@ This is independent from:
 
 ## 6. PASS 2 — recovery only
 
+> **Superseded PASS 2 start rule — 2026-09-21:** Section 6.1 below records the earlier architecture choice and is no longer current. Canonical decision `PPD-003` and `config/progressive_personalization_contract.json#phase_c_pass2_design` replace the global `not_analyzed_count == 0` start barrier with a per-item Dossier-ready gate. PASS 1 and PASS 2 may operate independently in parallel; only a current `analysis_incomplete` item with a canonically accepted exact-compatible Dossier and unused one-shot PASS 2 budget is eligible. Waiting for Dossier consumes zero PASS 2 attempts. This report remains otherwise historical and is not a runtime activation.
+
 ### 6.1 Start rule
 
 PASS 2 should start **only after PASS 1 has covered the entire current semantic candidate set**, i.e. `not_analyzed_count == 0`.
