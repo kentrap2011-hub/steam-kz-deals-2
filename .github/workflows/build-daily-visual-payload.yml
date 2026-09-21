@@ -13,6 +13,8 @@ on:
     paths:
       - "scripts/build_final_visual_payload.py"
       - "scripts/progressive_personalization.py"
+      - "scripts/progressive_pass1.py"
+      - "scripts/test_progressive_pass1.py"
       - "scripts/test_progressive_personalization.py"
       - "scripts/test_progressive_unresolved_row_preservation.py"
       - "scripts/progressive_visual_activation_routing.py"
@@ -49,6 +51,8 @@ on:
       - "config/duration_enrichment_contract.json"
       - "config/final_ranking_policy.json"
       - "config/progressive_personalization_contract.json"
+      - "config/progressive_pass1_contract.json"
+      - "data/cache/progressive_pass1_state.json"
       - "config/fixed_package_purchase_option_contract.json"
       - "config/purchase_equivalence_overrides.json"
       - "config/taste_result_contract.json"
@@ -741,6 +745,7 @@ jobs:
           set -euo pipefail
           python scripts/validate_priority_ranking.py
           python scripts/test_progressive_personalization.py
+          python scripts/test_progressive_pass1.py
           python scripts/test_progressive_unresolved_row_preservation.py
 
       - name: Validate canonical duration enrichment contract
