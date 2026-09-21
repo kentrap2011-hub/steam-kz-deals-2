@@ -27,6 +27,8 @@ def compatible_visual(source='S'):
         'progressive_personalization': {
             'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
             'phase': 'phase_b',
+            'pass1_active': True,
+            'pass2_active': False,
         },
         'processing_status': {
             'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
