@@ -12,7 +12,7 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## ACTIVE — Progressive personalized deals Phase B / PASS 1 live acceptance
+## BLOCKED EXTERNAL — Progressive personalized deals Phase B / PASS 1 live acceptance
 
 Parent task:
 `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_IMPLEMENT_01.md`
@@ -20,34 +20,27 @@ Parent task:
 Live acceptance task:
 `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_LIVE_ACCEPTANCE_01.md`
 
-Task ID:
-`progressive-personalized-deals-phase-b-pass1-live-acceptance-01`
-
-Mode:
-`LIVE ACCEPTANCE / BOUNDED PRODUCTION VALIDATION`
-
-Worker routing:
-- use a FRESH ЧАТ 1 worker chat;
-- do not use the long-running ЧАТ 2 implementation context.
-
-Accepted baseline:
-- Phase B code/control-plane is ready;
-- Phase B visual is live;
-- PASS 1 active, PASS 2 inactive;
-- current visible catalogue remains available;
-- no real PASS 1 item has yet been accepted.
-
-Scope:
-- run exactly one GitHub-selected current PASS 1 item end-to-end;
-- prove Scheduled result -> artifact -> ingest -> durable state -> incremental visual/site update;
-- no retry, no second item, no backlog drain, no PASS 2.
-
-Expected report:
+Report:
 `reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-live-acceptance-01.md`
 
-Next decision:
-- if complete_live_acceptance, authorize normal canonical PASS 1 backlog processing;
-- otherwise fix only the exact blocker.
+Status:
+`blocked_external`
+
+Accepted facts:
+- GitHub-owned PASS 1 manifest is current and unambiguous;
+- exact first item is sequence 1, Tower Dominion, App_3226530 / appid 3226530;
+- pre-attempt state is clean: attempted 0, remaining 721, PASS 2 inactive;
+- exact prepared result path is known and absent;
+- current worker environment cannot invoke the existing authorized Scheduled PASS 1 ChatGPT worker;
+- no semantic result was fabricated;
+- no PASS 1 attempt was consumed;
+- no retry, second item, backlog drain or PASS 2 execution occurred;
+- current Phase B visual/site baseline remains unchanged and available.
+
+External unblock:
+- invoke the existing authorized Scheduled PASS 1 worker exactly once from an environment exposing its real execution interface, against the current GitHub-owned manifest/order;
+- then verify only that one resulting item end-to-end;
+- do not process a second item or backlog until Director accepts the live result.
 
 
 ## ACCEPTED — Progressive personalized deals Phase A
