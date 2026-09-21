@@ -183,7 +183,7 @@ def current_explanation_context():
         for row in progressive_personalization.load_jsonl(progressive_personalization.PROGRESSIVE_CONTEXT)
         if row.get('family_id')
     }
-    taste_entries = refiner.effective_taste_entries()
+    taste_entries = progressive_personalization.effective_taste_entries()
     projections = (
         (refiner.load_json(refiner.TASTE_PROJECTION).get('entries') or {})
         if refiner.TASTE_PROJECTION.exists()
@@ -584,7 +584,7 @@ def main():
     ready = base_builder.enrich_history_and_remove_expired(ready, context_by_family, payload)
     achievement_distribution = base_builder.achievement_quality_distribution(ready.get('items') or [])
 
-    taste_entries = refiner.effective_taste_entries()
+    taste_entries = progressive_personalization.effective_taste_entries()
     projections = (
         (refiner.load_json(refiner.TASTE_PROJECTION).get('entries') or {})
         if refiner.TASTE_PROJECTION.exists()
