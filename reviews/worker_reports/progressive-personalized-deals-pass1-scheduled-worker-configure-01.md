@@ -7,128 +7,125 @@
 - Source of truth: `main`
 - Mode: `CONFIGURE / VALIDATE — NO PRODUCTION RUN`
 - Date: 2026-09-21
-- Final status: `needs_user_decision`
+- Final status: `complete_scheduler_ready_for_bounded_live_acceptance`
 
-This task was stopped before scheduler creation because the canonical repository establishes the cadence and timezone but does not establish a sufficiently safe exact recurring clock time for the new Progressive PASS 1 worker.
+The previous `needs_user_decision` schedule blocker is resolved by the accepted owner/Director decision: run the dedicated Progressive PASS 1 worker every day at **02:00 Europe/Samara**.
 
 ## 2. Architecture preflight
 
-Verified before any scheduler write:
+The configured runtime remains within the accepted architecture:
 
-1. The requested change is limited to a dedicated Scheduled ChatGPT runtime/data-plane entrypoint.
-2. GitHub remains the sole control-plane owner for semantic generation, scope/order, work IDs, attempt state, retry eligibility, validation/persistence, completeness, counts and visual rebuilds.
-3. The accepted Director/audit classification is `missing_runtime_entrypoint` for an active dedicated Progressive PASS 1 Scheduled Task. Read-only scheduler inventory inspection did not provide evidence of a competing active dedicated Progressive PASS 1 task in the observable owner scope.
-4. No existing Taste/Dossier/Nightly task is being repurposed or modified.
-5. Current canonical PASS 1 work has `pass1_active=true`; PASS 2 remains inactive.
-6. No retry loop outside GitHub is introduced.
+1. The new entrypoint is a dedicated Scheduled ChatGPT semantic data-plane worker.
+2. GitHub remains the control-plane owner for semantic generation, scope/order, work IDs, attempt state, retry eligibility, validation/persistence, completeness, counts and visual rebuilds.
+3. No existing Taste/Dossier/Nightly task was repurposed or modified.
+4. PASS 1 remains item-level and GitHub-owned in scope/order.
+5. PASS 2 remains inactive.
+6. No scheduler-owned retry loop was introduced.
 
-No scheduler write was performed because the schedule gate below is unresolved.
+## 3. Dedicated Scheduled Task
 
-## 3. Scheduler existence check before creation
+Exactly one dedicated task was created and then validated without `Run now`:
 
-The canonical audit and accepted Director finding classify the dedicated Progressive PASS 1 runtime entrypoint as missing.
+- title: `Progressive PASS 1 Worker`
+- task ID: `6ab14c73f59c8191850959f97197e541`
+- enabled: `true`
+- timing mode: `exact_schedule`
+- timezone: `Europe/Samara`
+- cadence: daily
+- exact clock: `02:00`
+- DTSTART: `2026-09-22 02:00 Europe/Samara`
+- RRULE: `FREQ=DAILY;BYHOUR=2;BYMINUTE=0;BYSECOND=0`
 
-The intended new identity, once the schedule decision is supplied, is the dedicated title:
+At validation time the first scheduled occurrence was still in the future. No manual execution was invoked.
 
-`Progressive PASS 1 Worker`
+## 4. Schedule safety decision
 
-Existing historical or unrelated tasks, including `Taste Steam Review Dossier`, historical `Taste Semantic Producer` and `Nightly Production Runtime`, are not candidates for reuse.
+Canonical repository evidence established daily cadence and timezone `Europe/Samara`, while the earlier CONFIGURE pass correctly stopped before inventing an exact clock.
 
-No existing scheduler entry was changed.
+The owner/Director subsequently selected **02:00 Europe/Samara daily**. This resolves the only schedule decision blocker and places the worker after the normal GitHub-owned preparation chain rather than at the unsafe 01:00 preparation boundary.
 
-## 4. Exact created Scheduled Task title and ID
+The scheduler was configured exactly to that accepted time; no alternate clock was inferred.
 
-No Scheduled Task was created.
+## 5. Runtime prompt / loader binding
 
-- intended title: `Progressive PASS 1 Worker`
-- created task title: N/A
-- created task ID: N/A
+The dedicated scheduler prompt is loader-based and binds the runtime to the canonical GitHub contract.
 
-Reason: the task explicitly requires stopping before creation when a safe exact recurring clock cannot be derived with enough certainty.
+Each invocation is instructed to:
 
-## 5. Enabled state
-
-N/A — no new Scheduled Task was created or enabled.
-
-## 6. Schedule / timezone and safety relative to GitHub preparation
-
-Canonical evidence establishes:
-
-- cadence: **daily**;
-- timezone: **`Europe/Samara`**;
-- GitHub production collection starts at local **00:10**;
-- canonical night preparation is anchored at local **01:00**.
-
-However, `progressive_pass1_work.json` is produced downstream of the GitHub-owned preparation chain rather than by the Scheduled ChatGPT worker itself. The current workflows include:
-
-- the 00:10 production shortlist workflow, with a 60-minute timeout;
-- an event-driven mailing-feed stage, with a 3-minute timeout;
-- an event-driven pre-AI snapshot stage, with a 5-minute timeout;
-- `scripts/build_progressive_pass1_work.py` in that pre-AI stage.
-
-Therefore an exact Scheduled ChatGPT clock of 01:00 is not proven safe: under allowed runtime durations, chained execution can reach past 01:00 even before GitHub queueing delay is considered. The repository does not canonically specify another exact PASS 1 worker clock.
-
-Per the task rule, no time was guessed.
-
-Unresolved schedule field:
-
-**exact daily HH:MM in `Europe/Samara` for the new dedicated `Progressive PASS 1 Worker`.**
-
-## 7. Exact prompt / loader binding
-
-No scheduler entry was created, so no live effective prompt is claimed.
-
-The required loader binding is nevertheless canonical and ready for configuration after the clock decision. Each invocation must:
-
-- target only `kentrap2011-hub/steam-kz-deals-2` / `main`;
+- operate only on `kentrap2011-hub/steam-kz-deals-2` / `main`;
 - first read the latest `config/progressive_pass1_worker_prompt.md` fully;
-- read and obey `config/progressive_pass1_contract.json`;
-- use only current GitHub-owned `data/production/pre_ai/progressive_pass1_work.json`;
+- then read and obey `config/progressive_pass1_contract.json`;
+- use only the current GitHub-owned `data/production/pre_ai/progressive_pass1_work.json`;
+- preserve exact manifest order, work IDs and result paths;
 - never choose, rebuild, reorder or expand work;
-- create only exact create-only per-item PASS 1 result artifacts at GitHub-provided paths;
 - never auto-retry PASS 1;
 - never start PASS 2;
-- stop cleanly when no current items remain or runtime/tool budget no longer safely permits another item.
+- never impose the Taste Steam Review Dossier / universal Russian-review requirement on PASS 1;
+- create only exact create-only per-item PASS 1 result artifacts authorized by the current manifest during future scheduled production execution;
+- stop cleanly when no current items remain or runtime/tool budget no longer safely permits another item;
+- leave scope, order, attempts, retry, persistence, completeness, counts and visual rebuild ownership in GitHub.
 
-No stale full semantic contract was copied into a scheduler prompt.
+No stale copy of the full semantic contract was embedded as an alternative source of truth.
 
-## 8. Validation checklist
+## 6. Validation checklist
 
-- Dedicated Progressive PASS 1 task exists: **NO — intentionally not created due unresolved exact clock**.
-- Exact title/ID validated: **NOT APPLICABLE**.
-- Enabled state validated: **NOT APPLICABLE**.
-- Cadence established: **YES — daily**.
-- Timezone established: **YES — `Europe/Samara`**.
-- Exact safe clock established: **NO — user decision required**.
-- Canonical loader source established: **YES — `config/progressive_pass1_worker_prompt.md`**.
-- Repo/branch binding established: **YES — `kentrap2011-hub/steam-kz-deals-2` / `main`**.
+- Dedicated Progressive PASS 1 task exists: **YES**.
+- Exact title validated: **YES — `Progressive PASS 1 Worker`**.
+- Exact task ID recorded: **YES — `6ab14c73f59c8191850959f97197e541`**.
+- Enabled state validated: **YES — `true`**.
+- Timing mode validated: **YES — `exact_schedule`**.
+- Cadence validated: **YES — daily**.
+- Timezone validated: **YES — `Europe/Samara`**.
+- Exact clock validated: **YES — `02:00`**.
+- Canonical loader source bound: **YES — `config/progressive_pass1_worker_prompt.md`**.
+- PASS 1 contract bound: **YES — `config/progressive_pass1_contract.json`**.
+- Repo/branch binding: **YES — `kentrap2011-hub/steam-kz-deals-2` / `main`**.
 - Existing Taste/Dossier/Nightly tasks changed: **NO**.
 - `Run now` used: **NO**.
-- Production semantic execution occurred: **NO**.
-- PASS 1 result artifact created: **NO**.
-- PASS 1 attempt consumed: **NO**.
+- Production semantic execution caused by CONFIGURE: **NO**.
+- PASS 1 result artifact created by CONFIGURE: **NO**.
+- PASS 1 attempt consumed by CONFIGURE: **NO**.
+- Retry/backlog drain performed: **NO**.
 - PASS 2 started: **NO**.
 
-Current GitHub state at the stop boundary:
+## 7. Production-state no-run proof
 
-- PASS 1 generation: `334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d`;
+Post-configuration GitHub state was reread from `main`.
+
+`data/production/pre_ai/progressive_pass1_work.json`:
+
+- blob SHA: `66adc8b90ee61c19afff9854b3255fab97ef730a`;
+- contract: `PROGRESSIVE-PASS1-WORK-V1`;
+- phase: `phase_b_pass1`;
+- semantic generation: `334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d`;
+- `pass1_active = true`;
 - `pass1_attempted_count = 0`;
 - `pass1_remaining_count = 721`;
-- durable PASS 1 state entries remain empty;
+- `compatible_cache_resolved_count = 0`;
+- `expired_before_pass1_count = 0`;
 - `pass2_active = false`.
 
-## 9. Unrelated Scheduled Tasks
+`data/cache/progressive_pass1_state.json`:
 
-No existing Scheduled Task was modified, repurposed, enabled, disabled, rescheduled or run.
+- blob SHA: `ab52a04ee52e9e012e85cc161eec1416c57422a3`;
+- durable entry count: `0`.
+
+Both blob SHAs are unchanged from the pre-configuration baseline. Therefore scheduler configuration did not consume a PASS 1 attempt, persist a semantic result or start PASS 2.
+
+The first manifest item remains Tower Dominion / `App_3226530` / appid `3226530`; it was not processed by this CONFIGURE task.
+
+## 8. Unrelated Scheduled Tasks
+
+No existing Scheduled Task was modified, repurposed, enabled, disabled, rescheduled or manually run as part of this task.
 
 In particular, old Taste/Dossier/Nightly tasks were left unchanged.
 
-## 10. No production execution
+## 9. No production execution
 
 Confirmed:
 
 - no `Run now / Выполнить сейчас`;
-- no scheduled PASS 1 production execution;
+- no manual PASS 1 execution;
 - no Tower Dominion processing;
 - no PASS 1 result artifact;
 - no consumed PASS 1 attempt;
@@ -136,25 +133,19 @@ Confirmed:
 - no backlog drain;
 - no PASS 2 execution.
 
-## 11. Unresolved item
+Creating and validating the scheduled entrypoint is the only runtime-side action performed.
 
-One scheduling decision remains:
+## 10. Final status
 
-**Choose the exact daily clock time (HH:MM) in `Europe/Samara` for the new dedicated `Progressive PASS 1 Worker`.**
+`complete_scheduler_ready_for_bounded_live_acceptance`
 
-Cadence and timezone do not require a decision; both are already canonical.
+The dedicated Progressive PASS 1 scheduler entrypoint now exists, is enabled, is bound to the canonical loader/contract, and is scheduled for **02:00 Europe/Samara daily**. CONFIGURE completed without executing production semantic work.
 
-## 12. Final status
+## 11. Exactly one next step
 
-`needs_user_decision`
+Return to Director for a separately authorized bounded live acceptance. Do not perform that acceptance inside CONFIGURE 01.
 
-The scheduler was deliberately left unchanged rather than guessing a clock that could race GitHub manifest preparation.
-
-## 13. Exactly one recommended next step
-
-Provide the exact daily HH:MM in `Europe/Samara` for `Progressive PASS 1 Worker`; then configure exactly one dedicated Scheduled Task with the canonical loader prompt, validate it read-only, and do not run it.
-
-## 14. Exact scheduler / GitHub refs available
+## 12. Canonical refs
 
 - `CHAT_PROTOCOL.md`
 - `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_WORKER_CONFIGURE_01.md`
@@ -163,15 +154,5 @@ Provide the exact daily HH:MM in `Europe/Samara` for `Progressive PASS 1 Worker`
 - `config/execution_ownership_contract.json`
 - `config/daily_execution_contract.json`
 - `reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-entrypoint-audit-01.md`
-- `DIRECTOR_TASK_BOARD.md`
-- `.github/workflows/steam-test.yml`
-- `.github/workflows/build-mailing-feed.yml`
-- `.github/workflows/build-pre-ai-store-snapshot.yml`
-- `data/production/pre_ai/progressive_pass1_work.json` @ blob `66adc8b90ee61c19afff9854b3255fab97ef730a`
-- `data/cache/progressive_pass1_state.json` @ blob `ab52a04ee52e9e012e85cc161eec1416c57422a3`
-
-Scheduler task ID is unavailable because creation was correctly stopped before the unresolved clock decision.
-
-## 15. Efficiency / reusable lesson
-
-A canonical timezone or a named “night preparation” anchor is not sufficient evidence for a semantic worker clock when its input is produced by a chained event-driven GitHub pipeline. Configuration should derive the worker clock from the actual manifest-creation boundary; when that boundary has variable completion time and no canonical post-preparation clock, stop before scheduler creation instead of inferring a margin.
+- `data/production/pre_ai/progressive_pass1_work.json`
+- `data/cache/progressive_pass1_state.json`
