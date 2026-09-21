@@ -48,9 +48,7 @@ def cache_entries(obj):
 
 
 def effective_taste_entries():
-    merged = dict(cache_entries(load_json(TASTE_CACHE)))
-    merged.update(cache_entries(load_json(TASTE_OVERLAY)))
-    return merged
+    return progressive_personalization.effective_taste_entries()
 
 
 def get_fit(row, taste_entries):
