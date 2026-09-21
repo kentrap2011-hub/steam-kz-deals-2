@@ -598,3 +598,14 @@
 - durable report: `reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-live-acceptance-01.md`.
 - blocker: existing authorized Scheduled PASS 1 worker is not invocable from this environment; no semantic result was fabricated and no PASS 1 attempt was consumed.
 
+## Worker in progress — 2026-09-21
+
+### Progressive PASS 1 Scheduled worker configure 01
+Статус: `needs_user_decision`.
+- worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_WORKER_CONFIGURE_01.md`;
+- mode: CONFIGURE only; PASS 1/PASS 2 не запускались, `Run now` не использовался;
+- canonical cadence: daily;
+- canonical timezone: `Europe/Samara`;
+- blocker: exact safe recurring clock не задан канонически; Scheduled Task не создан и существующие Taste/Dossier/Nightly tasks не изменялись;
+- durable report: `reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-configure-01.md`.
+
