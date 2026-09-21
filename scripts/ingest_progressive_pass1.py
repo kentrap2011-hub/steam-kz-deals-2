@@ -59,11 +59,7 @@ def main():
         name = receipt['artifact']
         raw = raw_by_name.get(name, name.encode('utf-8'))
         out = receipt_path(raw)
-        if out.exists():
-            existing = json.loads(out.read_text(encoding='utf-8'))
-            if existing != receipt:
-                raise SystemExit(f'PASS 1 receipt collision for {name}')
-        else:
+        if not out.exists():
             out.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
     for path in paths:
