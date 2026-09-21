@@ -12,49 +12,41 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## CODE COMPLETE / WAITING LIVE ACCEPTANCE — Progressive personalized deals Phase B / PASS 1
+## ACTIVE — Progressive personalized deals Phase B / PASS 1 live acceptance
 
 Parent task:
 `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_IMPLEMENT_01.md`
 
-Completed continuation:
-`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_FRESHNESS_ACTIVATION_FIX_01.md`
+Live acceptance task:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_LIVE_ACCEPTANCE_01.md`
 
-Report:
-`reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-implement-01.md`
+Task ID:
+`progressive-personalized-deals-phase-b-pass1-live-acceptance-01`
 
-Current status:
-`complete_code_waiting_external_live_acceptance`
+Mode:
+`LIVE ACCEPTANCE / BOUNDED PRODUCTION VALIDATION`
 
-Director acceptance of implemented state:
-- canonical item-level PASS 1 contracts/state/work/ingest are merged;
-- real GitHub-owned manifest is active;
-- current semantic generation is prepared;
-- Phase B visual activation is live and non-empty;
-- current visual reports `phase_b`, `pass1_active=true`, `pass2_active=false`;
-- current visible catalogue remains 720 Tier 3 items;
-- current PASS 1 visual scope reports attempted 0 / remaining 720;
-- normal full build and UI/Pages deployment are green;
-- open PASS 1 work no longer blocks current catalogue publication;
-- no Scheduled PASS 1 item has yet been accepted;
-- no PASS 2 work occurred.
+Worker routing:
+- use a FRESH worker chat, not the long-running ЧАТ 2 implementation context.
 
-Key refs:
-- Phase B PR #78 / merge `4bb7e822f3275fc922d32105fc922f2966f14577`;
-- freshness fix PR #81 / merge `2bb36ebb9cfb3bcdd84510c86978e69ee97a7501`;
-- full visual build `35590588101`;
-- deploy `35590629152`;
-- current visual commit `78746c6c5071d205ec799861ece63a0f0bb26e7a`.
+Accepted baseline:
+- Phase B code/control-plane is ready;
+- Phase B visual is live;
+- PASS 1 active, PASS 2 inactive;
+- current visible catalogue remains available;
+- no real PASS 1 item has yet been accepted.
 
-Next required step:
-- one bounded REAL Scheduled PASS 1 item acceptance through the already-active manifest;
-- prove GitHub work -> Scheduled result -> item artifact -> ingest -> durable state -> incremental visual update;
-- do not process the backlog yet;
-- do not begin PASS 2.
+Scope:
+- run exactly one GitHub-selected current PASS 1 item end-to-end;
+- prove Scheduled result -> artifact -> ingest -> durable state -> incremental visual/site update;
+- no retry, no second item, no backlog drain, no PASS 2.
 
-Worker routing recommendation:
-- do NOT continue implementation in the long-running ЧАТ 2;
-- use a fresh worker chat for the bounded live acceptance step to avoid carrying the large implementation context forward.
+Expected report:
+`reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-live-acceptance-01.md`
+
+Next decision:
+- if complete_live_acceptance, authorize normal canonical PASS 1 backlog processing;
+- otherwise fix only the exact blocker.
 
 
 ## ACCEPTED — Progressive personalized deals Phase A
