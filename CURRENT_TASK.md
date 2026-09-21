@@ -587,3 +587,13 @@
 - deploy run `35590629152` passed UI regressions and Pages deployment;
 - PASS 1 accepted ledger remains empty; Scheduled ChatGPT, real item ingest and PASS 2 were not run;
 - exact next step: Director performs one bounded real Scheduled PASS 1 item acceptance.
+
+## Worker in progress — 2026-09-21
+
+### Progressive Personalized Deals Phase B PASS 1 live acceptance 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_LIVE_ACCEPTANCE_01.md`;
+- scope: ровно одна текущая GitHub-owned PASS 1 item attempt через существующий Scheduled semantic worker path;
+- без retry, второй игры, backlog drain, PASS 2 и ручной semantic repair;
+- durable report: `reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-live-acceptance-01.md`.
+
