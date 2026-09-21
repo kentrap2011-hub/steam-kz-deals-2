@@ -533,13 +533,14 @@
 
 
 ### Progressive Personalized Deals Phase A implement 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_director_acceptance`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_IMPLEMENT_01.md`;
-- scope: Phase A only — progressive display/state/count/tier projection and normal deploy;
-- GitHub remains owner of candidate state/counts/publication/order inputs;
-- Scheduled ChatGPT must not be run or changed;
-- PASS 1/PASS 2 execution is explicitly out of scope;
-- hard source/business/identity gates and existing manual end-of-queue semantics must remain strict.
+- Phase A current progressive publication is functionally live through the normal GitHub build/deploy path;
+- current source: 721 progressive candidates; final visual: 720 visible `not_analyzed` Tier 3 rows after one legitimate expiry;
+- processing counts reconcile and unresolved rows expose no unsupported personalized fields;
+- full build run `35558666900` and Pages deploy run `35558698003` succeeded, including UI regressions;
+- Scheduled ChatGPT and PASS 1/PASS 2 were not run or changed;
+- exact next step: Director acceptance before Phase B.
 
 
 ### Progressive Personalized Deals Phase A activation routing fix 01
@@ -555,9 +556,12 @@
 
 
 ### Progressive Personalized Deals Phase A unresolved row preservation fix 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_director_acceptance`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_UNRESOLVED_ROW_PRESERVATION_FIX_01.md`;
-- scope is limited to preserving `analysis_incomplete` and `not_analyzed` rows through history/expiry enrichment while keeping unsupported personalization stripped;
-- existing deterministic expiry/history/source rules and analyzed-fit behavior remain unchanged;
-- no state-model, tier-ordering, UI, Taste/Dossier, PASS 1/PASS 2 or Scheduled ChatGPT changes are authorized;
-- after the narrow fix, use the normal full build/validation/deploy path and update the existing Phase A report only.
+- PR #77 merged as `481c2ded398fae8ac5e56ed5e372a3b325d8d5a0`;
+- unresolved Tier 2/3 rows now remain in the shared deterministic expiry/history path after unsupported personalization is stripped;
+- focused regression and full build run `35558666900` passed;
+- current visual commit `39f42d255e2c737d348ec645903f752a73eee837` contains 720 visible unresolved rows from 721 current candidates after one legitimate expiry;
+- deploy run `35558698003` passed UI regressions and Pages deployment;
+- no PASS 1/PASS 2 or Scheduled ChatGPT execution/change occurred;
+- exact next step: Director acceptance before Phase B.
