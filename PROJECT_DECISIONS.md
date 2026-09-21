@@ -511,3 +511,25 @@
 **Граница Phase A:** PASS 1/PASS 2 execution, retry/recovery и изменение Scheduled ChatGPT не входят в это решение. Для Phase A активируется только state projection, publication, ordering и site progress visibility.
 
 **Основные места:** `config/progressive_personalization_contract.json`, `config/daily_execution_contract.json`, `config/mailing_policy.json`, `config/final_ranking_policy.json`, visual producer и read-only UI.
+
+
+---
+
+## PPD-002 — PASS 1 is item-level, one-shot per semantic binding, and coverage-first
+
+**Дата:** 2026-09-21  
+**Статус:** approved for Phase B implementation
+
+**Решение:** Phase B использует GitHub-owned item-level PASS 1 поверх Phase A progressive publication. Каждый current `not_analyzed` item получает не более одной PASS 1 попытки для текущей semantic/item binding. Валидный результат независимо переходит в `analyzed_fit`, `analyzed_not_fit` или `analysis_incomplete`. Недостаток evidence, invalid exact-bound semantic result и caught per-item worker failure не превращаются в not-fit и не блокируют следующие items.
+
+**Почему:** group/maximal-prefix acceptance превращает один сложный item в head-of-line blocker и противоречит цели coverage-first. Phase A уже доказала, что unresolved каталог можно честно публиковать, поэтому semantic progress должен быть incremental и независимым от полного закрытия backlog.
+
+**Transport:** canonical PASS 1 progress — item-level. Worker может обработать несколько последовательных items за invocation, но каждый результат создаётся отдельным immutable create-only artifact с exact GitHub work identity. Batch atomicity и maximal contiguous prefix не являются authority PASS 1.
+
+**Evidence:** compatible-cache — fast path. Новый PASS 1 использует lightweight candidate-specific evidence; Dossier, Russian Steam review, exhaustive multi-source research и deep recovery не являются обязательными. `insufficient_evidence` => `analysis_incomplete`. Retry/deep recovery принадлежит будущему PASS 2.
+
+**Generation:** commercial price/source timestamp не входит в semantic generation identity и сам по себе не сбрасывает attempt. Profile/model/semantics/context-contract change создаёт новый global generation; fingerprint/context change создаёт новый item work identity только для затронутого item.
+
+**Граница:** GitHub остаётся control plane; Scheduled ChatGPT — bounded semantic data plane; browser — read-only. PASS 2 не активирован. Phase A current catalogue остаётся fallback и публикация не ждёт PASS 1 completion.
+
+**Основные места:** `config/progressive_pass1_contract.json`, `config/progressive_personalization_contract.json`, `scripts/progressive_pass1.py`, `scripts/build_progressive_pass1_work.py`, `scripts/ingest_progressive_pass1.py`, `.github/workflows/ingest-progressive-pass1.yml`.
