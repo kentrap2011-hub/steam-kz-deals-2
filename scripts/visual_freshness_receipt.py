@@ -79,18 +79,28 @@ def _commercial_intent_ready(commercial: dict[str, Any]) -> bool:
 
 
 def _progressive_phase_a_publication(repo: Path) -> bool:
-    visual, visual_error = _read_json_optional(repo / VISUAL_PATH)
-    if visual_error:
-        return False
+    """Accept both the Phase A fallback and active Phase B progressive publication."""
+    visual = _load_json(repo / VISUAL_PATH)
     progressive = visual.get("progressive_personalization") or {}
-    processing = visual.get("processing_status") or {}
+    phase = progressive.get("phase")
+    publication = progressive.get("publication_status")
+    phase_a = (
+        phase == "phase_a"
+        and publication == "current_deterministic_catalogue"
+        and progressive.get("pass1_active") is False
+        and progressive.get("pass2_active") is False
+    )
+    phase_b = (
+        phase == "phase_b"
+        and publication == "current_deterministic_catalogue_with_incremental_pass1"
+        and progressive.get("pass1_active") is True
+        and progressive.get("pass2_active") is False
+    )
     return bool(
         visual.get("status") == "complete"
         and progressive.get("contract") == "PROGRESSIVE-PERSONALIZED-DEALS-V1"
-        and progressive.get("phase") == "phase_a"
-        and progressive.get("publication_status") == "current_deterministic_catalogue"
-        and processing.get("contract") == "PROGRESSIVE-PERSONALIZED-DEALS-V1"
-        and processing.get("semantic_queue_zero_required_for_publication") is False
+        and progressive.get("semantic_queue_zero_required_for_publication") is False
+        and (phase_a or phase_b)
     )
 
 
