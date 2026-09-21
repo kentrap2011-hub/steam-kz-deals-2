@@ -12,76 +12,46 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
-## ACTIVE — Progressive personalized deals Phase A unresolved-row preservation fix
+## ACCEPTED — Progressive personalized deals Phase A
 
 Parent task:
 `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_IMPLEMENT_01.md`
 
-Continuation task:
-`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_UNRESOLVED_ROW_PRESERVATION_FIX_01.md`
+Narrow continuations:
+- `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_ACTIVATION_ROUTING_FIX_01.md`
+- `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_UNRESOLVED_ROW_PRESERVATION_FIX_01.md`
 
-Task ID:
-`progressive-personalized-deals-phase-a-unresolved-row-preservation-fix-01`
-
-Mode:
-`IMPLEMENT / ACTIVATE / VALIDATE`
-
-Worker slot:
-`ЧАТ 2`.
-
-User authorization:
-- explicit approval given for this bounded Phase A producer fix.
-
-Accepted blocker:
-- activation routing is already fixed and full build/deploy works;
-- unresolved Tier 2/3 rows are currently dropped by history/expiry enrichment after unsupported personalization is stripped;
-- deployed progressive payload is empty despite 719 current progressive candidates.
-
-Narrow scope:
-- preserve valid `analysis_incomplete` and `not_analyzed` rows through history/expiry enrichment;
-- keep unsupported personalized fields stripped;
-- retain legitimate deterministic expiry/source removals;
-- rerun full build, UI regressions and Pages deploy;
-- update the existing Phase A report only.
-
-Expected report:
+Report:
 `reviews/worker_reports/progressive-personalized-deals-phase-a-implement-01.md`
 
-Next decision:
-- if Phase A becomes functionally live, Director acceptance before Phase B;
-- if another blocker appears, stop and record it without scope expansion.
+Final status:
+`complete_ready_for_director_acceptance`
 
-## NEEDS FIX — Progressive personalized deals Phase A
+Director acceptance:
+- Phase A is functionally live through the normal GitHub build/deploy path;
+- current deterministic source produced 721 progressive candidates;
+- one candidate was removed by legitimate deterministic expiry;
+- 720 visible unresolved cards were published;
+- current live state is 720 × `not_analyzed` / Tier 3;
+- processing counts reconcile: total 720, fit 0, not-fit 0, incomplete 0, not-analyzed 720, visible 720;
+- unresolved cards contain no unsupported personalized fields;
+- tier/status UI regressions passed;
+- Pages deployment succeeded;
+- activation routing and unresolved-row preservation blockers are resolved;
+- no PASS 1/PASS 2 execution or Scheduled ChatGPT run occurred.
 
-Parent task:
-`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_IMPLEMENT_01.md`
+Key refs:
+- Phase A merge PR #74 / merge `fb54c8463b131dd52fc9cc6b7da96cfd5de1129c`;
+- routing fix PR #76 / merge `b7727266543121a62b16fc532eb7e557c251f2fc`;
+- row preservation fix PR #77 / merge `481c2ded398fae8ac5e56ed5e372a3b325d8d5a0`;
+- full build run `35558666900`;
+- deploy run `35558698003`;
+- current visual commit `39f42d255e2c737d348ec645903f752a73eee837`.
 
-Completed narrow continuation:
-`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_ACTIVATION_ROUTING_FIX_01.md`
-
-Durable report:
-`reviews/worker_reports/progressive-personalized-deals-phase-a-implement-01.md`
-
-Current status:
-`needs_fix`
-
-Accepted current facts:
-- activation routing defect is fixed;
-- real main run `35532554751` selected and completed the full progressive build;
-- deploy run `35532579278` completed UI regressions and Pages deployment;
-- progressive input remains 719 current candidates;
-- full build exposed a separate producer defect in history/expiry enrichment;
-- unresolved Tier 2/3 rows are stripped of unsupported personalization and then accidentally dropped instead of retained;
-- resulting deployed progressive payload has `item_count=0` and zero processing counts despite 719 current candidates;
-- no PASS 1/PASS 2/Scheduled ChatGPT execution occurred.
-
-Exact next blocker:
-- preserve unresolved `analysis_incomplete` / `not_analyzed` rows through history/expiry enrichment after stripping unsupported personalization.
-
-Next decision:
-- authorize one bounded Phase A producer fix only;
-- after that rerun the already-working full build/deploy path;
-- do not start Phase B yet.
+Next step:
+- Phase B item-level PASS 1 implementation, only after explicit user approval;
+- PASS 1 must progressively convert Tier 3 items into analyzed fit / analyzed not-fit / incomplete without one item blocking later items;
+- PASS 2 remains out of scope until Phase B is accepted.
 
 ## ACCEPTED — Progressive personalized deals architecture amendment
 
