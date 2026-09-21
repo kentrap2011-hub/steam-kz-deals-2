@@ -1,0 +1,134 @@
+{
+  "contract": "PROGRESSIVE-PASS1-V1",
+  "version": 1,
+  "status": "canonical",
+  "phase": "phase_b_pass1",
+  "purpose": "GitHub-owned item-level first-pass semantic coverage for Progressive Personalized Deals without global publication blocking or deep recovery.",
+  "ownership": {
+    "control_plane": "github",
+    "semantic_generation_identity": "github",
+    "scope_and_order": "github",
+    "attempt_state": "github",
+    "immutable_work": "github",
+    "validation_and_persistence": "github",
+    "visual_rebuild_trigger": "github",
+    "scheduled_chatgpt": "bounded_semantic_data_plane_only",
+    "interactive_chat": "development_only_not_backlog_worker"
+  },
+  "semantic_generation": {
+    "global_binding_fields": [
+      "profile_blob_sha",
+      "taste_model_version",
+      "taste_semantics_sha256",
+      "candidate_context_contract_blob_sha"
+    ],
+    "commercial_source_timestamp_in_generation": false,
+    "rule": "A price/commercial refresh alone never resets PASS 1. Profile/model/semantics/semantic-context contract changes create a new global semantic generation.",
+    "per_item_binding_fields": [
+      "family_id",
+      "taste_subject_key",
+      "appid",
+      "taste_fingerprint",
+      "candidate_context_sha256"
+    ],
+    "per_item_change_rule": "A changed fingerprint/context creates a new work_id for that affected item and makes prior PASS 1 state non-current."
+  },
+  "attempt_budget": {
+    "maximum_attempts_per_work_id": 1,
+    "automatic_pass1_retry": false,
+    "durable_in_progress_user_state": false,
+    "invalid_semantic_payload_with_exact_identity": "consume_attempt_as_analysis_incomplete",
+    "stale_or_unbound_payload": "reject_without_hiding_item_or_blocking_later_work",
+    "pass2_owns_retry_and_deep_recovery": true
+  },
+  "outcomes": {
+    "analyzed_fit": {
+      "fit_levels": [
+        "strong",
+        "moderate"
+      ],
+      "confidence": [
+        "medium",
+        "high"
+      ],
+      "require_candidate_specific_positive_evidence": true,
+      "require_all_normalized_taste_factors": true,
+      "optional_rich_negative_or_dossier_evidence": true
+    },
+    "analyzed_not_fit": {
+      "confidence": [
+        "medium",
+        "high"
+      ],
+      "bases": [
+        "completed_below_threshold",
+        "confirmed_personal_negative"
+      ],
+      "require_completed_candidate_specific_evidence": true,
+      "insufficient_information_forbidden": true
+    },
+    "analysis_incomplete": {
+      "issue_codes": [
+        "insufficient_evidence",
+        "evidence_unavailable",
+        "worker_failure",
+        "invalid_semantic_result",
+        "base_support_unresolved"
+      ],
+      "visible_tier": 2,
+      "retry_in_pass1": false
+    }
+  },
+  "worker_strategy": {
+    "compatible_cache_fast_path": true,
+    "lightweight_pass1": true,
+    "dossier_required": false,
+    "russian_review_required": false,
+    "exhaustive_research_required": false,
+    "deep_recovery_allowed": false,
+    "stop_when_trustworthy_fit_or_not_fit_is_possible": true,
+    "insufficient_means_incomplete_not_not_fit": true
+  },
+  "ordering": {
+    "owner": "github",
+    "precedence": [
+      "known_sale_end_asc",
+      "deterministic_purchase_value_desc",
+      "stable_family_id_asc"
+    ],
+    "operational_only": true,
+    "changes_site_ranking": false,
+    "repeatedly_failing_item_cannot_block_later_items": true
+  },
+  "transport": {
+    "mode": "immutable_item_create_only",
+    "one_result_artifact_per_item": true,
+    "batch_atomicity": false,
+    "maximal_contiguous_prefix": false,
+    "valid_siblings_depend_on_invalid_sibling": false,
+    "submission_directory": "data/ai_inbox/progressive_pass1"
+  },
+  "state": {
+    "path": "data/cache/progressive_pass1_state.json",
+    "work_manifest": "data/production/pre_ai/progressive_pass1_work.json",
+    "worker_prompt": "config/progressive_pass1_worker_prompt.md",
+    "accepted_outcome_fields": [
+      "semantic_generation_id",
+      "work_id",
+      "pass1_attempted",
+      "outcome",
+      "analysis_issue_code",
+      "accepted_at_utc"
+    ]
+  },
+  "publication": {
+    "phase_a_fallback_remains_valid": true,
+    "pass1_remaining_may_be_nonzero": true,
+    "pass1_failure_cannot_empty_or_hide_unrelated_catalogue": true,
+    "current_progress_updates_visual_without_waiting_for_pass1_completion": true
+  },
+  "pass2": {
+    "active": false,
+    "implemented": false
+  }
+}
