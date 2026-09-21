@@ -80,7 +80,7 @@ def _commercial_intent_ready(commercial: dict[str, Any]) -> bool:
 
 def _progressive_phase_a_publication(repo: Path) -> bool:
     """Accept both the Phase A fallback and active Phase B progressive publication."""
-    visual = _load_json(repo / VISUAL_PATH)
+    visual = _read_json(repo / VISUAL_PATH)
     progressive = visual.get("progressive_personalization") or {}
     phase = progressive.get("phase")
     publication = progressive.get("publication_status")
