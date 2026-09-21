@@ -533,3 +533,25 @@
 **Граница:** GitHub остаётся control plane; Scheduled ChatGPT — bounded semantic data plane; browser — read-only. PASS 2 не активирован. Phase A current catalogue остаётся fallback и публикация не ждёт PASS 1 completion.
 
 **Основные места:** `config/progressive_pass1_contract.json`, `config/progressive_personalization_contract.json`, `scripts/progressive_pass1.py`, `scripts/build_progressive_pass1_work.py`, `scripts/ingest_progressive_pass1.py`, `.github/workflows/ingest-progressive-pass1.yml`.
+
+
+---
+
+## PPD-003 — PASS 2 is dossier-ready per item and independent from global PASS 1 completion
+
+**Дата:** 2026-09-21  
+**Статус:** approved canonical design; runtime not implemented
+
+**Решение:** глобальный барьер `not_analyzed_count == 0` для старта PASS 2 отменён. PASS 1 и будущий PASS 2 являются независимыми GitHub-owned потоками: PASS 1 продолжает брать только текущие `not_analyzed` items, а PASS 2 может рассматривать только уже текущие `analysis_incomplete` items. Ни один pass не ждёт завершения другого и не блокирует его.
+
+Конкретный `analysis_incomplete` item становится PASS 2 eligible только после того, как GitHub канонически принял и сохранил **current exact-compatible** Taste Steam Review Dossier для того же app/work identity. Буферный candidate, stale/expired dossier, wrong-app/wrong-work/cross-release dossier или dossier со старой/mismatched content-complete evidence binding не открывает PASS 2.
+
+**Attempt budget:** ожидание Dossier, сама eligibility projection и нахождение в будущей recovery queue расходуют **0** PASS 2 attempts. Для одного текущего `semantic_generation_id + work_id` разрешена максимум одна автоматическая PASS 2 recovery attempt. Новый/обновлённый dossier сам по себе не сбрасывает этот budget. После израсходованной неуспешной попытки item остаётся видимым `analysis_incomplete` Tier 2 и выходит из automatic recovery до смены semantic generation/work identity по существующим правилам.
+
+**Ownership:** GitHub владеет dossier acceptance truth, PASS 2 eligibility, scope/order, immutable binding, state и attempt accounting. Scheduled ChatGPT может получить только уже подготовленную eligible work unit. Dossier worker не может напрямую поставить item в PASS 2 queue. Canonical Dossier acceptance должна автоматически стать входом для GitHub eligibility recomputation без interactive intervention.
+
+**Почему:** глубокая recovery без принятого exact-compatible Dossier повторяет лёгкую/случайную оценку и не даёт PASS 2 нового подтверждённого основания. Одновременно ожидание полного PASS 1 искусственно задерживает recovery уже готовых incomplete items. Per-item dossier-ready gate сохраняет bounded recovery и позволяет обоим pass идти параллельно без starvation и без retry loop.
+
+**Не изменено:** PASS 1 остаётся one-shot coverage path без обязательного Dossier; Dossier evidence/identity/freshness semantics остаются в своих canonical contracts; PASS 2 runtime/scheduler/worker/processor этим решением не активируются.
+
+**Основные места:** `config/progressive_personalization_contract.json#phase_c_pass2_design`, `config/progressive_pass1_contract.json` (PASS 1 unchanged), `config/taste_steam_review_dossier_contract.json`, `config/taste_steam_review_dossier_persistence_bridge.json`.
