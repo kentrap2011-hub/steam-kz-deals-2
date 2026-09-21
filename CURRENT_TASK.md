@@ -595,10 +595,10 @@
 - worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_LIVE_ACCEPTANCE_01.md`;
 - пользователь выполнил ровно один `Run now` существующего `Progressive PASS 1 Worker`; прежний external invocation blocker снят;
 - exact Tower Dominion result был создан по подготовленному path, GitHub ingest/validation прошёл success и durable PASS 1 state обновился;
-- один Scheduled invocation обработал несколько последовательных PASS 1 items, поэтому acceptance-инварианты "ровно один item" / "no second item" не выполнены;
+- несколько последовательных PASS 1 items внутри одной invocation являются допустимым production-поведением по текущему `config/progressive_pass1_worker_prompt.md`; старый one-item acceptance criterion классифицирован как устаревший mismatch, а не production defect;
 - current durable state: 6 entries; current manifest: total `493`, attempted `5`, remaining `488`, expired-before-PASS1 `228`, PASS 2 inactive;
-- post-ingest progressive visual rebuild не произошёл: current visual остаётся pre-run и показывает attempted `0` / 720 Tier 3;
-- повторный `Run now`, incomplete retry и PASS 2 не выполнять до bounded fix live-acceptance path;
+- единственный подтверждённый defect: post-ingest progressive visual rebuild не произошёл; current visual остаётся pre-run и показывает attempted `0` / 720 Tier 3;
+- recommended follow-up: bounded fix только GitHub-owned visual/site rebuild trigger после accepted PASS 1 ingest; новый one-item production mode не вводить;
 - durable report: `reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-live-acceptance-01.md`.
 
 ## Worker in progress — 2026-09-21
