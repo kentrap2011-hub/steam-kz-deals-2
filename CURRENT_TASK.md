@@ -601,6 +601,15 @@
 - recommended follow-up: bounded fix только GitHub-owned visual/site rebuild trigger после accepted PASS 1 ingest; новый one-item production mode не вводить;
 - durable report: `reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-live-acceptance-01.md`.
 
+
+### Progressive PASS 1 visual rebuild trigger fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_VISUAL_REBUILD_TRIGGER_FIX_01.md`;
+- scope: только missing GitHub-owned downstream edge accepted PASS 1 ingest -> existing progressive visual rebuild/publication;
+- architecture preflight: PASS 1 ingest, visual projection/rebuild и publication остаются GitHub-owned; existing build/deploy workflows must be reused;
+- Scheduled PASS 1 worker, incomplete retry и PASS 2 не запускать;
+- durable report: `reviews/worker_reports/progressive-personalized-deals-pass1-visual-rebuild-trigger-fix-01.md`.
+
 ## Worker in progress — 2026-09-21
 
 ### Progressive PASS 1 Scheduled worker configure 01
