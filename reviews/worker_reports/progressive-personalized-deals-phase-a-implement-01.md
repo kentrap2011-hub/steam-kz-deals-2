@@ -1,4 +1,4 @@
-# Progressive Personalized Deals Phase A Implement 01 — activation status
+# Progressive Personalized Deals Phase A Implement 01 — final activation evidence
 
 ## 1. Task / repo / mode
 
@@ -7,9 +7,10 @@
 - Base/source of truth: `main`
 - Original mode: `IMPLEMENT / ACTIVATE / VALIDATE`
 - Checkpoint request: stop further implementation expansion and record factual state only.
-- Checkpoint status: `needs_fix`
+- Original checkpoint status: `needs_fix`
+- Current status: `complete_ready_for_director_acceptance`
 
-Phase A is **not complete**. The activation-routing defect is fixed and the normal full-build/deploy path now runs, but that full build exposed a separate producer defect: all unresolved Tier 2/3 rows are dropped during history/expiry enrichment, so the deployed progressive payload is empty despite 719 current progressive candidates.
+Phase A is now functionally live through the normal GitHub build/deploy path. The activation-routing defect and the subsequent unresolved-row preservation defect are both fixed. On the current source, 721 progressive candidates entered the full build, one legitimately expired item was removed, and 720 unresolved Tier 3 cards were published with reconciled GitHub-owned processing counts and no unsupported personalized fields.
 
 ## 2. Architecture preflight confirmation
 
@@ -372,15 +373,15 @@ The first four are collateral existing workflow refreshes caused by the merge pu
 
 ## 17. Status
 
-`needs_fix`
+`complete_ready_for_director_acceptance`
 
-Reason: routing is fixed and normal full build + Pages deploy now succeed, but the resulting progressive payload is functionally invalid for Phase A because unresolved Tier 2/3 candidates are dropped by `enrich_history_and_remove_expired()`; the current deployed visual has 0 items while the active progressive candidate context has 719.
+Reason: the narrow unresolved-row preservation fix is merged and the normal full build + validation + Pages deployment path succeeds. The current canonical/deployed payload contains 720 visible unresolved candidates with reconciled processing counts; the one candidate removed from the 721-row current progressive input was removed by the existing deterministic expiry rule.
 
 ## 18. Exactly one recommended next step
 
-Return to Director with this exact new blocker and authorize one bounded Phase A producer fix: preserve unresolved Tier 2/3 rows in `enrich_history_and_remove_expired()` after stripping unsupported personalization, then rerun the already-working full build/deploy path.
+Return to Director for Phase A acceptance before any Phase B / PASS 1 work.
 
-Do not start PASS 1/PASS 2.
+Do not start PASS 1/PASS 2 inside Phase A.
 
 ## 19. Exact commit / PR / run refs
 
@@ -497,6 +498,162 @@ Pages is technically deployed, but Phase A is **not functionally live/acceptable
 - PHASEA-15 — **PARTIAL**: normal activation/deploy technically succeeds, but the deployed Phase A payload is not functionally correct.
 - PHASEA-16 — **PASS after this report update is committed and reread from main**.
 
-### Final allowed status
+### Status at activation-routing checkpoint
 
 `needs_fix`
+
+
+## 22. Unresolved row preservation fix 01 — final Phase A evidence
+
+### Exact producer defect
+
+The full progressive build already created unresolved Tier 2/3 cards correctly, but
+`scripts/build_daily_visual_payload.py::enrich_history_and_remove_expired()`
+stripped unsupported personalization and then immediately `continue`d for every
+state other than `None` / `analyzed_fit`.
+
+That bypassed the shared deterministic offer expiry/history path and, more
+importantly, never appended unresolved rows to `kept`. The result was an empty
+visual payload even though the current progressive input was non-empty.
+
+### Exact narrow fix
+
+For unresolved rows, the producer now:
+
+1. calls `progressive_personalization.strip_unresolved_personalization(game)`;
+2. does **not** exit the row path;
+3. continues through the existing deterministic active-offer expiry/history logic;
+4. appends the row only when at least one active offer remains.
+
+No semantic/personal scoring is created for unresolved rows. The analyzed-fit
+path uses the same existing deterministic enrichment code as before.
+
+Files changed by PR #77:
+
+- `scripts/build_daily_visual_payload.py`
+- `scripts/test_progressive_unresolved_row_preservation.py`
+- `.github/workflows/build-daily-visual-payload.yml`
+- `CURRENT_TASK.md`
+
+No state model, sorting semantics, UI labels/counters, Taste/Dossier semantics,
+source/business eligibility, PASS 1/PASS 2, or Scheduled ChatGPT behavior was changed.
+
+### ROW-01..12
+
+- ROW-01 — **PASS**. Focused regression proves active `not_analyzed` survives history/expiry enrichment.
+- ROW-02 — **PASS**. Focused regression proves active `analysis_incomplete` survives history/expiry enrichment.
+- ROW-03 — **PASS**. Focused regression proves unresolved `fit`, `total_score`, `why_fit`, and `risks` are stripped; live payload inspection found zero unresolved rows with forbidden personalized fields.
+- ROW-04 — **PASS**. Focused regression removes an expired unresolved fixture; live full build also removed exactly one expired current candidate (`game:2421410`).
+- ROW-05 — **PASS**. Focused regression proves analyzed-fit retains its supported personalization while passing through the same deterministic history/expiry path.
+- ROW-06 — **PASS**. The existing `scripts/test_progressive_personalization.py` regression passed in the same full build and continues to prove `analyzed_not_fit` is excluded from the normal visible set. This fix did not alter state projection.
+- ROW-07 — **PASS**. Final live counts reconcile: `720 = 0 fit + 0 not-fit + 0 incomplete + 720 not-analyzed`; `normal_visible_count = 720`.
+- ROW-08 — **PASS**. Current full build is non-empty: 721 progressive input rows -> 720 final visible rows after one legitimate expiry.
+- ROW-09 — **PASS**. Deployed/current payload contains 720 visible Tier 3 `not_analyzed` rows and correct processing counts. The current source has no `analysis_incomplete` rows; Tier 2 preservation is covered by the focused regression rather than fabricated production state.
+- ROW-10 — **PASS**. Deploy run `35558698003` passed `Run UI regressions`, artifact staging/binding, Pages upload, and Pages deployment.
+- ROW-11 — **PASS**. No Scheduled ChatGPT invocation/configuration and no PASS 1/PASS 2 execution occurred; deployed processing state still reports `pass1_active=false`, `pass2_active=false`.
+- ROW-12 — **PASS**. PR #77 changed exactly the four files listed above; no unrelated architecture changes were made.
+
+### Activation / build / deploy refs
+
+PR:
+- PR #77 — `Preserve unresolved Phase A rows through expiry enrichment`
+- branch head: `7640e73668f5051062e6be6e488bd451e24aad56`
+- merge commit: `481c2ded398fae8ac5e56ed5e372a3b325d8d5a0`
+- PR checks:
+  - `35558646338` Validate backlog dispositions — success
+  - `35558646351` Validate package purchase value — success
+
+Normal full build:
+- run `35558666900` — success
+- focused unresolved-row regression — success
+- existing progressive personalization regression — success
+- canonical full build — success
+- current visual commit: `39f42d255e2c737d348ec645903f752a73eee837`
+
+Normal deploy:
+- run `35558698003` — success
+- UI regressions — success
+- staged publication bound to the triggering build receipt — success
+- Pages artifact upload — success
+- Pages deployment — success
+- deployed Pages build version: `39f42d255e2c737d348ec645903f752a73eee837`
+- Pages environment URL reported by GitHub Actions:
+  `https://kentrap2011-hub.github.io/steam-kz-deals-2/`
+
+### Resulting current payload
+
+Current deterministic source:
+- `source_mailing_updated_at_utc = 2026-09-20T22:49:56.265596+00:00`
+- `source_family_count = 781`
+- deterministic exclusions = 60
+- progressive candidate input = 721
+- semantic queue remains open at 721
+
+Final canonical/current visual:
+- `status = complete`
+- `item_count = 720`
+- `processing_status.total_current_candidates = 720`
+- `analyzed_success_count = 0`
+- `analyzed_fit_count = 0`
+- `analyzed_not_fit_count = 0`
+- `analysis_incomplete_count = 0`
+- `not_analyzed_count = 720`
+- `normal_visible_count = 720`
+- visible state population = 720 × `not_analyzed` / Tier 3
+- unresolved rows with fake personalized fields = 0
+- deterministic expiry removals = 1
+
+The base progressive producer reported 721 current candidates before expiry.
+The final producer removed one legitimately expired item and retained the other
+720 unresolved candidates.
+
+### User-visible site state
+
+The Pages artifact contains the non-empty current progressive payload rather
+than the prior empty payload. UI regressions passed against that publication,
+including the progressive tier/status UI suite.
+
+The current source has no trustworthy current analyzed-fit or incomplete rows,
+so all 720 visible cards are honestly shown as Tier 3 / not analyzed. Phase A
+does not fabricate Tier 1/Tier 2 state merely to populate those tiers.
+
+Direct HTTP retrieval of the Pages URL was unavailable from the external web
+inspection tool used by this worker, so the live-browser rendering itself was
+not independently fetched outside GitHub Actions. GitHub Pages deployment,
+artifact publication, payload staging, and UI regression evidence all succeeded.
+
+### Final PHASEA-01..16 status
+
+- PHASEA-01 — **PASS**: canonical progressive state/tier/count semantics exist.
+- PHASEA-02 — **PASS**: current deterministic catalogue publishes with semantic queue still open (721).
+- PHASEA-03 — **PASS**: unresolved deterministic-eligible candidates survive and are visible; one current candidate is excluded only by legitimate expiry.
+- PHASEA-04 — **PASS**: trustworthy not-fit exclusion remains covered by the canonical progressive regression.
+- PHASEA-05 — **PASS**: tier-first producer/UI ordering remains active.
+- PHASEA-06 — **PASS**: urgency/tier UI regression passed in normal deploy.
+- PHASEA-07 — **PASS**: live unresolved rows expose no fake personalized fields.
+- PHASEA-08 — **PASS**: deployed payload carries reconciled GitHub-owned processing counters.
+- PHASEA-09 — **PASS**: count invariants reconcile on the real current payload.
+- PHASEA-10 — **PASS**: source/business/identity hard gates were not weakened.
+- PHASEA-11 — **PASS**: compatible accepted Taste reuse behavior remains covered by existing regression; no reanalysis was performed.
+- PHASEA-12 — **PASS**: stale/ambiguous semantic state remains conservatively unresolved.
+- PHASEA-13 — **PASS**: no PASS 1/PASS 2 redesign/execution or semantic backlog processing occurred.
+- PHASEA-14 — **PASS**: focused producer regression, existing progressive regressions, build validations, and UI regressions passed.
+- PHASEA-15 — **PASS**: normal full build and Pages deploy completed successfully with the non-empty progressive payload.
+- PHASEA-16 — **PASS after this final report commit is reread from `main`**.
+
+### Unresolved blockers
+
+No Phase A blocker remains from activation routing or unresolved-row
+preservation.
+
+The absence of analyzed-fit / incomplete rows in the current production payload
+is current semantic state, not a Phase A publication defect. PASS 1/PASS 2
+remain intentionally outside Phase A.
+
+### Final Phase A status
+
+`complete_ready_for_director_acceptance`
+
+### Exactly one next step
+
+Return to Director for Phase A acceptance before any Phase B / PASS 1 work.
