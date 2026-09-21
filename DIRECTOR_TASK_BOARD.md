@@ -23,9 +23,10 @@ State:
 - do not reconstruct project truth from the retired Director transcript unless canonical compact state is genuinely insufficient.
 
 Immediate active work:
-- owner-scope UI observation has resolved the active runtime branch as `missing_runtime_entrypoint`;
-- bounded CONFIGURE task for a dedicated Progressive PASS 1 Scheduled Task is assigned to `СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`;
-- PASS 1 production execution and PASS 2 remain paused until that configuration is accepted and live acceptance is separately resumed.
+- Progressive PASS 1 Scheduled worker is configured, deduplicated, and proven invocable;
+- first live PASS 1 invocation completed and durable semantic ingest works;
+- one confirmed defect remains: PASS 1 ingest does not trigger progressive visual/site rebuild, leaving published visual stale;
+- no second manual `Run now` and no PASS 2 until that downstream publication defect is fixed and validated.
 
 ## ACCEPTED — Progressive PASS 1 Scheduled worker dedup fix
 
@@ -90,64 +91,30 @@ Next step:
 - do not press `Run now`, edit, enable/disable, clone, or create anything.
 
 
-## ACTIVE — Progressive PASS 1 Scheduled runtime configure
+## NEEDS FIX — Progressive personalized deals Phase B / PASS 1 live acceptance
 
 Task:
-`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_RUNTIME_CONFIGURE_01.md`
-
-Mode:
-`IMPLEMENT / RUNTIME CONFIGURE`
-
-Worker slot:
-`СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`
-
-User authorization:
-- after Director stated that a separate bounded CONFIGURE is required, user explicitly instructed: `Отдай задачу чату 1`.
-
-Confirmed basis:
-- owner-scope UI shows no active Progressive PASS 1 task;
-- historical paused/completed tasks must not be treated as the current PASS 1 owner by name alone;
-- entrypoint audit is accepted as `complete_insufficient_observability`;
-- canonical ownership requires GitHub control plane and only bounded Scheduled ChatGPT semantic data plane.
-
-Goal:
-- establish one legally authorized Progressive PASS 1 runtime binding, or stop with the exact canonical/user decision still required;
-- no `Run now`, no PASS 1 result/attempt, no backlog drain, no PASS 2.
-
-Expected report:
-`reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-runtime-configure-01.md`
-
-## BLOCKED PENDING RUNTIME OBSERVABILITY — Progressive personalized deals Phase B / PASS 1 live acceptance
-
-Parent task:
-`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_IMPLEMENT_01.md`
-
-Live acceptance task:
 `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_LIVE_ACCEPTANCE_01.md`
 
 Report:
 `reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-live-acceptance-01.md`
 
-Prior live-acceptance status:
-`blocked_external`
+Final status:
+`needs_fix`
 
-Current Director classification after entrypoint audit and owner-scope UI inspection:
-`no active Progressive PASS 1 runtime observed; bounded runtime configuration assigned to ЧАТ 1`
+Director acceptance:
+- Scheduled `Progressive PASS 1 Worker` is externally invocable and completed one real invocation;
+- multiple consecutive items per invocation are valid under the current canonical worker prompt and are not a production defect;
+- create-only submission, GitHub ingest/validation, durable PASS 1 state, queue progression, and PASS2=false behavior are proven;
+- six durable PASS 1 entries were accepted during the invocation;
+- current manifest reconciles at 493 total = 5 attempted + 488 remaining, with 228 expired-before-PASS1;
+- the confirmed production defect is downstream publication: accepted PASS 1 state does not trigger progressive visual/site rebuild, so the published visual remains stale;
+- no second manual `Run now` is authorized before this defect is fixed and validated.
 
-Accepted facts:
-- GitHub-owned PASS 1 manifest/order remains the source of truth;
-- exact first item remains sequence 1, Tower Dominion, App_3226530 / appid 3226530;
-- no PASS 1 attempt was consumed by the blocked acceptance;
-- no retry, second item, backlog drain or PASS 2 execution occurred;
-- the repository PASS 1 worker contract/prompt exists;
-- actual existence/binding of a compatible Progressive PASS 1 Scheduled Task is not yet proven;
-- the prior wording `existing authorized Scheduled PASS 1 worker` must not be treated as established runtime fact.
-
-External unblock:
-- first obtain one read-only owner-scope Scheduled Tasks inventory observation;
-- only after existence/binding is classified may Director choose between bounded live acceptance, bounded CONFIGURE, or binding repair;
-- do not run PASS 1 or PASS 2 before that classification.
-
+Next step:
+- after explicit user approval, assign one bounded follow-up IMPLEMENT task for the PASS 1 ingest -> progressive visual/site rebuild edge only;
+- do not introduce a one-item production mode;
+- do not run PASS 2 or retry incomplete items as part of that fix.
 
 ## ACCEPTED — Progressive personalized deals Phase A
 
