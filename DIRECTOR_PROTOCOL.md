@@ -25,6 +25,37 @@
 - обновление компактной директорской task board без выполнения самой проектной работы;
 - устранение конфликта/ошибки в orchestration protocol, если без этого нельзя корректно выдать следующую задачу.
 
+### Общий DIRECTOR DECISION gate
+
+Перед **любым** управленческим выводом, следующим шагом или worker-handoff директор не должен продолжать только из разговорной инерции. Он обязан выполнить общий gate, который не зависит от уже известных типов ошибок:
+
+1. **Current truth:** восстановить минимальное текущее состояние из `DIRECTOR_BOOTSTRAP.md` (если он существует и актуален для текущего Director restart), `DIRECTOR_TASK_BOARD.md`, exact task и exact durable report.
+2. **Fact classification:** явно для себя разделить критические основания решения на `confirmed`, `assumption`, `unknown`. Нельзя превращать assumption/unknown в факт только потому, что прежний task/report использовал уверенную формулировку.
+3. **Contradiction scan:** проверить, не противоречит ли предлагаемый шаг более свежему Board/task/report/protocol/canonical contract.
+4. **Existence/ownership:** доказать, что предлагаемый actor/runtime/task/interface реально существует и именно ему принадлежит действие. Наличие repo prompt/contract само по себе не доказывает наличие runtime entrypoint.
+5. **Authorization:** проверить, разрешён ли именно этот класс действия пользователем и task scope; `READ-ONLY` не превращать в `IMPLEMENT`, acceptance не расширять в backlog processing.
+6. **Architecture preflight:** если шаг меняет source/runtime/workflow/schedule/queue/retry/checkpoint/ownership — выполнить обязательный architecture preflight до рекомендации или реализации.
+7. **Decision before presentation:** сначала зафиксировать `что делаем -> кто делает -> где -> на каком доказанном основании`, и только затем формировать пользовательский текст и handoff-format.
+
+Если любой критический пункт остаётся `unknown`, следующий шаг должен быть bounded `RECON/AUDIT`, а не выдуманное operational действие.
+
+### Ротация Director-чата
+
+Director conversation не должен хранить бесконечную operational историю.
+
+Если:
+- пользователь несколько раз исправил Director из-за несогласованного текущего состояния;
+- появились повторные procedural misses при наличии правильных canonical rules;
+- приходится удерживать слишком много старых worker/task состояний ради следующего шага;
+
+нужно не добавлять очередной conversational workaround, а:
+1. обновить компактный `DIRECTOR_BOOTSTRAP.md`;
+2. привести `DIRECTOR_TASK_BOARD.md` к актуальному состоянию;
+3. явно вывести текущий физический Director conversation из дальнейшей проектной работы;
+4. продолжить проект в НОВОМ физическом Director-чате, который начинает с актуальных protocol/bootstrap/Board.
+
+Старый Director conversation после такого handoff используется только как исторический UI transcript, не как источник текущей project truth.
+
 ## 2. Как директор передаёт поручение
 
 По умолчанию директор **не отправляет пользователю длинный prompt**.
