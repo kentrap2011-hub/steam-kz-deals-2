@@ -86,6 +86,33 @@ Next step:
 - do not press `Run now`, edit, enable/disable, clone, or create anything.
 
 
+## ACTIVE — Progressive PASS 1 Scheduled runtime configure
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_RUNTIME_CONFIGURE_01.md`
+
+Mode:
+`IMPLEMENT / RUNTIME CONFIGURE`
+
+Worker slot:
+`СУЩЕСТВУЮЩИЙ ЧАТ — ЧАТ 1`
+
+User authorization:
+- after Director stated that a separate bounded CONFIGURE is required, user explicitly instructed: `Отдай задачу чату 1`.
+
+Confirmed basis:
+- owner-scope UI shows no active Progressive PASS 1 task;
+- historical paused/completed tasks must not be treated as the current PASS 1 owner by name alone;
+- entrypoint audit is accepted as `complete_insufficient_observability`;
+- canonical ownership requires GitHub control plane and only bounded Scheduled ChatGPT semantic data plane.
+
+Goal:
+- establish one legally authorized Progressive PASS 1 runtime binding, or stop with the exact canonical/user decision still required;
+- no `Run now`, no PASS 1 result/attempt, no backlog drain, no PASS 2.
+
+Expected report:
+`reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-runtime-configure-01.md`
+
 ## BLOCKED PENDING RUNTIME OBSERVABILITY — Progressive personalized deals Phase B / PASS 1 live acceptance
 
 Parent task:
@@ -100,8 +127,8 @@ Report:
 Prior live-acceptance status:
 `blocked_external`
 
-Current Director classification after entrypoint audit:
-`insufficient_observability`
+Current Director classification after entrypoint audit and owner-scope UI inspection:
+`no active Progressive PASS 1 runtime observed; bounded runtime configuration assigned to ЧАТ 1`
 
 Accepted facts:
 - GitHub-owned PASS 1 manifest/order remains the source of truth;
