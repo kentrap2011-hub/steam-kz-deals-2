@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import progressive_visual_activation_routing as routing
 
 
@@ -74,6 +76,12 @@ def classify(visual, *, source='S', count=719, context_count=719, store_source='
 
 
 def main():
+    # ROUTE-00: accepted Progressive PASS 1 ingest must enter the existing
+    # GitHub-owned visual rebuild workflow through workflow_run, because pushes
+    # made by the ingest workflow token do not recursively trigger push workflows.
+    workflow = Path('.github/workflows/build-daily-visual-payload.yml').read_text(encoding='utf-8')
+    assert '      - "Ingest Progressive PASS 1 item"' in workflow
+
     # ROUTE-01: checkpoint shape — active 719-row progressive input + legacy 3-row visual.
     legacy = {
         'source_mailing_updated_at_utc': 'OLD',
