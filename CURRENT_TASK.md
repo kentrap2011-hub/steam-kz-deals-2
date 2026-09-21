@@ -575,3 +575,12 @@
 - compatible cache is reused before new PASS 1 work; insufficient/invalid/worker-failure outcomes become `analysis_incomplete`;
 - Phase A progressive publication remains fallback while PASS 1 is open;
 - PASS 2, automatic PASS 1 retry, universal Dossier/deep recovery and manual backlog processing are out of scope.
+
+
+### Progressive Personalized Deals Phase B PASS 1 freshness activation fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_FRESHNESS_ACTIVATION_FIX_01.md`;
+- scope is limited to the freshness-receipt compatibility blocker preventing normal Phase B visual activation;
+- PASS 1 queue/order/attempt state/worker prompt/ingest remain unchanged;
+- no Scheduled ChatGPT invocation, real PASS 1 item acceptance, PASS 2, UI feature, or source/business rule changes are authorized;
+- after the bounded freshness fix, run focused freshness regression and the existing normal full visual build/deploy path, then update the existing Phase B report.
