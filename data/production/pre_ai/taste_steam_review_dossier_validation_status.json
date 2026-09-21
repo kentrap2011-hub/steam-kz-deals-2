@@ -1,90 +1,32 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-STATUS-V1",
   "schema_version": 1,
-  "snapshot_id": "533abb9b4328efec3b80a61caddb142ffe0ff7fb9438482d5159b2ed9878378d",
-  "prepared_required_sha256": "5e1317437af9c588df1eb4fc7f7ec972c23b3374ef7f7559c49e54e3659a8779",
-  "group_plan_sha256": "025cd20432e829b252481eb6cfe8e13b372ca8b504f6ec85560e1a9c97ae52c5",
+  "snapshot_id": "04298ca0b80d00cd819af116323de3d1c4906d6ed71e84f40c15c6978d0d08d8",
+  "prepared_required_sha256": "271d2a484f3c644e9a53687b60385ad3c89dbbc654ba3c9247d9e829b0e0b174",
+  "group_plan_sha256": "d8f7108270c55575f100ce4e8ccb1d0d38366a9eebadf581aaa764628f6078ed",
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+    "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+    "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
-    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
-    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+    "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+    "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
   },
-  "canonical_expected_sequence": 1,
-  "completed_required_count": 0,
-  "remaining_required_count": 686,
+  "canonical_expected_sequence": 2,
+  "completed_required_count": 3,
+  "remaining_required_count": 717,
   "full_backlog_complete": false,
-  "candidate_count": 2,
+  "candidate_count": 0,
   "valid_candidate_count": 0,
-  "invalid_candidate_count": 2,
-  "invalid_expected_group": {
-    "sequence": 1,
-    "group_sha256": "1bf7b03cbd90fd29ff9da33b04e058671b959b540b8fd303074d6188ed0d3fe0",
-    "artifact_sha256": "ec3d5a1e09846a251c907656404ca50591109afa85930cc5fb1754ff8e65745c",
-    "validator_error": "game identity requires an identity-role provenance source"
-  },
-  "candidate_groups": [
-    {
-      "snapshot_id": "533abb9b4328efec3b80a61caddb142ffe0ff7fb9438482d5159b2ed9878378d",
-      "sequence": 1,
-      "group_sha256": "1bf7b03cbd90fd29ff9da33b04e058671b959b540b8fd303074d6188ed0d3fe0",
-      "web_evidence_contract_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-        "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
-        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
-        "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
-      },
-      "validation": "invalid",
-      "canonical_position": "expected",
-      "artifact_paths": [
-        "data/ai_inbox/taste_steam_review_dossiers/533abb9b4328efec3b80a61caddb142ffe0ff7fb9438482d5159b2ed9878378d--g000001--1bf7b03cbd90fd29ff9da33b04e058671b959b540b8fd303074d6188ed0d3fe0.json"
-      ],
-      "artifact_sha256": "ec3d5a1e09846a251c907656404ca50591109afa85930cc5fb1754ff8e65745c",
-      "validator_error": "game identity requires an identity-role provenance source"
-    },
-    {
-      "snapshot_id": "533abb9b4328efec3b80a61caddb142ffe0ff7fb9438482d5159b2ed9878378d",
-      "sequence": 2,
-      "group_sha256": "59f3a5687078c168ac1f963915ad04818d1c37f72aabf396337ef205194bc161",
-      "web_evidence_contract_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-        "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
-        "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
-        "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
-      },
-      "validation": "invalid",
-      "canonical_position": "later_buffered",
-      "artifact_paths": [
-        "data/ai_inbox/taste_steam_review_dossiers/533abb9b4328efec3b80a61caddb142ffe0ff7fb9438482d5159b2ed9878378d--g000002--59f3a5687078c168ac1f963915ad04818d1c37f72aabf396337ef205194bc161.json"
-      ],
-      "artifact_sha256": "bf55eca232d4c12d32c63247d832cc5f63b6f00e959d653488dbf9e75f50df2b",
-      "validator_error": "game identity requires an identity-role provenance source"
-    }
-  ],
+  "invalid_candidate_count": 0,
+  "invalid_expected_group": null,
+  "candidate_groups": [],
   "malformed_current_snapshot_artifacts": [],
   "canonical_progress_authority": false,
   "retry_state": false
