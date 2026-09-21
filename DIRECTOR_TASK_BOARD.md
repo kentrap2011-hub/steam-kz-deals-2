@@ -12,6 +12,33 @@
 - Proactive gap detection follows `PROACTIVE_PROJECT_AUDITOR_PROTOCOL.md`; the user is not the project's monitoring layer.
 - Current priority is operational speed with GitHub-owned production control-plane boundaries preserved.
 
+## ACTIVE — PASS 1 Scheduled worker entrypoint audit
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_WORKER_ENTRYPOINT_AUDIT_01.md`
+
+Mode:
+`READ-ONLY / ENTRYPOINT + OWNERSHIP AUDIT`
+
+Worker slot:
+`ЧАТ 2`
+
+Reason:
+- Phase B live acceptance is blocked on the claimed `existing authorized Scheduled PASS 1 worker`;
+- Director needs an independent read-only check of whether a real Scheduled Task/runtime entrypoint actually exists, is correctly bound to the Progressive PASS 1 contract, and is callable;
+- no production run, task reconfiguration, PASS 1 attempt or PASS 2 work is authorized in this audit.
+
+Expected report:
+`reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-entrypoint-audit-01.md`
+
+Allowed final statuses:
+- `complete_existing_worker_identified`
+- `complete_worker_missing_setup_required`
+- `complete_wrong_runtime_binding_identified`
+- `complete_insufficient_observability`
+- `needs_fix`
+- `needs_user_decision`
+
 ## BLOCKED EXTERNAL — Progressive personalized deals Phase B / PASS 1 live acceptance
 
 Parent task:
