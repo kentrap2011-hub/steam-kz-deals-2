@@ -552,3 +552,12 @@
 - result: active progressive context 719 rows, deployed/current visual 0 rows and zero processing counts;
 - no PASS 1/PASS 2 or Scheduled ChatGPT work occurred;
 - exact next step belongs to a new bounded Phase A producer-fix task; do not broaden this routing task.
+
+
+### Progressive Personalized Deals Phase A unresolved row preservation fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_A_UNRESOLVED_ROW_PRESERVATION_FIX_01.md`;
+- scope is limited to preserving `analysis_incomplete` and `not_analyzed` rows through history/expiry enrichment while keeping unsupported personalization stripped;
+- existing deterministic expiry/history/source rules and analyzed-fit behavior remain unchanged;
+- no state-model, tier-ordering, UI, Taste/Dossier, PASS 1/PASS 2 or Scheduled ChatGPT changes are authorized;
+- after the narrow fix, use the normal full build/validation/deploy path and update the existing Phase A report only.
