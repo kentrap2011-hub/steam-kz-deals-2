@@ -3,6 +3,7 @@
 ## Current rules
 - Keep at most two independent worker slots busy when safe.
 - `ЧАТ 1` and `ЧАТ 2` are reusable worker slots, not historical chat identities.
+- If a physical worker conversation has been declared overloaded/stale/retired, it must not be reused as an existing chat. Reusing its slot number requires an explicitly NEW physical chat and the Board assignment must say so.
 - No autonomous IMPLEMENT without separate user approval.
 - Reconcile Board -> exact task -> exact durable report before assigning follow-up work.
 - Every nontrivial worker task must finish with its compact durable report committed to `main` at the task-declared `reviews/worker_reports/...` path before the worker presents the task as complete/ready for Director acceptance.
@@ -21,7 +22,7 @@ Mode:
 `READ-ONLY / ENTRYPOINT + OWNERSHIP AUDIT`
 
 Worker slot:
-`ЧАТ 2`
+`НОВЫЙ ЧАТ — ЧАТ 2` — fresh physical conversation; do not use the retired/overloaded previous ЧАТ 2.
 
 Reason:
 - Phase B live acceptance is blocked on the claimed `existing authorized Scheduled PASS 1 worker`;
