@@ -7,150 +7,300 @@
 - Source of truth: `main`
 - Mode: `LIVE ACCEPTANCE / BOUNDED PRODUCTION VALIDATION`
 - Date: 2026-09-21
-- Status: `blocked_external`
+- Status: `needs_fix`
 
-The acceptance was bounded to exactly one GitHub-owned PASS 1 item and was required to use the existing authorized Scheduled PASS 1 semantic worker. No interactive semantic substitute is permitted.
+The previous `blocked_external` status is superseded. The user invoked exactly one existing `Progressive PASS 1 Worker` via `Run now`, and that invocation completed. No second manual `Run now` was performed.
+
+The scheduled semantic path is therefore externally invocable and the former execution-interface blocker is resolved.
+
+However, the completed invocation did not satisfy this acceptance task's bounded end-to-end contract: it processed multiple PASS 1 items in one invocation, and the accepted PASS 1 state did not trigger a post-ingest progressive visual rebuild.
 
 ## 2. Baseline
 
-Current GitHub-prepared PASS 1 work was read from `main`.
+The original bounded acceptance baseline before the live invocation was:
 
-Canonical work manifest:
-- path: `data/production/pre_ai/progressive_pass1_work.json`
-- blob SHA: `66adc8b90ee61c19afff9854b3255fab97ef730a`
-- contract: `PROGRESSIVE-PASS1-WORK-V1`
-- phase: `phase_b_pass1`
-- `pass1_active = true`
-- `pass2_active = false`
-- semantic generation: `334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d`
-- total PASS 1 scope: 721
-- attempted: 0
-- remaining: 721
+- semantic generation: `334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d`;
+- first GitHub-owned item: Tower Dominion / `game:3226530` / appid `3226530`;
+- work_id: `cf4fa5b1a7e783bf77d698137754b9b892c4c64f8af3d4c540aba84bd7cedf3d`;
+- exact prepared submission path:
+  `data/ai_inbox/progressive_pass1/334bee04617cc4a4--cf4fa5b1a7e783bf77d698137754b9b892c4c64f8af3d4c540aba84bd7cedf3d.json`;
+- pre-attempt PASS 1 durable state empty;
+- pre-attempt manifest attempted count `0`;
+- PASS 2 inactive.
 
-Durable PASS 1 state:
-- path: `data/cache/progressive_pass1_state.json`
-- blob SHA: `ab52a04ee52e9e012e85cc161eec1416c57422a3`
-- contract: `PROGRESSIVE-PASS1-STATE-V1`
-- entries: empty
-
-The prerequisite implementation/activation report records the current Phase B visual as active and non-empty, with visual commit `78746c6c5071d205ec799861ece63a0f0bb26e7a`, `pass1_active=true`, `pass2_active=false`, 720 visible/not-analyzed current catalogue items, and zero PASS 1 attempts. The work manifest contains 721 candidates before the visual expiry filter; the visual reports 720 current candidates after that deterministic filter.
+The prior report stopped as `blocked_external` only because the worker environment available at that time could not invoke the existing Scheduled Task. That external boundary is no longer the current result.
 
 ## 3. Exact selected work item
 
-No manual selection was performed. The exact first current item in the GitHub-owned manifest/order is:
+LIVE-01 selection is confirmed from the original GitHub-owned order.
 
-- sequence: 1
-- title: `Tower Dominion`
-- family_id: `game:3226530`
-- taste_subject_key: `App_3226530`
-- appid: `3226530`
-- work_id: `cf4fa5b1a7e783bf77d698137754b9b892c4c64f8af3d4c540aba84bd7cedf3d`
-- taste_fingerprint: `3cd92551405762dd1d673a29c2d0b65a24d95ee4b25c1eb36b189d587443cfef`
-- candidate_context_sha256: `c66b5c3976ae066c6fe019a080c32f763909cfaaa773ee1f4fab7bd2515af08d`
-- semantic_generation_id: `334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d`
-- exact prepared submission path: `data/ai_inbox/progressive_pass1/334bee04617cc4a4--cf4fa5b1a7e783bf77d698137754b9b892c4c64f8af3d4c540aba84bd7cedf3d.json`
+The exact first item was Tower Dominion:
 
-Pre-attempt verification:
-- current state contains no entry for this work item;
-- manifest attempt count is 0;
-- PASS 2 is inactive;
-- the exact prepared result artifact path returned 404 / does not exist on `main`.
+- sequence at baseline: `1`;
+- title: `Tower Dominion`;
+- family_id: `game:3226530`;
+- taste_subject_key: `App_3226530`;
+- appid: `3226530`;
+- work_id: `cf4fa5b1a7e783bf77d698137754b9b892c4c64f8af3d4c540aba84bd7cedf3d`;
+- taste_fingerprint: `3cd92551405762dd1d673a29c2d0b65a24d95ee4b25c1eb36b189d587443cfef`;
+- candidate_context_sha256: `c66b5c3976ae066c6fe019a080c32f763909cfaaa773ee1f4fab7bd2515af08d`;
+- semantic_generation_id: `334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d`;
+- exact prepared submission path:
+  `data/ai_inbox/progressive_pass1/334bee04617cc4a4--cf4fa5b1a7e783bf77d698137754b9b892c4c64f8af3d4c540aba84bd7cedf3d.json`.
+
+No manual candidate selection replaced the GitHub-owned head.
 
 ## 4. Scheduled worker execution
 
-The required existing authorized Scheduled PASS 1 worker could not be invoked from this worker environment.
+The user performed exactly one `Run now` on the existing `Progressive PASS 1 Worker`.
 
-The available environment exposes:
-- GitHub repository read/write and GitHub Actions inspection/re-run surfaces;
-- ChatGPT automation create/update/list/peek management surfaces.
+That single Scheduled Task invocation produced multiple consecutive create-only PASS 1 submissions:
 
-It does **not** expose an invocation/run-now surface for the existing Scheduled PASS 1 ChatGPT semantic worker. A GitHub Actions re-run is not an authorized substitute for the external Scheduled ChatGPT semantic execution path, and creating or rescheduling a task would alter production scheduling rather than execute the required existing worker once.
+1. Tower Dominion — result commit `68bc17cea1d34cb2bb0a96f23b7c624f0ca18c4f`;
+2. Sweet Home — result commit `f9584bd7a5528ae4bc0c6881d17d9f5e1f23d9f0`;
+3. Green Hell — result commit `c225cd5b75dd114fdd7f385e58a000331ea8749a`;
+4. SAEKO: Giantess Dating Sim — result commit `875a4fc34c06aae750568fd468c1a81385f2e6ef`;
+5. Star Traders: Frontiers — result commit `efa967e73e019ccf714929f9b0ce4aefe0a958d8`;
+6. Lucid Blocks — result commit `6b49999bc634ba47f5a6723b159732b751521773`.
 
-Per the task's explicit fail-closed rule, execution stopped at this boundary. No semantic judgment was performed interactively and no result was fabricated.
+This is consistent with the normal production worker prompt, which explicitly allows multiple consecutive items per invocation while budget permits.
+
+It is **not** consistent with this LIVE ACCEPTANCE task, whose critical boundedness requires exactly one real PASS 1 item and explicitly prohibits processing a second item or backlog drain.
+
+Therefore:
+
+- exactly one manual Scheduled Task invocation occurred;
+- more than one PASS 1 item attempt occurred inside that invocation;
+- LIVE-02 and LIVE-12 are not satisfied.
+
+No retry of an incomplete item occurred and PASS 2 was not started.
 
 ## 5. Result artifact
 
-Expected exact result path:
+Tower Dominion's exact prepared result path is proven by commit `68bc17cea1d34cb2bb0a96f23b7c624f0ca18c4f`.
+
+That commit added exactly:
 
 `data/ai_inbox/progressive_pass1/334bee04617cc4a4--cf4fa5b1a7e783bf77d698137754b9b892c4c64f8af3d4c540aba84bd7cedf3d.json`
 
-Observed before stopping:
-- exact path does not exist on `main`;
-- no alternate result path was created;
-- no result was written manually;
-- no semantic status (`analyzed_fit`, `analyzed_not_fit`, or `analysis_incomplete`) was invented.
+Commit message:
+
+`Submit Progressive PASS1 seq 1 Tower Dominion`
+
+The artifact is no longer present at the inbox path after ingest because the canonical ingest workflow consumes/deletes accepted inbox artifacts. Its historical exact-path creation is preserved by the result commit.
+
+LIVE-04 is therefore proven for Tower Dominion.
 
 ## 6. Ingest / validation
 
-Not reached.
+Tower Dominion triggered GitHub Actions run:
 
-Because the authorized Scheduled worker could not produce the exact item artifact, the canonical GitHub ingest/validation step was not triggered for this acceptance attempt. No binding/schema acceptance is claimed.
+- workflow: `Ingest Progressive PASS 1 item`;
+- run ID: `35632486421`;
+- event: `push`;
+- conclusion: `success`;
+- head SHA: `68bc17cea1d34cb2bb0a96f23b7c624f0ca18c4f`.
+
+The ingest job `106441781090` completed successfully. Its steps include:
+
+- `Validate Progressive PASS 1 contract and item semantics` — success;
+- `Ingest independent PASS 1 item artifacts` — success;
+- `Revalidate PASS 1 state after ingest` — success;
+- `Commit PASS 1 state and remaining work` — success.
+
+The job log records:
+
+- `accepted_count = 1`;
+- deletion of the exact Tower Dominion inbox artifact after ingest.
+
+The resulting ingest commit was:
+
+- `efca97748e13cc03ca087daab0285cdc6c29d8e1`
+- message: `Ingest Progressive PASS 1 item`.
+
+The five subsequent submitted items likewise each triggered a successful `Ingest Progressive PASS 1 item` run:
+
+- `35632572944`
+- `35632639845`
+- `35632700362`
+- `35632807116`
+- `35632884542`
+
+Thus the semantic artifact -> GitHub ingest/validation -> durable-state path is operational.
 
 ## 7. Durable state transition
 
-No PASS 1 attempt was consumed.
+Current durable PASS 1 state on `main`:
 
-The durable baseline remains:
-- `pass1_attempted_count = 0`;
-- `pass1_remaining_count = 721` in the work manifest;
-- `data/cache/progressive_pass1_state.json` has no entries;
-- PASS 2 remains inactive.
+- path: `data/cache/progressive_pass1_state.json`;
+- blob SHA: `d9aae43a3ab2564321b6939a06398d49a0fd4ac7`;
+- entries: `6`.
 
-This is intentional fail-closed behavior for an external execution blocker, not a semantic item failure and not a retryable consumed attempt.
+Tower Dominion is durably recorded as:
+
+- `pass1_attempted = true`;
+- outcome: `analysis_incomplete`;
+- analysis_issue_code: `insufficient_evidence`;
+- accepted_at_utc: `2026-09-21T17:30:56+00:00`.
+
+This is a valid acceptance outcome under the PASS 1 contract.
+
+The other five durable results from the same single Scheduled Task invocation are:
+
+- Sweet Home — `analysis_incomplete / insufficient_evidence`;
+- Green Hell — `analyzed_fit / moderate / medium`;
+- SAEKO: Giantess Dating Sim — `analyzed_fit / moderate / medium`;
+- Star Traders: Frontiers — `analysis_incomplete / insufficient_evidence`;
+- Lucid Blocks — `analyzed_fit / moderate / medium`.
+
+Current work manifest on `main`:
+
+- path: `data/production/pre_ai/progressive_pass1_work.json`;
+- blob SHA: `d29dfe64096f84fe70680d2b6f1cfbd12797ff83`;
+- contract: `PROGRESSIVE-PASS1-WORK-V1`;
+- phase: `phase_b_pass1`;
+- semantic generation unchanged: `334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d`;
+- `pass1_active = true`;
+- `pass2_active = false`;
+- current total scope: `493`;
+- current attempted count: `5`;
+- current remaining count: `488`;
+- expired-before-PASS1 count: `228`.
+
+Arithmetic is valid:
+
+`493 = 5 + 488`.
+
+The durable state has six entries while current attempted count is five because Tower Dominion was accepted and then is no longer part of the current active scope after the GitHub-owned scope refresh/expiry transition. The state entry is retained historically, while the current manifest accounts only for current runnable scope.
+
+The current next GitHub-owned item is:
+
+- Solasta: Crown of the Magister;
+- appid `1096530`;
+- work_id `ea1c759fb8d20b84b8a90295b7845839da0b86c8748cc703641e8fd7e7251455`.
+
+No further execution was performed during this verification.
 
 ## 8. Visual / site update
 
-No post-attempt progressive visual rebuild or site/count transition was produced, because no Scheduled semantic result entered GitHub ingest.
+The full end-to-end chain is **not** complete.
 
-The pre-existing Phase B publication remains the baseline; this acceptance report does not claim a new visual commit, new site publication, or changed counts.
+Current canonical visual:
+
+- path: `data/production/visual/current.json`;
+- blob SHA: `afd90ca08a7627a86a581ca0ae659ad56508ab39`;
+- `generated_at_utc = 2026-09-21T10:47:29.889164+00:00`;
+- item_count: `720`.
+
+That visual predates the Scheduled PASS 1 invocation, whose first accepted result arrived at `2026-09-21T17:30:56+00:00`.
+
+Its current processing status still reports:
+
+- analyzed success: `0`;
+- analyzed fit: `0`;
+- analysis incomplete: `0`;
+- not analyzed: `720`;
+- visible: `720`;
+- PASS 1 attempted: `0`;
+- PASS 1 remaining: `720`;
+- PASS 2 inactive.
+
+The five still-visible live-run items inspected in the visual remain `not_analyzed` / Tier 3 / `pass1_attempted=false`.
+
+Therefore the current published visual does **not** reflect the accepted durable PASS 1 state.
+
+The owning ingest workflow confirms the missing downstream edge. Current:
+
+`.github/workflows/ingest-progressive-pass1.yml`
+blob `113f59c10671ebf1f875c461ffd00436a17b0245`
+
+validates, ingests, revalidates, and commits:
+
+- inbox artifacts;
+- `data/cache/progressive_pass1_state.json`;
+- PASS 1 receipts;
+- remaining work manifest.
+
+It contains no step that rebuilds or dispatches the progressive visual/site publication after accepted PASS 1 state changes.
+
+The pre-existing site/visual baseline remains available, but LIVE-10's required incremental reflection of accepted state is not satisfied.
 
 ## 9. LIVE-01..12
 
-- LIVE-01 — **PASS (precondition)**: current GitHub-prepared PASS 1 work exists and is bound to the current semantic generation.
-- LIVE-02 — **BLOCKED_EXTERNAL**: exactly one real Scheduled PASS 1 attempt could not be executed because the authorized Scheduled worker is not invocable from this environment.
-- LIVE-03 — **PASS (safety)**: no PASS 2 execution and no retry loop occurred.
-- LIVE-04 — **NOT REACHED**: exact prepared result path is known and verified absent; no worker result was produced.
-- LIVE-05 — **NOT REACHED**: ingest did not run, so exact binding validation was not exercised live.
-- LIVE-06 — **NOT REACHED / unchanged**: zero attempts remain consumed for the current work_id/generation.
-- LIVE-07 — **PASS (fail-closed safety)**: durable PASS 1 state was not mutated by an unavailable external worker.
-- LIVE-08 — **UNCHANGED BASELINE**: no post-attempt count transition exists to reconcile.
-- LIVE-09 — **PASS (safety)**: unrelated items were not touched or consumed.
-- LIVE-10 — **NOT REACHED for post-attempt update**: no new visual/site update was produced; the prerequisite Phase B publication remains the baseline.
-- LIVE-11 — **UNCHANGED BASELINE**: untouched catalogue visibility was not modified by this blocked acceptance.
-- LIVE-12 — **PASS**: no backlog drain and no second item execution occurred.
+- LIVE-01 — **PASS**: Tower Dominion was the exact GitHub-owned head item at acceptance start.
+- LIVE-02 — **FAIL / NEEDS_FIX**: one manual `Run now` produced multiple real PASS 1 item attempts; acceptance required exactly one item attempt.
+- LIVE-03 — **PASS**: PASS 2 remained inactive; no retry loop or incomplete-item retry occurred.
+- LIVE-04 — **PASS**: Tower Dominion result was created at the exact prepared create-only path.
+- LIVE-05 — **PASS**: GitHub ingest workflow validated the PASS 1 contract/item semantics and accepted the result.
+- LIVE-06 — **PASS**: Tower Dominion has a durable `pass1_attempted=true` entry for the exact generation/work_id.
+- LIVE-07 — **PASS**: Tower Dominion's durable outcome is valid typed `analysis_incomplete / insufficient_evidence`.
+- LIVE-08 — **PASS, but outside acceptance bound**: unrelated later work remained runnable; subsequent items were in fact processed. That proves non-blocking item independence but also demonstrates the LIVE-02/LIVE-12 boundedness violation.
+- LIVE-09 — **PASS**: current manifest counts reconcile, `493 = 5 attempted + 488 remaining`; expired count is separately `228`.
+- LIVE-10 — **FAIL / NEEDS_FIX**: no post-ingest progressive visual rebuild occurred; current visual still reports zero attempts and zero analyzed items.
+- LIVE-11 — **NOT ACCEPTED AS POST-RUN PROOF**: the current visual still shows all 720 cards as Tier 3 because it is the pre-run visual, not a post-ingest projection.
+- LIVE-12 — **FAIL / NEEDS_FIX**: a second and additional item executions occurred inside the single Scheduled Task invocation.
 
-## 10. Blocker
+## 10. Blocker / defect classification
 
-Exact blocker:
+The old `blocked_external` classification is resolved.
 
-`blocked_external` — the current worker environment cannot invoke the existing authorized Scheduled PASS 1 ChatGPT semantic worker. The contract explicitly forbids fabricating or replacing that execution with an interactive semantic result.
+Current classification: `needs_fix`.
 
-The acceptance chain therefore stops here:
+The existing normal Scheduled PASS 1 production path is not compatible with the exact bounded live-acceptance contract in two concrete ways:
 
-`GitHub-prepared work -> [BLOCKED: Scheduled semantic worker] -> exact result artifact -> GitHub ingest -> durable item state -> progressive visual update -> site/count update`
+1. the production worker prompt intentionally allows multiple consecutive items per invocation, while LIVE ACCEPTANCE 01 requires exactly one item and forbids a second;
+2. successful PASS 1 ingest updates durable state/work but does not trigger an incremental progressive visual rebuild, leaving the published visual stale relative to accepted state.
+
+No additional production run is authorized or required to establish these findings.
 
 ## 11. Status
 
-`blocked_external`
+`needs_fix`
 
-No production PASS 1 item was consumed. This report is a bounded fail-closed acceptance result, not a successful live semantic acceptance and not a `needs_fix` finding in the GitHub control-plane implementation.
+What is proven successfully:
+
+- real Scheduled Task invocation works;
+- exact GitHub-owned item selection works;
+- exact create-only result transport works;
+- GitHub ingest/validation works;
+- durable PASS 1 state works;
+- one-attempt state is persisted;
+- later work remains independently runnable;
+- PASS 2 remains inactive.
+
+What prevents `complete_live_acceptance`:
+
+- the acceptance run was not one-item bounded;
+- the accepted durable state was not reflected by a post-ingest visual/site rebuild.
 
 ## 12. Exactly one recommended next step
 
-Invoke the **existing authorized Scheduled PASS 1 worker** once from an environment that has its real execution interface, against the current GitHub-owned manifest/order; then rerun this bounded acceptance verification for that single resulting item without manual result creation, retry, second-item processing, backlog drain, or PASS 2.
+Return to Director with one bounded follow-up task to reconcile the **live-acceptance execution path** before any further acceptance run: define a canonical one-item acceptance mode that cannot continue to a second item, and ensure accepted PASS 1 ingest triggers the GitHub-owned incremental progressive visual rebuild/publication path.
+
+Do not perform another `Run now`, do not retry incomplete items, and do not start PASS 2 until that bounded path is fixed and validated.
 
 ## 13. Exact refs
 
-- `CHAT_PROTOCOL.md` on `main`
-- `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_LIVE_ACCEPTANCE_01.md` on `main`
+- `CHAT_PROTOCOL.md`
+- `CHAT_CONTEXT.md`
+- `WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_LIVE_ACCEPTANCE_01.md`
 - `reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-implement-01.md`
 - `config/progressive_pass1_contract.json`
 - `config/progressive_pass1_worker_prompt.md`
-- `config/execution_ownership_contract.json`
 - `config/progressive_personalization_contract.json`
-- `data/production/pre_ai/progressive_pass1_work.json` @ blob `66adc8b90ee61c19afff9854b3255fab97ef730a`
-- `data/cache/progressive_pass1_state.json` @ blob `ab52a04ee52e9e012e85cc161eec1416c57422a3`
-- exact expected result: `data/ai_inbox/progressive_pass1/334bee04617cc4a4--cf4fa5b1a7e783bf77d698137754b9b892c4c64f8af3d4c540aba84bd7cedf3d.json`
-- semantic generation: `334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d`
-- work_id: `cf4fa5b1a7e783bf77d698137754b9b892c4c64f8af3d4c540aba84bd7cedf3d`
-- prerequisite Phase B visual commit: `78746c6c5071d205ec799861ece63a0f0bb26e7a`
+- `.github/workflows/ingest-progressive-pass1.yml` @ blob `113f59c10671ebf1f875c461ffd00436a17b0245`
+- `data/cache/progressive_pass1_state.json` @ blob `d9aae43a3ab2564321b6939a06398d49a0fd4ac7`
+- `data/production/pre_ai/progressive_pass1_work.json` @ blob `d29dfe64096f84fe70680d2b6f1cfbd12797ff83`
+- `data/production/visual/current.json` @ blob `afd90ca08a7627a86a581ca0ae659ad56508ab39`
+- Tower Dominion result commit: `68bc17cea1d34cb2bb0a96f23b7c624f0ca18c4f`
+- Tower Dominion ingest workflow run: `35632486421`
+- Tower Dominion ingest job: `106441781090`
+- Tower Dominion ingest commit: `efca97748e13cc03ca087daab0285cdc6c29d8e1`
+- subsequent successful ingest runs:
+  - `35632572944`
+  - `35632639845`
+  - `35632700362`
+  - `35632807116`
+  - `35632884542`
+- current semantic generation:
+  `334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d`
