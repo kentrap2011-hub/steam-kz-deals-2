@@ -120,6 +120,29 @@ User-authoritative correction:
 Expected report:
 `reviews/worker_reports/taste-dossier-nonblocking-group-progress-implement-01.md`
 
+## ACTIVE — Progressive PASS 2 Phase C core implementation
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PASS2_PHASE_C_CORE_IMPLEMENT_01.md`
+
+Worker slot:
+`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Scope:
+- implement the inactive GitHub-owned PASS 2 core on Progressive-owned surfaces;
+- preserve the accepted exact Dossier-ready gate and one-attempt semantics;
+- add exact immutable work/result/receipt accounting and PASS 2 provenance;
+- add site-visible PASS 2 provenance labels;
+- keep `pass2_active=false` and perform no production PASS 2 run;
+- do not modify Dossier-owned runtime/workflow files while ЧАТ 1 is still implementing non-blocking Dossier progress;
+- defer only the final Dossier-persistence -> PASS 2 eligibility wiring until ЧАТ 1 is accepted.
+
+Expected report:
+`reviews/worker_reports/progressive-pass2-phase-c-core-implement-01.md`
+
 ## ACCEPTED — Progressive PASS 2 Dossier-ready gate amendment
 
 Task:
