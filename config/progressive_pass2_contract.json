@@ -1,9 +1,9 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
   "version": 1,
-  "status": "implemented_inactive_integration_wired",
+  "status": "architecture_amended_runtime_adaptation_required_inactive",
   "phase": "phase_c_pass2",
-  "purpose": "GitHub-owned one-shot PASS 2 recovery core for current Progressive analysis_incomplete items after exact current canonically accepted Dossier evidence becomes available.",
+  "purpose": "GitHub-owned Deep analysis stage for eventual authoritative personalized coverage of every current eligible Progressive game after exact-compatible canonically accepted Dossier evidence is ready. Technical PASS 2 remains inactive until runtime adaptation and separate activation.",
   "implemented": true,
   "active": false,
   "ownership": {
@@ -19,16 +19,8 @@
     "interactive_chat": "development_only_not_production_worker"
   },
   "eligibility": {
-    "source_state": "current_exact_pass1_analysis_incomplete_only",
-    "pass1_exact_identity_required": [
-      "semantic_generation_id",
-      "work_id",
-      "family_id",
-      "taste_subject_key",
-      "appid",
-      "taste_fingerprint",
-      "candidate_context_sha256"
-    ],
+    "source_state": "all_current_eligible_progressive_items_without_current_authoritative_deep_completion",
+    "pass1_exact_identity_required": [],
     "canonical_dossier_store": "data/cache/taste_steam_review_dossiers",
     "current_dossier_binding_source": "data/production/pre_ai/taste_steam_review_dossier_worker_index.json#web_evidence_contract_binding",
     "accepted_store_presence_required": true,
@@ -43,7 +35,28 @@
     ],
     "cross_release_or_ambiguous_identity_allowed": false,
     "waiting_for_dossier_consumes_attempt": false,
-    "queue_projection_consumes_attempt": false
+    "queue_projection_consumes_attempt": false,
+    "current_semantic_identity_required": [
+      "semantic_generation_id",
+      "work_id",
+      "family_id",
+      "taste_subject_key",
+      "appid",
+      "taste_fingerprint",
+      "candidate_context_sha256"
+    ],
+    "prior_fast_attempt_required": false,
+    "fast_analysis_incomplete_required": false,
+    "global_fast_completion_required": false,
+    "deep_may_run_before_fast": true,
+    "current_authoritative_deep_completion_excludes_normal_work": true,
+    "failed_first_pass_requires_explicit_recovery_authorization": true,
+    "recovery_authorization_is_github_owned": true,
+    "recovery_conditions": [
+      "materially_changed_canonically_accepted_dossier_or_evidence",
+      "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+      "explicit_canonical_github_recovery_action_with_recorded_reason"
+    ]
   },
   "ordering": {
     "owner": "github",
@@ -71,7 +84,19 @@
     ],
     "invalid_or_stale_result_consumes_attempt": false,
     "invalid_or_stale_execution_receipt_consumes_attempt": false,
-    "terminal_unresolved_behavior": "remain_analysis_incomplete_and_become_ineligible_for_another_automatic_pass2_attempt_for_the_same_budget_key"
+    "terminal_unresolved_behavior": "leave_authoritative_completion_open_move_exact_identity_to_github_owned_recovery_state_remove_it_from_normal_first_pass_and_require_a_new_concrete_recovery_authorization_before_any_later_recovery_attempt",
+    "maximum_automatic_attempts_semantics": "normal_deep_first_pass_only",
+    "normal_first_pass_attempts_per_deep_identity": 1,
+    "recovery_attempts_share_normal_first_pass_budget": false,
+    "recovery_has_hidden_fixed_quota": false,
+    "recovery_requires_fresh_github_authorization_each_attempt": true,
+    "recovery_authorization_resets_by_time_or_queue_presence": false,
+    "recovery_authorization_conditions": [
+      "materially_changed_canonically_accepted_dossier_or_evidence",
+      "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+      "explicit_canonical_github_recovery_action"
+    ],
+    "recovery_attempt_history_separate": true
   },
   "work": {
     "manifest_path": "data/production/pre_ai/progressive_pass2_work.json",
@@ -117,7 +142,28 @@
       "analysis_issue_code",
       "attempt_consumption_source",
       "accepted_at_utc"
-    ]
+    ],
+    "fast_history_mutation_allowed": false,
+    "target_deep_state_model": {
+      "normal_first_pass_states": [
+        "not_started",
+        "waiting_for_dossier",
+        "eligible_or_pending",
+        "completed"
+      ],
+      "unresolved_state": "incomplete_or_recovery",
+      "recovery_detail_states": [
+        "recovery_owned",
+        "recovery_eligible",
+        "recovery_pending"
+      ],
+      "authoritative_completion_outcomes": [
+        "analyzed_fit",
+        "analyzed_not_fit"
+      ],
+      "first_pass_and_recovery_history_separate": true,
+      "schema_runtime_adaptation_required": true
+    }
   },
   "outcomes": {
     "analyzed_fit": {
@@ -153,7 +199,9 @@
         "terminal_execution_failure"
       ],
       "visible_tier": 2,
-      "automatic_retry": false
+      "automatic_retry": false,
+      "deep_authoritative_completion": false,
+      "moves_to_recovery_owned_after_consumed_normal_first_pass": true
     }
   },
   "visual_provenance": {
@@ -161,7 +209,29 @@
     "pass2_value": "pass2",
     "browser_inference_forbidden": true,
     "pass2_fit_label": "Разобрана · PASS 2",
-    "pass2_incomplete_label": "Разбор не завершён · PASS 2"
+    "pass2_incomplete_label": "Разбор не завершён · PASS 2",
+    "deep_completed_label": "Глубокий разбор завершён",
+    "deep_incomplete_label": "Глубокий разбор не завершён",
+    "target_stage_fields": {
+      "deep_stage_state": [
+        "not_started",
+        "waiting_for_dossier",
+        "eligible_or_pending",
+        "completed",
+        "incomplete_or_recovery"
+      ],
+      "deep_stage_outcome": [
+        "fit",
+        "not_fit",
+        null
+      ],
+      "deep_recovery_state": [
+        "none",
+        "recovery_owned",
+        "recovery_eligible",
+        "recovery_pending"
+      ]
+    }
   },
   "dossier_integration": {
     "automatic_recompute_after_canonical_dossier_persistence": "active_github_owned",
@@ -176,14 +246,71 @@
     "serialization_boundary": "github_actions_concurrency_group_taste-steam-review-dossier-canonical-writer_cancel_in_progress_false",
     "time_expiry_guard": "scheduled_worker_preexecution_expiry_check_plus_github_recompute_before_pass2_ingest",
     "projection_is_attempt_consumption": false,
-    "rule": "All GitHub-owned writers that can change current PASS 2 eligibility or its consumed-attempt state recompute through the existing Progressive entrypoint inside one serialized canonical-writer boundary; no Dossier semantic rule or PASS 1 semantic rule is redefined."
+    "rule": "All GitHub-owned writers that can change current Deep eligibility or its first-pass/recovery attempt state reuse the existing Progressive recomputation boundary; Dossier semantic evidence, identity, freshness, recovery, and persistence semantics remain unchanged.",
+    "reusable_wiring_preserved": true,
+    "old_recovery_only_predicate_superseded": true,
+    "runtime_predicate_adaptation_required": true
   },
   "activation_guard": {
     "pass2_active": false,
+    "deep_active": false,
     "scheduled_task_created_or_modified": false,
     "production_execution_authorized": false,
     "real_backlog_processing_allowed": false,
+    "previous_recovery_only_activation_plan_superseded": true,
+    "runtime_adaptation_required_before_activation": true,
     "activation_requires_separate_director_accepted_follow_up": true,
-    "integration_ready": true
+    "reusable_integration_wiring_ready": true
+  },
+  "user_stage": {
+    "id": "deep",
+    "label_ru": "Глубокий разбор",
+    "authoritative": true,
+    "eventual_coverage_target": "all_current_eligible_games"
+  },
+  "runtime_architecture": {
+    "landed_core_present": true,
+    "target_architecture_runtime_adapted": false,
+    "runtime_adaptation_required": true,
+    "old_recovery_only_predicate_superseded": true,
+    "production_execution_authorized": false,
+    "note": "Existing inactive runtime/recomputation wiring is reusable scaffolding only. It must not be activated under the obsolete PASS1-incomplete-only eligibility predicate."
+  },
+  "effective_result_precedence": {
+    "completed_deep_fit_or_not_fit": "authoritative",
+    "deep_incomplete_or_error": "does_not_erase_valid_current_fast_fit_or_not_fit",
+    "fast_fit_or_not_fit_when_no_completed_deep": "provisional_effective_result",
+    "no_trustworthy_completed_fast_or_deep": "existing_unresolved_or_not_analyzed_projection",
+    "history_rule": "Never rewrite Fast/PASS 1 history to pretend Deep/PASS 2 produced it."
+  },
+  "completeness": {
+    "normal_first_pass_metric": "deep_normal_first_pass_complete",
+    "eventual_authoritative_metric": "deep_all_current_authoritative_complete",
+    "normal_first_pass_complete_rule": "true only when every current Deep identity has either authoritative completion or has consumed its one normal first-pass attempt and moved to recovery-owned state; waiting-for-dossier/not-started current identities keep it false",
+    "all_current_authoritative_complete_rule": "true only when every current Deep coverage target identity has authoritative analyzed_fit/analyzed_not_fit completion",
+    "metrics_are_distinct": true,
+    "recovery_owned_counts_as_normal_first_pass_accounted": true,
+    "recovery_owned_counts_as_authoritative_complete": false
+  },
+  "recovery_model": {
+    "owner": "github_control_plane",
+    "non_blocking": true,
+    "separate_from_normal_first_pass": true,
+    "no_blind_retry_loop": true,
+    "no_hidden_arbitrary_retry_quota": true,
+    "authorization_key_fields": [
+      "semantic_generation_id",
+      "work_id",
+      "recovery_authorization_id"
+    ],
+    "attempt_history_must_record": [
+      "recovery_authorization_id",
+      "recovery_reason",
+      "dossier_content_sha256_or_defect_fix_binding",
+      "attempt_consumption_source",
+      "outcome",
+      "accepted_at_utc"
+    ],
+    "unrelated_normal_first_pass_work_continues": true
   }
 }
