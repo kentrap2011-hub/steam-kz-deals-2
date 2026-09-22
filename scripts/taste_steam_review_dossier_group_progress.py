@@ -180,6 +180,29 @@ def set_group_state(manifest, contract, sequence, state, *, failure=None):
     return migrated
 
 
+
+def reopen_failed_group(manifest, contract, sequence):
+    """Explicit GitHub-owned recovery transition; never used by normal first-pass drain."""
+    migrated = ensure_group_progress(manifest, contract)
+    if not migrated["group_progress"]["normal_first_pass_complete"]:
+        raise ValueError("failed-group recovery may reopen only after normal first pass is complete")
+    entries = copy.deepcopy(migrated["group_progress"]["groups"])
+    found = False
+    for entry in entries:
+        if int(entry["sequence"]) != int(sequence):
+            continue
+        found = True
+        if entry["state"] != FAILED:
+            raise ValueError("recovery may reopen only a failed dossier group")
+        entry["state"] = PENDING
+        entry.pop("failure", None)
+        break
+    if not found:
+        raise ValueError("recovery group sequence is outside immutable plan")
+    migrated["group_progress"] = _base_progress(migrated, entries)
+    validate_group_progress(migrated, contract)
+    return migrated
+
 def accepted_contiguous_prefix_item_count(manifest, contract):
     progress = manifest.get("group_progress") or infer_group_progress(manifest, contract)
     validate_group_progress(manifest, contract, progress)
