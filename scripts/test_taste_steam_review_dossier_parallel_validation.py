@@ -14,7 +14,10 @@ from taste_steam_review_dossier_parallel_validation import build_parallel_valida
 from taste_steam_review_dossier_strict import current_worker_contract_binding
 from taste_steam_review_dossier_test_fixture import web_dossier
 from taste_steam_review_dossier_web import build_daily_work_manifest_web
-from taste_steam_review_dossier_worker_projection import build_worker_projection
+from taste_steam_review_dossier_worker_projection import (
+    buffered_candidate_descriptor_projection,
+    build_worker_projection,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
@@ -175,9 +178,15 @@ class ParallelValidationTests(unittest.TestCase):
         runtime_text = runtime_path.read_text(encoding="utf-8")
         self.assertIn("TASTE-STEAM-REVIEW-DOSSIER-RUNTIME-PROMPT-V1", runtime_text)
         self.assertIn("next_pending_sequence", runtime_text)
+        self.assertIn("Exact buffered identity serialization", runtime_text)
+        self.assertIn("top-level `items` is mandatory", runtime_text)
         self.assertIn("must never enable, disable, pause, delete, reschedule, or edit its own Scheduled Task", runtime_text)
 
         runtime_contract = BASE_CONTRACT["worker_runtime_prompt"]
+        self.assertEqual(
+            runtime_contract["revision"],
+            "nonblocking-group-progress-v2-exact-buffer-identity",
+        )
         self.assertFalse(runtime_contract["semantic_evidence_binding"])
         self.assertFalse(runtime_contract["descriptor_binding"])
         self.assertTrue(runtime_contract["worker_index_binding"])
@@ -193,6 +202,20 @@ class ParallelValidationTests(unittest.TestCase):
         self.assertEqual(index["runtime_prompt_path"], runtime_contract["path"])
         self.assertEqual(index["runtime_prompt_revision"], runtime_contract["revision"])
         self.assertEqual(len(index["runtime_prompt_sha256"]), 64)
+        self.assertEqual(
+            index["buffer_identity_fields"],
+            BASE_CONTRACT["buffered_submission"]["group_plan"]["immutable_descriptor_required_fields"],
+        )
+        self.assertIn("items", index["buffer_identity_fields"])
+        self.assertEqual(
+            index["buffer_candidate_serialization_rule"],
+            "verbatim_deep_copy_group_descriptor_replace_schema_marker_then_add_dossiers",
+        )
+        candidate_projection = buffered_candidate_descriptor_projection(descriptors[0], contract)
+        self.assertEqual(candidate_projection["items"], descriptors[0]["items"])
+        self.assertIsNot(candidate_projection["items"], descriptors[0]["items"])
+        self.assertNotIn("schema", candidate_projection)
+        self.assertNotIn("schema_version", candidate_projection)
         self.assertNotIn("runtime_prompt_path", descriptors[0])
         self.assertNotIn("runtime_prompt_revision", descriptors[0])
         self.assertNotIn("runtime_prompt_sha256", descriptors[0])
