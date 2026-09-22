@@ -702,3 +702,12 @@
 - Deep/PASS 2 remains inactive; no Scheduled Deep task or production backlog execution occurred;
 - old recovery-only activation plan is superseded; reusable GitHub recomputation/exact-binding wiring is preserved for the next bounded runtime-adaptation task;
 - durable report: `reviews/worker_reports/progressive-fast-dossier-deep-architecture-amendment-01.md`.
+
+
+## Worker in progress — 2026-09-22
+
+### Progressive Deep runtime adaptation 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_PROGRESSIVE_DEEP_RUNTIME_ADAPTATION_01.md`;
+- scope: adapt inactive Deep/PASS 2 runtime to accepted `FAST-DOSSIER-DEEP-V1`, including first-pass/recovery accounting, Fast suppression after authoritative Deep, effective-result precedence, producer-owned stage fields/statistics, and zero-attempt inactive projection regeneration;
+- Deep/PASS 2 activation remains forbidden in this task; no Scheduled Task creation/edit/enable/run, no production Deep result/receipt/attempt, and no backlog execution.
