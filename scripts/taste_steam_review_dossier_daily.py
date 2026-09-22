@@ -17,6 +17,12 @@ from taste_steam_review_dossier import (
     validate_dossier,
 )
 
+from taste_steam_review_dossier_group_progress import (
+    accepted_contiguous_prefix_item_count,
+    ensure_group_progress,
+    validate_group_progress,
+)
+
 CONTRACT_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2"
 WORK_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-WORK-V2"
 GROUP_PLAN_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-GROUP-PLAN-V1"
@@ -214,22 +220,21 @@ def expected_group_sequence(manifest, contract):
 
 
 def ensure_submission_group_plan(manifest, contract):
-    """Add the additive plan to an unfinished legacy V2 manifest after migration proof."""
+    """Ensure immutable group plan plus GitHub-owned non-blocking group progress."""
     validate_manifest(manifest, contract)
-    if manifest.get("submission_group_plan") is not None:
-        validate_group_plan(manifest, contract, required=True)
-        return copy.deepcopy(manifest)
     migrated = copy.deepcopy(manifest)
-    migrated["submission_group_plan"] = build_submission_group_plan(
-        snapshot_id=migrated["snapshot_id"],
-        prepared_required_sha256=migrated["prepared_required_sha256"],
-        prepared_required_items=migrated["prepared_required_items"],
-        checkpoint_size=int(contract["checkpointing"]["checkpoint_size"]),
-        scope_source=migrated["scope_source"],
-        source_queue_sha256=migrated["source_queue_sha256"],
-    )
-    validate_manifest(migrated, contract)
+    if migrated.get("submission_group_plan") is None:
+        migrated["submission_group_plan"] = build_submission_group_plan(
+            snapshot_id=migrated["snapshot_id"],
+            prepared_required_sha256=migrated["prepared_required_sha256"],
+            prepared_required_items=migrated["prepared_required_items"],
+            checkpoint_size=int(contract["checkpointing"]["checkpoint_size"]),
+            scope_source=migrated["scope_source"],
+            source_queue_sha256=migrated["source_queue_sha256"],
+        )
     validate_group_plan(migrated, contract, required=True)
+    migrated = ensure_group_progress(migrated, contract)
+    validate_manifest(migrated, contract)
     return migrated
 
 
@@ -321,6 +326,7 @@ def build_daily_work_manifest(queue_rows, contract, store_dir, *, now=None, ttl_
         "submission_group_plan": group_plan,
     }
     manifest.update(progress_fields(snapshot_id, required, list(required), checkpoint_size))
+    manifest = ensure_group_progress(manifest, contract)
     validate_manifest(manifest, contract)
     return manifest
 
@@ -361,6 +367,11 @@ def validate_manifest(manifest, contract):
         raise ValueError("Daily dossier prepared scope contains invalid appid")
     if manifest.get("submission_group_plan") is not None:
         validate_group_plan(manifest, contract, required=True)
+    if manifest.get("group_progress") is not None:
+        validate_group_progress(manifest, contract)
+        prefix_count = accepted_contiguous_prefix_item_count(manifest, contract)
+        if completed != prefix_count:
+            raise ValueError("legacy contiguous progress must equal the accepted group prefix")
     return current
 
 
