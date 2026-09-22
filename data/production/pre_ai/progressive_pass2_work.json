@@ -34,9 +34,9 @@
   },
   "scope": {
     "current_analysis_incomplete_count": 65,
-    "dossier_waiting_count": 61,
+    "dossier_waiting_count": 60,
     "pass2_attempted_count": 0,
-    "pass2_eligible_count": 4
+    "pass2_eligible_count": 5
   },
   "items": [
     {
@@ -230,6 +230,54 @@
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--b24c020124b23e95633847ecf6f71267385bb48e0aa3f295ba32d28dd6b9b464--39eb9c5e294f2819934d15de42bde13fc10744d369cdcc581eb0508b450b768c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--b24c020124b23e95633847ecf6f71267385bb48e0aa3f295ba32d28dd6b9b464--39eb9c5e294f2819934d15de42bde13fc10744d369cdcc581eb0508b450b768c.json",
       "sequence": 4
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1135690",
+      "taste_subject_key": "App_1135690",
+      "appid": "1135690",
+      "taste_fingerprint": "38db98783b1219b0755a077c4c86f4bbe7cd9b18fa0dd8713b2616d1d6395513",
+      "candidate_context_sha256": "da7b986c93ed7aa3e173731f751c2ceb1da600c932c9d941d5584bafd4ef86f7",
+      "work_id": "062be5c04af8ceaa9b66c32fb3a5e0e68a6750341220557a54c949a62ea82c87",
+      "semantic_input": {
+        "title": "Unpacking",
+        "short_description": "Unpacking is a zen puzzle game about the familiar experience of pulling possessions out of boxes and fitting them into a new home. Part block-fitting puzzle, part home decoration, you are invited to create a satisfying living space while learning clues about the life you’re unpacking.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Story Rich"
+        ],
+        "core_fit_count": 1,
+        "release_date": "1 Nov, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1135690"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1135690.json",
+      "dossier_content_sha256": "f65cbbad197ec0a4205af5e19931ec8ffc8b0088b708731cea61682b3547bac7",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-12T19:02:38Z",
+      "authorization_id": "85bed39f5d9b2142bad72cf7b44f2d3b5d3df01384ed411ab2ea1875f0056285",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--062be5c04af8ceaa9b66c32fb3a5e0e68a6750341220557a54c949a62ea82c87--85bed39f5d9b2142bad72cf7b44f2d3b5d3df01384ed411ab2ea1875f0056285.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--062be5c04af8ceaa9b66c32fb3a5e0e68a6750341220557a54c949a62ea82c87--85bed39f5d9b2142bad72cf7b44f2d3b5d3df01384ed411ab2ea1875f0056285.json",
+      "sequence": 5
     }
   ]
 }

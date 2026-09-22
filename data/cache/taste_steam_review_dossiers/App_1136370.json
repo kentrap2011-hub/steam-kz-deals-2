@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+    "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+    "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
-    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
-    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+    "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+    "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
   },
   "appid": "1136370",
   "title": "Bear and Breakfast",
-  "generated_at_utc": "2026-09-19T11:00:00Z",
-  "expires_at_utc": "2026-10-09T11:00:00Z",
+  "generated_at_utc": "2026-09-22T19:02:38Z",
+  "expires_at_utc": "2026-10-12T19:02:38Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Bear and Breakfast",
@@ -42,19 +42,19 @@
   "observations": [
     {
       "category": "pacing",
-      "statement": "Russian player feedback describes the hotel-management and collection loop as charming and enjoyable but deliberately slow, with quests sometimes taking a long time to advance.",
-      "sentiment": "mixed",
+      "statement": "Player feedback reports slow progression, repetitive fetch-task loops, and substantial downtime between meaningful management actions.",
+      "sentiment": "negative",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
-        "russian"
+        "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
         "source-002"
       ],
       "player_feedback_ids": [
-        "fallback-001"
+        "feedback-001"
       ]
     }
   ],
@@ -63,10 +63,10 @@
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "single_source_only",
-    "single_source_reason": "Bounded research yielded one contract-usable exact-product Russian player-feedback collection used for the validated durable finding.",
-    "russian_attempt": "found_and_used",
+    "single_source_reason": "Bounded research yielded one contract-usable exact-product player-feedback item used for the durable finding; Russian-specific searches produced no reliable exact-product Russian player-feedback existence signal.",
+    "russian_attempt": "searched_no_existence_signal",
     "overall_strength": "limited",
-    "stop_reason": "evidence_stable"
+    "stop_reason": "bounded_limit_reached"
   },
   "provenance": {
     "sources": [
@@ -83,24 +83,24 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "store_user_reviews",
-        "domain": "steambuy.com",
-        "url": "https://steambuy.com/goods.php?idd=200009901",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1136370/reviews/",
         "publication_date": null,
-        "language": "russian",
-        "freshness": "unknown",
+        "language": "non_russian",
+        "freshness": "recent",
         "evidence_role": "durable_trait",
-        "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
+        "player_feedback": true
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "fallback-001",
+        "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": null,
-        "language": "russian",
-        "identity_mode": "transient_author_deduped"
+        "public_ref": "steam-recommendation:1136370-week-2026-09-16",
+        "publication_date": "2026-09-16",
+        "language": "non_russian",
+        "identity_mode": "stable_locator"
       }
     ]
   }
