@@ -309,7 +309,15 @@ class RecoveryLifecycleTests(unittest.TestCase):
             self.assertEqual(manifest_path.read_text(encoding="utf-8"), before_manifest)
             corrected = write_group(work, contract, 1)
             self.assertEqual(corrected, p1)
-            drained = drain_inbox_state(manifest_path=manifest_path, contract_path=contract_path, store_dir=store, buffer_dir=contract["paths"]["submission_inbox_dir"], fail_on_blocked=False)
+            drained = drain_inbox_state(
+                manifest_path=manifest_path,
+                contract_path=contract_path,
+                store_dir=store,
+                buffer_dir=contract["paths"]["submission_inbox_dir"],
+                failed_quarantine_root=Path(td) / "failed-group-quarantine",
+                failure_audit_path=Path(td) / "failed-group-audit.jsonl",
+                fail_on_blocked=False,
+            )
             self.assertEqual(drained["accepted_group_count"], 2)
             self.assertEqual(drained["accepted_dossier_count"], GROUP_SIZE * 2)
             self.assertEqual(json.loads(manifest_path.read_text())["completed_required_count"], GROUP_SIZE * 2)
@@ -361,11 +369,27 @@ class RecoveryLifecycleTests(unittest.TestCase):
             manifest_path.write_text(json.dumps(work), encoding="utf-8")
             contract_path, _, _ = self._write_contracts(td, contract)
             write_group(work, contract, 1)
-            result = drain_inbox_state(manifest_path=manifest_path, contract_path=contract_path, store_dir=store, buffer_dir=contract["paths"]["submission_inbox_dir"], fail_on_blocked=False)
+            result = drain_inbox_state(
+                manifest_path=manifest_path,
+                contract_path=contract_path,
+                store_dir=store,
+                buffer_dir=contract["paths"]["submission_inbox_dir"],
+                failed_quarantine_root=Path(td) / "failed-group-quarantine",
+                failure_audit_path=Path(td) / "failed-group-audit.jsonl",
+                fail_on_blocked=False,
+            )
             self.assertEqual(result["accepted_group_count"], 1)
             current_progress = json.loads(manifest_path.read_text())["completed_required_count"]
             write_group(work, contract, 2, lambda a: a["dossiers"][0].__setitem__("schema_version", True))
-            classified = drain_inbox_state(manifest_path=manifest_path, contract_path=contract_path, store_dir=store, buffer_dir=contract["paths"]["submission_inbox_dir"], fail_on_blocked=False)
+            classified = drain_inbox_state(
+                manifest_path=manifest_path,
+                contract_path=contract_path,
+                store_dir=store,
+                buffer_dir=contract["paths"]["submission_inbox_dir"],
+                failed_quarantine_root=Path(td) / "failed-group-quarantine",
+                failure_audit_path=Path(td) / "failed-group-audit.jsonl",
+                fail_on_blocked=False,
+            )
             self.assertEqual(classified["status"], "group_state_advanced")
             self.assertEqual(classified["failed_sequences"], [2])
             after = json.loads(manifest_path.read_text())

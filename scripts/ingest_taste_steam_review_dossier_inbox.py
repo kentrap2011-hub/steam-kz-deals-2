@@ -68,6 +68,8 @@ def drain_inbox_state(
     contract_path="config/taste_steam_review_dossier_contract.json",
     store_dir="data/cache/taste_steam_review_dossiers",
     buffer_dir=None,
+    failed_quarantine_root=None,
+    failure_audit_path=None,
     fail_on_blocked=True,
 ):
     """Classify all present pending buffered groups independently from repository state.
@@ -83,11 +85,17 @@ def drain_inbox_state(
     inbox = Path(buffer_dir or contract["paths"]["submission_inbox_dir"])
 
     if manifest.get("submission_group_plan") is not None:
+        drain_kwargs = {}
+        if failed_quarantine_root is not None:
+            drain_kwargs["failed_quarantine_root"] = failed_quarantine_root
+        if failure_audit_path is not None:
+            drain_kwargs["failure_audit_path"] = failure_audit_path
         result = drain_buffered_groups(
             manifest_path=manifest_path,
             contract=contract,
             buffer_dir=inbox,
             store_dir=store_dir,
+            **drain_kwargs,
         )
         changed = bool(
             result["accepted_group_count_this_run"]
