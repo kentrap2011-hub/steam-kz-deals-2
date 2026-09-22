@@ -713,6 +713,8 @@ def main():
         'progressive_personalization_contract_blob_sha': base_builder.git_sha('config/progressive_personalization_contract.json'),
         'progressive_pass1_contract_blob_sha': base_builder.git_sha('config/progressive_pass1_contract.json'),
         'progressive_pass1_state_blob_sha': base_builder.git_sha('data/cache/progressive_pass1_state.json'),
+        'progressive_pass2_contract_blob_sha': base_builder.git_sha('config/progressive_pass2_contract.json'),
+        'progressive_pass2_state_blob_sha': base_builder.git_sha('data/cache/progressive_pass2_state.json'),
         'source_taste_queue_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_taste_queue.jsonl'),
         'source_history_snapshot_blob_sha': base_builder.git_sha('data/production/pre_ai/history_snapshot.json'),
         'giveaway_visual_handoff_blob_sha': base_builder.git_sha('scripts/giveaway_visual_handoff.py'),
