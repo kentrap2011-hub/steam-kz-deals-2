@@ -28,24 +28,28 @@ Immediate active work:
 - current published projection reflects accepted PASS 1 results;
 - PASS 2 remains inactive and requires separate authorization.
 
-## ACTIVE — Progressive PASS 2 Dossier-ready gate amendment
+## ACCEPTED — Progressive PASS 2 Dossier-ready gate amendment
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PASS2_DOSSIER_READY_GATE_AMENDMENT_01.md`
 
-Mode:
-`CANONICAL RULE AMENDMENT / NO PASS2 IMPLEMENTATION`
-
-Worker slot:
-`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
-
-User-authoritative correction:
-- PASS 2 may evaluate an incomplete item only after current exact-compatible accepted Dossier evidence exists for that same work identity;
-- waiting for Dossier consumes no PASS 2 attempt;
-- PASS 1 and PASS 2 operate independently in parallel; neither waits for or blocks the other.
-
-Expected report:
+Report:
 `reviews/worker_reports/progressive-pass2-dossier-ready-gate-amendment-01.md`
+
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- PASS 2 eligibility now requires a current exact-compatible canonically accepted Dossier for the same current incomplete item/work identity;
+- buffered/unaccepted, stale, expired, wrong-app, wrong-work, ambiguous, or compatibility-mismatched Dossier cannot unlock PASS 2;
+- waiting for Dossier consumes zero PASS 2 attempts;
+- PASS 1 and PASS 2 are independent parallel GitHub-owned flows; neither has a global wait/block dependency on the other;
+- one automatic PASS 2 recovery attempt per current semantic generation/work identity remains bounded;
+- the old global “PASS 1 must finish first” barrier is explicitly superseded;
+- PASS 2 remains inactive and unimplemented.
+
+Next step:
+- only after explicit user approval, create a bounded Progressive PASS 2 Phase C implementation task; no PASS 2 runtime activation before that implementation is accepted.
 
 ## ACCEPTED — Progressive PASS 1 Scheduled worker dedup fix
 
