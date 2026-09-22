@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
     "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
   },
-  "appid": "1087760",
-  "title": "The Gunk",
+  "appid": "1085510",
+  "title": "Garfield Kart - Furious Racing",
   "generated_at_utc": "2026-09-22T16:04:00Z",
   "expires_at_utc": "2026-10-12T16:04:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "The Gunk",
-    "release_year": 2022,
+    "work_title": "Garfield Kart - Furious Racing",
+    "release_year": 2019,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,31 +30,31 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1087760"
+        "value": "1085510"
       },
       {
         "kind": "developer",
-        "value": "Image & Form Games"
+        "value": "Artefacts Studio"
       }
     ]
   },
   "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "friction",
-      "statement": "Russian-language player feedback reports achievement failures after completing the game.",
-      "sentiment": "negative",
+      "category": "coop",
+      "statement": "Russian-language player feedback describes local shared-screen play as accessible and enjoyable, while noting limited variety outside cooperative play.",
+      "sentiment": "mixed",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
         "russian"
       ],
-      "evidence_status": "current",
+      "evidence_status": "durable",
       "source_ids": [
         "source-002"
       ],
       "player_feedback_ids": [
-        "fallback-001"
+        "feedback-001"
       ]
     }
   ],
@@ -74,8 +74,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1087760/",
-        "publication_date": "2022-04-29",
+        "url": "https://store.steampowered.com/app/1085510/",
+        "publication_date": "2019-11-06",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "identity",
@@ -83,24 +83,24 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "steam_reviews",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1087760/The_Gunk/?curator_clanid=41553298&l=russian",
-        "publication_date": null,
+        "source_type": "store_user_reviews",
+        "domain": "stopgame.ru",
+        "url": "https://stopgame.ru/game/garfield_kart_furious_racing",
+        "publication_date": "2025-10-31",
         "language": "russian",
         "freshness": "recent",
-        "evidence_role": "current_state",
-        "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
+        "evidence_role": "durable_trait",
+        "player_feedback": true
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "fallback-001",
+        "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": "2026-04-02",
+        "url": "https://stopgame.ru/game/garfield_kart_furious_racing",
+        "publication_date": "2025-10-31",
         "language": "russian",
-        "identity_mode": "transient_author_deduped"
+        "identity_mode": "stable_locator"
       }
     ]
   }
