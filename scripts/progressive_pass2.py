@@ -227,6 +227,7 @@ def dossier_is_eligible(
 def make_work_item(binding, queue_row, dossier_record, current_binding):
     semantic_input = _semantic_input(queue_row)
     digest = dossier_record['content_sha256']
+    dossier = dossier_record['doc']
     auth = authorization_id(binding, digest, current_binding)
     prefix = f"{binding['semantic_generation_id'][:16]}--{binding['work_id']}--{auth}"
     return {
@@ -235,6 +236,7 @@ def make_work_item(binding, queue_row, dossier_record, current_binding):
         'dossier_path': dossier_record['path'],
         'dossier_content_sha256': digest,
         'dossier_compatibility_binding': deepcopy(current_binding),
+        'dossier_expires_at_utc': dossier['expires_at_utc'],
         'authorization_id': auth,
         'result_submission_path': f'data/ai_inbox/progressive_pass2/results/{prefix}.json',
         'terminal_execution_submission_path': (
