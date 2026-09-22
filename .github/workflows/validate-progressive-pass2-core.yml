@@ -16,6 +16,7 @@ on:
       - "scripts/progressive_visual_activation_routing.py"
       - "scripts/build_final_visual_payload.py"
       - "scripts/test_progressive_pass2.py"
+      - "scripts/test_progressive_pass2_integration.py"
       - "scripts/test_progressive_pass1.py"
       - "scripts/test_progressive_personalization.py"
       - "scripts/test_progressive_unresolved_row_preservation.py"
@@ -26,7 +27,10 @@ on:
       - "web/progressive-personalization-ui.test.js"
       - "reviews/worker_reports/progressive-pass2-phase-c-core-implement-01.md"
       - ".github/workflows/build-daily-visual-payload.yml"
+      - ".github/workflows/build-pre-ai-store-snapshot.yml"
+      - ".github/workflows/ingest-progressive-pass1.yml"
       - ".github/workflows/ingest-progressive-pass2.yml"
+      - ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
       - ".github/workflows/validate-progressive-pass2-core.yml"
 
 permissions:
@@ -43,9 +47,11 @@ jobs:
           python-version: "3.12"
       - name: Compile PASS 2 Python
         run: |
-          python -m py_compile             scripts/progressive_pass2.py             scripts/build_progressive_pass2_work.py             scripts/ingest_progressive_pass2.py             scripts/progressive_personalization.py             scripts/progressive_visual_activation_routing.py
+          python -m py_compile             scripts/progressive_pass2.py             scripts/build_progressive_pass2_work.py             scripts/ingest_progressive_pass2.py             scripts/test_progressive_pass2_integration.py             scripts/progressive_personalization.py             scripts/progressive_visual_activation_routing.py
       - name: PASS 2 core regression
         run: python scripts/test_progressive_pass2.py
+      - name: PASS 2 Dossier integration regression
+        run: python scripts/test_progressive_pass2_integration.py
       - name: PASS 1 regression
         run: python scripts/test_progressive_pass1.py
       - name: Progressive personalization regression
@@ -72,5 +78,6 @@ jobs:
           assert contract.get('active') is False
           assert work.get('pass2_active') is False
           assert state.get('entries') == {}
-          print('PROGRESSIVE_PASS2_INACTIVE_PROJECTION=PASS')
+          assert len(work.get('items') or []) == int((work.get('scope') or {}).get('pass2_eligible_count') or 0)
+          print('PROGRESSIVE_PASS2_INACTIVE_PROJECTION=PASS eligible=' + str(len(work.get('items') or [])))
           PY
