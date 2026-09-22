@@ -174,7 +174,7 @@
     "scheduled_worker_may_edit_own_schedule": false
   },
   "progressive_personalization_phase_c_pass2_core": {
-    "status": "implemented_inactive",
+    "status": "implemented_inactive_integration_wired",
     "control_plane": "github",
     "pass2_active": false,
     "contract": "config/progressive_pass2_contract.json",
@@ -185,7 +185,8 @@
       "validate_result_or_terminal_execution_receipt",
       "persist_pass2_state_and_attempt_budget",
       "project_explicit_pass2_provenance_to_visual_output",
-      "recompute_eligibility_through_the_progressive_owned_entrypoint_when_later_wired"
+      "recompute_eligibility_through_the_progressive_owned_entrypoint_when_later_wired",
+      "recompute_eligibility_after_canonical_dossier_pass1_daily_binding_or_pass2_attempt_state_changes"
     ],
     "scheduled_chatgpt_responsibilities_when_activated": [
       "read_only_github_prepared_current_pass2_work",
@@ -204,6 +205,8 @@
       "dossier_owned_workflow_or_semantics_change_in_core_implementation",
       "pass1_attempt_state_mutation",
       "second_independent_scheduler_or_retry_loop"
-    ]
+    ],
+    "eligibility_recompute_serialization_boundary": "github_actions_concurrency_group_taste-steam-review-dossier-canonical-writer_cancel_in_progress_false",
+    "time_expiry_guard": "scheduled_worker_preexecution_liveness_check_and_github_recompute_before_pass2_ingest"
   }
 }

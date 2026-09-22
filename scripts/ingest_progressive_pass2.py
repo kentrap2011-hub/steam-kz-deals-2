@@ -56,13 +56,21 @@ def main():
     if contract.get('active') is not True:
         raise SystemExit('Progressive PASS 2 is implemented but inactive; ingest is not authorized')
 
-    work = progressive_pass2.load_json(progressive_pass2.WORK)
+    persisted_work = progressive_pass2.load_json(progressive_pass2.WORK)
     if (
-        work.get('contract') != 'PROGRESSIVE-PASS2-WORK-V1'
-        or work.get('implemented') is not True
-        or work.get('pass2_active') is not True
+        persisted_work.get('contract') != 'PROGRESSIVE-PASS2-WORK-V1'
+        or persisted_work.get('implemented') is not True
+        or persisted_work.get('pass2_active') is not True
     ):
         raise SystemExit('Current Progressive PASS 2 work manifest is missing, stale, or inactive')
+
+    # Re-evaluate the current authorization from canonical truth immediately before
+    # accepting any semantic artifact. This makes wall-clock dossier expiry,
+    # binding changes, PASS 1 changes, and generation/work rebinding fail closed
+    # even if an older work projection was read by the external worker.
+    work = build_progressive_pass2_work.build_work_document()
+    if work.get('pass2_active') is not True:
+        raise SystemExit('PASS 2 became inactive before ingest; refusing semantic persistence')
 
     result_paths = sorted(RESULT_INBOX.glob('*.json')) if RESULT_INBOX.exists() else []
     terminal_paths = sorted(RECEIPT_INBOX.glob('*.json')) if RECEIPT_INBOX.exists() else []

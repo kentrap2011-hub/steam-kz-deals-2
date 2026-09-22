@@ -227,3 +227,25 @@ Production validator проверяет:
 - Scheduled ChatGPT cannot overwrite/rename/delete transport, own retry/completeness, or enable/disable/edit its own schedule;
 - snapshot/plan/binding exactness, strict dossier semantics, story-DLC scope, Russian retrieval/provenance and stale-snapshot isolation remain fail-closed;
 - old snapshot artifacts never rebind to a new snapshot; same-snapshot descriptors stay immutable.
+
+
+---
+
+## Progressive PASS 2: eligibility recomputation and activation boundary
+
+**Что ищем:** где PASS 2 получает current exact eligibility и какие GitHub writers обязаны обновлять его проекцию.
+
+**Последняя проверка:** 2026-09-22.
+
+**Быстрая точка входа:**
+1. `config/progressive_pass2_contract.json` — canonical inactive PASS 2 ownership/eligibility/attempt/work contract.
+2. `scripts/progressive_pass2.py::recompute_eligibility` — единственный eligibility predicate; canonical Dossier store only.
+3. `scripts/build_progressive_pass2_work.py` — GitHub-owned idempotent work projection; projection consumes zero attempts.
+4. `.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml` — recompute after canonical accepted/recovery Dossier persistence.
+5. `.github/workflows/ingest-progressive-pass1.yml` — recompute after PASS 1 durable state transition.
+6. `.github/workflows/build-pre-ai-store-snapshot.yml` — recompute after daily/current generation, work identity, Dossier binding and freshness preparation.
+7. `.github/workflows/ingest-progressive-pass2.yml` + `scripts/ingest_progressive_pass2.py` — future attempt persistence; current authorization is recomputed again before artifact acceptance.
+8. All four writers use `taste-steam-review-dossier-canonical-writer` with `cancel-in-progress:false`; do not split eligibility writers into unsynchronized concurrency domains.
+9. `scripts/test_progressive_pass2_integration.py` — P2INT trigger-graph, zero-attempt, stale/expiry, sibling independence and inactive-guard regression.
+
+**Инварианты:** buffered/unaccepted/failed Dossier transport is never accepted truth; exact generation/work/appid/Dossier SHA/binding/authorization remains mandatory; wall-clock expiry is guarded before semantic execution and again by GitHub before ingest; PASS 1/Dossier semantics are read-only inputs; PASS 2 semantic execution remains forbidden while the canonical active flags are false.

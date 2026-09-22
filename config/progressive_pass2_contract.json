@@ -1,7 +1,7 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
   "version": 1,
-  "status": "implemented_inactive",
+  "status": "implemented_inactive_integration_wired",
   "phase": "phase_c_pass2",
   "purpose": "GitHub-owned one-shot PASS 2 recovery core for current Progressive analysis_incomplete items after exact current canonically accepted Dossier evidence becomes available.",
   "implemented": true,
@@ -88,6 +88,7 @@
       "candidate_context_sha256",
       "dossier_content_sha256",
       "dossier_compatibility_binding",
+      "dossier_expires_at_utc",
       "authorization_id"
     ],
     "dossier_path_is_canonical_read_only_input": true
@@ -163,15 +164,26 @@
     "pass2_incomplete_label": "Разбор не завершён · PASS 2"
   },
   "dossier_integration": {
-    "automatic_recompute_after_canonical_dossier_persistence": "deferred",
-    "dossier_owned_workflow_modification_in_this_implementation": false,
-    "future_wiring_must_call_existing_recomputation_entrypoint_without_changing_dossier_semantics": true
+    "automatic_recompute_after_canonical_dossier_persistence": "active_github_owned",
+    "dossier_owned_workflow_modification_in_this_implementation": true,
+    "recomputation_entrypoint": "scripts/build_progressive_pass2_work.py",
+    "canonical_input_trigger_graph": {
+      "dossier_acceptance_or_recovery_persistence": ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml",
+      "pass1_state_persistence": ".github/workflows/ingest-progressive-pass1.yml",
+      "daily_generation_binding_freshness_rebuild": ".github/workflows/build-pre-ai-store-snapshot.yml",
+      "pass2_attempt_persistence": ".github/workflows/ingest-progressive-pass2.yml"
+    },
+    "serialization_boundary": "github_actions_concurrency_group_taste-steam-review-dossier-canonical-writer_cancel_in_progress_false",
+    "time_expiry_guard": "scheduled_worker_preexecution_expiry_check_plus_github_recompute_before_pass2_ingest",
+    "projection_is_attempt_consumption": false,
+    "rule": "All GitHub-owned writers that can change current PASS 2 eligibility or its consumed-attempt state recompute through the existing Progressive entrypoint inside one serialized canonical-writer boundary; no Dossier semantic rule or PASS 1 semantic rule is redefined."
   },
   "activation_guard": {
     "pass2_active": false,
     "scheduled_task_created_or_modified": false,
     "production_execution_authorized": false,
     "real_backlog_processing_allowed": false,
-    "activation_requires_separate_director_accepted_follow_up": true
+    "activation_requires_separate_director_accepted_follow_up": true,
+    "integration_ready": true
   }
 }
