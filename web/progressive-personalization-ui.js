@@ -39,7 +39,14 @@
   function sortItems(items,urgencyFirst=false){
     return [...(items||[])].sort((a,b)=>compareGames(a,b,urgencyFirst));
   }
-  function labelFor(game){return LABELS[game&&game.analysis_state]||'Статус разбора неизвестен'}
+  function labelFor(game){
+    const state=game&&game.analysis_state;
+    if(game&&game.analysis_resolution_pass==='pass2'){
+      if(state==='analyzed_fit')return 'Разобрана · PASS 2';
+      if(state==='analysis_incomplete')return 'Разбор не завершён · PASS 2';
+    }
+    return LABELS[state]||'Статус разбора неизвестен';
+  }
   function processingLines(status){
     status=status||{};
     const n=key=>Number.isFinite(Number(status[key]))?Number(status[key]):0;

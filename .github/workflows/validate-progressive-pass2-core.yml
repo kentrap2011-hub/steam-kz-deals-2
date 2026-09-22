@@ -1,0 +1,76 @@
+name: Validate Progressive PASS 2 core
+
+on:
+  push:
+    paths:
+      - "config/execution_ownership_contract.json"
+      - "config/progressive_personalization_contract.json"
+      - "config/progressive_pass2_contract.json"
+      - "config/progressive_pass2_result_schema.json"
+      - "config/progressive_pass2_execution_receipt_schema.json"
+      - "config/progressive_pass2_worker_prompt.md"
+      - "scripts/progressive_pass2.py"
+      - "scripts/build_progressive_pass2_work.py"
+      - "scripts/ingest_progressive_pass2.py"
+      - "scripts/progressive_personalization.py"
+      - "scripts/progressive_visual_activation_routing.py"
+      - "scripts/build_final_visual_payload.py"
+      - "scripts/test_progressive_pass2.py"
+      - "scripts/test_progressive_pass1.py"
+      - "scripts/test_progressive_personalization.py"
+      - "scripts/test_progressive_unresolved_row_preservation.py"
+      - "scripts/test_progressive_visual_activation_routing.py"
+      - "data/cache/progressive_pass2_state.json"
+      - "data/production/pre_ai/progressive_pass2_work.json"
+      - "web/progressive-personalization-ui.js"
+      - "web/progressive-personalization-ui.test.js"
+      - "reviews/worker_reports/progressive-pass2-phase-c-core-implement-01.md"
+      - ".github/workflows/build-daily-visual-payload.yml"
+      - ".github/workflows/ingest-progressive-pass2.yml"
+      - ".github/workflows/validate-progressive-pass2-core.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile PASS 2 Python
+        run: |
+          python -m py_compile             scripts/progressive_pass2.py             scripts/build_progressive_pass2_work.py             scripts/ingest_progressive_pass2.py             scripts/progressive_personalization.py             scripts/progressive_visual_activation_routing.py
+      - name: PASS 2 core regression
+        run: python scripts/test_progressive_pass2.py
+      - name: PASS 1 regression
+        run: python scripts/test_progressive_pass1.py
+      - name: Progressive personalization regression
+        run: python scripts/test_progressive_personalization.py
+      - name: Unresolved-row preservation regression
+        run: python scripts/test_progressive_unresolved_row_preservation.py
+      - name: Visual activation routing regression
+        run: python scripts/test_progressive_visual_activation_routing.py
+      - name: UI provenance regression
+        run: node web/progressive-personalization-ui.test.js
+      - name: Recompute inactive production eligibility without consuming attempts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp data/cache/progressive_pass2_state.json /tmp/progressive-pass2-state-before.json
+          python scripts/build_progressive_pass2_work.py | tee /tmp/progressive-pass2-work.log
+          cmp /tmp/progressive-pass2-state-before.json data/cache/progressive_pass2_state.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          contract=json.loads(Path('config/progressive_pass2_contract.json').read_text(encoding='utf-8'))
+          work=json.loads(Path('data/production/pre_ai/progressive_pass2_work.json').read_text(encoding='utf-8'))
+          state=json.loads(Path('data/cache/progressive_pass2_state.json').read_text(encoding='utf-8'))
+          assert contract.get('active') is False
+          assert work.get('pass2_active') is False
+          assert state.get('entries') == {}
+          print('PROGRESSIVE_PASS2_INACTIVE_PROJECTION=PASS')
+          PY

@@ -1,0 +1,177 @@
+{
+  "contract": "PROGRESSIVE-PASS2-V1",
+  "version": 1,
+  "status": "implemented_inactive",
+  "phase": "phase_c_pass2",
+  "purpose": "GitHub-owned one-shot PASS 2 recovery core for current Progressive analysis_incomplete items after exact current canonically accepted Dossier evidence becomes available.",
+  "implemented": true,
+  "active": false,
+  "ownership": {
+    "control_plane": "github",
+    "eligibility": "github",
+    "scope_and_order": "github",
+    "attempt_state": "github",
+    "immutable_work": "github",
+    "validation_and_persistence": "github",
+    "terminal_execution_receipt": "github",
+    "visual_projection": "github",
+    "scheduled_chatgpt": "bounded_semantic_data_plane_only_when_later_activated",
+    "interactive_chat": "development_only_not_production_worker"
+  },
+  "eligibility": {
+    "source_state": "current_exact_pass1_analysis_incomplete_only",
+    "pass1_exact_identity_required": [
+      "semantic_generation_id",
+      "work_id",
+      "family_id",
+      "taste_subject_key",
+      "appid",
+      "taste_fingerprint",
+      "candidate_context_sha256"
+    ],
+    "canonical_dossier_store": "data/cache/taste_steam_review_dossiers",
+    "current_dossier_binding_source": "data/production/pre_ai/taste_steam_review_dossier_worker_index.json#web_evidence_contract_binding",
+    "accepted_store_presence_required": true,
+    "buffered_or_worker_candidate_is_accepted_truth": false,
+    "dossier_requirements": [
+      "exact_appid",
+      "exact_work_title",
+      "exact_release_year_when_current_item_exposes_one",
+      "resolved_identity_only",
+      "current_exact_web_evidence_contract_binding",
+      "not_expired_at_eligibility_evaluation"
+    ],
+    "cross_release_or_ambiguous_identity_allowed": false,
+    "waiting_for_dossier_consumes_attempt": false,
+    "queue_projection_consumes_attempt": false
+  },
+  "ordering": {
+    "owner": "github",
+    "precedence": [
+      "known_sale_end_asc",
+      "deterministic_purchase_value_desc",
+      "stable_family_id_asc"
+    ],
+    "operational_only": true,
+    "changes_site_ranking": false,
+    "invalid_or_failed_item_blocks_siblings": false
+  },
+  "attempt_budget": {
+    "maximum_automatic_attempts_per_semantic_generation_and_work_id": 1,
+    "budget_key": [
+      "semantic_generation_id",
+      "work_id"
+    ],
+    "new_dossier_same_budget_key_resets_attempt": false,
+    "commercial_or_price_refresh_resets_attempt": false,
+    "changed_semantic_generation_or_work_id_may_establish_new_budget": true,
+    "attempt_consumption_sources": [
+      "exact_bound_accepted_result",
+      "github_owned_terminal_execution_receipt"
+    ],
+    "invalid_or_stale_result_consumes_attempt": false,
+    "invalid_or_stale_execution_receipt_consumes_attempt": false,
+    "terminal_unresolved_behavior": "remain_analysis_incomplete_and_become_ineligible_for_another_automatic_pass2_attempt_for_the_same_budget_key"
+  },
+  "work": {
+    "manifest_path": "data/production/pre_ai/progressive_pass2_work.json",
+    "schema": "PROGRESSIVE-PASS2-WORK-V1",
+    "projection_entrypoint": "scripts/build_progressive_pass2_work.py",
+    "recomputation_function": "scripts/progressive_pass2.py::recompute_eligibility",
+    "immutable_binding_fields": [
+      "semantic_generation_id",
+      "work_id",
+      "family_id",
+      "taste_subject_key",
+      "appid",
+      "taste_fingerprint",
+      "candidate_context_sha256",
+      "dossier_content_sha256",
+      "dossier_compatibility_binding",
+      "authorization_id"
+    ],
+    "dossier_path_is_canonical_read_only_input": true
+  },
+  "transport": {
+    "mode": "immutable_item_create_only",
+    "batch_atomicity": false,
+    "maximal_contiguous_prefix": false,
+    "valid_siblings_depend_on_invalid_sibling": false,
+    "result_directory": "data/ai_inbox/progressive_pass2/results",
+    "terminal_execution_submission_directory": "data/ai_inbox/progressive_pass2/execution_receipts",
+    "canonical_terminal_execution_receipt_directory": "data/cache/progressive_pass2_execution_receipts",
+    "result_schema": "config/progressive_pass2_result_schema.json",
+    "execution_receipt_schema": "config/progressive_pass2_execution_receipt_schema.json"
+  },
+  "state": {
+    "path": "data/cache/progressive_pass2_state.json",
+    "schema": "PROGRESSIVE-PASS2-STATE-V1",
+    "worker_prompt": "config/progressive_pass2_worker_prompt.md",
+    "pass1_history_mutation_allowed": false,
+    "accepted_outcome_fields": [
+      "semantic_generation_id",
+      "work_id",
+      "pass2_attempted",
+      "outcome",
+      "analysis_issue_code",
+      "attempt_consumption_source",
+      "accepted_at_utc"
+    ]
+  },
+  "outcomes": {
+    "analyzed_fit": {
+      "fit_levels": [
+        "strong",
+        "moderate"
+      ],
+      "confidence": [
+        "medium",
+        "high"
+      ],
+      "require_candidate_specific_positive_evidence": true,
+      "require_all_normalized_taste_factors": true
+    },
+    "analyzed_not_fit": {
+      "confidence": [
+        "medium",
+        "high"
+      ],
+      "bases": [
+        "completed_below_threshold",
+        "confirmed_personal_negative"
+      ],
+      "require_completed_candidate_specific_evidence": true,
+      "insufficient_information_forbidden": true
+    },
+    "analysis_incomplete": {
+      "issue_codes": [
+        "insufficient_evidence",
+        "evidence_unavailable",
+        "worker_failure",
+        "base_support_unresolved",
+        "terminal_execution_failure"
+      ],
+      "visible_tier": 2,
+      "automatic_retry": false
+    }
+  },
+  "visual_provenance": {
+    "producer_field": "analysis_resolution_pass",
+    "pass2_value": "pass2",
+    "browser_inference_forbidden": true,
+    "pass2_fit_label": "Разобрана · PASS 2",
+    "pass2_incomplete_label": "Разбор не завершён · PASS 2"
+  },
+  "dossier_integration": {
+    "automatic_recompute_after_canonical_dossier_persistence": "deferred",
+    "dossier_owned_workflow_modification_in_this_implementation": false,
+    "future_wiring_must_call_existing_recomputation_entrypoint_without_changing_dossier_semantics": true
+  },
+  "activation_guard": {
+    "pass2_active": false,
+    "scheduled_task_created_or_modified": false,
+    "production_execution_authorized": false,
+    "real_backlog_processing_allowed": false,
+    "activation_requires_separate_director_accepted_follow_up": true
+  }
+}

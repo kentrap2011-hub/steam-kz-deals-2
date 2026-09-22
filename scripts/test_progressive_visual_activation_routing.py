@@ -30,6 +30,7 @@ def compatible_visual(source='S'):
             'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
             'phase': 'phase_b',
             'pass1_active': True,
+            'pass2_implemented': True,
             'pass2_active': False,
         },
         'processing_status': {
@@ -46,12 +47,14 @@ def compatible_visual(source='S'):
             'pass1_total_scope': 4,
             'pass1_attempted_count': 3,
             'pass1_remaining_count': 1,
+            'pass2_implemented': True,
             'pass2_active': False,
         },
         'production_contract': {
             'source_progressive_candidate_context_blob_sha': 'CTX',
             'progressive_personalization_contract_blob_sha': 'CONTRACT',
             'progressive_pass1_state_blob_sha': 'PASS1',
+            'progressive_pass2_state_blob_sha': 'PASS2',
         },
     }
 
@@ -71,6 +74,7 @@ def classify(visual, *, source='S', count=719, context_count=719, store_source='
         progressive_context_blob='CTX',
         progressive_contract_blob='CONTRACT',
         pass1_state_blob='PASS1',
+        pass2_state_blob='PASS2',
     )
     return integrity, compatible, reason
 
@@ -81,6 +85,7 @@ def main():
     # made by the ingest workflow token do not recursively trigger push workflows.
     workflow = Path('.github/workflows/build-daily-visual-payload.yml').read_text(encoding='utf-8')
     assert '      - "Ingest Progressive PASS 1 item"' in workflow
+    assert '      - "Ingest Progressive PASS 2 item"' in workflow
 
     # ROUTE-01: checkpoint shape — active 719-row progressive input + legacy 3-row visual.
     legacy = {
@@ -126,6 +131,15 @@ def main():
     assert integrity is True
     assert compatible is False
     assert reason == 'progressive_pass1_state_provenance_mismatch'
+
+    # Implemented PASS 2 is still inactive, but accepted PASS 2 state is a
+    # producer-owned semantic input and must force the same full rebuild path.
+    stale_pass2 = compatible_visual()
+    stale_pass2['production_contract']['progressive_pass2_state_blob_sha'] = 'OLD-PASS2'
+    integrity, compatible, reason = classify(stale_pass2)
+    assert integrity is True
+    assert compatible is False
+    assert reason == 'progressive_pass2_state_provenance_mismatch'
 
     # ROUTE-04: invalid source identity remains fail-closed and must never be
     # treated as a compatible bounded-refresh candidate.
