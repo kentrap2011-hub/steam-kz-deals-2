@@ -150,8 +150,10 @@
     "item_level_progress": true,
     "one_attempt_per_current_item_binding": true,
     "commercial_refresh_resets_attempt_state": false,
-    "pass2_owner": "not_active",
-    "new_independent_scheduler_created": false
+    "pass2_owner": "github_control_plane_implemented_inactive",
+    "new_independent_scheduler_created": false,
+    "pass2_active": false,
+    "pass2_contract": "config/progressive_pass2_contract.json"
   },
   "taste_steam_review_dossier_nonblocking_progress": {
     "contract": "config/taste_steam_review_dossier_contract.json",
@@ -170,5 +172,38 @@
     "failed_group_blocks_unrelated_groups": false,
     "new_queue_retry_loop_or_scheduler_created": false,
     "scheduled_worker_may_edit_own_schedule": false
+  },
+  "progressive_personalization_phase_c_pass2_core": {
+    "status": "implemented_inactive",
+    "control_plane": "github",
+    "pass2_active": false,
+    "contract": "config/progressive_pass2_contract.json",
+    "github_responsibilities": [
+      "derive_current_pass2_eligibility_from_exact_current_pass1_incomplete_state_and_canonical_accepted_dossier_store",
+      "bind_work_to_semantic_generation_work_appid_dossier_sha_and_current_dossier_compatibility_binding",
+      "own_work_order_and_immutable_result_paths",
+      "validate_result_or_terminal_execution_receipt",
+      "persist_pass2_state_and_attempt_budget",
+      "project_explicit_pass2_provenance_to_visual_output",
+      "recompute_eligibility_through_the_progressive_owned_entrypoint_when_later_wired"
+    ],
+    "scheduled_chatgpt_responsibilities_when_activated": [
+      "read_only_github_prepared_current_pass2_work",
+      "execute_only_exact_authorized_items_in_github_order",
+      "publish_only_exact_create_only_result_or_terminal_execution_submission"
+    ],
+    "attempt_budget": {
+      "maximum_automatic_attempts_per_semantic_generation_and_work_id": 1,
+      "waiting_or_projection_consumes_attempt": false,
+      "consumption_requires": "github_accepted_exact_bound_result_or_github_owned_terminal_execution_receipt_proving_authorized_execution"
+    },
+    "forbidden": [
+      "production_semantic_execution_while_pass2_active_false",
+      "chatgpt_scope_selection_or_retry_policy",
+      "dossier_buffer_or_unaccepted_candidate_as_pass2_truth",
+      "dossier_owned_workflow_or_semantics_change_in_core_implementation",
+      "pass1_attempt_state_mutation",
+      "second_independent_scheduler_or_retry_loop"
+    ]
   }
 }
