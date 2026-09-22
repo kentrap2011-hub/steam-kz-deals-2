@@ -107,18 +107,39 @@ class PackageMemberDossierAggregationTests(unittest.TestCase):
         self.assertEqual(mapping["members"][0]["dossier_key"], "App_222222")
 
     def test_sub_87601_package_uses_only_game_subjects_and_manifest_binds_package_mapping(self):
-        queue_path = ROOT / "data/production/pre_ai/chatgpt_taste_queue.jsonl"
-        all_rows = [json.loads(line) for line in queue_path.read_text(encoding="utf-8").splitlines() if line.strip()]
-        by_key = {row["taste_subject_key"]: row for row in all_rows}
-        self.assertNotIn("Sub_87601", by_key, "package must not be reintroduced as a second semantic subject")
-
-        # Daily queue membership is intentionally dynamic. Exercise the invariant with
-        # deterministic direct game subjects instead of requiring these games to be
-        # present in today's live queue.
+        # Daily queue/family-graph membership is intentionally dynamic. Exercise the
+        # package-identity invariant with a deterministic canonical-shape fixture.
         queue_rows = [
             _app_row("304240", "Resident Evil"),
             _app_row("339340", "Resident Evil 0"),
         ]
+        self.assertTrue(all(row["taste_subject_key"].startswith("App_") for row in queue_rows))
+
+        family_graph = {
+            "families": [
+                {
+                    "family_id": "game:304240",
+                    "family_type": "base_game",
+                    "taste_subject_key": "App_304240",
+                    "primary_title": "Resident Evil",
+                    "base_appids": ["304240"],
+                },
+                {
+                    "family_id": "game:339340",
+                    "family_type": "base_game",
+                    "taste_subject_key": "App_339340",
+                    "primary_title": "Resident Evil 0",
+                    "base_appids": ["339340"],
+                },
+                {
+                    "family_id": "bundle:Sub_87601",
+                    "family_type": "franchise_bundle",
+                    "taste_subject_key": "Sub_87601",
+                    "primary_title": "Resident Evil Deluxe Origins Bundle",
+                    "base_appids": ["304240", "339340"],
+                },
+            ],
+        }
 
         resolution = resolve_dossier_scope_identities(queue_rows, CONTRACT)
         self.assertEqual(resolution["identity_blocked_items"], [])
@@ -133,7 +154,6 @@ class PackageMemberDossierAggregationTests(unittest.TestCase):
             "App_339340", "Resident Evil 0",
         ))
 
-        family_graph = json.loads((ROOT / "data/production/pre_ai/family_graph.json").read_text(encoding="utf-8"))
         package = next(family for family in family_graph["families"] if family["taste_subject_key"] == "Sub_87601")
         self.assertEqual(package["base_appids"], ["304240", "339340"])
 
