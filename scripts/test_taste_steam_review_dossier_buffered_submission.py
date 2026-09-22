@@ -237,6 +237,7 @@ class BufferedSubmissionTests(unittest.TestCase):
             progressed = advance(work, contract, store, 2)
             legacy = copy.deepcopy(progressed)
             legacy.pop("submission_group_plan")
+            legacy.pop("group_progress", None)
             sid = legacy["snapshot_id"]
             migrated = ensure_submission_group_plan(legacy, contract)
             self.assertEqual(migrated["snapshot_id"], sid)
