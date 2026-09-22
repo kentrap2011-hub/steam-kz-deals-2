@@ -14,8 +14,8 @@ from taste_steam_review_dossier_recovery import quarantine_stale_snapshot_inbox
 from taste_steam_review_dossier_strict import derive_dossier_summary
 from taste_steam_review_dossier_test_fixture import web_dossier
 from taste_steam_review_dossier_worker_projection import (
+    WORKER_GROUP_SCHEMA,
     buffered_candidate_descriptor_projection,
-    build_worker_projection,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -37,9 +37,17 @@ def queue(appids):
     return rows
 
 
+def worker_descriptor(work, sequence=1):
+    descriptor = copy.deepcopy(work["submission_group_plan"]["groups"][sequence - 1])
+    return {
+        "schema": WORKER_GROUP_SCHEMA,
+        "schema_version": 1,
+        **descriptor,
+    }
+
+
 def build_group(work, sequence=1):
-    _, worker_descriptors = build_worker_projection(work, BASE_CONTRACT)
-    descriptor = worker_descriptors[sequence - 1]
+    descriptor = worker_descriptor(work, sequence)
     return {
         "schema": BUFFER_GROUP_SCHEMA,
         "schema_version": 1,
@@ -85,14 +93,13 @@ class PrepublicationParityTests(unittest.TestCase):
         self.assertEqual(len(docs), 3)
 
     def test_buffer_candidate_copies_exact_descriptor_items_and_strict_mutations_fail(self):
-        _, worker_descriptors = build_worker_projection(self.work, BASE_CONTRACT)
-        worker_descriptor = worker_descriptors[0]
-        projection = buffered_candidate_descriptor_projection(worker_descriptor, BASE_CONTRACT)
-        self.assertEqual(projection["items"], worker_descriptor["items"])
-        self.assertIsNot(projection["items"], worker_descriptor["items"])
+        descriptor = worker_descriptor(self.work)
+        projection = buffered_candidate_descriptor_projection(descriptor, BASE_CONTRACT)
+        self.assertEqual(projection["items"], descriptor["items"])
+        self.assertIsNot(projection["items"], descriptor["items"])
 
         valid = build_group(self.work)
-        self.assertEqual(valid["items"], worker_descriptor["items"])
+        self.assertEqual(valid["items"], descriptor["items"])
         self.assertEqual(
             validate_prepublication_artifact(copy.deepcopy(valid), self.work, self.contract)["status"],
             "valid",
