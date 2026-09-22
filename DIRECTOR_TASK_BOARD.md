@@ -217,6 +217,41 @@ Next step:
 - only after that amendment is accepted may the landed recomputation wiring be adapted and production activation resume.
 
 
+## ACTIVE — ЧАТ 2 — Fast / Dossier / Deep architecture amendment
+
+Task:
+`WORKER_TASK_PROGRESSIVE_FAST_DOSSIER_DEEP_ARCHITECTURE_AMENDMENT_01.md`
+
+Worker slot:
+`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
+
+Mode:
+`IMPLEMENT / VALIDATE — CONTRACT / ARCHITECTURE ONLY`
+
+User-authoritative target:
+- Fast analysis is provisional early coverage;
+- Dossier is independent evidence preparation;
+- Deep analysis is the eventual authoritative layer and must eventually cover every current eligible game;
+- Deep may run before Fast when Dossier is ready;
+- completed Deep suppresses future Fast for that current identity;
+- Fast success never suppresses eventual Deep;
+- Deep incomplete/error must not erase a still-valid Fast provisional result;
+- Deep first-pass failures move to separate non-blocking recovery instead of becoming permanently complete;
+- future UI exposes three per-game stage indicators and a dedicated three-section statistics page.
+
+Guards:
+- Deep/PASS 2 remains inactive;
+- no Scheduled Deep task is created or run;
+- no runtime backlog processing;
+- old recovery-only activation plan remains superseded;
+- reuse compatible GitHub recomputation wiring already landed.
+
+Expected report:
+`reviews/worker_reports/progressive-fast-dossier-deep-architecture-amendment-01.md`
+
+Next gate:
+- only after this architecture amendment is accepted, create one bounded runtime adaptation task and then a separate activation/live-acceptance step.
+
 ## DRAFT / NOT AUTHORIZED — Progressive site progress header compaction
 
 Task:
