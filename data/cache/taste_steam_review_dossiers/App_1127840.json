@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+    "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+    "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
-    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
-    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+    "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+    "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
   },
   "appid": "1127840",
   "title": "Landlord's Super",
-  "generated_at_utc": "2026-09-19T11:00:00Z",
-  "expires_at_utc": "2026-10-09T11:00:00Z",
+  "generated_at_utc": "2026-09-22T18:00:00Z",
+  "expires_at_utc": "2026-10-12T18:00:00Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Landlord's Super",
@@ -42,14 +42,14 @@
   "observations": [
     {
       "category": "localization",
-      "statement": "Russian-speaking players requested Russian localization, and current Steam metadata still lists Russian as unsupported.",
+      "statement": "Russian-language player feedback historically identified the absence of Russian localization as a barrier, and current product metadata still lists no Russian language support.",
       "sentiment": "negative",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
         "russian"
       ],
-      "evidence_status": "current",
+      "evidence_status": "historical",
       "source_ids": [
         "source-002",
         "source-003"
@@ -64,7 +64,7 @@
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "single_source_only",
-    "single_source_reason": "Bounded research yielded one exact-product Russian player-feedback discussion; current-state localization status is corroborated by current Steam metadata.",
+    "single_source_reason": "One exact-product Steam Community thread supplied the bound Russian player-feedback item; current metadata was used only for temporal context.",
     "russian_attempt": "found_and_used",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
@@ -75,7 +75,7 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1127840/",
+        "url": "https://store.steampowered.com/app/1127840/Landlords_Super/",
         "publication_date": "2023-05-25",
         "language": "non_russian",
         "freshness": "older",
@@ -96,11 +96,11 @@
       },
       {
         "source_id": "source-003",
-        "source_type": "official_metadata",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1127840?l=russian",
+        "source_type": "professional_context",
+        "domain": "wasdland.com",
+        "url": "https://www.wasdland.com/game/landlords-super-1127840/",
         "publication_date": null,
-        "language": "russian",
+        "language": "non_russian",
         "freshness": "recent",
         "evidence_role": "current_state",
         "player_feedback": false
