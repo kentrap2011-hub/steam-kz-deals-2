@@ -7,7 +7,7 @@ Do not search, read, modify, or use any other repository. If GitHub/tool opens a
 
 Task ID: taste-dossier-group-identity-items-mismatch-fix-01
 Mode: DIAGNOSE / IMPLEMENT / VALIDATE
-Worker slot: СУЩЕСТВУЮЩИЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2
+Worker slot: НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2
 
 ## START
 
