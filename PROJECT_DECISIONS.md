@@ -540,7 +540,7 @@
 ## PPD-003 — PASS 2 is dossier-ready per item and independent from global PASS 1 completion
 
 **Дата:** 2026-09-21  
-**Статус:** approved canonical design; runtime not implemented
+**Статус:** superseded before production activation by PPD-004; retained as historical rationale for the dossier-ready and no-global-wait parts only
 
 **Решение:** глобальный барьер `not_analyzed_count == 0` для старта PASS 2 отменён. PASS 1 и будущий PASS 2 являются независимыми GitHub-owned потоками: PASS 1 продолжает брать только текущие `not_analyzed` items, а PASS 2 может рассматривать только уже текущие `analysis_incomplete` items. Ни один pass не ждёт завершения другого и не блокирует его.
 
@@ -577,14 +577,14 @@
 
 
 
-## PPD-002 — PASS 2 eligibility is recomputed at every canonical input writer
+## PPD-005 — Deep eligibility recomputation wiring is reusable; old recovery-only predicate is superseded
 
 **Дата:** 2026-09-22  
-**Статус:** implemented inactive; production semantic activation remains separate.
+**Статус:** wiring implemented inactive; eligibility premise superseded by PPD-004; runtime predicate adaptation required before activation.
 
 **Решение:** Progressive PASS 2 eligibility is a GitHub-owned derived projection, not a queue owned by a Scheduled Task. The same existing `scripts/build_progressive_pass2_work.py` / `scripts/progressive_pass2.py::recompute_eligibility` entrypoint is invoked after every canonical write class that can change current eligibility: accepted/recovered Dossier persistence, PASS 1 durable state persistence, daily pre-AI generation/binding/freshness rebuild, and future PASS 2 attempt persistence. These writers share the existing serialized `taste-steam-review-dossier-canonical-writer` GitHub Actions boundary so a later rebase cannot overwrite the PASS 2 projection with eligibility derived from older canonical inputs.
 
-**Почему:** eligibility depends jointly on current exact PASS 1 `analysis_incomplete`, current semantic generation/work identity, exact canonically accepted Dossier content/binding/freshness and unconsumed PASS 2 attempt state. Wiring only Dossier acceptance would leave already-accepted Dossiers invisible when PASS 1 later becomes incomplete; wiring only PASS 1 would miss later Dossier acceptance; relying only on the daily build would leave both stale until an unrelated event. Separate concurrency domains would still permit a stale projection overwrite after concurrent writers rebase.
+**Почему:** Deep eligibility now depends on current semantic generation/work identity, exact canonically accepted Dossier content/binding/freshness, Deep first-pass/recovery state and current authorization. The previously landed hooks after Dossier persistence, Fast/PASS 1 persistence, daily/current identity-freshness preparation and Deep/PASS 2 attempt persistence remain the correct recomputation boundaries. The old requirement that eligibility also depend on current Fast/PASS 1 `analysis_incomplete` is superseded by PPD-004 and must be removed by the next runtime-adaptation task. Separate concurrency domains would still permit stale projection overwrite after concurrent writers rebase.
 
 **Freshness boundary:** daily preparation recomputes normal freshness/binding changes. Wall-clock expiry between GitHub writes does not create a new scheduler: prepared work carries the exact Dossier expiry, the future semantic worker checks expiry/binding immediately before starting an item, and GitHub recomputes authorization from current canonical truth immediately before accepting a PASS 2 result/terminal receipt. Expired or rebound work therefore cannot consume an attempt or become canonical.
 
@@ -593,3 +593,29 @@
 **Сознательно отвергнуто:** Dossier-only hook; PASS1-only hook; daily-only reconciliation; ChatGPT-owned queue/retry state; a new expiry polling scheduler; separate unsynchronized PASS 2 projection writers.
 
 **Основные места:** `config/progressive_pass2_contract.json`, `scripts/build_progressive_pass2_work.py`, `scripts/ingest_progressive_pass2.py`, `.github/workflows/ingest-progressive-pass1.yml`, `.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml`, `.github/workflows/build-pre-ai-store-snapshot.yml`, `.github/workflows/ingest-progressive-pass2.yml`.
+
+
+---
+
+## PPD-004 — Fast / Dossier / Deep are independent stages with Deep as eventual authority
+
+**Дата:** 2026-09-22  
+**Статус:** canonical architecture approved by user; Deep runtime adaptation required; production Deep remains inactive.
+
+**Решение:** Progressive personalization uses three related but independent stages. PASS 1 is user-facing **Быстрый разбор** and provides provisional early fit/not-fit/incomplete coverage. Taste Steam Review Dossier is user-facing **Подготовка досье**, remains neutral evidence preparation, and never decides fit/not-fit. PASS 2 is user-facing **Глубокий разбор** and is the eventual authoritative personalized analysis for every current eligible game.
+
+Deep eligibility does **not** require a prior Fast attempt, Fast completion, or Fast `analysis_incomplete`. A current game becomes normal Deep work when its Progressive semantic/work identity is current, an exact-compatible canonically accepted current Dossier exists, and no authoritative current Deep completion exists. Therefore Deep may run before Fast. If authoritative Deep completes first, future Fast work for that identity is suppressed; if Fast completes first, Deep remains required.
+
+**Effective result precedence:** trustworthy current completed Deep fit/not-fit is authoritative. Otherwise a trustworthy current completed Fast fit/not-fit may remain the provisional effective result. Deep incomplete/error never erases a still-valid Fast provisional result. Stage history stays separate and Deep never rewrites Fast provenance.
+
+**First pass / recovery:** every current Deep identity gets one normal first-pass attempt once its accepted compatible Dossier is ready. A normal unresolved/technical failure does not count as authoritative completion and moves only that identity into GitHub-owned non-blocking recovery state. Recovery is not a blind retry loop and has no hidden arbitrary quota: every recovery attempt requires a fresh GitHub-owned authorization tied to a concrete condition such as materially changed accepted Dossier/evidence, a corrected runtime/validation defect material to the prior failure, or an explicit canonical recovery action with recorded reason. Recovery attempt history is separate from normal first-pass accounting.
+
+**Completeness:** `deep_normal_first_pass_complete` and `deep_all_current_authoritative_complete` are different canonical metrics. Recovery-owned items may count as normal-first-pass-accounted but never as authoritative completion. Dossier normal-first-pass completeness and all-accepted/recovered completeness remain separate under the Dossier contract.
+
+**Presentation:** GitHub must emit explicit per-game Fast/Dossier/Deep stage states for the browser; browser inference from history/files/timestamps is forbidden. The future UI may render three small pixel-style card indicators and one compact `Статистика` control leading to a dedicated three-section statistics page. Each section uses its own named denominator; scope counts are never merged when Fast, Dossier and Deep scopes differ.
+
+**Preserved implementation:** existing GitHub-owned recomputation hooks after canonical Dossier persistence, Fast/PASS 1 persistence, daily/current identity/freshness preparation and future Deep/PASS 2 persistence are reusable, as are exact binding, liveness, zero-attempt projection and serialized ownership safeguards. The old recovery-only eligibility predicate and its activation plan are superseded and must not be activated.
+
+**Граница:** Deep/PASS 2 stays inactive. No Scheduled Deep worker is created/enabled/run, no Deep production attempt is consumed, no backlog is processed, Dossier evidence semantics and site ranking weights are unchanged, and final statistics/pixel-icon UI is deferred.
+
+**Основные места:** `config/progressive_personalization_contract.json`, `config/progressive_pass1_contract.json`, `config/progressive_pass2_contract.json`, `config/execution_ownership_contract.json`, `PROJECT_ROUTES.md`.
