@@ -153,12 +153,15 @@ class ParallelValidationTests(unittest.TestCase):
             self.assertEqual(reopened["group_progress"]["pending_group_count"], 1)
             self.assertFalse(reopened["group_progress"]["normal_first_pass_complete"])
 
-    def test_worker_contract_forbids_schedule_edit_and_uses_next_pending(self):
-        prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
-        self.assertIn("TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V2", prompt)
-        self.assertIn("next_pending_sequence", prompt)
-        self.assertIn("must never enable, disable, pause, delete, reschedule, or edit its own Scheduled Task", prompt)
-        self.assertNotIn("maximal valid contiguous prefix", prompt)
+    def test_control_plane_owns_next_pending_and_forbids_schedule_edit(self):
+        ownership = json.loads((ROOT / "config/execution_ownership_contract.json").read_text(encoding="utf-8"))
+        forbidden = ownership["scheduled_chatgpt_runtime_data_plane"]["forbidden"]
+        self.assertIn("enable_disable_pause_delete_reschedule_or_edit_its_own_scheduled_task", forbidden)
+        dossier = ownership["taste_steam_review_dossier_nonblocking_progress"]
+        self.assertEqual(dossier["owner"], "github_control_plane")
+        self.assertFalse(dossier["failed_group_blocks_unrelated_groups"])
+        self.assertFalse(dossier["new_queue_retry_loop_or_scheduler_created"])
+        self.assertFalse(dossier["scheduled_worker_may_edit_own_schedule"])
 
         parallel = json.loads((ROOT / "config/taste_steam_review_dossier_parallel_validation_contract.json").read_text(encoding="utf-8"))
         self.assertEqual(parallel["candidate_publication"]["required_group_size"], 3)
