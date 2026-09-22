@@ -260,7 +260,13 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
             deep_stage = 'waiting_for_dossier'
 
         deep_recovery = (
-            progressive_pass2.deep_recovery_state(binding, pass2_state_doc, deep_work_doc)
+            progressive_pass2.deep_recovery_state(
+                binding,
+                pass2_state_doc,
+                deep_work_doc,
+                dossier_record=progressive_pass2.canonical_dossier_loader(binding.get('appid')),
+                current_binding=current_dossier_binding,
+            )
             if binding else 'none'
         )
         deep_outcome = None
