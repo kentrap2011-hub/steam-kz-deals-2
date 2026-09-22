@@ -3,7 +3,7 @@
   "version": 1,
   "status": "canonical",
   "phase": "phase_b_pass1",
-  "purpose": "GitHub-owned item-level first-pass semantic coverage for Progressive Personalized Deals without global publication blocking or deep recovery.",
+  "purpose": "GitHub-owned item-level provisional Fast analysis for Progressive Personalized Deals: provide useful early fit/not-fit/incomplete coverage without blocking publication or Deep analysis.",
   "ownership": {
     "control_plane": "github",
     "semantic_generation_identity": "github",
@@ -39,7 +39,9 @@
     "durable_in_progress_user_state": false,
     "invalid_semantic_payload_with_exact_identity": "consume_attempt_as_analysis_incomplete",
     "stale_or_unbound_payload": "reject_without_hiding_item_or_blocking_later_work",
-    "pass2_owns_retry_and_deep_recovery": true
+    "pass2_owns_retry_and_deep_recovery": false,
+    "deep_is_not_pass1_retry": true,
+    "deep_failure_does_not_reopen_fast": true
   },
   "outcomes": {
     "analyzed_fit": {
@@ -87,7 +89,11 @@
     "exhaustive_research_required": false,
     "deep_recovery_allowed": false,
     "stop_when_trustworthy_fit_or_not_fit_is_possible": true,
-    "insufficient_means_incomplete_not_not_fit": true
+    "insufficient_means_incomplete_not_not_fit": true,
+    "fast_stage": true,
+    "deep_result_is_stronger": true,
+    "skip_new_fast_attempt_when_current_authoritative_deep_exists": true,
+    "fast_completion_required_before_deep": false
   },
   "ordering": {
     "owner": "github",
@@ -98,7 +104,8 @@
     ],
     "operational_only": true,
     "changes_site_ranking": false,
-    "repeatedly_failing_item_cannot_block_later_items": true
+    "repeatedly_failing_item_cannot_block_later_items": true,
+    "deep_ready_item_may_be_processed_by_deep_before_fast": true
   },
   "transport": {
     "mode": "immutable_item_create_only",
@@ -125,12 +132,42 @@
     "phase_a_fallback_remains_valid": true,
     "pass1_remaining_may_be_nonzero": true,
     "pass1_failure_cannot_empty_or_hide_unrelated_catalogue": true,
-    "current_progress_updates_visual_without_waiting_for_pass1_completion": true
+    "current_progress_updates_visual_without_waiting_for_pass1_completion": true,
+    "fast_result_is_provisional": true,
+    "completed_deep_may_replace_fast_effective_result_without_rewriting_fast_history": true
   },
   "pass2": {
     "active": false,
     "implemented": true,
     "contract": "config/progressive_pass2_contract.json",
-    "eligibility_recompute_after_pass1_persistence": true
+    "eligibility_recompute_after_pass1_persistence": true,
+    "user_stage": "deep",
+    "deep_is_independent_from_fast": true,
+    "deep_requires_fast_attempt": false,
+    "deep_requires_fast_incomplete": false,
+    "fast_success_suppresses_deep": false,
+    "authoritative_deep_completion_suppresses_future_fast_for_same_current_identity": true,
+    "runtime_adaptation_required": true
+  },
+  "user_stage": {
+    "id": "fast",
+    "label_ru": "Быстрый разбор",
+    "authoritative": false,
+    "role": "provisional_personalized_analysis"
+  },
+  "stage_state_contract": {
+    "producer_owned": true,
+    "browser_inference_forbidden": true,
+    "values": [
+      "not_started",
+      "completed",
+      "incomplete",
+      "error"
+    ],
+    "completed_outcomes": [
+      "fit",
+      "not_fit"
+    ],
+    "rule": "A current authoritative Deep completion may cause future Fast work to be skipped, but does not rewrite or delete prior Fast history."
   }
 }
