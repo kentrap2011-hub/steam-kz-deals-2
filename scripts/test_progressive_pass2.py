@@ -231,6 +231,7 @@ def main():
     assert item1['appid'] == '1'
     assert item1['dossier_content_sha256'] == d1['content_sha256']
     assert item1['dossier_compatibility_binding'] == current_binding
+    assert item1['dossier_expires_at_utc'] == d1['doc']['expires_at_utc']
     assert len(item1['authorization_id']) == 64
 
     # P2CORE-03: stale, wrong-app, wrong-work, ambiguous/cross-release and binding
@@ -428,18 +429,22 @@ def main():
     )
     assert persisted_state['entries'] == {}
     assert persisted_work['pass2_active'] is False
-    assert persisted_work['items'] == []
+    assert len(persisted_work.get('items') or []) == int(
+        (persisted_work.get('scope') or {}).get('pass2_eligible_count') or 0
+    )
     assert personalization_contract['phase_b_execution']['pass2_active'] is False
     assert personalization_contract['phase_b_execution']['pass2_implemented'] is True
     assert personalization_contract['phase_c_pass2_design']['active'] is False
     assert personalization_contract['phase_c_pass2_design']['implemented'] is True
 
-    # P2CORE-15: Dossier integration remains read-only and deferred. PASS 2 reads
-    # only the canonical accepted store plus current compatibility projection.
+    # P2CORE-15: Dossier evidence semantics remain read-only to PASS 2 while the
+    # GitHub-owned canonical persistence boundary now invokes the existing Progressive
+    # eligibility projection.
     assert contract['eligibility']['canonical_dossier_store'] == 'data/cache/taste_steam_review_dossiers'
     assert contract['eligibility']['buffered_or_worker_candidate_is_accepted_truth'] is False
-    assert contract['dossier_integration']['automatic_recompute_after_canonical_dossier_persistence'] == 'deferred'
-    assert contract['dossier_integration']['dossier_owned_workflow_modification_in_this_implementation'] is False
+    assert contract['dossier_integration']['automatic_recompute_after_canonical_dossier_persistence'] == 'active_github_owned'
+    assert contract['dossier_integration']['dossier_owned_workflow_modification_in_this_implementation'] is True
+    assert contract['dossier_integration']['projection_is_attempt_consumption'] is False
 
     json.loads(Path('config/progressive_pass2_result_schema.json').read_text(encoding='utf-8'))
     json.loads(Path('config/progressive_pass2_execution_receipt_schema.json').read_text(encoding='utf-8'))
