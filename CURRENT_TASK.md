@@ -145,6 +145,13 @@
 
 ## Запланировано / выполняется
 
+### Taste dossier group identity items mismatch fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_GROUP_IDENTITY_ITEMS_MISMATCH_FIX_01.md`;
+- scope: exact descriptor-bound `items` vs buffered candidate serialization mismatch for g000001/g000002, preserving strict validation and non-blocking per-group progress;
+- no Scheduled Task configuration/run, no PASS 1/PASS 2/Taste Semantic Producer behavior changes;
+- durable report target: `reviews/worker_reports/taste-dossier-group-identity-items-mismatch-fix-01.md`.
+
 ### Taste dossier Russian multi-source retrieval implement 01
 Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_RUSSIAN_MULTI_SOURCE_RETRIEVAL_IMPLEMENT_01.md`;
