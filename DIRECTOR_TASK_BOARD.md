@@ -217,40 +217,39 @@ Next step:
 - only after that amendment is accepted may the landed recomputation wiring be adapted and production activation resume.
 
 
-## ACTIVE — ЧАТ 2 — Fast / Dossier / Deep architecture amendment
+## ACCEPTED — Fast / Dossier / Deep architecture amendment
 
 Task:
 `WORKER_TASK_PROGRESSIVE_FAST_DOSSIER_DEEP_ARCHITECTURE_AMENDMENT_01.md`
 
-Worker slot:
-`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
-
-Mode:
-`IMPLEMENT / VALIDATE — CONTRACT / ARCHITECTURE ONLY`
-
-User-authoritative target:
-- Fast analysis is provisional early coverage;
-- Dossier is independent evidence preparation;
-- Deep analysis is the eventual authoritative layer and must eventually cover every current eligible game;
-- Deep may run before Fast when Dossier is ready;
-- completed Deep suppresses future Fast for that current identity;
-- Fast success never suppresses eventual Deep;
-- Deep incomplete/error must not erase a still-valid Fast provisional result;
-- Deep first-pass failures move to separate non-blocking recovery instead of becoming permanently complete;
-- future UI exposes three per-game stage indicators and a dedicated three-section statistics page.
-
-Guards:
-- Deep/PASS 2 remains inactive;
-- no Scheduled Deep task is created or run;
-- no runtime backlog processing;
-- old recovery-only activation plan remains superseded;
-- reuse compatible GitHub recomputation wiring already landed.
-
-Expected report:
+Report:
 `reviews/worker_reports/progressive-fast-dossier-deep-architecture-amendment-01.md`
 
-Next gate:
-- only after this architecture amendment is accepted, create one bounded runtime adaptation task and then a separate activation/live-acceptance step.
+Final status:
+`complete_architecture_amendment`
+
+Director acceptance:
+- Fast / PASS 1 is now canonically provisional early analysis;
+- Dossier remains independent neutral evidence preparation and never decides fit/not-fit;
+- Deep / technical PASS 2 is the eventual authoritative analysis layer for every current eligible game;
+- Deep eligibility no longer requires a prior Fast attempt or Fast `analysis_incomplete`;
+- accepted current Dossier evidence is the Deep evidence gate;
+- Deep may run before Fast; authoritative Deep completion suppresses future Fast for that current identity;
+- Fast success never suppresses eventual Deep coverage;
+- authoritative completed Deep fit/not-fit supersedes Fast as effective current personalized truth;
+- Deep incomplete/error does not erase a still-valid Fast provisional result;
+- Deep normal first-pass failure enters separate non-blocking GitHub-owned recovery rather than permanent completion;
+- no blind retry loop or hidden retry quota is introduced; every recovery attempt requires fresh concrete GitHub authorization;
+- normal Deep first-pass completeness and eventual all-current authoritative completeness are separate metrics;
+- explicit producer-owned Fast/Dossier/Deep stage states and dedicated per-stage statistics metrics are canonically defined for future card indicators/statistics UI;
+- reusable GitHub-owned recomputation/exact-binding/liveness scaffolding from the prior PASS 2 integration remains preserved;
+- the old recovery-only PASS 2 activation plan remains superseded;
+- Deep/PASS 2 remains inactive, durable PASS 2 attempts remain zero, and no Scheduled Deep worker/run occurred.
+
+Next step:
+- only after explicit user approval, create one bounded runtime-adaptation task to bring inactive Deep/PASS 2 eligibility/state/projection/tests into the accepted `FAST-DOSSIER-DEEP-V1` model, including producer-owned stage/statistics fields;
+- keep Deep inactive throughout that adaptation; activation/live acceptance remains a later separate step.
+
 
 ## DRAFT / NOT AUTHORIZED — Progressive site progress header compaction
 
