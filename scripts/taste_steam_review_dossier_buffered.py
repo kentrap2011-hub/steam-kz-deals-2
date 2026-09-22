@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-"""GitHub-owned buffered transport helpers for Steam review dossiers.
-
-Buffer files are transport only. Canonical progress is derived exclusively from the
-current work manifest and is advanced only after a maximal valid contiguous prefix
-has been validated from repository state.
-"""
+"""GitHub-owned non-blocking buffered transport for Steam review dossiers."""
 import copy
+import hashlib
 import json
 import re
+import shutil
+from datetime import datetime, timezone
 from pathlib import Path
 
 from taste_steam_review_dossier import atomic_write_json, canonical_sha256, dossier_path
@@ -17,15 +15,25 @@ from taste_steam_review_dossier_compact_provenance import (
 )
 from taste_steam_review_dossier_daily import (
     BUFFER_GROUP_SCHEMA,
-    expected_group_sequence,
     progress_fields,
     validate_group_plan,
     validate_manifest,
+)
+from taste_steam_review_dossier_group_progress import (
+    ACCEPTED,
+    FAILED,
+    accepted_contiguous_prefix_item_count,
+    ensure_group_progress,
+    next_pending_sequence,
+    pending_sequences,
+    set_group_state,
 )
 from taste_steam_review_dossier_strict import validate_dossiers_against_expected_items
 
 
 _BUFFER_NAME_RE = re.compile(r"^(?P<snapshot>[0-9a-f]{64})--g(?P<sequence>[0-9]{6})--(?P<group>[0-9a-f]{64})\.json$")
+_DEFAULT_FAILED_QUARANTINE = Path("data/quarantine/taste_steam_review_dossier_inbox/failed_group")
+_DEFAULT_FAILURE_AUDIT = Path("data/audit/taste_steam_review_dossier_group_failures.jsonl")
 
 
 def expected_buffer_path(descriptor, contract):
@@ -106,10 +114,11 @@ def _current_snapshot_candidates(buffer_dir, snapshot_id):
 
 
 def current_expected_buffer_paths(manifest, contract, buffer_dir=None):
-    """Return files claiming the current canonical expected sequence."""
+    """Compatibility helper: files claiming the current next-pending group."""
+    manifest = ensure_group_progress(manifest, contract)
     validate_manifest(manifest, contract)
     validate_group_plan(manifest, contract, required=True)
-    sequence = expected_group_sequence(manifest, contract)
+    sequence = next_pending_sequence(manifest, contract)
     if sequence is None:
         return []
     root = Path(buffer_dir or contract["paths"]["submission_inbox_dir"])
@@ -119,100 +128,138 @@ def current_expected_buffer_paths(manifest, contract, buffer_dir=None):
     return list(candidates.get(sequence, []))
 
 
-def plan_buffered_drain(manifest, contract, buffer_dir):
-    """Plan a maximal valid contiguous prefix without mutating canonical files."""
+def _quarantine_target(path, manifest, sequence, artifact_sha, root):
+    return Path(root) / manifest["snapshot_id"] / f"g{sequence:06d}" / f"{path.name}.invalid-{artifact_sha[:12]}"
+
+
+def _failure_entry(*, manifest, descriptor, paths, validator_error, quarantine_root):
+    expected = expected_buffer_path(descriptor, {"paths": {"submission_inbox_dir": str(Path(paths[0]).parent) if paths else ""}})
+    primary = paths[0] if paths else expected
+    if len(paths) == 1 and paths[0].exists():
+        artifact_sha = hashlib.sha256(paths[0].read_bytes()).hexdigest()
+    else:
+        artifact_sha = canonical_sha256([p.as_posix() for p in paths] or [expected.as_posix()])
+    targets = [
+        _quarantine_target(p, manifest, int(descriptor["sequence"]), hashlib.sha256(p.read_bytes()).hexdigest(), quarantine_root)
+        for p in paths if p.exists()
+    ]
+    primary_target = targets[0] if targets else Path(quarantine_root) / manifest["snapshot_id"] / f"g{int(descriptor['sequence']):06d}" / "missing-invalid-artifact"
+    failure = {
+        "validator_error": validator_error,
+        "artifact_path": primary.as_posix(),
+        "artifact_sha256": artifact_sha,
+        "quarantine_artifact_path": primary_target.as_posix(),
+        "recovery_eligible": True,
+    }
+    return {
+        "descriptor": descriptor,
+        "paths": list(paths),
+        "quarantine_targets": targets,
+        "failure": failure,
+    }
+
+
+def plan_buffered_drain(
+    manifest,
+    contract,
+    buffer_dir,
+    *,
+    failed_quarantine_root=_DEFAULT_FAILED_QUARANTINE,
+):
+    """Validate/classify every present pending group independently."""
+    manifest = ensure_group_progress(manifest, contract)
     validate_manifest(manifest, contract)
     group_plan = validate_group_plan(manifest, contract, required=True)
-    expected = expected_group_sequence(manifest, contract)
-    if expected is None:
-        return {
-            "accepted": [],
-            "accepted_count": 0,
-            "accepted_dossier_count": 0,
-            "blocked_reason": None,
-            "stop_sequence": None,
-            "next_manifest": copy.deepcopy(manifest),
-        }
-
     candidates, malformed_names = _current_snapshot_candidates(buffer_dir, manifest["snapshot_id"])
-    if malformed_names:
-        return {
-            "accepted": [],
-            "accepted_count": 0,
-            "accepted_dossier_count": 0,
-            "blocked_reason": "malformed_current_snapshot_buffer_filename",
-            "stop_sequence": expected,
-            "next_manifest": copy.deepcopy(manifest),
-        }
-
     groups = {int(group["sequence"]): group for group in group_plan["groups"]}
     accepted = []
-    sequence = expected
-    blocked_reason = None
-    stop_sequence = None
+    failed = []
+    next_manifest = copy.deepcopy(manifest)
 
-    while sequence in groups:
+    for sequence in pending_sequences(manifest, contract):
         descriptor = groups[sequence]
         paths = candidates.get(sequence, [])
         if not paths:
-            blocked_reason = "gap"
-            stop_sequence = sequence
-            break
+            continue
+        deterministic = expected_buffer_path(descriptor, contract)
         if len(paths) != 1:
-            blocked_reason = "duplicate_or_alternate_buffer_artifact"
-            stop_sequence = sequence
-            break
+            entry = _failure_entry(
+                manifest=manifest,
+                descriptor=descriptor,
+                paths=paths,
+                validator_error="duplicate_or_alternate_buffer_artifact",
+                quarantine_root=failed_quarantine_root,
+            )
+            failed.append(entry)
+            next_manifest = set_group_state(next_manifest, contract, sequence, FAILED, failure=entry["failure"])
+            continue
         path = paths[0]
-        expected_path = expected_buffer_path(descriptor, contract)
-        if path.as_posix() != expected_path.as_posix():
-            blocked_reason = "non_deterministic_buffer_path"
-            stop_sequence = sequence
-            break
+        if path.as_posix() != deterministic.as_posix():
+            entry = _failure_entry(
+                manifest=manifest,
+                descriptor=descriptor,
+                paths=paths,
+                validator_error="non_deterministic_buffer_path",
+                quarantine_root=failed_quarantine_root,
+            )
+            failed.append(entry)
+            next_manifest = set_group_state(next_manifest, contract, sequence, FAILED, failure=entry["failure"])
+            continue
         try:
             artifact = json.loads(path.read_text(encoding="utf-8"))
             docs = validate_buffer_artifact(artifact, descriptor, manifest, contract)
-        except (ValueError, json.JSONDecodeError, OSError, KeyError, TypeError):
-            blocked_reason = "invalid_expected_group"
-            stop_sequence = sequence
-            break
+        except (ValueError, json.JSONDecodeError, UnicodeDecodeError, OSError, KeyError, TypeError) as exc:
+            entry = _failure_entry(
+                manifest=manifest,
+                descriptor=descriptor,
+                paths=paths,
+                validator_error=str(exc),
+                quarantine_root=failed_quarantine_root,
+            )
+            failed.append(entry)
+            next_manifest = set_group_state(next_manifest, contract, sequence, FAILED, failure=entry["failure"])
+            continue
         accepted.append({"path": path, "descriptor": descriptor, "dossiers": docs})
-        sequence += 1
+        next_manifest = set_group_state(next_manifest, contract, sequence, ACCEPTED)
 
-    dossier_count = sum(len(entry["dossiers"]) for entry in accepted)
-    next_manifest = copy.deepcopy(manifest)
-    if accepted:
-        remaining = list(manifest["remaining_required_items"])
-        accepted_items = []
-        for entry in accepted:
-            accepted_items.extend(entry["descriptor"]["items"])
-        if remaining[:len(accepted_items)] != accepted_items:
-            raise ValueError("buffered accepted prefix is not the canonical remaining prefix")
-        next_remaining = remaining[len(accepted_items):]
-        next_manifest.update(progress_fields(
-            manifest["snapshot_id"],
-            manifest["prepared_required_items"],
-            next_remaining,
-            int(contract["checkpointing"]["checkpoint_size"]),
-        ))
-        validate_manifest(next_manifest, contract)
+    prefix_count = accepted_contiguous_prefix_item_count(next_manifest, contract)
+    next_remaining = list(next_manifest["prepared_required_items"])[prefix_count:]
+    next_manifest.update(progress_fields(
+        next_manifest["snapshot_id"],
+        next_manifest["prepared_required_items"],
+        next_remaining,
+        int(contract["checkpointing"]["checkpoint_size"]),
+    ))
+    validate_manifest(next_manifest, contract)
 
     return {
         "accepted": accepted,
+        "failed": failed,
         "accepted_count": len(accepted),
-        "accepted_dossier_count": dossier_count,
-        "blocked_reason": blocked_reason,
-        "stop_sequence": stop_sequence,
+        "accepted_dossier_count": sum(len(entry["dossiers"]) for entry in accepted),
+        "failed_count": len(failed),
+        "malformed_current_snapshot_artifacts": [path.as_posix() for path in malformed_names],
         "next_manifest": next_manifest,
     }
 
 
-def apply_buffered_drain(plan, *, manifest_path, store_dir):
-    """Apply a previously validated drain plan locally for one atomic Git commit."""
-    accepted = plan["accepted"]
-    if not accepted:
-        return []
+def _append_failure_audit(path, record):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(record, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n")
+
+
+def apply_buffered_drain(
+    plan,
+    *,
+    manifest_path,
+    store_dir,
+    failure_audit_path=_DEFAULT_FAILURE_AUDIT,
+):
+    """Apply independent group classifications locally for one atomic Git commit."""
     persisted = []
-    for entry in accepted:
+    for entry in plan["accepted"]:
         for doc in entry["dossiers"]:
             path = dossier_path(store_dir, str(doc["appid"]))
             atomic_write_json(path, doc)
@@ -221,8 +268,25 @@ def apply_buffered_drain(plan, *, manifest_path, store_dir):
                 "path": path.as_posix(),
                 "dossier_sha256": canonical_sha256(doc),
             })
+
+    for entry in plan["failed"]:
+        for source, target in zip(entry["paths"], entry["quarantine_targets"]):
+            target.parent.mkdir(parents=True, exist_ok=True)
+            if target.exists():
+                raise ValueError(f"failed-group quarantine target already exists: {target.as_posix()}")
+            shutil.move(source.as_posix(), target.as_posix())
+        _append_failure_audit(failure_audit_path, {
+            "schema": "TASTE-STEAM-REVIEW-DOSSIER-GROUP-FAILURE-AUDIT-V1",
+            "recorded_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+            "snapshot_id": plan["next_manifest"]["snapshot_id"],
+            "sequence": entry["descriptor"]["sequence"],
+            "group_sha256": entry["descriptor"]["group_sha256"],
+            **entry["failure"],
+            "normal_forward_progress_blocked": False,
+        })
+
     atomic_write_json(manifest_path, plan["next_manifest"])
-    for entry in accepted:
+    for entry in plan["accepted"]:
         entry["path"].unlink()
     return persisted
 
@@ -233,19 +297,42 @@ def drain_buffered_groups(
     contract=None,
     buffer_dir="data/ai_inbox/taste_steam_review_dossiers",
     store_dir="data/cache/taste_steam_review_dossiers",
+    failed_quarantine_root=_DEFAULT_FAILED_QUARANTINE,
+    failure_audit_path=_DEFAULT_FAILURE_AUDIT,
 ):
     manifest_path = Path(manifest_path)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    plan = plan_buffered_drain(manifest, contract, buffer_dir)
-    persisted = apply_buffered_drain(plan, manifest_path=manifest_path, store_dir=store_dir)
+    plan = plan_buffered_drain(
+        manifest,
+        contract,
+        buffer_dir,
+        failed_quarantine_root=failed_quarantine_root,
+    )
+    persisted = apply_buffered_drain(
+        plan,
+        manifest_path=manifest_path,
+        store_dir=store_dir,
+        failure_audit_path=failure_audit_path,
+    )
+    progress = plan["next_manifest"]["group_progress"]
     return {
-        "accepted_group_count": plan["accepted_count"],
-        "accepted_dossier_count": plan["accepted_dossier_count"],
+        "accepted_group_count_this_run": plan["accepted_count"],
+        "accepted_dossier_count_this_run": plan["accepted_dossier_count"],
+        "failed_group_count_this_run": plan["failed_count"],
         "accepted_sequences": [entry["descriptor"]["sequence"] for entry in plan["accepted"]],
-        "blocked_reason": plan["blocked_reason"],
-        "stop_sequence": plan["stop_sequence"],
+        "failed_sequences": [entry["descriptor"]["sequence"] for entry in plan["failed"]],
+        "malformed_current_snapshot_artifacts": plan["malformed_current_snapshot_artifacts"],
         "persisted": persisted,
         "snapshot_id": plan["next_manifest"]["snapshot_id"],
-        "remaining_required_count": plan["next_manifest"]["remaining_required_count"],
+        "next_pending_sequence": next_pending_sequence(plan["next_manifest"], contract),
+        "accepted_group_count": progress["accepted_group_count"],
+        "failed_group_count": progress["failed_group_count"],
+        "pending_group_count": progress["pending_group_count"],
+        "accepted_dossier_count": progress["accepted_dossier_count"],
+        "failed_dossier_count": progress["failed_dossier_count"],
+        "pending_dossier_count": progress["pending_dossier_count"],
+        "normal_first_pass_complete": progress["normal_first_pass_complete"],
+        "all_groups_accepted": progress["all_groups_accepted"],
+        "legacy_contiguous_remaining_required_count": plan["next_manifest"]["remaining_required_count"],
         "full_backlog_complete": plan["next_manifest"]["full_backlog_complete"],
     }
