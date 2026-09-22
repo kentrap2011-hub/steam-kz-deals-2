@@ -83,8 +83,8 @@ def load_contract(path=CONTRACT):
     if contract.get('tier_precedence') != ['analyzed_fit', 'analysis_incomplete', 'not_analyzed']:
         raise ValueError('progressive tier precedence mismatch')
     phase = contract.get('phase_b_execution') or {}
-    if phase.get('pass1_active') is not True or phase.get('pass2_active') is not False:
-        raise ValueError('Phase B must activate PASS 1 and keep PASS 2 inactive')
+    if phase.get('pass1_active') is not True or phase.get('pass2_active') is not True:
+        raise ValueError('Progressive runtime must activate both Fast/PASS 1 and Deep/PASS 2')
     if phase.get('pass2_implemented') is not True:
         raise ValueError('Phase C PASS 2 core must be implemented before projection')
     progressive_pass1.load_contract()
@@ -563,7 +563,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'pass1_attempted_count': fast_attempted,
         'pass1_remaining_count': fast_remaining,
         'pass2_implemented': True,
-        'pass2_active': False,
+        'pass2_active': True,
         'semantic_queue_zero_required_for_publication': False,
 
         'fast_total_current_scope': fast_total,
@@ -679,7 +679,7 @@ def stamp_processing_status(visual, state_index=None):
         'semantic_queue_zero_required_for_publication': False,
         'pass1_active': True,
         'pass2_implemented': True,
-        'pass2_active': False,
+        'pass2_active': True,
         'deep_runtime_adapted': True,
     }
     visual['status'] = 'complete'
@@ -776,7 +776,7 @@ def validate_processing_status(status):
     if (
         status.get('pass1_active') is not True
         or status.get('pass2_implemented') is not True
-        or status.get('pass2_active') is not False
+        or status.get('pass2_active') is not True
     ):
         raise ValueError('Fast/Deep implementation or activation flags invalid')
     return True
