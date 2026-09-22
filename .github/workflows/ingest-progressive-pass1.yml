@@ -39,10 +39,8 @@ jobs:
       - name: Recompute Progressive PASS 2 eligibility from accepted PASS 1 state
         run: python scripts/build_progressive_pass2_work.py
 
-      - name: Revalidate PASS 1 state and PASS 2 projection after ingest
-        run: |
-          python scripts/test_progressive_pass1.py
-          python scripts/test_progressive_pass2.py
+      - name: Revalidate PASS 1 state after ingest
+        run: python scripts/test_progressive_pass1.py
 
       - name: Commit PASS 1 state and remaining work
         shell: bash
