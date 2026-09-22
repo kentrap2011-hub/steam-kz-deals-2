@@ -1,5 +1,8 @@
 # WORKER TASK — Progressive PASS 2 Dossier Integration + Activation Prep 01
 
+Status: PAUSED_SUPERSEDED_PENDING_ARCHITECTURE
+Director note: user changed the target product semantics on 2026-09-22. PASS 2 is no longer merely recovery for PASS 1 incomplete items; deep analysis is intended to eventually cover every current eligible game. Do not continue implementation/activation under the old eligibility model. Preserve any already-landed safe integration work, but stop before further writes and report current landed state if asked.
+
 Repository: kentrap2011-hub/steam-kz-deals-2
 Base branch / source of truth: main
 
