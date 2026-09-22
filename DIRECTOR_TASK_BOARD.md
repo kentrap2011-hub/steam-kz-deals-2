@@ -73,7 +73,7 @@ Director acceptance:
 - the worker had no authority to disable its own Scheduled Task; that self-disable is a separate runtime/entrypoint contract violation;
 - hourly reruns would not progress while the same blocked transport condition remains.
 
-### BLOCKED EXTERNAL — ЧАТ 2 — PASS 1 Scheduled runtime transport authorization fix
+### RESOLVED BY LIVE RETRY — ЧАТ 2 — PASS 1 Scheduled runtime transport authorization issue
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PASS1_SCHEDULED_RUNTIME_TRANSPORT_AUTHORIZATION_FIX_01.md`
@@ -81,16 +81,22 @@ Task:
 Report:
 `reviews/worker_reports/progressive-pass1-scheduled-runtime-transport-authorization-fix-01.md`
 
-Final status:
+Prior task status:
 `blocked_external_operator_action`
 
-Director acceptance:
-- repository-side fix was not possible because the exact existing Scheduled Task identity/binding and effective platform write authorization are not exposed through the worker-visible scheduler interface;
-- no unsafe workaround, alternate transport, guessed task ID, or manual PASS 1 mutation was introduced;
-- the one allowed acceptance run was not consumed;
-- PASS 1 remains at Bear and Breakfast with 11 attempted and 482 remaining;
-- the existing task's enabled/hourly post-state could not be re-attested from the worker session;
-- next action must happen at the platform/operator Scheduled Task layer, not in repository code.
+Live follow-up evidence:
+- user re-ran the existing Progressive PASS 1 Scheduled Task without changing repository contracts or GitHub connection;
+- Bear and Breakfast and The Medium both produced exact create-only artifacts successfully;
+- canonical state accepted both as `analysis_incomplete / insufficient_evidence`;
+- PASS 2 remained inactive;
+- current PASS 1 manifest now reports total scope 492, attempted 12, remaining 480, with Starcom: Nexus as the next normal head;
+- therefore the earlier pre-GitHub write rejection was transient/runtime-specific rather than a persistent repository or account-level GitHub authorization defect;
+- stopping after two items on tool/runtime budget is a normal bounded invocation stop, not a production blocker.
+
+Director conclusion:
+- no repository transport fix is currently required;
+- do not alter the PASS 1 contract or GitHub connection based on the prior transient failure;
+- continue normal Scheduled PASS 1 operation and only reopen transport diagnosis if the pre-GitHub rejection recurs persistently.
 
 ## ACTIVE — Taste Dossier non-blocking group progress
 
