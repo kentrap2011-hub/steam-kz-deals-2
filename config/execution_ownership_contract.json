@@ -180,7 +180,7 @@
     "scheduled_worker_may_edit_own_schedule": false
   },
   "progressive_personalization_phase_c_pass2_core": {
-    "status": "architecture_amended_runtime_adaptation_required_inactive",
+    "status": "runtime_adapted_inactive_ready_for_activation",
     "control_plane": "github",
     "pass2_active": false,
     "contract": "config/progressive_pass2_contract.json",
@@ -227,10 +227,14 @@
     "user_stage": "deep",
     "authoritative": true,
     "eventual_coverage_target": "all_current_eligible_games",
-    "runtime_adaptation_required": true,
+    "runtime_adaptation_required": false,
     "old_recovery_only_activation_plan_superseded": true,
     "first_pass_completeness_metric": "deep_normal_first_pass_complete",
     "eventual_completion_metric": "deep_all_current_authoritative_complete",
-    "recomputation_wiring": "landed_reusable_requires_target_predicate_runtime_adaptation"
+    "recomputation_wiring": "landed_reusable_requires_target_predicate_runtime_adaptation",
+    "runtime_adaptation_complete": true,
+    "production_execution_authorized": false,
+    "recovery_authorization_owner": "github_control_plane",
+    "recovery_authorization_entrypoint": "manual_github_workflow_dispatch_only"
   }
 }
