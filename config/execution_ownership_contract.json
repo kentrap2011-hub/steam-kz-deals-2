@@ -64,7 +64,8 @@
       "create an independent recurring production stage without a canonical contract change",
       "replace GitHub retry/completeness logic with conversational iteration",
       "change business rules while executing a production run",
-      "treat an interactive chat as the production scheduler or backlog manager"
+      "treat an interactive chat as the production scheduler or backlog manager",
+      "enable_disable_pause_delete_reschedule_or_edit_its_own_scheduled_task"
     ],
     "steamdb_specific_rule": "For SteamDB, ChatGPT may fetch exact external evidence for GitHub-prepared entity keys because GitHub Actions is blocked from SteamDB, but GitHub owns which keys are required, unresolved/retry state, completeness, validation, persistence into canonical history, and downstream orchestration."
   },
@@ -151,5 +152,23 @@
     "commercial_refresh_resets_attempt_state": false,
     "pass2_owner": "not_active",
     "new_independent_scheduler_created": false
+  },
+  "taste_steam_review_dossier_nonblocking_progress": {
+    "contract": "config/taste_steam_review_dossier_contract.json",
+    "owner": "github_control_plane",
+    "github_owns": [
+      "immutable_group_plan",
+      "per_group_pending_accepted_failed_state",
+      "strict_validation",
+      "canonical_dossier_persistence",
+      "failed_group_quarantine_and_recovery_eligibility",
+      "next_pending_projection",
+      "normal_first_pass_completeness",
+      "all_groups_accepted_completeness"
+    ],
+    "scheduled_chatgpt_role": "bounded_semantic_candidate_generation_and_create_only_transport_only",
+    "failed_group_blocks_unrelated_groups": false,
+    "new_queue_retry_loop_or_scheduler_created": false,
+    "scheduled_worker_may_edit_own_schedule": false
   }
 }
