@@ -658,3 +658,13 @@
 - activation: preserve accepted current-snapshot groups, classify existing invalid g000005 as failed/incomplete, and project later pending groups normally;
 - boundaries: no PASS 1/PASS 2/Taste Semantic Producer changes, no new scheduler, no cadence change, no interactive full-backlog processing;
 - next: architecture preflight, bounded implementation, focused validation, durable report.
+
+
+## Worker in progress — 2026-09-22
+
+### Progressive PASS 2 Phase C core implement 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_PROGRESSIVE_PASS2_PHASE_C_CORE_IMPLEMENT_01.md`;
+- scope: inactive GitHub-owned PASS 2 core on Progressive-owned surfaces only; Dossier workflow/runtime integration is explicitly deferred;
+- guards: `pass2_active=false`, no Scheduled Task creation/run, no production PASS 2 attempt/result;
+- next: bounded implementation + focused P2CORE validation + durable report.
