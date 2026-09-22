@@ -11,7 +11,7 @@
     "validation": "github",
     "publication": "github",
     "browser": "read_only_presentation",
-    "scheduled_chatgpt": "bounded_pass1_semantic_data_plane",
+    "scheduled_chatgpt": "bounded_pass1_and_deep_semantic_data_plane",
     "interactive_chat": "development_only_not_production_worker",
     "pass2_eligibility": "github",
     "pass2_order": "github",
@@ -128,13 +128,13 @@
     "publication_waits_for_pass1_completion": false,
     "dossier_required_for_pass1": false,
     "deep_recovery_in_pass1": false,
-    "pass2_active": false,
+    "pass2_active": true,
     "creates_automatic_pass1_retry_loop": false,
     "pass2_implemented": true,
     "pass2_activation_requires_separate_implementation": false,
     "pass2_global_pass1_completion_gate": false,
     "pass2_requires_current_exact_compatible_accepted_dossier": true,
-    "pass2_activation_requires_separate_director_acceptance": true,
+    "pass2_activation_requires_separate_director_acceptance": false,
     "pass1_user_stage": "fast",
     "pass1_is_provisional": true,
     "fast_skips_current_authoritative_deep": true,
@@ -146,8 +146,8 @@
     "old_recovery_only_activation_plan_superseded": true
   },
   "phase_c_pass2_design": {
-    "status": "runtime_adapted_inactive_ready_for_activation",
-    "active": false,
+    "status": "production_active",
+    "active": true,
     "implemented": true,
     "runtime_adaptation_required": false,
     "user_stage": "deep",
@@ -159,7 +159,7 @@
       "dossier_acceptance_truth": "github_control_plane",
       "first_pass_attempt_accounting": "github_control_plane",
       "recovery_eligibility_and_history": "github_control_plane",
-      "scheduled_chatgpt": "bounded_deep_semantic_data_plane_only_after_separate_activation",
+      "scheduled_chatgpt": "bounded_deep_semantic_data_plane_only",
       "interactive_chat": "no_production_role"
     },
     "parallelism": {
@@ -230,7 +230,7 @@
       "exact_binding_liveness_zero_attempt_projection_preserved": true,
       "old_recovery_only_eligibility_predicate_superseded": true
     },
-    "activation_guard": "Deep/PASS 2 semantic execution remains inactive. FAST-DOSSIER-DEEP-V1 runtime adaptation is implemented, but no Scheduled Deep worker may be created/enabled/run and no Deep backlog may be processed until a later Director-accepted activation step explicitly authorizes production."
+    "activation_guard": "Deep/PASS 2 production semantic execution is repository-authorized under FAST-DOSSIER-DEEP-V1. Exactly one externally configured Progressive Deep Worker may execute only current GitHub-prepared work; GitHub remains the control plane for scope, order, attempts, recovery, persistence, recomputation and completeness."
   },
   "stage_model": {
     "revision": "FAST-DOSSIER-DEEP-V1",
