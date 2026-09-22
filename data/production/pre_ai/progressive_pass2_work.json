@@ -1,11 +1,11 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "contract": "PROGRESSIVE-PASS2-WORK-V1",
   "phase": "phase_c_pass2",
   "implemented": true,
   "pass1_active": true,
   "pass2_active": false,
-  "projection_status": "current_github_owned_eligibility_projection",
+  "projection_status": "current_github_owned_fast_dossier_deep_v1_projection",
   "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
   "semantic_bindings": {
     "profile_blob_sha": "9b9926031889dbd98ba6585c57836d52c739a0bb",
@@ -33,10 +33,25 @@
     "maximal_contiguous_prefix": false
   },
   "scope": {
+    "deep_total_current_coverage_target": 540,
+    "deep_first_pass_attempted_count": 0,
+    "deep_authoritative_completed_count": 0,
+    "deep_completed_fit_count": 0,
+    "deep_completed_not_fit_count": 0,
+    "deep_incomplete_or_recovery_count": 0,
+    "deep_waiting_for_dossier_count": 523,
+    "deep_ready_or_pending_count": 17,
+    "deep_normal_first_pass_remaining_count": 540,
+    "deep_remaining_until_all_authoritative_count": 540,
+    "deep_normal_first_pass_complete": false,
+    "deep_all_current_authoritative_complete": false,
+    "recovery_owned_count": 0,
+    "recovery_eligible_count": 0,
+    "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 60,
-    "dossier_waiting_count": 56,
+    "dossier_waiting_count": 523,
     "pass2_attempted_count": 0,
-    "pass2_eligible_count": 4
+    "pass2_eligible_count": 17
   },
   "items": [
     {
@@ -47,6 +62,7 @@
       "taste_fingerprint": "c3bab3d5b70ec23462a0d2693158b3696b6638ff26a0587b2bf754bf74bba995",
       "candidate_context_sha256": "96d26cc37f99df4475d02dc622734b6515aaf5d9251a021cfe94fbdfd7f4cd17",
       "work_id": "68b06bde03f0e667d54ef8a93207c7f6ab3524ed8dbe94c617a1d3aa16899e58",
+      "work_mode": "normal_first_pass",
       "semantic_input": {
         "title": "Monster Train",
         "short_description": "Monster Train is a strategic roguelike deck building game with a twist. Set on a train to hell, you’ll use tactical decision making to defend multiple vertical battlegrounds. With real time competitive multiplayer and endless replayability, Monster Train is always on time.",
@@ -80,9 +96,12 @@
         "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
       },
       "dossier_expires_at_utc": "2026-10-12T16:04:00Z",
-      "authorization_id": "6ea49b1d9a443dbbd4011da4626de8c3fab312b781adf22c0d411c594eef825e",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--68b06bde03f0e667d54ef8a93207c7f6ab3524ed8dbe94c617a1d3aa16899e58--6ea49b1d9a443dbbd4011da4626de8c3fab312b781adf22c0d411c594eef825e.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--68b06bde03f0e667d54ef8a93207c7f6ab3524ed8dbe94c617a1d3aa16899e58--6ea49b1d9a443dbbd4011da4626de8c3fab312b781adf22c0d411c594eef825e.json",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "2dc6634e7d610474d368ff063231eaf116be133b9b260404e0de11b7469d8475",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--68b06bde03f0e667d54ef8a93207c7f6ab3524ed8dbe94c617a1d3aa16899e58--2dc6634e7d610474d368ff063231eaf116be133b9b260404e0de11b7469d8475.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--68b06bde03f0e667d54ef8a93207c7f6ab3524ed8dbe94c617a1d3aa16899e58--2dc6634e7d610474d368ff063231eaf116be133b9b260404e0de11b7469d8475.json",
       "sequence": 1
     },
     {
@@ -93,6 +112,7 @@
       "taste_fingerprint": "eae4ca10cfb38845d31edc59a7f9eeaaabf9b9e6f50bbffa5c9ca7bae2d496b7",
       "candidate_context_sha256": "08c07ea8b7d57dc3a141c1b22df5318c699447019645f98a26bda29db56d6a6c",
       "work_id": "3f2e8e1bdc3a8b8c7298eca5a2413b3b27784c2962e85898d564e4b78c95d401",
+      "work_mode": "normal_first_pass",
       "semantic_input": {
         "title": "Monaco: What's Yours Is Mine",
         "short_description": "Monaco: What's Yours Is Mine is a single player or co-op heist game.  Assemble a crack team of thieves, case the joint, and pull off the perfect heist.",
@@ -128,9 +148,12 @@
         "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
       },
       "dossier_expires_at_utc": "2026-10-12T18:00:00Z",
-      "authorization_id": "5ff9b7d33f8bb027dc48cd558d9d2e82d5c547fa74ddde9458dd1ae5febd5549",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--3f2e8e1bdc3a8b8c7298eca5a2413b3b27784c2962e85898d564e4b78c95d401--5ff9b7d33f8bb027dc48cd558d9d2e82d5c547fa74ddde9458dd1ae5febd5549.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--3f2e8e1bdc3a8b8c7298eca5a2413b3b27784c2962e85898d564e4b78c95d401--5ff9b7d33f8bb027dc48cd558d9d2e82d5c547fa74ddde9458dd1ae5febd5549.json",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "18b7860991351e06d719234aaded49e84a76dd0b86d61470f594da624381826b",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--3f2e8e1bdc3a8b8c7298eca5a2413b3b27784c2962e85898d564e4b78c95d401--18b7860991351e06d719234aaded49e84a76dd0b86d61470f594da624381826b.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--3f2e8e1bdc3a8b8c7298eca5a2413b3b27784c2962e85898d564e4b78c95d401--18b7860991351e06d719234aaded49e84a76dd0b86d61470f594da624381826b.json",
       "sequence": 2
     },
     {
@@ -141,6 +164,7 @@
       "taste_fingerprint": "1c2786d88436d963dc36cb9da352b3b9f699a0a3092486484e5f60f25114ddc8",
       "candidate_context_sha256": "0a5c07040ac4617755ba6e0993b0c9107eecbd0c9cb385743941f41fdb1c548a",
       "work_id": "0b4d045951e90722d49c111a572b52a06e743a78ea4e982e86506cafeb759df0",
+      "work_mode": "normal_first_pass",
       "semantic_input": {
         "title": "The Wild at Heart",
         "short_description": "Wield an ever-growing herd of quirky creatures to rebuild broken paths, battle perilous beasts, and solve peculiar puzzles in a rich, interconnected world. Join two young runaways as they unravel the mysteries of a lost realm in this nostalgic storybook fantasy!",
@@ -177,9 +201,12 @@
         "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
       },
       "dossier_expires_at_utc": "2026-10-12T16:04:00Z",
-      "authorization_id": "6ba278a8f94d0cae2a2e59c62837a9d4d7c535356174e0a6d6567e8ca1bb6ea2",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--0b4d045951e90722d49c111a572b52a06e743a78ea4e982e86506cafeb759df0--6ba278a8f94d0cae2a2e59c62837a9d4d7c535356174e0a6d6567e8ca1bb6ea2.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--0b4d045951e90722d49c111a572b52a06e743a78ea4e982e86506cafeb759df0--6ba278a8f94d0cae2a2e59c62837a9d4d7c535356174e0a6d6567e8ca1bb6ea2.json",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "230033010a054f578dc31e629c496acf613671736c5a855f3e3cde5632fc9d4b",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--0b4d045951e90722d49c111a572b52a06e743a78ea4e982e86506cafeb759df0--230033010a054f578dc31e629c496acf613671736c5a855f3e3cde5632fc9d4b.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--0b4d045951e90722d49c111a572b52a06e743a78ea4e982e86506cafeb759df0--230033010a054f578dc31e629c496acf613671736c5a855f3e3cde5632fc9d4b.json",
       "sequence": 3
     },
     {
@@ -190,6 +217,7 @@
       "taste_fingerprint": "b2ed5bc2b9ca93300f8cf563808d3ebf303c76750af7ec75615b4cedde43d0a2",
       "candidate_context_sha256": "fae751870f1baee9d92990be833dedb63f8f24976819b61fd581d3986ffcdd71",
       "work_id": "b24c020124b23e95633847ecf6f71267385bb48e0aa3f295ba32d28dd6b9b464",
+      "work_mode": "normal_first_pass",
       "semantic_input": {
         "title": "DEEEER Simulator: Your Average Everyday Deer Game",
         "short_description": "Put simply, DEEEER Simulator is a “Slow-Life Town Destruction Game”. You can spend your days enjoying a nice, relaxed frolic here and there together with the other animals around town, or you can choose to relieve some stress and absolutely destroy the town and everything in it.",
@@ -226,10 +254,701 @@
         "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
       },
       "dossier_expires_at_utc": "2026-10-11T19:40:00Z",
-      "authorization_id": "39eb9c5e294f2819934d15de42bde13fc10744d369cdcc581eb0508b450b768c",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--b24c020124b23e95633847ecf6f71267385bb48e0aa3f295ba32d28dd6b9b464--39eb9c5e294f2819934d15de42bde13fc10744d369cdcc581eb0508b450b768c.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--b24c020124b23e95633847ecf6f71267385bb48e0aa3f295ba32d28dd6b9b464--39eb9c5e294f2819934d15de42bde13fc10744d369cdcc581eb0508b450b768c.json",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "7cffe337b22c8b93cdc9825debaeb26198d1589435b5fe78ab51c0b2977d3424",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--b24c020124b23e95633847ecf6f71267385bb48e0aa3f295ba32d28dd6b9b464--7cffe337b22c8b93cdc9825debaeb26198d1589435b5fe78ab51c0b2977d3424.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--b24c020124b23e95633847ecf6f71267385bb48e0aa3f295ba32d28dd6b9b464--7cffe337b22c8b93cdc9825debaeb26198d1589435b5fe78ab51c0b2977d3424.json",
       "sequence": 4
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1036890",
+      "taste_subject_key": "App_1036890",
+      "appid": "1036890",
+      "taste_fingerprint": "ea7d67c32c0b9f0ed0dc578bb47942aa2529c9c0e6994f47997bb7426a802a82",
+      "candidate_context_sha256": "6e7089a21be739b5f7c01777e2dc69947fc1657d2e3a8e35a44520284aa0d6dc",
+      "work_id": "e7fa6fa96ab0a7ea01528df4ce0e634eed0877d0e0c320efefb8454f8b9bf987",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Shadow Warrior 3: Definitive Edition",
+        "short_description": "Take an adrenaline-fueled journey through a mythical Japanese realm in the Definitive Edition of Shadow Warrior 3, packed with new features, and enjoy an ultraviolent blend of fast-paced gunplay, razor-sharp melee combat, and spectacular free-running movement.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure"
+        ],
+        "core_fit_count": 0,
+        "release_date": "1 Mar, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1036890"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1036890.json",
+      "dossier_content_sha256": "97686182f03fbff6337d2222a94321fd3ca985c9d482b1a75b38f486554ab24b",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-11T19:40:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "eef30e2d3a5cc94f1d4e1333e3f53b3c590dae2050e2aaebbf12511aee27bdba",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--e7fa6fa96ab0a7ea01528df4ce0e634eed0877d0e0c320efefb8454f8b9bf987--eef30e2d3a5cc94f1d4e1333e3f53b3c590dae2050e2aaebbf12511aee27bdba.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--e7fa6fa96ab0a7ea01528df4ce0e634eed0877d0e0c320efefb8454f8b9bf987--eef30e2d3a5cc94f1d4e1333e3f53b3c590dae2050e2aaebbf12511aee27bdba.json",
+      "sequence": 5
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1051690",
+      "taste_subject_key": "App_1051690",
+      "appid": "1051690",
+      "taste_fingerprint": "5493eb1642f90e26eafc3b1b29b2aa7a46cfb29449b5a978484cbe0917dcb362",
+      "candidate_context_sha256": "5babe36585977ead416649ed275c833a3fe4b2453f4f54f35b40ec72324268a4",
+      "work_id": "fa9f838883fcf36f0f2f27806b52ef67f1ee5bb711d4e6b1f7fd1a8d0f3768de",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Nightmare Reaper",
+        "short_description": "Blast through a cursed nightmare solo or with up to 3 friends. A retro-inspired FPS where looter shooter weapons meets boomer shooter chaos and rogue-lite elements.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "28 Mar, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1051690"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1051690.json",
+      "dossier_content_sha256": "9f950415acc92f0b50f27fd940d3a15dc4e7120867f17e89ee41cda9854b400f",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-11T19:40:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "bcd8f557241fd19eac74b47cda792d86118149cfdc2f69772fbc3cb4b4ac1813",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--fa9f838883fcf36f0f2f27806b52ef67f1ee5bb711d4e6b1f7fd1a8d0f3768de--bcd8f557241fd19eac74b47cda792d86118149cfdc2f69772fbc3cb4b4ac1813.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--fa9f838883fcf36f0f2f27806b52ef67f1ee5bb711d4e6b1f7fd1a8d0f3768de--bcd8f557241fd19eac74b47cda792d86118149cfdc2f69772fbc3cb4b4ac1813.json",
+      "sequence": 6
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1134520",
+      "taste_subject_key": "App_1134520",
+      "appid": "1134520",
+      "taste_fingerprint": "f20aa2f901fb7051a1f5ebba925106cef63dabf0f5d32ea1acc1e5e1cae1ebe7",
+      "candidate_context_sha256": "d1fed06a1594b5d13378a9fa33b54ec9a05b57958853a5a4c7b3fb343edd558e",
+      "work_id": "585532cc3236864f9396302e6a9b101548af9376eca7ec2a9cb0d062c849a2f9",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Dark Light",
+        "short_description": "Dark Light is a post-apocalyptic cyberpunk action-platformer with intense hack'n slash combat. Explore the unknown, enhance your abilities with cyberwares, and face off against supernatural entities to seal the Dark Void and end the eternal darkness.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure",
+          "Cyberpunk",
+          "Horror",
+          "Souls-like"
+        ],
+        "core_fit_count": 3,
+        "release_date": "29 Sep, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1134520"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1134520.json",
+      "dossier_content_sha256": "2db26d311d997681011ae0ab397ba2f8ba48a9c73feff6ece105847fc8aabfc9",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-12T18:00:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "6985be7ed0898f4e6d3c7970f5e1c89bc4d3687fcb638a8e895d5f78d6285775",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--585532cc3236864f9396302e6a9b101548af9376eca7ec2a9cb0d062c849a2f9--6985be7ed0898f4e6d3c7970f5e1c89bc4d3687fcb638a8e895d5f78d6285775.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--585532cc3236864f9396302e6a9b101548af9376eca7ec2a9cb0d062c849a2f9--6985be7ed0898f4e6d3c7970f5e1c89bc4d3687fcb638a8e895d5f78d6285775.json",
+      "sequence": 7
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1087760",
+      "taste_subject_key": "App_1087760",
+      "appid": "1087760",
+      "taste_fingerprint": "a839780f29e567796e0f8311b15d51bf5bc912ba2347a8ca88a9a173371a726b",
+      "candidate_context_sha256": "47bafd322d6dd5ebd8a6c87235be434567d1bbb88d41446f5d36351f584da679",
+      "work_id": "12c642b8a58976af6ff442e74918dc67e4c4ad6f714b9c7644f15f21d4e5e698",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "The Gunk",
+        "short_description": "The Gunk is an action-adventure game in which you play as Rani, part of our duo of gritty space haulers. As they’re struggling to bring in funds, they chance upon an untouched planet brimming with life. They came in search of valuable resources, and it looks like they’ve hit the jackpot…",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action-Adventure",
+          "Sci-fi"
+        ],
+        "core_fit_count": 2,
+        "release_date": "29 Apr, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1087760"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1087760.json",
+      "dossier_content_sha256": "5079a728c0a49f673f523e3a9cd4edcfc0f7412ab5c76700ec6a694a0782f7a4",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-12T16:04:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "b56829e4c073167e5baf23162374a30baba0fd038e790122219650b626cee64c",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--12c642b8a58976af6ff442e74918dc67e4c4ad6f714b9c7644f15f21d4e5e698--b56829e4c073167e5baf23162374a30baba0fd038e790122219650b626cee64c.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--12c642b8a58976af6ff442e74918dc67e4c4ad6f714b9c7644f15f21d4e5e698--b56829e4c073167e5baf23162374a30baba0fd038e790122219650b626cee64c.json",
+      "sequence": 8
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1051310",
+      "taste_subject_key": "App_1051310",
+      "appid": "1051310",
+      "taste_fingerprint": "8499bb6d5fd00ea111e3019194abb3d1a35f681138c122219a16d47203141217",
+      "candidate_context_sha256": "4c88a72a66971b6b1493b5650a2a875d4623ce51cb5a9ea20fe18f5019a083e9",
+      "work_id": "1896d06b4e2f75df22450643a2dd4f58b4f17d152491156eeecfb394f14075cc",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Paper Dolls: Original / 纸人",
+        "short_description": "Paper Dolls Original is a first-person horror adventure game steeped in Eastern culture. You act a man who is separated from his daughter after a car accident. When he awakes, he finds himself in a deserted Asian mansion. Find your daughter and unveil a terrifying story buried for a hundred years",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure",
+          "Horror"
+        ],
+        "core_fit_count": 1,
+        "release_date": "19 Apr, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1051310"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1051310.json",
+      "dossier_content_sha256": "7060c6ef4c5495aff1764ddbbbd038840996625a32958d1a327862a7ea1b3f22",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-11T19:40:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "e1bf8738b4ecde51063b19f066d822b7413ea36ce9c9fab0777cc513d6707b2a",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--1896d06b4e2f75df22450643a2dd4f58b4f17d152491156eeecfb394f14075cc--e1bf8738b4ecde51063b19f066d822b7413ea36ce9c9fab0777cc513d6707b2a.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--1896d06b4e2f75df22450643a2dd4f58b4f17d152491156eeecfb394f14075cc--e1bf8738b4ecde51063b19f066d822b7413ea36ce9c9fab0777cc513d6707b2a.json",
+      "sequence": 9
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1086620",
+      "taste_subject_key": "App_1086620",
+      "appid": "1086620",
+      "taste_fingerprint": "9f926a18a58e355b80788ae920e4bd6e50ec8743764e9c706798f1687e7fb020",
+      "candidate_context_sha256": "0a5f82ad15f46dc72a49a4a4e3e4a40ebef5a25bbae14d9528e5254daf26fccf",
+      "work_id": "6f1a80b74251c2ddd1aaa5da8e7bc03849b4075298cbce42a788dbc78a3f0256",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Selfloss",
+        "short_description": "Selfloss  is an emotional exploration game filled with rich lore, set in a whale-worshipping, Slavic-inspired world. Embark on the journey of the healer, Kazimir, and his magical staff as he fights a mysterious Miasma in search of a ritual to cure his wounded soul.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure",
+          "Dark Fantasy",
+          "Emotional"
+        ],
+        "core_fit_count": 2,
+        "release_date": "5 Sep, 2024",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1086620"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1086620.json",
+      "dossier_content_sha256": "3e46fdfbe6f8ce01cdb38bfb203184c0e97a0e1be926a4981b6e033be28a378c",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-12T16:04:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "16d8d7c4c9b7e7228284ac3eb65430eeb2c9a2ea9485e70c4115519f4cdad642",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--6f1a80b74251c2ddd1aaa5da8e7bc03849b4075298cbce42a788dbc78a3f0256--16d8d7c4c9b7e7228284ac3eb65430eeb2c9a2ea9485e70c4115519f4cdad642.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--6f1a80b74251c2ddd1aaa5da8e7bc03849b4075298cbce42a788dbc78a3f0256--16d8d7c4c9b7e7228284ac3eb65430eeb2c9a2ea9485e70c4115519f4cdad642.json",
+      "sequence": 10
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1127840",
+      "taste_subject_key": "App_1127840",
+      "appid": "1127840",
+      "taste_fingerprint": "3be929f522bc09bb0b9dae377a58e2237fb5fe6f2cdd6cdbdeac354c03a79a81",
+      "candidate_context_sha256": "70a992561d19f123c303ab521edd53abe4ad2318d31e9753508b6a5cd113cae0",
+      "work_id": "48a4020645fa4d56da240da910ffe890f1e86138b5dd1dca0d17e2192449247b",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Landlord's Super",
+        "short_description": "Your quintessential construction simulator is here. Take a dodgy loan, restore a property, move in the locals, attend to their grievances, then celebrate with a pint in this fully-simulated, open-world 1980's Britain.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Open World"
+        ],
+        "core_fit_count": 1,
+        "release_date": "25 May, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1127840"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1127840.json",
+      "dossier_content_sha256": "d66f317769f036d8456f1f48358754a67bfb21a4761f3a0813e486e7ca1f65a5",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-12T18:00:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "5dfe804bb39e38d16d1af39eeb8f784e5be3e4d64d1ccee814770b7171b282cb",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--48a4020645fa4d56da240da910ffe890f1e86138b5dd1dca0d17e2192449247b--5dfe804bb39e38d16d1af39eeb8f784e5be3e4d64d1ccee814770b7171b282cb.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--48a4020645fa4d56da240da910ffe890f1e86138b5dd1dca0d17e2192449247b--5dfe804bb39e38d16d1af39eeb8f784e5be3e4d64d1ccee814770b7171b282cb.json",
+      "sequence": 11
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1085510",
+      "taste_subject_key": "App_1085510",
+      "appid": "1085510",
+      "taste_fingerprint": "96ae084aae70febef03440d61952d3bef2a14b0ae80a44348068c5eeb0b2d164",
+      "candidate_context_sha256": "fc40b1e5e183b75f96bf032f31babe2094becb209b140a994daa84bfe5145e47",
+      "work_id": "c437cd6327c4f2d4fc9a2c45cff7ddadd5ac938d24192fa7c5de11942103761f",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Garfield Kart - Furious Racing",
+        "short_description": "Garfield, the famous lasagna-loving cat is back to take on Jon, Odie and company in a no-holds-barred racing game!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Third Person"
+        ],
+        "core_fit_count": 1,
+        "release_date": "6 Nov, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1085510"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1085510.json",
+      "dossier_content_sha256": "a691cc3134b33ea9908654dfb84e0bf4200fb6efec71a13bdbefe21ee734eb17",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-12T16:04:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "8d601c5d9368e7d2e1932bf26b245090abd0d36810eb07c61ed086281ecdd34f",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--c437cd6327c4f2d4fc9a2c45cff7ddadd5ac938d24192fa7c5de11942103761f--8d601c5d9368e7d2e1932bf26b245090abd0d36810eb07c61ed086281ecdd34f.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--c437cd6327c4f2d4fc9a2c45cff7ddadd5ac938d24192fa7c5de11942103761f--8d601c5d9368e7d2e1932bf26b245090abd0d36810eb07c61ed086281ecdd34f.json",
+      "sequence": 12
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1118240",
+      "taste_subject_key": "App_1118240",
+      "appid": "1118240",
+      "taste_fingerprint": "40833639209ad170743d0f57b9f0b953764e2ba8d271d0b24b17ab2ab8f6f3fe",
+      "candidate_context_sha256": "c5b1d8177bb40c6f54ad2c630fdbd95e96ab9df3511c76afbf86f830192850f0",
+      "work_id": "b58245abd74f14412b3bdbe6530615d274a3f7de8e24fcf5604d079aa2365950",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Lake",
+        "short_description": "It's 1986 - Meredith Weiss takes a break from her career in the big city to deliver mail in her hometown.\r\nHow will she experience two weeks in beautiful Providence Oaks, with its iconic lake and quirky community? And what will she do next?\r\n  \r\nIt's up to you.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Open World",
+          "Story Rich"
+        ],
+        "core_fit_count": 2,
+        "release_date": "1 Sep, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1118240"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1118240.json",
+      "dossier_content_sha256": "c80324a0ef8a2497ceca005f784636d4d7d8a70caecb08bbe7d3d57602f833af",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-12T18:00:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "8eeb7da85ba9a7aad763eab3da8ccc0d27a212350d855baac64ee3cb85a9ae7f",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--b58245abd74f14412b3bdbe6530615d274a3f7de8e24fcf5604d079aa2365950--8eeb7da85ba9a7aad763eab3da8ccc0d27a212350d855baac64ee3cb85a9ae7f.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--b58245abd74f14412b3bdbe6530615d274a3f7de8e24fcf5604d079aa2365950--8eeb7da85ba9a7aad763eab3da8ccc0d27a212350d855baac64ee3cb85a9ae7f.json",
+      "sequence": 13
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1107790",
+      "taste_subject_key": "App_1107790",
+      "appid": "1107790",
+      "taste_fingerprint": "9396a6acbaa4be164400de8f2ab92ec531ca4865d02c85a712ea3d5544ea5969",
+      "candidate_context_sha256": "80b094c03fc8a189c0107c729338faa90811120f9a7d467bd4feaeb9309c382e",
+      "work_id": "4977206481c3b7a1b3cef38891c532c8082dc0dff97950ef728277592290b08f",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "The Complex",
+        "short_description": "After a major bio-weapon attack on London, two scientists find themselves in a locked-down laboratory with time, and air, running out. The Complex is an interactive sci-fi thriller movie where your decisions lead to one of eight suspenseful endings.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Choices Matter",
+          "Story Rich"
+        ],
+        "core_fit_count": 2,
+        "release_date": "31 Mar, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1107790"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1107790.json",
+      "dossier_content_sha256": "f8a27d11445b9641106725bd805621d0854a804015acfb79263ab598409d4e30",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-12T18:00:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "8cdf038be5d39665d09c4d60901ea3ffc3896bfe3a7fe1a1b6b11f5f1d2003e1",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--4977206481c3b7a1b3cef38891c532c8082dc0dff97950ef728277592290b08f--8cdf038be5d39665d09c4d60901ea3ffc3896bfe3a7fe1a1b6b11f5f1d2003e1.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--4977206481c3b7a1b3cef38891c532c8082dc0dff97950ef728277592290b08f--8cdf038be5d39665d09c4d60901ea3ffc3896bfe3a7fe1a1b6b11f5f1d2003e1.json",
+      "sequence": 14
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1115690",
+      "taste_subject_key": "App_1115690",
+      "appid": "1115690",
+      "taste_fingerprint": "09fdf2f5ad79d57098f2429d778b9037c324fa01c78909165b26c4d8ccd427b4",
+      "candidate_context_sha256": "427e4452825c993b6d22068d08ef963a73e346eb064c03f0d518bf91d2a9771e",
+      "work_id": "d81df8be269cccf4d582119053c1e929a709679bf6d052c9cbb2cab0373067f4",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Yes, Your Grace",
+        "short_description": "These are troubling times, Your Grace. The petitioners’ petty matters exceed our limited resources, to say nothing of the war. A careful balance must be struck. Your throne awaits.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Choices Matter",
+          "RPG",
+          "Story Rich"
+        ],
+        "core_fit_count": 2,
+        "release_date": "6 Mar, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1115690"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1115690.json",
+      "dossier_content_sha256": "016a0f84ac5e359890acbfa5b0a38fbdf70126715b5a564282307f3b278d387c",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-12T18:00:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "7a37270e34829907ad6a738e374e57216d20b08da7a0e1abb434a9a383eb4931",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--d81df8be269cccf4d582119053c1e929a709679bf6d052c9cbb2cab0373067f4--7a37270e34829907ad6a738e374e57216d20b08da7a0e1abb434a9a383eb4931.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--d81df8be269cccf4d582119053c1e929a709679bf6d052c9cbb2cab0373067f4--7a37270e34829907ad6a738e374e57216d20b08da7a0e1abb434a9a383eb4931.json",
+      "sequence": 15
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1000010",
+      "taste_subject_key": "App_1000010",
+      "appid": "1000010",
+      "taste_fingerprint": "5a4f8afb219b01d3a7153c2970255f8c2d56f42848aea1920dac19bca32f0788",
+      "candidate_context_sha256": "f655f241cebbe63fd11eb4eb7dfd60aa5cc62260e2cfc14f160a866016d43149",
+      "work_id": "fabeff2bd9a19be3402e0d107e0f5514d2844a364abfccb942d5bd67caa2bfab",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Crown Trick",
+        "short_description": "Enter a labyrinth that moves as you move, where mastering the elements is key to defeating enemies and uncovering the mysteries of this underground world. With a new experience awaiting every time you enter the dungeon, let the power bestowed by the crown guide you in this challenging adventure!",
+        "bundle_members": [],
+        "fit_tags": [
+          "RPG"
+        ],
+        "core_fit_count": 0,
+        "release_date": "16 Oct, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1000010"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1000010.json",
+      "dossier_content_sha256": "b26924ca2138a7c3f7af4a9de922653bb3b2e231ee5d09275d4fcd32cb841e30",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-11T04:30:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "0d2a66ebac2718a61b40c4b96cdf639fd987cda459e1b6fa6831fb5d8b1557c8",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--fabeff2bd9a19be3402e0d107e0f5514d2844a364abfccb942d5bd67caa2bfab--0d2a66ebac2718a61b40c4b96cdf639fd987cda459e1b6fa6831fb5d8b1557c8.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--fabeff2bd9a19be3402e0d107e0f5514d2844a364abfccb942d5bd67caa2bfab--0d2a66ebac2718a61b40c4b96cdf639fd987cda459e1b6fa6831fb5d8b1557c8.json",
+      "sequence": 16
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1054490",
+      "taste_subject_key": "App_1054490",
+      "appid": "1054490",
+      "taste_fingerprint": "bd211174279fa4efc63ea52de880ec9ae2400dc84f4bac23182d31add988bf14",
+      "candidate_context_sha256": "46eb0d0b7f74ce52b911ef9b3398ea1b767ad68face8522281117426bd9dd5c1",
+      "work_id": "20262897ceca72dacce422df0bfdfef07f8c6008ca576e612042490b4cf9a448",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Wingspan",
+        "short_description": "Wingspan is a relaxing, award-winning strategy card game about birds for 1 to 5 players. Each bird you play extends a chain of powerful combinations in one of your three habitats. Your goal is to discover and attract the best birds to your network of wildlife preserves.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "17 Sep, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1054490"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1054490.json",
+      "dossier_content_sha256": "bc002db89bd16629eec1d6ffd3340e78a75c453b39ab0417d7c78c3b768711a8",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-11T19:40:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "9892ebe25ac9aef8a73949133a125d9ee28f6f98bedb17f54a6b3b86b976064a",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--20262897ceca72dacce422df0bfdfef07f8c6008ca576e612042490b4cf9a448--9892ebe25ac9aef8a73949133a125d9ee28f6f98bedb17f54a6b3b86b976064a.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--20262897ceca72dacce422df0bfdfef07f8c6008ca576e612042490b4cf9a448--9892ebe25ac9aef8a73949133a125d9ee28f6f98bedb17f54a6b3b86b976064a.json",
+      "sequence": 17
     }
   ]
 }
