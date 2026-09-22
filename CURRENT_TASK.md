@@ -679,7 +679,12 @@
 ## Worker in progress — 2026-09-22
 
 ### Progressive PASS 2 Dossier integration + activation prep 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_activation`.
 - task: `WORKER_TASK_PROGRESSIVE_PASS2_DOSSIER_INTEGRATION_ACTIVATION_PREP_01.md`;
-- scope: wire GitHub-owned PASS 2 eligibility recomputation at canonical Dossier persistence, PASS 1 persistence, and daily/current-input rebuild boundaries; validate inactive zero-attempt projection; prepare exact future Scheduled Task activation plan without creating/running it;
-- activation guard: PASS 2 remains inactive and no production PASS 2 execution is authorized.
+- implementation squash: `1f7c09b8681a48842d928f7bdb5ff9da79165728` (PR #86);
+- GitHub-owned PASS 2 eligibility recomputation is wired after canonical Dossier persistence, PASS 1 persistence, daily/current generation-binding-freshness rebuild and future PASS 2 attempt persistence, using the existing Progressive recomputation entrypoint and one serialized canonical-writer boundary;
+- validation runs: PASS 2 `35764806818`, Dossier `35764806854`, backlog `35764806771` — success;
+- acceptance production projection: `4` eligible, `0` attempted, durable PASS 2 state entries `0`; g000001/g000002 remain failed/recovery-owned and g000003/g000004 remain accepted truth;
+- PASS 2 remains inactive; no production PASS 2 result/receipt/attempt was created and no PASS 2 Scheduled Task was created/edited/enabled/disabled/run;
+- exact future one-task configuration and repository-activation -> task-enable -> first-`Run now` order are fixed in the durable report;
+- durable report: `reviews/worker_reports/progressive-pass2-dossier-integration-activation-prep-01.md`.
