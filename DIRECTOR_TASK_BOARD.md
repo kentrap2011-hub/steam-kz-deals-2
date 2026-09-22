@@ -45,18 +45,27 @@ Observed blocker:
 - worker cannot legally overwrite/skip;
 - user reports the Scheduled Dossier task disabled itself.
 
-### ЧАТ 2 — PASS 1 create-only environment rejection
+### ACCEPTED — ЧАТ 2 — PASS 1 create-only environment rejection diagnostic
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PASS1_CREATE_ONLY_ENVIRONMENT_REJECTION_DIAGNOSTIC_01.md`
 
-Expected report:
+Report:
 `reviews/worker_reports/progressive-pass1-create-only-environment-rejection-diagnostic-01.md`
 
-Observed blocker:
-- Bear and Breakfast result create action was rejected by environment protection before GitHub write;
-- no result was published;
-- user reports the Scheduled PASS 1 task disabled itself.
+Final status:
+`complete_narrowed_root_cause`
+
+Director acceptance:
+- Bear and Breakfast remains the exact current PASS 1 head with no accepted state/artifact collision;
+- intended create-only write is contract-valid and repository/GitHub state exposes no legitimate blocker;
+- the narrowest proven failure boundary is the Scheduled-runtime/platform/tool write-authorization layer before GitHub mutation;
+- exact internal platform guard remains unobservable from repository evidence;
+- the worker had no authority to disable its own Scheduled Task; that self-disable is a separate runtime/entrypoint contract violation;
+- hourly reruns would not progress while the same blocked transport condition remains.
+
+Next step:
+- only after explicit user approval, perform one bounded Scheduled-runtime transport/authorization fix; do not change PASS 1 contracts/order/retry/state.
 
 Scope:
 - diagnosis only;
