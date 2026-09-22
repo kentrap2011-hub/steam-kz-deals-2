@@ -220,6 +220,31 @@ class ParallelValidationTests(unittest.TestCase):
         self.assertNotIn("runtime_prompt_revision", descriptors[0])
         self.assertNotIn("runtime_prompt_sha256", descriptors[0])
 
+        active_index = json.loads(
+            (ROOT / "data/production/pre_ai/taste_steam_review_dossier_worker_index.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            active_index["runtime_prompt_sha256"],
+            hashlib.sha256(runtime_path.read_bytes()).hexdigest(),
+        )
+        self.assertEqual(active_index["runtime_prompt_revision"], runtime_contract["revision"])
+        self.assertEqual(active_index["buffer_identity_fields"], index["buffer_identity_fields"])
+        self.assertEqual(
+            active_index["buffer_candidate_serialization_rule"],
+            index["buffer_candidate_serialization_rule"],
+        )
+        if active_index["next_pending_sequence"] is not None:
+            sequence = active_index["next_pending_sequence"]
+            descriptor_path = ROOT / active_index["descriptor_path_template"].format(
+                snapshot_id=active_index["snapshot_id"],
+                sequence=sequence,
+            )
+            active_descriptor = json.loads(descriptor_path.read_text(encoding="utf-8"))
+            active_projection = buffered_candidate_descriptor_projection(active_descriptor, BASE_CONTRACT)
+            self.assertEqual(active_projection["items"], active_descriptor["items"])
+            self.assertEqual(active_projection["items_sha256"], active_descriptor["items_sha256"])
+
+
     def test_ingest_workflow_records_status_and_has_no_second_scheduler(self):
         workflow = (ROOT / ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml").read_text(encoding="utf-8")
         self.assertIn("python scripts/ingest_taste_steam_review_dossier_inbox.py --reconcile-nonfatal", workflow)
