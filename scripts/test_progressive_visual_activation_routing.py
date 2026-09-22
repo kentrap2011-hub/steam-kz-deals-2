@@ -22,9 +22,30 @@ def compatible_visual(source='S'):
     return {
         'source_mailing_updated_at_utc': source,
         'items': [
-            {'id': 'A', 'analysis_state': 'analyzed_fit', 'analysis_tier': 1},
-            {'id': 'B', 'analysis_state': 'analysis_incomplete', 'analysis_tier': 2},
-            {'id': 'C', 'analysis_state': 'not_analyzed', 'analysis_tier': 3},
+            {
+                'id': 'A', 'analysis_state': 'analyzed_fit', 'analysis_tier': 1,
+                'fast_stage_state': 'completed', 'fast_stage_outcome': 'fit',
+                'dossier_stage_state': 'accepted',
+                'deep_stage_state': 'completed', 'deep_stage_outcome': 'fit',
+                'deep_recovery_state': 'none',
+                'effective_personalized_result_source': 'deep',
+            },
+            {
+                'id': 'B', 'analysis_state': 'analysis_incomplete', 'analysis_tier': 2,
+                'fast_stage_state': 'incomplete', 'fast_stage_outcome': None,
+                'dossier_stage_state': 'failed_or_recovery',
+                'deep_stage_state': 'waiting_for_dossier', 'deep_stage_outcome': None,
+                'deep_recovery_state': 'none',
+                'effective_personalized_result_source': 'none',
+            },
+            {
+                'id': 'C', 'analysis_state': 'not_analyzed', 'analysis_tier': 3,
+                'fast_stage_state': 'not_started', 'fast_stage_outcome': None,
+                'dossier_stage_state': 'accepted',
+                'deep_stage_state': 'eligible_or_pending', 'deep_stage_outcome': None,
+                'deep_recovery_state': 'none',
+                'effective_personalized_result_source': 'none',
+            },
         ],
         'progressive_personalization': {
             'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
@@ -49,6 +70,33 @@ def compatible_visual(source='S'):
             'pass1_remaining_count': 1,
             'pass2_implemented': True,
             'pass2_active': False,
+            'fast_total_current_scope': 4,
+            'fast_attempted_count': 3,
+            'fast_completed_fit_count': 1,
+            'fast_completed_not_fit_count': 1,
+            'fast_incomplete_count': 1,
+            'fast_error_count': 0,
+            'fast_skipped_due_to_authoritative_deep_count': 0,
+            'fast_remaining_count': 1,
+            'dossier_observability': 'available',
+            'dossier_total_current_scope': 4,
+            'dossier_accepted_count': 1,
+            'dossier_pending_count': 2,
+            'dossier_failed_or_recovery_count': 1,
+            'dossier_normal_first_pass_complete': False,
+            'dossier_all_accepted_or_recovered_complete': False,
+            'deep_total_current_coverage_target': 4,
+            'deep_first_pass_attempted_count': 1,
+            'deep_authoritative_completed_count': 1,
+            'deep_completed_fit_count': 1,
+            'deep_completed_not_fit_count': 0,
+            'deep_incomplete_or_recovery_count': 0,
+            'deep_waiting_for_dossier_count': 2,
+            'deep_ready_or_pending_count': 1,
+            'deep_normal_first_pass_remaining_count': 3,
+            'deep_remaining_until_all_authoritative_count': 3,
+            'deep_normal_first_pass_complete': False,
+            'deep_all_current_authoritative_complete': False,
         },
         'production_contract': {
             'source_progressive_candidate_context_blob_sha': 'CTX',
@@ -140,6 +188,15 @@ def main():
     assert integrity is True
     assert compatible is False
     assert reason == 'progressive_pass2_state_provenance_mismatch'
+
+    # Stage observability is producer-owned; a stale visual missing any stage
+    # field must force a full Progressive rebuild before bounded refresh.
+    missing_stage = compatible_visual()
+    missing_stage['items'][0].pop('deep_stage_state')
+    integrity, compatible, reason = classify(missing_stage)
+    assert integrity is True
+    assert compatible is False
+    assert reason == 'visible_stage_field_missing:deep_stage_state'
 
     # ROUTE-04: invalid source identity remains fail-closed and must never be
     # treated as a compatible bounded-refresh candidate.
