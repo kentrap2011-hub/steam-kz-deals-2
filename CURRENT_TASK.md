@@ -652,12 +652,15 @@
 ## Worker in progress — 2026-09-22
 
 ### Taste Dossier non-blocking group progress implement 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_user_scheduled_validation`.
 - task: `WORKER_TASK_TASTE_DOSSIER_NONBLOCKING_GROUP_PROGRESS_IMPLEMENT_01.md`;
-- scope: replace dossier contiguous-prefix blocking with GitHub-owned per-group non-blocking progress while preserving create-only transport and strict validation;
-- activation: preserve accepted current-snapshot groups, classify existing invalid g000005 as failed/incomplete, and project later pending groups normally;
-- boundaries: no PASS 1/PASS 2/Taste Semantic Producer changes, no new scheduler, no cadence change, no interactive full-backlog processing;
-- next: architecture preflight, bounded implementation, focused validation, durable report.
+- implementation: `79f1c38c218d0d2ea89d7722e4ff5b1c9840d508`; runtime activation: `f0ffb166f37b0ba2da363f8908359373d8b17939`; regression-isolation fix: `93a2bddda9232134147c1960af46681f495c4930`;
+- final canonical build run `35721372787` (#164), job `106724811441`: success; atomic pre-AI commit `b60aca7f5bc76263bc1b21f522747a5e37a4d095`;
+- current V2 snapshot `9cf59f4d94d1b4c7270bece5464666e3eb2359b87bd74cbefe3883b969f90689`: 550 required, 184 groups, accepted/failed/pending `0/0/184`, next pending `g000001`;
+- old snapshot `04298ca0...` accepted groups 1–4 remain in canonical cache; rejected g000005/g000006 were moved byte-identically to stale quarantine on source-snapshot replacement and were never accepted;
+- non-blocking same-snapshot BAD g5 / GOOD g6+ semantics are regression-covered; Scheduled worker schedule mutation is explicitly forbidden and hourly cadence is unchanged;
+- report: `reviews/worker_reports/taste-dossier-nonblocking-group-progress-implement-01.md`;
+- exact remaining step: one clean `Run now` of the existing `Taste Steam Review Dossier` Scheduled Task against the current V2 index, without changing its schedule, followed by normal GitHub ingest observation.
 
 
 ## Worker in progress — 2026-09-22
