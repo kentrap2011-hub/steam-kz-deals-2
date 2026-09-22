@@ -2,6 +2,11 @@ name: Ingest Progressive PASS 2 item
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "data/ai_inbox/progressive_pass2/results/*.json"
+      - "data/ai_inbox/progressive_pass2/execution_receipts/*.json"
 
 permissions:
   contents: write
