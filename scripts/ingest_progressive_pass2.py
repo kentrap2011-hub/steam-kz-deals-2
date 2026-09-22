@@ -64,10 +64,10 @@ def main():
     ):
         raise SystemExit('Current Progressive PASS 2 work manifest is missing, stale, or inactive')
 
-    # Re-evaluate the current authorization from canonical truth immediately before
-    # accepting any semantic artifact. This makes wall-clock dossier expiry,
-    # binding changes, PASS 1 changes, and generation/work rebinding fail closed
-    # even if an older work projection was read by the external worker.
+    # Re-evaluate current GitHub-owned Deep authorization immediately before
+    # accepting any semantic artifact. Dossier expiry/binding changes, exact Deep
+    # identity rebinding, or recovery-authorization changes fail closed. Fast/PASS 1
+    # state is deliberately not a Deep eligibility prerequisite.
     work = build_progressive_pass2_work.build_work_document()
     if work.get('pass2_active') is not True:
         raise SystemExit('PASS 2 became inactive before ingest; refusing semantic persistence')
@@ -147,8 +147,12 @@ def main():
             r['status'] == 'rejected_invalid_execution_receipt_no_attempt'
             for r in terminal_receipts
         ),
-        'pass2_attempted_count': next_work['scope']['pass2_attempted_count'],
-        'pass2_eligible_count': next_work['scope']['pass2_eligible_count'],
+        'deep_first_pass_attempted_count': next_work['scope']['deep_first_pass_attempted_count'],
+        'deep_authoritative_completed_count': next_work['scope']['deep_authoritative_completed_count'],
+        'deep_incomplete_or_recovery_count': next_work['scope']['deep_incomplete_or_recovery_count'],
+        'deep_waiting_for_dossier_count': next_work['scope']['deep_waiting_for_dossier_count'],
+        'deep_ready_or_pending_count': next_work['scope']['deep_ready_or_pending_count'],
+        'recovery_pending_count': next_work['scope']['recovery_pending_count'],
         'semantic_generation_id': next_work['semantic_generation_id'],
     }
     print(json.dumps(summary, ensure_ascii=False, indent=2))
