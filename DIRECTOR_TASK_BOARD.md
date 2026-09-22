@@ -188,6 +188,40 @@ Director conclusion:
 - the existing Dossier Scheduled Task may remain enabled on its normal cadence;
 - the gate “at least one canonically accepted current Dossier group before PASS 2 integration” is satisfied;
 - next work is a separate bounded Dossier-persistence -> PASS 2 eligibility integration/activation task, requiring explicit user approval before IMPLEMENT.
+## ACTIVE — ЧАТ 1 — Progressive PASS 2 Dossier integration + activation prep
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PASS2_DOSSIER_INTEGRATION_ACTIVATION_PREP_01.md`
+
+Worker slot:
+`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
+
+Conversation state:
+- previous physical ЧАТ 1 completed the separate Dossier non-blocking implementation and is retired;
+- this is a new independent PASS 2 integration task and must start in a NEW physical ЧАТ 1 under the single-task-per-chat rule.
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Confirmed prerequisites:
+- PASS 2 core is implemented and inactive;
+- Dossier non-blocking progress is accepted;
+- Dossier exact-items candidate fix is live-proven;
+- current accepted Dossier truth exists (g000003/g000004 accepted, six dossiers);
+- PASS 1 continues independently.
+
+Scope:
+- wire GitHub-owned PASS 2 eligibility recomputation at all canonical input-change boundaries needed to avoid stale/missed eligibility;
+- preserve exact Dossier-ready and one-attempt semantics;
+- prepare exact operator configuration/order for one future PASS 2 Scheduled Task;
+- keep PASS 2 inactive and perform no production PASS 2 run in this task.
+
+Expected report:
+`reviews/worker_reports/progressive-pass2-dossier-integration-activation-prep-01.md`
+
+Next gate after report acceptance:
+- activate PASS 2 through a separate bounded activation step, configure exactly one Scheduled Task, and perform one controlled live `Run now` acceptance.
+
 ## ACCEPTED — Progressive PASS 2 Phase C core implementation
 
 Task:
