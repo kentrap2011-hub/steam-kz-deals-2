@@ -67,7 +67,7 @@ SEMANTIC_PRESERVED_FIELDS = (
     'deep_stage_state',
     'deep_stage_outcome',
     'deep_recovery_state',
-    'effective_personalized_result_source',
+    'effective_analysis_source',
 )
 
 
