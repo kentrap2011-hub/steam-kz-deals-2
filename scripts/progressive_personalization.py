@@ -4,6 +4,7 @@ from pathlib import Path
 
 import priority_ranking
 import progressive_pass1
+import progressive_pass2
 
 ROOT = Path('.')
 CONTRACT = ROOT / 'config/progressive_personalization_contract.json'
@@ -60,8 +61,11 @@ def effective_taste_entries():
     """Tier-1 rendering view with canonical cache precedence over PASS 1."""
     canonical = canonical_taste_entries()
     pass1 = progressive_pass1.current_fit_semantic_entries() if progressive_pass1.STATE.exists() else {}
+    pass2 = progressive_pass2.current_fit_semantic_entries() if progressive_pass2.STATE.exists() else {}
     merged = dict(pass1)
-    # Exact-compatible canonical Taste remains the stronger reusable source.
+    # PASS 2 is a later recovery result for a PASS 1-incomplete item. Canonical
+    # Taste remains the strongest reusable source when present.
+    merged.update(pass2)
     merged.update(canonical)
     return merged
 
@@ -79,7 +83,10 @@ def load_contract(path=CONTRACT):
     phase = contract.get('phase_b_execution') or {}
     if phase.get('pass1_active') is not True or phase.get('pass2_active') is not False:
         raise ValueError('Phase B must activate PASS 1 and keep PASS 2 inactive')
+    if phase.get('pass2_implemented') is not True:
+        raise ValueError('Phase C PASS 2 core must be implemented before projection')
     progressive_pass1.load_contract()
+    progressive_pass2.load_contract()
     return contract
 
 
@@ -91,8 +98,10 @@ def _base_state(analysis_state='not_analyzed', *, issue=None, fit=None, evaluate
         'fit': fit,
         'evaluated_at_utc': evaluated_at,
         'analysis_semantic_source': source,
+        'analysis_resolution_pass': None,
         'semantic_generation_id': None,
         'pass1_attempted': False,
+        'pass2_attempted': False,
     }
 
 
@@ -152,6 +161,7 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
     taste_entries = taste_entries if taste_entries is not None else canonical_taste_entries()
     projections = projection_doc.get('entries') or {}
     pass1_state_doc = progressive_pass1.load_state()
+    pass2_state_doc = progressive_pass2.load_state()
     queue_rows = progressive_pass1.load_jsonl(progressive_pass1.TASTE_QUEUE)
     generation, pass1_bindings, _queue_by_family = progressive_pass1.current_bindings(
         context_rows,
@@ -173,13 +183,29 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
         state = projection_state(projection, canonical_entry)
         binding = pass1_bindings.get(family_id)
         pass1_entry = progressive_pass1.matching_state_entry(binding, pass1_state_doc) if binding else None
+        pass2_entry = progressive_pass2.matching_state_entry(binding, pass2_state_doc) if binding else None
 
         if state['analysis_state'] == 'not_analyzed' and pass1_entry is not None:
             pass1_state = progressive_pass1.project_state(binding, pass1_state_doc)
             if pass1_state is not None:
                 state = pass1_state
+                state['analysis_resolution_pass'] = 'pass1'
+                state['pass2_attempted'] = False
 
-        if state['analysis_state'] == 'analyzed_fit' and state.get('analysis_semantic_source') == 'progressive_pass1':
+        # PASS 2 may only replace the current exact PASS 1 incomplete projection.
+        if (
+            state['analysis_state'] == 'analysis_incomplete'
+            and state.get('analysis_semantic_source') == 'progressive_pass1'
+            and pass1_entry is not None
+            and pass2_entry is not None
+        ):
+            pass2_state = progressive_pass2.project_state(binding, pass2_state_doc)
+            if pass2_state is not None:
+                state = pass2_state
+
+        if state['analysis_state'] == 'analyzed_fit' and state.get('analysis_semantic_source') == 'progressive_pass2':
+            semantic_entry = progressive_pass2.semantic_taste_entry(pass2_entry)
+        elif state['analysis_state'] == 'analyzed_fit' and state.get('analysis_semantic_source') == 'progressive_pass1':
             semantic_entry = progressive_pass1.semantic_taste_entry(pass1_entry)
         elif state['analysis_state'] == 'analyzed_fit':
             semantic_entry = canonical_entry
@@ -233,6 +259,12 @@ def apply_state_fields(game, state):
     else:
         game.pop('analysis_semantic_generation_id', None)
     game['pass1_attempted'] = bool(state.get('pass1_attempted'))
+    game['pass2_attempted'] = bool(state.get('pass2_attempted'))
+    resolution_pass = state.get('analysis_resolution_pass')
+    if resolution_pass:
+        game['analysis_resolution_pass'] = resolution_pass
+    else:
+        game.pop('analysis_resolution_pass', None)
     if analysis_state != 'analyzed_fit':
         strip_unresolved_personalization(game)
     return game
@@ -335,6 +367,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'pass1_total_scope': pass1_total_scope,
         'pass1_attempted_count': pass1_attempted,
         'pass1_remaining_count': pass1_remaining,
+        'pass2_implemented': True,
         'pass2_active': False,
         'semantic_queue_zero_required_for_publication': False,
     }
@@ -374,6 +407,7 @@ def stamp_processing_status(visual, state_index=None):
         'publication_status': 'current_deterministic_catalogue_with_incremental_pass1',
         'semantic_queue_zero_required_for_publication': False,
         'pass1_active': True,
+        'pass2_implemented': True,
         'pass2_active': False,
     }
     # Overall visual availability reflects the deterministic current catalogue.
@@ -408,6 +442,10 @@ def validate_processing_status(status):
     pass1_remaining = int(status['pass1_remaining_count'])
     if pass1_total != pass1_attempted + pass1_remaining:
         raise ValueError('PASS 1 scope invariant failed')
-    if status.get('pass1_active') is not True or status.get('pass2_active') is not False:
-        raise ValueError('PASS 1/PASS 2 activation flags invalid')
+    if (
+        status.get('pass1_active') is not True
+        or status.get('pass2_implemented') is not True
+        or status.get('pass2_active') is not False
+    ):
+        raise ValueError('PASS 1/PASS 2 implementation or activation flags invalid')
     return True
