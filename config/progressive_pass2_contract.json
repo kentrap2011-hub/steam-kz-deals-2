@@ -1,9 +1,9 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
-  "version": 1,
-  "status": "architecture_amended_runtime_adaptation_required_inactive",
+  "version": 4,
+  "status": "runtime_adapted_inactive_ready_for_activation",
   "phase": "phase_c_pass2",
-  "purpose": "GitHub-owned Deep analysis stage for eventual authoritative personalized coverage of every current eligible Progressive game after exact-compatible canonically accepted Dossier evidence is ready. Technical PASS 2 remains inactive until runtime adaptation and separate activation.",
+  "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; Fast/PASS 1 is never an eligibility prerequisite.",
   "implemented": true,
   "active": false,
   "ownership": {
@@ -131,17 +131,23 @@
   },
   "state": {
     "path": "data/cache/progressive_pass2_state.json",
-    "schema": "PROGRESSIVE-PASS2-STATE-V1",
+    "schema": "PROGRESSIVE-PASS2-STATE-V2",
     "worker_prompt": "config/progressive_pass2_worker_prompt.md",
     "pass1_history_mutation_allowed": false,
     "accepted_outcome_fields": [
       "semantic_generation_id",
       "work_id",
       "pass2_attempted",
+      "normal_first_pass_attempted",
+      "authoritative_completed",
       "outcome",
       "analysis_issue_code",
       "attempt_consumption_source",
-      "accepted_at_utc"
+      "accepted_at_utc",
+      "normal_first_pass",
+      "recovery_attempts",
+      "recovery_owned",
+      "recovery_authorization"
     ],
     "fast_history_mutation_allowed": false,
     "target_deep_state_model": {
@@ -162,8 +168,12 @@
         "analyzed_not_fit"
       ],
       "first_pass_and_recovery_history_separate": true,
-      "schema_runtime_adaptation_required": true
-    }
+      "schema_runtime_adaptation_required": false
+    },
+    "schema_version": 2,
+    "recovery_authorization_entrypoint": "scripts/authorize_progressive_pass2_recovery.py",
+    "recovery_authorization_workflow": ".github/workflows/authorize-progressive-pass2-recovery.yml",
+    "recovery_authorization_contract": "PROGRESSIVE-PASS2-RECOVERY-AUTHORIZATION-V1"
   },
   "outcomes": {
     "analyzed_fit": {
@@ -241,7 +251,8 @@
       "dossier_acceptance_or_recovery_persistence": ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml",
       "pass1_state_persistence": ".github/workflows/ingest-progressive-pass1.yml",
       "daily_generation_binding_freshness_rebuild": ".github/workflows/build-pre-ai-store-snapshot.yml",
-      "pass2_attempt_persistence": ".github/workflows/ingest-progressive-pass2.yml"
+      "pass2_attempt_persistence": ".github/workflows/ingest-progressive-pass2.yml",
+      "recovery_authorization_persistence": ".github/workflows/authorize-progressive-pass2-recovery.yml"
     },
     "serialization_boundary": "github_actions_concurrency_group_taste-steam-review-dossier-canonical-writer_cancel_in_progress_false",
     "time_expiry_guard": "scheduled_worker_preexecution_expiry_check_plus_github_recompute_before_pass2_ingest",
@@ -249,7 +260,7 @@
     "rule": "All GitHub-owned writers that can change current Deep eligibility or its first-pass/recovery attempt state reuse the existing Progressive recomputation boundary; Dossier semantic evidence, identity, freshness, recovery, and persistence semantics remain unchanged.",
     "reusable_wiring_preserved": true,
     "old_recovery_only_predicate_superseded": true,
-    "runtime_predicate_adaptation_required": true
+    "runtime_predicate_adaptation_required": false
   },
   "activation_guard": {
     "pass2_active": false,
@@ -258,9 +269,10 @@
     "production_execution_authorized": false,
     "real_backlog_processing_allowed": false,
     "previous_recovery_only_activation_plan_superseded": true,
-    "runtime_adaptation_required_before_activation": true,
+    "runtime_adaptation_required_before_activation": false,
     "activation_requires_separate_director_accepted_follow_up": true,
-    "reusable_integration_wiring_ready": true
+    "reusable_integration_wiring_ready": true,
+    "runtime_adaptation_complete": true
   },
   "user_stage": {
     "id": "deep",
@@ -270,11 +282,11 @@
   },
   "runtime_architecture": {
     "landed_core_present": true,
-    "target_architecture_runtime_adapted": false,
-    "runtime_adaptation_required": true,
+    "target_architecture_runtime_adapted": true,
+    "runtime_adaptation_required": false,
     "old_recovery_only_predicate_superseded": true,
     "production_execution_authorized": false,
-    "note": "Existing inactive runtime/recomputation wiring is reusable scaffolding only. It must not be activated under the obsolete PASS1-incomplete-only eligibility predicate."
+    "note": "FAST-DOSSIER-DEEP-V1 runtime predicate, explicit first-pass/recovery accounting, Fast suppression and effective-result precedence are implemented while Deep remains inactive."
   },
   "effective_result_precedence": {
     "completed_deep_fit_or_not_fit": "authoritative",
