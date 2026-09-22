@@ -1116,7 +1116,14 @@ def dossier_stage_state(
     return 'not_ready'
 
 
-def deep_recovery_state(binding, state_doc=None, work_doc=None):
+def deep_recovery_state(
+    binding,
+    state_doc=None,
+    work_doc=None,
+    *,
+    dossier_record=None,
+    current_binding=None,
+):
     entry = matching_state_entry(binding, state_doc)
     if entry is None or entry.get('authoritative_completed') is True or entry.get('recovery_owned') is not True:
         return 'none'
@@ -1127,9 +1134,14 @@ def deep_recovery_state(binding, state_doc=None, work_doc=None):
             and item.get('family_id') == binding.get('family_id')
             and item.get('work_id') == binding.get('work_id')
             and item.get('work_mode') == 'recovery'
+            and item.get('recovery_authorization_id')
+                == (entry.get('recovery_authorization') or {}).get('recovery_authorization_id')
         ):
             return 'recovery_pending'
-    auth = entry.get('recovery_authorization')
-    if isinstance(auth, dict) and auth.get('status') == 'authorized':
+    if (
+        dossier_record is not None
+        and current_binding is not None
+        and recovery_authorization_is_live(entry, dossier_record, current_binding)
+    ):
         return 'recovery_eligible'
     return 'recovery_owned'
