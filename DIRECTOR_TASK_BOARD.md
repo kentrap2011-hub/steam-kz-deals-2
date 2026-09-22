@@ -188,21 +188,33 @@ Director conclusion:
 - the existing Dossier Scheduled Task may remain enabled on its normal cadence;
 - the gate “at least one canonically accepted current Dossier group before PASS 2 integration” is satisfied;
 - next work is a separate bounded Dossier-persistence -> PASS 2 eligibility integration/activation task, requiring explicit user approval before IMPLEMENT.
-## PAUSED / SUPERSEDED — ЧАТ 1 — Progressive PASS 2 Dossier integration + activation prep
+## COMPLETED / SUPERSEDED BEFORE ACTIVATION — Progressive PASS 2 Dossier integration + activation prep
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PASS2_DOSSIER_INTEGRATION_ACTIVATION_PREP_01.md`
 
-State:
-- user changed the target architecture before activation;
-- deep analysis is now intended to eventually cover every current eligible game, not only PASS 1 `analysis_incomplete`;
-- PASS 1 becomes a provisional/fast layer while deep analysis is the eventual authoritative layer;
-- the old task's eligibility premise is superseded and must not be activated as-is;
-- no further implementation/activation under the old eligibility model is authorized;
-- preserve already-landed safe integration work for reuse after the architecture amendment.
+Report:
+`reviews/worker_reports/progressive-pass2-dossier-integration-activation-prep-01.md`
 
-Required next step:
-- discuss and canonically amend PASS 1/PASS 2 precedence, eligibility, result projection, retry/recovery and site-stage semantics before resuming activation.
+Worker status:
+`complete_ready_for_activation`
+
+Director acceptance of landed reusable work:
+- GitHub-owned PASS 2 recomputation wiring is complete across canonical Dossier persistence, PASS 1 persistence, daily/current preparation, and PASS 2 attempt persistence;
+- the implementation remains inactive and consumed zero PASS 2 attempts;
+- no PASS 2 Scheduled Task was created or run;
+- current inactive projection proved four eligible items under the OLD recovery-only eligibility model;
+- control-plane ownership, exact binding, liveness checks, and idempotent zero-attempt recomputation are reusable in the new architecture.
+
+Superseded parts:
+- the activation plan and eligibility premise are NOT accepted for production activation because the user changed the target architecture before activation;
+- deep analysis is now intended to eventually cover every current eligible game, not only PASS 1 `analysis_incomplete`;
+- PASS 1 is provisional/fast coverage; deep analysis becomes the eventual authoritative analysis layer;
+- do not create/enable/run `Progressive PASS 2 Worker` using the report's old activation plan.
+
+Next step:
+- first create a canonical architecture amendment for fast-analysis vs dossier vs deep-analysis eligibility, precedence, coverage, recovery, state projection, and site-stage semantics;
+- only after that amendment is accepted may the landed recomputation wiring be adapted and production activation resume.
 
 
 ## DRAFT / NOT AUTHORIZED — Progressive site progress header compaction
