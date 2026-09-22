@@ -201,34 +201,29 @@ Production validator проверяет:
 
 ---
 
-## Taste Steam review dossier: parallel buffered validation and immutable-safe recovery
+## Taste Steam review dossier: non-blocking per-group progress and immutable recovery
 
-**Что ищем:** как Scheduled ChatGPT публикует immutable candidate groups без локального Python, где GitHub выполняет authoritative strict validation, как canonical progress принимает только максимальный непрерывный валидный префикс и как несовместимый snapshot становится stale/inert без ручной правки artifacts/progress.
+**Что ищем:** как Scheduled ChatGPT публикует immutable predeclared 3-game candidates, а GitHub независимо классифицирует каждую группу как `pending`, `accepted` или `failed_or_invalid_pending_recovery` без head-of-line blocking.
 
-**Последняя проверка:** 2026-09-18.
+**Последняя проверка:** 2026-09-22.
 
 **Быстрая точка входа:**
-1. `config/taste_steam_review_dossier_contract.json` — canonical control-plane/group contract; `checkpoint_size` остаётся `3`, transport — parallel immutable candidate buffer.
-2. `config/taste_steam_review_dossier_schema.json` + `config/taste_steam_review_dossier_web_evidence_contract.json` + `config/taste_steam_review_dossier_worker_prompt.md` — worker/evidence compatibility binding и generation invariants, включая bound-record language derivation.
-3. `scripts/taste_steam_review_dossier_buffered.py::validate_buffer_artifact` + `scripts/taste_steam_review_dossier_strict.py` — authoritative GitHub-side strict validation после create-only candidate publication.
-4. `scripts/taste_steam_review_dossier_prepublication.py` — только optional CI/developer parity utility; Scheduled ChatGPT не обязан и не должен запускать repository Python перед публикацией.
-5. `scripts/taste_steam_review_dossier_parallel_validation.py` — observational validation status и contiguous-prefix planning; более поздние валидные группы могут оставаться buffered за более ранней invalid group.
-6. `scripts/build_taste_steam_review_dossier_work.py` — content-complete worker/evidence binding входит в snapshot identity; semantic contract/prompt change требует normal GitHub-owned fresh snapshot даже в тот же день.
-7. `scripts/taste_steam_review_dossier_recovery.py` — stale-snapshot quarantine/reconcile; old artifacts не rebind-ятся и canonical progress вручную не продвигается.
-8. `.github/workflows/validate-taste-dossier-buffered.yml` — PR regression gate.
-9. `.github/workflows/build-pre-ai-store-snapshot.yml` — штатная GitHub-owned activation/rebuild/reconcile после merge.
+1. `config/taste_steam_review_dossier_contract.json` — canonical GitHub-owned per-group progress/completeness contract; `checkpoint_size=3` остаётся transport/group boundary, не quota.
+2. `scripts/taste_steam_review_dossier_group_progress.py` — canonical state transitions, counts, `next_pending_sequence`, normal-first-pass vs all-accepted semantics.
+3. `scripts/taste_steam_review_dossier_buffered.py` + `scripts/taste_steam_review_dossier_strict.py` — strict independent validation/persistence; invalid transport quarantine affects only its exact group.
+4. `scripts/taste_steam_review_dossier_worker_projection.py` — V2 compact index; worker resumes from GitHub-owned next pending group, not first historical failure.
+5. `scripts/taste_steam_review_dossier_parallel_validation.py` — validation/recovery observability; not queue/progress authority.
+6. `scripts/taste_steam_review_dossier_recovery.py` — separate GitHub-owned failed-group recovery after normal first pass; no automatic semantic retry.
+7. `.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml` and `.github/workflows/build-pre-ai-store-snapshot.yml` share the existing serialized canonical-writer boundary; no second scheduler.
+8. `config/taste_steam_review_dossier_worker_prompt.md` — create-only semantic data-plane rules and explicit prohibition on editing/disabling its own Scheduled Task.
 
 **Runtime / recovery-инварианты:**
-- Scheduled ChatGPT собирает полный predeclared 3-game group и публикует его create-only; successful write означает только `candidate buffered`, не canonical acceptance;
-- GitHub асинхронно валидирует candidates и продвигает canonical progress только через maximal contiguous valid prefix от текущего expected sequence;
-- invalid group N останавливает canonical promotion на N, но не требует worker ждать GitHub acceptance перед публикацией уже подготовленных N+1/N+2 по immutable plan;
-- локальный repository Python не является Scheduled runtime prerequisite; отсутствие локального Python не является причиной fail-closed для candidate publication;
-- опубликованный deterministic group нельзя overwrite/update/rename/delete через worker/chat и нельзя «лечить» retry/per-game replacement;
-- при content-complete binding change GitHub создаёт fresh snapshot; artifacts старого snapshot становятся stale/inert и могут быть перемещены только штатным GitHub-owned stale-quarantine path;
-- очередь/cache/progress/receipts вручную не чинить.
-- **Story-DLC scope gate:** до dossier identity projection `scripts/taste_steam_review_dossier_web.py::classify_story_dlc_scope` классифицирует только add-on rows по canonical Steam `short_description`; positive story evidence включает DLC, explicit non-story metadata исключает, отсутствие positive proof исключает fail-closed. Policy revision входит в snapshot identity/preservation guard через `scripts/build_taste_steam_review_dossier_work.py`.
-- Для audit использовать `taste_steam_review_dossier_work.json.story_dlc_scope`; не искать DLC вручную по backlog. `appid 2378500` является обязательной non-story regression.
-- Russian retrieval gate: `evidence.russian_attempt` различает `found_and_used`, genuine `searched_no_existence_signal` и два proven-existence unresolved failure state; точные machine semantics живут в web-evidence contract/schema, а strict enforcement — только в `scripts/taste_steam_review_dossier_strict.py`.
-- После exact-product Russian existence proof worker prompt/web-evidence contract требуют bounded source-agnostic diversification: дешёвый usable concrete Steam item-level path остаётся предпочтительным, но aggregate/count-only, inaccessible language-filter, profile-only, non-Russian-card-only или index-row-without-child Steam shape рано передают приоритет generic non-site-constrained cross-source discovery; site-specific follow-up — только после promising discovery. Fixed Steam query/page quota, fixed website quota и Steam-only retrieval запрещены.
-
-**Проверенный parallel-buffer факт:** live acceptance `g000002` был correctly rejected strict validator, а уже опубликованный `g000003` мог оставаться buffered за ним; это ожидаемое доказательство contiguous-prefix архитектуры, а не повод возвращать synchronous local validation.
+- create-only deterministic transport remains immutable and is not canonical acceptance;
+- every present pending group is strict-validated independently; valid later groups may persist even when an earlier different group failed;
+- invalid group is recorded `failed_or_invalid_pending_recovery`, moved out of normal forward progress and remains separately recoverable;
+- missing pending group remains pending but does not prevent processing another present pending group;
+- accepted and failed groups are excluded from normal first-pass traversal; future worker invocations start from `next_pending_sequence`;
+- `normal_first_pass_complete=true` means no pending groups remain; `full_backlog_complete` retains the stricter legacy/all-accepted meaning and failures never count as accepted evidence;
+- Scheduled ChatGPT cannot overwrite/rename/delete transport, own retry/completeness, or enable/disable/edit its own schedule;
+- snapshot/plan/binding exactness, strict dossier semantics, story-DLC scope, Russian retrieval/provenance and stale-snapshot isolation remain fail-closed;
+- old snapshot artifacts never rebind to a new snapshot; same-snapshot descriptors stay immutable.
