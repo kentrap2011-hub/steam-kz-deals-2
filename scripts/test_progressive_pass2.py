@@ -466,11 +466,11 @@ def main():
                 taste_entries={},
             )
             assert index['game:1']['analysis_state'] == 'analyzed_not_fit'
-            assert index['game:1']['effective_personalized_result_source'] == 'deep'
+            assert index['game:1']['effective_analysis_source'] == 'deep'
             assert index['game:1']['deep_stage_state'] == 'completed'
             assert index['game:2']['analysis_state'] == 'analyzed_fit'
             assert index['game:2']['analysis_semantic_source'] == 'progressive_pass1'
-            assert index['game:2']['effective_personalized_result_source'] == 'fast'
+            assert index['game:2']['effective_analysis_source'] == 'fast'
             assert index['game:2']['deep_stage_state'] == 'incomplete_or_recovery'
 
             # Only authoritative Deep suppresses future Fast; unresolved Deep does not.
@@ -485,7 +485,7 @@ def main():
             for field in (
                 'fast_stage_state', 'fast_stage_outcome', 'dossier_stage_state',
                 'deep_stage_state', 'deep_stage_outcome', 'deep_recovery_state',
-                'effective_personalized_result_source',
+                'effective_analysis_source',
             ):
                 assert field in game
     finally:
