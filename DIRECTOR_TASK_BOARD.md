@@ -32,18 +32,27 @@ Immediate active work:
 
 Two independent READ-ONLY / RECON tasks are authorized before any PASS 2 implementation.
 
-### ЧАТ 1 — Taste Dossier g000005 existing-artifact block
+### ACCEPTED — ЧАТ 1 — Taste Dossier g000005 existing-artifact block diagnostic
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_G000005_DUPLICATE_ARTIFACT_BLOCK_DIAGNOSTIC_01.md`
 
-Expected report:
+Report:
 `reviews/worker_reports/taste-dossier-g000005-existing-artifact-block-diagnostic-01.md`
 
-Observed blocker:
-- canonical expects g000005 while its deterministic artifact already exists;
-- worker cannot legally overwrite/skip;
-- user reports the Scheduled Dossier task disabled itself.
+Final status:
+`complete_root_cause_proven`
+
+Director acceptance:
+- g000005 deterministic artifact is current/exact for the active snapshot and was observed by GitHub ingest;
+- canonical validation rejected it because observation evidence_languages did not exactly match the bound-record language projection;
+- canonical sequence correctly remained at 5 while the invalid immutable artifact remained at the deterministic path;
+- subsequent Scheduled runs therefore cannot overwrite/skip and will remain blocked until GitHub-owned recovery runs;
+- an existing canonical recovery path already exists: `quarantine_invalid_expected` for only the current expected artifact, after which the same deterministic path may be recreated;
+- the Dossier worker's self-disable was unauthorized; the correct behavior was only to stop the current invocation.
+
+Next step:
+- only after explicit user approval, execute the existing GitHub-owned bounded recovery for current g000005 and then validate that Dossier can resume normally.
 
 ### ACCEPTED — ЧАТ 2 — PASS 1 create-only environment rejection diagnostic
 
