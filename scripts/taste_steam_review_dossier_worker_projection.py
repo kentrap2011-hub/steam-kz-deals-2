@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """GitHub-owned compact read projection for the Steam-review-dossier worker."""
 import copy
+import hashlib
 import json
 import shutil
 from pathlib import Path
@@ -50,9 +51,32 @@ def _manifest_binding(manifest):
     return copy.deepcopy(binding)
 
 
+def _runtime_prompt_binding(contract):
+    runtime = contract.get("worker_runtime_prompt") or {}
+    if (
+        runtime.get("status") != "active"
+        or runtime.get("owner") != "github_control_plane"
+        or runtime.get("semantic_evidence_binding") is not False
+        or runtime.get("descriptor_binding") is not False
+        or runtime.get("worker_index_binding") is not True
+    ):
+        raise ValueError("dossier worker runtime prompt contract is missing or unsafe")
+    path = Path(str(runtime.get("path") or ""))
+    revision = runtime.get("revision")
+    if not path.is_file() or not isinstance(revision, str) or not revision:
+        raise ValueError("dossier worker runtime prompt path/revision is invalid")
+    return {
+        "runtime_prompt_path": path.as_posix(),
+        "runtime_prompt_revision": revision,
+        "runtime_prompt_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+    }
+
+
 def _index_for_manifest(manifest, contract, plan, projection, binding):
     progress = manifest["group_progress"]
+    runtime_binding = _runtime_prompt_binding(contract)
     return {
+        **runtime_binding,
         "schema": WORKER_INDEX_SCHEMA,
         "schema_version": 2,
         "work_manifest_path": contract["paths"]["work_manifest"],
