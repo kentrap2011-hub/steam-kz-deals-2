@@ -16,29 +16,106 @@
     "dossier_content_sha256",
     "dossier_compatibility_binding",
     "authorization_id",
+    "work_mode",
+    "recovery_authorization_id",
+    "recovery_reason",
+    "recovery_condition_binding",
     "outcome"
   ],
   "properties": {
-    "schema_version": {"const": 1},
-    "contract": {"const": "PROGRESSIVE-PASS2-RESULT-V1"},
-    "semantic_generation_id": {"type": "string", "minLength": 1},
-    "work_id": {"type": "string", "minLength": 1},
-    "family_id": {"type": "string", "minLength": 1},
-    "taste_subject_key": {"type": "string", "minLength": 1},
-    "appid": {"type": "string", "pattern": "^[0-9]+$"},
-    "taste_fingerprint": {"type": "string", "minLength": 1},
-    "candidate_context_sha256": {"type": "string", "minLength": 1},
-    "dossier_content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "dossier_compatibility_binding": {"type": "object"},
-    "authorization_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-    "outcome": {"enum": ["analyzed_fit", "analyzed_not_fit", "analysis_incomplete"]},
-    "fit_level": {"enum": ["strong", "moderate"]},
-    "confidence": {"enum": ["medium", "high"]},
-    "positive_evidence": {"type": "array", "items": {"type": "string", "minLength": 1}},
-    "taste_factors": {"type": "object"},
-    "base_support_compatible": {"type": ["boolean", "null"]},
-    "not_fit_basis": {"enum": ["completed_below_threshold", "confirmed_personal_negative"]},
-    "not_fit_evidence": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "schema_version": {
+      "const": 1
+    },
+    "contract": {
+      "const": "PROGRESSIVE-PASS2-RESULT-V1"
+    },
+    "semantic_generation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "work_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "family_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "taste_subject_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "appid": {
+      "type": "string",
+      "pattern": "^[0-9]+$"
+    },
+    "taste_fingerprint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidate_context_sha256": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dossier_content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "dossier_compatibility_binding": {
+      "type": "object"
+    },
+    "authorization_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "outcome": {
+      "enum": [
+        "analyzed_fit",
+        "analyzed_not_fit",
+        "analysis_incomplete"
+      ]
+    },
+    "fit_level": {
+      "enum": [
+        "strong",
+        "moderate"
+      ]
+    },
+    "confidence": {
+      "enum": [
+        "medium",
+        "high"
+      ]
+    },
+    "positive_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "taste_factors": {
+      "type": "object"
+    },
+    "base_support_compatible": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "not_fit_basis": {
+      "enum": [
+        "completed_below_threshold",
+        "confirmed_personal_negative"
+      ]
+    },
+    "not_fit_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
     "issue_code": {
       "enum": [
         "insufficient_evidence",
@@ -47,7 +124,92 @@
         "base_support_unresolved",
         "terminal_execution_failure"
       ]
+    },
+    "work_mode": {
+      "enum": [
+        "normal_first_pass",
+        "recovery"
+      ]
+    },
+    "recovery_authorization_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "recovery_reason": {
+      "enum": [
+        "materially_changed_canonically_accepted_dossier_or_evidence",
+        "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+        "explicit_canonical_github_recovery_action_with_recorded_reason",
+        null
+      ]
+    },
+    "recovery_condition_binding": {
+      "type": [
+        "object",
+        "null"
+      ]
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "work_mode": {
+            "const": "normal_first_pass"
+          }
+        },
+        "required": [
+          "work_mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "recovery_authorization_id": {
+            "type": "null"
+          },
+          "recovery_reason": {
+            "type": "null"
+          },
+          "recovery_condition_binding": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "work_mode": {
+            "const": "recovery"
+          }
+        },
+        "required": [
+          "work_mode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "recovery_authorization_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "recovery_reason": {
+            "enum": [
+              "materially_changed_canonically_accepted_dossier_or_evidence",
+              "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+              "explicit_canonical_github_recovery_action_with_recorded_reason"
+            ]
+          },
+          "recovery_condition_binding": {
+            "type": "object",
+            "minProperties": 1
+          }
+        }
+      }
+    }
+  ]
 }
