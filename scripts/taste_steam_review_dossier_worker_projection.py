@@ -11,8 +11,14 @@ from taste_steam_review_dossier_daily import (
     validate_group_plan,
     validate_manifest,
 )
+from taste_steam_review_dossier_group_progress import (
+    ensure_group_progress,
+    failed_sequences,
+    next_pending_sequence,
+    pending_sequences,
+)
 
-WORKER_INDEX_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V1"
+WORKER_INDEX_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V2"
 WORKER_GROUP_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1"
 
 
@@ -44,28 +50,32 @@ def _manifest_binding(manifest):
     return copy.deepcopy(binding)
 
 
-def build_worker_projection(manifest, contract):
-    """Derive the complete worker read projection only from canonical manifest state."""
-    validate_manifest(manifest, contract)
-    plan = validate_group_plan(manifest, contract, required=True)
-    projection = _projection_contract(contract)
-    binding = _manifest_binding(manifest)
-    if manifest.get("sampling_policy") != contract.get("sampling"):
-        raise ValueError("canonical manifest sampling policy no longer matches the active contract")
-
-    index = {
+def _index_for_manifest(manifest, contract, plan, projection, binding):
+    progress = manifest["group_progress"]
+    return {
         "schema": WORKER_INDEX_SCHEMA,
-        "schema_version": 1,
+        "schema_version": 2,
         "work_manifest_path": contract["paths"]["work_manifest"],
         "snapshot_id": manifest["snapshot_id"],
         "prepared_for_date": manifest["prepared_for_date"],
         "prepared_required_sha256": manifest["prepared_required_sha256"],
         "group_plan_sha256": plan["group_plan_sha256"],
         "group_count": plan["group_count"],
-        "canonical_expected_sequence": expected_group_sequence(manifest, contract),
+        "next_pending_sequence": next_pending_sequence(manifest, contract),
+        "pending_group_sequences": pending_sequences(manifest, contract),
+        "failed_group_sequences": failed_sequences(manifest, contract),
+        "accepted_group_count": progress["accepted_group_count"],
+        "failed_group_count": progress["failed_group_count"],
+        "pending_group_count": progress["pending_group_count"],
+        "accepted_dossier_count": progress["accepted_dossier_count"],
+        "failed_dossier_count": progress["failed_dossier_count"],
+        "pending_dossier_count": progress["pending_dossier_count"],
+        "normal_first_pass_complete": progress["normal_first_pass_complete"],
+        "all_groups_accepted": progress["all_groups_accepted"],
+        "legacy_contiguous_expected_sequence": expected_group_sequence(manifest, contract),
         "prepared_required_count": manifest["prepared_required_count"],
-        "completed_required_count": manifest["completed_required_count"],
-        "remaining_required_count": manifest["remaining_required_count"],
+        "legacy_contiguous_completed_required_count": manifest["completed_required_count"],
+        "legacy_contiguous_remaining_required_count": manifest["remaining_required_count"],
         "full_backlog_complete": manifest["full_backlog_complete"],
         "ttl_days": manifest["ttl_days"],
         "sampling_policy": copy.deepcopy(manifest["sampling_policy"]),
@@ -76,9 +86,21 @@ def build_worker_projection(manifest, contract):
         "descriptor_path_template": projection["descriptor_path_template"],
     }
 
+
+def build_worker_projection(manifest, contract):
+    """Derive worker next-work strictly from GitHub-owned pending group state."""
+    manifest = ensure_group_progress(manifest, contract)
+    validate_manifest(manifest, contract)
+    plan = validate_group_plan(manifest, contract, required=True)
+    projection = _projection_contract(contract)
+    binding = _manifest_binding(manifest)
+    if manifest.get("sampling_policy") != contract.get("sampling"):
+        raise ValueError("canonical manifest sampling policy no longer matches the active contract")
+
+    index = _index_for_manifest(manifest, contract, plan, projection, binding)
     descriptors = []
     for group in plan["groups"]:
-        descriptor = {
+        descriptors.append({
             "schema": WORKER_GROUP_SCHEMA,
             "schema_version": 1,
             "snapshot_id": manifest["snapshot_id"],
@@ -87,45 +109,24 @@ def build_worker_projection(manifest, contract):
             "group_count": plan["group_count"],
             "web_evidence_contract_binding": copy.deepcopy(binding),
             **copy.deepcopy(group),
-        }
-        descriptors.append(descriptor)
+        })
     validate_worker_projection(index, descriptors, manifest, contract)
     return index, descriptors
 
 
 def validate_worker_projection(index, descriptors, manifest, contract):
-    """Fail closed unless projection content exactly equals the canonical derivation."""
+    """Fail closed unless projection exactly equals canonical per-group state."""
+    manifest = ensure_group_progress(manifest, contract)
     validate_manifest(manifest, contract)
     plan = validate_group_plan(manifest, contract, required=True)
     projection = _projection_contract(contract)
     binding = _manifest_binding(manifest)
-    if not isinstance(index, dict) or index.get("schema") != WORKER_INDEX_SCHEMA or index.get("schema_version") != 1:
+    if not isinstance(index, dict) or index.get("schema") != WORKER_INDEX_SCHEMA or index.get("schema_version") != 2:
         raise ValueError("compact dossier worker index is missing or unsupported")
     if not isinstance(descriptors, list) or len(descriptors) != plan["group_count"]:
         raise ValueError("compact dossier worker descriptor set is incomplete")
 
-    expected_index = {
-        "schema": WORKER_INDEX_SCHEMA,
-        "schema_version": 1,
-        "work_manifest_path": contract["paths"]["work_manifest"],
-        "snapshot_id": manifest["snapshot_id"],
-        "prepared_for_date": manifest["prepared_for_date"],
-        "prepared_required_sha256": manifest["prepared_required_sha256"],
-        "group_plan_sha256": plan["group_plan_sha256"],
-        "group_count": plan["group_count"],
-        "canonical_expected_sequence": expected_group_sequence(manifest, contract),
-        "prepared_required_count": manifest["prepared_required_count"],
-        "completed_required_count": manifest["completed_required_count"],
-        "remaining_required_count": manifest["remaining_required_count"],
-        "full_backlog_complete": manifest["full_backlog_complete"],
-        "ttl_days": manifest["ttl_days"],
-        "sampling_policy": copy.deepcopy(manifest["sampling_policy"]),
-        "web_evidence_contract_binding": binding,
-        "scope_source": manifest["scope_source"],
-        "source_queue_path": manifest["source_queue_path"],
-        "source_queue_sha256": manifest["source_queue_sha256"],
-        "descriptor_path_template": projection["descriptor_path_template"],
-    }
+    expected_index = _index_for_manifest(manifest, contract, plan, projection, binding)
     if index != expected_index:
         raise ValueError("compact dossier worker index does not exactly match canonical manifest state")
 
@@ -187,7 +188,7 @@ def validate_worker_projection_files(manifest, contract, *, index_path=None):
 
 
 def write_worker_projection(manifest, contract, *, index_path=None, groups_root=None):
-    """Synchronize the GitHub-owned projection while preserving same-snapshot descriptor bytes."""
+    """Synchronize index state while preserving same-snapshot descriptor bytes."""
     index, descriptors = build_worker_projection(manifest, contract)
     index_path = Path(index_path or contract["paths"]["worker_index"])
     groups_root = Path(groups_root or contract["paths"]["worker_groups_root"])
