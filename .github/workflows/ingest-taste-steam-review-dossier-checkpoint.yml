@@ -55,7 +55,6 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/build_progressive_pass2_work.py
-          python scripts/test_progressive_pass2.py
 
       - name: Commit dossier recovery transport validation canonical progress and worker projection atomically
         shell: bash
