@@ -713,3 +713,15 @@
 - runtime: accepted `FAST-DOSSIER-DEEP-V1` implemented with independent normal Deep first pass, explicit GitHub-owned recovery authorization/accounting, authoritative-Deep Fast suppression, effective-result precedence, producer-owned stage fields and independent Fast/Dossier/Deep statistics;
 - current inactive Deep projection: target 540, ready/pending 22, waiting for Dossier 518, normal/recovery attempts 0;
 - Deep/PASS 2 remains inactive: no Scheduled Task created/edited/enabled/run, no production Deep result/receipt/attempt, no production backlog execution, no final pixel-icon/Statistics-page UI.
+
+
+## Worker in progress — 2026-09-22
+
+### Progressive Deep production activation + live acceptance 01
+Статус: `phase_a_in_progress`.
+- task: `WORKER_TASK_PROGRESSIVE_DEEP_PRODUCTION_ACTIVATION_LIVE_ACCEPTANCE_01.md`;
+- accepted model: `FAST-DOSSIER-DEEP-V1`;
+- Phase A scope: activate canonical Deep/PASS 2 repository truth, validate zero-attempt activation, then stop for the exact external Scheduled Task action;
+- no Deep semantic execution is allowed before repository activation is proven;
+- Phase B continues in this same physical worker chat after exactly one user `Run now`;
+- durable report: `reviews/worker_reports/progressive-deep-production-activation-live-acceptance-01.md`.
