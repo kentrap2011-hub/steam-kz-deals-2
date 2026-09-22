@@ -142,4 +142,9 @@ jobs:
               + ' ready=' + str(scope.get('deep_ready_or_pending_count'))
               + ' attempts=' + str(scope.get('deep_first_pass_attempted_count'))
           )
+          import base64
+          raw=Path('data/production/pre_ai/progressive_pass2_work.json').read_bytes()
+          print('PASS2_WORK_BASE64_BEGIN')
+          print(base64.b64encode(raw).decode('ascii'))
+          print('PASS2_WORK_BASE64_END')
           PY
