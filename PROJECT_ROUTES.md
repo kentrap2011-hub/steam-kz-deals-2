@@ -231,21 +231,21 @@ Production validator проверяет:
 
 ---
 
-## Progressive PASS 2: eligibility recomputation and activation boundary
+## Progressive Fast / Dossier / Deep: stage architecture and Deep recomputation boundary
 
-**Что ищем:** где PASS 2 получает current exact eligibility и какие GitHub writers обязаны обновлять его проекцию.
+**Что ищем:** canonical Fast/Dossier/Deep semantics, effective-result precedence, Deep first-pass/recovery ownership and the reusable GitHub recomputation hooks.
 
 **Последняя проверка:** 2026-09-22.
 
 **Быстрая точка входа:**
-1. `config/progressive_pass2_contract.json` — canonical inactive PASS 2 ownership/eligibility/attempt/work contract.
-2. `scripts/progressive_pass2.py::recompute_eligibility` — единственный eligibility predicate; canonical Dossier store only.
-3. `scripts/build_progressive_pass2_work.py` — GitHub-owned idempotent work projection; projection consumes zero attempts.
-4. `.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml` — recompute after canonical accepted/recovery Dossier persistence.
-5. `.github/workflows/ingest-progressive-pass1.yml` — recompute after PASS 1 durable state transition.
-6. `.github/workflows/build-pre-ai-store-snapshot.yml` — recompute after daily/current generation, work identity, Dossier binding and freshness preparation.
-7. `.github/workflows/ingest-progressive-pass2.yml` + `scripts/ingest_progressive_pass2.py` — future attempt persistence; current authorization is recomputed again before artifact acceptance.
-8. All four writers use `taste-steam-review-dossier-canonical-writer` with `cancel-in-progress:false`; do not split eligibility writers into unsynchronized concurrency domains.
-9. `scripts/test_progressive_pass2_integration.py` — P2INT trigger-graph, zero-attempt, stale/expiry, sibling independence and inactive-guard regression.
+1. `config/progressive_personalization_contract.json` — canonical three-stage model, effective-result precedence, explicit UI stage states and statistics-page metric contract.
+2. `config/progressive_pass1_contract.json` — PASS 1 as provisional user-facing `Быстрый разбор`; no Dossier requirement and no Fast prerequisite for Deep.
+3. `config/progressive_pass2_contract.json` — technical PASS 2 as eventual authoritative `Глубокий разбор`, all-current-game coverage target, one normal first pass plus separate GitHub-owned recovery authorization model; still inactive.
+4. `config/taste_steam_review_dossier_contract.json` — independent neutral Dossier acceptance/recovery truth; buffered/failed candidates never count as accepted Deep evidence.
+5. `config/execution_ownership_contract.json` — GitHub owns Deep scope/order/first-pass/recovery/completeness; Scheduled ChatGPT is bounded semantic data plane only after later activation.
+6. `scripts/progressive_pass2.py::recompute_eligibility` + `scripts/build_progressive_pass2_work.py` — landed reusable recomputation entrypoint/wiring, but the current runtime predicate still reflects the superseded recovery-only model and must be adapted before activation.
+7. Recompute hooks already exist after canonical Dossier persistence, Fast/PASS 1 persistence, daily/current generation-work-binding-freshness preparation and future Deep/PASS 2 persistence.
+8. Those writers remain inside `taste-steam-review-dossier-canonical-writer` with `cancel-in-progress:false`; do not split them into unsynchronized authority domains.
+9. `PROJECT_DECISIONS.md#PPD-004` — rationale for Fast/Dossier/Deep independence, Deep precedence, all-game coverage and non-blocking recovery.
 
-**Инварианты:** buffered/unaccepted/failed Dossier transport is never accepted truth; exact generation/work/appid/Dossier SHA/binding/authorization remains mandatory; wall-clock expiry is guarded before semantic execution and again by GitHub before ingest; PASS 1/Dossier semantics are read-only inputs; PASS 2 semantic execution remains forbidden while the canonical active flags are false.
+**Инварианты:** Deep eligibility never requires prior Fast/PASS 1 attempt or Fast `analysis_incomplete`; exact-compatible canonically accepted Dossier remains the evidence gate; completed Deep suppresses future Fast for the same current identity while Fast success never suppresses Deep; Deep incomplete/error does not erase a valid Fast provisional result; normal Deep first-pass completeness and eventual all-authoritative completeness are separate; no blind retry loop or hidden recovery quota; Deep semantic execution remains forbidden while active flags are false.
