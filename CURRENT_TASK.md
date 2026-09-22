@@ -674,3 +674,12 @@
 - Dossier-owned contract/prompt/ingest/recovery/workflow surfaces were not modified; automatic recomputation after canonical Dossier persistence remains the explicit deferred integration dependency;
 - focused validation passed, including inactive production eligibility projection with zero state mutation;
 - durable report: `reviews/worker_reports/progressive-pass2-phase-c-core-implement-01.md`.
+
+
+## Worker in progress — 2026-09-22
+
+### Progressive PASS 2 Dossier integration + activation prep 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_PROGRESSIVE_PASS2_DOSSIER_INTEGRATION_ACTIVATION_PREP_01.md`;
+- scope: wire GitHub-owned PASS 2 eligibility recomputation at canonical Dossier persistence, PASS 1 persistence, and daily/current-input rebuild boundaries; validate inactive zero-attempt projection; prepare exact future Scheduled Task activation plan without creating/running it;
+- activation guard: PASS 2 remains inactive and no production PASS 2 execution is authorized.
