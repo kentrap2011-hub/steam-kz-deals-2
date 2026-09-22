@@ -1,9 +1,9 @@
 {
   "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
-  "version": 3,
+  "version": 4,
   "status": "canonical",
   "phase": "phase_b",
-  "purpose": "Publish the current deterministic-eligible Steam KZ deal catalogue continuously while GitHub-owned item-level PASS 1 progressively resolves current semantic fit and a separately implemented future PASS 2 may recover only dossier-ready incomplete items without waiting for global PASS 1 completion.",
+  "purpose": "Publish the current deterministic-eligible Steam KZ deal catalogue continuously while GitHub-owned item-level PASS 1 progressively resolves current semantic fit and the implemented-but-inactive GitHub-owned PASS 2 core can later recover only dossier-ready incomplete items after separate activation.",
   "ownership": {
     "control_plane": "github",
     "state_projection": "github",
@@ -122,15 +122,16 @@
     "deep_recovery_in_pass1": false,
     "pass2_active": false,
     "creates_automatic_pass1_retry_loop": false,
-    "pass2_implemented": false,
-    "pass2_activation_requires_separate_implementation": true,
+    "pass2_implemented": true,
+    "pass2_activation_requires_separate_implementation": false,
     "pass2_global_pass1_completion_gate": false,
-    "pass2_requires_current_exact_compatible_accepted_dossier": true
+    "pass2_requires_current_exact_compatible_accepted_dossier": true,
+    "pass2_activation_requires_separate_director_acceptance": true
   },
   "phase_c_pass2_design": {
-    "status": "canonical_design_only_not_implemented",
+    "status": "implemented_inactive",
     "active": false,
-    "implemented": false,
+    "implemented": true,
     "purpose": "One bounded automatic recovery attempt for a current analysis_incomplete item only after GitHub can prove a current exact-compatible canonically accepted Taste Steam Review Dossier for the same item/work identity.",
     "ownership": {
       "eligibility": "github_control_plane",
@@ -204,6 +205,7 @@
       "web_evidence_contract": "config/taste_steam_review_dossier_web_evidence_contract.json",
       "rule": "PASS 2 consumes only canonical accepted dossier truth and does not redefine Dossier evidence, identity, freshness, or compatibility semantics."
     },
-    "activation_guard": "No PASS 2 runtime, scheduler, worker prompt, queue processor, or production execution is authorized by this design block. A separate implementation task must create and validate the GitHub-owned runtime path."
+    "activation_guard": "PASS 2 core mechanics are implemented but inactive. No production PASS 2 semantic execution is authorized while config/progressive_pass2_contract.json#active and phase_b_execution.pass2_active remain false. Dossier-persistence recomputation wiring and production activation require a separate accepted follow-up.",
+    "implementation_contract": "config/progressive_pass2_contract.json"
   }
 }
