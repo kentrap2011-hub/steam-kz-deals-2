@@ -18,8 +18,10 @@ from taste_steam_review_dossier import (
 )
 
 from taste_steam_review_dossier_group_progress import (
+    ACCEPTED,
     accepted_contiguous_prefix_item_count,
     ensure_group_progress,
+    set_group_state,
     validate_group_progress,
 )
 
@@ -413,11 +415,16 @@ def persist_submission_and_advance_snapshot(submission, manifest, contract, stor
     if [str(x["appid"]) for x in remaining[:len(current)]] != expected:
         raise ValueError("current checkpoint is not the canonical prefix of remaining daily snapshot scope")
     next_remaining = remaining[len(current):]
+    checkpoint_size = int(contract["checkpointing"]["checkpoint_size"])
+    if next_manifest.get("submission_group_plan") is not None:
+        completed_before = int(manifest["completed_required_count"])
+        sequence = completed_before // checkpoint_size + 1
+        next_manifest = set_group_state(next_manifest, contract, sequence, ACCEPTED)
     next_manifest.update(progress_fields(
         manifest["snapshot_id"],
         manifest["prepared_required_items"],
         next_remaining,
-        int(contract["checkpointing"]["checkpoint_size"]),
+        checkpoint_size,
     ))
     validate_manifest(next_manifest, contract)
     if manifest_output_path is not None:
