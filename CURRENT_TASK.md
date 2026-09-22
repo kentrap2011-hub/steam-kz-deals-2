@@ -693,8 +693,12 @@
 ## Worker in progress — 2026-09-22
 
 ### Progressive Fast / Dossier / Deep architecture amendment 01
-Статус: `in_progress_contract_architecture_only`.
+Статус: `complete_architecture_amendment`.
 - worker task: `WORKER_TASK_PROGRESSIVE_FAST_DOSSIER_DEEP_ARCHITECTURE_AMENDMENT_01.md`;
-- scope: canonical Fast / Dossier / Deep contract amendment only;
-- Deep/PASS 2 remains inactive; no Scheduled Deep task or production backlog execution is authorized;
-- old recovery-only PASS 2 activation plan is superseded; reusable GitHub recomputation/exact-binding wiring is preserved for later runtime adaptation.
+- canonical model is now Fast (provisional) / Dossier (independent evidence) / Deep (eventual authoritative for all current eligible games);
+- Deep eligibility no longer requires prior Fast attempt or Fast `analysis_incomplete`;
+- normal Deep first pass and GitHub-owned non-blocking recovery are separate; no blind retry loop or hidden recovery quota;
+- explicit producer-owned per-game stage states and separate Fast/Dossier/Deep statistics denominators are canonicalized;
+- Deep/PASS 2 remains inactive; no Scheduled Deep task or production backlog execution occurred;
+- old recovery-only activation plan is superseded; reusable GitHub recomputation/exact-binding wiring is preserved for the next bounded runtime-adaptation task;
+- durable report: `reviews/worker_reports/progressive-fast-dossier-deep-architecture-amendment-01.md`.
