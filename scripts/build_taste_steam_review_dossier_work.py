@@ -13,6 +13,7 @@ from taste_steam_review_dossier_daily import (
     progress_fields,
     validate_manifest,
 )
+from taste_steam_review_dossier_group_progress import ensure_group_progress
 from taste_steam_review_dossier_recovery import (
     load_recovery_contract,
     quarantine_stale_snapshot_inbox,
@@ -91,6 +92,8 @@ def _rebind_snapshot_and_plan(manifest, contract):
         list(manifest["prepared_required_items"]),
         checkpoint_size,
     ))
+    manifest.pop("group_progress", None)
+    manifest.update(ensure_group_progress(manifest, contract))
     validate_manifest(manifest, contract)
     return manifest
 
@@ -274,6 +277,10 @@ def main():
         "current_checkpoint_count": manifest["current_checkpoint_count"],
         "remaining_required_count": manifest["remaining_required_count"],
         "full_backlog_complete": manifest["full_backlog_complete"],
+        "normal_first_pass_complete": manifest["group_progress"]["normal_first_pass_complete"],
+        "accepted_group_count": manifest["group_progress"]["accepted_group_count"],
+        "failed_group_count": manifest["group_progress"]["failed_group_count"],
+        "pending_group_count": manifest["group_progress"]["pending_group_count"],
         "package_member_mapping_count": manifest["package_member_mapping_count"],
         "story_dlc_considered_count": manifest["story_dlc_scope"]["considered_count"],
         "story_dlc_story_eligible_count": manifest["story_dlc_scope"]["story_eligible_count"],
@@ -281,7 +288,7 @@ def main():
         "story_dlc_ambiguous_excluded_count": manifest["story_dlc_scope"]["ambiguous_excluded_count"],
         "worker_index_path": projection["index_path"],
         "worker_descriptor_count": projection["descriptor_count"],
-        "worker_canonical_expected_sequence": projection["index"]["canonical_expected_sequence"],
+        "worker_next_pending_sequence": projection["index"]["next_pending_sequence"],
         "stale_inbox_quarantined_count": len(stale_cleanup["moved"]),
     }, ensure_ascii=False, indent=2))
 
