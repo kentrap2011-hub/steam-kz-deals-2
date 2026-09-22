@@ -11,6 +11,7 @@ from taste_steam_review_dossier_buffered import apply_buffered_drain, expected_b
 from taste_steam_review_dossier_daily import BUFFER_GROUP_SCHEMA, load_contract
 from taste_steam_review_dossier_group_progress import reopen_failed_group
 from taste_steam_review_dossier_parallel_validation import build_parallel_validation_status
+from taste_steam_review_dossier_strict import current_worker_contract_binding
 from taste_steam_review_dossier_test_fixture import web_dossier
 from taste_steam_review_dossier_web import build_daily_work_manifest_web
 from taste_steam_review_dossier_worker_projection import build_worker_projection
@@ -168,6 +169,33 @@ class ParallelValidationTests(unittest.TestCase):
         self.assertFalse(parallel["github_validation"]["partial_per_game_acceptance"])
         self.assertFalse(parallel["github_validation"]["automatic_semantic_retry_or_healing"])
         self.assertFalse(parallel["error_philosophy"]["normal_forward_progress_blocked_by_invalid_group"])
+
+    def test_runtime_prompt_is_index_only_and_outside_semantic_binding(self):
+        runtime_path = ROOT / "config/taste_steam_review_dossier_runtime_prompt.md"
+        runtime_text = runtime_path.read_text(encoding="utf-8")
+        self.assertIn("TASTE-STEAM-REVIEW-DOSSIER-RUNTIME-PROMPT-V1", runtime_text)
+        self.assertIn("next_pending_sequence", runtime_text)
+        self.assertIn("must never enable, disable, pause, delete, reschedule, or edit its own Scheduled Task", runtime_text)
+
+        runtime_contract = BASE_CONTRACT["worker_runtime_prompt"]
+        self.assertFalse(runtime_contract["semantic_evidence_binding"])
+        self.assertFalse(runtime_contract["descriptor_binding"])
+        self.assertTrue(runtime_contract["worker_index_binding"])
+
+        with tempfile.TemporaryDirectory() as td:
+            contract = contract_for(td)
+            work = build_daily_work_manifest_web(queue(range(830001, 830004)), contract, Path(td) / "store")
+            index, descriptors = build_worker_projection(work, contract)
+
+        semantic_binding = current_worker_contract_binding()
+        self.assertEqual(index["web_evidence_contract_binding"], semantic_binding)
+        self.assertEqual(descriptors[0]["web_evidence_contract_binding"], semantic_binding)
+        self.assertEqual(index["runtime_prompt_path"], runtime_contract["path"])
+        self.assertEqual(index["runtime_prompt_revision"], runtime_contract["revision"])
+        self.assertEqual(len(index["runtime_prompt_sha256"]), 64)
+        self.assertNotIn("runtime_prompt_path", descriptors[0])
+        self.assertNotIn("runtime_prompt_revision", descriptors[0])
+        self.assertNotIn("runtime_prompt_sha256", descriptors[0])
 
     def test_ingest_workflow_records_status_and_has_no_second_scheduler(self):
         workflow = (ROOT / ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml").read_text(encoding="utf-8")
