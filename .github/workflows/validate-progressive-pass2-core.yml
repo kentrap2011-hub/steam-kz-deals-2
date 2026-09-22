@@ -12,6 +12,7 @@ on:
       - "scripts/progressive_pass2.py"
       - "scripts/build_progressive_pass2_work.py"
       - "scripts/ingest_progressive_pass2.py"
+      - "scripts/authorize_progressive_pass2_recovery.py"
       - "scripts/progressive_personalization.py"
       - "scripts/progressive_visual_activation_routing.py"
       - "scripts/build_final_visual_payload.py"
@@ -30,6 +31,7 @@ on:
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
       - ".github/workflows/ingest-progressive-pass1.yml"
       - ".github/workflows/ingest-progressive-pass2.yml"
+      - ".github/workflows/authorize-progressive-pass2-recovery.yml"
       - ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
       - ".github/workflows/validate-progressive-pass2-core.yml"
 
@@ -44,6 +46,7 @@ on:
       - "scripts/progressive_pass2.py"
       - "scripts/build_progressive_pass2_work.py"
       - "scripts/ingest_progressive_pass2.py"
+      - "scripts/authorize_progressive_pass2_recovery.py"
       - "scripts/progressive_personalization.py"
       - "scripts/progressive_visual_activation_routing.py"
       - "scripts/build_final_visual_payload.py"
@@ -62,6 +65,7 @@ on:
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
       - ".github/workflows/ingest-progressive-pass1.yml"
       - ".github/workflows/ingest-progressive-pass2.yml"
+      - ".github/workflows/authorize-progressive-pass2-recovery.yml"
       - ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
       - ".github/workflows/validate-progressive-pass2-core.yml"
 permissions:
@@ -78,7 +82,15 @@ jobs:
           python-version: "3.12"
       - name: Compile PASS 2 Python
         run: |
-          python -m py_compile             scripts/progressive_pass2.py             scripts/build_progressive_pass2_work.py             scripts/ingest_progressive_pass2.py             scripts/test_progressive_pass2_integration.py             scripts/progressive_personalization.py             scripts/progressive_visual_activation_routing.py
+          python -m py_compile \
+            scripts/progressive_pass2.py \
+            scripts/build_progressive_pass2_work.py \
+            scripts/ingest_progressive_pass2.py \
+            scripts/authorize_progressive_pass2_recovery.py \
+            scripts/test_progressive_pass2.py \
+            scripts/test_progressive_pass2_integration.py \
+            scripts/progressive_personalization.py \
+            scripts/progressive_visual_activation_routing.py
       - name: PASS 2 core regression
         run: python scripts/test_progressive_pass2.py
       - name: PASS 2 Dossier integration regression
@@ -108,7 +120,26 @@ jobs:
           state=json.loads(Path('data/cache/progressive_pass2_state.json').read_text(encoding='utf-8'))
           assert contract.get('active') is False
           assert work.get('pass2_active') is False
-          assert state.get('entries') == {}
-          assert len(work.get('items') or []) == int((work.get('scope') or {}).get('pass2_eligible_count') or 0)
-          print('PROGRESSIVE_PASS2_INACTIVE_PROJECTION=PASS eligible=' + str(len(work.get('items') or [])))
+          scope=work.get('scope') or {}
+          assert state == {
+              'schema_version': 2,
+              'contract': 'PROGRESSIVE-PASS2-STATE-V2',
+              'entries': {},
+          }
+          assert int(scope.get('deep_first_pass_attempted_count') or 0) == 0
+          assert int(scope.get('deep_authoritative_completed_count') or 0) == 0
+          assert int(scope.get('deep_incomplete_or_recovery_count') or 0) == 0
+          assert int(scope.get('recovery_pending_count') or 0) == 0
+          assert len(work.get('items') or []) == int(scope.get('pass2_eligible_count') or 0)
+          assert int(scope.get('deep_total_current_coverage_target') or 0) == (
+              int(scope.get('deep_waiting_for_dossier_count') or 0)
+              + int(scope.get('deep_ready_or_pending_count') or 0)
+          )
+          print(
+              'PROGRESSIVE_PASS2_INACTIVE_PROJECTION=PASS '
+              + 'target=' + str(scope.get('deep_total_current_coverage_target'))
+              + ' waiting=' + str(scope.get('deep_waiting_for_dossier_count'))
+              + ' ready=' + str(scope.get('deep_ready_or_pending_count'))
+              + ' attempts=' + str(scope.get('deep_first_pass_attempted_count'))
+          )
           PY
