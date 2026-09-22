@@ -575,3 +575,21 @@
 
 **Основные места:** `config/taste_steam_review_dossier_contract.json`, `config/taste_steam_review_dossier_persistence_bridge.json`, `config/taste_steam_review_dossier_recovery_contract.json`, `config/execution_ownership_contract.json`, `scripts/taste_steam_review_dossier_group_progress.py`, `scripts/taste_steam_review_dossier_buffered.py`, `scripts/taste_steam_review_dossier_worker_projection.py`, `scripts/taste_steam_review_dossier_recovery.py`, `config/taste_steam_review_dossier_worker_prompt.md`.
 
+
+
+## PPD-002 — PASS 2 eligibility is recomputed at every canonical input writer
+
+**Дата:** 2026-09-22  
+**Статус:** implemented inactive; production semantic activation remains separate.
+
+**Решение:** Progressive PASS 2 eligibility is a GitHub-owned derived projection, not a queue owned by a Scheduled Task. The same existing `scripts/build_progressive_pass2_work.py` / `scripts/progressive_pass2.py::recompute_eligibility` entrypoint is invoked after every canonical write class that can change current eligibility: accepted/recovered Dossier persistence, PASS 1 durable state persistence, daily pre-AI generation/binding/freshness rebuild, and future PASS 2 attempt persistence. These writers share the existing serialized `taste-steam-review-dossier-canonical-writer` GitHub Actions boundary so a later rebase cannot overwrite the PASS 2 projection with eligibility derived from older canonical inputs.
+
+**Почему:** eligibility depends jointly on current exact PASS 1 `analysis_incomplete`, current semantic generation/work identity, exact canonically accepted Dossier content/binding/freshness and unconsumed PASS 2 attempt state. Wiring only Dossier acceptance would leave already-accepted Dossiers invisible when PASS 1 later becomes incomplete; wiring only PASS 1 would miss later Dossier acceptance; relying only on the daily build would leave both stale until an unrelated event. Separate concurrency domains would still permit a stale projection overwrite after concurrent writers rebase.
+
+**Freshness boundary:** daily preparation recomputes normal freshness/binding changes. Wall-clock expiry between GitHub writes does not create a new scheduler: prepared work carries the exact Dossier expiry, the future semantic worker checks expiry/binding immediately before starting an item, and GitHub recomputes authorization from current canonical truth immediately before accepting a PASS 2 result/terminal receipt. Expired or rebound work therefore cannot consume an attempt or become canonical.
+
+**Граница:** PASS 2 remains inactive until a separate accepted activation. Projection consumes zero attempts. Buffered/unaccepted/failed Dossier artifacts remain non-authoritative; PASS 1 semantics, Dossier evidence/identity/recovery semantics and site ranking are unchanged. No polling daemon, second queue owner, retry loop or additional recurring producer is created.
+
+**Сознательно отвергнуто:** Dossier-only hook; PASS1-only hook; daily-only reconciliation; ChatGPT-owned queue/retry state; a new expiry polling scheduler; separate unsynchronized PASS 2 projection writers.
+
+**Основные места:** `config/progressive_pass2_contract.json`, `scripts/build_progressive_pass2_work.py`, `scripts/ingest_progressive_pass2.py`, `.github/workflows/ingest-progressive-pass1.yml`, `.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml`, `.github/workflows/build-pre-ai-store-snapshot.yml`, `.github/workflows/ingest-progressive-pass2.yml`.
