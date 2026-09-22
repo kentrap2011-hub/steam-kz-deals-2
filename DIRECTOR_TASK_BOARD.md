@@ -284,6 +284,40 @@ Next step:
 - the final pixel-icon/card indicators and dedicated Statistics page remain separate UI work.
 
 
+## ACTIVE — ЧАТ 2 — Progressive Deep production activation + live acceptance
+
+Task:
+`WORKER_TASK_PROGRESSIVE_DEEP_PRODUCTION_ACTIVATION_LIVE_ACCEPTANCE_01.md`
+
+Worker slot:
+`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
+
+Mode:
+`IMPLEMENT / ACTIVATE / VALIDATE`
+
+Structure:
+- Phase A: activate GitHub canonical Deep truth, validate zero-attempt activation, then stop for exact user Scheduled Task action;
+- Phase B: continue in the SAME physical ЧАТ 2 after the user's single `Run now`, verify canonical ingest/state/projection and close live acceptance.
+
+Canonical scheduler target:
+- title `Progressive Deep Worker`;
+- one task only;
+- hourly at :30, `Europe/Samara`;
+- exact loader prompt is fixed in the task;
+- duplicate guard checks both legacy `Progressive PASS 2 Worker` and current `Progressive Deep Worker`.
+
+Guards:
+- no semantic execution before repository activation is validated;
+- user performs scheduler creation/config/enable and exactly one first `Run now`;
+- no second Run now before GitHub verification;
+- no new queue/retry owner or second scheduler;
+- preserve `FAST-DOSSIER-DEEP-V1`.
+
+Expected report:
+`reviews/worker_reports/progressive-deep-production-activation-live-acceptance-01.md`
+
+Final acceptance requires at least one canonically accepted Deep semantic result when executable work existed; terminal receipt alone is not sufficient for full live acceptance.
+
 ## DRAFT / NOT AUTHORIZED — Progressive site progress header compaction
 
 Task:
