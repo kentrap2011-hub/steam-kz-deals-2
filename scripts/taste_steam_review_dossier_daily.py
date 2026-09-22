@@ -52,7 +52,7 @@ def load_contract(path):
     checkpoint = doc.get("checkpointing") or {}
     if checkpoint.get("owner") != "github_control_plane" or checkpoint.get("semantics") != "internal_durability_boundary_not_scope_quota":
         raise ValueError("Daily dossier checkpoint ownership/semantics are invalid")
-    if checkpoint.get("advance_rule") != "after_successful_checkpoint_persistence_advance_progress_inside_same_snapshot_without_queue_or_store_scope_rebuild":
+    if checkpoint.get("advance_rule") != "after_successful_group_persistence_classify_that_exact_group_accepted_without_requiring_earlier_failed_groups_to_recover":
         raise ValueError("Daily dossier same-snapshot advance rule is invalid")
     if not isinstance(checkpoint.get("checkpoint_size"), int) or checkpoint["checkpoint_size"] <= 0:
         raise ValueError("Daily dossier checkpoint size is invalid")
