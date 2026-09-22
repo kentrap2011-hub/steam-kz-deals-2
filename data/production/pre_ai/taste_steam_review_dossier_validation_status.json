@@ -1,9 +1,9 @@
 {
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-STATUS-V2",
   "schema_version": 2,
-  "snapshot_id": "9cf59f4d94d1b4c7270bece5464666e3eb2359b87bd74cbefe3883b969f90689",
-  "prepared_required_sha256": "39867146352844fbbf1ff442b64adc63ca14ba1d0793570909486c3e602d033d",
-  "group_plan_sha256": "b12e3a0c49ebc80e443f17240b738228f4035e6ebbbfef2d28901a1e134686a3",
+  "snapshot_id": "c4eb260d36f55f5205cb8128886a49d79fe824ab456305d80905970d38fc5e42",
+  "prepared_required_sha256": "8bcd232d2c63fe5228c30a69db738d1eb22306e04f0eecea77c570dbd6356ddb",
+  "group_plan_sha256": "e546324e415c50e17686d6117dcb89e91b32e96caaad8391e2e3892f885911e8",
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
@@ -18,51 +18,17 @@
     "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
     "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
   },
-  "next_pending_sequence": 12,
-  "accepted_group_count": 8,
-  "failed_group_count": 3,
-  "pending_group_count": 173,
+  "next_pending_sequence": 1,
+  "accepted_group_count": 0,
+  "failed_group_count": 0,
+  "pending_group_count": 178,
   "normal_first_pass_complete": false,
   "all_groups_accepted": false,
   "full_backlog_complete": false,
   "candidate_count": 0,
   "valid_candidate_count": 0,
   "invalid_candidate_count": 0,
-  "failed_groups_pending_recovery": [
-    {
-      "sequence": 1,
-      "group_sha256": "f10c6afc90ff5ccda25e2aa915a096dfe9d5ac1d5e47ce8ee54c1b6785cc1aaf",
-      "failure": {
-        "validator_error": "buffered dossier group identity mismatch: items",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9cf59f4d94d1b4c7270bece5464666e3eb2359b87bd74cbefe3883b969f90689--g000001--f10c6afc90ff5ccda25e2aa915a096dfe9d5ac1d5e47ce8ee54c1b6785cc1aaf.json",
-        "artifact_sha256": "dd89f1bcd3f26e3bb8fed9c1a387d1144f91faf761e4a024fe39ec5918af6733",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9cf59f4d94d1b4c7270bece5464666e3eb2359b87bd74cbefe3883b969f90689/g000001/9cf59f4d94d1b4c7270bece5464666e3eb2359b87bd74cbefe3883b969f90689--g000001--f10c6afc90ff5ccda25e2aa915a096dfe9d5ac1d5e47ce8ee54c1b6785cc1aaf.json.invalid-dd89f1bcd3f2",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 2,
-      "group_sha256": "9198d70df050c582564824a3fe9e87dfa3e62d76631a6068f3f4674c1cb35aaa",
-      "failure": {
-        "validator_error": "buffered dossier group identity mismatch: items",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9cf59f4d94d1b4c7270bece5464666e3eb2359b87bd74cbefe3883b969f90689--g000002--9198d70df050c582564824a3fe9e87dfa3e62d76631a6068f3f4674c1cb35aaa.json",
-        "artifact_sha256": "c026310c1c4406f4e949027e9ad9b7553fa7afb58e5209bb57926115636b3ee1",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9cf59f4d94d1b4c7270bece5464666e3eb2359b87bd74cbefe3883b969f90689/g000002/9cf59f4d94d1b4c7270bece5464666e3eb2359b87bd74cbefe3883b969f90689--g000002--9198d70df050c582564824a3fe9e87dfa3e62d76631a6068f3f4674c1cb35aaa.json.invalid-c026310c1c44",
-        "recovery_eligible": true
-      }
-    },
-    {
-      "sequence": 11,
-      "group_sha256": "0907a85fd5538fb04607c4f1b8035e0aa5a89bc64fc67c23440767e8643e2dcb",
-      "failure": {
-        "validator_error": "duplicate or aliased provenance source reference is forbidden",
-        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9cf59f4d94d1b4c7270bece5464666e3eb2359b87bd74cbefe3883b969f90689--g000011--0907a85fd5538fb04607c4f1b8035e0aa5a89bc64fc67c23440767e8643e2dcb.json",
-        "artifact_sha256": "fb816995df8dacf0fdcfca6cb9f07c6b4f626a18e3aaefd2a6b6cc6036b5f0b1",
-        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9cf59f4d94d1b4c7270bece5464666e3eb2359b87bd74cbefe3883b969f90689/g000011/9cf59f4d94d1b4c7270bece5464666e3eb2359b87bd74cbefe3883b969f90689--g000011--0907a85fd5538fb04607c4f1b8035e0aa5a89bc64fc67c23440767e8643e2dcb.json.invalid-fb816995df8d",
-        "recovery_eligible": true
-      }
-    }
-  ],
+  "failed_groups_pending_recovery": [],
   "candidate_groups": [],
   "malformed_current_snapshot_artifacts": [],
   "canonical_progress_authority": false,

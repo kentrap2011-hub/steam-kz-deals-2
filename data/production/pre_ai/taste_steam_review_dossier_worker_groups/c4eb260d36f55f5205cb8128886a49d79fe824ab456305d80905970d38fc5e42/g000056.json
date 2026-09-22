@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "c4eb260d36f55f5205cb8128886a49d79fe824ab456305d80905970d38fc5e42",
+  "prepared_required_sha256": "8bcd232d2c63fe5228c30a69db738d1eb22306e04f0eecea77c570dbd6356ddb",
+  "group_plan_sha256": "e546324e415c50e17686d6117dcb89e91b32e96caaad8391e2e3892f885911e8",
+  "group_count": 178,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+    "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+    "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+  },
+  "sequence": 56,
+  "start_index": 165,
+  "end_index_exclusive": 168,
+  "appids": [
+    "1835240",
+    "1836730",
+    "1839510"
+  ],
+  "items_sha256": "bf2cde90ce2aa221ee9b93d578e4124eebf9e39b3c9c7fb9dcc851aefc754591",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "db3f6e3c2b92e2bf47f293585c405d2d19fa276c6911c7fcdd124db18f3eda1d",
+  "items": [
+    {
+      "key": "App_1835240",
+      "appid": "1835240",
+      "title": "Spiritfall",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1835240.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1836730",
+      "appid": "1836730",
+      "title": "Echo Point Nova",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1836730.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1839510",
+      "appid": "1839510",
+      "title": "RPG Time: The Legend of Wright",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1839510.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "71b8bf127cd53a6fb66bd918eb3073b0fa2a09446d2fbbfa8f8837796ef476e6"
+}
