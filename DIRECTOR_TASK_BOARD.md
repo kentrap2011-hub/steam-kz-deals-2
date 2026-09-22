@@ -92,6 +92,28 @@ Director acceptance:
 - the existing task's enabled/hourly post-state could not be re-attested from the worker session;
 - next action must happen at the platform/operator Scheduled Task layer, not in repository code.
 
+## ACTIVE — Taste Dossier non-blocking group progress
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_NONBLOCKING_GROUP_PROGRESS_IMPLEMENT_01.md`
+
+Worker slot:
+`СУЩЕСТВУЮЩИЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
+
+Mode:
+`IMPLEMENT / ACTIVATE / VALIDATE`
+
+User-authoritative correction:
+- one invalid/failed Dossier group must never block later groups;
+- valid groups persist independently;
+- failed groups become a separate GitHub-owned recovery set;
+- normal first-pass traversal resumes from the next pending group, not the first historical failure;
+- current invalid g000005 must become failed/incomplete and stop pinning g000006+;
+- Scheduled Dossier must never disable/edit its own recurring schedule because of a group-level failure.
+
+Expected report:
+`reviews/worker_reports/taste-dossier-nonblocking-group-progress-implement-01.md`
+
 ## ACCEPTED — Progressive PASS 2 Dossier-ready gate amendment
 
 Task:
