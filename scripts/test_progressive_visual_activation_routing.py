@@ -28,7 +28,7 @@ def compatible_visual(source='S'):
                 'dossier_stage_state': 'accepted',
                 'deep_stage_state': 'completed', 'deep_stage_outcome': 'fit',
                 'deep_recovery_state': 'none',
-                'effective_personalized_result_source': 'deep',
+                'effective_analysis_source': 'deep',
             },
             {
                 'id': 'B', 'analysis_state': 'analysis_incomplete', 'analysis_tier': 2,
@@ -36,7 +36,7 @@ def compatible_visual(source='S'):
                 'dossier_stage_state': 'failed_or_recovery',
                 'deep_stage_state': 'waiting_for_dossier', 'deep_stage_outcome': None,
                 'deep_recovery_state': 'none',
-                'effective_personalized_result_source': 'none',
+                'effective_analysis_source': 'none',
             },
             {
                 'id': 'C', 'analysis_state': 'not_analyzed', 'analysis_tier': 3,
@@ -44,7 +44,7 @@ def compatible_visual(source='S'):
                 'dossier_stage_state': 'accepted',
                 'deep_stage_state': 'eligible_or_pending', 'deep_stage_outcome': None,
                 'deep_recovery_state': 'none',
-                'effective_personalized_result_source': 'none',
+                'effective_analysis_source': 'none',
             },
         ],
         'progressive_personalization': {
