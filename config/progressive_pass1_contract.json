@@ -137,7 +137,7 @@
     "completed_deep_may_replace_fast_effective_result_without_rewriting_fast_history": true
   },
   "pass2": {
-    "active": false,
+    "active": true,
     "implemented": true,
     "contract": "config/progressive_pass2_contract.json",
     "eligibility_recompute_after_pass1_persistence": true,
@@ -148,8 +148,8 @@
     "fast_success_suppresses_deep": false,
     "authoritative_deep_completion_suppresses_future_fast_for_same_current_identity": true,
     "runtime_adaptation_required": false,
-    "status": "runtime_adapted_inactive",
-    "note": "Deep runtime now follows FAST-DOSSIER-DEEP-V1. Current authoritative Deep completion suppresses future Fast for the same exact identity; unresolved/recovery Deep never suppresses Fast."
+    "status": "production_active",
+    "note": "Deep runtime now follows FAST-DOSSIER-DEEP-V1 and is production-active. Current authoritative Deep completion suppresses future Fast for the same exact identity; unresolved/recovery Deep never suppresses Fast."
   },
   "user_stage": {
     "id": "fast",
