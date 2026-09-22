@@ -106,14 +106,19 @@ class PackageMemberDossierAggregationTests(unittest.TestCase):
         self.assertEqual(mapping["member_appids"], ["222222"])
         self.assertEqual(mapping["members"][0]["dossier_key"], "App_222222")
 
-    def test_sub_87601_live_queue_uses_only_game_subjects_and_manifest_binds_package_mapping(self):
+    def test_sub_87601_package_uses_only_game_subjects_and_manifest_binds_package_mapping(self):
         queue_path = ROOT / "data/production/pre_ai/chatgpt_taste_queue.jsonl"
         all_rows = [json.loads(line) for line in queue_path.read_text(encoding="utf-8").splitlines() if line.strip()]
         by_key = {row["taste_subject_key"]: row for row in all_rows}
         self.assertNotIn("Sub_87601", by_key, "package must not be reintroduced as a second semantic subject")
-        direct_304240 = by_key["App_304240"]
-        direct_339340 = by_key["App_339340"]
-        queue_rows = [direct_304240, direct_339340]
+
+        # Daily queue membership is intentionally dynamic. Exercise the invariant with
+        # deterministic direct game subjects instead of requiring these games to be
+        # present in today's live queue.
+        queue_rows = [
+            _app_row("304240", "Resident Evil"),
+            _app_row("339340", "Resident Evil 0"),
+        ]
 
         resolution = resolve_dossier_scope_identities(queue_rows, CONTRACT)
         self.assertEqual(resolution["identity_blocked_items"], [])
