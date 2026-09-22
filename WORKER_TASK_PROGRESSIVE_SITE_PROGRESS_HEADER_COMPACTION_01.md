@@ -1,5 +1,8 @@
 # WORKER TASK — Progressive Site Progress Header Compaction 01
 
+Status: DRAFT_NOT_AUTHORIZED
+User decision gate: discussion in Director chat is still open. Do not execute this task until the Director explicitly re-authorizes it after user approval.
+
 Repository: kentrap2011-hub/steam-kz-deals-2
 Base branch / source of truth: main
 
