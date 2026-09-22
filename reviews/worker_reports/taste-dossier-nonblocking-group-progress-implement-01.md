@@ -112,7 +112,7 @@ Prepared scope SHA: `39867146352844fbbf1ff442b64adc63ca14ba1d0793570909486c3e602
 - **NB-13 PASS** — hourly external cadence preserved; no scheduler added.
 - **NB-14 PASS** — first-pass exhaustion is separate from all-evidence acceptance.
 - **NB-15 PASS** — no PASS 1/PASS 2/Taste Semantic Producer behavior changed.
-- **NB-16 PASS pending final report commit/reread protocol** — this report is the durable closeout artifact and must be reread from `main` after its commit before final response.
+- **NB-16 PASS** — durable report commit exists; this final report revision is reread from `main` immediately before the final response.
 
 ## Remaining operator validation
 
