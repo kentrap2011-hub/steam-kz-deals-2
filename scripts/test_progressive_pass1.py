@@ -138,7 +138,7 @@ def main():
     assert contract['transport']['one_result_artifact_per_item'] is True
     assert contract['transport']['batch_atomicity'] is False
     assert contract['transport']['maximal_contiguous_prefix'] is False
-    assert contract['pass2']['active'] is False
+    assert contract['pass2']['active'] is True
 
     base_projection = projection('commercial-A')
     generation_a = progressive_pass1.semantic_generation(base_projection)
