@@ -67,8 +67,8 @@ def load_contract(path=CONTRACT):
         raise ValueError('progressive PASS 1 contract mismatch')
     if contract.get('status') != 'canonical' or contract.get('phase') != 'phase_b_pass1':
         raise ValueError('progressive PASS 1 contract is not canonical Phase B')
-    if (contract.get('pass2') or {}).get('active') is not False:
-        raise ValueError('PASS 2 must remain inactive')
+    if (contract.get('pass2') or {}).get('active') is not True:
+        raise ValueError('PASS 2 must be production-active')
     budget = contract.get('attempt_budget') or {}
     if budget.get('maximum_attempts_per_work_id') != 1 or budget.get('automatic_pass1_retry') is not False:
         raise ValueError('PASS 1 one-attempt budget mismatch')
