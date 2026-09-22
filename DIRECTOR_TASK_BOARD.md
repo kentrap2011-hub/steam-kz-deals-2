@@ -222,35 +222,18 @@ Expected report:
 Next gate after report acceptance:
 - activate PASS 2 through a separate bounded activation step, configure exactly one Scheduled Task, and perform one controlled live `Run now` acceptance.
 
-## ACTIVE — ЧАТ 2 — Progressive site progress header compaction
+## DRAFT / NOT AUTHORIZED — Progressive site progress header compaction
 
 Task:
 `WORKER_TASK_PROGRESSIVE_SITE_PROGRESS_HEADER_COMPACTION_01.md`
 
-Worker slot:
-`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
+State:
+- created prematurely before product discussion was complete;
+- no worker assignment is active;
+- do not send this task to any worker chat;
+- discuss the desired mobile/header design with the user first;
+- only after explicit user approval may Director revise/re-authorize the task and assign a NEW physical worker chat.
 
-Conversation state:
-- previous physical ЧАТ 2 completed the Dossier group identity items mismatch fix and is retired;
-- this is a new independent UI task and must start in a NEW physical ЧАТ 2 under the single-task-per-chat rule.
-
-Mode:
-`IMPLEMENT / VALIDATE`
-
-User requirements:
-- reduce the oversized mobile progress/header area;
-- remove ambiguity of generic `Разобрано`;
-- visibly separate PASS 1, PASS 2, and Dossier progress;
-- retain compact fit/not-fit/incomplete/not-analyzed outcomes;
-- static metrics must not look like non-working buttons.
-
-Parallel safety:
-- web/presentation scope only where possible;
-- do not modify PASS 2 integration/runtime/contracts/workflows currently owned by active ЧАТ 1;
-- if a missing presentation field would require an overlapping file, record the dependency instead of creating a merge race.
-
-Expected report:
-`reviews/worker_reports/progressive-site-progress-header-compaction-01.md`
 
 ## ACCEPTED — Progressive PASS 2 Phase C core implementation
 
