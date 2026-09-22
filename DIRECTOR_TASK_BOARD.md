@@ -104,7 +104,12 @@ Task:
 `WORKER_TASK_TASTE_DOSSIER_NONBLOCKING_GROUP_PROGRESS_IMPLEMENT_01.md`
 
 Worker slot:
-`СУЩЕСТВУЮЩИЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
+`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
+
+State:
+- previous physical ЧАТ 1 was reported stuck by the user and is retired;
+- continue the same existing task in a NEW physical ЧАТ 1;
+- no new task scope is created.
 
 Mode:
 `IMPLEMENT / ACTIVATE / VALIDATE`
@@ -120,28 +125,32 @@ User-authoritative correction:
 Expected report:
 `reviews/worker_reports/taste-dossier-nonblocking-group-progress-implement-01.md`
 
-## ACTIVE — Progressive PASS 2 Phase C core implementation
+## ACCEPTED — Progressive PASS 2 Phase C core implementation
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PASS2_PHASE_C_CORE_IMPLEMENT_01.md`
 
-Worker slot:
-`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
-
-Mode:
-`IMPLEMENT / VALIDATE`
-
-Scope:
-- implement the inactive GitHub-owned PASS 2 core on Progressive-owned surfaces;
-- preserve the accepted exact Dossier-ready gate and one-attempt semantics;
-- add exact immutable work/result/receipt accounting and PASS 2 provenance;
-- add site-visible PASS 2 provenance labels;
-- keep `pass2_active=false` and perform no production PASS 2 run;
-- do not modify Dossier-owned runtime/workflow files while ЧАТ 1 is still implementing non-blocking Dossier progress;
-- defer only the final Dossier-persistence -> PASS 2 eligibility wiring until ЧАТ 1 is accepted.
-
-Expected report:
+Report:
 `reviews/worker_reports/progressive-pass2-phase-c-core-implement-01.md`
+
+Final status:
+`complete_core_ready_for_director_acceptance`
+
+Director acceptance:
+- GitHub-owned PASS 2 core is implemented and validated;
+- exact Dossier-ready eligibility and one-attempt-per-generation/work semantics are preserved;
+- immutable work/result/terminal-receipt accounting is implemented;
+- PASS 1 history remains distinct from PASS 2 current resolution;
+- site provenance can distinguish PASS 2 fit and PASS 2 unresolved outcomes;
+- PASS 2 remains inactive and no production attempt/run occurred;
+- no Dossier-owned runtime/workflow file was modified;
+- focused PASS 2 CI passed.
+
+Deferred dependency:
+- canonical Dossier persistence -> PASS 2 eligibility recomputation wiring remains deferred until the Dossier non-blocking task is accepted.
+
+Next step:
+- finish and accept the Dossier non-blocking task, then create one bounded activation/integration task for the Dossier-persistence -> PASS 2 recomputation boundary before any production PASS 2 activation.
 
 ## ACCEPTED — Progressive PASS 2 Dossier-ready gate amendment
 
