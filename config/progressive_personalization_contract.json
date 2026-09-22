@@ -129,7 +129,7 @@
     "pass2_activation_requires_separate_director_acceptance": true
   },
   "phase_c_pass2_design": {
-    "status": "implemented_inactive",
+    "status": "implemented_inactive_integration_wired",
     "active": false,
     "implemented": true,
     "purpose": "One bounded automatic recovery attempt for a current analysis_incomplete item only after GitHub can prove a current exact-compatible canonically accepted Taste Steam Review Dossier for the same item/work identity.",
@@ -205,7 +205,8 @@
       "web_evidence_contract": "config/taste_steam_review_dossier_web_evidence_contract.json",
       "rule": "PASS 2 consumes only canonical accepted dossier truth and does not redefine Dossier evidence, identity, freshness, or compatibility semantics."
     },
-    "activation_guard": "PASS 2 core mechanics are implemented but inactive. No production PASS 2 semantic execution is authorized while config/progressive_pass2_contract.json#active and phase_b_execution.pass2_active remain false. Dossier-persistence recomputation wiring and production activation require a separate accepted follow-up.",
-    "implementation_contract": "config/progressive_pass2_contract.json"
+    "activation_guard": "PASS 2 core and GitHub-owned eligibility recomputation are implemented while semantic execution remains inactive. No production PASS 2 semantic execution is authorized while config/progressive_pass2_contract.json#active and phase_b_execution.pass2_active remain false. Production activation requires a separate Director-accepted activation action and one dedicated Scheduled Task.",
+    "implementation_contract": "config/progressive_pass2_contract.json",
+    "integration_status": "github_owned_recomputation_wired_inactive"
   }
 }
