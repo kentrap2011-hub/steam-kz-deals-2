@@ -28,6 +28,41 @@ Immediate active work:
 - current published projection reflects accepted PASS 1 results;
 - PASS 2 remains inactive and requires separate authorization.
 
+## ACTIVE — Scheduled production blockers diagnostics
+
+Two independent READ-ONLY / RECON tasks are authorized before any PASS 2 implementation.
+
+### ЧАТ 1 — Taste Dossier g000005 existing-artifact block
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_G000005_DUPLICATE_ARTIFACT_BLOCK_DIAGNOSTIC_01.md`
+
+Expected report:
+`reviews/worker_reports/taste-dossier-g000005-existing-artifact-block-diagnostic-01.md`
+
+Observed blocker:
+- canonical expects g000005 while its deterministic artifact already exists;
+- worker cannot legally overwrite/skip;
+- user reports the Scheduled Dossier task disabled itself.
+
+### ЧАТ 2 — PASS 1 create-only environment rejection
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PASS1_CREATE_ONLY_ENVIRONMENT_REJECTION_DIAGNOSTIC_01.md`
+
+Expected report:
+`reviews/worker_reports/progressive-pass1-create-only-environment-rejection-diagnostic-01.md`
+
+Observed blocker:
+- Bear and Breakfast result create action was rejected by environment protection before GitHub write;
+- no result was published;
+- user reports the Scheduled PASS 1 task disabled itself.
+
+Scope:
+- diagnosis only;
+- no production mutation, no Scheduled run/edit, no fix implementation;
+- explicitly determine whether self-disabling was authorized.
+
 ## ACCEPTED — Progressive PASS 2 Dossier-ready gate amendment
 
 Task:
