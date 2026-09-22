@@ -55,3 +55,21 @@ jobs:
         run: python scripts/test_progressive_visual_activation_routing.py
       - name: UI provenance regression
         run: node web/progressive-personalization-ui.test.js
+      - name: Recompute inactive production eligibility without consuming attempts
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp data/cache/progressive_pass2_state.json /tmp/progressive-pass2-state-before.json
+          python scripts/build_progressive_pass2_work.py | tee /tmp/progressive-pass2-work.log
+          cmp /tmp/progressive-pass2-state-before.json data/cache/progressive_pass2_state.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          contract=json.loads(Path('config/progressive_pass2_contract.json').read_text(encoding='utf-8'))
+          work=json.loads(Path('data/production/pre_ai/progressive_pass2_work.json').read_text(encoding='utf-8'))
+          state=json.loads(Path('data/cache/progressive_pass2_state.json').read_text(encoding='utf-8'))
+          assert contract.get('active') is False
+          assert work.get('pass2_active') is False
+          assert state.get('entries') == {}
+          print('PROGRESSIVE_PASS2_INACTIVE_PROJECTION=PASS')
+          PY
