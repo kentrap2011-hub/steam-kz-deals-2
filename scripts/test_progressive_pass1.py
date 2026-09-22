@@ -114,7 +114,7 @@ def work_doc(bindings, queue):
         'schema_version': 1,
         'contract': 'PROGRESSIVE-PASS1-WORK-V1',
         'pass1_active': True,
-        'pass2_active': False,
+        'pass2_active': True,
         'semantic_generation_id': generation,
         'items': items,
     }
