@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "PROGRESSIVE-PASS2-EXECUTION-RECEIPT-V1",
+  "title": "Progressive PASS 2 terminal execution submission",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "contract",
+    "semantic_generation_id",
+    "work_id",
+    "family_id",
+    "taste_subject_key",
+    "appid",
+    "taste_fingerprint",
+    "candidate_context_sha256",
+    "dossier_content_sha256",
+    "dossier_compatibility_binding",
+    "authorization_id",
+    "execution_status",
+    "execution_started_at_utc",
+    "execution_finished_at_utc",
+    "terminal_reason"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "contract": {"const": "PROGRESSIVE-PASS2-EXECUTION-RECEIPT-V1"},
+    "semantic_generation_id": {"type": "string", "minLength": 1},
+    "work_id": {"type": "string", "minLength": 1},
+    "family_id": {"type": "string", "minLength": 1},
+    "taste_subject_key": {"type": "string", "minLength": 1},
+    "appid": {"type": "string", "pattern": "^[0-9]+$"},
+    "taste_fingerprint": {"type": "string", "minLength": 1},
+    "candidate_context_sha256": {"type": "string", "minLength": 1},
+    "dossier_content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "dossier_compatibility_binding": {"type": "object"},
+    "authorization_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "execution_status": {"const": "executed_no_accepted_result"},
+    "execution_started_at_utc": {"type": "string", "minLength": 1},
+    "execution_finished_at_utc": {"type": "string", "minLength": 1},
+    "terminal_reason": {
+      "enum": [
+        "worker_failure",
+        "evidence_unavailable",
+        "insufficient_evidence",
+        "base_support_unresolved",
+        "terminal_execution_failure"
+      ]
+    }
+  },
+  "additionalProperties": false
+}
