@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: progressive-pass1-control-plane
+  group: taste-steam-review-dossier-canonical-writer
   cancel-in-progress: false
 
 jobs:
@@ -36,8 +36,13 @@ jobs:
       - name: Ingest independent PASS 1 item artifacts
         run: python scripts/ingest_progressive_pass1.py
 
-      - name: Revalidate PASS 1 state after ingest
-        run: python scripts/test_progressive_pass1.py
+      - name: Recompute Progressive PASS 2 eligibility from accepted PASS 1 state
+        run: python scripts/build_progressive_pass2_work.py
+
+      - name: Revalidate PASS 1 state and PASS 2 projection after ingest
+        run: |
+          python scripts/test_progressive_pass1.py
+          python scripts/test_progressive_pass2.py
 
       - name: Commit PASS 1 state and remaining work
         shell: bash
@@ -45,7 +50,7 @@ jobs:
           set -euo pipefail
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git add -A             data/ai_inbox/progressive_pass1             data/cache/progressive_pass1_state.json             data/cache/progressive_pass1_receipts             data/production/pre_ai/progressive_pass1_work.json
+          git add -A             data/ai_inbox/progressive_pass1             data/cache/progressive_pass1_state.json             data/cache/progressive_pass1_receipts             data/production/pre_ai/progressive_pass1_work.json             data/production/pre_ai/progressive_pass2_work.json
           if git diff --cached --quiet; then
             echo "Progressive PASS 1 state already current"
             exit 0
