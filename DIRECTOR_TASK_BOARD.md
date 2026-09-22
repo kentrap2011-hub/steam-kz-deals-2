@@ -98,32 +98,39 @@ Director conclusion:
 - do not alter the PASS 1 contract or GitHub connection based on the prior transient failure;
 - continue normal Scheduled PASS 1 operation and only reopen transport diagnosis if the pre-GitHub rejection recurs persistently.
 
-## ACTIVE — Taste Dossier non-blocking group progress
+## ACCEPTED — Taste Dossier non-blocking group progress
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_NONBLOCKING_GROUP_PROGRESS_IMPLEMENT_01.md`
 
-Worker slot:
-`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
-
-State:
-- previous physical ЧАТ 1 was reported stuck by the user and is retired;
-- continue the same existing task in a NEW physical ЧАТ 1;
-- no new task scope is created.
-
-Mode:
-`IMPLEMENT / ACTIVATE / VALIDATE`
-
-User-authoritative correction:
-- one invalid/failed Dossier group must never block later groups;
-- valid groups persist independently;
-- failed groups become a separate GitHub-owned recovery set;
-- normal first-pass traversal resumes from the next pending group, not the first historical failure;
-- current invalid g000005 must become failed/incomplete and stop pinning g000006+;
-- Scheduled Dossier must never disable/edit its own recurring schedule because of a group-level failure.
-
-Expected report:
+Report:
 `reviews/worker_reports/taste-dossier-nonblocking-group-progress-implement-01.md`
+
+Final status:
+`complete_ready_for_user_scheduled_validation`
+
+Director acceptance:
+- the old single canonical-expected / maximal-contiguous-prefix model is replaced by independent per-group `pending / accepted / failed_or_invalid_pending_recovery` state;
+- one invalid group no longer blocks valid later groups;
+- valid groups persist independently and failed groups move to separate GitHub-owned recovery;
+- normal traversal resumes from the next pending group rather than the first historical failure;
+- strict validation, create-only transport, snapshot binding, and GitHub ownership are preserved;
+- the historical g000005 was never accepted and is now stale-quarantined because its snapshot was legitimately superseded during activation;
+- the 12 previously accepted dossiers remain in canonical cache;
+- focused and canonical build validation passed;
+- PASS 1, PASS 2, and Taste Semantic Producer behavior were not changed.
+
+Current Dossier state:
+- active snapshot `9cf59f4d94d1b4c7270bece5464666e3eb2359b87bd74cbefe3883b969f90689`;
+- 184 canonical groups, 184 pending, 0 accepted, 0 failed;
+- next pending `g000001`;
+- normal first pass not complete;
+- all-groups-accepted/full-backlog-complete remain false.
+
+Remaining validation:
+- exactly one clean `Run now` of the existing `Taste Steam Review Dossier` Scheduled Task against the current V2 index;
+- do not change its schedule and do not create another task;
+- after the run, verify GitHub ingest classified any published groups independently before PASS 2 activation/integration proceeds.
 
 ## ACCEPTED — Progressive PASS 2 Phase C core implementation
 
