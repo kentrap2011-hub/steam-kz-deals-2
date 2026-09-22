@@ -50,15 +50,15 @@ These are producer-owned fields; no browser-side stage reconstruction or final p
 
 Fast fields: `fast_total_current_scope`, `fast_attempted_count`, `fast_completed_fit_count`, `fast_completed_not_fit_count`, `fast_incomplete_count`, `fast_error_count`, `fast_skipped_due_to_authoritative_deep_count`, `fast_remaining_count`.
 
-Current Fast projection: total **540**; attempted **60** = fit **0** + not-fit **0** + incomplete **57** + error **3**; skipped due to authoritative Deep **0**; remaining **480**.
+Current Fast projection at main snapshot `9e00cbd28c88271c9718398b40d2a19b9c611f67`: total **540**; attempted **65** = fit **0** + not-fit **0** + incomplete **62** + error **3**; skipped due to authoritative Deep **0**; remaining **475**.
 
 Dossier fields: `dossier_total_current_scope`, `dossier_accepted_count`, `dossier_pending_count`, `dossier_failed_or_recovery_count`, `dossier_normal_first_pass_complete`, `dossier_all_accepted_or_recovered_complete`, plus `dossier_observability`.
 
-Current Dossier projection: total **556**; accepted **18**; pending **532**; failed/recovery **6**; normal-first-pass complete **false**; all accepted/recovered complete **false**; observability `available`.
+Current Dossier projection at the same snapshot: total **556**; accepted **24** (= 6 already-current outside required work + 18 accepted required); pending **526**; failed/recovery **6**; normal-first-pass complete **false**; all accepted/recovered complete **false**; observability `available`.
 
 Deep fields: `deep_total_current_coverage_target`, `deep_first_pass_attempted_count`, `deep_authoritative_completed_count`, `deep_completed_fit_count`, `deep_completed_not_fit_count`, `deep_incomplete_or_recovery_count`, `deep_waiting_for_dossier_count`, `deep_ready_or_pending_count`, `deep_normal_first_pass_remaining_count`, `deep_remaining_until_all_authoritative_count`, `deep_normal_first_pass_complete`, `deep_all_current_authoritative_complete`.
 
-Current regenerated inactive Deep projection: target **540**; first-pass attempted **0**; authoritative completed **0**; completed fit **0**; completed not-fit **0**; incomplete/recovery **0**; waiting for Dossier **523**; ready/pending **17**; normal first-pass remaining **540**; remaining until all authoritative **540**; both completion flags **false**. Recovery-owned/eligible/pending attempt counts are all **0**. The 17 ready items are inactive work projection only; no semantic execution occurred.
+Current regenerated inactive Deep projection at the same snapshot: target **540**; first-pass attempted **0**; authoritative completed **0**; completed fit **0**; completed not-fit **0**; incomplete/recovery **0**; waiting for Dossier **518**; ready/pending **22**; normal first-pass remaining **540**; remaining until all authoritative **540**; both completion flags **false**. Recovery-owned/eligible/pending attempt counts are all **0**. The 22 ready items are inactive work projection only; no semantic execution occurred.
 
 ## Recompute trigger graph
 
@@ -78,11 +78,11 @@ Recompute is idempotent, zero-attempt, exact-bound, and sibling-nonblocking.
 - DEEP-09..12: unresolved first pass moves only that identity to recovery ownership; normal work does not reemit it; recovery requires fresh explicit GitHub authorization; repeated/time-based recomputation cannot create a blind retry or hidden quota.
 - DEEP-13: normal first-pass completeness and all-authoritative completeness reconcile separately.
 - DEEP-14..16: exact producer stage fields and independent stage denominators reconcile; Dossier observability failure is non-blocking.
-- DEEP-17: canonical builder regenerated `data/production/pre_ai/progressive_pass2_work.json` under the new predicate with 17 ready/pending items and zero attempts.
+- DEEP-17: canonical main recompute regenerated `data/production/pre_ai/progressive_pass2_work.json` under the new predicate; current snapshot has 22 ready/pending items and zero attempts.
 - DEEP-18..19: Fast/Dossier semantic histories remain untouched; exact binding, ingest-time recomputation, and existing serialized GitHub ownership remain intact.
 - DEEP-20: every Deep/PASS 2 activation mirror remains false and durable Deep attempt count remains zero.
-- DEEP-21: GitHub Actions run `35771238162` at head `57bb59c63cef69632154861efb988658dd0e08c1` passed compile, Deep core/integration, PASS 1, personalization, unresolved-row, visual-routing, UI provenance, real Fast/Dossier accounting, and inactive Deep recomputation checks.
-- DEEP-22: completion gate is to commit this report to `main` and reread this exact path from `main` before the final chat response; the final reread is performed after integration.
+- DEEP-21: branch GitHub Actions run `35771238162` passed the full focused/canonical suite; after main integration and the final ownership-mirror correction, main run `35771819937` also passed `Validate Progressive PASS 2 core` at commit `7a28393f49cf426cebee238789a47d56e818206d`.
+- DEEP-22: PASS gate: this report was committed to `main` with the runtime integration, reread from `main` after canonical recomputation, and this final count/ref correction is reread once more from `main` before the final chat response.
 
 ## Activation proof
 
@@ -101,7 +101,11 @@ No Deep Scheduled Task was created, edited, enabled, or run. No production Deep 
 - Deep state contract: `PROGRESSIVE-PASS2-STATE-V2`
 - Deep work contract: `PROGRESSIVE-PASS2-WORK-V1` schema version 2
 - Recovery authorization contract: `PROGRESSIVE-PASS2-RECOVERY-AUTHORIZATION-V1`
-- Main integration commit and DEEP-22 reread: recorded after integration in the final completion gate.
+- Main runtime integration commit: `e3b5cdc362dbe4ba902f389d1099fcebf90065b3`
+- Canonical new-predicate Deep projection was present on main by `eca72463651fb10050c438dbec6597935b0ecd45`; final count snapshot verified at `9e00cbd28c88271c9718398b40d2a19b9c611f67`
+- Ownership mirror correction: `7a28393f49cf426cebee238789a47d56e818206d`
+- Main PASS 2 validation run: `35771819937` (success)
+- DEEP-22 initial main reread completed before this final report correction; exact final report reread is the last pre-response gate.
 
 ## Recommended next step
 
