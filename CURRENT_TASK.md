@@ -688,3 +688,13 @@
 - PASS 2 remains inactive; no production PASS 2 result/receipt/attempt was created and no PASS 2 Scheduled Task was created/edited/enabled/disabled/run;
 - exact future one-task configuration and repository-activation -> task-enable -> first-`Run now` order are fixed in the durable report;
 - durable report: `reviews/worker_reports/progressive-pass2-dossier-integration-activation-prep-01.md`.
+
+
+## Worker in progress — 2026-09-22
+
+### Progressive Fast / Dossier / Deep architecture amendment 01
+Статус: `in_progress_contract_architecture_only`.
+- worker task: `WORKER_TASK_PROGRESSIVE_FAST_DOSSIER_DEEP_ARCHITECTURE_AMENDMENT_01.md`;
+- scope: canonical Fast / Dossier / Deep contract amendment only;
+- Deep/PASS 2 remains inactive; no Scheduled Deep task or production backlog execution is authorized;
+- old recovery-only PASS 2 activation plan is superseded; reusable GitHub recomputation/exact-binding wiring is preserved for later runtime adaptation.
