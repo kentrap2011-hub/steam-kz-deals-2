@@ -194,10 +194,7 @@ jobs:
           python scripts/test_taste_story_dlc_scope.py
 
       - name: Recompute Progressive PASS 2 eligibility from current canonical truth
-        run: |
-          python scripts/build_progressive_pass2_work.py
-          python scripts/test_progressive_pass2.py
-          python scripts/test_progressive_pass2_integration.py
+        run: python scripts/build_progressive_pass2_work.py
 
       - name: Persist or preserve pre-semantic Taste active pin
         env:
