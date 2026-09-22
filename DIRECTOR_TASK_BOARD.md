@@ -152,7 +152,11 @@ Task:
 `WORKER_TASK_TASTE_DOSSIER_GROUP_IDENTITY_ITEMS_MISMATCH_FIX_01.md`
 
 Worker slot:
-`СУЩЕСТВУЮЩИЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
+`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
+
+Conversation state:
+- previous physical ЧАТ 2 completed the separate Progressive PASS 2 Phase C task and is retired for unrelated work;
+- this identity-mismatch fix must start in a NEW physical ЧАТ 2 under the single-task-per-chat rule.
 
 Mode:
 `DIAGNOSE / IMPLEMENT / VALIDATE`
