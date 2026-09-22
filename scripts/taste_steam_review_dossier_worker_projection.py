@@ -37,6 +37,10 @@ def _projection_contract(contract):
     expected_template = paths["worker_groups_root"].rstrip("/") + "/{snapshot_id}/g{sequence:06d}.json"
     if template != expected_template:
         raise ValueError("compact dossier worker descriptor path template is invalid")
+    if projection.get("buffer_identity_fields_source") != "buffered_submission.group_plan.immutable_descriptor_required_fields":
+        raise ValueError("compact dossier worker buffer identity field source is invalid")
+    if projection.get("buffer_candidate_serialization_rule") != "verbatim_deep_copy_group_descriptor_replace_schema_marker_then_add_dossiers":
+        raise ValueError("compact dossier worker buffer serialization rule is invalid")
     return projection
 
 
@@ -70,6 +74,39 @@ def _runtime_prompt_binding(contract):
         "runtime_prompt_revision": revision,
         "runtime_prompt_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
     }
+
+
+def _buffer_identity_fields(contract):
+    fields = (
+        ((contract.get("buffered_submission") or {}).get("group_plan") or {})
+        .get("immutable_descriptor_required_fields")
+    )
+    if (
+        not isinstance(fields, list)
+        or not fields
+        or any(not isinstance(field, str) or not field for field in fields)
+        or len(fields) != len(set(fields))
+        or "items" not in fields
+    ):
+        raise ValueError("canonical buffered dossier identity field set is invalid")
+    return copy.deepcopy(fields)
+
+
+def buffered_candidate_descriptor_projection(descriptor, contract):
+    """Deep-copy the exact worker descriptor identity for buffered candidate construction."""
+    if (
+        not isinstance(descriptor, dict)
+        or descriptor.get("schema") != WORKER_GROUP_SCHEMA
+        or descriptor.get("schema_version") != 1
+    ):
+        raise ValueError("buffered candidate source descriptor is missing or unsupported")
+    for field in _buffer_identity_fields(contract):
+        if field not in descriptor:
+            raise ValueError(f"buffered candidate source descriptor is missing identity field: {field}")
+    projected = copy.deepcopy(descriptor)
+    projected.pop("schema")
+    projected.pop("schema_version")
+    return projected
 
 
 def _index_for_manifest(manifest, contract, plan, projection, binding):
@@ -108,6 +145,8 @@ def _index_for_manifest(manifest, contract, plan, projection, binding):
         "source_queue_path": manifest["source_queue_path"],
         "source_queue_sha256": manifest["source_queue_sha256"],
         "descriptor_path_template": projection["descriptor_path_template"],
+        "buffer_identity_fields": _buffer_identity_fields(contract),
+        "buffer_candidate_serialization_rule": projection["buffer_candidate_serialization_rule"],
     }
 
 
