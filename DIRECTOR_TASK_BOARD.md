@@ -64,39 +64,24 @@ Director acceptance:
 - the worker had no authority to disable its own Scheduled Task; that self-disable is a separate runtime/entrypoint contract violation;
 - hourly reruns would not progress while the same blocked transport condition remains.
 
-Next step:
-- only after explicit user approval, perform one bounded Scheduled-runtime transport/authorization fix; do not change PASS 1 contracts/order/retry/state.
-
-Scope:
-- diagnosis only;
-- no production mutation, no Scheduled run/edit, no fix implementation;
-- explicitly determine whether self-disabling was authorized.
-
-## ACTIVE — Progressive PASS 1 Scheduled runtime transport authorization fix
+### BLOCKED EXTERNAL — ЧАТ 2 — PASS 1 Scheduled runtime transport authorization fix
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PASS1_SCHEDULED_RUNTIME_TRANSPORT_AUTHORIZATION_FIX_01.md`
 
-Worker slot:
-`СУЩЕСТВУЮЩИЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
-
-Mode:
-`IMPLEMENT / ACTIVATE / VALIDATE`
-
-Accepted diagnosis:
-- canonical Bear create-only operation is valid;
-- blocker is narrowed to Scheduled-runtime/platform/tool authorization before GitHub mutation;
-- prior Scheduled Task self-disable was unauthorized.
-
-Authorized scope:
-- restore only the existing Scheduled worker GitHub create-only transport/binding;
-- harden entrypoint against self-disable/schedule edits;
-- preserve hourly cadence;
-- perform exactly one bounded manual acceptance run after the fix;
-- no PASS 1 semantic/retry/order changes and no PASS 2/Dossier changes.
-
-Expected report:
+Report:
 `reviews/worker_reports/progressive-pass1-scheduled-runtime-transport-authorization-fix-01.md`
+
+Final status:
+`blocked_external_operator_action`
+
+Director acceptance:
+- repository-side fix was not possible because the exact existing Scheduled Task identity/binding and effective platform write authorization are not exposed through the worker-visible scheduler interface;
+- no unsafe workaround, alternate transport, guessed task ID, or manual PASS 1 mutation was introduced;
+- the one allowed acceptance run was not consumed;
+- PASS 1 remains at Bear and Breakfast with 11 attempted and 482 remaining;
+- the existing task's enabled/hourly post-state could not be re-attested from the worker session;
+- next action must happen at the platform/operator Scheduled Task layer, not in repository code.
 
 ## ACCEPTED — Progressive PASS 2 Dossier-ready gate amendment
 
