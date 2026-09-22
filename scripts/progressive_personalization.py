@@ -292,7 +292,7 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
         state['deep_stage_state'] = deep_stage
         state['deep_stage_outcome'] = deep_outcome
         state['deep_recovery_state'] = deep_recovery
-        state['effective_personalized_result_source'] = effective_source
+        state['effective_analysis_source'] = effective_source
         state['deep_authoritative_completed'] = deep_authoritative is not None
         state['deep_first_pass_attempted'] = deep_entry is not None
         state['fast_scope_eligible'] = bool(binding) and cache_state.get('analysis_semantic_source') != 'compatible_cache'
@@ -368,7 +368,7 @@ def apply_state_fields(game, state):
         'deep_stage_state',
         'deep_stage_outcome',
         'deep_recovery_state',
-        'effective_personalized_result_source',
+        'effective_analysis_source',
     ):
         game[field] = state.get(field)
 
@@ -630,17 +630,17 @@ def build_processing_status(state_index, visible_items, business_excluded_family
             'deep': sum(
                 1 for fid, state in state_index.items()
                 if fid not in business_excluded
-                and state.get('effective_personalized_result_source') == 'deep'
+                and state.get('effective_analysis_source') == 'deep'
             ),
             'fast': sum(
                 1 for fid, state in state_index.items()
                 if fid not in business_excluded
-                and state.get('effective_personalized_result_source') == 'fast'
+                and state.get('effective_analysis_source') == 'fast'
             ),
             'none': sum(
                 1 for fid, state in state_index.items()
                 if fid not in business_excluded
-                and state.get('effective_personalized_result_source') == 'none'
+                and state.get('effective_analysis_source') == 'none'
             ),
         },
     }
