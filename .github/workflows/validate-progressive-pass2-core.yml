@@ -99,6 +99,29 @@ jobs:
         run: python scripts/test_progressive_pass1.py
       - name: Progressive personalization regression
         run: python scripts/test_progressive_personalization.py
+      - name: Current staged projection accounting
+        run: |
+          python - <<'PY'
+          import json
+          import build_progressive_pass1_work
+          import progressive_personalization
+          fast=build_progressive_pass1_work.build_work_document()['scope']
+          dossier=progressive_personalization._dossier_processing_metrics()
+          assert int(fast['fast_total_current_scope']) == (
+              int(fast['fast_attempted_count'])
+              + int(fast['fast_skipped_due_to_authoritative_deep_count'])
+              + int(fast['fast_remaining_count'])
+          )
+          if dossier['dossier_total_current_scope'] is not None:
+              assert int(dossier['dossier_total_current_scope']) == (
+                  int(dossier['dossier_accepted_count'])
+                  + int(dossier['dossier_pending_count'])
+                  + int(dossier['dossier_failed_or_recovery_count'])
+              )
+          print('PROGRESSIVE_FAST_CURRENT=' + json.dumps(fast, sort_keys=True))
+          print('PROGRESSIVE_DOSSIER_CURRENT=' + json.dumps(dossier, sort_keys=True))
+          PY
+
       - name: Unresolved-row preservation regression
         run: python scripts/test_progressive_unresolved_row_preservation.py
       - name: Visual activation routing regression
