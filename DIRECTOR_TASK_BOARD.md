@@ -251,42 +251,38 @@ Next step:
 - keep Deep inactive throughout that adaptation; activation/live acceptance remains a later separate step.
 
 
-## ACTIVE — ЧАТ 1 — Progressive Deep runtime adaptation
+## ACCEPTED — Progressive Deep runtime adaptation
 
 Task:
 `WORKER_TASK_PROGRESSIVE_DEEP_RUNTIME_ADAPTATION_01.md`
 
-Worker slot:
-`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
-
-Conversation state:
-- previous physical ЧАТ 1 completed the superseded PASS 2 integration task and is retired;
-- this is a new independent runtime-adaptation task and must start in a NEW physical ЧАТ 1.
-
-Mode:
-`IMPLEMENT / VALIDATE`
-
-Scope:
-- replace obsolete Fast-incomplete-only Deep eligibility with accepted `FAST-DOSSIER-DEEP-V1`;
-- implement normal Deep first-pass + separate explicit GitHub-owned recovery accounting;
-- suppress future Fast only after current authoritative Deep completion;
-- implement Deep-over-Fast effective-result precedence while preserving Fast fallback after unresolved Deep;
-- emit producer-owned per-game Fast/Dossier/Deep stage fields;
-- emit independent Fast/Dossier/Deep statistics fields for the future Statistics page;
-- preserve/reuse existing recomputation/exact-binding/concurrency wiring;
-- regenerate inactive Deep projection under the new predicate with zero attempt consumption.
-
-Guards:
-- Deep/PASS 2 remains inactive;
-- no Deep Scheduled Task creation/edit/enable/run;
-- no production Deep result, receipt, attempt, or backlog execution;
-- final pixel-icon/statistics-page UI remains out of scope.
-
-Expected report:
+Report:
 `reviews/worker_reports/progressive-deep-runtime-adaptation-01.md`
 
-Next gate:
-- after Director acceptance, create a separate bounded Deep production activation/live-acceptance task.
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- inactive Deep/PASS 2 runtime is adapted to the accepted `FAST-DOSSIER-DEEP-V1` model;
+- normal Deep eligibility now covers any current eligible game with exact-compatible accepted Dossier, independent of Fast state;
+- Fast fit/not-fit/incomplete/error/not-started no longer suppresses Deep;
+- authoritative current Deep fit/not-fit suppresses future Fast for the same current identity, while stale/unresolved Deep does not;
+- authoritative Deep result supersedes Fast as effective personalized truth; unresolved Deep preserves a valid Fast provisional result;
+- Deep state migrated to V2 with separate normal-first-pass accounting and GitHub-owned explicit recovery authorization;
+- unresolved consumed first pass becomes recovery-owned and is not normally re-emitted;
+- recovery requires an exact fresh GitHub authorization with reason/binding; no blind retry loop, time retry, or hidden fixed quota exists;
+- producer-owned Fast/Dossier/Deep per-game stage fields are implemented;
+- independent Fast/Dossier/Deep statistics fields are implemented; Dossier observability failure is non-blocking for core visual publication;
+- existing recomputation/exact-binding/concurrency safeguards are preserved;
+- inactive Deep projection was regenerated under the new predicate with zero attempt consumption;
+- current inactive projection at report snapshot: Fast 65/540 attempted, Dossier 24/556 accepted, Deep 22 ready / 518 waiting / 0 attempted / 0 authoritative complete;
+- all Deep/PASS 2 activation mirrors remain false; durable Deep state has zero attempts; no Deep Scheduled Task or production Deep execution occurred;
+- validation DEEP-01..22 passed, including successful main PASS 2 validation run 35771819937.
+
+Next step:
+- only after explicit user approval, create a separate bounded Deep production activation/live-acceptance task;
+- the final pixel-icon/card indicators and dedicated Statistics page remain separate UI work.
+
 
 ## DRAFT / NOT AUTHORIZED — Progressive site progress header compaction
 
