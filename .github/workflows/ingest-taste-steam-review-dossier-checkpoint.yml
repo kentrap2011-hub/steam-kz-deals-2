@@ -51,6 +51,12 @@ jobs:
           # recovery visibility; group_progress remains the progress authority.
           python scripts/taste_steam_review_dossier_parallel_validation.py
 
+      - name: Recompute Progressive PASS 2 eligibility from canonical accepted Dossiers
+        run: |
+          set -euo pipefail
+          python scripts/build_progressive_pass2_work.py
+          python scripts/test_progressive_pass2.py
+
       - name: Commit dossier recovery transport validation canonical progress and worker projection atomically
         shell: bash
         run: |
@@ -62,6 +68,7 @@ jobs:
             data/production/pre_ai/taste_steam_review_dossier_work.json \
             data/production/pre_ai/taste_steam_review_dossier_worker_index.json \
             data/production/pre_ai/taste_steam_review_dossier_validation_status.json \
+            data/production/pre_ai/progressive_pass2_work.json \
             data/ai_inbox/taste_steam_review_dossiers
           git add -A data/production/pre_ai/taste_steam_review_dossier_worker_groups
           git add -A -- data/control data/quarantine data/audit 2>/dev/null || true
