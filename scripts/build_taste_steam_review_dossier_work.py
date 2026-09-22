@@ -93,7 +93,7 @@ def _rebind_snapshot_and_plan(manifest, contract):
         checkpoint_size,
     ))
     manifest.pop("group_progress", None)
-    manifest.update(ensure_group_progress(manifest, contract))
+    manifest = ensure_group_progress(manifest, contract)
     validate_manifest(manifest, contract)
     return manifest
 
