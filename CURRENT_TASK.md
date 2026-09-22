@@ -647,3 +647,14 @@
 - waiting for Dossier consumes zero PASS 2 attempts; automatic PASS 2 remains bounded to one attempt per current semantic generation/work identity;
 - PASS 2 runtime/scheduler/worker/production execution were not implemented or run;
 - durable report: `reviews/worker_reports/progressive-pass2-dossier-ready-gate-amendment-01.md`.
+
+
+## Worker in progress — 2026-09-22
+
+### Taste Dossier non-blocking group progress implement 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_TASTE_DOSSIER_NONBLOCKING_GROUP_PROGRESS_IMPLEMENT_01.md`;
+- scope: replace dossier contiguous-prefix blocking with GitHub-owned per-group non-blocking progress while preserving create-only transport and strict validation;
+- activation: preserve accepted current-snapshot groups, classify existing invalid g000005 as failed/incomplete, and project later pending groups normally;
+- boundaries: no PASS 1/PASS 2/Taste Semantic Producer changes, no new scheduler, no cadence change, no interactive full-backlog processing;
+- next: architecture preflight, bounded implementation, focused validation, durable report.
