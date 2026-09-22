@@ -1,9 +1,9 @@
 {
   "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
-  "version": 4,
+  "version": 5,
   "status": "canonical",
   "phase": "phase_b",
-  "purpose": "Publish the current deterministic-eligible Steam KZ deal catalogue continuously while GitHub-owned item-level PASS 1 progressively resolves current semantic fit and the implemented-but-inactive GitHub-owned PASS 2 core can later recover only dossier-ready incomplete items after separate activation.",
+  "purpose": "Publish the current deterministic-eligible Steam KZ catalogue while three independent GitHub-owned stages progress: provisional Fast analysis (PASS 1), neutral Dossier preparation, and eventual authoritative Deep analysis (technical PASS 2) for every current eligible game.",
   "ownership": {
     "control_plane": "github",
     "state_projection": "github",
@@ -16,7 +16,11 @@
     "pass2_eligibility": "github",
     "pass2_order": "github",
     "pass2_state": "github",
-    "pass2_attempt_accounting": "github"
+    "pass2_attempt_accounting": "github",
+    "stage_state_projection": "github",
+    "effective_personalized_result_projection": "github",
+    "deep_first_pass_completeness": "github",
+    "deep_recovery_eligibility_and_history": "github"
   },
   "durable_states": {
     "analyzed_fit": {
@@ -91,7 +95,11 @@
     "last_accepted_analysis_at_utc",
     "pass1_total_scope",
     "pass1_attempted_count",
-    "pass1_remaining_count"
+    "pass1_remaining_count",
+    "fast_stage_counts",
+    "dossier_stage_counts",
+    "deep_stage_counts",
+    "effective_result_counts"
   ],
   "invariants": [
     "total_current_candidates = analyzed_fit_count + analyzed_not_fit_count + analysis_incomplete_count + not_analyzed_count",
@@ -126,87 +134,265 @@
     "pass2_activation_requires_separate_implementation": false,
     "pass2_global_pass1_completion_gate": false,
     "pass2_requires_current_exact_compatible_accepted_dossier": true,
-    "pass2_activation_requires_separate_director_acceptance": true
+    "pass2_activation_requires_separate_director_acceptance": true,
+    "pass1_user_stage": "fast",
+    "pass1_is_provisional": true,
+    "fast_skips_current_authoritative_deep": true,
+    "pass2_user_stage": "deep",
+    "pass2_eventual_coverage_target": "all_current_eligible_games",
+    "pass2_requires_prior_pass1_attempt": false,
+    "pass2_requires_pass1_analysis_incomplete": false,
+    "pass2_runtime_adaptation_required": true,
+    "old_recovery_only_activation_plan_superseded": true
   },
   "phase_c_pass2_design": {
-    "status": "implemented_inactive_integration_wired",
+    "status": "architecture_amended_runtime_adaptation_required_inactive",
     "active": false,
     "implemented": true,
-    "purpose": "One bounded automatic recovery attempt for a current analysis_incomplete item only after GitHub can prove a current exact-compatible canonically accepted Taste Steam Review Dossier for the same item/work identity.",
+    "runtime_adaptation_required": true,
+    "user_stage": "deep",
+    "purpose": "Eventual authoritative Deep analysis for every current eligible Progressive game after exact-compatible canonically accepted Dossier evidence is ready; Fast/PASS 1 is not an eligibility prerequisite.",
     "ownership": {
       "eligibility": "github_control_plane",
       "queue_scope_and_order": "github_control_plane",
       "state_projection": "github_control_plane",
       "dossier_acceptance_truth": "github_control_plane",
-      "attempt_budget_and_receipts": "github_control_plane",
-      "scheduled_chatgpt": "bounded_pass2_semantic_data_plane_only_after_github_prepares_eligible_work",
+      "first_pass_attempt_accounting": "github_control_plane",
+      "recovery_eligibility_and_history": "github_control_plane",
+      "scheduled_chatgpt": "bounded_deep_semantic_data_plane_only_after_separate_activation",
       "interactive_chat": "no_production_role"
     },
     "parallelism": {
-      "pass1_and_pass2_independent": true,
-      "pass1_waits_for_pass2": false,
-      "pass2_waits_for_global_pass1_completion": false,
-      "pass2_may_consider_only_current_analysis_incomplete_items": true,
-      "pass1_continues_current_not_analyzed_items_while_pass2_recovers_eligible_incomplete_items": true,
-      "one_pass_failure_must_not_block_the_other": true
+      "fast_and_deep_independent": true,
+      "fast_waits_for_deep": false,
+      "deep_waits_for_fast": false,
+      "deep_waits_for_global_fast_completion": false,
+      "deep_may_run_before_fast_when_dossier_ready": true,
+      "fast_success_suppresses_deep": false,
+      "deep_completed_suppresses_future_fast_for_same_current_identity": true,
+      "one_stage_failure_must_not_block_other_stage_or_unrelated_games": true
     },
     "eligibility_predicate": {
       "all_required": true,
       "conditions": [
-        "current_progressive_state == analysis_incomplete",
-        "current_pass1_state.semantic_generation_id == current_progressive_semantic_generation_id",
-        "current_pass1_state.work_id == current_item_work_id",
-        "automatic_pass2_attempts_consumed_for(current_semantic_generation_id,current_work_id) == 0",
-        "a dossier exists in the canonical GitHub-owned dossier store and was persisted by canonical dossier ingest/validation rather than merely buffered or worker-produced",
-        "dossier.appid == current_item.appid",
-        "dossier.game_identity.work_title == current_item.semantic_input.title",
-        "when the current item exposes a release year, dossier.game_identity.release_year == current_item.release_year",
-        "dossier identity is resolved under the current Dossier identity rules with cross-release combination forbidden",
-        "dossier.web_evidence_contract_binding exactly equals the current active content-complete Dossier compatibility binding required by the canonical Dossier schema/evidence/prompt contracts",
-        "dossier is fresh at eligibility evaluation time and has not expired",
-        "GitHub binds the emitted PASS 2 work immutably to the current semantic_generation_id, work_id, appid, exact dossier content sha256, and current Dossier compatibility binding"
+        "item is current and eligible under the Progressive semantic generation/work identity",
+        "an exact-compatible canonically accepted current Dossier exists in the GitHub-owned accepted Dossier store",
+        "Dossier appid/work/release identity is exact under current Dossier identity rules and its compatibility binding/freshness are current",
+        "no current authoritative Deep analyzed_fit/analyzed_not_fit completion exists for this deep work identity",
+        "the item is eligible for normal Deep first pass, or has an explicit GitHub-owned recovery authorization under the recovery model"
+      ],
+      "explicitly_not_required": [
+        "prior Fast/PASS 1 attempt",
+        "Fast/PASS 1 analysis_incomplete",
+        "global Fast/PASS 1 completion"
       ],
       "false_if_any": [
-        "no canonically accepted dossier",
-        "dossier only exists as an unaccepted buffered candidate",
-        "stale or expired dossier",
-        "wrong appid",
-        "wrong work title or release identity",
-        "cross-release or ambiguous identity",
-        "old or mismatched Dossier compatibility binding",
-        "current semantic_generation_id or work_id differs from the incomplete PASS 1 state",
-        "the automatic PASS 2 attempt budget for the current semantic_generation_id/work_id is already consumed"
+        "no canonically accepted exact-compatible current Dossier",
+        "Dossier exists only as buffered/unaccepted/failed-or-recovery candidate",
+        "stale/expired/wrong-app/wrong-work/cross-release/ambiguous/mismatched-binding Dossier",
+        "current semantic_generation_id or work_id no longer matches the authorized Deep identity",
+        "current authoritative Deep completion already exists",
+        "a failed first pass is recovery-owned but no explicit current recovery condition/authorization exists"
       ]
     },
-    "dossier_ready_transition": {
-      "waiting_state": "analysis_incomplete",
-      "waiting_is_pass2_eligible": false,
-      "waiting_consumes_pass2_attempts": 0,
-      "acceptance_event": "canonical GitHub Dossier persistence/acceptance becomes an input to GitHub PASS 2 eligibility projection",
-      "automatic_effect": "GitHub re-evaluates pending analysis_incomplete items and may add only the exact matching current semantic_generation_id/work_id item to future PASS 2 work",
-      "interactive_intervention_required": false,
-      "dossier_worker_may_enqueue_pass2_directly": false
-    },
-    "attempt_budget": {
-      "maximum_automatic_attempts_per_semantic_generation_and_work_id": 1,
-      "waiting_for_dossier_consumes_attempt": false,
-      "stale_or_mismatched_dossier_consumes_attempt": false,
-      "eligibility_projection_or_queue_presence_consumes_attempt": false,
-      "budget_reset_by_price_or_commercial_refresh": false,
-      "budget_reset_by_new_dossier_for_same_semantic_generation_and_work_id": false,
-      "budget_may_reset_only_when_current_semantic_generation_id_or_work_id_changes_under_the_existing_semantic_generation_rules": true,
-      "terminal_unresolved_behavior": "remain analysis_incomplete, remain visible in Tier 2, and leave automatic PASS 2 eligibility for that semantic_generation_id/work_id after the single automatic attempt is consumed",
-      "attempt_consumption_rule": "The future PASS 2 implementation must let GitHub consume the one automatic attempt only from an exact-bound accepted PASS 2 result or an explicit GitHub-owned terminal execution receipt proving that the authorized eligible attempt actually ran; mere Dossier waiting, eligibility, enqueueing, stale work, or unbound artifacts consume zero."
+    "normal_first_pass_and_recovery": {
+      "normal_first_pass_attempts_per_current_deep_identity": 1,
+      "normal_first_pass_goal": "attempt every current eligible deep identity once when its accepted compatible Dossier becomes ready",
+      "normal_first_pass_success": "authoritative Deep analyzed_fit/analyzed_not_fit closes the current deep identity",
+      "normal_first_pass_unresolved": "does not count as authoritative completion; move the exact identity into separate GitHub-owned recovery state without blocking unrelated normal first-pass work",
+      "recovery_is_not_blind_retry": true,
+      "recovery_has_hidden_fixed_quota": false,
+      "recovery_unlock_conditions": [
+        "materially_changed canonically accepted Dossier/evidence for the same current deep identity",
+        "a corrected runtime/validation defect that materially changes the reason the prior Deep attempt could not complete",
+        "an explicit canonical GitHub recovery action with a recorded reason and exact authorization"
+      ],
+      "recovery_authorization_rule": "Every recovery attempt requires a fresh GitHub-owned authorization bound to the concrete recovery condition. Passage of time, queue presence, or another worker invocation alone never authorizes retry.",
+      "recovery_history_rule": "Recovery attempts and outcomes are accounted separately from the single normal first-pass attempt.",
+      "unresolved_recovery_rule": "If a recovery attempt remains unresolved, return to recovery-owned state and require a new concrete recovery condition/authorization before another recovery attempt."
     },
     "dossier_contract_dependencies": {
       "canonical_contract": "config/taste_steam_review_dossier_contract.json",
       "persistence_bridge": "config/taste_steam_review_dossier_persistence_bridge.json",
       "schema": "config/taste_steam_review_dossier_schema.json",
       "web_evidence_contract": "config/taste_steam_review_dossier_web_evidence_contract.json",
-      "rule": "PASS 2 consumes only canonical accepted dossier truth and does not redefine Dossier evidence, identity, freshness, or compatibility semantics."
+      "rule": "Deep consumes only canonical accepted Dossier truth and does not redefine Dossier evidence, identity, freshness, recovery, or persistence semantics."
     },
-    "activation_guard": "PASS 2 core and GitHub-owned eligibility recomputation are implemented while semantic execution remains inactive. No production PASS 2 semantic execution is authorized while config/progressive_pass2_contract.json#active and phase_b_execution.pass2_active remain false. Production activation requires a separate Director-accepted activation action and one dedicated Scheduled Task.",
-    "implementation_contract": "config/progressive_pass2_contract.json",
-    "integration_status": "github_owned_recomputation_wired_inactive"
+    "recomputation_wiring": {
+      "status": "landed_reusable_requires_deep_predicate_adaptation",
+      "preserved_events": [
+        "canonical Dossier persistence",
+        "Fast/PASS 1 persistence",
+        "daily/current generation-work-binding-freshness rebuild",
+        "future Deep/PASS 2 attempt persistence"
+      ],
+      "exact_binding_liveness_zero_attempt_projection_preserved": true,
+      "old_recovery_only_eligibility_predicate_superseded": true
+    },
+    "activation_guard": "Deep/PASS 2 semantic execution remains inactive. The previously prepared recovery-only activation plan is superseded. No Scheduled Deep worker may be created/enabled/run and no Deep backlog may be processed until a separate runtime-adaptation task implements this FAST-DOSSIER-DEEP-V1 architecture and a later Director-accepted activation step authorizes production."
+  },
+  "stage_model": {
+    "revision": "FAST-DOSSIER-DEEP-V1",
+    "user_facing_stages": [
+      {
+        "id": "fast",
+        "technical_name": "PASS 1",
+        "label_ru": "Быстрый разбор",
+        "role": "provisional_personalized_analysis"
+      },
+      {
+        "id": "dossier",
+        "technical_name": "Taste Steam Review Dossier",
+        "label_ru": "Подготовка досье",
+        "role": "independent_neutral_evidence_preparation"
+      },
+      {
+        "id": "deep",
+        "technical_name": "PASS 2",
+        "label_ru": "Глубокий разбор",
+        "role": "eventual_authoritative_personalized_analysis"
+      }
+    ],
+    "independence_rules": [
+      "Fast and Deep do not globally wait for each other.",
+      "Dossier runs independently and never decides personalized fit/not-fit.",
+      "Deep eligibility is unlocked by exact-compatible canonically accepted Dossier evidence, not by Fast completion or Fast analysis_incomplete.",
+      "Deep may run before Fast when Dossier is ready.",
+      "Completed authoritative Deep suppresses future Fast work for the same current identity.",
+      "Completed Fast never suppresses eventual Deep coverage.",
+      "A failure in one stage does not globally block another stage or unrelated games."
+    ],
+    "current_identity_rule": "All stage authorization and presentation must bind to the current Progressive semantic generation/work identity; stale generation/work authorizations are invalid."
+  },
+  "effective_result_precedence": {
+    "scope": "progressive_staged_personalization",
+    "ordered_rules": [
+      "trustworthy current completed Deep analyzed_fit or analyzed_not_fit is authoritative effective personalized truth",
+      "otherwise trustworthy current completed Fast analyzed_fit or analyzed_not_fit may remain the provisional effective personalized truth",
+      "otherwise use the existing unresolved/not-analyzed projection"
+    ],
+    "deep_incomplete_or_error_rule": "A Deep incomplete/technical failure never erases a still-valid trustworthy Fast fit/not-fit result.",
+    "provenance_rule": "Fast and Deep stage history remain separate; Deep completion does not rewrite Fast history.",
+    "existing_reusable_taste_cache_rule": "This amendment does not rewrite the separately canonical reusable Taste cache. Runtime adaptation must keep its existing compatibility rules and must never present such cache reuse as Fast or Deep stage completion unless exact stage provenance exists."
+  },
+  "stage_observability": {
+    "browser_inference_forbidden": true,
+    "producer_owned_per_game_fields": {
+      "fast_stage_state": {
+        "values": [
+          "not_started",
+          "completed",
+          "incomplete",
+          "error"
+        ],
+        "outcome_field": "fast_stage_outcome",
+        "outcome_values": [
+          "fit",
+          "not_fit",
+          null
+        ]
+      },
+      "dossier_stage_state": {
+        "values": [
+          "not_ready",
+          "accepted",
+          "failed_or_recovery"
+        ]
+      },
+      "deep_stage_state": {
+        "values": [
+          "not_started",
+          "waiting_for_dossier",
+          "eligible_or_pending",
+          "completed",
+          "incomplete_or_recovery"
+        ],
+        "outcome_field": "deep_stage_outcome",
+        "outcome_values": [
+          "fit",
+          "not_fit",
+          null
+        ]
+      },
+      "deep_recovery_state": {
+        "values": [
+          "none",
+          "recovery_owned",
+          "recovery_eligible",
+          "recovery_pending"
+        ]
+      },
+      "effective_personalized_result_source": {
+        "values": [
+          "deep",
+          "fast",
+          "none"
+        ]
+      }
+    },
+    "labels_ru": {
+      "fast": "Быстрый разбор",
+      "dossier": "Подготовка досье",
+      "deep": "Глубокий разбор"
+    },
+    "card_indicator_target": "Every game card can render three small pixel-style indicators, one per stage, directly from producer-owned fields. Final visual design is deferred."
+  },
+  "statistics_page_contract": {
+    "user_entrypoint_label_ru": "Статистика",
+    "dedicated_page_required": true,
+    "denominator_rule": "Each section uses its own explicitly named current scope. Never combine counts across different scopes into one denominator.",
+    "fast": {
+      "denominator": "fast_total_current_scope",
+      "fields": [
+        "fast_total_current_scope",
+        "fast_attempted_count",
+        "fast_completed_fit_count",
+        "fast_completed_not_fit_count",
+        "fast_incomplete_count",
+        "fast_error_count",
+        "fast_skipped_due_to_authoritative_deep_count",
+        "fast_remaining_count"
+      ],
+      "invariants": [
+        "fast_attempted_count = fast_completed_fit_count + fast_completed_not_fit_count + fast_incomplete_count + fast_error_count",
+        "fast_total_current_scope = fast_attempted_count + fast_remaining_count + fast_skipped_due_to_authoritative_deep_count"
+      ]
+    },
+    "dossier": {
+      "denominator": "dossier_total_current_scope",
+      "fields": [
+        "dossier_total_current_scope",
+        "dossier_accepted_count",
+        "dossier_pending_count",
+        "dossier_failed_or_recovery_count",
+        "dossier_normal_first_pass_complete",
+        "dossier_all_accepted_or_recovered_complete"
+      ],
+      "invariants": [
+        "dossier_total_current_scope = dossier_accepted_count + dossier_pending_count + dossier_failed_or_recovery_count"
+      ]
+    },
+    "deep": {
+      "denominator": "deep_total_current_coverage_target",
+      "fields": [
+        "deep_total_current_coverage_target",
+        "deep_first_pass_attempted_count",
+        "deep_authoritative_completed_count",
+        "deep_completed_fit_count",
+        "deep_completed_not_fit_count",
+        "deep_incomplete_or_recovery_count",
+        "deep_waiting_for_dossier_count",
+        "deep_ready_or_pending_count",
+        "deep_normal_first_pass_remaining_count",
+        "deep_remaining_until_all_authoritative_count",
+        "deep_normal_first_pass_complete",
+        "deep_all_current_authoritative_complete"
+      ],
+      "invariants": [
+        "deep_authoritative_completed_count = deep_completed_fit_count + deep_completed_not_fit_count",
+        "deep_remaining_until_all_authoritative_count = deep_total_current_coverage_target - deep_authoritative_completed_count",
+        "deep_normal_first_pass_complete and deep_all_current_authoritative_complete are distinct metrics and may differ while recovery-owned items remain"
+      ]
+    }
   }
 }
