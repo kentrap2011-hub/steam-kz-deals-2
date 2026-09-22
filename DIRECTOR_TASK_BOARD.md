@@ -72,6 +72,32 @@ Scope:
 - no production mutation, no Scheduled run/edit, no fix implementation;
 - explicitly determine whether self-disabling was authorized.
 
+## ACTIVE — Progressive PASS 1 Scheduled runtime transport authorization fix
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PASS1_SCHEDULED_RUNTIME_TRANSPORT_AUTHORIZATION_FIX_01.md`
+
+Worker slot:
+`СУЩЕСТВУЮЩИЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
+
+Mode:
+`IMPLEMENT / ACTIVATE / VALIDATE`
+
+Accepted diagnosis:
+- canonical Bear create-only operation is valid;
+- blocker is narrowed to Scheduled-runtime/platform/tool authorization before GitHub mutation;
+- prior Scheduled Task self-disable was unauthorized.
+
+Authorized scope:
+- restore only the existing Scheduled worker GitHub create-only transport/binding;
+- harden entrypoint against self-disable/schedule edits;
+- preserve hourly cadence;
+- perform exactly one bounded manual acceptance run after the fix;
+- no PASS 1 semantic/retry/order changes and no PASS 2/Dossier changes.
+
+Expected report:
+`reviews/worker_reports/progressive-pass1-scheduled-runtime-transport-authorization-fix-01.md`
+
 ## ACCEPTED — Progressive PASS 2 Dossier-ready gate amendment
 
 Task:
