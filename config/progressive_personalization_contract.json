@@ -142,14 +142,14 @@
     "pass2_eventual_coverage_target": "all_current_eligible_games",
     "pass2_requires_prior_pass1_attempt": false,
     "pass2_requires_pass1_analysis_incomplete": false,
-    "pass2_runtime_adaptation_required": true,
+    "pass2_runtime_adaptation_required": false,
     "old_recovery_only_activation_plan_superseded": true
   },
   "phase_c_pass2_design": {
-    "status": "architecture_amended_runtime_adaptation_required_inactive",
+    "status": "runtime_adapted_inactive_ready_for_activation",
     "active": false,
     "implemented": true,
-    "runtime_adaptation_required": true,
+    "runtime_adaptation_required": false,
     "user_stage": "deep",
     "purpose": "Eventual authoritative Deep analysis for every current eligible Progressive game after exact-compatible canonically accepted Dossier evidence is ready; Fast/PASS 1 is not an eligibility prerequisite.",
     "ownership": {
@@ -219,17 +219,18 @@
       "rule": "Deep consumes only canonical accepted Dossier truth and does not redefine Dossier evidence, identity, freshness, recovery, or persistence semantics."
     },
     "recomputation_wiring": {
-      "status": "landed_reusable_requires_deep_predicate_adaptation",
+      "status": "landed_reusable_adapted_to_fast_dossier_deep_v1",
       "preserved_events": [
         "canonical Dossier persistence",
         "Fast/PASS 1 persistence",
         "daily/current generation-work-binding-freshness rebuild",
-        "future Deep/PASS 2 attempt persistence"
+        "future Deep/PASS 2 attempt persistence",
+        "explicit GitHub-owned Deep recovery authorization persistence"
       ],
       "exact_binding_liveness_zero_attempt_projection_preserved": true,
       "old_recovery_only_eligibility_predicate_superseded": true
     },
-    "activation_guard": "Deep/PASS 2 semantic execution remains inactive. The previously prepared recovery-only activation plan is superseded. No Scheduled Deep worker may be created/enabled/run and no Deep backlog may be processed until a separate runtime-adaptation task implements this FAST-DOSSIER-DEEP-V1 architecture and a later Director-accepted activation step authorizes production."
+    "activation_guard": "Deep/PASS 2 semantic execution remains inactive. FAST-DOSSIER-DEEP-V1 runtime adaptation is implemented, but no Scheduled Deep worker may be created/enabled/run and no Deep backlog may be processed until a later Director-accepted activation step explicitly authorizes production."
   },
   "stage_model": {
     "revision": "FAST-DOSSIER-DEEP-V1",
