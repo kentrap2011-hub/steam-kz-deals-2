@@ -421,12 +421,16 @@ def _dossier_processing_metrics():
     try:
         doc = progressive_pass2.load_json(progressive_pass2.DOSSIER_WORK)
         progress = doc.get('group_progress') or {}
-        total = int(doc.get('prepared_required_count'))
-        accepted = int(progress.get('accepted_dossier_count'))
+        total = int(doc.get('eligible_scope_count'))
+        prepared_required = int(doc.get('prepared_required_count'))
+        if prepared_required > total:
+            raise ValueError('Dossier required scope exceeds current eligible scope')
+        already_current_accepted = total - prepared_required
+        accepted = already_current_accepted + int(progress.get('accepted_dossier_count'))
         failed = int(progress.get('failed_dossier_count'))
         pending = int(progress.get('pending_dossier_count'))
         if total != accepted + failed + pending:
-            raise ValueError('Dossier progress arithmetic mismatch')
+            raise ValueError('Dossier current-scope arithmetic mismatch')
         return {
             'dossier_observability': 'available',
             'dossier_total_current_scope': total,
