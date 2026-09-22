@@ -132,6 +132,20 @@ Remaining validation:
 - do not change its schedule and do not create another task;
 - after the run, verify GitHub ingest classified any published groups independently before PASS 2 activation/integration proceeds.
 
+
+Live Scheduled validation:
+- one clean existing `Taste Steam Review Dossier` Run now published g000001 and g000002 for the current snapshot;
+- GitHub independently classified both groups as `failed_or_invalid_pending_recovery`;
+- both failures have the same validator error: `buffered dossier group identity mismatch: items`;
+- both artifacts were moved to failed-group quarantine and are recovery eligible;
+- normal forward progress did not pin: `next_pending_sequence=3`, with g000003 and later still pending;
+- therefore the non-blocking progress architecture is live-proven, but a new systematic candidate-generation identity mismatch is now exposed;
+- current counts after validation: accepted groups 0, failed groups 2, pending groups 182; accepted dossiers 0, failed dossiers 6, pending dossiers 544.
+
+Director conclusion:
+- non-blocking Dossier progress implementation is accepted;
+- do not treat g000001/g000002 as accepted Dossiers;
+- do not proceed to PASS 2 production integration/activation until the repeated `items` identity mismatch is corrected and at least one clean Dossier group is canonically accepted.
 ## ACCEPTED — Progressive PASS 2 Phase C core implementation
 
 Task:
