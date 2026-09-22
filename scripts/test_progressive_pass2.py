@@ -142,7 +142,7 @@ def work_doc(items):
         'schema_version': 2,
         'contract': 'PROGRESSIVE-PASS2-WORK-V1',
         'implemented': True,
-        'pass2_active': False,
+        'pass2_active': True,
         'items': items,
     }
 
@@ -200,7 +200,7 @@ def fit_result(item):
 
 def main():
     contract = progressive_pass2.load_contract()
-    assert contract['active'] is False
+    assert contract['active'] is True
     assert contract['runtime_architecture']['target_architecture_runtime_adapted'] is True
     assert contract['attempt_budget']['normal_first_pass_attempts_per_deep_identity'] == 1
     assert contract['attempt_budget']['recovery_attempts_share_normal_first_pass_budget'] is False
@@ -513,20 +513,19 @@ def main():
     assert status['deep_first_pass_attempted_count'] == 1
     assert status['deep_authoritative_completed_count'] == 0
 
-    # DEEP-20/21: inactive migration/projection state has zero attempts and every
-    # activation guard remains off. Work may contain projected items, but projection
-    # itself consumes no attempt.
+    # DEEP-20/21: production activation preserves zero-attempt migration/projection.
+    # Work may contain prepared items, but activation/projection itself consumes no attempt.
     persisted_state = json.loads(Path('data/cache/progressive_pass2_state.json').read_text(encoding='utf-8'))
     persisted_work = json.loads(Path('data/production/pre_ai/progressive_pass2_work.json').read_text(encoding='utf-8'))
     personalization = json.loads(Path('config/progressive_personalization_contract.json').read_text(encoding='utf-8'))
     ownership = json.loads(Path('config/execution_ownership_contract.json').read_text(encoding='utf-8'))
     assert persisted_state == empty_pass2_state()
-    assert persisted_work.get('pass2_active') is False
+    assert persisted_work.get('pass2_active') is True
     assert persisted_work.get('scope', {}).get('deep_first_pass_attempted_count', 0) == 0
-    assert contract['active'] is False
-    assert personalization['phase_b_execution']['pass2_active'] is False
-    assert personalization['phase_c_pass2_design']['active'] is False
-    assert ownership['progressive_personalization_phase_c_pass2_core']['pass2_active'] is False
+    assert contract['active'] is True
+    assert personalization['phase_b_execution']['pass2_active'] is True
+    assert personalization['phase_c_pass2_design']['active'] is True
+    assert ownership['progressive_personalization_phase_c_pass2_core']['pass2_active'] is True
 
     # DEEP-22: this runtime adaptation does not implement the user-facing stage UI.
     changed_ui_guard = Path('web/progressive-personalization-ui.js').read_text(encoding='utf-8')
