@@ -1,7 +1,7 @@
 {
   "runtime_prompt_path": "config/taste_steam_review_dossier_runtime_prompt.md",
-  "runtime_prompt_revision": "nonblocking-group-progress-v1",
-  "runtime_prompt_sha256": "462ae83c7e600c810b5590a34e16973a375063f58c0d0be64c487be76037816e",
+  "runtime_prompt_revision": "nonblocking-group-progress-v2-exact-buffer-identity",
+  "runtime_prompt_sha256": "bfa4a7b5fac60eceefab5ce7f6cb8a01f0dc31fe39e998f45e80c8ae3515fe35",
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V2",
   "schema_version": 2,
   "work_manifest_path": "data/production/pre_ai/taste_steam_review_dossier_work.json",
@@ -252,5 +252,19 @@
   "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
   "source_queue_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
   "source_queue_sha256": "97df681161ff572131c8c5a8f706d3ccdc8918a09b56d89f0397fb839fcf3124",
-  "descriptor_path_template": "data/production/pre_ai/taste_steam_review_dossier_worker_groups/{snapshot_id}/g{sequence:06d}.json"
+  "descriptor_path_template": "data/production/pre_ai/taste_steam_review_dossier_worker_groups/{snapshot_id}/g{sequence:06d}.json",
+  "buffer_identity_fields": [
+    "snapshot_id",
+    "prepared_required_sha256",
+    "sequence",
+    "start_index",
+    "end_index_exclusive",
+    "items",
+    "appids",
+    "items_sha256",
+    "group_sha256",
+    "scope_source",
+    "source_queue_sha256"
+  ],
+  "buffer_candidate_serialization_rule": "verbatim_deep_copy_group_descriptor_replace_schema_marker_then_add_dossiers"
 }
