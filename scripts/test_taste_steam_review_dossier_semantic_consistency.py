@@ -413,7 +413,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_web_search_queries"], 8)
         self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_opened_or_read_source_pages"], 16)
 
-    def test_worker_facing_contract_covers_all_six_without_changing_buffer_architecture(self):
+    def test_worker_facing_contract_covers_all_six_with_nonblocking_github_drain(self):
         self.assertFalse(EVIDENCE["parent_item_binding"]["host_match_alone_is_sufficient"])
         self.assertTrue(EVIDENCE["parent_item_binding"]["same_thread_distinct_items_allowed"])
         self.assertIn("known_child_date_parent_coherence_rule", EVIDENCE["recency"])
@@ -424,7 +424,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertTrue(CONTROL["buffered_submission"]["buffer"]["multiple_pending_groups_same_snapshot_allowed"])
         self.assertEqual(
             CONTROL["buffered_submission"]["drain"]["acceptance_rule"],
-            "accept_only_the_maximal_valid_contiguous_prefix_starting_at_expected_sequence",
+            "strict_validate_each_present_pending_group_independently;persist_valid_groups_and_classify_invalid_groups_failed_or_invalid_pending_recovery",
         )
 
 

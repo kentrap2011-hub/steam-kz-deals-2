@@ -17,6 +17,14 @@ from taste_steam_review_dossier import (
     validate_dossier,
 )
 
+from taste_steam_review_dossier_group_progress import (
+    ACCEPTED,
+    accepted_contiguous_prefix_item_count,
+    ensure_group_progress,
+    set_group_state,
+    validate_group_progress,
+)
+
 CONTRACT_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2"
 WORK_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-WORK-V2"
 GROUP_PLAN_SCHEMA = "TASTE-STEAM-REVIEW-DOSSIER-GROUP-PLAN-V1"
@@ -46,7 +54,7 @@ def load_contract(path):
     checkpoint = doc.get("checkpointing") or {}
     if checkpoint.get("owner") != "github_control_plane" or checkpoint.get("semantics") != "internal_durability_boundary_not_scope_quota":
         raise ValueError("Daily dossier checkpoint ownership/semantics are invalid")
-    if checkpoint.get("advance_rule") != "after_successful_checkpoint_persistence_advance_progress_inside_same_snapshot_without_queue_or_store_scope_rebuild":
+    if checkpoint.get("advance_rule") != "after_successful_group_persistence_classify_that_exact_group_accepted_without_requiring_earlier_failed_groups_to_recover":
         raise ValueError("Daily dossier same-snapshot advance rule is invalid")
     if not isinstance(checkpoint.get("checkpoint_size"), int) or checkpoint["checkpoint_size"] <= 0:
         raise ValueError("Daily dossier checkpoint size is invalid")
@@ -214,22 +222,21 @@ def expected_group_sequence(manifest, contract):
 
 
 def ensure_submission_group_plan(manifest, contract):
-    """Add the additive plan to an unfinished legacy V2 manifest after migration proof."""
+    """Ensure immutable group plan plus GitHub-owned non-blocking group progress."""
     validate_manifest(manifest, contract)
-    if manifest.get("submission_group_plan") is not None:
-        validate_group_plan(manifest, contract, required=True)
-        return copy.deepcopy(manifest)
     migrated = copy.deepcopy(manifest)
-    migrated["submission_group_plan"] = build_submission_group_plan(
-        snapshot_id=migrated["snapshot_id"],
-        prepared_required_sha256=migrated["prepared_required_sha256"],
-        prepared_required_items=migrated["prepared_required_items"],
-        checkpoint_size=int(contract["checkpointing"]["checkpoint_size"]),
-        scope_source=migrated["scope_source"],
-        source_queue_sha256=migrated["source_queue_sha256"],
-    )
-    validate_manifest(migrated, contract)
+    if migrated.get("submission_group_plan") is None:
+        migrated["submission_group_plan"] = build_submission_group_plan(
+            snapshot_id=migrated["snapshot_id"],
+            prepared_required_sha256=migrated["prepared_required_sha256"],
+            prepared_required_items=migrated["prepared_required_items"],
+            checkpoint_size=int(contract["checkpointing"]["checkpoint_size"]),
+            scope_source=migrated["scope_source"],
+            source_queue_sha256=migrated["source_queue_sha256"],
+        )
     validate_group_plan(migrated, contract, required=True)
+    migrated = ensure_group_progress(migrated, contract)
+    validate_manifest(migrated, contract)
     return migrated
 
 
@@ -321,6 +328,7 @@ def build_daily_work_manifest(queue_rows, contract, store_dir, *, now=None, ttl_
         "submission_group_plan": group_plan,
     }
     manifest.update(progress_fields(snapshot_id, required, list(required), checkpoint_size))
+    manifest = ensure_group_progress(manifest, contract)
     validate_manifest(manifest, contract)
     return manifest
 
@@ -361,6 +369,11 @@ def validate_manifest(manifest, contract):
         raise ValueError("Daily dossier prepared scope contains invalid appid")
     if manifest.get("submission_group_plan") is not None:
         validate_group_plan(manifest, contract, required=True)
+    if manifest.get("group_progress") is not None:
+        validate_group_progress(manifest, contract)
+        prefix_count = accepted_contiguous_prefix_item_count(manifest, contract)
+        if completed != prefix_count:
+            raise ValueError("legacy contiguous progress must equal the accepted group prefix")
     return current
 
 
@@ -402,11 +415,16 @@ def persist_submission_and_advance_snapshot(submission, manifest, contract, stor
     if [str(x["appid"]) for x in remaining[:len(current)]] != expected:
         raise ValueError("current checkpoint is not the canonical prefix of remaining daily snapshot scope")
     next_remaining = remaining[len(current):]
+    checkpoint_size = int(contract["checkpointing"]["checkpoint_size"])
+    if next_manifest.get("submission_group_plan") is not None:
+        completed_before = int(manifest["completed_required_count"])
+        sequence = completed_before // checkpoint_size + 1
+        next_manifest = set_group_state(next_manifest, contract, sequence, ACCEPTED)
     next_manifest.update(progress_fields(
         manifest["snapshot_id"],
         manifest["prepared_required_items"],
         next_remaining,
-        int(contract["checkpointing"]["checkpoint_size"]),
+        checkpoint_size,
     ))
     validate_manifest(next_manifest, contract)
     if manifest_output_path is not None:

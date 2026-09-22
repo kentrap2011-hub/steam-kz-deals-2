@@ -25,6 +25,11 @@ from taste_steam_review_dossier_daily import (
     progress_fields,
     validate_manifest,
 )
+from taste_steam_review_dossier_group_progress import (
+    ACCEPTED,
+    ensure_group_progress,
+    set_group_state,
+)
 from taste_steam_review_dossier_strict import (
     current_worker_contract_binding,
     dossier_state_strict,
@@ -501,6 +506,7 @@ def build_daily_work_manifest_web(queue_rows, contract, store_dir, *, now=None, 
         "submission_group_plan": group_plan,
     }
     manifest.update(progress_fields(snapshot_id, required, list(required), checkpoint_size))
+    manifest = ensure_group_progress(manifest, contract)
     validate_manifest(manifest, contract)
     return manifest
 
@@ -528,9 +534,14 @@ def persist_submission_and_advance_snapshot_strict(submission, manifest, contrac
     if remaining[:len(current)] != list(current):
         raise ValueError("current checkpoint is not the canonical prefix of remaining daily snapshot scope")
     next_remaining = remaining[len(current):]
+    checkpoint_size = int(contract["checkpointing"]["checkpoint_size"])
+    if next_manifest.get("submission_group_plan") is not None:
+        completed_before = int(manifest["completed_required_count"])
+        sequence = completed_before // checkpoint_size + 1
+        next_manifest = set_group_state(next_manifest, contract, sequence, ACCEPTED)
     next_manifest.update(progress_fields(
         manifest["snapshot_id"], manifest["prepared_required_items"], next_remaining,
-        int(contract["checkpointing"]["checkpoint_size"]),
+        checkpoint_size,
     ))
     next_manifest = ensure_web_evidence_binding(next_manifest)
     validate_manifest(next_manifest, contract)

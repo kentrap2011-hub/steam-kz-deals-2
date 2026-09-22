@@ -7,15 +7,13 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-from taste_steam_review_dossier_buffered import (
-    apply_buffered_drain,
-    expected_buffer_path,
-    plan_buffered_drain,
-)
+from taste_steam_review_dossier_buffered import apply_buffered_drain, expected_buffer_path, plan_buffered_drain
 from taste_steam_review_dossier_daily import BUFFER_GROUP_SCHEMA, load_contract
+from taste_steam_review_dossier_group_progress import reopen_failed_group
 from taste_steam_review_dossier_parallel_validation import build_parallel_validation_status
 from taste_steam_review_dossier_test_fixture import web_dossier
 from taste_steam_review_dossier_web import build_daily_work_manifest_web
+from taste_steam_review_dossier_worker_projection import build_worker_projection
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
@@ -61,103 +59,117 @@ def write_candidate(work, contract, sequence, mutate=None):
 
 
 class ParallelValidationTests(unittest.TestCase):
-    def test_middle_invalid_group_blocks_progress_but_later_valid_groups_remain_buffered(self):
+    def test_bad_group_5_does_not_block_good_groups_6_and_7(self):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
             store = Path(td) / "store"
-            work = build_daily_work_manifest_web(queue(range(810001, 810013)), contract, store)
-            self.assertEqual(int(contract["checkpointing"]["checkpoint_size"]), 3)
-            self.assertEqual(work["completed_required_count"], 0)
-            self.assertEqual(len(work["submission_group_plan"]["groups"]), 4)
+            manifest_path = Path(td) / "work.json"
+            quarantine = Path(td) / "quarantine"
+            audit = Path(td) / "failure.jsonl"
+            work = build_daily_work_manifest_web(queue(range(810001, 810022)), contract, store)
+            self.assertEqual(len(work["submission_group_plan"]["groups"]), 7)
 
-            p1 = write_candidate(work, contract, 1)
-            p2 = write_candidate(
-                work,
-                contract,
-                2,
+            # Establish accepted groups 1..4 first.
+            for sequence in range(1, 5):
+                write_candidate(work, contract, sequence)
+            first = plan_buffered_drain(work, contract, contract["paths"]["submission_inbox_dir"], failed_quarantine_root=quarantine)
+            self.assertEqual([x["descriptor"]["sequence"] for x in first["accepted"]], [1, 2, 3, 4])
+            self.assertEqual(first["failed_count"], 0)
+            manifest_path.write_text(json.dumps(work), encoding="utf-8")
+            apply_buffered_drain(first, manifest_path=manifest_path, store_dir=store, failure_audit_path=audit)
+            current = json.loads(manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(current["group_progress"]["accepted_group_count"], 4)
+            self.assertEqual(current["group_progress"]["pending_group_count"], 3)
+
+            p5 = write_candidate(
+                current, contract, 5,
                 lambda artifact: artifact["dossiers"][0].__setitem__("schema_version", 1),
             )
-            p3 = write_candidate(work, contract, 3)
-            p4 = write_candidate(work, contract, 4)
+            p6 = write_candidate(current, contract, 6)
+            p7 = write_candidate(current, contract, 7)
+            second = plan_buffered_drain(current, contract, contract["paths"]["submission_inbox_dir"], failed_quarantine_root=quarantine)
 
-            # Candidate publication itself is transport-only: all four groups can
-            # exist while canonical progress still expects group 1.
-            self.assertEqual(work["completed_required_count"], 0)
-            before = {path: path.read_bytes() for path in (p2, p3, p4)}
+            self.assertEqual([x["descriptor"]["sequence"] for x in second["failed"]], [5])
+            self.assertEqual([x["descriptor"]["sequence"] for x in second["accepted"]], [6, 7])
+            apply_buffered_drain(second, manifest_path=manifest_path, store_dir=store, failure_audit_path=audit)
+            final = json.loads(manifest_path.read_text(encoding="utf-8"))
 
-            plan = plan_buffered_drain(work, contract, contract["paths"]["submission_inbox_dir"])
-            self.assertEqual([entry["descriptor"]["sequence"] for entry in plan["accepted"]], [1])
-            self.assertEqual(plan["blocked_reason"], "invalid_expected_group")
-            self.assertEqual(plan["stop_sequence"], 2)
+            self.assertFalse(p5.exists())
+            self.assertFalse(p6.exists())
+            self.assertFalse(p7.exists())
+            self.assertEqual(final["group_progress"]["accepted_group_count"], 6)
+            self.assertEqual(final["group_progress"]["failed_group_count"], 1)
+            self.assertEqual(final["group_progress"]["pending_group_count"], 0)
+            self.assertTrue(final["group_progress"]["normal_first_pass_complete"])
+            self.assertFalse(final["group_progress"]["all_groups_accepted"])
+            self.assertFalse(final["full_backlog_complete"])
+            self.assertEqual(final["completed_required_count"], 12)  # legacy contiguous accepted prefix only
+            self.assertEqual(final["remaining_required_count"], 9)
 
-            manifest_path = Path(td) / "work.json"
-            manifest_path.write_text(json.dumps(work), encoding="utf-8")
-            persisted = apply_buffered_drain(plan, manifest_path=manifest_path, store_dir=store)
-            current = json.loads(manifest_path.read_text(encoding="utf-8"))
-
-            self.assertEqual(len(persisted), 3)
-            self.assertEqual(current["completed_required_count"], 3)
-            self.assertEqual(current["remaining_required_count"], 9)
-            self.assertFalse(p1.exists())
-            for path in (p2, p3, p4):
-                self.assertTrue(path.exists())
-                self.assertEqual(path.read_bytes(), before[path])
-
-            # No member of invalid group 2 was partially persisted.
-            group2_appids = work["submission_group_plan"]["groups"][1]["appids"]
-            for appid in group2_appids:
+            # Group 5 is not accepted; groups 6 and 7 were independently persisted.
+            for appid in current["submission_group_plan"]["groups"][4]["appids"]:
                 self.assertFalse((store / f"App_{appid}.json").exists())
+            for sequence in (6, 7):
+                for appid in current["submission_group_plan"]["groups"][sequence - 1]["appids"]:
+                    self.assertTrue((store / f"App_{appid}.json").exists())
 
-            status = build_parallel_validation_status(
-                current,
-                contract,
-                contract["paths"]["submission_inbox_dir"],
+            index, _ = build_worker_projection(final, contract)
+            self.assertIsNone(index["next_pending_sequence"])
+            self.assertEqual(index["failed_group_sequences"], [5])
+            self.assertTrue(index["normal_first_pass_complete"])
+            self.assertFalse(index["all_groups_accepted"])
+
+            status = build_parallel_validation_status(final, contract, contract["paths"]["submission_inbox_dir"])
+            self.assertEqual(status["failed_group_count"], 1)
+            self.assertEqual(status["failed_groups_pending_recovery"][0]["sequence"], 5)
+            self.assertEqual(status["candidate_count"], 0)
+
+    def test_failed_group_recovery_is_separate_and_never_fabricates_acceptance(self):
+        with tempfile.TemporaryDirectory() as td:
+            contract = contract_for(td)
+            store = Path(td) / "store"
+            manifest_path = Path(td) / "work.json"
+            work = build_daily_work_manifest_web(queue(range(820001, 820007)), contract, store)
+            p1 = write_candidate(
+                work, contract, 1,
+                lambda artifact: artifact["dossiers"][0].__setitem__("schema_version", 1),
             )
-            self.assertEqual(status["canonical_expected_sequence"], 2)
-            by_sequence = {record["sequence"]: record for record in status["candidate_groups"]}
-            self.assertEqual(by_sequence[2]["validation"], "invalid")
-            self.assertEqual(by_sequence[2]["canonical_position"], "expected")
-            self.assertIsNotNone(by_sequence[2]["validator_error"])
-            self.assertEqual(by_sequence[3]["validation"], "valid")
-            self.assertEqual(by_sequence[3]["canonical_position"], "later_buffered")
-            self.assertEqual(by_sequence[4]["validation"], "valid")
-            self.assertEqual(by_sequence[4]["canonical_position"], "later_buffered")
-            self.assertEqual(status["invalid_expected_group"]["sequence"], 2)
-            self.assertFalse(status["canonical_progress_authority"])
-            self.assertFalse(status["retry_state"])
+            write_candidate(work, contract, 2)
+            plan = plan_buffered_drain(
+                work, contract, contract["paths"]["submission_inbox_dir"],
+                failed_quarantine_root=Path(td) / "quarantine",
+            )
+            manifest_path.write_text(json.dumps(work), encoding="utf-8")
+            apply_buffered_drain(plan, manifest_path=manifest_path, store_dir=store, failure_audit_path=Path(td) / "audit.jsonl")
+            failed = json.loads(manifest_path.read_text(encoding="utf-8"))
+            self.assertFalse(p1.exists())
+            self.assertTrue(failed["group_progress"]["normal_first_pass_complete"])
+            self.assertEqual(failed["group_progress"]["failed_group_count"], 1)
 
-            # Replanning cannot cross the invalid group even though later groups validate.
-            blocked_again = plan_buffered_drain(current, contract, contract["paths"]["submission_inbox_dir"])
-            self.assertEqual(blocked_again["accepted_count"], 0)
-            self.assertEqual(blocked_again["blocked_reason"], "invalid_expected_group")
-            self.assertEqual(blocked_again["stop_sequence"], 2)
-            self.assertEqual(blocked_again["next_manifest"]["completed_required_count"], 3)
+            reopened = reopen_failed_group(failed, contract, 1)
+            self.assertEqual(reopened["group_progress"]["groups"][0]["state"], "pending")
+            self.assertEqual(reopened["group_progress"]["accepted_group_count"], 1)
+            self.assertEqual(reopened["group_progress"]["failed_group_count"], 0)
+            self.assertEqual(reopened["group_progress"]["pending_group_count"], 1)
+            self.assertFalse(reopened["group_progress"]["normal_first_pass_complete"])
 
-    def test_worker_contract_is_async_create_only_without_runtime_python_gate(self):
-        prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
-        self.assertNotIn("python scripts/taste_steam_review_dossier_prepublication.py", prompt)
-        self.assertNotIn("prepublication_validator_unavailable", prompt)
-        self.assertIn("candidate buffered", prompt)
-        self.assertIn("Do not wait for GitHub validation or canonical acceptance", prompt)
-        self.assertIn("local traversal target only to `N+1`", prompt)
-
-        evidence = json.loads((ROOT / "config/taste_steam_review_dossier_web_evidence_contract.json").read_text(encoding="utf-8"))
-        publication = evidence["prepublication_validation"]
-        self.assertFalse(publication["validate_complete_group_before_create_only_publication"])
-        self.assertFalse(publication["scheduled_worker_python_execution_required"])
-        self.assertTrue(publication["github_validation_after_candidate_write_required"])
+    def test_control_plane_owns_next_pending_and_forbids_schedule_edit(self):
+        ownership = json.loads((ROOT / "config/execution_ownership_contract.json").read_text(encoding="utf-8"))
+        forbidden = ownership["scheduled_chatgpt_runtime_data_plane"]["forbidden"]
+        self.assertIn("enable_disable_pause_delete_reschedule_or_edit_its_own_scheduled_task", forbidden)
+        dossier = ownership["taste_steam_review_dossier_nonblocking_progress"]
+        self.assertEqual(dossier["owner"], "github_control_plane")
+        self.assertFalse(dossier["failed_group_blocks_unrelated_groups"])
+        self.assertFalse(dossier["new_queue_retry_loop_or_scheduler_created"])
+        self.assertFalse(dossier["scheduled_worker_may_edit_own_schedule"])
 
         parallel = json.loads((ROOT / "config/taste_steam_review_dossier_parallel_validation_contract.json").read_text(encoding="utf-8"))
         self.assertEqual(parallel["candidate_publication"]["required_group_size"], 3)
         self.assertFalse(parallel["github_validation"]["partial_per_game_acceptance"])
         self.assertFalse(parallel["github_validation"]["automatic_semantic_retry_or_healing"])
-        self.assertEqual(
-            parallel["validation_status"]["required_binding"],
-            ["snapshot_id", "sequence", "group_sha256", "web_evidence_contract_binding"],
-        )
-        self.assertTrue(parallel["validation_status"]["new_snapshot_supersedes_prior_status"])
+        self.assertFalse(parallel["error_philosophy"]["normal_forward_progress_blocked_by_invalid_group"])
 
-    def test_ingest_workflow_records_status_and_treats_semantic_block_as_state_not_retry(self):
+    def test_ingest_workflow_records_status_and_has_no_second_scheduler(self):
         workflow = (ROOT / ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml").read_text(encoding="utf-8")
         self.assertIn("python scripts/ingest_taste_steam_review_dossier_inbox.py --reconcile-nonfatal", workflow)
         self.assertIn("python scripts/taste_steam_review_dossier_parallel_validation.py", workflow)

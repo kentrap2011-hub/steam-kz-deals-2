@@ -2,8 +2,8 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "story-dlc-scope-positive-evidence-2026-09-18",
-  "purpose": "Prepare one complete fixed daily neutral Steam review dossier backlog snapshot before Taste semantic analysis, preserve checkpoint-sized durable progress inside that fixed snapshot, expose a bounded GitHub-derived compact read projection for the scheduled worker, and use buffered create-only group transport without transferring canonical progress or queue ownership away from GitHub.",
+  "contract_revision": "nonblocking-per-group-progress-2026-09-22",
+  "purpose": "Prepare one fixed daily neutral Steam review dossier backlog snapshot, track every immutable predeclared group independently in GitHub-owned canonical state, accept valid groups independently, retain failed groups for separate recovery, and expose only pending groups as normal Scheduled-worker work.",
   "ownership": {
     "control_plane": "github",
     "semantic_data_plane": "scheduled_chatgpt_dossier_worker",
@@ -17,18 +17,19 @@
       "predeclare_immutable_ordered_group_plan_for_active_buffered_mode",
       "generate_validate_compact_worker_read_projection_from_canonical_manifest_and_group_plan",
       "synchronize_compact_worker_index_with_canonical_progress_without_mutating_same_snapshot_descriptors",
-      "own_canonical_expected_group_sequence",
-      "advance_same_snapshot_progress_only_after_successful_canonical_persistence",
-      "track_same_snapshot_backlog_completeness_and_resume",
       "validate_submission",
       "validate_buffered_group_exactly_against_predeclared_group",
-      "own_gap_retry_stale_replay_and_duplicate_interpretation",
       "persist_compact_dossier",
       "persist_canonical_manifest_progress",
       "cleanup_or_consume_buffer_artifacts",
       "serialize_all_github_writers_of_the_dossier_canonical_manifest",
       "cleanup_expired_out_of_scope_dossiers",
-      "build_fail_closed_taste_semantic_input_from_active_pin"
+      "build_fail_closed_taste_semantic_input_from_active_pin",
+      "own_canonical_per_group_progress_state",
+      "classify_each_published_group_independently_as_accepted_or_failed_pending_recovery",
+      "derive_normal_next_work_only_from_pending_groups",
+      "own_failed_group_recovery_projection_and_recovery_eligibility",
+      "track_normal_first_pass_exhaustion_separately_from_all_groups_accepted"
     ],
     "semantic_worker_responsibilities": [
       "read_only_the_github_generated_compact_worker_index_and_exact_group_descriptors",
@@ -38,7 +39,7 @@
       "perform_a_distinct_russian_player_feedback_attempt_without_treating_store_language_ui_as_feedback",
       "produce_neutral_compact_synthesis_with_provenance",
       "publish_each_completed_group_only_through_repository_defined_create_only_transport",
-      "continue_from_group_n_to_the_immediately_next_projected_group_after_successful_create_only_publication_without_waiting_for_canonical_ingest"
+      "continue_to_the_next_pending_predeclared_group_after_successful_create_only_publication_while_snapshot_plan_and_binding_remain_live"
     ],
     "forbidden": [
       "treat_all_dlc_or_addons_as_independent_taste_semantic_scope",
@@ -47,7 +48,6 @@
       "refresh_or_rebuild_scope_after_checkpoint_persistence",
       "manage_queue_or_retry_policy",
       "interpret_buffer_as_canonical_progress_retry_state_or_chatgpt_queue",
-      "skip_a_missing_or_invalid_predeclared_group",
       "choose_alternate_retry_filenames",
       "overwrite_update_or_delete_buffer_artifacts_from_chatgpt",
       "write_or_mutate_worker_index_or_group_descriptors_from_chatgpt",
@@ -58,7 +58,8 @@
       "choose_include_or_exclude",
       "use_price_discount_or_sale_urgency",
       "archive_raw_review_text",
-      "change_taste_pin_or_taste_ingest_authority"
+      "change_taste_pin_or_taste_ingest_authority",
+      "enable_disable_or_edit_the_scheduled_dossier_task_from_the_semantic_worker"
     ]
   },
   "daily_preparation": {
@@ -141,9 +142,10 @@
       "current_checkpoint_items",
       "current_checkpoint_count",
       "full_backlog_complete",
-      "status"
+      "status",
+      "group_progress"
     ],
-    "progress_rule": "accepted_checkpoint_removes_only_that_checkpoint_from_remaining_scope_without_re-reading_source_queue",
+    "progress_rule": "group_progress_is_canonical_per_group_state;legacy_remaining_completed_checkpoint_fields_remain_a_contiguous-prefix_compatibility_projection_and_do_not_define_normal_next_work",
     "replacement_rule": "next_daily_preparation_replaces_previous_snapshot_with_new_current_queue_and_store_evaluation",
     "buffered_mode_extension": {
       "status": "active",
@@ -160,11 +162,11 @@
     "semantics": "internal_durability_boundary_not_scope_quota",
     "completion_scope": "entire_same_prepared_daily_snapshot",
     "ordering": "prepared_snapshot_canonical_queue_order_after_appid_deduplication",
-    "advance_rule": "after_successful_checkpoint_persistence_advance_progress_inside_same_snapshot_without_queue_or_store_scope_rebuild",
-    "same_invocation_rule": "active_buffered_mode_may_traverse_only_the_next_predeclared_group_after_successful_create_only_publication_without_waiting_for_advanced_manifest;legacy_compatibility_fallback_waits_for_advanced_manifest",
-    "resume_rule": "later_invocation_starts_from_github_owned_canonical_progress_for_the_same_latest_prepared_daily_snapshot",
-    "ready_condition": "same_snapshot_remaining_required_count_zero",
-    "failure_rule": "invalid_or_failed_later_checkpoint_does_not_discard_prior_durable_checkpoint_progress",
+    "advance_rule": "after_successful_group_persistence_classify_that_exact_group_accepted_without_requiring_earlier_failed_groups_to_recover",
+    "same_invocation_rule": "active_buffered_mode_may_continue_to_the_next_pending_predeclared_group_after_successful_create_only_publication_without_waiting_for_advanced_manifest",
+    "resume_rule": "later_invocation_starts_from_github_owned_next_pending_group_for_the_same_latest_prepared_daily_snapshot",
+    "ready_condition": "normal_first_pass_complete_when_no_pending_groups_remain;full_backlog_complete_retains_all_groups_accepted_meaning",
+    "failure_rule": "invalid_or_failed_group_is_classified_failed_or_invalid_pending_recovery_for_that_exact_group_and_does_not_block_unrelated_later_groups",
     "forbidden_interpretations": [
       "daily_cap",
       "run_quota",
@@ -176,7 +178,7 @@
   },
   "buffered_submission": {
     "status": "active",
-    "architecture": "immutable_predeclared_group_plan_plus_github_compact_read_projection_plus_create_only_transport_buffer_plus_github_contiguous_drain",
+    "architecture": "immutable_predeclared_group_plan_plus_github_compact_read_projection_plus_create_only_transport_buffer_plus_github_nonblocking_per_group_drain",
     "activation_gate": {
       "rule": "buffered_transport_and_compact_worker_read_projection_are_active_under_this_contract_and_the_landed_runtime",
       "runtime_requirements_met": [
@@ -217,21 +219,21 @@
       "immutability_rule": "the_group_plan_for_a_snapshot_cannot_change_when_canonical_progress_advances"
     },
     "worker": {
-      "start_rule": "start_from_canonical_expected_sequence_in_the_github_generated_worker_index_then_read_only_that_exact_compact_group_descriptor",
-      "same_invocation_progression_rule": "after_successful_create_only_publication_of_group_n_the_worker_may_process_only_group_n_plus_1_from_the_same_immutable_projected_plan_without_waiting_for_canonical_ingest",
+      "start_rule": "start_from_next_pending_sequence_in_the_github_generated_worker_index_then_read_only_that_exact_compact_group_descriptor",
+      "same_invocation_progression_rule": "after_successful_create_only_publication_re_read_index_for_liveness_and_continue_to_the_next_still_pending_predeclared_group_in_plan_order_without_waiting_for_canonical_ingest",
       "same_invocation_progression_is_not_canonical_progress": true,
       "liveness_rule": "before_each_later_group_re_read_the_tiny_index_only_as_snapshot_plan_and_binding_guard_not_as_a_progress_gate",
-      "deterministic_artifact_already_exists_rule": "if_the_deterministic_artifact_for_the_current_canonical_expected_group_already_exists_while_canonical_progress_has_not_advanced_do_not_overwrite_rename_skip_or_create_an_alternate_artifact;stop_and_leave_drain_retry_interpretation_to_github",
-      "interrupted_invocation_rule": "on_a_later_invocation_reload_github_worker_index_and_start_from_its_canonical_expected_sequence;do_not_scan_pending_buffer_files_to_invent_resume_order_or_retry_state",
+      "deterministic_artifact_already_exists_rule": "if_the_deterministic_artifact_for_a_pending_group_already_exists_do_not_overwrite_rename_or_create_an_alternate;stop_only_if_github_has_not_yet_classified_that_transport_state;failed_or_accepted_groups_are_excluded_by_the_next_pending_projection",
+      "interrupted_invocation_rule": "on_a_later_invocation_reload_github_worker_index_and_start_from_next_pending_sequence;never_resume_from_the_first_historical_failure",
       "snapshot_replacement_rule": "if_a_different_current_snapshot_or_group_plan_is_observed_do_not_publish_more_groups_for_the_superseded_projection",
       "forbidden": [
         "derive_new_scope",
         "choose_arbitrary_group_offsets",
         "reconstruct_descriptor_from_partial_full_manifest_fields",
-        "skip_gaps",
         "interpret_replay_or_stale_state",
         "manage_buffer_cleanup",
-        "declare_completeness"
+        "declare_completeness",
+        "enable_disable_or_edit_own_schedule"
       ]
     },
     "buffer": {
@@ -250,18 +252,18 @@
       "owner": "github_control_plane",
       "wake_up_semantics": "a_buffer_push_is_only_a_wake_up_signal;current_repository_state_is_the_input",
       "state_source": "full_canonical_work_manifest_and_buffer_not_compact_worker_projection",
-      "expected_sequence_source": "canonical_manifest_progress",
-      "acceptance_rule": "accept_only_the_maximal_valid_contiguous_prefix_starting_at_expected_sequence",
-      "gap_rule": "stop_at_the_first_missing_or_invalid_expected_group_and_never_advance_through_a_gap",
+      "expected_sequence_source": "manifest.group_progress pending projection",
+      "acceptance_rule": "strict_validate_each_present_pending_group_independently;persist_valid_groups_and_classify_invalid_groups_failed_or_invalid_pending_recovery",
+      "gap_rule": "a_missing_pending_group_remains_pending_but_does_not_block_validation_or_acceptance_of_other_present_pending_groups",
       "validation_rule": "each_group_must_exactly_match_its_predeclared_descriptor_from_the_full_canonical_manifest_snapshot_sequence_range_ordered_items_appids_hashes_and_provenance_bindings_and_each_dossier_must_pass_canonical_validation",
-      "malformed_reordered_out_of_scope_rule": "the_first_such_expected_group_blocks_itself_and_every_later_group",
+      "malformed_reordered_out_of_scope_rule": "fail_closed_for_the_affected_group_only;never_fabricate_acceptance_and_never_globally_pin_unrelated_groups",
       "wrong_snapshot_rule": "never_apply_to_current_snapshot",
       "replay_rule": "a_group_already_canonically_accepted_must_not_persist_or_advance_again",
       "duplicate_rule": "deterministic_path_is_authoritative;alternate_filename_duplicates_are_invalid",
       "idempotency_rule": "reruns_derive_truth_again_from_current_github_canonical_state_and_replay_cannot_repeat_canonical_advancement",
       "cleanup_rule": "only_github_may_delete_consume_or_mark_buffer_artifacts",
-      "example_contiguous": "expected=5;buffer=5,6,7,8=>accept=5,6,7,8",
-      "example_gap": "expected=5;buffer=5,6,8=>accept=5,6;stop_at=7"
+      "example_contiguous": "pending=5,6,7,8;buffer=5_bad,6_good,7_good=>failed=5;accepted=6,7;next_pending=8",
+      "example_gap": "pending=5,6,7;buffer=6_good=>accepted=6;5_and_7_remain_pending;next_pending=5"
     },
     "canonical_writer_serialization": {
       "owner": "github_control_plane",
@@ -286,12 +288,12 @@
       "proof_requirements": [
         "prepared_required_sha256_matches_existing_prepared_required_items",
         "completed_required_count_equals_prepared_required_count_minus_remaining_required_count",
-        "remaining_required_items_exactly_equal_prepared_required_items[completed_required_count:]",
-        "completed_required_count_lands_on_a_group_boundary_unless_the_snapshot_is_fully_complete",
-        "all_derived_group_descriptors_reproduce_the_existing_prepared_order_without_reordering_or_scope_change"
+        "all_derived_group_descriptors_reproduce_the_existing_prepared_order_without_reordering_or_scope_change",
+        "group_progress_if_present_exactly_binds_every_immutable_group_sequence_and_group_sha256",
+        "legacy_contiguous_progress_fields_equal_only_the_maximal_accepted_prefix_and_are_not_normal_next_work_authority"
       ],
       "accepted_group_rule": "only_groups_under_the_same_compatible_worker_evidence_binding_and_group_plan_can_be_treated_as_already_canonically_accepted",
-      "next_group_rule": "continue_from_the_first_group_after_the_proven_accepted_prefix_only_for_a_compatible_snapshot",
+      "next_group_rule": "continue_from_the_lowest_pending_group_under_the_same_compatible_snapshot;failed_groups_remain_separate_recovery work and accepted groups are never reprocessed",
       "failure_rule": "an_incompatible_evidence_binding_or_group_size_must_rebuild_through_the_normal_github_owned_pre_ai_path_without_manual_progress_or_cache_rewrites"
     }
   },
@@ -300,10 +302,10 @@
     "owner": "github_control_plane",
     "canonical_authority": false,
     "canonical_source": "data/production/pre_ai/taste_steam_review_dossier_work.json",
-    "index_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V1",
+    "index_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V2",
     "group_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
     "descriptor_path_template": "data/production/pre_ai/taste_steam_review_dossier_worker_groups/{snapshot_id}/g{sequence:06d}.json",
-    "index_rule": "contains_only_o1_snapshot_plan_progress_sampling_and_address_bindings_derived_from_the_full_canonical_manifest",
+    "index_rule": "contains_snapshot_plan_binding_plus_github_owned_next_pending_sequence_and_per_group_progress_counts;normal worker start is never derived from a historical failed group",
     "descriptor_rule": "one_file_per_exact_immutable_canonical_group_with_projection_level_plan_bindings_and_no_worker_recomputation_of_scope_or_identity",
     "same_snapshot_immutability_rule": "descriptor_files_must_remain_byte_identical_when_only_canonical_progress_advances",
     "progress_rule": "same_snapshot_progress_changes_update_only_the_mutable_worker_index_progress_fields",

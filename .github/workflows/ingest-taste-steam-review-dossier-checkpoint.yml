@@ -32,24 +32,23 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Apply explicit GitHub-owned invalid expected artifact recovery if requested
+      - name: Apply explicit GitHub-owned dossier recovery if requested
         run: |
           set -euo pipefail
           python scripts/taste_steam_review_dossier_recovery.py
 
-      - name: Drain maximal valid contiguous dossier prefix from current repository state
+      - name: Classify and drain pending dossier groups independently
         run: |
           set -euo pipefail
-          # A semantic-invalid candidate is a durable blocked state, not an
-          # infrastructure failure or an automatic retry request. The drain still
-          # applies only the maximal valid contiguous prefix and never crosses it.
+          # Group-level semantic invalidity becomes canonical failed/incomplete
+          # state for that exact group and never blocks unrelated pending groups.
           python scripts/ingest_taste_steam_review_dossier_inbox.py --reconcile-nonfatal
 
       - name: Record strict validation status for all current-snapshot candidate groups
         run: |
           set -euo pipefail
-          # This pass is observational only. It may validate later buffered groups
-          # independently for visibility, but it cannot advance canonical progress.
+          # This pass projects candidate validation plus canonical failed-group
+          # recovery visibility; group_progress remains the progress authority.
           python scripts/taste_steam_review_dossier_parallel_validation.py
 
       - name: Commit dossier recovery transport validation canonical progress and worker projection atomically
@@ -68,7 +67,7 @@ jobs:
           git add -A -- data/control data/quarantine data/audit 2>/dev/null || true
           git diff --cached --check
           if git diff --cached --quiet; then
-            echo "No contiguous canonical dossier recovery or validation state changes available"
+            echo "No dossier recovery or per-group state changes available"
             exit 0
           fi
           git commit -m "Drain and validate Steam review dossier buffer"

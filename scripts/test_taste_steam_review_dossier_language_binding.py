@@ -98,13 +98,13 @@ class LanguageBindingRegressionTests(unittest.TestCase):
         self.assertIn("A Russian/mixed record that was found during research but is **not bound to that observation or conflict** gives that entry no Russian support.", PROMPT)
         self.assertIn("Before serializing each observation/conflict, perform the derivation from its final `player_feedback_ids` again.", PROMPT)
 
-    def test_parallel_buffer_and_group_size_contract_are_unchanged(self):
+    def test_parallel_buffer_group_size_and_github_owned_drain_are_preserved(self):
         buffered = CONTROL["buffered_submission"]
         self.assertEqual(int(CONTROL["checkpointing"]["checkpoint_size"]), 3)
         self.assertTrue(buffered["buffer"]["multiple_pending_groups_same_snapshot_allowed"])
         self.assertEqual(
             buffered["drain"]["acceptance_rule"],
-            "accept_only_the_maximal_valid_contiguous_prefix_starting_at_expected_sequence",
+            "strict_validate_each_present_pending_group_independently;persist_valid_groups_and_classify_invalid_groups_failed_or_invalid_pending_recovery",
         )
         self.assertEqual(buffered["drain"]["owner"], "github_control_plane")
 

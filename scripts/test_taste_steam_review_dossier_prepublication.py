@@ -159,7 +159,8 @@ class FreshSnapshotRecoveryTests(unittest.TestCase):
             before_remaining = work["remaining_required_count"]
             plan = plan_buffered_drain(work, contract, buffer_dir)
             self.assertEqual(plan["accepted_count"], 0)
-            self.assertEqual(plan["blocked_reason"], "gap")
+            self.assertEqual(plan["failed_count"], 0)
+            self.assertEqual(plan["next_manifest"]["group_progress"]["pending_group_count"], 1)
             self.assertEqual(plan["next_manifest"]["completed_required_count"], before_completed)
             self.assertEqual(plan["next_manifest"]["remaining_required_count"], before_remaining)
 

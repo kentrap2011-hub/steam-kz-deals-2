@@ -107,18 +107,19 @@ class BufferedSubmissionTests(unittest.TestCase):
             self.assertEqual(expected_group_sequence(progressed, contract), 2)
             self.assertEqual(progressed["web_evidence_contract_binding"], work["web_evidence_contract_binding"])
 
-    def test_future_group_waits_and_gap_never_skips(self):
+    def test_present_later_pending_group_is_independently_accepted(self):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
             work = build_daily_work_manifest_web(queue(range(110000, 110025)), contract, Path(td) / "store", now=NOW)
             future = write_group(work, contract, 2)
             plan = plan_buffered_drain(work, contract, contract["paths"]["submission_inbox_dir"])
-            self.assertEqual(plan["accepted_count"], 0)
-            self.assertEqual(plan["blocked_reason"], "gap")
-            self.assertEqual(plan["stop_sequence"], 1)
+            self.assertEqual([x["descriptor"]["sequence"] for x in plan["accepted"]], [2])
+            self.assertEqual(plan["failed_count"], 0)
+            self.assertEqual(plan["next_manifest"]["group_progress"]["groups"][0]["state"], "pending")
+            self.assertEqual(plan["next_manifest"]["group_progress"]["groups"][1]["state"], "accepted")
             self.assertTrue(future.exists())
 
-    def test_contiguous_drain_and_gap_behavior_are_unchanged(self):
+    def test_nonblocking_drain_crosses_missing_pending_group(self):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
             store = Path(td) / "store"
@@ -126,18 +127,22 @@ class BufferedSubmissionTests(unittest.TestCase):
             current = advance(work, contract, store, 3)
             p4, p5, p7 = [write_group(work, contract, sequence) for sequence in (4, 5, 7)]
             plan = plan_buffered_drain(current, contract, contract["paths"]["submission_inbox_dir"])
-            self.assertEqual([x["descriptor"]["sequence"] for x in plan["accepted"]], [4, 5])
-            self.assertEqual(plan["blocked_reason"], "gap")
-            self.assertEqual(plan["stop_sequence"], 6)
+            self.assertEqual([x["descriptor"]["sequence"] for x in plan["accepted"]], [4, 5, 7])
+            self.assertEqual(plan["failed_count"], 0)
+            self.assertEqual(plan["next_manifest"]["group_progress"]["groups"][5]["state"], "pending")
+            self.assertEqual(plan["next_manifest"]["group_progress"]["groups"][6]["state"], "accepted")
             manifest_path = Path(td) / "work.json"
             manifest_path.write_text(json.dumps(current), encoding="utf-8")
             buffered.apply_buffered_drain(plan, manifest_path=manifest_path, store_dir=store)
             self.assertFalse(p4.exists())
             self.assertFalse(p5.exists())
-            self.assertTrue(p7.exists())
-            self.assertEqual(json.loads(manifest_path.read_text())["completed_required_count"], GROUP_SIZE * 5)
+            self.assertFalse(p7.exists())
+            persisted_manifest = json.loads(manifest_path.read_text())
+            self.assertEqual(persisted_manifest["completed_required_count"], GROUP_SIZE * 5)
+            self.assertEqual(persisted_manifest["group_progress"]["groups"][5]["state"], "pending")
+            self.assertEqual(persisted_manifest["group_progress"]["groups"][6]["state"], "accepted")
 
-    def test_invalid_expected_group_blocks_later_groups(self):
+    def test_invalid_group_fails_without_blocking_later_group(self):
         with tempfile.TemporaryDirectory() as td:
             contract = contract_for(td)
             store = Path(td) / "store"
@@ -145,16 +150,26 @@ class BufferedSubmissionTests(unittest.TestCase):
             p1 = write_group(work, contract, 1)
             p2 = write_group(work, contract, 2, lambda a: a["dossiers"][0].__setitem__("schema_version", 1))
             p3 = write_group(work, contract, 3)
-            plan = plan_buffered_drain(work, contract, contract["paths"]["submission_inbox_dir"])
-            self.assertEqual([x["descriptor"]["sequence"] for x in plan["accepted"]], [1])
-            self.assertEqual(plan["blocked_reason"], "invalid_expected_group")
-            self.assertEqual(plan["stop_sequence"], 2)
+            quarantine = Path(td) / "quarantine"
+            plan = plan_buffered_drain(
+                work, contract, contract["paths"]["submission_inbox_dir"],
+                failed_quarantine_root=quarantine,
+            )
+            self.assertEqual([x["descriptor"]["sequence"] for x in plan["accepted"]], [1, 3])
+            self.assertEqual([x["descriptor"]["sequence"] for x in plan["failed"]], [2])
             manifest_path = Path(td) / "work.json"
             manifest_path.write_text(json.dumps(work), encoding="utf-8")
-            buffered.apply_buffered_drain(plan, manifest_path=manifest_path, store_dir=store)
+            buffered.apply_buffered_drain(
+                plan, manifest_path=manifest_path, store_dir=store,
+                failure_audit_path=Path(td) / "failures.jsonl",
+            )
             self.assertFalse(p1.exists())
-            self.assertTrue(p2.exists())
-            self.assertTrue(p3.exists())
+            self.assertFalse(p2.exists())
+            self.assertFalse(p3.exists())
+            current = json.loads(manifest_path.read_text())
+            self.assertEqual(current["group_progress"]["groups"][1]["state"], "failed_or_invalid_pending_recovery")
+            self.assertEqual(current["group_progress"]["groups"][2]["state"], "accepted")
+            self.assertTrue(any(quarantine.rglob("*.invalid-*")))
 
     def test_stale_snapshot_inert_and_replay_idempotent(self):
         with tempfile.TemporaryDirectory() as td:
@@ -165,7 +180,7 @@ class BufferedSubmissionTests(unittest.TestCase):
             stale = write_group(old, contract, 1)
             plan = plan_buffered_drain(current, contract, contract["paths"]["submission_inbox_dir"])
             self.assertEqual(plan["accepted_count"], 0)
-            self.assertEqual(plan["blocked_reason"], "gap")
+            self.assertEqual(plan["failed_count"], 0)
             self.assertTrue(stale.exists())
 
         with tempfile.TemporaryDirectory() as td:
@@ -182,8 +197,10 @@ class BufferedSubmissionTests(unittest.TestCase):
             write_group(work, contract, 1)
             replay = plan_buffered_drain(current, contract, contract["paths"]["submission_inbox_dir"])
             self.assertEqual(replay["accepted_count"], 0)
-            self.assertEqual(replay["stop_sequence"], 2)
+            self.assertEqual(replay["failed_count"], 0)
             self.assertEqual(replay["next_manifest"]["completed_required_count"], GROUP_SIZE)
+            self.assertEqual(replay["next_manifest"]["group_progress"]["groups"][0]["state"], "accepted")
+            self.assertEqual(replay["next_manifest"]["group_progress"]["groups"][1]["state"], "pending")
 
     def test_atomic_multi_group_apply_and_restart_before_apply(self):
         with tempfile.TemporaryDirectory() as td:
@@ -220,6 +237,7 @@ class BufferedSubmissionTests(unittest.TestCase):
             progressed = advance(work, contract, store, 2)
             legacy = copy.deepcopy(progressed)
             legacy.pop("submission_group_plan")
+            legacy.pop("group_progress", None)
             sid = legacy["snapshot_id"]
             migrated = ensure_submission_group_plan(legacy, contract)
             self.assertEqual(migrated["snapshot_id"], sid)

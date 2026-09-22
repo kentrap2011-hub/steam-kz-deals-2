@@ -102,7 +102,8 @@ class ContractGapRegressionTests(unittest.TestCase):
             path.write_text(json.dumps(artifact), encoding="utf-8")
             plan = plan_buffered_drain(work, contract, contract["paths"]["submission_inbox_dir"])
             self.assertEqual(plan["accepted_count"], 0)
-            self.assertEqual(plan["blocked_reason"], "invalid_expected_group")
+            self.assertEqual(plan["failed_count"], 1)
+            self.assertEqual(plan["next_manifest"]["group_progress"]["groups"][0]["state"], "failed_or_invalid_pending_recovery")
             self.assertEqual(plan["next_manifest"]["completed_required_count"], 0)
 
     def test_gap02_feedback_url_aliases_cannot_double_count_but_distinct_items_same_thread_pass(self):

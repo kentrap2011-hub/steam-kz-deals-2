@@ -33,6 +33,7 @@ on:
       - "config/taste_steam_review_dossier_web_evidence_contract.json"
       - "config/taste_steam_review_dossier_worker_prompt.md"
       - "config/taste_steam_review_dossier_recovery_contract.json"
+      - "config/taste_steam_review_dossier_parallel_validation_contract.json"
       - "config/taste_steam_review_dossier_persistence_bridge.json"
       - "config/russian_description_translation_contract.json"
       - "config/russian_description_translation_result_contract.json"
@@ -73,6 +74,8 @@ on:
       - "scripts/taste_steam_review_dossier_compact_provenance.py"
       - "scripts/taste_steam_review_dossier_prepublication.py"
       - "scripts/taste_steam_review_dossier_buffered.py"
+      - "scripts/taste_steam_review_dossier_group_progress.py"
+      - "scripts/taste_steam_review_dossier_parallel_validation.py"
       - "scripts/taste_steam_review_dossier_recovery.py"
       - "scripts/taste_steam_review_dossier_worker_projection.py"
       - "scripts/build_taste_steam_review_dossier_work.py"
@@ -171,6 +174,9 @@ jobs:
       - name: Reconcile already-present dossier inbox state
         run: python scripts/ingest_taste_steam_review_dossier_inbox.py --reconcile-nonfatal
 
+      - name: Record current dossier group validation and recovery projection
+        run: python scripts/taste_steam_review_dossier_parallel_validation.py
+
       - name: Regression test fixed daily dossier snapshot control plane
         run: |
           python scripts/test_taste_steam_review_dossier_daily_snapshot.py
@@ -214,6 +220,7 @@ jobs:
             data/production/pre_ai/chatgpt_taste_queue.jsonl \
             data/production/pre_ai/taste_steam_review_dossier_work.json \
             data/production/pre_ai/taste_steam_review_dossier_worker_index.json \
+            data/production/pre_ai/taste_steam_review_dossier_validation_status.json \
             data/production/pre_ai/chatgpt_purchase_context.jsonl \
             data/production/pre_ai/progressive_candidate_context.jsonl \
             data/production/pre_ai/progressive_pass1_work.json \
@@ -221,7 +228,7 @@ jobs:
             data/production/pre_ai/chatgpt_ru_description_status.json
           git add -A -- data/ai_inbox/taste_steam_review_dossiers 2>/dev/null || true
           git add -A data/production/pre_ai/taste_steam_review_dossier_worker_groups
-          git add -A -- data/quarantine/taste_steam_review_dossier_inbox 2>/dev/null || true
+          git add -A -- data/quarantine/taste_steam_review_dossier_inbox data/audit/taste_steam_review_dossier_group_failures.jsonl 2>/dev/null || true
           if [ -e data/production/pre_ai/taste_active_work_unit.json ] || \
              git ls-files --error-unmatch data/production/pre_ai/taste_active_work_unit.json >/dev/null 2>&1; then
             git add -A data/production/pre_ai/taste_active_work_unit.json

@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Durable GitHub-owned validation status for buffered Taste dossier candidates.
-
-This module is observational only. It never advances canonical progress, mutates
-candidate artifacts, creates retry state, or repairs semantic output. Canonical
-persistence remains owned by the existing contiguous buffer drain.
-"""
+"""Durable GitHub-owned validation/recovery observability for dossier candidates."""
 import argparse
 import hashlib
 import json
@@ -16,12 +11,8 @@ from taste_steam_review_dossier_buffered import (
     expected_buffer_path,
     validate_buffer_artifact,
 )
-from taste_steam_review_dossier_daily import (
-    expected_group_sequence,
-    load_contract,
-    validate_group_plan,
-    validate_manifest,
-)
+from taste_steam_review_dossier_daily import load_contract, validate_group_plan, validate_manifest
+from taste_steam_review_dossier_group_progress import ensure_group_progress, next_pending_sequence
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_PARALLEL_CONTRACT = ROOT / "config/taste_steam_review_dossier_parallel_validation_contract.json"
@@ -39,25 +30,24 @@ def load_parallel_validation_contract(path=DEFAULT_PARALLEL_CONTRACT):
         raise ValueError("parallel dossier validation contract is missing, stale or unsupported")
     if doc.get("candidate_publication", {}).get("required_group_size") != 3:
         raise ValueError("parallel dossier validation contract must preserve group size 3")
-    if doc.get("validation_status", {}).get("schema") != "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-STATUS-V1":
+    if doc.get("validation_status", {}).get("schema") != "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-STATUS-V2":
         raise ValueError("parallel dossier validation status schema is unsupported")
     return doc
 
 
-def _candidate_record(*, manifest, descriptor, paths, contract, expected_sequence):
+def _candidate_record(*, manifest, descriptor, paths, contract, canonical_state, next_pending):
     sequence = int(descriptor["sequence"])
     record = {
         "snapshot_id": manifest["snapshot_id"],
         "sequence": sequence,
         "group_sha256": descriptor["group_sha256"],
         "web_evidence_contract_binding": manifest["web_evidence_contract_binding"],
+        "canonical_group_state": canonical_state,
         "validation": "invalid",
-        "canonical_position": (
-            "expected"
-            if expected_sequence == sequence
-            else "later_buffered"
-            if expected_sequence is not None and sequence > expected_sequence
-            else "replay_or_completed"
+        "normal_first_pass_position": (
+            "next_pending" if next_pending == sequence
+            else "pending_later" if canonical_state == "pending"
+            else canonical_state
         ),
         "artifact_paths": [path.as_posix() for path in paths],
         "artifact_sha256": None,
@@ -66,13 +56,11 @@ def _candidate_record(*, manifest, descriptor, paths, contract, expected_sequenc
     if len(paths) != 1:
         record["validator_error"] = "duplicate_or_alternate_buffer_artifact"
         return record
-
     path = paths[0]
     deterministic = expected_buffer_path(descriptor, contract)
     if path.as_posix() != deterministic.as_posix():
         record["validator_error"] = "non_deterministic_buffer_path"
         return record
-
     try:
         raw = path.read_bytes()
         record["artifact_sha256"] = hashlib.sha256(raw).hexdigest()
@@ -81,28 +69,25 @@ def _candidate_record(*, manifest, descriptor, paths, contract, expected_sequenc
     except (ValueError, json.JSONDecodeError, UnicodeDecodeError, OSError, KeyError, TypeError) as exc:
         record["validator_error"] = str(exc)
         return record
-
     record["validation"] = "valid"
     return record
 
 
 def build_parallel_validation_status(manifest, contract, buffer_dir):
-    """Strict-validate every present current-snapshot candidate independently.
-
-    Later valid candidates are observable as valid even when an earlier expected
-    group is invalid. This function never promotes them; canonical contiguous
-    acceptance remains a separate GitHub-owned operation.
-    """
+    """Observe present candidates plus canonical per-group progress/recovery projection."""
+    manifest = ensure_group_progress(manifest, contract)
     validate_manifest(manifest, contract)
     group_plan = validate_group_plan(manifest, contract, required=True)
     if int(contract["checkpointing"]["checkpoint_size"]) != 3:
         raise ValueError("parallel validation requires canonical checkpoint size 3")
 
-    expected = expected_group_sequence(manifest, contract)
+    next_pending = next_pending_sequence(manifest, contract)
     candidates, malformed = _current_snapshot_candidates(buffer_dir, manifest["snapshot_id"])
     groups = {int(group["sequence"]): group for group in group_plan["groups"]}
+    state_by_sequence = {
+        int(entry["sequence"]): entry for entry in manifest["group_progress"]["groups"]
+    }
     records = []
-
     for sequence in sorted(candidates):
         descriptor = groups.get(sequence)
         paths = candidates[sequence]
@@ -112,8 +97,9 @@ def build_parallel_validation_status(manifest, contract, buffer_dir):
                 "sequence": sequence,
                 "group_sha256": None,
                 "web_evidence_contract_binding": manifest["web_evidence_contract_binding"],
+                "canonical_group_state": "outside_plan",
                 "validation": "invalid",
-                "canonical_position": "outside_plan",
+                "normal_first_pass_position": "outside_plan",
                 "artifact_paths": [path.as_posix() for path in paths],
                 "artifact_sha256": None,
                 "validator_error": "buffer_artifact_sequence_outside_current_group_plan",
@@ -124,41 +110,42 @@ def build_parallel_validation_status(manifest, contract, buffer_dir):
             descriptor=descriptor,
             paths=paths,
             contract=contract,
-            expected_sequence=expected,
+            canonical_state=state_by_sequence[sequence]["state"],
+            next_pending=next_pending,
         ))
 
-    invalid_expected = next(
-        (
-            {
-                "sequence": record["sequence"],
-                "group_sha256": record["group_sha256"],
-                "artifact_sha256": record["artifact_sha256"],
-                "validator_error": record["validator_error"],
-            }
-            for record in records
-            if expected is not None and record["sequence"] == expected and record["validation"] == "invalid"
-        ),
-        None,
-    )
+    failed_groups = [
+        {
+            "sequence": entry["sequence"],
+            "group_sha256": entry["group_sha256"],
+            "failure": entry["failure"],
+        }
+        for entry in manifest["group_progress"]["groups"]
+        if entry["state"] == "failed_or_invalid_pending_recovery"
+    ]
+    progress = manifest["group_progress"]
     return {
-        "schema": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-STATUS-V1",
-        "schema_version": 1,
+        "schema": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-STATUS-V2",
+        "schema_version": 2,
         "snapshot_id": manifest["snapshot_id"],
         "prepared_required_sha256": manifest["prepared_required_sha256"],
         "group_plan_sha256": group_plan["group_plan_sha256"],
         "web_evidence_contract_binding": manifest["web_evidence_contract_binding"],
-        "canonical_expected_sequence": expected,
-        "completed_required_count": manifest["completed_required_count"],
-        "remaining_required_count": manifest["remaining_required_count"],
+        "next_pending_sequence": next_pending,
+        "accepted_group_count": progress["accepted_group_count"],
+        "failed_group_count": progress["failed_group_count"],
+        "pending_group_count": progress["pending_group_count"],
+        "normal_first_pass_complete": progress["normal_first_pass_complete"],
+        "all_groups_accepted": progress["all_groups_accepted"],
         "full_backlog_complete": manifest["full_backlog_complete"],
         "candidate_count": len(records),
         "valid_candidate_count": sum(1 for record in records if record["validation"] == "valid"),
         "invalid_candidate_count": sum(1 for record in records if record["validation"] == "invalid"),
-        "invalid_expected_group": invalid_expected,
+        "failed_groups_pending_recovery": failed_groups,
         "candidate_groups": records,
         "malformed_current_snapshot_artifacts": [path.as_posix() for path in malformed],
         "canonical_progress_authority": False,
-        "retry_state": False,
+        "recovery_projection_authority": False,
     }
 
 
@@ -181,7 +168,7 @@ def write_parallel_validation_status(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Write durable GitHub-owned validation status for buffered Taste dossier candidates")
+    parser = argparse.ArgumentParser(description="Write GitHub-owned dossier validation/recovery observability")
     parser.add_argument("--manifest", default="data/production/pre_ai/taste_steam_review_dossier_work.json")
     parser.add_argument("--dossier-contract", default="config/taste_steam_review_dossier_contract.json")
     parser.add_argument("--parallel-contract", default=str(DEFAULT_PARALLEL_CONTRACT))
@@ -199,10 +186,10 @@ def main():
         "status": "written",
         "path": target.as_posix(),
         "snapshot_id": status["snapshot_id"],
-        "canonical_expected_sequence": status["canonical_expected_sequence"],
-        "valid_candidate_count": status["valid_candidate_count"],
-        "invalid_candidate_count": status["invalid_candidate_count"],
-        "invalid_expected_group": status["invalid_expected_group"],
+        "next_pending_sequence": status["next_pending_sequence"],
+        "accepted_group_count": status["accepted_group_count"],
+        "failed_group_count": status["failed_group_count"],
+        "pending_group_count": status["pending_group_count"],
     }, ensure_ascii=False, indent=2))
 
 

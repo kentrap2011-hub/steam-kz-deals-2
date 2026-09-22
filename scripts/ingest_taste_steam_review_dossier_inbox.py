@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 from ingest_taste_steam_review_dossiers import ingest_submission
-from taste_steam_review_dossier_buffered import current_expected_buffer_paths, drain_buffered_groups
+from taste_steam_review_dossier_buffered import drain_buffered_groups
 from taste_steam_review_dossier_daily import load_contract, validate_manifest
 from taste_steam_review_dossier_worker_projection import write_worker_projection
 
@@ -62,22 +62,6 @@ def ingest_inbox_submission(
     }
 
 
-def _blocked_result(manifest, reason, sequence, mode):
-    return {
-        "mode": mode,
-        "status": "blocked_no_progress",
-        "snapshot_id": manifest["snapshot_id"],
-        "persisted": [],
-        "persisted_count": 0,
-        "accepted_group_count": 0,
-        "accepted_dossier_count": 0,
-        "blocked_reason": reason,
-        "stop_sequence": sequence,
-        "remaining_required_count": manifest["remaining_required_count"],
-        "full_backlog_complete": manifest["full_backlog_complete"],
-    }
-
-
 def drain_inbox_state(
     *,
     manifest_path="data/production/pre_ai/taste_steam_review_dossier_work.json",
@@ -86,25 +70,17 @@ def drain_inbox_state(
     buffer_dir=None,
     fail_on_blocked=True,
 ):
-    """Drain current repository state; the push event is only a wake-up signal.
+    """Classify all present pending buffered groups independently from repository state.
 
-    With fail_on_blocked=False this is the existing-writer lost-wakeup reconciliation
-    mode: an invalid/gapped pending state is reported without mutating progress or
-    failing the unrelated pre-AI build.
+    Group-level semantic invalidity is canonical failed/incomplete state, not a
+    global drain failure. fail_on_blocked is retained only for legacy/runtime
+    compatibility and does not turn one failed group into a head-of-line blocker.
     """
     contract = load_contract(contract_path)
     manifest_path = Path(manifest_path)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     validate_manifest(manifest, contract)
     inbox = Path(buffer_dir or contract["paths"]["submission_inbox_dir"])
-    legacy_path = expected_legacy_path_from_manifest(manifest, contract)
-    legacy_exists = legacy_path.exists() and not manifest["full_backlog_complete"]
-
-    buffered_expected = current_expected_buffer_paths(manifest, contract, inbox) if manifest.get("submission_group_plan") else []
-    if legacy_exists and buffered_expected:
-        if fail_on_blocked:
-            raise ValueError("both legacy and buffered artifacts claim the current canonical expected group")
-        return _blocked_result(manifest, "legacy_and_buffered_claim_same_position", None, "state_based_reconciliation")
 
     if manifest.get("submission_group_plan") is not None:
         result = drain_buffered_groups(
@@ -113,25 +89,27 @@ def drain_inbox_state(
             buffer_dir=inbox,
             store_dir=store_dir,
         )
-        if result["accepted_group_count"]:
-            next_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-            validate_manifest(next_manifest, contract)
-            write_worker_projection(next_manifest, contract)
-            result["mode"] = "buffered_contiguous_drain" if fail_on_blocked else "state_based_reconciliation"
-            result["status"] = "full_backlog_exhausted" if result["full_backlog_complete"] else "buffered_prefix_persisted"
-            return result
-        if result["blocked_reason"] not in (None, "gap"):
-            if fail_on_blocked:
-                raise ValueError(
-                    f"buffered drain blocked at sequence {result['stop_sequence']}: {result['blocked_reason']}"
-                )
-            return _blocked_result(
-                manifest,
-                result["blocked_reason"],
-                result["stop_sequence"],
-                "state_based_reconciliation",
-            )
+        changed = bool(
+            result["accepted_group_count_this_run"]
+            or result["failed_group_count_this_run"]
+        )
+        current = json.loads(manifest_path.read_text(encoding="utf-8"))
+        validate_manifest(current, contract)
+        if changed:
+            write_worker_projection(current, contract)
+        result["mode"] = "buffered_nonblocking_group_drain"
+        if result["all_groups_accepted"]:
+            result["status"] = "all_groups_accepted"
+        elif result["normal_first_pass_complete"]:
+            result["status"] = "normal_first_pass_complete_with_failures"
+        elif changed:
+            result["status"] = "group_state_advanced"
+        else:
+            result["status"] = "no_pending_artifact_available"
+        return result
 
+    legacy_path = expected_legacy_path_from_manifest(manifest, contract)
+    legacy_exists = legacy_path.exists() and not manifest["full_backlog_complete"]
     if legacy_exists:
         try:
             return ingest_inbox_submission(
@@ -141,21 +119,28 @@ def drain_inbox_state(
                 store_dir=store_dir,
                 delete_accepted=True,
             )
-        except (ValueError, FileNotFoundError, json.JSONDecodeError) as exc:
+        except (ValueError, FileNotFoundError, json.JSONDecodeError):
             if fail_on_blocked:
                 raise
-            return _blocked_result(manifest, f"invalid_legacy_expected:{exc}", None, "state_based_reconciliation")
+            return {
+                "mode": "legacy_state_based_reconciliation",
+                "status": "legacy_invalid_no_progress",
+                "snapshot_id": manifest["snapshot_id"],
+                "persisted": [],
+                "persisted_count": 0,
+                "remaining_required_count": manifest["remaining_required_count"],
+                "full_backlog_complete": manifest["full_backlog_complete"],
+            }
 
     return {
         "mode": "state_based_noop" if fail_on_blocked else "state_based_reconciliation",
-        "status": "no_contiguous_work_available",
+        "status": "no_work_available",
         "snapshot_id": manifest["snapshot_id"],
         "persisted": [],
         "persisted_count": 0,
         "remaining_required_count": manifest["remaining_required_count"],
         "full_backlog_complete": manifest["full_backlog_complete"],
     }
-
 
 def main():
     parser = argparse.ArgumentParser(description="Drain current GitHub dossier inbox state")

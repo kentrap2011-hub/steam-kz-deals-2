@@ -365,10 +365,13 @@ class RecoveryLifecycleTests(unittest.TestCase):
             self.assertEqual(result["accepted_group_count"], 1)
             current_progress = json.loads(manifest_path.read_text())["completed_required_count"]
             write_group(work, contract, 2, lambda a: a["dossiers"][0].__setitem__("schema_version", True))
-            blocked = drain_inbox_state(manifest_path=manifest_path, contract_path=contract_path, store_dir=store, buffer_dir=contract["paths"]["submission_inbox_dir"], fail_on_blocked=False)
-            self.assertEqual(blocked["status"], "blocked_no_progress")
-            self.assertEqual(blocked["blocked_reason"], "invalid_expected_group")
-            self.assertEqual(json.loads(manifest_path.read_text())["completed_required_count"], current_progress)
+            classified = drain_inbox_state(manifest_path=manifest_path, contract_path=contract_path, store_dir=store, buffer_dir=contract["paths"]["submission_inbox_dir"], fail_on_blocked=False)
+            self.assertEqual(classified["status"], "group_state_advanced")
+            self.assertEqual(classified["failed_sequences"], [2])
+            after = json.loads(manifest_path.read_text())
+            self.assertEqual(after["completed_required_count"], current_progress)
+            self.assertEqual(after["group_progress"]["groups"][1]["state"], "failed_or_invalid_pending_recovery")
+            self.assertEqual(after["group_progress"]["groups"][2]["state"], "pending")
 
 
 if __name__ == "__main__":
