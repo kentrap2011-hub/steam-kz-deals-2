@@ -425,6 +425,8 @@ def main():
     original_paths = {
         'p1_state': progressive_pass1.STATE,
         'p1_queue': progressive_pass1.TASTE_QUEUE,
+        'p1_context': progressive_pass1.PROGRESSIVE_CONTEXT,
+        'p1_projection': progressive_pass1.TASTE_PROJECTION,
         'p2_state': progressive_pass2.STATE,
         'dossier_work': progressive_pass2.DOSSIER_WORK,
         'deep_work': progressive_pass2.WORK,
@@ -436,16 +438,22 @@ def main():
             tmp = Path(tmp)
             p1_state_path = tmp / 'p1.json'
             queue_path = tmp / 'queue.jsonl'
+            context_path = tmp / 'context.jsonl'
+            projection_path = tmp / 'projection.json'
             p2_state_path = tmp / 'p2.json'
             dossier_work_path = tmp / 'dossier-work.json'
             deep_work_path = tmp / 'deep-work.json'
             p1_state_path.write_text(json.dumps(fast_state), encoding='utf-8')
             queue_path.write_text(''.join(json.dumps(row) + '\n' for row in q), encoding='utf-8')
+            context_path.write_text(''.join(json.dumps(row) + '\n' for row in ctx), encoding='utf-8')
+            projection_path.write_text(json.dumps(proj), encoding='utf-8')
             p2_state_path.write_text(json.dumps(combined_deep), encoding='utf-8')
             dossier_work_path.write_text(json.dumps({'submission_group_plan': {'groups': []}, 'group_progress': {'groups': []}}), encoding='utf-8')
             deep_work_path.write_text(json.dumps({'items': []}), encoding='utf-8')
             progressive_pass1.STATE = p1_state_path
             progressive_pass1.TASTE_QUEUE = queue_path
+            progressive_pass1.PROGRESSIVE_CONTEXT = context_path
+            progressive_pass1.TASTE_PROJECTION = projection_path
             progressive_pass2.STATE = p2_state_path
             progressive_pass2.DOSSIER_WORK = dossier_work_path
             progressive_pass2.WORK = deep_work_path
@@ -483,6 +491,8 @@ def main():
     finally:
         progressive_pass1.STATE = original_paths['p1_state']
         progressive_pass1.TASTE_QUEUE = original_paths['p1_queue']
+        progressive_pass1.PROGRESSIVE_CONTEXT = original_paths['p1_context']
+        progressive_pass1.TASTE_PROJECTION = original_paths['p1_projection']
         progressive_pass2.STATE = original_paths['p2_state']
         progressive_pass2.DOSSIER_WORK = original_paths['dossier_work']
         progressive_pass2.WORK = original_paths['deep_work']
