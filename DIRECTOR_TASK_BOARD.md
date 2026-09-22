@@ -173,6 +173,21 @@ Remaining live validation:
 - require at least one new group to become canonically accepted before PASS 2 integration/activation resumes;
 - if the task was temporarily disabled for the defect, re-enable only for this validation and keep its existing schedule/prompt unchanged.
 
+
+Live acceptance:
+- one clean existing `Taste Steam Review Dossier` Run now published g000003 and g000004 for the same current snapshot;
+- GitHub canonically accepted both groups;
+- accepted groups are now 2, failed groups 2, pending groups 180;
+- accepted dossiers are now 6; failed dossiers 6; pending dossiers 538;
+- g000001/g000002 remain failed/recovery-owned and were not reprocessed;
+- `next_pending_sequence=5`, proving normal forward traversal continued after the historical failures;
+- the exact-buffer-identity fix is therefore live-proven.
+
+Director conclusion:
+- Dossier candidate-generation identity mismatch fix is fully accepted;
+- the existing Dossier Scheduled Task may remain enabled on its normal cadence;
+- the gate “at least one canonically accepted current Dossier group before PASS 2 integration” is satisfied;
+- next work is a separate bounded Dossier-persistence -> PASS 2 eligibility integration/activation task, requiring explicit user approval before IMPLEMENT.
 ## ACCEPTED — Progressive PASS 2 Phase C core implementation
 
 Task:
