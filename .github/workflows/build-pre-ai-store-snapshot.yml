@@ -24,6 +24,8 @@ on:
       - "config/progressive_personalization_contract.json"
       - "config/progressive_pass1_contract.json"
       - "config/progressive_pass1_worker_prompt.md"
+      - "config/progressive_pass2_contract.json"
+      - "config/progressive_pass2_worker_prompt.md"
       - "config/taste_fingerprint_contract.json"
       - "config/taste_candidate_context_contract.json"
       - "config/taste_cache_entry_contract.json"
@@ -67,7 +69,11 @@ on:
       - "scripts/progressive_personalization.py"
       - "scripts/progressive_pass1.py"
       - "scripts/build_progressive_pass1_work.py"
+      - "scripts/progressive_pass2.py"
+      - "scripts/build_progressive_pass2_work.py"
       - "scripts/test_progressive_pass1.py"
+      - "scripts/test_progressive_pass2.py"
+      - "scripts/test_progressive_pass2_integration.py"
       - "scripts/test_progressive_personalization.py"
       - "scripts/taste_steam_review_dossier.py"
       - "scripts/taste_steam_review_dossier_strict.py"
@@ -187,6 +193,12 @@ jobs:
           python scripts/test_taste_steam_review_dossier_contract_gaps.py
           python scripts/test_taste_story_dlc_scope.py
 
+      - name: Recompute Progressive PASS 2 eligibility from current canonical truth
+        run: |
+          python scripts/build_progressive_pass2_work.py
+          python scripts/test_progressive_pass2.py
+          python scripts/test_progressive_pass2_integration.py
+
       - name: Persist or preserve pre-semantic Taste active pin
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -225,6 +237,7 @@ jobs:
             data/production/pre_ai/chatgpt_purchase_context.jsonl \
             data/production/pre_ai/progressive_candidate_context.jsonl \
             data/production/pre_ai/progressive_pass1_work.json \
+            data/production/pre_ai/progressive_pass2_work.json \
             data/production/pre_ai/chatgpt_ru_description_queue.jsonl \
             data/production/pre_ai/chatgpt_ru_description_status.json
           git add -A -- data/ai_inbox/taste_steam_review_dossiers 2>/dev/null || true
