@@ -7,6 +7,7 @@ on:
       - "Build pre-AI deterministic payload"
       - "Ingest context-bound taste batch"
       - "Ingest Progressive PASS 1 item"
+      - "Ingest Progressive PASS 2 item"
     types:
       - completed
   push:
@@ -15,7 +16,9 @@ on:
       - "scripts/build_final_visual_payload.py"
       - "scripts/progressive_personalization.py"
       - "scripts/progressive_pass1.py"
+      - "scripts/progressive_pass2.py"
       - "scripts/test_progressive_pass1.py"
+      - "scripts/test_progressive_pass2.py"
       - "scripts/test_progressive_personalization.py"
       - "scripts/test_progressive_unresolved_row_preservation.py"
       - "scripts/progressive_visual_activation_routing.py"
@@ -53,7 +56,9 @@ on:
       - "config/final_ranking_policy.json"
       - "config/progressive_personalization_contract.json"
       - "config/progressive_pass1_contract.json"
+      - "config/progressive_pass2_contract.json"
       - "data/cache/progressive_pass1_state.json"
+      - "data/cache/progressive_pass2_state.json"
       - "config/fixed_package_purchase_option_contract.json"
       - "config/purchase_equivalence_overrides.json"
       - "config/taste_result_contract.json"
