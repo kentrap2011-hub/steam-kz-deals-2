@@ -1,0 +1,63 @@
+name: Temporary regenerate inactive Progressive Deep projection
+
+on:
+  push:
+    branches:
+      - worker/progressive-deep-runtime-adaptation-01
+    paths:
+      - ".github/workflows/regenerate-progressive-deep-inactive-projection-temporary.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: taste-steam-review-dossier-canonical-writer
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: worker/progressive-deep-runtime-adaptation-01
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rebuild inactive Deep projection only
+        run: |
+          set -euo pipefail
+          cp data/cache/progressive_pass2_state.json /tmp/pass2-state-before.json
+          python scripts/build_progressive_pass2_work.py
+          cmp /tmp/pass2-state-before.json data/cache/progressive_pass2_state.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          contract=json.loads(Path('config/progressive_pass2_contract.json').read_text(encoding='utf-8'))
+          state=json.loads(Path('data/cache/progressive_pass2_state.json').read_text(encoding='utf-8'))
+          work=json.loads(Path('data/production/pre_ai/progressive_pass2_work.json').read_text(encoding='utf-8'))
+          scope=work.get('scope') or {}
+          assert contract.get('active') is False
+          assert work.get('pass2_active') is False
+          assert state == {'schema_version': 2, 'contract': 'PROGRESSIVE-PASS2-STATE-V2', 'entries': {}}
+          assert int(scope.get('deep_first_pass_attempted_count') or 0) == 0
+          assert int(scope.get('deep_authoritative_completed_count') or 0) == 0
+          assert int(scope.get('deep_incomplete_or_recovery_count') or 0) == 0
+          assert int(scope.get('recovery_pending_count') or 0) == 0
+          PY
+      - name: Commit only regenerated inactive work projection
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/production/pre_ai/progressive_pass2_work.json
+          if git diff --cached --quiet; then
+            echo "Inactive Deep projection already current"
+            exit 0
+          fi
+          git diff --cached --check
+          git commit -m "Regenerate inactive Progressive Deep work projection"
+          git push origin HEAD:worker/progressive-deep-runtime-adaptation-01
