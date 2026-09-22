@@ -103,6 +103,8 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import sys
+          sys.path.insert(0, 'scripts')
           import build_progressive_pass1_work
           import progressive_personalization
           fast=build_progressive_pass1_work.build_work_document()['scope']
