@@ -33,26 +33,28 @@ The compact index is:
 
 `data/production/pre_ai/taste_steam_review_dossier_worker_index.json`
 
-It has schema `TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V1`. Each exact immutable group descriptor has schema `TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1` and is addressed only by the index `descriptor_path_template`.
+It has schema `TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V2`. Each exact immutable group descriptor has schema `TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1` and is addressed only by the index `descriptor_path_template`.
 
-At the start of every invocation, read the two mandatory machine contracts and the compact worker index. If `full_backlog_complete=true`, require `canonical_expected_sequence=null` and stop with no dossier work. Otherwise require a positive `canonical_expected_sequence=N` within `1..group_count` and use exactly that sequence as the first local traversal target.
+At the start of every invocation, read the two mandatory machine contracts and the compact worker index. GitHub-owned `group_progress` is the only normal traversal authority. If `normal_first_pass_complete=true`, require `next_pending_sequence=null` and stop with no normal first-pass dossier work, even when `failed_group_count>0`. Otherwise require a positive `next_pending_sequence=N` within `1..group_count` and use exactly that sequence as the first local traversal target. `full_backlog_complete` keeps the stricter meaning "all groups accepted"; it is not the normal first-pass stop gate.
 
 Read only descriptor `g{N:06d}.json` through the exact index template. Validate before evidence work:
 
 - supported index/descriptor schemas;
 - descriptor `snapshot_id`, `prepared_required_sha256`, `group_plan_sha256`, `group_count`, `scope_source`, `source_queue_sha256` and `web_evidence_contract_binding` equal the index bindings;
-- descriptor `sequence` equals the requested sequence;
+- descriptor `sequence` equals the requested sequence and that sequence is listed in `pending_group_sequences`;
 - `items_sha256` is the canonical SHA-256 of exact ordered `items`;
 - `group_sha256` matches the repository canonical group identity formula;
 - ordered appids exactly project from ordered items.
 
 Never reconstruct a missing descriptor from the full manifest or partial fields. Missing/unreadable/inconsistent projection is a GitHub-side defect: stop fail-closed.
 
-After the connected GitHub **create-file** action successfully creates the deterministic buffered artifact for group N, the result is only **candidate buffered**, not accepted. Set the local traversal target only to `N+1`. Do not wait for GitHub validation or canonical acceptance. Before each later group, re-read the tiny worker index only as a snapshot/plan/binding liveness guard. The same `snapshot_id`, `prepared_required_sha256`, `group_plan_sha256`, `group_count`, `scope_source`, `source_queue_sha256` and `web_evidence_contract_binding` must remain current. `canonical_expected_sequence` is allowed to lag behind your local traversal target because GitHub validation is asynchronous; do not use that mutable progress field as a same-invocation gate.
+After the connected GitHub **create-file** action successfully creates the deterministic buffered artifact for group N, the result is only **candidate buffered**, not accepted. Do not wait for GitHub validation or canonical acceptance. Before each later group, re-read the tiny worker index as a snapshot/plan/binding liveness guard and choose the lowest still-pending sequence greater than the group just published. Accepted or failed historical groups must be skipped because GitHub has already removed them from normal first-pass work. The same `snapshot_id`, `prepared_required_sha256`, `group_plan_sha256`, `group_count`, `scope_source`, `source_queue_sha256` and `web_evidence_contract_binding` must remain current.
 
-Process later groups strictly in descriptor order: only N+1 after N, never N+2 directly, never an arbitrary offset, and never a descriptor outside the immutable plan. Stop if any true snapshot/plan/binding liveness value changes, if a required descriptor is missing/inconsistent, if the create-only write fails, or when the invocation's ordinary time/runtime limit is reached.
+Process only predeclared pending groups in immutable plan order. Never choose an arbitrary offset or a descriptor outside the plan. Stop the current invocation only if a true snapshot/plan/binding inconsistency, missing required descriptor, create-only transport failure, or ordinary runtime limit makes safe forward progress impossible.
 
-On a later invocation reload the index and start again from GitHub's canonical expected sequence. If the deterministic artifact for that expected group already exists while canonical progress has not advanced, do not overwrite, rename, skip, create an alternate file, or interpret it as permission to resume from a later inbox artifact; stop and leave GitHub recovery/validation state to the control plane. Inbox files are transport, not the worker's queue.
+On a later invocation reload the index and start from GitHub's current `next_pending_sequence`, never from the first historical failure. If the deterministic artifact for a still-pending group already exists, do not overwrite, rename, create an alternate file, or scan the inbox to invent state; stop that invocation and leave classification to GitHub. Once GitHub classifies that group accepted or failed, future invocations resume from the next pending group.
+
+The Scheduled Dossier worker must never enable, disable, pause, delete, reschedule, or edit its own Scheduled Task. A group-level semantic failure, invalid artifact, existing classified artifact, or recovery-pending group is never authority to change the hourly schedule. Only the current invocation may stop when safe forward progress is impossible.
 
 ## Per-game identity — title + year is mandatory
 
@@ -336,8 +338,8 @@ Publish the complete candidate only through the connected GitHub **create-file**
 
 Never update, overwrite, rename or delete a buffer artifact. Never directly edit dossier cache, canonical work manifest, worker index/descriptors, validation status, recovery request, quarantine or audit paths. Multiple pending sequential groups are allowed because the buffer is transport only.
 
-A successful create-only write means **candidate buffered**. It does not mean valid, accepted, persisted, or canonically complete. GitHub asynchronously executes the same strict buffered validator used by canonical ingestion and may expose observational validation status at `data/production/pre_ai/taste_steam_review_dossier_validation_status.json`. Do not wait for that status between groups, do not poll it as a queue, and do not alter traversal based on validation lag within the same invocation. Canonical GitHub state accepts only the maximal valid contiguous prefix beginning at its expected sequence; an invalid earlier group blocks promotion of every later group even if later candidates independently validate.
+A successful create-only write means **candidate buffered**. It does not mean valid, accepted, persisted, or canonically complete. GitHub asynchronously executes the same strict buffered validator used by canonical ingestion and may expose validation/recovery observability at `data/production/pre_ai/taste_steam_review_dossier_validation_status.json`. Do not poll that file as a queue. GitHub strict-validates each present pending group independently: a valid group may persist even when an earlier different group failed; an invalid group becomes `failed_or_invalid_pending_recovery` for that exact immutable identity and is removed from normal forward progress.
 
-If GitHub later marks a candidate invalid, do not create a corrected duplicate, alternate filename, overwrite, rename, delete, or automated retry/healing attempt for that group/snapshot. The invalid candidate remains immutable evidence of a production-readiness defect. A future contract/prompt/validator fix must use the normal content-complete compatibility rebuild so the old snapshot/artifact becomes stale/inert under GitHub-owned recovery rules.
+If GitHub marks a candidate failed, do not create a corrected duplicate, alternate filename, overwrite, rename, delete, or automated retry/healing attempt for that group/snapshot. GitHub preserves the failure and quarantined immutable transport for separate recovery. Only an explicit GitHub-owned recovery transition may later make that exact group pending again; normal first-pass traversal continues with unrelated pending groups.
 
 If the GitHub create-file action itself fails, stop on transport failure. Do not continue as though the candidate were durable.
