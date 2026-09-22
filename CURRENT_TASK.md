@@ -707,7 +707,9 @@
 ## Worker in progress — 2026-09-22
 
 ### Progressive Deep runtime adaptation 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_PROGRESSIVE_DEEP_RUNTIME_ADAPTATION_01.md`;
-- scope: adapt inactive Deep/PASS 2 runtime to accepted `FAST-DOSSIER-DEEP-V1`, including first-pass/recovery accounting, Fast suppression after authoritative Deep, effective-result precedence, producer-owned stage fields/statistics, and zero-attempt inactive projection regeneration;
-- Deep/PASS 2 activation remains forbidden in this task; no Scheduled Task creation/edit/enable/run, no production Deep result/receipt/attempt, and no backlog execution.
+- durable report: `reviews/worker_reports/progressive-deep-runtime-adaptation-01.md`;
+- runtime: accepted `FAST-DOSSIER-DEEP-V1` implemented with independent normal Deep first pass, explicit GitHub-owned recovery authorization/accounting, authoritative-Deep Fast suppression, effective-result precedence, producer-owned stage fields and independent Fast/Dossier/Deep statistics;
+- current inactive Deep projection: target 540, ready/pending 22, waiting for Dossier 518, normal/recovery attempts 0;
+- Deep/PASS 2 remains inactive: no Scheduled Task created/edited/enabled/run, no production Deep result/receipt/attempt, no production backlog execution, no final pixel-icon/Statistics-page UI.
