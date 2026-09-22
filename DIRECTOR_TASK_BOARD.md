@@ -146,39 +146,32 @@ Director conclusion:
 - non-blocking Dossier progress implementation is accepted;
 - do not treat g000001/g000002 as accepted Dossiers;
 - do not proceed to PASS 2 production integration/activation until the repeated `items` identity mismatch is corrected and at least one clean Dossier group is canonically accepted.
-## ACTIVE — ЧАТ 2 — Taste Dossier group identity items mismatch fix
+## ACCEPTED — Taste Dossier group identity items mismatch fix
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_GROUP_IDENTITY_ITEMS_MISMATCH_FIX_01.md`
 
-Worker slot:
-`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
-
-Conversation state:
-- previous physical ЧАТ 2 completed the separate Progressive PASS 2 Phase C task and is retired for unrelated work;
-- this identity-mismatch fix must start in a NEW physical ЧАТ 2 under the single-task-per-chat rule.
-
-Mode:
-`DIAGNOSE / IMPLEMENT / VALIDATE`
-
-Confirmed trigger:
-- live Dossier g000001 and g000002 were independently classified failed;
-- both expose `buffered dossier group identity mismatch: items`;
-- next normal pending group is g000003, proving non-blocking progress itself works.
-
-Scope:
-- identify exact descriptor-vs-candidate `items` divergence;
-- fix the producer-facing serialization/runtime path only;
-- preserve strict validator semantics and the accepted non-blocking per-group architecture;
-- do not rewrite/reaccept failed g000001/g000002;
-- do not change PASS 1/PASS 2/Taste Semantic Producer or Scheduled Task configuration.
-
-Expected report:
+Report:
 `reviews/worker_reports/taste-dossier-group-identity-items-mismatch-fix-01.md`
 
-Live acceptance after Director review:
-- one user-triggered existing Dossier `Run now`;
-- require at least one new group to become canonically accepted before PASS 2 integration/activation resumes.
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- g000001 and g000002 shared one exact producer-side defect: both buffered candidates omitted the required top-level `items` field;
+- immutable descriptors and the strict validator were correct;
+- the runtime/index producer path is now explicit and machine-readable: deep-copy the exact immutable descriptor, replace only the schema marker, then add `dossiers`;
+- `items` is mandatory and cannot be substituted by `items_sha256`;
+- validator exact-equality semantics were not weakened;
+- g000001/g000002 remain failed/recovery-owned and were not rewritten or manually accepted;
+- g000003 remains the next pending group under the corrected generation path;
+- PASS 1, PASS 2, Taste Semantic Producer, and Scheduled Task configuration were not changed;
+- focused and canonical Dossier validation passed, including PR #85 / run 35745448678.
+
+Remaining live validation:
+- use the existing `Taste Steam Review Dossier` Scheduled Task for exactly one clean `Run now`;
+- require at least one new group to become canonically accepted before PASS 2 integration/activation resumes;
+- if the task was temporarily disabled for the defect, re-enable only for this validation and keep its existing schedule/prompt unchanged.
 
 ## ACCEPTED — Progressive PASS 2 Phase C core implementation
 
