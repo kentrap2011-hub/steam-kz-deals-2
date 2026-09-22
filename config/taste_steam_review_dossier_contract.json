@@ -2,7 +2,7 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "nonblocking-per-group-progress-2026-09-22",
+  "contract_revision": "nonblocking-per-group-progress-items-identity-fix-2026-09-22",
   "purpose": "Prepare one fixed daily neutral Steam review dossier backlog snapshot, track every immutable predeclared group independently in GitHub-owned canonical state, accept valid groups independently, retain failed groups for separate recovery, and expose only pending groups as normal Scheduled-worker work.",
   "ownership": {
     "control_plane": "github",
@@ -305,7 +305,7 @@
     "index_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V2",
     "group_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
     "descriptor_path_template": "data/production/pre_ai/taste_steam_review_dossier_worker_groups/{snapshot_id}/g{sequence:06d}.json",
-    "index_rule": "contains_snapshot_plan_binding_plus_github_owned_next_pending_sequence_per_group_progress_counts_and_unbound_runtime_prompt_binding;normal worker start is never derived from a historical failed group",
+    "index_rule": "contains_snapshot_plan_binding_plus_github_owned_next_pending_sequence_per_group_progress_counts_unbound_runtime_prompt_binding_and_exact_buffered_identity_serialization_instructions;normal worker start is never derived from a historical failed group",
     "descriptor_rule": "one_file_per_exact_immutable_canonical_group_with_projection_level_plan_bindings_and_no_worker_recomputation_of_scope_or_identity",
     "same_snapshot_immutability_rule": "descriptor_files_must_remain_byte_identical_when_only_canonical_progress_advances",
     "progress_rule": "same_snapshot_progress_changes_update_only_the_mutable_worker_index_progress_fields",
@@ -313,7 +313,9 @@
     "same_day_adoption_rule": "preserve_only_when_the_current_manifest_already_matches_the_active_evidence_binding_and_canonical_group_size;otherwise_rebuild_through_the_normal_github_owned_path",
     "worker_liveness_rule": "re_read_index_between_locally_sequential_groups_only_to_guard_snapshot_plan_and_bindings_not_to_wait_for_canonical_progress",
     "worker_fallback_rule": "no_full_manifest_or_partial_field_descriptor_reconstruction_fallback_is_allowed",
-    "github_validation_rule": "generation_must_validate_the_complete_index_and_descriptor_set_against_the_full_canonical_manifest_before_commit"
+    "github_validation_rule": "generation_must_validate_the_complete_index_and_descriptor_set_against_the_full_canonical_manifest_before_commit",
+    "buffer_identity_fields_source": "buffered_submission.group_plan.immutable_descriptor_required_fields",
+    "buffer_candidate_serialization_rule": "verbatim_deep_copy_group_descriptor_replace_schema_marker_then_add_dossiers"
   },
   "transition": {
     "reason": "evidence_guard_binds_recurring_claims_to_attributable_player_feedback_records_and_reduces_the_canonical_research_transport_boundary_to_three_games",
@@ -447,10 +449,10 @@
     "status": "active",
     "owner": "github_control_plane",
     "path": "config/taste_steam_review_dossier_runtime_prompt.md",
-    "revision": "nonblocking-group-progress-v1",
+    "revision": "nonblocking-group-progress-v2-exact-buffer-identity",
     "semantic_evidence_binding": false,
     "descriptor_binding": false,
     "worker_index_binding": true,
-    "purpose": "govern_scheduled_runtime_traversal_stop_and_schedule_authority_without_changing_dossier_semantic_evidence_identity"
+    "purpose": "govern_scheduled_runtime_traversal_stop_schedule_authority_and_exact_buffered_descriptor_identity_serialization_without_changing_dossier_semantic_evidence_identity"
   }
 }
