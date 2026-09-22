@@ -10,6 +10,7 @@ PROGRESSIVE_CONTEXT = Path('data/production/pre_ai/progressive_candidate_context
 VISUAL = Path('data/production/visual/current.json')
 PROGRESSIVE_CONTRACT = Path('config/progressive_personalization_contract.json')
 PASS1_STATE = Path('data/cache/progressive_pass1_state.json')
+PASS2_STATE = Path('data/cache/progressive_pass2_state.json')
 
 VISIBLE_STATES = {'analyzed_fit', 'analysis_incomplete', 'not_analyzed'}
 
@@ -99,6 +100,7 @@ def progressive_visual_compatible(
     progressive_context_blob,
     progressive_contract_blob,
     pass1_state_blob,
+    pass2_state_blob,
 ):
     if not source_integrity_ok(payload, store, family):
         return False, 'source_integrity_invalid'
@@ -121,6 +123,7 @@ def progressive_visual_compatible(
         progressive.get('contract') != 'PROGRESSIVE-PERSONALIZED-DEALS-V1'
         or progressive.get('phase') != 'phase_b'
         or progressive.get('pass1_active') is not True
+        or progressive.get('pass2_implemented') is not True
         or progressive.get('pass2_active') is not False
     ):
         return False, 'progressive_state_block_incompatible'
@@ -148,6 +151,8 @@ def progressive_visual_compatible(
         return False, 'progressive_contract_provenance_mismatch'
     if contract.get('progressive_pass1_state_blob_sha') != pass1_state_blob:
         return False, 'progressive_pass1_state_provenance_mismatch'
+    if contract.get('progressive_pass2_state_blob_sha') != pass2_state_blob:
+        return False, 'progressive_pass2_state_provenance_mismatch'
 
     return True, 'compatible_progressive_visual'
 
@@ -162,6 +167,7 @@ def classify_current_files():
         context_blob = _blob(PROGRESSIVE_CONTEXT)
         contract_blob = _blob(PROGRESSIVE_CONTRACT)
         pass1_state_blob = _blob(PASS1_STATE)
+        pass2_state_blob = _blob(PASS2_STATE)
     except Exception as exc:
         return {
             'source_integrity_ok': False,
@@ -180,6 +186,7 @@ def classify_current_files():
         progressive_context_blob=context_blob,
         progressive_contract_blob=contract_blob,
         pass1_state_blob=pass1_state_blob,
+        pass2_state_blob=pass2_state_blob,
     )
     return {
         'source_integrity_ok': integrity,
