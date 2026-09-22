@@ -89,12 +89,12 @@ Validation:
 - P2CORE-13 — **PASS**: explicit machine provenance reaches the card label; browser inference is regression-tested away.
 - P2CORE-14 — **PASS**: contract/work remain inactive, initialized PASS 2 durable state is empty, no production PASS 2 result or attempt was created.
 - P2CORE-15 — **PASS**: branch diff contains no Dossier-owned contract/prompt/ingest/recovery/workflow modification.
-- P2CORE-16 — **PENDING FINAL MAIN REREAD**: this report must be committed to `main` and reread from `main` before task close.
+- P2CORE-16 — **PASS**: implementation/report were committed to `main` in squash commit `670e2cfb6991d955a9503637d72345a523ebca7a`; the durable report was then reread from `main` before this closeout update.
 
 Focused CI:
-- tested commit: `71036d70789cd185383d75d4e04095962011a5e6`
+- tested branch head: `116f5a2e8350398fc3bab5e8442fbd0f2978d74d`
 - workflow: `Validate Progressive PASS 2 core`
-- run: `35710353525`
+- run: `35710488760`
 - conclusion: `success`
 - checks include Python compilation, PASS 2 core, PASS 1 regression, personalization, unresolved-row preservation, visual routing, UI provenance, and inactive production eligibility dry-run.
 - production-shape dry-run recomputed eligibility with `pass2_active=false`, preserved an empty PASS 2 durable state and performed no execution.
@@ -108,7 +108,8 @@ Automatic eligibility recomputation after canonical Dossier persistence is inten
 - accepted design: `config/progressive_personalization_contract.json#phase_c_pass2_design`
 - accepted amendment report: `reviews/worker_reports/progressive-pass2-dossier-ready-gate-amendment-01.md`
 - PASS 2 contract: `config/progressive_pass2_contract.json`
-- tested branch head before report: `71036d70789cd185383d75d4e04095962011a5e6`
+- tested branch head before merge: `116f5a2e8350398fc3bab5e8442fbd0f2978d74d`
+- implementation squash on `main`: `670e2cfb6991d955a9503637d72345a523ebca7a`
 
 ## Next step
 
