@@ -1,0 +1,88 @@
+name: Authorize Progressive Deep recovery
+
+on:
+  workflow_dispatch:
+    inputs:
+      family_id:
+        description: Exact current family_id already owned by Deep recovery
+        required: true
+        type: string
+      reason:
+        description: Canonical concrete recovery reason
+        required: true
+        type: choice
+        options:
+          - materially_changed_canonically_accepted_dossier_or_evidence
+          - corrected_runtime_or_validation_defect_material_to_the_prior_failure
+          - explicit_canonical_github_recovery_action_with_recorded_reason
+      condition_binding:
+        description: Required concrete defect/action reference except for material Dossier change
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: taste-steam-review-dossier-canonical-writer
+  cancel-in-progress: false
+
+jobs:
+  authorize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Authorize exact recovery-owned Deep identity
+        shell: bash
+        env:
+          FAMILY_ID: ${{ inputs.family_id }}
+          RECOVERY_REASON: ${{ inputs.reason }}
+          CONDITION_BINDING: ${{ inputs.condition_binding }}
+        run: |
+          set -euo pipefail
+          python scripts/authorize_progressive_pass2_recovery.py \
+            --family-id "$FAMILY_ID" \
+            --reason "$RECOVERY_REASON" \
+            --condition-binding "$CONDITION_BINDING"
+
+      - name: Validate Deep regressions
+        run: |
+          python scripts/test_progressive_pass2.py
+          python scripts/test_progressive_pass2_integration.py
+
+      - name: Commit authorization and recomputed work
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "steam-kz-bot"
+          git config user.email "steam-kz-bot@users.noreply.github.com"
+          git add data/cache/progressive_pass2_state.json data/production/pre_ai/progressive_pass2_work.json
+          if git diff --cached --quiet; then
+            echo "Deep recovery authorization already current"
+            exit 0
+          fi
+          git diff --cached --check
+          git commit -m "Authorize Progressive Deep recovery"
+          for attempt in 1 2 3; do
+            git fetch origin main:refs/remotes/origin/main
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              exit 1
+            fi
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
