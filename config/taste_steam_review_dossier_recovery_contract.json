@@ -8,7 +8,6 @@
     "schema": "TASTE-STEAM-REVIEW-DOSSIER-RECOVERY-REQUEST-V1",
     "schema_version": 1,
     "path": "data/control/taste_steam_review_dossier_recovery_request.json",
-    "allowed_action": "quarantine_invalid_expected",
     "required_fields": [
       "schema",
       "schema_version",
@@ -18,6 +17,10 @@
       "group_sha256",
       "artifact_path",
       "reason"
+    ],
+    "allowed_actions": [
+      "quarantine_invalid_expected",
+      "reopen_failed_group"
     ]
   },
   "invalid_expected_artifact_recovery": {
@@ -47,9 +50,30 @@
     "trigger": "existing_serialized_pre_ai_writer_after_daily_manifest_prepare_or_preserve",
     "state_based": true,
     "idempotent": true,
-    "uses_same_contiguous_drain": true,
+    "uses_same_contiguous_drain": false,
     "invalid_or_gap_is_nonfatal_for_pre_ai_reconciliation": true,
     "worker_retry_artifact_required": false,
-    "new_scheduler_created": false
+    "new_scheduler_created": false,
+    "uses_nonblocking_per_group_drain": true
+  },
+  "failed_group_recovery": {
+    "owner": "github_control_plane",
+    "canonical_state_source": "data/production/pre_ai/taste_steam_review_dossier_work.json#group_progress",
+    "failed_state": "failed_or_invalid_pending_recovery",
+    "normal_forward_progress_blocking": false,
+    "automatic_retry": false,
+    "automatic_reopen": false,
+    "invalid_transport_quarantine_on_classification": true,
+    "quarantine_dir": "data/quarantine/taste_steam_review_dossier_inbox/failed_group",
+    "audit_log": "data/audit/taste_steam_review_dossier_group_failures.jsonl",
+    "recovery_projection": "all_current_snapshot_group_progress_entries_in_failed_or_invalid_pending_recovery",
+    "reopen_action": "reopen_failed_group",
+    "reopen_owner": "github_control_plane",
+    "reopen_requires_normal_first_pass_complete": true,
+    "reopen_requires_same_snapshot_and_exact_group_sha256": true,
+    "reopen_requires_deterministic_inbox_path_absent": true,
+    "reopen_transition": "failed_or_invalid_pending_recovery_to_pending",
+    "scheduled_worker_authority": false,
+    "schedule_edit_authority": false
   }
 }
