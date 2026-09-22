@@ -5,18 +5,231 @@
   "implemented": true,
   "pass1_active": true,
   "pass2_active": false,
-  "projection_status": "inactive_core_not_yet_wired_to_dossier_persistence",
-  "semantic_generation_id": null,
+  "projection_status": "current_github_owned_eligibility_projection",
+  "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+  "semantic_bindings": {
+    "profile_blob_sha": "9b9926031889dbd98ba6585c57836d52c739a0bb",
+    "taste_model_version": "taste-v3",
+    "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+    "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804"
+  },
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+    "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+    "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+  },
   "transport": {
     "mode": "immutable_item_create_only",
     "batch_atomicity": false,
     "maximal_contiguous_prefix": false
   },
   "scope": {
-    "current_analysis_incomplete_count": 0,
-    "dossier_waiting_count": 0,
+    "current_analysis_incomplete_count": 60,
+    "dossier_waiting_count": 56,
     "pass2_attempted_count": 0,
-    "pass2_eligible_count": 0
+    "pass2_eligible_count": 4
   },
-  "items": []
+  "items": [
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1102190",
+      "taste_subject_key": "App_1102190",
+      "appid": "1102190",
+      "taste_fingerprint": "c3bab3d5b70ec23462a0d2693158b3696b6638ff26a0587b2bf754bf74bba995",
+      "candidate_context_sha256": "96d26cc37f99df4475d02dc622734b6515aaf5d9251a021cfe94fbdfd7f4cd17",
+      "work_id": "68b06bde03f0e667d54ef8a93207c7f6ab3524ed8dbe94c617a1d3aa16899e58",
+      "semantic_input": {
+        "title": "Monster Train",
+        "short_description": "Monster Train is a strategic roguelike deck building game with a twist. Set on a train to hell, you’ll use tactical decision making to defend multiple vertical battlegrounds. With real time competitive multiplayer and endless replayability, Monster Train is always on time.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "21 May, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1102190"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1102190.json",
+      "dossier_content_sha256": "fc762a6a4e5cbbca27eed9bb7d591b3c1d335ce073089417e327e490863fb081",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-12T16:04:00Z",
+      "authorization_id": "6ea49b1d9a443dbbd4011da4626de8c3fab312b781adf22c0d411c594eef825e",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--68b06bde03f0e667d54ef8a93207c7f6ab3524ed8dbe94c617a1d3aa16899e58--6ea49b1d9a443dbbd4011da4626de8c3fab312b781adf22c0d411c594eef825e.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--68b06bde03f0e667d54ef8a93207c7f6ab3524ed8dbe94c617a1d3aa16899e58--6ea49b1d9a443dbbd4011da4626de8c3fab312b781adf22c0d411c594eef825e.json",
+      "sequence": 1
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:113020",
+      "taste_subject_key": "App_113020",
+      "appid": "113020",
+      "taste_fingerprint": "eae4ca10cfb38845d31edc59a7f9eeaaabf9b9e6f50bbffa5c9ca7bae2d496b7",
+      "candidate_context_sha256": "08c07ea8b7d57dc3a141c1b22df5318c699447019645f98a26bda29db56d6a6c",
+      "work_id": "3f2e8e1bdc3a8b8c7298eca5a2413b3b27784c2962e85898d564e4b78c95d401",
+      "semantic_input": {
+        "title": "Monaco: What's Yours Is Mine",
+        "short_description": "Monaco: What's Yours Is Mine is a single player or co-op heist game.  Assemble a crack team of thieves, case the joint, and pull off the perfect heist.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Stealth"
+        ],
+        "core_fit_count": 1,
+        "release_date": "24 Apr, 2013",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "113020"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_113020.json",
+      "dossier_content_sha256": "910d741934b00a310a1c0cacbbf6805aaa361b8a88be26a7632bc9eca02bda37",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-12T18:00:00Z",
+      "authorization_id": "5ff9b7d33f8bb027dc48cd558d9d2e82d5c547fa74ddde9458dd1ae5febd5549",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--3f2e8e1bdc3a8b8c7298eca5a2413b3b27784c2962e85898d564e4b78c95d401--5ff9b7d33f8bb027dc48cd558d9d2e82d5c547fa74ddde9458dd1ae5febd5549.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--3f2e8e1bdc3a8b8c7298eca5a2413b3b27784c2962e85898d564e4b78c95d401--5ff9b7d33f8bb027dc48cd558d9d2e82d5c547fa74ddde9458dd1ae5febd5549.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1093290",
+      "taste_subject_key": "App_1093290",
+      "appid": "1093290",
+      "taste_fingerprint": "1c2786d88436d963dc36cb9da352b3b9f699a0a3092486484e5f60f25114ddc8",
+      "candidate_context_sha256": "0a5c07040ac4617755ba6e0993b0c9107eecbd0c9cb385743941f41fdb1c548a",
+      "work_id": "0b4d045951e90722d49c111a572b52a06e743a78ea4e982e86506cafeb759df0",
+      "semantic_input": {
+        "title": "The Wild at Heart",
+        "short_description": "Wield an ever-growing herd of quirky creatures to rebuild broken paths, battle perilous beasts, and solve peculiar puzzles in a rich, interconnected world. Join two young runaways as they unravel the mysteries of a lost realm in this nostalgic storybook fantasy!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action-Adventure",
+          "Story Rich"
+        ],
+        "core_fit_count": 2,
+        "release_date": "19 May, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1093290"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1093290.json",
+      "dossier_content_sha256": "c7143f2e0aaf0dab7f90e92db1efb1de628220e4ee8d53f47e9122108dddd76b",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-12T16:04:00Z",
+      "authorization_id": "6ba278a8f94d0cae2a2e59c62837a9d4d7c535356174e0a6d6567e8ca1bb6ea2",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--0b4d045951e90722d49c111a572b52a06e743a78ea4e982e86506cafeb759df0--6ba278a8f94d0cae2a2e59c62837a9d4d7c535356174e0a6d6567e8ca1bb6ea2.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--0b4d045951e90722d49c111a572b52a06e743a78ea4e982e86506cafeb759df0--6ba278a8f94d0cae2a2e59c62837a9d4d7c535356174e0a6d6567e8ca1bb6ea2.json",
+      "sequence": 3
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1018800",
+      "taste_subject_key": "App_1018800",
+      "appid": "1018800",
+      "taste_fingerprint": "b2ed5bc2b9ca93300f8cf563808d3ebf303c76750af7ec75615b4cedde43d0a2",
+      "candidate_context_sha256": "fae751870f1baee9d92990be833dedb63f8f24976819b61fd581d3986ffcdd71",
+      "work_id": "b24c020124b23e95633847ecf6f71267385bb48e0aa3f295ba32d28dd6b9b464",
+      "semantic_input": {
+        "title": "DEEEER Simulator: Your Average Everyday Deer Game",
+        "short_description": "Put simply, DEEEER Simulator is a “Slow-Life Town Destruction Game”. You can spend your days enjoying a nice, relaxed frolic here and there together with the other animals around town, or you can choose to relieve some stress and absolutely destroy the town and everything in it.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Exploration",
+          "Third Person"
+        ],
+        "core_fit_count": 1,
+        "release_date": "23 Nov, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1018800"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1018800.json",
+      "dossier_content_sha256": "6025bea78d0f5fe4731a1318b8d733403caaeca07c08baa993ce740887d1d6b3",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+        "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+        "worker_prompt_sha256": "6d5c3be5eb7043a9731054679bf05871a4c34284abec86b1177d547bd9fa5d65"
+      },
+      "dossier_expires_at_utc": "2026-10-11T19:40:00Z",
+      "authorization_id": "39eb9c5e294f2819934d15de42bde13fc10744d369cdcc581eb0508b450b768c",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--b24c020124b23e95633847ecf6f71267385bb48e0aa3f295ba32d28dd6b9b464--39eb9c5e294f2819934d15de42bde13fc10744d369cdcc581eb0508b450b768c.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--b24c020124b23e95633847ecf6f71267385bb48e0aa3f295ba32d28dd6b9b464--39eb9c5e294f2819934d15de42bde13fc10744d369cdcc581eb0508b450b768c.json",
+      "sequence": 4
+    }
+  ]
 }
