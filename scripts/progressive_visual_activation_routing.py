@@ -213,7 +213,7 @@ def progressive_visual_compatible(
             'deep_stage_state',
             'deep_stage_outcome',
             'deep_recovery_state',
-            'effective_personalized_result_source',
+            'effective_analysis_source',
         ):
             if field not in item:
                 return False, f'visible_stage_field_missing:{field}'
