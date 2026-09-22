@@ -58,17 +58,19 @@ def canonical_taste_entries():
 
 
 def effective_taste_entries():
-    """Tier-1 rendering view with canonical cache precedence over PASS 1."""
+    """Current rendering view: Deep > Fast > reusable canonical Taste.
+
+    Exact reusable-cache compatibility is still decided by projection_state; this
+    merged semantic lookup only controls the payload used after a current source
+    has already been selected.
+    """
     canonical = canonical_taste_entries()
     pass1 = progressive_pass1.current_fit_semantic_entries() if progressive_pass1.STATE.exists() else {}
     pass2 = progressive_pass2.current_fit_semantic_entries() if progressive_pass2.STATE.exists() else {}
-    merged = dict(pass1)
-    # PASS 2 is a later recovery result for a PASS 1-incomplete item. Canonical
-    # Taste remains the strongest reusable source when present.
+    merged = dict(canonical)
+    merged.update(pass1)
     merged.update(pass2)
-    merged.update(canonical)
     return merged
-
 
 def load_contract(path=CONTRACT):
     contract = load_json(path)
@@ -154,6 +156,21 @@ def projection_state(projection, taste_entry):
     return _base_state()
 
 
+def _fast_stage(pass1_entry):
+    if not isinstance(pass1_entry, dict):
+        return 'not_started', None
+    outcome = pass1_entry.get('outcome')
+    if outcome == 'analyzed_fit':
+        return 'completed', 'fit'
+    if outcome == 'analyzed_not_fit':
+        return 'completed', 'not_fit'
+    if outcome == 'analysis_incomplete':
+        if pass1_entry.get('analysis_issue_code') in {'worker_failure', 'invalid_semantic_result'}:
+            return 'error', None
+        return 'incomplete', None
+    return 'error', None
+
+
 def build_state_index(context_rows=None, projection_doc=None, taste_entries=None):
     load_contract()
     context_rows = context_rows if context_rows is not None else load_jsonl(PROGRESSIVE_CONTEXT)
@@ -163,11 +180,17 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
     pass1_state_doc = progressive_pass1.load_state()
     pass2_state_doc = progressive_pass2.load_state()
     queue_rows = progressive_pass1.load_jsonl(progressive_pass1.TASTE_QUEUE)
-    generation, pass1_bindings, _queue_by_family = progressive_pass1.current_bindings(
+    generation, pass1_bindings, queue_by_family = progressive_pass1.current_bindings(
         context_rows,
         projection_doc,
         queue_rows,
     )
+    try:
+        current_dossier_binding = progressive_pass2.current_dossier_binding()
+    except Exception:
+        current_dossier_binding = {}
+    dossier_work_doc = progressive_pass2.load_json(progressive_pass2.DOSSIER_WORK)
+    deep_work_doc = progressive_pass2.load_json(progressive_pass2.WORK)
 
     index = {}
     for row in context_rows:
@@ -180,34 +203,106 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
 
         projection = projections.get(taste_key) or {}
         canonical_entry = taste_entries.get(taste_key) or {}
-        state = projection_state(projection, canonical_entry)
+        cache_state = projection_state(projection, canonical_entry)
+        state = dict(cache_state)
         binding = pass1_bindings.get(family_id)
         pass1_entry = progressive_pass1.matching_state_entry(binding, pass1_state_doc) if binding else None
-        pass2_entry = progressive_pass2.matching_state_entry(binding, pass2_state_doc) if binding else None
+        deep_entry = progressive_pass2.matching_state_entry(binding, pass2_state_doc) if binding else None
+        deep_authoritative = (
+            progressive_pass2.authoritative_completion_entry(binding, pass2_state_doc)
+            if binding else None
+        )
 
-        if state['analysis_state'] == 'not_analyzed' and pass1_entry is not None:
+        # Fast remains the provisional current result when no compatible reusable
+        # cache already resolved the identity.
+        if cache_state.get('analysis_semantic_source') != 'compatible_cache' and pass1_entry is not None:
             pass1_state = progressive_pass1.project_state(binding, pass1_state_doc)
             if pass1_state is not None:
                 state = pass1_state
                 state['analysis_resolution_pass'] = 'pass1'
-                state['pass2_attempted'] = False
 
-        # PASS 2 may only replace the current exact PASS 1 incomplete projection.
-        if (
-            state['analysis_state'] == 'analysis_incomplete'
+        # Authoritative Deep always wins. Unresolved Deep is diagnostic/recovery
+        # state only and must not erase a valid Fast or reusable-cache success.
+        if deep_authoritative is not None:
+            deep_state = progressive_pass2.project_state(binding, pass2_state_doc)
+            if deep_state is not None:
+                state = deep_state
+        elif deep_entry is not None and state.get('analysis_state') not in {'analyzed_fit', 'analyzed_not_fit'}:
+            deep_state = progressive_pass2.project_state(binding, pass2_state_doc)
+            if deep_state is not None:
+                state = deep_state
+
+        fast_stage_state, fast_stage_outcome = _fast_stage(pass1_entry)
+        queue_row = queue_by_family.get(family_id) or {}
+        semantic_input = progressive_pass2._semantic_input(queue_row)
+        if binding and current_dossier_binding:
+            try:
+                dossier_stage = progressive_pass2.dossier_stage_state(
+                    binding=binding,
+                    semantic_input=semantic_input,
+                    current_binding=current_dossier_binding,
+                    dossier_work_doc=dossier_work_doc,
+                )
+            except Exception:
+                dossier_stage = 'not_ready'
+        else:
+            dossier_stage = 'not_ready'
+
+        if not binding:
+            deep_stage = 'not_started'
+        elif deep_authoritative is not None:
+            deep_stage = 'completed'
+        elif deep_entry is not None:
+            deep_stage = 'incomplete_or_recovery'
+        elif dossier_stage == 'accepted':
+            deep_stage = 'eligible_or_pending'
+        else:
+            deep_stage = 'waiting_for_dossier'
+
+        deep_recovery = (
+            progressive_pass2.deep_recovery_state(
+                binding,
+                pass2_state_doc,
+                deep_work_doc,
+                dossier_record=progressive_pass2.canonical_dossier_loader(binding.get('appid')),
+                current_binding=current_dossier_binding,
+            )
+            if binding else 'none'
+        )
+        deep_outcome = None
+        if deep_authoritative is not None:
+            deep_outcome = 'fit' if deep_authoritative.get('outcome') == 'analyzed_fit' else 'not_fit'
+
+        if deep_authoritative is not None:
+            effective_source = 'deep'
+        elif (
+            pass1_entry is not None
+            and pass1_entry.get('outcome') in {'analyzed_fit', 'analyzed_not_fit'}
             and state.get('analysis_semantic_source') == 'progressive_pass1'
-            and pass1_entry is not None
-            and pass2_entry is not None
         ):
-            pass2_state = progressive_pass2.project_state(binding, pass2_state_doc)
-            if pass2_state is not None:
-                state = pass2_state
+            effective_source = 'fast'
+        else:
+            effective_source = 'none'
 
-        if state['analysis_state'] == 'analyzed_fit' and state.get('analysis_semantic_source') == 'progressive_pass2':
-            semantic_entry = progressive_pass2.semantic_taste_entry(pass2_entry)
-        elif state['analysis_state'] == 'analyzed_fit' and state.get('analysis_semantic_source') == 'progressive_pass1':
+        state['pass1_attempted'] = pass1_entry is not None
+        state['pass2_attempted'] = deep_entry is not None
+        state['fast_stage_state'] = fast_stage_state
+        state['fast_stage_outcome'] = fast_stage_outcome
+        state['dossier_stage_state'] = dossier_stage
+        state['deep_stage_state'] = deep_stage
+        state['deep_stage_outcome'] = deep_outcome
+        state['deep_recovery_state'] = deep_recovery
+        state['effective_analysis_source'] = effective_source
+        state['deep_authoritative_completed'] = deep_authoritative is not None
+        state['deep_first_pass_attempted'] = deep_entry is not None
+        state['fast_scope_eligible'] = bool(binding) and cache_state.get('analysis_semantic_source') != 'compatible_cache'
+        state['deep_scope_eligible'] = bool(binding)
+
+        if deep_authoritative is not None and deep_authoritative.get('outcome') == 'analyzed_fit':
+            semantic_entry = progressive_pass2.semantic_taste_entry(deep_authoritative)
+        elif state.get('analysis_state') == 'analyzed_fit' and state.get('analysis_semantic_source') == 'progressive_pass1':
             semantic_entry = progressive_pass1.semantic_taste_entry(pass1_entry)
-        elif state['analysis_state'] == 'analyzed_fit':
+        elif state.get('analysis_state') == 'analyzed_fit' and state.get('analysis_semantic_source') == 'compatible_cache':
             semantic_entry = canonical_entry
         else:
             semantic_entry = {}
@@ -218,7 +313,7 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
             'taste_entry': semantic_entry,
             'projection': projection,
             'context': row,
-            'pass1_scope_eligible': bool(binding) and state.get('analysis_semantic_source') != 'compatible_cache',
+            'pass1_scope_eligible': state['fast_scope_eligible'],
             'pass1_work_id': binding.get('work_id') if binding else None,
             'pass1_current_generation_id': generation['semantic_generation_id'] if binding else None,
         }
@@ -265,10 +360,21 @@ def apply_state_fields(game, state):
         game['analysis_resolution_pass'] = resolution_pass
     else:
         game.pop('analysis_resolution_pass', None)
+
+    for field in (
+        'fast_stage_state',
+        'fast_stage_outcome',
+        'dossier_stage_state',
+        'deep_stage_state',
+        'deep_stage_outcome',
+        'deep_recovery_state',
+        'effective_analysis_source',
+    ):
+        game[field] = state.get(field)
+
     if analysis_state != 'analyzed_fit':
         strip_unresolved_personalization(game)
     return game
-
 
 def apply_progressive_order(items, now=None):
     """Apply tier-first order without ever comparing purchase-only and personalized scores."""
@@ -311,6 +417,41 @@ def apply_progressive_order(items, now=None):
     return ordered, personalized_order
 
 
+def _dossier_processing_metrics():
+    try:
+        doc = progressive_pass2.load_json(progressive_pass2.DOSSIER_WORK)
+        progress = doc.get('group_progress') or {}
+        total = int(doc.get('eligible_scope_count'))
+        prepared_required = int(doc.get('prepared_required_count'))
+        if prepared_required > total:
+            raise ValueError('Dossier required scope exceeds current eligible scope')
+        already_current_accepted = total - prepared_required
+        accepted = already_current_accepted + int(progress.get('accepted_dossier_count'))
+        failed = int(progress.get('failed_dossier_count'))
+        pending = int(progress.get('pending_dossier_count'))
+        if total != accepted + failed + pending:
+            raise ValueError('Dossier current-scope arithmetic mismatch')
+        return {
+            'dossier_observability': 'available',
+            'dossier_total_current_scope': total,
+            'dossier_accepted_count': accepted,
+            'dossier_pending_count': pending,
+            'dossier_failed_or_recovery_count': failed,
+            'dossier_normal_first_pass_complete': bool(progress.get('normal_first_pass_complete')),
+            'dossier_all_accepted_or_recovered_complete': bool(progress.get('all_groups_accepted')),
+        }
+    except Exception as exc:
+        return {
+            'dossier_observability': f'unavailable:{type(exc).__name__}',
+            'dossier_total_current_scope': None,
+            'dossier_accepted_count': None,
+            'dossier_pending_count': None,
+            'dossier_failed_or_recovery_count': None,
+            'dossier_normal_first_pass_complete': None,
+            'dossier_all_accepted_or_recovered_complete': None,
+        }
+
+
 def build_processing_status(state_index, visible_items, business_excluded_family_ids=None):
     business_excluded = {str(x) for x in (business_excluded_family_ids or [])}
     counts = {
@@ -320,8 +461,11 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'not_analyzed': 0,
     }
     accepted_times = []
-    pass1_total_scope = 0
-    pass1_attempted = 0
+
+    fast_total = fast_attempted = fast_fit = fast_not_fit = 0
+    fast_incomplete = fast_error = fast_skipped_deep = fast_remaining = 0
+    deep_total = deep_first_pass_attempted = deep_authoritative = 0
+    deep_fit = deep_not_fit = deep_incomplete = deep_waiting = deep_ready = 0
 
     for family_id, state in state_index.items():
         if family_id in business_excluded:
@@ -332,10 +476,56 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         counts[key] += 1
         if state.get('evaluated_at_utc'):
             accepted_times.append(str(state['evaluated_at_utc']))
-        if state.get('pass1_scope_eligible'):
-            pass1_total_scope += 1
-            if state.get('pass1_attempted'):
-                pass1_attempted += 1
+
+        if state.get('fast_scope_eligible'):
+            fast_total += 1
+            fast_state = state.get('fast_stage_state')
+            fast_outcome = state.get('fast_stage_outcome')
+            if fast_state == 'completed':
+                fast_attempted += 1
+                if fast_outcome == 'fit':
+                    fast_fit += 1
+                elif fast_outcome == 'not_fit':
+                    fast_not_fit += 1
+                else:
+                    raise ValueError('completed Fast stage missing fit/not_fit outcome')
+            elif fast_state == 'incomplete':
+                fast_attempted += 1
+                fast_incomplete += 1
+            elif fast_state == 'error':
+                fast_attempted += 1
+                fast_error += 1
+            elif fast_state == 'not_started':
+                if state.get('deep_authoritative_completed'):
+                    fast_skipped_deep += 1
+                else:
+                    fast_remaining += 1
+            else:
+                raise ValueError(f'unknown Fast stage state: {fast_state!r}')
+
+        if state.get('deep_scope_eligible'):
+            deep_total += 1
+            if state.get('deep_first_pass_attempted'):
+                deep_first_pass_attempted += 1
+            if state.get('deep_authoritative_completed'):
+                deep_authoritative += 1
+                if state.get('deep_stage_outcome') == 'fit':
+                    deep_fit += 1
+                elif state.get('deep_stage_outcome') == 'not_fit':
+                    deep_not_fit += 1
+                else:
+                    raise ValueError('completed Deep stage missing fit/not_fit outcome')
+            elif state.get('deep_first_pass_attempted'):
+                deep_incomplete += 1
+
+            deep_stage = state.get('deep_stage_state')
+            recovery_state = state.get('deep_recovery_state')
+            if deep_stage == 'waiting_for_dossier':
+                deep_waiting += 1
+            elif deep_stage == 'eligible_or_pending':
+                deep_ready += 1
+            elif recovery_state in {'recovery_eligible', 'recovery_pending'}:
+                deep_ready += 1
 
     total = sum(counts.values())
     analyzed_success = counts['analyzed_fit'] + counts['analyzed_not_fit']
@@ -347,12 +537,17 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         )
     if total != analyzed_success + counts['analysis_incomplete'] + counts['not_analyzed']:
         raise ValueError('progressive total arithmetic mismatch')
-    pass1_remaining = pass1_total_scope - pass1_attempted
-    if pass1_remaining < 0:
-        raise ValueError('PASS 1 progress arithmetic mismatch')
+    if fast_total != fast_attempted + fast_skipped_deep + fast_remaining:
+        raise ValueError('Fast stage arithmetic mismatch')
 
+    deep_normal_remaining = deep_total - deep_first_pass_attempted
+    deep_authoritative_remaining = deep_total - deep_authoritative
+    if deep_normal_remaining < 0 or deep_authoritative_remaining < 0:
+        raise ValueError('Deep progress arithmetic underflow')
+
+    dossier = _dossier_processing_metrics()
     return {
-        'schema_version': 2,
+        'schema_version': 3,
         'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
         'phase': 'phase_b',
         'total_current_candidates': total,
@@ -364,15 +559,91 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'normal_visible_count': normal_visible,
         'last_accepted_analysis_at_utc': max(accepted_times) if accepted_times else None,
         'pass1_active': True,
-        'pass1_total_scope': pass1_total_scope,
-        'pass1_attempted_count': pass1_attempted,
-        'pass1_remaining_count': pass1_remaining,
+        'pass1_total_scope': fast_attempted + fast_remaining,
+        'pass1_attempted_count': fast_attempted,
+        'pass1_remaining_count': fast_remaining,
         'pass2_implemented': True,
         'pass2_active': False,
         'semantic_queue_zero_required_for_publication': False,
+
+        'fast_total_current_scope': fast_total,
+        'fast_attempted_count': fast_attempted,
+        'fast_completed_fit_count': fast_fit,
+        'fast_completed_not_fit_count': fast_not_fit,
+        'fast_incomplete_count': fast_incomplete,
+        'fast_error_count': fast_error,
+        'fast_skipped_due_to_authoritative_deep_count': fast_skipped_deep,
+        'fast_remaining_count': fast_remaining,
+
+        **dossier,
+
+        'deep_total_current_coverage_target': deep_total,
+        'deep_first_pass_attempted_count': deep_first_pass_attempted,
+        'deep_authoritative_completed_count': deep_authoritative,
+        'deep_completed_fit_count': deep_fit,
+        'deep_completed_not_fit_count': deep_not_fit,
+        'deep_incomplete_or_recovery_count': deep_incomplete,
+        'deep_waiting_for_dossier_count': deep_waiting,
+        'deep_ready_or_pending_count': deep_ready,
+        'deep_normal_first_pass_remaining_count': deep_normal_remaining,
+        'deep_remaining_until_all_authoritative_count': deep_authoritative_remaining,
+        'deep_normal_first_pass_complete': deep_normal_remaining == 0,
+        'deep_all_current_authoritative_complete': deep_authoritative_remaining == 0,
+
+        'fast_stage_counts': {
+            'total_current_scope': fast_total,
+            'attempted': fast_attempted,
+            'completed_fit': fast_fit,
+            'completed_not_fit': fast_not_fit,
+            'incomplete': fast_incomplete,
+            'error': fast_error,
+            'skipped_due_to_authoritative_deep': fast_skipped_deep,
+            'remaining': fast_remaining,
+        },
+        'dossier_stage_counts': {
+            key: dossier[key]
+            for key in (
+                'dossier_observability',
+                'dossier_total_current_scope',
+                'dossier_accepted_count',
+                'dossier_pending_count',
+                'dossier_failed_or_recovery_count',
+                'dossier_normal_first_pass_complete',
+                'dossier_all_accepted_or_recovered_complete',
+            )
+        },
+        'deep_stage_counts': {
+            'total_current_coverage_target': deep_total,
+            'first_pass_attempted': deep_first_pass_attempted,
+            'authoritative_completed': deep_authoritative,
+            'completed_fit': deep_fit,
+            'completed_not_fit': deep_not_fit,
+            'incomplete_or_recovery': deep_incomplete,
+            'waiting_for_dossier': deep_waiting,
+            'ready_or_pending': deep_ready,
+            'normal_first_pass_remaining': deep_normal_remaining,
+            'remaining_until_all_authoritative': deep_authoritative_remaining,
+            'normal_first_pass_complete': deep_normal_remaining == 0,
+            'all_current_authoritative_complete': deep_authoritative_remaining == 0,
+        },
+        'effective_result_counts': {
+            'deep': sum(
+                1 for fid, state in state_index.items()
+                if fid not in business_excluded
+                and state.get('effective_analysis_source') == 'deep'
+            ),
+            'fast': sum(
+                1 for fid, state in state_index.items()
+                if fid not in business_excluded
+                and state.get('effective_analysis_source') == 'fast'
+            ),
+            'none': sum(
+                1 for fid, state in state_index.items()
+                if fid not in business_excluded
+                and state.get('effective_analysis_source') == 'none'
+            ),
+        },
     }
-
-
 
 def business_excluded_family_ids(state_index):
     excluded = set()
@@ -404,16 +675,16 @@ def stamp_processing_status(visual, state_index=None):
     visual['progressive_personalization'] = {
         'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
         'phase': 'phase_b',
-        'publication_status': 'current_deterministic_catalogue_with_incremental_pass1',
+        'publication_status': 'current_deterministic_catalogue_with_independent_fast_dossier_deep_runtime',
         'semantic_queue_zero_required_for_publication': False,
         'pass1_active': True,
         'pass2_implemented': True,
         'pass2_active': False,
+        'deep_runtime_adapted': True,
     }
-    # Overall visual availability reflects the deterministic current catalogue.
-    # Semantic completeness remains separately available in semantic_completeness.
     visual['status'] = 'complete'
     return status
+
 
 def validate_processing_status(status):
     required = {
@@ -421,9 +692,24 @@ def validate_processing_status(status):
         'analyzed_not_fit_count', 'analysis_incomplete_count', 'not_analyzed_count',
         'normal_visible_count', 'pass1_total_scope', 'pass1_attempted_count',
         'pass1_remaining_count',
+        'fast_total_current_scope', 'fast_attempted_count',
+        'fast_completed_fit_count', 'fast_completed_not_fit_count',
+        'fast_incomplete_count', 'fast_error_count',
+        'fast_skipped_due_to_authoritative_deep_count', 'fast_remaining_count',
+        'dossier_total_current_scope', 'dossier_accepted_count',
+        'dossier_pending_count', 'dossier_failed_or_recovery_count',
+        'dossier_normal_first_pass_complete', 'dossier_all_accepted_or_recovered_complete',
+        'deep_total_current_coverage_target', 'deep_first_pass_attempted_count',
+        'deep_authoritative_completed_count', 'deep_completed_fit_count',
+        'deep_completed_not_fit_count', 'deep_incomplete_or_recovery_count',
+        'deep_waiting_for_dossier_count', 'deep_ready_or_pending_count',
+        'deep_normal_first_pass_remaining_count',
+        'deep_remaining_until_all_authoritative_count',
+        'deep_normal_first_pass_complete', 'deep_all_current_authoritative_complete',
     }
     if not required.issubset(status):
         raise ValueError('progressive processing status missing required counters')
+
     total = int(status['total_current_candidates'])
     fit = int(status['analyzed_fit_count'])
     not_fit = int(status['analyzed_not_fit_count'])
@@ -437,15 +723,61 @@ def validate_processing_status(status):
         raise ValueError('analyzed_success_count invariant failed')
     if visible != fit + incomplete + untouched:
         raise ValueError('normal_visible_count invariant failed')
+
     pass1_total = int(status['pass1_total_scope'])
     pass1_attempted = int(status['pass1_attempted_count'])
     pass1_remaining = int(status['pass1_remaining_count'])
     if pass1_total != pass1_attempted + pass1_remaining:
         raise ValueError('PASS 1 scope invariant failed')
+
+    fast_total = int(status['fast_total_current_scope'])
+    fast_attempted = int(status['fast_attempted_count'])
+    fast_skipped = int(status['fast_skipped_due_to_authoritative_deep_count'])
+    fast_remaining = int(status['fast_remaining_count'])
+    if fast_total != fast_attempted + fast_skipped + fast_remaining:
+        raise ValueError('Fast scope invariant failed')
+    if fast_attempted != (
+        int(status['fast_completed_fit_count'])
+        + int(status['fast_completed_not_fit_count'])
+        + int(status['fast_incomplete_count'])
+        + int(status['fast_error_count'])
+    ):
+        raise ValueError('Fast attempted-outcome invariant failed')
+
+    dossier_total = status.get('dossier_total_current_scope')
+    if dossier_total is not None:
+        if int(dossier_total) != (
+            int(status['dossier_accepted_count'])
+            + int(status['dossier_pending_count'])
+            + int(status['dossier_failed_or_recovery_count'])
+        ):
+            raise ValueError('Dossier scope invariant failed')
+
+    deep_total = int(status['deep_total_current_coverage_target'])
+    deep_first = int(status['deep_first_pass_attempted_count'])
+    deep_authoritative = int(status['deep_authoritative_completed_count'])
+    if deep_first + int(status['deep_normal_first_pass_remaining_count']) != deep_total:
+        raise ValueError('Deep normal first-pass invariant failed')
+    if deep_authoritative + int(status['deep_remaining_until_all_authoritative_count']) != deep_total:
+        raise ValueError('Deep authoritative completion invariant failed')
+    if deep_authoritative != (
+        int(status['deep_completed_fit_count']) + int(status['deep_completed_not_fit_count'])
+    ):
+        raise ValueError('Deep completed-outcome invariant failed')
+    if bool(status['deep_normal_first_pass_complete']) != (
+        int(status['deep_normal_first_pass_remaining_count']) == 0
+    ):
+        raise ValueError('Deep normal first-pass completion flag mismatch')
+    if bool(status['deep_all_current_authoritative_complete']) != (
+        int(status['deep_remaining_until_all_authoritative_count']) == 0
+    ):
+        raise ValueError('Deep all-authoritative completion flag mismatch')
+
     if (
         status.get('pass1_active') is not True
         or status.get('pass2_implemented') is not True
         or status.get('pass2_active') is not False
     ):
-        raise ValueError('PASS 1/PASS 2 implementation or activation flags invalid')
+        raise ValueError('Fast/Deep implementation or activation flags invalid')
     return True
+

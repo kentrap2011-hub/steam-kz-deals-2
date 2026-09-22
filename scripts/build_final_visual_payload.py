@@ -59,6 +59,15 @@ SEMANTIC_PRESERVED_FIELDS = (
     'analysis_semantic_source',
     'analysis_semantic_generation_id',
     'pass1_attempted',
+    'pass2_attempted',
+    'analysis_resolution_pass',
+    'fast_stage_state',
+    'fast_stage_outcome',
+    'dossier_stage_state',
+    'deep_stage_state',
+    'deep_stage_outcome',
+    'deep_recovery_state',
+    'effective_analysis_source',
 )
 
 

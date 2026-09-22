@@ -59,6 +59,24 @@ def processing_status_valid(status, visible_count):
         'pass1_total_scope',
         'pass1_attempted_count',
         'pass1_remaining_count',
+        'fast_total_current_scope',
+        'fast_attempted_count',
+        'fast_completed_fit_count',
+        'fast_completed_not_fit_count',
+        'fast_incomplete_count',
+        'fast_error_count',
+        'fast_skipped_due_to_authoritative_deep_count',
+        'fast_remaining_count',
+        'deep_total_current_coverage_target',
+        'deep_first_pass_attempted_count',
+        'deep_authoritative_completed_count',
+        'deep_completed_fit_count',
+        'deep_completed_not_fit_count',
+        'deep_incomplete_or_recovery_count',
+        'deep_waiting_for_dossier_count',
+        'deep_ready_or_pending_count',
+        'deep_normal_first_pass_remaining_count',
+        'deep_remaining_until_all_authoritative_count',
     )
     try:
         values = {key: int(status[key]) for key in required}
@@ -85,10 +103,55 @@ def processing_status_valid(status, visible_count):
         values['pass1_attempted_count'] + values['pass1_remaining_count']
     ):
         return False
+    if values['fast_total_current_scope'] != (
+        values['fast_attempted_count']
+        + values['fast_skipped_due_to_authoritative_deep_count']
+        + values['fast_remaining_count']
+    ):
+        return False
+    if values['fast_attempted_count'] != (
+        values['fast_completed_fit_count']
+        + values['fast_completed_not_fit_count']
+        + values['fast_incomplete_count']
+        + values['fast_error_count']
+    ):
+        return False
+    if values['deep_first_pass_attempted_count'] + values['deep_normal_first_pass_remaining_count'] != (
+        values['deep_total_current_coverage_target']
+    ):
+        return False
+    if values['deep_authoritative_completed_count'] + values['deep_remaining_until_all_authoritative_count'] != (
+        values['deep_total_current_coverage_target']
+    ):
+        return False
+    if values['deep_authoritative_completed_count'] != (
+        values['deep_completed_fit_count'] + values['deep_completed_not_fit_count']
+    ):
+        return False
+    if bool(status.get('deep_normal_first_pass_complete')) != (
+        values['deep_normal_first_pass_remaining_count'] == 0
+    ):
+        return False
+    if bool(status.get('deep_all_current_authoritative_complete')) != (
+        values['deep_remaining_until_all_authoritative_count'] == 0
+    ):
+        return False
+
+    dossier_total = status.get('dossier_total_current_scope')
+    if dossier_total is not None:
+        try:
+            if int(dossier_total) != (
+                int(status['dossier_accepted_count'])
+                + int(status['dossier_pending_count'])
+                + int(status['dossier_failed_or_recovery_count'])
+            ):
+                return False
+        except (KeyError, TypeError, ValueError):
+            return False
+
     if status.get('pass1_active') is not True or status.get('pass2_active') is not False:
         return False
     return values['normal_visible_count'] == int(visible_count)
-
 
 def progressive_visual_compatible(
     *,
@@ -143,6 +206,17 @@ def progressive_visual_compatible(
         expected_tier = {'analyzed_fit': 1, 'analysis_incomplete': 2, 'not_analyzed': 3}[state]
         if item.get('analysis_tier') != expected_tier:
             return False, 'visible_analysis_tier_invalid'
+        for field in (
+            'fast_stage_state',
+            'fast_stage_outcome',
+            'dossier_stage_state',
+            'deep_stage_state',
+            'deep_stage_outcome',
+            'deep_recovery_state',
+            'effective_analysis_source',
+        ):
+            if field not in item:
+                return False, f'visible_stage_field_missing:{field}'
 
     contract = visual.get('production_contract') or {}
     if contract.get('source_progressive_candidate_context_blob_sha') != progressive_context_blob:

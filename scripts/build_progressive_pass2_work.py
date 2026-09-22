@@ -73,13 +73,13 @@ def build_work_document(now=None):
         raise SystemExit('PASS 2 eligibility count mismatch')
 
     return {
-        'schema_version': 1,
+        'schema_version': 2,
         'contract': 'PROGRESSIVE-PASS2-WORK-V1',
         'phase': 'phase_c_pass2',
         'implemented': True,
         'pass1_active': True,
         'pass2_active': bool(contract.get('active')),
-        'projection_status': 'current_github_owned_eligibility_projection',
+        'projection_status': 'current_github_owned_fast_dossier_deep_v1_projection',
         'semantic_generation_id': recomputed['semantic_generation_id'],
         'semantic_bindings': recomputed['semantic_bindings'],
         'dossier_compatibility_binding': binding,
@@ -102,10 +102,12 @@ def main():
         'PROGRESSIVE_PASS2_WORK=READY '
         f"active={str(doc['pass2_active']).lower()} "
         f"generation={doc['semantic_generation_id']} "
-        f"incomplete={scope['current_analysis_incomplete_count']} "
-        f"waiting={scope['dossier_waiting_count']} "
-        f"attempted={scope['pass2_attempted_count']} "
-        f"eligible={scope['pass2_eligible_count']}"
+        f"target={scope['deep_total_current_coverage_target']} "
+        f"first_pass_attempted={scope['deep_first_pass_attempted_count']} "
+        f"authoritative={scope['deep_authoritative_completed_count']} "
+        f"waiting_dossier={scope['deep_waiting_for_dossier_count']} "
+        f"ready_or_pending={scope['deep_ready_or_pending_count']} "
+        f"recovery_pending={scope['recovery_pending_count']}"
     )
 
 
