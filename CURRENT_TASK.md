@@ -663,8 +663,11 @@
 ## Worker in progress — 2026-09-22
 
 ### Progressive PASS 2 Phase C core implement 01
-Статус: `in_progress`.
+Статус: `complete_core_ready_for_director_acceptance`.
 - task: `WORKER_TASK_PROGRESSIVE_PASS2_PHASE_C_CORE_IMPLEMENT_01.md`;
-- scope: inactive GitHub-owned PASS 2 core on Progressive-owned surfaces only; Dossier workflow/runtime integration is explicitly deferred;
-- guards: `pass2_active=false`, no Scheduled Task creation/run, no production PASS 2 attempt/result;
-- next: bounded implementation + focused P2CORE validation + durable report.
+- implementation squash: `670e2cfb6991d955a9503637d72345a523ebca7a`;
+- GitHub-owned PASS 2 core is implemented with exact current PASS 1 incomplete + exact accepted Dossier eligibility, immutable per-item transport, one-attempt accounting, terminal execution receipts and explicit UI provenance;
+- `pass2_active=false`; no Scheduled Task was created/edited/run and no production PASS 2 attempt/result was created;
+- Dossier-owned contract/prompt/ingest/recovery/workflow surfaces were not modified; automatic recomputation after canonical Dossier persistence remains the explicit deferred integration dependency;
+- focused validation passed, including inactive production eligibility projection with zero state mutation;
+- durable report: `reviews/worker_reports/progressive-pass2-phase-c-core-implement-01.md`.
