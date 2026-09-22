@@ -17,6 +17,11 @@ assert.deepStrictEqual(ui.sortItems([e1,e2],true).map(x=>x.id),['e1','e2']);
 assert.strictEqual(ui.labelFor(fit),'Разобрана · подходит вам');
 assert.strictEqual(ui.labelFor(error),'Разбор не завершён');
 assert.strictEqual(ui.labelFor(untouched),'Ещё не разобрана');
+assert.strictEqual(ui.labelFor({...fit,analysis_resolution_pass:'pass2'}),'Разобрана · PASS 2');
+assert.strictEqual(ui.labelFor({...error,analysis_resolution_pass:'pass2'}),'Разбор не завершён · PASS 2');
+// Browser labels consume the explicit GitHub-generated provenance field and do
+// not infer PASS 2 from semantic source/history.
+assert.strictEqual(ui.labelFor({...fit,analysis_semantic_source:'progressive_pass2'}),'Разобрана · подходит вам');
 
 const lines=ui.processingLines({
   total_current_candidates:734,analyzed_success_count:10,analyzed_fit_count:7,
