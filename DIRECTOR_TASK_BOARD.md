@@ -146,6 +146,36 @@ Director conclusion:
 - non-blocking Dossier progress implementation is accepted;
 - do not treat g000001/g000002 as accepted Dossiers;
 - do not proceed to PASS 2 production integration/activation until the repeated `items` identity mismatch is corrected and at least one clean Dossier group is canonically accepted.
+## ACTIVE — ЧАТ 2 — Taste Dossier group identity items mismatch fix
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_GROUP_IDENTITY_ITEMS_MISMATCH_FIX_01.md`
+
+Worker slot:
+`СУЩЕСТВУЮЩИЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
+
+Mode:
+`DIAGNOSE / IMPLEMENT / VALIDATE`
+
+Confirmed trigger:
+- live Dossier g000001 and g000002 were independently classified failed;
+- both expose `buffered dossier group identity mismatch: items`;
+- next normal pending group is g000003, proving non-blocking progress itself works.
+
+Scope:
+- identify exact descriptor-vs-candidate `items` divergence;
+- fix the producer-facing serialization/runtime path only;
+- preserve strict validator semantics and the accepted non-blocking per-group architecture;
+- do not rewrite/reaccept failed g000001/g000002;
+- do not change PASS 1/PASS 2/Taste Semantic Producer or Scheduled Task configuration.
+
+Expected report:
+`reviews/worker_reports/taste-dossier-group-identity-items-mismatch-fix-01.md`
+
+Live acceptance after Director review:
+- one user-triggered existing Dossier `Run now`;
+- require at least one new group to become canonically accepted before PASS 2 integration/activation resumes.
+
 ## ACCEPTED — Progressive PASS 2 Phase C core implementation
 
 Task:
