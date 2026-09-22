@@ -555,3 +555,23 @@
 **Не изменено:** PASS 1 остаётся one-shot coverage path без обязательного Dossier; Dossier evidence/identity/freshness semantics остаются в своих canonical contracts; PASS 2 runtime/scheduler/worker/processor этим решением не активируются.
 
 **Основные места:** `config/progressive_personalization_contract.json#phase_c_pass2_design`, `config/progressive_pass1_contract.json` (PASS 1 unchanged), `config/taste_steam_review_dossier_contract.json`, `config/taste_steam_review_dossier_persistence_bridge.json`.
+
+---
+
+## TASTE-013 — Dossier progress is per-group and non-blocking
+
+**Дата:** 2026-09-22  
+**Статус:** implementation governed by `WORKER_TASK_TASTE_DOSSIER_NONBLOCKING_GROUP_PROGRESS_IMPLEMENT_01.md`.
+
+**Решение:** maximal-contiguous-prefix promotion is superseded for normal Taste Dossier progress. GitHub owns one canonical state for every immutable predeclared group: `pending`, `accepted`, or `failed_or_invalid_pending_recovery`. A valid group persists independently even if an earlier different group failed. An invalid group is fail-closed only for its own identity, is quarantined/recorded for separate recovery, and is removed from normal first-pass traversal. Scheduled ChatGPT receives only GitHub's next pending projection and never owns retry, ordering, recovery, completeness, or schedule mutation.
+
+**Completeness:** `normal_first_pass_complete=true` means no `pending` groups remain and may coexist with unresolved failed groups. Existing `full_backlog_complete` is not silently redefined: it retains the stricter all-required/all-accepted meaning. Downstream evidence consumers may use only canonically accepted dossiers; a failed group never counts as accepted evidence.
+
+**Recovery:** failed groups remain visible through a separate GitHub-owned recovery projection. Normal first pass never automatically retries them. Explicit recovery may later reopen an exact same-snapshot failed group only under canonical recovery rules; create-only deterministic transport, exact plan/binding and strict validation remain mandatory.
+
+**Почему:** a single semantically bad group must not become a head-of-line blocker for hundreds of unrelated dossiers. The g000005 incident proved that immutable create-only transport plus contiguous-prefix acceptance could leave canonical progress pinned forever after a correctly rejected artifact, even though later groups were independent work.
+
+**Граница:** group size 3, strict dossier semantic validation, evidence/schema rules, snapshot/plan exactness, stale-snapshot isolation, GitHub control-plane ownership and hourly Scheduled Dossier cadence remain unchanged. No new queue, retry daemon, scheduler, PASS 1/PASS 2 behavior or Taste Semantic Producer behavior is introduced. The Scheduled Dossier worker is explicitly forbidden from enabling, disabling, pausing, deleting, rescheduling or editing its own task.
+
+**Основные места:** `config/taste_steam_review_dossier_contract.json`, `config/taste_steam_review_dossier_persistence_bridge.json`, `config/taste_steam_review_dossier_recovery_contract.json`, `config/execution_ownership_contract.json`, `scripts/taste_steam_review_dossier_group_progress.py`, `scripts/taste_steam_review_dossier_buffered.py`, `scripts/taste_steam_review_dossier_worker_projection.py`, `scripts/taste_steam_review_dossier_recovery.py`, `config/taste_steam_review_dossier_worker_prompt.md`.
+
