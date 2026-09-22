@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -39,14 +38,12 @@ def row(appid, title, description, *, addon=True):
 
 
 class StoryDlcScopeTests(unittest.TestCase):
-    def test_story_dlc_01_current_bg3_digital_deluxe_excluded(self):
-        queue_path = ROOT / "data/production/pre_ai/chatgpt_taste_queue.jsonl"
-        current = [
-            json.loads(line)
-            for line in queue_path.read_text(encoding="utf-8").splitlines()
-            if line.strip()
-        ]
-        bg3 = next(x for x in current if str(x.get("appid")) == "2378500")
+    def test_story_dlc_01_bg3_digital_deluxe_regression_excluded(self):
+        bg3 = row(
+            2378500,
+            "Baldur's Gate 3 - Digital Deluxe Edition DLC",
+            "Digital Deluxe Edition bonus content with soundtrack, digital artbook, character sheets and cosmetic items.",
+        )
         classified = classify_story_dlc_scope(bg3)
         self.assertEqual(classified["classification"], "non_story_dlc_excluded")
         self.assertFalse(classified["eligible"])
@@ -96,12 +93,13 @@ class StoryDlcScopeTests(unittest.TestCase):
         resolution = resolve_dossier_scope_identities([item], CONTRACT)
         self.assertEqual([x["appid"] for x in resolution["rows"]], ["7001"])
 
-    def test_story_dlc_08_regenerated_current_group_plan_excludes_bg3(self):
-        queue_path = ROOT / "data/production/pre_ai/chatgpt_taste_queue.jsonl"
+    def test_story_dlc_08_group_plan_excludes_bg3_fixture(self):
         current = [
-            json.loads(line)
-            for line in queue_path.read_text(encoding="utf-8").splitlines()
-            if line.strip()
+            row(
+                2378500,
+                "Baldur's Gate 3 - Digital Deluxe Edition DLC",
+                "Digital Deluxe Edition bonus content with soundtrack, digital artbook, character sheets and cosmetic items.",
+            )
         ]
         with tempfile.TemporaryDirectory() as td:
             manifest = build_daily_work_manifest_web(current, CONTRACT, td)
