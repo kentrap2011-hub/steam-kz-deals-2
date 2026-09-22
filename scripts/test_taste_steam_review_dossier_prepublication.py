@@ -13,6 +13,10 @@ from taste_steam_review_dossier_prepublication import validate_prepublication_ar
 from taste_steam_review_dossier_recovery import quarantine_stale_snapshot_inbox
 from taste_steam_review_dossier_strict import derive_dossier_summary
 from taste_steam_review_dossier_test_fixture import web_dossier
+from taste_steam_review_dossier_worker_projection import (
+    buffered_candidate_descriptor_projection,
+    build_worker_projection,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
@@ -34,11 +38,12 @@ def queue(appids):
 
 
 def build_group(work, sequence=1):
-    descriptor = work["submission_group_plan"]["groups"][sequence - 1]
+    _, worker_descriptors = build_worker_projection(work, BASE_CONTRACT)
+    descriptor = worker_descriptors[sequence - 1]
     return {
         "schema": BUFFER_GROUP_SCHEMA,
         "schema_version": 1,
-        **copy.deepcopy(descriptor),
+        **buffered_candidate_descriptor_projection(descriptor, BASE_CONTRACT),
         "dossiers": [
             web_dossier(item["appid"], NOW, title=item["title"])
             for item in descriptor["items"]
@@ -78,6 +83,40 @@ class PrepublicationParityTests(unittest.TestCase):
         self.assertEqual(result["dossier_count"], 3)
         self.assertEqual(result["canonical_validator"], "taste_steam_review_dossier_buffered.validate_buffer_artifact")
         self.assertEqual(len(docs), 3)
+
+    def test_buffer_candidate_copies_exact_descriptor_items_and_strict_mutations_fail(self):
+        _, worker_descriptors = build_worker_projection(self.work, BASE_CONTRACT)
+        worker_descriptor = worker_descriptors[0]
+        projection = buffered_candidate_descriptor_projection(worker_descriptor, BASE_CONTRACT)
+        self.assertEqual(projection["items"], worker_descriptor["items"])
+        self.assertIsNot(projection["items"], worker_descriptor["items"])
+
+        valid = build_group(self.work)
+        self.assertEqual(valid["items"], worker_descriptor["items"])
+        self.assertEqual(
+            validate_prepublication_artifact(copy.deepcopy(valid), self.work, self.contract)["status"],
+            "valid",
+        )
+
+        mutations = {
+            "missing": lambda artifact: artifact.pop("items"),
+            "extra_item": lambda artifact: artifact["items"].append(copy.deepcopy(artifact["items"][-1])),
+            "reordered": lambda artifact: artifact["items"].__setitem__(
+                slice(0, 2), [artifact["items"][1], artifact["items"][0]]
+            ),
+            "normalized_appid": lambda artifact: artifact["items"][0].__setitem__(
+                "appid", int(artifact["items"][0]["appid"])
+            ),
+            "extra_field": lambda artifact: artifact["items"][0].__setitem__("normalized", True),
+        }
+        for name, mutate in mutations.items():
+            with self.subTest(name=name):
+                artifact = copy.deepcopy(valid)
+                mutate(artifact)
+                with self.assertRaisesRegex(ValueError, "buffered dossier group identity mismatch: items"):
+                    validate_prepublication_artifact(copy.deepcopy(artifact), self.work, self.contract)
+                with self.assertRaisesRegex(ValueError, "buffered dossier group identity mismatch: items"):
+                    validate_buffer_artifact(copy.deepcopy(artifact), self.descriptor, self.work, self.contract)
 
     def test_hellish_live_shape_rejected_before_publication(self):
         def mutate(artifact):
