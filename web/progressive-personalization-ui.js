@@ -38,43 +38,43 @@
   function fastIndicator(game){
     const state=game&&game.fast_stage_state;
     const outcome=game&&game.fast_stage_outcome;
-    if(state==='completed'&&outcome==='fit')return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'positive',title:'Быстрый разбор: завершён — подходит'};
-    if(state==='completed'&&outcome==='not_fit')return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'negative',title:'Быстрый разбор: завершён — не подходит'};
-    if(state==='completed')return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'unknown',title:'Быстрый разбор: завершён — результат не указан'};
-    if(state==='incomplete')return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'warning',title:'Быстрый разбор: не завершён'};
-    if(state==='error')return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'error',title:'Быстрый разбор: ошибка'};
-    if(state==='not_started')return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'idle',title:'Быстрый разбор: ещё не начат'};
-    return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'unknown',title:'Быстрый разбор: состояние не опубликовано'};
+    if(state==='completed'&&outcome==='fit')return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'positive',lit:true,title:'Быстрый разбор: завершён — подходит'};
+    if(state==='completed'&&outcome==='not_fit')return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'negative',lit:true,title:'Быстрый разбор: завершён — не подходит'};
+    if(state==='completed')return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'unknown',lit:false,title:'Быстрый разбор: завершён, но итог не опубликован'};
+    if(state==='incomplete')return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'warning',lit:false,title:'Быстрый разбор: не удалось сделать вывод'};
+    if(state==='error')return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'error',lit:false,title:'Быстрый разбор: ошибка'};
+    if(state==='not_started')return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'idle',lit:false,title:'Быстрый разбор: ещё не начат'};
+    return {key:'fast',symbol:'⚡',label:'Быстрый разбор',tone:'unknown',lit:false,title:'Быстрый разбор: состояние не опубликовано'};
   }
 
   function dossierIndicator(game){
     const state=game&&game.dossier_stage_state;
-    if(state==='accepted')return {key:'dossier',symbol:'▤',label:'Подготовка досье',tone:'ready',title:'Подготовка досье: принято'};
-    if(state==='failed_or_recovery')return {key:'dossier',symbol:'▤',label:'Подготовка досье',tone:'warning',title:'Подготовка досье: ошибка или восстановление'};
-    if(state==='not_ready')return {key:'dossier',symbol:'▤',label:'Подготовка досье',tone:'idle',title:'Подготовка досье: ещё не готово'};
-    return {key:'dossier',symbol:'▤',label:'Подготовка досье',tone:'unknown',title:'Подготовка досье: состояние не опубликовано'};
+    if(state==='accepted')return {key:'dossier',symbol:'▤',label:'Подготовка досье',tone:'ready',lit:true,title:'Подготовка досье: готово'};
+    if(state==='failed_or_recovery')return {key:'dossier',symbol:'▤',label:'Подготовка досье',tone:'warning',lit:false,title:'Подготовка досье: требует восстановления'};
+    if(state==='not_ready')return {key:'dossier',symbol:'▤',label:'Подготовка досье',tone:'idle',lit:false,title:'Подготовка досье: ожидает подготовки'};
+    return {key:'dossier',symbol:'▤',label:'Подготовка досье',tone:'unknown',lit:false,title:'Подготовка досье: состояние не опубликовано'};
   }
 
   function deepIndicator(game){
     const state=game&&game.deep_stage_state;
     const outcome=game&&game.deep_stage_outcome;
     const recovery=game&&game.deep_recovery_state;
-    if(state==='completed'&&outcome==='fit')return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'positive',title:'Глубокий разбор: завершён — подходит'};
-    if(state==='completed'&&outcome==='not_fit')return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'negative',title:'Глубокий разбор: завершён — не подходит'};
-    if(state==='completed')return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'unknown',title:'Глубокий разбор: завершён — результат не указан'};
-    if(state==='waiting_for_dossier')return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'idle',title:'Глубокий разбор: ждёт досье'};
-    if(state==='eligible_or_pending')return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'ready',title:'Глубокий разбор: готов или ожидает выполнения'};
+    if(state==='completed'&&outcome==='fit')return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'positive',lit:true,title:'Глубокий разбор: завершён — подходит'};
+    if(state==='completed'&&outcome==='not_fit')return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'negative',lit:true,title:'Глубокий разбор: завершён — не подходит'};
+    if(state==='completed')return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'unknown',lit:false,title:'Глубокий разбор: завершён, но итог не опубликован'};
+    if(state==='waiting_for_dossier')return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'idle',lit:false,title:'Глубокий разбор: ждёт досье'};
+    if(state==='eligible_or_pending')return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'ready',lit:false,title:'Глубокий разбор: готов к разбору или ожидает выполнения'};
     if(state==='incomplete_or_recovery'){
       const recoveryTitles={
-        recovery_owned:'восстановление назначено',
-        recovery_eligible:'доступно восстановление',
+        recovery_owned:'требует восстановления',
+        recovery_eligible:'восстановление доступно',
         recovery_pending:'восстановление ожидает выполнения',
-        none:'не завершён',
+        none:'не удалось завершить',
       };
-      return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'warning',title:`Глубокий разбор: ${recoveryTitles[recovery]||'не завершён / восстановление'}`};
+      return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'warning',lit:false,title:`Глубокий разбор: ${recoveryTitles[recovery]||'не удалось завершить / требуется восстановление'}`};
     }
-    if(state==='not_started')return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'idle',title:'Глубокий разбор: ещё не начат'};
-    return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'unknown',title:'Глубокий разбор: состояние не опубликовано'};
+    if(state==='not_started')return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'idle',lit:false,title:'Глубокий разбор: ещё не начат'};
+    return {key:'deep',symbol:'◆',label:'Глубокий разбор',tone:'unknown',lit:false,title:'Глубокий разбор: состояние не опубликовано'};
   }
 
   function stageIndicators(game){
@@ -94,52 +94,48 @@
       {
         key:'fast',
         title:'Быстрый разбор',
-        scopeLabel:'Текущий Fast-scope',
+        scopeLabel:'Всего игр для быстрого разбора',
         denominatorKey:'fast_total_current_scope',
         denominator:field(status,'fast_total_current_scope'),
         rows:[
-          ['Попытки','fast_attempted_count'],
+          ['Обработано','fast_attempted_count'],
           ['Завершено: подходит','fast_completed_fit_count'],
           ['Завершено: не подходит','fast_completed_not_fit_count'],
-          ['Не завершено','fast_incomplete_count'],
+          ['Не удалось сделать вывод','fast_incomplete_count'],
           ['Ошибки','fast_error_count'],
-          ['Пропущено после authoritative Deep','fast_skipped_due_to_authoritative_deep_count'],
+          ['Не требовался: есть готовый глубокий разбор','fast_skipped_due_to_authoritative_deep_count'],
           ['Осталось','fast_remaining_count'],
         ].map(([label,key])=>({label,key,value:field(status,key)})),
+        note:'«Обработано» — быстрый разбор запускался для этого числа игр. Это сумма завершённых «подходит» и «не подходит», случаев «не удалось сделать вывод» и ошибок. «Не удалось сделать вывод» означает, что надёжных данных для итога не хватило; «Ошибка» — технический или некорректный результат.',
       },
       {
         key:'dossier',
         title:'Подготовка досье',
-        scopeLabel:'Текущий Dossier-scope',
+        scopeLabel:'Всего игр для подготовки досье',
         denominatorKey:'dossier_total_current_scope',
         denominator:field(status,'dossier_total_current_scope'),
         rows:[
-          ['Принято','dossier_accepted_count'],
+          ['Готово','dossier_accepted_count'],
           ['Ожидает','dossier_pending_count'],
-          ['Ошибка / восстановление','dossier_failed_or_recovery_count'],
-          ['Нормальный первый проход завершён','dossier_normal_first_pass_complete'],
-          ['Все приняты или восстановлены','dossier_all_accepted_or_recovered_complete'],
+          ['Требует восстановления','dossier_failed_or_recovery_count'],
         ].map(([label,key])=>({label,key,value:field(status,key)})),
       },
       {
         key:'deep',
         title:'Глубокий разбор',
-        scopeLabel:'Текущая цель Deep-покрытия',
+        scopeLabel:'Всего игр для глубокого разбора',
         denominatorKey:'deep_total_current_coverage_target',
         denominator:field(status,'deep_total_current_coverage_target'),
         rows:[
-          ['Попытка первого прохода','deep_first_pass_attempted_count'],
-          ['Authoritative завершено','deep_authoritative_completed_count'],
+          ['Окончательно разобрано','deep_authoritative_completed_count'],
           ['Завершено: подходит','deep_completed_fit_count'],
           ['Завершено: не подходит','deep_completed_not_fit_count'],
-          ['Не завершено / восстановление','deep_incomplete_or_recovery_count'],
+          ['Не удалось завершить / требуется восстановление','deep_incomplete_or_recovery_count'],
           ['Ждёт досье','deep_waiting_for_dossier_count'],
-          ['Готово / ожидает выполнения','deep_ready_or_pending_count'],
-          ['Осталось в первом проходе','deep_normal_first_pass_remaining_count'],
-          ['Осталось до полного authoritative покрытия','deep_remaining_until_all_authoritative_count'],
-          ['Нормальный первый проход завершён','deep_normal_first_pass_complete'],
-          ['Все текущие игры authoritative завершены','deep_all_current_authoritative_complete'],
+          ['Готово к разбору / ожидает','deep_ready_or_pending_count'],
+          ['Осталось до окончательного разбора','deep_remaining_until_all_authoritative_count'],
         ].map(([label,key])=>({label,key,value:field(status,key)})),
+        note:'«Окончательно разобрано» — глубокий разбор завершён с итогом «подходит» или «не подходит».',
       },
     ];
   }
