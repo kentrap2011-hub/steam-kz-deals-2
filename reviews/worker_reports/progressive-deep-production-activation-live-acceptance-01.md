@@ -2,9 +2,9 @@
 
 Task: `progressive-deep-production-activation-live-acceptance-01`  
 Accepted model: `FAST-DOSSIER-DEEP-V1`  
-Current status: `needs_fix`  
+Current status: `complete_live_accepted`  
 Repository: `kentrap2011-hub/steam-kz-deals-2`  
-Phase completed here: **Phase A complete; Phase B attempted once and stopped on confirmed GitHub-owned ingest/revalidation defect**  
+Phase completed here: **Phase A complete; Phase B live acceptance complete after bounded GitHub-owned ingest recovery**  
 Semantic Deep execution in Phase A: **NOT RUN**
 Phase B manual Scheduled Task runs performed: **exactly 1**
 
@@ -150,17 +150,9 @@ Exact compact loader prompt:
 Operate only as the bounded Progressive Deep semantic worker for repository kentrap2011-hub/steam-kz-deals-2, branch main. At the start of every invocation, first read the latest config/progressive_pass2_worker_prompt.md from main fully, then read and obey config/progressive_pass2_contract.json. If implemented != true or active != true, stop cleanly without creating any artifact. Use only the current GitHub-owned data/production/pre_ai/progressive_pass2_work.json and its exact order, work_mode values, work IDs, immutable bindings, dossier paths, result paths and terminal-receipt paths. Immediately before semantic execution of each item, apply every liveness check required by the canonical worker prompt. Deep eligibility is independent from Fast/PASS 1; never require or invent a Fast result. Never choose, rebuild, reorder, expand, retry or reinterpret scope. For recovery work, copy only the exact GitHub-provided recovery authorization/reason/binding and never invent recovery eligibility. Never modify Fast state, Dossier state, Deep eligibility/order/accounting/recovery, visual state or scheduler settings. Create only the exact create-only Deep result or terminal execution receipt authorized by the current manifest and canonical prompt. Stop cleanly when no current items remain or when runtime/tool budget no longer safely permits another item. GitHub remains the control plane for eligibility, order, validation, persistence, normal-first-pass attempts, recovery authorization, recomputation, completeness and visual projection.
 ```
 
-## External operator action now required
+## External operator action completed
 
-Do exactly this:
-1. inspect Scheduled Tasks and apply the duplicate guard above;
-2. configure the single task exactly while disabled;
-3. enable it;
-4. press `Run now` **exactly once**;
-5. do not press `Run now` a second time;
-6. return the Scheduled Task result/output to this same physical worker chat.
-
-Phase B must continue in this same chat. The worker will verify fresh GitHub canonical state rather than trusting chat output alone.
+The duplicate guard was satisfied by operator evidence: there was no matching Deep/PASS2 task before creation, then exactly one canonical `Progressive Deep Worker` was created (task ID `6ab33ffbcfc08191ad491de136efd784`). The user performed exactly one manual `Run now` in this same physical worker chat. No second manual `Run now` was performed or required for this live acceptance.
 
 ## Phase B — first live Scheduled Task run
 
@@ -204,30 +196,156 @@ This is a GitHub-owned control-plane/runtime validation defect, not a semantic-w
 
 No second `Run now` should be performed until the owning repository defect is fixed, validated, and the canonical state/work projection is recovered or explicitly authorizes a retry.
 
+## GitHub-owned recovery and live acceptance closeout
+
+The first manual Deep execution itself was not repeated. The existing immutable `Monster Train` inbox result from commit `6307c23519dcbd6a92b2108f09b529a69767a867` was recovered only through the canonical GitHub ingest path.
+
+### Owner-defect repairs
+
+Three bounded GitHub-owned defects were repaired without changing semantic scope, scheduler settings, generated PASS 2 state/work by hand, Fast history, or Dossier history:
+
+1. **Mutable production-state regression**
+   - stale activation-era assertions required persisted PASS 2 state to remain permanently equal to the empty state;
+   - PR #91 changed validation to assert live state/work accounting invariants and explicitly regress a legitimate non-empty consumed first-pass state;
+   - merge: `e0d5c8f246c6e1624a40d0be2f7a075d70d4d3c1`;
+   - PR validation run `35814958104`: success.
+
+2. **Optional canonical execution-receipt staging**
+   - a normal semantic result legitimately creates no terminal execution receipt directory, but the commit step treated that path as mandatory;
+   - PR #92 made staging of that optional path fail-safe and added integration coverage;
+   - merge: `28c22b286d1b4adf80ed8b88370bb880cc1d5dc0`;
+   - PASS 2 validation run `35815204741`: success;
+   - shared Dossier runtime validation run `35815204869`: success.
+
+3. **Recovery compatibility with the original failed workflow definition**
+   - GitHub reruns preserve the workflow definition of the original run even while `actions/checkout` reads current `main`;
+   - PR #93 made the current ingest runtime create the optional canonical receipt directory even when no terminal receipt exists, without fabricating any receipt artifact;
+   - merge: `31db1e3c5f55a69133e20fc584a1782afaaa00ae`;
+   - PR validation run `35815425221`: success;
+   - main PASS 2 validation run `35815491090`: success;
+   - main pre-AI run `35815491125`: success;
+   - execution-ownership run `35815491041`: success.
+
+No new semantic result was created, the existing `Monster Train` result was never overwritten, and no second manual Scheduled Task `Run now` was performed.
+
+### Canonical ingest recovery
+
+The same canonical workflow run `35812648739` was recovered through GitHub Actions. Its **attempt 4** completed successfully.
+
+Successful ingest summary:
+- processed semantic results: **1**;
+- accepted semantic results: **1**;
+- terminal execution receipts: **0**;
+- invalid/no-attempt results: **0**;
+- normal Deep first-pass attempted: **1**;
+- authoritative Deep completed: **0**;
+- incomplete/recovery-owned: **1**;
+- waiting for Dossier: **532**;
+- ready/pending executable Deep items: **27**;
+- recovery pending: **0**.
+
+Canonical persistence commit:
+- `f3030a14bb458bba6f2b6d108d82f1448678df9d` — `Ingest Progressive PASS 2 item`.
+
+That commit changed only PASS 2 transport/state/work surfaces:
+- deleted the consumed `Monster Train` PASS 2 inbox result;
+- added its PASS 2 ingest receipt;
+- updated `data/cache/progressive_pass2_state.json`;
+- updated `data/production/pre_ai/progressive_pass2_work.json`.
+
+It did **not** change Fast/PASS 1 or Dossier paths.
+
+### First-live-acceptance state and attempt accounting
+
+Immediately after canonical persistence:
+- PASS 2 state blob: `1ee5ba511bf3f4e80c5fcc95f0fabdc4dc65a332`;
+- PASS 2 work blob: `12c237139535b40f334f1417db888d5b643db87f`;
+- current Deep coverage target: **560**;
+- normal first-pass attempted: **1**;
+- authoritative completed: **0**;
+- incomplete/recovery: **1**;
+- normal first-pass remaining: **559**;
+- waiting for Dossier: **532**;
+- ready/pending: **27**;
+- recovery-owned: **1**;
+- recovery eligible/pending: **0 / 0**.
+
+The persisted `game:1102190` / `Monster Train` entry proves:
+- `normal_first_pass_attempted=true`;
+- `pass2_attempted=true`;
+- `outcome=analysis_incomplete`;
+- `analysis_issue_code=insufficient_evidence`;
+- `attempt_consumption_source=accepted_result`;
+- `authoritative_completed=false`;
+- `recovery_owned=true`;
+- `recovery_attempts=[]`;
+- no recovery authorization was invented.
+
+Therefore exactly one normal first-pass attempt was consumed for the one semantic execution that actually happened, and no recovery attempt was consumed.
+
+The active work projection removed `Monster Train` from normal pending work. The unrelated sibling `Monaco` / `game:113020` became sequence 1, proving that the unresolved result does not block unrelated normal first-pass work.
+
+### Fast/Dossier isolation and effective-result semantics
+
+Fast state remained unchanged across the accepted Deep ingest: blob `e3441e5d5155cf20a93b98fb8c12db5c5b61f429`. The `Monster Train` Fast entry remained its pre-existing `analysis_incomplete / insufficient_evidence` history; Deep did not rewrite it.
+
+The canonical Deep ingest commit `f3030a14bb458bba6f2b6d108d82f1448678df9d` contains no Dossier file mutation. Dossier remained the independent evidence owner.
+
+For the live processed item:
+- Fast stage: `incomplete`;
+- Dossier: current exact-compatible accepted evidence at authorization;
+- Deep stage: `incomplete_or_recovery`;
+- Deep recovery state: `recovery_owned`;
+- because neither Fast nor Deep has a trustworthy completed fit/not-fit result for this item, effective analysis remains unresolved rather than falsely becoming authoritative Deep.
+
+Canonical PASS 2 regressions also prove the complementary precedence cases:
+- authoritative Deep `analyzed_fit/analyzed_not_fit` becomes effective source `deep`;
+- unresolved/incomplete Deep preserves a still-valid completed Fast provisional result as effective source `fast`.
+
+### Producer stage/statistics and downstream visual projection
+
+The accepted PASS 2 state provenance triggered the normal producer-owned visual route:
+- `Build daily visual payload` run `35815602097`: success;
+- the run explicitly detected PASS 2 provenance mismatch and forced the full Progressive visual rebuild;
+- visual commit: `c77453370f4d69ed7e6dcbe4985e16cf75816c85` — `Refresh daily visual payload`.
+
+First-acceptance Deep statistics reconcile:
+- attempted **1 = authoritative 0 + incomplete/recovery 1**;
+- total **560 = first-pass attempted 1 + first-pass remaining 559**;
+- coverage disposition **560 = waiting Dossier 532 + ready/pending 27 + recovery-owned unresolved 1**;
+- ready/pending **27 = pass2_eligible 27**.
+
+Fast statistics remained independently reconciled at that acceptance rebuild:
+- total **560 = attempted 100 + authoritative-Deep skip 0 + remaining 460**.
+
+Dossier uses its own independent denominator and was not folded into Fast or Deep accounting.
+
+After this first-live-acceptance snapshot, the enabled Scheduled Deep worker was free to continue normal automatic production on later schedule ticks. Such later automatic invocations are separate from the one required **manual** `Run now` and do not alter the first-live-acceptance proof above.
+
 ## Validation status ACT-01..17
 
 - **ACT-01 PASS:** all canonical Deep activation mirrors are consistent and true.
-- **ACT-02 PASS:** activation plus GitHub recomputation consumed zero Deep attempts; durable state remains empty.
-- **ACT-03 PASS:** active work is current `FAST-DOSSIER-DEEP-V1`, generated by GitHub-owned recomputation.
-- **ACT-04 PASS:** one canonical scheduler identity/config is defined; legacy title is duplicate-detection only.
-- **ACT-05 PASS:** exactly one manual `Run now` was performed in this same worker chat.
-- **ACT-06 FAIL / NEEDS FIX:** semantic execution produced a valid create-only result and ingest reported `accepted_result_count=1` in its working tree, but canonical persistence failed before state/work commit, so no canonically persisted Deep semantic result exists yet.
-- **ACT-07 FAIL / NEEDS FIX:** semantic execution occurred for one normal-first-pass item, but durable attempt accounting remained 0 because canonical ingest persistence was blocked by regression validation.
-- **ACT-08 BLOCKED:** sibling live proof was intentionally not attempted after canonical ingest failed; continuing would have used stale GitHub-owned state.
-- **ACT-09 NOT YET CLOSED:** this failure path did not authorize Fast/Dossier mutation; final live acceptance comparison remains pending after repair.
-- **ACT-10 BLOCKED:** no canonically persisted Deep result exists yet, so live precedence/fallback proof cannot be completed.
-- **ACT-11 BLOCKED:** canonical state/stage projection was not committed because revalidation failed.
-- **ACT-12 BLOCKED:** post-ingest canonical statistics were not committed.
-- **ACT-13 FAIL / NEEDS FIX:** canonical post-ingest work/state recomputation could not be persisted after revalidation failure.
-- **ACT-14 PASS:** no browser-side semantic inference was introduced by activation.
-- **ACT-15 PASS:** no second scheduler/queue/retry loop was created by repository activation.
-- **ACT-16 PASS:** focused/canonical Phase A validations passed; GitHub-owned pre-AI recomputation succeeded.
-- **ACT-17 PARTIAL:** Phase B failure evidence is now durably recorded and reread from `main`; final `complete_live_accepted` closeout still requires repository repair and successful live acceptance.
+- **ACT-02 PASS:** repository activation/recompute alone consumed zero Deep attempts; the pre-run state was empty.
+- **ACT-03 PASS:** active work uses the current `FAST-DOSSIER-DEEP-V1` predicate and GitHub-owned exact work identity.
+- **ACT-04 PASS:** exactly one canonical scheduler identity/config is defined; operator evidence showed zero matching tasks before the single canonical `Progressive Deep Worker` was created.
+- **ACT-05 PASS:** exactly one manual `Run now` used the GitHub-prepared exact `Monster Train` work identity. No second manual run was performed.
+- **ACT-06 PASS:** the exact `Monster Train` semantic result was accepted and canonically persisted through `Ingest Progressive PASS 2 item` run `35812648739`, attempt 4.
+- **ACT-07 PASS:** first-live-acceptance accounting is exact: one normal-first-pass execution consumed exactly one normal-first-pass attempt; no recovery attempt was consumed.
+- **ACT-08 PASS:** the unresolved processed item moved to recovery-owned state while unrelated normal-first-pass work continued; ready work changed 28 -> 27 and `Monaco` became sequence 1.
+- **ACT-09 PASS:** accepted Deep ingest did not mutate Fast or Dossier history; the Fast state blob stayed unchanged and the canonical ingest commit contains only PASS 2 paths.
+- **ACT-10 PASS:** live incomplete Deep remained non-authoritative; canonical regressions prove authoritative Deep precedence and preservation of a valid Fast provisional fallback when Deep is unresolved.
+- **ACT-11 PASS:** processed-item producer stage semantics are correct: Fast incomplete, current accepted Dossier evidence, Deep incomplete/recovery, recovery-owned; downstream producer rebuilt on new PASS 2 provenance.
+- **ACT-12 PASS:** independent Fast/Deep stage statistics reconcile; Dossier remains an independent denominator.
+- **ACT-13 PASS:** active Deep work was recomputed after acceptance; `Monster Train` no longer appears as normal pending and the sibling projection advanced.
+- **ACT-14 PASS:** no browser-side semantic inference was introduced.
+- **ACT-15 PASS:** no second scheduler, queue, recurring Deep stage, blind retry loop or hidden quota was created.
+- **ACT-16 PASS:** focused and main validations succeeded, including runs `35814958104`, `35815204741`, `35815204869`, `35815425221`, `35815491090`, `35815491125`, `35815491041`; canonical ingest attempt 4 and visual rebuild `35815602097` also succeeded.
+- **ACT-17 PENDING FINAL REREAD:** this closeout content is being committed now; the exact committed report must be reread from `main`, then ACT-17 will be marked PASS in a final durable commit.
 
 ## Current status
 
-`needs_fix`
+`complete_live_accepted`
 
 ## Recommended next step
 
-Repair the GitHub-owned PASS 2 ingest/revalidation regression that incorrectly requires empty persisted PASS 2 state after an accepted production ingest. Validate canonical persistence/recomputation before authorizing any second manual `Run now`.
+Director may accept and close this task. No further manual `Run now` is required for this live acceptance.
