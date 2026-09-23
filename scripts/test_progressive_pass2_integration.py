@@ -278,6 +278,14 @@ def main():
         < pass2_ingest.index('progressive_pass2.process_result_documents(')
     )
 
+    # DEEP-INT-09B: canonical execution receipts are optional for a normal semantic
+    # result ingest. Staging must tolerate the directory not existing yet.
+    pass2_workflow = read('.github/workflows/ingest-progressive-pass2.yml')
+    assert (
+        'git add -A -- data/cache/progressive_pass2_execution_receipts '
+        '2>/dev/null || true'
+    ) in pass2_workflow
+
     # DEEP-INT-10: repository activation is consistent everywhere while live
     # production state remains allowed to advance after accepted Deep ingest.
     pass2_contract = json.loads(read('config/progressive_pass2_contract.json'))
