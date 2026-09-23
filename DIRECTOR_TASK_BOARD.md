@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — ЧАТ 3 — Taste Dossier Scheduled Task self-disable ownership diagnostic
+## ACTIVE — ЧАТ 2 — Taste Dossier Scheduled Task self-disable ownership diagnostic
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_SCHEDULED_TASK_SELF_DISABLE_OWNERSHIP_DIAGNOSTIC_01.md`
