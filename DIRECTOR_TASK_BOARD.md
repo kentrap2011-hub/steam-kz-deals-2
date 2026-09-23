@@ -16,13 +16,13 @@ Worker slot:
 - do not reuse the retired prior Chat 1 conversation.
 
 User authorization:
-- user explicitly approved replacing the small hard per-game web-search query-count ceiling with semantic/adaptive bounded stopping.
+- user explicitly approved replacing both hard per-game numeric web-retrieval ceilings with semantic/adaptive bounded stopping: remove the 8-search query ceiling and the 16 opened/read page ceiling, with no replacement arbitrary numeric ceiling.
 
 Goal:
-- remove the hard 8-search query-count stop gate;
+- remove both hard numeric search-count and opened-page-count stop gates;
 - preserve adaptive evidence-sufficient stopping, mandatory materially distinct route completion, anti-equivalent-retry behavior, fail-closed semantics, exact-product/Russian/identity/privacy rules, and GitHub control-plane ownership;
-- preserve the current 16 opened/read page ceiling unless a proven contradiction requires a separate decision;
-- update the fail-closed ledger/regressions so query count remains at most diagnostic and cannot cause `search budget exhausted` by itself;
+- ordinary invocation runtime/binding/liveness remains the outer technical safety boundary;
+- update the fail-closed ledger/regressions so numeric search/page counts are diagnostic only and cannot cause exhaustion by themselves;
 - no Scheduled Task UI action and no production Dossier run.
 
 Expected final status:
