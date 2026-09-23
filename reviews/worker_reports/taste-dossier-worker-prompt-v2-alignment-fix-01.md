@@ -39,15 +39,20 @@ Validation:
 - GitHub Actions run: `35875165680` (#184), event `push`, conclusion `success`;
 - job: `107229124431`, conclusion `success`;
 - step `Regression test fixed daily dossier snapshot control plane`: `success`;
-- downstream existing step `Recompute Progressive PASS 2 eligibility from current canonical truth`: `success`.
+- downstream existing step `Recompute Progressive PASS 2 eligibility from current canonical truth`: `success`;
+- run #184's own post-validation atomic commit was `f454d364edff1854b45367477b7f40f610eb401e`; it contained no Dossier index/manifest delta because the overlapping prompt-triggered build had already refreshed that projection.
 
 ## FIX-03 — canonical binding/projection refresh
 
 The worker prompt content hash is part of the canonical web-evidence compatibility binding and Dossier snapshot identity. Therefore the existing GitHub-owned build path canonically rebuilt the current Dossier projection; no snapshot/index/hash/progress file was hand-edited.
 
-Atomic pre-AI commit emitted by the successful canonical build:
+The prompt-change push triggered canonical build run `35875102006` (#183), job `107228855031`, conclusion `success`. Its job log proves the final rebased push `5e068f5e..2ba1ef1a  HEAD -> main`.
+
+Canonical Dossier binding/projection refresh commit:
 `2ba1ef1aa197c7ab0076b302df32ba6e55b22e57`
-(parent: regression commit `5e068f5ed4c97e6b9372b4d0b9fd6f2f6836b2d0`).
+(parent: regression commit `5e068f5ed4c97e6b9372b4d0b9fd6f2f6836b2d0` after the workflow rebased onto concurrent fresh `main`).
+
+A second overlapping push-triggered build, run `35875165680` (#184), then executed the newly added live anti-drift regression successfully. Its own atomic commit `f454d364edff1854b45367477b7f40f610eb401e` did not modify the Dossier worker index or manifest, confirming the projection was already current.
 
 Current binding:
 - worker prompt SHA-256: `c5773cc9aebe7fc4fb7a2bb9444bab4c35c5b2c63102f995b183def102b59ed7`;
@@ -99,9 +104,13 @@ The tracked current Dossier inbox contains no candidate artifacts. Accepted and 
 - task handoff state start: `d40ff48439c048e227d805813a430c3b9f3a5590`
 - prompt implementation: `17eba7f5ba616e53d45ef63ec835d35a4eb60913`
 - anti-drift regression: `5e068f5ed4c97e6b9372b4d0b9fd6f2f6836b2d0`
-- successful canonical build run: `35875165680`
-- successful canonical build job: `107229124431`
+- canonical binding/projection rebuild run: `35875102006`
+- canonical binding/projection rebuild job: `107228855031`
 - atomic canonical projection/binding refresh: `2ba1ef1aa197c7ab0076b302df32ba6e55b22e57`
+- live anti-drift validation run: `35875165680`
+- live anti-drift validation job: `107229124431`
+- post-validation atomic commit with no Dossier projection delta: `f454d364edff1854b45367477b7f40f610eb401e`
 - task closure state: `b7682da8f928425dac9c9e0d512f0c03edf66b80`
+- CURRENT_TASK provenance correction: `087a07509ce89c4584df15c04df5fe1c65b8bd7e`
 
 All FIX-01..FIX-06 acceptance gates are satisfied once this durable report is committed and reread from `main`.
