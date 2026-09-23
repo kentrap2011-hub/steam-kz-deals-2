@@ -318,6 +318,19 @@ Expected report:
 
 Final acceptance requires at least one canonically accepted Deep semantic result when executable work existed; terminal receipt alone is not sufficient for full live acceptance.
 
+Current live status:
+- Phase A merged successfully on fresh main via PR #89 / squash `36113dcd6e29307006f2d1dca6e4a5a6063b6a39`;
+- Deep is active and initial GitHub recomputation consumed zero attempts;
+- user performed exactly one manual `Run now`;
+- worker produced one exact Deep result for Monster Train (`analysis_incomplete / insufficient_evidence`) at the authorized create-only path;
+- GitHub ingest accepted that result in its working tree, but a stale regression assertion still required persisted PASS 2 state to equal `empty_pass2_state()`, causing revalidation failure before canonical state/work commit;
+- durable Deep state therefore still records 0 attempts even though one semantic execution occurred, and the exact create-only result remains in inbox;
+- task status is `needs_fix`;
+- no second manual `Run now` is allowed until the repository-owned ingest/revalidation defect is fixed and canonical persistence is recovered.
+
+Same-chat continuation:
+- existing physical ЧАТ 2 must repair this exact GitHub-owned ingest/revalidation regression within the same task, validate canonical persistence/recomputation, update and reread the durable report, and only then decide whether another operator run is needed.
+
 ## ACCEPTED — Taste Dossier g000012 existing-artifact collision diagnostic
 
 Task:
