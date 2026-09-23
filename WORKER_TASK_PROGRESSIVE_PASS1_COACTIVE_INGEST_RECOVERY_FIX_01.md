@@ -134,6 +134,32 @@ Do not:
 - **FIX-09** no Scheduled Task mutation or Scheduled `Run now`.
 - **FIX-10** durable report committed to `main` and reread exactly from `main`.
 
+## Live recovery continuation — commit-stage optional-path failure
+
+The operator executed the one authorized manual `workflow_dispatch`.
+
+Observed result:
+- PASS 1 ingest step succeeded;
+- PASS 2 recompute succeeded;
+- PASS 1 revalidation succeeded;
+- the workflow then failed only in `Commit PASS 1 state and remaining work`;
+- exact failure: `fatal: pathspec 'data/ai_inbox/taste_steam_review_dossiers' did not match any files`;
+- failure exit code: 128.
+
+This is a GitHub-owned workflow staging defect inside the same unfinished recovery task.
+
+Required continuation:
+1. Fix only the commit/staging robustness needed so optional Dossier inbox/quarantine/audit paths do not make PASS 1 canonical commit fail when absent.
+2. Preserve the shared canonical-writer ownership and Dossier reconcile behavior.
+3. Add/extend regression coverage so the PASS 1 workflow can commit when those optional paths are absent.
+4. Do not regenerate or edit the existing Friends vs Friends result.
+5. Do not manually edit PASS 1 state/work.
+6. Do not use Scheduled Task `Run now`.
+7. Do not dispatch another GitHub workflow from the worker chat.
+8. After the fix is merged and validated, stop and update the durable report with exact fresh-main state and whether one additional operator `workflow_dispatch` is required to finish recovery.
+
+The previous one-off operator dispatch has been consumed by the failed commit-stage attempt. A second operator dispatch is **not authorized by this task amendment**; if required, report that exact need for Director/user approval.
+
 ## Report
 Create:
 `reviews/worker_reports/progressive-pass1-coactive-ingest-recovery-fix-01.md`
