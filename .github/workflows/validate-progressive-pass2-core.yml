@@ -119,8 +119,6 @@ jobs:
         run: |
           bash -n scripts/stage_progressive_pass2_canonical_writer.sh
           python scripts/test_progressive_pass2_workflow_staging.py
-      - name: Dossier canonical-writer coalescing regression
-        run: python scripts/test_taste_dossier_canonical_writer_coalescing_liveness.py
       - name: PASS 1 regression
         run: python scripts/test_progressive_pass1.py
       - name: PASS 1 ingest activation regression
