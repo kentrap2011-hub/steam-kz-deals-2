@@ -742,11 +742,11 @@
 
 
 ### Progressive PASS 1 coactive ingest recovery fix 01
-Статус: `blocked`.
+Статус: `in_progress_commit_stage_fix`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PASS1_COACTIVE_INGEST_RECOVERY_FIX_01.md`;
-- implementation complete on `main`: live PASS 1 ingest accepts canonical coactive `true/true` and remains fail-closed for incompatible flags; focused regression + Fast/Deep validation coverage added;
-- validation run `35851821388`, job `107151055183`: success, including existing PASS 1/PASS 2 regressions and `PASS 1 ingest activation regression`;
-- current recovery state is intentionally unchanged: Friends vs Friends remains exact first item, PASS 1 is 100 attempted / 460 remaining, and the existing artifact is untouched;
-- blocker: the connected GitHub action surface available to this chat does not expose `workflow_dispatch`; task authorizes exactly one dispatch of `.github/workflows/ingest-progressive-pass1.yml` and forbids substituting the old failed-run rerun or an artificial inbox trigger;
-- exact unblock: execute the one authorized existing-workflow `workflow_dispatch`, then verify exact +1/-1 PASS 1 delta, Friends removal from first-unprocessed position, and PASS 2 recomputation through the same canonical writer;
+- coactive ingest guard/regression/validation coverage remain complete on `main`;
+- authorized operator dispatch run `35863646555`, job `107189704142`: PASS 1 ingest, PASS 2 recompute and PASS 1 revalidation succeeded, then canonical commit failed only because optional Dossier inbox path `data/ai_inbox/taste_steam_review_dossiers` was absent;
+- failed run workspace processed 5 already-present PASS 1 artifacts to 105 attempted / 455 remaining, but none of that state reached `main` because the commit step failed;
+- continuation scope: make optional Dossier inbox/quarantine/audit staging absence-safe, add focused regression tied to the production staging path, validate on fresh `main`;
+- no new workflow_dispatch and no Scheduled Task Run now are authorized in this continuation;
 - durable report: `reviews/worker_reports/progressive-pass1-coactive-ingest-recovery-fix-01.md`.
