@@ -43,7 +43,11 @@ on:
       - "scripts/test_taste_dossier_steam_store_review_card_parent.py"
       - "scripts/test_taste_dossier_contract_contradictions_fix.py"
       - "scripts/test_taste_dossier_identity_provenance_generation_fix.py"
-      - "scripts/test_taste_dossier_validator_generator_parity_fix.py"
+      - "scripts/test_taste_dossier_validator_generator_parity_fix.py scripts/test_taste_dossier_canonical_writer_coalescing_liveness.py"
+      - "scripts/test_taste_dossier_canonical_writer_coalescing_liveness.py"
+      - ".github/workflows/ingest-progressive-pass1.yml"
+      - ".github/workflows/ingest-progressive-pass2.yml"
+      - ".github/workflows/authorize-progressive-pass2-recovery.yml"
       - "scripts/test_taste_dossier_package_identity_fix.py"
       - "scripts/test_taste_story_dlc_scope.py"
       - ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml"
@@ -100,3 +104,5 @@ jobs:
         run: python scripts/test_taste_story_dlc_scope.py
       - name: Parallel candidate validation and nonblocking per-group regression
         run: python scripts/test_taste_steam_review_dossier_parallel_validation.py
+      - name: Canonical-writer coalescing liveness regression
+        run: python scripts/test_taste_dossier_canonical_writer_coalescing_liveness.py
