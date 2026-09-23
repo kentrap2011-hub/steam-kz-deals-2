@@ -1,142 +1,135 @@
 # DIRECTOR BOOTSTRAP
 
-Last refreshed: 2026-09-21
+Last refreshed: 2026-09-23
 
-Purpose: compact restart context for a NEW physical Director conversation.
+Purpose: compact restart context for a **NEW physical Director conversation**.
 
-This file is a bootstrap snapshot, not a replacement for canonical project truth. After reading it, the Director must use the latest `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, `DIRECTOR_TASK_BOARD.md`, exact active task files and durable worker reports as authoritative. If this file conflicts with newer canonical state, newer canonical state wins.
+This file is a bootstrap snapshot, not a replacement for canonical project truth. After reading it, the Director must use the latest `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, `DIRECTOR_TASK_BOARD.md`, exact active task files, and durable worker reports as authoritative. If this file conflicts with newer canonical state, newer canonical state wins.
 
 ## Repository scope
 
-Repository: `kentrap2011-hub/steam-kz-deals-2`
+Repository: `kentrap2011-hub/steam-kz-deals-2`  
 Base branch / source of truth: `main`
 
-Do not search, read, change or use another repository for this project unless an exact task explicitly authorizes it.
+Do not search, read, change, or use another repository for this project unless an exact task explicitly authorizes it.
 
 ## Director role
 
 - Director orchestrates; worker chats execute nontrivial project work.
 - GitHub owns production control-plane state.
-- Interactive chats must not become production backlog workers.
+- Interactive Director chat must not become a production semantic worker or backlog manager.
 - No autonomous IMPLEMENT without explicit user authorization.
-- PASS 2 is not authorized.
-- At most two worker slots are active when safe.
-- Any text the user must copy goes in a copyable writing block.
-- Named slot handoffs must state NEW/EXISTING physical chat explicitly outside the block and repeat the slot as the first line inside the block.
+- Reconcile Board -> exact task -> exact durable report before any worker follow-up.
+- When the user says a worker finished, read the expected durable worker report from GitHub directly; do not ask the user to paste it.
+- Any copyable worker handoff must say outside the block where it goes (NEW or EXISTING physical chat + slot) and repeat the slot as the first line inside the block.
+- `ЧАТ 1` / `ЧАТ 2` are reusable slots, not durable identities. Retired physical chats are not reused for unrelated tasks.
+- At most two independent worker slots should be active when safe.
 
-## Current product priority
+## Scheduled Task operator boundary
 
-Progressive Personalized Deals.
+The user personally handles ChatGPT Scheduled Task UI/settings.
 
-Accepted target:
-1. `analyzed_fit` — visible first.
-2. `analysis_incomplete` — visible second.
-3. `not_analyzed` — visible third.
-4. `analyzed_not_fit` — excluded from normal list.
+Do **not** create, edit, enable, disable, pause, delete, reschedule, rename, recreate, or run a Scheduled Task unless the user gives a direct explicit instruction for that exact action and the required tool is actually available.
 
-PASS 1 is coverage-first, at most one attempt per current semantic binding. One failed item must not block later items. PASS 2 is separate future recovery and remains off.
+Do not infer permission from phrases such as “делаем”, “запускаем”, or from a project task that only changes repository regulation.
 
-## Accepted production baseline
+## Current architecture
 
-Phase A is accepted/live.
+### Fast / Dossier / Deep
 
-Phase B PASS 1 code/control-plane is implemented and freshness-fixed.
+Accepted current model:
 
-Current known production facts:
-- GitHub-owned PASS 1 is active.
-- PASS 2 is inactive.
-- current visual has 720 visible unresolved Tier 3 items after one legitimate expiry;
-- the PASS 1 manifest/control-plane reported 721 remaining before that visual expiry projection;
-- no real PASS 1 semantic item has yet been accepted;
-- no PASS 1 retry/backlog drain has been authorized.
+- Fast / PASS 1 = provisional early personalized analysis.
+- Dossier = independent neutral evidence preparation; never decides fit/not-fit.
+- Deep / PASS 2 = eventual authoritative personalized analysis for every current eligible game.
+- Deep eligibility does **not** require prior Fast.
+- A current exact-compatible canonically accepted Dossier is the Deep evidence gate.
+- Deep may run before Fast.
+- Successful authoritative Deep fit/not-fit supersedes Fast.
+- Fast success never suppresses eventual Deep.
+- Deep incomplete/error does not erase a still-valid Fast provisional result.
+- Recovery is separate GitHub-owned authorization; no blind retry loop.
 
-Key report:
-`reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-implement-01.md`
+Both Fast and Deep production are active under their accepted contracts unless fresher Board state says otherwise.
 
-## Current blocker
+### Dossier retrieval
 
-The bounded one-item live acceptance stopped as `blocked_external`.
+The old hard per-game numeric ceilings are removed.
 
-Task:
-`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PHASE_B_PASS1_LIVE_ACCEPTANCE_01.md`
+Current accepted Dossier boundedness:
+- no hard 8-search ceiling;
+- no hard 16-opened-page ceiling;
+- no replacement arbitrary number;
+- stop when evidence is sufficient, when all reasonably discoverable mandatory materially distinct routes are exhausted, on directly observed blocker/binding/liveness change, or ordinary invocation runtime;
+- materially equivalent route repetition remains forbidden;
+- query/page counts are diagnostics only, with null limit fields.
 
-Report:
-`reviews/worker_reports/progressive-personalized-deals-phase-b-pass1-live-acceptance-01.md`
+Canonical decision: `TASTE-014`.
 
-Known facts from that acceptance:
-- GitHub order selected sequence 1: Tower Dominion, `App_3226530`, appid `3226530`;
-- no semantic result artifact was created;
-- no PASS 1 attempt was consumed;
-- no retry, second item, backlog drain or PASS 2 occurred;
-- the worker environment could not invoke a claimed existing Scheduled PASS 1 worker.
+## Immediate active worker state
 
-Important: the existence of an actual correctly-bound Scheduled PASS 1 runtime entrypoint is NOT yet accepted as fact.
+Read the **fresh `DIRECTOR_TASK_BOARD.md` first**. At this bootstrap refresh, the active worker is:
 
-## Completed PASS 1 entrypoint audit
+### ACTIVE — ЧАТ 1 — Progressive PASS 2 optional Dossier inbox staging recovery fix
 
 Task:
-`WORKER_TASK_PROGRESSIVE_PERSONALIZED_DEALS_PASS1_SCHEDULED_WORKER_ENTRYPOINT_AUDIT_01.md`
+`WORKER_TASK_PROGRESSIVE_PASS2_OPTIONAL_DOSSIER_INBOX_STAGING_RECOVERY_FIX_01.md`
 
 Report:
-`reviews/worker_reports/progressive-personalized-deals-pass1-scheduled-worker-entrypoint-audit-01.md`
+`reviews/worker_reports/progressive-pass2-optional-dossier-inbox-staging-recovery-fix-01.md`
 
-Final status:
-`complete_insufficient_observability`
+Known confirmed blocker at assignment time:
+- GitHub PASS 2 ingest accepted one current result in the working tree, then persistence failed because commit staging treated absent optional `data/ai_inbox/taste_steam_review_dossiers` as mandatory;
+- current exact Shadow Warrior 3 result artifact already existed and must be canonically ingested without semantic rerun;
+- the task is an IMPLEMENT fix inside the existing shared canonical-writer path;
+- no Scheduled Task action and no Deep semantic rerun are authorized by that task.
 
-Accepted result:
-- the repository PASS 1 contract/prompt exists;
-- Phase B created no new independent scheduler;
-- an actual compatible Progressive PASS 1 Scheduled Task/runtime entrypoint is not yet proven to exist or be absent;
-- `existing authorized Scheduled PASS 1 worker` is an unproven runtime-existence premise;
-- Taste Semantic Producer and Taste Steam Review Dossier cannot be treated as PASS 1 workers unchanged;
-- current overall blocker is `insufficient_observability`;
-- no production attempt/state change occurred.
+When the user says this worker finished, read the exact durable report before deciding anything else.
 
-Exact unresolved fact:
-- owner-scope Scheduled Tasks inventory must be inspected read-only for any Progressive PASS 1 candidate task, including title, task ID, enabled state, schedule/timezone and effective prompt/loader binding.
+## Dossier live result already observed
 
-Until that is resolved:
-- do not press `Run now`;
-- do not create/reconfigure a Scheduled Task;
-- do not resume PASS 1 production;
-- do not start PASS 2.
+After the clean Scheduled Dossier experiment and semantic-bounded-retrieval change, GitHub canonically accepted three groups / nine dossiers in one observed run sequence with zero failed groups at that check. This proved that the clean Dossier entrypoint and new retrieval contract can progress canonical Dossier state.
 
+Treat fresh Dossier index/progress as authoritative for any later count; do not reuse the old 3-group/9-dossier count as current progress.
 
-## Existing Scheduled workers: do not conflate
+## Site / UI product decision — accepted design, implementation not yet authorized
 
-Known existing historical tasks include:
-- `Taste Steam Review Dossier`;
-- `Taste Semantic Producer`.
+The user accepted this target presentation:
 
-They are separate mechanisms with separate contracts. Do not call either one the Progressive PASS 1 worker without owner-scope runtime inventory and binding proof.
+- remove the large always-visible statistics block from the main page;
+- add a compact **“Статистика”** entry/button leading to a dedicated statistics page;
+- do not show large textual card statuses such as “Подходит вам”, “Не подходит”, “Нужен дополнительный разбор”, or “Ещё не проверена”;
+- a trustworthy analyzed **not-fit** game is excluded from the normal visible list rather than shown with a “not fit” badge;
+- use three small visual stage icons on each card for:
+  1. **Быстрый разбор** (Fast),
+  2. **Подготовка досье** (Dossier),
+  3. **Глубокий разбор** (Deep);
+- icon state should communicate stage progress/result without duplicating a large textual status;
+- after successful personalized analysis, show the existing personalized score and supported explanation/why-fit fields;
+- analyzed-fit games use the existing personalized ranking authority / score ordering within their tier;
+- unresolved / not-yet-analyzed games must not receive fake personalized scores;
+- unresolved games remain lower tiers until resolved; trustworthy not-fit disappears from the normal list;
+- the browser remains presentation-only and must not infer semantic fit/stage truth.
 
-## Worker conversation state
+The old task `WORKER_TASK_PROGRESSIVE_SITE_PROGRESS_HEADER_COMPACTION_01.md` is stale/draft and must **not** be executed unchanged.
 
-- The retired/overloaded historical physical ЧАТ 2 remains retired.
-- The NEW physical ЧАТ 2 used for the entrypoint audit has completed its task and its durable report is accepted; no continuation is currently required.
-- Slot `ЧАТ 2` is free for a future task; use a NEW physical chat unless a future task explicitly benefits from the completed audit conversation.
-- ЧАТ 1 contains the bounded PASS 1 live-acceptance attempt that ended `blocked_external`; do not resume production execution there until owner-scope runtime existence/binding is classified.
+No new site IMPLEMENT task has yet been authorized solely by this product-design agreement. If the user asks to implement the site, create a fresh bounded UI task for a NEW physical worker chat.
 
-## Immediate Director sequence
+## Director reliability gate
 
-1. Treat the PASS 1 entrypoint audit as completed and accepted with `complete_insufficient_observability`.
-2. Obtain one read-only owner-scope Scheduled Tasks inventory observation.
-3. Classify exactly one branch:
-   - compatible existing Progressive PASS 1 worker;
-   - wrong runtime binding;
-   - missing runtime entrypoint/setup;
-   - still insufficient observability.
-4. Only then choose the next bounded task/action.
-5. Do not start PASS 1 production or PASS 2 before this classification.
+Before every decision or handoff:
 
+1. Read/reconcile current `DIRECTOR_TASK_BOARD.md`.
+2. Read the exact active task and exact durable report when available.
+3. Separate confirmed facts from assumptions/unknowns.
+4. Scan for contradiction with current ownership, runtime, scheduler, recovery, and user authorization.
+5. Verify the proposed actor actually exists and owns the action.
+6. Only then issue the next handoff or recommendation.
 
-## Director reliability rule
+Do not reconstruct project truth from retired Director conversation history unless canonical compact state is genuinely insufficient.
 
-Do not continue from conversational momentum. Before every decision or handoff:
-- separate confirmed facts from assumptions/unknowns;
-- reconcile Board -> exact task -> exact durable report;
-- scan for contradiction with protocol, ownership and user authorization;
-- verify the proposed actor actually exists and owns the action;
-- only then compose the user-facing instruction.
+## Rotation state
 
-If repeated corrections indicate this Director conversation is accumulating conflicting operational state, rotate again to a new physical Director conversation and refresh this bootstrap rather than adding more conversational memory.
+The Director conversation that produced this refresh is now being retired by user request.
+
+Continue only in a **NEW physical Director conversation** using this bootstrap plus the fresh Board and protocols.
