@@ -285,6 +285,10 @@ def main():
         'git add -A -- data/cache/progressive_pass2_execution_receipts '
         '2>/dev/null || true'
     ) in pass2_workflow
+    assert (
+        'progressive_pass2.CANONICAL_EXECUTION_RECEIPTS.mkdir('
+        'parents=True, exist_ok=True)'
+    ) in pass2_ingest
 
     # DEEP-INT-10: repository activation is consistent everywhere while live
     # production state remains allowed to advance after accepted Deep ingest.
