@@ -840,3 +840,15 @@
 - architecture preflight: GitHub remains owner of stage projection/aggregate counts/effective-result provenance/publication; browser remains `read_only_presentation`; no scheduler/queue/retry/checkpoint/semantic owner is added or changed; `config/progressive_personalization_contract.json` is the canonical source for stage/statistics fields;
 - producer projection may be touched only if a required canonical presentation field is genuinely absent from `data/production/visual/current.json`; Fast/Dossier/Deep business semantics remain unchanged;
 - no Scheduled Task action or semantic production run is authorized.
+
+## Worker completed — 2026-09-23
+
+### Progressive site stage icons + statistics UI 01 — closure
+Статус: `complete_ready_for_director_acceptance`.
+- task: `WORKER_TASK_PROGRESSIVE_SITE_STAGE_ICONS_STATISTICS_UI_01.md`;
+- old always-visible stats/processing blocks were replaced with compact `Статистика` entry + dedicated Fast/Dossier/Deep statistics view using separate canonical producer denominators;
+- visible recommendation cards now render three compact producer-owned Fast/Dossier/Deep stage indicators; generic large unresolved/status treatment was removed without adding frontend semantic inference;
+- producer/runtime contracts, ranking semantics, Fast/Dossier/Deep execution, queues/retry/schedulers and Scheduled Tasks were not changed by this worker;
+- `Build daily visual payload` run `35909184960` succeeded; `Deploy visual mailing` run `35909243926` succeeded, including UI regressions and Pages deploy;
+- durable report: `reviews/worker_reports/progressive-site-stage-icons-statistics-ui-01.md`, initial report commit `8bfa6996e93daad8173ea17f306b307edb93bf5f`.
+
