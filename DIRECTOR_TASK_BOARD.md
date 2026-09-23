@@ -1,5 +1,24 @@
 # DIRECTOR TASK BOARD
 
+## ACTIVE — NEW physical ЧАТ 2 — Taste Dossier worker prompt V2 alignment fix
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_WORKER_PROMPT_V2_ALIGNMENT_FIX_01.md`
+
+Expected report:
+`reviews/worker_reports/taste-dossier-worker-prompt-v2-alignment-fix-01.md`
+
+Mode:
+`IMPLEMENT / ACTIVATE / VALIDATE`
+
+Accepted diagnosis:
+- primary canonical Dossier worker prompt is stale on V1/`canonical_expected_sequence`;
+- current runtime prompt and GitHub worker index are V2 with `next_pending_sequence` / `pending_group_sequences`;
+- Scheduled worker correctly stopped fail-closed before dossier work;
+- fix is bounded to prompt/projection alignment plus anti-drift regression;
+- no Scheduled Task Run now is authorized in this task.
+
+
 ## ACCEPTED — Progressive PASS 1 coactive ingest + recovery fix
 
 Task:
