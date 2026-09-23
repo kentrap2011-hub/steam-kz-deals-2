@@ -340,7 +340,7 @@ After this first-live-acceptance snapshot, the enabled Scheduled Deep worker was
 - **ACT-14 PASS:** no browser-side semantic inference was introduced.
 - **ACT-15 PASS:** no second scheduler, queue, recurring Deep stage, blind retry loop or hidden quota was created.
 - **ACT-16 PASS:** focused and main validations succeeded, including runs `35814958104`, `35815204741`, `35815204869`, `35815425221`, `35815491090`, `35815491125`, `35815491041`; canonical ingest attempt 4 and visual rebuild `35815602097` also succeeded.
-- **ACT-17 PENDING FINAL REREAD:** this closeout content is being committed now; the exact committed report must be reread from `main`, then ACT-17 will be marked PASS in a final durable commit.
+- **ACT-17 PASS:** closeout report commit `dcc0d73360b3a0c481c0093141eee45411d70380` was reread from `main` as blob `b84256eed99fd98dfc078bcf80468487093f1045` with `complete_live_accepted`, recovery refs, ingest ref, visual ref and the exactly-one-manual-run evidence present; this final commit records that completed reread.
 
 ## Current status
 
