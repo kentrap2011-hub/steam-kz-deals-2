@@ -141,12 +141,15 @@ function statisticsValue(value){
   return Number.isFinite(number)?number.toLocaleString('ru-RU'):String(value);
 }
 function stageIndicatorsHtml(g){
-  return progressiveUi().stageIndicators(g).map(ind=>`<span class="stage-indicator ${escapeHtml(ind.tone)}" title="${escapeHtml(ind.title)}" aria-label="${escapeHtml(ind.title)}">${escapeHtml(ind.symbol)}</span>`).join('');
+  return progressiveUi().stageIndicators(g).map(ind=>{
+    const stateClass=ind.lit===true?`lit ${escapeHtml(ind.tone)}`:'unlit';
+    return `<span class="stage-indicator ${stateClass}" title="${escapeHtml(ind.title)}" aria-label="${escapeHtml(ind.title)}">${escapeHtml(ind.symbol)}</span>`;
+  }).join('');
 }
 function renderStatisticsView(){
   const root=$('stageStatistics');if(!root)return;
   const sections=progressiveUi().statisticsSections(data.processing_status||{});
-  root.innerHTML=sections.map(section=>`<section class="statistics-stage statistics-stage-${escapeHtml(section.key)}"><div class="statistics-stage-head"><h3>${escapeHtml(section.title)}</h3><div class="statistics-scope"><span>${escapeHtml(section.scopeLabel)}</span><b>${escapeHtml(statisticsValue(section.denominator))}</b></div></div><div class="statistics-metrics">${section.rows.map(row=>`<div class="statistics-metric" data-stat-field="${escapeHtml(row.key)}"><span>${escapeHtml(row.label)}</span><b>${escapeHtml(statisticsValue(row.value))}</b></div>`).join('')}</div></section>`).join('');
+  root.innerHTML=sections.map(section=>`<section class="statistics-stage statistics-stage-${escapeHtml(section.key)}"><div class="statistics-stage-head"><h3>${escapeHtml(section.title)}</h3><div class="statistics-scope"><span>${escapeHtml(section.scopeLabel)}</span><b>${escapeHtml(statisticsValue(section.denominator))}</b></div></div><div class="statistics-metrics">${section.rows.map(row=>`<div class="statistics-metric" data-stat-field="${escapeHtml(row.key)}"><span>${escapeHtml(row.label)}</span><b>${escapeHtml(statisticsValue(row.value))}</b></div>`).join('')}</div>${section.note?`<p class="statistics-note">${escapeHtml(section.note)}</p>`:''}</section>`).join('');
 }
 function renderRisk(g){
   const status=g.risk_status;
