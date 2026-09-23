@@ -318,45 +318,70 @@ Expected report:
 
 Final acceptance requires at least one canonically accepted Deep semantic result when executable work existed; terminal receipt alone is not sufficient for full live acceptance.
 
-## ACTIVE — ЧАТ 1 — Taste Dossier g000012 existing-artifact collision diagnostic
+## ACCEPTED — Taste Dossier g000012 existing-artifact collision diagnostic
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_G000012_EXISTING_ARTIFACT_COLLISION_DIAGNOSTIC_01.md`
 
+Report:
+`reviews/worker_reports/taste-dossier-g000012-existing-artifact-collision-diagnostic-01.md`
+
+Final status:
+`complete_root_cause_proven`
+
+Director acceptance:
+- the g000012 collision was same-snapshot/exact-group, not cross-snapshot and not a path-identity defect;
+- the first exact candidate was created once, but its Dossier ingest wake-up was cancelled before any job started inside the shared `taste-steam-review-dossier-canonical-writer` concurrency boundary;
+- a surviving PASS 1 writer did not reconcile the Dossier inbox, leaving durable transport unclassified while canonical state still said pending;
+- the later Scheduled semantic worker was correctly re-authorized by GitHub projection and correctly failed closed on create-only HTTP 422;
+- deterministic path/create-only semantics and worker behavior were correct;
+- the historical artifact is superseded by snapshot rollover and must not be recovered now;
+- accepted Dossiers/Deep evidence were not rolled back; impact was forward Dossier liveness only;
+- durable fix is state-based coalescing-safe Dossier inbox reconciliation in every surviving writer path capable of superseding the original wake-up.
+
+Next step:
+- implement the bounded canonical-writer coalescing liveness fix with an exact regression of the observed race.
+
+
+## ACTIVE — ЧАТ 1 — Taste Dossier canonical-writer coalescing liveness fix
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_CANONICAL_WRITER_COALESCING_LIVENESS_FIX_01.md`
+
 Worker slot:
 `НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
 
-Mode:
-`READ-ONLY / RECON`
+Conversation state:
+- previous physical ЧАТ 1 completed the g000012 read-only diagnostic and is retired;
+- this is a NEW physical ЧАТ 1 for a separate implementation task.
 
-Observed incident:
-- normal Dossier publication of `g000012` hit GitHub create-only HTTP 422 because the deterministic path already existed;
-- worker correctly refused overwrite, alternate filename and skip-to-next behavior;
-- no new artifact was created by that invocation;
-- root cause of the pre-existing deterministic artifact is not yet proven;
-- worker wording also claimed the recurring task was stopped; actual scheduler mutation is unproven from repository evidence and worker scheduler ownership is forbidden.
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Accepted root cause:
+- a durable exact Dossier inbox candidate can be stranded unclassified when its original Dossier ingest wake-up is cancelled before job start by a newer workflow in the shared `taste-steam-review-dossier-canonical-writer` boundary;
+- surviving non-Dossier writer paths may not currently reconcile Dossier inbox state.
 
 Scope:
-- identify exact failing snapshot/group/path;
-- inspect exact existing artifact and its history/identity;
-- determine same-snapshot vs stale/cross-snapshot collision;
-- reconstruct GitHub ingest/drain/recovery history;
-- prove why current work still authorized the occupied deterministic path;
-- identify whether path identity, liveness, ingest/drain, recovery, or multiple layers own the defect;
-- define smallest safe one-off recovery and durable recurrence fix without executing either;
-- determine impact on already accepted Dossiers / Deep.
+- enumerate every shared-writer path capable of superseding/coalescing a pending Dossier wake-up;
+- make reconciliation state-based and coalescing-safe within the existing single serialized writer domain;
+- ensure downstream derived Deep projection sees reconciled canonical Dossier truth;
+- add a regression reproducing the proven cancelled-wake-up race;
+- preserve deterministic path/create-only/strict validation/per-group recovery rules.
 
 Guards:
-- no delete/overwrite/rename/recovery mutation;
-- no Dossier Run now or scheduler mutation;
-- no Fast/Deep mutation;
-- no changes to the active Deep activation task.
+- no historical g000012 recovery/restoration/special-case;
+- no Scheduled Task mutation or Run now;
+- no second scheduler/queue/retry owner/concurrency domain;
+- do not modify the active Deep activation task owned by ЧАТ 2;
+- do not change Fast/Deep semantic policy.
 
 Expected report:
-`reviews/worker_reports/taste-dossier-g000012-existing-artifact-collision-diagnostic-01.md`
+`reviews/worker_reports/taste-dossier-canonical-writer-coalescing-liveness-fix-01.md`
 
 Next gate:
-- Director reviews the diagnostic and only then authorizes the exact bounded recovery/fix.
+- Director accepts the fix first;
+- only then decide the bounded operator step to resume/validate the existing Dossier Scheduled Task if it is actually disabled.
 
 ## DRAFT / NOT AUTHORIZED — Progressive site progress header compaction
 
