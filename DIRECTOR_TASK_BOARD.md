@@ -1,5 +1,35 @@
 # DIRECTOR TASK BOARD
 
+## ACTIVE — ЧАТ 1 — Taste Dossier clean Scheduled Task regulation
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_CLEAN_SCHEDULED_TASK_REGULATION_01.md`
+
+Report:
+`reviews/worker_reports/taste-dossier-clean-scheduled-task-regulation-01.md`
+
+Mode:
+`IMPLEMENT`
+
+Worker slot:
+- **НОВЫЙ физический ЧАТ 1**;
+- do not reuse an old retired Chat 1 conversation.
+
+User authorization:
+- user explicitly asked to give a worker chat the task of creating a new Dossier regulation for a fresh external Scheduled Task/chat.
+
+Goal:
+- create a concise copy-paste-ready Scheduled Task entry/bootstrap regulation from current `main`;
+- preserve current V2 Dossier semantics and GitHub control-plane ownership;
+- explicitly make invocation STOP non-authoritative for recurring task enable/disable/pause/delete/reschedule/edit;
+- treat prior chat context as non-authoritative versus current canonical repository state;
+- do not create/edit/run any external Scheduled Task in this worker task.
+
+Expected final status:
+- `complete_ready_for_director_acceptance`
+- `needs_user_decision`
+- `blocked`
+
 ## ACCEPTED — Taste Dossier worker prompt V2 alignment fix
 
 Task:
