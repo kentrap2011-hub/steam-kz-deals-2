@@ -110,18 +110,19 @@ Fast section:
 Dossier section:
 - scope label: `Всего игр для подготовки досье`
 - use plain Russian labels; no English scope jargon.
-- preserve the distinction between accepted, pending and failed/recovery.
+- keep only the useful current counters: `Готово` (accepted), `Ожидает` (pending), `Требует восстановления` (failed/recovery).
+- remove the boolean rows `Нормальный первый проход завершён` and `Все приняты или восстановлены` from the user-facing Statistics page.
 - do not describe Dossier as fit/not-fit.
 
 Deep section:
 - scope label: `Всего игр для глубокого разбора`
-- `Попытка первого прохода` -> `Обработано в первом проходе`
+- remove `Попытка первого прохода` / `Обработано в первом проходе` from the user-facing Statistics page; the user explicitly does not need this technical metric.
 - `Authoritative завершено` -> `Окончательно разобрано`
 - keep fit/not-fit completed breakdown
 - `Не завершено / восстановление` -> clear Russian equivalent such as `Не удалось завершить / требуется восстановление`
 - `Готово / ожидает выполнения` -> `Готово к разбору / ожидает`
 - `Осталось до полного authoritative покрытия` -> `Осталось до окончательного разбора`
-- `Все текущие игры authoritative завершены` -> `Все текущие игры окончательно разобраны`
+- remove the separate boolean row `Все текущие игры authoritative завершены`; `Осталось окончательно разобрать: 0` already communicates completion.
 
 The exact copy may be refined for layout, but it must preserve these meanings and contain no `authoritative` jargon.
 
@@ -174,12 +175,13 @@ Prove at minimum:
 - FIX-09: incomplete/no-conclusion is clearly distinguished from technical error.
 - FIX-10: Deep final-completion wording is understandable Russian and semantically identical to canonical authoritative completion.
 - FIX-11: Dossier remains neutral evidence-preparation status, not fit/not-fit.
-- FIX-12: mobile 360–430px remains compact with no new overflow.
-- FIX-13: existing score/explanation/tier/ranking/manual-end semantics remain unchanged.
-- FIX-14: relevant UI regressions pass.
-- FIX-15: normal visual build/deploy validation succeeds, or any unrelated pre-existing blocker is isolated.
-- FIX-16: no Scheduled Task action or semantic production run occurred.
-- FIX-17: durable report committed and reread from fresh `main`.
+- FIX-12: Dossier first-pass/all-complete boolean rows and Deep first-pass-processed/all-complete boolean rows are removed from user-facing Statistics while canonical producer fields remain untouched.
+- FIX-13: mobile 360–430px remains compact with no new overflow.
+- FIX-14: existing score/explanation/tier/ranking/manual-end semantics remain unchanged.
+- FIX-15: relevant UI regressions pass.
+- FIX-16: normal visual build/deploy validation succeeds, or any unrelated pre-existing blocker is isolated.
+- FIX-17: no Scheduled Task action or semantic production run occurred.
+- FIX-18: durable report committed and reread from fresh `main`.
 
 ## Durable report
 
