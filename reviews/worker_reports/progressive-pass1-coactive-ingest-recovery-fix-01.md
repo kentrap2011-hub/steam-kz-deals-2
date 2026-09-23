@@ -172,6 +172,6 @@ Fresh main retained PASS 1 at `105 attempted / 455 remaining` with Friends absen
 - FIX-08 documentation reconciliation: PASS.
 - FIX-09 no Scheduled Task mutation / Scheduled `Run now` by this worker task; final verification launched nothing: PASS.
 - commit/staging optional-path defect and regression coverage: PASS.
-- FIX-10 durable report committed and reread from `main`: pending final report commit/reread.
+- FIX-10 durable report committed and reread from `main`: PASS. Final report commit `450602fd7c23b83aa5ce7bb1b4325148a4b90a98` was reread from `main` as blob `58f0c2977e730c7ecbb57a434f5fe037e0bff65f`; this closeout update is reread again before the final response.
 
 No remaining recovery action is required for this task.
