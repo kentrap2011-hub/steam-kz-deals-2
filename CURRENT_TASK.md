@@ -830,3 +830,13 @@
 - no Progressive Deep Scheduled Task action and no new semantic attempt occurred;
 - one operator GitHub Actions `workflow_dispatch` of existing `Ingest Progressive PASS 2 item` on `main` remains required because the worker connector exposes no workflow-dispatch action;
 - durable report: `reviews/worker_reports/progressive-pass2-optional-dossier-inbox-staging-recovery-fix-01.md`.
+
+## Worker in progress — 2026-09-23
+
+### Progressive site stage icons + statistics UI 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_PROGRESSIVE_SITE_STAGE_ICONS_STATISTICS_UI_01.md`;
+- scope: compact main-page Statistics entry, dedicated Fast/Dossier/Deep statistics view, and three producer-owned stage indicators on recommendation cards;
+- architecture preflight: GitHub remains owner of stage projection/aggregate counts/effective-result provenance/publication; browser remains `read_only_presentation`; no scheduler/queue/retry/checkpoint/semantic owner is added or changed; `config/progressive_personalization_contract.json` is the canonical source for stage/statistics fields;
+- producer projection may be touched only if a required canonical presentation field is genuinely absent from `data/production/visual/current.json`; Fast/Dossier/Deep business semantics remain unchanged;
+- no Scheduled Task action or semantic production run is authorized.
