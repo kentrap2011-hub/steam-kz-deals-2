@@ -75,7 +75,7 @@ Therefore the only contract-compliant recovery action cannot be executed from th
 - FIX-07 unrelated Fast/Dossier/Deep histories unchanged: PASS up to the recovery boundary; final post-ingest proof remains blocked.
 - FIX-08 documentation reconciled: PASS.
 - FIX-09 no Scheduled Task mutation / Run now: PASS for this execution.
-- FIX-10 durable report committed and reread from main: pending closeout reread after this report commit.
+- FIX-10 durable report committed and reread from main: PASS. Initial report commit `ea2afa9ad072a2196fc54fde1e0ec9fc6282bd1e` was reread from `main` as blob `697b4b172c500f3f2877b5da1f2b4502c8002619`; this closeout update must itself be reread from `main` before final response.
 
 ## Exact unblock
 
