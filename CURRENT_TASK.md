@@ -742,8 +742,11 @@
 
 
 ### Progressive PASS 1 coactive ingest recovery fix 01
-Статус: `in_progress`.
+Статус: `blocked`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PASS1_COACTIVE_INGEST_RECOVERY_FIX_01.md`;
-- scope: исправить stale PASS 1 ingest activation guard для canonical `pass1_active=true / pass2_active=true`, добавить focused regression и validation coverage, затем канонически ingest уже существующего Friends vs Friends artifact;
-- recovery: только existing GitHub-owned `.github/workflows/ingest-progressive-pass1.yml`; semantic re-execution, manual state/count edits и Scheduled Task Run now запрещены;
+- implementation complete on `main`: live PASS 1 ingest accepts canonical coactive `true/true` and remains fail-closed for incompatible flags; focused regression + Fast/Deep validation coverage added;
+- validation run `35851821388`, job `107151055183`: success, including existing PASS 1/PASS 2 regressions and `PASS 1 ingest activation regression`;
+- current recovery state is intentionally unchanged: Friends vs Friends remains exact first item, PASS 1 is 100 attempted / 460 remaining, and the existing artifact is untouched;
+- blocker: the connected GitHub action surface available to this chat does not expose `workflow_dispatch`; task authorizes exactly one dispatch of `.github/workflows/ingest-progressive-pass1.yml` and forbids substituting the old failed-run rerun or an artificial inbox trigger;
+- exact unblock: execute the one authorized existing-workflow `workflow_dispatch`, then verify exact +1/-1 PASS 1 delta, Friends removal from first-unprocessed position, and PASS 2 recomputation through the same canonical writer;
 - durable report: `reviews/worker_reports/progressive-pass1-coactive-ingest-recovery-fix-01.md`.
