@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — ЧАТ 1 — Progressive site stage icons + Statistics UI
+## ACCEPTED — ЧАТ 1 — Progressive site stage icons + Statistics UI
 
 Task:
 `WORKER_TASK_PROGRESSIVE_SITE_STAGE_ICONS_STATISTICS_UI_01.md`
@@ -8,37 +8,32 @@ Task:
 Report:
 `reviews/worker_reports/progressive-site-stage-icons-statistics-ui-01.md`
 
-Mode:
-`IMPLEMENT / VALIDATE`
+Final status:
+`complete_ready_for_director_acceptance`
 
-Worker slot:
-- **НОВЫЙ физический ЧАТ 1**;
-- do not reuse the retired prior Chat 1 conversation.
+Director acceptance:
+- the large always-visible statistics/status panel was removed from the main page;
+- a compact `Статистика` entry now opens a dedicated statistics view;
+- the Statistics view presents Fast / Dossier / Deep separately with their own canonical producer-owned denominators and metrics;
+- visible recommendation cards now render three compact stage indicators directly from producer-owned Fast/Dossier/Deep stage fields;
+- large generic card statuses were removed from the normal card presentation;
+- trustworthy analyzed-fit cards preserve supported personalized score/reasons/ranking semantics;
+- unresolved cards receive no fabricated personalized score or explanation, and analyzed-not-fit remains excluded by producer semantics;
+- browser remains presentation-only; no Fast/Dossier/Deep semantic contract, scheduler, queue, retry or ranking policy was changed;
+- mobile structural validation covers 360/390/412/430px and desktop/tablet behavior remained usable;
+- SITE-01..18 passed;
+- `Build daily visual payload` run `35909184960` succeeded;
+- Pages deploy run `35909243926` succeeded;
+- no Scheduled Task action or semantic production run was performed by this worker.
 
-User authorization:
-- user explicitly approved moving on to the website update after PASS 2 was verified healthy.
+Decision:
+- task accepted;
+- no further source change is required from automated validation;
+- optional human visual smoke-check on the deployed Pages site at ~390px is the only remaining non-blocking check.
 
-Goal:
-- remove the large always-visible statistics/status panel from the main page;
-- add a compact `Статистика` entry leading to a dedicated statistics page/view;
-- render three compact producer-owned stage indicators on every visible card: Fast / Dossier / Deep;
-- remove large generic textual card statuses;
-- preserve analyzed-fit score/explanation and producer-owned tier/ranking semantics;
-- keep unresolved games score-free and analyzed-not-fit excluded;
-- browser remains presentation-only; no Fast/Dossier/Deep semantic or scheduler changes.
-
-Architecture preflight:
-- GitHub remains owner of stage state, aggregate counts, effective-result provenance and publication;
-- browser remains read-only presentation;
-- existing `config/progressive_personalization_contract.json` stage/statistics fields are authoritative;
-- only minimum producer presentation projection may be added if a required field is genuinely absent;
-- no new scheduler, queue, retry, checkpoint or control-plane owner is authorized.
-
-Expected final status:
-- `complete_ready_for_director_acceptance`
-- `needs_fix`
-- `needs_user_decision`
-- `blocked`
+Worker state:
+- physical ЧАТ 1 used for this task is retired for independent future work;
+- this worker chat can be deleted.
 
 ## ACCEPTED — ЧАТ 1 — Progressive PASS 2 optional Dossier inbox staging recovery fix
 
