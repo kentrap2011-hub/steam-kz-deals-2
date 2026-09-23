@@ -808,3 +808,13 @@
 - focused SEMBOUND-01..11 and all task-relevant Dossier regressions passed in PR validation;
 - no Scheduled Task was created, changed, enabled, disabled, rescheduled, or run; no Production Dossier semantic worker was run by this task;
 - durable report: `reviews/worker_reports/taste-dossier-semantic-bounded-retrieval-01.md`.
+
+
+## Worker in progress — 2026-09-23
+
+### Progressive PASS 2 optional Dossier inbox staging recovery fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_PROGRESSIVE_PASS2_OPTIONAL_DOSSIER_INBOX_STAGING_RECOVERY_FIX_01.md`;
+- scope: fix the GitHub-owned PASS 2 ingest commit/staging blocker caused by an absent optional Dossier inbox directory after successful ingest;
+- preserve required PASS 2 staging, Dossier reconciliation, shared canonical-writer concurrency, immutable create-only result transport and existing recovery ownership;
+- no Progressive Deep Scheduled Task run and no new semantic attempt for an already-created PASS 2 result are authorized.
