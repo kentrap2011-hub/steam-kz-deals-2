@@ -27,6 +27,14 @@ Decision:
 - task fully accepted after operator recovery validation;
 - no further manual recovery or Deep rerun is required for this incident.
 
+Live PASS 2 follow-up:
+- a subsequent Progressive Deep run submitted current result for `App_1072150` / work `9759f2fbc9c65e75657627fb306d45bc2c1ac284d8c24c77d600336379e1dca0`;
+- ingest run `35906320990` completed successfully and accepted exactly one result;
+- outcome was `analysis_incomplete / insufficient_evidence`, so the item is recovery-owned rather than authoritative complete;
+- current projection reports `deep_first_pass_attempted_count=2`, `deep_ready_or_pending_count=10`, `deep_waiting_for_dossier_count=499`, `deep_authoritative_completed_count=0`;
+- downstream visual build run `35906366780` and deploy run `35906473685` completed successfully;
+- no new PASS 2 blocker is indicated; normal Deep cadence may continue.
+
 Worker state:
 - physical ЧАТ 1 used for this task is retired for independent future work;
 - this worker chat can be deleted.
