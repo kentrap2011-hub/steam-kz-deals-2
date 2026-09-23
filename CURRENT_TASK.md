@@ -777,3 +777,13 @@
 - no Scheduled Task create/edit/run action is authorized in this worker task;
 - GitHub control-plane and current V2 Dossier ownership boundaries must remain unchanged.
 
+## Worker completed — 2026-09-23
+
+### Taste Dossier clean scheduled task regulation 01 — closure
+Статус: `complete_ready_for_director_acceptance`.
+- this closure supersedes the earlier `in_progress` entry for `WORKER_TASK_TASTE_DOSSIER_CLEAN_SCHEDULED_TASK_REGULATION_01.md`;
+- canonical copy-paste regulation: `config/taste_steam_review_dossier_scheduled_task_regulation.md`;
+- GitHub remains control plane; external Scheduled Task lifecycle/configuration remains operator-owned;
+- no Scheduled Task create/edit/run action and no Dossier semantic production/recovery occurred;
+- durable report: `reviews/worker_reports/taste-dossier-clean-scheduled-task-regulation-01.md`.
+
