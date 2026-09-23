@@ -356,45 +356,42 @@ Next step:
 - implement the bounded canonical-writer coalescing liveness fix with an exact regression of the observed race.
 
 
-## ACTIVE — ЧАТ 1 — Taste Dossier canonical-writer coalescing liveness fix
+## ACCEPTED — Taste Dossier canonical-writer coalescing liveness fix
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_CANONICAL_WRITER_COALESCING_LIVENESS_FIX_01.md`
 
-Worker slot:
-`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
-
-Conversation state:
-- previous physical ЧАТ 1 completed the g000012 read-only diagnostic and is retired;
-- this is a NEW physical ЧАТ 1 for a separate implementation task.
-
-Mode:
-`IMPLEMENT / VALIDATE`
-
-Accepted root cause:
-- a durable exact Dossier inbox candidate can be stranded unclassified when its original Dossier ingest wake-up is cancelled before job start by a newer workflow in the shared `taste-steam-review-dossier-canonical-writer` boundary;
-- surviving non-Dossier writer paths may not currently reconcile Dossier inbox state.
-
-Scope:
-- enumerate every shared-writer path capable of superseding/coalescing a pending Dossier wake-up;
-- make reconciliation state-based and coalescing-safe within the existing single serialized writer domain;
-- ensure downstream derived Deep projection sees reconciled canonical Dossier truth;
-- add a regression reproducing the proven cancelled-wake-up race;
-- preserve deterministic path/create-only/strict validation/per-group recovery rules.
-
-Guards:
-- no historical g000012 recovery/restoration/special-case;
-- no Scheduled Task mutation or Run now;
-- no second scheduler/queue/retry owner/concurrency domain;
-- do not modify the active Deep activation task owned by ЧАТ 2;
-- do not change Fast/Deep semantic policy.
-
-Expected report:
+Report:
 `reviews/worker_reports/taste-dossier-canonical-writer-coalescing-liveness-fix-01.md`
 
-Next gate:
-- Director accepts the fix first;
-- only then decide the bounded operator step to resume/validate the existing Dossier Scheduled Task if it is actually disabled.
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- the lost Dossier wake-up hole is closed inside the existing single GitHub-owned `taste-steam-review-dossier-canonical-writer` boundary;
+- all five current workflows in that shared writer domain were enumerated;
+- the two existing Dossier/pre-AI paths already reconciled inbox state, and PASS 1, PASS 2, and Deep recovery authorization now do the same before dependent Deep projection/write;
+- repository state, not the triggering event type, now determines whether durable Dossier inbox work must be classified;
+- a cancelled zero-job Dossier wake-up can no longer strand an exact current candidate as falsely pending while a later surviving shared writer completes;
+- valid/invalid classification remains strict and idempotent; repeated reconciliation is a no-op;
+- deterministic pathname, create-only transport, snapshot/group identity, validator strictness, per-group progress, Fast semantics and Deep semantics were not changed;
+- downstream Deep/PASS 2 recomputation sees post-reconcile canonical Dossier truth;
+- no second scheduler, concurrency domain, polling loop, retry daemon, queue owner or ChatGPT-side inbox interpretation was introduced;
+- the required race regression and existing Dossier/PASS 2/backlog gates passed;
+- historical g000012 was not recovered or special-cased;
+- no Scheduled Task setting/action occurred.
+
+Key refs:
+- implementation PR #90;
+- merge `e69eb97a678636ea78b2aaac52ff07785c119f0d`;
+- Dossier validation run `35814982291`;
+- Progressive PASS 2 validation run `35814982336`;
+- backlog validation run `35814982293`.
+
+Next step:
+- if the existing `Taste Steam Review Dossier` Scheduled Task is externally disabled, the owning operator may restore that existing task separately;
+- do not create a duplicate task.
+
 
 ## DRAFT / NOT AUTHORIZED — Progressive site progress header compaction
 
