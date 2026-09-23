@@ -818,3 +818,15 @@
 - scope: fix the GitHub-owned PASS 2 ingest commit/staging blocker caused by an absent optional Dossier inbox directory after successful ingest;
 - preserve required PASS 2 staging, Dossier reconciliation, shared canonical-writer concurrency, immutable create-only result transport and existing recovery ownership;
 - no Progressive Deep Scheduled Task run and no new semantic attempt for an already-created PASS 2 result are authorized.
+
+
+## Worker completed — 2026-09-23
+
+### Progressive PASS 2 optional Dossier inbox staging recovery fix 01 — closure
+Статус: `complete_ready_for_director_acceptance`.
+- task: `WORKER_TASK_PROGRESSIVE_PASS2_OPTIONAL_DOSSIER_INBOX_STAGING_RECOVERY_FIX_01.md`;
+- confirmed optional Dossier inbox staging blocker fixed by `scripts/stage_progressive_pass2_canonical_writer.sh` and focused regression;
+- final PASS 2 validation run `35904500536` succeeded; execution ownership run `35904500434` succeeded;
+- no Progressive Deep Scheduled Task action and no new semantic attempt occurred;
+- one operator GitHub Actions `workflow_dispatch` of existing `Ingest Progressive PASS 2 item` on `main` remains required because the worker connector exposes no workflow-dispatch action;
+- durable report: `reviews/worker_reports/progressive-pass2-optional-dossier-inbox-staging-recovery-fix-01.md`.
