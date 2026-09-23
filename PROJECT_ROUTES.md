@@ -237,14 +237,14 @@ Production validator проверяет:
 
 **Что ищем:** canonical Fast/Dossier/Deep semantics, effective-result precedence, Deep first-pass/recovery ownership and the reusable GitHub recomputation hooks.
 
-**Последняя проверка:** 2026-09-22.
+**Последняя проверка:** 2026-09-23.
 
 **Быстрая точка входа:**
 1. `config/progressive_personalization_contract.json` — canonical three-stage model, effective-result precedence, explicit UI stage states and statistics-page metric contract.
 2. `config/progressive_pass1_contract.json` — PASS 1 as provisional user-facing `Быстрый разбор`; no Dossier requirement and no Fast prerequisite for Deep.
-3. `config/progressive_pass2_contract.json` — technical PASS 2 as eventual authoritative `Глубокий разбор`, all-current-game coverage target, one normal first pass plus separate GitHub-owned recovery authorization model; still inactive.
+3. `config/progressive_pass2_contract.json` — technical PASS 2 as eventual authoritative `Глубокий разбор`, all-current-game coverage target, one normal first pass plus separate GitHub-owned recovery authorization model; production-active under current `FAST-DOSSIER-DEEP-V1` contracts.
 4. `config/taste_steam_review_dossier_contract.json` — independent neutral Dossier acceptance/recovery truth; buffered/failed candidates never count as accepted Deep evidence.
-5. `config/execution_ownership_contract.json` — GitHub owns Deep scope/order/first-pass/recovery/completeness; Scheduled ChatGPT is bounded semantic data plane only after later activation.
+5. `config/execution_ownership_contract.json` — GitHub owns Deep scope/order/first-pass/recovery/completeness; under the current production-active architecture Scheduled ChatGPT is only the bounded Deep semantic data plane, while scheduler configuration remains outside repository-owned execution.
 6. `scripts/progressive_pass2.py::recompute_eligibility` + `scripts/build_progressive_pass2_work.py` — runtime-adapted `FAST-DOSSIER-DEEP-V1` recomputation: all-current Deep first-pass scope, no Fast prerequisite, explicit authoritative-completion exclusion and separate GitHub-authorized recovery.
 7. Recompute hooks exist after canonical Dossier persistence, Fast/PASS 1 persistence, daily/current generation-work-binding-freshness preparation, Deep/PASS 2 persistence, and explicit Deep recovery authorization.
 8. Those writers remain inside `taste-steam-review-dossier-canonical-writer` with `cancel-in-progress:false`; do not split them into unsynchronized authority domains.
