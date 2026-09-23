@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — ЧАТ 1 — Progressive PASS 2 optional Dossier inbox staging recovery fix
+## ACCEPTED — ЧАТ 1 — Progressive PASS 2 optional Dossier inbox staging recovery fix
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PASS2_OPTIONAL_DOSSIER_INBOX_STAGING_RECOVERY_FIX_01.md`
@@ -8,29 +8,28 @@ Task:
 Report:
 `reviews/worker_reports/progressive-pass2-optional-dossier-inbox-staging-recovery-fix-01.md`
 
-Mode:
-`IMPLEMENT`
+Final status:
+`complete_ready_for_director_acceptance`
 
-Worker slot:
-- **НОВЫЙ физический ЧАТ 1**;
-- do not reuse the retired prior Chat 1 conversation.
+Director acceptance:
+- the confirmed PASS 2 post-ingest persistence blocker was fixed inside the existing GitHub-owned canonical-writer path;
+- absent optional `data/ai_inbox/taste_steam_review_dossiers` no longer breaks staging, while required PASS 2 state/work/result paths remain strict;
+- focused PASS 2 staging/integration validation passed; the unrelated stale PASS 1 generic coalescing assertion remains separate and did not block this recovery;
+- no Progressive Deep Scheduled Task action and no semantic Deep rerun occurred;
+- operator recovery workflow_dispatch run `35905337526` completed successfully;
+- canonical ingest processed four existing PASS 2 artifacts: exactly one current exact-compatible Shadow Warrior 3 result was accepted, and the three old-binding artifacts were rejected as `rejected_stale_or_mismatched` with `artifact_path_not_current`;
+- current PASS 2 state records Shadow Warrior 3 exactly once as normal-first-pass `analysis_incomplete / insufficient_evidence`, accepted at `2026-09-23T18:51:26+00:00`;
+- current projection reports `deep_first_pass_attempted_count=1`, `deep_ready_or_pending_count=11`, `deep_waiting_for_dossier_count=499`, and no authoritative Deep completion;
+- recovery commit `053a1260d2306b77a15fe546e06343fb92efe500` persisted canonical state;
+- downstream visual build run `35905367380` and deploy run `35905431802` both completed successfully.
 
-Confirmed blocker:
-- `Ingest Progressive PASS 2 item` run `35900791199` accepted one current result in the working tree, then failed persistence because the commit step treated absent optional path `data/ai_inbox/taste_steam_review_dossiers` as mandatory;
-- current main still has 9 Deep ready/pending and 0 current first-pass attempts persisted;
-- exact current Shadow Warrior 3 result artifact already exists and must be canonically ingested without semantic rerun.
+Decision:
+- task fully accepted after operator recovery validation;
+- no further manual recovery or Deep rerun is required for this incident.
 
-Goal:
-- make optional Dossier inbox staging absence-safe inside the existing shared canonical-writer workflow;
-- add focused regression;
-- preserve create-only transport, exact bindings, attempt accounting, Dossier reconciliation and shared concurrency ownership;
-- recover already-created current PASS 2 artifact through the existing GitHub-owned ingest path when tooling permits;
-- no ChatGPT Scheduled Task action and no Deep semantic rerun.
-
-Expected final status:
-- `complete_ready_for_director_acceptance`
-- `needs_user_decision`
-- `blocked`
+Worker state:
+- physical ЧАТ 1 used for this task is retired for independent future work;
+- this worker chat can be deleted.
 
 ## ACCEPTED — Taste Dossier semantic bounded retrieval
 
