@@ -266,7 +266,7 @@ class CanonicalWriterCoalescingLivenessTests(unittest.TestCase):
         self.assertLess(pass2.index(DEEP_RECOMPUTE), pass2.index("python scripts/ingest_progressive_pass2.py"))
 
         recovery = text_by_path[".github/workflows/authorize-progressive-pass2-recovery.yml"]
-        self.assertLess(RECONCILE and recovery.index(RECONCILE), recovery.index("python scripts/authorize_progressive_pass2_recovery.py"))
+        self.assertLess(recovery.index(RECONCILE), recovery.index("python scripts/authorize_progressive_pass2_recovery.py"))
         recovery_script = (ROOT / "scripts/authorize_progressive_pass2_recovery.py").read_text(encoding="utf-8")
         self.assertIn("build_progressive_pass2_work.build_work_document()", recovery_script)
 
