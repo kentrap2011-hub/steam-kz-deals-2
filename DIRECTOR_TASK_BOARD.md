@@ -41,6 +41,47 @@ Expected final status:
 - `needs_user_decision`
 - `blocked`
 
+## ACTIVE — ЧАТ 2 — Fast + Deep zero completion diagnostic
+
+Task:
+`WORKER_TASK_PROGRESSIVE_FAST_DEEP_ZERO_COMPLETION_DIAGNOSTIC_01.md`
+
+Report:
+`reviews/worker_reports/progressive-fast-deep-zero-completion-diagnostic-01.md`
+
+Mode:
+`READ-ONLY / RECON`
+
+Worker slot:
+- **НОВЫЙ физический ЧАТ 2**;
+- independent from the active UI repair in ЧАТ 1.
+
+User authorization:
+- user explicitly assigned two parallel chats: ЧАТ 1 for site repair, ЧАТ 2 to diagnose why current Fast and Deep completed-result counts are effectively zero.
+
+Goal:
+- prove current Fast/Dossier/Deep statistics from canonical truth;
+- explain why current Fast shows many processed attempts but zero completed fit/not-fit;
+- reconcile historical completed Fast state against current exact identity;
+- explain every current Fast error class;
+- trace every current Deep attempted item and explain why none reached final completion;
+- determine whether the Statistics page is correctly exposing a real semantic/evidence problem or whether projection itself is wrong;
+- compare the actual Fast input, Dossier evidence, and Deep completion requirements;
+- recommend the smallest correct repair boundary without implementing it.
+
+Architecture:
+- GitHub remains control-plane owner of scope/identity/attempts/recovery/statistics;
+- diagnostic only: no source/config/prompt/workflow/state/result/recovery/scheduler changes;
+- no Fast/Dossier/Deep semantic run;
+- only durable report write is authorized.
+
+Expected final status:
+- `complete_root_cause_proven`
+- `complete_multiple_root_causes_proven`
+- `needs_deeper_recon`
+- `needs_user_decision`
+- `blocked`
+
 ## ACCEPTED — ЧАТ 1 — Progressive site stage icons + Statistics UI
 
 Task:
