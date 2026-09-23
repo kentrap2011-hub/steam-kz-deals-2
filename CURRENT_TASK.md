@@ -797,3 +797,14 @@
 - scope: remove the hard per-game web-search and opened/read-page numeric ceilings and replace them with semantic/adaptive bounded stopping inside the existing Dossier worker;
 - GitHub remains control plane; no new scheduler, queue, retry loop, checkpoint owner, or persistence owner is authorized;
 - Scheduled Task and production Dossier execution are explicitly out of scope.
+
+
+### Taste Dossier semantic bounded retrieval 01 — closeout
+Статус: `complete_ready_for_director_acceptance`.
+- implementation merged to `main` by PR #94, merge commit `915e9eec9795215df02a6c214f4b65dabddffa14`;
+- main-owned deterministic projection refresh completed successfully in workflow run #185 and committed `cf3215f35d0d883701ab116eb530734dd3072533`;
+- active Dossier worker index/work now bind `semantic-bounded-retrieval-2026-09-23` / `web-evidence-v2-semantic-bounded-retrieval-v1`;
+- hard per-game web-search/opened-page numeric ceilings are removed; diagnostic limits are `null` and counts are not semantic stop gates;
+- focused SEMBOUND-01..11 and all task-relevant Dossier regressions passed in PR validation;
+- no Scheduled Task was created, changed, enabled, disabled, rescheduled, or run; no Production Dossier semantic worker was run by this task;
+- durable report: `reviews/worker_reports/taste-dossier-semantic-bounded-retrieval-01.md`.
