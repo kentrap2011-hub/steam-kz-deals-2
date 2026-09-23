@@ -16,12 +16,14 @@ on:
       - "scripts/ingest_progressive_pass1.py"
       - "scripts/stage_progressive_pass1_canonical_writer.sh"
       - "scripts/ingest_progressive_pass2.py"
+      - "scripts/stage_progressive_pass2_canonical_writer.sh"
       - "scripts/authorize_progressive_pass2_recovery.py"
       - "scripts/progressive_personalization.py"
       - "scripts/progressive_visual_activation_routing.py"
       - "scripts/build_final_visual_payload.py"
       - "scripts/test_progressive_pass2.py"
       - "scripts/test_progressive_pass2_integration.py"
+      - "scripts/test_progressive_pass2_workflow_staging.py"
       - "scripts/test_progressive_pass1.py"
       - "scripts/test_progressive_pass1_ingest_activation.py"
       - "scripts/test_progressive_pass1_workflow_staging.py"
@@ -56,12 +58,14 @@ on:
       - "scripts/ingest_progressive_pass1.py"
       - "scripts/stage_progressive_pass1_canonical_writer.sh"
       - "scripts/ingest_progressive_pass2.py"
+      - "scripts/stage_progressive_pass2_canonical_writer.sh"
       - "scripts/authorize_progressive_pass2_recovery.py"
       - "scripts/progressive_personalization.py"
       - "scripts/progressive_visual_activation_routing.py"
       - "scripts/build_final_visual_payload.py"
       - "scripts/test_progressive_pass2.py"
       - "scripts/test_progressive_pass2_integration.py"
+      - "scripts/test_progressive_pass2_workflow_staging.py"
       - "scripts/test_progressive_pass1.py"
       - "scripts/test_progressive_pass1_ingest_activation.py"
       - "scripts/test_progressive_pass1_workflow_staging.py"
@@ -102,6 +106,7 @@ jobs:
             scripts/authorize_progressive_pass2_recovery.py \
             scripts/test_progressive_pass2.py \
             scripts/test_progressive_pass2_integration.py \
+            scripts/test_progressive_pass2_workflow_staging.py \
             scripts/test_progressive_pass1_ingest_activation.py \
             scripts/test_progressive_pass1_workflow_staging.py \
             scripts/progressive_personalization.py \
@@ -110,6 +115,12 @@ jobs:
         run: python scripts/test_progressive_pass2.py
       - name: PASS 2 Dossier integration regression
         run: python scripts/test_progressive_pass2_integration.py
+      - name: PASS 2 canonical-writer staging regression
+        run: |
+          bash -n scripts/stage_progressive_pass2_canonical_writer.sh
+          python scripts/test_progressive_pass2_workflow_staging.py
+      - name: Dossier canonical-writer coalescing regression
+        run: python scripts/test_taste_dossier_canonical_writer_coalescing_liveness.py
       - name: PASS 1 regression
         run: python scripts/test_progressive_pass1.py
       - name: PASS 1 ingest activation regression
