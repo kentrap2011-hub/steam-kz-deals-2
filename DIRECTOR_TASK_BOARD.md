@@ -1,24 +1,50 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — NEW physical ЧАТ 2 — Progressive Fast/Deep coactivation stale-guard audit
+## ACTIVE — NEW physical ЧАТ 2 — Progressive PASS 1 coactive ingest + recovery fix
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PASS1_COACTIVE_INGEST_RECOVERY_FIX_01.md`
+
+Expected report:
+`reviews/worker_reports/progressive-pass1-coactive-ingest-recovery-fix-01.md`
+
+Mode:
+`IMPLEMENT / ACTIVATE / VALIDATE`
+
+Authorized scope:
+- fix the stale PASS 1 ingest activation guard for canonical Fast+Deep coactivation;
+- add focused regression and validation workflow coverage;
+- reconcile stale pre-activation route/decision wording;
+- consume the already-existing exact Friends vs Friends artifact through the existing GitHub-owned ingest path without semantic re-execution;
+- one bounded GitHub workflow_dispatch of the existing PASS 1 ingest workflow is authorized after the fix is live if required.
+
+Hard guard:
+- no new PASS 1 semantic result;
+- no overwrite/delete/rename of the existing artifact;
+- no manual PASS 1 state/count surgery;
+- no Scheduled Task mutation or Scheduled Task Run now;
+- no architecture change.
+
+
+## ACCEPTED — Progressive Fast/Deep coactivation stale-guard audit
 
 Task:
 `WORKER_TASK_PROGRESSIVE_FAST_DEEP_COACTIVATION_STALE_GUARD_AUDIT_01.md`
 
-Expected report:
+Report:
 `reviews/worker_reports/progressive-fast-deep-coactivation-stale-guard-audit-01.md`
 
-Mode:
-`READ-ONLY / RECON`
+Final status:
+`complete_additional_analogues_found`
 
-Purpose:
-- before fixing the confirmed PASS 1 ingest activation-flag defect, audit all current Progressive production paths for analogous stale pre-Deep/mutual-exclusion assumptions;
-- no implementation or production mutation in this task.
-
-Known seed:
-- current valid Fast+Deep state has both `pass1_active=true` and `pass2_active=true`;
-- PASS 1 ingest still requires `pass2_active=false`;
-- run `35812546365` failed before ingesting the exact Friends vs Friends artifact.
+Director acceptance:
+- F-01 is the only production runtime blocker of the stale pre-Deep mutual-exclusion class in the bounded current production paths;
+- no second production Fast/Deep coactivation blocker was found;
+- F-02/F-03 are regression/CI coverage gaps;
+- DOC-01/DOC-02 are stale non-runtime guidance;
+- AUD-01..08 all PASS after exact report reread from `main`;
+- report closeout commit `15e1a94e2ab68977cc2722101f259db9b75b7ec6`;
+- this physical audit chat is retired.
 
 
 ## ACCEPTED — ЧАТ 2 — Taste Dossier Scheduled Task self-disable ownership diagnostic
