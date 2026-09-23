@@ -753,3 +753,12 @@
 - downstream visual rebuild run `35870282561` and deploy run `35870360504` both succeeded;
 - no new workflow or Scheduled Task run was launched by the final verification chat;
 - durable report: `reviews/worker_reports/progressive-pass1-coactive-ingest-recovery-fix-01.md`.
+
+
+## Worker in progress — 2026-09-23
+
+### Taste Dossier worker prompt V2 alignment fix 01
+Статус: `implementing`.
+- task: `WORKER_TASK_TASTE_DOSSIER_WORKER_PROMPT_V2_ALIGNMENT_FIX_01.md`;
+- scope: align canonical Dossier worker prompt with existing V2 non-blocking worker index/runtime, add live anti-drift regression, canonically refresh binding/projection if prompt hash participates;
+- prohibitions: do not run or edit the Dossier Scheduled Task; do not change Fast/PASS 1 or Deep/PASS 2 behavior; do not hand-edit Dossier progress/state/counts.
