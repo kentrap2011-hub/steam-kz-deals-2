@@ -173,7 +173,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertIn("site_specific", "site_specific")
         self.assertIn("materially distinct", guidance["site_specific_escalation"])
         self.assertIn("steam_community", guidance["steam_community_guidance"])
-        self.assertIn("attributable_item_level", guidance["after_existence_signal"])
+        self.assertIn("attributable item-level", guidance["after_existence_signal"])
         self.assertFalse(guidance["fixed_source_quota"])
         self.assertFalse(guidance["bounds_are_safety_ceilings_not_targets"])
         self.assertFalse(guidance["numeric_search_or_page_ceiling_active"])
@@ -794,7 +794,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         )
         self.assertFalse(
             EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"][
-                "premature_unresolved_allowed_with_budget_and_reasonably_discoverable_distinct_surface"
+                "premature_unresolved_allowed_with_reasonably_discoverable_distinct_surface"
             ]
         )
         self.assertTrue(EVIDENCE["language_binding"]["strict_exact_equality_required"])
