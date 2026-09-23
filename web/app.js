@@ -255,7 +255,7 @@ function renderFeed(){
   const p=g.better_purchase_option;const packageBadge=p&&p.package_price_rub!=null?` · 🎁 ${Number(p.covered_visible_game_count)||0} игр за ${fmtRub(p.package_price_rub)}`:'';
   const personalized=g.analysis_state==='analyzed_fit';
   $('stageIndicators').innerHTML=stageIndicatorsHtml(g);
-  $('title').textContent=g.title;$('decision').textContent=`${g.decision||''}${packageBadge}`;$('price').textContent=fmtRub(g.current_price_rub);$('oldPrice').textContent=fmtRub(g.original_price_rub);$('discount').textContent=`−${g.discount_percent}%`;
+  $('title').textContent=g.title;$('decision').classList.toggle('hidden',!personalized);$('decision').textContent=personalized?`${g.decision||''}${packageBadge}`:'';$('price').textContent=fmtRub(g.current_price_rub);$('oldPrice').textContent=fmtRub(g.original_price_rub);$('discount').textContent=`−${g.discount_percent}%`;
   $('histPrice').textContent=g.previously_free?'Ранее была бесплатной':`Ист. минимум: ${g.historical_minimum_rub==null?'нет данных':fmtRub(g.historical_minimum_rub)}`;
   $('deadline').textContent=deadlineText(g.sale_end_utc);$('summary').textContent=g.summary||'Краткое описание пока недоступно.';
   const gp=(g.gameplay_points||[]).filter(Boolean);$('gameplaySection').classList.toggle('hidden',!gp.length);$('gameplay').innerHTML=gp.map(x=>`<li>${escapeHtml(x)}</li>`).join('');
