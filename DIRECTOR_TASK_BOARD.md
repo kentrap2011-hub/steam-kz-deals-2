@@ -318,6 +318,46 @@ Expected report:
 
 Final acceptance requires at least one canonically accepted Deep semantic result when executable work existed; terminal receipt alone is not sufficient for full live acceptance.
 
+## ACTIVE — ЧАТ 1 — Taste Dossier g000012 existing-artifact collision diagnostic
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_G000012_EXISTING_ARTIFACT_COLLISION_DIAGNOSTIC_01.md`
+
+Worker slot:
+`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
+
+Mode:
+`READ-ONLY / RECON`
+
+Observed incident:
+- normal Dossier publication of `g000012` hit GitHub create-only HTTP 422 because the deterministic path already existed;
+- worker correctly refused overwrite, alternate filename and skip-to-next behavior;
+- no new artifact was created by that invocation;
+- root cause of the pre-existing deterministic artifact is not yet proven;
+- worker wording also claimed the recurring task was stopped; actual scheduler mutation is unproven from repository evidence and worker scheduler ownership is forbidden.
+
+Scope:
+- identify exact failing snapshot/group/path;
+- inspect exact existing artifact and its history/identity;
+- determine same-snapshot vs stale/cross-snapshot collision;
+- reconstruct GitHub ingest/drain/recovery history;
+- prove why current work still authorized the occupied deterministic path;
+- identify whether path identity, liveness, ingest/drain, recovery, or multiple layers own the defect;
+- define smallest safe one-off recovery and durable recurrence fix without executing either;
+- determine impact on already accepted Dossiers / Deep.
+
+Guards:
+- no delete/overwrite/rename/recovery mutation;
+- no Dossier Run now or scheduler mutation;
+- no Fast/Deep mutation;
+- no changes to the active Deep activation task.
+
+Expected report:
+`reviews/worker_reports/taste-dossier-g000012-existing-artifact-collision-diagnostic-01.md`
+
+Next gate:
+- Director reviews the diagnostic and only then authorizes the exact bounded recovery/fix.
+
 ## DRAFT / NOT AUTHORIZED — Progressive site progress header compaction
 
 Task:
