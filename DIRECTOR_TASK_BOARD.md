@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — ЧАТ 1 — Taste Dossier semantic bounded retrieval
+## ACCEPTED — Taste Dossier semantic bounded retrieval
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_SEMANTIC_BOUNDED_RETRIEVAL_01.md`
@@ -8,27 +8,29 @@ Task:
 Report:
 `reviews/worker_reports/taste-dossier-semantic-bounded-retrieval-01.md`
 
-Mode:
-`IMPLEMENT`
+Final status:
+`complete_ready_for_director_acceptance`
 
-Worker slot:
-- **НОВЫЙ физический ЧАТ 1**;
-- do not reuse the retired prior Chat 1 conversation.
+Director acceptance:
+- both hard per-game numeric Dossier retrieval ceilings are removed: no 8-search ceiling and no 16-opened/read-page ceiling;
+- active machine evidence contract now has `max_web_search_queries:null`, `max_opened_or_read_source_pages:null`, `numeric_limits_active:false`, and `counts_are_semantic_stop_gates:false`;
+- boundedness is semantic/adaptive: stop when evidence is sufficient, when all reasonably discoverable mandatory materially distinct routes are exhausted, on directly observed runtime/tool/transport blockers, binding/liveness changes, or ordinary invocation runtime;
+- materially equivalent query/locale/endpoint/list/index variants remain non-new routes and may not be retried without a materially new factual lead;
+- exact-product, Russian, temporal, privacy/provenance, source-diversification, create-only publication, V2 traversal, GitHub recovery/completeness, and scheduler ownership remain unchanged;
+- fail-closed ledger keeps search/page counts as diagnostics only with null limit fields; numeric counts cannot justify exhaustion or `why_not_executed`;
+- focused SEMBOUND-01..11 acceptance gates passed and all task-relevant Dossier regressions passed;
+- PR #94 merged as `915e9eec9795215df02a6c214f4b65dabddffa14`;
+- deterministic projection rebuild succeeded in run `35896659610`, producing projection commit `cf3215f35d0d883701ab116eb530734dd3072533`;
+- no Scheduled Task action and no production Dossier semantic run occurred;
+- the red overall PR workflow was caused only by a pre-existing unrelated Progressive PASS 1 canonical-writer staging/test mismatch; this task did not alter that surface.
 
-User authorization:
-- user explicitly approved replacing both hard per-game numeric web-retrieval ceilings with semantic/adaptive bounded stopping: remove the 8-search query ceiling and the 16 opened/read page ceiling, with no replacement arbitrary numeric ceiling.
+Decision:
+- task accepted;
+- no further Dossier contract change is required for numeric retrieval ceilings;
+- the unrelated Progressive PASS 1 baseline regression remains a separate issue and is not silently treated as fixed here.
 
-Goal:
-- remove both hard numeric search-count and opened-page-count stop gates;
-- preserve adaptive evidence-sufficient stopping, mandatory materially distinct route completion, anti-equivalent-retry behavior, fail-closed semantics, exact-product/Russian/identity/privacy rules, and GitHub control-plane ownership;
-- ordinary invocation runtime/binding/liveness remains the outer technical safety boundary;
-- update the fail-closed ledger/regressions so numeric search/page counts are diagnostic only and cannot cause exhaustion by themselves;
-- no Scheduled Task UI action and no production Dossier run.
-
-Expected final status:
-- `complete_ready_for_director_acceptance`
-- `needs_user_decision`
-- `blocked`
+Worker state:
+- physical ЧАТ 1 used for this task is retired for independent future work.
 
 ## ACCEPTED — Taste Dossier clean Scheduled Task regulation
 
