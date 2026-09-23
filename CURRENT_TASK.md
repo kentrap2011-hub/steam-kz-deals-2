@@ -718,10 +718,13 @@
 ## Worker in progress — 2026-09-22
 
 ### Progressive Deep production activation + live acceptance 01
-Статус: `blocked_external_operator_action`.
+Статус: `needs_fix`.
 - task: `WORKER_TASK_PROGRESSIVE_DEEP_PRODUCTION_ACTIVATION_LIVE_ACCEPTANCE_01.md`;
 - accepted model: `FAST-DOSSIER-DEEP-V1`;
-- Phase A complete: canonical Deep/PASS 2 repository truth is active, GitHub-owned recomputation is zero-attempt, and the task is stopped for the exact external Scheduled Task action;
-- no Deep semantic execution is allowed before repository activation is proven;
-- Phase B continues in this same physical worker chat after exactly one user `Run now`;
+- Phase A complete: canonical Deep/PASS 2 repository truth is active and zero-attempt activation was proven;
+- exactly one manual Scheduled Task `Run now` was performed in the same physical worker chat;
+- first authorized item `Monster Train` produced a create-only `analysis_incomplete / insufficient_evidence` result at commit `6307c23519dcbd6a92b2108f09b529a69767a867`;
+- canonical `Ingest Progressive PASS 2 item` run `35812648739` reported `accepted_result_count=1` in its working tree, then failed during PASS 2 revalidation because the regression suite still requires persisted PASS 2 state to equal the empty state after a real ingest;
+- canonical PASS 2 state therefore remained at 0 entries / 0 attempts and work remained unrecomputed; the existing inbox result must not be semantically executed again;
+- no second `Run now` is authorized until the GitHub-owned ingest/revalidation defect is fixed, validated and canonical persistence/recomputation is recovered;
 - durable report: `reviews/worker_reports/progressive-deep-production-activation-live-acceptance-01.md`.
