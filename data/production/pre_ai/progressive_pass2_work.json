@@ -39,8 +39,8 @@
     "deep_completed_fit_count": 0,
     "deep_completed_not_fit_count": 0,
     "deep_incomplete_or_recovery_count": 0,
-    "deep_waiting_for_dossier_count": 508,
-    "deep_ready_or_pending_count": 3,
+    "deep_waiting_for_dossier_count": 505,
+    "deep_ready_or_pending_count": 6,
     "deep_normal_first_pass_remaining_count": 511,
     "deep_remaining_until_all_authoritative_count": 511,
     "deep_normal_first_pass_complete": false,
@@ -49,9 +49,9 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 76,
-    "dossier_waiting_count": 508,
+    "dossier_waiting_count": 505,
     "pass2_attempted_count": 0,
-    "pass2_eligible_count": 3
+    "pass2_eligible_count": 6
   },
   "items": [
     {
@@ -109,6 +109,110 @@
     },
     {
       "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1051690",
+      "taste_subject_key": "App_1051690",
+      "appid": "1051690",
+      "taste_fingerprint": "5493eb1642f90e26eafc3b1b29b2aa7a46cfb29449b5a978484cbe0917dcb362",
+      "candidate_context_sha256": "5babe36585977ead416649ed275c833a3fe4b2453f4f54f35b40ec72324268a4",
+      "work_id": "fa9f838883fcf36f0f2f27806b52ef67f1ee5bb711d4e6b1f7fd1a8d0f3768de",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Nightmare Reaper",
+        "short_description": "Blast through a cursed nightmare solo or with up to 3 friends. A retro-inspired FPS where looter shooter weapons meets boomer shooter chaos and rogue-lite elements.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "28 Mar, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1051690"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1051690.json",
+      "dossier_content_sha256": "7e9b287905d06324d42caa479bcfb9ff6f0454a254223acc944fc75002409cf5",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+        "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+        "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+      },
+      "dossier_expires_at_utc": "2026-10-13T17:53:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "8f0a707ee16f9046fe8ed068a63831252d0f29bfdb8d00aab70a5ff8d6d478c1",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--fa9f838883fcf36f0f2f27806b52ef67f1ee5bb711d4e6b1f7fd1a8d0f3768de--8f0a707ee16f9046fe8ed068a63831252d0f29bfdb8d00aab70a5ff8d6d478c1.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--fa9f838883fcf36f0f2f27806b52ef67f1ee5bb711d4e6b1f7fd1a8d0f3768de--8f0a707ee16f9046fe8ed068a63831252d0f29bfdb8d00aab70a5ff8d6d478c1.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1051310",
+      "taste_subject_key": "App_1051310",
+      "appid": "1051310",
+      "taste_fingerprint": "8499bb6d5fd00ea111e3019194abb3d1a35f681138c122219a16d47203141217",
+      "candidate_context_sha256": "4c88a72a66971b6b1493b5650a2a875d4623ce51cb5a9ea20fe18f5019a083e9",
+      "work_id": "1896d06b4e2f75df22450643a2dd4f58b4f17d152491156eeecfb394f14075cc",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Paper Dolls: Original / 纸人",
+        "short_description": "Paper Dolls Original is a first-person horror adventure game steeped in Eastern culture. You act a man who is separated from his daughter after a car accident. When he awakes, he finds himself in a deserted Asian mansion. Find your daughter and unveil a terrifying story buried for a hundred years",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure",
+          "Horror"
+        ],
+        "core_fit_count": 1,
+        "release_date": "19 Apr, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1051310"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1051310.json",
+      "dossier_content_sha256": "6acc34946fc229ff84404aa60a6d03621e7a31b5a2611e48bf5d253594e2c786",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+        "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+        "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+      },
+      "dossier_expires_at_utc": "2026-10-13T17:53:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "7d327a8afa72efff8944e312086432cddcd574aeb60c58cde7be22a15f093c21",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--1896d06b4e2f75df22450643a2dd4f58b4f17d152491156eeecfb394f14075cc--7d327a8afa72efff8944e312086432cddcd574aeb60c58cde7be22a15f093c21.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--1896d06b4e2f75df22450643a2dd4f58b4f17d152491156eeecfb394f14075cc--7d327a8afa72efff8944e312086432cddcd574aeb60c58cde7be22a15f093c21.json",
+      "sequence": 3
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
       "family_id": "game:1007040",
       "taste_subject_key": "App_1007040",
       "appid": "1007040",
@@ -157,7 +261,7 @@
       "authorization_id": "dbd19525ad73212661466886611d520cf7d67dfb2f9ad4bed88d38034e0fafd3",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--4bf3c5bc6b037cf716f5bc0d10affc47c81d8456c4a08b973354418d66542d8c--dbd19525ad73212661466886611d520cf7d67dfb2f9ad4bed88d38034e0fafd3.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--4bf3c5bc6b037cf716f5bc0d10affc47c81d8456c4a08b973354418d66542d8c--dbd19525ad73212661466886611d520cf7d67dfb2f9ad4bed88d38034e0fafd3.json",
-      "sequence": 2
+      "sequence": 4
     },
     {
       "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
@@ -209,7 +313,57 @@
       "authorization_id": "3686be922caa110d2c162adb33903b34a59dac181cc30c1fcfb2b71b3fce2f1c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--fabeff2bd9a19be3402e0d107e0f5514d2844a364abfccb942d5bd67caa2bfab--3686be922caa110d2c162adb33903b34a59dac181cc30c1fcfb2b71b3fce2f1c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--fabeff2bd9a19be3402e0d107e0f5514d2844a364abfccb942d5bd67caa2bfab--3686be922caa110d2c162adb33903b34a59dac181cc30c1fcfb2b71b3fce2f1c.json",
-      "sequence": 3
+      "sequence": 5
+    },
+    {
+      "semantic_generation_id": "334bee04617cc4a43fe300a26d62a3ef3af4e1469eb313c352e37fb39fc0213d",
+      "family_id": "game:1054490",
+      "taste_subject_key": "App_1054490",
+      "appid": "1054490",
+      "taste_fingerprint": "bd211174279fa4efc63ea52de880ec9ae2400dc84f4bac23182d31add988bf14",
+      "candidate_context_sha256": "46eb0d0b7f74ce52b911ef9b3398ea1b767ad68face8522281117426bd9dd5c1",
+      "work_id": "20262897ceca72dacce422df0bfdfef07f8c6008ca576e612042490b4cf9a448",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Wingspan",
+        "short_description": "Wingspan is a relaxing, award-winning strategy card game about birds for 1 to 5 players. Each bird you play extends a chain of powerful combinations in one of your three habitats. Your goal is to discover and attract the best birds to your network of wildlife preserves.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "17 Sep, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1054490"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1054490.json",
+      "dossier_content_sha256": "d864fbaec40960b2c6ecdcb6a93f1a6894c1837870cffba7284b889203f69a3c",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+        "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+        "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+      },
+      "dossier_expires_at_utc": "2026-10-13T17:53:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "8aaf1c6cc3666b25bcb2a5e22f303d0bc26ab1694b9a5e895fb8f7b3b8d7bdd6",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/334bee04617cc4a4--20262897ceca72dacce422df0bfdfef07f8c6008ca576e612042490b4cf9a448--8aaf1c6cc3666b25bcb2a5e22f303d0bc26ab1694b9a5e895fb8f7b3b8d7bdd6.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/334bee04617cc4a4--20262897ceca72dacce422df0bfdfef07f8c6008ca576e612042490b4cf9a448--8aaf1c6cc3666b25bcb2a5e22f303d0bc26ab1694b9a5e895fb8f7b3b8d7bdd6.json",
+      "sequence": 6
     }
   ]
 }
