@@ -188,8 +188,8 @@ class ContractContradictionsFixRegressionTests(unittest.TestCase):
 
     def test_contract_surfaces_align_on_all_three_closeouts(self):
         self.assertEqual(SCHEMA["schema_revision"], "validator-generator-parity-fix-2026-09-20")
-        self.assertEqual(EVIDENCE["contract_revision"], "validator-generator-parity-fix-2026-09-20")
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-fail-closed-execution-ledger-v1")
+        self.assertEqual(EVIDENCE["contract_revision"], "semantic-bounded-retrieval-2026-09-23")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-semantic-bounded-retrieval-v1")
         self.assertTrue(EVIDENCE["language_binding"]["strict_exact_equality_required"])
         self.assertEqual(SCHEMA["enums"]["evidence_languages"], ["russian", "non_russian", "unknown"])
         self.assertTrue(SCHEMA["provenance_internal_id_invariants"]["ids_are_author_independent"])

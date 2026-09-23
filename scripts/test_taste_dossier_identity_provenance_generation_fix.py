@@ -84,7 +84,7 @@ class IdentityProvenanceGenerationFixTests(unittest.TestCase):
         self.assertIn("never relabel an ordinary player-feedback source as `identity` merely to satisfy validation", PROMPT)
         self.assertEqual(
             EVIDENCE["worker_prompt_revision"],
-            "web-evidence-v2-fail-closed-execution-ledger-v1",
+            "web-evidence-v2-semantic-bounded-retrieval-v1",
         )
 
     def test_id_prov_03_valid_identity_source_passes_strict_prepublication_and_buffered_validation(self):
@@ -151,14 +151,15 @@ class IdentityProvenanceGenerationFixTests(unittest.TestCase):
             self.validate(leaked)
 
     def test_id_prov_07_existing_evidence_semantics_are_unchanged(self):
-        self.assertEqual(EVIDENCE["contract_revision"], "validator-generator-parity-fix-2026-09-20")
+        self.assertEqual(EVIDENCE["contract_revision"], "semantic-bounded-retrieval-2026-09-23")
         self.assertTrue(EVIDENCE["language_binding"]["strict_exact_equality_required"])
         self.assertEqual(EVIDENCE["transient_author_fallback"]["status"], "active")
         self.assertTrue(EVIDENCE["source_policy"]["steam_store_exact_app_review_collection_may_be_fallback_parent"])
-        self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"], {
-            "max_web_search_queries": 8,
-            "max_opened_or_read_source_pages": 16,
-        })
+        bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
+        self.assertIsNone(bounds["max_web_search_queries"])
+        self.assertIsNone(bounds["max_opened_or_read_source_pages"])
+        self.assertFalse(bounds["numeric_limits_active"])
+        self.assertFalse(bounds["counts_are_semantic_stop_gates"])
 
 
 if __name__ == "__main__":

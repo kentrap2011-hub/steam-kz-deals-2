@@ -2,6 +2,7 @@
 import copy
 import hashlib
 import json
+import os
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
@@ -341,8 +342,44 @@ class ContractGapRegressionTests(unittest.TestCase):
         )
 
         current_binding = current_worker_contract_binding()
-        self.assertEqual(manifest["web_evidence_contract_binding"], current_binding)
-        self.assertEqual(index["web_evidence_contract_binding"], current_binding)
+        manifest_binding = manifest["web_evidence_contract_binding"]
+        index_binding = index["web_evidence_contract_binding"]
+        self.assertEqual(index_binding, manifest_binding)
+        if manifest_binding != current_binding:
+            # A pull request can intentionally change the content-complete semantic binding
+            # before the main-only deterministic projection refresh runs. Keep the live
+            # projection internally exact, and allow drift only in the content authorities
+            # this PR can legitimately replace; main/local validation still requires exact
+            # active projection equality.
+            self.assertEqual(os.environ.get("GITHUB_EVENT_NAME"), "pull_request")
+            stable_binding_fields = (
+                "evidence_contract_schema",
+                "evidence_contract_version",
+                "worker_schema",
+                "worker_schema_version",
+                "worker_schema_revision",
+                "worker_schema_sha256",
+                "dossier_schema",
+                "dossier_schema_version",
+            )
+            for field in stable_binding_fields:
+                self.assertEqual(manifest_binding[field], current_binding[field])
+            changed_fields = {
+                field
+                for field in current_binding
+                if manifest_binding.get(field) != current_binding.get(field)
+            }
+            self.assertTrue(changed_fields)
+            self.assertTrue(
+                changed_fields.issubset({
+                    "evidence_contract_revision",
+                    "evidence_contract_sha256",
+                    "worker_prompt_revision",
+                    "worker_prompt_sha256",
+                })
+            )
+        else:
+            self.assertEqual(index_binding, current_binding)
 
         pending = [
             entry["sequence"]
@@ -372,7 +409,7 @@ class ContractGapRegressionTests(unittest.TestCase):
             self.assertEqual(descriptor["group_plan_sha256"], index["group_plan_sha256"])
             self.assertEqual(
                 descriptor["web_evidence_contract_binding"],
-                current_binding,
+                index_binding,
             )
 
 

@@ -103,7 +103,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         self.assertEqual(EVIDENCE_CONTRACT["schema"], "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2")
         self.assertEqual(EVIDENCE_CONTRACT["version"], 2)
         self.assertEqual(SCHEMA["evidence_contract"], EVIDENCE_CONTRACT["schema"])
-        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-fail-closed-execution-ledger-v1")
+        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-semantic-bounded-retrieval-v1")
         prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
         for needle in (
             "title **plus the resolved release year**",
@@ -113,8 +113,8 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "Never persist raw review bodies",
             "`mention_count` is exactly",
             "?l=russian",
-            "8 web-search queries",
-            "16 opened/read source pages",
+            "Boundedness is semantic/adaptive rather than a fixed per-game search/page count",
+            "there is no finite numeric per-game limit to fabricate",
             "Mandatory pre-publication validation",
             "taste_steam_review_dossier_prepublication.py",
             "Language binding — bind records first, derive claims second",

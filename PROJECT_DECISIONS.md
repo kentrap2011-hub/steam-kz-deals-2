@@ -619,3 +619,21 @@ Deep eligibility does **not** require a prior Fast attempt, Fast completion, or 
 **Граница (historical pre-activation, superseded):** at approval time Deep/PASS 2 stayed inactive and this decision itself did not create/enable/run a Scheduled Deep worker or consume backlog attempts. Current production has since activated Deep under `FAST-DOSSIER-DEEP-V1`; Dossier evidence semantics and site ranking weights remain unchanged, and activation did not transfer scheduler ownership into this decision record.
 
 **Основные места:** `config/progressive_personalization_contract.json`, `config/progressive_pass1_contract.json`, `config/progressive_pass2_contract.json`, `config/execution_ownership_contract.json`, `PROJECT_ROUTES.md`.
+
+
+---
+
+## TASTE-014 — Dossier retrieval boundedness is semantic/adaptive, not a fixed search/page count
+
+**Дата:** 2026-09-23  
+**Статус:** implemented by `WORKER_TASK_TASTE_DOSSIER_SEMANTIC_BOUNDED_RETRIEVAL_01.md`.
+
+**Решение:** hard per-game ceilings of 8 web-search queries and 16 opened/read source pages are removed from the active Dossier worker and machine evidence contract. Boundedness is now defined by semantic progress: stop early when evidence is sufficient; otherwise continue only through mandatory or materially promising distinct retrieval routes while the current snapshot/plan/binding is live and ordinary invocation runtime/tooling safely permits progress. Materially equivalent query, locale, endpoint, list/index or already-proven unusable surface variants are not new routes and must not be retried without a materially new factual lead. When all reasonably discoverable mandatory materially distinct routes are exhausted and critical evidence remains insufficient, fail closed and publish nothing.
+
+**Ledger / observability:** query and opened-page counters remain diagnostic execution facts only. Their corresponding limit fields are explicitly `null`; count ordinals are not semantic stop gates and cannot by themselves justify route exhaustion, `stop_gate`, or `why_not_executed`. Runtime/tool/transport blockers and binding/liveness changes remain valid invocation-level stop conditions only when directly observed.
+
+**Почему:** a fixed 8/16 ceiling can terminate a legitimately progressing exact-product/Russian retrieval solely because an arbitrary ordinal was reached, even when a materially distinct required route remains. Removing that ceiling must not turn the worker into an unlimited crawler, so anti-loop control is route-semantic rather than numeric: equivalence suppression, distinct-route exhaustion, evidence sufficiency, exact identity, and ordinary invocation runtime remain the bounding mechanisms.
+
+**Граница:** this decision supersedes only the numeric 8/16-bound portions of TASTE-008, TASTE-010, TASTE-012 and earlier implementation reports. Russian-attempt semantics, exact-product/appid identity, temporal pre-stop rules, privacy/provenance, source diversification, create-only buffered transport, group size, GitHub-owned recovery/completeness, and scheduler ownership remain unchanged. No replacement numeric ceiling, website quota, scheduler, queue, retry loop, checkpoint authority, persistence owner, or production Dossier run is introduced.
+
+**Основные места:** `config/taste_steam_review_dossier_worker_prompt.md`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `scripts/test_taste_dossier_semantic_bounded_retrieval.py`, `scripts/test_taste_steam_review_dossier_semantic_consistency.py`, `.github/workflows/validate-taste-dossier-buffered.yml`.
