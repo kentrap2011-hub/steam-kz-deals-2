@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "dd4c807895c244011f1a1898661ed258299c6c523777137158181210583de91c",
+  "prepared_required_sha256": "3d53a198d7f43179581da38b3b28cc54ceca1786837aa0565a857c0aec2bbf43",
+  "group_plan_sha256": "27c1b9578fed58e6e9866bc6f8e2c45057b1be0120df7eb29aa3fc2839f7f1b2",
+  "group_count": 171,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+  },
+  "sequence": 21,
+  "start_index": 60,
+  "end_index_exclusive": 63,
+  "appids": [
+    "1227890",
+    "1229490",
+    "1231990"
+  ],
+  "items_sha256": "9b2ee40763b806e99ef5f7a3b7587cf10b79116300d3e5e1c6df24cd900a58e9",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "4ba955b5edc157301aeda520e816a17924a949ed553ef86edec76fb1638965ba",
+  "items": [
+    {
+      "key": "App_1227890",
+      "appid": "1227890",
+      "title": "Summer Memories",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1227890.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1229490",
+      "appid": "1229490",
+      "title": "ULTRAKILL",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1229490.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1231990",
+      "appid": "1231990",
+      "title": "Gestalt: Steam & Cinder",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1231990.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "f0bf3f2fb81d775f15588ff6a3c47682ca894e034521424b7becdeca661e61e8"
+}
