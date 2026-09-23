@@ -787,3 +787,13 @@
 - no Scheduled Task create/edit/run action and no Dossier semantic production/recovery occurred;
 - durable report: `reviews/worker_reports/taste-dossier-clean-scheduled-task-regulation-01.md`.
 
+
+
+## Worker in progress — 2026-09-23
+
+### Taste Dossier semantic bounded retrieval 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_SEMANTIC_BOUNDED_RETRIEVAL_01.md`;
+- scope: remove the hard per-game web-search and opened/read-page numeric ceilings and replace them with semantic/adaptive bounded stopping inside the existing Dossier worker;
+- GitHub remains control plane; no new scheduler, queue, retry loop, checkpoint owner, or persistence owner is authorized;
+- Scheduled Task and production Dossier execution are explicitly out of scope.
