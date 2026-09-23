@@ -1,0 +1,392 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "dd4c807895c244011f1a1898661ed258299c6c523777137158181210583de91c",
+  "prepared_required_sha256": "3d53a198d7f43179581da38b3b28cc54ceca1786837aa0565a857c0aec2bbf43",
+  "group_plan_sha256": "27c1b9578fed58e6e9866bc6f8e2c45057b1be0120df7eb29aa3fc2839f7f1b2",
+  "group_count": 171,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+  },
+  "sequence": 1,
+  "start_index": 0,
+  "end_index_exclusive": 3,
+  "appids": [
+    "1000010",
+    "1007040",
+    "1036890"
+  ],
+  "items_sha256": "890754605b1c5f8a2157c36e366618f652cf993b67a41276a13071d702feccd1",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "4ba955b5edc157301aeda520e816a17924a949ed553ef86edec76fb1638965ba",
+  "items": [
+    {
+      "key": "App_1000010",
+      "appid": "1000010",
+      "title": "Crown Trick",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1000010.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1007040",
+      "appid": "1007040",
+      "title": "EARTH DEFENSE FORCE 5",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1007040.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1036890",
+      "appid": "1036890",
+      "title": "Shadow Warrior 3: Definitive Edition",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1036890.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "d174495ab8a023d7ad9feb0b4e864dc7a05d20616d11441e1097039d9428a8f2",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+        "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+        "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+      },
+      "appid": "1000010",
+      "title": "Crown Trick",
+      "generated_at_utc": "2026-09-23T17:50:00Z",
+      "expires_at_utc": "2026-10-13T17:50:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Crown Trick",
+        "release_year": 2020,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1000010"
+          },
+          {
+            "kind": "developer",
+            "value": "NEXT Studios"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "repetition",
+          "statement": "Recent Russian Steam player feedback criticizes the game for limited roguelike content and weak replay appeal after the main progression is understood.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "fallback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "One contract-usable exact-product Russian Steam review collection supplied the serialized player-feedback finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1000010/",
+            "publication_date": "2020-10-16",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1000010/Crown_Trick/?cc=us&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection"
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "fallback-001",
+            "source_id": "source-002",
+            "publication_date": "2026-03-15",
+            "language": "russian",
+            "identity_mode": "transient_author_deduped"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+        "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+        "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+      },
+      "appid": "1007040",
+      "title": "EARTH DEFENSE FORCE 5",
+      "generated_at_utc": "2026-09-23T17:50:00Z",
+      "expires_at_utc": "2026-10-13T17:50:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "EARTH DEFENSE FORCE 5",
+        "release_year": 2019,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1007040"
+          },
+          {
+            "kind": "developer",
+            "value": "SANDLOT"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "localization",
+          "statement": "Russian player feedback reports a need for Russian localization, while current Steam support metadata still lists Russian as unsupported for the game.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "One exact-product Russian Steam discussion supplied the player-feedback mention; current official support metadata was used only for state context.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1007040/",
+            "publication_date": "2019-07-11",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1007040/discussions/0/4339861336969920516/",
+            "publication_date": "2024-06-09",
+            "language": "russian",
+            "freshness": "older",
+            "evidence_role": "historical",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "official_metadata",
+            "domain": "help.steampowered.com",
+            "url": "https://help.steampowered.com/ru/wizard/HelpWithGameTechnicalIssue?appid=1007040",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "current_state",
+            "player_feedback": false
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "url": "https://steamcommunity.com/app/1007040/discussions/0/4339861336969920516/",
+            "publication_date": "2024-06-09",
+            "language": "russian",
+            "identity_mode": "stable_locator"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+        "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+        "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+      },
+      "appid": "1036890",
+      "title": "Shadow Warrior 3: Definitive Edition",
+      "generated_at_utc": "2026-09-23T17:50:00Z",
+      "expires_at_utc": "2026-10-13T17:50:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Shadow Warrior 3: Definitive Edition",
+        "release_year": 2022,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1036890"
+          },
+          {
+            "kind": "developer",
+            "value": "Flying Wild Hog"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Recent Russian player feedback describes the third entry as a fast and enjoyable shooter and, for that player, the strongest of the three games.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "One contract-usable exact-product Russian Steam discussion item supplied the serialized durable finding.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable"
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1036890/",
+            "publication_date": "2022-03-01",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1036890/discussions/0/762932533852831622/",
+            "publication_date": "2026-02-10",
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "url": "https://steamcommunity.com/app/1036890/discussions/0/762932533852831622/",
+            "publication_date": "2026-02-10",
+            "language": "russian",
+            "identity_mode": "stable_locator"
+          }
+        ]
+      }
+    }
+  ]
+}
