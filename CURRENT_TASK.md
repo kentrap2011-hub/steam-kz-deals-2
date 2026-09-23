@@ -755,10 +755,15 @@
 - durable report: `reviews/worker_reports/progressive-pass1-coactive-ingest-recovery-fix-01.md`.
 
 
-## Worker in progress — 2026-09-23
+## Worker completed — 2026-09-23
 
 ### Taste Dossier worker prompt V2 alignment fix 01
-Статус: `implementing`.
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_TASTE_DOSSIER_WORKER_PROMPT_V2_ALIGNMENT_FIX_01.md`;
-- scope: align canonical Dossier worker prompt with existing V2 non-blocking worker index/runtime, add live anti-drift regression, canonically refresh binding/projection if prompt hash participates;
-- prohibitions: do not run or edit the Dossier Scheduled Task; do not change Fast/PASS 1 or Deep/PASS 2 behavior; do not hand-edit Dossier progress/state/counts.
+- primary prompt alignment: `17eba7f5ba616e53d45ef63ec835d35a4eb60913`;
+- live anti-drift regression: `5e068f5ed4c97e6b9372b4d0b9fd6f2f6836b2d0`;
+- canonical V2 binding/projection rebuild: build run `35875165680`, job `107229124431`, atomic pre-AI commit `2ba1ef1aa197c7ab0076b302df32ba6e55b22e57`;
+- current binding: worker prompt SHA-256 `c5773cc9aebe7fc4fb7a2bb9444bab4c35c5b2c63102f995b183def102b59ed7`, runtime prompt SHA-256 `bfa4a7b5fac60eceefab5ce7f6cb8a01f0dc31fe39e998f45e80c8ae3515fe35`;
+- fresh-main V2 index: snapshot `bae494b435e752f23beea70ee238d7f480f45cf94d9d27e8827525bb4b67fc09`, 187 groups, next pending `g000001`, accepted/failed/pending `0/0/187`;
+- no Dossier candidate was created; no Dossier Scheduled Task run/settings change was performed; Fast/Deep behavior/source/state/attempt history was not modified;
+- durable report: `reviews/worker_reports/taste-dossier-worker-prompt-v2-alignment-fix-01.md`.
