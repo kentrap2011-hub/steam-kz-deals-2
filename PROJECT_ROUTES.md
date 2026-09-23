@@ -205,7 +205,7 @@ Production validator проверяет:
 
 **Что ищем:** как Scheduled ChatGPT публикует immutable predeclared 3-game candidates, а GitHub независимо классифицирует каждую группу как `pending`, `accepted` или `failed_or_invalid_pending_recovery` без head-of-line blocking.
 
-**Последняя проверка:** 2026-09-22.
+**Последняя проверка:** 2026-09-23.
 
 **Быстрая точка входа:**
 1. `config/taste_steam_review_dossier_contract.json` — canonical GitHub-owned per-group progress/completeness contract; `checkpoint_size=3` остаётся transport/group boundary, не quota.
@@ -214,8 +214,9 @@ Production validator проверяет:
 4. `scripts/taste_steam_review_dossier_worker_projection.py` — V2 compact index; worker resumes from GitHub-owned next pending group, not first historical failure.
 5. `scripts/taste_steam_review_dossier_parallel_validation.py` — validation/recovery observability; not queue/progress authority.
 6. `scripts/taste_steam_review_dossier_recovery.py` — separate GitHub-owned failed-group recovery after normal first pass; no automatic semantic retry.
-7. `.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml` and `.github/workflows/build-pre-ai-store-snapshot.yml` share the existing serialized canonical-writer boundary; no second scheduler.
-8. `config/taste_steam_review_dossier_worker_prompt.md` — create-only semantic data-plane rules and explicit prohibition on editing/disabling its own Scheduled Task.
+7. Exact shared-writer inventory: `.github/workflows/build-pre-ai-store-snapshot.yml`, `.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml`, `.github/workflows/ingest-progressive-pass1.yml`, `.github/workflows/ingest-progressive-pass2.yml`, `.github/workflows/authorize-progressive-pass2-recovery.yml`; all use the single `taste-steam-review-dossier-canonical-writer` boundary and state-reconcile current Dossier inbox before dependent Deep projection/write.
+8. `scripts/test_taste_dossier_canonical_writer_coalescing_liveness.py` — regression for cancelled/coalesced zero-job Dossier wake-up, exactly-once classification, idempotence and post-reconcile Deep visibility.
+9. `config/taste_steam_review_dossier_worker_prompt.md` — create-only semantic data-plane rules and explicit prohibition on editing/disabling its own Scheduled Task.
 
 **Runtime / recovery-инварианты:**
 - create-only deterministic transport remains immutable and is not canonical acceptance;
@@ -227,6 +228,7 @@ Production validator проверяет:
 - Scheduled ChatGPT cannot overwrite/rename/delete transport, own retry/completeness, or enable/disable/edit its own schedule;
 - snapshot/plan/binding exactness, strict dossier semantics, story-DLC scope, Russian retrieval/provenance and stale-snapshot isolation remain fail-closed;
 - old snapshot artifacts never rebind to a new snapshot; same-snapshot descriptors stay immutable.
+- Dossier wake-up events are advisory only: durable repository state is authoritative, so cancellation/coalescing of the original zero-job wake-up cannot strand a current candidate while another shared writer survives.
 
 
 ---
