@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "bae494b435e752f23beea70ee238d7f480f45cf94d9d27e8827525bb4b67fc09",
+  "prepared_required_sha256": "395257c5b5c730e02c6926b40e3f943fe25395732bc2fc40cd4a39dfb0d7d3a5",
+  "group_plan_sha256": "c350fb01f6a4f1dda90baf48e378de8dd13ac1d61711fcc73ae04518f4ee2a01",
+  "group_count": 187,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "validator-generator-parity-fix-2026-09-20",
+    "evidence_contract_sha256": "be470fbdb75b90fde5eb71da8d7a76ec9df77ac0ed171237aa4283df4a4deaac",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+    "worker_prompt_sha256": "c5773cc9aebe7fc4fb7a2bb9444bab4c35c5b2c63102f995b183def102b59ed7"
+  },
+  "sequence": 23,
+  "start_index": 66,
+  "end_index_exclusive": 69,
+  "appids": [
+    "1227690",
+    "1227890",
+    "1229490"
+  ],
+  "items_sha256": "9e49e0cee1394ea410e069e86931c829bbbede82f8f3d92f925f545d0abbce4e",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "4c2434cf74fe982b574bc83ec7e482672fa1f3a5d489dcbd134e103eb6cbd79b",
+  "items": [
+    {
+      "key": "App_1227690",
+      "appid": "1227690",
+      "title": "Severed Steel",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1227690.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1227890",
+      "appid": "1227890",
+      "title": "Summer Memories",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1227890.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1229490",
+      "appid": "1229490",
+      "title": "ULTRAKILL",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1229490.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "c46ee0a1efa1c1d62cab8b046ac2e4dd54883a72394a3f1678cbe4f4246c8fb9"
+}
