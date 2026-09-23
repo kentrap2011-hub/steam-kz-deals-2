@@ -1,5 +1,45 @@
 # DIRECTOR TASK BOARD
 
+## ACTIVE — ЧАТ 1 — Progressive site stage icons + Statistics UI
+
+Task:
+`WORKER_TASK_PROGRESSIVE_SITE_STAGE_ICONS_STATISTICS_UI_01.md`
+
+Report:
+`reviews/worker_reports/progressive-site-stage-icons-statistics-ui-01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Worker slot:
+- **НОВЫЙ физический ЧАТ 1**;
+- do not reuse the retired prior Chat 1 conversation.
+
+User authorization:
+- user explicitly approved moving on to the website update after PASS 2 was verified healthy.
+
+Goal:
+- remove the large always-visible statistics/status panel from the main page;
+- add a compact `Статистика` entry leading to a dedicated statistics page/view;
+- render three compact producer-owned stage indicators on every visible card: Fast / Dossier / Deep;
+- remove large generic textual card statuses;
+- preserve analyzed-fit score/explanation and producer-owned tier/ranking semantics;
+- keep unresolved games score-free and analyzed-not-fit excluded;
+- browser remains presentation-only; no Fast/Dossier/Deep semantic or scheduler changes.
+
+Architecture preflight:
+- GitHub remains owner of stage state, aggregate counts, effective-result provenance and publication;
+- browser remains read-only presentation;
+- existing `config/progressive_personalization_contract.json` stage/statistics fields are authoritative;
+- only minimum producer presentation projection may be added if a required field is genuinely absent;
+- no new scheduler, queue, retry, checkpoint or control-plane owner is authorized.
+
+Expected final status:
+- `complete_ready_for_director_acceptance`
+- `needs_fix`
+- `needs_user_decision`
+- `blocked`
+
 ## ACCEPTED — ЧАТ 1 — Progressive PASS 2 optional Dossier inbox staging recovery fix
 
 Task:
