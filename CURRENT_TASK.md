@@ -145,6 +145,14 @@
 
 ## Запланировано / выполняется
 
+### Taste Dossier canonical-writer coalescing liveness fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_CANONICAL_WRITER_COALESCING_LIVENESS_FIX_01.md`;
+- scope: GitHub-owned state-based Dossier reconcile во всех surviving workflow внутри `taste-steam-review-dossier-canonical-writer`;
+- historical g000012 recovery, Dossier Scheduled Task и active Deep activation work ЧАТА 2 не трогать;
+- обязательный regression: cancelled/coalesced zero-job Dossier wake-up не может оставить уже существующий current candidate в pending.
+
+
 ### Taste dossier Russian multi-source retrieval implement 01
 Статус: `complete_ready_for_live_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_RUSSIAN_MULTI_SOURCE_RETRIEVAL_IMPLEMENT_01.md`;

@@ -31,6 +31,15 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Reconcile already-present dossier inbox state
+        run: python scripts/ingest_taste_steam_review_dossier_inbox.py --reconcile-nonfatal
+
+      - name: Record current dossier group validation and recovery projection
+        run: python scripts/taste_steam_review_dossier_parallel_validation.py
+
+      - name: Recompute Progressive PASS 2 eligibility from reconciled Dossier truth
+        run: python scripts/build_progressive_pass2_work.py
+
       - name: Validate PASS 2 core
         run: python scripts/test_progressive_pass2.py
 
@@ -58,20 +67,31 @@ jobs:
         if: steps.guard.outputs.active == 'true'
         run: python scripts/test_progressive_pass2.py
 
-      - name: Commit PASS 2 state and remaining work
-        if: steps.guard.outputs.active == 'true'
+      - name: Commit reconciled Dossier and PASS 2 state
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git add -A             data/ai_inbox/progressive_pass2             data/cache/progressive_pass2_state.json             data/cache/progressive_pass2_execution_receipts             data/cache/progressive_pass2_ingest_receipts             data/production/pre_ai/progressive_pass2_work.json
+          git add -A \
+            data/ai_inbox/progressive_pass2 \
+            data/cache/progressive_pass2_state.json \
+            data/cache/progressive_pass2_execution_receipts \
+            data/cache/progressive_pass2_ingest_receipts \
+            data/production/pre_ai/progressive_pass2_work.json \
+            data/cache/taste_steam_review_dossiers \
+            data/production/pre_ai/taste_steam_review_dossier_work.json \
+            data/production/pre_ai/taste_steam_review_dossier_worker_index.json \
+            data/production/pre_ai/taste_steam_review_dossier_validation_status.json \
+            data/ai_inbox/taste_steam_review_dossiers
+          git add -A data/production/pre_ai/taste_steam_review_dossier_worker_groups
+          git add -A -- data/quarantine/taste_steam_review_dossier_inbox data/audit/taste_steam_review_dossier_group_failures.jsonl 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "Progressive PASS 2 state already current"
             exit 0
           fi
           git diff --cached --check
-          git commit -m "Ingest Progressive PASS 2 item"
+          git commit -m "Reconcile Dossier and PASS 2 state"
           for attempt in 1 2 3; do
             git fetch origin main:refs/remotes/origin/main
             if ! git rebase origin/main; then
