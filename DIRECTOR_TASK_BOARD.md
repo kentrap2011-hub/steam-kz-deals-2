@@ -24,6 +24,9 @@ Goal:
 - Fast/Deep incomplete/error/pending/recovery remain dim; Dossier lights only when accepted;
 - replace technical Statistics wording (`authoritative`, `Fast-scope`, `Dossier-scope`, `Deep-покрытие`) with clear Russian;
 - rename Fast `Попытки` to `Обработано` and explain its arithmetic vs completed/incomplete/error buckets;
+- simplify Dossier to useful counters only: готово / ожидает / требует восстановления;
+- remove user-facing Dossier first-pass/all-complete booleans;
+- remove Deep first-pass-processed and redundant all-complete boolean rows; keep final completion, waiting/ready/recovery and remaining-to-final counters;
 - preserve all producer semantics, ranking, visibility and scheduler boundaries.
 
 Architecture:
