@@ -852,12 +852,16 @@
 - `Build daily visual payload` run `35909184960` succeeded; `Deploy visual mailing` run `35909243926` succeeded, including UI regressions and Pages deploy;
 - durable report: `reviews/worker_reports/progressive-site-stage-icons-statistics-ui-01.md`, initial report commit `8bfa6996e93daad8173ea17f306b307edb93bf5f`.
 
-## Worker in progress — 2026-09-24
+## Worker completed — 2026-09-24
 
 ### Progressive stage indicator completion + Statistics copy fix 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_PROGRESSIVE_SITE_STAGE_INDICATOR_COMPLETION_STATS_COPY_FIX_01.md`;
-- scope: keep exactly three Fast/Dossier/Deep card indicators, make the lit treatment mean completed stage only, and replace technical Statistics wording with clear Russian copy plus compact count explanations;
-- architecture preflight: GitHub remains owner of stage truth and aggregate counts; browser remains presentation-only; no queue/retry/scheduler/semantic outcome/denominator/ranking/attempt/recovery ownership changes are authorized;
-- no Scheduled Task action or semantic production run is authorized.
+- exactly three Fast/Dossier/Deep indicators remain; only exact completed-stage truth is visually lit;
+- pending/incomplete/error/recovery/unknown states remain detailed in tooltip but use the same neutral dim treatment;
+- Statistics copy is plain Russian, Fast arithmetic is explained, Dossier remains neutral, and technical first-pass/all-complete rows requested for removal are no longer user-facing;
+- canonical producer fields/count formulas, ranking/manual-end semantics and execution ownership were not changed;
+- final visual build run `35914688960` and deploy run `35914767930` succeeded; UI regression passed; Pages artifact `10774477479`;
+- no Scheduled Task action or semantic production run occurred;
+- durable report: `reviews/worker_reports/progressive-site-stage-indicator-completion-stats-copy-fix-01.md`, report commit `ae403371a50149d79b9c927926d5b075202141d9`.
 
