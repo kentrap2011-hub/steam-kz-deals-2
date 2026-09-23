@@ -29,13 +29,17 @@ def receipt_path(raw):
     return RECEIPTS / f'{digest}.json'
 
 
+def validate_activation_flags(work):
+    if work.get('pass1_active') is not True or work.get('pass2_active') is not True:
+        raise SystemExit('Progressive PASS 1 work activation flags are invalid')
+
+
 def main():
     progressive_pass1.load_contract()
     work = progressive_pass1.load_json(progressive_pass1.WORK)
     if work.get('contract') != 'PROGRESSIVE-PASS1-WORK-V1':
         raise SystemExit('Current Progressive PASS 1 work manifest is missing or incompatible')
-    if work.get('pass1_active') is not True or work.get('pass2_active') is not False:
-        raise SystemExit('Progressive PASS 1 work activation flags are invalid')
+    validate_activation_flags(work)
 
     state = progressive_pass1.load_state()
     paths = sorted(INBOX.glob('*.json')) if INBOX.exists() else []
