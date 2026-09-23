@@ -175,9 +175,10 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertIn("steam_community", guidance["steam_community_guidance"])
         self.assertIn("attributable_item_level", guidance["after_existence_signal"])
         self.assertFalse(guidance["fixed_source_quota"])
-        self.assertTrue(guidance["bounds_are_safety_ceilings_not_targets"])
-        self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_web_search_queries"], 8)
-        self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_opened_or_read_source_pages"], 16)
+        self.assertFalse(guidance["bounds_are_safety_ceilings_not_targets"])
+        self.assertFalse(guidance["numeric_search_or_page_ceiling_active"])
+        self.assertIsNone(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_web_search_queries"])
+        self.assertIsNone(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_opened_or_read_source_pages"])
         self.assertIn("site-specific player-feedback/community search", PROMPT)
         self.assertIn("Exact-product Steam Community discussion/review surfaces", PROMPT)
 
@@ -410,8 +411,8 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertGreaterEqual(len(diversification["surface_class_examples"]), 5)
         self.assertIn("fixed site quota", PROMPT)
         self.assertIn("never required to provide the usable record", PROMPT)
-        self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_web_search_queries"], 8)
-        self.assertEqual(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_opened_or_read_source_pages"], 16)
+        self.assertIsNone(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_web_search_queries"])
+        self.assertIsNone(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_opened_or_read_source_pages"])
 
     def test_worker_facing_contract_covers_all_six_with_nonblocking_github_drain(self):
         self.assertFalse(EVIDENCE["parent_item_binding"]["host_match_alone_is_sufficient"])
@@ -464,11 +465,13 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
 
     def test_retrieve_ru_06_bounded_adaptive_search_avoids_inaccessible_endpoint_retries(self):
         bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
-        self.assertEqual(bounds["max_web_search_queries"], 8)
-        self.assertEqual(bounds["max_opened_or_read_source_pages"], 16)
+        self.assertIsNone(bounds["max_web_search_queries"])
+        self.assertIsNone(bounds["max_opened_or_read_source_pages"])
+        self.assertFalse(bounds["numeric_limits_active"])
+        self.assertFalse(bounds["counts_are_semantic_stop_gates"])
         self.assertFalse(EVIDENCE["adaptive_research"]["russian_discovery"]["fixed_source_quota"])
         self.assertIn("do not keep retrying materially equivalent forms of that inaccessible endpoint family", PROMPT)
-        self.assertIn("not a new website quota, required Steam lane, retry loop, or evidence semantic", PROMPT)
+        self.assertIn("not a new website quota, required Steam lane, retry loop, crawler, or evidence semantic", PROMPT)
 
 
     def test_diversify_early_01_steam_remains_preferred_when_cheap_usable_item_is_exposed(self):
@@ -536,10 +539,10 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertIn("story", EVIDENCE["recency"]["old_feedback_remains_valid_for"])
         self.assertIn("It changes retrieval priority only; it does not change what counts as evidence", PROMPT)
 
-    def test_diversify_early_09_production_ceilings_and_no_fixed_steam_quota_are_unchanged(self):
+    def test_diversify_early_09_semantic_bounds_and_no_fixed_steam_quota_are_active(self):
         bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
-        self.assertEqual(bounds["max_web_search_queries"], 8)
-        self.assertEqual(bounds["max_opened_or_read_source_pages"], 16)
+        self.assertIsNone(bounds["max_web_search_queries"])
+        self.assertIsNone(bounds["max_opened_or_read_source_pages"])
         self.assertFalse(EVIDENCE["adaptive_research"]["russian_discovery"]["fixed_source_quota"])
         self.assertIn("There is **no fixed number of Steam queries or pages** before diversification", PROMPT)
 
@@ -559,7 +562,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
 
     def test_temporal_prestop_02_missing_recent_support_continues_bounded_retrieval(self):
         self.assertIn("continue bounded exact-product recent player-feedback retrieval", PROMPT)
-        self.assertIn("If that recent current-state support is missing and either web-search or page-read budget remains", PROMPT)
+        self.assertIn("If that recent current-state support is missing, continue bounded exact-product recent player-feedback retrieval while a materially distinct required route remains reasonably discoverable", PROMPT)
 
     def test_temporal_prestop_03_historical_semantics_are_unchanged(self):
         self.assertTrue(SCHEMA["observation_invariants"]["historical_requires_historical_and_recent_current_state_sources"])
@@ -589,12 +592,12 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertFalse(diversification["steam_required_as_retrieval_source"])
         self.assertFalse(diversification["fixed_named_website_quota"])
 
-    def test_temporal_prestop_08_production_ceilings_are_unchanged(self):
+    def test_temporal_prestop_08_semantic_bounds_replace_numeric_ceilings(self):
         bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
-        self.assertEqual(bounds["max_web_search_queries"], 8)
-        self.assertEqual(bounds["max_opened_or_read_source_pages"], 16)
-        self.assertIn("existing 8-search / 16-page ceilings", PROMPT)
-        self.assertIn("never turn the recent check into a Steam-only lane, fixed site quota, new retry loop", PROMPT)
+        self.assertIsNone(bounds["max_web_search_queries"])
+        self.assertIsNone(bounds["max_opened_or_read_source_pages"])
+        self.assertIn("arbitrary numeric search/page quota", PROMPT)
+        self.assertIn("never turn the recent check into a Steam-only lane, fixed site quota, new retry loop, crawler", PROMPT)
 
     def test_temporal_prestop_09_strict_validator_semantics_remain_authoritative(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
@@ -626,11 +629,11 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("60 Seconds! Reatomized", PROMPT)
         self.assertNotIn("1012880", PROMPT)
         self.assertNotIn("steamcommunity.com/app/1012880", PROMPT)
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-fail-closed-execution-ledger-v1")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-semantic-bounded-retrieval-v1")
 
 
     def test_ledger_01_marker_binding_and_core_fields(self):
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-fail-closed-execution-ledger-v1")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-semantic-bounded-retrieval-v1")
         self.assertIn("FAIL_CLOSED_EXECUTION_LEDGER_V1", PROMPT)
         for field in (
             "snapshot_id",
@@ -696,8 +699,8 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             self.assertIn(f"`{field}`", PROMPT)
         self.assertIn("active Russian, source-diversification, temporal, and identity routes", PROMPT)
         bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
-        self.assertEqual(bounds["max_web_search_queries"], 8)
-        self.assertEqual(bounds["max_opened_or_read_source_pages"], 16)
+        self.assertIsNone(bounds["max_web_search_queries"])
+        self.assertIsNone(bounds["max_opened_or_read_source_pages"])
 
     def test_ledger_04_required_next_step_and_no_silent_early_stop(self):
         for status in (
@@ -706,7 +709,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "blocked",
         ):
             self.assertIn(f"`{status}`", PROMPT)
-        self.assertIn("If a mandatory next material route is still `pending`, budget remains", PROMPT)
+        self.assertIn("If a mandatory next material route is still `pending`, remains reasonably discoverable/materially distinct", PROMPT)
         self.assertIn("do not stop", PROMPT)
         self.assertIn("execute that pivot or ledger the exact exposed blocker", PROMPT)
         self.assertIn(
