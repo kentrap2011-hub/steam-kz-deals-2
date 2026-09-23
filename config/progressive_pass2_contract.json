@@ -1,11 +1,11 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
   "version": 4,
-  "status": "runtime_adapted_inactive_ready_for_activation",
+  "status": "production_active",
   "phase": "phase_c_pass2",
   "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; Fast/PASS 1 is never an eligibility prerequisite.",
   "implemented": true,
-  "active": false,
+  "active": true,
   "ownership": {
     "control_plane": "github",
     "eligibility": "github",
@@ -15,7 +15,7 @@
     "validation_and_persistence": "github",
     "terminal_execution_receipt": "github",
     "visual_projection": "github",
-    "scheduled_chatgpt": "bounded_semantic_data_plane_only_when_later_activated",
+    "scheduled_chatgpt": "bounded_semantic_data_plane_only",
     "interactive_chat": "development_only_not_production_worker"
   },
   "eligibility": {
@@ -263,16 +263,17 @@
     "runtime_predicate_adaptation_required": false
   },
   "activation_guard": {
-    "pass2_active": false,
-    "deep_active": false,
-    "scheduled_task_created_or_modified": false,
-    "production_execution_authorized": false,
-    "real_backlog_processing_allowed": false,
+    "pass2_active": true,
+    "deep_active": true,
+    "production_execution_authorized": true,
+    "real_backlog_processing_allowed": true,
     "previous_recovery_only_activation_plan_superseded": true,
     "runtime_adaptation_required_before_activation": false,
-    "activation_requires_separate_director_accepted_follow_up": true,
+    "activation_requires_separate_director_accepted_follow_up": false,
     "reusable_integration_wiring_ready": true,
-    "runtime_adaptation_complete": true
+    "runtime_adaptation_complete": true,
+    "scheduled_task_configuration_owner": "external_user_operator",
+    "repository_activation_creates_or_modifies_scheduled_task": false
   },
   "user_stage": {
     "id": "deep",
@@ -285,8 +286,8 @@
     "target_architecture_runtime_adapted": true,
     "runtime_adaptation_required": false,
     "old_recovery_only_predicate_superseded": true,
-    "production_execution_authorized": false,
-    "note": "FAST-DOSSIER-DEEP-V1 runtime predicate, explicit first-pass/recovery accounting, Fast suppression and effective-result precedence are implemented while Deep remains inactive."
+    "production_execution_authorized": true,
+    "note": "FAST-DOSSIER-DEEP-V1 runtime predicate, explicit first-pass/recovery accounting, Fast suppression and effective-result precedence are implemented and Deep production execution is repository-authorized."
   },
   "effective_result_precedence": {
     "completed_deep_fit_or_not_fit": "authoritative",
@@ -324,5 +325,14 @@
       "accepted_at_utc"
     ],
     "unrelated_normal_first_pass_work_continues": true
+  },
+  "scheduler": {
+    "canonical_title": "Progressive Deep Worker",
+    "legacy_matching_title": "Progressive PASS 2 Worker",
+    "matching_task_cardinality": 1,
+    "timezone": "Europe/Samara",
+    "schedule": "RRULE:FREQ=HOURLY;BYMINUTE=30;BYSECOND=0",
+    "configuration_owner": "external_user_operator",
+    "repository_activation_creates_or_modifies_task": false
   }
 }

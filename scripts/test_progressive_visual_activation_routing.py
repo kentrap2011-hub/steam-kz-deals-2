@@ -52,7 +52,7 @@ def compatible_visual(source='S'):
             'phase': 'phase_b',
             'pass1_active': True,
             'pass2_implemented': True,
-            'pass2_active': False,
+            'pass2_active': True,
         },
         'processing_status': {
             'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
@@ -69,7 +69,7 @@ def compatible_visual(source='S'):
             'pass1_attempted_count': 3,
             'pass1_remaining_count': 1,
             'pass2_implemented': True,
-            'pass2_active': False,
+            'pass2_active': True,
             'fast_total_current_scope': 4,
             'fast_attempted_count': 3,
             'fast_completed_fit_count': 1,
@@ -180,7 +180,7 @@ def main():
     assert compatible is False
     assert reason == 'progressive_pass1_state_provenance_mismatch'
 
-    # Implemented PASS 2 is still inactive, but accepted PASS 2 state is a
+    # Active PASS 2 state is a
     # producer-owned semantic input and must force the same full rebuild path.
     stale_pass2 = compatible_visual()
     stale_pass2['production_contract']['progressive_pass2_state_blob_sha'] = 'OLD-PASS2'

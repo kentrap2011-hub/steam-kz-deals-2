@@ -278,22 +278,32 @@ def main():
         < pass2_ingest.index('progressive_pass2.process_result_documents(')
     )
 
-    # DEEP-INT-10: activation is still explicitly off everywhere and the durable
-    # production state contains zero attempts.
+    # DEEP-INT-10: repository activation is consistent everywhere and activation
+    # itself consumes zero attempts.
     pass2_contract = json.loads(read('config/progressive_pass2_contract.json'))
+    pass1_contract = json.loads(read('config/progressive_pass1_contract.json'))
     personalization = json.loads(read('config/progressive_personalization_contract.json'))
     ownership = json.loads(read('config/execution_ownership_contract.json'))
+    daily = json.loads(read('config/daily_execution_contract.json'))
     pass2_state = json.loads(read('data/cache/progressive_pass2_state.json'))
     pass2_work = json.loads(read('data/production/pre_ai/progressive_pass2_work.json'))
-    assert pass2_contract['active'] is False
-    assert pass2_contract['activation_guard']['deep_active'] is False
-    assert pass2_contract['activation_guard']['production_execution_authorized'] is False
-    assert pass2_contract['activation_guard']['real_backlog_processing_allowed'] is False
-    assert personalization['phase_b_execution']['pass2_active'] is False
-    assert personalization['phase_c_pass2_design']['active'] is False
-    assert ownership['progressive_personalization_phase_c_pass2_core']['pass2_active'] is False
+    assert pass2_contract['active'] is True
+    assert pass2_contract['activation_guard']['pass2_active'] is True
+    assert pass2_contract['activation_guard']['deep_active'] is True
+    assert pass2_contract['activation_guard']['production_execution_authorized'] is True
+    assert pass2_contract['activation_guard']['real_backlog_processing_allowed'] is True
+    assert pass2_contract['runtime_architecture']['production_execution_authorized'] is True
+    assert pass1_contract['pass2']['active'] is True
+    assert personalization['phase_b_execution']['pass2_active'] is True
+    assert personalization['phase_c_pass2_design']['active'] is True
+    assert ownership['progressive_personalization_phase_c_pass2_core']['pass2_active'] is True
+    assert ownership['progressive_personalization_phase_c_pass2_core']['production_execution_authorized'] is True
+    assert daily['progressive_personalization_phase_a']['pass2_active'] is True
+    assert daily['progressive_personalization_phase_b_pass1']['pass2_active'] is True
+    assert daily['progressive_personalization_phase_c_pass2']['pass2_active'] is True
+    assert pass2_contract['scheduler']['canonical_title'] == 'Progressive Deep Worker'
+    assert pass2_contract['scheduler']['matching_task_cardinality'] == 1
     assert pass2_state == core.empty_pass2_state()
-    assert pass2_work.get('pass2_active') is False
     assert pass2_work.get('scope', {}).get('deep_first_pass_attempted_count', 0) == 0
 
     print('progressive Deep FAST-DOSSIER-DEEP integration regression: ok')

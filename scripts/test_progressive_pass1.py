@@ -114,7 +114,7 @@ def work_doc(bindings, queue):
         'schema_version': 1,
         'contract': 'PROGRESSIVE-PASS1-WORK-V1',
         'pass1_active': True,
-        'pass2_active': False,
+        'pass2_active': True,
         'semantic_generation_id': generation,
         'items': items,
     }
@@ -138,7 +138,7 @@ def main():
     assert contract['transport']['one_result_artifact_per_item'] is True
     assert contract['transport']['batch_atomicity'] is False
     assert contract['transport']['maximal_contiguous_prefix'] is False
-    assert contract['pass2']['active'] is False
+    assert contract['pass2']['active'] is True
 
     base_projection = projection('commercial-A')
     generation_a = progressive_pass1.semantic_generation(base_projection)
