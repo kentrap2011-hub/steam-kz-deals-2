@@ -100,23 +100,16 @@ function counts(){
   for(const g of items){const r=rec(g.id);if(r.status==='liked')liked++;if(r.status==='final')final++;if(g.wishlist)wishlist++;if(isNew(g.id))newCount++;if((r.seen||0)>0)repeat++;else unseen++}
   return {liked,final,wishlist,newCount,repeat,unseen};
 }
-function renderProcessingStatus(){
-  const status=data.processing_status||{};
-  const lines=progressiveUi().processingLines(status);
-  $('processingStats').innerHTML=lines.map(([label,value])=>`<div class="processing-stat"><b>${value}</b><span>${escapeHtml(label)}</span></div>`).join('');
-  const stamp=status.last_accepted_analysis_at_utc?fmtDate(status.last_accepted_analysis_at_utc):null;
-  $('processingUpdated').textContent=stamp?`Последний успешный разбор: ${stamp}`:'Последний успешный разбор: пока нет';
-}
 function renderStats(){
   const c=counts();
-  $('stats').innerHTML=`<div class="stat"><b>${c.newCount}</b><span>🆕 новые</span></div><div class="stat"><b>${c.unseen}</b><span>не смотрел</span></div><div class="stat"><b>${c.liked}</b><span>♡ интересно</span></div><div class="stat"><b>${c.repeat}</b><span>🔁 видел</span></div>`;
   $('feedCount').textContent=`(${queueCount()})`;$('wishlistCount').textContent=c.wishlist?`(${c.wishlist})`:'';$('likedCount').textContent=c.liked?`(${c.liked})`:'';$('finalCount').textContent=c.final?`(${c.final})`:'';
   $('freshness').textContent=sourceLabel();
-  renderProcessingStatus();
+  renderStatisticsView();
 }
 function renderTabs(){
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===currentTab));
-  $('feedView').classList.toggle('hidden',currentTab!=='feed');$('wishlistView').classList.toggle('hidden',currentTab!=='wishlist');$('likedView').classList.toggle('hidden',currentTab!=='liked');$('finalView').classList.toggle('hidden',currentTab!=='final');
+  $('feedView').classList.toggle('hidden',currentTab!=='feed');$('wishlistView').classList.toggle('hidden',currentTab!=='wishlist');$('likedView').classList.toggle('hidden',currentTab!=='liked');$('finalView').classList.toggle('hidden',currentTab!=='final');$('statisticsView').classList.toggle('hidden',currentTab!=='statistics');
+  $('statisticsBtn').classList.toggle('active',currentTab==='statistics');$('statisticsBtn').setAttribute('aria-pressed',String(currentTab==='statistics'));
 }
 function renderQueueMode(){
   const btn=$('urgencyBtn');if(!btn)return;
@@ -141,6 +134,20 @@ function textList(el,values,empty){
   const arr=(values||[]).filter(Boolean);el.innerHTML=arr.length?arr.map(x=>`<div>${escapeHtml(x)}</div>`).join('<br>'):`<span class="muted">${escapeHtml(empty)}</span>`;
 }
 function escapeHtml(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function statisticsValue(value){
+  if(value===null||value===undefined||value==='')return '—';
+  if(typeof value==='boolean')return value?'Да':'Нет';
+  const number=Number(value);
+  return Number.isFinite(number)?number.toLocaleString('ru-RU'):String(value);
+}
+function stageIndicatorsHtml(g){
+  return progressiveUi().stageIndicators(g).map(ind=>`<span class="stage-indicator ${escapeHtml(ind.tone)}" title="${escapeHtml(ind.title)}" aria-label="${escapeHtml(ind.title)}">${escapeHtml(ind.symbol)}</span>`).join('');
+}
+function renderStatisticsView(){
+  const root=$('stageStatistics');if(!root)return;
+  const sections=progressiveUi().statisticsSections(data.processing_status||{});
+  root.innerHTML=sections.map(section=>`<section class="statistics-stage statistics-stage-${escapeHtml(section.key)}"><div class="statistics-stage-head"><h3>${escapeHtml(section.title)}</h3><div class="statistics-scope"><span>${escapeHtml(section.scopeLabel)}</span><b>${escapeHtml(statisticsValue(section.denominator))}</b></div></div><div class="statistics-metrics">${section.rows.map(row=>`<div class="statistics-metric" data-stat-field="${escapeHtml(row.key)}"><span>${escapeHtml(row.label)}</span><b>${escapeHtml(statisticsValue(row.value))}</b></div>`).join('')}</div></section>`).join('');
+}
 function renderRisk(g){
   const status=g.risk_status;
   const el=$('riskStatus');
@@ -247,8 +254,7 @@ function renderFeed(){
   const r=rec(g.id);$('newBadge').classList.toggle('hidden',!isNew(g.id));$('repeatBadge').classList.toggle('hidden',!(r.seen>0));$('repeatBadge').textContent=r.seen?`🔁 Показ №${r.seen+1}`:'';
   const p=g.better_purchase_option;const packageBadge=p&&p.package_price_rub!=null?` · 🎁 ${Number(p.covered_visible_game_count)||0} игр за ${fmtRub(p.package_price_rub)}`:'';
   const personalized=g.analysis_state==='analyzed_fit';
-  $('analysisBadge').textContent=progressiveUi().labelFor(g);
-  $('analysisBadge').className=`analysis-badge ${g.analysis_state||'unknown'}`;
+  $('stageIndicators').innerHTML=stageIndicatorsHtml(g);
   $('title').textContent=g.title;$('decision').textContent=`${g.decision||''}${packageBadge}`;$('price').textContent=fmtRub(g.current_price_rub);$('oldPrice').textContent=fmtRub(g.original_price_rub);$('discount').textContent=`−${g.discount_percent}%`;
   $('histPrice').textContent=g.previously_free?'Ранее была бесплатной':`Ист. минимум: ${g.historical_minimum_rub==null?'нет данных':fmtRub(g.historical_minimum_rub)}`;
   $('deadline').textContent=deadlineText(g.sale_end_utc);$('summary').textContent=g.summary||'Краткое описание пока недоступно.';
@@ -274,7 +280,7 @@ function miniCard(g,status){
   const place=status==='wishlist'?`★ В желаемом · ${listPositionText(g)} · `:'';
   const score=g.total_score!=null?` · ${Number(g.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/100`:'';
   const p=g.better_purchase_option;const packageText=p&&p.package_price_rub!=null?` · 🎁 ${Number(p.covered_visible_game_count)||0} игр за ${fmtRub(p.package_price_rub)}`:'';
-  return `<div class="list-card"><img src="${escapeHtml(img)}" alt=""><div><div class="list-title">${escapeHtml(g.title)}</div><div class="list-meta">${place}${fmtRub(g.current_price_rub)} · −${g.discount_percent}%${score}${packageText} · ${escapeHtml(deadlineText(g.sale_end_utc))}</div><div class="list-actions">${status==='liked'?`<button class="small-btn" data-to-final="${escapeHtml(g.id)}" type="button">🏆 В финал</button>`:''}<button class="small-btn" data-focus="${escapeHtml(g.id)}" type="button">Показать в ленте</button></div></div></div>`;
+  return `<div class="list-card"><img src="${escapeHtml(img)}" alt=""><div><div class="list-card-head"><div class="list-title">${escapeHtml(g.title)}</div><div class="stage-indicators stage-indicators-mini" aria-label="Этапы персонального разбора">${stageIndicatorsHtml(g)}</div></div><div class="list-meta">${place}${fmtRub(g.current_price_rub)} · −${g.discount_percent}%${score}${packageText} · ${escapeHtml(deadlineText(g.sale_end_utc))}</div><div class="list-actions">${status==='liked'?`<button class="small-btn" data-to-final="${escapeHtml(g.id)}" type="button">🏆 В финал</button>`:''}<button class="small-btn" data-focus="${escapeHtml(g.id)}" type="button">Показать в ленте</button></div></div></div>`;
 }
 function renderLists(){
   const wishlist=items.filter(g=>g.wishlist),liked=items.filter(g=>rec(g.id).status==='liked'),finals=items.filter(g=>rec(g.id).status==='final');
@@ -339,6 +345,8 @@ async function init(){
 }
 
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{currentTab=b.dataset.tab;render()}));
+$('statisticsBtn').addEventListener('click',()=>{currentTab='statistics';render();window.scrollTo({top:0,behavior:'smooth'})});
+$('statisticsBackBtn').addEventListener('click',()=>{currentTab='feed';render();window.scrollTo({top:0,behavior:'smooth'})});
 $('likeBtn').addEventListener('click',()=>markCurrent('liked'));$('finalBtn').addEventListener('click',()=>markCurrent('final'));$('endBtn').addEventListener('click',sendCurrentToEnd);$('startBtn').addEventListener('click',goToStart);$('urgencyBtn').addEventListener('click',toggleUrgencyFirst);
 $('steamBtn').addEventListener('click',()=>{const g=currentGame();if(g)openSteam(g.steam_url,g.web_url)});
 $('searchBtn').addEventListener('click',()=>{$('searchDialog').showModal();$('searchInput').value='';searchRender();setTimeout(()=>$('searchInput').focus(),50)});$('searchInput').addEventListener('input',searchRender);
