@@ -123,3 +123,14 @@
 
 **Evidence refs:** `WORKER_TASK_TASTE_DOSSIER_VALIDATOR_GENERATOR_PARITY_FIX_01.md`; `reviews/worker_reports/taste-dossier-validator-generator-parity-fix-01.md`; PR #70, where the first dossier CI pass exposed a stale strict-recovery `worker_prompt_revision` assertion after the intentional parity binding update.
 
+---
+
+## PITFALL-007 — Shared-writer wake-up is not durable work ownership
+
+**Trigger / symptom:** an immutable current Dossier candidate exists in `data/ai_inbox/taste_steam_review_dossiers`, but canonical group progress still says `pending`; the original Dossier ingest run may be cancelled with zero jobs while another run in `taste-steam-review-dossier-canonical-writer` survives.
+
+**Do not repeat:** do not treat the original push/workflow event as the only owner of Dossier classification, and do not repair this by making the Scheduled semantic worker scan transport state, overwrite the candidate, rename it, skip the group, or create another scheduler/retry loop.
+
+**Correct move:** every surviving workflow in the shared canonical-writer domain must reconcile current repository Dossier inbox state through the existing strict GitHub-owned drain before dependent projection/write. A valid candidate is persisted once, an invalid candidate enters the existing failed/recovery state once, and repeated reconcile is idempotent.
+
+**Evidence refs:** `reviews/worker_reports/taste-dossier-g000012-existing-artifact-collision-diagnostic-01.md`; `WORKER_TASK_TASTE_DOSSIER_CANONICAL_WRITER_COALESCING_LIVENESS_FIX_01.md`; `scripts/test_taste_dossier_canonical_writer_coalescing_liveness.py`.
