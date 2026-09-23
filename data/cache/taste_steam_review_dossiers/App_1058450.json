@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "contract-contradictions-fix-2026-09-18",
-    "evidence_contract_sha256": "f4ed3b985d85baac86c3aa267336264c8931972310dc2b9e949c0bb51d0a3c0c",
+    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "contract-contradictions-fix-2026-09-18",
-    "worker_schema_sha256": "d04a8463ec17e0971fa54a851258247163af4e4ceb2861f1b202907e359d362e",
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-temporal-prestop-retrieval-gate-v1",
-    "worker_prompt_sha256": "78d491811cba9aa95ec2fe005bde1bc32482bd861503ac1885b716306c966fef"
+    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
   },
   "appid": "1058450",
   "title": "MY HERO ONE'S JUSTICE 2",
-  "generated_at_utc": "2026-09-19T11:00:00Z",
-  "expires_at_utc": "2026-10-09T11:00:00Z",
+  "generated_at_utc": "2026-09-23T17:55:00Z",
+  "expires_at_utc": "2026-10-13T17:55:00Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "MY HERO ONE'S JUSTICE 2",
@@ -38,16 +38,15 @@
       }
     ]
   },
-  "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "other",
-      "statement": "A mixed-language player discussion describes the game positively.",
+      "category": "structure",
+      "statement": "Player feedback describes the sequel as expanding the first game's formula with additional characters, gameplay quality-of-life changes, and more aggressive high-difficulty AI.",
       "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
-        "russian",
         "non_russian"
       ],
       "evidence_status": "durable",
@@ -57,32 +56,15 @@
       "player_feedback_ids": [
         "feedback-001"
       ]
-    },
-    {
-      "category": "structure",
-      "statement": "Player feedback says the single-player offering includes hero and villain story modes, mission content, and free-fight modes.",
-      "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-003"
-      ],
-      "player_feedback_ids": [
-        "feedback-002"
-      ]
     }
   ],
   "conflicts": [],
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "multi_source",
-    "single_source_reason": null,
-    "russian_attempt": "found_and_used",
+    "source_mix_status": "single_source_only",
+    "single_source_reason": "One contract-usable exact-product Steam discussion supplied the serialized durable finding.",
+    "russian_attempt": "searched_no_existence_signal",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
   },
@@ -92,7 +74,7 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1058450/",
+        "url": "https://store.steampowered.com/app/1058450",
         "publication_date": "2020-03-12",
         "language": "non_russian",
         "freshness": "older",
@@ -103,19 +85,8 @@
         "source_id": "source-002",
         "source_type": "steam_community",
         "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1058450/discussions/0/2953755177910654180/?l=russian",
-        "publication_date": "2020-09-16",
-        "language": "mixed",
-        "freshness": "older",
-        "evidence_role": "durable_trait",
-        "player_feedback": true
-      },
-      {
-        "source_id": "source-003",
-        "source_type": "steam_community",
-        "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1058450/discussions/0/2577697524294948307/",
-        "publication_date": "2020-06-29",
+        "url": "https://steamcommunity.com/app/1058450/discussions/0/2254560552288807254/",
+        "publication_date": "2020-05-20",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "durable_trait",
@@ -126,16 +97,8 @@
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "url": "https://steamcommunity.com/app/1058450/discussions/0/2953755177910654180/?l=russian",
-        "publication_date": "2020-09-16",
-        "language": "mixed",
-        "identity_mode": "stable_locator"
-      },
-      {
-        "feedback_id": "feedback-002",
-        "source_id": "source-003",
-        "url": "https://steamcommunity.com/app/1058450/discussions/0/2577697524294948307/",
-        "publication_date": "2020-06-29",
+        "url": "https://steamcommunity.com/app/1058450/discussions/0/2254560552288807254/",
+        "publication_date": "2020-05-22",
         "language": "non_russian",
         "identity_mode": "stable_locator"
       }
