@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
     "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
   },
-  "appid": "1036890",
-  "title": "Shadow Warrior 3: Definitive Edition",
+  "appid": "1007040",
+  "title": "EARTH DEFENSE FORCE 5",
   "generated_at_utc": "2026-09-23T17:50:00Z",
   "expires_at_utc": "2026-10-13T17:50:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Shadow Warrior 3: Definitive Edition",
-    "release_year": 2022,
+    "work_title": "EARTH DEFENSE FORCE 5",
+    "release_year": 2019,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,28 +30,29 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1036890"
+        "value": "1007040"
       },
       {
         "kind": "developer",
-        "value": "Flying Wild Hog"
+        "value": "SANDLOT"
       }
     ]
   },
   "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Recent Russian player feedback describes the third entry as a fast and enjoyable shooter and, for that player, the strongest of the three games.",
-      "sentiment": "positive",
+      "category": "localization",
+      "statement": "Russian player feedback reports a need for Russian localization, while current Steam support metadata still lists Russian as unsupported for the game.",
+      "sentiment": "negative",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
         "russian"
       ],
-      "evidence_status": "durable",
+      "evidence_status": "current",
       "source_ids": [
-        "source-002"
+        "source-002",
+        "source-003"
       ],
       "player_feedback_ids": [
         "feedback-001"
@@ -63,7 +64,7 @@
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "single_source_only",
-    "single_source_reason": "One contract-usable exact-product Russian Steam discussion item supplied the serialized durable finding.",
+    "single_source_reason": "One exact-product Russian Steam discussion supplied the player-feedback mention; current official support metadata was used only for state context.",
     "russian_attempt": "found_and_used",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable"
@@ -74,8 +75,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1036890/",
-        "publication_date": "2022-03-01",
+        "url": "https://store.steampowered.com/app/1007040/",
+        "publication_date": "2019-07-11",
         "language": "non_russian",
         "freshness": "older",
         "evidence_role": "identity",
@@ -85,20 +86,31 @@
         "source_id": "source-002",
         "source_type": "steam_community",
         "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1036890/discussions/0/762932533852831622/",
-        "publication_date": "2026-02-10",
+        "url": "https://steamcommunity.com/app/1007040/discussions/0/4339861336969920516/",
+        "publication_date": "2024-06-09",
+        "language": "russian",
+        "freshness": "older",
+        "evidence_role": "historical",
+        "player_feedback": true
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "official_metadata",
+        "domain": "help.steampowered.com",
+        "url": "https://help.steampowered.com/ru/wizard/HelpWithGameTechnicalIssue?appid=1007040",
+        "publication_date": null,
         "language": "russian",
         "freshness": "recent",
-        "evidence_role": "durable_trait",
-        "player_feedback": true
+        "evidence_role": "current_state",
+        "player_feedback": false
       }
     ],
     "player_feedback_records": [
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "url": "https://steamcommunity.com/app/1036890/discussions/0/762932533852831622/",
-        "publication_date": "2026-02-10",
+        "url": "https://steamcommunity.com/app/1007040/discussions/0/4339861336969920516/",
+        "publication_date": "2024-06-09",
         "language": "russian",
         "identity_mode": "stable_locator"
       }
