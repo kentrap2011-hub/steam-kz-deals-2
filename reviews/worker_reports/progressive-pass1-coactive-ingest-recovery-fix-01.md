@@ -123,7 +123,7 @@ Therefore, if no intervening canonical PASS 1 change occurs, another canonical i
 - FIX-09 no Scheduled Task mutation / Scheduled `Run now`; no new workflow dispatch in this continuation: PASS.
 - commit/staging optional-path defect: PASS.
 - staging regression tied to live production workflow: PASS.
-- FIX-10 durable report committed and reread from `main`: pending closeout reread after this update.
+- FIX-10 durable report committed and reread from `main`: PASS. Report commit `3061e56595f5e46c7e5fcbdf20b5752162fcc93a` was reread from `main` as blob `2d342d4543c97ab4165cacf31f2f3d202e008738`; this closeout update is reread again before the final response.
 
 ## Exact remaining unblock
 
