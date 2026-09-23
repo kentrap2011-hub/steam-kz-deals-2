@@ -54,19 +54,7 @@ jobs:
           set -euo pipefail
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git add -A \
-            data/ai_inbox/progressive_pass1 \
-            data/cache/progressive_pass1_state.json \
-            data/cache/progressive_pass1_receipts \
-            data/production/pre_ai/progressive_pass1_work.json \
-            data/production/pre_ai/progressive_pass2_work.json \
-            data/cache/taste_steam_review_dossiers \
-            data/production/pre_ai/taste_steam_review_dossier_work.json \
-            data/production/pre_ai/taste_steam_review_dossier_worker_index.json \
-            data/production/pre_ai/taste_steam_review_dossier_validation_status.json \
-            data/ai_inbox/taste_steam_review_dossiers
-          git add -A data/production/pre_ai/taste_steam_review_dossier_worker_groups
-          git add -A -- data/quarantine/taste_steam_review_dossier_inbox data/audit/taste_steam_review_dossier_group_failures.jsonl 2>/dev/null || true
+          bash scripts/stage_progressive_pass1_canonical_writer.sh
           if git diff --cached --quiet; then
             echo "Progressive PASS 1 state already current"
             exit 0
