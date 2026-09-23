@@ -148,7 +148,7 @@ Architecture preflight for this fix set:
 - **AUD-05 PASS** — compatible inspected paths are explicitly listed as negative evidence.
 - **AUD-06 PASS** — no production state/work/cache/inbox/contract/site mutation, workflow dispatch/rerun, semantic work, or Scheduled Task mutation was performed; the Friends vs Friends artifact was read only.
 - **AUD-07 PASS** — bounded ordered implementation fix set defined but not applied.
-- **AUD-08 PENDING AT REPORT WRITE** — satisfied only after this report is committed to `main` and reread exactly from `main`.
+- **AUD-08 PASS** — initial report commit `0d158bc7c58b3a49f84cba1ce25d661f5bffa177` was reread exactly from `main`; that reread returned report blob SHA `fa525a3a54f015c21025be4bb44b6ff87407b1c1` while `main` head was `0d158bc7c58b3a49f84cba1ce25d661f5bffa177`. This closeout reread from `main` again returned the same report blob SHA before updating this gate.
 
 ## Read-only mutation ledger
 
