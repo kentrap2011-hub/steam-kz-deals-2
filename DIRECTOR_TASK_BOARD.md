@@ -284,62 +284,40 @@ Next step:
 - the final pixel-icon/card indicators and dedicated Statistics page remain separate UI work.
 
 
-## ACTIVE — ЧАТ 2 — Progressive Deep production activation + live acceptance
+## ACCEPTED — Progressive Deep production activation + live acceptance
 
 Task:
 `WORKER_TASK_PROGRESSIVE_DEEP_PRODUCTION_ACTIVATION_LIVE_ACCEPTANCE_01.md`
 
-Worker slot:
-`НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
-
-Mode:
-`IMPLEMENT / ACTIVATE / VALIDATE`
-
-Structure:
-- Phase A: activate GitHub canonical Deep truth, validate zero-attempt activation, then stop for exact user Scheduled Task action;
-- Phase B: continue in the SAME physical ЧАТ 2 after the user's single `Run now`, verify canonical ingest/state/projection and close live acceptance.
-
-Canonical scheduler target:
-- title `Progressive Deep Worker`;
-- one task only;
-- hourly at :30, `Europe/Samara`;
-- exact loader prompt is fixed in the task;
-- duplicate guard checks both legacy `Progressive PASS 2 Worker` and current `Progressive Deep Worker`.
-
-Guards:
-- no semantic execution before repository activation is validated;
-- user performs scheduler creation/config/enable and exactly one first `Run now`;
-- no second Run now before GitHub verification;
-- no new queue/retry owner or second scheduler;
-- preserve `FAST-DOSSIER-DEEP-V1`.
-
-Expected report:
+Report:
 `reviews/worker_reports/progressive-deep-production-activation-live-acceptance-01.md`
 
-Final acceptance requires at least one canonically accepted Deep semantic result when executable work existed; terminal receipt alone is not sufficient for full live acceptance.
+Final status:
+`complete_live_accepted`
 
-Current live status:
-- Phase A merged successfully on fresh main via PR #89 / squash `36113dcd6e29307006f2d1dca6e4a5a6063b6a39`;
-- Deep is active and initial GitHub recomputation consumed zero attempts;
-- user performed exactly one manual `Run now`;
-- worker produced one exact Deep result for Monster Train (`analysis_incomplete / insufficient_evidence`) at the authorized create-only path;
-- GitHub ingest accepted that result in its working tree, but a stale regression assertion still required persisted PASS 2 state to equal `empty_pass2_state()`, causing revalidation failure before canonical state/work commit;
-- durable Deep state therefore still records 0 attempts even though one semantic execution occurred, and the exact create-only result remains in inbox;
-- task status is `needs_fix`;
-- no second manual `Run now` is allowed until the repository-owned ingest/revalidation defect is fixed and canonical persistence is recovered.
+Director acceptance:
+- Deep/PASS 2 production activation is live under the accepted `FAST-DOSSIER-DEEP-V1` model;
+- activation from fresh `main` consumed zero attempts before semantic execution;
+- exactly one canonical `Progressive Deep Worker` Scheduled Task was established at hourly :30 Europe/Samara;
+- exactly one manual first `Run now` was used for live acceptance;
+- the exact Monster Train normal-first-pass result was eventually canonically ingested without a second semantic run;
+- durable Deep accounting records exactly 1 normal-first-pass attempt, 0 authoritative completions, and 1 incomplete/recovery-owned item;
+- unrelated normal Deep work remained live and advanced from 28 to 27 ready/pending items at the acceptance snapshot;
+- Fast and Dossier histories were not rewritten by Deep ingest;
+- GitHub-owned revalidation/staging defects exposed by the first ingest were repaired and regressions/main validations passed;
+- downstream visual projection rebuilt successfully from accepted PASS 2 provenance;
+- ACT-01..17 all passed and the durable report was reread from `main`.
 
-Same-chat continuation:
-- existing physical ЧАТ 2 must repair this exact GitHub-owned ingest/revalidation regression within the same task, validate canonical persistence/recomputation, update and reread the durable report, and only then decide whether another operator run is needed.
+Key refs:
+- activation merge `36113dcd6e29307006f2d1dca6e4a5a6063b6a39`;
+- canonical accepted-result persistence `f3030a14bb458bba6f2b6d108d82f1448678df9d`;
+- final report commit `dcc0d73360b3a0c481c0093141eee45411d70380`;
+- accepted report blob `b84256eed99fd98dfc078bcf80468487093f1045`.
 
-Repository recovery observed after the stale report:
-- PR #91 merged the live-state revalidation fix;
-- PR #92 and PR #93 fixed the optional PASS 2 execution-receipt staging/runtime-directory follow-up defects encountered while replaying the already-existing result;
-- existing Monster Train inbox result was canonically ingested in commit `f3030a14bb458bba6f2b6d108d82f1448678df9d`;
-- durable Deep state now records exactly 1 normal-first-pass attempt for Monster Train with `analysis_incomplete / insufficient_evidence`, `recovery_owned=true`;
-- current Deep work reports 27 ready/pending, 1 attempted, 1 incomplete/recovery, and 559 normal-first-pass remaining;
-- daily visual payload rebuilt successfully after that ingest;
-- durable worker report is still stale at `needs_fix`, so Director acceptance is withheld until the same physical ЧАТ 2 updates and rereads its report from fresh main;
-- no second manual `Run now` is needed to prove recovery of the first result.
+Operator state:
+- no further manual `Run now` is required for this acceptance;
+- normal automatic Deep cadence may continue;
+- the physical ЧАТ 2 used for this task is retired for independent future work.
 
 ## ACCEPTED — Taste Dossier g000012 existing-artifact collision diagnostic
 
