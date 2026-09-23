@@ -5,7 +5,9 @@ on:
     paths:
       - "config/execution_ownership_contract.json"
       - "config/progressive_personalization_contract.json"
+      - "config/progressive_pass1_contract.json"
       - "config/progressive_pass2_contract.json"
+      - "config/daily_execution_contract.json"
       - "config/progressive_pass2_result_schema.json"
       - "config/progressive_pass2_execution_receipt_schema.json"
       - "config/progressive_pass2_worker_prompt.md"
@@ -39,7 +41,9 @@ on:
     paths:
       - "config/execution_ownership_contract.json"
       - "config/progressive_personalization_contract.json"
+      - "config/progressive_pass1_contract.json"
       - "config/progressive_pass2_contract.json"
+      - "config/daily_execution_contract.json"
       - "config/progressive_pass2_result_schema.json"
       - "config/progressive_pass2_execution_receipt_schema.json"
       - "config/progressive_pass2_worker_prompt.md"
@@ -130,7 +134,7 @@ jobs:
         run: python scripts/test_progressive_visual_activation_routing.py
       - name: UI provenance regression
         run: node web/progressive-personalization-ui.test.js
-      - name: Recompute inactive production eligibility without consuming attempts
+      - name: Recompute active production eligibility without consuming attempts
         shell: bash
         run: |
           set -euo pipefail
@@ -143,8 +147,8 @@ jobs:
           contract=json.loads(Path('config/progressive_pass2_contract.json').read_text(encoding='utf-8'))
           work=json.loads(Path('data/production/pre_ai/progressive_pass2_work.json').read_text(encoding='utf-8'))
           state=json.loads(Path('data/cache/progressive_pass2_state.json').read_text(encoding='utf-8'))
-          assert contract.get('active') is False
-          assert work.get('pass2_active') is False
+          assert contract.get('active') is True
+          assert work.get('pass2_active') is True
           scope=work.get('scope') or {}
           assert state == {
               'schema_version': 2,
@@ -161,7 +165,7 @@ jobs:
               + int(scope.get('deep_ready_or_pending_count') or 0)
           )
           print(
-              'PROGRESSIVE_PASS2_INACTIVE_PROJECTION=PASS '
+              'PROGRESSIVE_PASS2_ACTIVE_PROJECTION=PASS '
               + 'target=' + str(scope.get('deep_total_current_coverage_target'))
               + ' waiting=' + str(scope.get('deep_waiting_for_dossier_count'))
               + ' ready=' + str(scope.get('deep_ready_or_pending_count'))
