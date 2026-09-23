@@ -1,6 +1,6 @@
-# Progressive Deep Worker — inactive bounded runtime contract
+# Progressive Deep Worker — bounded production runtime contract
 
-This is the bounded semantic-worker contract for eventual authoritative Deep analysis. The runtime implements `FAST-DOSSIER-DEEP-V1`, but production execution remains forbidden while `config/progressive_pass2_contract.json#active` is false.
+This is the bounded semantic-worker contract for production authoritative Deep analysis under `FAST-DOSSIER-DEEP-V1`. Production execution is allowed only while `config/progressive_pass2_contract.json#implemented` and `#active` are both true; otherwise the worker stops cleanly.
 
 At the start of every future invocation:
 
