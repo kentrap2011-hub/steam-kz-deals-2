@@ -409,7 +409,7 @@ class ContractGapRegressionTests(unittest.TestCase):
             self.assertEqual(descriptor["group_plan_sha256"], index["group_plan_sha256"])
             self.assertEqual(
                 descriptor["web_evidence_contract_binding"],
-                current_binding,
+                index_binding,
             )
 
 
