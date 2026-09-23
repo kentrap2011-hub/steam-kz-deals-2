@@ -150,9 +150,9 @@
     "item_level_progress": true,
     "one_attempt_per_current_item_binding": true,
     "commercial_refresh_resets_attempt_state": false,
-    "pass2_owner": "github_control_plane_deep_stage_inactive_pending_runtime_adaptation",
+    "pass2_owner": "github_control_plane_deep_stage_active",
     "new_independent_scheduler_created": false,
-    "pass2_active": false,
+    "pass2_active": true,
     "pass2_contract": "config/progressive_pass2_contract.json",
     "user_stage": "fast",
     "role": "provisional_fast_analysis",
@@ -180,9 +180,9 @@
     "scheduled_worker_may_edit_own_schedule": false
   },
   "progressive_personalization_phase_c_pass2_core": {
-    "status": "runtime_adapted_inactive_ready_for_activation",
+    "status": "production_active",
     "control_plane": "github",
-    "pass2_active": false,
+    "pass2_active": true,
     "contract": "config/progressive_pass2_contract.json",
     "github_responsibilities": [
       "derive current Deep eligibility from current Progressive semantic/work identity plus exact-compatible canonically accepted Dossier truth, without requiring prior Fast/PASS 1 attempt or analysis_incomplete",
@@ -233,8 +233,18 @@
     "eventual_completion_metric": "deep_all_current_authoritative_complete",
     "recomputation_wiring": "landed_reusable_adapted_to_fast_dossier_deep_v1",
     "runtime_adaptation_complete": true,
-    "production_execution_authorized": false,
+    "production_execution_authorized": true,
     "recovery_authorization_owner": "github_control_plane",
-    "recovery_authorization_entrypoint": "manual_github_workflow_dispatch_only"
+    "recovery_authorization_entrypoint": "manual_github_workflow_dispatch_only",
+    "scheduler": {
+      "canonical_title": "Progressive Deep Worker",
+      "matching_titles": [
+        "Progressive Deep Worker",
+        "Progressive PASS 2 Worker"
+      ],
+      "matching_task_cardinality": 1,
+      "configuration_owner": "external_user_operator",
+      "scheduled_chatgpt_role": "bounded_deep_semantic_data_plane_only"
+    }
   }
 }
