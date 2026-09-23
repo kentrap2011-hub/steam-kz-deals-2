@@ -96,6 +96,10 @@ def main():
     )
 
     progressive_pass2.STATE.parent.mkdir(parents=True, exist_ok=True)
+    # Canonical execution receipts are optional for normal semantic results, but
+    # the workflow commit step may still stage this path. Ensure the directory
+    # exists even when this ingest produced no terminal execution receipt.
+    progressive_pass2.CANONICAL_EXECUTION_RECEIPTS.mkdir(parents=True, exist_ok=True)
     progressive_pass2.STATE.write_text(
         json.dumps(final_state, ensure_ascii=False, indent=2) + '\n',
         encoding='utf-8',
