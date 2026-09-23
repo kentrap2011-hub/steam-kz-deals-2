@@ -24,7 +24,7 @@ from taste_steam_review_dossier_strict import (
 )
 from taste_steam_review_dossier_test_fixture import web_dossier
 from taste_steam_review_dossier_web import build_daily_work_manifest_web
-from taste_steam_review_dossier_worker_projection import build_worker_projection
+from taste_steam_review_dossier_worker_projection import WORKER_INDEX_SCHEMA, build_worker_projection
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_CONTRACT = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
@@ -309,6 +309,71 @@ class ContractGapRegressionTests(unittest.TestCase):
             "config/taste_steam_review_dossier_worker_prompt.md",
         ):
             self.assertIn(f'      - "{path}"', workflow)
+
+
+    def test_gap08_live_worker_prompt_runtime_and_projection_are_v2_aligned(self):
+        prompt_path = ROOT / "config/taste_steam_review_dossier_worker_prompt.md"
+        runtime_path = ROOT / "config/taste_steam_review_dossier_runtime_prompt.md"
+        index_path = ROOT / "data/production/pre_ai/taste_steam_review_dossier_worker_index.json"
+        manifest_path = ROOT / "data/production/pre_ai/taste_steam_review_dossier_work.json"
+
+        prompt = prompt_path.read_text(encoding="utf-8")
+        runtime = runtime_path.read_text(encoding="utf-8")
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(WORKER_INDEX_SCHEMA, "TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V2")
+        self.assertEqual(BASE_CONTRACT["worker_read_projection"]["index_schema"], WORKER_INDEX_SCHEMA)
+        for live_prompt in (prompt, runtime):
+            self.assertIn(WORKER_INDEX_SCHEMA, live_prompt)
+            self.assertIn("normal_first_pass_complete", live_prompt)
+            self.assertIn("next_pending_sequence", live_prompt)
+            self.assertIn("pending_group_sequences", live_prompt)
+            self.assertNotIn("canonical_expected_sequence", live_prompt)
+        self.assertNotIn("TASTE-STEAM-REVIEW-DOSSIER-WORKER-INDEX-V1", prompt)
+
+        self.assertEqual(index["schema"], WORKER_INDEX_SCHEMA)
+        self.assertEqual(index["schema_version"], 2)
+        self.assertEqual(index["snapshot_id"], manifest["snapshot_id"])
+        self.assertEqual(
+            index["runtime_prompt_sha256"],
+            hashlib.sha256(runtime_path.read_bytes()).hexdigest(),
+        )
+
+        current_binding = current_worker_contract_binding()
+        self.assertEqual(manifest["web_evidence_contract_binding"], current_binding)
+        self.assertEqual(index["web_evidence_contract_binding"], current_binding)
+
+        pending = [
+            entry["sequence"]
+            for entry in manifest["group_progress"]["groups"]
+            if entry["state"] == "pending"
+        ]
+        self.assertEqual(index["pending_group_sequences"], pending)
+        self.assertEqual(index["next_pending_sequence"], pending[0] if pending else None)
+        self.assertEqual(index["normal_first_pass_complete"], not pending)
+        self.assertEqual(
+            index["normal_first_pass_complete"],
+            manifest["group_progress"]["normal_first_pass_complete"],
+        )
+
+        if pending:
+            descriptor_path = ROOT / index["descriptor_path_template"].format(
+                snapshot_id=index["snapshot_id"],
+                sequence=index["next_pending_sequence"],
+            )
+            descriptor = json.loads(descriptor_path.read_text(encoding="utf-8"))
+            self.assertEqual(descriptor["sequence"], index["next_pending_sequence"])
+            self.assertEqual(descriptor["snapshot_id"], index["snapshot_id"])
+            self.assertEqual(
+                descriptor["prepared_required_sha256"],
+                index["prepared_required_sha256"],
+            )
+            self.assertEqual(descriptor["group_plan_sha256"], index["group_plan_sha256"])
+            self.assertEqual(
+                descriptor["web_evidence_contract_binding"],
+                current_binding,
+            )
 
 
 if __name__ == "__main__":
