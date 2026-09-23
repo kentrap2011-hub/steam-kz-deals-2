@@ -2,14 +2,14 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "validator-generator-parity-fix-2026-09-20",
+  "contract_revision": "semantic-bounded-retrieval-2026-09-23",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "parallel_validation_contract": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2-fail-closed-execution-ledger-v1",
+  "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
   "purpose": "Define the active semantic evidence policy for neutral Taste dossiers while leaving GitHub-owned scope, buffered transport, asynchronous strict validation/persistence, recovery and completeness in the existing control-plane contracts.",
   "supersedes": {
     "steam_appreviews_required": false,
@@ -355,7 +355,7 @@
     "found_and_used_rule": "requires_at_least_one_bound Russian-or-mixed player-feedback record that is either a valid stable_locator item or a valid transient_author_deduped concrete fallback item",
     "inverse_rule": "if_any_russian_or_mixed_player_feedback_record_is_actually_bound_to_an_observation_or_conflict_russian_attempt_must_be_found_and_used",
     "no_existence_signal_rule": "searched_no_existence_signal_is_allowed_only_after_bounded_good_faith_search_finds_no_reliable_exact_product_player_feedback_existence_signal_and_no_russian_or_mixed_record_is_bound",
-    "retrieval_unresolved_rule": "if_reliable_exact_product_russian_player_feedback_existence_is_established_but_no_contract_usable_attributable_item_level_russian_or_mixed_record_is_obtained_within_hard_bounds_classify_existence_established_retrieval_unresolved_and_do_not_publish_a_complete_dossier",
+    "retrieval_unresolved_rule": "if reliable exact-product Russian player-feedback existence is established but no contract-usable attributable item-level Russian or mixed record is obtained after all reasonably discoverable mandatory materially distinct retrieval routes are exhausted, classify existence_established_retrieval_unresolved and do not publish a complete dossier",
     "access_unresolved_rule": "if_reliable_exact_product_russian_player_feedback_existence_is_established_but_access_to_required_player_feedback_surface_prevents_item_level_resolution_classify_existence_established_access_unresolved_and_do_not_publish_a_complete_dossier",
     "existence_signal_definition": "reliable_exact_product_or_exact_appid_player_activity_evidence_such_as_nonzero_language_review_population_or_exact_product_community_player_activity;signal_is_discovery_state_only_not_player_feedback_record",
     "existence_signal_exact_identity_required": true,
@@ -397,25 +397,29 @@
       "localization_specific",
       "identity_ambiguous"
     ],
-    "stop_when": "additional_search_is_unlikely_to_materially_change_the_dossier",
+    "stop_when": "evidence_is_sufficient_or_all_reasonably_discoverable_mandatory_materially_distinct_routes_are_exhausted_or_a_directly_observed_runtime_tool_liveness_blocker_prevents_safe_continuation",
     "accepted_stop_reasons": [
       "evidence_stable",
-      "bounded_limit_reached"
+      "required_materially_distinct_routes_exhausted",
+      "runtime_tool_or_liveness_blocker"
     ],
     "hard_bounds_per_game": {
-      "max_web_search_queries": 8,
-      "max_opened_or_read_source_pages": 16
+      "max_web_search_queries": null,
+      "max_opened_or_read_source_pages": null,
+      "numeric_limits_active": false,
+      "counts_are_semantic_stop_gates": false,
+      "outer_runtime_boundary": "ordinary_invocation_runtime"
     },
     "critical_insufficiency_behavior": "fail_closed_no_dossier",
     "fixed_review_count_or_cursor_requirement": false,
     "russian_discovery": {
       "exact_identity_query": "use_exact_descriptor_title_plus_release_year_and_or_exact_appid",
       "russian_query_variants_required": true,
-      "site_specific_escalation": "if_ordinary_search_does_not_resolve_the_russian_attempt_and_budget_remains_try_a_relevant_site_specific_player_feedback_or_community_search",
+      "site_specific_escalation": "if ordinary search does not resolve the Russian attempt and a materially distinct relevant player-feedback/community route remains reasonably discoverable, try that promising route; do not enumerate sites",
       "steam_community_guidance": "exact_product_steam_community_discussion_or_review_surfaces_are_a_natural_option_when_they_exist",
-      "after_existence_signal": "direct_remaining_bounded_search_toward_contract_usable_attributable_item_level_russian_or_mixed_records_instead_of_repeating_aggregate_or_list_lookups",
+      "after_existence_signal": "continue toward contract-usable attributable item-level Russian or mixed records through mandatory or materially promising distinct routes; do not repeat aggregate/list variants",
       "fixed_source_quota": false,
-      "bounds_are_safety_ceilings_not_targets": true,
+      "bounds_are_safety_ceilings_not_targets": false,
       "retrieval_diversification": {
         "phase_trigger": "reliable_exact_product_russian_player_feedback_existence_established_and_no_usable_russian_or_mixed_item_yet",
         "goal": "obtain_contract_usable_attributable_item_level_russian_or_mixed_player_feedback_without_weakening_exact_product_identity",
@@ -428,9 +432,9 @@
           "pikabu_or_analogous_public_user_generated_discussions",
           "other_credible_public_player_feedback"
         ],
-        "first_failed_surface_rule": "if_the_first_reasonable_retrieval_surface_yields_only_aggregate_list_non_item_or_otherwise_unusable_evidence_and_query_or_page_budget_remains_the_worker_must_try_at_least_one_materially_different_public_player_feedback_surface_class_when_reasonably_discoverable",
-        "continued_diversification_rule": "after_the_first_materially_different_surface_if_retrieval_is_still_unresolved_and_budget_remains_continue_adaptively_to_the_most_promising_reasonably_discoverable_distinct_player_feedback_surface_classes_until_a_usable_item_is_found_a_hard_bound_is_reached_or_no_reasonably_discoverable_distinct_surface_class_remains",
-        "same_surface_diminishing_return_rule": "repeated_same_domain_or_same_surface_aggregate_list_index_query_variants_after_existence_proof_have_diminishing_return_and_must_not_consume_budget_ahead_of_reasonably_discoverable_distinct_item_level_player_feedback_surfaces",
+        "first_failed_surface_rule": "if the first reasonable retrieval surface yields only aggregate, list, non-item, or otherwise unusable evidence, the worker must try at least one materially different public player-feedback surface class when one is reasonably discoverable and safe",
+        "continued_diversification_rule": "after the first materially different surface, if retrieval is still unresolved, continue adaptively to the most promising reasonably discoverable distinct player-feedback surface classes until a usable item is found, all required materially distinct routes are exhausted, or a directly observed runtime/tool/liveness blocker prevents safe continuation",
+        "same_surface_diminishing_return_rule": "repeated same-domain or same-surface aggregate/list/index/query variants after existence proof are materially equivalent and must not be retried ahead of reasonably discoverable distinct item-level player-feedback surfaces",
         "materially_different_rule": "a_surface_class_must_represent_a_different_public_player_feedback_mechanism_or_community_context_not_merely_another_query_variant_or_collection_page_on_the_same_surface",
         "professional_or_editorial_counts_as_player_feedback_surface": false,
         "steam_required_as_retrieval_source": false,
@@ -438,7 +442,8 @@
         "visit_all_surface_classes_required": false,
         "premature_unresolved_allowed_with_budget_and_reasonably_discoverable_distinct_surface": false,
         "exact_product_identity_rules_still_apply": true
-      }
+      },
+      "numeric_search_or_page_ceiling_active": false
     },
     "transient_author_fallback": {
       "order": [
@@ -446,9 +451,23 @@
         "if_unavailable_but_concrete_item_and_author_are_visibly_distinguishable_use_author_transiently_for_dedupe",
         "persist_no_author_identity",
         "serialize_reduced_strength_fallback",
-        "do_not_repeat_neutral_locator_chasing_after_valid_fallback_when_stronger_evidence_is_not_reasonably_obtainable_within_remaining_budget"
+        "do_not_repeat_neutral_locator_chasing_after_valid_fallback_without_a_materially_new_factual_lead"
       ],
-      "hard_bounds_unchanged": true
+      "hard_bounds_unchanged": false,
+      "numeric_search_page_limits_active": false,
+      "semantic_bounded_stopping_required": true
+    },
+    "semantic_boundedness": {
+      "numeric_query_or_page_count_is_stop_gate": false,
+      "materially_equivalent_route_retry_forbidden": true,
+      "route_revisit_requires_material_new_factual_lead": true,
+      "discovery_rule": "choose_the_most_promising_materially_distinct_public_player_feedback_surface_not_arbitrary_site_enumeration",
+      "fail_closed_rule": "when_all_reasonably_discoverable_mandatory_materially_distinct_routes_are_exhausted_and_critical_evidence_is_still_insufficient",
+      "safe_invocation_stop_conditions": [
+        "ordinary_invocation_runtime_ended",
+        "snapshot_plan_or_binding_changed",
+        "directly_observed_tool_or_transport_blocker"
+      ]
     }
   },
   "accepted_evidence_statuses": [
