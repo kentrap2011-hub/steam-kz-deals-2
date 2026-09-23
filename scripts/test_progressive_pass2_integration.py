@@ -282,13 +282,20 @@ def main():
         < pass2_ingest.index('progressive_pass2.process_result_documents(')
     )
 
-    # DEEP-INT-09B: canonical execution receipts are optional for a normal semantic
-    # result ingest. Staging must tolerate the directory not existing yet.
+    # DEEP-INT-09B: canonical execution receipts and the reconciled Dossier inbox
+    # are optional for a normal semantic result ingest. Production staging must use
+    # the tested helper instead of making either absent path a fatal pathspec.
     pass2_workflow = read('.github/workflows/ingest-progressive-pass2.yml')
+    pass2_stager = read('scripts/stage_progressive_pass2_canonical_writer.sh')
+    assert 'bash scripts/stage_progressive_pass2_canonical_writer.sh' in pass2_workflow
     assert (
-        'git add -A -- data/cache/progressive_pass2_execution_receipts '
-        '2>/dev/null || true'
-    ) in pass2_workflow
+        'stage_optional_path data/cache/progressive_pass2_execution_receipts'
+    ) in pass2_stager
+    assert (
+        'stage_optional_path data/ai_inbox/taste_steam_review_dossiers'
+    ) in pass2_stager
+    assert 'data/cache/progressive_pass2_state.json' in pass2_stager
+    assert 'data/production/pre_ai/progressive_pass2_work.json' in pass2_stager
     assert (
         'progressive_pass2.CANONICAL_EXECUTION_RECEIPTS.mkdir('
         'parents=True, exist_ok=True)'
