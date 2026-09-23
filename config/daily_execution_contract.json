@@ -134,18 +134,31 @@
     "rule": "Phase A deterministic progressive publication remains the fallback availability model underneath active Phase B PASS 1. It must remain publishable whenever PASS 1 is open or partially progressed.",
     "ui_rule": "The site remains a read-only consumer of the GitHub-produced progressive payload.",
     "pass1_active": false,
-    "pass2_active": false
+    "pass2_active": true
   },
   "progressive_personalization_phase_b_pass1": {
     "contract": "config/progressive_pass1_contract.json",
     "status": "active",
     "pass1_active": true,
-    "pass2_active": false,
+    "pass2_active": true,
     "publication_waits_for_pass1_completion": false,
     "item_level_progress": true,
     "one_attempt_per_current_item_binding": true,
     "commercial_refresh_does_not_reset_semantic_attempts": true,
     "phase_a_catalogue_remains_fallback": true,
     "rule": "GitHub prepares and accepts independent PASS 1 item work while the current deterministic catalogue remains publishable. Accepted progress may rebuild the visual immediately; remaining PASS 1 work never blocks publication."
+  },
+  "progressive_personalization_phase_c_pass2": {
+    "contract": "config/progressive_pass2_contract.json",
+    "status": "active",
+    "pass2_active": true,
+    "user_stage": "deep",
+    "control_plane_owner": "github",
+    "scheduled_chatgpt_role": "bounded_deep_semantic_data_plane_only",
+    "scheduler_title": "Progressive Deep Worker",
+    "scheduler_matching_task_cardinality": 1,
+    "scheduler_timezone": "Europe/Samara",
+    "scheduler_schedule": "RRULE:FREQ=HOURLY;BYMINUTE=30;BYSECOND=0",
+    "rule": "Deep is an independently recurring bounded semantic data-plane stage. GitHub owns scope, order, normal-first-pass accounting, recovery authorization, persistence, recomputation and completeness; exactly one matching Deep/PASS2 Scheduled Task may execute only GitHub-prepared current work."
   }
 }
