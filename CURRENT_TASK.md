@@ -737,5 +737,5 @@
 - canonical `Ingest Progressive PASS 2 item` run `35812648739`, attempt 4, succeeded and persisted the existing result as commit `f3030a14bb458bba6f2b6d108d82f1448678df9d`;
 - first-live-acceptance accounting: Deep attempted `1`, authoritative `0`, incomplete/recovery `1`, recovery-owned `1`, recovery attempts `0`, ready/pending `27`; `Monster Train` left normal pending and sibling `Monaco` advanced to sequence 1;
 - downstream visual rebuild run `35815602097` succeeded and committed `c77453370f4d69ed7e6dcbe4985e16cf75816c85`;
-- all ACT-01..16 gates are PASS; ACT-17 is being closed by final durable report reread/commit;
+- all ACT-01..17 gates are PASS; final durable report reread is recorded in commit `0f3ca7962bc959cd1aeef3a100e1353bbd8a451d`;
 - durable report: `reviews/worker_reports/progressive-deep-production-activation-live-acceptance-01.md`.
