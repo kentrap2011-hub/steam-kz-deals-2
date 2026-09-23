@@ -251,7 +251,7 @@ Acceptance for that task should also retest the two current Deep examples. If th
 - **DIAG-10 PASS** — workers demonstrably execute: Fast advanced from task snapshot 86 -> 91 attempts; Deep has accepted first-pass results; zero means zero useful completion, not zero execution.
 - **DIAG-11 PASS** — no production/scheduler/recovery/source/config/state/work/result mutation performed; only this report is written.
 - **DIAG-12 PASS** — repair owner/contract boundary named; GitHub remains control-plane owner.
-- **DIAG-13 PENDING UNTIL COMMIT/REREAD** — satisfied only after this report is committed to and reread from fresh `main`.
+- **DIAG-13 PASS** — report was committed to `main` as `cae00fb479e6dc4380ffa74cdf9ed8e011cc3861` and reread from fresh `main`; final closeout revision is reread again after this marker is persisted.
 
 ## 13. Key exact refs
 
