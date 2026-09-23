@@ -1,0 +1,57 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "4531598188b3d3173e38363c46f202f6eb02f78a4ec56e1775632cfde45fbbfd",
+  "prepared_required_sha256": "99513acf2e8d02e8aea9080677ea9ea358952f913274ad5d696d4bb692483e14",
+  "group_plan_sha256": "37887d5c1239f845e6423a3c0897c2c8ba8e1282a7c2062afc9133fa30e2d1cf",
+  "group_count": 173,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+  },
+  "sequence": 122,
+  "start_index": 363,
+  "end_index_exclusive": 366,
+  "appids": [
+    "397540",
+    "397950",
+    "405820"
+  ],
+  "items_sha256": "fbc2b2222f951152ccb053e9186a6fd7a87d9997b2ab24f6056de65976cbe5f7",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "f27aea7aba5ca50601f89e3f25ffa735f2829d1fad26fd70e1031c1651686edc",
+  "items": [
+    {
+      "key": "App_397540",
+      "appid": "397540",
+      "title": "Borderlands 3",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_397540.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_397950",
+      "appid": "397950",
+      "title": "Clustertruck",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_397950.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_405820",
+      "appid": "405820",
+      "title": "Turok",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_405820.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "5fcfbe3aea8dece4724d20c78331eca76e77697ffcb2adc642e10bff7cf8c673"
+}
