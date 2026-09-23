@@ -261,6 +261,10 @@ def main():
     recovery_workflow = read('.github/workflows/authorize-progressive-pass2-recovery.yml')
     for workflow in (pass1_workflow, dossier_workflow, daily_workflow):
         assert 'python scripts/build_progressive_pass2_work.py' in workflow
+    pass1_stager = read('scripts/stage_progressive_pass1_canonical_writer.sh')
+    assert 'bash scripts/stage_progressive_pass1_canonical_writer.sh' in pass1_workflow
+    assert 'data/production/pre_ai/progressive_pass2_work.json' in pass1_stager
+    for workflow in (dossier_workflow, daily_workflow):
         assert 'data/production/pre_ai/progressive_pass2_work.json' in workflow
     for workflow in (
         pass1_workflow, dossier_workflow, daily_workflow, pass2_workflow, recovery_workflow
