@@ -742,11 +742,14 @@
 
 
 ### Progressive PASS 1 coactive ingest recovery fix 01
-Статус: `in_progress_commit_stage_fix`.
+Статус: `blocked_pending_second_operator_dispatch_authorization`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PASS1_COACTIVE_INGEST_RECOVERY_FIX_01.md`;
 - coactive ingest guard/regression/validation coverage remain complete on `main`;
 - authorized operator dispatch run `35863646555`, job `107189704142`: PASS 1 ingest, PASS 2 recompute and PASS 1 revalidation succeeded, then canonical commit failed only because optional Dossier inbox path `data/ai_inbox/taste_steam_review_dossiers` was absent;
-- failed run workspace processed 5 already-present PASS 1 artifacts to 105 attempted / 455 remaining, but none of that state reached `main` because the commit step failed;
-- continuation scope: make optional Dossier inbox/quarantine/audit staging absence-safe, add focused regression tied to the production staging path, validate on fresh `main`;
-- no new workflow_dispatch and no Scheduled Task Run now are authorized in this continuation;
+- commit-stage fix complete: production workflow now uses `scripts/stage_progressive_pass1_canonical_writer.sh`; optional Dossier inbox/quarantine/audit paths are staged only when present or tracked, while required canonical paths remain strict;
+- focused regression `scripts/test_progressive_pass1_workflow_staging.py` covers absent optional paths, tracked deletions and new optional paths and is linked to the live workflow; existing Deep integration regression was updated to verify PASS 2 projection staging through the helper;
+- fresh-main validation run `35868415779`, job `107205837580`: success including PASS 1 canonical-writer staging regression and all relevant Progressive regressions;
+- latest fresh main after normal pre-AI/visual rebuild remains PASS 1 100 attempted / 460 remaining with 5 already-existing PASS 1 result artifacts pending; Friends vs Friends is still first;
+- failed dispatch proved those 5 current artifacts process to 105 attempted / 455 remaining before commit; no new dispatch was run by this continuation;
+- exact remaining recovery requires another existing-workflow ingest activation; the task amendment does not authorize a second operator `workflow_dispatch`, so Director/user approval is required before recovery can be completed;
 - durable report: `reviews/worker_reports/progressive-pass1-coactive-ingest-recovery-fix-01.md`.
