@@ -1,22 +1,35 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — NEW physical ЧАТ 2 — Taste Dossier worker prompt V2 alignment fix
+## ACCEPTED — Taste Dossier worker prompt V2 alignment fix
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_WORKER_PROMPT_V2_ALIGNMENT_FIX_01.md`
 
-Expected report:
+Report:
 `reviews/worker_reports/taste-dossier-worker-prompt-v2-alignment-fix-01.md`
 
-Mode:
-`IMPLEMENT / ACTIVATE / VALIDATE`
+Final status:
+`complete_ready_for_director_acceptance`
 
-Accepted diagnosis:
-- primary canonical Dossier worker prompt is stale on V1/`canonical_expected_sequence`;
-- current runtime prompt and GitHub worker index are V2 with `next_pending_sequence` / `pending_group_sequences`;
-- Scheduled worker correctly stopped fail-closed before dossier work;
-- fix is bounded to prompt/projection alignment plus anti-drift regression;
-- no Scheduled Task Run now is authorized in this task.
+Director acceptance:
+- primary canonical Dossier worker prompt is aligned to the active non-blocking V2 index/runtime;
+- stale V1/`canonical_expected_sequence` traversal text was removed without changing evidence/privacy/exact-app/create-only/ownership semantics;
+- live anti-drift regression now checks the primary prompt, runtime prompt, manifest, index, next descriptor and bindings;
+- canonical projection/binding was refreshed through the existing GitHub-owned build path;
+- current index is V2 with `next_pending_sequence=1`, 187 pending groups, 0 accepted, 0 failed, and a readable consistent `g000001` descriptor;
+- no Dossier candidate/progress/history was fabricated or manually advanced;
+- no Scheduled Task setting or Run now was used during implementation;
+- FIX-01..06 PASS.
+
+Key refs:
+- prompt implementation `17eba7f5ba616e53d45ef63ec835d35a4eb60913`;
+- anti-drift regression `5e068f5ed4c97e6b9372b4d0b9fd6f2f6836b2d0`;
+- canonical projection refresh `2ba1ef1aa197c7ab0076b302df32ba6e55b22e57`;
+- validation run `35875165680`;
+- report state reread from fresh main.
+
+Worker state:
+- this physical ЧАТ 2 is retired for independent future work.
 
 
 ## ACCEPTED — Progressive PASS 1 coactive ingest + recovery fix
