@@ -331,6 +331,16 @@ Current live status:
 Same-chat continuation:
 - existing physical ЧАТ 2 must repair this exact GitHub-owned ingest/revalidation regression within the same task, validate canonical persistence/recomputation, update and reread the durable report, and only then decide whether another operator run is needed.
 
+Repository recovery observed after the stale report:
+- PR #91 merged the live-state revalidation fix;
+- PR #92 and PR #93 fixed the optional PASS 2 execution-receipt staging/runtime-directory follow-up defects encountered while replaying the already-existing result;
+- existing Monster Train inbox result was canonically ingested in commit `f3030a14bb458bba6f2b6d108d82f1448678df9d`;
+- durable Deep state now records exactly 1 normal-first-pass attempt for Monster Train with `analysis_incomplete / insufficient_evidence`, `recovery_owned=true`;
+- current Deep work reports 27 ready/pending, 1 attempted, 1 incomplete/recovery, and 559 normal-first-pass remaining;
+- daily visual payload rebuilt successfully after that ingest;
+- durable worker report is still stale at `needs_fix`, so Director acceptance is withheld until the same physical ЧАТ 2 updates and rereads its report from fresh main;
+- no second manual `Run now` is needed to prove recovery of the first result.
+
 ## ACCEPTED — Taste Dossier g000012 existing-artifact collision diagnostic
 
 Task:
