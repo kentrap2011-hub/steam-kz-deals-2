@@ -852,3 +852,12 @@
 - `Build daily visual payload` run `35909184960` succeeded; `Deploy visual mailing` run `35909243926` succeeded, including UI regressions and Pages deploy;
 - durable report: `reviews/worker_reports/progressive-site-stage-icons-statistics-ui-01.md`, initial report commit `8bfa6996e93daad8173ea17f306b307edb93bf5f`.
 
+## Worker in progress — 2026-09-24
+
+### Progressive stage indicator completion + Statistics copy fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_PROGRESSIVE_SITE_STAGE_INDICATOR_COMPLETION_STATS_COPY_FIX_01.md`;
+- scope: keep exactly three Fast/Dossier/Deep card indicators, make the lit treatment mean completed stage only, and replace technical Statistics wording with clear Russian copy plus compact count explanations;
+- architecture preflight: GitHub remains owner of stage truth and aggregate counts; browser remains presentation-only; no queue/retry/scheduler/semantic outcome/denominator/ranking/attempt/recovery ownership changes are authorized;
+- no Scheduled Task action or semantic production run is authorized.
+
