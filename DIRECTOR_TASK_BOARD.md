@@ -1,5 +1,35 @@
 # DIRECTOR TASK BOARD
 
+## ACTIVE — ЧАТ 1 — Taste Dossier semantic bounded retrieval
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_SEMANTIC_BOUNDED_RETRIEVAL_01.md`
+
+Report:
+`reviews/worker_reports/taste-dossier-semantic-bounded-retrieval-01.md`
+
+Mode:
+`IMPLEMENT`
+
+Worker slot:
+- **НОВЫЙ физический ЧАТ 1**;
+- do not reuse the retired prior Chat 1 conversation.
+
+User authorization:
+- user explicitly approved replacing the small hard per-game web-search query-count ceiling with semantic/adaptive bounded stopping.
+
+Goal:
+- remove the hard 8-search query-count stop gate;
+- preserve adaptive evidence-sufficient stopping, mandatory materially distinct route completion, anti-equivalent-retry behavior, fail-closed semantics, exact-product/Russian/identity/privacy rules, and GitHub control-plane ownership;
+- preserve the current 16 opened/read page ceiling unless a proven contradiction requires a separate decision;
+- update the fail-closed ledger/regressions so query count remains at most diagnostic and cannot cause `search budget exhausted` by itself;
+- no Scheduled Task UI action and no production Dossier run.
+
+Expected final status:
+- `complete_ready_for_director_acceptance`
+- `needs_user_decision`
+- `blocked`
+
 ## ACCEPTED — Taste Dossier clean Scheduled Task regulation
 
 Task:
