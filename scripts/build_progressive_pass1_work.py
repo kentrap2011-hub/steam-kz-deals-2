@@ -152,7 +152,7 @@ def build_work_document(now=None):
         'contract': 'PROGRESSIVE-PASS1-WORK-V1',
         'phase': 'phase_b_pass1',
         'pass1_active': True,
-        'pass2_active': False,
+        'pass2_active': True,
         'semantic_generation_id': generation['semantic_generation_id'],
         'semantic_bindings': generation['bindings'],
         'source_mailing_updated_at_utc': projection.get('source_mailing_updated_at_utc'),
