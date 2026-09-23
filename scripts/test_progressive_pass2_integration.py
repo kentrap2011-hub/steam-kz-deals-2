@@ -278,8 +278,8 @@ def main():
         < pass2_ingest.index('progressive_pass2.process_result_documents(')
     )
 
-    # DEEP-INT-10: repository activation is consistent everywhere and activation
-    # itself consumes zero attempts.
+    # DEEP-INT-10: repository activation is consistent everywhere while live
+    # production state remains allowed to advance after accepted Deep ingest.
     pass2_contract = json.loads(read('config/progressive_pass2_contract.json'))
     pass1_contract = json.loads(read('config/progressive_pass1_contract.json'))
     personalization = json.loads(read('config/progressive_personalization_contract.json'))
@@ -303,8 +303,15 @@ def main():
     assert daily['progressive_personalization_phase_c_pass2']['pass2_active'] is True
     assert pass2_contract['scheduler']['canonical_title'] == 'Progressive Deep Worker'
     assert pass2_contract['scheduler']['matching_task_cardinality'] == 1
-    assert pass2_state == core.empty_pass2_state()
-    assert pass2_work.get('scope', {}).get('deep_first_pass_attempted_count', 0) == 0
+    core.assert_persisted_projection_invariants(
+        pass2_state,
+        pass2_work.get('scope') or {},
+        pass2_work.get('items') or [],
+    )
+    # A consumed unresolved first pass is a legitimate non-empty production state.
+    # Regression validation must accept it instead of pinning production to activation-era zero.
+    assert unresolved['entries']
+    core.assert_persisted_projection_invariants(unresolved, first['counts'], first['items'])
 
     print('progressive Deep FAST-DOSSIER-DEEP integration regression: ok')
 
