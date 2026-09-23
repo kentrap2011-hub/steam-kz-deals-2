@@ -1,5 +1,43 @@
 # DIRECTOR TASK BOARD
 
+## ACTIVE — ЧАТ 1 — Stage indicator completion + Statistics copy fix
+
+Task:
+`WORKER_TASK_PROGRESSIVE_SITE_STAGE_INDICATOR_COMPLETION_STATS_COPY_FIX_01.md`
+
+Report:
+`reviews/worker_reports/progressive-site-stage-indicator-completion-stats-copy-fix-01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Worker slot:
+- **НОВЫЙ физический ЧАТ 1**;
+- do not reuse the retired prior Chat 1 conversation.
+
+User authorization:
+- user visually inspected the deployed site and explicitly approved this follow-up correction.
+
+Goal:
+- keep exactly three card stage icons with no extra visible state glyphs;
+- an icon is bright/lit only when that exact stage is truly complete;
+- Fast/Deep incomplete/error/pending/recovery remain dim; Dossier lights only when accepted;
+- replace technical Statistics wording (`authoritative`, `Fast-scope`, `Dossier-scope`, `Deep-покрытие`) with clear Russian;
+- rename Fast `Попытки` to `Обработано` and explain its arithmetic vs completed/incomplete/error buckets;
+- preserve all producer semantics, ranking, visibility and scheduler boundaries.
+
+Architecture:
+- GitHub remains owner of stage truth/counts;
+- browser remains presentation-only;
+- no producer semantic/denominator change is expected;
+- no scheduler/queue/retry/recovery ownership change is authorized.
+
+Expected final status:
+- `complete_ready_for_director_acceptance`
+- `needs_fix`
+- `needs_user_decision`
+- `blocked`
+
 ## ACCEPTED — ЧАТ 1 — Progressive site stage icons + Statistics UI
 
 Task:
