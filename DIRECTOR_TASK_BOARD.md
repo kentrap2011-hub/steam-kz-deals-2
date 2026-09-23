@@ -393,6 +393,12 @@ Next step:
 - do not create a duplicate task.
 
 
+Operator follow-up:
+- user confirmed the existing `Taste Steam Review Dossier` Scheduled Task was returned to normal operation;
+- no duplicate task was created;
+- continue normal cadence; no manual `Run now` is required solely for the accepted liveness fix;
+- if a new create-only collision or canonical pending/artifact mismatch recurs, reopen diagnostics from fresh canonical state rather than retrying/overwriting.
+
 ## DRAFT / NOT AUTHORIZED — Progressive site progress header compaction
 
 Task:
