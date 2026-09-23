@@ -15,7 +15,7 @@ git add -A -- \
 
 stage_optional_path() {
   local path="$1"
-  if [[ -e "$path" || -L "$path" ]] || git ls-files -- "$path" | grep -q .; then
+  if [[ -e "$path" || -L "$path" ]] || [[ -n "$(git ls-files -- "$path")" ]]; then
     git add -A -- "$path"
   fi
 }
