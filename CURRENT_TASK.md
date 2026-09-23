@@ -739,3 +739,11 @@
 - downstream visual rebuild run `35815602097` succeeded and committed `c77453370f4d69ed7e6dcbe4985e16cf75816c85`;
 - all ACT-01..17 gates are PASS; final durable report reread is recorded in commit `0f3ca7962bc959cd1aeef3a100e1353bbd8a451d`;
 - durable report: `reviews/worker_reports/progressive-deep-production-activation-live-acceptance-01.md`.
+
+
+### Progressive PASS 1 coactive ingest recovery fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_PROGRESSIVE_PASS1_COACTIVE_INGEST_RECOVERY_FIX_01.md`;
+- scope: исправить stale PASS 1 ingest activation guard для canonical `pass1_active=true / pass2_active=true`, добавить focused regression и validation coverage, затем канонически ingest уже существующего Friends vs Friends artifact;
+- recovery: только existing GitHub-owned `.github/workflows/ingest-progressive-pass1.yml`; semantic re-execution, manual state/count edits и Scheduled Task Run now запрещены;
+- durable report: `reviews/worker_reports/progressive-pass1-coactive-ingest-recovery-fix-01.md`.
