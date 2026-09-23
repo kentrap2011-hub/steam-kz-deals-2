@@ -767,3 +767,13 @@
 - fresh-main V2 index: snapshot `bae494b435e752f23beea70ee238d7f480f45cf94d9d27e8827525bb4b67fc09`, 187 groups, next pending `g000001`, accepted/failed/pending `0/0/187`;
 - no Dossier candidate was created; no Dossier Scheduled Task run/settings change was performed; Fast/Deep behavior/source/state/attempt history was not modified;
 - durable report: `reviews/worker_reports/taste-dossier-worker-prompt-v2-alignment-fix-01.md`.
+
+## Worker in progress — 2026-09-23
+
+### Taste Dossier clean scheduled task regulation 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_CLEAN_SCHEDULED_TASK_REGULATION_01.md`;
+- scope: prepare only the canonical copy-paste entry/bootstrap regulation for a future NEW external Dossier Scheduled Task/chat;
+- no Scheduled Task create/edit/run action is authorized in this worker task;
+- GitHub control-plane and current V2 Dossier ownership boundaries must remain unchanged.
+
