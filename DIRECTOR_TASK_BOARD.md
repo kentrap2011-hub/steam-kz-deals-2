@@ -32,6 +32,14 @@ Live continuation:
 - same physical Chat 2 continues this unfinished task to fix only this GitHub-owned staging defect and regression coverage;
 - no second operator workflow dispatch is authorized yet; worker must stop after fix/validation and report whether it is required.
 
+Current closeout state:
+- coactivation ingest defect fixed and validated;
+- optional Dossier-path commit/staging defect fixed and regression-covered;
+- first operator dispatch proved ingest/recompute/revalidation but failed before canonical commit;
+- current canonical PASS 1 remains 100 attempted / 460 remaining with 5 existing inbox artifacts;
+- one additional operator `workflow_dispatch` of the existing PASS 1 ingest workflow is required to finish canonical recovery;
+- second dispatch requires Director/user approval; no Scheduled Task Run now is needed.
+
 
 ## ACCEPTED — Progressive Fast/Deep coactivation stale-guard audit
 
