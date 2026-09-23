@@ -8,7 +8,7 @@
   <title>Игры со скидками</title>
   <link rel="icon" href="icon.svg?v=shortcut-icon-1" type="image/svg+xml" sizes="any">
   <link rel="manifest" href="manifest.webmanifest?v=shortcut-icon-1">
-  <link rel="stylesheet" href="styles.css?v=progressive-personalization-phase-a-01">
+  <link rel="stylesheet" href="styles.css?v=progressive-site-stage-icons-statistics-ui-01">
   <link rel="stylesheet" href="giveaway-ui.css?v=giveaway-separate-view-fix-01">
   <link rel="stylesheet" href="purchase-options.css?v=compact-purchase-options-1">
   <link rel="stylesheet" href="score-details.css?v=detailed-score-ui-fix-1">
@@ -21,14 +21,11 @@
           <h1>Игры со скидками</h1>
           <div id="freshness" class="muted small"></div>
         </div>
-        <button id="searchBtn" class="icon-btn" type="button" aria-label="Поиск">⌕</button>
+        <div class="top-actions">
+          <button id="statisticsBtn" class="statistics-entry" type="button" aria-pressed="false">Статистика</button>
+          <button id="searchBtn" class="icon-btn" type="button" aria-label="Поиск">⌕</button>
+        </div>
       </div>
-
-      <div id="stats" class="stats" aria-label="Статистика"></div>
-      <section class="processing-summary" aria-label="Прогресс персонального разбора">
-        <div id="processingStats" class="processing-stats"></div>
-        <div id="processingUpdated" class="muted small processing-updated"></div>
-      </section>
 
       <nav class="tabs" aria-label="Разделы">
         <button class="tab active" data-tab="feed" type="button">Лента <span id="feedCount"></span></button>
@@ -69,8 +66,10 @@
           </div>
 
           <div class="content">
-            <div id="analysisBadge" class="analysis-badge"></div>
-            <div id="decision" class="decision-pill"></div>
+            <div class="card-status-row">
+              <div id="stageIndicators" class="stage-indicators" aria-label="Этапы персонального разбора"></div>
+              <div id="decision" class="decision-pill"></div>
+            </div>
             <h2 id="title"></h2>
             <div id="deadline" class="deadline"></div>
 
@@ -127,6 +126,17 @@
         <div class="swipe-help"><span><b>свайп ←</b><br>следующая игра</span><span><b>свайп →</b><br>предыдущая игра</span></div>
       </section>
 
+      <section id="statisticsView" class="hidden list-view statistics-view" aria-label="Статистика персонального разбора">
+        <div class="statistics-view-head">
+          <button id="statisticsBackBtn" class="small-btn" type="button">← Назад</button>
+          <div>
+            <h2>Статистика</h2>
+            <p class="muted small">Fast, Dossier и Deep показаны отдельно — каждый со своим текущим scope.</p>
+          </div>
+        </div>
+        <div id="stageStatistics" class="statistics-stage-list"></div>
+      </section>
+
       <section id="giveawayView" class="hidden list-view giveaway-view" aria-label="Бесплатные раздачи">
         <div class="giveaway-view-head">
           <button class="small-btn" type="button" data-giveaway-exit>← Назад</button>
@@ -153,8 +163,8 @@
   <div id="toast" class="toast" aria-live="polite"></div>
   <script src="feed-bootstrap.js?v=mobile-feed-instant-cache-fix-01"></script>
   <script src="giveaway-ui.js?v=giveaway-separate-view-fix-01"></script>
-  <script src="progressive-personalization-ui.js?v=phase-a-01"></script>
-  <script src="app.js?v=progressive-personalization-phase-a-01"></script>
+  <script src="progressive-personalization-ui.js?v=progressive-site-stage-icons-statistics-ui-01"></script>
+  <script src="app.js?v=progressive-site-stage-icons-statistics-ui-01"></script>
   <script src="paid-freshness-ui.js?v=visual-main-list-refresh-handoff-implement-01"></script>
   <script src="image-swipe-sync.js?v=image-swipe-sync-1"></script>
   <script src="package-deal-ui.js?v=compact-purchase-options-1"></script>
