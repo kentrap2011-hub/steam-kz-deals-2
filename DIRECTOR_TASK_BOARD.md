@@ -1,5 +1,37 @@
 # DIRECTOR TASK BOARD
 
+## ACTIVE — ЧАТ 1 — Progressive PASS 2 optional Dossier inbox staging recovery fix
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PASS2_OPTIONAL_DOSSIER_INBOX_STAGING_RECOVERY_FIX_01.md`
+
+Report:
+`reviews/worker_reports/progressive-pass2-optional-dossier-inbox-staging-recovery-fix-01.md`
+
+Mode:
+`IMPLEMENT`
+
+Worker slot:
+- **НОВЫЙ физический ЧАТ 1**;
+- do not reuse the retired prior Chat 1 conversation.
+
+Confirmed blocker:
+- `Ingest Progressive PASS 2 item` run `35900791199` accepted one current result in the working tree, then failed persistence because the commit step treated absent optional path `data/ai_inbox/taste_steam_review_dossiers` as mandatory;
+- current main still has 9 Deep ready/pending and 0 current first-pass attempts persisted;
+- exact current Shadow Warrior 3 result artifact already exists and must be canonically ingested without semantic rerun.
+
+Goal:
+- make optional Dossier inbox staging absence-safe inside the existing shared canonical-writer workflow;
+- add focused regression;
+- preserve create-only transport, exact bindings, attempt accounting, Dossier reconciliation and shared concurrency ownership;
+- recover already-created current PASS 2 artifact through the existing GitHub-owned ingest path when tooling permits;
+- no ChatGPT Scheduled Task action and no Deep semantic rerun.
+
+Expected final status:
+- `complete_ready_for_director_acceptance`
+- `needs_user_decision`
+- `blocked`
+
 ## ACCEPTED — Taste Dossier semantic bounded retrieval
 
 Task:
