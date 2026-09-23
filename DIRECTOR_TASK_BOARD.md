@@ -1,44 +1,38 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — NEW physical ЧАТ 2 — Progressive PASS 1 coactive ingest + recovery fix
+## ACCEPTED — Progressive PASS 1 coactive ingest + recovery fix
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PASS1_COACTIVE_INGEST_RECOVERY_FIX_01.md`
 
-Expected report:
+Report:
 `reviews/worker_reports/progressive-pass1-coactive-ingest-recovery-fix-01.md`
 
-Mode:
-`IMPLEMENT / ACTIVATE / VALIDATE`
+Final status:
+`complete_ready_for_director_acceptance`
 
-Authorized scope:
-- fix the stale PASS 1 ingest activation guard for canonical Fast+Deep coactivation;
-- add focused regression and validation workflow coverage;
-- reconcile stale pre-activation route/decision wording;
-- consume the already-existing exact Friends vs Friends artifact through the existing GitHub-owned ingest path without semantic re-execution;
-- one bounded GitHub workflow_dispatch of the existing PASS 1 ingest workflow is authorized after the fix is live if required.
+Director acceptance:
+- PASS 1 coactive Fast+Deep ingest guard is corrected and fail-closed for incompatible activation states;
+- focused activation and staging regressions are live in the validation surface;
+- optional Dossier-path absence no longer breaks the canonical PASS 1 commit stage;
+- second operator workflow dispatch completed successfully as run `35870243352`;
+- canonical ingest commit `9c51743030d9f6cba62648a27b3a8f3d1af937f8` accepted all five already-existing PASS 1 artifacts without semantic re-execution;
+- PASS 1 advanced from 100 attempted / 460 remaining to 105 / 455;
+- Friends vs Friends was consumed exactly once from its original byte-identical artifact and no longer remains in work;
+- PASS 2 recompute succeeded without advancing Deep attempt/state accounting;
+- unrelated Fast/Dossier/Deep semantic histories were not rewritten;
+- downstream visual build/deploy succeeded;
+- FIX-01..10 PASS;
+- no further recovery action is required.
 
-Hard guard:
-- no new PASS 1 semantic result;
-- no overwrite/delete/rename of the existing artifact;
-- no manual PASS 1 state/count surgery;
-- no Scheduled Task mutation or Scheduled Task Run now;
-- no architecture change.
+Key refs:
+- final report commit `450602fd7c23b83aa5ce7bb1b4325148a4b90a98`;
+- successful recovery run `35870243352`;
+- canonical ingest commit `9c51743030d9f6cba62648a27b3a8f3d1af937f8`;
+- visual commit `c44825bf11c875f30cb534239170a627adc1ecd9`.
 
-Live continuation:
-- operator executed the authorized manual GitHub workflow dispatch;
-- PASS 1 ingest, PASS 2 recompute, and PASS 1 revalidation succeeded in the run;
-- commit stage failed because mandatory `git add` referenced absent optional path `data/ai_inbox/taste_steam_review_dossiers`;
-- same physical Chat 2 continues this unfinished task to fix only this GitHub-owned staging defect and regression coverage;
-- no second operator workflow dispatch is authorized yet; worker must stop after fix/validation and report whether it is required.
-
-Current closeout state:
-- coactivation ingest defect fixed and validated;
-- optional Dossier-path commit/staging defect fixed and regression-covered;
-- first operator dispatch proved ingest/recompute/revalidation but failed before canonical commit;
-- current canonical PASS 1 remains 100 attempted / 460 remaining with 5 existing inbox artifacts;
-- one additional operator `workflow_dispatch` of the existing PASS 1 ingest workflow is required to finish canonical recovery;
-- second dispatch requires Director/user approval; no Scheduled Task Run now is needed.
+Worker state:
+- this physical ЧАТ 2 is retired for independent future work.
 
 
 ## ACCEPTED — Progressive Fast/Deep coactivation stale-guard audit
