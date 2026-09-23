@@ -2,7 +2,7 @@
 
 ## Assignment
 
-- Worker slot: **NEW physical ЧАТ 3**
+- Worker slot: **NEW physical ЧАТ 2**
 - Mode: **DIAGNOSTIC / READ-ONLY**
 - Repository: `kentrap2011-hub/steam-kz-deals-2`
 - Source of truth: `main`
