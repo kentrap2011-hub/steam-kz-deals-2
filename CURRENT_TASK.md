@@ -718,10 +718,10 @@
 ## Worker in progress — 2026-09-22
 
 ### Progressive Deep production activation + live acceptance 01
-Статус: `phase_a_in_progress`.
+Статус: `blocked_external_operator_action`.
 - task: `WORKER_TASK_PROGRESSIVE_DEEP_PRODUCTION_ACTIVATION_LIVE_ACCEPTANCE_01.md`;
 - accepted model: `FAST-DOSSIER-DEEP-V1`;
-- Phase A scope: activate canonical Deep/PASS 2 repository truth, validate zero-attempt activation, then stop for the exact external Scheduled Task action;
+- Phase A complete: canonical Deep/PASS 2 repository truth is active, GitHub-owned recomputation is zero-attempt, and the task is stopped for the exact external Scheduled Task action;
 - no Deep semantic execution is allowed before repository activation is proven;
 - Phase B continues in this same physical worker chat after exactly one user `Run now`;
 - durable report: `reviews/worker_reports/progressive-deep-production-activation-live-acceptance-01.md`.
