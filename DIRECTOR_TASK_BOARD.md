@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — ЧАТ 1 — Taste Dossier clean Scheduled Task regulation
+## ACCEPTED — Taste Dossier clean Scheduled Task regulation
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_CLEAN_SCHEDULED_TASK_REGULATION_01.md`
@@ -8,27 +8,30 @@ Task:
 Report:
 `reviews/worker_reports/taste-dossier-clean-scheduled-task-regulation-01.md`
 
-Mode:
-`IMPLEMENT`
+Final status:
+`complete_ready_for_director_acceptance`
 
-Worker slot:
-- **НОВЫЙ физический ЧАТ 1**;
-- do not reuse an old retired Chat 1 conversation.
+Director acceptance:
+- a dedicated copy-paste Scheduled Task bootstrap now exists at `config/taste_steam_review_dossier_scheduled_task_regulation.md`;
+- every invocation is required to re-anchor to current `main` and current canonical Dossier/runtime/ownership contracts;
+- remembered chat state, old worker conclusions, prior snapshot/binding assumptions, and previous task state are explicitly non-authoritative without current-main revalidation;
+- V2 traversal via `next_pending_sequence` / `pending_group_sequences` is preserved and stale V1/`canonical_expected_sequence` behavior is forbidden;
+- invocation-level STOP/fail-closed/no-work/runtime failure is explicitly separated from recurring Scheduled Task lifecycle;
+- scheduler enable/disable/pause/delete/reschedule/rename/recreate/edit remains external operator-owned and worker-forbidden;
+- GitHub remains control plane for scope/order/projection/validation/persistence/progress/recovery/completeness;
+- semantic/evidence/privacy/exact-product behavior is referenced from current canonical contracts rather than forked;
+- no external Scheduled Task action, Run now, semantic production, recovery, or scheduler creation occurred;
+- REG-01..10 PASS;
+- the fresh-chat hypothesis remains unproven until a later controlled run.
 
-User authorization:
-- user explicitly asked to give a worker chat the task of creating a new Dossier regulation for a fresh external Scheduled Task/chat.
+Key refs:
+- regulation implementation commit `f911c0995eaf00ef3a4d4a433911cfe3e4bb1139`;
+- regulation blob `c4cc3564744ef2d44f8cacdc5aa694d8479e262c`;
+- durable report reread from fresh `main`.
 
-Goal:
-- create a concise copy-paste-ready Scheduled Task entry/bootstrap regulation from current `main`;
-- preserve current V2 Dossier semantics and GitHub control-plane ownership;
-- explicitly make invocation STOP non-authoritative for recurring task enable/disable/pause/delete/reschedule/edit;
-- treat prior chat context as non-authoritative versus current canonical repository state;
-- do not create/edit/run any external Scheduled Task in this worker task.
+Worker state:
+- this physical ЧАТ 1 is retired for independent future work.
 
-Expected final status:
-- `complete_ready_for_director_acceptance`
-- `needs_user_decision`
-- `blocked`
 
 ## ACCEPTED — Taste Dossier worker prompt V2 alignment fix
 
