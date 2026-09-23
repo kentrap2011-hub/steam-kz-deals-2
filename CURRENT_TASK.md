@@ -762,7 +762,7 @@
 - task: `WORKER_TASK_TASTE_DOSSIER_WORKER_PROMPT_V2_ALIGNMENT_FIX_01.md`;
 - primary prompt alignment: `17eba7f5ba616e53d45ef63ec835d35a4eb60913`;
 - live anti-drift regression: `5e068f5ed4c97e6b9372b4d0b9fd6f2f6836b2d0`;
-- canonical V2 binding/projection rebuild: build run `35875165680`, job `107229124431`, atomic pre-AI commit `2ba1ef1aa197c7ab0076b302df32ba6e55b22e57`;
+- canonical V2 binding/projection rebuild: build run `35875102006`, job `107228855031`, atomic pre-AI commit `2ba1ef1aa197c7ab0076b302df32ba6e55b22e57`; anti-drift validation run `35875165680`, job `107229124431`, success;
 - current binding: worker prompt SHA-256 `c5773cc9aebe7fc4fb7a2bb9444bab4c35c5b2c63102f995b183def102b59ed7`, runtime prompt SHA-256 `bfa4a7b5fac60eceefab5ce7f6cb8a01f0dc31fe39e998f45e80c8ae3515fe35`;
 - fresh-main V2 index: snapshot `bae494b435e752f23beea70ee238d7f480f45cf94d9d27e8827525bb4b67fc09`, 187 groups, next pending `g000001`, accepted/failed/pending `0/0/187`;
 - no Dossier candidate was created; no Dossier Scheduled Task run/settings change was performed; Fast/Deep behavior/source/state/attempt history was not modified;
