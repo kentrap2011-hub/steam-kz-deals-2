@@ -742,14 +742,14 @@
 
 
 ### Progressive PASS 1 coactive ingest recovery fix 01
-Статус: `blocked_pending_second_operator_dispatch_authorization`.
+Статус: `complete_ready_for_director_acceptance`.
 - worker task: `WORKER_TASK_PROGRESSIVE_PASS1_COACTIVE_INGEST_RECOVERY_FIX_01.md`;
-- coactive ingest guard/regression/validation coverage remain complete on `main`;
-- authorized operator dispatch run `35863646555`, job `107189704142`: PASS 1 ingest, PASS 2 recompute and PASS 1 revalidation succeeded, then canonical commit failed only because optional Dossier inbox path `data/ai_inbox/taste_steam_review_dossiers` was absent;
-- commit-stage fix complete: production workflow now uses `scripts/stage_progressive_pass1_canonical_writer.sh`; optional Dossier inbox/quarantine/audit paths are staged only when present or tracked, while required canonical paths remain strict;
-- focused regression `scripts/test_progressive_pass1_workflow_staging.py` covers absent optional paths, tracked deletions and new optional paths and is linked to the live workflow; existing Deep integration regression was updated to verify PASS 2 projection staging through the helper;
-- fresh-main validation run `35868415779`, job `107205837580`: success including PASS 1 canonical-writer staging regression and all relevant Progressive regressions;
-- latest fresh main after normal pre-AI/visual rebuild remains PASS 1 100 attempted / 460 remaining with 5 already-existing PASS 1 result artifacts pending; Friends vs Friends is still first;
-- failed dispatch proved those 5 current artifacts process to 105 attempted / 455 remaining before commit; no new dispatch was run by this continuation;
-- exact remaining recovery requires another existing-workflow ingest activation; the task amendment does not authorize a second operator `workflow_dispatch`, so Director/user approval is required before recovery can be completed;
+- coactive ingest guard, focused regression, validation coverage and optional Dossier staging fix are complete on `main`;
+- final operator dispatch run `35870243352`, job `107212138816`: all reconcile/validation/ingest/PASS 2 recompute/commit steps succeeded;
+- canonical ingest commit `9c51743030d9f6cba62648a27b3a8f3d1af937f8` accepted all 5 already-pending PASS 1 artifacts, advancing 100→105 attempted and 460→455 remaining;
+- Friends vs Friends work_id `4a85ac1f78ca5a8812a59631c715058f36032959b997b8be2504018c1100eed0` was consumed exactly once from the original unchanged artifact blob `5643b0ad29ffae4514350d93f99b748d1f487974`; it now has one accepted state entry and one receipt and is no longer in remaining work;
+- the 119 pre-existing Fast state entries were unchanged; Deep state blob stayed `7efdc20ade2ed66ae2770c0bf1184e925b9eea3e`; ingest commit changed no Dossier semantic-history file and only recomputed derived PASS 2 work;
+- PASS 2 recompute remained target 560 / first-pass attempted 1 / waiting Dossier 532 / ready-or-pending 27, with current Fast incomplete projection advancing 100→105;
+- downstream visual rebuild run `35870282561` and deploy run `35870360504` both succeeded;
+- no new workflow or Scheduled Task run was launched by the final verification chat;
 - durable report: `reviews/worker_reports/progressive-pass1-coactive-ingest-recovery-fix-01.md`.
