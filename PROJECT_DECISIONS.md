@@ -580,7 +580,7 @@
 ## PPD-005 — Deep eligibility recomputation wiring is reusable; old recovery-only predicate is superseded
 
 **Дата:** 2026-09-22  
-**Статус:** wiring implemented inactive; eligibility premise superseded by PPD-004; runtime predicate adaptation required before activation.
+**Статус:** historical pre-activation record; eligibility premise superseded by PPD-004. The old inactive/runtime-adaptation status is superseded in current production by active `FAST-DOSSIER-DEEP-V1` contracts.
 
 **Решение:** Progressive PASS 2 eligibility is a GitHub-owned derived projection, not a queue owned by a Scheduled Task. The same existing `scripts/build_progressive_pass2_work.py` / `scripts/progressive_pass2.py::recompute_eligibility` entrypoint is invoked after every canonical write class that can change current eligibility: accepted/recovered Dossier persistence, PASS 1 durable state persistence, daily pre-AI generation/binding/freshness rebuild, and future PASS 2 attempt persistence. These writers share the existing serialized `taste-steam-review-dossier-canonical-writer` GitHub Actions boundary so a later rebase cannot overwrite the PASS 2 projection with eligibility derived from older canonical inputs.
 
@@ -588,7 +588,7 @@
 
 **Freshness boundary:** daily preparation recomputes normal freshness/binding changes. Wall-clock expiry between GitHub writes does not create a new scheduler: prepared work carries the exact Dossier expiry, the future semantic worker checks expiry/binding immediately before starting an item, and GitHub recomputes authorization from current canonical truth immediately before accepting a PASS 2 result/terminal receipt. Expired or rebound work therefore cannot consume an attempt or become canonical.
 
-**Граница:** PASS 2 remains inactive until a separate accepted activation. Projection consumes zero attempts. Buffered/unaccepted/failed Dossier artifacts remain non-authoritative; PASS 1 semantics, Dossier evidence/identity/recovery semantics and site ranking are unchanged. No polling daemon, second queue owner, retry loop or additional recurring producer is created.
+**Граница (historical pre-activation, superseded):** at the time of this decision PASS 2 remained inactive until a separate accepted activation. Current production has since activated `FAST-DOSSIER-DEEP-V1`; the preserved invariants remain that projection consumes zero attempts, buffered/unaccepted/failed Dossier artifacts are non-authoritative, and no polling daemon, second queue owner, retry loop or additional recurring producer is created.
 
 **Сознательно отвергнуто:** Dossier-only hook; PASS1-only hook; daily-only reconciliation; ChatGPT-owned queue/retry state; a new expiry polling scheduler; separate unsynchronized PASS 2 projection writers.
 
@@ -600,7 +600,7 @@
 ## PPD-004 — Fast / Dossier / Deep are independent stages with Deep as eventual authority
 
 **Дата:** 2026-09-22  
-**Статус:** canonical architecture approved by user; Deep runtime adaptation required; production Deep remains inactive.
+**Статус:** canonical architecture; the former pre-activation note that Deep runtime adaptation was still required and production Deep was inactive is superseded. Current production runs active `FAST-DOSSIER-DEEP-V1` under the canonical Progressive contracts.
 
 **Решение:** Progressive personalization uses three related but independent stages. PASS 1 is user-facing **Быстрый разбор** and provides provisional early fit/not-fit/incomplete coverage. Taste Steam Review Dossier is user-facing **Подготовка досье**, remains neutral evidence preparation, and never decides fit/not-fit. PASS 2 is user-facing **Глубокий разбор** and is the eventual authoritative personalized analysis for every current eligible game.
 
@@ -616,6 +616,6 @@ Deep eligibility does **not** require a prior Fast attempt, Fast completion, or 
 
 **Preserved implementation:** existing GitHub-owned recomputation hooks after canonical Dossier persistence, Fast/PASS 1 persistence, daily/current identity/freshness preparation and future Deep/PASS 2 persistence are reusable, as are exact binding, liveness, zero-attempt projection and serialized ownership safeguards. The old recovery-only eligibility predicate and its activation plan are superseded and must not be activated.
 
-**Граница:** Deep/PASS 2 stays inactive. No Scheduled Deep worker is created/enabled/run, no Deep production attempt is consumed, no backlog is processed, Dossier evidence semantics and site ranking weights are unchanged, and final statistics/pixel-icon UI is deferred.
+**Граница (historical pre-activation, superseded):** at approval time Deep/PASS 2 stayed inactive and this decision itself did not create/enable/run a Scheduled Deep worker or consume backlog attempts. Current production has since activated Deep under `FAST-DOSSIER-DEEP-V1`; Dossier evidence semantics and site ranking weights remain unchanged, and activation did not transfer scheduler ownership into this decision record.
 
 **Основные места:** `config/progressive_personalization_contract.json`, `config/progressive_pass1_contract.json`, `config/progressive_pass2_contract.json`, `config/execution_ownership_contract.json`, `PROJECT_ROUTES.md`.
