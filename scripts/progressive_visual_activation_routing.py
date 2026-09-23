@@ -149,7 +149,7 @@ def processing_status_valid(status, visible_count):
         except (KeyError, TypeError, ValueError):
             return False
 
-    if status.get('pass1_active') is not True or status.get('pass2_active') is not False:
+    if status.get('pass1_active') is not True or status.get('pass2_active') is not True:
         return False
     return values['normal_visible_count'] == int(visible_count)
 
@@ -187,7 +187,7 @@ def progressive_visual_compatible(
         or progressive.get('phase') != 'phase_b'
         or progressive.get('pass1_active') is not True
         or progressive.get('pass2_implemented') is not True
-        or progressive.get('pass2_active') is not False
+        or progressive.get('pass2_active') is not True
     ):
         return False, 'progressive_state_block_incompatible'
 
