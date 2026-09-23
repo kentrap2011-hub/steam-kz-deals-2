@@ -143,27 +143,17 @@ jobs:
           cmp /tmp/progressive-pass2-state-before.json data/cache/progressive_pass2_state.json
           python - <<'PY'
           import json
+          import sys
           from pathlib import Path
+          sys.path.insert(0, 'scripts')
+          import test_progressive_pass2 as core
           contract=json.loads(Path('config/progressive_pass2_contract.json').read_text(encoding='utf-8'))
           work=json.loads(Path('data/production/pre_ai/progressive_pass2_work.json').read_text(encoding='utf-8'))
           state=json.loads(Path('data/cache/progressive_pass2_state.json').read_text(encoding='utf-8'))
           assert contract.get('active') is True
           assert work.get('pass2_active') is True
           scope=work.get('scope') or {}
-          assert state == {
-              'schema_version': 2,
-              'contract': 'PROGRESSIVE-PASS2-STATE-V2',
-              'entries': {},
-          }
-          assert int(scope.get('deep_first_pass_attempted_count') or 0) == 0
-          assert int(scope.get('deep_authoritative_completed_count') or 0) == 0
-          assert int(scope.get('deep_incomplete_or_recovery_count') or 0) == 0
-          assert int(scope.get('recovery_pending_count') or 0) == 0
-          assert len(work.get('items') or []) == int(scope.get('pass2_eligible_count') or 0)
-          assert int(scope.get('deep_total_current_coverage_target') or 0) == (
-              int(scope.get('deep_waiting_for_dossier_count') or 0)
-              + int(scope.get('deep_ready_or_pending_count') or 0)
-          )
+          core.assert_persisted_projection_invariants(state, scope, work.get('items') or [])
           print(
               'PROGRESSIVE_PASS2_ACTIVE_PROJECTION=PASS '
               + 'target=' + str(scope.get('deep_total_current_coverage_target'))

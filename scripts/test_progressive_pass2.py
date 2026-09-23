@@ -117,6 +117,30 @@ def empty_pass2_state():
     return {'schema_version': 2, 'contract': 'PROGRESSIVE-PASS2-STATE-V2', 'entries': {}}
 
 
+def assert_persisted_projection_invariants(state_doc, scope, items):
+    """Validate mutable production Deep state/work without requiring zero attempts."""
+    assert state_doc.get('schema_version') == 2
+    assert state_doc.get('contract') == 'PROGRESSIVE-PASS2-STATE-V2'
+    assert isinstance(state_doc.get('entries'), dict)
+
+    total = int(scope.get('deep_total_current_coverage_target') or 0)
+    attempted = int(scope.get('deep_first_pass_attempted_count') or 0)
+    authoritative = int(scope.get('deep_authoritative_completed_count') or 0)
+    incomplete = int(scope.get('deep_incomplete_or_recovery_count') or 0)
+    ready = int(scope.get('deep_ready_or_pending_count') or 0)
+    eligible = int(scope.get('pass2_eligible_count') or 0)
+
+    assert 0 <= authoritative <= attempted <= total
+    assert attempted == authoritative + incomplete
+    assert int(scope.get('pass2_attempted_count') or 0) == attempted
+    assert int(scope.get('deep_normal_first_pass_remaining_count') or 0) == total - attempted
+    assert int(scope.get('deep_remaining_until_all_authoritative_count') or 0) == total - authoritative
+    assert bool(scope.get('deep_normal_first_pass_complete')) == (attempted == total)
+    assert bool(scope.get('deep_all_current_authoritative_complete')) == (authoritative == total)
+    assert ready == eligible == len(items)
+    assert int(scope.get('recovery_pending_count') or 0) <= ready
+
+
 def dossier_record(appid, title, binding, *, digest=None, expires='2026-10-01T00:00:00Z', resolved=True):
     return {
         'path': f'data/cache/taste_steam_review_dossiers/App_{appid}.json',
@@ -513,17 +537,23 @@ def main():
     assert status['deep_first_pass_attempted_count'] == 1
     assert status['deep_authoritative_completed_count'] == 0
 
-    # DEEP-20/21: production activation preserves zero-attempt migration/projection.
-    # Work may contain prepared items, but activation/projection itself consumes no attempt.
-    persisted_state = json.loads(Path('data/cache/progressive_pass2_state.json').read_text(encoding='utf-8'))
+    # DEEP-20/21: production activation mirrors remain active after legitimate
+    # production ingest. Live state is intentionally mutable; regressions validate
+    # its schema/accounting rather than requiring the activation-era empty snapshot.
+    # Non-mutating recompute is proved separately by the workflow's before/after cmp.
+    persisted_state = progressive_pass2.load_state()
     persisted_work = json.loads(Path('data/production/pre_ai/progressive_pass2_work.json').read_text(encoding='utf-8'))
     personalization = json.loads(Path('config/progressive_personalization_contract.json').read_text(encoding='utf-8'))
     ownership = json.loads(Path('config/execution_ownership_contract.json').read_text(encoding='utf-8'))
-    assert persisted_state == empty_pass2_state()
-    # The checked-in work manifest is GitHub-generated and may still reflect the
-    # pre-activation commit on a feature branch. Activation validation recomputes
-    # it separately and proves the active projection without consuming attempts.
-    assert persisted_work.get('scope', {}).get('deep_first_pass_attempted_count', 0) == 0
+    assert_persisted_projection_invariants(
+        persisted_state,
+        persisted_work.get('scope') or {},
+        persisted_work.get('items') or [],
+    )
+    # Explicitly prove the same invariant accepts a legitimate non-empty consumed
+    # first-pass state; this guards against reintroducing an "always empty" assertion.
+    assert unresolved['entries']
+    assert_persisted_projection_invariants(unresolved, again['counts'], again['items'])
     assert contract['active'] is True
     assert personalization['phase_b_execution']['pass2_active'] is True
     assert personalization['phase_c_pass2_design']['active'] is True
