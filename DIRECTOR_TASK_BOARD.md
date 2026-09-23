@@ -25,6 +25,13 @@ Hard guard:
 - no Scheduled Task mutation or Scheduled Task Run now;
 - no architecture change.
 
+Live continuation:
+- operator executed the authorized manual GitHub workflow dispatch;
+- PASS 1 ingest, PASS 2 recompute, and PASS 1 revalidation succeeded in the run;
+- commit stage failed because mandatory `git add` referenced absent optional path `data/ai_inbox/taste_steam_review_dossiers`;
+- same physical Chat 2 continues this unfinished task to fix only this GitHub-owned staging defect and regression coverage;
+- no second operator workflow dispatch is authorized yet; worker must stop after fix/validation and report whether it is required.
+
 
 ## ACCEPTED — Progressive Fast/Deep coactivation stale-guard audit
 
