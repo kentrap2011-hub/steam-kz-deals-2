@@ -1,42 +1,44 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — ЧАТ 2 — Taste Dossier Scheduled Task self-disable ownership diagnostic
+## ACTIVE — NEW physical ЧАТ 2 — Progressive Fast/Deep coactivation stale-guard audit
+
+Task:
+`WORKER_TASK_PROGRESSIVE_FAST_DEEP_COACTIVATION_STALE_GUARD_AUDIT_01.md`
+
+Expected report:
+`reviews/worker_reports/progressive-fast-deep-coactivation-stale-guard-audit-01.md`
+
+Mode:
+`READ-ONLY / RECON`
+
+Purpose:
+- before fixing the confirmed PASS 1 ingest activation-flag defect, audit all current Progressive production paths for analogous stale pre-Deep/mutual-exclusion assumptions;
+- no implementation or production mutation in this task.
+
+Known seed:
+- current valid Fast+Deep state has both `pass1_active=true` and `pass2_active=true`;
+- PASS 1 ingest still requires `pass2_active=false`;
+- run `35812546365` failed before ingesting the exact Friends vs Friends artifact.
+
+
+## ACCEPTED — ЧАТ 2 — Taste Dossier Scheduled Task self-disable ownership diagnostic
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_SCHEDULED_TASK_SELF_DISABLE_OWNERSHIP_DIAGNOSTIC_01.md`
 
-Expected report:
+Report:
 `reviews/worker_reports/taste-dossier-scheduled-task-self-disable-ownership-diagnostic-01.md`
 
-Mode:
-`DIAGNOSTIC / READ-ONLY`
+Report status:
+`needs_user_evidence`
 
-Why:
-- a Dossier invocation reported a full-block requirement to disable its own Scheduled Task;
-- the operator-supplied live prompt says to STOP the invocation on blocking conditions but also says not to modify or reinterpret the existing Scheduled Task title/schedule/production limits;
-- current canonical ownership must be traced before any scheduler or prompt change.
-
-Scope:
-- identify the exact source of the self-disable requirement;
-- establish canonical STOP semantics and scheduler-mutation ownership;
-- verify actual external task state only if directly observable, otherwise record the evidence boundary;
-- classify root cause and recommend only the smallest next-step fix class.
-
-Hard guard:
-- no `Run now`;
-- no enable/disable/edit/delete/recreate of `Taste Steam Review Dossier`;
-- no Scheduled Task prompt/cadence changes;
-- no new scheduler;
-- no workflow dispatch or production semantic work;
-- no GitHub runtime/state/workflow repair;
-- do not touch the active ЧАТ 1 coalescing-liveness task;
-- historical `g000012` remains out of scope.
-
-Allowed report statuses:
-- `complete_root_cause_proven`
-- `needs_user_evidence`
-- `needs_fix`
-- `blocked_external_operator_state`
+Director conclusion:
+- canonical STOP means stop the current invocation, not disable recurrence;
+- no canonical or operator-reported live-prompt rule authorizes self-disable;
+- self-disable was classified as unsupported worker interpretation / ownership-layer conflation;
+- external task enabled/disabled/cadence/last-run state remains unverified and user-owned evidence;
+- no scheduler or production mutation occurred;
+- this physical Chat 2 is retired.
 
 
 ## Current rules
