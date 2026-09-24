@@ -9,6 +9,8 @@ import urllib.request
 from collections import Counter
 from pathlib import Path
 
+import taste_pinned_work_unit
+
 from taste_cache_common import (
     CANDIDATE_CONTEXT_CONTRACT,
     candidate_context_digest,
@@ -73,17 +75,15 @@ def current_profile(policy):
     profile_cfg = policy['taste_profile']
     repo = profile_cfg['canonical_repository']
     path = profile_cfg['canonical_path']
-    url = f'https://raw.githubusercontent.com/{repo}/main/{path}'
-    req = urllib.request.Request(url, headers={'User-Agent': 'steam-kz-deals/1.0'})
-    with urllib.request.urlopen(req, timeout=15) as resp:
-        raw = resp.read()
-    json.loads(raw.decode('utf-8'))
+    frozen = taste_pinned_work_unit.freeze_current_live_profile(repo, path)
     return {
-        'repository': repo,
-        'path': path,
-        'raw_url': url,
-        'blob_sha': git_blob_sha_bytes(raw),
-        'bytes': len(raw),
+        'repository': frozen['repository'],
+        'path': frozen['path'],
+        'raw_url': frozen['immutable_raw_url'],
+        'resolved_commit_sha': frozen['resolved_commit_sha'],
+        'blob_sha': frozen['blob_sha'],
+        'content_sha256': frozen['content_sha256'],
+        'bytes': frozen['bytes'],
     }
 
 

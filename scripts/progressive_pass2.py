@@ -236,6 +236,32 @@ def canonical_dossier_loader(appid):
     }
 
 
+def prepared_work_item_dossier_is_live(work_item, now=None):
+    """Revalidate Deep evidence liveness without rebinding semantic/profile identity."""
+    if not isinstance(work_item, dict):
+        return False, 'prepared_work_item_missing'
+    current_binding = current_dossier_binding()
+    if work_item.get('dossier_compatibility_binding') != current_binding:
+        return False, 'dossier_compatibility_binding_mismatch'
+    record = canonical_dossier_loader(work_item.get('appid'))
+    if not isinstance(record, dict):
+        return False, 'no_canonically_accepted_dossier'
+    if record.get('path') != work_item.get('dossier_path'):
+        return False, 'dossier_path_changed'
+    if record.get('content_sha256') != work_item.get('dossier_content_sha256'):
+        return False, 'dossier_content_changed'
+    dossier = record.get('doc') or {}
+    if dossier.get('expires_at_utc') != work_item.get('dossier_expires_at_utc'):
+        return False, 'dossier_expiry_binding_changed'
+    return dossier_is_eligible(
+        binding=work_item,
+        semantic_input=work_item.get('semantic_input') or {},
+        dossier_record=record,
+        current_binding=current_binding,
+        now=now,
+    )
+
+
 def dossier_is_eligible(
     *,
     binding,
@@ -595,6 +621,7 @@ def recompute_eligibility(
     return {
         'semantic_generation_id': generation['semantic_generation_id'],
         'semantic_bindings': generation['bindings'],
+        'profile_pin': generation['profile_pin'],
         'items': items,
         'counts': counts,
         'reasons': reasons,
@@ -630,6 +657,7 @@ def _attempt_base(work_item, outcome, accepted_at_utc, source):
         'analysis_issue_code': None,
         'attempt_consumption_source': source,
         'accepted_at_utc': accepted_at_utc,
+        'work_authority_commit': work_item.get('_work_authority_commit'),
     }
 
 
@@ -786,6 +814,7 @@ def _apply_attempt(existing, work_item, attempt):
             'analysis_issue_code': attempt.get('analysis_issue_code'),
             'attempt_consumption_source': attempt.get('attempt_consumption_source'),
             'accepted_at_utc': attempt.get('accepted_at_utc'),
+            'work_authority_commit': attempt.get('work_authority_commit'),
             'dossier_content_sha256': attempt.get('dossier_content_sha256'),
             'dossier_compatibility_binding': deepcopy(attempt.get('dossier_compatibility_binding')),
             'authorization_id': attempt.get('authorization_id'),
@@ -816,6 +845,7 @@ def _apply_attempt(existing, work_item, attempt):
     entry['analysis_issue_code'] = attempt.get('analysis_issue_code')
     entry['attempt_consumption_source'] = attempt.get('attempt_consumption_source')
     entry['accepted_at_utc'] = attempt.get('accepted_at_utc')
+    entry['work_authority_commit'] = attempt.get('work_authority_commit')
     entry['dossier_content_sha256'] = attempt.get('dossier_content_sha256')
     entry['dossier_compatibility_binding'] = deepcopy(attempt.get('dossier_compatibility_binding'))
     entry['authorization_id'] = attempt.get('authorization_id')

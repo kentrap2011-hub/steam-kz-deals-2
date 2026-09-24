@@ -5,6 +5,7 @@ from pathlib import Path
 
 import build_progressive_pass1_work
 import progressive_pass1
+import progressive_work_authority
 
 INBOX = Path('data/ai_inbox/progressive_pass1')
 RECEIPTS = Path('data/cache/progressive_pass1_receipts')
@@ -45,12 +46,63 @@ def main():
     paths = sorted(INBOX.glob('*.json')) if INBOX.exists() else []
     accepted_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     docs, raw_by_name = load_documents(paths)
+    consumed = progressive_work_authority.consumed_work_ids(RECEIPTS)
+    authorized = []
+    authorization_errors = {}
+    doc_by_name = {name: (name, doc, error) for name, doc, error in docs}
+    for path in paths:
+        try:
+            item = progressive_work_authority.resolve_presemantic_work_item(
+                path,
+                progressive_pass1.WORK,
+                path_field='submission_path',
+                expected_contract='PROGRESSIVE-PASS1-WORK-V1',
+            )
+            progressive_pass1.validate_profile_pin(item.pop('_profile_pin'))
+            if item['work_id'] in consumed:
+                authorization_errors[path.name] = 'work_id_already_consumed'
+                continue
+            existing = (state.get('entries') or {}).get(item['family_id'])
+            existing_authority = existing.get('work_authority_commit') if isinstance(existing, dict) else None
+            incoming_authority = item.get('_work_authority_commit')
+            if (
+                existing_authority
+                and existing.get('work_id') != item.get('work_id')
+                and incoming_authority != existing_authority
+                and progressive_work_authority.commit_is_ancestor(incoming_authority, existing_authority)
+            ):
+                authorization_errors[path.name] = 'superseded_by_newer_accepted_work'
+                continue
+            authorized.append(item)
+        except (ValueError, OSError, json.JSONDecodeError) as exc:
+            authorization_errors[path.name] = str(exc)
+
+    authorized.sort(
+        key=lambda item: progressive_work_authority.authority_rank(item['_work_authority_commit'])
+    )
+    authorized_names = {Path(item['submission_path']).name for item in authorized}
+    ordered_docs = [
+        doc_by_name[Path(item['submission_path']).name]
+        for item in authorized
+        if Path(item['submission_path']).name in doc_by_name
+    ]
+    ordered_docs.extend(row for row in docs if row[0] not in authorized_names)
+    acceptance_work = {'contract': 'PROGRESSIVE-PASS1-WORK-V1', 'items': authorized}
     new_state, receipts = progressive_pass1.process_submission_documents(
-        work,
+        acceptance_work,
         state,
-        docs,
+        ordered_docs,
         accepted_at_utc=accepted_at,
     )
+    for receipt in receipts:
+        if (
+            receipt.get('status') == 'rejected_stale_or_mismatched'
+            and receipt.get('artifact') in authorization_errors
+        ):
+            receipt['reason'] = (
+                'no_current_or_historical_presemantic_authority:'
+                + authorization_errors[receipt['artifact']]
+            )
 
     progressive_pass1.STATE.parent.mkdir(parents=True, exist_ok=True)
     progressive_pass1.STATE.write_text(

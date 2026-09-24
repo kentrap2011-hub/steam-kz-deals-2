@@ -80,14 +80,18 @@ def _decode_contents_file(doc):
     return raw, blob_sha
 
 
-def freeze_profile_identity_for_projection(projection, fetch_json=_fetch_github_json, max_attempts=PROFILE_FREEZE_MAX_ATTEMPTS):
-    profile = projection.get('current_profile') or {}
-    repository = str(profile.get('repository') or '')
-    path = str(profile.get('path') or '')
-    expected_blob = str(profile.get('blob_sha') or '')
-    expected_bytes = profile.get('bytes')
-    if not repository or not path or len(expected_blob) != 40 or not isinstance(expected_bytes, int) or expected_bytes <= 0:
-        raise ValueError('Prepared Taste projection lacks canonical profile identity needed for immutable pinning')
+def freeze_current_live_profile(
+    repository,
+    path,
+    *,
+    fetch_json=_fetch_github_json,
+    max_attempts=PROFILE_FREEZE_MAX_ATTEMPTS,
+):
+    """Freeze one exact current live-profile Git object with a bounded head check."""
+    repository = str(repository or '')
+    path = str(path or '')
+    if not repository or not path or int(max_attempts) < 1:
+        raise ValueError('Canonical live Taste profile authority is incomplete')
     encoded_path = urllib.parse.quote(path, safe='/')
     api_root = f'https://api.github.com/repos/{repository}'
     head_url = f'{api_root}/commits/main'
@@ -102,11 +106,6 @@ def freeze_profile_identity_for_projection(projection, fetch_json=_fetch_github_
             raise ValueError('Canonical live Taste profile confirmation SHA is missing or malformed')
         if after != before:
             continue
-        if blob_sha != expected_blob or len(raw) != expected_bytes:
-            raise ValueError(
-                'Canonical live Taste profile changed after the prepared projection; '
-                'refusing to pin a mixed profile/work-unit tuple'
-            )
         return {
             'repository': repository,
             'path': path,
@@ -114,8 +113,60 @@ def freeze_profile_identity_for_projection(projection, fetch_json=_fetch_github_
             'blob_sha': blob_sha,
             'content_sha256': hashlib.sha256(raw).hexdigest(),
             'bytes': len(raw),
+            'immutable_raw_url': f'https://raw.githubusercontent.com/{repository}/{before}/{path}',
         }
     raise ValueError('Canonical live Taste profile changed during all bounded pin freeze attempts')
+
+
+def freeze_profile_identity_for_projection(
+    projection,
+    fetch_json=_fetch_github_json,
+    max_attempts=PROFILE_FREEZE_MAX_ATTEMPTS,
+):
+    profile = projection.get('current_profile') or {}
+    repository = str(profile.get('repository') or '')
+    path = str(profile.get('path') or '')
+    expected_blob = str(profile.get('blob_sha') or '')
+    expected_bytes = profile.get('bytes')
+    if not repository or not path or len(expected_blob) != 40 or not isinstance(expected_bytes, int) or expected_bytes <= 0:
+        raise ValueError('Prepared Taste projection lacks canonical profile identity needed for immutable pinning')
+
+    frozen_commit = str(profile.get('resolved_commit_sha') or profile.get('commit_sha') or '')
+    frozen_content_sha = str(profile.get('content_sha256') or '')
+    if frozen_commit and frozen_content_sha:
+        if len(frozen_commit) != 40 or len(frozen_content_sha) != 64:
+            raise ValueError('Prepared Taste projection immutable profile identity is malformed')
+        encoded_path = urllib.parse.quote(path, safe='/')
+        contents_url = f'https://api.github.com/repos/{repository}/contents/{encoded_path}?ref={frozen_commit}'
+        raw, blob_sha = _decode_contents_file(fetch_json(contents_url))
+        if (
+            blob_sha != expected_blob
+            or len(raw) != expected_bytes
+            or hashlib.sha256(raw).hexdigest() != frozen_content_sha
+        ):
+            raise ValueError('Prepared Taste projection immutable profile object does not verify')
+        return {
+            'repository': repository,
+            'path': path,
+            'resolved_commit_sha': frozen_commit,
+            'blob_sha': blob_sha,
+            'content_sha256': frozen_content_sha,
+            'bytes': len(raw),
+            'immutable_raw_url': f'https://raw.githubusercontent.com/{repository}/{frozen_commit}/{path}',
+        }
+
+    frozen = freeze_current_live_profile(
+        repository,
+        path,
+        fetch_json=fetch_json,
+        max_attempts=max_attempts,
+    )
+    if frozen['blob_sha'] != expected_blob or frozen['bytes'] != expected_bytes:
+        raise ValueError(
+            'Canonical live Taste profile changed after the prepared projection; '
+            'refusing to pin a mixed profile/work-unit tuple'
+        )
+    return frozen
 
 
 def read_jsonl(path):

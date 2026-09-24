@@ -37,9 +37,6 @@ jobs:
       - name: Record current dossier group validation and recovery projection
         run: python scripts/taste_steam_review_dossier_parallel_validation.py
 
-      - name: Recompute Progressive PASS 2 eligibility from reconciled Dossier truth
-        run: python scripts/build_progressive_pass2_work.py
-
       - name: Validate PASS 2 core
         run: python scripts/test_progressive_pass2.py
 

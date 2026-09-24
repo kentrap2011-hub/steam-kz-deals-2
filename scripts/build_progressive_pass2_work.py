@@ -82,6 +82,7 @@ def build_work_document(now=None):
         'projection_status': 'current_github_owned_fast_dossier_deep_v1_projection',
         'semantic_generation_id': recomputed['semantic_generation_id'],
         'semantic_bindings': recomputed['semantic_bindings'],
+        'profile_pin': recomputed['profile_pin'],
         'dossier_compatibility_binding': binding,
         'transport': {
             'mode': 'immutable_item_create_only',

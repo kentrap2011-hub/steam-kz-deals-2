@@ -11,9 +11,12 @@ GitHub is the only control-plane owner. On every invocation:
 
 1. read `config/progressive_pass1_contract.json`;
 2. read `data/production/pre_ai/progressive_pass1_work.json`;
-3. use only the exact current `semantic_generation_id` and ordered `items` prepared by GitHub;
-4. never rebuild, reorder, expand, retry or invent work;
-5. never start PASS 2.
+3. use only the exact current `semantic_generation_id`, top-level `profile_pin`, and ordered `items` prepared by GitHub;
+4. before starting an item, require its `profile_pin_sha256` to equal the top-level `profile_pin.pin_sha256`;
+5. read `gaming_taste_live.json` only through that pin's exact repository/path at `resolved_commit_sha` (never `main`, never remembered profile context), verify Git blob SHA, byte count and content SHA256, parse the exact JSON object, and use those exact pinned bytes as the sole personalized profile;
+6. if the exact pinned profile cannot be fetched or verified, fail closed without consuming the item; never substitute another profile version;
+7. never rebuild, reorder, expand, retry or invent work;
+8. never start PASS 2.
 
 The worker does not own queue state, attempt counts, completeness, retry policy, publication or site ordering.
 
@@ -61,6 +64,7 @@ Every exact-bound result must use:
 
 and echo exactly:
 - `semantic_generation_id`
+- `profile_pin_sha256`
 - `work_id`
 - `family_id`
 - `taste_subject_key`
@@ -120,9 +124,11 @@ For a caught per-item tool/runtime failure, submit `worker_failure` for that exa
 
 ## Stale work
 
-Before each new item submission, the work item must still come from the current GitHub manifest read for this invocation.
+Before starting each **new** item, reload current GitHub work and take only the exact next item GitHub currently prepares.
 
-If the manifest/generation has changed materially before you can safely submit, stop and reload current GitHub work. Never adapt an old result to a new binding.
+Once semantic execution of one exact item has started from a durably prepared manifest, a later live-profile update or newer Progressive manifest does **not** invalidate that started item. Finish it only against its original immutable `profile_pin` and exact work identity. Never switch profile versions mid-item and never adapt its result to a newer binding. GitHub ingest proves the exact pre-semantic manifest from Git history.
+
+For the next not-yet-started item, use the then-current GitHub manifest and its pin.
 
 ## Privacy / persistence
 

@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS1-V1",
-  "version": 1,
+  "version": 2,
   "status": "canonical",
   "phase": "phase_b_pass1",
   "purpose": "GitHub-owned item-level provisional Fast analysis for Progressive Personalized Deals: provide useful early fit/not-fit/incomplete coverage without blocking publication or Deep analysis.",
@@ -18,6 +18,7 @@
   "semantic_generation": {
     "global_binding_fields": [
       "profile_blob_sha",
+      "profile_pin_sha256",
       "taste_model_version",
       "taste_semantics_sha256",
       "candidate_context_contract_blob_sha"
@@ -25,13 +26,32 @@
     "commercial_source_timestamp_in_generation": false,
     "rule": "A price/commercial refresh alone never resets PASS 1. Profile/model/semantics/semantic-context contract changes create a new global semantic generation.",
     "per_item_binding_fields": [
+      "profile_pin_sha256",
       "family_id",
       "taste_subject_key",
       "appid",
       "taste_fingerprint",
       "candidate_context_sha256"
     ],
-    "per_item_change_rule": "A changed fingerprint/context creates a new work_id for that affected item and makes prior PASS 1 state non-current."
+    "per_item_change_rule": "A changed fingerprint/context creates a new work_id for that affected item and makes prior PASS 1 state non-current.",
+    "profile_pin": {
+      "contract": "PROGRESSIVE-PROFILE-PIN-V1",
+      "authority": "github_pre_semantic_immutable_live_profile",
+      "canonical_repository": "kentrap2011-hub/stopgame-ratings-data",
+      "canonical_path": "gaming_taste_live.json",
+      "required_identity_fields": [
+        "repository",
+        "path",
+        "resolved_commit_sha",
+        "blob_sha",
+        "content_sha256",
+        "bytes"
+      ],
+      "semantic_worker_must_read_exact_pinned_content": true,
+      "mutable_main_lookup_by_worker": false,
+      "live_update_after_pin_invalidates_started_work": false,
+      "next_new_generation_uses_then_current_profile": true
+    }
   },
   "attempt_budget": {
     "maximum_attempts_per_work_id": 1,
@@ -120,6 +140,8 @@
     "work_manifest": "data/production/pre_ai/progressive_pass1_work.json",
     "worker_prompt": "config/progressive_pass1_worker_prompt.md",
     "accepted_outcome_fields": [
+      "profile_pin_sha256",
+      "work_authority_commit",
       "semantic_generation_id",
       "work_id",
       "pass1_attempted",

@@ -27,6 +27,7 @@ INCOMPLETE_CODES = {
 OUTCOMES = {'analyzed_fit', 'analyzed_not_fit', 'analysis_incomplete'}
 IDENTITY_FIELDS = (
     'semantic_generation_id',
+    'profile_pin_sha256',
     'work_id',
     'family_id',
     'taste_subject_key',
@@ -34,6 +35,13 @@ IDENTITY_FIELDS = (
     'taste_fingerprint',
     'candidate_context_sha256',
 )
+PROFILE_PIN_CONTRACT = 'PROGRESSIVE-PROFILE-PIN-V1'
+CANONICAL_PROFILE_REPOSITORY = 'kentrap2011-hub/stopgame-ratings-data'
+CANONICAL_PROFILE_PATH = 'gaming_taste_live.json'
+PROFILE_IDENTITY_FIELDS = (
+    'repository', 'path', 'resolved_commit_sha', 'blob_sha', 'content_sha256', 'bytes',
+)
+
 FORBIDDEN_COMMERCIAL_TEXT = (
     'price', 'discount', 'wishlist', 'steamdb', 'sale price', 'historical price',
     'rub', 'kzt', 'цена', 'скидк', 'вишлист', 'руб', 'тенге',
@@ -90,12 +98,81 @@ def load_state(path=None):
     return doc
 
 
+def profile_pin_from_projection(projection_doc):
+    profile = (projection_doc or {}).get('current_profile') or {}
+    identity = {field: profile.get(field) for field in PROFILE_IDENTITY_FIELDS}
+    if identity.get('repository') != CANONICAL_PROFILE_REPOSITORY:
+        raise ValueError('Progressive profile pin repository is not canonical')
+    if identity.get('path') != CANONICAL_PROFILE_PATH:
+        raise ValueError('Progressive profile pin path is not canonical')
+    if not isinstance(identity.get('resolved_commit_sha'), str) or len(identity['resolved_commit_sha']) != 40:
+        raise ValueError('Progressive profile pin immutable commit is missing')
+    if not isinstance(identity.get('blob_sha'), str) or len(identity['blob_sha']) != 40:
+        raise ValueError('Progressive profile pin blob SHA is missing')
+    if not isinstance(identity.get('content_sha256'), str) or len(identity['content_sha256']) != 64:
+        raise ValueError('Progressive profile pin content SHA256 is missing')
+    if not isinstance(identity.get('bytes'), int) or identity['bytes'] <= 0:
+        raise ValueError('Progressive profile pin byte count is missing')
+    immutable_raw_url = (
+        f"https://raw.githubusercontent.com/{identity['repository']}/"
+        f"{identity['resolved_commit_sha']}/{identity['path']}"
+    )
+    material = {
+        'schema_version': 1,
+        'contract': PROFILE_PIN_CONTRACT,
+        'authority': 'github_pre_semantic_immutable_live_profile',
+        'profile_identity': identity,
+        'immutable_raw_url': immutable_raw_url,
+    }
+    pin = dict(material)
+    pin['pin_sha256'] = canonical_sha256(material)
+    return pin
+
+
+def validate_profile_pin(pin):
+    if not isinstance(pin, dict) or pin.get('schema_version') != 1:
+        raise ValueError('Progressive profile pin schema mismatch')
+    if pin.get('contract') != PROFILE_PIN_CONTRACT:
+        raise ValueError('Progressive profile pin contract mismatch')
+    if pin.get('authority') != 'github_pre_semantic_immutable_live_profile':
+        raise ValueError('Progressive profile pin authority mismatch')
+    identity = pin.get('profile_identity') or {}
+    expected = profile_pin_from_projection({'current_profile': identity})
+    if pin != expected:
+        raise ValueError('Progressive profile pin hash/identity mismatch')
+    return pin
+
+
+def verify_profile_content(pin, raw):
+    validate_profile_pin(pin)
+    if not isinstance(raw, (bytes, bytearray)):
+        raise ValueError('Progressive pinned profile content must be bytes')
+    raw = bytes(raw)
+    identity = pin['profile_identity']
+    git_blob = hashlib.sha1(f"blob {len(raw)}\\0".encode('ascii') + raw).hexdigest()
+    if len(raw) != identity['bytes']:
+        raise ValueError('Progressive pinned profile byte count mismatch')
+    if git_blob != identity['blob_sha']:
+        raise ValueError('Progressive pinned profile Git blob mismatch')
+    if hashlib.sha256(raw).hexdigest() != identity['content_sha256']:
+        raise ValueError('Progressive pinned profile content SHA256 mismatch')
+    try:
+        parsed = json.loads(raw.decode('utf-8'))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f'Progressive pinned profile JSON is malformed: {exc}') from exc
+    if not isinstance(parsed, dict):
+        raise ValueError('Progressive pinned profile JSON must be an object')
+    return parsed
+
+
 def semantic_generation(projection_doc=None):
     projection_doc = projection_doc if projection_doc is not None else load_json(TASTE_PROJECTION)
     profile = projection_doc.get('current_profile') or {}
     binding = projection_doc.get('current_binding') or {}
+    profile_pin = profile_pin_from_projection(projection_doc)
     material = {
         'profile_blob_sha': profile.get('blob_sha'),
+        'profile_pin_sha256': profile_pin['pin_sha256'],
         'taste_model_version': binding.get('taste_model_version'),
         'taste_semantics_sha256': binding.get('taste_semantics_sha256'),
         'candidate_context_contract_blob_sha': binding.get('candidate_context_contract_blob_sha'),
@@ -106,6 +183,7 @@ def semantic_generation(projection_doc=None):
     return {
         'semantic_generation_id': canonical_sha256(material),
         'bindings': material,
+        'profile_pin': profile_pin,
     }
 
 
@@ -145,6 +223,7 @@ def current_bindings(context_rows=None, projection_doc=None, queue_rows=None):
             raise ValueError(f'PASS 1 queue/context identity mismatch for {family_id}')
         item_material = {
             'semantic_generation_id': generation['semantic_generation_id'],
+            'profile_pin_sha256': generation['profile_pin']['pin_sha256'],
             'family_id': family_id,
             'taste_subject_key': taste_key,
             'appid': str(queue_row.get('appid') or ''),
@@ -300,6 +379,7 @@ def normalize_submission(doc, work_item, accepted_at_utc=None):
         'outcome': outcome,
         'analysis_issue_code': None,
         'accepted_at_utc': accepted_at_utc,
+        'work_authority_commit': work_item.get('_work_authority_commit'),
     })
 
     if outcome == 'analyzed_fit':
@@ -356,6 +436,7 @@ def invalid_result_entry(work_item, accepted_at_utc=None):
         'outcome': 'analysis_incomplete',
         'analysis_issue_code': 'invalid_semantic_result',
         'accepted_at_utc': accepted_at_utc,
+        'work_authority_commit': work_item.get('_work_authority_commit'),
     }
 
 

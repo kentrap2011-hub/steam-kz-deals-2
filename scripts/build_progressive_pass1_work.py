@@ -155,6 +155,7 @@ def build_work_document(now=None):
         'pass2_active': True,
         'semantic_generation_id': generation['semantic_generation_id'],
         'semantic_bindings': generation['bindings'],
+        'profile_pin': generation['profile_pin'],
         'source_mailing_updated_at_utc': projection.get('source_mailing_updated_at_utc'),
         'transport': {
             'mode': 'immutable_item_create_only',

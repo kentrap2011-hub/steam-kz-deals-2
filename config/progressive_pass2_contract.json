@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
-  "version": 4,
+  "version": 5,
   "status": "production_active",
   "phase": "phase_c_pass2",
   "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; Fast/PASS 1 is never an eligibility prerequisite.",
@@ -37,6 +37,7 @@
     "waiting_for_dossier_consumes_attempt": false,
     "queue_projection_consumes_attempt": false,
     "current_semantic_identity_required": [
+      "profile_pin_sha256",
       "semantic_generation_id",
       "work_id",
       "family_id",
@@ -104,6 +105,7 @@
     "projection_entrypoint": "scripts/build_progressive_pass2_work.py",
     "recomputation_function": "scripts/progressive_pass2.py::recompute_eligibility",
     "immutable_binding_fields": [
+      "profile_pin_sha256",
       "semantic_generation_id",
       "work_id",
       "family_id",
@@ -116,7 +118,16 @@
       "dossier_expires_at_utc",
       "authorization_id"
     ],
-    "dossier_path_is_canonical_read_only_input": true
+    "dossier_path_is_canonical_read_only_input": true,
+    "profile_pin": {
+      "contract": "PROGRESSIVE-PROFILE-PIN-V1",
+      "source": "exact_current_progressive_semantic_generation",
+      "semantic_worker_must_read_exact_pinned_content": true,
+      "mutable_live_profile_lookup_by_worker": false,
+      "later_live_profile_update_invalidates_started_work": false,
+      "ingest_profile_rebinding_for_started_work": false,
+      "dossier_liveness_revalidation_remains_required": true
+    }
   },
   "transport": {
     "mode": "immutable_item_create_only",
@@ -135,6 +146,8 @@
     "worker_prompt": "config/progressive_pass2_worker_prompt.md",
     "pass1_history_mutation_allowed": false,
     "accepted_outcome_fields": [
+      "profile_pin_sha256",
+      "work_authority_commit",
       "semantic_generation_id",
       "work_id",
       "pass2_attempted",
