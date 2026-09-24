@@ -2,6 +2,14 @@
 
 Последнее обновление: 2026-09-18
 
+## ACTIVE — Progressive pinned live-profile handoff fix
+Статус: `implement_validate_in_progress`.
+- task: `WORKER_TASK_PROGRESSIVE_PINNED_LIVE_PROFILE_HANDOFF_FIX_01.md`;
+- scope: exact immutable live-profile pin/content handoff for Progressive Fast + Deep;
+- invariant: live profile may advance after pin without invalidating the pinned in-flight work; next newly prepared work uses the then-current profile;
+- no Scheduled Task mutation and no manual semantic production run;
+- report target: `reviews/worker_reports/progressive-pinned-live-profile-handoff-fix-01.md`.
+
 ## Завершено
 
 ### Cross-platform claim-to-keep giveaway RECON 01
