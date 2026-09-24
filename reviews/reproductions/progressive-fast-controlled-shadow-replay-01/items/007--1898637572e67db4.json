@@ -1,0 +1,44 @@
+{
+  "sequence": 7,
+  "appid": "49520",
+  "title": "Borderlands 2",
+  "work_id": "1898637572e67db463a36df18af194b9277495bfc1ab6d08aeab9cc461c4c241",
+  "historical_authority_commit": "a1fe53af3e77c21e8fd4de61da6324c11c9c575a",
+  "historical_prompt_blob": "03b0cba057f7b8205e5b2232f578b32369151700",
+  "profile_pin_sha256": "cf4a4ecf03e72d0d77c85c5e101ce4e37ab36b8547d1bcc1deada780a8df2a6c",
+  "prepared_input_summary": "Action title in the Borderlands series; prepared short description is not sufficient because it describes an upgrade rather than the base game's gameplay.",
+  "relevant_profile_signals": [
+    "Pinned profile explicitly says Borderlands 2 was never played, so no exact personal verdict exists for this title.",
+    "Borderlands is a high-confidence 2.5/5 negative benchmark because the shooter-looter gameplay felt boring and visual novelty alone could not sustain interest."
+  ],
+  "retrieval_needed": true,
+  "retrieval_actions": [
+    {
+      "query_or_request": "\"Borderlands 2\" official gameplay shooter looter skill trees 49520",
+      "source_page_identity": "Web search",
+      "success": false,
+      "factual_evidence_obtained": "No usable exact-product source surfaced in that search result set."
+    },
+    {
+      "query_or_request": "https://store.steampowered.com/app/49520/",
+      "source_page_identity": "Steam app 49520",
+      "success": false,
+      "factual_evidence_obtained": "Steam returned an age-check page rather than gameplay details."
+    },
+    {
+      "query_or_request": "\"Borderlands 2\" site:borderlands.2k.com skill trees loot vault hunters / \"Borderlands 2\" site:2k.com shooter looter skills",
+      "source_page_identity": "2K official Borderlands collection / Borderlands 2 materials",
+      "success": true,
+      "factual_evidence_obtained": "2K describes Borderlands 2 as a shooter-looter centered on Vault Hunters, bazillions of weapons, loot, character classes/skill trees, diverse environments, missions and enemies, with solo/co-op play."
+    }
+  ],
+  "observable_tool_errors": [],
+  "shadow_outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "decision_basis": "The exact title lacks a personal play verdict, but official evidence confirms it retains the same shooter-looter core that was the decisive negative in the pinned Borderlands benchmark. Added classes, skills and variety reduce uncertainty but do not remove the core mismatch, supporting a provisional below-threshold Fast conclusion.",
+  "fast_standard_satisfied": true,
+  "continuation_decision": "continue_next_item",
+  "continuation_reason": "Light retrieval recovered usable official evidence after two non-fatal retrieval dead ends; no invocation-level stop condition occurred.",
+  "next_sequence_expected": 8
+}
