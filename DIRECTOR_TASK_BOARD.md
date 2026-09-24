@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — ЧАТ 1 — Progressive runtime rule rationale consistency audit
+## ACCEPTED — ЧАТ 1 — Progressive runtime rule rationale consistency audit
 
 Task:
 `WORKER_TASK_PROGRESSIVE_RUNTIME_RULE_RATIONALE_CONSISTENCY_AUDIT_01.md`
@@ -8,31 +8,32 @@ Task:
 Report:
 `reviews/worker_reports/progressive-runtime-rule-rationale-consistency-audit-01.md`
 
-Mode:
-`READ-ONLY / RECON / ARCHITECTURE AUDIT`
+Final status:
+`complete_ready_for_director_review`
 
-Worker slot:
-- **НОВЫЙ физический ЧАТ 1**;
-- previously completed Chat 1 is retired and must not be reused.
+Director acceptance:
+- audit traced suspicious Fast / Dossier / Deep runtime rules back to their original rationale rather than treating throughput cost alone as a defect;
+- confirmed PASS 1 per-item reload/take-current-next was strengthened by pinned-profile fix commit `4e9b2f84...` and is a regression against PPD-002 independent multi-item progress;
+- confirmed Fast can traverse later already-predeclared immutable items without waiting for prior sibling GitHub ingest;
+- on later Fast invocation, an exact current-manifest create-only path may serve only as a transport-progress marker (“already submitted, do not recreate”), never as canonical acceptance/attempt state;
+- confirmed Deep sibling traversal also must not wait for prior sibling ingest, but per-item current authorization, Dossier SHA/binding/expiry, profile pin and recovery authorization checks remain required;
+- confirmed Dossier normal buffered progression already does not wait for canonical ingest; its later-invocation occupied-pending collision stop is intentional under the accepted GitHub classification/coalescing architecture and is not a current bug;
+- confirmed no hidden current Fast->Deep / Deep->Fast global completion gate remains;
+- confirmed immutable profile pin, Git-history pre-semantic authority, Fast one-shot semantics, Deep Dossier liveness, Deep explicit recovery authorization, shared canonical writer serialization and Dossier failed-group quarantine remain necessary safeguards;
+- identified one unresolved Deep policy defect: malformed/invalid exact current result/receipt can consume no attempt while leaving its deterministic create-only path occupied, which can strand that exact identity;
+- SAFE_BOUNDED_FIXES: SBF-01 Fast asynchronous traversal/transport-marker semantics; SBF-02 Deep reload clarification as liveness-only with no sibling-ingest wait;
+- DISCUSSION_REQUIRED: DR-01 Deep invalid-no-attempt transport disposition;
+- no code, contracts, prompts, workflows, state, scheduler or production semantic execution was changed by the audit;
+- Director independently reread the current final report from fresh `main` at head `f8dd0c0329440a9c41aba4248daaa47049349cfb`, report blob `bd5b2d5ecb707ce3333d726557b9e12db7f6003d`.
 
-User intent:
-- audit Fast / Dossier / Deep for rules whose current implementation may no longer match the reason the rule originally existed;
-- for every suspicious rule, prove original rationale and the invariant it protects before recommending any change;
-- distinguish real regressions/superseded mechanisms from restrictions that must remain;
-- explicitly analyze asynchronous create-only transport vs canonical GitHub acceptance so semantic workers do not wait for GitHub unless a still-valid invariant truly requires it;
-- no fixes in this task;
-- after report, Director/user will discuss `DISCUSSION_REQUIRED` findings;
-- only then will a separate coordinated IMPLEMENT task be authorized for the approved fix set.
+Decision:
+- audit accepted;
+- no implementation is authorized yet;
+- discuss DR-01 with the user, then issue one coordinated IMPLEMENT task for SBF-01/SBF-02 plus the approved DR-01 policy.
 
-Seed finding:
-- current PASS 1 per-item manifest reload appears to have been introduced by the pinned-profile handoff fix and conflicts with PPD-002 multi-item independent progress;
-- treat as a proven audit seed, not as permission to generalize without evidence.
-
-Expected final status:
-- `complete_ready_for_director_review`
-- `needs_more_recon`
-- `needs_user_decision`
-- `blocked`
+Worker state:
+- physical ЧАТ 1 is retired for independent future work;
+- this worker chat can be deleted.
 
 ## ACCEPTED — ЧАТ 1 — Progressive pinned live-profile handoff fix
 
