@@ -1,0 +1,105 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "4531598188b3d3173e38363c46f202f6eb02f78a4ec56e1775632cfde45fbbfd",
+  "prepared_required_sha256": "99513acf2e8d02e8aea9080677ea9ea358952f913274ad5d696d4bb692483e14",
+  "group_plan_sha256": "37887d5c1239f845e6423a3c0897c2c8ba8e1282a7c2062afc9133fa30e2d1cf",
+  "group_count": 173,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+  },
+  "sequence": 5,
+  "start_index": 12,
+  "end_index_exclusive": 15,
+  "appids": ["1155970", "1158890", "1158940"],
+  "items_sha256": "09b40ab08f06f91fcdcffe576ecc7d06ee9974bfb4ceed58aab5e4462ca3701c",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "f27aea7aba5ca50601f89e3f25ffa735f2829d1fad26fd70e1031c1651686edc",
+  "items": [
+    {"key":"App_1155970","appid":"1155970","title":"Roadwarden","dossier_path":"data/cache/taste_steam_review_dossiers/App_1155970.json","reason":"refresh_required"},
+    {"key":"App_1158890","appid":"1158890","title":"White Shadows","dossier_path":"data/cache/taste_steam_review_dossiers/App_1158890.json","reason":"refresh_required"},
+    {"key":"App_1158940","appid":"1158940","title":"Blazing Sails","dossier_path":"data/cache/taste_steam_review_dossiers/App_1158940.json","reason":"missing_dossier"}
+  ],
+  "group_sha256": "5fb1152c7b8a4a611838fc97166774b46077f1ea26947f8928875e9c8f061e01",
+  "dossiers": [
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,
+      "web_evidence_contract_binding":{"evidence_contract_schema":"TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2","evidence_contract_version":2,"evidence_contract_revision":"semantic-bounded-retrieval-2026-09-23","evidence_contract_sha256":"5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7","worker_schema":"TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2","worker_schema_version":2,"worker_schema_revision":"validator-generator-parity-fix-2026-09-20","worker_schema_sha256":"d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98","dossier_schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","dossier_schema_version":2,"worker_prompt_revision":"web-evidence-v2-semantic-bounded-retrieval-v1","worker_prompt_sha256":"d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"},
+      "appid":"1155970","title":"Roadwarden","generated_at_utc":"2026-09-24T06:38:04Z","expires_at_utc":"2026-10-14T06:38:04Z","ttl_days":20,
+      "game_identity":{"work_title":"Roadwarden","release_year":2022,"resolution_status":"resolved","identity_source_ids":["source-001"],"corroborators":[{"kind":"appid","value":"1155970"},{"kind":"developer","value":"Moral Anxiety Studio"}]},
+      "summary":"Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations":[
+        {"category":"structure","statement":"Player feedback describes the text-heavy RPG structure as rewarding for exploration and choice, while some players find the opening and writing unengaging.","sentiment":"mixed","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["source-002","source-003"],"player_feedback_ids":["feedback-001","feedback-002"]},
+        {"category":"localization","statement":"Russian-language community feedback asks for a Russian translation, while the game remains strongly dependent on reading dense text.","sentiment":"negative","recurrence":"anecdotal","mention_count":1,"evidence_languages":["russian"],"evidence_status":"durable","source_ids":["source-004"],"player_feedback_ids":["feedback-003"]}
+      ],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"multi_source","single_source_reason":null,"russian_attempt":"found_and_used","overall_strength":"limited","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"source-001","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/1155970/Roadwarden/","publication_date":"2022-09-12","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"source-002","source_type":"reddit","domain":"reddit.com","url":"https://www.reddit.com/r/Roadwarden/comments/yutsdn/","publication_date":"2022-11-14","language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true},
+        {"source_id":"source-003","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1155970/discussions/0/3481868187520109964/","publication_date":"2022-09-14","language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true},
+        {"source_id":"source-004","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1155970/discussions/0/3825287408061637728/","publication_date":"2023-04-24","language":"russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true}
+      ],"player_feedback_records":[
+        {"feedback_id":"feedback-001","source_id":"source-002","url":"https://www.reddit.com/r/Roadwarden/comments/yutsdn/","publication_date":"2022-11-14","language":"non_russian","identity_mode":"stable_locator"},
+        {"feedback_id":"feedback-002","source_id":"source-003","url":"https://steamcommunity.com/app/1155970/discussions/0/3481868187520109964/","publication_date":"2022-09-14","language":"non_russian","identity_mode":"stable_locator"},
+        {"feedback_id":"feedback-003","source_id":"source-004","url":"https://steamcommunity.com/app/1155970/discussions/0/3825287408061637728/","publication_date":"2023-04-24","language":"russian","identity_mode":"stable_locator"}
+      ]}
+    },
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,
+      "web_evidence_contract_binding":{"evidence_contract_schema":"TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2","evidence_contract_version":2,"evidence_contract_revision":"semantic-bounded-retrieval-2026-09-23","evidence_contract_sha256":"5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7","worker_schema":"TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2","worker_schema_version":2,"worker_schema_revision":"validator-generator-parity-fix-2026-09-20","worker_schema_sha256":"d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98","dossier_schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","dossier_schema_version":2,"worker_prompt_revision":"web-evidence-v2-semantic-bounded-retrieval-v1","worker_prompt_sha256":"d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"},
+      "appid":"1158890","title":"White Shadows","generated_at_utc":"2026-09-24T06:38:04Z","expires_at_utc":"2026-10-14T06:38:04Z","ttl_days":20,
+      "game_identity":{"work_title":"White Shadows","release_year":2021,"resolution_status":"resolved","identity_source_ids":["source-001"],"corroborators":[{"kind":"appid","value":"1158890"},{"kind":"developer","value":"Monokel"}]},
+      "summary":"Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations":[
+        {"category":"structure","statement":"Player feedback consistently highlights the striking dystopian presentation while describing the experience as short and mechanically light.","sentiment":"mixed","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["source-002","source-003"],"player_feedback_ids":["feedback-001","feedback-002"]},
+        {"category":"friction","statement":"Player feedback reports performance and control friction alongside otherwise strong visual presentation.","sentiment":"negative","recurrence":"anecdotal","mention_count":1,"evidence_languages":["non_russian"],"evidence_status":"current","source_ids":["source-004"],"player_feedback_ids":["feedback-003"]}
+      ],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"multi_source","single_source_reason":null,"russian_attempt":"searched_no_existence_signal","overall_strength":"limited","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"source-001","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/1158890/White_Shadows/","publication_date":"2021-12-07","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"source-002","source_type":"store_user_reviews","domain":"gog.com","url":"https://www.gog.com/en/game/white_shadows","publication_date":null,"language":"non_russian","freshness":"unknown","evidence_role":"durable_trait","player_feedback":true,"feedback_surface_mode":"concrete_item_collection"},
+        {"source_id":"source-003","source_type":"steam_reviews","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1158890/reviews/","publication_date":null,"language":"non_russian","freshness":"recent","evidence_role":"durable_trait","player_feedback":true,"feedback_surface_mode":"concrete_item_collection"},
+        {"source_id":"source-004","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1158890","publication_date":null,"language":"non_russian","freshness":"recent","evidence_role":"current_state","player_feedback":true,"feedback_surface_mode":"concrete_item_collection"}
+      ],"player_feedback_records":[
+        {"feedback_id":"fallback-001","source_id":"source-002","publication_date":"2025-02-05","language":"non_russian","identity_mode":"transient_author_deduped"},
+        {"feedback_id":"fallback-002","source_id":"source-003","publication_date":"2026-05-17","language":"non_russian","identity_mode":"transient_author_deduped"},
+        {"feedback_id":"fallback-003","source_id":"source-004","publication_date":"2025-09-08","language":"non_russian","identity_mode":"transient_author_deduped"}
+      ]}
+    },
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,
+      "web_evidence_contract_binding":{"evidence_contract_schema":"TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2","evidence_contract_version":2,"evidence_contract_revision":"semantic-bounded-retrieval-2026-09-23","evidence_contract_sha256":"5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7","worker_schema":"TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2","worker_schema_version":2,"worker_schema_revision":"validator-generator-parity-fix-2026-09-20","worker_schema_sha256":"d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98","dossier_schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","dossier_schema_version":2,"worker_prompt_revision":"web-evidence-v2-semantic-bounded-retrieval-v1","worker_prompt_sha256":"d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"},
+      "appid":"1158940","title":"Blazing Sails","generated_at_utc":"2026-09-24T06:38:04Z","expires_at_utc":"2026-10-14T06:38:04Z","ttl_days":20,
+      "game_identity":{"work_title":"Blazing Sails","release_year":2023,"resolution_status":"resolved","identity_source_ids":["source-001"],"corroborators":[{"kind":"appid","value":"1158940"},{"kind":"developer","value":"Get Up Games"}]},
+      "summary":"Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations":[
+        {"category":"multiplayer","statement":"Player feedback describes the game as more enjoyable with a coordinated group while warning that the active player population can be low.","sentiment":"mixed","recurrence":"limited","mention_count":2,"evidence_languages":["non_russian"],"evidence_status":"current","source_ids":["source-002"],"player_feedback_ids":["fallback-001","fallback-002"]},
+        {"category":"friction","statement":"Russian-language community feedback reports matchmaking or login failures that can prevent reaching a playable session.","sentiment":"negative","recurrence":"limited","mention_count":2,"evidence_languages":["russian"],"evidence_status":"current","source_ids":["source-002"],"player_feedback_ids":["fallback-003","fallback-004"]}
+      ],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"single_source_only","single_source_reason":"Bounded research found multiple concrete exact-product player-feedback items on the Steam Community collection, including Russian-language feedback, but no second comparably useful physical player source was needed for the serialized findings.","russian_attempt":"found_and_used","overall_strength":"limited","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"source-001","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/1158940/Blazing_Sails/","publication_date":"2023-11-13","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"source-002","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1158940/","publication_date":null,"language":"mixed","freshness":"recent","evidence_role":"current_state","player_feedback":true,"feedback_surface_mode":"concrete_item_collection"}
+      ],"player_feedback_records":[
+        {"feedback_id":"fallback-001","source_id":"source-002","publication_date":"2026-09-20","language":"non_russian","identity_mode":"transient_author_deduped"},
+        {"feedback_id":"fallback-002","source_id":"source-002","publication_date":"2026-09-06","language":"non_russian","identity_mode":"transient_author_deduped"},
+        {"feedback_id":"fallback-003","source_id":"source-002","publication_date":"2026-03-09","language":"russian","identity_mode":"transient_author_deduped"},
+        {"feedback_id":"fallback-004","source_id":"source-002","publication_date":"2026-02-02","language":"russian","identity_mode":"transient_author_deduped"}
+      ]}
+    }
+  ]
+}
