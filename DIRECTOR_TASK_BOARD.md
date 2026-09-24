@@ -8,40 +8,21 @@ Task:
 Report:
 `reviews/worker_reports/progressive-site-stage-indicator-completion-stats-copy-fix-01.md`
 
-Mode:
-`IMPLEMENT / VALIDATE`
+Current review state:
+`needs_report_closeout`
+
+Director review:
+- implementation evidence is otherwise complete: exactly three icons remain, completion-only lit mapping is documented, user-facing technical jargon is removed, Dossier/Deep technical rows were simplified, mobile/UI regressions passed, visual build and final Pages deploy succeeded;
+- however the current task was refined to require `FIX-18` = durable report committed and reread from fresh `main`;
+- the committed report still labels its validation section `FIX-01..17` and does not explicitly close current `FIX-18`;
+- do not redo implementation;
+- update only the durable report/closeout so it explicitly validates current FIX-01..18, includes the report commit/ref, and states that the report was reread from fresh `main`.
 
 Worker slot:
-- **НОВЫЙ физический ЧАТ 1**;
-- do not reuse the retired prior Chat 1 conversation.
+- **EXISTING physical ЧАТ 1** for this same task;
+- do not open a new worker for this closeout.
 
-User authorization:
-- user visually inspected the deployed site and explicitly approved this follow-up correction.
-
-Goal:
-- keep exactly three card stage icons with no extra visible state glyphs;
-- an icon is bright/lit only when that exact stage is truly complete;
-- Fast/Deep incomplete/error/pending/recovery remain dim; Dossier lights only when accepted;
-- replace technical Statistics wording (`authoritative`, `Fast-scope`, `Dossier-scope`, `Deep-покрытие`) with clear Russian;
-- rename Fast `Попытки` to `Обработано` and explain its arithmetic vs completed/incomplete/error buckets;
-- simplify Dossier to useful counters only: готово / ожидает / требует восстановления;
-- remove user-facing Dossier first-pass/all-complete booleans;
-- remove Deep first-pass-processed and redundant all-complete boolean rows; keep final completion, waiting/ready/recovery and remaining-to-final counters;
-- preserve all producer semantics, ranking, visibility and scheduler boundaries.
-
-Architecture:
-- GitHub remains owner of stage truth/counts;
-- browser remains presentation-only;
-- no producer semantic/denominator change is expected;
-- no scheduler/queue/retry/recovery ownership change is authorized.
-
-Expected final status:
-- `complete_ready_for_director_acceptance`
-- `needs_fix`
-- `needs_user_decision`
-- `blocked`
-
-## ACTIVE — ЧАТ 2 — Fast + Deep zero completion diagnostic
+## ACCEPTED — ЧАТ 2 — Fast + Deep zero completion diagnostic
 
 Task:
 `WORKER_TASK_PROGRESSIVE_FAST_DEEP_ZERO_COMPLETION_DIAGNOSTIC_01.md`
@@ -49,38 +30,36 @@ Task:
 Report:
 `reviews/worker_reports/progressive-fast-deep-zero-completion-diagnostic-01.md`
 
-Mode:
-`READ-ONLY / RECON`
+Final status:
+`complete_multiple_root_causes_proven`
 
-Worker slot:
-- **НОВЫЙ физический ЧАТ 2**;
-- independent from the active UI repair in ЧАТ 1.
+Director acceptance:
+- current Statistics is correct; no Statistics projection bug was found;
+- fresh current state at report time: Fast 91 processed = 87 insufficient-evidence + 3 worker_failure + 1 invalid semantic result, with 0 current completed fit/not-fit;
+- the 9 historical Fast analyzed-fit results are genuinely non-current because those families are outside the current candidate scope, not because current Statistics dropped valid current completions;
+- the dominant Fast defect is a systemic semantic-input handoff gap: work binds the canonical taste/profile semantics by hashes but does not actually hand the bounded worker the canonical personalized decision context needed to produce reproducible fit/not-fit and five-factor outputs;
+- all four current Fast error outcomes were separated from the dominant semantic-insufficiency pattern; one invalid-result identity defect is proven exactly, while three worker_failure sub-causes are not durably persisted;
+- both current Deep attempts were exact/current and used accepted current Dossiers, but both Dossiers were limited single-source evidence and both Deep results were accepted as `analysis_incomplete / insufficient_evidence`;
+- Deep therefore has a contributing evidence-readiness weakness, but the missing canonical personalized semantic payload is independently a cross-stage blocker affecting both Fast and Deep;
+- workers are running; zero completion means zero useful current completion, not zero execution;
+- no source/runtime/scheduler/recovery mutation occurred;
+- DIAG-01..13 passed.
 
-User authorization:
-- user explicitly assigned two parallel chats: ЧАТ 1 for site repair, ЧАТ 2 to diagnose why current Fast and Deep completed-result counts are effectively zero.
+Root-cause classification:
+- `mixed_root_causes`;
+- primary: missing canonical personalized semantic payload at the Fast/Deep worker boundary;
+- contributing Deep cause: accepted Dossiers can be structurally valid yet too thin for a final personalized verdict;
+- secondary Fast causes: four error outcomes;
+- Statistics projection is behaving correctly.
 
-Goal:
-- prove current Fast/Dossier/Deep statistics from canonical truth;
-- explain why current Fast shows many processed attempts but zero completed fit/not-fit;
-- reconcile historical completed Fast state against current exact identity;
-- explain every current Fast error class;
-- trace every current Deep attempted item and explain why none reached final completion;
-- determine whether the Statistics page is correctly exposing a real semantic/evidence problem or whether projection itself is wrong;
-- compare the actual Fast input, Dossier evidence, and Deep completion requirements;
-- recommend the smallest correct repair boundary without implementing it.
+Recommended next step:
+- only after explicit user authorization, create one bounded implementation task for the Progressive canonical taste-semantic input handoff fix under PASS 1 + PASS 2 contracts;
+- require that fix to regenerate exact semantic identity/work and then retest Fast completion plus the two traced Deep examples before deciding whether a separate Dossier-to-Deep evidence-readiness fix is needed;
+- do not manually retry/recover existing consumed attempts.
 
-Architecture:
-- GitHub remains control-plane owner of scope/identity/attempts/recovery/statistics;
-- diagnostic only: no source/config/prompt/workflow/state/result/recovery/scheduler changes;
-- no Fast/Dossier/Deep semantic run;
-- only durable report write is authorized.
-
-Expected final status:
-- `complete_root_cause_proven`
-- `complete_multiple_root_causes_proven`
-- `needs_deeper_recon`
-- `needs_user_decision`
-- `blocked`
+Worker state:
+- physical ЧАТ 2 is retired for independent future work;
+- this worker chat can be deleted.
 
 ## ACCEPTED — ЧАТ 1 — Progressive site stage icons + Statistics UI
 
