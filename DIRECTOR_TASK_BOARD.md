@@ -1,5 +1,35 @@
 # DIRECTOR TASK BOARD
 
+## IN PROGRESS — НОВЫЙ ЧАТ 2 — Deep insufficient-evidence diagnostic
+
+Task:
+`WORKER_TASK_PROGRESSIVE_DEEP_INSUFFICIENT_EVIDENCE_DIAGNOSTIC_01.md`
+
+Report:
+`reviews/worker_reports/progressive-deep-insufficient-evidence-diagnostic-01.md`
+
+Status:
+`authorized_ready_for_worker`
+
+User-approved goal:
+- explain why current Deep/PASS 2 completes only 4 of 49 attempted current identities while 45 move to incomplete/recovery;
+- separate Dossier evidence weakness from Deep semantic over-conservatism and from technical/binding defects;
+- compare all 4 current completed not-fit controls against 8 exact current insufficient-evidence cases;
+- perform no production semantic retry/recovery or source/runtime change until the root cause is proven.
+
+Current production facts at task creation:
+- Deep coverage target 465;
+- first-pass attempted 49;
+- authoritative completed 4 = 0 fit + 4 not-fit;
+- incomplete/recovery 45;
+- dominant semantic issue is `insufficient_evidence`;
+- one separate `terminal_execution_failure` is treated as a technical control.
+
+Worker state:
+- use a NEW physical conversation for ЧАТ 2;
+- this is read-only diagnostic work except task/report/tracking documentation;
+- no Scheduled Task action is authorized.
+
 ## ACCEPTED — ЧАТ 1 — Deep deferred run-start confirmation
 
 Task:
