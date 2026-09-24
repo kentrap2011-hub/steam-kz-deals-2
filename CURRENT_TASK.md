@@ -900,3 +900,10 @@
 - final PASS 2 workflow run `36032288111` succeeded; execution ownership run `36031531931` succeeded;
 - no Scheduled Task action and no manual Deep production backlog processing occurred;
 - durable report: `reviews/worker_reports/progressive-deep-deferred-run-start-confirmation-01.md`, report commit `9d4af1128b1c9bb0009186baf6139bc78b810ae0`.
+
+## ACTIVE — Progressive Deep insufficient-evidence diagnostic 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_PROGRESSIVE_DEEP_INSUFFICIENT_EVIDENCE_DIAGNOSTIC_01.md`;
+- mode: read-only diagnostic / report; production PASS 2, Dossier, recovery and Scheduled Task are immutable;
+- fixed sample: 4 completed not-fit controls, 8 insufficient-evidence cases, 1 terminal-execution-failure technical control;
+- durable report target: `reviews/worker_reports/progressive-deep-insufficient-evidence-diagnostic-01.md`.
