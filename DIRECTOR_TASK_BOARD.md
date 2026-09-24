@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — ЧАТ 1 — Progressive async traversal + Deep invalid transport fix
+## ACCEPTED — ЧАТ 1 — Progressive async traversal + Deep invalid transport fix
 
 Task:
 `WORKER_TASK_PROGRESSIVE_ASYNC_TRAVERSAL_AND_DEEP_INVALID_TRANSPORT_FIX_01.md`
@@ -8,36 +8,34 @@ Task:
 Report:
 `reviews/worker_reports/progressive-async-traversal-and-deep-invalid-transport-fix-01.md`
 
-Mode:
-`IMPLEMENT / VALIDATE`
+Final status:
+`complete_ready_for_director_acceptance`
 
-Worker slot:
-- **НОВЫЙ физический ЧАТ 1**;
-- previous audit chat is retired and must not be reused.
+Director acceptance:
+- Fast/PASS 1 now freezes one invocation-start manifest/profile pin and traverses its already-predeclared ordered items without waiting for prior sibling GitHub ingest or manifest advancement;
+- an exact existing Fast submission path means only “already submitted, do not recreate”, never canonical acceptance or attempt consumption;
+- Deep/PASS 2 now establishes one GitHub-confirmed invocation-start authority before semantic execution, freezes the work/Dossier/recovery/profile view once, and performs no mutable-current rereads between games;
+- later profile/Dossier/recovery/work changes apply only to the next Deep invocation and do not invalidate the current confirmed run;
+- DRG-01 is closed: the worker's own timestamp is not authority; a create-only run-start marker is confirmed by the existing GitHub PASS 2 ingest path, and the actual marker commit parent/time define the trusted run-start authority;
+- forged-time regression proves an older superseded authority A cannot be accepted even when a transport claims an earlier `run_started_at_utc`;
+- GitHub ingest requires the confirmed start receipt to predate result transport and re-proves marker/parent/time lineage before accepting a Deep result;
+- invalid authorized Deep result/receipt with zero-attempt rejection now preserves the rejection reason, removes the bad active candidate, consumes no semantic attempt, and leaves any later resubmission decision to a later GitHub-confirmed invocation;
+- no raw rejected-payload archive and no new rejected-payload fingerprint/hash field were added;
+- same deterministic Deep path reuse after GitHub-owned invalid cleanup is covered by regression;
+- Dossier progression/evidence behavior and Fast/Deep stage independence were not changed;
+- no Scheduled Task configuration/action and no manual semantic backlog processing occurred;
+- relevant PR and fresh-main gates were green, including Progressive PASS 2 core, execution ownership, deterministic pre-AI build, daily visual build, and buffered Dossier runtime validation;
+- unrelated SteamDB true-miss validation failure remains outside this task and was not modified;
+- Director independently reread the final report from fresh `main` at head `b344bbd11bbdad387dda9764892a8fdf69b29dcc`, report blob `7eb5ab481f6f385293a671de1aaf6a986c7e5f57`.
 
-Authorized scope:
-- Fast/PASS 1 asynchronous traversal through already-predeclared independent items without waiting for GitHub ingest;
-- later Fast invocation may treat an exact current submission path only as “already submitted, do not recreate”, never as canonical acceptance;
-- Deep/PASS 2 freezes the then-current Deep work, Dossier bindings/expiry state and recovery authorizations once at invocation start; it does not recheck them between games, and changes after start belong to the next invocation;
-- GitHub validates Deep results against that exact invocation-start authority rather than mutable changes that happened later;
-- invalid authorized Deep result/receipt with zero-attempt rejection must persist the existing error receipt, remove the bad candidate from the active inbox, consume no semantic attempt, and leave any later retry decision to the next GitHub-owned invocation-start view;
-- no separate raw rejected-payload archive;
-- no new rejected-payload fingerprint/hash field;
-- no Dossier behavior change;
-- no Scheduled Task mutation/run;
-- no manual semantic backlog processing.
+Decision:
+- task accepted;
+- no further source change is required for the approved Fast/Deep traversal and invalid-transport behavior;
+- normal Scheduled Fast/Dossier/Deep production may continue under the updated canonical contracts.
 
-Director review:
-- implementation is not yet accepted;
-- DRG-01 requires a one-time GitHub-verifiable invocation-start authority anchor;
-- worker-supplied `run_started_at_utc` alone is insufficient because an older time can be claimed;
-- add a regression proving an older superseded authority is rejected even when transport forges an earlier run-start time;
-- continue the SAME task in the SAME physical ЧАТ 1.
-
-Acceptance:
-- focused regressions F-01..F-06, D-01..D-17, O-01..O-05 plus DRG-01 forged-time regression;
-- relevant CI/workflows green;
-- durable report updated, committed and reread from fresh `main`.
+Worker state:
+- physical ЧАТ 1 is retired for independent future work;
+- this worker chat can be deleted.
 
 ## ACCEPTED — ЧАТ 1 — Progressive runtime rule rationale consistency audit
 
