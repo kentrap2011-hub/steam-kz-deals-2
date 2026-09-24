@@ -877,10 +877,10 @@
 ## Worker in progress — 2026-09-24
 
 ### Progressive async traversal + Deep invalid transport fix 01
-Статус: `complete_ready_for_director_acceptance`.
+Статус: `in_progress_director_correction_drg01`.
 - task: `WORKER_TASK_PROGRESSIVE_ASYNC_TRAVERSAL_AND_DEEP_INVALID_TRANSPORT_FIX_01.md`;
-- implementation commits: `69508034743e9d2ef4f96c2083eff089b0bb8bd3`, `a470fe109825f8a7194b54ea63906a79d9bec366`;
-- validation: Progressive PASS 2 core run `35975616173` success; pre-AI run `35975616059` success; visual run `35975616058` success;
-- durable report: `reviews/worker_reports/progressive-async-traversal-and-deep-invalid-transport-fix-01.md`;
-- GitHub remains the only scope/order/acceptance/attempt/recovery owner; no scheduler/task mutation, no Dossier behavior change, no manual semantic backlog processing.
+- Director review requires DRG-01: replace worker-timestamp-only Deep run-start proof with one GitHub-verifiable invocation-start anchor, checked once at the real invocation boundary;
+- preserve the landed asynchronous Fast/Deep traversal, no per-item mutable rereads, invalid-transport zero-attempt cleanup, Dossier independence and Scheduled Task boundaries;
+- prior implementation commits: `69508034743e9d2ef4f96c2083eff089b0bb8bd3`, `a470fe109825f8a7194b54ea63906a79d9bec366`;
+- durable report to update in place: `reviews/worker_reports/progressive-async-traversal-and-deep-invalid-transport-fix-01.md`.
 
