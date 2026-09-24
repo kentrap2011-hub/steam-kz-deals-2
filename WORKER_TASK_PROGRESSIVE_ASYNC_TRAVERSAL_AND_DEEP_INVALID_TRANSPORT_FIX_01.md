@@ -18,18 +18,19 @@ Implement the accepted findings from:
 The user explicitly approved:
 
 1. Fast/PASS 1 must not wait for GitHub ingest or manifest advancement between already-predeclared independent items.
-2. Deep/PASS 2 must not wait for prior sibling ingest before later independently authorized items.
-3. Deep invalid technical transport must NOT consume the semantic attempt.
-4. For an invalid Deep result/terminal-receipt candidate:
+2. Deep/PASS 2 must use one fixed run-start view: at the start of each Scheduled invocation, read/freeze the then-current GitHub-prepared Deep work, exact Dossier bindings/expiry state and recovery authorizations once; later changes are for the next invocation and must not force per-item rereads or invalidate work already authorized for the current invocation.
+3. GitHub ingest must validate Deep submissions against that exact run-start authority, not against mutable changes that happened after the invocation began.
+4. Deep invalid technical transport must NOT consume the semantic attempt.
+5. For an invalid Deep result/terminal-receipt candidate:
    - keep the existing durable error/ingest receipt with the reason;
    - do NOT keep a separate raw copy of the bad candidate;
    - remove the bad candidate from the active inbox after the rejection receipt is durably recorded;
    - keep the semantic attempt unconsumed;
    - allow the exact current item to become submit-able again through GitHub-owned current work/authorization if it is still otherwise live/current.
-5. Do NOT add a new rejected-payload fingerprint/hash field or a new raw rejected-payload archive merely for this fix.
+6. Do NOT add a new rejected-payload fingerprint/hash field or a new raw rejected-payload archive merely for this fix.
    - Existing internal hashing already used by current receipt-file naming may remain unchanged; do not redesign it unless technically required by an unrelated existing invariant.
-6. Do not change any Scheduled Task configuration/settings.
-7. Do not weaken exact profile pin, Dossier liveness, one-attempt semantics for valid execution, recovery authorization, identity validation, privacy/evidence rules or GitHub canonical acceptance ownership.
+7. Do not change any Scheduled Task configuration/settings.
+8. Do not weaken exact profile pin, one-attempt semantics for valid execution, recovery authorization identity, privacy/evidence rules or GitHub canonical acceptance ownership. Dossier/recovery freshness is checked at the invocation boundary instead of before every item; this timing change is explicitly user-approved.
 
 ## START gate
 
@@ -66,8 +67,10 @@ Before editing, verify these remain true:
 4. A worker may traverse only work already prepared/authorized by GitHub.
 5. Transport existence may mean only “already submitted / do not recreate”; it never means “accepted”.
 6. Exact immutable profile pin and Git-history pre-semantic work authority remain unchanged.
-7. Deep Dossier current binding/content/expiry and recovery authorization remain live checks before each new Deep execution.
-8. No Scheduled Task create/update/enable/disable/pause/delete/reschedule/rename/recreate/run action is authorized.
+7. Deep uses one invocation-start authority boundary: the exact current Deep manifest/work, Dossier bindings/expiry state and recovery authorizations visible at invocation start are fixed for that invocation. They are not reread/revalidated before each later item.
+8. A live-profile/Dossier/authorization change after invocation start applies only to a later invocation and must not retroactively invalidate an item authorized in the current run-start view.
+9. GitHub acceptance must be able to prove the submission belongs to that exact run-start authorized view; ChatGPT still never chooses scope/order/recovery itself.
+10. No Scheduled Task create/update/enable/disable/pause/delete/reschedule/rename/recreate/run action is authorized.
 
 If implementation would violate any fixed decision, stop and report the exact conflict instead of inventing a broader architecture.
 
@@ -99,22 +102,53 @@ If the current GitHub-prepared item still appears in the current manifest but it
 
 Fast exact malformed current submissions keep their existing one-shot terminal-incomplete semantics. Do not change that policy in this task.
 
-## FIX-02 — Deep asynchronous sibling traversal
+## FIX-02 — Deep fixed run-start snapshot + asynchronous traversal
 
-Clarify/repair PASS 2 worker semantics:
+Replace per-item mutable-currentness checks with one invocation boundary.
 
-- before each new Deep item, retain current GitHub authorization/liveness checks;
-- retain exact profile pin verification;
-- retain exact Dossier content SHA/binding/expiry check;
-- retain exact recovery authorization for recovery work;
-- BUT prior sibling canonical ingest/attempt advancement is never a prerequisite for the next independent authorized sibling.
+Required behavior:
+
+- At the start of each Deep Scheduled invocation, read the then-current GitHub-prepared Deep manifest/work from one exact `main` revision and establish that as the immutable run-start view for this invocation.
+- The run-start view must include or exactly bind:
+  - ordered Deep items/work IDs;
+  - work mode;
+  - exact profile pin;
+  - exact Dossier path/content SHA/compatibility binding and the expiry state applicable at run start;
+  - exact recovery authorization identity/reason/binding for recovery items.
+- Verify the exact profile pin once for the invocation and use those exact pinned profile bytes throughout that invocation.
+- Establish that each item in the run-start view is authorized/live at the invocation boundary using the smallest GitHub-owned mechanism compatible with current architecture.
+- After that boundary is established, do NOT reread/revalidate mutable Dossier state, expiry, recovery authorization, manifest order or GitHub progress before every later item.
+- A Dossier/profile/authorization/work change that occurs after invocation start is intentionally deferred to the next invocation.
+- Do NOT require prior sibling canonical ingest/attempt advancement before the next item.
+- Traverse only the immutable ordered items in the run-start view and only while runtime/tool budget safely permits.
+- Never add work that was not present in the run-start view.
 
 If exact result or terminal-receipt transport for Deep item A already exists:
 - do not rerun A;
 - do not treat it as canonically accepted;
-- later currently authorized siblings may still proceed.
+- continue to later items from the same run-start view.
 
-Do not freeze an old Deep plan blindly: each new item must still pass current item-specific authorization/Dossier liveness checks.
+### GitHub acceptance boundary
+
+Current ingest logic revalidates Deep against mutable current Dossier state. That must be reconciled with the new user-approved invocation snapshot rule.
+
+A result created under an exact valid run-start view must remain eligible for canonical validation even if, after invocation start:
+- Dossier content/binding changes;
+- Dossier wall-clock expiry passes;
+- recovery authorization projection changes;
+- a newer Deep manifest is prepared;
+- the live profile advances.
+
+GitHub must validate the result against the exact run-start authority used by the worker, while still rejecting:
+- work that was already stale/unauthorized at invocation start;
+- wrong item/work/profile/Dossier/recovery binding;
+- arbitrary historical/unprepared work;
+- malformed/invalid result transport;
+- duplicate/replayed consumed work.
+
+Prefer reusing existing immutable manifest/work authority. If current result/receipt identity cannot unambiguously prove the exact run-start view, add only the minimal durable run-start binding needed (for example an exact manifest authority commit/id). Do not introduce a new queue, scheduler or mutable worker-owned state.
+
+This change intentionally supersedes the old rule that Dossier expiry/current authorization must be rechecked immediately before each individual item and again against mutable-latest state at ingest. Freshness is now defined at the invocation boundary; later changes belong to the next invocation.
 
 ## FIX-03 — Deep invalid transport leaves no active-file deadlock
 
@@ -129,8 +163,7 @@ Implement the user-approved policy:
    - do NOT create a separate raw rejected-payload archive;
    - do NOT add a new fingerprint/hash field for this rejected payload;
    - once that rejection receipt is durably represented in the same canonical GitHub-owned persistence transaction, remove the invalid candidate from the active inbox.
-3. The semantic attempt remains unconsumed.
-4. If the item is still current, live and otherwise authorized, GitHub's normal work projection must be able to make it submit-able again; ChatGPT must not invent this eligibility itself.
+3. The semantic attempt remains unconsumed. On a later invocation, GitHub's then-current run-start view decides whether the item is submit-able again; ChatGPT must not invent this eligibility itself.
 5. Preserve the old rejected receipt for diagnosis even after the bad active file is removed.
 6. Never overwrite or mutate the bad candidate before classification.
 7. Never silently turn invalid transport into accepted/incomplete semantic state.
@@ -161,7 +194,9 @@ Update the smallest necessary canonical contract/prompt text so future maintenan
 
 Make explicit:
 - semantic worker can traverse already-authorized independent work asynchronously;
-- GitHub acceptance can lag transport;
+- Deep freezes its authorized Dossier/recovery/work view once at invocation start rather than rechecking between games;
+- changes after invocation start belong to the next invocation;
+- GitHub acceptance can lag transport and validates Deep against the exact run-start authority;
 - GitHub alone decides canonical result/attempt/recovery state.
 
 ## FIX-05 — Do not touch Dossier behavior
@@ -193,23 +228,26 @@ Add focused regression coverage proving at least:
 - F-05: malformed exact current Fast transport retains existing terminal-incomplete one-shot semantics.
 - F-06: profile pin/latest-main advancement behavior remains correct.
 
-### Deep traversal
-- D-01: valid A transport awaiting ingest does not block B.
-- D-02: B still requires its own current Dossier content/binding/expiry and current authorization.
-- D-03: expired/rebound Dossier blocks only the affected item without consuming its attempt.
-- D-04: recovery authorization cannot be bypassed by old/prepared local state.
-- D-05: no Fast prerequisite is introduced.
+### Deep run-start snapshot / traversal
+- D-01: invocation reads one exact current Deep run-start view and later A transport awaiting ingest does not block B.
+- D-02: the run-start view exactly binds every processed item's Dossier identity/content, work mode and any recovery authorization.
+- D-03: Dossier/profile/authorization changes after invocation start do not stop or invalidate later items from that same authorized run-start view.
+- D-04: the next invocation sees the newer GitHub state and does not silently reuse the older run-start view.
+- D-05: work already stale/expired/unauthorized before the invocation boundary is not admitted to that run-start view.
+- D-06: GitHub ingest accepts a valid result against its exact run-start authority even if mutable current state changed after invocation start.
+- D-07: wrong/unprepared/arbitrary historical work is still rejected.
+- D-08: no Fast prerequisite is introduced.
 
 ### Deep invalid transport
-- D-06: malformed exact current result -> rejection receipt persists, active bad file removed, attempt count unchanged.
-- D-07: malformed exact current execution receipt -> same.
-- D-08: after cleanup, if exact work is still current/live, it can be submitted again through GitHub-owned current work; no worker-created retry scope.
-- D-09: a later valid resubmission is accepted exactly once and only then consumes the normal attempt.
-- D-10: old rejection receipt remains available after successful later submission.
-- D-11: no separate raw rejected-payload archive is created.
-- D-12: no new rejected-payload fingerprint/hash field is added for this policy.
-- D-13: invalid Deep A does not block unrelated Deep B.
-- D-14: stale/mismatched Deep artifact keeps existing stale policy and is not confused with current-invalid transport.
+- D-09: malformed exact authorized result -> rejection receipt persists, active bad file removed, attempt count unchanged.
+- D-10: malformed exact authorized execution receipt -> same.
+- D-11: after cleanup, a later invocation may resubmit only if its then-current GitHub run-start view authorizes the item; no worker-created retry scope.
+- D-12: a later valid resubmission is accepted exactly once and only then consumes the normal attempt.
+- D-13: old rejection receipt remains available after successful later submission.
+- D-14: no separate raw rejected-payload archive is created.
+- D-15: no new rejected-payload fingerprint/hash field is added for this policy.
+- D-16: invalid Deep A does not block unrelated Deep B.
+- D-17: stale/mismatched/unprepared Deep artifact keeps fail-closed behavior and is not confused with current-invalid transport.
 
 ### Cross-stage / ownership
 - O-01: GitHub remains sole canonical acceptance/attempt/recovery owner.
@@ -244,7 +282,7 @@ Required report sections:
 8. Work-authority/path-reuse design actually implemented.
 9. Files changed.
 10. Tests/workflows and exact refs.
-11. Validation F-01..F-06, D-01..D-14, O-01..O-05.
+11. Validation F-01..F-06, D-01..D-17, O-01..O-05.
 12. Any natural concurrent production observations, clearly separated from validation.
 13. Unresolved items.
 14. Final Director recommendation.
