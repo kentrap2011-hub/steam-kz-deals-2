@@ -877,10 +877,12 @@
 ## Worker in progress — 2026-09-24
 
 ### Progressive async traversal + Deep invalid transport fix 01
-Статус: `in_progress_director_correction_drg01`.
+Статус: `complete_ready_for_repeat_director_review`.
 - task: `WORKER_TASK_PROGRESSIVE_ASYNC_TRAVERSAL_AND_DEEP_INVALID_TRANSPORT_FIX_01.md`;
-- Director review requires DRG-01: replace worker-timestamp-only Deep run-start proof with one GitHub-verifiable invocation-start anchor, checked once at the real invocation boundary;
-- preserve the landed asynchronous Fast/Deep traversal, no per-item mutable rereads, invalid-transport zero-attempt cleanup, Dossier independence and Scheduled Task boundaries;
-- prior implementation commits: `69508034743e9d2ef4f96c2083eff089b0bb8bd3`, `a470fe109825f8a7194b54ea63906a79d9bec366`;
-- durable report to update in place: `reviews/worker_reports/progressive-async-traversal-and-deep-invalid-transport-fix-01.md`.
+- original implementation: `69508034743e9d2ef4f96c2083eff089b0bb8bd3`, `a470fe109825f8a7194b54ea63906a79d9bec366`;
+- Director DRG-01 correction: PR `#95`, merge `1fe2fa668320626fb1f471b08f465d87512792dc`;
+- Deep now uses one create-only GitHub run-start marker + GitHub-owned confirmation receipt; actual marker parent/time, not worker-chosen time, establish the frozen invocation authority;
+- no per-item mutable rereads or sibling-ingest waits were restored; invalid zero-attempt cleanup, Fast behavior, Dossier behavior and Scheduled Task boundaries remain intact;
+- validation: PR PASS 2 `35981637513` success; PR Dossier `35981637494` success; main PASS 2 `35981732708` success; execution ownership `35981732888` success; pre-AI `35981732695` success; visual `35981732905` success;
+- durable report: `reviews/worker_reports/progressive-async-traversal-and-deep-invalid-transport-fix-01.md`, DRG-01 update commit `c395b7788f5d957f924ce1e235cb2a2ce67971c0`.
 
