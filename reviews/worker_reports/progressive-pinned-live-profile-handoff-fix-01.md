@@ -201,7 +201,7 @@ No Taste Dossier contract/schema/worker semantics file was changed.
 - **PIN-17 PASS** — focused/canonical workflow suites below are green.
 - **PIN-18 PASS** — deterministic pre-AI rebuild produced coherent Fast and Deep manifests sharing the exact pin-aware semantic generation.
 - **PIN-19 PASS** — no Scheduled Task action was performed and no Fast/Dossier/Deep production worker was manually triggered.
-- **PIN-20 CLOSEOUT FREEZE** — implementation/runtime acceptance is already complete. This report body is now frozen for final closeout; the next step is an exact fresh-`main` reread of this committed materialization, followed only by an in-report closeout attestation. No source/runtime/scheduler/production change is part of that attestation.
+- **PIN-20 PASS** — canonical final report payload commit `c14f937ce3e77f758ad81e9ffba3dbd6e3fa199d`, report blob `c733da6865a9a3d796310e59fda84fed533bbf6e`; that exact committed payload was reread from fresh `main` with `main == c14f937ce3e77f758ad81e9ffba3dbd6e3fa199d` and returned the exact same blob. The subsequent report-only attestation does not change implementation/runtime findings or redefine the frozen payload identity.
 
 ## 12. Exact validation / workflow / commit refs
 
@@ -249,9 +249,19 @@ Actual personalized fit/not-fit quality is intentionally **not** claimed by this
 
 Closeout mode: report-only.
 
-This commit freezes the final report payload for PIN-20 verification. No implementation finding, runtime behavior, test result, final status, or Director recommendation is changed by this closeout section.
+Canonical final report payload identity for PIN-20:
 
-The exact commit/blob of this frozen payload will be recorded in the subsequent attestation-only report commit **after** this version has been committed and reread from fresh `main`.
+- commit: `c14f937ce3e77f758ad81e9ffba3dbd6e3fa199d`
+- report blob: `c733da6865a9a3d796310e59fda84fed533bbf6e`
+- exact reread source: fresh `main`
+- fresh-`main` head at reread: `c14f937ce3e77f758ad81e9ffba3dbd6e3fa199d`
+- blob returned by that reread: `c733da6865a9a3d796310e59fda84fed533bbf6e`
+- exact commit match: `true`
+- exact blob match: `true`
+
+This section is an attestation-only successor to the frozen payload above. It changes no implementation finding, runtime behavior, test result, final status, or Director recommendation. For PIN-20, the canonical final report payload is the immutable commit/blob pair recorded above; the attestation merely records the already-completed exact reread.
+
+No source/runtime/scheduler/production file or action was changed during this closeout.
 
 ## 16. Recommended next Director step
 
