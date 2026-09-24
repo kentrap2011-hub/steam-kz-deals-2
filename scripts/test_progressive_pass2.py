@@ -575,9 +575,11 @@ def main():
     assert personalization['phase_c_pass2_design']['active'] is True
     assert ownership['progressive_personalization_phase_c_pass2_core']['pass2_active'] is True
 
-    # DEEP-22: this runtime adaptation does not implement the user-facing stage UI.
+    # DEEP-22: the separately accepted stage-indicator UI now exposes Deep
+    # state. This runtime regression must coexist with that UI instead of asserting
+    # its old pre-stage-indicator absence.
     changed_ui_guard = Path('web/progressive-personalization-ui.js').read_text(encoding='utf-8')
-    assert 'deep_stage_state' not in changed_ui_guard
+    assert 'deep_stage_state' in changed_ui_guard
 
     json.loads(Path('config/progressive_pass2_result_schema.json').read_text(encoding='utf-8'))
     json.loads(Path('config/progressive_pass2_execution_receipt_schema.json').read_text(encoding='utf-8'))
