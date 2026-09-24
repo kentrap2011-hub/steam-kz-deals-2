@@ -205,7 +205,7 @@ Production validator проверяет:
 
 **Что ищем:** как Scheduled ChatGPT публикует immutable predeclared 3-game candidates, а GitHub независимо классифицирует каждую группу как `pending`, `accepted` или `failed_or_invalid_pending_recovery` без head-of-line blocking.
 
-**Последняя проверка:** 2026-09-23.
+**Последняя проверка:** 2026-09-24.
 
 **Быстрая точка входа:**
 1. `config/taste_steam_review_dossier_contract.json` — canonical GitHub-owned per-group progress/completeness contract; `checkpoint_size=3` остаётся transport/group boundary, не quota.
@@ -249,5 +249,7 @@ Production validator проверяет:
 7. Recompute hooks exist after canonical Dossier persistence, Fast/PASS 1 persistence, daily/current generation-work-binding-freshness preparation, Deep/PASS 2 persistence, and explicit Deep recovery authorization.
 8. Those writers remain inside `taste-steam-review-dossier-canonical-writer` with `cancel-in-progress:false`; do not split them into unsynchronized authority domains.
 9. `PROJECT_DECISIONS.md#PPD-004` — rationale for Fast/Dossier/Deep independence, Deep precedence, all-game coverage and non-blocking recovery.
+10. `PROJECT_DECISIONS.md#PPD-006` + `#PPD-007` — one immutable Deep run-start authority plus deferred confirmation: marker before semantics, provisional computation on the exact observed commit, mandatory confirmed GitHub receipt before first semantic transport.
+11. `config/progressive_pass2_worker_prompt.md` + `scripts/test_progressive_async_traversal.py` — bounded worker timing and regressions for delayed/missing/rejected confirmation, authority equality, no pre-confirmation publication and continued sibling traversal.
 
-**Инварианты:** Deep eligibility never requires prior Fast/PASS 1 attempt or Fast `analysis_incomplete`; exact-compatible canonically accepted Dossier remains the evidence gate; completed authoritative Deep suppresses future Fast for the same current identity while Fast success never suppresses Deep; Deep incomplete/error does not erase a valid Fast provisional result; unresolved consumed Deep becomes recovery-owned and can return only through a fresh concrete GitHub-owned recovery authorization; normal Deep first-pass completeness and eventual all-authoritative completeness are separate; no blind retry loop or hidden recovery quota; Deep semantic execution remains forbidden while active flags are false.
+**Инварианты:** Deep eligibility never requires prior Fast/PASS 1 attempt or Fast `analysis_incomplete`; the run-start marker is created before semantics, provisional semantics may use only the exact observed immutable authority, and no Deep result/terminal receipt may be published until GitHub durably confirms the same authority; missing/rejected/mismatched confirmation consumes no attempt and publishes nothing; exact-compatible canonically accepted Dossier remains the evidence gate; completed authoritative Deep suppresses future Fast for the same current identity while Fast success never suppresses Deep; Deep incomplete/error does not erase a valid Fast provisional result; unresolved consumed Deep becomes recovery-owned and can return only through a fresh concrete GitHub-owned recovery authorization; normal Deep first-pass completeness and eventual all-authoritative completeness are separate; no blind retry loop or hidden recovery quota; Deep semantic execution remains forbidden while active flags are false.
