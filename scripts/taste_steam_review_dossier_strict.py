@@ -759,6 +759,103 @@ def _validate_conflicts(dossier, source_map, feedback_map, enums, schema_doc):
     return used_feedback_ids
 
 
+
+def _validate_coverage_sufficiency(evidence, observations, schema_doc):
+    """Validate the neutral machine-readable coverage attestation for persisted sufficient dossiers."""
+    coverage = evidence.get("coverage")
+    required = ("dimensions", "closure_basis", "strengths_investigated", "weaknesses_tradeoffs_investigated")
+    _require_fields(coverage, required, "evidence.coverage")
+    if set(coverage) != set(required):
+        raise ValueError("evidence.coverage contains unsupported fields")
+
+    enums = schema_doc["enums"]
+    dimensions = coverage["dimensions"]
+    if not isinstance(dimensions, list):
+        raise ValueError("evidence.coverage.dimensions must be a list")
+
+    expected_dimensions = set(enums["coverage_dimension"])
+    seen_dimensions = set()
+    state_by_dimension = {}
+    for index, item in enumerate(dimensions):
+        _require_fields(item, ("dimension", "state", "observation_indices"), f"coverage dimension {index}")
+        if set(item) != {"dimension", "state", "observation_indices"}:
+            raise ValueError(f"coverage dimension {index} contains unsupported fields")
+        dimension = item["dimension"]
+        state = item["state"]
+        observation_indices = item["observation_indices"]
+        if dimension not in expected_dimensions:
+            raise ValueError(f"coverage dimension {index} is invalid")
+        if dimension in seen_dimensions:
+            raise ValueError("coverage dimensions must classify every dimension exactly once")
+        seen_dimensions.add(dimension)
+        if state not in enums["coverage_state"]:
+            raise ValueError(f"coverage dimension {dimension} state is invalid")
+        if (
+            not isinstance(observation_indices, list)
+            or len(observation_indices) != len(set(observation_indices))
+            or any(not _json_int(value) or value < 0 or value >= len(observations) for value in observation_indices)
+        ):
+            raise ValueError(f"coverage dimension {dimension} observation_indices are invalid")
+        if state == "covered" and not observation_indices:
+            raise ValueError(f"covered coverage dimension {dimension} requires bound observation indices")
+        if state != "covered" and observation_indices:
+            raise ValueError(f"non-covered coverage dimension {dimension} must not bind observations")
+        state_by_dimension[dimension] = state
+
+    if seen_dimensions != expected_dimensions:
+        raise ValueError("coverage dimensions must classify every canonical dimension exactly once")
+
+    if coverage["closure_basis"] not in enums["coverage_closure_basis"]:
+        raise ValueError("evidence.coverage closure_basis is invalid")
+    if coverage["strengths_investigated"] is not True:
+        raise ValueError("sufficient dossier coverage requires neutral investigation of meaningful strengths")
+    if coverage["weaknesses_tradeoffs_investigated"] is not True:
+        raise ValueError("sufficient dossier coverage requires neutral investigation of weaknesses and trade-offs")
+
+    unresolved = [
+        dimension for dimension, state in state_by_dimension.items()
+        if state == "materially_unresolved"
+    ]
+    if unresolved:
+        raise ValueError("sufficient/evidence_stable dossier has materially unresolved game-experience coverage")
+
+    exhausted = {
+        dimension for dimension, state in state_by_dimension.items()
+        if state == "exhausted_unavailable"
+    }
+    closure_basis = coverage["closure_basis"]
+    if exhausted and closure_basis != "sufficient_after_route_exhaustion":
+        raise ValueError("exhausted unavailable coverage requires route-exhaustion closure basis")
+    if closure_basis == "sufficient_after_route_exhaustion" and not exhausted:
+        raise ValueError("route-exhaustion closure basis requires at least one exhausted unavailable dimension")
+
+    central_dimensions = {
+        "core_play_mechanics",
+        "controls_game_feel",
+        "progression_development_unlocks",
+        "variety_repetition_over_time",
+        "difficulty_mastery_learning_friction",
+        "pacing_structure_direction",
+        "exploration_mission_activity_structure",
+        "multiplayer_coop_dependence",
+        "story_characters_identity_hooks",
+    }
+    covered_central = {
+        dimension for dimension in central_dimensions
+        if state_by_dimension.get(dimension) == "covered"
+    }
+    exhausted_central = {
+        dimension for dimension in central_dimensions
+        if state_by_dimension.get(dimension) == "exhausted_unavailable"
+    }
+    if not covered_central and not (
+        closure_basis == "sufficient_after_route_exhaustion" and exhausted_central
+    ):
+        raise ValueError(
+            "sufficient/evidence_stable dossier is only a narrow nonrepresentative slice of game experience"
+        )
+
+
 def derive_dossier_summary(observations, conflicts):
     """Return the only canonical top-level summary projection from validated structured findings."""
     if not isinstance(observations, list) or not observations or not isinstance(conflicts, list):
@@ -913,8 +1010,8 @@ def validate_dossier_strict(
         raise ValueError("dossier summary must equal canonical structured-finding derivation")
 
     evidence = dossier.get("evidence")
-    _require_fields(evidence, ("strategy", "research_state", "source_mix_status", "single_source_reason", "russian_attempt", "overall_strength", "stop_reason"), "evidence")
-    if set(evidence) != {"strategy", "research_state", "source_mix_status", "single_source_reason", "russian_attempt", "overall_strength", "stop_reason"}:
+    _require_fields(evidence, ("strategy", "research_state", "source_mix_status", "single_source_reason", "russian_attempt", "overall_strength", "stop_reason", "coverage"), "evidence")
+    if set(evidence) != {"strategy", "research_state", "source_mix_status", "single_source_reason", "russian_attempt", "overall_strength", "stop_reason", "coverage"}:
         raise ValueError("evidence contains unsupported fields")
     if evidence["strategy"] not in enums["research_strategy"]:
         raise ValueError("evidence strategy is invalid")
