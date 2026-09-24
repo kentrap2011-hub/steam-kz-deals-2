@@ -656,3 +656,23 @@ Deep establishes one GitHub-confirmed invocation boundary before semantic execut
 **Сохранено:** GitHub alone owns scope/order, canonical acceptance, attempts, recovery authorization, completeness and persistence; exact profile pin and exact work/Dossier/recovery identity remain strict; valid execution still consumes attempts exactly once; stale/unprepared work remains fail-closed; Fast and Deep remain independent; Dossier worker/progression behavior is unchanged; no scheduler/queue/retry daemon or Scheduled Task setting is added or changed.
 
 **Основные места:** `config/progressive_pass1_contract.json`, `config/progressive_pass1_worker_prompt.md`, `config/progressive_pass2_contract.json`, `config/progressive_pass2_worker_prompt.md`, `config/execution_ownership_contract.json`, `scripts/progressive_work_authority.py`, `scripts/ingest_progressive_pass2.py`, `scripts/progressive_pass2.py`.
+
+
+---
+
+## PPD-007 — Deep run-start confirmation is a publication guard, not a semantic-computation barrier
+
+**Дата:** 2026-09-24  
+**Статус:** canonical; supersedes only the “confirmation before semantic execution” timing clause of PPD-006. The GitHub-owned confirmation guard itself remains mandatory.
+
+**Решение:** Deep reads one exact `observed_main_commit`, reads and freezes the PASS 2 contract/work plus the exact profile/Dossier/recovery inputs from that immutable commit, and creates the existing create-only run-start marker before any semantic execution. Semantic computation may then begin immediately, but it is strictly provisional: it may use only that exact observed immutable view and has no attempt, persistence, or transport effect by itself.
+
+Before the **first** Deep result or terminal execution receipt from the invocation is serialized/published, the worker must obtain the durable GitHub-owned `PROGRESSIVE-PASS2-RUN-START-RECEIPT-V1`. Publication is authorized only when the receipt is exact, `status:"confirmed"`, its marker path/nonce lineage matches the marker, and its `run_start_authority_commit` equals the exact `observed_main_commit` used for provisional semantics. The trusted `run_started_at_utc` still comes only from the marker commit's Git committer time through that receipt. A rejected, inconsistent, unsafe, or different-authority receipt invalidates all provisional work from the invocation and authorizes no result, terminal receipt, or semantic attempt.
+
+**Delayed confirmation:** if the first provisional outcome is ready before the receipt exists, absence is not a failure authorization and never permits transport. The worker may perform only the bounded contract-defined wait/recheck sequence: one read when the first outcome is ready, then at most two delayed rereads after about 5 and 10 additional seconds (15 seconds total additional wait), while runtime/tool budget safely permits. If confirmation is still absent, the invocation stops without publishing or consuming an attempt. This tolerates the observed ~13-second GitHub confirmation latency without creating an unbounded poller, retry loop, queue manager, or second marker.
+
+**Почему:** production anchor `202a0517b61d3462049afad503e57f2610c1eb05` was valid and later confirmed, but the scheduled worker stopped before semantics because the receipt had not yet appeared; this turned normal asynchronous GitHub persistence latency into zero-work invocations. Conversely, earlier anchor `90e8f5cc93c19950d5a4f4f016ce262f854c4eeb` was correctly rejected because observed main had been superseded. Therefore the confirmation remains the anti-race **publication** guard, while semantic computation before confirmation is speculative only.
+
+**Сохранено:** GitHub remains sole control-plane authority for scope/order, marker confirmation, canonical acceptance, attempts, recovery authorization, completeness and persistence. Ingest must still prove that the confirmed receipt was durable before result transport and must reject missing/rejected/wrong-authority confirmation. No per-item mutable-current reread is restored; after one confirmation, frozen siblings continue without sibling-ingest waits. Fast prerequisites, Dossier acceptance/evidence semantics, Scheduled Task configuration, scheduler ownership and recovery ownership are unchanged.
+
+**Основные места:** `config/progressive_pass2_contract.json`, `config/progressive_pass2_worker_prompt.md`, `config/execution_ownership_contract.json`, `scripts/ingest_progressive_pass2.py`, `scripts/progressive_work_authority.py`, `scripts/test_progressive_async_traversal.py`, `PROJECT_ROUTES.md`.
