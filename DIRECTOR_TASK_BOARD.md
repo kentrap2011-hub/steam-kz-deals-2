@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — ЧАТ 1 — Progressive pinned live-profile handoff fix
+## ACCEPTED — ЧАТ 1 — Progressive pinned live-profile handoff fix
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PINNED_LIVE_PROFILE_HANDOFF_FIX_01.md`
@@ -8,31 +8,34 @@ Task:
 Report:
 `reviews/worker_reports/progressive-pinned-live-profile-handoff-fix-01.md`
 
-Current review state:
-`needs_report_closeout`
+Final status:
+`complete_ready_for_director_acceptance`
 
-Director review:
-- implementation evidence is otherwise complete and consistent with the authorized architecture;
+Director acceptance:
 - canonical profile authority remains `kentrap2011-hub/stopgame-ratings-data:gaming_taste_live.json`;
 - Progressive Fast and Deep now receive/read an exact GitHub-pinned immutable profile reference/content rather than only profile hashes;
-- profile pin is part of semantic identity and validation;
-- update-before-pin, update-after-pin, churn, wrong/unpinned profile and next-new-work behavior are reported as regression-covered;
-- already pinned/in-flight work remains valid when live profile advances later; next newly prepared work uses the newer profile;
-- no user quiet window, semantic GitHub summarizer, threshold weakening, Dossier semantic change, manual attempt reset, Scheduled Task mutation or manual production semantic run occurred;
-- current old Fast/Deep state remains preserved and becomes non-current through the new pin-aware identity rather than manual reset;
-- PIN-01..19 are sufficiently evidenced in the report;
-- PIN-20 is not yet formally closed for the **current final report revision**: the report says commit `6b34c50...` was reread from fresh `main` before a later closeout update, so the present report revision itself was not yet proven reread after its final commit.
+- the pin contains exact immutable commit/blob/content identity and is part of semantic generation/work/result validation;
+- Fast and Deep worker contracts require reading/verifying that exact pinned profile and forbid switching to mutable/latest profile or chat memory;
+- profile updates before pin are handled by the bounded existing freeze rule;
+- profile updates after pin do not mutate or invalidate already pinned/in-flight work merely because live `main` advances;
+- newly prepared work after a profile update uses the newer profile;
+- no mixed-profile or arbitrary unpinned historical result can pass validation;
+- GitHub performs deterministic fetch/freeze/hash/binding only; no semantic profile summarizer/AI stage was introduced;
+- Fast/Deep fit thresholds and Dossier evidence semantics were not weakened;
+- existing Fast/Deep state was not manually reset; old state becomes non-current under the new pin-aware semantic identity through normal generation logic;
+- no Scheduled Task action, manual recovery authorization, or manual Fast/Dossier/Deep production run occurred;
+- PIN-01..20 accepted;
+- validation workflows reported green, including pin-aware pre-AI rebuild and PASS 2 core validation;
+- Director independently reread the current final report from fresh `main` at head `ae6a3083f7ba13734a7baf4ed7a1ead0065f00bd`, report blob `1b8bbc9d9b7b05ad610d308b8f3c7c102b1d8c52`.
 
-Required closeout:
-- do not redo implementation or tests;
-- commit the final durable report revision if needed;
-- reread that exact final report revision from fresh `main`;
-- update the report so PIN-20 cites the exact final report commit/blob reread proof;
-- do not make any source/runtime/scheduler/production change.
+Decision:
+- task accepted;
+- the primary semantic-input handoff defect is repaired;
+- actual fit/not-fit quality must now be judged from later naturally scheduled Fast/Deep results, not from this implementation task.
 
-Worker slot:
-- **EXISTING physical ЧАТ 1** for this same task;
-- do not open a new worker for this closeout.
+Worker state:
+- physical ЧАТ 1 is retired for independent future work;
+- this worker chat can be deleted.
 
 ## ACCEPTED — ЧАТ 1 — Stage indicator completion + Statistics copy fix
 
