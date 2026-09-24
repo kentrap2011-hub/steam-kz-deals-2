@@ -888,12 +888,15 @@
 
 
 
-## Worker in progress — 2026-09-24
+## Worker completed — 2026-09-24
 
-### Progressive Deep deferred run-start confirmation 01
-Статус: `in_progress`.
+### Progressive Deep deferred run-start confirmation 01 — closure
+Статус: `complete_ready_for_director_acceptance`.
 - worker task: `WORKER_TASK_PROGRESSIVE_DEEP_DEFERRED_RUN_START_CONFIRMATION_01.md`;
-- scope: move the existing GitHub run-start confirmation from a pre-semantic gate to a pre-publication gate, allowing provisional semantics only against the exact observed immutable authority;
-- rejected/mismatched confirmation must discard provisional work and publish nothing; missing confirmation never authorizes transport;
-- GitHub remains control plane; no Scheduled Task action, new scheduler, queue, retry daemon, backlog manager, or manual Deep production is authorized;
-- durable report: `reviews/worker_reports/progressive-deep-deferred-run-start-confirmation-01.md`.
+- PASS 2 marker remains before semantics, while exact-observed semantic computation may proceed provisionally before GitHub confirmation;
+- the exact durable confirmed receipt remains mandatory before first result/terminal publication and must confirm the same observed authority; missing/rejected/wrong authority publishes nothing and consumes no attempt;
+- strict ingest now forbids current-work fallback after a claimed run-start authority proof fails, so confirmation created after transport cannot retroactively authorize it;
+- bounded receipt rechecks cover ordinary ~13-second latency without creating a poller/queue/retry owner;
+- final PASS 2 workflow run `36032288111` succeeded; execution ownership run `36031531931` succeeded;
+- no Scheduled Task action and no manual Deep production backlog processing occurred;
+- durable report: `reviews/worker_reports/progressive-deep-deferred-run-start-confirmation-01.md`, report commit `9d4af1128b1c9bb0009186baf6139bc78b810ae0`.
