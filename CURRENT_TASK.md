@@ -874,3 +874,11 @@
 - no Scheduled Task action or semantic production run occurred;
 - durable report: `reviews/worker_reports/progressive-site-stage-indicator-completion-stats-copy-fix-01.md`, report commit `ae403371a50149d79b9c927926d5b075202141d9`.
 
+## Worker in progress — 2026-09-24
+
+### Progressive async traversal + Deep invalid transport fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_PROGRESSIVE_ASYNC_TRAVERSAL_AND_DEEP_INVALID_TRANSPORT_FIX_01.md`;
+- scope: Fast/Deep asynchronous traversal over already-authorized immutable work; Deep invocation-start authority snapshot; Deep invalid-transport cleanup with zero semantic-attempt consumption;
+- GitHub remains the only scope/order/acceptance/attempt/recovery owner; no scheduler/task mutation, no Dossier behavior change, no manual semantic backlog processing.
+
