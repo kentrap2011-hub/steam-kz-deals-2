@@ -139,7 +139,7 @@ Explanation:
 | FIX-15 | PASS | Final deploy step `Run UI regressions` succeeded; log contains `progressive personalization stage/statistics UI regression: ok`. |
 | FIX-16 | PASS | `Build daily visual payload` run `35914688960` succeeded; final `Deploy visual mailing` run `35914767930` succeeded and Pages deployment reported success. |
 | FIX-17 | PASS | No Scheduled Task action and no semantic production execution was invoked by this worker. |
-| FIX-18 | PENDING CLOSEOUT REREAD | This closeout version must be committed, reread from fresh `main`, then this row must be changed to PASS with the exact commit/blob evidence. |
+| FIX-18 | PASS | Closeout candidate report commit `f0c27fdc5f88ded411d958d90903f2033ba73c29` was reread from fresh `main`; fetched blob SHA `1a25aed062bbbdb3adbb1a8baa2f5292526901e9` exactly matched the committed content. This reread evidence is recorded in the durable report. |
 
 ## 7. Mobile validation
 - 360–430 CSS px structural validation passed using the retained responsive layout contract.
@@ -179,7 +179,10 @@ Intermediate deploy runs created by sequential file commits were cancelled/skipp
 Durable report:
 - canonical path/ref: `main:reviews/worker_reports/progressive-site-stage-indicator-completion-stats-copy-fix-01.md`;
 - initial durable report commit: `ae403371a50149d79b9c927926d5b075202141d9`;
-- closeout candidate commit/blob: to be recorded after the required fresh-`main` reread.
+- FIX-18 closeout candidate commit: `f0c27fdc5f88ded411d958d90903f2033ba73c29`;
+- closeout candidate blob SHA: `1a25aed062bbbdb3adbb1a8baa2f5292526901e9`;
+- fresh-`main` reread after that commit: PASS, exact blob match;
+- this final annotation commit is the report closeout commit and will be reread again from fresh `main` before the worker response.
 
 ## 9. Unresolved items
 - none.
