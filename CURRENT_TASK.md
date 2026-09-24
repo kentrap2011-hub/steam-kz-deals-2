@@ -886,3 +886,14 @@
 - validation: PR PASS 2 `35981637513` success; PR Dossier `35981637494` success; main PASS 2 `35981732708` success; execution ownership `35981732888` success; pre-AI `35981732695` success; visual `35981732905` success;
 - durable report: `reviews/worker_reports/progressive-async-traversal-and-deep-invalid-transport-fix-01.md`, DRG-01 update commit `c395b7788f5d957f924ce1e235cb2a2ce67971c0`.
 
+
+
+## Worker in progress — 2026-09-24
+
+### Progressive Deep deferred run-start confirmation 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_PROGRESSIVE_DEEP_DEFERRED_RUN_START_CONFIRMATION_01.md`;
+- scope: move the existing GitHub run-start confirmation from a pre-semantic gate to a pre-publication gate, allowing provisional semantics only against the exact observed immutable authority;
+- rejected/mismatched confirmation must discard provisional work and publish nothing; missing confirmation never authorizes transport;
+- GitHub remains control plane; no Scheduled Task action, new scheduler, queue, retry daemon, backlog manager, or manual Deep production is authorized;
+- durable report: `reviews/worker_reports/progressive-deep-deferred-run-start-confirmation-01.md`.
