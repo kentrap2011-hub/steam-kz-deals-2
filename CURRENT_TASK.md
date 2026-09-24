@@ -901,9 +901,13 @@
 - no Scheduled Task action and no manual Deep production backlog processing occurred;
 - durable report: `reviews/worker_reports/progressive-deep-deferred-run-start-confirmation-01.md`, report commit `9d4af1128b1c9bb0009186baf6139bc78b810ae0`.
 
-## ACTIVE — Progressive Deep insufficient-evidence diagnostic 01
-Статус: `in_progress`.
+## COMPLETED — Progressive Deep insufficient-evidence diagnostic 01
+Статус: `complete_root_cause_proven`.
 - task: `WORKER_TASK_PROGRESSIVE_DEEP_INSUFFICIENT_EVIDENCE_DIAGNOSTIC_01.md`;
-- mode: read-only diagnostic / report; production PASS 2, Dossier, recovery and Scheduled Task are immutable;
-- fixed sample: 4 completed not-fit controls, 8 insufficient-evidence cases, 1 terminal-execution-failure technical control;
-- durable report target: `reviews/worker_reports/progressive-deep-insufficient-evidence-diagnostic-01.md`.
+- dominant root cause: `DOSSIER_TOO_THIN`;
+- Deep over-conservatism: not proven on the fixed sample;
+- semantic input/profile/binding defect: not found on the fixed sample;
+- terminal execution failure: independent technical control;
+- recommendation: bounded Dossier evidence-preparation/acceptance stop-rule repair only; no implementation or recovery authorized;
+- durable report: `reviews/worker_reports/progressive-deep-insufficient-evidence-diagnostic-01.md`;
+- report commit: `7f0ee4db37f5e4a5cf6ccdff47a63d26f7dd7e2d`.
