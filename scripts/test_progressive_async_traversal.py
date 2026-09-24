@@ -1,6 +1,7 @@
 import copy
 import hashlib
 import json
+import os
 import subprocess
 import tempfile
 from datetime import datetime, timezone
@@ -15,6 +16,7 @@ import test_progressive_pass2 as pass2_core
 
 NOW = datetime(2026, 9, 24, 12, 0, 0, tzinfo=timezone.utc)
 RUN_STARTED = '2026-09-24T11:00:00+00:00'
+NEXT_RUN_STARTED = '2026-09-24T11:35:00+00:00'
 
 
 def read(path):
@@ -25,6 +27,21 @@ def git(repo, *args):
     return subprocess.run(
         ['git', *args], cwd=repo, text=True, capture_output=True, check=True
     ).stdout.strip()
+
+
+def commit(repo, message, when):
+    env = dict(os.environ)
+    env['GIT_AUTHOR_DATE'] = when
+    env['GIT_COMMITTER_DATE'] = when
+    subprocess.run(
+        ['git', 'commit', '-qm', message],
+        cwd=repo,
+        text=True,
+        capture_output=True,
+        check=True,
+        env=env,
+    )
+    return git(repo, 'rev-parse', 'HEAD')
 
 
 def write_json(path, value):
@@ -78,30 +95,33 @@ def deep_fixture():
     return item, manifest, dossier
 
 
+def init_repo(repo):
+    git(repo, 'init', '-q')
+    git(repo, 'config', 'user.name', 'test')
+    git(repo, 'config', 'user.email', 'test@example.invalid')
+
+
 def exact_authority_and_path_reuse():
     item, manifest, dossier = deep_fixture()
     with tempfile.TemporaryDirectory() as td:
         repo = Path(td)
-        git(repo, 'init', '-q')
-        git(repo, 'config', 'user.name', 'test')
-        git(repo, 'config', 'user.email', 'test@example.invalid')
+        init_repo(repo)
         (repo / 'README').write_text('base\n', encoding='utf-8')
         git(repo, 'add', '.')
-        git(repo, 'commit', '-qm', 'base')
-        unprepared = git(repo, 'rev-parse', 'HEAD')
+        unprepared = commit(repo, 'base', '2026-09-24T09:00:00+00:00')
 
         manifest_path = repo / 'data/production/pre_ai/progressive_pass2_work.json'
         dossier_path = repo / item['dossier_path']
         write_json(manifest_path, manifest)
         write_json(dossier_path, dossier)
         git(repo, 'add', '.')
-        git(repo, 'commit', '-qm', 'prepare Deep work')
+        prepared = commit(repo, 'prepare Deep work', '2026-09-24T10:00:00+00:00')
 
         candidate = repo / item['result_submission_path']
         candidate.parent.mkdir(parents=True, exist_ok=True)
         candidate.write_text('{bad json', encoding='utf-8')
         git(repo, 'add', '.')
-        git(repo, 'commit', '-qm', 'bad transport')
+        commit(repo, 'bad transport', '2026-09-24T10:20:00+00:00')
 
         candidate.unlink()
         write_json(
@@ -109,14 +129,13 @@ def exact_authority_and_path_reuse():
             {'status': 'rejected_invalid_result_no_attempt', 'work_id': item['work_id']},
         )
         git(repo, 'add', '-A')
-        git(repo, 'commit', '-qm', 'durable rejection then cleanup')
-        later_run_start = git(repo, 'rev-parse', 'HEAD')
+        later_run_start = commit(
+            repo, 'durable rejection then cleanup', '2026-09-24T10:50:00+00:00'
+        )
 
-        # The exact deterministic path is safely reusable after GitHub cleanup.
         write_json(candidate, {'valid_transport': True})
         git(repo, 'add', '.')
-        git(repo, 'commit', '-qm', 'valid resubmission')
-        valid_add = git(repo, 'rev-parse', 'HEAD')
+        valid_add = commit(repo, 'valid resubmission', '2026-09-24T11:10:00+00:00')
         resolved = progressive_work_authority.resolve_presemantic_work_item_at_commit(
             candidate,
             manifest_path,
@@ -129,6 +148,25 @@ def exact_authority_and_path_reuse():
         assert progressive_pass2.validate_run_start_authority(
             resolved, later_run_start, RUN_STARTED, repo_root=repo, now=NOW
         )
+
+        # Historical-but-prepared authority is not enough: it had already been
+        # superseded on main before this claimed invocation boundary.
+        historical = progressive_work_authority.resolve_presemantic_work_item_at_commit(
+            candidate,
+            manifest_path,
+            prepared,
+            path_field='result_submission_path',
+            expected_contract='PROGRESSIVE-PASS2-WORK-V1',
+            repo_root=repo,
+        )
+        try:
+            progressive_pass2.validate_run_start_authority(
+                historical, prepared, RUN_STARTED, repo_root=repo, now=NOW
+            )
+        except ValueError as exc:
+            assert 'already superseded before run start' in str(exc)
+        else:
+            raise AssertionError('arbitrary historical prepared work must fail closed')
 
         try:
             progressive_work_authority.resolve_presemantic_work_item_at_commit(
@@ -144,32 +182,31 @@ def exact_authority_and_path_reuse():
         else:
             raise AssertionError('unprepared authority commit must fail closed')
 
-    # Later Dossier mutation is ignored by the frozen run but visible to the next run.
+    # A mutable Dossier change after the frozen run start does not invalidate
+    # that run, while the next invocation sees the newer bytes.
     item, manifest, dossier = deep_fixture()
     with tempfile.TemporaryDirectory() as td:
         repo = Path(td)
-        git(repo, 'init', '-q')
-        git(repo, 'config', 'user.name', 'test')
-        git(repo, 'config', 'user.email', 'test@example.invalid')
+        init_repo(repo)
         manifest_path = repo / 'data/production/pre_ai/progressive_pass2_work.json'
         dossier_path = repo / item['dossier_path']
         write_json(manifest_path, manifest)
         write_json(dossier_path, dossier)
         git(repo, 'add', '.')
-        git(repo, 'commit', '-qm', 'frozen authority')
-        frozen = git(repo, 'rev-parse', 'HEAD')
+        frozen = commit(repo, 'frozen authority', '2026-09-24T10:00:00+00:00')
 
         changed = copy.deepcopy(dossier)
         changed['generated_at_utc'] = '2026-09-23T01:00:00Z'
         write_json(dossier_path, changed)
         git(repo, 'add', '.')
-        git(repo, 'commit', '-qm', 'later dossier change')
-        changed_commit = git(repo, 'rev-parse', 'HEAD')
+        changed_commit = commit(
+            repo, 'later dossier change', '2026-09-24T11:30:00+00:00'
+        )
 
         candidate = repo / item['result_submission_path']
         write_json(candidate, {'transport': 'from frozen run'})
         git(repo, 'add', '.')
-        git(repo, 'commit', '-qm', 'frozen result')
+        commit(repo, 'frozen result', '2026-09-24T11:40:00+00:00')
         resolved = progressive_work_authority.resolve_presemantic_work_item_at_commit(
             candidate,
             manifest_path,
@@ -186,12 +223,12 @@ def exact_authority_and_path_reuse():
         newer['_work_authority_commit'] = changed_commit
         try:
             progressive_pass2.validate_run_start_authority(
-                newer, changed_commit, RUN_STARTED, repo_root=repo, now=NOW
+                newer, changed_commit, NEXT_RUN_STARTED, repo_root=repo, now=NOW
             )
-        except ValueError:
-            pass
+        except ValueError as exc:
+            assert 'content SHA does not match' in str(exc)
         else:
-            raise AssertionError('next run must observe changed Dossier bytes')
+            raise AssertionError('next invocation must observe changed Dossier bytes')
 
 
 def main():
@@ -204,7 +241,6 @@ def main():
     receipt_schema = json.loads(read('config/progressive_pass2_execution_receipt_schema.json'))
     ingest_source = read('scripts/ingest_progressive_pass2.py')
 
-    # F-01..04: frozen Fast traversal never waits for sibling ingest.
     ft = fast['invocation_traversal']
     assert ft['manifest_and_profile_pin_read_once_per_invocation'] is True
     assert ft['prior_sibling_ingest_required'] is False
@@ -213,15 +249,12 @@ def main():
     assert ft['stale_wrong_generation_or_wrong_path_counts_as_submitted'] is False
     assert 'do not wait for GitHub to ingest A' in fast_prompt
     assert 'do not infer acceptance' in fast_prompt
-
-    # F-05/F-06 remain the existing Fast one-shot + exact profile-pin policy.
     assert fast['attempt_budget']['invalid_semantic_payload_with_exact_identity'] == (
         'consume_attempt_as_analysis_incomplete'
     )
     assert fast['attempt_budget']['maximum_attempts_per_work_id'] == 1
     assert fast['semantic_generation']['profile_pin']['live_update_after_pin_invalidates_started_work'] is False
 
-    # D-01..08: one exact run-start view, no mutable per-item liveness gate.
     dt = deep['invocation_traversal']
     assert dt['snapshot_boundary'] == 'exact_main_revision_at_invocation_start'
     assert dt['manifest_dossier_and_recovery_authorization_frozen_once'] is True
@@ -235,7 +268,6 @@ def main():
     assert 'run_start_authority_commit' in deep_prompt
     exact_authority_and_path_reuse()
 
-    # D-05: stale before the invocation boundary is not live.
     item, _manifest, dossier = deep_fixture()
     expired = copy.deepcopy(dossier)
     expired['expires_at_utc'] = '2026-09-24T10:00:00Z'
@@ -255,8 +287,6 @@ def main():
     )
     assert ok is False and reason == 'dossier_expired_or_missing_expiry'
 
-    # D-09/D-10/D-12: malformed result/receipt stays zero-attempt, is removable,
-    # and a later valid submission consumes exactly one attempt.
     ctx, q, proj = pass2_core.contexts(), pass2_core.queue(), pass2_core.projection()
     binding = {'binding': 'current-v1', 'schema': 'Dossier-V2'}
     d1 = pass2_core.dossier_record('1', 'Game 1', binding)
@@ -310,7 +340,6 @@ def main():
     assert replay_state == valid_state
     assert replay_receipts[0]['status'] == 'replay_ignored'
 
-    # D-13..15: rejection receipt survives later success; no raw archive/fingerprint.
     original = ingest_progressive_pass2.INGEST_RECEIPTS
     try:
         with tempfile.TemporaryDirectory() as td:
@@ -332,7 +361,6 @@ def main():
     assert 'rejected_payload_fingerprint' not in json.dumps(receipt_schema)
     assert ingest_source.index('write_ingest_receipts(') < ingest_source.index('path.unlink()')
 
-    # D-16/D-17 + ownership.
     assert deep['ordering']['invalid_or_failed_item_blocks_siblings'] is False
     assert deep['transport']['valid_siblings_depend_on_invalid_sibling'] is False
     assert dt['same_invocation_retry_after_transport_cleanup'] is False

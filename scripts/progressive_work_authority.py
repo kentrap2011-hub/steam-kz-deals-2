@@ -1,6 +1,7 @@
 import json
 import re
 import subprocess
+from datetime import datetime
 from pathlib import Path
 
 
@@ -179,6 +180,61 @@ def resolve_presemantic_work_item(
             return resolved
     raise ValueError('No exact Git-prepared pre-semantic work authority exists for artifact')
 
+
+
+def validate_run_start_commit_boundary(
+    authority_commit,
+    result_commit,
+    run_started_at_utc,
+    repo_root=Path('.'),
+):
+    """Prove authority was the latest first-parent main ancestor at run start."""
+    repo = Path(repo_root).resolve()
+    authority = str(authority_commit or '').lower()
+    result = str(result_commit or '').lower()
+    if not COMMIT_SHA_RE.fullmatch(authority) or not COMMIT_SHA_RE.fullmatch(result):
+        raise ValueError('Progressive run-start commit boundary has invalid commit identity')
+    try:
+        started = datetime.fromisoformat(str(run_started_at_utc).replace('Z', '+00:00'))
+    except ValueError as exc:
+        raise ValueError('Progressive run_started_at_utc is invalid') from exc
+    if started.tzinfo is None:
+        raise ValueError('Progressive run_started_at_utc must be timezone-aware')
+
+    parent = _text(repo, 'rev-parse', f'{result}^')
+    first_parent_lineage = [
+        value for value in _text(repo, 'rev-list', '--first-parent', parent).splitlines()
+        if value
+    ]
+    if authority not in first_parent_lineage:
+        raise ValueError('Progressive run-start authority is not on result main first-parent lineage')
+
+    authority_time = datetime.fromisoformat(
+        _text(repo, 'show', '-s', '--format=%cI', authority).replace('Z', '+00:00')
+    )
+    if authority_time > started:
+        raise ValueError('Progressive run-start authority commit did not exist at run start')
+
+    descendants = [
+        value for value in
+        _text(repo, 'rev-list', '--first-parent', '--reverse', f'{authority}..{parent}').splitlines()
+        if value
+    ]
+    if descendants:
+        next_time = datetime.fromisoformat(
+            _text(repo, 'show', '-s', '--format=%cI', descendants[0]).replace('Z', '+00:00')
+        )
+        if next_time <= started:
+            raise ValueError(
+                'Progressive run-start authority was already superseded before run start'
+            )
+
+    result_time = datetime.fromisoformat(
+        _text(repo, 'show', '-s', '--format=%cI', result).replace('Z', '+00:00')
+    )
+    if result_time < started:
+        raise ValueError('Progressive result transport predates claimed run start')
+    return True
 
 def consumed_work_ids(receipt_dir):
     consumed = set()

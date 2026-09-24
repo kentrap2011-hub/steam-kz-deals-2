@@ -258,6 +258,12 @@ def validate_run_start_authority(
     current = now or datetime.now(timezone.utc)
     if started > current:
         raise ValueError('Deep run_started_at_utc is in the future')
+    progressive_work_authority.validate_run_start_commit_boundary(
+        authority,
+        work_item.get('_result_introduction_commit'),
+        run_started_at_utc,
+        repo_root=repo_root,
+    )
 
     dossier_path = work_item.get('dossier_path')
     if not isinstance(dossier_path, str) or not dossier_path:
