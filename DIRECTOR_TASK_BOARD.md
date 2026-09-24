@@ -1,5 +1,36 @@
 # DIRECTOR TASK BOARD
 
+## ACTIVE — ЧАТ 2 — Fast insufficient-evidence semantic review
+
+Task:
+`WORKER_TASK_PROGRESSIVE_FAST_INSUFFICIENT_EVIDENCE_REVIEW_01.md`
+
+Report:
+`reviews/worker_reports/progressive-fast-insufficient-evidence-review-01.md`
+
+Mode:
+`READ-ONLY / RECON / SEMANTIC QUALITY REVIEW`
+
+Worker slot:
+- **НОВЫЙ физический ЧАТ 2**;
+- any previously retired physical ЧАТ 2 must not be reused.
+
+Scope:
+- independently review the four real Fast `analysis_incomplete / insufficient_evidence` results:
+  - RV There Yet? / App_3949040
+  - Uncanny Tales: Cold Road / App_3534240
+  - Nimbatus - The Space Drone Constructor / App_383840
+  - Borderlands 3 / App_397540
+- use exact historical work authority `3aec5050283ec006fefa66f70d7473a499ced2f9` and exact pinned Taste profile;
+- judge against Fast standards, not Deep standards;
+- determine whether lightweight evidence really was insufficient or Fast stopped too early;
+- no replacement results, no retry/reset, no production semantic run, no prompt/contract/scheduler change.
+
+Required per-game classification:
+- `JUSTIFIED_INSUFFICIENT_EVIDENCE`
+- `TOO_CONSERVATIVE_EVIDENCE_WAS_AVAILABLE`
+- `UNPROVABLE_HISTORICAL_RETRIEVAL_LIMITATION`
+
 ## ACTIVE — ЧАТ 1 — Progressive Fast five-item stop diagnostic
 
 Task:
