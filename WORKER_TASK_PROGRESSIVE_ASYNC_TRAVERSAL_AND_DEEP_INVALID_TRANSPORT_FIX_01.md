@@ -164,10 +164,10 @@ Implement the user-approved policy:
    - do NOT add a new fingerprint/hash field for this rejected payload;
    - once that rejection receipt is durably represented in the same canonical GitHub-owned persistence transaction, remove the invalid candidate from the active inbox.
 3. The semantic attempt remains unconsumed. On a later invocation, GitHub's then-current run-start view decides whether the item is submit-able again; ChatGPT must not invent this eligibility itself.
-5. Preserve the old rejected receipt for diagnosis even after the bad active file is removed.
-6. Never overwrite or mutate the bad candidate before classification.
-7. Never silently turn invalid transport into accepted/incomplete semantic state.
-8. Do not create a tight same-invocation retry loop. A candidate rejected by GitHub is not rerun by the same semantic invocation merely because cleanup later frees the path.
+4. Preserve the old rejected receipt for diagnosis even after the bad active file is removed.
+5. Never overwrite or mutate the bad candidate before classification.
+6. Never silently turn invalid transport into accepted/incomplete semantic state.
+7. Do not create a tight same-invocation retry loop. A candidate rejected by GitHub is not rerun by the same semantic invocation merely because cleanup later frees the path.
 
 ### Reusing the deterministic path
 
