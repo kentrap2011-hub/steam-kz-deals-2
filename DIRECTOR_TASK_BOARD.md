@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — ЧАТ 1 — Stage indicator completion + Statistics copy fix
+## ACCEPTED — ЧАТ 1 — Stage indicator completion + Statistics copy fix
 
 Task:
 `WORKER_TASK_PROGRESSIVE_SITE_STAGE_INDICATOR_COMPLETION_STATS_COPY_FIX_01.md`
@@ -8,19 +8,32 @@ Task:
 Report:
 `reviews/worker_reports/progressive-site-stage-indicator-completion-stats-copy-fix-01.md`
 
-Current review state:
-`needs_report_closeout`
+Final status:
+`complete_ready_for_director_acceptance`
 
-Director review:
-- implementation evidence is otherwise complete: exactly three icons remain, completion-only lit mapping is documented, user-facing technical jargon is removed, Dossier/Deep technical rows were simplified, mobile/UI regressions passed, visual build and final Pages deploy succeeded;
-- however the current task was refined to require `FIX-18` = durable report committed and reread from fresh `main`;
-- the committed report still labels its validation section `FIX-01..17` and does not explicitly close current `FIX-18`;
-- do not redo implementation;
-- update only the durable report/closeout so it explicitly validates current FIX-01..18, includes the report commit/ref, and states that the report was reread from fresh `main`.
+Director acceptance:
+- exactly three visible stage icons remain;
+- Fast is lit only for exact completed fit/not-fit;
+- Dossier is lit only when canonically accepted;
+- Deep is lit only for exact completed fit/not-fit;
+- incomplete/error/pending/recovery/unknown states remain visually dim;
+- user-facing Statistics no longer exposes `authoritative`, `Fast-scope`, `Dossier-scope` or `Deep-покрытие`;
+- Fast `Обработано` is explained as completed fit + completed not-fit + no-conclusion + errors;
+- Dossier is simplified to `Готово / Ожидает / Требует восстановления`;
+- Deep first-pass processed/remaining and redundant all-complete boolean rows are removed from the user-facing page;
+- FIX-01..18 passed;
+- visual build run `35914688960` succeeded;
+- final Pages deploy run `35914767930` succeeded;
+- FIX-18 closeout was committed and reread from fresh `main` with exact blob verification;
+- no Scheduled Task action or semantic production run occurred.
 
-Worker slot:
-- **EXISTING physical ЧАТ 1** for this same task;
-- do not open a new worker for this closeout.
+Decision:
+- task accepted;
+- no further source change is required for this UI correction.
+
+Worker state:
+- physical ЧАТ 1 is retired for independent future work;
+- this worker chat can be deleted.
 
 ## ACCEPTED — ЧАТ 2 — Fast + Deep zero completion diagnostic
 
