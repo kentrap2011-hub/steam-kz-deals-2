@@ -29,7 +29,7 @@ Worker state:
 - physical ЧАТ 2 is retired for independent future work;
 - this worker chat can be deleted.
 
-## ACTIVE — ЧАТ 1 — Progressive Fast five-item stop diagnostic
+## ACCEPTED — ЧАТ 1 — Progressive Fast five-item stop diagnostic
 
 Task:
 `WORKER_TASK_PROGRESSIVE_FAST_FIVE_ITEM_STOP_DIAGNOSTIC_01.md`
@@ -37,33 +37,33 @@ Task:
 Report:
 `reviews/worker_reports/progressive-fast-five-item-stop-diagnostic-01.md`
 
-Mode:
-`READ-ONLY / RECON`
+Final status:
+`needs_external_invocation_evidence`
 
-Worker slot:
-- **НОВЫЙ физический ЧАТ 1**;
-- previous physical ЧАТ 1 is retired and must not be reused.
+Final classification:
+`NOT_PROVABLE_FROM_REPOSITORY_EVIDENCE`
 
-Question:
-- why did the latest real Fast invocation stop after exactly five consecutive submissions even though canonical Fast has no fixed five-item quota?
+Director acceptance:
+- immutable Git proves the real five-item sequence was BOKURA, RV There Yet?, Uncanny Tales: Cold Road, Nimbatus - The Space Drone Constructor, Borderlands 3;
+- FACT-01 correction is complete and the report no longer misidentifies items 2/3;
+- there is no canonical/config/code/current-bootstrap five-item quota;
+- the invocation-side rules explicitly allowed continuing beyond five while runtime/tool budget safely permitted;
+- item 6 was The Bureau: XCOM Declassified and remained current, valid and unsubmitted immediately after item 5;
+- no GitHub ingest/state/profile/pin/path collision blocked item 6 before it could run;
+- BOKURA produced fit and the next four produced analysis_incomplete; those per-item outcomes were not valid whole-invocation stop reasons;
+- repository evidence does not prove runtime/tool budget exhaustion, timeout, platform interruption, tool/API error, context/token limit, or an unjustified voluntary stop;
+- therefore the exact stop cause cannot be classified more strongly without the actual Scheduled Task execution record;
+- no production worker, source, prompt, contract, state or Scheduled Task was modified by this diagnostic;
+- Director reread the corrected report from fresh `main` at head `ba8f1af739330725853556fe195f7408a775b42b`, report blob `2cfeb088ac2f6949ac66353506bc6935045c9a16`.
 
-Boundaries:
-- diagnose only;
-- no code/prompt/contract fix;
-- no Scheduled Task change;
-- no manual Fast/Dossier/Deep production run;
-- do not claim runtime/tool/platform interruption without direct evidence;
-- if repository evidence is insufficient, report the exact missing evidence from the actual Scheduled Task invocation.
+Decision:
+- diagnostic accepted;
+- do not implement a five-item-limit fix because no such canonical limit was found;
+- if exact root cause is still needed, inspect the actual Scheduled Task execution record after Borderlands 3.
 
-Known production fact:
-- five Fast results were submitted from 10:02:37Z through 10:02:53Z;
-- first GitHub ingest followed at 10:02:57Z;
-- therefore GitHub ingest did not serialize those five items.
-
-Director review:
-- root-cause classification may remain `NOT_PROVABLE_FROM_REPOSITORY_EVIDENCE`, but report is not accepted yet;
-- FACT-01 correction required: immutable Git proves items 2/3 were RV There Yet? and Uncanny Tales: Cold Road, not NARUTO/Rayman;
-- correct the same durable report in the SAME physical ЧАТ 1; no new diagnosis or implementation unless new evidence changes the conclusion.
+Worker state:
+- physical ЧАТ 1 is retired for independent future work;
+- this worker chat can be deleted.
 
 ## ACCEPTED — ЧАТ 1 — Progressive async traversal + Deep invalid transport fix
 
