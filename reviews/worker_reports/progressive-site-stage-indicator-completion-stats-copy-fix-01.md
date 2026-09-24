@@ -119,7 +119,7 @@ Explanation:
 - User-facing wording contains no `authoritative` term.
 - Deep first-pass processed/remaining and separate all-complete boolean rows were removed from the Statistics surface; canonical producer fields remain untouched.
 
-## 6. Validation — FIX-01..17
+## 6. Validation — FIX-01..18
 | Gate | Result | Evidence |
 |---|---|---|
 | FIX-01 | PASS | `stageIndicators()` still returns exactly Fast, Dossier, Deep; regression asserts keys, symbols and length=3. |
@@ -139,6 +139,7 @@ Explanation:
 | FIX-15 | PASS | Final deploy step `Run UI regressions` succeeded; log contains `progressive personalization stage/statistics UI regression: ok`. |
 | FIX-16 | PASS | `Build daily visual payload` run `35914688960` succeeded; final `Deploy visual mailing` run `35914767930` succeeded and Pages deployment reported success. |
 | FIX-17 | PASS | No Scheduled Task action and no semantic production execution was invoked by this worker. |
+| FIX-18 | PENDING CLOSEOUT REREAD | This closeout version must be committed, reread from fresh `main`, then this row must be changed to PASS with the exact commit/blob evidence. |
 
 ## 7. Mobile validation
 - 360–430 CSS px structural validation passed using the retained responsive layout contract.
@@ -174,6 +175,11 @@ Final deploy:
 - deployment status: success.
 
 Intermediate deploy runs created by sequential file commits were cancelled/skipped by existing concurrency as superseded; final build/deploy above is the acceptance chain.
+
+Durable report:
+- canonical path/ref: `main:reviews/worker_reports/progressive-site-stage-indicator-completion-stats-copy-fix-01.md`;
+- initial durable report commit: `ae403371a50149d79b9c927926d5b075202141d9`;
+- closeout candidate commit/blob: to be recorded after the required fresh-`main` reread.
 
 ## 9. Unresolved items
 - none.
