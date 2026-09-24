@@ -640,6 +640,24 @@ Deep eligibility does **not** require a prior Fast attempt, Fast completion, or 
 
 ---
 
+## TASTE-015 — Dossier sufficiency means downstream-ready neutral coverage
+
+**Дата:** 2026-09-25  
+**Статус:** implemented by `WORKER_TASK_TASTE_DOSSIER_PURPOSE_AND_COVERAGE_SUFFICIENCY_FIX_01.md`.
+
+**Решение:** Taste Dossier is a neutral, profile-agnostic evidence package for a later personalized Deep analysis. The Dossier worker must not use the user's Taste profile to choose favorable/unfavorable evidence or to decide when research is complete. Its semantic objective is a sufficiently complete, balanced, evidence-grounded picture of the actual game experience so downstream Deep can later judge fit.
+
+**Sufficiency / speed:** semantic coverage and downstream usefulness outrank throughput, ordinary latency and minimizing tool calls. One valid observation, one usable source, one Russian item, one generic positive or one complaint is evidence, not completion. `research_state:"sufficient"` / `stop_reason:"evidence_stable"` requires a structured neutral coverage attestation over the final serialized observations. A material unresolved dimension forbids persisted sufficient/stable output. Narrow slices such as localization-only, generic social enjoyment, one isolated mechanic/complaint, or aggregate sentiment cannot close research while broader materially distinct exact-product player-feedback routes remain reasonably discoverable.
+
+**Compact dossiers remain valid:** there is no minimum review/source/search/page/observation count and no numeric completeness score. A compact dossier may close when it directly and credibly characterizes the central experience, or when remaining applicable material dimensions are genuinely unavailable after required materially distinct routes are exhausted and no critical material gap remains. Balanced investigation means checking meaningful strengths and weaknesses/trade-offs where reasonably discoverable; it does not require fabricated one-pro/one-con symmetry.
+
+**Boundedness / ownership:** this does not authorize unbounded crawling. TASTE-014 semantic/adaptive boundedness, equivalent-route suppression, exact identity, Russian evidence, temporal checks, privacy/provenance, create-only transport, ordinary invocation runtime/tool/liveness boundaries, GitHub-owned scope/validation/persistence/recovery/completeness and Scheduled Task ownership remain unchanged. No recovery authorization or Scheduled Task action is introduced.
+
+**Основные места:** `config/taste_steam_review_dossier_worker_prompt.md`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_schema.json`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/test_taste_dossier_purpose_coverage_sufficiency.py`, `.github/workflows/validate-taste-dossier-buffered.yml`.
+
+
+---
+
 ## PPD-006 — Progressive semantic invocations traverse a frozen run-start authority asynchronously
 
 **Дата:** 2026-09-24  
