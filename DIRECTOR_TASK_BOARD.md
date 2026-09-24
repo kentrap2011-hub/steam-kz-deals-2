@@ -1,5 +1,36 @@
 # DIRECTOR TASK BOARD
 
+## ACTIVE — ЧАТ 1 — Progressive Fast five-item stop diagnostic
+
+Task:
+`WORKER_TASK_PROGRESSIVE_FAST_FIVE_ITEM_STOP_DIAGNOSTIC_01.md`
+
+Report:
+`reviews/worker_reports/progressive-fast-five-item-stop-diagnostic-01.md`
+
+Mode:
+`READ-ONLY / RECON`
+
+Worker slot:
+- **НОВЫЙ физический ЧАТ 1**;
+- previous physical ЧАТ 1 is retired and must not be reused.
+
+Question:
+- why did the latest real Fast invocation stop after exactly five consecutive submissions even though canonical Fast has no fixed five-item quota?
+
+Boundaries:
+- diagnose only;
+- no code/prompt/contract fix;
+- no Scheduled Task change;
+- no manual Fast/Dossier/Deep production run;
+- do not claim runtime/tool/platform interruption without direct evidence;
+- if repository evidence is insufficient, report the exact missing evidence from the actual Scheduled Task invocation.
+
+Known production fact:
+- five Fast results were submitted from 10:02:37Z through 10:02:53Z;
+- first GitHub ingest followed at 10:02:57Z;
+- therefore GitHub ingest did not serialize those five items.
+
 ## ACCEPTED — ЧАТ 1 — Progressive async traversal + Deep invalid transport fix
 
 Task:
