@@ -629,7 +629,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("60 Seconds! Reatomized", PROMPT)
         self.assertNotIn("1012880", PROMPT)
         self.assertNotIn("steamcommunity.com/app/1012880", PROMPT)
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-semantic-bounded-retrieval-v1")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-purpose-coverage-sufficiency-v1")
 
 
     def test_ledger_01_marker_binding_and_core_fields(self):
