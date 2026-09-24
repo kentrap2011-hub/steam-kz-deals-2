@@ -2,12 +2,12 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "version": 2,
   "status": "active",
-  "schema_revision": "validator-generator-parity-fix-2026-09-20",
+  "schema_revision": "purpose-coverage-sufficiency-2026-09-25",
   "evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "evidence_contract_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "purpose": "Exact worker-facing neutral multi-source web-evidence dossier shape shared with canonical ingress validation, with content-complete compatibility binding and auditable physical player-feedback identity/count support.",
+  "purpose": "Exact worker-facing neutral multi-source web-evidence dossier shape shared with canonical ingress validation, including profile-agnostic downstream-purpose coverage attestation, content-complete compatibility binding, and auditable physical player-feedback identity/count support.",
   "unknown_fields_policy": "top_level_and_observation_extras_remain_permissive_but_raw_body_like_and_personal_or_commercial_fields_are_forbidden;provenance_source_and_player_feedback_record_records_are_strict",
   "compact_provenance_policy_source": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2#compact_provenance",
   "prepublication_validation_policy_source": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2#prepublication_validation",
@@ -115,8 +115,7 @@
       "adaptive_multi_source_web"
     ],
     "research_stop_reason": [
-      "evidence_stable",
-      "bounded_limit_reached"
+      "evidence_stable"
     ],
     "overall_strength": [
       "strong",
@@ -141,6 +140,31 @@
     ],
     "source_feedback_surface_mode": [
       "concrete_item_collection"
+    ],
+    "coverage_dimension": [
+      "core_play_mechanics",
+      "controls_game_feel",
+      "progression_development_unlocks",
+      "variety_repetition_over_time",
+      "difficulty_mastery_learning_friction",
+      "pacing_structure_direction",
+      "exploration_mission_activity_structure",
+      "multiplayer_coop_dependence",
+      "story_characters_identity_hooks",
+      "recurring_strengths",
+      "recurring_complaints_tradeoffs",
+      "technical_performance_localization_regional"
+    ],
+    "coverage_state": [
+      "covered",
+      "not_material_or_not_applicable",
+      "exhausted_unavailable",
+      "materially_unresolved"
+    ],
+    "coverage_closure_basis": [
+      "broad_neutral_picture",
+      "compact_central_experience",
+      "sufficient_after_route_exhaustion"
     ]
   },
   "integer_rules": {
@@ -292,7 +316,20 @@
       "steam_reviews",
       "store_user_reviews"
     ],
-    "steam_store_exact_app_fallback_parent_source_type_set_is_exclusive": true
+    "steam_store_exact_app_fallback_parent_source_type_set_is_exclusive": true,
+    "coverage": {
+      "required_for_sufficient_evidence_stable": true,
+      "all_dimensions_classified_exactly_once": true,
+      "covered_dimension_requires_at_least_one_valid_observation_index": true,
+      "noncovered_dimension_requires_empty_observation_indices": true,
+      "materially_unresolved_forbidden_for_persisted_sufficient": true,
+      "strengths_investigated_must_be_true": true,
+      "weaknesses_tradeoffs_investigated_must_be_true": true,
+      "exhausted_unavailable_requires_sufficient_after_route_exhaustion_closure": true,
+      "compact_or_broad_requires_covered_central_experience_dimension": true,
+      "route_exhaustion_closure_may_substitute_exhausted_central_dimension_for_covered_central_dimension": true,
+      "fixed_numeric_completeness_score_forbidden": true
+    }
   },
   "provenance_source_required_fields": [
     "source_id",
@@ -443,7 +480,8 @@
           "single_source_reason",
           "russian_attempt",
           "overall_strength",
-          "stop_reason"
+          "stop_reason",
+          "coverage"
         ],
         "additionalProperties": false,
         "properties": {
@@ -502,6 +540,82 @@
               "evidence_stable",
               "bounded_limit_reached"
             ]
+          },
+          "coverage": {
+            "type": "object",
+            "required": [
+              "dimensions",
+              "closure_basis",
+              "strengths_investigated",
+              "weaknesses_tradeoffs_investigated"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "dimensions": {
+                "type": "array",
+                "minItems": 12,
+                "maxItems": 12,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "dimension",
+                    "state",
+                    "observation_indices"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "dimension": {
+                      "type": "string",
+                      "enum": [
+                        "core_play_mechanics",
+                        "controls_game_feel",
+                        "progression_development_unlocks",
+                        "variety_repetition_over_time",
+                        "difficulty_mastery_learning_friction",
+                        "pacing_structure_direction",
+                        "exploration_mission_activity_structure",
+                        "multiplayer_coop_dependence",
+                        "story_characters_identity_hooks",
+                        "recurring_strengths",
+                        "recurring_complaints_tradeoffs",
+                        "technical_performance_localization_regional"
+                      ]
+                    },
+                    "state": {
+                      "type": "string",
+                      "enum": [
+                        "covered",
+                        "not_material_or_not_applicable",
+                        "exhausted_unavailable",
+                        "materially_unresolved"
+                      ]
+                    },
+                    "observation_indices": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "uniqueItems": true
+                    }
+                  }
+                }
+              },
+              "closure_basis": {
+                "type": "string",
+                "enum": [
+                  "broad_neutral_picture",
+                  "compact_central_experience",
+                  "sufficient_after_route_exhaustion"
+                ]
+              },
+              "strengths_investigated": {
+                "type": "boolean"
+              },
+              "weaknesses_tradeoffs_investigated": {
+                "type": "boolean"
+              }
+            }
           }
         },
         "allOf": [
