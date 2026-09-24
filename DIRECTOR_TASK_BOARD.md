@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — ЧАТ 2 — Fast insufficient-evidence semantic review
+## ACCEPTED — ЧАТ 2 — Fast insufficient-evidence semantic review
 
 Task:
 `WORKER_TASK_PROGRESSIVE_FAST_INSUFFICIENT_EVIDENCE_REVIEW_01.md`
@@ -8,28 +8,26 @@ Task:
 Report:
 `reviews/worker_reports/progressive-fast-insufficient-evidence-review-01.md`
 
-Mode:
-`READ-ONLY / RECON / SEMANTIC QUALITY REVIEW`
+Final status:
+`complete_ready_for_director_review`
 
-Worker slot:
-- **НОВЫЙ физический ЧАТ 2**;
-- any previously retired physical ЧАТ 2 must not be reused.
+Director acceptance:
+- review used the exact historical Fast work identity and exact pinned Taste profile for the four intended games;
+- RV There Yet?, Uncanny Tales: Cold Road, Nimbatus - The Space Drone Constructor and Borderlands 3 were all originally `analysis_incomplete / insufficient_evidence`;
+- for all four, lightweight exact-product evidence was reasonably available and sufficient under Fast standards for a provisional fit/not-fit conclusion;
+- overall classification accepted: `FAST_TOO_CONSERVATIVE_PATTERN_CONFIRMED`;
+- the confirmed defect is at the semantic decision/outcome layer: Fast applied a stricter evidence threshold than its own lightweight coverage-first contract required;
+- exact mechanism remains unproven: repository evidence does not distinguish skipped retrieval, failed retrieval, retrieved-but-not-used evidence, or an overly high confidence threshold;
+- current web evidence was used only to judge reasonable Fast-level sufficiency, not to claim exact historical search results at 10:02Z;
+- no canonical Fast results were replaced, no attempts were reset, no retry/recovery was authorized, no production worker or Scheduled Task was changed.
 
-Scope:
-- independently review the four real Fast `analysis_incomplete / insufficient_evidence` results:
-  - RV There Yet? / App_3949040
-  - Uncanny Tales: Cold Road / App_3534240
-  - Nimbatus - The Space Drone Constructor / App_383840
-  - Borderlands 3 / App_397540
-- use exact historical work authority `3aec5050283ec006fefa66f70d7473a499ced2f9` and exact pinned Taste profile;
-- judge against Fast standards, not Deep standards;
-- determine whether lightweight evidence really was insufficient or Fast stopped too early;
-- no replacement results, no retry/reset, no production semantic run, no prompt/contract/scheduler change.
+Decision:
+- semantic quality review accepted;
+- do not implement a fix yet until the actual Scheduled Task execution evidence is inspected for the mechanism.
 
-Required per-game classification:
-- `JUSTIFIED_INSUFFICIENT_EVIDENCE`
-- `TOO_CONSERVATIVE_EVIDENCE_WAS_AVAILABLE`
-- `UNPROVABLE_HISTORICAL_RETRIEVAL_LIMITATION`
+Worker state:
+- physical ЧАТ 2 is retired for independent future work;
+- this worker chat can be deleted.
 
 ## ACTIVE — ЧАТ 1 — Progressive Fast five-item stop diagnostic
 
@@ -61,6 +59,11 @@ Known production fact:
 - five Fast results were submitted from 10:02:37Z through 10:02:53Z;
 - first GitHub ingest followed at 10:02:57Z;
 - therefore GitHub ingest did not serialize those five items.
+
+Director review:
+- root-cause classification may remain `NOT_PROVABLE_FROM_REPOSITORY_EVIDENCE`, but report is not accepted yet;
+- FACT-01 correction required: immutable Git proves items 2/3 were RV There Yet? and Uncanny Tales: Cold Road, not NARUTO/Rayman;
+- correct the same durable report in the SAME physical ЧАТ 1; no new diagnosis or implementation unless new evidence changes the conclusion.
 
 ## ACCEPTED — ЧАТ 1 — Progressive async traversal + Deep invalid transport fix
 
