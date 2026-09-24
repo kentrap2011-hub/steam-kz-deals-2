@@ -2,15 +2,15 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "semantic-bounded-retrieval-2026-09-23",
+  "contract_revision": "purpose-coverage-sufficiency-2026-09-25",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "parallel_validation_contract": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
-  "purpose": "Define the active semantic evidence policy for neutral Taste dossiers while leaving GitHub-owned scope, buffered transport, asynchronous strict validation/persistence, recovery and completeness in the existing control-plane contracts.",
+  "worker_prompt_revision": "web-evidence-v2-purpose-coverage-sufficiency-v1",
+  "purpose": "Define the active semantic evidence policy for neutral, profile-agnostic Taste dossiers that give a downstream personalized Deep worker a sufficiently complete and balanced evidence-grounded picture of actual game experience, while leaving GitHub-owned scope, buffered transport, asynchronous strict validation/persistence, recovery and completeness in the existing control-plane contracts.",
   "supersedes": {
     "steam_appreviews_required": false,
     "steam_cursor_required": false,
@@ -395,9 +395,12 @@
       "source_divergent",
       "temporal_conflict",
       "localization_specific",
-      "identity_ambiguous"
+      "identity_ambiguous",
+      "material_game_experience_coverage_sparse",
+      "current_evidence_is_narrow_or_nonrepresentative",
+      "meaningful_strengths_or_weaknesses_tradeoffs_uninvestigated"
     ],
-    "stop_when": "evidence_is_sufficient_or_all_reasonably_discoverable_mandatory_materially_distinct_routes_are_exhausted_or_a_directly_observed_runtime_tool_liveness_blocker_prevents_safe_continuation",
+    "stop_when": "evidence_is_sufficient_after_mandatory_neutral_coverage_check_or_all_reasonably_discoverable_mandatory_materially_distinct_routes_are_exhausted_or_a_directly_observed_runtime_tool_liveness_blocker_prevents_safe_continuation",
     "accepted_stop_reasons": [
       "evidence_stable",
       "required_materially_distinct_routes_exhausted",
@@ -467,7 +470,10 @@
         "ordinary_invocation_runtime_ended",
         "snapshot_plan_or_binding_changed",
         "directly_observed_tool_or_transport_blocker"
-      ]
+      ],
+      "completeness_over_speed": true,
+      "throughput_or_latency_is_semantic_stop_gate": false,
+      "one_valid_observation_is_completion_gate": false
     }
   },
   "accepted_evidence_statuses": [
@@ -511,5 +517,72 @@
     "multi_source_requires_at_least_two_distinct_physical_used_player_sources": true,
     "multi_source_requires_single_source_reason_null": true,
     "single_source_only_requires_compact_reason": true
+  },
+  "downstream_purpose": {
+    "consumer": "downstream_personalized_deep_semantic_worker",
+    "dossier_role": "neutral_profile_agnostic_evidence_package",
+    "user_taste_profile_use": "forbidden_for_evidence_selection_synthesis_or_stop_decisions",
+    "goal": "sufficiently_complete_balanced_evidence_grounded_picture_of_actual_game_experience_for_later_personalized_fit_analysis",
+    "priority": "semantic_completeness_and_downstream_usefulness_over_throughput_latency_or_minimizing_tool_calls"
+  },
+  "coverage_sufficiency": {
+    "required_before_persisted_sufficient_or_evidence_stable": true,
+    "dimensions": [
+      "core_play_mechanics",
+      "controls_game_feel",
+      "progression_development_unlocks",
+      "variety_repetition_over_time",
+      "difficulty_mastery_learning_friction",
+      "pacing_structure_direction",
+      "exploration_mission_activity_structure",
+      "multiplayer_coop_dependence",
+      "story_characters_identity_hooks",
+      "recurring_strengths",
+      "recurring_complaints_tradeoffs",
+      "technical_performance_localization_regional"
+    ],
+    "dimension_states": [
+      "covered",
+      "not_material_or_not_applicable",
+      "exhausted_unavailable",
+      "materially_unresolved"
+    ],
+    "closure_bases": [
+      "broad_neutral_picture",
+      "compact_central_experience",
+      "sufficient_after_route_exhaustion"
+    ],
+    "all_dimensions_must_be_classified_once": true,
+    "covered_dimension_requires_bound_observation_indices": true,
+    "not_every_dimension_requires_an_observation": true,
+    "materially_unresolved_forbids_persisted_sufficient_or_evidence_stable": true,
+    "balanced_investigation": {
+      "strengths_investigated_required": true,
+      "weaknesses_tradeoffs_investigated_required": true,
+      "artificial_pro_con_symmetry_required": false,
+      "one_sided_evidence_may_remain_one_sided_after_balanced_investigation": true
+    },
+    "narrow_topic_anti_stop": {
+      "examples": [
+        "localization_or_menu_language_only",
+        "generic_social_enjoyment_only",
+        "one_descriptive_mechanic_without_sustained_experience_context",
+        "one_isolated_complaint_without_corroboration_when_broader_exact_product_evidence_is_reasonably_discoverable",
+        "aggregate_sentiment_without_concrete_player_experience_content"
+      ],
+      "rule": "do_not_declare_evidence_stable_while_material_game_experience_dimensions_remain_reasonably_discoverable_and_unresolved"
+    },
+    "compact_success": {
+      "allowed": true,
+      "rule": "a_compact_dossier_may_be_sufficient_when_bound_observations_directly_credibly_characterize_the_central_experience_or_when_remaining_applicable_material_dimensions_are_genuinely_unavailable_after_required_materially_distinct_routes_are_exhausted_and_no_critical_material_gap_remains"
+    },
+    "no_fixed_minimum": {
+      "reviews": false,
+      "sources": false,
+      "searches": false,
+      "pages": false,
+      "covered_dimension_count": false,
+      "completeness_score": false
+    }
   }
 }
