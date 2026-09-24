@@ -1,57 +1,50 @@
-# WORKER TASK — PROGRESSIVE DEEP DEFERRED RUN-START CONFIRMATION 01
+# WORKER TASK — PROGRESSIVE DEEP INSUFFICIENT EVIDENCE DIAGNOSTIC 01
 
 Repository: `kentrap2011-hub/steam-kz-deals-2`
 Base/source of truth: `main`
 
-Task ID: `progressive-deep-deferred-run-start-confirmation-01`
-Mode: `IMPLEMENT / VALIDATE`
-Worker slot: `НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
+Task ID: `progressive-deep-insufficient-evidence-diagnostic-01`
+Mode: `READ-ONLY DIAGNOSTIC / REPORT`
+Worker slot: `НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
 
 Durable report:
-`reviews/worker_reports/progressive-deep-deferred-run-start-confirmation-01.md`
+`reviews/worker_reports/progressive-deep-insufficient-evidence-diagnostic-01.md`
 
-## User-approved decision
+## User-approved goal
 
-The user explicitly approved changing PASS 2 so GitHub run-start confirmation no longer blocks semantic work.
+Determine why current Progressive Deep/PASS 2 completes very few games.
 
-Target behavior:
+Current observed production state at task creation:
+- current Deep coverage target: 465
+- first-pass attempted: 49
+- authoritative completed: 4
+- completed fit: 0
+- completed not-fit: 4
+- incomplete/recovery: 45
+- dominant issue among incomplete results: `insufficient_evidence`
+- one observed technical `terminal_execution_failure`
 
-1. Deep reads one exact `observed_main_commit`, reads contract/work from that exact commit, and creates the existing create-only run-start marker.
-2. Deep MAY begin semantic analysis immediately against that exact observed immutable view while GitHub processes the marker.
-3. Before Deep publishes the FIRST result or terminal execution receipt from that invocation, it MUST obtain the GitHub-owned run-start receipt for the marker anchor.
-4. Publication is allowed only if that receipt is exact, durable and `status:"confirmed"`, and its `run_start_authority_commit` equals the exact `observed_main_commit` used for the provisional semantic work.
-5. If the receipt is `rejected`, inconsistent, unsafe, or confirms a different authority, discard all provisional semantic work from that invocation and publish no result/terminal receipt.
-6. If the receipt is merely not present yet when the first semantic result becomes ready, bounded rechecks/waiting are allowed while runtime/tool budget safely permits. Absence never authorizes publication.
-7. After confirmation, continue through the already frozen ordered invocation items without waiting for sibling ingest, exactly as today.
-8. Do not change Scheduled Task settings or create another scheduler/queue/retry owner.
+The run-start liveness defect is already fixed and accepted separately. Do NOT reopen run-start confirmation unless direct evidence in this diagnostic proves it is causing the semantic outcomes under review.
 
-## Proven incident motivating the change
+## Question to answer
 
-Real production run:
-- observed main: `c2d2789658036739f18d2dfd241aac7d9a481cf7`
-- run-start anchor: `202a0517b61d3462049afad503e57f2610c1eb05`
-- marker commit time: `2026-09-24T16:36:49Z`
-- GitHub receipt commit: `d6723e9f75efccd648eb0958ca3d88b98c6b180c`
-- receipt became `confirmed` at about 13 seconds after marker creation
-- Scheduled worker had already stopped before semantic execution because receipt was absent on its immediate check
-- frozen manifest contained 40 items
+For current `analysis_incomplete / insufficient_evidence` outcomes, classify the dominant cause as one of:
 
-This is a liveness defect: a valid start can produce a zero-work invocation solely because GitHub confirmation is asynchronous.
+- `DOSSIER_TOO_THIN`
+- `DEEP_TOO_CONSERVATIVE`
+- `MIXED_DOSSIER_AND_DEEP`
+- `SEMANTIC_INPUT_OR_BINDING_DEFECT`
+- `NOT_PROVABLE_FROM_AVAILABLE_EVIDENCE`
 
-A separate earlier production case proves the confirmation guard itself is still required:
-- anchor `90e8f5cc93c19950d5a4f4f016ce262f854c4eeb`
-- GitHub later created a `rejected` receipt
-- reason: `Progressive observed main was superseded before the actual run-start marker`
-
-Therefore this task moves the confirmation gate later; it does NOT remove it.
+Do not choose a category by intuition. Prove it from exact current production artifacts and bounded independent comparison.
 
 ## START gate
 
-First read current `CHAT_PROTOCOL.md` from `main` and complete its START gate.
+First read current `CHAT_PROTOCOL.md` and complete its START gate.
 
 Then read this task fully.
 
-Read current, minimally:
+Read minimally:
 - `CHAT_CONTEXT.md`
 - `DIRECTOR_TASK_BOARD.md`
 - `PROJECT_ROUTES.md`
@@ -59,154 +52,184 @@ Read current, minimally:
 - `config/execution_ownership_contract.json`
 - `config/progressive_pass2_contract.json`
 - `config/progressive_pass2_worker_prompt.md`
-- `scripts/ingest_progressive_pass2.py`
-- `scripts/test_progressive_pass2.py`
-- the current PASS 2 result/execution-receipt schemas
-- the accepted report `reviews/worker_reports/progressive-async-traversal-and-deep-invalid-transport-fix-01.md` only as needed for run-start authority rationale/regressions.
+- `data/cache/progressive_pass2_state.json`
+- `data/production/pre_ai/progressive_pass2_work.json`
+- current exact Deep result artifacts / ingest receipts for the sample below
+- exact bound accepted Dossier files for the same identities
+- exact current pinned profile bytes/reference used by those Deep identities
+- candidate semantic context for those identities
+- the accepted reports:
+  - `reviews/worker_reports/progressive-pinned-live-profile-handoff-fix-01.md`
+  - `reviews/worker_reports/progressive-deep-deferred-run-start-confirmation-01.md`
+  - `reviews/worker_reports/progressive-fast-deep-zero-completion-diagnostic-01.md` only for historical comparison; do not carry its pre-fix conclusions forward without re-proving them against current identities.
 
 Do not perform broad repository archaeology.
 
-## Architecture preflight — fixed decisions
+## Fixed bounded sample
 
-Before editing, verify and preserve:
+### Successful Deep controls — all current completed not-fit
 
-1. GitHub remains the sole owner of Deep scope/order, run-start confirmation truth, canonical acceptance, attempts, recovery authorization, completeness and persistence.
-2. Scheduled ChatGPT remains only the bounded semantic data plane plus create-only transport.
-3. No new scheduler, recurring stage, queue, retry daemon, backlog manager or canonical state owner is introduced.
-4. The existing GitHub-owned marker receipt remains mandatory before ANY Deep semantic artifact is published.
-5. The marker commit's actual first parent and Git committer time remain the trusted authority/time source; worker-supplied time never becomes authority.
-6. No per-item mutable-current reread is reintroduced after the invocation authority is confirmed.
-7. No Fast prerequisite is introduced.
-8. Dossier acceptance/evidence semantics are unchanged.
-9. No Scheduled Task create/update/enable/disable/pause/delete/reschedule/rename/recreate/run action is authorized.
+Inspect all four:
+- appid `1227280`
+- appid `1210320`
+- appid `1161590`
+- appid `1118240`
 
-Important: the current canonical contract explicitly says confirmation must happen before semantic execution. The new user-approved design conflicts with that exact rule. Therefore implementation must update the canonical contract/ownership rationale FIRST in the same bounded change, then align prompt/tests. Do not silently violate the old contract.
+### Current insufficient-evidence sample
 
-## IMPLEMENT
+Inspect these eight current Deep outcomes:
+- appid `1227690`
+- appid `1244800`
+- appid `1206610`
+- appid `1239690`
+- appid `1244460`
+- appid `1222680`
+- appid `1173820`
+- appid `1196090`
 
-### FIX-01 — split provisional semantic execution from publication authority
+If any listed identity is no longer current by the time the worker begins, do not silently substitute another app. Record it as `sample_identity_no_longer_current` and continue with the remaining exact sample.
 
-Change the Deep runtime contract so:
+### Technical control
 
-- marker creation remains before semantic execution;
-- semantic analysis may start immediately using ONLY the exact `observed_main_commit` view already read before marker creation;
-- no result or terminal execution receipt may be serialized/published until the GitHub run-start receipt is confirmed;
-- once receipt is confirmed, verify:
-  - exact anchor;
-  - exact marker path/nonce lineage;
-  - `status:"confirmed"`;
-  - `run_start_authority_commit == observed_main_commit`;
-  - trusted `run_started_at_utc` comes only from the receipt;
-- only then may the already computed first semantic outcome be transported using the confirmed authority/time fields;
-- later frozen siblings continue asynchronously without waiting for ingest.
+Inspect appid `1164940`, currently observed as `terminal_execution_failure`, only to keep technical failure separate from semantic insufficiency. Do not let this one technical case distort the semantic classification.
 
-Do not permit semantic execution from a mutable/latest re-read after marker creation.
+## Diagnostic method
 
-### FIX-02 — rejected/superseded start behavior
+### A. Exact production-chain reconstruction
 
-If the receipt is rejected or proves the marker was not anchored on the observed authority:
-- publish no Deep result;
-- publish no Deep execution receipt;
-- consume no semantic attempt;
-- discard provisional semantic work;
-- stop the invocation;
-- do not create a second marker in the same invocation.
+For every sampled identity, reconstruct only the exact current chain:
 
-Preserve the real superseded-main failure protection demonstrated by anchor `90e8f5...`.
+`current Deep work identity -> exact pinned profile -> candidate context -> exact accepted Dossier -> submitted Deep result/terminal receipt -> GitHub ingest receipt/state outcome`
 
-### FIX-03 — absent receipt behavior
+Verify:
+- appid/work_id/semantic_generation/profile pin exactness
+- dossier path/content SHA/compatibility binding
+- result identity and run-start authority
+- accepted outcome and issue code
+- no stale or cross-release evidence silently substituted
 
-If the first semantic outcome is ready but receipt is still absent:
-- bounded repeat read/wait is permitted while runtime/tool budget safely permits;
-- do not introduce an unbounded polling loop;
-- do not invent a fixed semantic quota;
-- do not terminate immediately merely because the first receipt read missed the GitHub asynchronous writer;
-- if the invocation must stop before confirmation arrives, publish nothing and consume no attempt.
+If any binding defect exists, identify it separately before semantic interpretation.
 
-Choose the smallest bounded behavior that can tolerate ordinary GitHub receipt latency such as the observed ~13 seconds. Do not turn ChatGPT into a queue manager.
+### B. Closed-book semantic sufficiency review
 
-### FIX-04 — canonical documentation/ownership alignment
+Using ONLY the exact production inputs that Deep had for that identity:
+- pinned personalized profile
+- candidate context
+- accepted Dossier evidence
 
-Update the smallest necessary canonical sources so they agree:
-- `config/progressive_pass2_contract.json`
-- `config/progressive_pass2_worker_prompt.md`
-- `config/execution_ownership_contract.json`
-- relevant `PROJECT_DECISIONS.md` rationale
-- `PROJECT_ROUTES.md` only if the operational route text would otherwise be stale.
+independently judge whether a competent Deep analysis could reasonably reach:
+- `analyzed_fit`,
+- `analyzed_not_fit`, or
+- genuinely must remain unresolved.
 
-The durable rationale must say:
-- confirmation remains an anti-race publication guard;
-- semantic computation before confirmation is speculative/provisional only;
-- GitHub confirmation remains authoritative;
-- rejected confirmation invalidates all provisional work;
-- no semantic artifact can cross the GitHub boundary before confirmation.
+Do not use current web evidence in this phase.
 
-### FIX-05 — ingest authority remains strict
+For each of the 8 incomplete cases, record:
+- which concrete personalized dimensions are supported;
+- which material positive/negative dimensions are missing;
+- whether the existing Dossier contains enough candidate-specific evidence for a medium-confidence final verdict under the current PASS 2 contract;
+- whether Deep's own submitted `insufficient_evidence` explanation correctly identifies the missing information, if the transport exposes such detail;
+- classification: `justified_incomplete` or `final_verdict_was_reasonably_possible`.
 
-Do not weaken `scripts/ingest_progressive_pass2.py` acceptance proof.
+Apply the same reasoning standard to the 4 successful not-fit controls. Identify what evidence/property actually allowed them to cross the final-verdict threshold.
 
-A published result must still:
-- reference an existing confirmed receipt;
-- be bound to the exact confirmed authority;
-- have transport Git history after the durable confirmation;
-- fail closed for rejected/missing/wrong authority receipts.
+### C. Dossier richness comparison
 
-If current ingest already enforces this, preserve it and prove it with regression rather than changing it unnecessarily.
+Compare successful controls vs incomplete cases on factual dimensions only, such as:
+- number of usable player-feedback observations;
+- source diversity;
+- Russian evidence status;
+- recency/temporal status;
+- concrete mechanics/loop/difficulty/repetition/story/technical/performance information;
+- presence of evidence relevant to the user's strongest positive and negative profile dimensions;
+- whether observations are generic sentiment vs decision-relevant specifics.
 
-## VALIDATION
+Do not invent a numeric quality score unless an existing canonical field already provides it.
 
-Add focused regression coverage proving at least:
+### D. Bounded current-public-evidence check
 
-- C-01: marker -> receipt delayed/absent initially -> semantic work may begin, but no artifact is published before confirmation.
-- C-02: receipt appears confirmed after a realistic delayed check -> already computed first result may then be published and accepted.
-- C-03: receipt rejected because observed main was superseded -> provisional semantic result is discarded; no artifact and no attempt.
-- C-04: forged/worker-chosen timestamp cannot substitute for GitHub receipt.
-- C-05: confirmed authority must equal the exact observed authority used for provisional semantics.
-- C-06: missing receipt never permits publication.
-- C-07: bounded waiting/rechecks cannot become an unbounded polling/retry loop.
-- C-08: after one confirmation, sibling B/C traversal still does not wait for sibling ingest or mutable manifest advancement.
-- C-09: later mutable Dossier/profile/recovery changes remain deferred to next invocation as already accepted.
-- C-10: ingest still rejects result transport that predates confirmation or references rejected/wrong receipt.
-- O-01: GitHub remains control-plane owner.
-- O-02: no new scheduler/queue/retry owner.
-- O-03: no Dossier behavior change.
-- O-04: no Scheduled Task action.
-- O-05: no manual semantic production backlog processing.
+Only for incomplete cases classified in phase B as genuinely under-evidenced, perform a bounded independent current web check to answer:
 
-Run relevant current PASS 2 and execution-ownership regressions/workflows. Do not weaken tests to make them green.
+> Was additional exact-product, decision-relevant player evidence reasonably discoverable, such that the accepted Dossier appears materially under-collected?
 
-## Production boundary
+Rules:
+- this is diagnostic current evidence, not proof of the exact historical retrieval surface seen by the Dossier worker;
+- use exact product identity;
+- prioritize player feedback/community evidence appropriate to the Dossier contract;
+- do not require exhaustive research;
+- record whether meaningful missing evidence is readily discoverable or not.
 
-Do NOT manually process real Deep backlog in this worker task.
-Do NOT run or edit the Scheduled Task.
-Natural concurrent production may be observed but is not required for implementation acceptance.
+This phase separates:
+- Dossier genuinely lacked reasonably available evidence, from
+- public evidence itself being weak/ambiguous.
+
+### E. Successful-control contrast
+
+For each of the four completed not-fit controls, explain exactly why final not-fit was possible while most other cases became incomplete.
+
+Check whether the difference is:
+- stronger negative evidence,
+- clearer conflict with pinned profile,
+- richer/more diverse Dossier,
+- a lower evidence threshold for negative conclusions,
+- or another concrete factor.
+
+Specifically test for asymmetry:
+- Is Deep effectively able to finalize `not_fit` from a clear negative conflict while requiring unrealistically broad evidence to finalize `fit` or neutral/moderate cases?
+
+Do not assert asymmetry unless the sample supports it.
+
+## Required final analysis
+
+Report:
+1. current sample identities and exact bindings;
+2. per-game compact comparison table;
+3. successful-control evidence pattern;
+4. incomplete-case evidence pattern;
+5. whether current Dossiers are materially too thin;
+6. whether Deep semantic threshold is materially too conservative;
+7. whether fit/not-fit threshold appears asymmetric;
+8. whether any semantic-input/profile binding defect remains;
+9. whether the one terminal failure is independent technical noise;
+10. dominant root-cause classification;
+11. exact recommended next fix, but DO NOT implement it.
+
+The recommendation must be one of:
+- change Dossier evidence preparation/acceptance;
+- change Deep semantic sufficiency/decision rules;
+- coordinated Dossier + Deep change;
+- repair semantic input/binding;
+- no implementation yet because evidence is insufficient.
+
+If recommending a future change, state the smallest bounded change and the regression cases it must preserve.
+
+## Hard boundaries
+
+Do NOT:
+- modify PASS 1 or PASS 2 contracts/prompts/runtime;
+- modify Dossier contracts/prompts/runtime;
+- authorize Deep recovery;
+- reset or delete attempts/results/state;
+- create replacement semantic results;
+- manually process production Deep backlog;
+- modify/run/reschedule/enable/disable any Scheduled Task;
+- change profile, ranking, UI or visual payload;
+- turn current web research into canonical Dossier evidence.
+
+Only task/report/tracking documentation may be written.
 
 ## Durable report
 
 Commit:
-`reviews/worker_reports/progressive-deep-deferred-run-start-confirmation-01.md`
+`reviews/worker_reports/progressive-deep-insufficient-evidence-diagnostic-01.md`
 
-Required sections:
-1. Final status
-2. Architecture preflight
-3. Proven production incident
-4. Before/after contract
-5. Exact implementation
-6. Rejected/superseded behavior
-7. Delayed-confirmation behavior
-8. Files changed
-9. Tests/workflows with exact refs
-10. Validation C-01..C-10 and O-01..O-05
-11. Natural production observations, if any
-12. Unresolved
-13. Director recommendation
-
-Allowed final statuses:
-- `complete_ready_for_director_acceptance`
+Required final status exactly one:
+- `complete_root_cause_proven`
+- `complete_mixed_causes_proven`
+- `not_provable_from_available_evidence`
 - `blocked`
-- `needs_user_decision`
 
 Before completion:
-- commit the report to `main`;
+- commit the durable report to `main`;
 - reread the exact committed report from fresh `main`;
-- do not modify it after that reread unless you repeat the final commit+reread closeout.
+- do not modify it after that reread unless repeating final commit+reread closeout.
