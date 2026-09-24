@@ -1,5 +1,39 @@
 # DIRECTOR TASK BOARD
 
+## ACTIVE — ЧАТ 1 — Progressive runtime rule rationale consistency audit
+
+Task:
+`WORKER_TASK_PROGRESSIVE_RUNTIME_RULE_RATIONALE_CONSISTENCY_AUDIT_01.md`
+
+Report:
+`reviews/worker_reports/progressive-runtime-rule-rationale-consistency-audit-01.md`
+
+Mode:
+`READ-ONLY / RECON / ARCHITECTURE AUDIT`
+
+Worker slot:
+- **НОВЫЙ физический ЧАТ 1**;
+- previously completed Chat 1 is retired and must not be reused.
+
+User intent:
+- audit Fast / Dossier / Deep for rules whose current implementation may no longer match the reason the rule originally existed;
+- for every suspicious rule, prove original rationale and the invariant it protects before recommending any change;
+- distinguish real regressions/superseded mechanisms from restrictions that must remain;
+- explicitly analyze asynchronous create-only transport vs canonical GitHub acceptance so semantic workers do not wait for GitHub unless a still-valid invariant truly requires it;
+- no fixes in this task;
+- after report, Director/user will discuss `DISCUSSION_REQUIRED` findings;
+- only then will a separate coordinated IMPLEMENT task be authorized for the approved fix set.
+
+Seed finding:
+- current PASS 1 per-item manifest reload appears to have been introduced by the pinned-profile handoff fix and conflicts with PPD-002 multi-item independent progress;
+- treat as a proven audit seed, not as permission to generalize without evidence.
+
+Expected final status:
+- `complete_ready_for_director_review`
+- `needs_more_recon`
+- `needs_user_decision`
+- `blocked`
+
 ## ACCEPTED — ЧАТ 1 — Progressive pinned live-profile handoff fix
 
 Task:
