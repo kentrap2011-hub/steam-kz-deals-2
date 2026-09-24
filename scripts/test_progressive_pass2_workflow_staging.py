@@ -84,6 +84,7 @@ def assert_production_workflow_uses_stager():
     assert marker in workflow
     commit_block = workflow.split(marker, 1)[1]
     assert 'bash scripts/stage_progressive_pass2_canonical_writer.sh' in commit_block
+    assert 'Recompute Progressive PASS 2 eligibility from reconciled Dossier truth' not in workflow
     for path in OPTIONAL_ROOTS:
         assert path not in commit_block
 

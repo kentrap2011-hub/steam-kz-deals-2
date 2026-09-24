@@ -51,6 +51,7 @@ on:
       - "data/cache/russian_description_translations.json"
       - "scripts/taste_cache_common.py"
       - "scripts/taste_pinned_work_unit.py"
+      - "scripts/progressive_work_authority.py"
       - "scripts/build_taste_cache_index.py"
       - "scripts/ingest_taste_results.py"
       - "scripts/build_pre_ai_store_snapshot.py"
@@ -72,6 +73,7 @@ on:
       - "scripts/progressive_pass2.py"
       - "scripts/build_progressive_pass2_work.py"
       - "scripts/test_progressive_pass1.py"
+      - "scripts/test_progressive_profile_pin.py"
       - "scripts/test_progressive_pass2.py"
       - "scripts/test_progressive_pass2_integration.py"
       - "scripts/test_progressive_personalization.py"
@@ -172,6 +174,7 @@ jobs:
 
       - name: Regression test progressive personalization and PASS 1
         run: |
+          python scripts/test_progressive_profile_pin.py
           python scripts/test_progressive_personalization.py
           python scripts/test_progressive_pass1.py
 

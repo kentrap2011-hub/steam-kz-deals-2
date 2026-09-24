@@ -144,7 +144,8 @@
       "accepted_outcome_persistence",
       "retry_eligibility",
       "processing_counts",
-      "visual_rebuild_trigger"
+      "visual_rebuild_trigger",
+      "durable_exact_live_profile_pin_and_handoff"
     ],
     "scheduled_chatgpt_role": "bounded_lightweight_semantic_execution_only",
     "item_level_progress": true,
@@ -159,7 +160,8 @@
     "authoritative": false,
     "deep_requires_fast_attempt": false,
     "deep_requires_fast_incomplete": false,
-    "authoritative_deep_completion_suppresses_future_fast": true
+    "authoritative_deep_completion_suppresses_future_fast": true,
+    "profile_handoff_rule": "GitHub freezes and durably prepares the exact immutable live-profile identity/reference before Fast semantics; later live-profile updates do not invalidate already-started exact Fast work, and the semantic worker never selects mutable latest."
   },
   "taste_steam_review_dossier_nonblocking_progress": {
     "contract": "config/taste_steam_review_dossier_contract.json",
@@ -192,7 +194,8 @@
       "validate Deep result or terminal execution receipt and persist canonical Deep state",
       "project explicit Fast/Dossier/Deep stage states plus effective-result provenance for read-only browser presentation",
       "recompute Deep eligibility through the existing Progressive-owned entrypoint after canonical Dossier, Fast/PASS 1, daily binding/freshness and Deep attempt-state changes",
-      "keep normal Deep first-pass completeness separate from eventual all-current authoritative Deep completeness"
+      "keep normal Deep first-pass completeness separate from eventual all-current authoritative Deep completeness",
+      "durably bind each Deep work identity to the exact immutable live-profile pin used for personalized semantics"
     ],
     "scheduled_chatgpt_responsibilities_when_activated": [
       "read only GitHub-prepared current Deep/PASS 2 work",
@@ -245,6 +248,7 @@
       "matching_task_cardinality": 1,
       "configuration_owner": "external_user_operator",
       "scheduled_chatgpt_role": "bounded_deep_semantic_data_plane_only"
-    }
+    },
+    "profile_handoff_rule": "Deep reads only the exact GitHub-prepared immutable profile pin; later live-profile updates do not rebind started work, while Dossier liveness remains independently current and fail-closed."
   }
 }

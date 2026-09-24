@@ -149,7 +149,7 @@ def verify_profile_content(pin, raw):
         raise ValueError('Progressive pinned profile content must be bytes')
     raw = bytes(raw)
     identity = pin['profile_identity']
-    git_blob = hashlib.sha1(f"blob {len(raw)}\\0".encode('ascii') + raw).hexdigest()
+    git_blob = hashlib.sha1(f"blob {len(raw)}\0".encode('ascii') + raw).hexdigest()
     if len(raw) != identity['bytes']:
         raise ValueError('Progressive pinned profile byte count mismatch')
     if git_blob != identity['blob_sha']:

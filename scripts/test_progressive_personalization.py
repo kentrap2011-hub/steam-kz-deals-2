@@ -45,7 +45,18 @@ def projection(key, status='ai_required', verdict=None, fit=None, evidence_state
 
 def projection_doc(entries):
     return {
-        'current_profile': {'blob_sha': 'test-profile-blob'},
+        'current_profile': {
+            'repository': 'kentrap2011-hub/stopgame-ratings-data',
+            'path': 'gaming_taste_live.json',
+            'resolved_commit_sha': 'a' * 40,
+            'blob_sha': 'b' * 40,
+            'content_sha256': 'c' * 64,
+            'bytes': 123,
+            'raw_url': (
+                'https://raw.githubusercontent.com/kentrap2011-hub/'
+                'stopgame-ratings-data/' + ('a' * 40) + '/gaming_taste_live.json'
+            ),
+        },
         'current_binding': {
             'taste_model_version': 'taste-v3',
             'taste_semantics_sha256': 'test-semantics-sha',

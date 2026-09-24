@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import json
 import tempfile
 from datetime import datetime, timezone
@@ -25,7 +26,22 @@ def projection(profile='profile-A'):
         'schema_version': 3,
         'status': 'complete',
         'source_mailing_updated_at_utc': 'commercial-A',
-        'current_profile': {'blob_sha': profile},
+        'current_profile': {
+            'repository': progressive_pass1.CANONICAL_PROFILE_REPOSITORY,
+            'path': progressive_pass1.CANONICAL_PROFILE_PATH,
+            'resolved_commit_sha': hashlib.sha1(('commit:' + profile).encode()).hexdigest(),
+            'blob_sha': hashlib.sha1(profile.encode()).hexdigest(),
+            'content_sha256': hashlib.sha256(profile.encode()).hexdigest(),
+            'bytes': max(1, len(profile.encode())),
+            'raw_url': (
+                'https://raw.githubusercontent.com/'
+                + progressive_pass1.CANONICAL_PROFILE_REPOSITORY
+                + '/'
+                + hashlib.sha1(('commit:' + profile).encode()).hexdigest()
+                + '/'
+                + progressive_pass1.CANONICAL_PROFILE_PATH
+            ),
+        },
         'current_binding': {
             'taste_model_version': 'taste-v3',
             'taste_semantics_sha256': 'semantics-sha',

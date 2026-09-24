@@ -28,7 +28,20 @@ def projection(source='commercial-A', fingerprint_suffix=''):
         'schema_version': 3,
         'status': 'complete',
         'source_mailing_updated_at_utc': source,
-        'current_profile': {'blob_sha': 'profile-blob'},
+        'current_profile': {
+            'repository': progressive_pass1.CANONICAL_PROFILE_REPOSITORY,
+            'path': progressive_pass1.CANONICAL_PROFILE_PATH,
+            'resolved_commit_sha': 'a' * 40,
+            'blob_sha': 'b' * 40,
+            'content_sha256': 'c' * 64,
+            'bytes': 123,
+            'raw_url': (
+                'https://raw.githubusercontent.com/'
+                + progressive_pass1.CANONICAL_PROFILE_REPOSITORY
+                + '/' + ('a' * 40) + '/'
+                + progressive_pass1.CANONICAL_PROFILE_PATH
+            ),
+        },
         'current_binding': {
             'taste_model_version': 'taste-v3',
             'taste_semantics_sha256': 'semantics-sha',
@@ -116,6 +129,7 @@ def work_doc(bindings, queue):
         'pass1_active': True,
         'pass2_active': True,
         'semantic_generation_id': generation,
+        'profile_pin': progressive_pass1.profile_pin_from_projection(projection()),
         'items': items,
     }
 

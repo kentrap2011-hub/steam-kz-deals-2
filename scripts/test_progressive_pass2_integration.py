@@ -274,13 +274,14 @@ def main():
     assert 'workflow_dispatch:' in recovery_workflow
     assert 'schedule:' not in recovery_workflow
 
-    # DEEP-INT-09: ingest always recomputes current authorization immediately before
-    # persistence; worker-supplied work is never treated as control-plane truth.
+    # DEEP-INT-09: ingest resolves exact pre-semantic Git work authority instead
+    # of rebinding an already-started item to current profile/main. Dossier liveness
+    # is still revalidated immediately before persistence.
     pass2_ingest = read('scripts/ingest_progressive_pass2.py')
-    assert (
-        pass2_ingest.index('work = build_progressive_pass2_work.build_work_document()')
-        < pass2_ingest.index('progressive_pass2.process_result_documents(')
-    )
+    process_pos = pass2_ingest.index('progressive_pass2.process_result_documents(')
+    assert pass2_ingest.index('resolve_presemantic_work_item(') < process_pos
+    assert pass2_ingest.index('prepared_work_item_dossier_is_live(') < process_pos
+    assert 'work = build_progressive_pass2_work.build_work_document()' not in pass2_ingest[:process_pos]
 
     # DEEP-INT-09B: canonical execution receipts and the reconciled Dossier inbox
     # are optional for a normal semantic result ingest. Production staging must use
