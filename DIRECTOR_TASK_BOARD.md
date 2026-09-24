@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## ACTIVE — ЧАТ 1 — Progressive Fast controlled shadow replay
+## ACCEPTED — ЧАТ 1 — Progressive Fast controlled shadow replay
 
 Task:
 `WORKER_TASK_PROGRESSIVE_FAST_CONTROLLED_SHADOW_REPLAY_01.md`
@@ -8,37 +8,33 @@ Task:
 Report:
 `reviews/worker_reports/progressive-fast-controlled-shadow-replay-01.md`
 
-Mode:
-`CONTROLLED SHADOW REPLAY / OBSERVE / NO PRODUCTION MUTATION`
+Final status:
+`complete_ready_for_director_review`
 
-Worker slot:
-- **НОВЫЙ физический ЧАТ 1**;
-- previously accepted diagnostic chats are retired and must not be reused.
+Director acceptance:
+- replay used immutable historical authority `a1fe53af3e77c21e8fd4de61da6324c11c9c575a`, historical Fast prompt blob `03b0cba057f7b8205e5b2232f578b32369151700`, work blob `f3dd4b1d756becc77eb0770c580afcd3aa63a775`, semantic generation `b33cc4416860bd15a37f530c9daef8fb7755ae440929f93aa915d5363e31c490` and profile pin `cf4a4ecf03e72d0d77c85c5e101ce4e37ab36b8547d1bcc1deada780a8df2a6c`;
+- production Fast/Deep/Dossier state and Scheduled Tasks were not modified by the replay; task-owned writes are isolated diagnostic artifacts plus the durable report;
+- the replay processed 12 historical frozen items and crossed the critical 5 -> 6 boundary successfully;
+- Borderlands 3 explicitly recorded `continue_next_item`, item 6 The Bureau: XCOM Declassified was then completed, and later items also continued;
+- classification `STOP_AT_FIVE_NOT_REPRODUCED` is accepted as behavioral replay evidence;
+- this does NOT establish the historical Scheduled Task stop reason; exact timeout/runtime/tool/platform/voluntary-stop mechanism remains unknown without the original invocation trace;
+- RV There Yet?, Nimbatus and Borderlands 3 reached normal Fast conclusions after lightweight exact-product evidence; the replay therefore strengthens the finding that genuine Fast-level evidence absence did not explain their historical `insufficient_evidence`;
+- Uncanny Tales also did not require `insufficient_evidence`, but replay and the independent semantic review reached opposite provisional directions from different lightweight evidence: replay `fit`, independent review `not_fit`;
+- that Uncanny disagreement is accepted as an important additional diagnosis: evidence selection/sufficiency is underconstrained, so a future fix must not merely lower the confidence threshold or globally suppress `insufficient_evidence`;
+- next design must define a lightweight profile-risk coverage gate: before Fast declares fit/not-fit, it must check material candidate-specific positive and negative dimensions relevant to the pinned profile, while remaining substantially lighter than Deep;
+- the exact historical mechanism behind the original four `insufficient_evidence` results remains unresolved among retrieval-not-attempted, retrieval failure/weaker results, retrieved-but-not-used evidence, overly conservative threshold, and underconstrained evidence selection;
+- the replay also exposed that the previously accepted five-item diagnostic report contains stale historical authority identifiers inconsistent with immutable Git; its high-level no-five-quota conclusion remains valid, but those documentary identifiers require a separate docs-only correction if we want the durable record fully clean;
+- Director reread the replay report from fresh `main` at head `e89bca51ebc46fb1f578398a793a6a1328bad071`, report blob `7fbfaf058c756544bed8b8634607b60ec7162ab0`.
 
-Goal:
-- reproduce the problematic historical Fast invocation as closely as safely possible using the exact historical prompt, work blob, order and pinned Taste profile;
-- diagnose both the historical stop after item 5 and the four overly conservative `insufficient_evidence` outcomes;
-- record observable actions, web retrievals, source facts, tool errors, concise rule-based rationale and continuation decision per item;
-- do not record private chain-of-thought.
+Decision:
+- controlled shadow replay accepted;
+- do not implement a five-item quota fix;
+- do not fix Fast by simply lowering the decision threshold;
+- any implementation should first define the precise lightweight evidence-selection / profile-risk sufficiency rule and future observability needed to distinguish retrieval failure from semantic refusal.
 
-Replay authority:
-- invocation-side commit `a1fe53af3e77c21e8fd4de61da6324c11c9c575a`;
-- work blob `f3dd4b1d756becc77eb0770c580afcd3aa63a775`;
-- historical worker prompt blob `03b0cba057f7b8205e5b2232f578b32369151700`;
-- generation `b33cc4416860bd15a37f530c9daef8fb7755ae440929f93aa915d5363e31c490`;
-- profile pin `cf4a4ecf03e72d0d77c85c5e101ce4e37ab36b8547d1bcc1deada780a8df2a6c`.
-
-Critical boundary:
-- items 1-5 are BOKURA, RV There Yet?, Uncanny Tales: Cold Road, Nimbatus, Borderlands 3;
-- item 6 is The Bureau: XCOM Declassified;
-- no five-item quota;
-- if item 5 explicitly says continue but item 6 never appears, preserve that as interruption evidence.
-
-Safety:
-- no writes to production Fast/Deep/Dossier paths;
-- no replacement results, reset/retry, production semantic run, ingest dispatch or Scheduled Task mutation;
-- allowed writes are only isolated diagnostic per-item artifacts under `reviews/reproductions/progressive-fast-controlled-shadow-replay-01/` and the final durable report;
-- no implementation in this task.
+Worker state:
+- physical ЧАТ 1 is retired for independent future work;
+- this replay chat can be deleted.
 
 ## ACCEPTED — ЧАТ 2 — Fast insufficient-evidence semantic review
 
