@@ -916,8 +916,12 @@
 ## Worker in progress — 2026-09-25
 
 ### Taste Dossier purpose + coverage sufficiency fix 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_TASTE_DOSSIER_PURPOSE_AND_COVERAGE_SUFFICIENCY_FIX_01.md`;
 - scope: encode the Dossier as a neutral evidence package for downstream personalized Deep analysis, make semantic coverage/completeness outrank throughput, and prevent narrow evidence from being called `sufficient/evidence_stable`;
 - no fixed source/review/search/page quota is authorized; semantic/adaptive boundedness remains;
 - Recovery and Scheduled Task lifecycle/actions remain untouched.
+- worker-report: `reviews/worker_reports/taste-dossier-purpose-and-coverage-sufficiency-fix-01.md`;
+- implementation: PR #96, merge `d8061c470cff903fc13ca7f4f5038e95ff232bee`;
+- validation: Dossier runtime run #163 / `36058048358` success; backlog run #1198 / `36058048369` success;
+- post-merge activation: pre-AI run #200 / `36058130032` success; projection commit `efc335509349df42bdac16f1e975f5cf868ef978`.
