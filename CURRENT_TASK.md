@@ -911,3 +911,13 @@
 - recommendation: bounded Dossier evidence-preparation/acceptance stop-rule repair only; no implementation or recovery authorized;
 - durable report: `reviews/worker_reports/progressive-deep-insufficient-evidence-diagnostic-01.md`;
 - report commit: `7f0ee4db37f5e4a5cf6ccdff47a63d26f7dd7e2d`.
+
+
+## Worker in progress — 2026-09-25
+
+### Taste Dossier purpose + coverage sufficiency fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_TASTE_DOSSIER_PURPOSE_AND_COVERAGE_SUFFICIENCY_FIX_01.md`;
+- scope: encode the Dossier as a neutral evidence package for downstream personalized Deep analysis, make semantic coverage/completeness outrank throughput, and prevent narrow evidence from being called `sufficient/evidence_stable`;
+- no fixed source/review/search/page quota is authorized; semantic/adaptive boundedness remains;
+- Recovery and Scheduled Task lifecycle/actions remain untouched.
