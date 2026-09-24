@@ -357,8 +357,6 @@ class ContractGapRegressionTests(unittest.TestCase):
                 "evidence_contract_version",
                 "worker_schema",
                 "worker_schema_version",
-                "worker_schema_revision",
-                "worker_schema_sha256",
                 "dossier_schema",
                 "dossier_schema_version",
             )
@@ -376,6 +374,8 @@ class ContractGapRegressionTests(unittest.TestCase):
                     "evidence_contract_sha256",
                     "worker_prompt_revision",
                     "worker_prompt_sha256",
+                    "worker_schema_revision",
+                    "worker_schema_sha256",
                 })
             )
         else:
