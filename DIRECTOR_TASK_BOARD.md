@@ -1,5 +1,45 @@
 # DIRECTOR TASK BOARD
 
+## ACTIVE — ЧАТ 1 — Progressive pinned live-profile handoff fix
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PINNED_LIVE_PROFILE_HANDOFF_FIX_01.md`
+
+Report:
+`reviews/worker_reports/progressive-pinned-live-profile-handoff-fix-01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Worker slot:
+- **НОВЫЙ физический ЧАТ 1**;
+- prior physical Chat 1 is retired and must not be reused.
+
+User authorization:
+- user explicitly approved implementation after confirming the previously accepted no-quiet-window live-profile behavior must be preserved.
+
+Goal:
+- reuse the already-canonical immutable live-profile freeze/pin model for Progressive Fast + Deep;
+- GitHub pins exact profile identity/content before semantic execution; ChatGPT reads that exact pinned profile;
+- user may update `gaming_taste_live.json` at any time;
+- a later live-profile update must not mutate or invalidate an already pinned/in-flight work unit merely because `main` advanced;
+- next newly prepared work uses the then-current profile;
+- fix the proven zero-completion semantic handoff defect without weakening fit/not-fit thresholds, Dossier semantics or validators;
+- preserve GitHub control-plane ownership and existing Fast/Deep attempt/recovery rules;
+- no Scheduled Task mutation or manual semantic run.
+
+Architecture:
+- canonical profile authority remains `kentrap2011-hub/stopgame-ratings-data:gaming_taste_live.json`;
+- reuse/refactor existing accepted freeze/pin machinery rather than inventing a second profile architecture;
+- GitHub performs deterministic fetch/freeze/hash/binding only, not semantic taste interpretation;
+- Scheduled ChatGPT remains bounded semantic data-plane only.
+
+Expected final status:
+- `complete_ready_for_director_acceptance`
+- `needs_fix`
+- `needs_user_decision`
+- `blocked`
+
 ## ACCEPTED — ЧАТ 1 — Stage indicator completion + Statistics copy fix
 
 Task:
