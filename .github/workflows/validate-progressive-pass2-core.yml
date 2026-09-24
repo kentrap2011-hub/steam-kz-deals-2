@@ -6,12 +6,15 @@ on:
       - "config/execution_ownership_contract.json"
       - "config/progressive_personalization_contract.json"
       - "config/progressive_pass1_contract.json"
+      - "config/progressive_pass1_worker_prompt.md"
       - "config/progressive_pass2_contract.json"
       - "config/daily_execution_contract.json"
       - "config/progressive_pass2_result_schema.json"
       - "config/progressive_pass2_execution_receipt_schema.json"
       - "config/progressive_pass2_worker_prompt.md"
       - "scripts/progressive_pass2.py"
+      - "scripts/progressive_work_authority.py"
+      - "scripts/test_progressive_async_traversal.py"
       - "scripts/build_progressive_pass2_work.py"
       - "scripts/ingest_progressive_pass1.py"
       - "scripts/stage_progressive_pass1_canonical_writer.sh"
@@ -48,12 +51,15 @@ on:
       - "config/execution_ownership_contract.json"
       - "config/progressive_personalization_contract.json"
       - "config/progressive_pass1_contract.json"
+      - "config/progressive_pass1_worker_prompt.md"
       - "config/progressive_pass2_contract.json"
       - "config/daily_execution_contract.json"
       - "config/progressive_pass2_result_schema.json"
       - "config/progressive_pass2_execution_receipt_schema.json"
       - "config/progressive_pass2_worker_prompt.md"
       - "scripts/progressive_pass2.py"
+      - "scripts/progressive_work_authority.py"
+      - "scripts/test_progressive_async_traversal.py"
       - "scripts/build_progressive_pass2_work.py"
       - "scripts/ingest_progressive_pass1.py"
       - "scripts/stage_progressive_pass1_canonical_writer.sh"
@@ -100,6 +106,8 @@ jobs:
         run: |
           python -m py_compile \
             scripts/progressive_pass2.py \
+            scripts/progressive_work_authority.py \
+            scripts/test_progressive_async_traversal.py \
             scripts/build_progressive_pass2_work.py \
             scripts/ingest_progressive_pass1.py \
             scripts/ingest_progressive_pass2.py \
@@ -111,6 +119,8 @@ jobs:
             scripts/test_progressive_pass1_workflow_staging.py \
             scripts/progressive_personalization.py \
             scripts/progressive_visual_activation_routing.py
+      - name: Progressive async traversal + invalid transport regression
+        run: python scripts/test_progressive_async_traversal.py
       - name: PASS 2 core regression
         run: python scripts/test_progressive_pass2.py
       - name: PASS 2 Dossier integration regression

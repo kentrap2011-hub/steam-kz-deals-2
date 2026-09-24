@@ -161,7 +161,8 @@
     "deep_requires_fast_attempt": false,
     "deep_requires_fast_incomplete": false,
     "authoritative_deep_completion_suppresses_future_fast": true,
-    "profile_handoff_rule": "GitHub freezes and durably prepares the exact immutable live-profile identity/reference before Fast semantics; later live-profile updates do not invalidate already-started exact Fast work, and the semantic worker never selects mutable latest."
+    "profile_handoff_rule": "GitHub freezes and durably prepares the exact immutable live-profile identity/reference before Fast semantics; later live-profile updates do not invalidate already-started exact Fast work, and the semantic worker never selects mutable latest.",
+    "invocation_traversal_rule": "Fast freezes one exact GitHub-prepared manifest/profile pin at invocation start and may traverse already-predeclared independent items without waiting for sibling ingest; exact transport existence is only a do-not-recreate marker and never acceptance."
   },
   "taste_steam_review_dossier_nonblocking_progress": {
     "contract": "config/taste_steam_review_dossier_contract.json",
@@ -195,12 +196,15 @@
       "project explicit Fast/Dossier/Deep stage states plus effective-result provenance for read-only browser presentation",
       "recompute Deep eligibility through the existing Progressive-owned entrypoint after canonical Dossier, Fast/PASS 1, daily binding/freshness and Deep attempt-state changes",
       "keep normal Deep first-pass completeness separate from eventual all-current authoritative Deep completeness",
-      "durably bind each Deep work identity to the exact immutable live-profile pin used for personalized semantics"
+      "durably bind each Deep work identity to the exact immutable live-profile pin used for personalized semantics",
+      "validate Deep result/terminal transport against the exact immutable invocation-start work/Dossier/recovery authority recorded by the worker, rather than mutable-latest changes after that boundary"
     ],
     "scheduled_chatgpt_responsibilities_when_activated": [
-      "read only GitHub-prepared current Deep/PASS 2 work",
-      "execute only exact authorized normal-first-pass or recovery items in GitHub order",
-      "publish only exact create-only result or terminal execution submission",
+      "resolve one exact current main revision at invocation start and freeze the GitHub-prepared Deep work/Dossier/recovery view from that revision",
+      "verify the exact pinned profile once and use those immutable bytes throughout the invocation",
+      "execute only run-start-authorized normal-first-pass or recovery items in frozen GitHub order, without waiting for sibling ingest",
+      "publish only exact create-only result or terminal execution submission bound to run_start_authority_commit and run_started_at_utc",
+      "treat existing exact transport only as already-submitted/do-not-recreate and continue; never infer canonical acceptance",
       "never choose recovery reason, retry eligibility, queue scope, order, completeness, or scheduler settings"
     ],
     "attempt_budget": {
@@ -226,7 +230,7 @@
       "second independent scheduler or recurring Deep stage"
     ],
     "eligibility_recompute_serialization_boundary": "github_actions_concurrency_group_taste-steam-review-dossier-canonical-writer_cancel_in_progress_false",
-    "time_expiry_guard": "scheduled_worker_preexecution_liveness_check_and_github_recompute_before_pass2_ingest",
+    "time_expiry_guard": "invocation_start_dossier_expiry_check_and_github_exact_run_start_authority_validation",
     "user_stage": "deep",
     "authoritative": true,
     "eventual_coverage_target": "all_current_eligible_games",
@@ -249,6 +253,7 @@
       "configuration_owner": "external_user_operator",
       "scheduled_chatgpt_role": "bounded_deep_semantic_data_plane_only"
     },
-    "profile_handoff_rule": "Deep reads only the exact GitHub-prepared immutable profile pin; later live-profile updates do not rebind started work, while Dossier liveness remains independently current and fail-closed."
+    "profile_handoff_rule": "Deep reads only the exact GitHub-prepared immutable profile pin and freezes Dossier/recovery authority at the same invocation boundary; later profile/Dossier/authorization changes apply to the next invocation and do not retroactively invalidate the current frozen run.",
+    "invalid_transport_rule": "Invalid exact authorized Deep transport consumes zero semantic attempts; GitHub persists the rejection receipt then removes the bad active inbox candidate in the same canonical writer transaction. A later retry exists only if a later GitHub run-start view authorizes it."
   }
 }

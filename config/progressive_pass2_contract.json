@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
-  "version": 5,
+  "version": 6,
   "status": "production_active",
   "phase": "phase_c_pass2",
   "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; Fast/PASS 1 is never an eligibility prerequisite.",
@@ -126,7 +126,9 @@
       "mutable_live_profile_lookup_by_worker": false,
       "later_live_profile_update_invalidates_started_work": false,
       "ingest_profile_rebinding_for_started_work": false,
-      "dossier_liveness_revalidation_remains_required": true
+      "dossier_liveness_revalidation_remains_required": false,
+      "dossier_liveness_revalidation_timing": "once_at_invocation_start",
+      "mutable_dossier_or_authorization_change_after_invocation_start_invalidates_started_run": false
     }
   },
   "transport": {
@@ -138,7 +140,20 @@
     "terminal_execution_submission_directory": "data/ai_inbox/progressive_pass2/execution_receipts",
     "canonical_terminal_execution_receipt_directory": "data/cache/progressive_pass2_execution_receipts",
     "result_schema": "config/progressive_pass2_result_schema.json",
-    "execution_receipt_schema": "config/progressive_pass2_execution_receipt_schema.json"
+    "execution_receipt_schema": "config/progressive_pass2_execution_receipt_schema.json",
+    "invalid_zero_attempt_policy": {
+      "statuses": [
+        "rejected_invalid_result_no_attempt",
+        "rejected_invalid_execution_receipt_no_attempt"
+      ],
+      "persist_existing_ingest_receipt_before_cleanup": true,
+      "remove_invalid_candidate_from_active_inbox": true,
+      "semantic_attempt_consumed": false,
+      "raw_rejected_payload_archive": false,
+      "new_rejected_payload_fingerprint_field": false,
+      "retry_scope_owner": "github_next_invocation_authority",
+      "same_invocation_retry": false
+    }
   },
   "state": {
     "path": "data/cache/progressive_pass2_state.json",
@@ -268,9 +283,9 @@
       "recovery_authorization_persistence": ".github/workflows/authorize-progressive-pass2-recovery.yml"
     },
     "serialization_boundary": "github_actions_concurrency_group_taste-steam-review-dossier-canonical-writer_cancel_in_progress_false",
-    "time_expiry_guard": "scheduled_worker_preexecution_expiry_check_plus_github_recompute_before_pass2_ingest",
+    "time_expiry_guard": "scheduled_worker_invocation_start_snapshot_check_plus_github_exact_run_start_authority_validation",
     "projection_is_attempt_consumption": false,
-    "rule": "All GitHub-owned writers that can change current Deep eligibility or its first-pass/recovery attempt state reuse the existing Progressive recomputation boundary; Dossier semantic evidence, identity, freshness, recovery, and persistence semantics remain unchanged.",
+    "rule": "All GitHub-owned writers continue to recompute future Deep eligibility from current canonical truth. A running Deep invocation freezes the exact work/Dossier/recovery view once at start; changes after that boundary affect the next invocation, while ingest validates returned transport against the exact recorded run-start authority.",
     "reusable_wiring_preserved": true,
     "old_recovery_only_predicate_superseded": true,
     "runtime_predicate_adaptation_required": false
@@ -347,5 +362,24 @@
     "schedule": "RRULE:FREQ=HOURLY;BYMINUTE=30;BYSECOND=0",
     "configuration_owner": "external_user_operator",
     "repository_activation_creates_or_modifies_task": false
+  },
+  "invocation_traversal": {
+    "snapshot_boundary": "exact_main_revision_at_invocation_start",
+    "required_result_binding_fields": [
+      "run_start_authority_commit",
+      "run_started_at_utc"
+    ],
+    "manifest_dossier_and_recovery_authorization_frozen_once": true,
+    "profile_pin_verified_once": true,
+    "per_item_mutable_manifest_dossier_or_authorization_reread": false,
+    "changes_after_start_apply_to_next_invocation": true,
+    "ordered_predeclared_items_only": true,
+    "prior_sibling_ingest_required": false,
+    "prior_sibling_attempt_advancement_required": false,
+    "existing_exact_result_or_terminal_transport_behavior": "already_submitted_do_not_rerun_continue",
+    "existing_transport_implies_canonical_acceptance": false,
+    "same_invocation_retry_after_transport_cleanup": false,
+    "github_ingest_validates_against_exact_run_start_authority": true,
+    "rule": "Deep freezes one exact GitHub-prepared work/Dossier/recovery view at invocation start. Later mutable changes belong to the next invocation; GitHub accepts only artifacts bound to and valid against that exact run-start authority."
   }
 }

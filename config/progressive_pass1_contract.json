@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS1-V1",
-  "version": 2,
+  "version": 3,
   "status": "canonical",
   "phase": "phase_b_pass1",
   "purpose": "GitHub-owned item-level provisional Fast analysis for Progressive Personalized Deals: provide useful early fit/not-fit/incomplete coverage without blocking publication or Deep analysis.",
@@ -193,5 +193,17 @@
       "not_fit"
     ],
     "rule": "A current authoritative Deep completion may cause future Fast work to be skipped, but does not rewrite or delete prior Fast history."
+  },
+  "invocation_traversal": {
+    "snapshot_boundary": "invocation_start",
+    "manifest_and_profile_pin_read_once_per_invocation": true,
+    "ordered_predeclared_items_only": true,
+    "prior_sibling_ingest_required": false,
+    "prior_sibling_manifest_advancement_required": false,
+    "existing_exact_submission_path_behavior": "already_submitted_do_not_recreate_continue",
+    "existing_transport_implies_canonical_acceptance": false,
+    "stale_wrong_generation_or_wrong_path_counts_as_submitted": false,
+    "same_invocation_retry_after_transport_cleanup": false,
+    "rule": "A Fast invocation freezes the exact GitHub-prepared manifest/profile pin at start and traverses that predeclared order without waiting for sibling ingest. Exact transport existence is only a do-not-recreate marker; GitHub alone decides canonical acceptance and attempt state."
   }
 }

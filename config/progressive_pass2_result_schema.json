@@ -6,6 +6,8 @@
   "required": [
     "schema_version",
     "contract",
+    "run_start_authority_commit",
+    "run_started_at_utc",
     "semantic_generation_id",
     "profile_pin_sha256",
     "work_id",
@@ -156,6 +158,14 @@
     "profile_pin_sha256": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
+    },
+    "run_start_authority_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "run_started_at_utc": {
+      "type": "string",
+      "format": "date-time"
     }
   },
   "additionalProperties": false,

@@ -637,3 +637,22 @@ Deep eligibility does **not** require a prior Fast attempt, Fast completion, or 
 **Граница:** this decision supersedes only the numeric 8/16-bound portions of TASTE-008, TASTE-010, TASTE-012 and earlier implementation reports. Russian-attempt semantics, exact-product/appid identity, temporal pre-stop rules, privacy/provenance, source diversification, create-only buffered transport, group size, GitHub-owned recovery/completeness, and scheduler ownership remain unchanged. No replacement numeric ceiling, website quota, scheduler, queue, retry loop, checkpoint authority, persistence owner, or production Dossier run is introduced.
 
 **Основные места:** `config/taste_steam_review_dossier_worker_prompt.md`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `scripts/test_taste_dossier_semantic_bounded_retrieval.py`, `scripts/test_taste_steam_review_dossier_semantic_consistency.py`, `.github/workflows/validate-taste-dossier-buffered.yml`.
+
+---
+
+## PPD-006 — Progressive semantic invocations traverse a frozen run-start authority asynchronously
+
+**Дата:** 2026-09-24  
+**Статус:** canonical; supersedes only the per-item mutable-latest freshness timing in PPD-005 and earlier worker prompts.
+
+**Решение:** Fast/PASS 1 and Deep/PASS 2 no longer serialize already-predeclared sibling semantic work on GitHub ingest/manifest advancement. A Fast invocation freezes the current prepared manifest/profile pin once and traverses its ordered items without waiting for prior sibling ingest. Exact Fast transport existence means only “already submitted; do not recreate”; it never means accepted or attempted.
+
+Deep freezes one exact `main` revision at invocation start, including ordered work, immutable profile pin, exact Dossier SHA/binding/expiry state and recovery authorization identity/reason/condition. Dossier/profile/recovery/work changes after that boundary belong to the next invocation and do not trigger per-item rereads or retroactive invalidation. Deep result/terminal transport records the exact run-start authority commit and boundary time; GitHub validates against that immutable authority instead of mutable-latest Dossier/authorization state.
+
+**Invalid Deep transport:** malformed/invalid exact authorized Deep result or terminal receipt remains zero-attempt. GitHub durably writes the existing ingest rejection receipt, removes the bad candidate from the active deterministic inbox path in the same canonical-writer transaction, keeps no separate raw rejected-payload archive and adds no rejected-payload fingerprint field. A freed path is not worker-owned retry authority: only a later GitHub-prepared run-start view can authorize another submission, and there is no same-invocation retry loop.
+
+**Почему:** immutable predeclared siblings are independent semantic work, so waiting for canonical ingest creates avoidable head-of-line blocking. Conversely, checking mutable Dossier/recovery state between Deep games can invalidate work after it was legitimately authorized. Invalid zero-attempt transport must not permanently occupy a create-only deterministic path.
+
+**Сохранено:** GitHub alone owns scope/order, canonical acceptance, attempts, recovery authorization, completeness and persistence; exact profile pin and exact work/Dossier/recovery identity remain strict; valid execution still consumes attempts exactly once; stale/unprepared work remains fail-closed; Fast and Deep remain independent; Dossier worker/progression behavior is unchanged; no scheduler/queue/retry daemon or Scheduled Task setting is added or changed.
+
+**Основные места:** `config/progressive_pass1_contract.json`, `config/progressive_pass1_worker_prompt.md`, `config/progressive_pass2_contract.json`, `config/progressive_pass2_worker_prompt.md`, `config/execution_ownership_contract.json`, `scripts/progressive_work_authority.py`, `scripts/ingest_progressive_pass2.py`, `scripts/progressive_pass2.py`.

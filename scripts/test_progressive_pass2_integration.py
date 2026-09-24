@@ -274,13 +274,14 @@ def main():
     assert 'workflow_dispatch:' in recovery_workflow
     assert 'schedule:' not in recovery_workflow
 
-    # DEEP-INT-09: ingest resolves exact pre-semantic Git work authority instead
-    # of rebinding an already-started item to current profile/main. Dossier liveness
-    # is still revalidated immediately before persistence.
+    # DEEP-INT-09: ingest validates against the exact invocation-start Git
+    # authority carried by transport. Mutable current Dossier/profile/authorization
+    # state is not a second liveness gate for an already-authorized run.
     pass2_ingest = read('scripts/ingest_progressive_pass2.py')
     process_pos = pass2_ingest.index('progressive_pass2.process_result_documents(')
-    assert pass2_ingest.index('resolve_presemantic_work_item(') < process_pos
-    assert pass2_ingest.index('prepared_work_item_dossier_is_live(') < process_pos
+    assert pass2_ingest.index('resolve_presemantic_work_item_at_commit(') < process_pos
+    assert pass2_ingest.index('validate_run_start_authority(') < process_pos
+    assert 'prepared_work_item_dossier_is_live(' not in pass2_ingest[:process_pos]
     assert 'work = build_progressive_pass2_work.build_work_document()' not in pass2_ingest[:process_pos]
 
     # DEEP-INT-09B: canonical execution receipts and the reconciled Dossier inbox

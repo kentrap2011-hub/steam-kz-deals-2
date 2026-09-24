@@ -1,31 +1,45 @@
 # Progressive Deep Worker — bounded production runtime contract
 
-This is the bounded semantic-worker contract for production authoritative Deep analysis under `FAST-DOSSIER-DEEP-V1`. Production execution is allowed only while `config/progressive_pass2_contract.json#implemented` and `#active` are both true; otherwise the worker stops cleanly.
+This is the bounded semantic-worker contract for production authoritative Deep analysis under `FAST-DOSSIER-DEEP-V1`. Production execution is allowed only while the frozen invocation-start `config/progressive_pass2_contract.json#implemented` and `#active` are both true.
 
-At the start of every future invocation:
+## Establish one immutable run-start view
 
-1. Read the latest `config/progressive_pass2_contract.json` from `main`.
-2. If `implemented != true` or `active != true`, stop cleanly without creating any Deep result or execution-receipt artifact.
-3. Read only the current GitHub-owned `data/production/pre_ai/progressive_pass2_work.json`.
-4. Before starting an item, require its `profile_pin_sha256` to equal the top-level `profile_pin.pin_sha256`; read `gaming_taste_live.json` only through that pin's exact repository/path at `resolved_commit_sha` (never `main` or remembered profile context), verify Git blob SHA, byte count and content SHA256, parse the exact JSON object, and use only those pinned bytes for personalized semantics. If exact verification fails, publish no artifact and consume no attempt.
-5. Use the manifest's exact item order, exact `work_mode`, immutable bindings, exact pinned profile, and exact repository paths. Never choose, rebuild, reorder, expand, retry, or reinterpret scope.
-5. Deep eligibility is GitHub-owned and independent from Fast/PASS 1. Never require a Fast result, Fast attempt, Fast failure, or global Fast completion before executing an item that GitHub already prepared.
-6. Read only the exact `dossier_path` and prepared semantic input for each item. The Dossier is neutral evidence; do not alter Dossier identity, freshness, acceptance, recovery, or persistence semantics.
-7. Immediately before semantic execution, verify that the canonical Dossier still has the exact prepared `dossier_compatibility_binding`, exact `dossier_content_sha256`, and exact `dossier_expires_at_utc`, and that expiry is strictly later than current UTC. If liveness fails, publish no artifact and consume no attempt.
-8. Treat `work_mode=normal_first_pass` as the one GitHub-owned normal Deep first pass for that exact current identity.
-9. Treat `work_mode=recovery` only as a GitHub-preauthorized recovery attempt. Copy the exact `recovery_authorization_id`, `recovery_reason`, and `recovery_condition_binding`. Never invent, extend, refresh, or select recovery authorization yourself.
-10. Publish at most one create-only transport artifact for an authorized item:
-    - a valid `PROGRESSIVE-PASS2-RESULT-V1` at the exact `result_submission_path`; or
-    - only after the authorized semantic attempt actually started but no accepted result can be produced, a `PROGRESSIVE-PASS2-EXECUTION-RECEIPT-V1` at the exact `terminal_execution_submission_path`.
-11. Copy every immutable field exactly, including `profile_pin_sha256`: current semantic identity, pinned-profile identity, Dossier SHA/binding, `authorization_id`, `work_mode`, and all recovery fields (including explicit nulls on normal first pass).
-12. Never overwrite, rename, delete, or invent an alternate filename. If the exact result or terminal receipt path already exists, do not run the item again.
-13. A trustworthy fit may return `analyzed_fit`; a trustworthy completed negative may return `analyzed_not_fit`; unresolved evidence returns `analysis_incomplete`. Insufficient evidence is never a completed negative.
-14. Do not use price, discount, sale urgency, wishlist, purchase value, or other commercial signals for the semantic judgment.
-15. Stop when no current prepared items remain or when runtime/tool budget no longer safely permits another item. Runtime boundaries are not quotas.
-16. Do not modify Fast/PASS 1 state, Dossier state/workflows, Deep GitHub eligibility/order/state/recovery authorization/accounting, visual projection, or Scheduled Task settings.
+At the start of every invocation, before semantic execution:
 
-GitHub is the sole control-plane authority for Deep scope, order, first-pass accounting, recovery ownership and authorization, validation, canonical persistence, terminal execution receipts, recomputation, completeness and producer projection.
+1. Resolve the exact current `main` commit once and record it as `run_start_authority_commit`.
+2. Record the invocation boundary UTC time as `run_started_at_utc`.
+3. Read `config/progressive_pass2_contract.json` and `data/production/pre_ai/progressive_pass2_work.json` from exactly `run_start_authority_commit`. If `implemented != true` or `active != true`, stop cleanly.
+4. Freeze the manifest's exact ordered items, work modes, immutable identities, top-level profile pin, Dossier path/SHA/compatibility/expiry bindings, and every recovery authorization id/reason/condition for the whole invocation. Never add work absent from this frozen view.
+5. Verify every item pin equals the frozen top-level profile pin. Fetch `gaming_taste_live.json` only at the pin's exact immutable repository/path/commit, verify blob SHA, byte count and content SHA256 once, parse once, and use those exact profile bytes throughout the invocation.
+6. At this invocation boundary, validate each frozen item's exact Dossier from `run_start_authority_commit`: exact path, content SHA256, compatibility binding, app/work identity and expiry must be valid at `run_started_at_utc`. Recovery items must carry the exact GitHub-prepared recovery authorization fields. An item already stale/expired/unauthorized at this boundary is not executable and produces no artifact; continue to later frozen items.
 
-## Pinned in-flight handoff
+After this boundary is established, do not reread or revalidate mutable `main`, manifest order, Dossier content/binding/expiry, live profile, recovery authorization projection, or GitHub progress between games. Any such change after invocation start belongs to the next invocation.
 
-Before starting each **new** item, reload the current Deep manifest. Once one exact authorized item has started, a later live-profile update or newer Progressive manifest does not invalidate that started item. Complete it only with the original immutable profile pin and work identity. GitHub may accept that result from its exact earlier pre-semantic manifest authority while independently revalidating current Dossier liveness. Never rebind an old result to a newer profile or work id.
+Deep eligibility is independent from Fast/PASS 1. Never require a Fast result, attempt, failure, or global Fast completion.
+
+## Asynchronous traversal and transport
+
+Traverse only executable items from the frozen run-start order while runtime/tool budget safely permits.
+
+For each item:
+
+- If its exact `result_submission_path` or exact `terminal_execution_submission_path` already exists, do not rerun it. This means only `already submitted; do not recreate`, never canonical acceptance or attempt consumption. Continue to the next frozen item.
+- Otherwise execute semantic analysis using the frozen profile, semantic input and frozen Dossier evidence.
+- Publish at most one create-only artifact: a valid `PROGRESSIVE-PASS2-RESULT-V1`, or only after an authorized semantic attempt actually started but no accepted result can be produced, a `PROGRESSIVE-PASS2-EXECUTION-RECEIPT-V1`.
+- Echo all immutable work/Dossier/recovery fields exactly and additionally include the invocation-wide `run_start_authority_commit` and `run_started_at_utc`.
+- After submitting A, do not wait for GitHub ingest, attempt advancement, manifest rebuild or sibling removal before starting B.
+- Never revisit an item in the same invocation. If GitHub later rejects and removes an invalid transport, that does not authorize a same-invocation retry.
+
+Never overwrite, rename, delete, or invent an alternate transport filename. A stale/similarly named path is not a marker for the current item.
+
+## Semantic outcomes
+
+A trustworthy fit may return `analyzed_fit`; a trustworthy completed negative may return `analyzed_not_fit`; unresolved evidence returns `analysis_incomplete`. Insufficient evidence is never a completed negative. Do not use price, discount, sale urgency, wishlist, purchase value or other commercial signals for the semantic judgment.
+
+## Ownership boundary
+
+GitHub alone owns Deep scope/order, exact run-start acceptance proof, normal-first-pass accounting, recovery ownership/authorization, validation, canonical persistence, terminal receipts, future eligibility recomputation, completeness and producer projection. The worker never chooses retry eligibility or recovery scope.
+
+Invalid technical transport consumes no semantic attempt. GitHub may persist its rejection receipt and remove the invalid active inbox candidate; only a later invocation's then-current GitHub run-start view can authorize another submission. The worker never turns a freed path into its own retry decision.
+
+Do not modify Fast/PASS 1 state, Dossier state/workflows, Deep GitHub state/recovery authorization/accounting, visual projection, or Scheduled Task settings.

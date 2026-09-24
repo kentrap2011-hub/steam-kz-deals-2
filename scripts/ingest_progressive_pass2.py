@@ -48,9 +48,74 @@ def removable_names(receipts):
             'accepted_terminal_execution_receipt',
             'replay_ignored',
             'rejected_stale_or_mismatched',
+            'rejected_invalid_result_no_attempt',
+            'rejected_invalid_execution_receipt_no_attempt',
         }:
             removable.add(receipt['artifact'])
     return removable
+
+
+def _current_item_for_path(work, path, path_field):
+    target = path.as_posix()
+    for item in work.get('items') or []:
+        if isinstance(item, dict) and str(item.get(path_field) or '') == target:
+            return item
+    return None
+
+
+def _same_current_identity(a, b):
+    if not isinstance(a, dict) or not isinstance(b, dict):
+        return False
+    fields = ('work_id', 'authorization_id', 'work_mode', 'profile_pin_sha256')
+    return all(a.get(field) == b.get(field) for field in fields)
+
+
+def resolve_candidate_authority(path, path_field, doc, persisted_work):
+    run_commit = doc.get('run_start_authority_commit') if isinstance(doc, dict) else None
+    run_started = doc.get('run_started_at_utc') if isinstance(doc, dict) else None
+    exact_error = None
+
+    if isinstance(run_commit, str) and isinstance(run_started, str):
+        try:
+            item = progressive_work_authority.resolve_presemantic_work_item_at_commit(
+                path,
+                progressive_pass2.WORK,
+                run_commit,
+                path_field=path_field,
+                expected_contract='PROGRESSIVE-PASS2-WORK-V1',
+            )
+            progressive_pass1.validate_profile_pin(item['_profile_pin'])
+            progressive_pass2.validate_run_start_authority(
+                item,
+                run_commit,
+                run_started,
+            )
+            item['_run_start_authority_commit'] = run_commit
+            item['_run_started_at_utc'] = run_started
+            item['_run_start_authority_verified'] = True
+            return item, None
+        except (ValueError, OSError, json.JSONDecodeError) as exc:
+            exact_error = str(exc)
+
+    current = _current_item_for_path(persisted_work, path, path_field)
+    if current is None:
+        if exact_error:
+            raise ValueError(exact_error)
+        raise ValueError('candidate lacks exact current run-start authority')
+
+    item = progressive_work_authority.resolve_presemantic_work_item(
+        path,
+        progressive_pass2.WORK,
+        path_field=path_field,
+        expected_contract='PROGRESSIVE-PASS2-WORK-V1',
+    )
+    progressive_pass1.validate_profile_pin(item['_profile_pin'])
+    if not _same_current_identity(item, current):
+        raise ValueError('candidate path no longer matches current prepared Deep identity')
+    item['_run_start_authority_commit'] = item.get('_work_authority_commit')
+    item['_run_started_at_utc'] = None
+    item['_run_start_authority_verified'] = False
+    return item, exact_error or 'missing_run_start_authority_binding'
 
 
 def main():
@@ -66,35 +131,36 @@ def main():
     ):
         raise SystemExit('Current Progressive PASS 2 work manifest is missing, stale, or inactive')
 
-    # Resolve the exact Git-prepared work that existed before each artifact.
-    # Profile/main drift is not a liveness gate for started work; Dossier truth is.
-    work = persisted_work
-
     result_paths = sorted(RESULT_INBOX.glob('*.json')) if RESULT_INBOX.exists() else []
     terminal_paths = sorted(RECEIPT_INBOX.glob('*.json')) if RECEIPT_INBOX.exists() else []
     result_docs, result_raw, _result_sha = load_documents(result_paths)
     terminal_docs, terminal_raw, terminal_sha = load_documents(terminal_paths)
+    document_by_name = {
+        name: (doc, error)
+        for name, doc, error in (result_docs + terminal_docs)
+    }
 
     accepted_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     state = progressive_pass2.load_state()
     consumed = progressive_work_authority.consumed_work_ids(INGEST_RECEIPTS)
     authorization_errors = {}
+    invalid_transport_authority_errors = {}
     authorized = []
+
     for path in result_paths + terminal_paths:
         path_field = (
             'result_submission_path'
             if path.parent.name == 'results'
             else 'terminal_execution_submission_path'
         )
+        doc, _parse_error = document_by_name.get(path.name, (None, 'missing_document'))
         try:
-            item = progressive_work_authority.resolve_presemantic_work_item(
-                path,
-                progressive_pass2.WORK,
-                path_field=path_field,
-                expected_contract='PROGRESSIVE-PASS2-WORK-V1',
+            item, invalid_authority_error = resolve_candidate_authority(
+                path, path_field, doc, persisted_work
             )
-            progressive_pass1.validate_profile_pin(item.pop('_profile_pin'))
-            if item['work_id'] in consumed:
+            if invalid_authority_error:
+                invalid_transport_authority_errors[path.name] = invalid_authority_error
+            if item.get('work_mode') == 'normal_first_pass' and item['work_id'] in consumed:
                 authorization_errors[path.name] = 'work_id_already_consumed'
                 continue
             existing = (state.get('entries') or {}).get(item['family_id'])
@@ -108,10 +174,6 @@ def main():
             ):
                 authorization_errors[path.name] = 'superseded_by_newer_accepted_work'
                 continue
-            dossier_live, dossier_reason = progressive_pass2.prepared_work_item_dossier_is_live(item)
-            if not dossier_live:
-                authorization_errors[path.name] = dossier_reason
-                continue
             authorized.append(item)
         except (ValueError, OSError, json.JSONDecodeError) as exc:
             authorization_errors[path.name] = str(exc)
@@ -122,6 +184,7 @@ def main():
         key=lambda row: progressive_work_authority.authority_rank(row['_work_authority_commit']),
     ):
         by_work[(item['work_id'], item['authorization_id'])] = item
+
     acceptance_work = {
         'contract': 'PROGRESSIVE-PASS2-WORK-V1',
         'implemented': True,
@@ -143,20 +206,30 @@ def main():
             source_sha256_by_name=terminal_sha,
         )
     )
+
     for receipt in result_receipts + terminal_receipts:
+        artifact = receipt.get('artifact')
         if (
             receipt.get('status') == 'rejected_stale_or_mismatched'
-            and receipt.get('artifact') in authorization_errors
+            and artifact in authorization_errors
         ):
             receipt['reason'] = (
-                'no_live_presemantic_authority:'
-                + authorization_errors[receipt['artifact']]
+                'no_run_start_presemantic_authority:'
+                + authorization_errors[artifact]
+            )
+        if (
+            receipt.get('status') in {
+                'rejected_invalid_result_no_attempt',
+                'rejected_invalid_execution_receipt_no_attempt',
+            }
+            and artifact in invalid_transport_authority_errors
+        ):
+            receipt['reason'] = (
+                'run_start_authority_invalid:'
+                + invalid_transport_authority_errors[artifact]
             )
 
     progressive_pass2.STATE.parent.mkdir(parents=True, exist_ok=True)
-    # Canonical execution receipts are optional for normal semantic results, but
-    # the workflow commit step may still stage this path. Ensure the directory
-    # exists even when this ingest produced no terminal execution receipt.
     progressive_pass2.CANONICAL_EXECUTION_RECEIPTS.mkdir(parents=True, exist_ok=True)
     progressive_pass2.STATE.write_text(
         json.dumps(final_state, ensure_ascii=False, indent=2) + '\n',
@@ -176,6 +249,9 @@ def main():
     all_receipts = result_receipts + terminal_receipts
     combined_raw = dict(result_raw)
     combined_raw.update(terminal_raw)
+
+    # Persist diagnostic rejection/acceptance receipts before active-path cleanup.
+    # The canonical writer stages both receipt and deletion in one Git commit.
     write_ingest_receipts(all_receipts, combined_raw)
 
     remove_results = removable_names(result_receipts)
