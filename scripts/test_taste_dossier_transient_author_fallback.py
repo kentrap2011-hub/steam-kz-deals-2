@@ -76,6 +76,27 @@ def fallback_dossier(appid, now, *, title=None, transient_author_tokens=("epheme
         "russian_attempt": "found_and_used",
         "overall_strength": "limited",
         "stop_reason": "evidence_stable",
+        "coverage": {
+            "dimensions": [
+                {
+                    "dimension": dimension,
+                    "state": "covered" if dimension in {
+                        "core_play_mechanics",
+                        "recurring_strengths",
+                        "recurring_complaints_tradeoffs",
+                    } else "not_material_or_not_applicable",
+                    "observation_indices": [0] if dimension in {
+                        "core_play_mechanics",
+                        "recurring_strengths",
+                        "recurring_complaints_tradeoffs",
+                    } else [],
+                }
+                for dimension in EVIDENCE["coverage_sufficiency"]["dimensions"]
+            ],
+            "closure_basis": "compact_central_experience",
+            "strengths_investigated": True,
+            "weaknesses_tradeoffs_investigated": True,
+        },
     }
     doc["provenance"] = {"sources": [metadata, collection], "player_feedback_records": records}
     return doc
