@@ -305,22 +305,51 @@ def exact_authority_and_path_reuse():
         )
         git(repo, 'add', marker2.relative_to(repo).as_posix())
         anchor2 = commit(repo, 'next Deep run-start marker', '2026-09-24T11:35:00+00:00')
-        proof2 = progressive_work_authority.validate_run_start_marker_commit(
-            anchor2,
-            marker2,
-            json.loads(marker2.read_text(encoding='utf-8')),
-            repo_root=repo,
+        previous_cwd = Path.cwd()
+        try:
+            os.chdir(repo)
+            next_start_receipts = ingest_progressive_pass2.process_run_start_markers()
+        finally:
+            os.chdir(previous_cwd)
+        assert len(next_start_receipts) == 1
+        next_start_receipt = next_start_receipts[0]
+        assert next_start_receipt['status'] == 'confirmed'
+        assert next_start_receipt['run_start_anchor_commit'] == anchor2
+        assert next_start_receipt['run_start_authority_commit'] == observed_c
+
+        set_git_identity(
+            repo,
+            'steam-kz-bot',
+            'steam-kz-bot@users.noreply.github.com',
         )
-        next_item = progressive_work_authority.resolve_presemantic_work_item_at_commit(
-            marker_path.parent.parent / 'results' / Path(item['result_submission_path']).name,
+        git(repo, 'add', '-A')
+        commit(
+            repo,
+            'Reconcile next Dossier and PASS 2 state',
+            '2026-09-24T11:36:00+00:00',
+        )
+        write_json(stale_path, {'next_run_probe': True})
+        set_git_identity(repo, 'scheduled-worker', 'scheduled-worker@example.invalid')
+        git(repo, 'add', stale_path.relative_to(repo).as_posix())
+        commit(repo, 'next run probe transport', '2026-09-24T11:40:00+00:00')
+        next_resolved = progressive_work_authority.resolve_presemantic_work_item_at_commit(
+            stale_path,
             manifest_path,
-            proof2['run_start_authority_commit'],
+            observed_c,
             path_field='result_submission_path',
             expected_contract='PROGRESSIVE-PASS2-WORK-V1',
             repo_root=repo,
-        ) if False else None
-        assert next_item is None
-        assert proof2['run_start_authority_commit'] == observed_c
+        )
+        try:
+            progressive_pass2.validate_run_start_authority(
+                next_resolved,
+                next_start_receipt,
+                repo_root=repo,
+            )
+        except ValueError as exc:
+            assert 'content SHA does not match' in str(exc)
+        else:
+            raise AssertionError('next invocation must observe the newer Dossier state')
 
     # Same deterministic result path may be added again after GitHub-owned invalid
     # cleanup; work-authority lookup must bind to the new bytes/introduction commit.
