@@ -207,7 +207,11 @@ def resolve_candidate_authority(path, path_field, doc, persisted_work):
             item['_run_start_authority_verified'] = True
             return item, None
         except (ValueError, OSError, json.JSONDecodeError) as exc:
-            exact_error = str(exc)
+            # Once transport claims an invocation run-start anchor, exact GitHub
+            # confirmation is mandatory. Never fall back to mutable/current work:
+            # a receipt created after this artifact, a rejected receipt, or a
+            # wrong-authority receipt must remain fail-closed with zero attempt.
+            raise ValueError(str(exc)) from exc
 
     current = _current_item_for_path(persisted_work, path, path_field)
     if current is None:
