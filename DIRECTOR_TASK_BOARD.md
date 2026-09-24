@@ -1,5 +1,34 @@
 # DIRECTOR TASK BOARD
 
+## IN PROGRESS — НОВЫЙ ЧАТ 1 — Dossier purpose + coverage sufficiency fix
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_PURPOSE_AND_COVERAGE_SUFFICIENCY_FIX_01.md`
+
+Report:
+`reviews/worker_reports/taste-dossier-purpose-and-coverage-sufficiency-fix-01.md`
+
+Status:
+`authorized_ready_for_worker`
+
+User-approved decision:
+- Dossier must explicitly understand that it prepares a neutral evidence package for a later personalized Deep analysis by another worker;
+- Dossier itself remains profile-agnostic and must not score or personalize fit;
+- completeness and downstream usefulness of the game picture are more important than speed/throughput;
+- `evidence_stable` must mean sufficiently complete neutral coverage of the actual game experience, not merely that one valid fact was found;
+- no fixed minimum review/source/search/page quota is allowed; compact decisive Dossiers remain valid;
+- add an explicit neutral coverage check and narrow-topic anti-stop rule before `research_state:sufficient / evidence_stable`;
+- no recovery, Scheduled Task action or production semantic rerun is authorized by this implementation task.
+
+Proven basis:
+- accepted diagnostic `progressive-deep-insufficient-evidence-diagnostic-01` classified the dominant root cause as `DOSSIER_TOO_THIN`;
+- 8/8 sampled Deep incomplete outcomes were justified from their exact Dossier inputs while additional exact-product decision-relevant player evidence remained readily discoverable;
+- successful compact controls prove the repair must target semantic coverage, not numeric quotas.
+
+Worker state:
+- use a NEW physical conversation for ЧАТ 1;
+- prior physical ЧАТ 1 workers are retired for unrelated work.
+
 ## ACCEPTED — ЧАТ 2 — Deep insufficient-evidence diagnostic
 
 Task:
