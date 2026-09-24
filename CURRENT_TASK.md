@@ -2,13 +2,14 @@
 
 Последнее обновление: 2026-09-18
 
-## ACTIVE — Progressive pinned live-profile handoff fix
-Статус: `implement_validate_in_progress`.
+## COMPLETE — Progressive pinned live-profile handoff fix
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_PROGRESSIVE_PINNED_LIVE_PROFILE_HANDOFF_FIX_01.md`;
-- scope: exact immutable live-profile pin/content handoff for Progressive Fast + Deep;
-- invariant: live profile may advance after pin without invalidating the pinned in-flight work; next newly prepared work uses the then-current profile;
-- no Scheduled Task mutation and no manual semantic production run;
-- report target: `reviews/worker_reports/progressive-pinned-live-profile-handoff-fix-01.md`.
+- implementation commits: `4e9b2f84c77a59df89afdef5d126362ce5f16c4e`, `4a4a1261e6c682343d97a7b6fc5e3d7f2c2c2cd2`, `7e7ef7b7e87fbc3f7f5e14883bfa838289015bae`;
+- generated pin-aware pre-AI validation commits observed: `7e10b54ad418aaeb4881714a0c830a1a3293372f`, `74bfe90793bc9e8ec2efa778d0a2e471c9139495`;
+- invariant: live profile may advance after pin without invalidating already-started exact Fast/Deep work; new semantic generations use the newly frozen exact profile;
+- Scheduled Tasks unchanged; no Fast/Dossier/Deep production worker was manually triggered;
+- report: `reviews/worker_reports/progressive-pinned-live-profile-handoff-fix-01.md`.
 
 ## Завершено
 
