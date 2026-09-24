@@ -1025,8 +1025,6 @@ def validate_dossier_strict(
         raise ValueError("overall_strength is invalid")
     if evidence["stop_reason"] not in enums["research_stop_reason"]:
         raise ValueError("evidence stop_reason is invalid")
-    _validate_coverage_sufficiency(evidence, observations, schema_doc)
-
     used_records = [feedback_map[feedback_id] for feedback_id in used_feedback_ids]
     used_player_source_identities = {source_identity_map[record["source_id"]] for record in used_records}
     if not used_player_source_identities:
@@ -1067,6 +1065,8 @@ def validate_dossier_strict(
         raise ValueError("overall strong evidence requires at least one strongly recurring observation")
     if evidence["overall_strength"] == "moderate" and max_recurrence_rank < _RECURRENCE_RANK["moderate"]:
         raise ValueError("overall moderate evidence requires at least one moderately recurring observation")
+
+    _validate_coverage_sufficiency(evidence, observations, schema_doc)
 
     _validate_no_raw_body_like_payload(dossier)
     _validate_no_raw_or_personal_payload(dossier)
