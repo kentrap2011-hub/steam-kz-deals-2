@@ -1,5 +1,45 @@
 # DIRECTOR TASK BOARD
 
+## ACTIVE — ЧАТ 1 — Progressive Fast controlled shadow replay
+
+Task:
+`WORKER_TASK_PROGRESSIVE_FAST_CONTROLLED_SHADOW_REPLAY_01.md`
+
+Report:
+`reviews/worker_reports/progressive-fast-controlled-shadow-replay-01.md`
+
+Mode:
+`CONTROLLED SHADOW REPLAY / OBSERVE / NO PRODUCTION MUTATION`
+
+Worker slot:
+- **НОВЫЙ физический ЧАТ 1**;
+- previously accepted diagnostic chats are retired and must not be reused.
+
+Goal:
+- reproduce the problematic historical Fast invocation as closely as safely possible using the exact historical prompt, work blob, order and pinned Taste profile;
+- diagnose both the historical stop after item 5 and the four overly conservative `insufficient_evidence` outcomes;
+- record observable actions, web retrievals, source facts, tool errors, concise rule-based rationale and continuation decision per item;
+- do not record private chain-of-thought.
+
+Replay authority:
+- invocation-side commit `a1fe53af3e77c21e8fd4de61da6324c11c9c575a`;
+- work blob `f3dd4b1d756becc77eb0770c580afcd3aa63a775`;
+- historical worker prompt blob `03b0cba057f7b8205e5b2232f578b32369151700`;
+- generation `b33cc4416860bd15a37f530c9daef8fb7755ae440929f93aa915d5363e31c490`;
+- profile pin `cf4a4ecf03e72d0d77c85c5e101ce4e37ab36b8547d1bcc1deada780a8df2a6c`.
+
+Critical boundary:
+- items 1-5 are BOKURA, RV There Yet?, Uncanny Tales: Cold Road, Nimbatus, Borderlands 3;
+- item 6 is The Bureau: XCOM Declassified;
+- no five-item quota;
+- if item 5 explicitly says continue but item 6 never appears, preserve that as interruption evidence.
+
+Safety:
+- no writes to production Fast/Deep/Dossier paths;
+- no replacement results, reset/retry, production semantic run, ingest dispatch or Scheduled Task mutation;
+- allowed writes are only isolated diagnostic per-item artifacts under `reviews/reproductions/progressive-fast-controlled-shadow-replay-01/` and the final durable report;
+- no implementation in this task.
+
 ## ACCEPTED — ЧАТ 2 — Fast insufficient-evidence semantic review
 
 Task:
