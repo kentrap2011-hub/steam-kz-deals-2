@@ -7,7 +7,7 @@
     "canonical_profile_blob_sha": "9b9926031889dbd98ba6585c57836d52c739a0bb",
     "taste_model_version": "taste-v3",
     "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-    "content_metadata_blob_sha": "83d9dc3a8b4a041f7976e5223249f6124c422ba8"
+    "content_metadata_blob_sha": "762b59a72cc8d95566be61a5b1b5649e5b2771a8"
   },
   "wishlist_binding": {
     "blob_sha": "bc7fe206d147e40c99bceceda11e70c9c20c17a4",
@@ -15,8 +15,8 @@
     "is_context_only_not_taste_proof": true
   },
   "fx_binding": {
-    "kzt_per_rub": 5.314354,
-    "provider_updated_at_utc": "2026-09-23T00:02:31+00:00"
+    "kzt_per_rub": 5.306138,
+    "provider_updated_at_utc": "2026-09-24T00:02:32+00:00"
   },
   "contract": {
     "minimum_taste_fit": "moderate",
@@ -80,14 +80,14 @@
     "russian_description_translation_queue_jsonl": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
     "russian_description_translation_status_json": "data/production/pre_ai/chatgpt_ru_description_status.json"
   },
-  "source_family_count": 579,
-  "candidate_description_known_count": 579,
+  "source_family_count": 573,
+  "candidate_description_known_count": 573,
   "candidate_description_missing_count": 0,
   "candidate_description_coverage": 1.0,
-  "ai_queue_count": 537,
+  "ai_queue_count": 531,
   "ready_without_ai_count": 0,
-  "purchase_context_line_count": 537,
-  "progressive_candidate_count": 537,
+  "purchase_context_line_count": 531,
+  "progressive_candidate_count": 531,
   "deterministically_excluded_without_ai_count": 42,
   "deterministic_exclusion_counts": {
     "deal_excludes_even_if_strong": 39,
@@ -109,7 +109,7 @@
   "negative_analysis": {
     "work_code": "resolve_grounded_negative_analysis",
     "negative_backfill_queue_count": 0,
-    "negative_full_evaluation_queue_count": 537,
+    "negative_full_evaluation_queue_count": 531,
     "negative_ready_without_ai_count": 0,
     "evidence_backfill_queue_count": 0,
     "normal_ready_requires_confirmed_negative": true
@@ -117,7 +117,7 @@
   "sale_end_coverage": 1.0,
   "sale_end_missing_count": 0,
   "sale_end_missing_primary_keys": [],
-  "source_pre_ai_artifact_bytes": 2220763,
+  "source_pre_ai_artifact_bytes": 2199966,
   "deterministically_excluded_primary_keys": [
     "Sub_1529",
     "Sub_320",
@@ -148,7 +148,7 @@
     "App_2825880",
     "App_2982610",
     "App_2997230",
-    "App_3094010",
+    "App_3047750",
     "App_3167180",
     "App_3178350",
     "App_335670",
@@ -162,17 +162,17 @@
     "App_866570",
     "App_897450"
   ],
-  "elapsed_seconds": 0.275,
+  "elapsed_seconds": 0.167,
   "semantic_completeness": {
     "status": "degraded",
     "scope_partition_complete": true,
     "sufficiently_complete_for_publication": false,
-    "unresolved_semantic_count": 537,
+    "unresolved_semantic_count": 531,
     "resolved_semantic_count": 0,
-    "total_relevant_semantic_scope": 537,
-    "source_family_count": 579,
+    "total_relevant_semantic_scope": 531,
+    "source_family_count": 573,
     "unresolved_scope_source_mailing_updated_at_utc": "2026-09-23T23:12:47.031485+00:00",
-    "unresolved_scope_age_seconds": 57,
+    "unresolved_scope_age_seconds": 15283,
     "unresolved_age_basis": "source_mailing_updated_at_utc"
   },
   "semantic_runtime_observability": {
@@ -197,7 +197,7 @@
     "taste": {
       "work_type": "taste",
       "queue_path": "data/production/pre_ai/chatgpt_taste_queue.jsonl",
-      "queue_count": 537,
+      "queue_count": 531,
       "result_contract": "config/taste_result_contract.json"
     },
     "russian_description_translation": {
@@ -207,7 +207,7 @@
       "cache_contract": "RUSSIAN-DESCRIPTION-TRANSLATION-CACHE-ENTRY-V1",
       "queue_path": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
       "status_path": "data/production/pre_ai/chatgpt_ru_description_status.json",
-      "queue_count": 149,
+      "queue_count": 144,
       "submission_glob": "data/ai_inbox/russian_descriptions/*.json",
       "runtime_owner": "scheduled_chatgpt_runtime_data_plane",
       "control_plane_owner": "github_control_plane"
