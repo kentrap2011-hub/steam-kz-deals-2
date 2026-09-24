@@ -205,32 +205,37 @@ def exact_authority_and_path_reuse():
         previous_cwd = Path.cwd()
         try:
             os.chdir(repo)
-            stale_item, stale_error = ingest_progressive_pass2.resolve_candidate_authority(
-                Path(item['result_submission_path']),
-                'result_submission_path',
-                stale_doc,
-                manifest_b,
-            )
-            assert stale_error is not None
-            assert 'does not match GitHub confirmation' in stale_error
-            stale_state, stale_receipts = progressive_pass2.process_result_documents(
-                pass2_core.work_doc([stale_item]),
-                pass2_core.empty_pass2_state(),
-                [(Path(item['result_submission_path']).name, stale_doc, None)],
-                accepted_at_utc='2026-09-24T11:11:00+00:00',
-            )
+            try:
+                ingest_progressive_pass2.resolve_candidate_authority(
+                    Path(item['result_submission_path']),
+                    'result_submission_path',
+                    stale_doc,
+                    manifest_b,
+                )
+            except ValueError as exc:
+                stale_error = str(exc)
+                assert 'does not match GitHub confirmation' in stale_error
+            else:
+                raise AssertionError('wrong-authority Deep transport must fail closed')
         finally:
             os.chdir(previous_cwd)
-        assert stale_state['entries'] == {}
-        assert stale_receipts[0]['status'] == 'rejected_invalid_result_no_attempt'
 
-        # Remove the rejected transport exactly as GitHub invalid-transport cleanup
+        stale_state, stale_receipts = progressive_pass2.process_result_documents(
+            pass2_core.work_doc([]),
+            pass2_core.empty_pass2_state(),
+            [(Path(item['result_submission_path']).name, stale_doc, None)],
+            accepted_at_utc='2026-09-24T11:11:00+00:00',
+        )
+        assert stale_state['entries'] == {}
+        assert stale_receipts[0]['status'] == 'rejected_stale_or_mismatched'
+
+        # Remove the rejected transport exactly as GitHub stale/mismatched cleanup
         # does, leaving the semantic attempt unconsumed and the old error receipt durable.
         stale_path.unlink()
         write_json(
             repo / 'data/cache/progressive_pass2_ingest_receipts/rejected.json',
             {
-                'status': 'rejected_invalid_result_no_attempt',
+                'status': 'rejected_stale_or_mismatched',
                 'work_id': item['work_id'],
                 'reason': stale_error,
             },
