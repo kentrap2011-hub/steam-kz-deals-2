@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## IN PROGRESS — НОВЫЙ ЧАТ 2 — Deep insufficient-evidence diagnostic
+## ACCEPTED — ЧАТ 2 — Deep insufficient-evidence diagnostic
 
 Task:
 `WORKER_TASK_PROGRESSIVE_DEEP_INSUFFICIENT_EVIDENCE_DIAGNOSTIC_01.md`
@@ -8,27 +8,29 @@ Task:
 Report:
 `reviews/worker_reports/progressive-deep-insufficient-evidence-diagnostic-01.md`
 
-Status:
-`authorized_ready_for_worker`
+Final status:
+`complete_root_cause_proven`
 
-User-approved goal:
-- explain why current Deep/PASS 2 completes only 4 of 49 attempted current identities while 45 move to incomplete/recovery;
-- separate Dossier evidence weakness from Deep semantic over-conservatism and from technical/binding defects;
-- compare all 4 current completed not-fit controls against 8 exact current insufficient-evidence cases;
-- perform no production semantic retry/recovery or source/runtime change until the root cause is proven.
+Director acceptance:
+- dominant root cause is `DOSSIER_TOO_THIN`;
+- all 8 sampled current `analysis_incomplete / insufficient_evidence` outcomes are justified when reviewed closed-book against only their exact pinned profile, candidate context and accepted Dossier;
+- all 8 incomplete Dossiers are `overall_strength=limited`, contain only 1–2 observations, and several cover only a narrow/non-decision-ready topic;
+- bounded current-public-evidence checks found additional exact-product, decision-relevant player evidence readily discoverable for all 8 sampled incomplete games;
+- all 4 successful Deep controls are `analyzed_not_fit` and cross the final threshold because their compact Dossiers contain direct high-weight profile conflicts, proving Deep does not mechanically require multi-source or high-volume evidence;
+- no current semantic-input/profile/Dossier/run-start binding defect was found in the fixed sample;
+- one Trepang2 `terminal_execution_failure` is separate technical noise, not the dominant semantic pattern;
+- fit/not-fit contract asymmetry exists structurally, but this sample does not prove Deep is materially over-conservative;
+- the Dossier defect is specifically premature `research_state=sufficient / stop_reason=evidence_stable` on sparse material play coverage, not the absence of a fixed numeric quota;
+- no PASS 2/Dossier/recovery/Scheduled Task/runtime change or semantic retry was performed by the diagnostic.
 
-Current production facts at task creation:
-- Deep coverage target 465;
-- first-pass attempted 49;
-- authoritative completed 4 = 0 fit + 4 not-fit;
-- incomplete/recovery 45;
-- dominant semantic issue is `insufficient_evidence`;
-- one separate `terminal_execution_failure` is treated as a technical control.
+Decision:
+- diagnostic accepted;
+- do not weaken Deep thresholds yet;
+- next implementation should be a bounded Dossier adaptive-sufficiency/stop-rule repair that preserves compact decisive dossiers while preventing narrow sparse evidence from being called `evidence_stable`;
+- do not authorize recovery solely from this diagnostic; recovery remains GitHub-owned after an approved implementation/change in evidence.
 
 Worker state:
-- use a NEW physical conversation for ЧАТ 2;
-- this is read-only diagnostic work except task/report/tracking documentation;
-- no Scheduled Task action is authorized.
+- physical ЧАТ 2 used for this diagnostic is retired and can be deleted.
 
 ## ACCEPTED — ЧАТ 1 — Deep deferred run-start confirmation
 
