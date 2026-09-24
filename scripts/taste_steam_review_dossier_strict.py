@@ -1025,6 +1025,7 @@ def validate_dossier_strict(
         raise ValueError("overall_strength is invalid")
     if evidence["stop_reason"] not in enums["research_stop_reason"]:
         raise ValueError("evidence stop_reason is invalid")
+    _validate_coverage_sufficiency(evidence, observations, schema_doc)
 
     used_records = [feedback_map[feedback_id] for feedback_id in used_feedback_ids]
     used_player_source_identities = {source_identity_map[record["source_id"]] for record in used_records}
