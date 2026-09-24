@@ -1,108 +1,212 @@
-# WORKER TASK
+# WORKER TASK — PROGRESSIVE DEEP DEFERRED RUN-START CONFIRMATION 01
 
-Task ID: `giveaway-publication-gap-fix-01`
-Mode: `IMPLEMENT`
-Report: `reviews/worker_reports/giveaway-publication-gap-fix-01.md`
+Repository: `kentrap2011-hub/steam-kz-deals-2`
+Base/source of truth: `main`
 
-## Goal
+Task ID: `progressive-deep-deferred-run-start-confirmation-01`
+Mode: `IMPLEMENT / VALIDATE`
+Worker slot: `НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
 
-Исправить уже доказанный publication gap: актуальная canonical giveaway-раздача есть в `data/production/giveaways/v1/current.json`, но `data/production/visual/current.json` остаётся собран из старого giveaway snapshot и поэтому сайт не получает `Alone With You`.
+Durable report:
+`reviews/worker_reports/progressive-deep-deferred-run-start-confirmation-01.md`
 
-Это bounded fix. Не переоткрывай Epic parser и не перерабатывай giveaway UI.
+## User-approved decision
 
-## Proven recon result
+The user explicitly approved changing PASS 2 so GitHub run-start confirmation no longer blocks semantic work.
 
-Source report:
-`reviews/worker_reports/giveaway-publication-gap-recon-01.md`
+Target behavior:
 
-Доказано:
-- canonical `data/production/giveaways/v1/current.json` — complete, Epic ok/complete, `Alone With You` accepted;
-- published chain uses `data/production/visual/current.json` -> `web/data/current.json`;
-- current visual payload still references old giveaway source blob `7354f876...` and has `giveaways.games=[]`;
-- current canonical giveaway blob is `33c1318a4950450aadb41b98a9552223b5cf43b8`;
-- first loss boundary is canonical giveaway -> derived visual payload;
-- existing giveaway-only refresh routing does not classify a change to `data/production/giveaways/v1/current.json` as giveaway-only, so a healthy canonical giveaway update can fail to refresh the visual derivative.
+1. Deep reads one exact `observed_main_commit`, reads contract/work from that exact commit, and creates the existing create-only run-start marker.
+2. Deep MAY begin semantic analysis immediately against that exact observed immutable view while GitHub processes the marker.
+3. Before Deep publishes the FIRST result or terminal execution receipt from that invocation, it MUST obtain the GitHub-owned run-start receipt for the marker anchor.
+4. Publication is allowed only if that receipt is exact, durable and `status:"confirmed"`, and its `run_start_authority_commit` equals the exact `observed_main_commit` used for the provisional semantic work.
+5. If the receipt is `rejected`, inconsistent, unsafe, or confirms a different authority, discard all provisional semantic work from that invocation and publish no result/terminal receipt.
+6. If the receipt is merely not present yet when the first semantic result becomes ready, bounded rechecks/waiting are allowed while runtime/tool budget safely permits. Absence never authorizes publication.
+7. After confirmation, continue through the already frozen ordered invocation items without waiting for sibling ingest, exactly as today.
+8. Do not change Scheduled Task settings or create another scheduler/queue/retry owner.
 
-## Read first
+## Proven incident motivating the change
 
-1. Current `main`.
-2. `CHAT_PROTOCOL.md` and `CHAT_CONTEXT.md`.
-3. `reviews/worker_reports/giveaway-publication-gap-recon-01.md`.
-4. `data/production/giveaways/v1/current.json`.
-5. `data/production/visual/current.json`.
-6. Only the exact current workflow/helper files needed for the existing giveaway visual refresh path.
+Real production run:
+- observed main: `c2d2789658036739f18d2dfd241aac7d9a481cf7`
+- run-start anchor: `202a0517b61d3462049afad503e57f2610c1eb05`
+- marker commit time: `2026-09-24T16:36:49Z`
+- GitHub receipt commit: `d6723e9f75efccd648eb0958ca3d88b98c6b180c`
+- receipt became `confirmed` at about 13 seconds after marker creation
+- Scheduled worker had already stopped before semantic execution because receipt was absent on its immediate check
+- frozen manifest contained 40 items
 
-Do not perform broad Git/Actions archaeology.
+This is a liveness defect: a valid start can produce a zero-work invocation solely because GitHub confirmation is asynchronous.
 
-## Required implementation
+A separate earlier production case proves the confirmation guard itself is still required:
+- anchor `90e8f5cc93c19950d5a4f4f016ce262f854c4eeb`
+- GitHub later created a `rejected` receipt
+- reason: `Progressive observed main was superseded before the actual run-start marker`
 
-Make the smallest safe change so that a committed change to the canonical giveaway snapshot reliably drives the existing bounded giveaway visual refresh path.
+Therefore this task moves the confirmation gate later; it does NOT remove it.
 
-Expected behavior after the fix:
+## START gate
 
-1. A change to `data/production/giveaways/v1/current.json` can enter the existing giveaway-only refresh route without requiring unrelated full visual rebuild work.
-2. The existing giveaway handoff regenerates the giveaway sibling in `data/production/visual/current.json` from the current canonical giveaway snapshot.
-3. Provenance remains strict: `production_contract.source_giveaway_snapshot_blob_sha` must match the canonical giveaway blob used for that derivative.
-4. The staged `web/data/current.json` must contain the same giveaway result that is present in the refreshed visual payload.
-5. Do not weaken any freshness/completeness contract merely to make the workflow green.
+First read current `CHAT_PROTOCOL.md` from `main` and complete its START gate.
 
-Prefer the existing workflow/handoff architecture. Do not introduce a second publication path, scheduler, writer, cache authority or renderer.
+Then read this task fully.
 
-## Critical boundaries
+Read current, minimally:
+- `CHAT_CONTEXT.md`
+- `DIRECTOR_TASK_BOARD.md`
+- `PROJECT_ROUTES.md`
+- `PROJECT_DECISIONS.md`
+- `config/execution_ownership_contract.json`
+- `config/progressive_pass2_contract.json`
+- `config/progressive_pass2_worker_prompt.md`
+- `scripts/ingest_progressive_pass2.py`
+- `scripts/test_progressive_pass2.py`
+- the current PASS 2 result/execution-receipt schemas
+- the accepted report `reviews/worker_reports/progressive-async-traversal-and-deep-invalid-transport-fix-01.md` only as needed for run-start authority rationale/regressions.
 
-Do NOT:
-- change `scripts/giveaway_epic.py` or reopen the Epic schema fix;
-- change giveaway eligibility/region/price semantics;
-- change ITAD/IGDB identity work;
-- change Taste/ranking/paid-deal logic;
-- redesign the giveaway frontend/view unless new independent evidence proves it necessary;
-- weaken visual freshness or semantic completeness checks;
-- touch mobile feed behavior;
-- add another workflow or publication authority.
+Do not perform broad repository archaeology.
 
-## Validation
+## Architecture preflight — fixed decisions
 
-Use focused tests / workflow validation appropriate to the exact change.
+Before editing, verify and preserve:
 
-Then run/use the canonical bounded publication path needed to prove production recovery.
+1. GitHub remains the sole owner of Deep scope/order, run-start confirmation truth, canonical acceptance, attempts, recovery authorization, completeness and persistence.
+2. Scheduled ChatGPT remains only the bounded semantic data plane plus create-only transport.
+3. No new scheduler, recurring stage, queue, retry daemon, backlog manager or canonical state owner is introduced.
+4. The existing GitHub-owned marker receipt remains mandatory before ANY Deep semantic artifact is published.
+5. The marker commit's actual first parent and Git committer time remain the trusted authority/time source; worker-supplied time never becomes authority.
+6. No per-item mutable-current reread is reintroduced after the invocation authority is confirmed.
+7. No Fast prerequisite is introduced.
+8. Dossier acceptance/evidence semantics are unchanged.
+9. No Scheduled Task create/update/enable/disable/pause/delete/reschedule/rename/recreate/run action is authorized.
 
-Required proof before calling the implementation complete:
-- refreshed `data/production/visual/current.json` no longer uses the stale giveaway source blob;
-- its `production_contract.source_giveaway_snapshot_blob_sha` equals the canonical giveaway blob used for the refresh;
-- its giveaway sibling contains `Alone With You` while that canonical giveaway remains active;
-- staged/published `web/data/current.json` contains `Alone With You`;
-- no unrelated producer/output ownership is changed;
-- exact commit refs and workflow/deploy run IDs are recorded.
+Important: the current canonical contract explicitly says confirmation must happen before semantic execution. The new user-approved design conflicts with that exact rule. Therefore implementation must update the canonical contract/ownership rationale FIRST in the same bounded change, then align prompt/tests. Do not silently violate the old contract.
 
-If a CI/deploy run is long-running, own that wait/check inside this worker chat rather than returning it to the Director unfinished.
+## IMPLEMENT
 
-## User-visible acceptance
+### FIX-01 — split provisional semantic execution from publication authority
 
-This is a user-visible incident. Even after technical production proof, do not claim final user-visible closure on behalf of the user.
+Change the Deep runtime contract so:
 
-Report when the deployed site should contain the giveaway and tell the Director that real-site verification by the user is still required.
+- marker creation remains before semantic execution;
+- semantic analysis may start immediately using ONLY the exact `observed_main_commit` view already read before marker creation;
+- no result or terminal execution receipt may be serialized/published until the GitHub run-start receipt is confirmed;
+- once receipt is confirmed, verify:
+  - exact anchor;
+  - exact marker path/nonce lineage;
+  - `status:"confirmed"`;
+  - `run_start_authority_commit == observed_main_commit`;
+  - trusted `run_started_at_utc` comes only from the receipt;
+- only then may the already computed first semantic outcome be transported using the confirmed authority/time fields;
+- later frozen siblings continue asynchronously without waiting for ingest.
 
-## Done when
+Do not permit semantic execution from a mutable/latest re-read after marker creation.
 
-Save report:
-`reviews/worker_reports/giveaway-publication-gap-fix-01.md`
+### FIX-02 — rejected/superseded start behavior
 
-Report sections:
-1. Task
-2. Proven cause
-3. Changes
-4. Validation
-5. Production/deploy evidence
-6. User verification required
-7. Unresolved
-8. Status
-9. Recommended next step
-10. Exact refs
-11. Efficiency / reusable lesson
+If the receipt is rejected or proves the marker was not anchored on the observed authority:
+- publish no Deep result;
+- publish no Deep execution receipt;
+- consume no semantic attempt;
+- discard provisional semantic work;
+- stop the invocation;
+- do not create a second marker in the same invocation.
 
-Status exactly one:
-- `complete`
+Preserve the real superseded-main failure protection demonstrated by anchor `90e8f5...`.
+
+### FIX-03 — absent receipt behavior
+
+If the first semantic outcome is ready but receipt is still absent:
+- bounded repeat read/wait is permitted while runtime/tool budget safely permits;
+- do not introduce an unbounded polling loop;
+- do not invent a fixed semantic quota;
+- do not terminate immediately merely because the first receipt read missed the GitHub asynchronous writer;
+- if the invocation must stop before confirmation arrives, publish nothing and consume no attempt.
+
+Choose the smallest bounded behavior that can tolerate ordinary GitHub receipt latency such as the observed ~13 seconds. Do not turn ChatGPT into a queue manager.
+
+### FIX-04 — canonical documentation/ownership alignment
+
+Update the smallest necessary canonical sources so they agree:
+- `config/progressive_pass2_contract.json`
+- `config/progressive_pass2_worker_prompt.md`
+- `config/execution_ownership_contract.json`
+- relevant `PROJECT_DECISIONS.md` rationale
+- `PROJECT_ROUTES.md` only if the operational route text would otherwise be stale.
+
+The durable rationale must say:
+- confirmation remains an anti-race publication guard;
+- semantic computation before confirmation is speculative/provisional only;
+- GitHub confirmation remains authoritative;
+- rejected confirmation invalidates all provisional work;
+- no semantic artifact can cross the GitHub boundary before confirmation.
+
+### FIX-05 — ingest authority remains strict
+
+Do not weaken `scripts/ingest_progressive_pass2.py` acceptance proof.
+
+A published result must still:
+- reference an existing confirmed receipt;
+- be bound to the exact confirmed authority;
+- have transport Git history after the durable confirmation;
+- fail closed for rejected/missing/wrong authority receipts.
+
+If current ingest already enforces this, preserve it and prove it with regression rather than changing it unnecessarily.
+
+## VALIDATION
+
+Add focused regression coverage proving at least:
+
+- C-01: marker -> receipt delayed/absent initially -> semantic work may begin, but no artifact is published before confirmation.
+- C-02: receipt appears confirmed after a realistic delayed check -> already computed first result may then be published and accepted.
+- C-03: receipt rejected because observed main was superseded -> provisional semantic result is discarded; no artifact and no attempt.
+- C-04: forged/worker-chosen timestamp cannot substitute for GitHub receipt.
+- C-05: confirmed authority must equal the exact observed authority used for provisional semantics.
+- C-06: missing receipt never permits publication.
+- C-07: bounded waiting/rechecks cannot become an unbounded polling/retry loop.
+- C-08: after one confirmation, sibling B/C traversal still does not wait for sibling ingest or mutable manifest advancement.
+- C-09: later mutable Dossier/profile/recovery changes remain deferred to next invocation as already accepted.
+- C-10: ingest still rejects result transport that predates confirmation or references rejected/wrong receipt.
+- O-01: GitHub remains control-plane owner.
+- O-02: no new scheduler/queue/retry owner.
+- O-03: no Dossier behavior change.
+- O-04: no Scheduled Task action.
+- O-05: no manual semantic production backlog processing.
+
+Run relevant current PASS 2 and execution-ownership regressions/workflows. Do not weaken tests to make them green.
+
+## Production boundary
+
+Do NOT manually process real Deep backlog in this worker task.
+Do NOT run or edit the Scheduled Task.
+Natural concurrent production may be observed but is not required for implementation acceptance.
+
+## Durable report
+
+Commit:
+`reviews/worker_reports/progressive-deep-deferred-run-start-confirmation-01.md`
+
+Required sections:
+1. Final status
+2. Architecture preflight
+3. Proven production incident
+4. Before/after contract
+5. Exact implementation
+6. Rejected/superseded behavior
+7. Delayed-confirmation behavior
+8. Files changed
+9. Tests/workflows with exact refs
+10. Validation C-01..C-10 and O-01..O-05
+11. Natural production observations, if any
+12. Unresolved
+13. Director recommendation
+
+Allowed final statuses:
+- `complete_ready_for_director_acceptance`
 - `blocked`
-- `needs_followup_fix`
+- `needs_user_decision`
 
-`complete` means the bounded production publication gap is technically repaired and deployed; user real-site verification may still be pending and must be stated explicitly.
+Before completion:
+- commit the report to `main`;
+- reread the exact committed report from fresh `main`;
+- do not modify it after that reread unless you repeat the final commit+reread closeout.
