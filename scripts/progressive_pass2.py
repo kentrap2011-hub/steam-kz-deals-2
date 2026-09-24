@@ -238,32 +238,31 @@ def canonical_dossier_loader(appid):
 
 
 
+
 def validate_run_start_authority(
     work_item,
-    run_start_authority_commit,
-    run_started_at_utc,
+    run_start_receipt,
     *,
     repo_root=ROOT,
-    now=None,
 ):
-    """Validate Deep evidence against the immutable invocation-start Git snapshot."""
+    """Validate Deep evidence against one GitHub-confirmed invocation-start snapshot."""
     if not isinstance(work_item, dict):
         raise ValueError('Deep run-start prepared work item is missing')
-    authority = str(run_start_authority_commit or '').lower()
+    if not isinstance(run_start_receipt, dict):
+        raise ValueError('Deep GitHub run-start confirmation receipt is missing')
+    if run_start_receipt.get('status') != 'confirmed':
+        raise ValueError('Deep GitHub run-start confirmation is not confirmed')
+
+    authority = str(run_start_receipt.get('run_start_authority_commit') or '').lower()
+    anchor = str(run_start_receipt.get('run_start_anchor_commit') or '').lower()
+    started_text = run_start_receipt.get('run_started_at_utc')
     if work_item.get('_work_authority_commit') != authority:
         raise ValueError('Deep run-start authority commit does not match resolved work')
-    started = parse_utc(run_started_at_utc)
+    started = parse_utc(started_text)
     if started is None:
-        raise ValueError('Deep run_started_at_utc is invalid')
-    current = now or datetime.now(timezone.utc)
-    if started > current:
-        raise ValueError('Deep run_started_at_utc is in the future')
-    progressive_work_authority.validate_run_start_commit_boundary(
-        authority,
-        work_item.get('_result_introduction_commit'),
-        run_started_at_utc,
-        repo_root=repo_root,
-    )
+        raise ValueError('Deep GitHub-confirmed run_started_at_utc is invalid')
+    if not anchor:
+        raise ValueError('Deep GitHub-confirmed run-start anchor is missing')
 
     dossier_path = work_item.get('dossier_path')
     if not isinstance(dossier_path, str) or not dossier_path:
@@ -701,6 +700,9 @@ def _identity_matches(doc, work_item, contract_name):
         return False
     if doc.get('recovery_condition_binding') != work_item.get('recovery_condition_binding'):
         return False
+    run_anchor = work_item.get('_run_start_anchor_commit')
+    if run_anchor is not None and doc.get('run_start_anchor_commit') != run_anchor:
+        return False
     run_commit = work_item.get('_run_start_authority_commit')
     if run_commit is not None and doc.get('run_start_authority_commit') != run_commit:
         return False
@@ -724,6 +726,7 @@ def _attempt_base(work_item, outcome, accepted_at_utc, source):
         'analysis_issue_code': None,
         'attempt_consumption_source': source,
         'accepted_at_utc': accepted_at_utc,
+        'run_start_anchor_commit': work_item.get('_run_start_anchor_commit'),
         'run_start_authority_commit': work_item.get('_run_start_authority_commit'),
         'run_started_at_utc': work_item.get('_run_started_at_utc'),
         'work_authority_commit': work_item.get('_work_authority_commit'),
@@ -832,6 +835,7 @@ def normalize_terminal_execution_receipt(doc, work_item, accepted_at_utc=None, s
         'terminal_reason': reason,
         'source_transport_sha256': source_sha256,
         'accepted_at_utc': accepted_at_utc,
+        'run_start_anchor_commit': work_item.get('_run_start_anchor_commit'),
         'run_start_authority_commit': work_item.get('_run_start_authority_commit'),
         'run_started_at_utc': work_item.get('_run_started_at_utc'),
     }

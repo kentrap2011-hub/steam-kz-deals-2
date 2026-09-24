@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
-  "version": 6,
+  "version": 7,
   "status": "production_active",
   "phase": "phase_c_pass2",
   "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; Fast/PASS 1 is never an eligibility prerequisite.",
@@ -153,6 +153,20 @@
       "new_rejected_payload_fingerprint_field": false,
       "retry_scope_owner": "github_next_invocation_authority",
       "same_invocation_retry": false
+    },
+    "run_start_confirmation": {
+      "marker_contract": "PROGRESSIVE-PASS2-RUN-START-MARKER-V1",
+      "marker_directory": "data/ai_inbox/progressive_pass2/run_starts",
+      "confirmation_contract": "PROGRESSIVE-PASS2-RUN-START-RECEIPT-V1",
+      "confirmation_directory": "data/cache/progressive_pass2_run_start_receipts",
+      "confirmation_owner": "github_control_plane",
+      "one_confirmation_per_invocation_before_semantic_execution": true,
+      "actual_authority_source": "first_parent_of_create_only_run_start_marker_commit",
+      "trusted_start_time_source": "git_committer_time_of_run_start_marker_commit",
+      "worker_supplied_time_is_authority": false,
+      "confirmation_must_be_durable_before_semantic_result_transport": true,
+      "per_item_reconfirmation": false,
+      "rejected_start_marker_authorizes_semantic_execution": false
     }
   },
   "state": {
@@ -283,9 +297,9 @@
       "recovery_authorization_persistence": ".github/workflows/authorize-progressive-pass2-recovery.yml"
     },
     "serialization_boundary": "github_actions_concurrency_group_taste-steam-review-dossier-canonical-writer_cancel_in_progress_false",
-    "time_expiry_guard": "scheduled_worker_invocation_start_snapshot_check_plus_github_exact_run_start_authority_validation",
+    "time_expiry_guard": "github_confirmed_invocation_start_marker_time_plus_exact_run_start_authority_validation",
     "projection_is_attempt_consumption": false,
-    "rule": "All GitHub-owned writers continue to recompute future Deep eligibility from current canonical truth. A running Deep invocation freezes the exact work/Dossier/recovery view once at start; changes after that boundary affect the next invocation, while ingest validates returned transport against the exact recorded run-start authority.",
+    "rule": "All GitHub-owned writers continue to recompute future Deep eligibility from current canonical truth. A running Deep invocation first receives one GitHub-owned confirmation of its create-only start marker; the marker commit's actual first parent fixes the exact work/Dossier/recovery view and its Git commit time fixes the freshness boundary. Changes after that boundary affect the next invocation, while ingest validates returned transport against that exact confirmed authority without per-item mutable rereads.",
     "reusable_wiring_preserved": true,
     "old_recovery_only_predicate_superseded": true,
     "runtime_predicate_adaptation_required": false
@@ -364,8 +378,9 @@
     "repository_activation_creates_or_modifies_task": false
   },
   "invocation_traversal": {
-    "snapshot_boundary": "exact_main_revision_at_invocation_start",
+    "snapshot_boundary": "github_confirmed_create_only_run_start_marker_first_parent",
     "required_result_binding_fields": [
+      "run_start_anchor_commit",
       "run_start_authority_commit",
       "run_started_at_utc"
     ],
@@ -380,6 +395,9 @@
     "existing_transport_implies_canonical_acceptance": false,
     "same_invocation_retry_after_transport_cleanup": false,
     "github_ingest_validates_against_exact_run_start_authority": true,
-    "rule": "Deep freezes one exact GitHub-prepared work/Dossier/recovery view at invocation start. Later mutable changes belong to the next invocation; GitHub accepts only artifacts bound to and valid against that exact run-start authority."
+    "rule": "Deep creates one create-only run-start marker before semantic execution; GitHub confirms the marker's actual first-parent main state once and supplies the trusted Git commit time. The invocation then freezes that confirmed work/Dossier/recovery view and traverses its already-authorized ordered items asynchronously. Later mutable changes belong to the next invocation; no per-item confirmation or mutable reread is performed.",
+    "github_run_start_confirmation_required": true,
+    "worker_supplied_run_started_at_is_authority": false,
+    "run_started_at_source": "github_run_start_confirmation_git_commit_time"
   }
 }

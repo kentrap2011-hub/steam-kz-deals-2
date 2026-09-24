@@ -274,15 +274,25 @@ def main():
     assert 'workflow_dispatch:' in recovery_workflow
     assert 'schedule:' not in recovery_workflow
 
-    # DEEP-INT-09: ingest validates against the exact invocation-start Git
-    # authority carried by transport. Mutable current Dossier/profile/authorization
-    # state is not a second liveness gate for an already-authorized run.
+    # DEEP-INT-09: ingest validates against a GitHub-confirmed invocation-start
+    # marker. The worker-supplied time is not authority, and mutable current
+    # Dossier/profile/authorization state is not a second per-item liveness gate.
     pass2_ingest = read('scripts/ingest_progressive_pass2.py')
+    work_authority = read('scripts/progressive_work_authority.py')
     process_pos = pass2_ingest.index('progressive_pass2.process_result_documents(')
+    assert pass2_ingest.index('process_run_start_markers()') < process_pos
+    assert (
+        pass2_ingest.index('load_confirmed_run_start_receipt_for_artifact(')
+        < process_pos
+    )
     assert pass2_ingest.index('resolve_presemantic_work_item_at_commit(') < process_pos
     assert pass2_ingest.index('validate_run_start_authority(') < process_pos
     assert 'prepared_work_item_dossier_is_live(' not in pass2_ingest[:process_pos]
     assert 'work = build_progressive_pass2_work.build_work_document()' not in pass2_ingest[:process_pos]
+    assert 'validate_run_start_commit_boundary' not in work_authority
+    assert 'first_parent_of_create_only_run_start_marker_commit' in read(
+        'config/progressive_pass2_contract.json'
+    )
 
     # DEEP-INT-09B: canonical execution receipts and the reconciled Dossier inbox
     # are optional for a normal semantic result ingest. Production staging must use
@@ -290,6 +300,7 @@ def main():
     pass2_workflow = read('.github/workflows/ingest-progressive-pass2.yml')
     pass2_stager = read('scripts/stage_progressive_pass2_canonical_writer.sh')
     assert 'bash scripts/stage_progressive_pass2_canonical_writer.sh' in pass2_workflow
+    assert 'data/ai_inbox/progressive_pass2/run_starts/*.json' in pass2_workflow
     assert (
         'stage_optional_path data/cache/progressive_pass2_execution_receipts'
     ) in pass2_stager
@@ -297,6 +308,7 @@ def main():
         'stage_optional_path data/ai_inbox/taste_steam_review_dossiers'
     ) in pass2_stager
     assert 'data/cache/progressive_pass2_state.json' in pass2_stager
+    assert 'data/cache/progressive_pass2_run_start_receipts' in pass2_stager
     assert 'data/production/pre_ai/progressive_pass2_work.json' in pass2_stager
     assert (
         'progressive_pass2.CANONICAL_EXECUTION_RECEIPTS.mkdir('

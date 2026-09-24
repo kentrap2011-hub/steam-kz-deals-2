@@ -15,8 +15,7 @@ import test_progressive_pass2 as pass2_core
 
 
 NOW = datetime(2026, 9, 24, 12, 0, 0, tzinfo=timezone.utc)
-RUN_STARTED = '2026-09-24T11:00:00+00:00'
-NEXT_RUN_STARTED = '2026-09-24T11:35:00+00:00'
+FORGED_RUN_STARTED = '2026-09-24T10:15:00+00:00'
 
 
 def read(path):
@@ -97,138 +96,296 @@ def deep_fixture():
 
 def init_repo(repo):
     git(repo, 'init', '-q')
-    git(repo, 'config', 'user.name', 'test')
-    git(repo, 'config', 'user.email', 'test@example.invalid')
+    git(repo, 'config', 'user.name', 'scheduled-worker')
+    git(repo, 'config', 'user.email', 'scheduled-worker@example.invalid')
+
+
+def set_git_identity(repo, name, email):
+    git(repo, 'config', 'user.name', name)
+    git(repo, 'config', 'user.email', email)
 
 
 def exact_authority_and_path_reuse():
+    item, manifest_a, dossier = deep_fixture()
+    with tempfile.TemporaryDirectory() as td:
+        repo = Path(td)
+        init_repo(repo)
+
+        contract_path = repo / 'config/progressive_pass2_contract.json'
+        manifest_path = repo / 'data/production/pre_ai/progressive_pass2_work.json'
+        dossier_path = repo / item['dossier_path']
+        write_json(
+            contract_path,
+            {
+                'contract': 'PROGRESSIVE-PASS2-V1',
+                'implemented': True,
+                'active': True,
+            },
+        )
+        write_json(manifest_path, manifest_a)
+        write_json(dossier_path, dossier)
+        git(repo, 'add', '.')
+        authority_a = commit(repo, 'prepare Deep authority A', '2026-09-24T10:00:00+00:00')
+
+        # Main advances to B before the real invocation starts. Keep the exact item
+        # identity/path the same so only the run-start authority proof can distinguish
+        # stale A from actual current B.
+        manifest_b = copy.deepcopy(manifest_a)
+        manifest_b['director_test_authority'] = 'B'
+        write_json(manifest_path, manifest_b)
+        git(repo, 'add', '.')
+        authority_b = commit(repo, 'replace Deep authority with B', '2026-09-24T10:30:00+00:00')
+
+        nonce = '1' * 32
+        marker_path = (
+            repo / 'data/ai_inbox/progressive_pass2/run_starts'
+            / f'{authority_b}--{nonce}.json'
+        )
+        marker_doc = {
+            'schema_version': 1,
+            'contract': 'PROGRESSIVE-PASS2-RUN-START-MARKER-V1',
+            'observed_main_commit': authority_b,
+            'run_start_nonce': nonce,
+        }
+        write_json(marker_path, marker_doc)
+        git(repo, 'add', marker_path.relative_to(repo).as_posix())
+        anchor = commit(repo, 'Deep run-start marker', '2026-09-24T11:00:00+00:00')
+
+        previous_cwd = Path.cwd()
+        try:
+            os.chdir(repo)
+            start_receipts = ingest_progressive_pass2.process_run_start_markers()
+        finally:
+            os.chdir(previous_cwd)
+        assert len(start_receipts) == 1
+        start_receipt = start_receipts[0]
+        assert start_receipt['status'] == 'confirmed'
+        assert start_receipt['run_start_anchor_commit'] == anchor
+        assert start_receipt['run_start_authority_commit'] == authority_b
+        assert start_receipt['run_started_at_utc'] == '2026-09-24T11:00:00+00:00'
+        assert not marker_path.exists()
+
+        set_git_identity(
+            repo,
+            'steam-kz-bot',
+            'steam-kz-bot@users.noreply.github.com',
+        )
+        git(repo, 'add', '-A')
+        confirmation_commit = commit(
+            repo,
+            'Reconcile Dossier and PASS 2 state',
+            '2026-09-24T11:01:00+00:00',
+        )
+
+        # Mandatory DRG-01 regression: stale A plus a forged earlier worker time
+        # cannot masquerade as current. The GitHub receipt says the actual authority
+        # at marker creation was B, so A is rejected even though the fake time lies
+        # before B's commit.
+        stale_doc = pass2_core.fit_result(item)
+        stale_doc.update({
+            'run_start_anchor_commit': anchor,
+            'run_start_authority_commit': authority_a,
+            'run_started_at_utc': FORGED_RUN_STARTED,
+        })
+        stale_path = repo / item['result_submission_path']
+        write_json(stale_path, stale_doc)
+        set_git_identity(repo, 'scheduled-worker', 'scheduled-worker@example.invalid')
+        git(repo, 'add', stale_path.relative_to(repo).as_posix())
+        commit(repo, 'stale A result with forged earlier time', '2026-09-24T11:10:00+00:00')
+
+        previous_cwd = Path.cwd()
+        try:
+            os.chdir(repo)
+            stale_item, stale_error = ingest_progressive_pass2.resolve_candidate_authority(
+                Path(item['result_submission_path']),
+                'result_submission_path',
+                stale_doc,
+                manifest_b,
+            )
+            assert stale_error is not None
+            assert 'does not match GitHub confirmation' in stale_error
+            stale_state, stale_receipts = progressive_pass2.process_result_documents(
+                pass2_core.work_doc([stale_item]),
+                pass2_core.empty_pass2_state(),
+                [(Path(item['result_submission_path']).name, stale_doc, None)],
+                accepted_at_utc='2026-09-24T11:11:00+00:00',
+            )
+        finally:
+            os.chdir(previous_cwd)
+        assert stale_state['entries'] == {}
+        assert stale_receipts[0]['status'] == 'rejected_invalid_result_no_attempt'
+
+        # Remove the rejected transport exactly as GitHub invalid-transport cleanup
+        # does, leaving the semantic attempt unconsumed and the old error receipt durable.
+        stale_path.unlink()
+        write_json(
+            repo / 'data/cache/progressive_pass2_ingest_receipts/rejected.json',
+            {
+                'status': 'rejected_invalid_result_no_attempt',
+                'work_id': item['work_id'],
+                'reason': stale_error,
+            },
+        )
+        set_git_identity(
+            repo,
+            'steam-kz-bot',
+            'steam-kz-bot@users.noreply.github.com',
+        )
+        git(repo, 'add', '-A')
+        commit(repo, 'persist stale rejection and cleanup', '2026-09-24T11:12:00+00:00')
+
+        # A later Git/Dossier change belongs to the next invocation. It must not
+        # invalidate the already-confirmed B run.
+        changed = copy.deepcopy(dossier)
+        changed['generated_at_utc'] = '2026-09-23T01:00:00Z'
+        write_json(dossier_path, changed)
+        set_git_identity(repo, 'scheduled-worker', 'scheduled-worker@example.invalid')
+        git(repo, 'add', dossier_path.relative_to(repo).as_posix())
+        later_change = commit(repo, 'later Dossier change C', '2026-09-24T11:20:00+00:00')
+
+        valid_doc = pass2_core.fit_result(item)
+        valid_doc.update({
+            'run_start_anchor_commit': anchor,
+            'run_start_authority_commit': authority_b,
+            'run_started_at_utc': start_receipt['run_started_at_utc'],
+        })
+        write_json(stale_path, valid_doc)
+        git(repo, 'add', stale_path.relative_to(repo).as_posix())
+        valid_add = commit(repo, 'valid result from confirmed B run', '2026-09-24T11:30:00+00:00')
+
+        previous_cwd = Path.cwd()
+        try:
+            os.chdir(repo)
+            resolved, exact_error = ingest_progressive_pass2.resolve_candidate_authority(
+                Path(item['result_submission_path']),
+                'result_submission_path',
+                valid_doc,
+                manifest_b,
+            )
+            assert exact_error is None
+            assert resolved['_result_introduction_commit'] == valid_add
+            assert resolved['_run_start_anchor_commit'] == anchor
+            assert resolved['_run_start_authority_commit'] == authority_b
+            valid_state, valid_receipts = progressive_pass2.process_result_documents(
+                pass2_core.work_doc([resolved]),
+                pass2_core.empty_pass2_state(),
+                [(Path(item['result_submission_path']).name, valid_doc, None)],
+                accepted_at_utc='2026-09-24T11:31:00+00:00',
+            )
+        finally:
+            os.chdir(previous_cwd)
+        assert valid_receipts[0]['status'] == 'accepted'
+        assert valid_state['entries'][item['family_id']]['normal_first_pass_attempted'] is True
+        assert progressive_work_authority.commit_is_ancestor(
+            confirmation_commit, valid_add, repo
+        )
+        assert progressive_work_authority.commit_is_ancestor(
+            later_change, valid_add, repo
+        )
+
+        # The next invocation anchors C, not B. With the old B manifest still binding
+        # the previous Dossier SHA, C is not silently reusable as the older run view.
+        stale_path.unlink()
+        git(repo, 'add', '-A')
+        commit(repo, 'clear accepted transport fixture', '2026-09-24T11:32:00+00:00')
+        nonce2 = '2' * 32
+        observed_c = git(repo, 'rev-parse', 'HEAD')
+        marker2 = (
+            repo / 'data/ai_inbox/progressive_pass2/run_starts'
+            / f'{observed_c}--{nonce2}.json'
+        )
+        write_json(
+            marker2,
+            {
+                'schema_version': 1,
+                'contract': 'PROGRESSIVE-PASS2-RUN-START-MARKER-V1',
+                'observed_main_commit': observed_c,
+                'run_start_nonce': nonce2,
+            },
+        )
+        git(repo, 'add', marker2.relative_to(repo).as_posix())
+        anchor2 = commit(repo, 'next Deep run-start marker', '2026-09-24T11:35:00+00:00')
+        previous_cwd = Path.cwd()
+        try:
+            os.chdir(repo)
+            next_start_receipts = ingest_progressive_pass2.process_run_start_markers()
+        finally:
+            os.chdir(previous_cwd)
+        assert len(next_start_receipts) == 1
+        next_start_receipt = next_start_receipts[0]
+        assert next_start_receipt['status'] == 'confirmed'
+        assert next_start_receipt['run_start_anchor_commit'] == anchor2
+        assert next_start_receipt['run_start_authority_commit'] == observed_c
+
+        set_git_identity(
+            repo,
+            'steam-kz-bot',
+            'steam-kz-bot@users.noreply.github.com',
+        )
+        git(repo, 'add', '-A')
+        commit(
+            repo,
+            'Reconcile next Dossier and PASS 2 state',
+            '2026-09-24T11:36:00+00:00',
+        )
+        write_json(stale_path, {'next_run_probe': True})
+        set_git_identity(repo, 'scheduled-worker', 'scheduled-worker@example.invalid')
+        git(repo, 'add', stale_path.relative_to(repo).as_posix())
+        commit(repo, 'next run probe transport', '2026-09-24T11:40:00+00:00')
+        next_resolved = progressive_work_authority.resolve_presemantic_work_item_at_commit(
+            stale_path,
+            manifest_path,
+            observed_c,
+            path_field='result_submission_path',
+            expected_contract='PROGRESSIVE-PASS2-WORK-V1',
+            repo_root=repo,
+        )
+        try:
+            progressive_pass2.validate_run_start_authority(
+                next_resolved,
+                next_start_receipt,
+                repo_root=repo,
+            )
+        except ValueError as exc:
+            assert 'content SHA does not match' in str(exc)
+        else:
+            raise AssertionError('next invocation must observe the newer Dossier state')
+
+    # Same deterministic result path may be added again after GitHub-owned invalid
+    # cleanup; work-authority lookup must bind to the new bytes/introduction commit.
     item, manifest, dossier = deep_fixture()
     with tempfile.TemporaryDirectory() as td:
         repo = Path(td)
         init_repo(repo)
-        (repo / 'README').write_text('base\n', encoding='utf-8')
-        git(repo, 'add', '.')
-        unprepared = commit(repo, 'base', '2026-09-24T09:00:00+00:00')
-
         manifest_path = repo / 'data/production/pre_ai/progressive_pass2_work.json'
         dossier_path = repo / item['dossier_path']
         write_json(manifest_path, manifest)
         write_json(dossier_path, dossier)
         git(repo, 'add', '.')
-        prepared = commit(repo, 'prepare Deep work', '2026-09-24T10:00:00+00:00')
+        authority = commit(repo, 'prepare Deep work', '2026-09-24T12:00:00+00:00')
 
         candidate = repo / item['result_submission_path']
         candidate.parent.mkdir(parents=True, exist_ok=True)
         candidate.write_text('{bad json', encoding='utf-8')
         git(repo, 'add', '.')
-        commit(repo, 'bad transport', '2026-09-24T10:20:00+00:00')
-
+        commit(repo, 'bad transport', '2026-09-24T12:05:00+00:00')
         candidate.unlink()
-        write_json(
-            repo / 'data/cache/progressive_pass2_ingest_receipts/rejected.json',
-            {'status': 'rejected_invalid_result_no_attempt', 'work_id': item['work_id']},
-        )
         git(repo, 'add', '-A')
-        later_run_start = commit(
-            repo, 'durable rejection then cleanup', '2026-09-24T10:50:00+00:00'
-        )
+        commit(repo, 'GitHub cleanup', '2026-09-24T12:06:00+00:00')
 
         write_json(candidate, {'valid_transport': True})
         git(repo, 'add', '.')
-        valid_add = commit(repo, 'valid resubmission', '2026-09-24T11:10:00+00:00')
+        valid_add = commit(repo, 'valid resubmission', '2026-09-24T12:10:00+00:00')
         resolved = progressive_work_authority.resolve_presemantic_work_item_at_commit(
             candidate,
             manifest_path,
-            later_run_start,
+            authority,
             path_field='result_submission_path',
             expected_contract='PROGRESSIVE-PASS2-WORK-V1',
             repo_root=repo,
         )
         assert resolved['_result_introduction_commit'] == valid_add
-        assert progressive_pass2.validate_run_start_authority(
-            resolved, later_run_start, RUN_STARTED, repo_root=repo, now=NOW
-        )
 
-        # Historical-but-prepared authority is not enough: it had already been
-        # superseded on main before this claimed invocation boundary.
-        historical = progressive_work_authority.resolve_presemantic_work_item_at_commit(
-            candidate,
-            manifest_path,
-            prepared,
-            path_field='result_submission_path',
-            expected_contract='PROGRESSIVE-PASS2-WORK-V1',
-            repo_root=repo,
-        )
-        try:
-            progressive_pass2.validate_run_start_authority(
-                historical, prepared, RUN_STARTED, repo_root=repo, now=NOW
-            )
-        except ValueError as exc:
-            assert 'already superseded before run start' in str(exc)
-        else:
-            raise AssertionError('arbitrary historical prepared work must fail closed')
-
-        try:
-            progressive_work_authority.resolve_presemantic_work_item_at_commit(
-                candidate,
-                manifest_path,
-                unprepared,
-                path_field='result_submission_path',
-                expected_contract='PROGRESSIVE-PASS2-WORK-V1',
-                repo_root=repo,
-            )
-        except ValueError:
-            pass
-        else:
-            raise AssertionError('unprepared authority commit must fail closed')
-
-    # A mutable Dossier change after the frozen run start does not invalidate
-    # that run, while the next invocation sees the newer bytes.
-    item, manifest, dossier = deep_fixture()
-    with tempfile.TemporaryDirectory() as td:
-        repo = Path(td)
-        init_repo(repo)
-        manifest_path = repo / 'data/production/pre_ai/progressive_pass2_work.json'
-        dossier_path = repo / item['dossier_path']
-        write_json(manifest_path, manifest)
-        write_json(dossier_path, dossier)
-        git(repo, 'add', '.')
-        frozen = commit(repo, 'frozen authority', '2026-09-24T10:00:00+00:00')
-
-        changed = copy.deepcopy(dossier)
-        changed['generated_at_utc'] = '2026-09-23T01:00:00Z'
-        write_json(dossier_path, changed)
-        git(repo, 'add', '.')
-        changed_commit = commit(
-            repo, 'later dossier change', '2026-09-24T11:30:00+00:00'
-        )
-
-        candidate = repo / item['result_submission_path']
-        write_json(candidate, {'transport': 'from frozen run'})
-        git(repo, 'add', '.')
-        commit(repo, 'frozen result', '2026-09-24T11:40:00+00:00')
-        resolved = progressive_work_authority.resolve_presemantic_work_item_at_commit(
-            candidate,
-            manifest_path,
-            frozen,
-            path_field='result_submission_path',
-            expected_contract='PROGRESSIVE-PASS2-WORK-V1',
-            repo_root=repo,
-        )
-        assert progressive_pass2.validate_run_start_authority(
-            resolved, frozen, RUN_STARTED, repo_root=repo, now=NOW
-        )
-
-        newer = copy.deepcopy(resolved)
-        newer['_work_authority_commit'] = changed_commit
-        try:
-            progressive_pass2.validate_run_start_authority(
-                newer, changed_commit, NEXT_RUN_STARTED, repo_root=repo, now=NOW
-            )
-        except ValueError as exc:
-            assert 'content SHA does not match' in str(exc)
-        else:
-            raise AssertionError('next invocation must observe changed Dossier bytes')
 
 
 def main():
@@ -256,7 +413,10 @@ def main():
     assert fast['semantic_generation']['profile_pin']['live_update_after_pin_invalidates_started_work'] is False
 
     dt = deep['invocation_traversal']
-    assert dt['snapshot_boundary'] == 'exact_main_revision_at_invocation_start'
+    assert dt['snapshot_boundary'] == 'github_confirmed_create_only_run_start_marker_first_parent'
+    assert dt['github_run_start_confirmation_required'] is True
+    assert dt['worker_supplied_run_started_at_is_authority'] is False
+    assert dt['run_started_at_source'] == 'github_run_start_confirmation_git_commit_time'
     assert dt['manifest_dossier_and_recovery_authorization_frozen_once'] is True
     assert dt['per_item_mutable_manifest_dossier_or_authorization_reread'] is False
     assert dt['changes_after_start_apply_to_next_invocation'] is True
@@ -265,7 +425,10 @@ def main():
     assert deep['eligibility']['prior_fast_attempt_required'] is False
     assert deep['eligibility']['global_fast_completion_required'] is False
     assert 'do not reread or revalidate mutable' in deep_prompt
-    assert 'run_start_authority_commit' in deep_prompt
+    assert 'PROGRESSIVE-PASS2-RUN-START-MARKER-V1' in deep_prompt
+    assert 'PROGRESSIVE-PASS2-RUN-START-RECEIPT-V1' in deep_prompt
+    assert 'Never substitute a time chosen by the semantic worker' in deep_prompt
+    assert 'do not reread or revalidate mutable' in deep_prompt
     exact_authority_and_path_reuse()
 
     item, _manifest, dossier = deep_fixture()
@@ -369,6 +532,7 @@ def main():
     assert deep['scheduler']['configuration_owner'] == 'external_user_operator'
 
     for schema in (result_schema, receipt_schema):
+        assert 'run_start_anchor_commit' in schema['required']
         assert 'run_start_authority_commit' in schema['required']
         assert 'run_started_at_utc' in schema['required']
 

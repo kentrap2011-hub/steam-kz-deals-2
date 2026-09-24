@@ -20,6 +20,7 @@ stage_optional_path() {
 }
 
 stage_optional_path data/cache/progressive_pass2_execution_receipts
+stage_optional_path data/cache/progressive_pass2_run_start_receipts
 stage_optional_path data/ai_inbox/taste_steam_review_dossiers
 stage_optional_path data/quarantine/taste_steam_review_dossier_inbox
 stage_optional_path data/audit/taste_steam_review_dossier_group_failures.jsonl

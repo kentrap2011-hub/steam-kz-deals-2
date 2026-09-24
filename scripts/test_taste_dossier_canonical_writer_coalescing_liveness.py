@@ -247,6 +247,13 @@ class CanonicalWriterCoalescingLivenessTests(unittest.TestCase):
             self.assertEqual(workflow.count(RECONCILE), 1)
             self.assertEqual(workflow.count(VALIDATE), 1)
             self.assertNotIn("schedule:", workflow)
+            staging_surface = workflow
+            for helper in (
+                "scripts/stage_progressive_pass1_canonical_writer.sh",
+                "scripts/stage_progressive_pass2_canonical_writer.sh",
+            ):
+                if helper in workflow:
+                    staging_surface += "\n" + (ROOT / helper).read_text(encoding="utf-8")
             for staged in (
                 "data/cache/taste_steam_review_dossiers",
                 "data/production/pre_ai/taste_steam_review_dossier_work.json",
@@ -254,13 +261,12 @@ class CanonicalWriterCoalescingLivenessTests(unittest.TestCase):
                 "data/production/pre_ai/taste_steam_review_dossier_validation_status.json",
                 "data/ai_inbox/taste_steam_review_dossiers",
             ):
-                self.assertIn(staged, workflow)
+                self.assertIn(staged, staging_surface)
 
         for rel in (
             ".github/workflows/build-pre-ai-store-snapshot.yml",
             ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml",
             ".github/workflows/ingest-progressive-pass1.yml",
-            ".github/workflows/ingest-progressive-pass2.yml",
         ):
             workflow = text_by_path[rel]
             self.assertLess(workflow.index(RECONCILE), workflow.index(DEEP_RECOMPUTE))
@@ -270,7 +276,14 @@ class CanonicalWriterCoalescingLivenessTests(unittest.TestCase):
         self.assertLess(pass1.index("python scripts/ingest_progressive_pass1.py"), pass1.index(DEEP_RECOMPUTE))
 
         pass2 = text_by_path[".github/workflows/ingest-progressive-pass2.yml"]
-        self.assertLess(pass2.index(DEEP_RECOMPUTE), pass2.index("python scripts/ingest_progressive_pass2.py"))
+        self.assertLess(
+            pass2.index(RECONCILE),
+            pass2.index("python scripts/ingest_progressive_pass2.py"),
+        )
+        pass2_ingest = (ROOT / "scripts/ingest_progressive_pass2.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("build_progressive_pass2_work.build_work_document()", pass2_ingest)
 
         recovery = text_by_path[".github/workflows/authorize-progressive-pass2-recovery.yml"]
         self.assertLess(recovery.index(RECONCILE), recovery.index("python scripts/authorize_progressive_pass2_recovery.py"))

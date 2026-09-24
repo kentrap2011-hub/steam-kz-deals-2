@@ -11,7 +11,9 @@ import progressive_work_authority
 
 RESULT_INBOX = Path('data/ai_inbox/progressive_pass2/results')
 RECEIPT_INBOX = Path('data/ai_inbox/progressive_pass2/execution_receipts')
+RUN_START_INBOX = Path('data/ai_inbox/progressive_pass2/run_starts')
 INGEST_RECEIPTS = Path('data/cache/progressive_pass2_ingest_receipts')
+RUN_START_RECEIPTS = Path('data/cache/progressive_pass2_run_start_receipts')
 
 
 def load_documents(paths):
@@ -38,6 +40,100 @@ def write_ingest_receipts(receipts, raw_by_name):
         path = INGEST_RECEIPTS / f'{digest}.json'
         if not path.exists():
             path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+
+
+def _read_json_at_commit(commit, path):
+    raw = progressive_work_authority.file_bytes_at_commit(commit, path)
+    try:
+        return json.loads(raw.decode('utf-8'))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f'Progressive run-start authority has invalid JSON at {path}') from exc
+
+
+def _write_run_start_receipt(receipt):
+    anchor = receipt.get('run_start_anchor_commit')
+    if not isinstance(anchor, str) or len(anchor) != 40:
+        raise ValueError('Deep run-start receipt anchor is missing')
+    RUN_START_RECEIPTS.mkdir(parents=True, exist_ok=True)
+    path = RUN_START_RECEIPTS / f'{anchor}.json'
+    raw = json.dumps(receipt, ensure_ascii=False, indent=2) + '\n'
+    if path.exists():
+        if path.read_text(encoding='utf-8') != raw:
+            raise ValueError(f'Deep run-start receipt conflict: {path}')
+        return path
+    path.write_text(raw, encoding='utf-8')
+    return path
+
+
+def process_run_start_markers():
+    paths = sorted(RUN_START_INBOX.glob('*.json')) if RUN_START_INBOX.exists() else []
+    receipts = []
+    for path in paths:
+        anchor = progressive_work_authority.result_introduction_commit(path)
+        parent = progressive_work_authority.commit_parent(anchor)
+        started = progressive_work_authority.commit_committer_time_utc(anchor)
+        raw = path.read_bytes()
+        try:
+            doc = json.loads(raw.decode('utf-8'))
+            parse_error = None
+        except Exception as exc:
+            doc = None
+            parse_error = f'{type(exc).__name__}:{exc}'
+
+        receipt = {
+            'schema_version': 1,
+            'contract': 'PROGRESSIVE-PASS2-RUN-START-RECEIPT-V1',
+            'status': 'rejected',
+            'run_start_anchor_commit': anchor,
+            'run_start_authority_commit': parent,
+            'run_started_at_utc': started,
+            'marker_path': path.as_posix(),
+            'run_start_nonce': doc.get('run_start_nonce') if isinstance(doc, dict) else None,
+            'semantic_generation_id': None,
+            'profile_pin_sha256': None,
+            'reason': parse_error,
+        }
+        try:
+            if parse_error:
+                raise ValueError(parse_error)
+            proof = progressive_work_authority.validate_run_start_marker_commit(
+                anchor,
+                path,
+                doc,
+            )
+            contract = _read_json_at_commit(parent, 'config/progressive_pass2_contract.json')
+            work = _read_json_at_commit(parent, progressive_pass2.WORK.as_posix())
+            if contract.get('contract') != 'PROGRESSIVE-PASS2-V1':
+                raise ValueError('Deep run-start contract mismatch')
+            if contract.get('implemented') is not True or contract.get('active') is not True:
+                raise ValueError('Deep was not active at the anchored invocation boundary')
+            if (
+                work.get('contract') != 'PROGRESSIVE-PASS2-WORK-V1'
+                or work.get('implemented') is not True
+                or work.get('pass2_active') is not True
+            ):
+                raise ValueError('Deep work was not active at the anchored invocation boundary')
+            profile_pin = work.get('profile_pin')
+            progressive_pass1.validate_profile_pin(profile_pin)
+            receipt.update({
+                'status': 'confirmed',
+                'run_start_authority_commit': proof['run_start_authority_commit'],
+                'run_started_at_utc': proof['run_started_at_utc'],
+                'marker_path': proof['marker_path'],
+                'run_start_nonce': proof['run_start_nonce'],
+                'semantic_generation_id': work.get('semantic_generation_id'),
+                'profile_pin_sha256': profile_pin.get('pin_sha256'),
+                'reason': None,
+            })
+        except (ValueError, OSError, json.JSONDecodeError) as exc:
+            receipt['reason'] = str(exc)
+
+        _write_run_start_receipt(receipt)
+        receipts.append(receipt)
+        path.unlink()
+
+    return receipts
 
 
 def removable_names(receipts):
@@ -71,12 +167,24 @@ def _same_current_identity(a, b):
 
 
 def resolve_candidate_authority(path, path_field, doc, persisted_work):
-    run_commit = doc.get('run_start_authority_commit') if isinstance(doc, dict) else None
-    run_started = doc.get('run_started_at_utc') if isinstance(doc, dict) else None
+    run_anchor = doc.get('run_start_anchor_commit') if isinstance(doc, dict) else None
     exact_error = None
 
-    if isinstance(run_commit, str) and isinstance(run_started, str):
+    if isinstance(run_anchor, str):
         try:
+            run_receipt = (
+                progressive_work_authority.load_confirmed_run_start_receipt_for_artifact(
+                    path,
+                    run_anchor,
+                    receipt_root=RUN_START_RECEIPTS.as_posix(),
+                )
+            )
+            run_commit = run_receipt['run_start_authority_commit']
+            run_started = run_receipt['run_started_at_utc']
+            if doc.get('run_start_authority_commit') != run_commit:
+                raise ValueError('candidate run-start authority does not match GitHub confirmation')
+            if doc.get('run_started_at_utc') != run_started:
+                raise ValueError('candidate run-start time does not match GitHub confirmation')
             item = progressive_work_authority.resolve_presemantic_work_item_at_commit(
                 path,
                 progressive_pass2.WORK,
@@ -85,11 +193,15 @@ def resolve_candidate_authority(path, path_field, doc, persisted_work):
                 expected_contract='PROGRESSIVE-PASS2-WORK-V1',
             )
             progressive_pass1.validate_profile_pin(item['_profile_pin'])
+            if item.get('profile_pin_sha256') != run_receipt.get('profile_pin_sha256'):
+                raise ValueError('candidate profile pin does not match GitHub run-start confirmation')
+            if item.get('semantic_generation_id') != run_receipt.get('semantic_generation_id'):
+                raise ValueError('candidate generation does not match GitHub run-start confirmation')
             progressive_pass2.validate_run_start_authority(
                 item,
-                run_commit,
-                run_started,
+                run_receipt,
             )
+            item['_run_start_anchor_commit'] = run_anchor
             item['_run_start_authority_commit'] = run_commit
             item['_run_started_at_utc'] = run_started
             item['_run_start_authority_verified'] = True
@@ -101,7 +213,7 @@ def resolve_candidate_authority(path, path_field, doc, persisted_work):
     if current is None:
         if exact_error:
             raise ValueError(exact_error)
-        raise ValueError('candidate lacks exact current run-start authority')
+        raise ValueError('candidate lacks exact GitHub-confirmed run-start authority')
 
     item = progressive_work_authority.resolve_presemantic_work_item(
         path,
@@ -112,11 +224,11 @@ def resolve_candidate_authority(path, path_field, doc, persisted_work):
     progressive_pass1.validate_profile_pin(item['_profile_pin'])
     if not _same_current_identity(item, current):
         raise ValueError('candidate path no longer matches current prepared Deep identity')
+    item['_run_start_anchor_commit'] = None
     item['_run_start_authority_commit'] = item.get('_work_authority_commit')
     item['_run_started_at_utc'] = None
     item['_run_start_authority_verified'] = False
-    return item, exact_error or 'missing_run_start_authority_binding'
-
+    return item, exact_error or 'missing_github_confirmed_run_start_authority'
 
 def main():
     contract = progressive_pass2.load_contract()
@@ -130,6 +242,8 @@ def main():
         or persisted_work.get('pass2_active') is not True
     ):
         raise SystemExit('Current Progressive PASS 2 work manifest is missing, stale, or inactive')
+
+    run_start_receipts = process_run_start_markers()
 
     result_paths = sorted(RESULT_INBOX.glob('*.json')) if RESULT_INBOX.exists() else []
     terminal_paths = sorted(RECEIPT_INBOX.glob('*.json')) if RECEIPT_INBOX.exists() else []
@@ -272,6 +386,9 @@ def main():
     )
 
     summary = {
+        'processed_run_start_marker_count': len(run_start_receipts),
+        'confirmed_run_start_count': sum(r['status'] == 'confirmed' for r in run_start_receipts),
+        'rejected_run_start_count': sum(r['status'] == 'rejected' for r in run_start_receipts),
         'processed_result_artifact_count': len(result_paths),
         'processed_terminal_receipt_count': len(terminal_paths),
         'accepted_result_count': sum(r['status'] == 'accepted' for r in result_receipts),
