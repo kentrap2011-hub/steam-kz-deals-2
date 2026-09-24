@@ -1,5 +1,31 @@
 # DIRECTOR TASK BOARD
 
+## IN PROGRESS — НОВЫЙ ЧАТ 1 — Deep deferred run-start confirmation
+
+Task:
+`WORKER_TASK_PROGRESSIVE_DEEP_DEFERRED_RUN_START_CONFIRMATION_01.md`
+
+Report:
+`reviews/worker_reports/progressive-deep-deferred-run-start-confirmation-01.md`
+
+Status:
+`authorized_ready_for_worker`
+
+User-approved decision:
+- PASS 2 may begin provisional semantic computation after its create-only run-start marker without waiting for the asynchronous GitHub confirmation receipt;
+- before the first Deep result or execution receipt is published, the exact run-start receipt remains mandatory and must be `confirmed` for the same observed authority;
+- rejected/inconsistent confirmation discards provisional semantic work and publishes nothing;
+- missing receipt may be boundedly rechecked/waited for, but never authorizes publication;
+- GitHub remains control-plane authority; no Scheduled Task settings/action, new scheduler, queue or retry owner is authorized.
+
+Proven trigger:
+- production anchor `202a0517b61d3462049afad503e57f2610c1eb05` was confirmed about 13 seconds after marker creation, but the worker had already stopped before semantics;
+- earlier anchor `90e8f5cc93c19950d5a4f4f016ce262f854c4eeb` was later rejected because observed main was superseded, proving the receipt guard must remain.
+
+Worker state:
+- use a NEW physical conversation for ЧАТ 1;
+- prior physical ЧАТ 1 workers are retired and must not be reused for this independent implementation.
+
 ## ACCEPTED — ЧАТ 1 — Progressive Fast controlled shadow replay
 
 Task:
