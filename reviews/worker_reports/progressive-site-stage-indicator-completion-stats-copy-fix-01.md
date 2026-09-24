@@ -139,7 +139,7 @@ Explanation:
 | FIX-15 | PASS | Final deploy step `Run UI regressions` succeeded; log contains `progressive personalization stage/statistics UI regression: ok`. |
 | FIX-16 | PASS | `Build daily visual payload` run `35914688960` succeeded; final `Deploy visual mailing` run `35914767930` succeeded and Pages deployment reported success. |
 | FIX-17 | PASS | No Scheduled Task action and no semantic production execution was invoked by this worker. |
-| FIX-18 | PASS | Closeout candidate report commit `f0c27fdc5f88ded411d958d90903f2033ba73c29` was reread from fresh `main`; fetched blob SHA `1a25aed062bbbdb3adbb1a8baa2f5292526901e9` exactly matched the committed content. This reread evidence is recorded in the durable report. |
+| FIX-18 | PASS | Closeout candidate `f0c27fdc5f88ded411d958d90903f2033ba73c29` was reread from fresh `main` with exact blob match `1a25aed062bbbdb3adbb1a8baa2f5292526901e9`; the evidence-bearing report commit `7801e6a9909e282baa37d92f9e17e599f9ad0158` was then also reread from fresh `main` with exact blob match `cb3141d4465f893837563df909968226889cc34a`. Durable ref: `main:reviews/worker_reports/progressive-site-stage-indicator-completion-stats-copy-fix-01.md`. |
 
 ## 7. Mobile validation
 - 360–430 CSS px structural validation passed using the retained responsive layout contract.
@@ -182,7 +182,10 @@ Durable report:
 - FIX-18 closeout candidate commit: `f0c27fdc5f88ded411d958d90903f2033ba73c29`;
 - closeout candidate blob SHA: `1a25aed062bbbdb3adbb1a8baa2f5292526901e9`;
 - fresh-`main` reread after that commit: PASS, exact blob match;
-- this final annotation commit is the report closeout commit and will be reread again from fresh `main` before the worker response.
+- FIX-18 evidence commit: `7801e6a9909e282baa37d92f9e17e599f9ad0158`;
+- FIX-18 evidence blob SHA: `cb3141d4465f893837563df909968226889cc34a`;
+- fresh-`main` reread of that evidence commit: PASS, exact blob match;
+- current durable ref remains `main:reviews/worker_reports/progressive-site-stage-indicator-completion-stats-copy-fix-01.md`.
 
 ## 9. Unresolved items
 - none.
