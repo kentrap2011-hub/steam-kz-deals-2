@@ -151,6 +151,15 @@ def exact_authority_and_path_reuse():
         git(repo, 'add', marker_path.relative_to(repo).as_posix())
         anchor = commit(repo, 'Deep run-start marker', '2026-09-24T11:00:00+00:00')
 
+        # C-01/C-02: semantic computation may happen provisionally after the marker
+        # while the GitHub receipt is still absent, but no transport exists yet.
+        provisional_doc = pass2_core.fit_result(item)
+        provisional_path = repo / item['result_submission_path']
+        terminal_path = repo / item['terminal_execution_submission_path']
+        assert not (repo / f'data/cache/progressive_pass2_run_start_receipts/{anchor}.json').exists()
+        assert not provisional_path.exists()
+        assert not terminal_path.exists()
+
         previous_cwd = Path.cwd()
         try:
             os.chdir(repo)
@@ -243,7 +252,9 @@ def exact_authority_and_path_reuse():
         git(repo, 'add', dossier_path.relative_to(repo).as_posix())
         later_change = commit(repo, 'later Dossier change C', '2026-09-24T11:20:00+00:00')
 
-        valid_doc = pass2_core.fit_result(item)
+        # Reuse the already-computed provisional semantic result only after the
+        # exact GitHub confirmation is durable.
+        valid_doc = copy.deepcopy(provisional_doc)
         valid_doc.update({
             'run_start_anchor_commit': anchor,
             'run_start_authority_commit': authority_b,
@@ -388,6 +399,136 @@ def exact_authority_and_path_reuse():
 
 
 
+def preconfirmation_transport_and_rejected_start_regressions():
+    # C-06/C-10: even a syntactically exact transport created before the GitHub
+    # confirmation is durable must fail closed and consume no attempt.
+    item, manifest, dossier = deep_fixture()
+    with tempfile.TemporaryDirectory() as td:
+        repo = Path(td)
+        init_repo(repo)
+        contract_path = repo / 'config/progressive_pass2_contract.json'
+        manifest_path = repo / 'data/production/pre_ai/progressive_pass2_work.json'
+        dossier_path = repo / item['dossier_path']
+        write_json(contract_path, {'contract': 'PROGRESSIVE-PASS2-V1', 'implemented': True, 'active': True})
+        write_json(manifest_path, manifest)
+        write_json(dossier_path, dossier)
+        git(repo, 'add', '.')
+        authority = commit(repo, 'prepare exact Deep authority', '2026-09-24T13:00:00+00:00')
+
+        nonce = '3' * 32
+        marker_path = (
+            repo / 'data/ai_inbox/progressive_pass2/run_starts'
+            / f'{authority}--{nonce}.json'
+        )
+        write_json(marker_path, {
+            'schema_version': 1,
+            'contract': 'PROGRESSIVE-PASS2-RUN-START-MARKER-V1',
+            'observed_main_commit': authority,
+            'run_start_nonce': nonce,
+        })
+        git(repo, 'add', marker_path.relative_to(repo).as_posix())
+        anchor = commit(repo, 'marker before provisional semantics', '2026-09-24T13:01:00+00:00')
+
+        early_doc = pass2_core.fit_result(item)
+        early_doc.update({
+            'run_start_anchor_commit': anchor,
+            'run_start_authority_commit': authority,
+            'run_started_at_utc': '2026-09-24T13:01:00+00:00',
+        })
+        early_path = repo / item['result_submission_path']
+        write_json(early_path, early_doc)
+        git(repo, 'add', early_path.relative_to(repo).as_posix())
+        commit(repo, 'forbidden pre-confirmation result transport', '2026-09-24T13:02:00+00:00')
+
+        previous_cwd = Path.cwd()
+        try:
+            os.chdir(repo)
+            receipts = ingest_progressive_pass2.process_run_start_markers()
+        finally:
+            os.chdir(previous_cwd)
+        assert receipts[0]['status'] == 'confirmed'
+
+        set_git_identity(repo, 'steam-kz-bot', 'steam-kz-bot@users.noreply.github.com')
+        git(repo, 'add', '-A')
+        commit(repo, 'persist delayed GitHub confirmation', '2026-09-24T13:03:00+00:00')
+
+        previous_cwd = Path.cwd()
+        try:
+            os.chdir(repo)
+            resolved, exact_error = ingest_progressive_pass2.resolve_candidate_authority(
+                Path(item['result_submission_path']),
+                'result_submission_path',
+                early_doc,
+                manifest,
+            )
+            assert exact_error is not None
+            assert 'confirmation receipt is missing' in exact_error
+            state, result_receipts = progressive_pass2.process_result_documents(
+                pass2_core.work_doc([resolved]),
+                pass2_core.empty_pass2_state(),
+                [(Path(item['result_submission_path']).name, early_doc, None)],
+                accepted_at_utc='2026-09-24T13:04:00+00:00',
+            )
+        finally:
+            os.chdir(previous_cwd)
+        assert state['entries'] == {}
+        assert result_receipts[0]['status'] == 'rejected_invalid_result_no_attempt'
+
+    # C-03/C-05: a marker whose actual parent no longer equals observed main is
+    # rejected; provisional semantics cannot produce either transport kind.
+    item, manifest_a, dossier = deep_fixture()
+    with tempfile.TemporaryDirectory() as td:
+        repo = Path(td)
+        init_repo(repo)
+        contract_path = repo / 'config/progressive_pass2_contract.json'
+        manifest_path = repo / 'data/production/pre_ai/progressive_pass2_work.json'
+        dossier_path = repo / item['dossier_path']
+        write_json(contract_path, {'contract': 'PROGRESSIVE-PASS2-V1', 'implemented': True, 'active': True})
+        write_json(manifest_path, manifest_a)
+        write_json(dossier_path, dossier)
+        git(repo, 'add', '.')
+        observed_a = commit(repo, 'prepare observed A', '2026-09-24T14:00:00+00:00')
+
+        manifest_b = copy.deepcopy(manifest_a)
+        manifest_b['superseding_authority'] = 'B'
+        write_json(manifest_path, manifest_b)
+        git(repo, 'add', manifest_path.relative_to(repo).as_posix())
+        commit(repo, 'supersede observed A with B', '2026-09-24T14:01:00+00:00')
+
+        nonce = '4' * 32
+        marker_path = (
+            repo / 'data/ai_inbox/progressive_pass2/run_starts'
+            / f'{observed_a}--{nonce}.json'
+        )
+        write_json(marker_path, {
+            'schema_version': 1,
+            'contract': 'PROGRESSIVE-PASS2-RUN-START-MARKER-V1',
+            'observed_main_commit': observed_a,
+            'run_start_nonce': nonce,
+        })
+        git(repo, 'add', marker_path.relative_to(repo).as_posix())
+        anchor = commit(repo, 'superseded run-start marker', '2026-09-24T14:02:00+00:00')
+
+        # Provisional computation is allowed conceptually, but nothing is published.
+        _provisional = pass2_core.fit_result(item)
+        assert not (repo / item['result_submission_path']).exists()
+        assert not (repo / item['terminal_execution_submission_path']).exists()
+
+        previous_cwd = Path.cwd()
+        try:
+            os.chdir(repo)
+            receipts = ingest_progressive_pass2.process_run_start_markers()
+        finally:
+            os.chdir(previous_cwd)
+        assert len(receipts) == 1
+        assert receipts[0]['run_start_anchor_commit'] == anchor
+        assert receipts[0]['status'] == 'rejected'
+        assert 'superseded before the actual run-start marker' in receipts[0]['reason']
+        assert not (repo / item['result_submission_path']).exists()
+        assert not (repo / item['terminal_execution_submission_path']).exists()
+
+
+
 def main():
     fast = json.loads(read('config/progressive_pass1_contract.json'))
     deep = json.loads(read('config/progressive_pass2_contract.json'))
@@ -413,8 +554,17 @@ def main():
     assert fast['semantic_generation']['profile_pin']['live_update_after_pin_invalidates_started_work'] is False
 
     dt = deep['invocation_traversal']
-    assert dt['snapshot_boundary'] == 'github_confirmed_create_only_run_start_marker_first_parent'
+    assert dt['snapshot_boundary'] == 'exact_observed_main_commit_before_marker_then_github_confirmed_marker_first_parent_before_publication'
     assert dt['github_run_start_confirmation_required'] is True
+    assert dt['provisional_semantic_source_commit'] == 'observed_main_commit'
+    assert dt['provisional_semantic_execution_before_confirmation_allowed'] is True
+    assert dt['confirmation_required_before_first_artifact_publication'] is True
+    assert dt['confirmed_authority_must_equal_observed_main_commit'] is True
+    assert dt['provisional_work_discarded_on_rejected_or_mismatched_confirmation'] is True
+    assert dt['missing_confirmation_authorizes_publication'] is False
+    assert dt['bounded_confirmation_wait_max_seconds'] == 15
+    assert dt['bounded_confirmation_wait_max_receipt_reads_after_first_outcome'] == 3
+    assert dt['unbounded_confirmation_polling_allowed'] is False
     assert dt['worker_supplied_run_started_at_is_authority'] is False
     assert dt['run_started_at_source'] == 'github_run_start_confirmation_git_commit_time'
     assert dt['manifest_dossier_and_recovery_authorization_frozen_once'] is True
@@ -428,8 +578,23 @@ def main():
     assert 'PROGRESSIVE-PASS2-RUN-START-MARKER-V1' in deep_prompt
     assert 'PROGRESSIVE-PASS2-RUN-START-RECEIPT-V1' in deep_prompt
     assert 'Never substitute a time chosen by the semantic worker' in deep_prompt
+    assert 'semantic analysis MAY begin immediately' in deep_prompt
+    assert 'Before publishing the FIRST Deep result or terminal execution receipt' in deep_prompt
+    assert 'at most three receipt reads' in deep_prompt
+    assert 'unbounded polling loop' in deep_prompt
+    assert 'discard all provisional semantic work' in deep_prompt
     assert 'do not reread or revalidate mutable' in deep_prompt
+    confirmation = deep['transport']['run_start_confirmation']
+    assert confirmation['marker_must_exist_before_semantic_execution'] is True
+    assert confirmation['provisional_semantic_execution_before_confirmation_allowed'] is True
+    assert confirmation['confirmation_required_before_first_semantic_artifact_publication'] is True
+    assert confirmation['confirmation_authority_must_equal_observed_main_commit'] is True
+    assert confirmation['missing_confirmation_authorizes_publication'] is False
+    assert confirmation['bounded_confirmation_wait']['maximum_receipt_reads_after_outcome_ready'] == 3
+    assert confirmation['bounded_confirmation_wait']['maximum_additional_wait_seconds'] == 15
+    assert confirmation['bounded_confirmation_wait']['unbounded_polling_allowed'] is False
     exact_authority_and_path_reuse()
+    preconfirmation_transport_and_rejected_start_regressions()
 
     item, _manifest, dossier = deep_fixture()
     expired = copy.deepcopy(dossier)
@@ -528,6 +693,10 @@ def main():
     assert deep['transport']['valid_siblings_depend_on_invalid_sibling'] is False
     assert dt['same_invocation_retry_after_transport_cleanup'] is False
     assert ownership['progressive_personalization_phase_c_pass2_core']['control_plane'] == 'github'
+    responsibilities = ownership['progressive_personalization_phase_c_pass2_core']['scheduled_chatgpt_responsibilities_when_activated']
+    assert any('provisional semantic computation' in value for value in responsibilities)
+    assert any('before publishing the first Deep result or terminal execution receipt' in value for value in responsibilities)
+    assert any('bounded contract-defined receipt rechecks' in value for value in responsibilities)
     assert ownership['progressive_personalization_phase_b_pass1']['owner'] == 'github_control_plane'
     assert deep['scheduler']['configuration_owner'] == 'external_user_operator'
 
