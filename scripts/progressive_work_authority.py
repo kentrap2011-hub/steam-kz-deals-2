@@ -1,7 +1,7 @@
 import json
 import re
 import subprocess
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -182,59 +182,214 @@ def resolve_presemantic_work_item(
 
 
 
-def validate_run_start_commit_boundary(
-    authority_commit,
-    result_commit,
-    run_started_at_utc,
+
+def commit_parent(commit, repo_root=Path('.')):
+    repo = Path(repo_root).resolve()
+    commit = str(commit or '').lower()
+    if not COMMIT_SHA_RE.fullmatch(commit):
+        raise ValueError('Progressive commit identity is invalid')
+    parts = _text(repo, 'rev-list', '--parents', '-n', '1', commit).split()
+    if len(parts) != 2 or parts[0] != commit:
+        raise ValueError('Progressive run-start anchor must be a single-parent Git commit')
+    return parts[1]
+
+
+def commit_committer_time_utc(commit, repo_root=Path('.')):
+    repo = Path(repo_root).resolve()
+    raw = _text(repo, 'show', '-s', '--format=%cI', str(commit))
+    try:
+        parsed = datetime.fromisoformat(raw.replace('Z', '+00:00'))
+    except ValueError as exc:
+        raise ValueError('Progressive Git commit time is invalid') from exc
+    if parsed.tzinfo is None:
+        raise ValueError('Progressive Git commit time must be timezone-aware')
+    return parsed.astimezone(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def validate_run_start_marker_commit(
+    anchor_commit,
+    marker_path,
+    marker_doc,
+    *,
     repo_root=Path('.'),
 ):
-    """Prove authority was the latest first-parent main ancestor at run start."""
+    """Prove one create-only marker anchored the actual main parent at run start."""
     repo = Path(repo_root).resolve()
-    authority = str(authority_commit or '').lower()
-    result = str(result_commit or '').lower()
-    if not COMMIT_SHA_RE.fullmatch(authority) or not COMMIT_SHA_RE.fullmatch(result):
-        raise ValueError('Progressive run-start commit boundary has invalid commit identity')
-    try:
-        started = datetime.fromisoformat(str(run_started_at_utc).replace('Z', '+00:00'))
-    except ValueError as exc:
-        raise ValueError('Progressive run_started_at_utc is invalid') from exc
-    if started.tzinfo is None:
-        raise ValueError('Progressive run_started_at_utc must be timezone-aware')
+    anchor = str(anchor_commit or '').lower()
+    if not COMMIT_SHA_RE.fullmatch(anchor):
+        raise ValueError('Progressive run-start anchor commit is invalid')
+    if _text(repo, 'rev-parse', f'{anchor}^{{commit}}') != anchor:
+        raise ValueError('Progressive run-start anchor commit does not resolve exactly')
+    if not isinstance(marker_doc, dict):
+        raise ValueError('Progressive run-start marker must be a JSON object')
+    required = {
+        'schema_version',
+        'contract',
+        'observed_main_commit',
+        'run_start_nonce',
+    }
+    if set(marker_doc) != required:
+        raise ValueError('Progressive run-start marker fields are invalid')
+    if marker_doc.get('schema_version') != 1:
+        raise ValueError('Progressive run-start marker schema mismatch')
+    if marker_doc.get('contract') != 'PROGRESSIVE-PASS2-RUN-START-MARKER-V1':
+        raise ValueError('Progressive run-start marker contract mismatch')
+    observed = str(marker_doc.get('observed_main_commit') or '').lower()
+    nonce = str(marker_doc.get('run_start_nonce') or '').lower()
+    if not COMMIT_SHA_RE.fullmatch(observed):
+        raise ValueError('Progressive run-start marker observed main is invalid')
+    if not re.fullmatch(r'[0-9a-f]{32}', nonce):
+        raise ValueError('Progressive run-start marker nonce is invalid')
 
-    parent = _text(repo, 'rev-parse', f'{result}^')
-    first_parent_lineage = [
-        value for value in _text(repo, 'rev-list', '--first-parent', parent).splitlines()
-        if value
-    ]
-    if authority not in first_parent_lineage:
-        raise ValueError('Progressive run-start authority is not on result main first-parent lineage')
-
-    authority_time = datetime.fromisoformat(
-        _text(repo, 'show', '-s', '--format=%cI', authority).replace('Z', '+00:00')
+    relative_marker = _relative(repo, repo / Path(marker_path))
+    expected_path = (
+        'data/ai_inbox/progressive_pass2/run_starts/'
+        f'{observed}--{nonce}.json'
     )
-    if authority_time > started:
-        raise ValueError('Progressive run-start authority commit did not exist at run start')
+    if relative_marker != expected_path:
+        raise ValueError('Progressive run-start marker path does not match its identity')
 
-    descendants = [
-        value for value in
-        _text(repo, 'rev-list', '--first-parent', '--reverse', f'{authority}..{parent}').splitlines()
-        if value
-    ]
-    if descendants:
-        next_time = datetime.fromisoformat(
-            _text(repo, 'show', '-s', '--format=%cI', descendants[0]).replace('Z', '+00:00')
+    parent = commit_parent(anchor, repo)
+    if parent != observed:
+        raise ValueError(
+            'Progressive observed main was superseded before the actual run-start marker'
         )
-        if next_time <= started:
-            raise ValueError(
-                'Progressive run-start authority was already superseded before run start'
-            )
 
-    result_time = datetime.fromisoformat(
-        _text(repo, 'show', '-s', '--format=%cI', result).replace('Z', '+00:00')
+    changes = [
+        value for value in
+        _text(repo, 'diff-tree', '--no-commit-id', '--name-status', '-r', anchor).splitlines()
+        if value
+    ]
+    if changes != [f'A\t{relative_marker}']:
+        raise ValueError('Progressive run-start anchor commit is not marker-only create-only transport')
+
+    try:
+        durable_doc = json.loads(_bytes_at(repo, anchor, relative_marker).decode('utf-8'))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError('Progressive durable run-start marker is not valid JSON') from exc
+    if durable_doc != marker_doc:
+        raise ValueError('Progressive durable run-start marker content mismatch')
+
+    return {
+        'run_start_anchor_commit': anchor,
+        'run_start_authority_commit': parent,
+        'run_started_at_utc': commit_committer_time_utc(anchor, repo),
+        'run_start_nonce': nonce,
+        'marker_path': relative_marker,
+    }
+
+
+def _file_introduction_commit_with_bytes(
+    relative_path,
+    raw,
+    *,
+    before_commit,
+    repo_root=Path('.'),
+):
+    repo = Path(repo_root).resolve()
+    commits = [
+        value for value in
+        _text(
+            repo,
+            'log',
+            '--diff-filter=A',
+            '--format=%H',
+            str(before_commit),
+            '--',
+            str(relative_path),
+        ).splitlines()
+        if value
+    ]
+    for commit in commits:
+        try:
+            if _bytes_at(repo, commit, str(relative_path)) == raw:
+                return commit
+        except ValueError:
+            continue
+    raise ValueError('Progressive durable GitHub confirmation receipt has no introduction commit')
+
+
+def load_confirmed_run_start_receipt_for_artifact(
+    artifact_path,
+    anchor_commit,
+    *,
+    receipt_root='data/cache/progressive_pass2_run_start_receipts',
+    repo_root=Path('.'),
+):
+    """Load the GitHub-owned start confirmation that existed before result transport."""
+    repo = Path(repo_root).resolve()
+    artifact = Path(artifact_path).resolve()
+    anchor = str(anchor_commit or '').lower()
+    if not COMMIT_SHA_RE.fullmatch(anchor):
+        raise ValueError('Progressive run-start anchor commit is invalid')
+
+    result_commit = result_introduction_commit(artifact, repo)
+    result_parent = commit_parent(result_commit, repo)
+    if not commit_is_ancestor(anchor, result_parent, repo):
+        raise ValueError('Progressive run-start anchor does not predate result transport')
+
+    receipt_path = f"{str(receipt_root).rstrip('/')}/{anchor}.json"
+    try:
+        raw = _bytes_at(repo, result_parent, receipt_path)
+        receipt = json.loads(raw.decode('utf-8'))
+    except (ValueError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError('Progressive GitHub run-start confirmation receipt is missing') from exc
+    if not isinstance(receipt, dict):
+        raise ValueError('Progressive GitHub run-start confirmation receipt is invalid')
+    if receipt.get('schema_version') != 1:
+        raise ValueError('Progressive GitHub run-start confirmation schema mismatch')
+    if receipt.get('contract') != 'PROGRESSIVE-PASS2-RUN-START-RECEIPT-V1':
+        raise ValueError('Progressive GitHub run-start confirmation contract mismatch')
+    if receipt.get('status') != 'confirmed':
+        raise ValueError('Progressive GitHub run-start confirmation is not confirmed')
+    if receipt.get('run_start_anchor_commit') != anchor:
+        raise ValueError('Progressive GitHub run-start confirmation anchor mismatch')
+
+    marker_path = receipt.get('marker_path')
+    if not isinstance(marker_path, str) or not marker_path:
+        raise ValueError('Progressive GitHub run-start confirmation marker path is missing')
+    try:
+        marker_raw = _bytes_at(repo, anchor, marker_path)
+        marker_doc = json.loads(marker_raw.decode('utf-8'))
+    except (ValueError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError('Progressive anchored run-start marker is unavailable') from exc
+    proof = validate_run_start_marker_commit(
+        anchor,
+        marker_path,
+        marker_doc,
+        repo_root=repo,
     )
-    if result_time < started:
-        raise ValueError('Progressive result transport predates claimed run start')
-    return True
+    for field in (
+        'run_start_authority_commit',
+        'run_started_at_utc',
+        'run_start_nonce',
+        'marker_path',
+    ):
+        if receipt.get(field) != proof[field]:
+            raise ValueError(f'Progressive GitHub run-start confirmation {field} mismatch')
+
+    receipt_commit = _file_introduction_commit_with_bytes(
+        receipt_path,
+        raw,
+        before_commit=result_parent,
+        repo_root=repo,
+    )
+    if not commit_is_ancestor(anchor, receipt_commit, repo):
+        raise ValueError('Progressive GitHub run-start confirmation predates its marker')
+    if not commit_is_ancestor(receipt_commit, result_parent, repo):
+        raise ValueError('Progressive GitHub run-start confirmation was not durable before result')
+    author_name = _text(repo, 'show', '-s', '--format=%an', receipt_commit)
+    author_email = _text(repo, 'show', '-s', '--format=%ae', receipt_commit)
+    if (
+        author_name != 'steam-kz-bot'
+        or author_email != 'steam-kz-bot@users.noreply.github.com'
+    ):
+        raise ValueError('Progressive run-start confirmation was not persisted by GitHub control plane')
+
+    result = dict(receipt)
+    result['_receipt_introduction_commit'] = receipt_commit
+    result['_result_introduction_commit'] = result_commit
+    return result
 
 def consumed_work_ids(receipt_dir):
     consumed = set()
