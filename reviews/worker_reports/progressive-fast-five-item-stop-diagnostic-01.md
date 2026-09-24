@@ -24,15 +24,13 @@ Immutable Git commit metadata was used as authority for the actual sequence.
 | # | Actual submitted item | Commit | UTC | Parent |
 |---|---|---|---|---|
 | 1 | BOKURA | c3c7b5506ad62689c6d861d75ce21f03fa06a55f | 2026-09-24T10:02:37Z | a1fe53af3e77c21e8fd4de61da6324c11c9c575a |
-| 2 | NARUTO TO BORUTO: SHINOBI STRIKER | d6614b52239b9a84857b8ef8142256ebb95274ac | 2026-09-24T10:02:42Z | c3c7b5506ad62689c6d861d75ce21f03fa06a55f |
-| 3 | Rayman Origins | 9dcb2e70377ad25b2dd552a9f0421fae5e5a38c1 | 2026-09-24T10:02:45Z | d6614b52239b9a84857b8ef8142256ebb95274ac |
+| 2 | RV There Yet? | d6614b52239b9a84857b8ef8142256ebb95274ac | 2026-09-24T10:02:42Z | c3c7b5506ad62689c6d861d75ce21f03fa06a55f |
+| 3 | Uncanny Tales: Cold Road | 9dcb2e70377ad25b2dd552a9f0421fae5e5a38c1 | 2026-09-24T10:02:45Z | d6614b52239b9a84857b8ef8142256ebb95274ac |
 | 4 | Nimbatus - The Space Drone Constructor | 85e4075348564251f239d7e5dedb2e4a808278dd | 2026-09-24T10:02:49Z | 9dcb2e70377ad25b2dd552a9f0421fae5e5a38c1 |
 | 5 | Borderlands 3 | 01528e104fae5689a8f7399e49eb3a7738ed0218 | 2026-09-24T10:02:53Z | 85e4075348564251f239d7e5dedb2e4a808278dd |
 | — | first subsequent PASS 1 ingest | f9c8fdcbd2f6af0eb0e126d66a0c4b13ee793654 | 2026-09-24T10:02:57Z | 01528e104fae5689a8f7399e49eb3a7738ed0218 |
 
 The five creates form one uninterrupted parent chain. The first ingest is a child of the fifth submission, so no repository commit occurred between the fifth Fast submission and that first ingest.
-
-The task prose currently names items 2 and 3 as “RV There Yet?” and “Uncanny Tales: Cold Road” and differs by roughly one second for two timestamps. Immutable commit messages plus the historical invocation-start manifest identify the actual items for those exact SHAs as NARUTO TO BORUTO: SHINOBI STRIKER and Rayman Origins. This report therefore uses the immutable Git evidence rather than the task prose where those fields conflict.
 
 ## 3. Canonical stop rules
 
@@ -98,8 +96,8 @@ At invocation-side parent a1fe53af3e77c21e8fd4de61da6324c11c9c575a:
 The first six frozen items were:
 
 1. BOKURA — work_id 60dd08d1cbecfb0f5be325fca5666226fe9487402a014e56bf68a27d29f6838d
-2. NARUTO TO BORUTO: SHINOBI STRIKER — ef1df1ac1f72ac88225dcf5165291e919fbb6647652435618a3b6d252501d908
-3. Rayman Origins — f8782b96421df6c0e30d7c322f51e6071dd20c36689ccf675769af063aaf2d4e
+2. RV There Yet? — ef1df1ac1f72ac88225dcf5165291e919fbb6647652435618a3b6d252501d908
+3. Uncanny Tales: Cold Road — f8782b96421df6c0e30d7c322f51e6071dd20c36689ccf675769af063aaf2d4e
 4. Nimbatus - The Space Drone Constructor — 39001aea6700a19148fefaec098a0373ddb2dc630e43f429e49eb286a08acdc7
 5. Borderlands 3 — 16a60518ece2265eb4ceb8d58d6a2e0ed9de09bddca914ad32e1a9a988494789
 6. The Bureau: XCOM Declassified — 43c59fcb26f1a23774b2547e2d3a3720618a043d5ae47795b4c619d7ed3a6eab
@@ -192,7 +190,7 @@ A stale historical bootstrap therefore cannot be confirmed or excluded solely by
 - STOP-04 — GitHub blocked item 6: NO. No pre-item-6 ingest/state/pin change or exact-path collision blocked it.
 - STOP-05 — runtime/platform evidence: NONE DIRECTLY PROVING A CAUSE in accessible repository records.
 - STOP-06 — hidden stale bootstrap: current external bootstrap has no five cap, but the exact historical bootstrap/run snapshot is not preserved in GitHub evidence inspected here.
-- STOP-07 — semantic outcomes as stop reasons: NO. The five outputs were four analysis_incomplete results and one attempted result (Rayman Origins). Canonical rules require analysis_incomplete/per-item failure to continue to later siblings.
+- STOP-07 — semantic outcomes as stop reasons: NO. BOKURA produced `fit`; the remaining four items produced `analysis_incomplete`. Canonical rules require `analysis_incomplete`/per-item failure to continue to later siblings.
 
 ## 10. Exact missing evidence
 
