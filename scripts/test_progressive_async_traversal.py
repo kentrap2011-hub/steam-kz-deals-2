@@ -180,10 +180,13 @@ def exact_authority_and_path_reuse():
             'steam-kz-bot@users.noreply.github.com',
         )
         git(repo, 'add', '-A')
+        # Model the observed ordinary GitHub confirmation latency: the durable
+        # receipt lands 13 seconds after the marker, within the 15-second bounded
+        # publication wait configured by the worker contract.
         confirmation_commit = commit(
             repo,
             'Reconcile Dossier and PASS 2 state',
-            '2026-09-24T11:01:00+00:00',
+            '2026-09-24T11:00:13+00:00',
         )
 
         # Mandatory DRG-01 regression: stale A plus a forged earlier worker time
