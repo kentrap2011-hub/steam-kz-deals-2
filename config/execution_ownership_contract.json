@@ -197,13 +197,15 @@
       "recompute Deep eligibility through the existing Progressive-owned entrypoint after canonical Dossier, Fast/PASS 1, daily binding/freshness and Deep attempt-state changes",
       "keep normal Deep first-pass completeness separate from eventual all-current authoritative Deep completeness",
       "durably bind each Deep work identity to the exact immutable live-profile pin used for personalized semantics",
-      "confirm one create-only Deep run-start marker through the existing GitHub PASS 2 ingest path; use the marker commit's actual first parent and Git committer time as the immutable invocation-start work/Dossier/recovery authority, then validate result/terminal transport only against that confirmed authority"
+      "confirm one create-only Deep run-start marker through the existing GitHub PASS 2 ingest path; use the marker commit's actual first parent and Git committer time as the immutable invocation authority/time, and require that durable confirmation before any Deep result or terminal execution receipt is published or accepted"
     ],
     "scheduled_chatgpt_responsibilities_when_activated": [
-      "read one proposed current main revision, create exactly one create-only Deep run-start marker, and wait once for the GitHub-owned confirmation receipt before semantic execution",
-      "take run_start_authority_commit and run_started_at_utc only from that GitHub confirmation; never use a worker-chosen timestamp as authority",
-      "freeze the GitHub-confirmed Deep work/Dossier/recovery view once, verify the exact pinned profile once, and use those immutable bytes throughout the invocation",
-      "execute only confirmed run-start-authorized normal-first-pass or recovery items in frozen GitHub order, without waiting for sibling ingest and without mutable rereads between games",
+      "read one exact proposed current main revision, read/freeze contract and Deep work from that exact revision, and create exactly one create-only Deep run-start marker before semantic execution",
+      "may begin only provisional semantic computation against the exact observed immutable work/Dossier/recovery/profile view while GitHub asynchronously confirms the marker; provisional work has no attempt or publication effect",
+      "before publishing the first Deep result or terminal execution receipt, obtain the durable GitHub-owned confirmed run-start receipt, verify exact marker/nonce lineage, require run_start_authority_commit to equal the observed main revision, and take run_started_at_utc only from that receipt",
+      "discard all provisional semantic work and publish nothing if confirmation is rejected, inconsistent, unsafe, or confirms a different authority; missing confirmation never authorizes publication",
+      "if the first outcome is ready before confirmation, use only the bounded contract-defined receipt rechecks/waits; never create an unbounded poller, queue manager, retry daemon, or second marker",
+      "after confirmation, execute/transport only frozen run-start-authorized normal-first-pass or recovery items in GitHub order, without waiting for sibling ingest and without mutable rereads between games",
       "publish only exact create-only result or terminal execution submission bound to run_start_anchor_commit plus the confirmed run_start_authority_commit and run_started_at_utc",
       "treat existing exact transport only as already-submitted/do-not-recreate and continue; never infer canonical acceptance",
       "never choose recovery reason, retry eligibility, queue scope, order, completeness, or scheduler settings"
@@ -231,7 +233,7 @@
       "second independent scheduler or recurring Deep stage"
     ],
     "eligibility_recompute_serialization_boundary": "github_actions_concurrency_group_taste-steam-review-dossier-canonical-writer_cancel_in_progress_false",
-    "time_expiry_guard": "one_github_confirmed_run_start_marker_boundary_then_no_per_item_mutable_revalidation",
+    "time_expiry_guard": "one_exact_observed_view_plus_github_confirmed_marker_time_before_publication_then_no_per_item_mutable_revalidation",
     "user_stage": "deep",
     "authoritative": true,
     "eventual_coverage_target": "all_current_eligible_games",
@@ -254,7 +256,7 @@
       "configuration_owner": "external_user_operator",
       "scheduled_chatgpt_role": "bounded_deep_semantic_data_plane_only"
     },
-    "profile_handoff_rule": "Deep uses one GitHub-confirmed invocation-start marker: the marker commit's actual first parent fixes the immutable profile/work/Dossier/recovery authority and its Git commit time fixes the freshness boundary. Later profile/Dossier/authorization changes apply only to the next invocation and do not retroactively invalidate the current frozen run.",
+    "profile_handoff_rule": "Deep freezes the exact observed immutable profile/work/Dossier/recovery view before creating its run-start marker and may compute provisionally only from that view. The marker commit's actual first parent/time must later be confirmed by GitHub and match the observed authority before any semantic artifact is published; later profile/Dossier/authorization changes apply only to the next invocation.",
     "invalid_transport_rule": "Invalid exact authorized Deep transport consumes zero semantic attempts; GitHub persists the rejection receipt then removes the bad active inbox candidate in the same canonical writer transaction. A later retry exists only if a later GitHub run-start view authorizes it."
   }
 }
