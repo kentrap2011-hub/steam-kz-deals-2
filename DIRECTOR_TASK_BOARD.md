@@ -1,5 +1,36 @@
 # DIRECTOR TASK BOARD
 
+## ACTIVE — ЧАТ 1 — Progressive async traversal + Deep invalid transport fix
+
+Task:
+`WORKER_TASK_PROGRESSIVE_ASYNC_TRAVERSAL_AND_DEEP_INVALID_TRANSPORT_FIX_01.md`
+
+Report:
+`reviews/worker_reports/progressive-async-traversal-and-deep-invalid-transport-fix-01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Worker slot:
+- **НОВЫЙ физический ЧАТ 1**;
+- previous audit chat is retired and must not be reused.
+
+Authorized scope:
+- Fast/PASS 1 asynchronous traversal through already-predeclared independent items without waiting for GitHub ingest;
+- later Fast invocation may treat an exact current submission path only as “already submitted, do not recreate”, never as canonical acceptance;
+- Deep/PASS 2 sibling traversal must not wait for prior sibling ingest while retaining per-item Dossier/profile/recovery liveness checks;
+- invalid current Deep result/receipt with zero-attempt rejection must persist the existing error receipt, remove the bad candidate from the active inbox, consume no semantic attempt, and allow GitHub-owned current work to make the item submit-able again if still live/current;
+- no separate raw rejected-payload archive;
+- no new rejected-payload fingerprint/hash field;
+- no Dossier behavior change;
+- no Scheduled Task mutation/run;
+- no manual semantic backlog processing.
+
+Acceptance:
+- focused regressions F-01..F-06, D-01..D-14, O-01..O-05;
+- relevant CI/workflows green;
+- durable report committed and reread from fresh `main`.
+
 ## ACCEPTED — ЧАТ 1 — Progressive runtime rule rationale consistency audit
 
 Task:
