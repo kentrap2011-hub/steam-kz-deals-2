@@ -296,3 +296,51 @@ Before completion:
 - commit the final durable report to `main`;
 - reread that exact committed report from fresh `main`;
 - do not modify the report after that reread unless you repeat the final commit+reread closeout.
+
+
+## Director review correction gate — DRG-01
+
+Status: required before Director acceptance.
+
+The first implementation/report is NOT yet accepted because the claimed invocation-start authority is not independently anchored strongly enough.
+
+### Confirmed gap
+
+Current implementation validates `run_start_authority_commit` against `run_started_at_utc`, but `run_started_at_utc` is supplied by the semantic worker itself.
+
+The focused regression proves that an older authority fails when the claimed run time is later than its superseding commit, but it does not prove fail-closed behavior when the worker supplies a forged/incorrect earlier `run_started_at_utc`.
+
+Therefore current code does not fully prove that the selected authority was actually the current GitHub state at the real invocation boundary.
+
+### Required correction
+
+Implement the smallest one-time GitHub-verifiable invocation-start anchor.
+
+Requirements:
+
+1. The authority used for the Deep invocation must be provably tied to the actual GitHub state at invocation start by durable Git/GitHub evidence that the semantic worker cannot fabricate merely by choosing an earlier timestamp.
+2. This check occurs only once at invocation start. Do NOT restore per-item mutable-current/Dossier/recovery rereads.
+3. Later GitHub changes still belong to the next invocation and must not invalidate the current frozen run.
+4. GitHub ingest must validate every result/terminal receipt against that exact anchored invocation-start authority.
+5. Arbitrary older prepared authority must fail even if the submitted payload lies about `run_started_at_utc`.
+6. Preserve all already-approved Fast, invalid-transport cleanup, zero-attempt, no-raw-archive, no-new-fingerprint, Dossier-independent, and Scheduled-Task boundaries.
+
+A one-time create-only GitHub/Git invocation-start marker is acceptable if it is the smallest safe design, but first reuse an existing trustworthy GitHub-owned/durable mechanism if one already exists. Do not add per-item polling or a new scheduler/queue.
+
+### Mandatory regression
+
+Add an explicit regression:
+
+- prepare authority A;
+- advance main to B before the alleged invocation;
+- submit later transport referencing A while forging `run_started_at_utc` to a time before B;
+- acceptance MUST still fail because A was not the actual invocation-start authority.
+
+Also prove:
+- the real anchored start authority succeeds;
+- after the one-time anchor, B/C/etc. items run without further mutable-current checks;
+- later main/Dossier/recovery changes do not invalidate that run.
+
+Update the same durable report, repeat all affected validation, commit it, and reread it from fresh `main`.
+
+Do not start a new task or new physical chat; continue this same task in the existing physical ЧАТ 1.
