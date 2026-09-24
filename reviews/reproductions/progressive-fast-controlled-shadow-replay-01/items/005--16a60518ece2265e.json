@@ -1,0 +1,40 @@
+{
+  "sequence": 5,
+  "appid": "397540",
+  "title": "Borderlands 3",
+  "work_id": "16a60518ece2265eb4ceb8d58d6a2e0ed9de09bddca914ad32e1a9a988494789",
+  "historical_authority_commit": "a1fe53af3e77c21e8fd4de61da6324c11c9c575a",
+  "historical_prompt_blob": "03b0cba057f7b8205e5b2232f578b32369151700",
+  "profile_pin_sha256": "cf4a4ecf03e72d0d77c85c5e101ce4e37ab36b8547d1bcc1deada780a8df2a6c",
+  "prepared_input_summary": "Shooter-looter sequel with many guns, new worlds/enemies and four Vault Hunters. Tags: Open World, RPG.",
+  "relevant_profile_signals": [
+    "Borderlands is a direct high-confidence negative benchmark at 2.5/5: visual novelty initially helped, but the core gameplay felt boring and failed to sustain interest.",
+    "Gameplay feel and ongoing development/variety are critically important; repetition without meaningful evolution is a frequent negative."
+  ],
+  "retrieval_needed": true,
+  "retrieval_actions": [
+    {
+      "query_or_request": "\"Borderlands 3\" official gameplay Vault Hunters skills loot co-op",
+      "source_page_identity": "2K official Borderlands 3 page",
+      "success": true,
+      "factual_evidence_obtained": "2K describes Borderlands 3 as the original shooter-looter returning, centered on blasting enemies, collecting loot, four Vault Hunters, deep skill trees, abilities and customization, solo or co-op."
+    }
+  ],
+  "observable_tool_errors": [],
+  "shadow_outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "decision_basis": "The pinned profile contains an exact-series negative benchmark for the first Borderlands specifically because its shooter-looter gameplay failed to sustain interest. The official sequel description explicitly preserves that core shooter-looter loop; added skill trees and customization improve progression but do not remove the strongest known mismatch. Fast-level evidence is sufficient for a provisional below-threshold conclusion.",
+  "fast_standard_satisfied": true,
+  "continuation_decision": "continue_next_item",
+  "continuation_reason": "Historical frozen item 6 is present and valid. No observable runtime, tool, platform, transport, profile, or contract stop condition exists after item 5; the historical rules contain no five-item quota.",
+  "next_sequence_expected": 6,
+  "item_6_safe_to_start": true,
+  "observable_runtime_or_tool_limit_at_boundary": false,
+  "expected_next_item": {
+    "sequence": 6,
+    "title": "The Bureau: XCOM Declassified",
+    "appid": "65930",
+    "work_id": "43c59fcb26f1a23774b2547e2d3a3720618a043d5ae47795b4c619d7ed3a6eab"
+  }
+}
