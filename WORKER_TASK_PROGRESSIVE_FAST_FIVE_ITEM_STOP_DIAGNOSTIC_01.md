@@ -186,3 +186,36 @@ Allowed final statuses:
 Before finishing:
 - commit the report to `main`;
 - reread the exact committed report from fresh `main`.
+
+
+## Director review correction gate — FACT-01
+
+The diagnostic conclusion is not yet rejected, but the durable report contains a factual identity error that must be corrected before acceptance.
+
+Immutable Git evidence proves:
+
+- `d6614b52239b9a84857b8ef8142256ebb95274ac`
+  - commit message: `Submit Progressive PASS 1 result for RV There Yet?`
+  - added artifact has `appid: 3949040`, `work_id: ef1df1ac...`
+- `9dcb2e70377ad25b2dd552a9f0421fae5e5a38c1`
+  - commit message: `Submit Progressive PASS 1 result for Uncanny Tales: Cold Road`
+  - added artifact has `appid: 3534240`, `work_id: f8782b96...`
+- invocation-start parent `a1fe53af3e77c21e8fd4de61da6324c11c9c575a` lists:
+  1. BOKURA
+  2. RV There Yet?
+  3. Uncanny Tales: Cold Road
+  4. Nimbatus - The Space Drone Constructor
+  5. Borderlands 3
+  6. The Bureau: XCOM Declassified
+
+Therefore the report's claims that items 2/3 were `NARUTO TO BORUTO: SHINOBI STRIKER` and `Rayman Origins` are incorrect.
+
+Required correction:
+- fix the timeline/table and all later references to items 2/3;
+- fix STOP-07 wording: the five outputs were BOKURA plus four `analysis_incomplete` results;
+- remove the claim that task prose conflicts with immutable Git evidence;
+- preserve the existing root-cause classification unless new evidence genuinely changes it;
+- update the same durable report, commit, and reread from fresh `main`.
+
+No implementation and no new production run.
+
