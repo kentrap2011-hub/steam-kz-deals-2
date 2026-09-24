@@ -455,24 +455,32 @@ def preconfirmation_transport_and_rejected_start_regressions():
         previous_cwd = Path.cwd()
         try:
             os.chdir(repo)
-            resolved, exact_error = ingest_progressive_pass2.resolve_candidate_authority(
-                Path(item['result_submission_path']),
-                'result_submission_path',
-                early_doc,
-                manifest,
-            )
-            assert exact_error is not None
-            assert 'confirmation receipt is missing' in exact_error
-            state, result_receipts = progressive_pass2.process_result_documents(
-                pass2_core.work_doc([resolved]),
-                pass2_core.empty_pass2_state(),
-                [(Path(item['result_submission_path']).name, early_doc, None)],
-                accepted_at_utc='2026-09-24T13:04:00+00:00',
-            )
+            try:
+                ingest_progressive_pass2.resolve_candidate_authority(
+                    Path(item['result_submission_path']),
+                    'result_submission_path',
+                    early_doc,
+                    manifest,
+                )
+            except ValueError as exc:
+                assert 'confirmation receipt is missing' in str(exc)
+            else:
+                raise AssertionError(
+                    'pre-confirmation Deep transport must not fall back to current work'
+                )
         finally:
             os.chdir(previous_cwd)
+
+        # Mirror ingest authorization exclusion: without exact confirmed authority,
+        # the artifact is stale/mismatched and therefore cannot mutate Deep state.
+        state, result_receipts = progressive_pass2.process_result_documents(
+            pass2_core.work_doc([]),
+            pass2_core.empty_pass2_state(),
+            [(Path(item['result_submission_path']).name, early_doc, None)],
+            accepted_at_utc='2026-09-24T13:04:00+00:00',
+        )
         assert state['entries'] == {}
-        assert result_receipts[0]['status'] == 'rejected_invalid_result_no_attempt'
+        assert result_receipts[0]['status'] == 'rejected_stale_or_mismatched'
 
     # C-03/C-05: a marker whose actual parent no longer equals observed main is
     # rejected; provisional semantics cannot produce either transport kind.
@@ -538,6 +546,7 @@ def main():
     result_schema = json.loads(read('config/progressive_pass2_result_schema.json'))
     receipt_schema = json.loads(read('config/progressive_pass2_execution_receipt_schema.json'))
     ingest_source = read('scripts/ingest_progressive_pass2.py')
+    assert 'Never fall back to mutable/current work' in ingest_source
 
     ft = fast['invocation_traversal']
     assert ft['manifest_and_profile_pin_read_once_per_invocation'] is True
