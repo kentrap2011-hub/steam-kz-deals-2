@@ -1,0 +1,100 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "4531598188b3d3173e38363c46f202f6eb02f78a4ec56e1775632cfde45fbbfd",
+  "prepared_required_sha256": "99513acf2e8d02e8aea9080677ea9ea358952f913274ad5d696d4bb692483e14",
+  "group_plan_sha256": "37887d5c1239f845e6423a3c0897c2c8ba8e1282a7c2062afc9133fa30e2d1cf",
+  "group_count": 173,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+  },
+  "sequence": 13,
+  "start_index": 36,
+  "end_index_exclusive": 39,
+  "appids": ["1216710", "1220140", "12210"],
+  "items_sha256": "d55c6018ccc207e16772c8332311108022a8946a59bdc7c19df5d333721aaae2",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "f27aea7aba5ca50601f89e3f25ffa735f2829d1fad26fd70e1031c1651686edc",
+  "items": [
+    {"key":"App_1216710","appid":"1216710","title":"Cyber Manhunt","dossier_path":"data/cache/taste_steam_review_dossiers/App_1216710.json","reason":"missing_dossier"},
+    {"key":"App_1220140","appid":"1220140","title":"Cartel Tycoon","dossier_path":"data/cache/taste_steam_review_dossiers/App_1220140.json","reason":"missing_dossier"},
+    {"key":"App_12210","appid":"12210","title":"Grand Theft Auto IV: The Complete Edition","dossier_path":"data/cache/taste_steam_review_dossiers/App_12210.json","reason":"missing_dossier"}
+  ],
+  "group_sha256": "7cb9fdef809f2c0f5e183f5d7daec5d974b6f460820a0876b31714c9f7e2b39c",
+  "dossiers": [
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,
+      "web_evidence_contract_binding":{"evidence_contract_schema":"TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2","evidence_contract_version":2,"evidence_contract_revision":"semantic-bounded-retrieval-2026-09-23","evidence_contract_sha256":"5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7","worker_schema":"TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2","worker_schema_version":2,"worker_schema_revision":"validator-generator-parity-fix-2026-09-20","worker_schema_sha256":"d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98","dossier_schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","dossier_schema_version":2,"worker_prompt_revision":"web-evidence-v2-semantic-bounded-retrieval-v1","worker_prompt_sha256":"d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"},
+      "appid":"1216710","title":"Cyber Manhunt","generated_at_utc":"2026-09-24T14:35:20Z","expires_at_utc":"2026-10-14T14:35:20Z","ttl_days":20,
+      "game_identity":{"work_title":"Cyber Manhunt","release_year":2021,"resolution_status":"resolved","identity_source_ids":["source-001"],"corroborators":[{"kind":"appid","value":"1216710"},{"kind":"developer","value":"Aluba Studio"}]},
+      "summary":"Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations":[
+        {"category":"structure","statement":"Russian-language player feedback praises the investigative information-gathering loop and the story's use of deduction after the tutorial.","sentiment":"positive","recurrence":"anecdotal","mention_count":1,"evidence_languages":["russian"],"evidence_status":"durable","source_ids":["source-002"],"player_feedback_ids":["fallback-001"]},
+        {"category":"friction","statement":"A player discussion reports a missing-text interface problem, with another participant reporting that a proposed workaround resolved it.","sentiment":"negative","recurrence":"anecdotal","mention_count":1,"evidence_languages":["non_russian"],"evidence_status":"current","source_ids":["source-003"],"player_feedback_ids":["feedback-001"]}
+      ],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"multi_source","single_source_reason":null,"russian_attempt":"found_and_used","overall_strength":"limited","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"source-001","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/1216710/","publication_date":"2021-02-02","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"source-002","source_type":"store_user_reviews","domain":"steam.kupikod.com","url":"https://steam.kupikod.com/ru-ru/games/cyber-manhunt/reviews","publication_date":"2020-08-28","language":"russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true,"feedback_surface_mode":"concrete_item_collection"},
+        {"source_id":"source-003","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1216710/discussions/0/601895119916898140/","publication_date":"2025-01-31","language":"non_russian","freshness":"recent","evidence_role":"current_state","player_feedback":true}
+      ],"player_feedback_records":[
+        {"feedback_id":"fallback-001","source_id":"source-002","publication_date":"2020-08-28","language":"russian","identity_mode":"transient_author_deduped"},
+        {"feedback_id":"feedback-001","source_id":"source-003","url":"https://steamcommunity.com/app/1216710/discussions/0/601895119916898140/","publication_date":"2025-01-31","language":"non_russian","identity_mode":"stable_locator"}
+      ]}
+    },
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,
+      "web_evidence_contract_binding":{"evidence_contract_schema":"TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2","evidence_contract_version":2,"evidence_contract_revision":"semantic-bounded-retrieval-2026-09-23","evidence_contract_sha256":"5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7","worker_schema":"TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2","worker_schema_version":2,"worker_schema_revision":"validator-generator-parity-fix-2026-09-20","worker_schema_sha256":"d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98","dossier_schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","dossier_schema_version":2,"worker_prompt_revision":"web-evidence-v2-semantic-bounded-retrieval-v1","worker_prompt_sha256":"d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"},
+      "appid":"1220140","title":"Cartel Tycoon","generated_at_utc":"2026-09-24T14:35:20Z","expires_at_utc":"2026-10-14T14:35:20Z","ttl_days":20,
+      "game_identity":{"work_title":"Cartel Tycoon","release_year":2022,"resolution_status":"resolved","identity_source_ids":["source-001"],"corroborators":[{"kind":"appid","value":"1220140"},{"kind":"developer","value":"Moon Moose"}]},
+      "summary":"Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations":[
+        {"category":"mechanics","statement":"Russian-language player feedback describes the logistics and money-management loop as approachable but deep, with a relaxing rhythm once production chains are established.","sentiment":"positive","recurrence":"anecdotal","mention_count":1,"evidence_languages":["russian"],"evidence_status":"current","source_ids":["source-002"],"player_feedback_ids":["fallback-001"]},
+        {"category":"friction","statement":"Steam community discussion repeatedly describes warehouse routing and logistics control as requiring excessive micromanagement and finer input/output control.","sentiment":"negative","recurrence":"anecdotal","mention_count":1,"evidence_languages":["non_russian"],"evidence_status":"durable","source_ids":["source-003"],"player_feedback_ids":["feedback-001"]}
+      ],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"multi_source","single_source_reason":null,"russian_attempt":"found_and_used","overall_strength":"limited","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"source-001","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/1220140/Cartel_Tycoon/","publication_date":"2022-07-26","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"source-002","source_type":"other_player_feedback","domain":"stopgame.ru","url":"https://stopgame.ru/game/cartel_tycoon/reviews","publication_date":"2025-12-01","language":"russian","freshness":"recent","evidence_role":"current_state","player_feedback":true,"feedback_surface_mode":"concrete_item_collection"},
+        {"source_id":"source-003","source_type":"steam_community","domain":"steamcommunity.com","url":"https://steamcommunity.com/app/1220140/discussions/0/4516523369469101993/","publication_date":"2021-04-16","language":"non_russian","freshness":"older","evidence_role":"durable_trait","player_feedback":true}
+      ],"player_feedback_records":[
+        {"feedback_id":"fallback-001","source_id":"source-002","publication_date":"2025-12-01","language":"russian","identity_mode":"transient_author_deduped"},
+        {"feedback_id":"feedback-001","source_id":"source-003","url":"https://steamcommunity.com/app/1220140/discussions/0/4516523369469101993/","publication_date":"2021-04-16","language":"non_russian","identity_mode":"stable_locator"}
+      ]}
+    },
+    {
+      "schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","schema_version":2,
+      "web_evidence_contract_binding":{"evidence_contract_schema":"TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2","evidence_contract_version":2,"evidence_contract_revision":"semantic-bounded-retrieval-2026-09-23","evidence_contract_sha256":"5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7","worker_schema":"TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2","worker_schema_version":2,"worker_schema_revision":"validator-generator-parity-fix-2026-09-20","worker_schema_sha256":"d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98","dossier_schema":"TASTE-STEAM-REVIEW-DOSSIER-V2","dossier_schema_version":2,"worker_prompt_revision":"web-evidence-v2-semantic-bounded-retrieval-v1","worker_prompt_sha256":"d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"},
+      "appid":"12210","title":"Grand Theft Auto IV: The Complete Edition","generated_at_utc":"2026-09-24T14:35:20Z","expires_at_utc":"2026-10-14T14:35:20Z","ttl_days":20,
+      "game_identity":{"work_title":"Grand Theft Auto IV: The Complete Edition","release_year":2020,"resolution_status":"resolved","identity_source_ids":["source-001"],"corroborators":[{"kind":"appid","value":"12210"},{"kind":"developer","value":"Rockstar North, Rockstar Toronto"}]},
+      "summary":"Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations":[
+        {"category":"friction","statement":"Recent PC player discussion reports launch, crash, cutscene, and performance problems and recommends community fixes or frame-rate limits to improve stability.","sentiment":"negative","recurrence":"anecdotal","mention_count":1,"evidence_languages":["non_russian"],"evidence_status":"current","source_ids":["source-002"],"player_feedback_ids":["fallback-001"]},
+        {"category":"other","statement":"Russian-language buyer feedback specifically praises returning to the game's atmosphere and treats the title as a nostalgic classic.","sentiment":"positive","recurrence":"anecdotal","mention_count":1,"evidence_languages":["russian"],"evidence_status":"current","source_ids":["source-003"],"player_feedback_ids":["fallback-002"]}
+      ],
+      "conflicts":[],
+      "evidence":{"strategy":"adaptive_multi_source_web","research_state":"sufficient","source_mix_status":"multi_source","single_source_reason":null,"russian_attempt":"found_and_used","overall_strength":"limited","stop_reason":"evidence_stable"},
+      "provenance":{"sources":[
+        {"source_id":"source-001","source_type":"official_metadata","domain":"store.steampowered.com","url":"https://store.steampowered.com/app/12210/Grand_Theft_Auto_IV_Complete_Edition/","publication_date":"2020-03-24","language":"non_russian","freshness":"older","evidence_role":"identity","player_feedback":false},
+        {"source_id":"source-002","source_type":"reddit","domain":"reddit.com","url":"https://www.reddit.com/r/GTAIV/comments/1esq0pj/","publication_date":"2024-08-15","language":"non_russian","freshness":"recent","evidence_role":"current_state","player_feedback":true,"feedback_surface_mode":"concrete_item_collection"},
+        {"source_id":"source-003","source_type":"store_user_reviews","domain":"reviews.yandex.ru","url":"https://reviews.yandex.ru/product/igra-grand-theft-auto-iv-the-complete-edition-gta-4-dlia-steam-pc-pk-steam-deck-rossiia-ukraina-podarkom--1236816512","publication_date":"2025-12-03","language":"russian","freshness":"recent","evidence_role":"current_state","player_feedback":true,"feedback_surface_mode":"concrete_item_collection"}
+      ],"player_feedback_records":[
+        {"feedback_id":"fallback-001","source_id":"source-002","publication_date":"2024-08-15","language":"non_russian","identity_mode":"transient_author_deduped"},
+        {"feedback_id":"fallback-002","source_id":"source-003","publication_date":"2025-12-03","language":"russian","identity_mode":"transient_author_deduped"}
+      ]}
+    }
+  ]
+}
