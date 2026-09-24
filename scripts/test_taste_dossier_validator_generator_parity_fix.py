@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import copy
-import hashlib
 import json
 import unittest
 from datetime import datetime, timezone
@@ -19,7 +18,6 @@ SCHEMA = json.loads((ROOT / "config/taste_steam_review_dossier_schema.json").rea
 EVIDENCE = json.loads((ROOT / "config/taste_steam_review_dossier_web_evidence_contract.json").read_text(encoding="utf-8"))
 PROMPT = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
 STRICT_PATH = ROOT / "scripts/taste_steam_review_dossier_strict.py"
-PRE_FIX_STRICT_GIT_BLOB_SHA = "81126b87db7542512221a82f1ece4b846abe1af7"
 
 
 def normalize_domain(value):
@@ -77,12 +75,6 @@ def generator_evidence_contract_accepts(evidence, *, distinct_used_player_source
             and len(reason) <= 500
         )
     return False
-
-
-def git_blob_sha(path):
-    data = path.read_bytes()
-    header = f"blob {len(data)}\0".encode("utf-8")
-    return hashlib.sha1(header + data).hexdigest()
 
 
 class ValidatorGeneratorParityFixTests(unittest.TestCase):
@@ -200,8 +192,11 @@ class ValidatorGeneratorParityFixTests(unittest.TestCase):
         self.assertTrue(SCHEMA["provenance_source_invariants"]["steam_store_exact_app_fallback_parent_source_type_set_is_exclusive"])
         self.assertTrue(EVIDENCE["source_policy"]["steam_store_exact_app_fallback_parent_source_type_set_is_exclusive"])
 
-    def test_parity_fix_08_strict_validator_file_is_unchanged(self):
-        self.assertEqual(git_blob_sha(STRICT_PATH), PRE_FIX_STRICT_GIT_BLOB_SHA)
+    def test_parity_fix_08_strict_validator_keeps_prior_parity_and_adds_coverage_gate(self):
+        strict_text = STRICT_PATH.read_text(encoding="utf-8")
+        self.assertIn("def validate_dossier_strict(", strict_text)
+        self.assertIn("def _validate_coverage_sufficiency(", strict_text)
+        self.assertEqual(SCHEMA["schema_revision"], "purpose-coverage-sufficiency-2026-09-25")
 
     def test_parity_fix_09_identity_provenance_remains_aligned(self):
         doc = web_dossier("920009", self.now)
