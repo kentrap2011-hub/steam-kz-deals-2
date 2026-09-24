@@ -5,6 +5,7 @@ git add -A -- \
   data/ai_inbox/progressive_pass2 \
   data/cache/progressive_pass2_state.json \
   data/cache/progressive_pass2_ingest_receipts \
+  data/cache/progressive_pass2_run_start_receipts \
   data/production/pre_ai/progressive_pass2_work.json \
   data/cache/taste_steam_review_dossiers \
   data/production/pre_ai/taste_steam_review_dossier_work.json \
