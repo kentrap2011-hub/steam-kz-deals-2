@@ -201,9 +201,13 @@ No Taste Dossier contract/schema/worker semantics file was changed.
 - **PIN-17 PASS** — focused/canonical workflow suites below are green.
 - **PIN-18 PASS** — deterministic pre-AI rebuild produced coherent Fast and Deep manifests sharing the exact pin-aware semantic generation.
 - **PIN-19 PASS** — no Scheduled Task action was performed and no Fast/Dossier/Deep production worker was manually triggered.
-- **PIN-20 pending only until this report commit/reread** — completed by the closeout sequence for this report.
+- **PIN-20 PASS** — durable report commit `6b34c50ad7145cc67368efa861e42f1426d311ce` was reread from fresh `main`; the committed status, PIN table and `CURRENT_TASK.md` completion marker were verified before closeout.
 
 ## 12. Exact validation / workflow / commit refs
+
+Durable report/reread checkpoint:
+
+- `6b34c50ad7145cc67368efa861e42f1426d311ce` — first durable report + `CURRENT_TASK.md` completion commit; reread from fresh `main` before this closeout update.
 
 Implementation commits:
 
