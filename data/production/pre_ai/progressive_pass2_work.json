@@ -55,8 +55,8 @@
     "deep_completed_fit_count": 0,
     "deep_completed_not_fit_count": 4,
     "deep_incomplete_or_recovery_count": 39,
-    "deep_waiting_for_dossier_count": 419,
-    "deep_ready_or_pending_count": 3,
+    "deep_waiting_for_dossier_count": 416,
+    "deep_ready_or_pending_count": 6,
     "deep_normal_first_pass_remaining_count": 422,
     "deep_remaining_until_all_authoritative_count": 461,
     "deep_normal_first_pass_complete": false,
@@ -65,9 +65,9 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 3,
-    "dossier_waiting_count": 419,
+    "dossier_waiting_count": 416,
     "pass2_attempted_count": 43,
-    "pass2_eligible_count": 3
+    "pass2_eligible_count": 6
   },
   "items": [
     {
@@ -128,6 +128,112 @@
     {
       "semantic_generation_id": "b33cc4416860bd15a37f530c9daef8fb7755ae440929f93aa915d5363e31c490",
       "profile_pin_sha256": "cf4a4ecf03e72d0d77c85c5e101ce4e37ab36b8547d1bcc1deada780a8df2a6c",
+      "family_id": "game:1239690",
+      "taste_subject_key": "App_1239690",
+      "appid": "1239690",
+      "taste_fingerprint": "c71d97e71a1f4b4c9b8a319a597b78200bf0c5b80470af1ae60d50c01c18e028",
+      "candidate_context_sha256": "3a8bf113f96d8ebe9c69ca76cb65fc358f5dbef0bb3f32ca37369cf61654dbc3",
+      "work_id": "08603e36cf0d559c5dc643bb4b963c15401f0b2c2cf894ccf76504db108cae53",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Retrowave",
+        "short_description": "Neon lights, palm trees, synthwave, '80s supercars speeding down an endless highway... Welcome to the world of Retrowave!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action"
+        ],
+        "core_fit_count": 0,
+        "release_date": "6 May, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1239690"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1239690.json",
+      "dossier_content_sha256": "3b17f8aabedf87ebea4b7e9ed08547614b25f93ccc247bc04a39635f221cb9bf",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+        "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+        "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+      },
+      "dossier_expires_at_utc": "2026-10-14T18:30:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "35aa4257cac241b0f959ee2f30562ec11c44b2daf741abc95dc3cf2ca2465224",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/b33cc4416860bd15--08603e36cf0d559c5dc643bb4b963c15401f0b2c2cf894ccf76504db108cae53--35aa4257cac241b0f959ee2f30562ec11c44b2daf741abc95dc3cf2ca2465224.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/b33cc4416860bd15--08603e36cf0d559c5dc643bb4b963c15401f0b2c2cf894ccf76504db108cae53--35aa4257cac241b0f959ee2f30562ec11c44b2daf741abc95dc3cf2ca2465224.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "b33cc4416860bd15a37f530c9daef8fb7755ae440929f93aa915d5363e31c490",
+      "profile_pin_sha256": "cf4a4ecf03e72d0d77c85c5e101ce4e37ab36b8547d1bcc1deada780a8df2a6c",
+      "family_id": "game:1244460",
+      "taste_subject_key": "App_1244460",
+      "appid": "1244460",
+      "taste_fingerprint": "272b82f8fed36a86022f0d32877b78112c33f803c594d0a30b097508ab41d21f",
+      "candidate_context_sha256": "c81b381e2da6b5df330ecbc37992dde09a155938190b841e11469e287bbce348",
+      "work_id": "122321f8d8f4bb76e7e1cd2a1092d39c65e5163fef395922340e13faf97fa94d",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Jurassic World Evolution 2",
+        "short_description": "Jurassic World Evolution 2 is the much-anticipated sequel to Frontier’s highly successful Jurassic World Evolution. This bold new era in the Jurassic World Evolution game franchise builds upon the ground-breaking and immersive 2018 management simulation.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Singleplayer"
+        ],
+        "core_fit_count": 0,
+        "release_date": "9 Nov, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1244460"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1244460.json",
+      "dossier_content_sha256": "1fe66d55f85554d0dc00b382148a7a4e71ec2e658c145258b125f78d22bc3be1",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+        "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+        "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+      },
+      "dossier_expires_at_utc": "2026-10-14T18:30:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "1581ad19a6d9db9bb532923addc3899ce90f140deab8013a843bc3a113a36598",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/b33cc4416860bd15--122321f8d8f4bb76e7e1cd2a1092d39c65e5163fef395922340e13faf97fa94d--1581ad19a6d9db9bb532923addc3899ce90f140deab8013a843bc3a113a36598.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/b33cc4416860bd15--122321f8d8f4bb76e7e1cd2a1092d39c65e5163fef395922340e13faf97fa94d--1581ad19a6d9db9bb532923addc3899ce90f140deab8013a843bc3a113a36598.json",
+      "sequence": 3
+    },
+    {
+      "semantic_generation_id": "b33cc4416860bd15a37f530c9daef8fb7755ae440929f93aa915d5363e31c490",
+      "profile_pin_sha256": "cf4a4ecf03e72d0d77c85c5e101ce4e37ab36b8547d1bcc1deada780a8df2a6c",
       "family_id": "game:1227690",
       "taste_subject_key": "App_1227690",
       "appid": "1227690",
@@ -176,7 +282,7 @@
       "authorization_id": "fbf0528532d54abb76e06b19861db94cb8808c8c2250e117d1239dc2eaf9c250",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/b33cc4416860bd15--6731494c282d0de9c9aa0ca398d6bf8bac310e51fae19b3bc3de172bd194bc5b--fbf0528532d54abb76e06b19861db94cb8808c8c2250e117d1239dc2eaf9c250.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/b33cc4416860bd15--6731494c282d0de9c9aa0ca398d6bf8bac310e51fae19b3bc3de172bd194bc5b--fbf0528532d54abb76e06b19861db94cb8808c8c2250e117d1239dc2eaf9c250.json",
-      "sequence": 2
+      "sequence": 4
     },
     {
       "semantic_generation_id": "b33cc4416860bd15a37f530c9daef8fb7755ae440929f93aa915d5363e31c490",
@@ -227,7 +333,61 @@
       "authorization_id": "cf0bc18268aed184df45261ffb1fc238f09c28304811fd9db4c4ee258045e6ef",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/b33cc4416860bd15--f4344408bcc5d4b42903a544fc81320e2578f5407dc5a0a1a6c8ce19ba98a4b6--cf0bc18268aed184df45261ffb1fc238f09c28304811fd9db4c4ee258045e6ef.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/b33cc4416860bd15--f4344408bcc5d4b42903a544fc81320e2578f5407dc5a0a1a6c8ce19ba98a4b6--cf0bc18268aed184df45261ffb1fc238f09c28304811fd9db4c4ee258045e6ef.json",
-      "sequence": 3
+      "sequence": 5
+    },
+    {
+      "semantic_generation_id": "b33cc4416860bd15a37f530c9daef8fb7755ae440929f93aa915d5363e31c490",
+      "profile_pin_sha256": "cf4a4ecf03e72d0d77c85c5e101ce4e37ab36b8547d1bcc1deada780a8df2a6c",
+      "family_id": "game:1244800",
+      "taste_subject_key": "App_1244800",
+      "appid": "1244800",
+      "taste_fingerprint": "448c6a718ef6f60a88872d4e3186b6ffac49bbf82ae093760aa0ab407b2d0992",
+      "candidate_context_sha256": "dad1c90afd25aa3ec778267f7af067bab57f6fd88914d8fe7b2f1b5d1025b41b",
+      "work_id": "eccf49c9ed210a4f2c703eeb0a232d58a9431164ebef072688c0f55377522869",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Terraformers",
+        "short_description": "Terraform Mars in this turn-based colony builder and resource management game with roguelike elements. Explore the planet, develop spectacular cities, spread life and turn the Red Planet into a green one!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Sci-fi",
+          "Singleplayer"
+        ],
+        "core_fit_count": 1,
+        "release_date": "9 Mar, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1244800"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1244800.json",
+      "dossier_content_sha256": "f993aa8c6cbab18d629def73670583dd87298c32681d69862a08e2362e06020e",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
+        "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
+        "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
+        "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+      },
+      "dossier_expires_at_utc": "2026-10-14T18:30:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "f0d4d2301e1c3be0f960d6ae43b3cbca280e5e6c8a03905bbf47ce9dd83ecebd",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/b33cc4416860bd15--eccf49c9ed210a4f2c703eeb0a232d58a9431164ebef072688c0f55377522869--f0d4d2301e1c3be0f960d6ae43b3cbca280e5e6c8a03905bbf47ce9dd83ecebd.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/b33cc4416860bd15--eccf49c9ed210a4f2c703eeb0a232d58a9431164ebef072688c0f55377522869--f0d4d2301e1c3be0f960d6ae43b3cbca280e5e6c8a03905bbf47ce9dd83ecebd.json",
+      "sequence": 6
     }
   ]
 }
