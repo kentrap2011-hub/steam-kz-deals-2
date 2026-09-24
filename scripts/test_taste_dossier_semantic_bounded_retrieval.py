@@ -115,8 +115,8 @@ class SemanticBoundedRetrievalRegressionTests(unittest.TestCase):
         self.assertEqual(CONTROL["ownership"]["control_plane"], "github")
         self.assertEqual(PERSISTENCE["buffered_transport"]["action"], "github_contents_create_file")
         self.assertFalse(PERSISTENCE["buffered_transport"]["worker_overwrite_update_delete_allowed"])
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-semantic-bounded-retrieval-v1")
-        self.assertEqual(EVIDENCE["contract_revision"], "semantic-bounded-retrieval-2026-09-23")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-purpose-coverage-sufficiency-v1")
+        self.assertEqual(EVIDENCE["contract_revision"], "purpose-coverage-sufficiency-2026-09-25")
 
 
 if __name__ == "__main__":
