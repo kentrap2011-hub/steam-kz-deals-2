@@ -27,10 +27,17 @@ Authorized scope:
 - no Scheduled Task mutation/run;
 - no manual semantic backlog processing.
 
+Director review:
+- implementation is not yet accepted;
+- DRG-01 requires a one-time GitHub-verifiable invocation-start authority anchor;
+- worker-supplied `run_started_at_utc` alone is insufficient because an older time can be claimed;
+- add a regression proving an older superseded authority is rejected even when transport forges an earlier run-start time;
+- continue the SAME task in the SAME physical ЧАТ 1.
+
 Acceptance:
-- focused regressions F-01..F-06, D-01..D-17, O-01..O-05;
+- focused regressions F-01..F-06, D-01..D-17, O-01..O-05 plus DRG-01 forged-time regression;
 - relevant CI/workflows green;
-- durable report committed and reread from fresh `main`.
+- durable report updated, committed and reread from fresh `main`.
 
 ## ACCEPTED — ЧАТ 1 — Progressive runtime rule rationale consistency audit
 
