@@ -18,8 +18,9 @@ Worker slot:
 Authorized scope:
 - Fast/PASS 1 asynchronous traversal through already-predeclared independent items without waiting for GitHub ingest;
 - later Fast invocation may treat an exact current submission path only as “already submitted, do not recreate”, never as canonical acceptance;
-- Deep/PASS 2 sibling traversal must not wait for prior sibling ingest while retaining per-item Dossier/profile/recovery liveness checks;
-- invalid current Deep result/receipt with zero-attempt rejection must persist the existing error receipt, remove the bad candidate from the active inbox, consume no semantic attempt, and allow GitHub-owned current work to make the item submit-able again if still live/current;
+- Deep/PASS 2 freezes the then-current Deep work, Dossier bindings/expiry state and recovery authorizations once at invocation start; it does not recheck them between games, and changes after start belong to the next invocation;
+- GitHub validates Deep results against that exact invocation-start authority rather than mutable changes that happened later;
+- invalid authorized Deep result/receipt with zero-attempt rejection must persist the existing error receipt, remove the bad candidate from the active inbox, consume no semantic attempt, and leave any later retry decision to the next GitHub-owned invocation-start view;
 - no separate raw rejected-payload archive;
 - no new rejected-payload fingerprint/hash field;
 - no Dossier behavior change;
@@ -27,7 +28,7 @@ Authorized scope:
 - no manual semantic backlog processing.
 
 Acceptance:
-- focused regressions F-01..F-06, D-01..D-14, O-01..O-05;
+- focused regressions F-01..F-06, D-01..D-17, O-01..O-05;
 - relevant CI/workflows green;
 - durable report committed and reread from fresh `main`.
 
