@@ -247,6 +247,13 @@ class CanonicalWriterCoalescingLivenessTests(unittest.TestCase):
             self.assertEqual(workflow.count(RECONCILE), 1)
             self.assertEqual(workflow.count(VALIDATE), 1)
             self.assertNotIn("schedule:", workflow)
+            staging_surface = workflow
+            for helper in (
+                "scripts/stage_progressive_pass1_canonical_writer.sh",
+                "scripts/stage_progressive_pass2_canonical_writer.sh",
+            ):
+                if helper in workflow:
+                    staging_surface += "\n" + (ROOT / helper).read_text(encoding="utf-8")
             for staged in (
                 "data/cache/taste_steam_review_dossiers",
                 "data/production/pre_ai/taste_steam_review_dossier_work.json",
@@ -254,7 +261,7 @@ class CanonicalWriterCoalescingLivenessTests(unittest.TestCase):
                 "data/production/pre_ai/taste_steam_review_dossier_validation_status.json",
                 "data/ai_inbox/taste_steam_review_dossiers",
             ):
-                self.assertIn(staged, workflow)
+                self.assertIn(staged, staging_surface)
 
         for rel in (
             ".github/workflows/build-pre-ai-store-snapshot.yml",
