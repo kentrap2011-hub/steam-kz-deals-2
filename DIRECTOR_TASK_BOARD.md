@@ -8,37 +8,31 @@ Task:
 Report:
 `reviews/worker_reports/progressive-pinned-live-profile-handoff-fix-01.md`
 
-Mode:
-`IMPLEMENT / VALIDATE`
+Current review state:
+`needs_report_closeout`
+
+Director review:
+- implementation evidence is otherwise complete and consistent with the authorized architecture;
+- canonical profile authority remains `kentrap2011-hub/stopgame-ratings-data:gaming_taste_live.json`;
+- Progressive Fast and Deep now receive/read an exact GitHub-pinned immutable profile reference/content rather than only profile hashes;
+- profile pin is part of semantic identity and validation;
+- update-before-pin, update-after-pin, churn, wrong/unpinned profile and next-new-work behavior are reported as regression-covered;
+- already pinned/in-flight work remains valid when live profile advances later; next newly prepared work uses the newer profile;
+- no user quiet window, semantic GitHub summarizer, threshold weakening, Dossier semantic change, manual attempt reset, Scheduled Task mutation or manual production semantic run occurred;
+- current old Fast/Deep state remains preserved and becomes non-current through the new pin-aware identity rather than manual reset;
+- PIN-01..19 are sufficiently evidenced in the report;
+- PIN-20 is not yet formally closed for the **current final report revision**: the report says commit `6b34c50...` was reread from fresh `main` before a later closeout update, so the present report revision itself was not yet proven reread after its final commit.
+
+Required closeout:
+- do not redo implementation or tests;
+- commit the final durable report revision if needed;
+- reread that exact final report revision from fresh `main`;
+- update the report so PIN-20 cites the exact final report commit/blob reread proof;
+- do not make any source/runtime/scheduler/production change.
 
 Worker slot:
-- **НОВЫЙ физический ЧАТ 1**;
-- prior physical Chat 1 is retired and must not be reused.
-
-User authorization:
-- user explicitly approved implementation after confirming the previously accepted no-quiet-window live-profile behavior must be preserved.
-
-Goal:
-- reuse the already-canonical immutable live-profile freeze/pin model for Progressive Fast + Deep;
-- GitHub pins exact profile identity/content before semantic execution; ChatGPT reads that exact pinned profile;
-- user may update `gaming_taste_live.json` at any time;
-- a later live-profile update must not mutate or invalidate an already pinned/in-flight work unit merely because `main` advanced;
-- next newly prepared work uses the then-current profile;
-- fix the proven zero-completion semantic handoff defect without weakening fit/not-fit thresholds, Dossier semantics or validators;
-- preserve GitHub control-plane ownership and existing Fast/Deep attempt/recovery rules;
-- no Scheduled Task mutation or manual semantic run.
-
-Architecture:
-- canonical profile authority remains `kentrap2011-hub/stopgame-ratings-data:gaming_taste_live.json`;
-- reuse/refactor existing accepted freeze/pin machinery rather than inventing a second profile architecture;
-- GitHub performs deterministic fetch/freeze/hash/binding only, not semantic taste interpretation;
-- Scheduled ChatGPT remains bounded semantic data-plane only.
-
-Expected final status:
-- `complete_ready_for_director_acceptance`
-- `needs_fix`
-- `needs_user_decision`
-- `blocked`
+- **EXISTING physical ЧАТ 1** for this same task;
+- do not open a new worker for this closeout.
 
 ## ACCEPTED — ЧАТ 1 — Stage indicator completion + Statistics copy fix
 
