@@ -237,7 +237,7 @@ Production validator проверяет:
 
 **Что ищем:** canonical Fast/Dossier/Deep semantics, effective-result precedence, Deep first-pass/recovery ownership and the reusable GitHub recomputation hooks.
 
-**Последняя проверка:** 2026-09-23.
+**Последняя проверка:** 2026-09-24.
 
 **Быстрая точка входа:**
 1. `config/progressive_personalization_contract.json` — canonical three-stage model, effective-result precedence, explicit UI stage states and statistics-page metric contract.
