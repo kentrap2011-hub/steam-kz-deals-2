@@ -9,8 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_EVIDENCE_CONTRACT = ROOT / "config/taste_steam_review_dossier_web_evidence_contract.json"
 
 _SOURCE_ID_RE = re.compile(r"^source-[0-9]{3}$")
-_STABLE_FEEDBACK_ID_RE = re.compile(r"^feedback-[0-9]{3}$")
-_FALLBACK_FEEDBACK_ID_RE = re.compile(r"^fallback-[0-9]{3}$")
+_FEEDBACK_ID_RE = re.compile(r"^feedback-[0-9]{3}$")
 
 
 def load_compact_provenance_policy(path=DEFAULT_EVIDENCE_CONTRACT):
@@ -99,11 +98,11 @@ def validate_compact_provenance(dossier, policy=None):
                 raise ValueError(f"{label}.source_id must be a dossier-local source-NNN token")
             if container_key == "player_feedback_records":
                 feedback_id = record.get("feedback_id")
-                identity_mode = str(record.get("identity_mode") or "stable_locator")
-                pattern = _FALLBACK_FEEDBACK_ID_RE if identity_mode == "transient_author_deduped" else _STABLE_FEEDBACK_ID_RE
-                if not isinstance(feedback_id, str) or not pattern.fullmatch(feedback_id):
-                    expected = "fallback-NNN" if identity_mode == "transient_author_deduped" else "feedback-NNN"
-                    raise ValueError(f"{label}.feedback_id must be a dossier-local {expected} token")
+                if not isinstance(feedback_id, str) or not _FEEDBACK_ID_RE.fullmatch(feedback_id):
+                    raise ValueError(f"{label}.feedback_id must be a dossier-local feedback-NNN token")
+                acquisition_mode = record.get("acquisition_mode")
+                if acquisition_mode not in {"stable_item", "inspected_collection_item", "search_result_observation"}:
+                    raise ValueError(f"{label}.acquisition_mode is invalid")
             if record.get("url") is not None:
                 _validate_url(record["url"], label, policy)
             if record.get("public_ref") is not None:
