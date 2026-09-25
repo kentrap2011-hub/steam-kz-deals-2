@@ -11,6 +11,7 @@ DEFAULT_EVIDENCE_CONTRACT = ROOT / "config/taste_steam_review_dossier_web_eviden
 _SOURCE_ID_RE = re.compile(r"^source-[0-9]{3}$")
 _STABLE_FEEDBACK_ID_RE = re.compile(r"^feedback-[0-9]{3}$")
 _FALLBACK_FEEDBACK_ID_RE = re.compile(r"^fallback-[0-9]{3}$")
+_SOURCE_OBSERVATION_FEEDBACK_ID_RE = re.compile(r"^observation-[0-9]{3}$")
 
 
 def load_compact_provenance_policy(path=DEFAULT_EVIDENCE_CONTRACT):
@@ -100,9 +101,13 @@ def validate_compact_provenance(dossier, policy=None):
             if container_key == "player_feedback_records":
                 feedback_id = record.get("feedback_id")
                 identity_mode = str(record.get("identity_mode") or "stable_locator")
-                pattern = _FALLBACK_FEEDBACK_ID_RE if identity_mode == "transient_author_deduped" else _STABLE_FEEDBACK_ID_RE
+                if identity_mode == "transient_author_deduped":
+                    pattern, expected = _FALLBACK_FEEDBACK_ID_RE, "fallback-NNN"
+                elif identity_mode == "source_observation":
+                    pattern, expected = _SOURCE_OBSERVATION_FEEDBACK_ID_RE, "observation-NNN"
+                else:
+                    pattern, expected = _STABLE_FEEDBACK_ID_RE, "feedback-NNN"
                 if not isinstance(feedback_id, str) or not pattern.fullmatch(feedback_id):
-                    expected = "fallback-NNN" if identity_mode == "transient_author_deduped" else "feedback-NNN"
                     raise ValueError(f"{label}.feedback_id must be a dossier-local {expected} token")
             if record.get("url") is not None:
                 _validate_url(record["url"], label, policy)
