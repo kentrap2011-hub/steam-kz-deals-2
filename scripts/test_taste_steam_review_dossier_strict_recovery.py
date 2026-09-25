@@ -103,24 +103,23 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         self.assertEqual(EVIDENCE_CONTRACT["schema"], "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2")
         self.assertEqual(EVIDENCE_CONTRACT["version"], 2)
         self.assertEqual(SCHEMA["evidence_contract"], EVIDENCE_CONTRACT["schema"])
-        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-purpose-coverage-sufficiency-v1")
+        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-pragmatic-evidence-model-v1")
         prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
         for needle in (
             "title **plus the resolved release year**",
             "recent evidence dominates old launch-era evidence",
             "Russian-language attempt is mandatory",
-            "Steam `appreviews` JSON, cursors, fixed review counts",
-            "Never persist raw review bodies",
-            "`mention_count` is exactly",
-            "?l=russian",
+            "Do not copy bodies/snippets/quotes into the dossier",
+            "Player-feedback acquisition modes",
+            "source_observation",
+            "No locator or author identity is required",
             "Boundedness is semantic/adaptive rather than a fixed per-game search/page count",
             "there is no finite numeric per-game limit to fabricate",
             "Mandatory pre-publication validation",
             "taste_steam_review_dossier_prepublication.py",
             "Language binding — bind records first, derive claims second",
-            "Russian retrieval diversification after existence proof",
-            "transient_author_deduped",
-            "fallback-only evidence is capped",
+            "Search/discovery representation safety",
+            "recurrence is qualitative",
         ):
             self.assertIn(needle, prompt)
 
@@ -133,17 +132,19 @@ class WebEvidenceSchemaTests(unittest.TestCase):
     def test_aggregate_523_cannot_become_523_mentions(self):
         self.assertInvalid(lambda d: d["observations"][0].__setitem__("mention_count", 523))
 
-    def test_one_player_record_cannot_support_moderate_or_strong_recurrence(self):
-        def mutate(doc):
-            doc["observations"][0]["player_feedback_ids"] = ["feedback-001"]
-            doc["observations"][0]["mention_count"] = 1
-            doc["observations"][0]["recurrence"] = "moderate"
-        self.assertInvalid(mutate)
-        def mutate_strong(doc):
-            doc["observations"][0]["player_feedback_ids"] = ["feedback-001"]
-            doc["observations"][0]["mention_count"] = 1
-            doc["observations"][0]["recurrence"] = "strong"
-        self.assertInvalid(mutate_strong)
+    def test_one_bound_support_record_has_no_numeric_recurrence_gate(self):
+        moderate = dossier(123456)
+        moderate["observations"][0]["player_feedback_ids"] = ["feedback-001"]
+        moderate["observations"][0]["mention_count"] = 1
+        moderate["observations"][0]["recurrence"] = "moderate"
+        self.assertIs(self.validate(moderate), moderate)
+
+        strong = dossier(123456)
+        strong["observations"][0]["player_feedback_ids"] = ["feedback-001"]
+        strong["observations"][0]["mention_count"] = 1
+        strong["observations"][0]["recurrence"] = "strong"
+        strong["evidence"]["overall_strength"] = "strong"
+        self.assertIs(self.validate(strong), strong)
 
     def test_russian_store_ui_is_not_player_feedback_or_multisource(self):
         def mutate(doc):
@@ -157,6 +158,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
                 "freshness": "recent",
                 "evidence_role": "current_state",
                 "player_feedback": True,
+                "acquisition_mode": "stable_item",
             }
             doc["provenance"]["player_feedback_records"][3]["source_id"] = "source-003"
         self.assertInvalid(mutate)
@@ -172,6 +174,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "freshness": "recent",
             "evidence_role": "current_state",
             "player_feedback": False,
+            "acquisition_mode": "context_only",
         })
         self.assertIs(self.validate(doc), doc)
         self.assertEqual(doc["evidence"]["russian_attempt"], "searched_no_existence_signal")
@@ -192,6 +195,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "source_id": "source-004", "source_type": "forum", "domain": "example.com",
             "url": "https://example.com/game/launch-thread", "publication_date": "2020-01-01",
             "language": "non_russian", "freshness": "older", "evidence_role": "historical", "player_feedback": True,
+            "acquisition_mode": "stable_item",
         })
         for n in range(1, 4):
             doc["provenance"]["player_feedback_records"].append({
