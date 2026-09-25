@@ -159,7 +159,7 @@
       "sort_remaining_query_parameters"
     ],
     "public_ref_rule": "must be a stable machine-like or explicit review/post/comment/thread/item locator token; human date/playtime descriptions alone are not item identities",
-    "collection_surfaces_forbidden_as_feedback_records": false,
+    "collection_surfaces_forbidden_as_feedback_records": true,
     "known_collection_examples": [
       "steam_app_reviews_list",
       "steam_discussions_index_without_thread_item",
@@ -183,7 +183,11 @@
       "search_result_observation"
     ],
     "transient_author_deduped_compatibility": "legacy-compatible optional mode; the active worker must not require or chase author identity merely to make visible feedback usable",
-    "stable_internal_join_id_rule": "stable feedback_id is a sequential dossier-local feedback-NNN key only; physical identity remains in the validated safe item URL/public_ref"
+    "stable_internal_join_id_rule": "stable feedback_id is a sequential dossier-local feedback-NNN key only; physical identity remains in the validated safe item URL/public_ref",
+    "fallback_forbidden_when_neutral_item_locator_available": true,
+    "collection_surface_fallback_parent_allowed_only_for_concrete_inspected_items": true,
+    "steam_store_exact_app_parent_allowed_for_identity_mode": "transient_author_deduped",
+    "steam_store_exact_app_parent_allowed_for_stable_locator": false
   },
   "parent_item_binding": {
     "rule": "every player_feedback_record must resolve to the physical surface represented by its parent source_id rather than merely sharing a host",
