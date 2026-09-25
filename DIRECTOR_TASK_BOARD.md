@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## IN PROGRESS — НОВЫЙ ЧАТ 1 — Dossier purpose + coverage sufficiency fix
+## ACCEPTED — ЧАТ 1 — Dossier purpose + coverage sufficiency fix
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_PURPOSE_AND_COVERAGE_SUFFICIENCY_FIX_01.md`
@@ -8,26 +8,31 @@ Task:
 Report:
 `reviews/worker_reports/taste-dossier-purpose-and-coverage-sufficiency-fix-01.md`
 
-Status:
-`authorized_ready_for_worker`
+Final status:
+`complete_ready_for_director_acceptance`
 
-User-approved decision:
-- Dossier must explicitly understand that it prepares a neutral evidence package for a later personalized Deep analysis by another worker;
-- Dossier itself remains profile-agnostic and must not score or personalize fit;
-- completeness and downstream usefulness of the game picture are more important than speed/throughput;
-- `evidence_stable` must mean sufficiently complete neutral coverage of the actual game experience, not merely that one valid fact was found;
-- no fixed minimum review/source/search/page quota is allowed; compact decisive Dossiers remain valid;
-- add an explicit neutral coverage check and narrow-topic anti-stop rule before `research_state:sufficient / evidence_stable`;
-- no recovery, Scheduled Task action or production semantic rerun is authorized by this implementation task.
+Director acceptance:
+- Dossier now explicitly exists to prepare a neutral, sufficiently complete evidence package for downstream personalized Deep analysis while remaining itself profile-agnostic;
+- completeness/downstream usefulness now outrank throughput, ordinary latency and minimizing tool calls;
+- `research_state:sufficient / stop_reason:evidence_stable` now requires a structured neutral coverage attestation instead of merely finding one valid fact;
+- 12 canonical neutral game-experience dimensions are classified as covered, not material/not applicable, exhausted unavailable, or materially unresolved;
+- any `materially_unresolved` dimension makes a sufficient/stable persisted Dossier invalid;
+- narrow-topic evidence such as localization-only, generic social enjoyment, one isolated mechanic/complaint or aggregate sentiment cannot close research while broader material exact-product feedback remains reasonably discoverable;
+- compact decisive Dossiers remain valid; no minimum count of reviews, sources, searches, pages, observations or covered dimensions was introduced;
+- balanced investigation requires meaningful strengths and weaknesses/trade-offs without fabricating artificial symmetry;
+- strict validator now enforces the coverage attestation and central-experience closure;
+- COV-01..COV-15 passed in buffered Dossier validation run `36058048358`;
+- PR #96 merged as `d8061c470cff903fc13ca7f4f5038e95ff232bee`;
+- post-merge pre-AI run `36058130032` succeeded and current Dossier work/index are bound to revision `purpose-coverage-sufficiency-2026-09-25`;
+- no Scheduled Task action, Dossier recovery, Deep recovery or manual production semantic rerun occurred.
 
-Proven basis:
-- accepted diagnostic `progressive-deep-insufficient-evidence-diagnostic-01` classified the dominant root cause as `DOSSIER_TOO_THIN`;
-- 8/8 sampled Deep incomplete outcomes were justified from their exact Dossier inputs while additional exact-product decision-relevant player evidence remained readily discoverable;
-- successful compact controls prove the repair must target semantic coverage, not numeric quotas.
+Decision:
+- implementation accepted;
+- future Dossiers must satisfy the new semantic coverage gate before Deep receives them;
+- historical thin Dossiers/Deep outcomes remain untouched until normal GitHub-owned refresh/recovery makes them eligible.
 
 Worker state:
-- use a NEW physical conversation for ЧАТ 1;
-- prior physical ЧАТ 1 workers are retired for unrelated work.
+- physical ЧАТ 1 used for this implementation is retired and can be deleted.
 
 ## ACCEPTED — ЧАТ 2 — Deep insufficient-evidence diagnostic
 
