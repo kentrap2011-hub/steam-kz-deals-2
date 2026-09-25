@@ -168,7 +168,7 @@ class TransientAuthorFallbackRegressionTests(unittest.TestCase):
             ["stable_locator", "source_observation"],
         )
         self.assertFalse(EVIDENCE["feedback_item_identity"]["stable_locator_required_for_evidence_usability"])
-        self.assertIn("Preferred stable path", PROMPT)
+        self.assertIn("Stable item when readily available", PROMPT)
 
     def test_author_fb_02_transient_author_fallback_accepted_without_author_data(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
@@ -209,7 +209,7 @@ class TransientAuthorFallbackRegressionTests(unittest.TestCase):
         self.assertEqual(doc["observations"][0]["mention_count"], 2)
         self.assertIs(self.validate(doc, now), doc)
 
-    def test_author_fb_05_fallback_only_recurrence_is_capped_at_limited(self):
+    def test_author_fb_05_legacy_fallback_has_no_fixed_stable_locator_recurrence_gate(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         moderate = fallback_dossier(
             710005,
@@ -218,8 +218,7 @@ class TransientAuthorFallbackRegressionTests(unittest.TestCase):
         )
         moderate["observations"][0]["recurrence"] = "moderate"
         moderate["evidence"]["overall_strength"] = "moderate"
-        with self.assertRaisesRegex(ValueError, "moderate recurrence requires at least three stable-locator records"):
-            self.validate(moderate, now)
+        self.assertIs(self.validate(moderate, now), moderate)
 
         strong = fallback_dossier(
             710006,
@@ -228,25 +227,18 @@ class TransientAuthorFallbackRegressionTests(unittest.TestCase):
         )
         strong["observations"][0]["recurrence"] = "strong"
         strong["evidence"]["overall_strength"] = "strong"
-        with self.assertRaisesRegex(ValueError, "strong recurrence requires at least five stable-locator records"):
-            self.validate(strong, now)
+        self.assertIs(self.validate(strong, now), strong)
 
-    def test_author_fb_06_mixed_stable_and_fallback_uses_stable_threshold_for_moderate(self):
+    def test_author_fb_06_mixed_stable_and_fallback_no_longer_uses_numeric_stable_threshold(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
 
-        rejected = fallback_dossier(710007, now, transient_author_tokens=("a", "b", "c"))
-        add_stable_records(rejected, "710007", now, 2)
-        rejected["observations"][0]["recurrence"] = "moderate"
-        rejected["evidence"]["overall_strength"] = "moderate"
-        with self.assertRaisesRegex(ValueError, "moderate recurrence requires at least three stable-locator records"):
-            self.validate(rejected, now)
-
-        accepted = fallback_dossier(710008, now, transient_author_tokens=("a", "b"))
-        add_stable_records(accepted, "710008", now, 3)
-        accepted["observations"][0]["recurrence"] = "moderate"
-        accepted["evidence"]["overall_strength"] = "moderate"
-        self.assertEqual(accepted["observations"][0]["mention_count"], 5)
-        self.assertIs(self.validate(accepted, now), accepted)
+        doc = fallback_dossier(710007, now, transient_author_tokens=("a", "b"))
+        add_stable_records(doc, "710007", now, 1)
+        doc["observations"][0]["recurrence"] = "moderate"
+        doc["evidence"]["overall_strength"] = "moderate"
+        self.assertEqual(doc["observations"][0]["mention_count"], 3)
+        self.assertIs(self.validate(doc, now), doc)
+        self.assertFalse(SCHEMA["observation_invariants"]["stable_locator_count_threshold_for_recurrence"])
 
     def test_author_fb_07_profile_scoped_review_may_be_inspected_but_profile_never_persists(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
@@ -272,7 +264,7 @@ class TransientAuthorFallbackRegressionTests(unittest.TestCase):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         doc = fallback_dossier(710009, now)
         del doc["provenance"]["sources"][1]["feedback_surface_mode"]
-        with self.assertRaisesRegex(ValueError, "Steam Store app page is not a player-feedback item"):
+        with self.assertRaisesRegex(ValueError, "inspected_collection_item requires concrete_item_collection"):
             self.validate(doc, now)
 
     def test_author_fb_09_valid_russian_fallback_satisfies_found_and_used(self):
