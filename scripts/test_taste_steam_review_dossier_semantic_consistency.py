@@ -56,6 +56,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "url": "https://www.reddit.com/r/games/comments/test610003/game_610003/comment2/",
             "publication_date": now.date().isoformat(),
             "language": "russian",
+            "acquisition_mode": "stable_item",
         })
         same_thread["observations"][1]["recurrence"] = "limited"
         same_thread["observations"][1]["mention_count"] = 2
@@ -120,6 +121,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
                 "public_ref": f"steam-review-650001-{suffix}",
                 "publication_date": older_date,
                 "language": "non_russian",
+                "acquisition_mode": "stable_item",
             })
         doc["conflicts"] = [{
             "statement": "A strong recurring conflict is present without any strongly recurring observation.",
@@ -431,14 +433,14 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
 
     def test_retrieve_ru_01_stable_route_is_preferred(self):
         self.assertEqual(
-            EVIDENCE["feedback_item_identity"]["preferred_identity_order"],
-            ["stable_locator", "transient_author_deduped"],
+            EVIDENCE["feedback_item_identity"]["preferred_auditability_order"],
+            ["stable_item", "inspected_collection_item", "search_result_observation"],
         )
-        stable_text = "Prefer a result that exposes a neutral stable review/recommendation identity"
-        fallback_text = "If no neutral stable item locator is exposed"
+        stable_text = "**`stable_item`**"
+        relaxed_text = "**`inspected_collection_item`**"
         self.assertIn(stable_text, PROMPT)
-        self.assertIn(fallback_text, PROMPT)
-        self.assertLess(PROMPT.index(stable_text), PROMPT.index(fallback_text))
+        self.assertIn(relaxed_text, PROMPT)
+        self.assertLess(PROMPT.index(stable_text), PROMPT.index(relaxed_text))
 
     def test_retrieve_ru_02_safe_collection_fallback_is_explicit(self):
         self.assertTrue(EVIDENCE["source_policy"]["steam_store_exact_app_review_collection_may_be_fallback_parent"])
@@ -629,11 +631,11 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("60 Seconds! Reatomized", PROMPT)
         self.assertNotIn("1012880", PROMPT)
         self.assertNotIn("steamcommunity.com/app/1012880", PROMPT)
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-purpose-coverage-sufficiency-v1")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-pragmatic-observed-feedback-v1")
 
 
     def test_ledger_01_marker_binding_and_core_fields(self):
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-purpose-coverage-sufficiency-v1")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-pragmatic-observed-feedback-v1")
         self.assertIn("FAIL_CLOSED_EXECUTION_LEDGER_V1", PROMPT)
         for field in (
             "snapshot_id",
@@ -673,8 +675,9 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "aggregate_only",
             "concrete_russian_card_visible",
             "concrete_non_russian_cards_only",
-            "stable_locator_available",
-            "transient_fallback_available",
+            "stable_item_available",
+            "collection_item_visible",
+            "search_result_observation_usable",
             "profile_scoped_discovery_only",
             "exact_product_mismatch",
             "no_results",
@@ -786,8 +789,8 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("1000360", PROMPT)
 
     def test_ledger_09_current_retrieval_semantics_remain_unchanged(self):
-        self.assertEqual(SCHEMA["schema_revision"], "purpose-coverage-sufficiency-2026-09-25")
-        self.assertEqual(EVIDENCE["contract_revision"], "purpose-coverage-sufficiency-2026-09-25")
+        self.assertEqual(SCHEMA["schema_revision"], "pragmatic-observed-feedback-2026-09-26")
+        self.assertEqual(EVIDENCE["contract_revision"], "pragmatic-observed-feedback-2026-09-26")
         self.assertEqual(
             EVIDENCE["russian_evidence"]["complete_dossier_allowed_states"],
             ["found_and_used", "searched_no_existence_signal"],
