@@ -198,7 +198,7 @@ class PragmaticEvidenceModelRegressionTests(unittest.TestCase):
 
         profiled = observed_russian_dossier("930027", self.now)
         profiled["profile_url"] = "https://steamcommunity.com/id/visible-reviewer/"
-        with self.assertRaisesRegex(ValueError, "forbidden author/profile URL"):
+        with self.assertRaisesRegex(ValueError, "author/profile-scoped and forbidden"):
             self.validate(profiled)
 
     def test_prag_08_equivalent_locatorless_surfacing_cannot_inflate_support(self):
