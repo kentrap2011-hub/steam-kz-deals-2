@@ -1,50 +1,55 @@
-# WORKER TASK — TASTE DOSSIER PURPOSE + COVERAGE SUFFICIENCY FIX 01
+# WORKER TASK — TASTE DOSSIER PRAGMATIC EVIDENCE MODEL FIX 01
 
 Repository: `kentrap2011-hub/steam-kz-deals-2`
 Base/source of truth: `main`
 
-Task ID: `taste-dossier-purpose-and-coverage-sufficiency-fix-01`
+Task ID: `taste-dossier-pragmatic-evidence-model-fix-01`
 Mode: `IMPLEMENT / VALIDATE`
-Worker slot: `НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
+Worker slot: `НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
 
 Durable report:
-`reviews/worker_reports/taste-dossier-purpose-and-coverage-sufficiency-fix-01.md`
+`reviews/worker_reports/taste-dossier-pragmatic-evidence-model-fix-01.md`
 
 ## User-approved decision
 
-The Dossier worker must understand the purpose of its output, not merely collect a few valid facts.
+The current Dossier evidence model is too audit-oriented and may reject useful player evidence only because a concrete review lacks a stable item-level locator or an author-based dedupe fallback.
 
-Canonical purpose to encode:
+The new principle is:
 
-> The Dossier is a neutral evidence package for a downstream semantic worker that will later judge how well the game fits a specific user. The Dossier itself must not personalize, score fit, or use the user's taste profile to select evidence. Its responsibility is to give the downstream worker a sufficiently complete, balanced, evidence-grounded picture of the actual game experience so that a later personalized judgment is reasonably possible.
+> Dossier exists to build a trustworthy, sufficiently complete neutral picture of the exact game for downstream Deep analysis. Evidence usability is determined primarily by whether the worker directly observed useful player-feedback content and can bind that content confidently to the exact target product. A permanent direct URL/locator for every individual review is useful when available, but is not required merely to make the observed information usable.
 
-Priority rule:
+The user explicitly approved these consequences:
 
-> Completeness and downstream usefulness of the game picture are more important than speed of obtaining the Dossier. Throughput/latency must not justify stopping while material, reasonably discoverable aspects of the game experience remain uncovered.
+1. Useful information visible directly in web/search results may be used when the result itself exposes enough evidence to establish that it is player feedback about the exact target product.
+2. Exact-product/AppID binding remains strict because remasters, DLC, editions, sequels and same/similar titles can genuinely be confused.
+3. Exact per-review counting/deduplication is not a primary objective. Dossier should not discard useful evidence merely because it cannot assign a permanent unique identity to every review.
+4. Provenance exists for debugging/source traceability and hallucination resistance, not to create a court-like proof chain for every observation.
+5. Raw review text, usernames, profile identifiers and author identity still must not be persisted. Persist only safe source-level provenance and neutral paraphrased observations.
+6. The existing coverage-sufficiency fix remains fully active: richer usable evidence should improve downstream completeness, not weaken the requirement for a balanced decision-ready picture.
 
-This does NOT mean exhaustive or unbounded research. Boundedness remains semantic/adaptive and runtime-safe. The worker must stop when the picture is sufficiently complete for downstream analysis, when remaining materially distinct required/promising routes are exhausted, or when a directly observed runtime/tool/liveness blocker prevents safe continuation.
+## Triggering production case
 
-## Proven diagnostic basis
+A real post-fix Dossier invocation failed closed on:
+- game: `Tiny Snow`
+- appid: `1002560`
 
-Accepted report:
-`reviews/worker_reports/progressive-deep-insufficient-evidence-diagnostic-01.md`
+The worker observed:
+- exact-product Russian-feedback existence;
+- a concrete Russian review text visible in a search result on `stmstat`;
+- exact-product context;
+- no contract-usable stable item locator;
+- no permitted transient-author fallback;
+- direct open/read then failed with HTTP/tool error `436 Unknown Status Code`.
 
-Accepted dominant root cause:
-`DOSSIER_TOO_THIN`
+The current contract therefore forced:
+`existence_established_retrieval_unresolved`
+and blocked the entire three-game group despite directly observed useful Russian player-feedback content.
 
-Proven sample findings:
-- 8/8 sampled current Deep `analysis_incomplete / insufficient_evidence` outcomes were justified when reviewed only against their exact canonical Dossier inputs;
-- all 8 sampled incomplete Dossiers were `overall_strength=limited`, had only 1–2 observations, and several covered only one narrow topic;
-- additional exact-product, decision-relevant player evidence was readily discoverable for all 8 in bounded diagnostic checks;
-- 4 successful Deep `not_fit` controls proved compact Dossiers can be sufficient when their evidence is genuinely decisive;
-- therefore the fix must improve semantic coverage/sufficiency, NOT impose a dumb minimum review/source quota and NOT weaken Deep first.
-
-Extreme regression example:
-- appid `1244460` / Jurassic World Evolution 2 had an accepted Dossier whose useful observation was effectively localization/menu selection, yet it was marked `research_state:"sufficient"` + `stop_reason:"evidence_stable"`.
+This task must make that class of failure unnecessary without weakening exact-product identity.
 
 ## START gate
 
-First read current `CHAT_PROTOCOL.md` from `main` and complete its START gate.
+First read current `CHAT_PROTOCOL.md` and complete its START gate.
 
 Then read this task fully.
 
@@ -57,215 +62,264 @@ Read current, minimally:
 - `config/taste_steam_review_dossier_contract.json`
 - `config/taste_steam_review_dossier_worker_prompt.md`
 - `config/taste_steam_review_dossier_web_evidence_contract.json`
-- current Dossier semantic schema / strict validator / focused tests
-- `reviews/worker_reports/progressive-deep-insufficient-evidence-diagnostic-01.md`
-- `reviews/worker_reports/taste-dossier-semantic-bounded-retrieval-01.md` as needed to preserve the no-fixed-numeric-limit design.
+- `config/taste_steam_review_dossier_schema.json`
+- `scripts/taste_steam_review_dossier_strict.py`
+- current provenance helper(s), fixtures and focused Dossier tests
+- `reviews/worker_reports/taste-dossier-purpose-and-coverage-sufficiency-fix-01.md`
+- relevant TASTE-008 / TASTE-010 / TASTE-012 / TASTE-014 / TASTE-015 decisions.
 
-Do not perform broad repository archaeology.
+Do not perform broad archaeology.
 
 ## Architecture preflight — fixed decisions
 
-Before editing verify:
+Before implementation verify and preserve:
 
-1. GitHub remains owner of Dossier scope/order, binding, validation, persistence, first-pass/recovery state and completeness.
-2. Scheduled ChatGPT remains bounded neutral evidence generation + create-only transport only.
-3. The Dossier remains profile-agnostic and must not read/use the user's taste profile to decide which evidence is favorable or unfavorable.
-4. Deep remains the personalized semantic stage.
-5. No new scheduler, queue, retry daemon, backlog manager, quota or second Dossier producer is introduced.
-6. No fixed minimum number of reviews, sources, searches or pages is introduced.
-7. Existing exact-product identity, Russian-evidence, temporal/freshness, privacy/provenance and create-only rules remain strict.
-8. Existing semantic/adaptive boundedness remains; the fix changes what qualifies as sufficiently complete/stable, not whether research is bounded.
-9. No Scheduled Task create/update/enable/disable/pause/delete/reschedule/rename/recreate/run action is authorized.
-10. No automatic recovery of existing Deep/Dossier failures is authorized by this task.
+1. GitHub remains control plane for scope/order/binding/validation/persistence/recovery/completeness.
+2. Scheduled ChatGPT remains the neutral semantic/web evidence producer with create-only transport.
+3. Dossier remains profile-agnostic; Deep remains personalized.
+4. Exact target identity remains strict at product/AppID/release/DLC/edition level where relevant.
+5. No raw review/post bodies, verbatim quotes, usernames, Steam IDs, profile IDs, author identities or reversible author hashes are persisted.
+6. No new scheduler, retry daemon, queue, crawler, persistent author registry or external evidence store is introduced.
+7. No fixed minimum review/source/search/page quota is introduced.
+8. TASTE-014 semantic/adaptive bounded retrieval remains active.
+9. TASTE-015 purpose/coverage sufficiency remains active.
+10. No Scheduled Task action is authorized.
+11. No Dossier/Deep recovery or manual backlog replay is authorized by this task.
 
-If any required implementation would violate these fixed decisions, stop and report instead of broadening scope.
+This task IS authorized to supersede the item-level locator / transient-author / mention-count portions of TASTE-008 and TASTE-010 when they conflict with the user-approved pragmatic evidence model.
 
 ## IMPLEMENT
 
-### FIX-01 — encode the Dossier's downstream purpose
+### EVID-01 — evidence may come from an inspected search-result representation
 
-Update the smallest canonical generator-facing contract/prompt surfaces so the worker explicitly understands:
+Allow a search/discovery result itself to support neutral Dossier evidence when ALL are true:
 
-- it is preparing evidence for a later personalized analysis by another worker;
-- it must remain neutral and profile-agnostic;
-- its output must describe the game experience broadly enough that the downstream worker can later evaluate fit;
-- collecting one valid fact is not equivalent to completing the Dossier;
-- a narrow observation may be useful evidence but cannot by itself justify `research_state:"sufficient"` unless it is genuinely decisive about the overall game experience or remaining material dimensions are reasonably unavailable/exhausted.
+- the worker actually received/inspected the result representation;
+- the representation exposes concrete player-authored/player-feedback content, not only aggregate rating/count or editorial/publisher copy;
+- the result can be bound confidently to the exact target product through result metadata/URL/title/appid/release context;
+- the content is useful to one or more neutral Dossier observations;
+- persisted output contains only a neutral paraphrase/summary, never the raw snippet/quote;
+- persisted provenance contains only safe source-level metadata and an acquisition/evidence mode indicating the content was observed from a search/discovery representation.
 
-The wording must not encourage profile-targeted evidence cherry-picking.
+The downstream validator must not require the target page to have been successfully opened if the search-result representation itself already exposed usable evidence.
 
-### FIX-02 — completeness over speed
+A search query string alone is never evidence.
+A domain hit alone is never evidence.
+An aggregate rating/count alone is never concrete player feedback.
 
-Make explicit in the active Dossier worker rules:
+### EVID-02 — collection/page-level inspected feedback is usable without per-item locator
 
-- semantic completeness / downstream usefulness has priority over throughput, speed, or minimizing tool calls;
-- the worker must not stop merely because it already has a valid observation, a valid Russian item, or one usable source;
-- ordinary latency or desire to process more games in the invocation is not a semantic reason to declare `evidence_stable`;
-- while the binding remains live and runtime/tooling safely permits, continue through materially useful distinct player-feedback routes when material game-experience dimensions are still sparse.
+If the worker directly sees one or more concrete player-feedback cards/items on an exact-product page/collection, the evidence may be used even when the individual item has no stable public URL/ref and no author identity is retained.
 
-Do NOT make this unbounded. Preserve safe runtime stopping and exact fail-closed behavior.
+Require:
+- safe exact-product parent/source provenance;
+- direct observation by the worker;
+- neutral paraphrase;
+- no claim of independently reopenable per-item identity unless such identity actually exists.
 
-### FIX-03 — mandatory neutral coverage check before `sufficient/evidence_stable`
+Do not require transient-author identity merely to make a visible review usable.
 
-Before the worker may emit:
-- `research_state:"sufficient"`
-- and/or `stop_reason:"evidence_stable"`
+### EVID-03 — item-level stable locators become optional quality metadata
 
-require an explicit structured neutral coverage check over the observations intended for serialization.
+When a stable non-identifying per-item locator exists, preserve it because it improves auditability.
 
-The check should ask whether the Dossier gives a sufficiently complete and balanced picture of the actual player experience.
+But:
+- absence of such a locator must not make otherwise usable exact-product observed feedback invalid;
+- absence must not force a Russian gate failure by itself;
+- absence must not cap the whole Dossier to failure if semantic coverage is otherwise sufficient.
 
-Material dimensions should include, when relevant and reasonably discoverable:
-- core play loop / mechanics;
-- controls / game feel where player feedback makes this material;
-- progression / development / unlock structure;
-- variety versus repetition over time;
-- difficulty / mastery / learning / friction;
-- pacing / structure / direction;
-- exploration / mission/activity structure where relevant;
-- multiplayer/co-op dependence where relevant;
-- story/characters/identity hooks where materially part of the experience;
-- recurring strengths;
-- recurring complaints/downsides;
-- current technical/performance/localization/regional issues when material.
+Represent auditability honestly through evidence/acquisition mode rather than pretending all evidence has stable item identity.
 
-These are coverage dimensions, NOT a checklist requiring one observation in every category for every game.
+### EVID-04 — simplify dedupe/counting semantics
 
-A Dossier may still be compact when:
-- one or two observations directly and credibly characterize the central/core experience strongly enough that more research is unlikely to materially change the neutral picture; or
-- remaining applicable dimensions are genuinely not reasonably discoverable after required materially distinct routes are exhausted.
+Review the current `feedback_id`, `mention_count`, recurrence and stable/fallback counting rules.
 
-### FIX-04 — narrow-topic anti-stop rule
+Required target behavior:
 
-Do not allow `evidence_stable` when the current evidence is only a narrow/nonrepresentative slice such as:
-- localization/menu language only;
-- generic social enjoyment only;
-- one descriptive mechanic with no sustained-experience context;
-- one isolated complaint with no corroboration when broader exact-product evidence is readily discoverable;
-- aggregate sentiment without concrete player-experience content.
+- Dossier does NOT need a globally stable identity for every individual review.
+- Do not use exact per-review identity/count as a prerequisite for evidence usability or Dossier completion.
+- Avoid obvious duplicate inflation within the same invocation/result set: identical or clearly same surfaced content must not be counted twice merely because it appears through equivalent routes.
+- Corroboration/recurrence should be qualitative and evidence-grounded:
+  - one observed player-feedback item = anecdotal support;
+  - multiple materially independent observations/sources may justify stronger recurrence;
+  - do not claim exact review population counts unless the source genuinely provides them and the contract explicitly allows that aggregate claim.
+- No semantic threshold should require N stable item locators.
+- If backward-compatible numeric fields must remain temporarily, they must not reintroduce the old stable-locator gate; document their reduced/non-authoritative role.
 
-When that happens and materially distinct player-feedback routes remain reasonably discoverable, continue research.
+Prefer removing obsolete counting complexity where safe rather than retaining it as hidden policy.
 
-### FIX-05 — balanced picture, not only negatives
+### EVID-05 — Russian attempt semantics
 
-Ensure the worker seeks a neutral picture containing both:
-- meaningful strengths / positive characteristics when reasonably evidenced;
-- meaningful weaknesses / recurring complaints / trade-offs when reasonably evidenced.
+Simplify the Russian gate around actual usable information.
 
-Do not require artificial “one pro + one con” symmetry when the evidence genuinely leans one way. The requirement is balanced investigation, not fabricated balance.
+A Russian attempt may resolve as `found_and_used` when usable exact-product Russian/mixed player-feedback content was directly observed and used through any allowed evidence mode, including:
+- stable item-level locator;
+- exact-product collection/card observation;
+- exact-product search/discovery result representation.
 
-### FIX-06 — stop semantics
+Do NOT require item-level stable locator or transient-author identity for `found_and_used`.
 
-Preserve:
-- `evidence_stable` for genuinely sufficient neutral coverage;
-- exhausted/unresolved/fail-closed behavior when critical material coverage remains missing after all required materially distinct routes are exhausted;
-- directly observed runtime/tool/liveness blockers as safe stop reasons where current contracts already allow them.
+Retain fail-closed behavior when:
+- only aggregate evidence proves Russian activity but no concrete Russian player-feedback content is actually visible/usable;
+- exact-product identity is ambiguous;
+- the surfaced content cannot be established as player feedback.
 
-Do not call sparse evidence “stable” merely because no contradiction has yet been found.
+Review whether the two old `existence_established_*_unresolved` states are still necessary. If retained, narrow them to genuine content-unavailable/access-unresolved cases, not locator-unavailable cases.
 
-### FIX-07 — machine-readable / validator alignment where appropriate
+### EVID-06 — Tiny Snow regression
 
-Inspect whether the current schema/strict validator can distinguish:
-- genuine sufficient coverage,
-- narrow sparse evidence incorrectly marked stable.
+Add an exact regression modelling the observed production case:
 
-If generator-facing prompt/contract changes alone cannot prevent the proven defect, add the smallest machine-readable coverage attestation needed so strict validation can reject a plainly narrow `sufficient/evidence_stable` dossier.
+- target `Tiny Snow`, appid `1002560`;
+- exact-product Russian review text is visible in a search/discovery result;
+- result provides safe exact-product source metadata;
+- no stable individual item locator is available;
+- no transient-author identity is available or persisted;
+- target page open/read fails with a transport error analogous to 436;
+- the visible result still supports a Russian neutral observation;
+- Russian attempt resolves as usable/found-and-used rather than `existence_established_retrieval_unresolved`;
+- the game is NOT rejected solely because the per-item locator/open failed.
 
-Do not add a profile-scoped score or arbitrary numeric completeness score.
+This does not mean the entire Dossier automatically passes: TASTE-015 coverage sufficiency must still be independently satisfied.
 
-Prefer a compact structured coverage summary using neutral dimensions / covered vs materially-unresolved state only if necessary.
+### EVID-07 — exact-product safety regressions
 
-Do not weaken strict validation.
+Prove the relaxed locator rule does NOT allow:
+- base-game feedback for DLC;
+- old/original release feedback for remaster/remake when exact release matters;
+- sequel/prequel feedback;
+- similarly named unrelated game;
+- search result whose query mentions target but result content/URL belongs to another product;
+- generic site/domain result with no exact-product binding.
 
-## VALIDATION
+### EVID-08 — provenance model
 
-Add focused regression coverage proving at least:
+Persist enough safe provenance to answer:
 
-### Proven failure cases
+> Where did the worker observe this information, and by what mode?
 
-- COV-01 — Jurassic World Evolution 2 / appid 1244460:
-  localization/menu-only evidence cannot be accepted as `sufficient/evidence_stable` while ordinary exact-product player-experience evidence remains reasonably discoverable.
+Do NOT attempt to answer:
 
-- COV-02 — Rubber Bandits / appid 1206610:
-  generic “fun with friends” evidence alone cannot close research while sustained variety/repetition remains materially unknown and discoverable.
+> What permanent globally unique identity did this individual author/review have?
 
-- COV-03 — Retrowave / appid 1239690:
-  one anecdotal repetition complaint cannot be called stable while readily discoverable corroborating variation/driving evidence remains.
+Prefer source-level fields such as:
+- source URL/domain/public locator safe for persistence;
+- exact-product binding evidence already available in the contract;
+- evidence acquisition mode, e.g. stable_item / inspected_collection_item / search_result_observation;
+- language/freshness/source type where applicable.
 
-- COV-04 — Terraformers / appid 1244800:
-  one descriptive core-loop anecdote cannot close research before available long-horizon progression/variety evidence is considered or routes are exhausted.
+No raw snippets/quotes in GitHub.
 
-- COV-05 — FINAL FANTASY VI / appid 1173820:
-  Dossier must capture or explicitly exhaust reasonably discoverable evidence on combat/progression/variety/pacing rather than stopping on story/party/slow-opening alone.
+### EVID-09 — validator behavior
 
-- COV-06 — Severed Steel / appid 1227690, Need for Speed Heat / 1222680, Scars Above / 1196090:
-  preserve exact-product identity while broadening material game-experience coverage beyond the narrow initial slice.
+Update strict validation so it checks:
+- exact-product source/result binding;
+- allowed evidence acquisition mode;
+- safe provenance;
+- no raw bodies/quotes/author identity;
+- observation-to-source support;
+- coverage sufficiency.
 
-### Compact-success controls
+It must NOT reject solely because:
+- no item-level URL exists;
+- no stable public item ref exists;
+- no transient author is retained;
+- direct source open failed after a usable search-result representation had already been observed.
 
-- COV-07 — Lake / appid 1118240:
-  compact evidence may still be sufficient when it directly characterizes the central core loop and the resulting neutral picture is genuinely decision-ready.
+### EVID-10 — preserve coverage and temporal gates
 
-- COV-08 — Potion Craft / appid 1210320:
-  compact evidence may still be sufficient when it directly captures a recurrent long-horizon progression/repetition property.
+The new pragmatic provenance model must not weaken:
+- current 12-dimension coverage attestation;
+- `materially_unresolved` rejection;
+- balanced strengths/weaknesses investigation;
+- current temporal completeness rules;
+- exact-product identity.
 
-These controls must prove the fix is semantic, not a minimum-count quota.
+The result should be: **more usable evidence, same or stronger semantic completeness**.
 
-### Architecture / invariants
+## REQUIRED REGRESSIONS
 
-- COV-09 — no minimum number of sources/reviews/searches/pages is introduced.
-- COV-10 — Dossier remains profile-agnostic and contains no personalized fit judgment.
-- COV-11 — Russian retrieval/provenance/privacy/exact-product rules remain strict.
-- COV-12 — temporal completeness behavior remains intact.
-- COV-13 — no new scheduler/queue/retry/backlog owner.
-- COV-14 — existing normal buffered traversal and GitHub-owned persistence/recovery remain unchanged.
-- COV-15 — completeness-over-speed wording cannot be interpreted as unbounded crawling; semantic/adaptive boundedness remains explicit.
+At minimum:
 
-Run all relevant current Dossier focused regressions/workflows. Do not weaken tests merely to make them green.
+- PRAG-01 Tiny Snow search-result Russian evidence survives missing per-item locator + 436 open failure.
+- PRAG-02 exact-product collection card can support evidence without stable item URL or transient author.
+- PRAG-03 stable item locator still works and remains preferred auditability when available.
+- PRAG-04 aggregate-only Russian activity does NOT become player-feedback evidence.
+- PRAG-05 query text alone cannot bind a result to target product.
+- PRAG-06 wrong appid / DLC/base / remake mismatch fails closed.
+- PRAG-07 no raw quote/snippet/author/profile identity persists.
+- PRAG-08 duplicate equivalent surfacing cannot artificially strengthen recurrence.
+- PRAG-09 recurrence/sufficiency has no hidden minimum stable-locator count.
+- PRAG-10 Russian `found_and_used` accepts allowed search-result/collection evidence.
+- PRAG-11 old unresolved Russian state, if retained, is limited to genuine absence of usable concrete content/access — not missing locator alone.
+- PRAG-12 TASTE-015 coverage gate still rejects localization-only/narrow dossiers.
+- PRAG-13 TASTE-012 temporal checks remain intact.
+- PRAG-14 no new scheduler/queue/retry/crawler/persistent author registry.
+- PRAG-15 normal buffered group validation/traversal and GitHub-owned persistence/recovery remain unchanged.
 
-## Production boundary
+Run all relevant current Dossier validation workflows/tests. Do not weaken unrelated tests to pass.
+
+## Migration / compatibility
+
+The evidence contract/schema/prompt binding will change. Use the normal GitHub-owned projection rebuild semantics.
+
+Do not manually rewrite historical accepted Dossiers in place.
+
+Do not manually recover the failed Tiny Snow group.
+
+Old dossiers that no longer validate under the new binding should become refresh work through the normal canonical mechanism.
+
+If schema compatibility requires a version/revision update, make it explicit and deterministic.
+
+## Durable decisions
+
+Update `PROJECT_DECISIONS.md` with a new decision that explicitly supersedes only the conflicting clauses of TASTE-008/TASTE-010:
+
+- exact-product identity stays strict;
+- concrete useful player feedback may be accepted from directly observed search-result/collection representations;
+- item-level permanent locator and author identity are optional auditability mechanisms, not evidence-validity gates;
+- provenance is for source traceability/debugging, not court-like proof;
+- no raw text or personal identifiers persist;
+- exact per-review counting is not a completion requirement;
+- Russian `found_and_used` depends on usable observed Russian player feedback, not per-item locator availability.
+
+Update `PROJECT_ROUTES.md` only if operational routing changes.
+
+## Production boundaries
 
 Do NOT:
-- manually rerun real failed Dossiers;
-- authorize Dossier recovery;
+- run/modify Scheduled Tasks;
+- manually rerun Tiny Snow;
+- manually recover Dossier groups;
 - authorize Deep recovery;
-- manually process Deep backlog;
-- change/run the Scheduled Task.
+- process production backlog manually;
+- alter Fast/Deep semantic thresholds;
+- alter UI/ranking/pricing behavior.
 
-Normal external production may continue independently unless the existing canonical task explicitly requires otherwise. Natural concurrent activity may be observed but is not required for implementation acceptance.
-
-## Durable rationale
-
-If this changes a non-obvious semantic rule, add/update the appropriate `PROJECT_DECISIONS.md` entry explaining:
-
-- Dossier exists to support a later personalized decision while remaining itself neutral;
-- semantic coverage/completeness is more important than throughput;
-- compact decisive Dossiers remain valid;
-- no fixed numeric quota is introduced;
-- `evidence_stable` means “sufficiently complete neutral picture,” not “we found at least one valid fact.”
-
-Update `PROJECT_ROUTES.md` only if the operational route would otherwise be stale.
+Natural GitHub rebuilds/tests caused by merged source changes are allowed.
 
 ## Durable report
 
 Commit:
-`reviews/worker_reports/taste-dossier-purpose-and-coverage-sufficiency-fix-01.md`
+`reviews/worker_reports/taste-dossier-pragmatic-evidence-model-fix-01.md`
 
 Required sections:
 1. Final status
 2. Architecture preflight
-3. Proven defect
-4. Purpose wording added
-5. Completeness-over-speed rule
-6. Coverage-check design
-7. Narrow-topic anti-stop behavior
-8. Validator/schema changes, if any
-9. Files changed
-10. Tests/workflows with exact refs
-11. COV-01..COV-15 results
-12. Natural production observations, if any
-13. Unresolved
-14. Director recommendation
+3. Old evidence-model problem
+4. New allowed evidence modes
+5. Exact-product safety
+6. Russian gate changes
+7. Dedupe/recurrence simplification
+8. Provenance/privacy behavior
+9. Schema/validator changes
+10. Files changed
+11. PRAG-01..PRAG-15 results
+12. Workflow/run refs
+13. Projection/binding activation
+14. Production observations, if any
+15. Unresolved
+16. Director recommendation
 
 Allowed final statuses:
 - `complete_ready_for_director_acceptance`
@@ -275,4 +329,4 @@ Allowed final statuses:
 Before completion:
 - commit the final durable report to `main`;
 - reread that exact committed report from fresh `main`;
-- do not modify it after the reread unless repeating final commit+reread closeout.
+- do not modify it after that reread unless repeating the final commit+reread closeout.
