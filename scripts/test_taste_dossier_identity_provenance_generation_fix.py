@@ -151,9 +151,9 @@ class IdentityProvenanceGenerationFixTests(unittest.TestCase):
             self.validate(leaked)
 
     def test_id_prov_07_existing_evidence_semantics_are_unchanged(self):
-        self.assertEqual(EVIDENCE["contract_revision"], "purpose-coverage-sufficiency-2026-09-25")
+        self.assertEqual(EVIDENCE["contract_revision"], "pragmatic-evidence-model-2026-09-26")
         self.assertTrue(EVIDENCE["language_binding"]["strict_exact_equality_required"])
-        self.assertEqual(EVIDENCE["transient_author_fallback"]["status"], "active")
+        self.assertEqual(EVIDENCE["transient_author_fallback"]["status"], "legacy_compatible_optional_not_required")
         self.assertTrue(EVIDENCE["source_policy"]["steam_store_exact_app_review_collection_may_be_fallback_parent"])
         bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
         self.assertIsNone(bounds["max_web_search_queries"])
