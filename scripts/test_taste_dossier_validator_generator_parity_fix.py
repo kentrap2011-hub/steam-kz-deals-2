@@ -196,7 +196,7 @@ class ValidatorGeneratorParityFixTests(unittest.TestCase):
         strict_text = STRICT_PATH.read_text(encoding="utf-8")
         self.assertIn("def validate_dossier_strict(", strict_text)
         self.assertIn("def _validate_coverage_sufficiency(", strict_text)
-        self.assertEqual(SCHEMA["schema_revision"], "purpose-coverage-sufficiency-2026-09-25")
+        self.assertEqual(SCHEMA["schema_revision"], "pragmatic-observed-feedback-2026-09-26")
 
     def test_parity_fix_09_identity_provenance_remains_aligned(self):
         doc = web_dossier("920009", self.now)
