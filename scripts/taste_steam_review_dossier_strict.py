@@ -1066,18 +1066,23 @@ def validate_dossier_strict(
 
     russian_attempt = evidence["russian_attempt"]
     complete_russian_states = set(evidence_contract["russian_evidence"]["complete_dossier_allowed_states"])
-    if russian_attempt == "existence_established_retrieval_unresolved":
-        raise ValueError(
-            "Russian exact-product existence is established but usable concrete player-feedback content was not observed"
-        )
-    if russian_attempt == "existence_established_access_unresolved":
+    used_russian = any(record["language"] in {"russian", "mixed"} for record in used_records)
+    if russian_attempt in {"existence_established_retrieval_unresolved", "existence_established_access_unresolved"}:
+        if used_russian:
+            raise ValueError(
+                "unresolved Russian state cannot coexist with used concrete Russian feedback; "
+                "missing locator or later target access is not unresolved once usable content was observed"
+            )
+        if russian_attempt == "existence_established_retrieval_unresolved":
+            raise ValueError(
+                "Russian exact-product existence is established but usable concrete player-feedback content was not observed"
+            )
         raise ValueError(
             "Russian exact-product existence is established but access prevents observing usable concrete player feedback"
         )
     if russian_attempt not in complete_russian_states:
         raise ValueError("russian_attempt is not a complete-dossier state")
 
-    used_russian = any(record["language"] in {"russian", "mixed"} for record in used_records)
     if russian_attempt == "found_and_used" and not used_russian:
         raise ValueError("russian found_and_used requires a bound Russian player-feedback record")
     if russian_attempt != "found_and_used" and used_russian:
