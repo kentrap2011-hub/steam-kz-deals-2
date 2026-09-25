@@ -103,7 +103,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         self.assertEqual(EVIDENCE_CONTRACT["schema"], "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2")
         self.assertEqual(EVIDENCE_CONTRACT["version"], 2)
         self.assertEqual(SCHEMA["evidence_contract"], EVIDENCE_CONTRACT["schema"])
-        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-purpose-coverage-sufficiency-v1")
+        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-pragmatic-observed-feedback-v1")
         prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
         for needle in (
             "title **plus the resolved release year**",
@@ -118,9 +118,9 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "Mandatory pre-publication validation",
             "taste_steam_review_dossier_prepublication.py",
             "Language binding — bind records first, derive claims second",
-            "Russian retrieval diversification after existence proof",
-            "transient_author_deduped",
-            "fallback-only evidence is capped",
+            "Russian retrieval after existence proof",
+            "search_result_observation",
+            "Author identity is **not required**",
         ):
             self.assertIn(needle, prompt)
 
@@ -196,7 +196,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         for n in range(1, 4):
             doc["provenance"]["player_feedback_records"].append({
                 "feedback_id": f"feedback-{n + 4:03d}", "source_id": "source-004", "public_ref": f"launch-post-{n}",
-                "publication_date": "2020-01-01", "language": "non_russian",
+                "publication_date": "2020-01-01", "language": "non_russian", "acquisition_mode": "stable_item",
             })
         doc["observations"][0].update({
             "category": "friction",
@@ -219,7 +219,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         for n in (5, 6):
             doc["provenance"]["player_feedback_records"].append({
                 "feedback_id": f"feedback-{n:03d}", "source_id": "source-003", "public_ref": f"reddit-current-{n}",
-                "publication_date": NOW.date().isoformat(), "language": "russian",
+                "publication_date": NOW.date().isoformat(), "language": "russian", "acquisition_mode": "stable_item",
             })
         doc["observations"][1].update({
             "statement": "Recent player feedback repeatedly reports the same current localization problem.",
