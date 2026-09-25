@@ -694,3 +694,27 @@ Before the **first** Deep result or terminal execution receipt from the invocati
 **Сохранено:** GitHub remains sole control-plane authority for scope/order, marker confirmation, canonical acceptance, attempts, recovery authorization, completeness and persistence. Ingest must still prove that the confirmed receipt was durable before result transport and must reject missing/rejected/wrong-authority confirmation. No per-item mutable-current reread is restored; after one confirmation, frozen siblings continue without sibling-ingest waits. Fast prerequisites, Dossier acceptance/evidence semantics, Scheduled Task configuration, scheduler ownership and recovery ownership are unchanged.
 
 **Основные места:** `config/progressive_pass2_contract.json`, `config/progressive_pass2_worker_prompt.md`, `config/execution_ownership_contract.json`, `scripts/ingest_progressive_pass2.py`, `scripts/progressive_work_authority.py`, `scripts/test_progressive_async_traversal.py`, `PROJECT_ROUTES.md`.
+
+
+---
+
+## TASTE-016 — Pragmatic Dossier evidence is observation-first, not per-review-identity-first
+
+**Дата:** 2026-09-26  
+**Статус:** implementation governed by `WORKER_TASK_TASTE_DOSSIER_PRAGMATIC_EVIDENCE_MODEL_FIX_01.md`.
+
+**Решение:** usable Dossier player-feedback evidence is defined by directly observed concrete feedback that is safely bound to the exact target product, not by the availability of a permanent locator or identity for every individual review. A safe stable item locator remains preferred auditability metadata when readily available, but inspected exact-product collection/card representations and exact-product search/discovery representations may also support observations through dossier-local `source_observation` records without persisting an item URL/ref or author identity.
+
+**Exact-product boundary:** locatorless observed-feedback provenance must carry an explicit exact-product binding for the dossier appid, exact descriptor title and resolved release year using allowed result/source metadata bases. Query text alone is not a binding basis. Wrong appid, base-game/DLC crossover, remake/remaster/original crossover, sequel/prequel or same-name different-product evidence remains fail-closed.
+
+**Counting and recurrence:** `mention_count` is retained only as a backward-compatible count of bound dossier-local support records. It is not an exact player-review population and is not a semantic sufficiency threshold. Recurrence remains qualitative/evidence-grounded. No fixed 2/3/5 record threshold and no minimum number of stable item locators is allowed to decide `limited/moderate/strong`, research completion or Dossier sufficiency. Obvious duplicate/equivalent surfacing must not be serialized repeatedly to inflate support.
+
+**Russian gate:** `russian_attempt:"found_and_used"` depends on actually observing and using Russian/mixed exact-product player feedback, including stable-item, inspected-collection or search-result observation modes. Missing item locator, missing author identity, or a later failed direct open does not turn already-observed usable Russian feedback into retrieval/access unresolved. `existence_established_retrieval_unresolved` and `existence_established_access_unresolved` remain reserved for genuine cases where usable concrete Russian/mixed feedback itself could not be observed after the required materially distinct routes or because access prevented observation.
+
+**Privacy/provenance:** raw review/post text, snippets, quotations, usernames, display names, author/account/profile identity, profile URLs and identity-derived hashes/pseudonyms remain forbidden from persistence. Persist only safe source/acquisition provenance, exact-product binding metadata and neutral synthesized findings. The historical `transient_author_deduped` mode remains validator-compatible for migration/history, but the active worker must not require or chase author identity to make visible feedback usable.
+
+**Supersession:** this decision supersedes only the conflicting per-item locator, transient-author prerequisite, exact-review-count and stable-locator recurrence-threshold clauses of **TASTE-008** and **TASTE-010**. It does **not** weaken **TASTE-012** temporal completeness, **TASTE-014** semantic/adaptive boundedness, **TASTE-015** neutral coverage sufficiency, exact-product identity, source diversification, create-only buffered transport, GitHub-owned validation/persistence/recovery/completeness or Scheduled Task ownership.
+
+**Архитектурная граница:** no new scheduler, queue, retry loop, crawler, persistent author registry or per-site quota is introduced. Buffered group traversal/validation/persistence/recovery ownership is unchanged.
+
+**Основные места:** `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/taste_steam_review_dossier_compact_provenance.py`, `scripts/test_taste_dossier_pragmatic_evidence_model.py`.
