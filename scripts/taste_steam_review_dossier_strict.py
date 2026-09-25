@@ -134,7 +134,7 @@ def _validate_no_author_identity_payload(dossier, evidence_contract):
             raise ValueError(f"dossier contains forbidden author identity field at {path}.{key}")
         if isinstance(value, str) and value.lower().startswith(("http://", "https://")):
             if _is_profile_scoped_url(value, evidence_contract):
-                raise ValueError(f"dossier contains forbidden author/profile URL at {path}.{key}")
+                raise ValueError(f"{path}.{key} url is author/profile-scoped and forbidden")
 
 
 def _require_fields(obj, fields, label):
