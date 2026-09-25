@@ -42,6 +42,13 @@ def fallback_dossier(appid, now, *, title=None, transient_author_tokens=("epheme
         "evidence_role": "durable_trait",
         "player_feedback": True,
         "feedback_surface_mode": "concrete_item_collection",
+        "acquisition_mode": "inspected_collection_item",
+        "exact_product_binding": {
+            "appid": appid,
+            "title": doc["title"],
+            "release_year": doc["game_identity"]["release_year"],
+            "binding_basis": "url_appid",
+        },
     }
     records = [
         {
@@ -113,6 +120,7 @@ def add_stable_records(doc, appid, now, count):
         "freshness": "unknown",
         "evidence_role": "durable_trait",
         "player_feedback": True,
+        "acquisition_mode": "stable_item",
     }
     doc["provenance"]["sources"].append(source)
     stable_ids = []
@@ -157,9 +165,9 @@ class TransientAuthorFallbackRegressionTests(unittest.TestCase):
         self.assertIs(self.validate(doc, now), doc)
         self.assertEqual(
             EVIDENCE["feedback_item_identity"]["preferred_identity_order"],
-            ["stable_locator", "transient_author_deduped"],
+            ["stable_locator", "source_observation"],
         )
-        self.assertTrue(EVIDENCE["feedback_item_identity"]["fallback_forbidden_when_neutral_item_locator_available"])
+        self.assertFalse(EVIDENCE["feedback_item_identity"]["stable_locator_required_for_evidence_usability"])
         self.assertIn("Preferred stable path", PROMPT)
 
     def test_author_fb_02_transient_author_fallback_accepted_without_author_data(self):
