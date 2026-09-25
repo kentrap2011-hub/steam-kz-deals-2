@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
-    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "evidence_contract_revision": "purpose-coverage-sufficiency-2026-09-25",
+    "evidence_contract_sha256": "66b527f77534a8c13eef4e8a60d4d869402f2dd180e1e2633ef5da59154450e8",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
-    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "worker_schema_revision": "purpose-coverage-sufficiency-2026-09-25",
+    "worker_schema_sha256": "d467644a6f1369a4af1525a59173af8544811ccb63e60b982cf2c4119bb92a37",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
-    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+    "worker_prompt_revision": "web-evidence-v2-purpose-coverage-sufficiency-v1",
+    "worker_prompt_sha256": "90a3b4241dde07778c8b3c002ac181e75b550db006275b4851f269c99e44eeed"
   },
   "appid": "1007040",
   "title": "EARTH DEFENSE FORCE 5",
-  "generated_at_utc": "2026-09-23T17:50:00Z",
-  "expires_at_utc": "2026-10-13T17:50:00Z",
+  "generated_at_utc": "2026-09-25T05:34:00Z",
+  "expires_at_utc": "2026-10-15T05:34:00Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "EARTH DEFENSE FORCE 5",
@@ -38,24 +38,75 @@
       }
     ]
   },
-  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "localization",
-      "statement": "Russian player feedback reports a need for Russian localization, while current Steam support metadata still lists Russian as unsupported for the game.",
-      "sentiment": "negative",
+      "category": "mechanics",
+      "statement": "Player feedback emphasizes the appeal of fighting very large enemy hordes with a broad arsenal and four substantially different classes.",
+      "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
         "russian"
       ],
-      "evidence_status": "current",
+      "evidence_status": "durable",
       "source_ids": [
-        "source-002",
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "fallback-001"
+      ]
+    },
+    {
+      "category": "coop",
+      "statement": "Player feedback repeatedly frames cooperative play as a major strength, with split-screen or online play making the large-scale combat especially enjoyable.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
         "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-001"
+        "fallback-002",
+        "fallback-003"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Player feedback identifies weapon and armor grinding, random upgrade acquisition, and repeated missions as a meaningful long-term friction point.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "fallback-004"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Player feedback describes higher difficulties as capable of becoming punishing enough that progression stalls can outweigh the fun for some players.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "fallback-002"
       ]
     }
   ],
@@ -63,11 +114,101 @@
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "single_source_only",
-    "single_source_reason": "One exact-product Russian Steam discussion supplied the player-feedback mention; current official support metadata was used only for state context.",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
     "russian_attempt": "found_and_used",
     "overall_strength": "limited",
-    "stop_reason": "evidence_stable"
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            3
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
     "sources": [
@@ -75,7 +216,7 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1007040/",
+        "url": "https://store.steampowered.com/app/1007040/EARTH_DEFENSE_FORCE_5",
         "publication_date": "2019-07-11",
         "language": "non_russian",
         "freshness": "older",
@@ -84,35 +225,57 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "steam_community",
-        "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1007040/discussions/0/4339861336969920516/",
-        "publication_date": "2024-06-09",
+        "source_type": "store_user_reviews",
+        "domain": "steam.kupikod.com",
+        "url": "https://steam.kupikod.com/ru-ru/games/earth-defense-force-5",
+        "publication_date": null,
         "language": "russian",
         "freshness": "older",
-        "evidence_role": "historical",
-        "player_feedback": true
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
       },
       {
         "source_id": "source-003",
-        "source_type": "official_metadata",
-        "domain": "help.steampowered.com",
-        "url": "https://help.steampowered.com/ru/wizard/HelpWithGameTechnicalIssue?appid=1007040",
+        "source_type": "store_user_reviews",
+        "domain": "metacritic.com",
+        "url": "https://www.metacritic.com/game/earth-defense-force-5/user-reviews/",
         "publication_date": null,
-        "language": "russian",
-        "freshness": "recent",
-        "evidence_role": "current_state",
-        "player_feedback": false
+        "language": "non_russian",
+        "freshness": "older",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection"
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "feedback-001",
+        "feedback_id": "fallback-001",
         "source_id": "source-002",
-        "url": "https://steamcommunity.com/app/1007040/discussions/0/4339861336969920516/",
-        "publication_date": "2024-06-09",
+        "publication_date": "2019-07-11",
         "language": "russian",
-        "identity_mode": "stable_locator"
+        "identity_mode": "transient_author_deduped"
+      },
+      {
+        "feedback_id": "fallback-002",
+        "source_id": "source-003",
+        "publication_date": "2024-05-28",
+        "language": "non_russian",
+        "identity_mode": "transient_author_deduped"
+      },
+      {
+        "feedback_id": "fallback-003",
+        "source_id": "source-003",
+        "publication_date": "2024-05-01",
+        "language": "non_russian",
+        "identity_mode": "transient_author_deduped"
+      },
+      {
+        "feedback_id": "fallback-004",
+        "source_id": "source-003",
+        "publication_date": "2019-11-16",
+        "language": "non_russian",
+        "identity_mode": "transient_author_deduped"
       }
     ]
   }

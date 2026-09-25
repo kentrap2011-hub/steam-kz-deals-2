@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
-    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "evidence_contract_revision": "purpose-coverage-sufficiency-2026-09-25",
+    "evidence_contract_sha256": "66b527f77534a8c13eef4e8a60d4d869402f2dd180e1e2633ef5da59154450e8",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
-    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "worker_schema_revision": "purpose-coverage-sufficiency-2026-09-25",
+    "worker_schema_sha256": "d467644a6f1369a4af1525a59173af8544811ccb63e60b982cf2c4119bb92a37",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
-    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+    "worker_prompt_revision": "web-evidence-v2-purpose-coverage-sufficiency-v1",
+    "worker_prompt_sha256": "90a3b4241dde07778c8b3c002ac181e75b550db006275b4851f269c99e44eeed"
   },
   "appid": "1000010",
   "title": "Crown Trick",
-  "generated_at_utc": "2026-09-23T17:50:00Z",
-  "expires_at_utc": "2026-10-13T17:50:00Z",
+  "generated_at_utc": "2026-09-25T05:34:00Z",
+  "expires_at_utc": "2026-10-15T05:34:00Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Crown Trick",
@@ -38,16 +38,67 @@
       }
     ]
   },
-  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "repetition",
-      "statement": "Recent Russian Steam player feedback criticizes the game for limited roguelike content and weak replay appeal after the main progression is understood.",
+      "category": "mechanics",
+      "statement": "Player feedback describes the turn-based dungeon combat as rewarding when weapon, relic, elemental, familiar, and terrain interactions combine into different tactical possibilities.",
+      "sentiment": "positive",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "fallback-001"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Player feedback criticizes permanent progression as limited or slow, with some upgrades taking multiple runs and not substantially changing play.",
       "sentiment": "negative",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
-        "russian"
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "fallback-002"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "Player feedback reports that the available content and item pool can feel exhausted after completing the story, reducing long-term replay appeal for some players.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "fallback-003"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Player feedback describes the game as demanding enough to require repeated adaptation and learning, with long runs possible before clearing later stages.",
+      "sentiment": "mixed",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
@@ -63,10 +114,96 @@
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "single_source_only",
-    "single_source_reason": "One contract-usable exact-product Russian Steam review collection supplied the serialized player-feedback finding.",
-    "russian_attempt": "found_and_used",
+    "single_source_reason": "One exact-product user-review collection supplied the final bound player-feedback records; other inspected sources were context, professional material, or did not add a stronger safe item identity.",
+    "russian_attempt": "searched_no_existence_signal",
     "overall_strength": "limited",
-    "stop_reason": "evidence_stable"
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
     "sources": [
@@ -74,7 +211,7 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1000010/",
+        "url": "https://store.steampowered.com/app/1000010",
         "publication_date": "2020-10-16",
         "language": "non_russian",
         "freshness": "older",
@@ -83,12 +220,12 @@
       },
       {
         "source_id": "source-002",
-        "source_type": "steam_reviews",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1000010/Crown_Trick/?cc=us&l=russian",
+        "source_type": "store_user_reviews",
+        "domain": "metacritic.com",
+        "url": "https://www.metacritic.com/game/crown-trick/",
         "publication_date": null,
-        "language": "russian",
-        "freshness": "recent",
+        "language": "non_russian",
+        "freshness": "older",
         "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection"
@@ -98,8 +235,22 @@
       {
         "feedback_id": "fallback-001",
         "source_id": "source-002",
-        "publication_date": "2026-03-15",
-        "language": "russian",
+        "publication_date": "2020-10-19",
+        "language": "non_russian",
+        "identity_mode": "transient_author_deduped"
+      },
+      {
+        "feedback_id": "fallback-002",
+        "source_id": "source-002",
+        "publication_date": "2020-10-18",
+        "language": "non_russian",
+        "identity_mode": "transient_author_deduped"
+      },
+      {
+        "feedback_id": "fallback-003",
+        "source_id": "source-002",
+        "publication_date": "2020-10-23",
+        "language": "non_russian",
         "identity_mode": "transient_author_deduped"
       }
     ]
