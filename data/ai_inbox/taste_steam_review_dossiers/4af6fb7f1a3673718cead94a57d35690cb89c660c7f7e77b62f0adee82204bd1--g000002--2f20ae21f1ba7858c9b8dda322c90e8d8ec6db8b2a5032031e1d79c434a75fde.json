@@ -1,0 +1,1022 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "4af6fb7f1a3673718cead94a57d35690cb89c660c7f7e77b62f0adee82204bd1",
+  "prepared_required_sha256": "585ad516860b3ccea954416ad00c426d2766a74ebe1463e0d193abde9eed4949",
+  "group_plan_sha256": "0d1faf2a8e849e3d98ff1c52040b3f174beece6194ddb75ef495e21e2ebc1289",
+  "group_count": 155,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "purpose-coverage-sufficiency-2026-09-25",
+    "evidence_contract_sha256": "66b527f77534a8c13eef4e8a60d4d869402f2dd180e1e2633ef5da59154450e8",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "purpose-coverage-sufficiency-2026-09-25",
+    "worker_schema_sha256": "d467644a6f1369a4af1525a59173af8544811ccb63e60b982cf2c4119bb92a37",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-purpose-coverage-sufficiency-v1",
+    "worker_prompt_sha256": "90a3b4241dde07778c8b3c002ac181e75b550db006275b4851f269c99e44eeed"
+  },
+  "sequence": 2,
+  "start_index": 3,
+  "end_index_exclusive": 6,
+  "appids": [
+    "102600",
+    "1046400",
+    "1051310"
+  ],
+  "items_sha256": "75e977db4e082feb141beebdd0c20be5bfa4f5af39b977dcf283191b8e366842",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "7695be89906ebbc5dc319f642b3cf78c11722d3ea80af2a92352bb4dd586608a",
+  "items": [
+    {
+      "key": "App_102600",
+      "appid": "102600",
+      "title": "Orcs Must Die!",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_102600.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1046400",
+      "appid": "1046400",
+      "title": "Astalon: Tears of the Earth",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1046400.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1051310",
+      "appid": "1051310",
+      "title": "Paper Dolls: Original / 纸人",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1051310.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "2f20ae21f1ba7858c9b8dda322c90e8d8ec6db8b2a5032031e1d79c434a75fde",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "purpose-coverage-sufficiency-2026-09-25",
+        "evidence_contract_sha256": "66b527f77534a8c13eef4e8a60d4d869402f2dd180e1e2633ef5da59154450e8",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "purpose-coverage-sufficiency-2026-09-25",
+        "worker_schema_sha256": "d467644a6f1369a4af1525a59173af8544811ccb63e60b982cf2c4119bb92a37",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-purpose-coverage-sufficiency-v1",
+        "worker_prompt_sha256": "90a3b4241dde07778c8b3c002ac181e75b550db006275b4851f269c99e44eeed"
+      },
+      "appid": "102600",
+      "title": "Orcs Must Die!",
+      "generated_at_utc": "2026-09-25T07:34:00Z",
+      "expires_at_utc": "2026-10-15T07:34:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Orcs Must Die!",
+        "release_year": 2011,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "102600"
+          },
+          {
+            "kind": "developer",
+            "value": "Robot Entertainment"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 5 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Player feedback consistently characterizes the central loop as a hybrid of tower defense trap placement and direct third-person combat, with the player actively covering weaknesses in trap setups.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Players describe new traps and tools arriving through the campaign, while noting that a small set of effective early traps can remain dominant for long stretches.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Player feedback reports meaningful pressure from enemy composition and later difficulty, sometimes requiring foreknowledge or careful loadout choices and rapid direct intervention.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "The campaign is described as a sequence of compact fortress-defense stages that can be played in short sessions, with score/skull chasing and alternate trap configurations providing replay value.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        },
+        {
+          "category": "voice",
+          "statement": "Russian player feedback praises the Russian voice work but reports that story dialogue during combat can be masked by loud battle audio and repeated enemy lines.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "exhausted_unavailable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/102600/Orcs_Must_Die/",
+            "publication_date": "2011-10-11",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/patientgamers/comments/uqn99q/orcs_must_die_2011_is_a_fun_tower_defence_third/",
+            "publication_date": "2022-05-16",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "other_player_feedback",
+            "domain": "stopgame.ru",
+            "url": "https://stopgame.ru/game/orcs_must_die/review/28819",
+            "publication_date": "2025-10-17",
+            "language": "russian",
+            "freshness": "recent",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "url": "https://www.reddit.com/r/patientgamers/comments/uqn99q/orcs_must_die_2011_is_a_fun_tower_defence_third/",
+            "publication_date": "2022-05-16",
+            "language": "non_russian",
+            "identity_mode": "stable_locator"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-003",
+            "url": "https://stopgame.ru/game/orcs_must_die/review/28819",
+            "publication_date": "2025-10-17",
+            "language": "russian",
+            "identity_mode": "stable_locator"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "purpose-coverage-sufficiency-2026-09-25",
+        "evidence_contract_sha256": "66b527f77534a8c13eef4e8a60d4d869402f2dd180e1e2633ef5da59154450e8",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "purpose-coverage-sufficiency-2026-09-25",
+        "worker_schema_sha256": "d467644a6f1369a4af1525a59173af8544811ccb63e60b982cf2c4119bb92a37",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-purpose-coverage-sufficiency-v1",
+        "worker_prompt_sha256": "90a3b4241dde07778c8b3c002ac181e75b550db006275b4851f269c99e44eeed"
+      },
+      "appid": "1046400",
+      "title": "Astalon: Tears of the Earth",
+      "generated_at_utc": "2026-09-25T07:34:00Z",
+      "expires_at_utc": "2026-10-15T07:34:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Astalon: Tears of the Earth",
+        "release_year": 2021,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1046400"
+          },
+          {
+            "kind": "developer",
+            "value": "LABS Works"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Players repeatedly praise the three-character swapping design, where distinct movement and attack capabilities are used to solve traversal and combat situations.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Player feedback describes a large interconnected tower with hidden rooms, shortcuts and secrets that gradually opens as exploration tools and routes are discovered.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Death feeds a persistent upgrade loop rather than acting only as a reset, and players report that upgrades and discovered abilities substantially improve later exploration and combat.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Backtracking and navigation can become tedious because map information is limited and character swapping or missed traversal items may require repeated trips through old rooms.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Difficulty is generally described as manageable but uneven: the opening can feel weak or harsh, while some later layouts or spikes are frustrating and bosses may become comparatively easy.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Players praise the retro presentation, atmosphere and music, frequently treating the 8-bit aesthetic as a strength rather than a limitation.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "searched_no_existence_signal",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1,
+                5
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                3,
+                4
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1046400/Astalon_Tears_of_the_Earth/",
+            "publication_date": "2021-06-03",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/metroidvania/comments/1isj7m9/astalon_is_a_fantastic_metroidvania/",
+            "publication_date": "2025-02-18",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/metroidvania/comments/18wg5t4/just_finished_astalon_my_thoughts/",
+            "publication_date": "2024-01-02",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/metroidvania/comments/rz9cdt/just_finished_astalon_wow/",
+            "publication_date": "2022-01-08",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "url": "https://www.reddit.com/r/metroidvania/comments/1isj7m9/astalon_is_a_fantastic_metroidvania/",
+            "publication_date": "2025-02-18",
+            "language": "non_russian",
+            "identity_mode": "stable_locator"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-003",
+            "url": "https://www.reddit.com/r/metroidvania/comments/18wg5t4/just_finished_astalon_my_thoughts/",
+            "publication_date": "2024-01-02",
+            "language": "non_russian",
+            "identity_mode": "stable_locator"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-004",
+            "url": "https://www.reddit.com/r/metroidvania/comments/rz9cdt/just_finished_astalon_wow/",
+            "publication_date": "2022-01-08",
+            "language": "non_russian",
+            "identity_mode": "stable_locator"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "purpose-coverage-sufficiency-2026-09-25",
+        "evidence_contract_sha256": "66b527f77534a8c13eef4e8a60d4d869402f2dd180e1e2633ef5da59154450e8",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "purpose-coverage-sufficiency-2026-09-25",
+        "worker_schema_sha256": "d467644a6f1369a4af1525a59173af8544811ccb63e60b982cf2c4119bb92a37",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-purpose-coverage-sufficiency-v1",
+        "worker_prompt_sha256": "90a3b4241dde07778c8b3c002ac181e75b550db006275b4851f269c99e44eeed"
+      },
+      "appid": "1051310",
+      "title": "Paper Dolls: Original / 纸人",
+      "generated_at_utc": "2026-09-25T07:34:00Z",
+      "expires_at_utc": "2026-10-15T07:34:00Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Paper Dolls: Original / 纸人",
+        "release_year": 2019,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1051310"
+          },
+          {
+            "kind": "developer",
+            "value": "Beijing Litchi Culture Media Co., Ltd."
+          }
+        ]
+      },
+      "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "structure",
+          "statement": "Player feedback describes a compact first-person survival-horror structure centered on exploring a small mansion, finding quest items, unlocking rooms and repeatedly returning through connected spaces.",
+          "sentiment": "neutral",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Players report that several puzzles are unusually opaque, with some solutions depending on Chinese-language or cultural knowledge and therefore pushing players toward external guides.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Player feedback identifies movement and escape pressure as a source of frustration, including a protagonist who runs poorly while hostile ghosts can force repeated retreats.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "The mansion atmosphere, ghost design, environmental detail and sound are praised for sustaining tension despite the game's small physical space.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        },
+        {
+          "category": "voice",
+          "statement": "English-language player feedback criticizes the English voice acting and the inability to freely pair original Chinese audio with English subtitles.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Player feedback portrays higher difficulty as materially increasing tension through more dangerous ghost encounters and demanding quick QTE responses rather than deeper combat systems.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                5
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                5
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2,
+                4
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1051310/Paper_Dolls_Original/",
+            "publication_date": "2019-04-19",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "community_discussion",
+            "domain": "dtf.ru",
+            "url": "https://dtf.ru/yakor/2729561-krovavoe-nasledie-paper-dolls-original",
+            "publication_date": "2024-06-08",
+            "language": "russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1051310/discussions/0/1861615926801722342/",
+            "publication_date": "2020-03-20",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1051310/discussions/0/1649919326334609544/",
+            "publication_date": "2019-05-28",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "url": "https://dtf.ru/yakor/2729561-krovavoe-nasledie-paper-dolls-original",
+            "publication_date": "2024-06-08",
+            "language": "russian",
+            "identity_mode": "stable_locator"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-003",
+            "url": "https://steamcommunity.com/app/1051310/discussions/0/1861615926801722342/",
+            "publication_date": "2020-03-20",
+            "language": "non_russian",
+            "identity_mode": "stable_locator"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-004",
+            "public_ref": "thread-op",
+            "publication_date": "2019-05-28",
+            "language": "non_russian",
+            "identity_mode": "stable_locator"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-004",
+            "public_ref": "comment-1",
+            "publication_date": "2022-10-03",
+            "language": "non_russian",
+            "identity_mode": "stable_locator"
+          }
+        ]
+      }
+    }
+  ]
+}
