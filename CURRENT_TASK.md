@@ -925,3 +925,14 @@
 - implementation: PR #96, merge `d8061c470cff903fc13ca7f4f5038e95ff232bee`;
 - validation: Dossier runtime run #163 / `36058048358` success; backlog run #1198 / `36058048369` success;
 - post-merge activation: pre-AI run #200 / `36058130032` success; projection commit `efc335509349df42bdac16f1e975f5cf868ef978`.
+
+
+## Worker in progress — 2026-09-26
+
+### Taste Dossier pragmatic evidence model fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_TASTE_DOSSIER_PRAGMATIC_EVIDENCE_MODEL_FIX_01.md`;
+- scope: PRAG-01..PRAG-15 — pragmatic exact-product player-feedback evidence from inspected search-result/collection representations without requiring per-item locator/author identity;
+- strict exact-product identity, TASTE-014 semantic/adaptive boundedness and TASTE-015 coverage sufficiency remain unchanged;
+- no Scheduled Task action, manual Tiny Snow recovery or production backlog replay is authorized;
+- planned report: `reviews/worker_reports/taste-dossier-pragmatic-evidence-model-fix-01.md`.
