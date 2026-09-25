@@ -187,8 +187,8 @@ class ContractContradictionsFixRegressionTests(unittest.TestCase):
         self.assertEqual([d["appid"] for d in validated], first_group["appids"])
 
     def test_contract_surfaces_align_on_all_three_closeouts(self):
-        self.assertEqual(SCHEMA["schema_revision"], "purpose-coverage-sufficiency-2026-09-25")
-        self.assertEqual(EVIDENCE["contract_revision"], "purpose-coverage-sufficiency-2026-09-25")
+        self.assertEqual(SCHEMA["schema_revision"], "pragmatic-evidence-model-2026-09-26")
+        self.assertEqual(EVIDENCE["contract_revision"], "pragmatic-evidence-model-2026-09-26")
         self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-purpose-coverage-sufficiency-v1")
         self.assertTrue(EVIDENCE["language_binding"]["strict_exact_equality_required"])
         self.assertEqual(SCHEMA["enums"]["evidence_languages"], ["russian", "non_russian", "unknown"])
