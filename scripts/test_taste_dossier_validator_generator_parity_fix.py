@@ -187,7 +187,7 @@ class ValidatorGeneratorParityFixTests(unittest.TestCase):
         parent = invalid["provenance"]["sources"][1]
         parent["source_type"] = "other_player_feedback"
         self.assertFalse(generator_source_contract_accepts(parent))
-        with self.assertRaisesRegex(ValueError, "Steam Store concrete-item fallback parent must use a review-surface source type"):
+        with self.assertRaisesRegex(ValueError, "Steam Store observed feedback surface must use a review-surface source type"):
             self.validate(invalid)
         self.assertTrue(SCHEMA["provenance_source_invariants"]["steam_store_exact_app_fallback_parent_source_type_set_is_exclusive"])
         self.assertTrue(EVIDENCE["source_policy"]["steam_store_exact_app_fallback_parent_source_type_set_is_exclusive"])
