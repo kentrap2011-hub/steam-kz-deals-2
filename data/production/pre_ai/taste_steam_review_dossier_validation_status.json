@@ -18,17 +18,29 @@
     "worker_prompt_revision": "web-evidence-v2-purpose-coverage-sufficiency-v1",
     "worker_prompt_sha256": "90a3b4241dde07778c8b3c002ac181e75b550db006275b4851f269c99e44eeed"
   },
-  "next_pending_sequence": 2,
+  "next_pending_sequence": 3,
   "accepted_group_count": 1,
-  "failed_group_count": 0,
-  "pending_group_count": 154,
+  "failed_group_count": 1,
+  "pending_group_count": 153,
   "normal_first_pass_complete": false,
   "all_groups_accepted": false,
   "full_backlog_complete": false,
   "candidate_count": 0,
   "valid_candidate_count": 0,
   "invalid_candidate_count": 0,
-  "failed_groups_pending_recovery": [],
+  "failed_groups_pending_recovery": [
+    {
+      "sequence": 2,
+      "group_sha256": "2f20ae21f1ba7858c9b8dda322c90e8d8ec6db8b2a5032031e1d79c434a75fde",
+      "failure": {
+        "validator_error": "exhausted unavailable coverage requires route-exhaustion closure basis",
+        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/4af6fb7f1a3673718cead94a57d35690cb89c660c7f7e77b62f0adee82204bd1--g000002--2f20ae21f1ba7858c9b8dda322c90e8d8ec6db8b2a5032031e1d79c434a75fde.json",
+        "artifact_sha256": "e7fed24d3f1cb182a83e1400e251cfaf8e313a88e5ce597050cce60f37df68a3",
+        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/4af6fb7f1a3673718cead94a57d35690cb89c660c7f7e77b62f0adee82204bd1/g000002/4af6fb7f1a3673718cead94a57d35690cb89c660c7f7e77b62f0adee82204bd1--g000002--2f20ae21f1ba7858c9b8dda322c90e8d8ec6db8b2a5032031e1d79c434a75fde.json.invalid-e7fed24d3f1c",
+        "recovery_eligible": true
+      }
+    }
+  ],
   "candidate_groups": [],
   "malformed_current_snapshot_artifacts": [],
   "canonical_progress_authority": false,
