@@ -278,7 +278,7 @@ class PragmaticEvidenceModelRegressionTests(unittest.TestCase):
         self.assertFalse(ownership["scheduled_worker_may_edit_own_schedule"])
         self.assertFalse(EVIDENCE["compact_provenance"]["author_identity_allowed"])
         self.assertFalse(EVIDENCE["compact_provenance"]["profile_scoped_urls_allowed"])
-        self.assertFalse(EVIDENCE["pragmatic_observed_feedback"]["author_or_profile_identity_persistence_forbidden"] is False)
+        self.assertTrue(EVIDENCE["pragmatic_observed_feedback"]["author_or_profile_identity_persistence_forbidden"])
 
     def test_prag_15_buffered_group_validation_traversal_persistence_recovery_ownership_unchanged(self):
         self.assertEqual(CONTROL["checkpointing"]["checkpoint_size"], 3)
