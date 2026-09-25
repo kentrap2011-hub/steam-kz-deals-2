@@ -1,5 +1,35 @@
 # DIRECTOR TASK BOARD
 
+## IN PROGRESS — НОВЫЙ ЧАТ 2 — Pragmatic Dossier evidence model fix
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_PRAGMATIC_EVIDENCE_MODEL_FIX_01.md`
+
+Report:
+`reviews/worker_reports/taste-dossier-pragmatic-evidence-model-fix-01.md`
+
+Status:
+`authorized_ready_for_worker`
+
+User-approved decision:
+- useful exact-product player-feedback visible in search/discovery results or exact-product collection/card surfaces may be used even without a permanent per-item locator;
+- exact-product/AppID/release/DLC/edition binding remains strict;
+- per-review stable locator, author identity and exact review counting are auxiliary auditability mechanisms, not prerequisites for evidence usability or Dossier completion;
+- provenance is retained at safe source/acquisition-mode level for traceability/debugging, not as a court-like proof chain;
+- raw review text, quotes, usernames/profile IDs/author identity remain forbidden in persistent artifacts;
+- Russian `found_and_used` should depend on usable observed Russian player feedback, not item-locator availability;
+- TASTE-015 coverage sufficiency and TASTE-014 semantic/adaptive boundedness remain active;
+- Tiny Snow / appid 1002560 is the primary regression: visible exact-product Russian review text in search results must not fail solely because the page cannot be opened or no per-item locator exists.
+
+Implementation authority:
+- may supersede only conflicting item-level locator/transient-author/mention-count clauses of TASTE-008/TASTE-010;
+- may update Dossier prompt/contracts/schema/validator/tests/projection binding accordingly;
+- no Scheduled Task action, manual Dossier recovery, Deep recovery or production backlog replay is authorized.
+
+Worker state:
+- use a NEW physical conversation for ЧАТ 2;
+- previous physical ЧАТ 2 workers are retired.
+
 ## ACCEPTED — ЧАТ 1 — Dossier purpose + coverage sufficiency fix
 
 Task:
