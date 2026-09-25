@@ -89,10 +89,10 @@ class SteamStoreReviewCardParentRegressionTests(unittest.TestCase):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         stable = web_dossier(1000360, now, title="Hellish Quart")
         self.assertIs(self.validate(stable, now), stable)
-        self.assertEqual(EVIDENCE["feedback_item_identity"]["preferred_identity_order"], ["stable_locator", "transient_author_deduped"])
+        self.assertEqual(EVIDENCE["feedback_item_identity"]["preferred_identity_order"], ["stable_locator", "source_observation"])
         self.assertTrue(EVIDENCE["feedback_item_identity"]["fallback_forbidden_when_neutral_item_locator_available"])
         self.assertFalse(EVIDENCE["feedback_item_identity"]["steam_store_exact_app_parent_allowed_for_stable_locator"])
-        self.assertIn("If a neutral `recommendationid`", PROMPT)
+        self.assertIn("Stable item when readily available", PROMPT)
 
     def test_store_card_07_exact_appid_mismatch_is_rejected(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
@@ -101,13 +101,13 @@ class SteamStoreReviewCardParentRegressionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "appid does not match exact dossier appid"):
             self.validate(doc, now)
 
-    def test_store_card_08_fallback_recurrence_caps_are_unchanged(self):
+    def test_store_card_08_legacy_fallback_no_longer_has_numeric_locator_recurrence_cap(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         doc = fallback_dossier(1000010, now, title="Crown Trick", transient_author_tokens=("a", "b", "c"))
         doc["observations"][0]["recurrence"] = "moderate"
         doc["evidence"]["overall_strength"] = "moderate"
-        with self.assertRaisesRegex(ValueError, "moderate recurrence requires at least three stable-locator records"):
-            self.validate(doc, now)
+        self.assertIs(self.validate(doc, now), doc)
+        self.assertFalse(EVIDENCE["mention_binding"]["stable_locator_thresholds_active"])
 
     def test_store_card_09_russian_fallback_can_satisfy_found_and_used(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
