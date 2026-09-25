@@ -33,7 +33,7 @@ class SteamStoreReviewCardParentRegressionTests(unittest.TestCase):
         record = doc["provenance"]["player_feedback_records"][0]
         record["acquisition_mode"] = "stable_item"
         record["public_ref"] = "120-russian-reviews"
-        with self.assertRaisesRegex(ValueError, "stable public item identity|stable item|locator"):
+        with self.assertRaisesRegex(ValueError, "stable public item identity|stable_item|public_ref"):
             self.validate(doc, now)
         self.assertTrue(SCHEMA["evidence_invariants"]["steam_store_app_page_cannot_be_player_feedback_record"])
 
