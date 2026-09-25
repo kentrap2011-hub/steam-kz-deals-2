@@ -119,7 +119,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "taste_steam_review_dossier_prepublication.py",
             "Language binding — bind records first, derive claims second",
             "Search/discovery representation safety",
-            "recurrence is qualitative",
+            "Recurrence is qualitative",
         ):
             self.assertIn(needle, prompt)
 
