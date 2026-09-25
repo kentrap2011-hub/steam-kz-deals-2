@@ -116,6 +116,7 @@ class ContractGapRegressionTests(unittest.TestCase):
             "url": alias["provenance"]["player_feedback_records"][3]["url"] + "?utm_source=share#fragment",
             "publication_date": now.date().isoformat(),
             "language": "russian",
+            "acquisition_mode": "stable_item",
         })
         with self.assertRaisesRegex(ValueError, "duplicate or aliased attributable player-feedback item"):
             self.validate(alias, now=now)
@@ -127,6 +128,7 @@ class ContractGapRegressionTests(unittest.TestCase):
             "url": "https://www.reddit.com/r/games/comments/test520002/game_520002/comment2/",
             "publication_date": now.date().isoformat(),
             "language": "russian",
+            "acquisition_mode": "stable_item",
         })
         distinct["observations"][1]["recurrence"] = "limited"
         distinct["observations"][1]["mention_count"] = 2
