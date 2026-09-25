@@ -98,6 +98,8 @@ A permanent per-review locator or author identity is **not** a prerequisite for 
 2. **`inspected_collection_item`** — one concrete individual player-feedback card/item was visibly inspected on a safe exact-product collection/source, but no acceptable child locator is available or needed. Persist no child URL/ref and no author identity. The parent source uses `feedback_surface_mode:"concrete_item_collection"` plus strict `exact_product_binding`.
 3. **`search_result_observation`** — a search/discovery result representation itself visibly exposes concrete player-authored/player-feedback content useful to an observation. Persist no snippet/text, child locator or author identity. Persist the safe target/source-level locator, `feedback_surface_mode:"search_result_representation"`, strict `exact_product_binding`, and the neutral synthesized observation.
 
+When a Steam Store exact-app page is used as an observed collection/result parent, its `source_type` is **exclusively** one of `steam_reviews` or `store_user_reviews`; the page remains parent provenance rather than a feedback item itself.
+
 For both locatorless modes, `exact_product_binding` must be machine-checkable from the observed result/source context, never merely from the query string or a domain hit. Allowed bases are:
 - `source_appid`: exact source/result metadata exposes the exact descriptor appid;
 - `source_title_release`: exact title plus resolved release year unambiguously match the descriptor product;
