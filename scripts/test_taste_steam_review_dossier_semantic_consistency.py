@@ -173,7 +173,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertIn("site_specific", "site_specific")
         self.assertIn("materially distinct", guidance["site_specific_escalation"])
         self.assertIn("steam_community", guidance["steam_community_guidance"])
-        self.assertIn("attributable item-level", guidance["after_existence_signal"])
+        self.assertIn("usable exact-product Russian/mixed concrete player feedback", guidance["after_existence_signal"])
         self.assertFalse(guidance["fixed_source_quota"])
         self.assertFalse(guidance["bounds_are_safety_ceilings_not_targets"])
         self.assertFalse(guidance["numeric_search_or_page_ceiling_active"])
@@ -192,7 +192,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             doc["evidence"]["russian_attempt"] = "existence_established_retrieval_unresolved"
             with self.subTest(appid=appid), self.assertRaisesRegex(
                 ValueError,
-                "existence is established but attributable item-level retrieval is unresolved",
+                "usable concrete player-feedback content was not observed",
             ):
                 self.validate(doc, now)
 
@@ -219,9 +219,10 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "freshness": "unknown",
             "evidence_role": "identity",
             "player_feedback": False,
+            "acquisition_mode": "context_only",
         })
         doc["evidence"]["russian_attempt"] = "existence_established_retrieval_unresolved"
-        with self.assertRaisesRegex(ValueError, "existence is established but attributable item-level retrieval is unresolved"):
+        with self.assertRaisesRegex(ValueError, "usable concrete player-feedback content was not observed"):
             self.validate(doc, now)
 
         misuse = web_dossier(670005, now, russian_status="searched_no_existence_signal")
@@ -235,8 +236,9 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "freshness": "recent",
             "evidence_role": "current_state",
             "player_feedback": True,
+            "acquisition_mode": "stable_item",
         })
-        with self.assertRaisesRegex(ValueError, "Steam Store app page is not a player-feedback item"):
+        with self.assertRaisesRegex(ValueError, "Steam Store app page is not itself a player-feedback item"):
             self.validate(misuse, now)
 
         russian = EVIDENCE["russian_evidence"]
@@ -273,7 +275,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         doc["evidence"]["russian_attempt"] = "existence_established_access_unresolved"
         with self.assertRaisesRegex(
             ValueError,
-            "existence is established but access prevents attributable item-level retrieval",
+            "access prevents observing usable concrete player-feedback content",
         ):
             self.validate(doc, now)
         self.assertNotIn(
@@ -294,6 +296,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "freshness": "unknown",
             "evidence_role": "identity",
             "player_feedback": False,
+            "acquisition_mode": "context_only",
         })
         self.assertEqual(doc["provenance"]["sources"][2]["source_type"], "reddit")
         self.assertEqual(doc["provenance"]["player_feedback_records"][3]["language"], "russian")
@@ -310,8 +313,8 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             diversification["premature_unresolved_allowed_with_reasonably_discoverable_distinct_surface"]
         )
         self.assertIn("must try at least one materially different", diversification["first_failed_surface_rule"])
-        self.assertIn("do **not** immediately classify retrieval unresolved", PROMPT)
-        self.assertIn("Try at least one such different class", PROMPT)
+        self.assertIn("pivot to a materially distinct promising player-feedback surface", PROMPT)
+        self.assertIn("materially distinct promising player-feedback surface", PROMPT)
 
     def test_rus_ms_03_diversified_search_can_remain_unresolved_and_fail_closed(self):
         attempted_surface_classes = [
@@ -329,7 +332,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         doc["evidence"]["russian_attempt"] = "existence_established_retrieval_unresolved"
         with self.assertRaisesRegex(
             ValueError,
-            "existence is established but attributable item-level retrieval is unresolved",
+            "usable concrete player-feedback content was not observed",
         ):
             self.validate(doc, now)
 
@@ -366,6 +369,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "freshness": "recent",
             "evidence_role": "current_state",
             "player_feedback": False,
+            "acquisition_mode": "context_only",
         })
         doc["evidence"]["russian_attempt"] = "found_and_used"
         with self.assertRaisesRegex(ValueError, "found_and_used requires a bound Russian player-feedback record"):
@@ -432,19 +436,19 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
     def test_retrieve_ru_01_stable_route_is_preferred(self):
         self.assertEqual(
             EVIDENCE["feedback_item_identity"]["preferred_identity_order"],
-            ["stable_locator", "transient_author_deduped"],
+            ["stable_locator", "source_observation"],
         )
-        stable_text = "Prefer a result that exposes a neutral stable review/recommendation identity"
-        fallback_text = "If no neutral stable item locator is exposed"
+        stable_text = "Stable item when readily available"
+        fallback_text = "No locator or author identity is required"
         self.assertIn(stable_text, PROMPT)
         self.assertIn(fallback_text, PROMPT)
         self.assertLess(PROMPT.index(stable_text), PROMPT.index(fallback_text))
 
     def test_retrieve_ru_02_safe_collection_fallback_is_explicit(self):
         self.assertTrue(EVIDENCE["source_policy"]["steam_store_exact_app_review_collection_may_be_fallback_parent"])
-        self.assertIn("search-indexed exact-app collection recovery", PROMPT)
-        self.assertIn("returned representation itself visibly exposes a concrete individual Russian/mixed review card", PROMPT)
-        self.assertIn("Persist only the safe exact-app collection parent and opaque dossier-local fallback record", PROMPT)
+        self.assertIn("Search/discovery representation safety", PROMPT)
+        self.assertIn("concrete player-authored feedback", PROMPT)
+        self.assertIn("source_observation", PROMPT)
 
     def test_retrieve_ru_03_profile_hit_is_discovery_only_and_cannot_be_rebound(self):
         self.assertFalse(EVIDENCE["compact_provenance"]["profile_scoped_urls_allowed"])
@@ -786,8 +790,8 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("1000360", PROMPT)
 
     def test_ledger_09_current_retrieval_semantics_remain_unchanged(self):
-        self.assertEqual(SCHEMA["schema_revision"], "purpose-coverage-sufficiency-2026-09-25")
-        self.assertEqual(EVIDENCE["contract_revision"], "purpose-coverage-sufficiency-2026-09-25")
+        self.assertEqual(SCHEMA["schema_revision"], "pragmatic-evidence-model-2026-09-26")
+        self.assertEqual(EVIDENCE["contract_revision"], "pragmatic-evidence-model-2026-09-26")
         self.assertEqual(
             EVIDENCE["russian_evidence"]["complete_dossier_allowed_states"],
             ["found_and_used", "searched_no_existence_signal"],
