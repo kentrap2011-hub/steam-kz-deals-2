@@ -21,6 +21,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "freshness": "unknown",
             "evidence_role": "identity",
             "player_feedback": False,
+            "acquisition_mode": "context_only",
         },
         {
             "source_id": "source-002",
@@ -32,6 +33,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "freshness": "older",
             "evidence_role": "durable_trait",
             "player_feedback": True,
+            "acquisition_mode": "stable_item",
         },
         {
             "source_id": "source-003",
@@ -43,6 +45,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "freshness": "recent",
             "evidence_role": "current_state",
             "player_feedback": True,
+            "acquisition_mode": "stable_item",
         },
     ]
     feedback_records = [
