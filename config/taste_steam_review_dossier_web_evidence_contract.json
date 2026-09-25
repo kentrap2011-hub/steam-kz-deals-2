@@ -2,21 +2,18 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "purpose-coverage-sufficiency-2026-09-25",
+  "contract_revision": "pragmatic-observed-feedback-2026-09-26",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "parallel_validation_contract": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2-purpose-coverage-sufficiency-v1",
-  "purpose": "Define the active semantic evidence policy for neutral, profile-agnostic Taste dossiers that give a downstream personalized Deep worker a sufficiently complete and balanced evidence-grounded picture of actual game experience, while leaving GitHub-owned scope, buffered transport, asynchronous strict validation/persistence, recovery and completeness in the existing control-plane contracts.",
+  "worker_prompt_revision": "web-evidence-v2-pragmatic-observed-feedback-v1",
+  "purpose": "Define strict exact-product, privacy-safe, pragmatic observed player-feedback evidence semantics for the neutral Taste Dossier, including directly inspected stable items, exact-product collection cards, and search/discovery result representations, while preserving temporal and neutral coverage sufficiency gates.",
   "supersedes": {
-    "steam_appreviews_required": false,
-    "steam_cursor_required": false,
-    "fixed_review_lane_counts_required": false,
-    "legacy_parent_sampling_policy_is_active_semantic_contract": false,
-    "ordinary_multi_source_player_feedback_web_research_is_active": true
+    "prior_revision": "purpose-coverage-sufficiency-2026-09-25",
+    "limited_scope": "supersedes only item-level permanent locator, transient-author identity, and stable-locator recurrence/count prerequisites from TASTE-008/TASTE-010; exact-product identity, privacy, temporal truth, TASTE-014 boundedness, TASTE-015 coverage sufficiency, GitHub ownership and buffered transport remain strict"
   },
   "identity": {
     "required_work_binding": [
@@ -86,7 +83,15 @@
       "steam_reviews",
       "store_user_reviews"
     ],
-    "steam_store_exact_app_fallback_parent_source_type_set_is_exclusive": true
+    "steam_store_exact_app_fallback_parent_source_type_set_is_exclusive": true,
+    "search_or_discovery_result_representation_may_be_player_feedback_evidence": true,
+    "search_query_string_alone_is_evidence": false,
+    "domain_hit_alone_is_evidence": false,
+    "search_result_requires_concrete_player_authored_content": true,
+    "search_result_requires_exact_product_binding": true,
+    "target_page_open_success_required_after_usable_search_result_observation": false,
+    "collection_concrete_cards_usable_without_item_locator_or_author_identity": true,
+    "item_level_locator_is_optional_auditability_metadata": true
   },
   "compact_provenance": {
     "author_identity_allowed": false,
@@ -120,52 +125,46 @@
       "steam-recommendation:185290437",
       "reddit-comment:ve5i0a:k3mz12"
     ],
-    "rule": "Persist only non-identifying locator/provenance metadata. Author/display identity, SteamID/account/profile identity and direct hashes or predictable pseudonyms derived from them must never persist. A transient author identity may be read only in worker memory to dedupe concrete fallback items before serialization.",
+    "rule": "Persist only safe source-level provenance, exact-product binding metadata, acquisition mode, dates/language and dossier-local join ids. Never persist raw review/post/snippet text, quotes, usernames, profile/account identity, direct author hashes or predictable author pseudonyms. Author identity is not required for evidence usability or dedupe.",
     "direct_author_identity_hash_as_anonymization_allowed": false,
-    "transient_author_identity_use": "dedupe_only_within_current_worker_run_and_current_product",
+    "transient_author_identity_use": "not_required_for_evidence_validity_or_dedupe",
     "transient_author_identity_persistence_allowed": false,
     "internal_join_ids": {
       "source_id_pattern": "^source-[0-9]{3}$",
-      "stable_feedback_id_pattern": "^feedback-[0-9]{3}$",
-      "fallback_feedback_id_pattern": "^fallback-[0-9]{3}$",
-      "assignment": "sequential_dossier_local_join_keys_in_serialized_record_order_by_namespace",
+      "feedback_id_pattern": "^feedback-[0-9]{3}$",
+      "assignment": "sequential_dossier_local_join_keys_in_serialized_record_order",
       "author_identity_independent": true,
       "direct_hash_or_predictable_author_pseudonym_forbidden": true,
-      "stable_item_identity_source": "validated_safe_item_url_or_public_ref_not_internal_join_id"
+      "physical_item_identity_when_available": "validated_safe_item_url_or_public_ref",
+      "relaxed_observation_identity": "dossier_local_support_join_only_not_global_review_identity"
     }
   },
   "feedback_item_identity": {
-    "definition": "one player-feedback record using the preferred persisted stable non-identifying item locator, or a dossier-local opaque transient-author-deduped fallback record when a concrete item was actually inspected on an exact-product player-feedback collection but no acceptable neutral item locator was obtainable",
-    "url_normalization": [
-      "lowercase_and_www_normalize_host",
-      "collapse_repeated_path_slashes",
-      "ignore_trailing_path_slash",
-      "drop_fragment",
-      "drop_utm_and_known_tracking_query_parameters",
-      "sort_remaining_query_parameters"
+    "definition": "one directly observed concrete player-feedback support record; stable item identity is optional quality metadata, while exact-product collection-card and search-result observations may be usable without an item locator or author identity",
+    "acquisition_modes": [
+      "stable_item",
+      "inspected_collection_item",
+      "search_result_observation"
     ],
-    "public_ref_rule": "must be a stable machine-like or explicit review/post/comment/thread/item locator token; human date/playtime descriptions alone are not item identities",
-    "collection_surfaces_forbidden_as_feedback_records": true,
-    "known_collection_examples": [
-      "steam_app_reviews_list",
-      "steam_discussions_index_without_thread_item",
-      "reddit_subreddit_index",
-      "search_result_page",
-      "generic_reviews_or_index_page"
+    "preferred_auditability_order": [
+      "stable_item",
+      "inspected_collection_item",
+      "search_result_observation"
     ],
-    "duplicate_alias_rule": "two feedback records resolving to the same canonical physical item identity are one item and the dossier is invalid rather than double-counted",
+    "stable_item_rule": "when a safe neutral item URL/public_ref is actually available, preserve it and retain exact physical parent/appid checks; do not require locator chasing after usable exact-product content has already been observed",
+    "inspected_collection_item_rule": "concrete player-feedback card/item actually inspected on a safe exact-product collection; child item URL/public_ref and author identity are not required",
+    "search_result_observation_rule": "concrete player-authored/player-feedback content actually inspected in a search/discovery result representation; target-page open success is not required after the result itself exposes usable exact-product content",
+    "relaxed_mode_exact_product_binding_required": true,
+    "relaxed_mode_child_locator_required": false,
+    "relaxed_mode_author_identity_required": false,
+    "search_query_or_domain_hit_only_forbidden": true,
+    "aggregate_only_forbidden": true,
+    "duplicate_alias_rule": "stable-item aliases resolving to the same physical item are rejected; obvious equivalent resurfacing of the same visible content must be deduped before serialization for all acquisition modes",
     "source_alias_rule": "obvious URL/public_ref aliases resolving to one parent player source cannot create source diversity",
-    "distinct_valid_items_same_thread_allowed": true,
-    "preferred_identity_order": [
-      "stable_locator",
-      "transient_author_deduped"
-    ],
-    "stable_locator_rule": "stable_locator remains the preferred and strongest path and retains all existing item-level URL/public_ref physical-identity validation",
-    "fallback_forbidden_when_neutral_item_locator_available": true,
-    "collection_surface_fallback_parent_allowed_only_for_concrete_inspected_items": true,
-    "steam_store_exact_app_parent_allowed_for_identity_mode": "transient_author_deduped",
-    "steam_store_exact_app_parent_allowed_for_stable_locator": false,
-    "stable_internal_join_id_rule": "stable feedback_id is a sequential dossier-local feedback-NNN key only; physical identity remains in the validated safe item URL/public_ref"
+    "collection_surface_is_parent_provenance_not_feedback_item": true,
+    "stable_internal_join_id_rule": "feedback_id is a sequential dossier-local feedback-NNN support key only; when a stable physical item identity exists it remains in the validated safe item URL/public_ref",
+    "global_per_review_identity_required": false,
+    "exact_per_review_count_is_completion_requirement": false
   },
   "parent_item_binding": {
     "rule": "every player_feedback_record must resolve to the physical surface represented by its parent source_id rather than merely sharing a host",
@@ -196,22 +195,25 @@
     "worker_check_role": "none_required_at_scheduled_runtime"
   },
   "mention_binding": {
-    "definition": "mention_count is the number of distinct bound player-feedback records actually inspected and bound to the exact observation or conflict; stable-locator records are independently reopenable, while transient-author-deduped fallback records are dossier-local and lower-auditability",
+    "definition": "mention_count is backward-compatible local bookkeeping equal to the number of distinct serialized support records bound to an observation/conflict; it is not a global review-population count, auditability score, or Dossier sufficiency threshold",
     "observation_binding_field": "player_feedback_ids",
     "conflict_binding_field": "player_feedback_ids",
     "record_container": "provenance.player_feedback_records",
-    "count_rule": "mention_count_must_equal_number_of_distinct_bound_player_feedback_ids_after_physical_item_identity_validation",
-    "record_rule": "every_bound_feedback_id_must_resolve_to_one_unique_compact_player_feedback_record_whose_source_is_player_feedback_true_and_is_also_referenced_by_the_observation_or_conflict;stable_locator_records_require_physical_item_identity_and_transient_author_deduped_records_require_the_explicit_fallback_contract",
+    "count_rule": "mention_count_must_equal_number_of_distinct_bound_dossier_local_player_feedback_ids",
+    "record_rule": "every bound feedback id resolves to one compact directly observed player-feedback support record whose source is player_feedback=true and is referenced by the observation/conflict; stable item locator or author identity is not required for relaxed acquisition modes",
     "aggregate_count_rule": "overall_review_totals_positive_counts_language_filtered_counts_percentages_ratings_curator_totals_and_other_aggregate_statistics_never_create_feedback_records_or_mentions",
-    "one_record_rule": "one_attributable_player_feedback_record_requires_anecdotal_recurrence_and_mention_count_1",
+    "one_record_rule": "one observed concrete player-feedback support record is anecdotal support",
+    "multiple_record_rule": "multiple materially independent observations/sources may justify stronger qualitative recurrence; no recurrence level requires a fixed count of stable item locators",
     "raw_body_storage": false,
+    "per_review_identity_is_sufficiency_gate": false,
+    "mention_count_is_sufficiency_gate": false,
     "recurrence_identity_strength": {
-      "anecdotal": "exactly_1_total_bound_record",
-      "limited": "at_least_2_total_distinct_bound_records",
-      "moderate": "at_least_3_bound_stable_locator_records",
-      "strong": "at_least_5_bound_stable_locator_records",
-      "fallback_only_cap": "limited",
-      "mixed_rule": "fallback_records_count_toward_total_mentions_and_can_help_reach_limited_but_never_count_toward_the_stable_locator_threshold_for_moderate_or_strong"
+      "stable_locator_thresholds_active": false,
+      "transient_author_thresholds_active": false,
+      "fixed_numeric_thresholds_above_single_item_active": false,
+      "one_observed_item": "anecdotal",
+      "stronger_recurrence": "qualitative_material_independence_and_evidence_grounding_required",
+      "duplicate_inflation_forbidden": true
     }
   },
   "language_binding": {
@@ -352,11 +354,11 @@
       "encoding",
       "regional_service"
     ],
-    "found_and_used_rule": "requires_at_least_one_bound Russian-or-mixed player-feedback record that is either a valid stable_locator item or a valid transient_author_deduped concrete fallback item",
+    "found_and_used_rule": "requires at least one bound Russian-or-mixed concrete player-feedback support record directly observed and used through stable_item, inspected_collection_item, or search_result_observation",
     "inverse_rule": "if_any_russian_or_mixed_player_feedback_record_is_actually_bound_to_an_observation_or_conflict_russian_attempt_must_be_found_and_used",
-    "no_existence_signal_rule": "searched_no_existence_signal_is_allowed_only_after_bounded_good_faith_search_finds_no_reliable_exact_product_player_feedback_existence_signal_and_no_russian_or_mixed_record_is_bound",
-    "retrieval_unresolved_rule": "if reliable exact-product Russian player-feedback existence is established but no contract-usable attributable item-level Russian or mixed record is obtained after all reasonably discoverable mandatory materially distinct retrieval routes are exhausted, classify existence_established_retrieval_unresolved and do not publish a complete dossier",
-    "access_unresolved_rule": "if_reliable_exact_product_russian_player_feedback_existence_is_established_but_access_to_required_player_feedback_surface_prevents_item_level_resolution_classify_existence_established_access_unresolved_and_do_not_publish_a_complete_dossier",
+    "no_existence_signal_rule": "searched_no_existence_signal_is_allowed_only_after_good_faith_semantically_bounded_search_finds_no_reliable_exact_product_player_feedback_existence_signal_and_no_russian_or_mixed_record_is_bound",
+    "retrieval_unresolved_rule": "if reliable exact-product Russian player-feedback existence is established but no concrete usable Russian/mixed player-feedback content is directly observed after all reasonably discoverable mandatory materially distinct routes are exhausted, classify existence_established_retrieval_unresolved; missing item locator alone never causes this state",
+    "access_unresolved_rule": "if reliable exact-product Russian player-feedback existence is established but access/tooling prevents the worker from observing any concrete usable Russian/mixed player-feedback content, classify existence_established_access_unresolved; a later target-page open failure does not apply when a prior search/discovery representation already exposed usable content",
     "existence_signal_definition": "reliable_exact_product_or_exact_appid_player_activity_evidence_such_as_nonzero_language_review_population_or_exact_product_community_player_activity;signal_is_discovery_state_only_not_player_feedback_record",
     "existence_signal_exact_identity_required": true,
     "russian_rendered_ui_alone_is_existence_signal": false,
@@ -366,10 +368,13 @@
     "existence_signal_may_create_mention_count": false,
     "existence_signal_may_raise_recurrence": false,
     "existence_signal_may_support_observation_or_conflict": false,
-    "steam_store_russian_ui_rule": "store_page_rendered_in_russian_or_with_l_russian_is_context_only_and_cannot_prove_player_feedback_existence_or_satisfy_found_and_used",
+    "aggregate_activity_alone_may_satisfy_found_and_used": false,
+    "search_query_language_alone_may_satisfy_found_and_used": false,
+    "missing_item_locator_may_force_unresolved": false,
+    "missing_author_identity_may_force_unresolved": false,
+    "target_open_failure_after_usable_result_observation_may_force_unresolved": false,
     "russian_specific_claim_rule": "do_not_infer_localization_translation_voice_font_encoding_or_regional_findings_from_non_russian_feedback",
-    "fabrication_forbidden": true,
-    "fallback_rule": "a_valid_russian_or_mixed_transient_author_deduped_record_may_satisfy_found_and_used;aggregate_counts_or_collection_pages_without_a_concrete_item_still_cannot"
+    "fabrication_forbidden": true
   },
   "compatibility_binding": {
     "snapshot_binding_must_include": [
@@ -420,12 +425,12 @@
       "russian_query_variants_required": true,
       "site_specific_escalation": "if ordinary search does not resolve the Russian attempt and a materially distinct relevant player-feedback/community route remains reasonably discoverable, try that promising route; do not enumerate sites",
       "steam_community_guidance": "exact_product_steam_community_discussion_or_review_surfaces_are_a_natural_option_when_they_exist",
-      "after_existence_signal": "continue toward contract-usable attributable item-level Russian or mixed records through mandatory or materially promising distinct routes; do not repeat aggregate/list variants",
+      "after_existence_signal": "continue toward usable concrete exact-product Russian or mixed player feedback through materially promising distinct routes; a directly inspected exact-product collection card or search-result representation may satisfy the gate without a permanent item locator or author identity",
       "fixed_source_quota": false,
       "bounds_are_safety_ceilings_not_targets": false,
       "retrieval_diversification": {
-        "phase_trigger": "reliable_exact_product_russian_player_feedback_existence_established_and_no_usable_russian_or_mixed_item_yet",
-        "goal": "obtain_contract_usable_attributable_item_level_russian_or_mixed_player_feedback_without_weakening_exact_product_identity",
+        "phase_trigger": "reliable_exact_product_russian_player_feedback_existence_established_and_no_usable_concrete_russian_or_mixed_feedback_yet",
+        "goal": "obtain_usable_concrete_exact_product_russian_or_mixed_player_feedback_without_weakening_exact_product_identity_or_requiring_per_item_identity",
         "surface_class_examples": [
           "steam_community_or_user_review_items",
           "reddit_exact_product_threads_or_comments",
@@ -435,8 +440,8 @@
           "pikabu_or_analogous_public_user_generated_discussions",
           "other_credible_public_player_feedback"
         ],
-        "first_failed_surface_rule": "if the first reasonable retrieval surface yields only aggregate, list, non-item, or otherwise unusable evidence, the worker must try at least one materially different public player-feedback surface class when one is reasonably discoverable and safe",
-        "continued_diversification_rule": "after the first materially different surface, if retrieval is still unresolved, continue adaptively to the most promising reasonably discoverable distinct player-feedback surface classes until a usable item is found, all required materially distinct routes are exhausted, or a directly observed runtime/tool/liveness blocker prevents safe continuation",
+        "first_failed_surface_rule": "if the first reasonable route yields only aggregate/list metadata or no concrete usable player-feedback content, try a materially different public player-feedback route when reasonably discoverable and safe; missing item locator is not a failed surface if concrete usable content was already inspected",
+        "continued_diversification_rule": "continue adaptively until usable concrete feedback is observed, all required materially distinct routes are exhausted, or a directly observed runtime/tool/liveness blocker prevents observing usable content",
         "same_surface_diminishing_return_rule": "repeated same-domain or same-surface aggregate/list/index/query variants after existence proof are materially equivalent and must not be retried ahead of reasonably discoverable distinct item-level player-feedback surfaces",
         "materially_different_rule": "a_surface_class_must_represent_a_different_public_player_feedback_mechanism_or_community_context_not_merely_another_query_variant_or_collection_page_on_the_same_surface",
         "professional_or_editorial_counts_as_player_feedback_surface": false,
@@ -446,19 +451,15 @@
         "exact_product_identity_rules_still_apply": true,
         "premature_unresolved_allowed_with_reasonably_discoverable_distinct_surface": false
       },
-      "numeric_search_or_page_ceiling_active": false
+      "numeric_search_or_page_ceiling_active": false,
+      "search_result_observation_allowed": true,
+      "collection_observation_allowed": true,
+      "item_locator_required_for_success": false,
+      "author_identity_required_for_success": false
     },
     "transient_author_fallback": {
-      "order": [
-        "try_to_obtain_neutral_stable_item_identity_first",
-        "if_unavailable_but_concrete_item_and_author_are_visibly_distinguishable_use_author_transiently_for_dedupe",
-        "persist_no_author_identity",
-        "serialize_reduced_strength_fallback",
-        "do_not_repeat_neutral_locator_chasing_after_valid_fallback_without_a_materially_new_factual_lead"
-      ],
-      "hard_bounds_unchanged": false,
-      "numeric_search_page_limits_active": false,
-      "semantic_bounded_stopping_required": true
+      "status": "superseded_for_evidence_validity",
+      "rule": "do not require or seek author identity merely to make directly observed exact-product feedback usable; stable item locator remains optional auditability metadata"
     },
     "semantic_boundedness": {
       "numeric_query_or_page_count_is_stop_gate": false,
@@ -493,24 +494,13 @@
     "manual_progress_migration_forbidden": true
   },
   "transient_author_fallback": {
-    "status": "active",
-    "trigger": "concrete_individual_player_feedback_item_is_visibly_inspected_but_no_acceptable_neutral_stable_item_locator_is_obtainable",
-    "preferred_path": "stable_locator_always_first",
-    "transient_author_use": "same_product_within_run_dedupe_only",
-    "same_author_rule": "the_same_transient_author_seen_more_than_once_for_the_same_product_produces_one_fallback_feedback_record_unless_a_normal_stable_item_locator_proves_distinct_items",
-    "distinct_author_rule": "distinct_fallback_records_require_distinct_authors_actually_observed_transiently_on_distinct_concrete_items",
-    "persisted_identity_mode": "transient_author_deduped",
-    "fallback_feedback_id_pattern": "^fallback-[0-9]{3}$",
-    "fallback_feedback_id_assignment": "sequential_in_serialized_fallback_record_order_starting_at_001_and_never_derived_from_author_identity",
-    "fallback_record_item_url_or_public_ref_allowed": false,
-    "parent_source_requirement": "exact_product_non_profile_https_player_feedback_collection_or_source_marked_feedback_surface_mode_concrete_item_collection",
-    "raw_author_identity_persistence_allowed": false,
-    "steamid_account_vanity_or_profile_persistence_allowed": false,
-    "direct_hash_or_predictable_pseudonym_persistence_allowed": false,
-    "cross_run_identity_claim_allowed": false,
-    "aggregate_only_page_can_create_fallback_record": false,
-    "russian_or_mixed_fallback_may_satisfy_found_and_used": true,
-    "parent_source_id_pattern": "^source-[0-9]{3}$"
+    "status": "superseded_by_pragmatic_observed_feedback_model",
+    "superseded_behavior": "author identity is no longer required for collection-card usability or dedupe; no author/profile identity is persisted",
+    "stable_item_locator_still_preferred_when_already_available": true,
+    "missing_stable_item_locator_is_evidence_failure": false,
+    "missing_author_identity_is_evidence_failure": false,
+    "author_identity_persistence_allowed": false,
+    "persistent_author_registry_allowed": false
   },
   "source_mix_policy": {
     "diversity_identity": "canonicalized_physical_source_locator_not_worker_source_id",
@@ -584,5 +574,21 @@
       "covered_dimension_count": false,
       "completeness_score": false
     }
+  },
+  "exact_product_observation_binding": {
+    "required_for_relaxed_acquisition_modes": true,
+    "field": "provenance.sources[].exact_product_binding",
+    "allowed_bases": [
+      "source_appid",
+      "source_title_release",
+      "source_appid_title_release"
+    ],
+    "source_appid_rule": "appid must equal exact dossier appid; title and release_year must be null",
+    "source_title_release_rule": "title must exactly equal dossier title and release_year must exactly equal resolved game_identity.release_year; appid must be null",
+    "source_appid_title_release_rule": "appid/title/release_year must all exactly equal the dossier/resolved identity",
+    "query_text_is_binding_evidence": false,
+    "domain_hit_is_binding_evidence": false,
+    "ambiguity_behavior": "fail_closed",
+    "exact_release_dlc_edition_sequel_remake_remaster_rules_unchanged": true
   }
 }
