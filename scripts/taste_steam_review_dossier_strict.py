@@ -236,6 +236,12 @@ def _has_stable_public_item_ref(value):
         return False
     if _STABLE_PUBLIC_REF_TOKEN_RE.search(text):
         return True
+    normalized = text.casefold()
+    if re.search(
+        r"(?:^|[-_:/#])(?:reviews|ratings|votes|review-count|language-count|positive|negative)(?:[-_:/#]|$)",
+        normalized,
+    ):
+        return False
     if not any(ch.isdigit() for ch in text):
         return False
     return bool(_MACHINE_PUBLIC_REF_RE.fullmatch(text) and any(sep in text for sep in ("-", ":", "/", "#")))
