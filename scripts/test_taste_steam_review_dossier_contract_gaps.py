@@ -220,16 +220,17 @@ class ContractGapRegressionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.validate(official_only, now=now)
 
-        inflated = web_dossier(560003, now)
-        inflated["conflicts"] = [{
-            "statement": "Three player records cannot mechanically establish strong recurrence.",
+        qualitative = web_dossier(560003, now)
+        qualitative["conflicts"] = [{
+            "statement": "Strong recurrence is a semantic claim over bound player feedback, not a fixed locator-count threshold.",
             "recurrence": "strong",
             "mention_count": 3,
             "source_ids": ["source-002"],
             "player_feedback_ids": ["feedback-001", "feedback-002", "feedback-003"],
         }]
-        with self.assertRaisesRegex(ValueError, "recurrence exceeds bound player-feedback support"):
-            self.validate(inflated, now=now)
+        self.assertIs(self.validate(qualitative, now=now), qualitative)
+        recurrence_policy = SCHEMA["conflict_invariants"]["recurrence_rule"]
+        self.assertIn("no stable-locator count threshold", recurrence_policy)
 
     def test_gap07_content_complete_binding_changes_on_schema_contract_or_prompt_content(self):
         prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
