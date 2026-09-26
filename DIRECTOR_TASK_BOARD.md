@@ -1,5 +1,48 @@
 # DIRECTOR TASK BOARD
 
+## IN PROGRESS — НОВЫЙ ЧАТ 1 — Dossier production failure diagnostic
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_PRODUCTION_FAILURE_DIAGNOSTIC_01.md`
+
+Report:
+`reviews/worker_reports/taste-dossier-production-failure-diagnostic-01.md`
+
+Status:
+`authorized_read_only_recon`
+
+Scope:
+- diagnose why a production Dossier candidate was published with a parent source marked recent while bound dated feedback was older than the canonical 365-day boundary;
+- prove why existing prepublication safeguards did not prevent that candidate from being created;
+- identify the exact machine-enforced prevention point for a future fix, without implementing it;
+- reproduce workflow run `36241650284` safely and prove the exact unstaged path(s) that caused `cannot rebase: You have unstaged changes`;
+- identify the exact creator step and why the current staging list missed the path;
+- classify whether the freshness defect and publication/rebase defect are independent or causally linked;
+- recommend the smallest future fixes and focused regressions only.
+
+Production refs:
+- snapshot `b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5`;
+- group sequence `1`;
+- group SHA-256 `9299039791406b032d652da85c685c8868e4dcaba808168f67c68b6fe5b709b0`;
+- candidate create commit `2a3a2e2dbd99faf784f22878f0b7ec2252d1f5fa`;
+- failed ingest run `36241650284`.
+
+Boundaries:
+- READ-ONLY / RECON;
+- no source/runtime/workflow/contract implementation;
+- no Scheduled Task action;
+- no Dossier or Deep recovery;
+- no manual Tiny Snow rerun;
+- no manual backlog processing;
+- no production-state rewrite;
+- only the durable report may be committed.
+
+Worker state:
+- use a NEW physical conversation for ЧАТ 1;
+- previous physical worker chats are retired;
+- after report completion Director reviews the proven root causes before any separately authorized IMPLEMENT task.
+
+
 ## ACCEPTED — ЧАТ 2 — Pragmatic Dossier evidence model fix
 
 Task:
