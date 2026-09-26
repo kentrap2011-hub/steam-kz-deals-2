@@ -694,3 +694,27 @@ Before the **first** Deep result or terminal execution receipt from the invocati
 **Сохранено:** GitHub remains sole control-plane authority for scope/order, marker confirmation, canonical acceptance, attempts, recovery authorization, completeness and persistence. Ingest must still prove that the confirmed receipt was durable before result transport and must reject missing/rejected/wrong-authority confirmation. No per-item mutable-current reread is restored; after one confirmation, frozen siblings continue without sibling-ingest waits. Fast prerequisites, Dossier acceptance/evidence semantics, Scheduled Task configuration, scheduler ownership and recovery ownership are unchanged.
 
 **Основные места:** `config/progressive_pass2_contract.json`, `config/progressive_pass2_worker_prompt.md`, `config/execution_ownership_contract.json`, `scripts/ingest_progressive_pass2.py`, `scripts/progressive_work_authority.py`, `scripts/test_progressive_async_traversal.py`, `PROJECT_ROUTES.md`.
+
+---
+
+## TASTE-016 — Directly observed exact-product player feedback is usable without permanent per-review identity
+
+**Дата:** 2026-09-26  
+**Статус:** implemented by `WORKER_TASK_TASTE_DOSSIER_PRAGMATIC_EVIDENCE_MODEL_FIX_01.md`.
+
+**Решение:** Taste Dossier may use concrete player-authored/player-feedback content that the worker directly observes in one of three acquisition modes: `stable_item`, `inspected_collection_item`, or `search_result_observation`. A neutral stable item URL/`public_ref` remains preferred auditability metadata when already available, but a permanent item locator and transient author/account identity are no longer evidence-validity, Russian-gate, recurrence-strength, or Dossier-completion prerequisites. Locatorless collection/search observations require strict safe source-level exact-product binding and persist only a neutral synthesis, source provenance, acquisition mode, language/recency metadata and dossier-local join ids.
+
+**Search/discovery representations:** a search/discovery result is usable evidence only when its returned representation itself exposes concrete player-feedback content, the result can be bound fail-closed to the exact intended product, and the content materially supports the serialized observation/conflict. Query wording, a domain hit, locale, aggregate review count/rating, or a result with no concrete player-authored content is discovery metadata only. Once usable exact-product feedback was visibly observed in the result representation, a later target-page open/read failure does not invalidate that observation merely because no per-item locator can be recovered.
+
+**Russian gate:** `found_and_used` requires actually observed and used Russian/mixed player feedback, but that feedback may use any allowed acquisition mode. The retained `existence_established_retrieval_unresolved` / `existence_established_access_unresolved` states are limited to genuine inability to observe usable concrete Russian/mixed content; missing locator, missing author identity, or later target-page failure after usable result observation is not such an unresolved state. Aggregate-only Russian activity still cannot satisfy `found_and_used`.
+
+**Dedupe / recurrence:** `feedback_id` and `mention_count` remain dossier-local compatibility/bookkeeping fields, not globally stable review identity or review-population truth. One observed support item can establish only anecdotal support. Stronger recurrence is qualitative and evidence-grounded from materially independent observations/sources; no semantic level requires N stable locators or transient-author identities. Obvious aliases/equivalent resurfacing must not be duplicated to inflate support.
+
+**Supersession boundary:** this decision supersedes **only** the conflicting item-level permanent-locator, transient-author fallback requirement, and stable-locator numeric recurrence/count prerequisites in TASTE-008 and TASTE-010. It does **not** relax exact AppID/product/release/DLC identity, safe provenance/privacy, language truth, TASTE-012 temporal completeness, TASTE-014 semantic/adaptive boundedness, TASTE-015 downstream-ready 12-dimension coverage sufficiency, create-only buffered transport, immutable group planning, or GitHub ownership of scope/validation/persistence/recovery/completeness.
+
+**Privacy:** raw review/post/search-result text, snippets, quotes, usernames/display names, Steam/account/profile identity, profile URLs and reversible/direct author-derived hashes remain forbidden in persisted Dossier artifacts. No persistent author registry is introduced.
+
+**Architecture:** no scheduler, second queue, retry daemon, crawler, manual backlog replay, Dossier recovery authorization, Deep recovery authorization, or Scheduled Task setting/change is introduced. Historical accepted Dossiers are not rewritten in place; binding changes flow through normal GitHub-owned projection/refresh semantics.
+
+**Основные места:** `config/taste_steam_review_dossier_contract.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/taste_steam_review_dossier_compact_provenance.py`, `scripts/test_taste_dossier_pragmatic_evidence_model.py`, `.github/workflows/validate-taste-dossier-buffered.yml`.
+

@@ -52,6 +52,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "public_ref": f"steam-review-{appid}-1",
             "publication_date": older_date,
             "language": "non_russian",
+            "acquisition_mode": "stable_item",
         },
         {
             "feedback_id": "feedback-002",
@@ -59,6 +60,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "public_ref": f"steam-review-{appid}-2",
             "publication_date": older_date,
             "language": "non_russian",
+            "acquisition_mode": "stable_item",
         },
         {
             "feedback_id": "feedback-003",
@@ -66,6 +68,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "public_ref": f"steam-review-{appid}-3",
             "publication_date": older_date,
             "language": "non_russian",
+            "acquisition_mode": "stable_item",
         },
         {
             "feedback_id": "feedback-004",
@@ -73,6 +76,7 @@ def web_dossier(appid, generated, *, title=None, release_year=2020, russian_stat
             "url": f"https://www.reddit.com/r/games/comments/test{appid}/game_{appid}/comment1/",
             "publication_date": recent_date,
             "language": "russian" if russian_status == "found_and_used" else "non_russian",
+            "acquisition_mode": "stable_item",
         },
     ]
     observations = [

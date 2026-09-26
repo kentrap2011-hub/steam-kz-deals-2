@@ -56,6 +56,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "url": "https://www.reddit.com/r/games/comments/test610003/game_610003/comment2/",
             "publication_date": now.date().isoformat(),
             "language": "russian",
+            "acquisition_mode": "stable_item",
         })
         same_thread["observations"][1]["recurrence"] = "limited"
         same_thread["observations"][1]["mention_count"] = 2
@@ -120,6 +121,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
                 "public_ref": f"steam-review-650001-{suffix}",
                 "publication_date": older_date,
                 "language": "non_russian",
+                "acquisition_mode": "stable_item",
             })
         doc["conflicts"] = [{
             "statement": "A strong recurring conflict is present without any strongly recurring observation.",
@@ -173,14 +175,14 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertIn("site_specific", "site_specific")
         self.assertIn("materially distinct", guidance["site_specific_escalation"])
         self.assertIn("steam_community", guidance["steam_community_guidance"])
-        self.assertIn("attributable item-level", guidance["after_existence_signal"])
+        self.assertIn("usable concrete exact-product", guidance["after_existence_signal"])
         self.assertFalse(guidance["fixed_source_quota"])
         self.assertFalse(guidance["bounds_are_safety_ceilings_not_targets"])
         self.assertFalse(guidance["numeric_search_or_page_ceiling_active"])
         self.assertIsNone(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_web_search_queries"])
         self.assertIsNone(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_opened_or_read_source_pages"])
         self.assertIn("site-specific player-feedback/community search", PROMPT)
-        self.assertIn("Exact-product Steam Community discussion/review surfaces", PROMPT)
+        self.assertIn("Exact-product Steam Community/review surfaces", PROMPT)
 
     def test_rus_gate_02_proven_existence_item_unresolved_rejects_complete_dossier(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
@@ -192,7 +194,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             doc["evidence"]["russian_attempt"] = "existence_established_retrieval_unresolved"
             with self.subTest(appid=appid), self.assertRaisesRegex(
                 ValueError,
-                "existence is established but attributable item-level retrieval is unresolved",
+                "existence is established but usable concrete player-feedback content was not observed",
             ):
                 self.validate(doc, now)
 
@@ -221,7 +223,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "player_feedback": False,
         })
         doc["evidence"]["russian_attempt"] = "existence_established_retrieval_unresolved"
-        with self.assertRaisesRegex(ValueError, "existence is established but attributable item-level retrieval is unresolved"):
+        with self.assertRaisesRegex(ValueError, "existence is established but usable concrete player-feedback content was not observed"):
             self.validate(doc, now)
 
         misuse = web_dossier(670005, now, russian_status="searched_no_existence_signal")
@@ -236,7 +238,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "evidence_role": "current_state",
             "player_feedback": True,
         })
-        with self.assertRaisesRegex(ValueError, "Steam Store app page is not a player-feedback item"):
+        with self.assertRaisesRegex(ValueError, "Steam Store app page is not itself a player-feedback item"):
             self.validate(misuse, now)
 
         russian = EVIDENCE["russian_evidence"]
@@ -273,7 +275,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         doc["evidence"]["russian_attempt"] = "existence_established_access_unresolved"
         with self.assertRaisesRegex(
             ValueError,
-            "existence is established but access prevents attributable item-level retrieval",
+            "existence is established but access prevents observing usable concrete player feedback",
         ):
             self.validate(doc, now)
         self.assertNotIn(
@@ -309,9 +311,9 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertFalse(
             diversification["premature_unresolved_allowed_with_reasonably_discoverable_distinct_surface"]
         )
-        self.assertIn("must try at least one materially different", diversification["first_failed_surface_rule"])
-        self.assertIn("do **not** immediately classify retrieval unresolved", PROMPT)
-        self.assertIn("Try at least one such different class", PROMPT)
+        self.assertIn("try a materially different", diversification["first_failed_surface_rule"])
+        self.assertIn("If the first route is aggregate-only or exposes no usable content", PROMPT)
+        self.assertIn("try a materially different promising player-feedback route", PROMPT)
 
     def test_rus_ms_03_diversified_search_can_remain_unresolved_and_fail_closed(self):
         attempted_surface_classes = [
@@ -329,7 +331,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         doc["evidence"]["russian_attempt"] = "existence_established_retrieval_unresolved"
         with self.assertRaisesRegex(
             ValueError,
-            "existence is established but attributable item-level retrieval is unresolved",
+            "existence is established but usable concrete player-feedback content was not observed",
         ):
             self.validate(doc, now)
 
@@ -409,8 +411,8 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertFalse(diversification["visit_all_surface_classes_required"])
         self.assertFalse(diversification["steam_required_as_retrieval_source"])
         self.assertGreaterEqual(len(diversification["surface_class_examples"]), 5)
-        self.assertIn("fixed site quota", PROMPT)
-        self.assertIn("never required to provide the usable record", PROMPT)
+        self.assertIn("fixed website quota", PROMPT)
+        self.assertIn("no source class is mandatory", PROMPT)
         self.assertIsNone(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_web_search_queries"])
         self.assertIsNone(EVIDENCE["adaptive_research"]["hard_bounds_per_game"]["max_opened_or_read_source_pages"])
 
@@ -429,92 +431,83 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         )
 
 
-    def test_retrieve_ru_01_stable_route_is_preferred(self):
+    def test_retrieve_ru_01_stable_route_is_preferred_auditability_not_validity_gate(self):
         self.assertEqual(
-            EVIDENCE["feedback_item_identity"]["preferred_identity_order"],
-            ["stable_locator", "transient_author_deduped"],
+            EVIDENCE["feedback_item_identity"]["preferred_auditability_order"],
+            ["stable_item", "inspected_collection_item", "search_result_observation"],
         )
-        stable_text = "Prefer a result that exposes a neutral stable review/recommendation identity"
-        fallback_text = "If no neutral stable item locator is exposed"
+        stable_text = "**`stable_item`**"
+        relaxed_text = "**`inspected_collection_item`**"
         self.assertIn(stable_text, PROMPT)
-        self.assertIn(fallback_text, PROMPT)
-        self.assertLess(PROMPT.index(stable_text), PROMPT.index(fallback_text))
+        self.assertIn(relaxed_text, PROMPT)
+        self.assertLess(PROMPT.index(stable_text), PROMPT.index(relaxed_text))
+        self.assertFalse(EVIDENCE["feedback_item_identity"]["global_per_review_identity_required"])
 
-    def test_retrieve_ru_02_safe_collection_fallback_is_explicit(self):
-        self.assertTrue(EVIDENCE["source_policy"]["steam_store_exact_app_review_collection_may_be_fallback_parent"])
-        self.assertIn("search-indexed exact-app collection recovery", PROMPT)
-        self.assertIn("returned representation itself visibly exposes a concrete individual Russian/mixed review card", PROMPT)
-        self.assertIn("Persist only the safe exact-app collection parent and opaque dossier-local fallback record", PROMPT)
+    def test_retrieve_ru_02_safe_collection_observation_is_explicit(self):
+        self.assertTrue(EVIDENCE["source_policy"]["collection_concrete_cards_usable_without_item_locator_or_author_identity"])
+        self.assertIn("**`inspected_collection_item`**", PROMPT)
+        self.assertIn("concrete individual player-feedback card/item was visibly inspected", PROMPT)
+        self.assertIn("Persist no child URL/ref and no author identity.", PROMPT)
 
-    def test_retrieve_ru_03_profile_hit_is_discovery_only_and_cannot_be_rebound(self):
+    def test_retrieve_ru_03_profile_identity_is_neither_persisted_nor_required(self):
         self.assertFalse(EVIDENCE["compact_provenance"]["profile_scoped_urls_allowed"])
-        self.assertIn("A profile-scoped Russian review hit is discovery signal only", PROMPT)
-        self.assertIn("Never persist its profile URL, author identity, or re-parent that item", PROMPT)
-        self.assertIn("use fallback only if a concrete Russian/mixed card is actually inspected on that non-profile parent", PROMPT)
+        self.assertIn("A persisted URL must not be author/profile-scoped", PROMPT)
+        self.assertIn("Author identity is **not required**", PROMPT)
+        self.assertFalse(EVIDENCE["feedback_item_identity"]["relaxed_mode_author_identity_required"])
 
     def test_retrieve_ru_04_aggregate_and_locale_remain_non_evidence(self):
         self.assertFalse(EVIDENCE["source_policy"]["aggregate_storefront_statistics_are_player_feedback_mentions"])
         self.assertFalse(EVIDENCE["source_policy"]["steam_store_language_parameter_is_player_feedback_evidence"])
-        self.assertIn("They do not prove item language, do not create a feedback record", PROMPT)
+        self.assertIn("Aggregate review counts, language totals, ratings, a Russian-rendered UI, query wording or a domain hit", PROMPT)
+        self.assertFalse(EVIDENCE["russian_evidence"]["aggregate_activity_alone_may_satisfy_found_and_used"])
 
-    def test_retrieve_ru_05_exact_appid_is_preserved(self):
+    def test_retrieve_ru_05_exact_product_binding_is_preserved(self):
         self.assertTrue(EVIDENCE["identity"]["steam_player_feedback_url_appid_must_match_exact_dossier_appid_when_exposed"])
-        self.assertIn("exact descriptor title, exact dossier appid", PROMPT)
-        self.assertIn("Keep exact appid binding fail-closed", PROMPT)
-        self.assertIn("another appid, base game, DLC, edition, sequel, remake, or remaster cannot satisfy the target dossier", PROMPT)
+        self.assertIn("Keep the descriptor `title` and `appid` as immutable work identity.", PROMPT)
+        self.assertIn("wrong base game, DLC/edition, sequel, remake/remaster, old release, or same-named different product", PROMPT)
+        self.assertFalse(EVIDENCE["identity"]["base_game_feedback_may_satisfy_dlc_gate"])
 
-    def test_retrieve_ru_06_bounded_adaptive_search_avoids_inaccessible_endpoint_retries(self):
+    def test_retrieve_ru_06_semantic_bounds_avoid_equivalent_endpoint_retries(self):
         bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
         self.assertIsNone(bounds["max_web_search_queries"])
         self.assertIsNone(bounds["max_opened_or_read_source_pages"])
         self.assertFalse(bounds["numeric_limits_active"])
         self.assertFalse(bounds["counts_are_semantic_stop_gates"])
-        self.assertFalse(EVIDENCE["adaptive_research"]["russian_discovery"]["fixed_source_quota"])
-        self.assertIn("do not keep retrying materially equivalent forms of that inaccessible endpoint family", PROMPT)
-        self.assertIn("not a new website quota, required Steam lane, retry loop, crawler, or evidence semantic", PROMPT)
+        self.assertIn("A materially equivalent query wording, locale, endpoint variant", PROMPT)
+        self.assertIn("does not create a Steam-only lane, fixed website quota, numeric search/page limit, crawler, queue, retry daemon", PROMPT)
 
+    def test_diversify_early_01_no_source_class_is_mandatory(self):
+        diversification = EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"]
+        self.assertFalse(diversification["steam_required_as_retrieval_source"])
+        self.assertFalse(diversification["fixed_named_website_quota"])
+        self.assertIn("no source class is mandatory", PROMPT)
 
-    def test_diversify_early_01_steam_remains_preferred_when_cheap_usable_item_is_exposed(self):
-        steam_first = "Prefer a cheap exact-product Steam item-level path when it is already exposed or immediately reachable"
-        cross_source = "Pivot early to generic cross-source discovery"
-        self.assertIn(steam_first, PROMPT)
-        self.assertIn(cross_source, PROMPT)
-        self.assertLess(PROMPT.index(steam_first), PROMPT.index(cross_source))
-        self.assertIn(
-            "do not leave Steam merely because one attempt failed when a cheap usable concrete Steam item is already exposed",
-            PROMPT,
-        )
+    def test_diversify_early_02_aggregate_only_requires_materially_distinct_route_when_available(self):
+        rule = EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"]["first_failed_surface_rule"]
+        self.assertIn("aggregate/list metadata", rule)
+        self.assertIn("materially different", rule)
+        self.assertIn("If the first route is aggregate-only or exposes no usable content", PROMPT)
 
-    def test_diversify_early_02_aggregate_only_steam_shape_triggers_early_diversification(self):
-        self.assertIn("aggregate/count-only evidence", PROMPT)
-        self.assertIn("they are a signal to diversify", PROMPT)
-        self.assertIn("rather than spend more work", PROMPT)
-
-    def test_diversify_early_03_profile_only_steam_shape_triggers_safe_diversification(self):
+    def test_diversify_early_03_profile_privacy_stays_strict(self):
         self.assertFalse(EVIDENCE["compact_provenance"]["profile_scoped_urls_allowed"])
-        self.assertIn("a profile-scoped item", PROMPT)
-        self.assertIn("Never persist its profile URL, author identity, or re-parent that item", PROMPT)
+        self.assertFalse(EVIDENCE["compact_provenance"]["direct_author_identity_hash_as_anonymization_allowed"])
+        self.assertIn("must not be author/profile-scoped", PROMPT)
+        self.assertIn("must not be sought, hashed, pseudonymized, or persisted", PROMPT)
 
-    def test_diversify_early_04_non_russian_steam_cards_do_not_block_cross_source_pivot(self):
-        self.assertIn("concrete Steam cards that are non-Russian", PROMPT)
-        self.assertIn("non-Russian-card", PROMPT)
-        self.assertIn("prioritize a generic non-site-constrained cross-source query", PROMPT)
+    def test_diversify_early_04_non_russian_feedback_cannot_satisfy_russian_specific_claim(self):
+        self.assertIn("Never infer Russian-specific localization/translation/voice/font/encoding/regional findings from non-Russian evidence.", PROMPT)
+        self.assertIn("russian_specific_claim_rule", EVIDENCE["russian_evidence"])
 
-    def test_diversify_early_05_index_row_only_does_not_monopolize_budget(self):
-        self.assertIn("a collection/index row without a concrete child item", PROMPT)
-        self.assertIn("index/collection row without a usable child", PROMPT)
-        self.assertIn("distinct public player-feedback discovery gets priority", PROMPT)
+    def test_diversify_early_05_result_without_concrete_content_is_discovery_only(self):
+        self.assertFalse(EVIDENCE["source_policy"]["search_query_string_alone_is_evidence"])
+        self.assertFalse(EVIDENCE["source_policy"]["domain_hit_alone_is_evidence"])
+        self.assertIn("a result row with only title/domain/count/rating and no concrete player-authored content is discovery metadata only", PROMPT)
 
-    def test_diversify_early_06_generic_discovery_has_no_product_or_named_site_hardcoding(self):
-        self.assertIn("non-site-constrained search", PROMPT)
-        self.assertIn("exact descriptor title, release year when helpful", PROMPT)
-        self.assertIn("Russian player-review/discussion wording", PROMPT)
-        self.assertIn("Use site-specific follow-up only after discovery makes a source promising", PROMPT)
+    def test_diversify_early_06_generic_discovery_has_no_product_hardcoding(self):
         self.assertNotIn("MO:Astray", PROMPT)
         self.assertNotIn("StopGame", PROMPT)
-        diversification = EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"]
-        self.assertFalse(diversification["fixed_named_website_quota"])
-        self.assertFalse(diversification["steam_required_as_retrieval_source"])
+        self.assertIn("use Russian-language query variants", PROMPT)
+        self.assertIn("site-specific player-feedback/community search remains allowed when ordinary discovery is insufficient", PROMPT)
 
     def test_diversify_early_07_stable_non_steam_player_feedback_remains_accepted(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
@@ -537,21 +530,20 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertTrue(EVIDENCE["recency"]["current_state_requires_recent_support"])
         self.assertIn("gameplay", EVIDENCE["recency"]["old_feedback_remains_valid_for"])
         self.assertIn("story", EVIDENCE["recency"]["old_feedback_remains_valid_for"])
-        self.assertIn("It changes retrieval priority only; it does not change what counts as evidence", PROMPT)
 
-    def test_diversify_early_09_semantic_bounds_and_no_fixed_steam_quota_are_active(self):
+    def test_diversify_early_09_semantic_bounds_and_no_fixed_query_page_quota_are_active(self):
         bounds = EVIDENCE["adaptive_research"]["hard_bounds_per_game"]
         self.assertIsNone(bounds["max_web_search_queries"])
         self.assertIsNone(bounds["max_opened_or_read_source_pages"])
         self.assertFalse(EVIDENCE["adaptive_research"]["russian_discovery"]["fixed_source_quota"])
-        self.assertIn("There is **no fixed number of Steam queries or pages** before diversification", PROMPT)
+        self.assertIn("there is no finite numeric per-game limit to fabricate", PROMPT)
 
-    def test_diversify_early_10_privacy_and_provenance_guards_remain_unchanged(self):
+    def test_diversify_early_10_privacy_and_provenance_guards_remain_strict(self):
         self.assertFalse(EVIDENCE["compact_provenance"]["profile_scoped_urls_allowed"])
         self.assertFalse(EVIDENCE["compact_provenance"]["direct_author_identity_hash_as_anonymization_allowed"])
         self.assertTrue(EVIDENCE["compact_provenance"]["internal_join_ids"]["author_identity_independent"])
         self.assertFalse(EVIDENCE["parent_item_binding"]["host_match_alone_is_sufficient"])
-        self.assertIn("Never persist its profile URL, author identity, or re-parent that item", PROMPT)
+        self.assertIn("Never persist raw review bodies", PROMPT)
 
 
     def test_temporal_prestop_01_historical_technical_requires_recent_check_before_stop(self):
@@ -629,11 +621,11 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("60 Seconds! Reatomized", PROMPT)
         self.assertNotIn("1012880", PROMPT)
         self.assertNotIn("steamcommunity.com/app/1012880", PROMPT)
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-purpose-coverage-sufficiency-v1")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-pragmatic-observed-feedback-v1")
 
 
     def test_ledger_01_marker_binding_and_core_fields(self):
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-purpose-coverage-sufficiency-v1")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-pragmatic-observed-feedback-v1")
         self.assertIn("FAIL_CLOSED_EXECUTION_LEDGER_V1", PROMPT)
         for field in (
             "snapshot_id",
@@ -673,8 +665,9 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
             "aggregate_only",
             "concrete_russian_card_visible",
             "concrete_non_russian_cards_only",
-            "stable_locator_available",
-            "transient_fallback_available",
+            "stable_item_available",
+            "collection_item_visible",
+            "search_result_observation_usable",
             "profile_scoped_discovery_only",
             "exact_product_mismatch",
             "no_results",
@@ -786,8 +779,8 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("1000360", PROMPT)
 
     def test_ledger_09_current_retrieval_semantics_remain_unchanged(self):
-        self.assertEqual(SCHEMA["schema_revision"], "purpose-coverage-sufficiency-2026-09-25")
-        self.assertEqual(EVIDENCE["contract_revision"], "purpose-coverage-sufficiency-2026-09-25")
+        self.assertEqual(SCHEMA["schema_revision"], "pragmatic-observed-feedback-2026-09-26")
+        self.assertEqual(EVIDENCE["contract_revision"], "pragmatic-observed-feedback-2026-09-26")
         self.assertEqual(
             EVIDENCE["russian_evidence"]["complete_dossier_allowed_states"],
             ["found_and_used", "searched_no_existence_signal"],

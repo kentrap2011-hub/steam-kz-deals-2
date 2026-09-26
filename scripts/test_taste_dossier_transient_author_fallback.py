@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Regression coverage for the TASTE-010 supersession by pragmatic observed feedback."""
 import copy
 import json
 import unittest
@@ -17,20 +18,17 @@ EVIDENCE = json.loads((ROOT / "config/taste_steam_review_dossier_web_evidence_co
 PROMPT = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
 
 
-def fallback_dossier(appid, now, *, title=None, transient_author_tokens=("ephemeral-a",)):
-    """Model worker-memory dedupe, then return only the privacy-safe serialized dossier."""
+def fallback_dossier(appid, now, *, title=None, transient_author_tokens=("legacy-fixture-card",)):
+    """Compatibility fixture name: serialize visible collection cards without author identity.
+
+    The historical keyword is retained only so older regression helpers can call this
+    fixture. Values model how many concrete cards were visibly inspected; they are
+    never used as author identity, dedupe keys, or persisted data.
+    """
     appid = str(appid)
     doc = web_dossier(appid, now, title=title, russian_status="searched_no_existence_signal")
     metadata = copy.deepcopy(doc["provenance"]["sources"][0])
-
-    seen = set()
-    unique_item_count = 0
-    for token in transient_author_tokens:
-        if token in seen:
-            continue
-        seen.add(token)
-        unique_item_count += 1
-
+    card_count = max(1, len(tuple(transient_author_tokens)))
     collection = {
         "source_id": "source-002",
         "source_type": "steam_reviews",
@@ -42,24 +40,29 @@ def fallback_dossier(appid, now, *, title=None, transient_author_tokens=("epheme
         "evidence_role": "durable_trait",
         "player_feedback": True,
         "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+            "basis": "source_appid",
+            "appid": appid,
+            "title": None,
+            "release_year": None,
+        },
     }
     records = [
         {
-            "feedback_id": f"fallback-{index:03d}",
+            "feedback_id": f"feedback-{index:03d}",
             "source_id": "source-002",
             "publication_date": now.date().isoformat(),
             "language": "russian",
-            "identity_mode": "transient_author_deduped",
+            "acquisition_mode": "inspected_collection_item",
         }
-        for index in range(1, unique_item_count + 1)
+        for index in range(1, card_count + 1)
     ]
-    recurrence = "anecdotal" if unique_item_count == 1 else "limited"
     observation = {
         "category": "mechanics",
-        "statement": "Concrete Russian player feedback describes a durable gameplay characteristic.",
+        "statement": "Observed Russian player feedback describes a durable gameplay characteristic.",
         "sentiment": "mixed",
-        "recurrence": recurrence,
-        "mention_count": unique_item_count,
+        "recurrence": "anecdotal" if card_count == 1 else "limited",
+        "mention_count": card_count,
         "evidence_languages": ["russian"],
         "evidence_status": "durable",
         "source_ids": ["source-002"],
@@ -72,7 +75,7 @@ def fallback_dossier(appid, now, *, title=None, transient_author_tokens=("epheme
         "strategy": "adaptive_multi_source_web",
         "research_state": "sufficient",
         "source_mix_status": "single_source_only",
-        "single_source_reason": "Only one exact-product concrete player-feedback collection was needed for this fixture.",
+        "single_source_reason": "One exact-product collection supplies the compact central-experience fixture.",
         "russian_attempt": "found_and_used",
         "overall_strength": "limited",
         "stop_reason": "evidence_stable",
@@ -102,41 +105,7 @@ def fallback_dossier(appid, now, *, title=None, transient_author_tokens=("epheme
     return doc
 
 
-def add_stable_records(doc, appid, now, count):
-    source = {
-        "source_id": "source-003",
-        "source_type": "steam_community",
-        "domain": "steamcommunity.com",
-        "url": f"https://steamcommunity.com/app/{appid}/reviews/",
-        "publication_date": None,
-        "language": "russian",
-        "freshness": "unknown",
-        "evidence_role": "durable_trait",
-        "player_feedback": True,
-    }
-    doc["provenance"]["sources"].append(source)
-    stable_ids = []
-    for index in range(1, count + 1):
-        feedback_id = f"feedback-{index:03d}"
-        stable_ids.append(feedback_id)
-        doc["provenance"]["player_feedback_records"].append({
-            "feedback_id": feedback_id,
-            "source_id": "source-003",
-            "public_ref": f"steam-recommendation:{appid}{index:03d}",
-            "publication_date": now.date().isoformat(),
-            "language": "russian",
-            "identity_mode": "stable_locator",
-        })
-    observation = doc["observations"][0]
-    observation["source_ids"].append("source-003")
-    observation["player_feedback_ids"] = stable_ids + observation["player_feedback_ids"]
-    observation["mention_count"] = len(observation["player_feedback_ids"])
-    doc["evidence"]["source_mix_status"] = "multi_source"
-    doc["evidence"]["single_source_reason"] = None
-    return stable_ids
-
-
-class TransientAuthorFallbackRegressionTests(unittest.TestCase):
+class PragmaticCollectionObservationRegressionTests(unittest.TestCase):
     def validate(self, doc, now):
         return validate_dossier_strict(
             doc,
@@ -147,181 +116,80 @@ class TransientAuthorFallbackRegressionTests(unittest.TestCase):
             now=now,
         )
 
-    def test_author_fb_01_recommendationid_remains_preferred_stable_path(self):
+    def test_collection_01_stable_item_remains_valid_optional_auditability(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         doc = web_dossier(710001, now)
-        doc["provenance"]["player_feedback_records"][0].update({
-            "identity_mode": "stable_locator",
-            "public_ref": "steam-recommendation:185290437",
-        })
         self.assertIs(self.validate(doc, now), doc)
         self.assertEqual(
-            EVIDENCE["feedback_item_identity"]["preferred_identity_order"],
-            ["stable_locator", "transient_author_deduped"],
+            EVIDENCE["feedback_item_identity"]["preferred_auditability_order"][0],
+            "stable_item",
         )
-        self.assertTrue(EVIDENCE["feedback_item_identity"]["fallback_forbidden_when_neutral_item_locator_available"])
-        self.assertIn("Preferred stable path", PROMPT)
+        self.assertFalse(EVIDENCE["feedback_item_identity"]["global_per_review_identity_required"])
 
-    def test_author_fb_02_transient_author_fallback_accepted_without_author_data(self):
+    def test_collection_02_visible_card_needs_no_locator_or_author(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
-        doc = fallback_dossier(710002, now, transient_author_tokens=("ephemeral-a",))
-        self.assertIs(self.validate(doc, now), doc)
-        payload = json.dumps(doc, ensure_ascii=False)
-        self.assertNotIn("ephemeral-a", payload)
+        doc = fallback_dossier(710002, now)
         record = doc["provenance"]["player_feedback_records"][0]
-        self.assertEqual(record["identity_mode"], "transient_author_deduped")
+        self.assertEqual(record["acquisition_mode"], "inspected_collection_item")
         self.assertNotIn("url", record)
         self.assertNotIn("public_ref", record)
-
-    def test_author_fb_03_same_transient_author_dedupes_before_serialization(self):
-        now = datetime.now(timezone.utc).replace(microsecond=0)
-        doc = fallback_dossier(
-            710003,
-            now,
-            transient_author_tokens=("ephemeral-same", "ephemeral-same"),
-        )
-        self.assertEqual(len(doc["provenance"]["player_feedback_records"]), 1)
-        self.assertEqual(doc["observations"][0]["mention_count"], 1)
-        self.assertEqual(doc["observations"][0]["recurrence"], "anecdotal")
-        self.assertNotIn("ephemeral-same", json.dumps(doc))
         self.assertIs(self.validate(doc, now), doc)
 
-    def test_author_fb_04_two_distinct_authors_produce_limited_local_fallback_records(self):
+    def test_collection_03_author_identity_is_rejected_not_required(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
-        doc = fallback_dossier(
-            710004,
-            now,
-            transient_author_tokens=("ephemeral-a", "ephemeral-b"),
-        )
-        self.assertEqual(
-            [record["feedback_id"] for record in doc["provenance"]["player_feedback_records"]],
-            ["fallback-001", "fallback-002"],
-        )
-        self.assertEqual(doc["observations"][0]["recurrence"], "limited")
-        self.assertEqual(doc["observations"][0]["mention_count"], 2)
+        doc = fallback_dossier(710003, now)
+        doc["provenance"]["player_feedback_records"][0]["author"] = "do-not-persist"
+        with self.assertRaisesRegex(ValueError, "unsupported fields|author identity"):
+            self.validate(doc, now)
+        self.assertFalse(EVIDENCE["feedback_item_identity"]["relaxed_mode_author_identity_required"])
+
+    def test_collection_04_no_stable_locator_threshold_for_moderate(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = fallback_dossier(710004, now, transient_author_tokens=("card-a", "card-b", "card-c"))
+        doc["observations"][0]["recurrence"] = "moderate"
+        doc["evidence"]["overall_strength"] = "moderate"
         self.assertIs(self.validate(doc, now), doc)
-
-    def test_author_fb_05_fallback_only_recurrence_is_capped_at_limited(self):
-        now = datetime.now(timezone.utc).replace(microsecond=0)
-        moderate = fallback_dossier(
-            710005,
-            now,
-            transient_author_tokens=("a", "b", "c"),
+        self.assertFalse(
+            EVIDENCE["mention_binding"]["recurrence_identity_strength"]["stable_locator_thresholds_active"]
         )
-        moderate["observations"][0]["recurrence"] = "moderate"
-        moderate["evidence"]["overall_strength"] = "moderate"
-        with self.assertRaisesRegex(ValueError, "moderate recurrence requires at least three stable-locator records"):
-            self.validate(moderate, now)
 
-        strong = fallback_dossier(
-            710006,
-            now,
-            transient_author_tokens=("a", "b", "c", "d", "e"),
-        )
-        strong["observations"][0]["recurrence"] = "strong"
-        strong["evidence"]["overall_strength"] = "strong"
-        with self.assertRaisesRegex(ValueError, "strong recurrence requires at least five stable-locator records"):
-            self.validate(strong, now)
-
-    def test_author_fb_06_mixed_stable_and_fallback_uses_stable_threshold_for_moderate(self):
+    def test_collection_05_one_observed_item_cannot_claim_stronger_recurrence(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
-
-        rejected = fallback_dossier(710007, now, transient_author_tokens=("a", "b", "c"))
-        add_stable_records(rejected, "710007", now, 2)
-        rejected["observations"][0]["recurrence"] = "moderate"
-        rejected["evidence"]["overall_strength"] = "moderate"
-        with self.assertRaisesRegex(ValueError, "moderate recurrence requires at least three stable-locator records"):
-            self.validate(rejected, now)
-
-        accepted = fallback_dossier(710008, now, transient_author_tokens=("a", "b"))
-        add_stable_records(accepted, "710008", now, 3)
-        accepted["observations"][0]["recurrence"] = "moderate"
-        accepted["evidence"]["overall_strength"] = "moderate"
-        self.assertEqual(accepted["observations"][0]["mention_count"], 5)
-        self.assertIs(self.validate(accepted, now), accepted)
-
-    def test_author_fb_07_profile_scoped_review_may_be_inspected_but_profile_never_persists(self):
-        now = datetime.now(timezone.utc).replace(microsecond=0)
-        transient_profile_url = "https://steamcommunity.com/id/ephemeral-profile/recommended/1000360/"
-        doc = fallback_dossier(
-            1000360,
-            now,
-            title="Hellish Quart",
-            transient_author_tokens=(transient_profile_url,),
-        )
-        payload = json.dumps(doc, ensure_ascii=False)
-        self.assertNotIn("ephemeral-profile", payload)
-        self.assertNotIn("/id/", payload)
-        self.assertIs(self.validate(doc, now), doc)
-
-        leaked = copy.deepcopy(doc)
-        leaked["provenance"]["sources"][1]["domain"] = "steamcommunity.com"
-        leaked["provenance"]["sources"][1]["url"] = transient_profile_url
-        with self.assertRaisesRegex(ValueError, "author/profile"):
-            self.validate(leaked, now)
-
-    def test_author_fb_08_aggregate_page_without_concrete_item_mode_is_invalid(self):
-        now = datetime.now(timezone.utc).replace(microsecond=0)
-        doc = fallback_dossier(710009, now)
-        del doc["provenance"]["sources"][1]["feedback_surface_mode"]
-        with self.assertRaisesRegex(ValueError, "Steam Store app page is not a player-feedback item"):
+        doc = fallback_dossier(710005, now)
+        doc["observations"][0]["recurrence"] = "moderate"
+        doc["evidence"]["overall_strength"] = "moderate"
+        with self.assertRaisesRegex(ValueError, "one observed feedback item supports anecdotal recurrence only"):
             self.validate(doc, now)
 
-    def test_author_fb_09_valid_russian_fallback_satisfies_found_and_used(self):
+    def test_collection_06_exact_appid_mismatch_stays_fail_closed(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
-        doc = fallback_dossier(710010, now)
-        self.assertEqual(doc["evidence"]["russian_attempt"], "found_and_used")
-        self.assertEqual(doc["provenance"]["player_feedback_records"][0]["language"], "russian")
-        self.assertIs(self.validate(doc, now), doc)
-
-    def test_author_fb_10_exact_product_identity_remains_fail_closed(self):
-        now = datetime.now(timezone.utc).replace(microsecond=0)
-        doc = fallback_dossier(710011, now)
+        doc = fallback_dossier(710006, now)
         doc["provenance"]["sources"][1]["url"] = "https://store.steampowered.com/app/999999/?l=russian"
         with self.assertRaisesRegex(ValueError, "appid does not match exact dossier appid"):
             self.validate(doc, now)
 
-    def test_author_fb_11_direct_hash_or_identity_derived_local_ids_are_rejected(self):
+    def test_collection_07_russian_card_satisfies_found_and_used(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
-        doc = fallback_dossier(710012, now)
-        doc["provenance"]["player_feedback_records"][0]["feedback_id"] = "a" * 64
-        doc["observations"][0]["player_feedback_ids"] = ["a" * 64]
-        with self.assertRaisesRegex(ValueError, "fallback-NNN"):
+        doc = fallback_dossier(710007, now)
+        self.assertEqual(doc["evidence"]["russian_attempt"], "found_and_used")
+        self.assertEqual(doc["provenance"]["player_feedback_records"][0]["language"], "russian")
+        self.assertIs(self.validate(doc, now), doc)
+
+    def test_collection_08_aggregate_only_has_no_feedback_record(self):
+        now = datetime.now(timezone.utc).replace(microsecond=0)
+        doc = fallback_dossier(710008, now)
+        doc["provenance"]["player_feedback_records"] = []
+        with self.assertRaisesRegex(ValueError, "player_feedback_records must be a non-empty list"):
             self.validate(doc, now)
+        self.assertFalse(EVIDENCE["russian_evidence"]["aggregate_activity_alone_may_satisfy_found_and_used"])
 
-        source_hash = fallback_dossier(710013, now)
-        direct_hash = "b" * 64
-        source_hash["provenance"]["sources"][1]["source_id"] = direct_hash
-        source_hash["provenance"]["player_feedback_records"][0]["source_id"] = direct_hash
-        source_hash["observations"][0]["source_ids"] = [direct_hash]
-        with self.assertRaisesRegex(ValueError, "source-NNN"):
-            self.validate(source_hash, now)
-
-    def test_author_fb_12_current_g000001_collection_card_shapes_are_usable_without_identity_persistence(self):
-        work = json.loads(
-            (ROOT / "data/production/pre_ai/taste_steam_review_dossier_work.json").read_text(encoding="utf-8")
+    def test_collection_09_prompt_explicitly_supersedes_transient_author_requirement(self):
+        self.assertEqual(
+            EVIDENCE["transient_author_fallback"]["status"],
+            "superseded_by_pragmatic_observed_feedback_model",
         )
-        first_group = work["submission_group_plan"]["groups"][0]
-        self.assertGreaterEqual(len(first_group["items"]), 2)
-
-        now = datetime.now(timezone.utc).replace(microsecond=0)
-        docs = []
-        transient_tokens = []
-        for index, item in enumerate(first_group["items"][:2], start=1):
-            tokens = (f"ephemeral-current-{index}-a", f"ephemeral-current-{index}-b")
-            transient_tokens.extend(tokens)
-            doc = fallback_dossier(
-                item["appid"],
-                now,
-                title=item["title"],
-                transient_author_tokens=tokens,
-            )
-            self.assertIs(self.validate(doc, now), doc)
-            docs.append(doc)
-
-        serialized = json.dumps(docs, ensure_ascii=False)
-        for token in transient_tokens:
-            self.assertNotIn(token, serialized)
+        self.assertIn("Author identity is **not required**", PROMPT)
+        self.assertIn("no recurrence level requires 3 or 5 stable locators", PROMPT)
 
 
 if __name__ == "__main__":
