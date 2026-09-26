@@ -1,0 +1,991 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5",
+  "prepared_required_sha256": "eeba05df6169ec140331c4d39ff12cb587d6e61e5a15b73627e1c5b32318dd9d",
+  "group_plan_sha256": "c7aa8d5bd85a721a7d0154e8dd15b3a3040d3d5dbf82c149170f66e4a63a548b",
+  "group_count": 148,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "pragmatic-observed-feedback-2026-09-26",
+    "evidence_contract_sha256": "d8fe0bbb2b98db51fe373dc76758e16281869d0a8cb5e8823ba92a2541dd1cc4",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "pragmatic-observed-feedback-2026-09-26",
+    "worker_schema_sha256": "466e43c6cb7d59e44f6c3077fc270660a3917bcaee86363b84430141425b4c22",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-pragmatic-observed-feedback-v1",
+    "worker_prompt_sha256": "2fc41f2efe961775e447ff6f073ab716adac1c00b9597f28b659e8551a6497a4"
+  },
+  "sequence": 1,
+  "start_index": 0,
+  "end_index_exclusive": 3,
+  "appids": [
+    "1000010",
+    "1002560",
+    "1007040"
+  ],
+  "items_sha256": "ee8c884f6b94f6b8e681bb17d30dfa7eed4819e2cba2f83c96c42df02f79ee5b",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "d885cc8f47cbdf2011d17d8a0ba0338002e21d0e0216122e21086c31af132316",
+  "items": [
+    {
+      "key": "App_1000010",
+      "appid": "1000010",
+      "title": "Crown Trick",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1000010.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1002560",
+      "appid": "1002560",
+      "title": "Tiny Snow",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1002560.json",
+      "reason": "refresh_required"
+    },
+    {
+      "key": "App_1007040",
+      "appid": "1007040",
+      "title": "EARTH DEFENSE FORCE 5",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1007040.json",
+      "reason": "refresh_required"
+    }
+  ],
+  "group_sha256": "9299039791406b032d652da85c685c8868e4dcaba808168f67c68b6fe5b709b0",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "pragmatic-observed-feedback-2026-09-26",
+        "evidence_contract_sha256": "d8fe0bbb2b98db51fe373dc76758e16281869d0a8cb5e8823ba92a2541dd1cc4",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "pragmatic-observed-feedback-2026-09-26",
+        "worker_schema_sha256": "466e43c6cb7d59e44f6c3077fc270660a3917bcaee86363b84430141425b4c22",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-pragmatic-observed-feedback-v1",
+        "worker_prompt_sha256": "2fc41f2efe961775e447ff6f073ab716adac1c00b9597f28b659e8551a6497a4"
+      },
+      "appid": "1000010",
+      "title": "Crown Trick",
+      "generated_at_utc": "2026-09-26T08:34:37Z",
+      "expires_at_utc": "2026-10-16T08:34:37Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Crown Trick",
+        "release_year": 2020,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1000010"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Players describe the central loop as deliberate grid-based turn combat where positioning, weapon and relic combinations, familiars, and elemental interactions shape each run.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-001",
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Feedback disagrees on difficulty: some players find the tactical challenge rewarding while others report that run outcomes and bosses can feel overly dependent on random build quality.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "A recurring tradeoff is that the strong combat concept can lose appeal because content, progression depth, or run variety feels too limited for a long-lived roguelike.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-001",
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Players repeatedly praise the visual presentation and enemy or boss design even when criticizing repetition, balance, or unclear descriptions.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Difficulty and replay value are experienced very differently: some players report deep build experimentation and substantial replayability, while others find the game easy, short, repetitive, or too luck-driven.",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                3
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "steam_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1000010/Crown_Trick/",
+            "publication_date": null,
+            "language": "mixed",
+            "freshness": "unknown",
+            "evidence_role": "identity",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid_title_release",
+              "appid": "1000010",
+              "title": "Crown Trick",
+              "release_year": 2020
+            }
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "store_user_reviews",
+            "domain": "metacritic.com",
+            "url": "https://www.metacritic.com/game/crown-trick/",
+            "publication_date": null,
+            "language": "non_russian",
+            "freshness": "unknown",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Crown Trick",
+              "release_year": 2020
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/steamachievements/comments/1npkef1/",
+            "publication_date": "2025-09-24",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Crown Trick",
+              "release_year": 2020
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-001",
+            "publication_date": "2020-10-17",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2020-10-19",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-003",
+            "publication_date": "2025-09-24",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "pragmatic-observed-feedback-2026-09-26",
+        "evidence_contract_sha256": "d8fe0bbb2b98db51fe373dc76758e16281869d0a8cb5e8823ba92a2541dd1cc4",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "pragmatic-observed-feedback-2026-09-26",
+        "worker_schema_sha256": "466e43c6cb7d59e44f6c3077fc270660a3917bcaee86363b84430141425b4c22",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-pragmatic-observed-feedback-v1",
+        "worker_prompt_sha256": "2fc41f2efe961775e447ff6f073ab716adac1c00b9597f28b659e8551a6497a4"
+      },
+      "appid": "1002560",
+      "title": "Tiny Snow",
+      "generated_at_utc": "2026-09-26T08:34:37Z",
+      "expires_at_utc": "2026-10-16T08:34:37Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Tiny Snow",
+        "release_year": 2019,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1002560"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 3 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "other",
+          "statement": "Player feedback frames Tiny Snow as a short visual novel centered on love and philosophical questions, with the narrative concept attracting interest but its romantic execution dividing readers.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "The experience is primarily reading with limited interaction, so players looking for active systems or substantial branching may find the experience narrow.",
+          "sentiment": "neutral",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        },
+        {
+          "category": "localization",
+          "statement": "Russian-associated player feedback shows language accessibility mattered to this audience, including players discussing English availability and community translation rather than native Russian support.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "historical",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "Russian player feedback includes both support for the developer and direct criticism that the romance and philosophical themes are unconvincing, so the unusually positive aggregate reception does not imply uniform approval of the story itself.",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "single_source_only",
+        "single_source_reason": "Bound concrete player-experience observations were directly available on one exact-app review collection; other discovered pages were aggregate, editorial, or community retellings rather than additional direct player-review surfaces.",
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "steambase.io",
+            "url": "https://steambase.io/games/tiny-snow/reviews",
+            "publication_date": "2026-03-29",
+            "language": "non_russian",
+            "freshness": "recent",
+            "evidence_role": "identity",
+            "player_feedback": false,
+            "exact_product_binding": {
+              "basis": "source_appid_title_release",
+              "appid": "1002560",
+              "title": "Tiny Snow",
+              "release_year": 2019
+            }
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "store_user_reviews",
+            "domain": "stmstat.com",
+            "url": "https://stmstat.com/ru/app/1002560/reviews",
+            "publication_date": null,
+            "language": "mixed",
+            "freshness": "unknown",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid_title_release",
+              "appid": "1002560",
+              "title": "Tiny Snow",
+              "release_year": 2019
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "pragmatic-observed-feedback-2026-09-26",
+        "evidence_contract_sha256": "d8fe0bbb2b98db51fe373dc76758e16281869d0a8cb5e8823ba92a2541dd1cc4",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "pragmatic-observed-feedback-2026-09-26",
+        "worker_schema_sha256": "466e43c6cb7d59e44f6c3077fc270660a3917bcaee86363b84430141425b4c22",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-pragmatic-observed-feedback-v1",
+        "worker_prompt_sha256": "2fc41f2efe961775e447ff6f073ab716adac1c00b9597f28b659e8551a6497a4"
+      },
+      "appid": "1007040",
+      "title": "EARTH DEFENSE FORCE 5",
+      "generated_at_utc": "2026-09-26T08:34:37Z",
+      "expires_at_utc": "2026-10-16T08:34:37Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "EARTH DEFENSE FORCE 5",
+        "release_year": 2019,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1007040"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 5 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Players characterize the core experience as large-scale third-person shooting against huge enemy swarms, supported by four substantially different classes, large weapon pools, vehicles, and destructible battlefields.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "coop",
+          "statement": "Co-op is repeatedly described as a major strength and often as the most enjoyable way to play, while solo play can make repetition and difficulty more apparent.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "The very long campaign and repeated mission ideas can become tiring, especially in solo play or during later stretches.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Weapon and armor progression creates a strong collection loop but higher difficulties can demand substantial grinding and repeated missions.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Players report dated presentation and technical friction such as frame drops, clunky controls, or awkward interfaces, though many regard these flaws as secondary to the spectacle and cooperative fun.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        }
+      ],
+      "conflicts": [
+        {
+          "statement": "The same repetition and grind that some players find exhausting is tolerated or enjoyed by others because escalating difficulty, class variety, and cooperative play make repeated missions satisfying.",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "source_ids": [
+            "source-002",
+            "source-003",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002",
+            "feedback-003"
+          ]
+        }
+      ],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                4
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3,
+                4
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1007040/EARTH_DEFENSE_FORCE_5/",
+            "publication_date": null,
+            "language": "mixed",
+            "freshness": "unknown",
+            "evidence_role": "identity",
+            "player_feedback": false,
+            "exact_product_binding": {
+              "basis": "source_appid_title_release",
+              "appid": "1007040",
+              "title": "EARTH DEFENSE FORCE 5",
+              "release_year": 2019
+            }
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "community_discussion",
+            "domain": "stopgame.ru",
+            "url": "https://stopgame.ru/game/earth_defense_force_5",
+            "publication_date": null,
+            "language": "russian",
+            "freshness": "unknown",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "EARTH DEFENSE FORCE 5",
+              "release_year": 2019
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "store_user_reviews",
+            "domain": "metacritic.com",
+            "url": "https://www.metacritic.com/game/earth-defense-force-5/user-reviews/",
+            "publication_date": null,
+            "language": "non_russian",
+            "freshness": "unknown",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "EARTH DEFENSE FORCE 5",
+              "release_year": 2019
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/EDF/comments/fixr1f/",
+            "publication_date": "2020-03-15",
+            "language": "non_russian",
+            "freshness": "older",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "EARTH DEFENSE FORCE 5",
+              "release_year": 2019
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-003",
+            "publication_date": "2024-05-28",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-004",
+            "publication_date": "2020-03-15",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    }
+  ]
+}
