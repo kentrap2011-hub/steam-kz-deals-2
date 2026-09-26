@@ -160,13 +160,13 @@ class PrepublicationParityTests(unittest.TestCase):
             artifact["dossiers"][0]["provenance"]["sources"][1]["url"] = (
                 "https://steamcommunity.com/id/maihasegawa/recommended/710001"
             )
-        self.assert_same_failure(mutate_custom_profile, "url is author/profile-scoped and forbidden")
+        self.assert_same_failure(mutate_custom_profile, "dossier contains forbidden author/profile URL")
 
         def mutate_numeric_profile(artifact):
             artifact["dossiers"][0]["provenance"]["sources"][1]["url"] = (
                 "https://steamcommunity.com/profiles/76561198442230810/recommended/710001/"
             )
-        self.assert_same_failure(mutate_numeric_profile, "url is author/profile-scoped and forbidden")
+        self.assert_same_failure(mutate_numeric_profile, "dossier contains forbidden author/profile URL")
 
     def test_review_content_like_ref_rejected_while_neutral_locator_allowed(self):
         artifact = build_group(self.work)
