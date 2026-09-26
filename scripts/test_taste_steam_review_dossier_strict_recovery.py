@@ -112,7 +112,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "Steam `appreviews` JSON, cursors, fixed review counts",
             "Never persist raw review bodies",
             "`mention_count` remains backward-compatible local bookkeeping",
-            "query wording, a Russian locale parameter, an aggregate count",
+            "A query that mentions the target, a Russian locale parameter, an aggregate count",
             "Boundedness is semantic/adaptive rather than a fixed per-game search/page count",
             "there is no finite numeric per-game limit to fabricate",
             "Mandatory pre-publication validation",
