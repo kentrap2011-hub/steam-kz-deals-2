@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## IN PROGRESS — НОВЫЙ ЧАТ 2 — Pragmatic Dossier evidence model fix
+## ACCEPTED — ЧАТ 2 — Pragmatic Dossier evidence model fix
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_PRAGMATIC_EVIDENCE_MODEL_FIX_01.md`
@@ -8,33 +8,33 @@ Task:
 Report:
 `reviews/worker_reports/taste-dossier-pragmatic-evidence-model-fix-01.md`
 
-Status:
-`authorized_ready_for_worker`
+Final status:
+`complete_ready_for_director_acceptance`
 
-User-approved decision:
-- useful exact-product player-feedback visible in search/discovery results or exact-product collection/card surfaces may be used even without a permanent per-item locator;
-- exact-product/AppID/release/DLC/edition binding remains strict;
-- per-review stable locator, author identity and exact review counting are auxiliary auditability mechanisms, not prerequisites for evidence usability or Dossier completion;
-- provenance is retained at safe source/acquisition-mode level for traceability/debugging, not as a court-like proof chain;
-- raw review text, quotes, usernames/profile IDs/author identity remain forbidden in persistent artifacts;
-- Russian `found_and_used` should depend on usable observed Russian player feedback, not item-locator availability;
-- TASTE-015 coverage sufficiency and TASTE-014 semantic/adaptive boundedness remain active;
-- Tiny Snow / appid 1002560 is the primary regression: visible exact-product Russian review text in search results must not fail solely because the page cannot be opened or no per-item locator exists.
+Director acceptance:
+- authoritative implementation is PR #98 / `worker/taste-dossier-pragmatic-evidence-01`; superseded PR #97 was closed unmerged;
+- PR #98 merged to `main` as `d3b0e40256b31b5444fe7c5ddd8ced49c078b81c`;
+- final PR head `43e76b553c4e6ca46a6f9f4e871e7ff758b5cadf` passed full buffered Dossier validation run #184 / `36212911900`;
+- PRAG-01..PRAG-15 all passed, including Tiny Snow / appid 1002560 search-result Russian evidence without per-item locator and simulated 436 follow-up open failure;
+- exact-product/AppID/release/DLC/remake identity remains strict;
+- raw review/search-result text, quotes and author/profile identity remain forbidden in persistence;
+- stable item locators remain preferred auditability but are no longer evidence-validity gates;
+- exact-product `inspected_collection_item` and `search_result_observation` are valid acquisition modes when concrete player feedback was actually observed;
+- Russian `found_and_used` now depends on usable observed Russian/mixed player feedback, not permanent item identity;
+- exact per-review identity/counting is no longer a completion or recurrence threshold; recurrence remains qualitative/evidence-grounded;
+- TASTE-012 temporal completeness, TASTE-014 semantic/adaptive boundedness and TASTE-015 downstream-ready neutral coverage remain strict;
+- post-merge `Build pre-AI deterministic payload` run #203 / `36212950419`, execution ownership run #207 / `36212950383`, and backlog disposition run #1228 / `36212950417` all succeeded;
+- normal GitHub-owned projection activation produced binding revision `pragmatic-observed-feedback-2026-09-26` for both current work and worker index;
+- no Scheduled Task mutation, manual Tiny Snow recovery, Dossier recovery, Deep recovery or manual backlog replay was performed by the implementation worker.
 
-Implementation authority:
-- may supersede only conflicting item-level locator/transient-author/mention-count clauses of TASTE-008/TASTE-010;
-- may update Dossier prompt/contracts/schema/validator/tests/projection binding accordingly;
-- no Scheduled Task action, manual Dossier recovery, Deep recovery or production backlog replay is authorized.
+Decision:
+- implementation accepted;
+- new pragmatic evidence model is canonical;
+- subsequent normal Dossier production should use the activated binding;
+- any later production group result is evaluated independently from this implementation acceptance.
 
 Worker state:
-- two physical ЧАТ 2 attempts hung after creating implementation branches;
-- PR #97 / `worker/taste-dossier-pragmatic-evidence-fix-01` is superseded and closed unmerged;
-- PR #98 / `worker/taste-dossier-pragmatic-evidence-01` at head `7e412b760fd1e5dd2f8b3c0eb0806630a551b27e` is the sole authoritative continuation branch;
-- PR #98 already contains the substantive implementation and PRAG regression suite;
-- its latest Dossier validation reached `Strict recovery regression` and failed on one stale prompt-alignment assertion expecting the old phrase `query wording, a Russian locale parameter, an aggregate count`; earlier steps in that run passed;
-- continue from PR #98, fix remaining validation failures one by one, run the full required suite, merge only when green, activate normal GitHub-owned projection binding, then write/reread the durable report;
-- do NOT restart implementation from `main` and do NOT revive PR #97;
-- use a NEW physical conversation (recommended ЧАТ 1 for the continuation); both hung physical ЧАТ 2 conversations are retired.
+- physical ЧАТ 2 used for the final continuation is retired and can be deleted.
 
 ## ACCEPTED — ЧАТ 1 — Dossier purpose + coverage sufficiency fix
 
