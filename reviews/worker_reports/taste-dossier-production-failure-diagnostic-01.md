@@ -26,6 +26,7 @@ Production case:
 - candidate create commit: `2a3a2e2dbd99faf784f22878f0b7ec2252d1f5fa`
 - candidate:
   `data/ai_inbox/taste_steam_review_dossiers/b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5--g000001--9299039791406b032d652da85c685c8868e4dcaba808168f67c68b6fe5b709b0.json`
+- exact candidate SHA-256: `a83ec942963057ddb5ad367ca82427710705a317d4eccaf99e39df38884f0378`
 - games, in group order:
   - Crown Trick — `1000010`
   - Tiny Snow — `1002560`
@@ -266,14 +267,14 @@ After the current git-add sequence:
   - ` M data/audit/taste_steam_review_dossier_group_failures.jsonl`
   - `?? data/quarantine/`
 
-Immediately after the local commit:
+Immediately after the local commit, `git status --porcelain --untracked-files=all` was:
 
 - ` M data/audit/taste_steam_review_dossier_group_failures.jsonl`
-- `?? data/quarantine/`
+- `?? data/quarantine/taste_steam_review_dossier_inbox/failed_group/b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5/g000001/b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5--g000001--9299039791406b032d652da85c685c8868e4dcaba808168f67c68b6fe5b709b0.json.invalid-a83ec9429630`
 
 Immediately before rebase:
 
-- same two dirty paths.
+- the same two dirty paths.
 
 A local rebase with no concurrent remote movement then reproduced the production error exactly:
 
@@ -302,11 +303,11 @@ This tracked modification is sufficient by itself to make `git rebase` refuse to
 
 ### New untracked quarantine artifact
 
-The production-shaped path is under:
+The exact deterministic path is:
 
-`data/quarantine/taste_steam_review_dossier_inbox/failed_group/<snapshot>/g000001/`
+`data/quarantine/taste_steam_review_dossier_inbox/failed_group/b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5/g000001/b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5--g000001--9299039791406b032d652da85c685c8868e4dcaba808168f67c68b6fe5b709b0.json.invalid-a83ec9429630`
 
-with the failed candidate moved to an `.invalid-<artifact-sha-prefix>` target.
+The suffix `a83ec9429630` is the first 12 hexadecimal characters of the exact candidate SHA-256 `a83ec942963057ddb5ad367ca82427710705a317d4eccaf99e39df38884f0378`, as required by `_quarantine_target`.
 
 Creator:
 
@@ -316,7 +317,7 @@ For each failed group it creates the quarantine parent and performs `shutil.move
 
 The source candidate deletion is separately staged by the earlier explicit `git add ... data/ai_inbox/taste_steam_review_dossiers`, but the quarantine destination is not staged because the later combined `data/control data/quarantine data/audit` add fails before applying the intended staging.
 
-The exact discarded production quarantine filename suffix cannot be recovered from durable `main` because the runner-local result was never pushed, but its deterministic path class, creator, source artifact, and reason for remaining untracked are proven.
+Although the runner-local quarantine file was never pushed, its exact deterministic filename is recoverable from the exact candidate bytes plus the repository's `_quarantine_target` rule and is shown above.
 
 ## 8. Why staging/tests missed it
 
