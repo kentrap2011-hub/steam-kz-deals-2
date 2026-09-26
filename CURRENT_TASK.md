@@ -927,12 +927,16 @@
 - post-merge activation: pre-AI run #200 / `36058130032` success; projection commit `efc335509349df42bdac16f1e975f5cf868ef978`.
 
 
-## Worker in progress — 2026-09-26
+## Worker completed — 2026-09-26
 
 ### Taste Dossier pragmatic evidence model fix 01
-Статус: `in_progress`.
+Статус: `complete_ready_for_director_acceptance`.
 - worker task: `WORKER_TASK_TASTE_DOSSIER_PRAGMATIC_EVIDENCE_MODEL_FIX_01.md`;
-- scope: PRAG-01..PRAG-15 — pragmatic exact-product player-feedback evidence from inspected search-result/collection representations without requiring per-item locator/author identity;
-- strict exact-product identity, TASTE-014 semantic/adaptive boundedness and TASTE-015 coverage sufficiency remain unchanged;
-- no Scheduled Task action, manual Tiny Snow recovery or production backlog replay is authorized;
-- planned report: `reviews/worker_reports/taste-dossier-pragmatic-evidence-model-fix-01.md`.
+- PR #98 merged as `d3b0e40256b31b5444fe7c5ddd8ced49c078b81c`;
+- final PR validation: Dossier run #184 / `36212911900` success; backlog run #1227 / `36212911901` success;
+- PRAG-01..PRAG-15 passed; TASTE-012, TASTE-014 and TASTE-015 regression gates remained green;
+- normal GitHub-owned activation: pre-AI run #203 / `36212950419` success; projection commit `c54267ecc55b2e7af32cb05031b2ba872348572d`;
+- active projection binding: evidence/schema revision `pragmatic-observed-feedback-2026-09-26`, prompt revision `web-evidence-v2-pragmatic-observed-feedback-v1`;
+- active snapshot `b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5`: 444 required items / 148 groups / next pending sequence 1;
+- no Scheduled Task action, manual Tiny Snow recovery, Dossier/Deep recovery or production backlog replay was performed;
+- report: `reviews/worker_reports/taste-dossier-pragmatic-evidence-model-fix-01.md`.
