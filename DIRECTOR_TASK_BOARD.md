@@ -27,8 +27,14 @@ Implementation authority:
 - no Scheduled Task action, manual Dossier recovery, Deep recovery or production backlog replay is authorized.
 
 Worker state:
-- use a NEW physical conversation for ЧАТ 2;
-- previous physical ЧАТ 2 workers are retired.
+- two physical ЧАТ 2 attempts hung after creating implementation branches;
+- PR #97 / `worker/taste-dossier-pragmatic-evidence-fix-01` is superseded and closed unmerged;
+- PR #98 / `worker/taste-dossier-pragmatic-evidence-01` at head `7e412b760fd1e5dd2f8b3c0eb0806630a551b27e` is the sole authoritative continuation branch;
+- PR #98 already contains the substantive implementation and PRAG regression suite;
+- its latest Dossier validation reached `Strict recovery regression` and failed on one stale prompt-alignment assertion expecting the old phrase `query wording, a Russian locale parameter, an aggregate count`; earlier steps in that run passed;
+- continue from PR #98, fix remaining validation failures one by one, run the full required suite, merge only when green, activate normal GitHub-owned projection binding, then write/reread the durable report;
+- do NOT restart implementation from `main` and do NOT revive PR #97;
+- use a NEW physical conversation (recommended ЧАТ 1 for the continuation); both hung physical ЧАТ 2 conversations are retired.
 
 ## ACCEPTED — ЧАТ 1 — Dossier purpose + coverage sufficiency fix
 
