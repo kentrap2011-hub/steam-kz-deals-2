@@ -185,6 +185,50 @@ jobs:
           PY
           )
 
+          # Progressive Phase A is a full visual build, not a bounded commercial
+          # refresh. If the current deterministic candidate projection is not yet
+          # represented by the canonical visual provenance/state, force the full path.
+          progressive_needed=$(python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+
+          def read(path):
+              return json.loads(Path(path).read_text(encoding='utf-8'))
+
+          try:
+              payload = read('data/production/pre_ai/chatgpt_payload.json')
+              visual = read('data/production/visual/current.json')
+              progressive_path = Path('data/production/pre_ai/progressive_candidate_context.jsonl')
+              progressive_blob = subprocess.check_output(
+                  ['git','rev-parse','HEAD:data/production/pre_ai/progressive_candidate_context.jsonl'],
+                  text=True,
+              ).strip()
+              progressive_lines = sum(1 for line in progressive_path.read_text(encoding='utf-8').splitlines() if line.strip())
+          except Exception:
+              print('false')
+              raise SystemExit(0)
+
+          expected = int(payload.get('progressive_candidate_count') or 0)
+          contract = visual.get('production_contract') or {}
+          progressive = visual.get('progressive_personalization') or {}
+          processing = visual.get('processing_status') or {}
+          represented = bool(
+              expected == progressive_lines
+              and contract.get('source_progressive_candidate_context_blob_sha') == progressive_blob
+              and progressive.get('contract') == 'PROGRESSIVE-PERSONALIZED-DEALS-V1'
+              and progressive.get('phase') == 'phase_a'
+              and processing.get('contract') == 'PROGRESSIVE-PERSONALIZED-DEALS-V1'
+              and int(processing.get('total_current_candidates') or -1) <= expected
+          )
+          print('false' if represented else 'true')
+          PY
+          )
+          if [ "$progressive_needed" = "true" ]; then
+            commercial_needed=false
+            echo "VISUAL_SCOPE full_progressive=true reason=progressive_projection_not_yet_published"
+          fi
+
           if [ "$EVENT_NAME" = "push" ] && [ -n "${BEFORE_SHA:-}" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
             git diff --name-only "$BEFORE_SHA" "$HEAD_SHA" > /tmp/visual-changed.txt
             cat /tmp/visual-changed.txt
