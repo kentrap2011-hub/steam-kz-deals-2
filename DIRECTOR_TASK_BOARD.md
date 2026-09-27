@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_01.md` (`IMPLEMENT / VALIDATE`).
+- Active worker assignments: `ЧАТ 1` — `WORKER_TASK_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_01.md` (`IMPLEMENT / VALIDATE`); `ЧАТ 2` — `WORKER_TASK_ANALYSIS_LAST_WRITE_TIMESTAMPS_UI_01.md` (`IMPLEMENT / VALIDATE`).
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_DEEP_PARALLEL_FROZEN_START_AUTHORITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -11,6 +11,32 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 2 — Analysis last-write timestamps UI
+
+Task:
+`WORKER_TASK_ANALYSIS_LAST_WRITE_TIMESTAMPS_UI_01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Goal:
+- add `Последняя запись` for Fast, Dossier and Deep on the Statistics page;
+- timestamps come from latest durable canonical GitHub progress records, not page/build/run time;
+- browser only formats prepared timestamps;
+- feature is observability only and changes no semantic execution.
+
+Parallel constraint:
+- ЧАТ 1 is concurrently repairing the Russian-description publication blocker;
+- ЧАТ 2 must refresh against current `main` before merge and preserve ЧАТ 1 changes;
+- no Dossier worker diagnosis or Scheduled Task changes.
+
+Report:
+`reviews/worker_reports/analysis-last-write-timestamps-ui-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 2`.
 
 
 ## ACTIVE — НОВЫЙ ЧАТ 1 — Russian description publication blocker fix
