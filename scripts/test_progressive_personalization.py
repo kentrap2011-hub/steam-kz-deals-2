@@ -1,4 +1,7 @@
 import copy
+import json
+import tempfile
+from pathlib import Path
 
 import progressive_personalization as progressive
 import refresh_visual_commercial_fields
@@ -196,6 +199,40 @@ def main():
     purchase = priority_ranking.build_purchase_breakdown(game('purchase', 'not_analyzed', 3))
     assert 0 <= purchase['purchase_score'] <= 40
     assert 'personal_score' not in purchase and 'total_score' not in purchase
+
+    # J. Dossier statistics are projected from the canonical work manifest on every build.
+    # Advancing one 3-game group changes accepted/pending counts without any semantic rerun.
+    original_dossier_work = progressive.progressive_pass2.DOSSIER_WORK
+    with tempfile.TemporaryDirectory() as tmp:
+        dossier_path = Path(tmp) / 'dossier-work.json'
+        progressive.progressive_pass2.DOSSIER_WORK = dossier_path
+        try:
+            base = {
+                'eligible_scope_count': 4,
+                'prepared_required_count': 4,
+                'group_progress': {
+                    'accepted_dossier_count': 0,
+                    'failed_dossier_count': 0,
+                    'pending_dossier_count': 4,
+                    'normal_first_pass_complete': False,
+                    'all_groups_accepted': False,
+                },
+            }
+            dossier_path.write_text(json.dumps(base), encoding='utf-8')
+            before = progressive._dossier_processing_metrics()
+            assert before['dossier_accepted_count'] == 0
+            assert before['dossier_pending_count'] == 4
+
+            advanced = copy.deepcopy(base)
+            advanced['group_progress']['accepted_dossier_count'] = 3
+            advanced['group_progress']['pending_dossier_count'] = 1
+            dossier_path.write_text(json.dumps(advanced), encoding='utf-8')
+            after = progressive._dossier_processing_metrics()
+            assert after['dossier_accepted_count'] == 3
+            assert after['dossier_pending_count'] == 1
+            assert after['dossier_failed_or_recovery_count'] == 0
+        finally:
+            progressive.progressive_pass2.DOSSIER_WORK = original_dossier_work
 
     # K. Arithmetic contradictions fail validation.
     broken = dict(status)

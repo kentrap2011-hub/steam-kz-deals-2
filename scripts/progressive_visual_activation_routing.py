@@ -7,6 +7,7 @@ PAYLOAD = Path('data/production/pre_ai/chatgpt_payload.json')
 STORE = Path('data/production/pre_ai/store_snapshot.json')
 FAMILY = Path('data/production/pre_ai/family_graph.json')
 PROGRESSIVE_CONTEXT = Path('data/production/pre_ai/progressive_candidate_context.jsonl')
+DOSSIER_WORK = Path('data/production/pre_ai/taste_steam_review_dossier_work.json')
 VISUAL = Path('data/production/visual/current.json')
 PROGRESSIVE_CONTRACT = Path('config/progressive_personalization_contract.json')
 PASS1_STATE = Path('data/cache/progressive_pass1_state.json')
@@ -161,6 +162,7 @@ def progressive_visual_compatible(
     visual,
     progressive_context_count,
     progressive_context_blob,
+    dossier_work_blob,
     progressive_contract_blob,
     pass1_state_blob,
     pass2_state_blob,
@@ -221,6 +223,8 @@ def progressive_visual_compatible(
     contract = visual.get('production_contract') or {}
     if contract.get('source_progressive_candidate_context_blob_sha') != progressive_context_blob:
         return False, 'progressive_context_provenance_mismatch'
+    if contract.get('source_taste_steam_review_dossier_work_blob_sha') != dossier_work_blob:
+        return False, 'dossier_work_provenance_mismatch'
     if contract.get('progressive_personalization_contract_blob_sha') != progressive_contract_blob:
         return False, 'progressive_contract_provenance_mismatch'
     if contract.get('progressive_pass1_state_blob_sha') != pass1_state_blob:
@@ -239,6 +243,7 @@ def classify_current_files():
         visual = _read(VISUAL)
         context_count = _line_count(PROGRESSIVE_CONTEXT)
         context_blob = _blob(PROGRESSIVE_CONTEXT)
+        dossier_work_blob = _blob(DOSSIER_WORK)
         contract_blob = _blob(PROGRESSIVE_CONTRACT)
         pass1_state_blob = _blob(PASS1_STATE)
         pass2_state_blob = _blob(PASS2_STATE)
@@ -258,6 +263,7 @@ def classify_current_files():
         visual=visual,
         progressive_context_count=context_count,
         progressive_context_blob=context_blob,
+        dossier_work_blob=dossier_work_blob,
         progressive_contract_blob=contract_blob,
         pass1_state_blob=pass1_state_blob,
         pass2_state_blob=pass2_state_blob,

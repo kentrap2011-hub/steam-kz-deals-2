@@ -719,6 +719,7 @@ def main():
         'source_chatgpt_payload_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_payload.json'),
         'source_purchase_context_blob_sha': base_builder.git_sha('data/production/pre_ai/chatgpt_purchase_context.jsonl'),
         'source_progressive_candidate_context_blob_sha': base_builder.git_sha('data/production/pre_ai/progressive_candidate_context.jsonl'),
+        'source_taste_steam_review_dossier_work_blob_sha': base_builder.git_sha('data/production/pre_ai/taste_steam_review_dossier_work.json'),
         'progressive_personalization_contract_blob_sha': base_builder.git_sha('config/progressive_personalization_contract.json'),
         'progressive_pass1_contract_blob_sha': base_builder.git_sha('config/progressive_pass1_contract.json'),
         'progressive_pass1_state_blob_sha': base_builder.git_sha('data/cache/progressive_pass1_state.json'),
