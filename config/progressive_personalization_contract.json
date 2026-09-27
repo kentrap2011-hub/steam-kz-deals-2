@@ -99,7 +99,10 @@
     "fast_stage_counts",
     "dossier_stage_counts",
     "deep_stage_counts",
-    "effective_result_counts"
+    "effective_result_counts",
+    "fast_last_write_at_utc",
+    "dossier_last_write_at_utc",
+    "deep_last_write_at_utc"
   ],
   "invariants": [
     "total_current_candidates = analyzed_fit_count + analyzed_not_fit_count + analysis_incomplete_count + not_analyzed_count",
@@ -336,7 +339,24 @@
       "dossier": "Подготовка досье",
       "deep": "Глубокий разбор"
     },
-    "card_indicator_target": "Every game card can render three small pixel-style indicators, one per stage, directly from producer-owned fields. Final visual design is deferred."
+    "card_indicator_target": "Every game card can render three small pixel-style indicators, one per stage, directly from producer-owned fields. Final visual design is deferred.",
+    "last_write_timestamps": {
+      "timezone": "UTC",
+      "no_record_value": null,
+      "browser_rule": "The browser may only format the producer-provided timestamp in the viewer's local timezone; it must not infer progress time from counts, page load, build time, deployment time, Scheduled Task time, or candidate/inbox timestamps.",
+      "fast": {
+        "field": "fast_last_write_at_utc",
+        "definition": "Latest accepted_at_utc among current exact-bound durable PASS 1/Fast state records in the current Fast statistics scope."
+      },
+      "dossier": {
+        "field": "dossier_last_write_at_utc",
+        "definition": "Latest GitHub commit time at which canonical group_progress for the current Dossier snapshot durably entered accepted or failed_or_invalid_pending_recovery; buffered/unaccepted candidate creation time is excluded."
+      },
+      "deep": {
+        "field": "deep_last_write_at_utc",
+        "definition": "Latest accepted_at_utc among current exact-bound durable PASS 2/Deep state records in the current Deep statistics scope."
+      }
+    }
   },
   "statistics_page_contract": {
     "user_entrypoint_label_ru": "Статистика",
@@ -352,7 +372,8 @@
         "fast_incomplete_count",
         "fast_error_count",
         "fast_skipped_due_to_authoritative_deep_count",
-        "fast_remaining_count"
+        "fast_remaining_count",
+        "fast_last_write_at_utc"
       ],
       "invariants": [
         "fast_attempted_count = fast_completed_fit_count + fast_completed_not_fit_count + fast_incomplete_count + fast_error_count",
@@ -367,7 +388,8 @@
         "dossier_pending_count",
         "dossier_failed_or_recovery_count",
         "dossier_normal_first_pass_complete",
-        "dossier_all_accepted_or_recovered_complete"
+        "dossier_all_accepted_or_recovered_complete",
+        "dossier_last_write_at_utc"
       ],
       "invariants": [
         "dossier_total_current_scope = dossier_accepted_count + dossier_pending_count + dossier_failed_or_recovery_count"
@@ -387,7 +409,8 @@
         "deep_normal_first_pass_remaining_count",
         "deep_remaining_until_all_authoritative_count",
         "deep_normal_first_pass_complete",
-        "deep_all_current_authoritative_complete"
+        "deep_all_current_authoritative_complete",
+        "deep_last_write_at_utc"
       ],
       "invariants": [
         "deep_authoritative_completed_count = deep_completed_fit_count + deep_completed_not_fit_count",

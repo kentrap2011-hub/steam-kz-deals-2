@@ -78,6 +78,7 @@ def compatible_visual(source='S'):
             'fast_error_count': 0,
             'fast_skipped_due_to_authoritative_deep_count': 0,
             'fast_remaining_count': 1,
+            'fast_last_write_at_utc': '2026-09-27T11:03:00+00:00',
             'dossier_observability': 'available',
             'dossier_total_current_scope': 4,
             'dossier_accepted_count': 1,
@@ -85,6 +86,7 @@ def compatible_visual(source='S'):
             'dossier_failed_or_recovery_count': 1,
             'dossier_normal_first_pass_complete': False,
             'dossier_all_accepted_or_recovered_complete': False,
+            'dossier_last_write_at_utc': '2026-09-27T10:05:00+00:00',
             'deep_total_current_coverage_target': 4,
             'deep_first_pass_attempted_count': 1,
             'deep_authoritative_completed_count': 1,
@@ -97,6 +99,7 @@ def compatible_visual(source='S'):
             'deep_remaining_until_all_authoritative_count': 3,
             'deep_normal_first_pass_complete': False,
             'deep_all_current_authoritative_complete': False,
+            'deep_last_write_at_utc': '2026-09-27T12:04:00+00:00',
         },
         'production_contract': {
             'source_progressive_candidate_context_blob_sha': 'CTX',
@@ -159,6 +162,13 @@ def main():
     assert reason == 'compatible_progressive_visual'
 
     # ROUTE-03: missing processing/state block cannot be commercial-only compatible.
+    missing_timestamp = compatible_visual()
+    missing_timestamp['processing_status'].pop('dossier_last_write_at_utc')
+    integrity, compatible, reason = classify(missing_timestamp)
+    assert integrity is True
+    assert compatible is False
+    assert reason == 'progressive_processing_status_invalid'
+
     missing = compatible_visual()
     missing.pop('processing_status')
     integrity, compatible, reason = classify(missing)

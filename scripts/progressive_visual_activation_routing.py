@@ -138,6 +138,17 @@ def processing_status_valid(status, visible_count):
     ):
         return False
 
+    for key in (
+        'fast_last_write_at_utc',
+        'dossier_last_write_at_utc',
+        'deep_last_write_at_utc',
+    ):
+        if key not in status:
+            return False
+        value = status.get(key)
+        if value is not None and (not isinstance(value, str) or not value):
+            return False
+
     dossier_total = status.get('dossier_total_current_scope')
     if dossier_total is not None:
         try:

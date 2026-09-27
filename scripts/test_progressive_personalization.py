@@ -322,7 +322,167 @@ def main():
         finally:
             progressive.progressive_pass2.DOSSIER_WORK = original_dossier_work
 
-    # K. Arithmetic contradictions fail validation.
+    # K. Last-write timestamps are derived only from durable current-stage records.
+    dossier_current = {'snapshot_id': 'snapshot-current'}
+    dossier_versions = [
+        (
+            '2026-09-27T09:00:00+00:00',
+            {
+                'snapshot_id': 'snapshot-old',
+                'group_progress': {'groups': [
+                    {'sequence': 1, 'state': 'accepted'},
+                ]},
+            },
+        ),
+        (
+            '2026-09-27T10:00:00+00:00',
+            {
+                'snapshot_id': 'snapshot-current',
+                'group_progress': {'groups': [
+                    {'sequence': 1, 'state': 'pending'},
+                    {'sequence': 2, 'state': 'pending'},
+                ]},
+            },
+        ),
+        (
+            '2026-09-27T10:05:00+00:00',
+            {
+                'snapshot_id': 'snapshot-current',
+                'group_progress': {'groups': [
+                    {'sequence': 1, 'state': 'accepted'},
+                    {'sequence': 2, 'state': 'pending'},
+                ]},
+            },
+        ),
+        # A later canonical rewrite with no group transition must not become a heartbeat.
+        (
+            '2026-09-27T10:08:00+00:00',
+            {
+                'snapshot_id': 'snapshot-current',
+                'group_progress': {'groups': [
+                    {'sequence': 1, 'state': 'accepted'},
+                    {'sequence': 2, 'state': 'pending'},
+                ]},
+            },
+        ),
+        (
+            '2026-09-27T10:11:00+00:00',
+            {
+                'snapshot_id': 'snapshot-current',
+                'group_progress': {'groups': [
+                    {'sequence': 1, 'state': 'accepted'},
+                    {'sequence': 2, 'state': 'failed_or_invalid_pending_recovery'},
+                ]},
+            },
+        ),
+    ]
+    assert progressive._latest_dossier_transition_from_versions(
+        dossier_current, dossier_versions
+    ) == '2026-09-27T10:11:00+00:00'
+    assert progressive._latest_dossier_transition_from_versions(
+        dossier_current,
+        [dossier_versions[1]],
+    ) is None
+
+    original_dossier_metrics = progressive._dossier_processing_metrics
+    progressive._dossier_processing_metrics = lambda: {
+        'dossier_observability': 'available',
+        'dossier_total_current_scope': 2,
+        'dossier_accepted_count': 1,
+        'dossier_pending_count': 1,
+        'dossier_failed_or_recovery_count': 0,
+        'dossier_normal_first_pass_complete': False,
+        'dossier_all_accepted_or_recovered_complete': False,
+        'dossier_last_write_at_utc': '2026-09-27T10:05:00+00:00',
+    }
+    try:
+        timestamp_states = {
+            'ts1': {
+                'analysis_state': 'analysis_incomplete',
+                'evaluated_at_utc': '2099-01-01T00:00:00+00:00',
+                'fast_scope_eligible': True,
+                'fast_stage_state': 'incomplete',
+                'fast_stage_outcome': None,
+                '_fast_last_write_at_utc': '2026-09-27T11:00:00+00:00',
+                'deep_scope_eligible': True,
+                'deep_first_pass_attempted': True,
+                'deep_authoritative_completed': False,
+                'deep_stage_state': 'incomplete_or_recovery',
+                'deep_stage_outcome': None,
+                'deep_recovery_state': 'recovery_owned',
+                '_deep_last_write_at_utc': '2026-09-27T12:00:00+00:00',
+                'effective_analysis_source': 'none',
+            },
+            'ts2': {
+                'analysis_state': 'analysis_incomplete',
+                'evaluated_at_utc': '2099-01-02T00:00:00+00:00',
+                'fast_scope_eligible': True,
+                'fast_stage_state': 'incomplete',
+                'fast_stage_outcome': None,
+                '_fast_last_write_at_utc': '2026-09-27T11:03:00+00:00',
+                'deep_scope_eligible': True,
+                'deep_first_pass_attempted': True,
+                'deep_authoritative_completed': False,
+                'deep_stage_state': 'incomplete_or_recovery',
+                'deep_stage_outcome': None,
+                'deep_recovery_state': 'recovery_owned',
+                '_deep_last_write_at_utc': '2026-09-27T12:04:00+00:00',
+                'effective_analysis_source': 'none',
+            },
+        }
+        timestamp_visible = [
+            game('ts1', 'analysis_incomplete', 2),
+            game('ts2', 'analysis_incomplete', 2),
+        ]
+        timestamp_status = progressive.build_processing_status(
+            timestamp_states, timestamp_visible
+        )
+        assert timestamp_status['fast_last_write_at_utc'] == '2026-09-27T11:03:00+00:00'
+        assert timestamp_status['dossier_last_write_at_utc'] == '2026-09-27T10:05:00+00:00'
+        assert timestamp_status['deep_last_write_at_utc'] == '2026-09-27T12:04:00+00:00'
+        # A generic/effective analysis timestamp (here deliberately in 2099) is not
+        # allowed to substitute for any independent stage's last durable write.
+        assert timestamp_status['fast_last_write_at_utc'] != timestamp_status['last_accepted_analysis_at_utc']
+        assert timestamp_status['deep_last_write_at_utc'] != timestamp_status['last_accepted_analysis_at_utc']
+
+        no_timestamp_states = copy.deepcopy(timestamp_states)
+        for state in no_timestamp_states.values():
+            state['_fast_last_write_at_utc'] = None
+            state['_deep_last_write_at_utc'] = None
+        no_timestamp_status = progressive.build_processing_status(
+            no_timestamp_states, timestamp_visible
+        )
+        assert no_timestamp_status['fast_last_write_at_utc'] is None
+        assert no_timestamp_status['deep_last_write_at_utc'] is None
+
+        def without_stage_times(value):
+            clean = copy.deepcopy(value)
+            for key in (
+                'fast_last_write_at_utc',
+                'dossier_last_write_at_utc',
+                'deep_last_write_at_utc',
+            ):
+                clean.pop(key, None)
+            for key in ('fast_stage_counts', 'dossier_stage_counts', 'deep_stage_counts'):
+                clean.get(key, {}).pop('last_write_at_utc', None)
+                clean.get(key, {}).pop('dossier_last_write_at_utc', None)
+            return clean
+
+        assert without_stage_times(timestamp_status) == without_stage_times(no_timestamp_status)
+
+        visual_with_timestamps = {'items': copy.deepcopy(timestamp_visible)}
+        progressive.stamp_processing_status(
+            visual_with_timestamps, state_index=timestamp_states
+        )
+        published = visual_with_timestamps['processing_status']
+        assert published['fast_last_write_at_utc'] == '2026-09-27T11:03:00+00:00'
+        assert published['dossier_last_write_at_utc'] == '2026-09-27T10:05:00+00:00'
+        assert published['deep_last_write_at_utc'] == '2026-09-27T12:04:00+00:00'
+        progressive.validate_processing_status(published)
+    finally:
+        progressive._dossier_processing_metrics = original_dossier_metrics
+
+    # L. Arithmetic contradictions fail validation.
     broken = dict(status)
     broken['total_current_candidates'] += 1
     try:

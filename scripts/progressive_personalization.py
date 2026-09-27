@@ -1,4 +1,5 @@
 import json
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -286,6 +287,14 @@ def build_state_index(context_rows=None, projection_doc=None, taste_entries=None
 
         state['pass1_attempted'] = pass1_entry is not None
         state['pass2_attempted'] = deep_entry is not None
+        state['_fast_last_write_at_utc'] = (
+            _normalize_utc_timestamp(pass1_entry.get('accepted_at_utc'))
+            if isinstance(pass1_entry, dict) else None
+        )
+        state['_deep_last_write_at_utc'] = (
+            _normalize_utc_timestamp(deep_entry.get('accepted_at_utc'))
+            if isinstance(deep_entry, dict) else None
+        )
         state['fast_stage_state'] = fast_stage_state
         state['fast_stage_outcome'] = fast_stage_outcome
         state['dossier_stage_state'] = dossier_stage
@@ -417,6 +426,115 @@ def apply_progressive_order(items, now=None):
     return ordered, personalized_order
 
 
+
+_DOSSIER_CLASSIFIED_STATES = {'accepted', 'failed_or_invalid_pending_recovery'}
+
+
+def _normalize_utc_timestamp(value):
+    if not isinstance(value, str) or not value.strip():
+        return None
+    text = value.strip()
+    if text.endswith('Z'):
+        text = text[:-1] + '+00:00'
+    try:
+        parsed = datetime.fromisoformat(text)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return None
+    return parsed.astimezone(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def _dossier_group_states(doc):
+    progress = (doc or {}).get('group_progress') or {}
+    states = {}
+    for entry in progress.get('groups') or []:
+        if not isinstance(entry, dict):
+            continue
+        try:
+            sequence = int(entry.get('sequence'))
+        except (TypeError, ValueError):
+            continue
+        state = entry.get('state')
+        if isinstance(state, str):
+            states[sequence] = state
+    return states
+
+
+def _latest_dossier_transition_from_versions(current_doc, versions):
+    """Return the latest durable current-snapshot accepted/failed group transition."""
+    snapshot_id = (current_doc or {}).get('snapshot_id')
+    if not snapshot_id:
+        return None
+
+    previous = {}
+    latest = None
+    for committed_at_utc, version in versions:
+        if not isinstance(version, dict) or version.get('snapshot_id') != snapshot_id:
+            continue
+        current = _dossier_group_states(version)
+        transitioned = any(
+            state in _DOSSIER_CLASSIFIED_STATES and previous.get(sequence) != state
+            for sequence, state in current.items()
+        )
+        if transitioned:
+            normalized = _normalize_utc_timestamp(committed_at_utc)
+            if normalized is not None:
+                latest = normalized
+        previous = current
+    return latest
+
+
+def _dossier_current_snapshot_history(current_doc, path=None):
+    """Read only durable Git revisions belonging to the manifest's current snapshot."""
+    snapshot_id = (current_doc or {}).get('snapshot_id')
+    path = Path(path or progressive_pass2.DOSSIER_WORK)
+    if not snapshot_id or path.is_absolute():
+        return []
+
+    rel = path.as_posix()
+    try:
+        log = subprocess.check_output(
+            ['git', 'log', '--format=%H%x09%cI', '--', rel],
+            cwd=ROOT,
+            text=True,
+            stderr=subprocess.DEVNULL,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return []
+
+    versions_newest_first = []
+    found_current_snapshot = False
+    for line in log.splitlines():
+        if '\t' not in line:
+            continue
+        commit_sha, committed_at_utc = line.split('\t', 1)
+        try:
+            raw = subprocess.check_output(
+                ['git', 'show', f'{commit_sha}:{rel}'],
+                cwd=ROOT,
+                text=True,
+                stderr=subprocess.DEVNULL,
+            )
+            version = json.loads(raw)
+        except (OSError, subprocess.CalledProcessError, json.JSONDecodeError):
+            continue
+
+        if version.get('snapshot_id') == snapshot_id:
+            found_current_snapshot = True
+            versions_newest_first.append((committed_at_utc, version))
+        elif found_current_snapshot:
+            break
+
+    versions_newest_first.reverse()
+    return versions_newest_first
+
+
+def _dossier_last_write_at_utc(doc):
+    versions = _dossier_current_snapshot_history(doc)
+    return _latest_dossier_transition_from_versions(doc, versions)
+
+
 def _dossier_processing_metrics():
     try:
         doc = progressive_pass2.load_json(progressive_pass2.DOSSIER_WORK)
@@ -433,6 +551,7 @@ def _dossier_processing_metrics():
             raise ValueError('Dossier current-scope arithmetic mismatch')
         return {
             'dossier_observability': 'available',
+            'dossier_last_write_at_utc': _dossier_last_write_at_utc(doc),
             'dossier_total_current_scope': total,
             'dossier_accepted_count': accepted,
             'dossier_pending_count': pending,
@@ -443,6 +562,7 @@ def _dossier_processing_metrics():
     except Exception as exc:
         return {
             'dossier_observability': f'unavailable:{type(exc).__name__}',
+            'dossier_last_write_at_utc': None,
             'dossier_total_current_scope': None,
             'dossier_accepted_count': None,
             'dossier_pending_count': None,
@@ -464,7 +584,9 @@ def build_processing_status(state_index, visible_items, business_excluded_family
 
     fast_total = fast_attempted = fast_fit = fast_not_fit = 0
     fast_incomplete = fast_error = fast_skipped_deep = fast_remaining = 0
+    fast_write_times = []
     deep_total = deep_first_pass_attempted = deep_authoritative = 0
+    deep_write_times = []
     deep_fit = deep_not_fit = deep_incomplete = deep_waiting = deep_ready = 0
 
     for family_id, state in state_index.items():
@@ -479,6 +601,9 @@ def build_processing_status(state_index, visible_items, business_excluded_family
 
         if state.get('fast_scope_eligible'):
             fast_total += 1
+            fast_written = _normalize_utc_timestamp(state.get('_fast_last_write_at_utc'))
+            if fast_written is not None:
+                fast_write_times.append(fast_written)
             fast_state = state.get('fast_stage_state')
             fast_outcome = state.get('fast_stage_outcome')
             if fast_state == 'completed':
@@ -505,6 +630,9 @@ def build_processing_status(state_index, visible_items, business_excluded_family
 
         if state.get('deep_scope_eligible'):
             deep_total += 1
+            deep_written = _normalize_utc_timestamp(state.get('_deep_last_write_at_utc'))
+            if deep_written is not None:
+                deep_write_times.append(deep_written)
             if state.get('deep_first_pass_attempted'):
                 deep_first_pass_attempted += 1
             if state.get('deep_authoritative_completed'):
@@ -574,6 +702,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'fast_error_count': fast_error,
         'fast_skipped_due_to_authoritative_deep_count': fast_skipped_deep,
         'fast_remaining_count': fast_remaining,
+        'fast_last_write_at_utc': max(fast_write_times) if fast_write_times else None,
 
         **dossier,
 
@@ -589,6 +718,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'deep_remaining_until_all_authoritative_count': deep_authoritative_remaining,
         'deep_normal_first_pass_complete': deep_normal_remaining == 0,
         'deep_all_current_authoritative_complete': deep_authoritative_remaining == 0,
+        'deep_last_write_at_utc': max(deep_write_times) if deep_write_times else None,
 
         'fast_stage_counts': {
             'total_current_scope': fast_total,
@@ -599,6 +729,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
             'error': fast_error,
             'skipped_due_to_authoritative_deep': fast_skipped_deep,
             'remaining': fast_remaining,
+            'last_write_at_utc': max(fast_write_times) if fast_write_times else None,
         },
         'dossier_stage_counts': {
             key: dossier[key]
@@ -610,6 +741,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
                 'dossier_failed_or_recovery_count',
                 'dossier_normal_first_pass_complete',
                 'dossier_all_accepted_or_recovered_complete',
+                'dossier_last_write_at_utc',
             )
         },
         'deep_stage_counts': {
@@ -625,6 +757,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
             'remaining_until_all_authoritative': deep_authoritative_remaining,
             'normal_first_pass_complete': deep_normal_remaining == 0,
             'all_current_authoritative_complete': deep_authoritative_remaining == 0,
+            'last_write_at_utc': max(deep_write_times) if deep_write_times else None,
         },
         'effective_result_counts': {
             'deep': sum(
@@ -706,9 +839,14 @@ def validate_processing_status(status):
         'deep_normal_first_pass_remaining_count',
         'deep_remaining_until_all_authoritative_count',
         'deep_normal_first_pass_complete', 'deep_all_current_authoritative_complete',
+        'fast_last_write_at_utc', 'dossier_last_write_at_utc', 'deep_last_write_at_utc',
     }
     if not required.issubset(status):
         raise ValueError('progressive processing status missing required counters')
+    for key in ('fast_last_write_at_utc', 'dossier_last_write_at_utc', 'deep_last_write_at_utc'):
+        value = status.get(key)
+        if value is not None and _normalize_utc_timestamp(value) is None:
+            raise ValueError(f'progressive processing status has invalid UTC timestamp: {key}')
 
     total = int(status['total_current_candidates'])
     fit = int(status['analyzed_fit_count'])
