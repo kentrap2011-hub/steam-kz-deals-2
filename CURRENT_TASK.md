@@ -1,13 +1,17 @@
 # CURRENT TASK
 
-## IN PROGRESS — Analysis last write timestamps UI 01
-Статус: `in_progress`.
+## COMPLETE — Analysis last write timestamps UI 01
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_ANALYSIS_LAST_WRITE_TIMESTAMPS_UI_01.md`;
-- worker slot: `ЧАТ 2`;
-- scope: add producer-owned durable last-write timestamps for Fast / Dossier / Deep to the existing Statistics payload/UI;
-- architecture boundary: GitHub remains canonical state/persistence owner; browser only formats provided timestamps; no scheduler, queue, retry, heartbeat, watchdog or semantic execution change;
-- parallel constraint: branch started from fresh main `46b236309e4e068f6fbe03afc98d2c52a2c8daab`; re-read/reconcile fresh `main` before merge so ЧАТ 1 and concurrent production writes are preserved.
-- no manual Fast/Dossier/Deep backlog processing and no Scheduled Task changes are authorized.
+- implementation PR: `#104`; merge: `132baf949178b7d57dd164c2ab12cd5d1d890082`;
+- producer-owned `Последняя запись` is now published separately for Fast / Dossier / Deep; Fast and Deep use current exact-bound durable accepted state timestamps, while Dossier uses the latest durable current-snapshot canonical accepted/failed group transition;
+- browser only formats the producer-provided UTC value in the viewer's local timezone; missing proof is `null` and renders `Последняя запись: ещё не было записей`;
+- normal visual run `36341084329` / #813 succeeded and produced visual commit `0d02729f1cd3589fc9a4504e7a4020a769d20e1d`;
+- following Pages deploy `36341118795` / #853 succeeded with UI regressions; Pages artifact `10938613629`;
+- verified published values in that artifact: Fast `null` (current attempted `0`), Dossier `2026-09-27T18:32:06+00:00`, Deep `2026-09-27T17:36:44+00:00`;
+- pre/post deployed comparison preserved all prior processing counters and Dossier/PASS1/PASS2 provenance blobs; only timestamp observability fields were added;
+- fresh-main reconciliation before merge preserved concurrent Dossier production writes and ЧАТ 1; no Dossier worker diagnosis/change, backlog processing, Scheduled Task change, watchdog, heartbeat, scheduler or retry mechanism was introduced;
+- report: `reviews/worker_reports/analysis-last-write-timestamps-ui-01.md`; report commit `7e286633918d424687c166fa6e82805ac4169c2b`.
 
 ## COMPLETE — Russian description publication blocker fix 01
 Статус: `complete_ready_for_director_acceptance`.
