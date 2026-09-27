@@ -714,6 +714,25 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 
 ---
 
+## PPD-009 — Completed Deep fit includes a separately grounded negative assessment
+
+**Дата:** 2026-09-27  
+**Статус:** canonical for the balanced Deep negative-assessment contract.
+
+**Решение:** authoritative Deep fit and Deep negative assessment are separate dimensions. Every newly produced completed Deep result (`analyzed_fit` or `analyzed_not_fit`) must explicitly evaluate the accepted Dossier's negative and mixed observations/conflicts. A completed assessment may contain (a) a **confirmed personal risk** that is grounded in exact Dossier evidence and may affect ranking only through an already-existing canonical risk code/policy, and/or (b) a **grounded caution/trade-off** that is visible to the user but creates no ranking penalty by itself. A completed assessment may also contain no surfaced findings, but only after the exact Dossier negative/mixed candidate set has been explicitly evaluated. If material negative/mixed evidence cannot be responsibly classified, the negative assessment is `unresolved`; unresolved never means “no risks found”.
+
+**Grounding:** the result binds each finding to one or more exact observation/conflict indices inside the already-bound immutable Dossier. GitHub validates those references against the exact Dossier SHA before persistence. The semantic worker cannot invent an unbound negative claim. Dossier remains neutral evidence preparation and never labels evidence as a personalized risk or ranking penalty.
+
+**Scoring boundary:** confirmed personal risks may use only the existing grounded negative-code catalog and the existing final risk policy. This decision adds no score weight, penalty, priority layer, or frontend scoring rule. Display-only cautions carry no new `risk_code` and therefore cannot silently enter the score. The browser only presents producer-owned status/findings.
+
+**Migration:** historical authoritative Deep completions produced before this contract remain valid for their historical fit/not-fit decision and are not automatically replayed, invalidated, requeued, or recovered solely to populate negative fields. When such a result lacks the new assessment, GitHub projects `legacy_not_evaluated`; the UI must say that the old Deep result did not evaluate/store negatives under the current contract and must not claim that no risks were found. Only future canonically authorized Deep executions naturally produce the new assessment unless a separately authorized migration/reanalysis task is created later.
+
+**Ownership:** GitHub remains owner of Deep scope/order/eligibility, exact Dossier binding, validation, persistence, projection, completeness, risk-policy application, and publication. Scheduled ChatGPT remains the bounded semantic data plane. No scheduler, recurring stage, queue, retry daemon, backlog manager, quota, recovery shortcut, or Scheduled Task change is introduced.
+
+**Основные места:** `config/progressive_pass2_contract.json`, `config/progressive_pass2_result_schema.json`, `config/progressive_pass2_worker_prompt.md`, `config/progressive_personalization_contract.json`, `scripts/progressive_pass2.py`, `scripts/refine_visual_ranking.py`, `scripts/card_explanation_policy.py`, `scripts/build_final_visual_payload.py`, `scripts/priority_ranking.py`, `web/app.js`.
+
+---
+
 ## TASTE-016 — Directly observed exact-product player feedback is usable without permanent per-review identity
 
 **Дата:** 2026-09-26  
