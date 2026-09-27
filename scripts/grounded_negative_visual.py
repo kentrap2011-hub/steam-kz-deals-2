@@ -124,6 +124,24 @@ def canonical_fit_from_structured_risks(game, risks):
     game['fit_adjustment_reason'] = reason
 
 
+def has_current_personalized_binding(game, projection):
+    if projection.get('status') == 'cache_hit':
+        return True
+    source = game.get('analysis_semantic_source')
+    if source == 'progressive_pass1':
+        return True
+    if source != 'progressive_pass2':
+        return False
+    return (
+        game.get('analysis_resolution_pass') == 'pass2'
+        and game.get('pass2_attempted') is True
+        and game.get('deep_stage_state') == 'completed'
+        and game.get('deep_stage_outcome') in {'fit', 'not_fit'}
+        and game.get('effective_analysis_source') == 'deep'
+        and game.get('analysis_state') in {'analyzed_fit', 'analyzed_not_fit'}
+    )
+
+
 def apply_to_document(ready, *, contexts, taste_entries, projections):
     unresolved = []
     corrected = []
@@ -147,10 +165,7 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
         projection = projection if isinstance(projection, dict) else {}
 
         readiness = negative_readiness(taste_entry)
-        current_bound = (
-            projection.get('status') == 'cache_hit'
-            or game.get('analysis_semantic_source') == 'progressive_pass1'
-        )
+        current_bound = has_current_personalized_binding(game, projection)
         verdict = taste_entry.get('verdict')
         if not current_bound or verdict != 'INCLUDE':
             unresolved.append({
