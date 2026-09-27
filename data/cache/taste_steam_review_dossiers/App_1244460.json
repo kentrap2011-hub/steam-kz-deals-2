@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
-    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
-    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
-    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
   "appid": "1244460",
   "title": "Jurassic World Evolution 2",
-  "generated_at_utc": "2026-09-24T18:30:00Z",
-  "expires_at_utc": "2026-10-14T18:30:00Z",
+  "generated_at_utc": "2026-09-27T18:06:30Z",
+  "expires_at_utc": "2026-10-17T18:06:30Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Jurassic World Evolution 2",
@@ -31,26 +31,128 @@
       {
         "kind": "appid",
         "value": "1244460"
+      },
+      {
+        "kind": "developer",
+        "value": "Frontier Developments"
       }
     ]
   },
-  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "localization",
-      "statement": "A Russian-language exact-app discussion reports that the Russian language can be selected through the game's Steam properties rather than through an in-game language menu.",
-      "sentiment": "neutral",
+      "category": "mechanics",
+      "statement": "Player feedback describes a deeper park-management layer than the first game, with dinosaur welfare, habitat requirements, scientists, aviaries, lagoons, and expanded management tools adding meaningful planning while preserving the accessible park-builder core.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Sandbox, Challenge, and Chaos Theory modes are repeatedly valued for providing different objectives, biomes, building sets, and ways to use the dinosaur-management systems beyond the main campaign.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "The main campaign is often described as short or tutorial-like, and some players prefer the first game's more continuous progression; others treat the shorter campaign as only one entry point into the broader Challenge, Chaos Theory, and Sandbox structure.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-004",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-006",
+        "feedback-007"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Storms, escapes, injuries, and repeated response tasks can create a demanding management loop; older complaints about repetitive crisis micromanagement are echoed by current feedback describing storms as a recurring disruption to otherwise rewarding park construction.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "historical",
+      "source_ids": [
+        "source-002",
+        "source-006"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-008"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Difficulty is closely tied to preparation for storms, dinosaur needs, staffing, and cash flow: players report that these systems can punish weak planning, while experienced play can turn them into manageable recurring constraints.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-006"
+      ],
+      "player_feedback_ids": [
+        "feedback-005",
+        "feedback-008"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "A recent Steam review reports severe low-frame-rate performance even at minimum settings on that player's PC, showing that technical performance can still be a current configuration-specific friction point.",
+      "sentiment": "negative",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
-        "russian"
+        "non_russian"
       ],
-      "evidence_status": "durable",
+      "evidence_status": "current",
       "source_ids": [
         "source-002"
       ],
       "player_feedback_ids": [
-        "feedback-001"
+        "feedback-002"
       ]
     }
   ],
@@ -58,11 +160,108 @@
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "single_source_only",
-    "single_source_reason": "The serialized localization finding uses one exact-app Russian Steam discussion item with a stable non-profile thread locator.",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "limited",
-    "stop_reason": "evidence_stable"
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            3
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            4
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            5
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
     "sources": [
@@ -72,31 +271,140 @@
         "domain": "store.steampowered.com",
         "url": "https://store.steampowered.com/app/1244460/Jurassic_World_Evolution_2/",
         "publication_date": "2021-11-09",
-        "language": "mixed",
-        "freshness": "older",
+        "language": "non_russian",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "older"
       },
       {
         "source_id": "source-002",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1244460/reviews/",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1244460",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1244460/reviews/?browsefilter=toprated&l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1244460",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/jurassicworldevo/comments/zqfuz4",
+        "publication_date": "2022-12-20",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-005",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/PS5/comments/qsi1j1",
+        "publication_date": "2021-11-12",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-006",
         "source_type": "steam_community",
         "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1244460/discussions/1/5005182950334369552/",
-        "publication_date": "2021-11-09",
-        "language": "russian",
-        "freshness": "older",
-        "evidence_role": "durable_trait",
-        "player_feedback": true
+        "url": "https://steamcommunity.com/app/1244460/discussions/0/4330853446695902665/",
+        "publication_date": "2024-06-01",
+        "language": "non_russian",
+        "evidence_role": "historical",
+        "player_feedback": true,
+        "freshness": "older"
       }
     ],
     "player_feedback_records": [
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "url": "https://steamcommunity.com/app/1244460/discussions/1/5005182950334369552/",
-        "publication_date": "2021-11-09",
+        "publication_date": "2026-09-14",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2026-09-13",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": "2026-09-10",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-003",
+        "publication_date": "2025-06-27",
         "language": "russian",
-        "identity_mode": "stable_locator"
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": "2021-11-25",
+        "language": "russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-004",
+        "url": "https://www.reddit.com/r/jurassicworldevo/comments/zqfuz4",
+        "publication_date": "2022-12-20",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-007",
+        "source_id": "source-005",
+        "url": "https://www.reddit.com/r/PS5/comments/qsi1j1",
+        "publication_date": "2021-11-12",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-008",
+        "source_id": "source-006",
+        "url": "https://steamcommunity.com/app/1244460/discussions/0/4330853446695902665/",
+        "publication_date": "2024-06-01",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
       }
     ]
   }
