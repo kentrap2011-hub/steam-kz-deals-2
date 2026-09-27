@@ -1,135 +1,232 @@
 # DIRECTOR BOOTSTRAP
 
-Last refreshed: 2026-09-23
+Last refreshed: 2026-09-27
 
-Purpose: compact restart context for a **NEW physical Director conversation**.
+Purpose: compact restart context for a **NEW physical Director conversation** after the previous Director chat reached its context limit.
 
-This file is a bootstrap snapshot, not a replacement for canonical project truth. After reading it, the Director must use the latest `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, `DIRECTOR_TASK_BOARD.md`, exact active task files, and durable worker reports as authoritative. If this file conflicts with newer canonical state, newer canonical state wins.
+This file is a bootstrap snapshot, not a replacement for canonical project truth. The new Director must read current `CHAT_PROTOCOL.md`, `DIRECTOR_PROTOCOL.md`, and fresh `DIRECTOR_TASK_BOARD.md` first. Newer canonical GitHub state always wins over this file.
 
 ## Repository scope
 
 Repository: `kentrap2011-hub/steam-kz-deals-2`  
 Base branch / source of truth: `main`
 
-Do not search, read, change, or use another repository for this project unless an exact task explicitly authorizes it.
+Use only this repository unless an exact task explicitly authorizes another repository.
 
-## Director role
+## Director operating rules
 
-- Director orchestrates; worker chats execute nontrivial project work.
+- Director orchestrates; worker chats perform nontrivial project investigation/implementation.
 - GitHub owns production control-plane state.
-- Interactive Director chat must not become a production semantic worker or backlog manager.
-- No autonomous IMPLEMENT without explicit user authorization.
-- Reconcile Board -> exact task -> exact durable report before any worker follow-up.
-- When the user says a worker finished, read the expected durable worker report from GitHub directly; do not ask the user to paste it.
-- Any copyable worker handoff must say outside the block where it goes (NEW or EXISTING physical chat + slot) and repeat the slot as the first line inside the block.
-- `ЧАТ 1` / `ЧАТ 2` are reusable slots, not durable identities. Retired physical chats are not reused for unrelated tasks.
-- At most two independent worker slots should be active when safe.
+- Do not turn the Director chat into the Dossier/Fast/Deep production worker or backlog manager.
+- No nontrivial IMPLEMENT without explicit user authorization.
+- Before any decision/handoff: reconcile fresh Board -> exact task -> exact durable report.
+- For a new worker task, write the full instruction into `WORKER_TASK.md` / exact `WORKER_TASK_*.md`, then give the user only the short protocol-entry launch prompt.
+- Every launch prompt must name repository, `main`, repository guard, `CHAT_PROTOCOL.md` START gate, exact task file, slot number, and whether the physical worker chat is NEW or EXISTING.
+- Retired physical worker chats are not reused for unrelated work. Slot numbers `ЧАТ 1/2` may be reused only with an explicitly NEW physical chat.
+- The user personally controls ChatGPT Scheduled Task UI. Do not create/edit/enable/disable/pause/delete/reschedule/rename/recreate/run a Scheduled Task unless the user explicitly requests that exact action.
+- User prefers project explanations in simple Russian with minimal untranslated technical terminology. Exact filenames, statuses, errors and identifiers may remain literal.
 
-## Scheduled Task operator boundary
+## Current Director state
 
-The user personally handles ChatGPT Scheduled Task UI/settings.
+There is **no currently assigned top-level worker task**.
 
-Do **not** create, edit, enable, disable, pause, delete, reschedule, rename, recreate, or run a Scheduled Task unless the user gives a direct explicit instruction for that exact action and the required tool is actually available.
+Latest Director Board current-state commit before this bootstrap:
+`0cdb6c1cc48410413f29359aef25c0914d1ce2f6`
 
-Do not infer permission from phrases such as “делаем”, “запускаем”, or from a project task that only changes repository regulation.
+The Board now has a top `CURRENT DIRECTOR STATE — 2026-09-27` section. Older lower Board sections with headings such as `ACTIVE`, `LIVE`, or `PAUSED` are historical records and may be stale; do not revive them without fresh verification.
 
-## Current architecture
+Latest physical worker chats are retired:
+- ЧАТ 1 — Dossier production failure diagnostic;
+- ЧАТ 2 — GitHub-derived Dossier dates + ingest atomicity fix.
 
-### Fast / Dossier / Deep
+Both may be deleted.
 
-Accepted current model:
+## Current Dossier architecture — important accepted rules
 
-- Fast / PASS 1 = provisional early personalized analysis.
-- Dossier = independent neutral evidence preparation; never decides fit/not-fit.
-- Deep / PASS 2 = eventual authoritative personalized analysis for every current eligible game.
-- Deep eligibility does **not** require prior Fast.
-- A current exact-compatible canonically accepted Dossier is the Deep evidence gate.
-- Deep may run before Fast.
-- Successful authoritative Deep fit/not-fit supersedes Fast.
-- Fast success never suppresses eventual Deep.
-- Deep incomplete/error does not erase a still-valid Fast provisional result.
-- Recovery is separate GitHub-owned authorization; no blind retry loop.
+### Purpose / completeness
 
-Both Fast and Deep production are active under their accepted contracts unless fresher Board state says otherwise.
+Dossier prepares a **neutral, sufficiently complete picture of the exact game** for later personalized Deep analysis.
 
-### Dossier retrieval
+Accepted rules:
+- Dossier itself is profile-agnostic;
+- completeness/downstream usefulness outrank speed/tool minimization;
+- 12 neutral experience dimensions are assessed;
+- materially unresolved important dimensions prevent a sufficient/stable Dossier;
+- narrow evidence such as only localization or one isolated complaint is not enough when broader relevant evidence remains reasonably discoverable;
+- no fixed minimum review/source/search/page count;
+- retrieval is semantically/adaptively bounded, not controlled by old 8-search/16-page limits.
 
-The old hard per-game numeric ceilings are removed.
+Relevant accepted decision family: TASTE-014 / TASTE-015.
 
-Current accepted Dossier boundedness:
-- no hard 8-search ceiling;
-- no hard 16-opened-page ceiling;
-- no replacement arbitrary number;
-- stop when evidence is sufficient, when all reasonably discoverable mandatory materially distinct routes are exhausted, on directly observed blocker/binding/liveness change, or ordinary invocation runtime;
-- materially equivalent route repetition remains forbidden;
-- query/page counts are diagnostics only, with null limit fields.
+### Pragmatic player evidence model
 
-Canonical decision: `TASTE-014`.
-
-## Immediate active worker state
-
-Read the **fresh `DIRECTOR_TASK_BOARD.md` first**. At this bootstrap refresh, the active worker is:
-
-### ACTIVE — ЧАТ 1 — Progressive PASS 2 optional Dossier inbox staging recovery fix
-
-Task:
-`WORKER_TASK_PROGRESSIVE_PASS2_OPTIONAL_DOSSIER_INBOX_STAGING_RECOVERY_FIX_01.md`
+Accepted implementation:
+`WORKER_TASK_TASTE_DOSSIER_PRAGMATIC_EVIDENCE_MODEL_FIX_01.md`
 
 Report:
-`reviews/worker_reports/progressive-pass2-optional-dossier-inbox-staging-recovery-fix-01.md`
+`reviews/worker_reports/taste-dossier-pragmatic-evidence-model-fix-01.md`
 
-Known confirmed blocker at assignment time:
-- GitHub PASS 2 ingest accepted one current result in the working tree, then persistence failed because commit staging treated absent optional `data/ai_inbox/taste_steam_review_dossiers` as mandatory;
-- current exact Shadow Warrior 3 result artifact already existed and must be canonically ingested without semantic rerun;
-- the task is an IMPLEMENT fix inside the existing shared canonical-writer path;
-- no Scheduled Task action and no Deep semantic rerun are authorized by that task.
+PR #98 merged as:
+`d3b0e40256b31b5444fe7c5ddd8ced49c078b81c`
 
-When the user says this worker finished, read the exact durable report before deciding anything else.
+Current evidence principles:
+- exact-product/AppID/release/DLC/remake identity remains strict;
+- useful concrete player feedback directly observed in a search-result representation or exact-product collection/card may be used even without a permanent per-review locator or author identity;
+- raw review/search-result text, quotes, usernames/profile identifiers are not persisted;
+- permanent per-item locator is useful auditability, not a validity requirement;
+- exact per-review counting is not a completion threshold;
+- recurrence is qualitative/evidence-grounded;
+- Russian `found_and_used` depends on actual usable observed Russian/mixed player feedback, not on permanent item identity.
 
-## Dossier live result already observed
+### GitHub-derived dates — latest accepted change
 
-After the clean Scheduled Dossier experiment and semantic-bounded-retrieval change, GitHub canonically accepted three groups / nine dossiers in one observed run sequence with zero failed groups at that check. This proved that the clean Dossier entrypoint and new retrieval contract can progress canonical Dossier state.
+Task:
+`WORKER_TASK_TASTE_DOSSIER_GITHUB_DATE_DERIVATION_AND_INGEST_ATOMICITY_FIX_01.md`
 
-Treat fresh Dossier index/progress as authoritative for any later count; do not reuse the old 3-group/9-dossier count as current progress.
+Report:
+`reviews/worker_reports/taste-dossier-github-date-derivation-and-ingest-atomicity-fix-01.md`
 
-## Site / UI product decision — accepted design, implementation not yet authorized
+PR #99 merged to `main` as:
+`5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`
 
-The user accepted this target presentation:
+Director acceptance commit:
+`fea60f54b5d007c458f62b1889e765b01a526ff1`
 
-- remove the large always-visible statistics block from the main page;
-- add a compact **“Статистика”** entry/button leading to a dedicated statistics page;
-- do not show large textual card statuses such as “Подходит вам”, “Не подходит”, “Нужен дополнительный разбор”, or “Ещё не проверена”;
-- a trustworthy analyzed **not-fit** game is excluded from the normal visible list rather than shown with a “not fit” badge;
-- use three small visual stage icons on each card for:
-  1. **Быстрый разбор** (Fast),
-  2. **Подготовка досье** (Dossier),
-  3. **Глубокий разбор** (Deep);
-- icon state should communicate stage progress/result without duplicating a large textual status;
-- after successful personalized analysis, show the existing personalized score and supported explanation/why-fit fields;
-- analyzed-fit games use the existing personalized ranking authority / score ordering within their tier;
-- unresolved / not-yet-analyzed games must not receive fake personalized scores;
-- unresolved games remain lower tiers until resolved; trustworthy not-fit disappears from the normal list;
-- the browser remains presentation-only and must not infer semantic fit/stage truth.
+Full validation was green:
+- buffered Dossier validation: `36312723478`;
+- Progressive PASS 2 core: `36312723454`;
+- backlog dispositions: `36312723552`.
 
-The old task `WORKER_TASK_PROGRESSIVE_SITE_PROGRESS_HEADER_COMPACTION_01.md` is stale/draft and must **not** be executed unchanged.
+User-approved responsibility model:
+- Scheduled semantic worker records only factual `publication_date` or `null`;
+- worker no longer decides `recent / older / unknown`;
+- GitHub derives temporal state deterministically under the unchanged 365-day boundary;
+- <=365 days = recent;
+- >365 days = older;
+- unknown date = unknown, never assumed recent;
+- current-state claims requiring recent support must use actual supporting feedback dates;
+- mixed old/recent feedback under one parent is classified per supporting record, not by a guessed parent-page freshness label.
 
-No new site IMPLEMENT task has yet been authorized solely by this product-design agreement. If the user asks to implement the site, create a fresh bounded UI task for a NEW physical worker chat.
+Current active Dossier binding:
+`github-derived-temporal-classification-2026-09-27`
 
-## Director reliability gate
+### Failed-group audit/quarantine atomicity — latest accepted change
 
-Before every decision or handoff:
+The production diagnostic proved that failed-group audit and quarantine outputs were intentional, but the old workflow could leave them unstaged because it used one combined optional-path `git add` with a missing `data/control` path and suppressed the failure.
 
-1. Read/reconcile current `DIRECTOR_TASK_BOARD.md`.
-2. Read the exact active task and exact durable report when available.
-3. Separate confirmed facts from assumptions/unknowns.
-4. Scan for contradiction with current ownership, runtime, scheduler, recovery, and user authorization.
-5. Verify the proposed actor actually exists and owns the action.
-6. Only then issue the next handoff or recommendation.
+PR #99 fixed this:
+- optional paths are staged independently;
+- staging errors are no longer broadly hidden;
+- failed-group audit/quarantine remain canonical outputs;
+- after the local canonical commit and before rebase/push, GitHub checks `git status --porcelain --untracked-files=all`;
+- if any leftover exists, workflow fails and prints the exact paths;
+- no stash/discard/implicit unknown-file add is used.
 
-Do not reconstruct project truth from retired Director conversation history unless canonical compact state is genuinely insufficient.
+## Production incident that led to the fix
+
+Diagnostic task:
+`WORKER_TASK_TASTE_DOSSIER_PRODUCTION_FAILURE_DIAGNOSTIC_01.md`
+
+Report:
+`reviews/worker_reports/taste-dossier-production-failure-diagnostic-01.md`
+
+Old production snapshot:
+`b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5`
+
+Old sequence 1 candidate contained:
+- Crown Trick / 1000010;
+- Tiny Snow / 1002560;
+- EARTH DEFENSE FORCE 5 / 1007040.
+
+Candidate commit:
+`2a3a2e2dbd99faf784f22878f0b7ec2252d1f5fa`
+
+Failed ingest run:
+`36241650284`
+
+What was proven:
+1. Tiny Snow had real temporal contradictions under the old worker-authored freshness model.
+2. GitHub correctly classified the old group as failed in the runner working tree.
+3. Separate staging bug prevented that failed state from reaching `main`.
+4. The two defects were independent and were both fixed structurally by PR #99.
+
+Do **not** manually rewrite or repair that old candidate.
+
+## Current Dossier production state
+
+Fresh current state after the binding change:
+
+Current snapshot:
+`81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`
+
+Current binding:
+`github-derived-temporal-classification-2026-09-27`
+
+Current projection at the last Director check:
+- next pending sequence: 1;
+- accepted groups: 0;
+- failed groups: 0;
+- pending groups: 140;
+- remaining required dossiers: 418;
+- full backlog complete: false.
+
+Important consequence:
+the old failed experiment snapshot `b98f...` is no longer the current snapshot.
+
+Therefore the new Director must **not automatically issue recovery for old g000001**. Before any recovery/reconciliation action, do a bounded READ-ONLY current-state check to determine whether the old snapshot needs any explicit cleanup at all or is already superseded by normal binding/snapshot rollover.
+
+No recovery action is currently authorized.
+
+## Fast / Dossier / Deep architecture
+
+Accepted high-level model:
+- Fast / PASS 1 = provisional personalized analysis;
+- Dossier = independent neutral evidence preparation;
+- Deep / PASS 2 = authoritative/final personalized analysis;
+- Deep does not require prior Fast;
+- current exact-compatible canonically accepted Dossier is the Deep evidence gate;
+- Deep may precede Fast;
+- authoritative Deep fit/not-fit supersedes Fast;
+- Deep incomplete/error preserves a still-valid Fast result;
+- Deep recovery is GitHub-owned, separate, and requires explicit authorization; no blind retry loop.
+
+GitHub owns:
+- scope/order;
+- validation;
+- persistence;
+- retry/recovery eligibility;
+- completeness;
+- canonical state.
+
+Scheduled ChatGPT owns only bounded semantic/evidence work explicitly assigned by contract.
+
+## What NOT to do on restart
+
+- Do not ask the user to repeat the project history.
+- Do not reconstruct truth from the retired Director conversation.
+- Do not reuse retired physical worker chats as existing chats.
+- Do not manually recover the old Dossier g000001.
+- Do not manually rerun Tiny Snow.
+- Do not process the Dossier backlog from the Director chat.
+- Do not change Scheduled Tasks without exact user instruction.
+- Do not assume historical Board sections marked ACTIVE/LIVE are current.
+- Do not create another freshness self-check in ChatGPT; date classification is now GitHub-owned.
+
+## Recommended first action in the new Director chat
+
+1. Read fresh `CHAT_PROTOCOL.md`.
+2. Read fresh `DIRECTOR_PROTOCOL.md`.
+3. Read this `DIRECTOR_BOOTSTRAP.md`.
+4. Read the top/current sections of fresh `DIRECTOR_TASK_BOARD.md`.
+5. Confirm that there is no active worker assignment.
+6. If the user wants to continue the Dossier thread, perform only a bounded current-state reconciliation decision:
+   - verify current snapshot/binding/index;
+   - determine whether the obsolete old g000001 snapshot requires any explicit cleanup/recovery;
+   - if cleanup/recovery is actually required, create a separate task and obtain user authorization before execution;
+   - otherwise continue with normal current-snapshot Dossier production under the accepted contract.
 
 ## Rotation state
 
-The Director conversation that produced this refresh is now being retired by user request.
+The Director conversation that produced this bootstrap has reached its context limit and is retired.
 
-Continue only in a **NEW physical Director conversation** using this bootstrap plus the fresh Board and protocols.
+Continue project work only in a **NEW physical Director conversation**.
