@@ -81,11 +81,12 @@ def process_run_start_markers():
             doc = None
             parse_error = f'{type(exc).__name__}:{exc}'
 
-        claimed_authority = (
-            str(doc.get('observed_main_commit') or '').lower()
-            if isinstance(doc, dict)
-            else parent
-        )
+        claimed_authority = parent
+        if (
+            isinstance(doc, dict)
+            and doc.get('contract') == 'PROGRESSIVE-PASS2-RUN-START-MARKER-V1'
+        ):
+            claimed_authority = str(doc.get('observed_main_commit') or '').lower()
         receipt = {
             'schema_version': 1,
             'contract': 'PROGRESSIVE-PASS2-RUN-START-RECEIPT-V1',
@@ -116,6 +117,18 @@ def process_run_start_markers():
                 doc,
             )
             authority = proof['run_start_authority_commit']
+            # Preserve the GitHub-proven frozen boundary even when a later
+            # contract/work validation rejects the start.
+            receipt.update({
+                'run_start_authority_commit': authority,
+                'run_start_marker_parent_commit': proof['run_start_marker_parent_commit'],
+                'run_started_at_utc': proof['run_started_at_utc'],
+                'marker_path': proof['marker_path'],
+                'marker_contract': proof['marker_contract'],
+                'run_start_nonce': proof['run_start_nonce'],
+                'progressive_pass2_contract_blob_sha': proof['progressive_pass2_contract_blob_sha'],
+                'progressive_pass2_work_blob_sha': proof['progressive_pass2_work_blob_sha'],
+            })
             contract = _read_json_at_commit(authority, 'config/progressive_pass2_contract.json')
             work = _read_json_at_commit(authority, progressive_pass2.WORK.as_posix())
             if contract.get('contract') != 'PROGRESSIVE-PASS2-V1':
