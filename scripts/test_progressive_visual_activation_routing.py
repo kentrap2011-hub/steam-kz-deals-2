@@ -100,6 +100,7 @@ def compatible_visual(source='S'):
         },
         'production_contract': {
             'source_progressive_candidate_context_blob_sha': 'CTX',
+            'source_taste_steam_review_dossier_work_blob_sha': 'DOSSIER',
             'progressive_personalization_contract_blob_sha': 'CONTRACT',
             'progressive_pass1_state_blob_sha': 'PASS1',
             'progressive_pass2_state_blob_sha': 'PASS2',
@@ -120,6 +121,7 @@ def classify(visual, *, source='S', count=719, context_count=719, store_source='
         visual=visual,
         progressive_context_count=context_count,
         progressive_context_blob='CTX',
+        dossier_work_blob='DOSSIER',
         progressive_contract_blob='CONTRACT',
         pass1_state_blob='PASS1',
         pass2_state_blob='PASS2',
@@ -134,6 +136,8 @@ def main():
     workflow = Path('.github/workflows/build-daily-visual-payload.yml').read_text(encoding='utf-8')
     assert '      - "Ingest Progressive PASS 1 item"' in workflow
     assert '      - "Ingest Progressive PASS 2 item"' in workflow
+    assert '      - "Ingest Steam review dossier checkpoint"' in workflow
+    assert '\n  schedule:' not in workflow
 
     # ROUTE-01: checkpoint shape — active 719-row progressive input + legacy 3-row visual.
     legacy = {
@@ -170,6 +174,15 @@ def main():
     assert compatible is False
     assert reason == 'progressive_context_provenance_mismatch'
 
+
+    # Canonical Dossier progress is part of producer-owned statistics. A changed
+    # work-manifest blob must invalidate the visual even when Fast/Deep state is unchanged.
+    stale_dossier = compatible_visual()
+    stale_dossier['production_contract']['source_taste_steam_review_dossier_work_blob_sha'] = 'OLD-DOSSIER'
+    integrity, compatible, reason = classify(stale_dossier)
+    assert integrity is True
+    assert compatible is False
+    assert reason == 'dossier_work_provenance_mismatch'
 
     # Phase B semantic progress must force a full rebuild when the accepted
     # PASS 1 state blob changes, even if commercial lineage is otherwise fresh.
