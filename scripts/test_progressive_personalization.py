@@ -4,6 +4,7 @@ import tempfile
 from pathlib import Path
 
 import progressive_personalization as progressive
+import grounded_negative_visual
 import refresh_visual_commercial_fields
 import priority_ranking
 
@@ -104,8 +105,95 @@ def game(fid, state, tier, *, price=300, original=1000, urgency=2, why=None):
     return row
 
 
+def deep_bound_game(fid, outcome='fit'):
+    state = 'analyzed_fit' if outcome == 'fit' else 'analyzed_not_fit'
+    row = game(fid, state, 1 if outcome == 'fit' else None)
+    row.update({
+        'analysis_semantic_source': 'progressive_pass2',
+        'analysis_resolution_pass': 'pass2',
+        'pass2_attempted': True,
+        'deep_stage_state': 'completed',
+        'deep_stage_outcome': outcome,
+        'effective_analysis_source': 'deep',
+    })
+    return row
+
+
 def main():
     progressive.load_contract()
+
+    # Deep visual authoritative binding regression:
+    # current authoritative PASS 2 is valid even when reusable Taste projection
+    # remains ai_required; stale/non-current Deep must still fail closed.
+    deep_fit = deep_bound_game('deep-fit', 'fit')
+    assert grounded_negative_visual.has_current_personalized_binding(
+        deep_fit, projection('App_201', 'ai_required')
+    )
+
+    original_package_apply = grounded_negative_visual.package_options.apply_current_artifacts_to_visual
+    original_order = grounded_negative_visual.progressive_personalization.apply_progressive_order
+    original_stamp = grounded_negative_visual.progressive_personalization.stamp_processing_status
+    try:
+        grounded_negative_visual.package_options.apply_current_artifacts_to_visual = lambda ready: None
+        grounded_negative_visual.progressive_personalization.apply_progressive_order = (
+            lambda items: (list(items), [])
+        )
+        grounded_negative_visual.progressive_personalization.stamp_processing_status = lambda ready: None
+        ready = {'items': [copy.deepcopy(deep_fit)]}
+        stats = grounded_negative_visual.apply_to_document(
+            ready,
+            contexts={'deep-fit': {'taste_subject_key': 'App_201'}},
+            taste_entries={
+                'App_201': {
+                    'verdict': 'INCLUDE',
+                    'negative_analysis_status': 'incomplete_no_confirmed_negative',
+                    'negative_findings': [],
+                    'negative_evidence': [],
+                }
+            },
+            projections={'App_201': projection('App_201', 'ai_required')},
+        )
+        assert ready['item_count'] == 1
+        assert stats['negative_pending_count'] == 1
+    finally:
+        grounded_negative_visual.package_options.apply_current_artifacts_to_visual = original_package_apply
+        grounded_negative_visual.progressive_personalization.apply_progressive_order = original_order
+        grounded_negative_visual.progressive_personalization.stamp_processing_status = original_stamp
+
+    deep_not_fit = deep_bound_game('deep-not-fit', 'not_fit')
+    assert grounded_negative_visual.has_current_personalized_binding(
+        deep_not_fit, projection('App_202', 'ai_required')
+    )
+    not_fit_visible, _ = progressive.apply_progressive_order([copy.deepcopy(deep_not_fit)])
+    assert not_fit_visible == []
+
+    stale_deep = copy.deepcopy(deep_fit)
+    stale_deep['deep_stage_state'] = 'waiting_for_dossier'
+    stale_deep['deep_stage_outcome'] = None
+    stale_deep['effective_analysis_source'] = 'none'
+    assert not grounded_negative_visual.has_current_personalized_binding(
+        stale_deep, projection('App_203', 'ai_required')
+    )
+    try:
+        grounded_negative_visual.apply_to_document(
+            {'items': [stale_deep]},
+            contexts={'deep-fit': {'taste_subject_key': 'App_203'}},
+            taste_entries={'App_203': {'verdict': 'INCLUDE'}},
+            projections={'App_203': projection('App_203', 'ai_required')},
+        )
+    except RuntimeError as exc:
+        assert 'personalized card binding is not current/INCLUDE' in str(exc)
+    else:
+        raise AssertionError('stale/non-current Deep must not bypass personalized binding guard')
+
+    assert grounded_negative_visual.has_current_personalized_binding(
+        {'analysis_semantic_source': 'progressive_pass1'},
+        projection('App_204', 'ai_required'),
+    )
+    assert grounded_negative_visual.has_current_personalized_binding(
+        {},
+        projection('App_205', 'cache_hit', 'INCLUDE', 'strong', 'sufficient', True),
+    )
 
     # A. Zero semantic results -> every current deterministic candidate is Tier 3.
     contexts = [context('A', 'App_1'), context('B', 'App_2'), context('C', 'App_3')]
