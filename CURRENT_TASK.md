@@ -1,12 +1,13 @@
 # CURRENT TASK
 
-## IN PROGRESS — Progressive Deep parallel frozen start authority fix 01
-Статус: `in_progress`.
+## COMPLETE — Progressive Deep parallel frozen start authority fix 01
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_PROGRESSIVE_DEEP_PARALLEL_FROZEN_START_AUTHORITY_FIX_01.md`;
-- branch: `fix/progressive-deep-frozen-start-authority-01`;
-- confirmed root cause: legacy V1 start confirmation rejected whenever the marker commit parent differed from the earlier observed whole-`main` commit, so a parallel Dossier/canonical write could cancel otherwise valid frozen Deep work;
-- implementation: V2 marker carries no worker-selected authority; its actual Git parent selects the exact Deep authority, GitHub derives the exact PASS 2 contract/work blobs from that parent, and the worker freezes all Dossier/profile/recovery/work inputs only from that immutable view; later writes apply only to the next invocation while exact bindings, consumed/retired guards and zero-attempt fail-closed behavior remain;
-- no Scheduled Task change, Dossier serialization, Fast prerequisite, retry loop or manual Deep backlog processing is authorized.
+- PR: `#101`, merge `544c0400b3290f945d1de5464d8dfa9f4faf2aa0`;
+- canonical V2 start authority is the actual GitHub marker-parent commit plus GitHub-computed exact PASS 2 contract/work blobs; later `main` movement alone no longer cancels the frozen invocation;
+- post-merge validation: Progressive PASS 2 run `36334678553` success, backlog disposition run `36334678558` success, execution ownership run `36334678675` success;
+- no Scheduled Task change and no manual production Fast/Dossier/Deep semantic processing was used for acceptance;
+- report: `reviews/worker_reports/progressive-deep-parallel-frozen-start-authority-fix-01.md`.
 
 Последнее обновление: 2026-09-27
 
