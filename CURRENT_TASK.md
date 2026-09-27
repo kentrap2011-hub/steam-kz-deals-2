@@ -1,22 +1,27 @@
 # CURRENT TASK
 
-## IN PROGRESS — Russian description publication blocker fix 01
-Статус: `in_progress`.
+## COMPLETE — Russian description publication blocker fix 01
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_01.md`;
-- blocker: `game:1213210` / Command & Conquer™ Remastered Collection fails the final meaningful-Russian gate after a successful full visual build;
-- root cause under repair: StoreBrowse does not supply the usable localized text for this exact app, while the existing official Steam `appdetails?cc=kz&l=russian` path does; the quality classifier also falsely matched `Переиздание` as technical edition wording because `издание` lacked word boundaries;
-- implementation PR: `#103`;
-- preservation: no manual Dossier/Fast/Deep backlog processing, no Scheduled Task action, no manual translation/cache population, no validator bypass.
+- target `game:1213210` / Command & Conquer™ Remastered Collection is now `ready_ru / good_ru` in the deployed Pages artifact;
+- proven target root cause: the quality regex matched `издание` inside `Переиздание`, falsely rejecting the meaningful Russian StoreBrowse description and falling back to English `needs_translation`;
+- shared hardening: exact-app official Steam `appdetails?cc=kz&l=russian` is now a direct-source fallback only when StoreBrowse is not `good_ru`, still behind the unchanged meaningful-Russian gate;
+- implementation PR `#103`, merge `f950944b1e9e7ee4433e0ed90c4d262b6ac24c91`;
+- normal full visual run `36339890167` / #808 succeeded with `good_ru=25`, `invalid_count=0`, visual commit `23cf719353d29d09d9df84bc90f9ec4daa6ce3d3`;
+- following Pages deploy `36339924386` / #847 succeeded; Pages artifact `10938334090`;
+- deployed Deep truth remains nonzero: target `397`, attempted `29`, authoritative `29`, fit/not-fit `25/4`; the target card is `progressive_pass2`, `deep completed/fit`, effective source `deep`;
+- no manual Dossier/Fast/Deep backlog processing, no Scheduled Task action, no manual translation/cache population and no validator bypass;
+- report: `reviews/worker_reports/russian-description-publication-blocker-fix-01.md`.
 
-## BLOCKED — Deep visual authoritative binding fix 01
-Статус: `blocked`.
+## COMPLETE — Deep visual authoritative binding fix 01 (external publication gate cleared)
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_DEEP_VISUAL_AUTHORITATIVE_BINDING_FIX_01.md`;
 - implementation: PR #102 merged as `54eea6427ff3a5a03643507865d5a02442737831`;
-- authoritative Deep binding regression and Progressive PASS 2 validation are green; post-merge full visual generation reaches `VISUAL_FINAL_BUILD=BUILT` without the old binding RuntimeError;
-- end-to-end persistence/deploy is blocked later by the independent Russian-description gate for `game:1213210` (`Command & Conquer™ Remastered Collection`, `needs_translation`);
-- build runs `36338505197` / #803 and `36338550470` / #804 fail only after successful visual generation at that later gate; deploys #841/#842 are skipped;
-- Dossier production/state/semantics, semantic backlog and Scheduled Tasks were not changed or manually processed;
-- report: `reviews/worker_reports/deep-visual-authoritative-binding-fix-01.md`.
+- the Deep binding defect itself was already fixed; its original worker report closed as `blocked` only because the independent Russian-description gate prevented end-to-end persistence/deploy;
+- that external gate is now cleared by PR #103; normal full visual run `36339890167` / #808 and following deploy `36339924386` / #847 prove the previously blocked publication chain completes;
+- deployed artifact `10938334090` preserves nonzero current Deep counters/provenance and the target card's `progressive_pass2` / effective `deep` result;
+- no Deep semantic backlog item was manually reprocessed for this acceptance;
+- historical report remains: `reviews/worker_reports/deep-visual-authoritative-binding-fix-01.md`.
 
 
 ## COMPLETE — Progressive Deep parallel frozen start authority fix 01
