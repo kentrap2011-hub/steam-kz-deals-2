@@ -165,6 +165,36 @@ def positive_reasons(positive_evidence: Iterable[str], limit: int = 2, source_bi
     return reasons, provenance
 
 
+def deep_cautions(taste_entry: dict, limit: int = 2):
+    if not isinstance(taste_entry, dict) or taste_entry.get('semantic_source') != 'progressive_pass2':
+        return [], []
+    status = taste_entry.get('deep_negative_assessment_status')
+    if status not in {'completed_with_confirmed_risk', 'completed_with_caution', 'completed_no_relevant_negative'}:
+        return [], []
+    binding = _normalized_binding(taste_entry.get('deep_negative_assessment_binding'))
+    if binding is None:
+        return [], []
+    cautions = []
+    provenance = []
+    for finding in taste_entry.get('deep_negative_findings') or []:
+        if not isinstance(finding, dict) or finding.get('disposition') != 'caution':
+            continue
+        text = _normalized_evidence(finding.get('text_ru'))
+        refs = finding.get('evidence_refs') or []
+        if not text or not refs:
+            continue
+        cautions.append(text)
+        provenance.append({
+            'source': 'deep_dossier_caution',
+            'disposition': 'caution',
+            'evidence_refs': [dict(ref) for ref in refs if isinstance(ref, dict)],
+            'semantic_binding': dict(binding),
+        })
+        if len(cautions) >= limit:
+            break
+    return cautions, provenance
+
+
 def visible_risk_payload(risks: Dict[str, dict], limit: int = 2):
     rows = []
     for row in (risks or {}).values():
@@ -181,13 +211,17 @@ def visible_risk_payload(risks: Dict[str, dict], limit: int = 2):
     visible = rows[:limit]
     risk_codes = [str(row.get('code')) for row in visible]
     risk_texts = [str(row.get('text')).strip() for row in visible]
-    provenance = [
-        {
+    provenance = []
+    for row in visible:
+        item = {
             'code': str(row.get('code')),
             'source': str(row.get('source')),
         }
-        for row in visible
-    ]
+        for field in ('category', 'evidence', 'evidence_refs', 'semantic_binding', 'disposition'):
+            value = row.get(field)
+            if value is not None and value != '':
+                item[field] = value
+        provenance.append(item)
     heuristic_candidates = sum(
         1
         for row in (risks or {}).values()
@@ -197,6 +231,10 @@ def visible_risk_payload(risks: Dict[str, dict], limit: int = 2):
         'has_described_risk': bool(visible),
         'described_risk_count': len(visible),
         'grounding': 'grounded' if visible else 'none',
+        'grounded_taste_negative_witness': any(
+            str(row.get('source') or '') == 'taste_negative_evidence'
+            for row in visible
+        ),
         'heuristic_candidate_count': heuristic_candidates,
     }
     return {

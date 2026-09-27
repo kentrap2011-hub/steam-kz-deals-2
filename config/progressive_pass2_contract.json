@@ -1,9 +1,9 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
-  "version": 9,
+  "version": 10,
   "status": "production_active",
   "phase": "phase_c_pass2",
-  "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; Fast/PASS 1 is never an eligibility prerequisite.",
+  "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; completed Deep results include a separately grounded balanced negative assessment, and Fast/PASS 1 is never an eligibility prerequisite.",
   "implemented": true,
   "active": true,
   "ownership": {
@@ -225,7 +225,8 @@
       "normal_first_pass",
       "recovery_attempts",
       "recovery_owned",
-      "recovery_authorization"
+      "recovery_authorization",
+      "negative_assessment"
     ],
     "fast_history_mutation_allowed": false,
     "target_deep_state_model": {
@@ -264,7 +265,8 @@
         "high"
       ],
       "require_candidate_specific_positive_evidence": true,
-      "require_all_normalized_taste_factors": true
+      "require_all_normalized_taste_factors": true,
+      "require_balanced_negative_assessment": true
     },
     "analyzed_not_fit": {
       "confidence": [
@@ -276,7 +278,8 @@
         "confirmed_personal_negative"
       ],
       "require_completed_candidate_specific_evidence": true,
-      "insufficient_information_forbidden": true
+      "insufficient_information_forbidden": true,
+      "require_balanced_negative_assessment": true
     },
     "analysis_incomplete": {
       "issue_codes": [
@@ -319,7 +322,14 @@
         "recovery_eligible",
         "recovery_pending"
       ]
-    }
+    },
+    "negative_assessment_status_values": [
+      "completed_with_confirmed_risk",
+      "completed_with_caution",
+      "completed_no_relevant_negative",
+      "unresolved",
+      "legacy_not_evaluated"
+    ]
   },
   "dossier_integration": {
     "automatic_recompute_after_canonical_dossier_persistence": "active_github_owned",
@@ -452,5 +462,29 @@
     "worker_chosen_authority_field_allowed": false,
     "marker_parent_is_frozen_authority": true,
     "confirmed_authority_must_equal_v2_marker_parent": true
+  },
+  "negative_assessment": {
+    "decision": "PROJECT_DECISIONS.md#PPD-009",
+    "required_for_new_completed_outcomes": [
+      "analyzed_fit",
+      "analyzed_not_fit"
+    ],
+    "worker_status_values": [
+      "completed",
+      "unresolved"
+    ],
+    "legacy_projection_value": "legacy_not_evaluated",
+    "candidate_evidence_source": "negative_or_mixed_dossier_observations_plus_all_dossier_conflicts",
+    "completed_rule": "evaluated_candidate_refs must exactly cover the accepted immutable Dossier candidate set; findings may be empty only after that explicit evaluation",
+    "unresolved_rule": "evidence exists but cannot be responsibly classified; at least one candidate must be acknowledged and no finding is emitted; unresolved never means no relevant risk",
+    "finding_dispositions": {
+      "confirmed_personal_risk": "must use an existing canonical grounded risk code; scoring remains exclusively under the existing risk policy",
+      "caution": "display-only grounded trade-off; risk_code must be null and creates no score penalty by itself"
+    },
+    "dossier_binding": "every evidence reference is validated against the exact accepted dossier_content_sha256 before persistence",
+    "dossier_remains_neutral": true,
+    "new_risk_weights_or_penalties_allowed": false,
+    "browser_semantic_inference_forbidden": true,
+    "historical_missing_field_policy": "preserve authoritative fit/not-fit completion and project legacy_not_evaluated without automatic replay, invalidation, requeue or recovery"
   }
 }

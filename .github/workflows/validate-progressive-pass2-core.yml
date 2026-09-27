@@ -13,6 +13,10 @@ on:
       - "config/progressive_pass2_execution_receipt_schema.json"
       - "config/progressive_pass2_worker_prompt.md"
       - "scripts/progressive_pass2.py"
+      - "scripts/test_deep_balanced_negative_assessment.py"
+      - "scripts/refine_visual_ranking.py"
+      - "scripts/card_explanation_policy.py"
+      - "scripts/priority_ranking.py"
       - "scripts/progressive_work_authority.py"
       - "scripts/test_progressive_async_traversal.py"
       - "scripts/test_progressive_deep_parallel_frozen_start.py"
@@ -38,6 +42,8 @@ on:
       - "data/production/pre_ai/progressive_pass2_work.json"
       - "web/progressive-personalization-ui.js"
       - "web/progressive-personalization-ui.test.js"
+      - "web/app.js"
+      - "web/index.html"
       - "reviews/worker_reports/progressive-pass2-phase-c-core-implement-01.md"
       - ".github/workflows/build-daily-visual-payload.yml"
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
@@ -59,6 +65,10 @@ on:
       - "config/progressive_pass2_execution_receipt_schema.json"
       - "config/progressive_pass2_worker_prompt.md"
       - "scripts/progressive_pass2.py"
+      - "scripts/test_deep_balanced_negative_assessment.py"
+      - "scripts/refine_visual_ranking.py"
+      - "scripts/card_explanation_policy.py"
+      - "scripts/priority_ranking.py"
       - "scripts/progressive_work_authority.py"
       - "scripts/test_progressive_async_traversal.py"
       - "scripts/test_progressive_deep_parallel_frozen_start.py"
@@ -84,6 +94,8 @@ on:
       - "data/production/pre_ai/progressive_pass2_work.json"
       - "web/progressive-personalization-ui.js"
       - "web/progressive-personalization-ui.test.js"
+      - "web/app.js"
+      - "web/index.html"
       - "reviews/worker_reports/progressive-pass2-phase-c-core-implement-01.md"
       - ".github/workflows/build-daily-visual-payload.yml"
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
@@ -108,6 +120,10 @@ jobs:
         run: |
           python -m py_compile \
             scripts/progressive_pass2.py \
+            scripts/test_deep_balanced_negative_assessment.py \
+            scripts/refine_visual_ranking.py \
+            scripts/card_explanation_policy.py \
+            scripts/priority_ranking.py \
             scripts/progressive_work_authority.py \
             scripts/test_progressive_async_traversal.py \
             scripts/test_progressive_deep_parallel_frozen_start.py \
@@ -130,6 +146,8 @@ jobs:
         run: python scripts/test_progressive_pass2.py
       - name: PASS 2 Dossier integration regression
         run: python scripts/test_progressive_pass2_integration.py
+      - name: Deep balanced negative assessment regression
+        run: python scripts/test_deep_balanced_negative_assessment.py
       - name: PASS 2 canonical-writer staging regression
         run: |
           bash -n scripts/stage_progressive_pass2_canonical_writer.sh

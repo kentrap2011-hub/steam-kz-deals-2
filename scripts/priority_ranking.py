@@ -254,6 +254,10 @@ def practical_risk_rank(game, policy=None):
 def build_risk_status(game, policy=None):
     policy = policy or load_final_policy()
     all_risk_codes = [str(code) for code in (game.get('risk_codes') or []) if code]
+    grounded_taste_witness = any(
+        isinstance(row, dict) and row.get('source') == 'taste_negative_evidence'
+        for row in (game.get('risk_provenance') or [])
+    )
     serious_rank = practical_risk_rank(game, policy)
     if serious_rank > 0:
         return {
@@ -264,6 +268,7 @@ def build_risk_status(game, policy=None):
             'serious_rank': serious_rank,
             'risk_level': game.get('risk_level') or 'unknown',
             'has_described_risk': bool(all_risk_codes),
+            'grounded_taste_negative_witness': grounded_taste_witness,
         }
     if all_risk_codes:
         return {
@@ -274,6 +279,38 @@ def build_risk_status(game, policy=None):
             'serious_rank': 0,
             'risk_level': game.get('risk_level') or 'unknown',
             'has_described_risk': True,
+            'grounded_taste_negative_witness': grounded_taste_witness,
+        }
+    negative_status = game.get('negative_assessment_status')
+    negative_labels = {
+        'completed_with_caution': (
+            'caution_only',
+            'Есть подтверждённые нюансы — без отдельного штрафа',
+        ),
+        'completed_no_relevant_negative': (
+            'evaluated_no_relevant_negative',
+            'Минусы проверены: значимых персональных рисков не найдено',
+        ),
+        'unresolved': (
+            'negative_assessment_unresolved',
+            'Оценка минусов не завершена',
+        ),
+        'legacy_not_evaluated': (
+            'legacy_negative_not_evaluated',
+            'В старом Deep-разборе минусы отдельно не оценивались',
+        ),
+    }
+    if negative_status in negative_labels:
+        code, label = negative_labels[negative_status]
+        return {
+            'code': code,
+            'label': label,
+            'affects_early_priority': False,
+            'affects_score': False,
+            'serious_rank': 0,
+            'risk_level': game.get('risk_level') or 'low',
+            'has_described_risk': False,
+            'grounded_taste_negative_witness': grounded_taste_witness,
         }
     return {
         'code': 'no_confirmed_risk',
@@ -283,6 +320,7 @@ def build_risk_status(game, policy=None):
         'serious_rank': 0,
         'risk_level': game.get('risk_level') or 'low',
         'has_described_risk': False,
+        'grounded_taste_negative_witness': grounded_taste_witness,
     }
 
 

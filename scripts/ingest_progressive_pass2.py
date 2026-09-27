@@ -51,6 +51,21 @@ def _read_json_at_commit(commit, path):
         raise ValueError(f'Progressive run-start authority has invalid JSON at {path}') from exc
 
 
+def _dossier_record_at_commit(commit, item):
+    path = item.get('dossier_path')
+    if not isinstance(path, str) or not path:
+        raise ValueError('Deep frozen work lacks Dossier path')
+    raw = progressive_work_authority.file_bytes_at_commit(commit, path)
+    digest = hashlib.sha256(raw).hexdigest()
+    if digest != item.get('dossier_content_sha256'):
+        raise ValueError('Deep frozen Dossier SHA does not match prepared work')
+    try:
+        doc = json.loads(raw.decode('utf-8'))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError('Deep frozen Dossier is invalid JSON') from exc
+    return {'path': path, 'content_sha256': digest, 'doc': doc}
+
+
 def _write_run_start_receipt(receipt):
     anchor = receipt.get('run_start_anchor_commit')
     if not isinstance(anchor, str) or len(anchor) != 40:
@@ -235,6 +250,7 @@ def resolve_candidate_authority(path, path_field, doc, persisted_work):
             item['_run_start_authority_commit'] = run_commit
             item['_run_started_at_utc'] = run_started
             item['_run_start_authority_verified'] = True
+            item['_dossier_record'] = _dossier_record_at_commit(run_commit, item)
             return item, None
         except (ValueError, OSError, json.JSONDecodeError) as exc:
             # Once transport claims an invocation run-start anchor, exact GitHub
@@ -262,6 +278,14 @@ def resolve_candidate_authority(path, path_field, doc, persisted_work):
     item['_run_start_authority_commit'] = item.get('_work_authority_commit')
     item['_run_started_at_utc'] = None
     item['_run_start_authority_verified'] = False
+    record = progressive_pass2.canonical_dossier_loader(item.get('appid'))
+    if (
+        not isinstance(record, dict)
+        or record.get('path') != item.get('dossier_path')
+        or record.get('content_sha256') != item.get('dossier_content_sha256')
+    ):
+        raise ValueError('current Deep Dossier no longer matches prepared work')
+    item['_dossier_record'] = record
     return item, exact_error or 'missing_github_confirmed_run_start_authority'
 
 def main():

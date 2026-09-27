@@ -657,6 +657,7 @@ def main():
         now=pass2_core.NOW,
     )
     item = next(row for row in ready['items'] if row['family_id'] == 'game:1')
+    item['_dossier_record'] = copy.deepcopy(d1)
     name = Path(item['result_submission_path']).name
     unchanged, bad_receipts = progressive_pass2.process_result_documents(
         pass2_core.work_doc([item]),

@@ -83,6 +83,47 @@ def validate_item(game):
     risk_codes = [str(x).strip() for x in game.get('risk_codes') or [] if str(x).strip()]
     risk_status = game.get('risk_status') or {}
     risk_provenance = game.get('risk_provenance') or []
+    cautions = [str(x).strip() for x in game.get('cautions') or [] if str(x).strip()]
+    caution_provenance = game.get('caution_provenance') or []
+    negative_status = game.get('negative_assessment_status')
+
+    if cautions:
+        if len(caution_provenance) != len(cautions):
+            errors.append(f'{title}: visible caution count and provenance count differ')
+        for row in caution_provenance[:len(cautions)]:
+            if row.get('source') != 'deep_dossier_caution' or row.get('disposition') != 'caution':
+                errors.append(f'{title}: caution provenance is not producer-owned Deep caution')
+                continue
+            if not row.get('evidence_refs'):
+                errors.append(f'{title}: Deep caution lacks exact Dossier evidence refs')
+            binding = row.get('semantic_binding') or {}
+            if binding.get('semantic_source') != 'progressive_pass2':
+                errors.append(f'{title}: Deep caution lacks exact accepted-state binding')
+            if str(binding.get('family_id') or '') != str(game.get('id') or ''):
+                errors.append(f'{title}: Deep caution family binding mismatch')
+            if str(binding.get('semantic_generation_id') or '') != str(
+                game.get('analysis_semantic_generation_id') or ''
+            ):
+                errors.append(f'{title}: Deep caution generation binding mismatch')
+        if negative_status not in {'completed_with_caution', 'completed_with_confirmed_risk'}:
+            errors.append(f'{title}: cautions visible under incompatible negative-assessment status')
+    elif caution_provenance:
+        errors.append(f'{title}: caution provenance exists without visible caution')
+
+    if game.get('effective_analysis_source') == 'deep':
+        allowed_negative = {
+            'completed_with_confirmed_risk',
+            'completed_with_caution',
+            'completed_no_relevant_negative',
+            'unresolved',
+            'legacy_not_evaluated',
+        }
+        if negative_status not in allowed_negative:
+            errors.append(f'{title}: Deep fit lacks producer-owned negative-assessment status')
+        if negative_status == 'legacy_not_evaluated' and risk_status.get('code') == 'no_confirmed_risk':
+            errors.append(f'{title}: legacy Deep result falsely claims no confirmed risk')
+        if negative_status == 'unresolved' and risk_status.get('code') == 'no_confirmed_risk':
+            errors.append(f'{title}: unresolved Deep negative assessment falsely claims no risk')
 
     # In Progressive Phase A a trustworthy fit may publish before optional
     # grounded-negative enrichment. If a risk is shown it must still be fully grounded.
@@ -108,6 +149,12 @@ def validate_item(game):
                     errors.append(f'{title}: Taste negative provenance lacks category')
                 if not str(row.get('evidence') or '').strip():
                     errors.append(f'{title}: Taste negative provenance lacks raw grounded evidence')
+                if game.get('effective_analysis_source') == 'deep':
+                    binding = row.get('semantic_binding') or {}
+                    if binding.get('semantic_source') != 'progressive_pass2':
+                        errors.append(f'{title}: Deep risk lacks exact accepted-state binding')
+                    if not row.get('evidence_refs'):
+                        errors.append(f'{title}: Deep risk lacks exact Dossier evidence refs')
         if taste_witnesses < 1:
             errors.append(f'{title}: visible risks contain no grounded Taste negative provenance')
     elif risk_codes or risk_provenance or risk_status.get('has_described_risk') is True:

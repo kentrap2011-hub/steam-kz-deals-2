@@ -8,6 +8,7 @@ from pathlib import Path
 import progressive_pass1
 import progressive_work_authority
 from taste_cache_common import validate_taste_factors
+from taste_negative_contract import NEGATIVE_FINDING_CATALOG
 
 
 ROOT = Path('.')
@@ -72,6 +73,170 @@ def parse_utc(value):
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=timezone.utc)
     return parsed.astimezone(timezone.utc)
+
+
+DEEP_NEGATIVE_STATUSES = {'completed', 'unresolved'}
+DEEP_NEGATIVE_DISPOSITIONS = {'confirmed_personal_risk', 'caution'}
+
+
+def _negative_ref_key(ref):
+    return (ref['kind'], ref['index'])
+
+
+def _normalize_negative_ref(value, field):
+    if not isinstance(value, dict) or set(value) != {'kind', 'index'}:
+        raise ValueError(f'{field} must contain only kind/index')
+    kind = value.get('kind')
+    index = value.get('index')
+    if kind not in {'observation', 'conflict'}:
+        raise ValueError(f'{field}.kind is unsupported')
+    if isinstance(index, bool) or not isinstance(index, int) or index < 0:
+        raise ValueError(f'{field}.index must be a non-negative integer')
+    return {'kind': kind, 'index': index}
+
+
+def dossier_negative_candidate_refs(dossier):
+    if not isinstance(dossier, dict):
+        raise ValueError('Deep bound Dossier is missing')
+    refs = []
+    for index, row in enumerate(dossier.get('observations') or []):
+        if isinstance(row, dict) and row.get('sentiment') in {'negative', 'mixed'}:
+            refs.append({'kind': 'observation', 'index': index})
+    for index, row in enumerate(dossier.get('conflicts') or []):
+        if isinstance(row, dict):
+            refs.append({'kind': 'conflict', 'index': index})
+    return refs
+
+
+def _bound_dossier(work_item):
+    record = work_item.get('_dossier_record')
+    if not isinstance(record, dict):
+        raise ValueError('Deep negative assessment lacks exact bound Dossier record')
+    if record.get('path') != work_item.get('dossier_path'):
+        raise ValueError('Deep negative assessment Dossier path mismatch')
+    if record.get('content_sha256') != work_item.get('dossier_content_sha256'):
+        raise ValueError('Deep negative assessment Dossier SHA mismatch')
+    dossier = record.get('doc')
+    if not isinstance(dossier, dict):
+        raise ValueError('Deep negative assessment Dossier document is missing')
+    if str(dossier.get('appid') or '') != str(work_item.get('appid') or ''):
+        raise ValueError('Deep negative assessment Dossier appid mismatch')
+    if dossier.get('web_evidence_contract_binding') != work_item.get('dossier_compatibility_binding'):
+        raise ValueError('Deep negative assessment Dossier binding mismatch')
+    return dossier
+
+
+def normalize_negative_assessment(value, work_item):
+    if not isinstance(value, dict) or set(value) != {'status', 'evaluated_candidate_refs', 'findings'}:
+        raise ValueError('Deep negative_assessment must contain only status/evaluated_candidate_refs/findings')
+    status = value.get('status')
+    if status not in DEEP_NEGATIVE_STATUSES:
+        raise ValueError('Deep negative_assessment status is unsupported')
+
+    dossier = _bound_dossier(work_item)
+    canonical_refs = dossier_negative_candidate_refs(dossier)
+    canonical_keys = {_negative_ref_key(ref) for ref in canonical_refs}
+
+    raw_evaluated = value.get('evaluated_candidate_refs')
+    if not isinstance(raw_evaluated, list):
+        raise ValueError('Deep negative_assessment evaluated_candidate_refs must be an array')
+    evaluated = [
+        _normalize_negative_ref(ref, f'negative_assessment.evaluated_candidate_refs[{index}]')
+        for index, ref in enumerate(raw_evaluated)
+    ]
+    evaluated_keys = [_negative_ref_key(ref) for ref in evaluated]
+    if len(set(evaluated_keys)) != len(evaluated_keys):
+        raise ValueError('Deep negative_assessment evaluated_candidate_refs contains duplicates')
+    if any(key not in canonical_keys for key in evaluated_keys):
+        raise ValueError('Deep negative_assessment references non-candidate Dossier evidence')
+
+    raw_findings = value.get('findings')
+    if not isinstance(raw_findings, list):
+        raise ValueError('Deep negative_assessment findings must be an array')
+
+    if status == 'unresolved':
+        if not canonical_refs or not evaluated:
+            raise ValueError('Deep unresolved negative_assessment requires existing evaluated candidate evidence')
+        if raw_findings:
+            raise ValueError('Deep unresolved negative_assessment must not publish partial findings')
+        return {
+            'status': status,
+            'evaluated_candidate_refs': evaluated,
+            'findings': [],
+        }
+
+    if set(evaluated_keys) != canonical_keys:
+        raise ValueError('Deep completed negative_assessment must evaluate every negative/mixed Dossier candidate')
+
+    findings = []
+    for index, finding in enumerate(raw_findings):
+        field = f'negative_assessment.findings[{index}]'
+        if not isinstance(finding, dict) or set(finding) != {'disposition', 'risk_code', 'text_ru', 'evidence_refs'}:
+            raise ValueError(f'{field} has invalid fields')
+        disposition = finding.get('disposition')
+        if disposition not in DEEP_NEGATIVE_DISPOSITIONS:
+            raise ValueError(f'{field}.disposition is unsupported')
+        risk_code = finding.get('risk_code')
+        if disposition == 'confirmed_personal_risk':
+            if risk_code not in NEGATIVE_FINDING_CATALOG:
+                raise ValueError(f'{field}.risk_code must be an existing canonical grounded risk code')
+        elif risk_code is not None:
+            raise ValueError(f'{field}.caution risk_code must be null')
+        text_ru = finding.get('text_ru')
+        if not isinstance(text_ru, str) or not text_ru.strip():
+            raise ValueError(f'{field}.text_ru must be non-empty')
+        raw_refs = finding.get('evidence_refs')
+        if not isinstance(raw_refs, list) or not raw_refs:
+            raise ValueError(f'{field}.evidence_refs must be a non-empty array')
+        refs = [
+            _normalize_negative_ref(ref, f'{field}.evidence_refs[{ref_index}]')
+            for ref_index, ref in enumerate(raw_refs)
+        ]
+        ref_keys = [_negative_ref_key(ref) for ref in refs]
+        if len(set(ref_keys)) != len(ref_keys):
+            raise ValueError(f'{field}.evidence_refs contains duplicates')
+        if any(key not in canonical_keys or key not in set(evaluated_keys) for key in ref_keys):
+            raise ValueError(f'{field} is not grounded in evaluated candidate Dossier evidence')
+        findings.append({
+            'disposition': disposition,
+            'risk_code': risk_code,
+            'text_ru': text_ru.strip(),
+            'evidence_refs': refs,
+        })
+
+    return {
+        'status': status,
+        'evaluated_candidate_refs': evaluated,
+        'findings': findings,
+    }
+
+
+def deep_negative_projection(entry):
+    assessment = entry.get('negative_assessment') if isinstance(entry, dict) else None
+    if not isinstance(assessment, dict):
+        return {
+            'status': 'legacy_not_evaluated',
+            'findings': [],
+            'evaluated_candidate_refs': [],
+        }
+    if assessment.get('status') == 'unresolved':
+        return {
+            'status': 'unresolved',
+            'findings': [],
+            'evaluated_candidate_refs': deepcopy(assessment.get('evaluated_candidate_refs') or []),
+        }
+    findings = deepcopy(assessment.get('findings') or [])
+    if any(row.get('disposition') == 'confirmed_personal_risk' for row in findings if isinstance(row, dict)):
+        status = 'completed_with_confirmed_risk'
+    elif any(row.get('disposition') == 'caution' for row in findings if isinstance(row, dict)):
+        status = 'completed_with_caution'
+    else:
+        status = 'completed_no_relevant_negative'
+    return {
+        'status': status,
+        'findings': findings,
+        'evaluated_candidate_refs': deepcopy(assessment.get('evaluated_candidate_refs') or []),
+    }
 
 
 def load_contract(path=CONTRACT):
@@ -744,6 +909,7 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
     base = _attempt_base(work_item, outcome, accepted_at_utc, 'accepted_result')
 
     if outcome == 'analyzed_fit':
+        negative_assessment = normalize_negative_assessment(doc.get('negative_assessment'), work_item)
         fit_level = doc.get('fit_level')
         confidence = doc.get('confidence')
         if fit_level not in FIT_LEVELS:
@@ -768,10 +934,12 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
             'positive_evidence': evidence,
             'taste_factors': deepcopy(factors),
             'base_support_compatible': True if requires_base else None,
+            'negative_assessment': deepcopy(negative_assessment),
         })
         return base
 
     if outcome == 'analyzed_not_fit':
+        negative_assessment = normalize_negative_assessment(doc.get('negative_assessment'), work_item)
         confidence = doc.get('confidence')
         basis = doc.get('not_fit_basis')
         if confidence not in CONFIDENCE:
@@ -783,13 +951,23 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
         evidence = progressive_pass1._validate_text_list(
             'not_fit_evidence', doc.get('not_fit_evidence'), require_nonempty=True
         )
+        if basis == 'confirmed_personal_negative':
+            confirmed = [
+                row for row in negative_assessment.get('findings') or []
+                if row.get('disposition') == 'confirmed_personal_risk'
+            ]
+            if negative_assessment.get('status') != 'completed' or not confirmed:
+                raise ValueError('confirmed personal negative requires a completed Deep negative assessment with a confirmed personal risk')
         base.update({
             'confidence': confidence,
             'not_fit_basis': basis,
             'not_fit_evidence': evidence,
+            'negative_assessment': deepcopy(negative_assessment),
         })
         return base
 
+    if 'negative_assessment' in doc:
+        raise ValueError('Deep analysis_incomplete must not publish negative_assessment')
     issue = doc.get('issue_code')
     if issue not in INCOMPLETE_CODES:
         raise ValueError('Deep analysis_incomplete has unsupported issue_code')
@@ -910,6 +1088,7 @@ def _apply_attempt(existing, work_item, attempt):
         for field in (
             'fit_level', 'confidence', 'positive_evidence', 'taste_factors',
             'base_support_compatible', 'not_fit_basis', 'not_fit_evidence',
+            'negative_assessment',
         ):
             if field in attempt:
                 entry[field] = deepcopy(attempt[field])
@@ -938,6 +1117,7 @@ def _apply_attempt(existing, work_item, attempt):
     for field in (
         'fit_level', 'confidence', 'positive_evidence', 'taste_factors',
         'base_support_compatible', 'not_fit_basis', 'not_fit_evidence',
+        'negative_assessment',
     ):
         entry.pop(field, None)
         if field in attempt:
@@ -1141,6 +1321,39 @@ def semantic_taste_entry(entry):
         or entry.get('outcome') != 'analyzed_fit'
     ):
         return {}
+
+    binding = {
+        'semantic_source': 'progressive_pass2',
+        **{field: entry.get(field) for field in PASS1_IDENTITY_FIELDS},
+        'dossier_content_sha256': entry.get('dossier_content_sha256'),
+        'authorization_id': entry.get('authorization_id'),
+        'accepted_at_utc': entry.get('accepted_at_utc'),
+        'work_authority_commit': entry.get('work_authority_commit'),
+    }
+    negative = deep_negative_projection(entry)
+    confirmed = [
+        row for row in negative['findings']
+        if row.get('disposition') == 'confirmed_personal_risk'
+    ]
+    legacy_findings = []
+    legacy_evidence = []
+    for row in confirmed:
+        code = row.get('risk_code')
+        spec = NEGATIVE_FINDING_CATALOG.get(code)
+        if not spec:
+            continue
+        evidence = '; '.join(
+            f"dossier_{ref['kind']}[{ref['index']}]"
+            for ref in row.get('evidence_refs') or []
+        )
+        legacy_findings.append({
+            'category': spec['category'],
+            'code': code,
+            'evidence': evidence,
+            'risk_text_ru': row.get('text_ru'),
+        })
+        legacy_evidence.append(evidence)
+
     return {
         'key': entry.get('taste_subject_key'),
         'appid': entry.get('appid'),
@@ -1150,17 +1363,17 @@ def semantic_taste_entry(entry):
         'taste_fingerprint': entry.get('taste_fingerprint'),
         'candidate_context_sha256': entry.get('candidate_context_sha256'),
         'positive_evidence': list(entry.get('positive_evidence') or []),
-        'positive_evidence_binding': {
-            'semantic_source': 'progressive_pass2',
-            **{field: entry.get(field) for field in PASS1_IDENTITY_FIELDS},
-            'dossier_content_sha256': entry.get('dossier_content_sha256'),
-            'authorization_id': entry.get('authorization_id'),
-            'accepted_at_utc': entry.get('accepted_at_utc'),
-            'work_authority_commit': entry.get('work_authority_commit'),
-        },
-        'negative_analysis_status': 'incomplete_no_confirmed_negative',
-        'negative_findings': [],
-        'negative_evidence': [],
+        'positive_evidence_binding': deepcopy(binding),
+        'negative_analysis_status': (
+            'complete_with_confirmed_negative'
+            if legacy_findings else 'incomplete_no_confirmed_negative'
+        ),
+        'negative_findings': legacy_findings,
+        'negative_evidence': legacy_evidence,
+        'deep_negative_assessment_status': negative['status'],
+        'deep_negative_findings': deepcopy(negative['findings']),
+        'deep_negative_evaluated_candidate_refs': deepcopy(negative['evaluated_candidate_refs']),
+        'deep_negative_assessment_binding': deepcopy(binding),
         'taste_factors': dict(entry.get('taste_factors') or {}),
         'fit_evidence_state': 'sufficient',
         'fit_evidence_confidence': entry.get('confidence') or 'medium',
@@ -1172,7 +1385,6 @@ def semantic_taste_entry(entry):
         'semantic_generation_id': entry.get('semantic_generation_id'),
         'dossier_content_sha256': entry.get('dossier_content_sha256'),
     }
-
 
 def current_fit_semantic_entries(context_rows=None, projection_doc=None, queue_rows=None, state_doc=None):
     context_rows = context_rows if context_rows is not None else progressive_pass1.load_jsonl(progressive_pass1.PROGRESSIVE_CONTEXT)
