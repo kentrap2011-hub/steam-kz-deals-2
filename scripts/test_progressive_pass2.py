@@ -197,6 +197,12 @@ def result_doc(item, outcome='analyzed_fit', **extra):
         'recovery_condition_binding': copy.deepcopy(item.get('recovery_condition_binding')),
         'outcome': outcome,
     }
+    if outcome in {'analyzed_fit', 'analyzed_not_fit'}:
+        doc['negative_assessment'] = {
+            'status': 'completed',
+            'evaluated_candidate_refs': [],
+            'findings': [],
+        }
     doc.update(extra)
     return doc
 
@@ -217,7 +223,7 @@ def terminal_doc(item, reason='worker_failure'):
 
 def recompute(bindings, p1, p2, dossiers, current_binding, *, proj=None):
     del bindings
-    return progressive_pass2.recompute_eligibility(
+    result = progressive_pass2.recompute_eligibility(
         context_rows=contexts(),
         projection_doc=proj or projection(),
         queue_rows=queue(),
@@ -227,6 +233,11 @@ def recompute(bindings, p1, p2, dossiers, current_binding, *, proj=None):
         dossier_loader=lambda appid: dossiers.get(str(appid)),
         now=NOW,
     )
+    for item in result.get('items') or []:
+        record = dossiers.get(str(item.get('appid')))
+        if isinstance(record, dict):
+            item['_dossier_record'] = copy.deepcopy(record)
+    return result
 
 
 def fit_result(item):
