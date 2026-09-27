@@ -88,7 +88,7 @@ Use ordinary web research. Useful player-feedback surfaces include Steam review/
 
 Prefer multiple independent physical player-feedback sources when practical. Worker-created `source_id` values do not by themselves create diversity: obvious aliases of the same source URL/public reference are one physical source. When at least two distinct physical used player-feedback sources support the serialized findings, persist `source_mix_status:"multi_source"` and **always** set `single_source_reason:null`. If only one usable physical player source exists after bounded research, persist `source_mix_status:"single_source_only"` with a compact factual non-empty reason.
 
-For every persisted source store only compact source-level provenance: source id, **exactly one** locator (`url` or stable `public_ref`, never both and never neither), domain, source type, approximate publication date when available, language, freshness classification, evidence role and whether it is player feedback. When the locator is `url`, it must be a public HTTPS URL and `domain` must equal that URL hostname under the canonical normalization already used by strict validation: trim whitespace, lowercase, remove trailing dots, then remove one leading `www.` prefix. Do not copy bodies/snippets/quotes into the dossier.
+For every persisted source store only compact source-level provenance: source id, **exactly one** locator (`url` or stable `public_ref`, never both and never neither), domain, source type, factual `publication_date` when actually known or `null` when genuinely unknown, language, evidence role and whether it is player feedback. Do **not** calculate age in days and do **not** choose or serialize `freshness`; GitHub derives `recent/older/unknown` deterministically. When the locator is `url`, it must be a public HTTPS URL and `domain` must equal that URL hostname under the canonical normalization already used by strict validation: trim whitespace, lowercase, remove trailing dots, then remove one leading `www.` prefix. Do not copy bodies/snippets/quotes into the dossier.
 
 ### Pragmatic observed-feedback acquisition and `mention_count`
 
@@ -141,38 +141,25 @@ Every `conflicts[]` entry must contain `statement`, `recurrence`, `mention_count
 
 ## Recency and temporal truth
 
-Search recent feedback first. Prefer material from roughly the last 12 months when available, then expand older if evidence is sparse. The canonical dated-source boundary is mechanical: **365 days or less is `recent`; more than 365 days is `older`**, measured from the dossier `generated_at_utc` date. A dated source must use the matching freshness value. Undated sources may use `publication_date:null`; that preserves the explicit unknown/undated path rather than inventing a date.
+Search current material first when a current-state-sensitive topic is material, then expand to older evidence when needed for history or durable traits. Your temporal output is factual only: for every source and bound player-feedback record, serialize the concrete `publication_date: YYYY-MM-DD` when the date is actually exposed, otherwise serialize `publication_date:null`. Do **not** calculate age in days and do **not** choose or serialize `recent`, `older`, or `unknown` freshness. GitHub owns the canonical 365-day calculation and derives the effective temporal state during strict validation.
 
-If an exact bound feedback record has a known `publication_date` older than 365 days, its parent player-feedback source must not be labeled `freshness:"recent"` or used as `evidence_role:"current_state"` merely because the parent source date is null. The known child date resolves that physical item as old. If the child `publication_date` is genuinely null, preserve the existing undated source/item behavior and do not invent a date.
+An undated parent page does not determine the age of its child feedback. Each supporting player-feedback record is temporally qualified from that record's own factual date. Different dated children under one source may therefore have different effective temporal states. A genuinely unknown child date stays unknown; current page accessibility is never evidence that the child is recent.
 
-For current bugs, performance, compatibility, technical state, localization or regional/service issues, recent evidence dominates old launch-era evidence. A complaint that was common at launch but recent evidence shows fixed or materially reduced must be represented as `evidence_status:"historical"`, not as a current defect. When old and recent evidence conflict and the present state cannot be resolved, use `uncertain`.
-
-The V2 validator requires current observations to cite recent current-state support, historical observations to cite historical evidence plus a recent current-state check, and durable observations to cite durable-trait evidence. Context-only/official sources may support identity or current-state context, but they never create player-sentiment mentions and never raise recurrence.
+For current bugs, performance, compatibility, technical state, localization or regional/service issues, gather concrete dated current-state player feedback whenever reasonably discoverable. Old evidence may still support historical or durable observations, but unknown-dated evidence cannot satisfy a requirement that specifically needs recent support. Final `current` / `historical` temporal admissibility is enforced by GitHub from the actual supporting record dates. Context-only/official sources may support identity or context, but they never create player-sentiment mentions and never substitute for dated player-feedback support.
 
 ## Temporal pre-stop completeness gate
 
-Before deciding that research is sufficient, before setting `research_state:"sufficient"`, and before using `stop_reason:"evidence_stable"`, perform a structured temporal completeness check over the exact observations you currently intend to serialize.
+Before deciding that research is sufficient, before setting `research_state:"sufficient"`, and before using `stop_reason:"evidence_stable"`, check whether every current-state-sensitive observation has the factual dated support needed for GitHub to evaluate it. This is a data-completeness check, not a worker freshness classification.
 
 Use this order:
 
-`collect evidence -> draft/plan observations -> temporal completeness check -> targeted recent retrieval if required -> re-evaluate temporal status -> only then decide sufficient/evidence_stable -> serialize candidate`
+`collect evidence -> draft/plan observations -> check factual publication dates on supporting records -> targeted current-state retrieval if required -> serialize factual dates -> GitHub derives temporal state`
 
-For each proposed observation, first determine whether its topic is current-state-sensitive. This includes bugs, performance, compatibility, technical state, localization, and regional/service state. Do not apply this extra stop gate to durable gameplay/story/art/music/structure traits that remain valid under the existing durable-trait rules.
+For bugs, performance, compatibility, technical state, localization and regional/service state, do not stop with only `publication_date:null` current-state support while a materially distinct dated player-feedback route remains reasonably discoverable and the invocation remains live and safe. Continue bounded exact-product retrieval for concrete dated current-state feedback. Apply the active early multi-source diversification strategy; never turn this into a Steam-only lane, fixed site quota, new retry loop, crawler, or arbitrary numeric search/page quota.
 
-If a current-state-sensitive observation is proposed as `evidence_status:"historical"`, it is temporally complete only when its final bound sources include **both**:
+Do not decide the 365-day boundary yourself. If you have concrete dates, persist those exact dates and let GitHub determine whether they satisfy the current-state requirement. If the present state remains unresolved after bounded research, use the existing `uncertain` semantics rather than inventing a temporal resolution. Durable gameplay/story/art/music/structure traits remain governed by the existing durable-trait rules.
 
-1. historical evidence for the older issue; and
-2. at least one bound source with `evidence_role:"current_state"` and `freshness:"recent"` under the existing <=365-day rule.
-
-If that recent current-state support is missing, continue bounded exact-product recent player-feedback retrieval while a materially distinct required route remains reasonably discoverable and the invocation remains live and safe. Do **not** set `research_state:"sufficient"` and do **not** use `stop_reason:"evidence_stable"` while this required recent check is still missing. Apply the active early multi-source diversification strategy to this targeted recent retrieval: prefer a cheap usable exact-product player-feedback path when exposed, but diversify source-agnostically after an unusable stop-shape; never turn the recent check into a Steam-only lane, fixed site quota, new retry loop, crawler, or arbitrary numeric search/page quota.
-
-After the bounded recent check, re-evaluate the temporal state rather than preserving the draft label mechanically:
-
-- use `historical` only when recent current-state evidence supports a fixed or materially reduced interpretation of the older issue;
-- use the existing `current` semantics when recent evidence supports that the issue is still current, including the unchanged requirement for recent current-state support;
-- use the existing `uncertain` path when the old-vs-current state remains unresolved after bounded research; never force `historical` merely because the available complaint is old.
-
-A hard-bound stop does not waive this gate. If the temporal state is still unresolved, serialize it only through the existing `uncertain` semantics when the dossier is otherwise valid; do not fabricate a historical resolution. This gate changes retrieval/stopping order only. It does not change the definitions of `current`, `historical`, `durable`, `uncertain`, recency, admissible sources, recurrence, privacy, provenance, or strict validation.
+A hard-bound stop does not waive this gate. Unknown dates remain unknown, and no worker-authored freshness label can make them recent. This gate changes only the factual temporal inputs and retrieval/stopping discipline; it does not weaken exact-product identity, privacy, recurrence, TASTE-014 boundedness, TASTE-015 coverage sufficiency, or strict GitHub validation.
 
 ## Russian-language attempt is mandatory
 
