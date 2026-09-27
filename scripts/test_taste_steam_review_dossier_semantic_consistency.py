@@ -63,7 +63,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         same_thread["observations"][1]["player_feedback_ids"] = ["feedback-004", "feedback-005"]
         self.assertIs(self.validate(same_thread, now), same_thread)
 
-    def test_scg02_old_known_child_cannot_be_laundered_by_undated_recent_parent_but_unknown_child_is_preserved(self):
+    def test_scg02_child_dates_drive_current_state_under_undated_parent(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         old_date = (now.date() - timedelta(days=800)).isoformat()
 
@@ -72,15 +72,18 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         old_child["provenance"]["sources"][2]["freshness"] = "recent"
         old_child["provenance"]["sources"][2]["evidence_role"] = "current_state"
         old_child["provenance"]["player_feedback_records"][3]["publication_date"] = old_date
-        with self.assertRaisesRegex(ValueError, "older feedback cannot inherit recent parent-source freshness"):
+        with self.assertRaisesRegex(ValueError, "current claim lacks recent dated current-state feedback"):
             self.validate(old_child, now)
+        self.assertEqual(old_child["provenance"]["sources"][2]["freshness"], "unknown")
 
         unknown_child = web_dossier(620002, now)
         unknown_child["provenance"]["sources"][2]["publication_date"] = None
         unknown_child["provenance"]["sources"][2]["freshness"] = "recent"
         unknown_child["provenance"]["sources"][2]["evidence_role"] = "current_state"
         unknown_child["provenance"]["player_feedback_records"][3]["publication_date"] = None
-        self.assertIs(self.validate(unknown_child, now), unknown_child)
+        with self.assertRaisesRegex(ValueError, "current claim lacks recent dated current-state feedback"):
+            self.validate(unknown_child, now)
+        self.assertEqual(unknown_child["provenance"]["sources"][2]["freshness"], "unknown")
 
     def test_scg03_summary_is_exact_structured_projection_and_cannot_add_claims(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
