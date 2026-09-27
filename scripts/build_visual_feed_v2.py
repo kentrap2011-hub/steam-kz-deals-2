@@ -12,8 +12,11 @@ from russian_description_quality import classify_description
 import commercial_reconsideration_bridge as commercial_bridge
 import progressive_personalization
 from russian_description_translation_runtime import (
+    STEAM_APPDETAILS_RU_SOURCE,
+    fetch_russian_appdetails_data,
     load_translation_cache,
     resolve_description_for_appids as resolve_description_with_translation_cache,
+    russian_description_from_appdetails_data,
 )
 
 ROOT = Path('.')
@@ -215,13 +218,12 @@ def classify_windows(requirements):
 
 
 def fetch_appdetails(appid):
-    url = f'https://store.steampowered.com/api/appdetails?appids={appid}&cc=kz&l=russian'
-    req = urllib.request.Request(url, headers={'User-Agent': 'steam-kz-deals-visual/3.0', 'Accept': 'application/json'})
     try:
-        with urllib.request.urlopen(req, timeout=20) as response:
-            payload = json.loads(response.read().decode('utf-8'))
-        wrapper = payload.get(str(appid)) or {}
-        data = wrapper.get('data') if wrapper.get('success') else None
+        data = fetch_russian_appdetails_data(
+            appid,
+            timeout=20,
+            user_agent='steam-kz-deals-visual/3.0',
+        )
         if not isinstance(data, dict):
             raise ValueError('missing appdetails')
         total = (data.get('achievements') or {}).get('total')
@@ -235,6 +237,7 @@ def fetch_appdetails(appid):
             'steam_achievements': achievements,
             'achievement_total': int(total) if total is not None else None,
             'windows_status': classify_windows(recommendation),
+            '_russian_short_description': russian_description_from_appdetails_data(data),
         }
     except Exception:
         return str(appid), {'steam_achievements': None, 'achievement_total': None, 'windows_status': 'unknown'}
@@ -407,6 +410,17 @@ def main():
     # Tier 2/3 cards use deterministic local artifacts and never block publication.
     media = storebrowse_media(wanted_personalized_appids) if wanted_personalized_appids else {}
     facts = practical_facts(wanted_personalized_appids) if wanted_personalized_appids else {}
+    for appid, app_facts in facts.items():
+        ru_description = app_facts.pop('_russian_short_description', None)
+        if not ru_description:
+            continue
+        media_entry = media.setdefault(appid, {})
+        if classify_description(media_entry.get('short_description_source')) == 'good_ru':
+            continue
+        media_entry['short_description_source'] = ru_description
+        media_entry['short_description_source_quality'] = 'good_ru'
+        media_entry['short_description_ru'] = ru_description
+        media_entry['short_description_source_path'] = STEAM_APPDETAILS_RU_SOURCE
     visible = []
 
     for row, state, scenario, family_id, fam, base_appids in prepared:

@@ -2,6 +2,23 @@ name: Validate execution ownership
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - "config/execution_ownership_contract.json"
+      - "config/daily_execution_contract.json"
+      - "config/russian_description_translation_contract.json"
+      - "config/russian_description_translation_result_contract.json"
+      - "config/russian_description_translation_cache_entry_contract.json"
+      - "scripts/validate_execution_ownership.py"
+      - "scripts/validate_russian_description_translation_contract.py"
+      - "scripts/russian_description_quality.py"
+      - "scripts/russian_description_translation_runtime.py"
+      - "scripts/build_russian_description_translation_queue.py"
+      - "scripts/ingest_russian_description_translations.py"
+      - "scripts/build_visual_feed_v2.py"
+      - "scripts/test_russian_description_quality.py"
+      - "scripts/test_russian_description_translation_runtime.py"
+      - ".github/workflows/validate-execution-ownership.yml"
   push:
     branches: [main]
     paths:
@@ -15,7 +32,13 @@ on:
       - "scripts/validate_execution_ownership.py"
       - "scripts/validate_russian_description_translation_contract.py"
       - "scripts/russian_description_quality.py"
-      - ".github/workflows/*.yml"
+      - "scripts/russian_description_translation_runtime.py"
+      - "scripts/build_russian_description_translation_queue.py"
+      - "scripts/ingest_russian_description_translations.py"
+      - "scripts/build_visual_feed_v2.py"
+      - "scripts/test_russian_description_quality.py"
+      - "scripts/test_russian_description_translation_runtime.py"
+      - ".github/workflows/validate-execution-ownership.yml"
 
 permissions:
   contents: read
@@ -30,8 +53,6 @@ jobs:
     timeout-minutes: 2
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: main
 
       - uses: actions/setup-python@v5
         with:
@@ -42,3 +63,18 @@ jobs:
 
       - name: Validate Russian description translation contract
         run: python scripts/validate_russian_description_translation_contract.py
+
+      - name: Compile Russian description runtime
+        run: |
+          python -m py_compile \
+            scripts/russian_description_quality.py \
+            scripts/russian_description_translation_runtime.py \
+            scripts/build_russian_description_translation_queue.py \
+            scripts/ingest_russian_description_translations.py \
+            scripts/build_visual_feed_v2.py \
+            scripts/test_russian_description_translation_runtime.py
+
+      - name: Run Russian description regressions
+        run: |
+          python scripts/test_russian_description_quality.py
+          python scripts/test_russian_description_translation_runtime.py
