@@ -324,7 +324,7 @@ def validate_run_start_marker_commit(
         _text(repo, 'diff-tree', '--no-commit-id', '--name-status', '-r', anchor).splitlines()
         if value
     ]
-    if changes != [f'A\\t{relative_marker}']:
+    if changes != [f'A\t{relative_marker}']:
         raise ValueError('Progressive run-start anchor commit is not marker-only create-only transport')
 
     try:
