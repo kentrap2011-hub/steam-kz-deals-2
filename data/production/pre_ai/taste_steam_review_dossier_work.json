@@ -15297,7 +15297,14 @@
       {
         "sequence": 15,
         "group_sha256": "87a884630364d967eec094e637a333929c2ed19a013c204adf73c7597be96eb6",
-        "state": "pending"
+        "state": "failed_or_invalid_pending_recovery",
+        "failure": {
+          "validator_error": "provenance.player_feedback_records[2] acquisition_mode requires concrete_item_collection parent provenance",
+          "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea--g000015--87a884630364d967eec094e637a333929c2ed19a013c204adf73c7597be96eb6.json",
+          "artifact_sha256": "3d6cc444d36349415152535eb262e26cfb745179584a021b20ae654176177dcb",
+          "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea/g000015/81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea--g000015--87a884630364d967eec094e637a333929c2ed19a013c204adf73c7597be96eb6.json.invalid-3d6cc444d363",
+          "recovery_eligible": true
+        }
       },
       {
         "sequence": 16,
@@ -15926,11 +15933,11 @@
       }
     ],
     "accepted_group_count": 10,
-    "failed_group_count": 4,
-    "pending_group_count": 126,
+    "failed_group_count": 5,
+    "pending_group_count": 125,
     "accepted_dossier_count": 30,
-    "failed_dossier_count": 12,
-    "pending_dossier_count": 376,
+    "failed_dossier_count": 15,
+    "pending_dossier_count": 373,
     "normal_first_pass_complete": false,
     "all_groups_accepted": false
   }
