@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DEEP_VISUAL_AUTHORITATIVE_BINDING_FIX_01.md` (`IMPLEMENT / VALIDATE`).
+- No worker task is currently assigned/in progress at the top-level Director state.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_DEEP_PARALLEL_FROZEN_START_AUTHORITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -13,30 +13,33 @@
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — Deep visual authoritative binding fix
+## ACCEPTED / BLOCKED — ЧАТ 1 — Deep visual authoritative binding fix
 
 Task:
 `WORKER_TASK_DEEP_VISUAL_AUTHORITATIVE_BINDING_FIX_01.md`
 
-Mode:
-`IMPLEMENT / VALIDATE`
-
-Goal:
-- repair the proven GitHub-owned visual producer guard so trustworthy authoritative Deep results are recognized as current personalized bindings;
-- preserve existing stale/unbound protection;
-- prove successful full visual build and Pages deploy with non-stale Deep statistics.
-
-Scope guard:
-- Dossier is explicitly out of scope and must not be investigated or changed;
-- no Scheduled Task changes;
-- no manual semantic backlog processing.
-
 Report:
 `reviews/worker_reports/deep-visual-authoritative-binding-fix-01.md`
 
+Final status:
+`blocked`
+
+Director acceptance:
+- PR #102 `Fix authoritative Deep visual binding` merged to `main` as `54eea6427ff3a5a03643507865d5a02442737831`;
+- the original Deep publication defect is fixed: trustworthy current authoritative `progressive_pass2` is now recognized by the visual personalized-binding guard;
+- stale/non-current Deep remains fail-closed and existing Fast/cache behavior remains preserved;
+- focused and post-merge PASS 2 validations passed;
+- post-merge full visual builds now pass the previously failing Deep-binding stage and reach `VISUAL_FINAL_BUILD=BUILT`;
+- end-to-end publication remains blocked later by an independent Russian-description gate for `game:1213210` / `Command & Conquer™ Remastered Collection`, whose current description status is `needs_translation`;
+- because that later gate fails, canonical visual persistence and Pages deploy are still skipped, so current non-zero Deep statistics are not yet published;
+- Dossier was explicitly out of scope and was not investigated or changed.
+
+Decision:
+- original Deep visual-binding implementation accepted;
+- a separate bounded follow-up is required for the Russian-description publication blocker before end-to-end site acceptance can complete.
+
 Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`;
-- prior physical ЧАТ 1 is retired and must not be reused as an existing chat.
+- physical ЧАТ 1 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 1 — Deep visual statistics staleness diagnostic
