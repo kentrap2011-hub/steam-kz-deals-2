@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
-  "version": 5,
+  "version": 6,
   "status": "canonical",
   "phase": "phase_b",
   "purpose": "Publish the current deterministic-eligible Steam KZ catalogue while three independent GitHub-owned stages progress: provisional Fast analysis (PASS 1), neutral Dossier preparation, and eventual authoritative Deep analysis (technical PASS 2) for every current eligible game.",
@@ -233,7 +233,17 @@
       "exact_binding_liveness_zero_attempt_projection_preserved": true,
       "old_recovery_only_eligibility_predicate_superseded": true
     },
-    "activation_guard": "Deep/PASS 2 production semantic execution is repository-authorized under FAST-DOSSIER-DEEP-V1. Exactly one externally configured Progressive Deep Worker may execute only current GitHub-prepared work; GitHub remains the control plane for scope, order, attempts, recovery, persistence, recomputation and completeness."
+    "activation_guard": "Deep/PASS 2 production semantic execution is repository-authorized under FAST-DOSSIER-DEEP-V1. Exactly one externally configured Progressive Deep Worker may execute only current GitHub-prepared work; GitHub remains the control plane for scope, order, attempts, recovery, persistence, recomputation and completeness.",
+    "balanced_negative_assessment": {
+      "decision": "PROJECT_DECISIONS.md#PPD-009",
+      "new_completed_deep_requires_explicit_evaluation": true,
+      "dossier_candidate_scope": "negative_or_mixed_observations_and_all_conflicts",
+      "confirmed_personal_risk": "grounded_and_scoreable_only_through_existing_risk_code_and_policy",
+      "caution": "grounded_display_only_no_new_penalty",
+      "completed_no_relevant_negative": "valid_only_after_explicit_full_candidate_evaluation",
+      "unresolved": "not_a_no_risk_conclusion",
+      "historical_missing_assessment": "legacy_not_evaluated_without_automatic_reanalysis"
+    }
   },
   "stage_model": {
     "revision": "FAST-DOSSIER-DEEP-V1",
@@ -332,6 +342,17 @@
           "fast",
           "none"
         ]
+      },
+      "negative_assessment_status": {
+        "values": [
+          "completed_with_confirmed_risk",
+          "completed_with_caution",
+          "completed_no_relevant_negative",
+          "unresolved",
+          "legacy_not_evaluated",
+          null
+        ],
+        "rule": "Producer-owned compatibility/presentation state. Browser must not infer it from empty risks or historical Deep completion."
       }
     },
     "labels_ru": {
