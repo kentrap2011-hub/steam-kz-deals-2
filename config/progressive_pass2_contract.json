@@ -169,7 +169,7 @@
       "rejected_start_marker_authorizes_semantic_execution": false,
       "marker_must_exist_before_semantic_execution": true,
       "provisional_semantic_execution_before_confirmation_allowed": true,
-      "provisional_semantic_source_commit": "exact_observed_main_commit_read_before_marker_creation",
+      "provisional_semantic_source_commit": "run_start_authority_commit_actual_v2_marker_parent",
       "provisional_semantic_work_is_attempt_consumption": false,
       "confirmation_required_before_first_semantic_artifact_publication": true,
       "confirmation_authority_must_equal_observed_main_commit": false,
@@ -435,10 +435,10 @@
     "github_run_start_confirmation_required": true,
     "worker_supplied_run_started_at_is_authority": false,
     "run_started_at_source": "github_run_start_confirmation_git_commit_time",
-    "provisional_semantic_source_commit": "observed_main_commit",
+    "provisional_semantic_source_commit": "run_start_authority_commit_actual_v2_marker_parent",
     "provisional_semantic_execution_before_confirmation_allowed": true,
     "confirmation_required_before_first_artifact_publication": true,
-    "confirmed_authority_must_equal_observed_main_commit": true,
+    "confirmed_authority_must_equal_observed_main_commit": false,
     "provisional_work_discarded_on_rejected_or_mismatched_confirmation": true,
     "missing_confirmation_authorizes_publication": false,
     "bounded_confirmation_wait_max_seconds": 15,
@@ -450,6 +450,7 @@
     "whole_main_equality_after_freeze_required": false,
     "marker_parent_must_descend_from_observed_authority": false,
     "worker_chosen_authority_field_allowed": false,
-    "marker_parent_is_frozen_authority": true
+    "marker_parent_is_frozen_authority": true,
+    "confirmed_authority_must_equal_v2_marker_parent": true
   }
 }
