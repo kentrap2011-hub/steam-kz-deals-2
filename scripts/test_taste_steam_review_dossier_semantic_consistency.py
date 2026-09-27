@@ -783,8 +783,8 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("1000360", PROMPT)
 
     def test_ledger_09_current_retrieval_semantics_remain_unchanged(self):
-        self.assertEqual(SCHEMA["schema_revision"], "pragmatic-observed-feedback-2026-09-26")
-        self.assertEqual(EVIDENCE["contract_revision"], "pragmatic-observed-feedback-2026-09-26")
+        self.assertEqual(SCHEMA["schema_revision"], "github-derived-temporal-classification-2026-09-27")
+        self.assertEqual(EVIDENCE["contract_revision"], "github-derived-temporal-classification-2026-09-27")
         self.assertEqual(
             EVIDENCE["russian_evidence"]["complete_dossier_allowed_states"],
             ["found_and_used", "searched_no_existence_signal"],
