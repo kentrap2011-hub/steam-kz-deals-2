@@ -50,6 +50,32 @@ def validate_item(game):
         for row in fit_provenance[:len(reasons)]:
             if row.get('source') != 'taste_positive_evidence' or not str(row.get('evidence') or '').strip():
                 errors.append(f'{title}: positive provenance is not grounded Taste evidence')
+                continue
+            if game.get('effective_analysis_source') == 'deep':
+                binding = row.get('semantic_binding') or {}
+                required = (
+                    'semantic_generation_id',
+                    'profile_pin_sha256',
+                    'work_id',
+                    'family_id',
+                    'taste_subject_key',
+                    'appid',
+                    'taste_fingerprint',
+                    'candidate_context_sha256',
+                    'dossier_content_sha256',
+                    'authorization_id',
+                    'accepted_at_utc',
+                )
+                if binding.get('semantic_source') != 'progressive_pass2' or any(
+                    binding.get(field) in {None, ''} for field in required
+                ):
+                    errors.append(f'{title}: Deep positive provenance lacks exact accepted-state binding')
+                if str(binding.get('family_id') or '') != str(game.get('id') or ''):
+                    errors.append(f'{title}: Deep positive provenance family binding mismatch')
+                if str(binding.get('semantic_generation_id') or '') != str(
+                    game.get('analysis_semantic_generation_id') or ''
+                ):
+                    errors.append(f'{title}: Deep positive provenance generation binding mismatch')
     elif fit_status.get('has_described_fit') is True:
         errors.append(f'{title}: why_fit_status describes a positive but why_fit is empty')
 

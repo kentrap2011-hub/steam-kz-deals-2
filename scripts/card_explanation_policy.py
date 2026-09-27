@@ -15,6 +15,34 @@ def _normalized_evidence(value):
     return ' '.join(str(value or '').strip().split())
 
 
+POSITIVE_BINDING_FIELDS = (
+    'semantic_source',
+    'semantic_generation_id',
+    'profile_pin_sha256',
+    'work_id',
+    'family_id',
+    'taste_subject_key',
+    'appid',
+    'taste_fingerprint',
+    'candidate_context_sha256',
+    'dossier_content_sha256',
+    'authorization_id',
+    'accepted_at_utc',
+    'work_authority_commit',
+)
+
+
+def _normalized_binding(value):
+    if not isinstance(value, dict):
+        return None
+    binding = {
+        field: value.get(field)
+        for field in POSITIVE_BINDING_FIELDS
+        if value.get(field) not in {None, ''}
+    }
+    return binding or None
+
+
 def _positive_reason(value):
     evidence = _normalized_evidence(value)
     text = evidence.casefold()
@@ -25,6 +53,20 @@ def _positive_reason(value):
         return (
             'mixed_2_5d_first_person',
             'Игра чередует 2.5D-платформинг и эпизоды от первого лица — тебе обычно лучше заходят игры, которые меняют формат и игровые ситуации, а не повторяют один цикл.',
+        )
+
+    mastery_details = []
+    if 'parry' in text or 'parrying' in text:
+        mastery_details.append('парирование')
+    if 'dodge' in text or 'dodging' in text:
+        mastery_details.append('уклонения')
+    if any(phrase in text for phrase in ['enemy reading', 'read enemies', 'reading enemies', 'enemy patterns']):
+        mastery_details.append('чтение действий противника')
+    if len(mastery_details) >= 2:
+        detail = ' и '.join(dict.fromkeys(mastery_details[:2]))
+        return (
+            'combat_mastery',
+            f'Боевая система заметно опирается на {detail} — тебе особенно подходят игры, где важны навык игрока, точные действия и понимание противника.',
         )
 
     tactical_details = []
@@ -62,10 +104,14 @@ def _positive_reason(value):
             f'Важная часть перемещения здесь — {traversal}; тебе особенно нравятся игры, где само движение и контроль персонажа интересны как отдельная механика.',
         )
 
-    if any(phrase in text for phrase in ['new abilities', 'unlock abilities', 'unlock new', 'upgrade abilities', 'ability upgrades']):
+    ability_progression = (
+        ('abilit' in text or 'skill' in text)
+        and any(phrase in text for phrase in ['new ', 'unlock', 'upgrade', 'expand', 'progress'])
+    )
+    if ability_progression:
         return (
             'ability_progression',
-            'По мере прохождения здесь открываются или улучшаются способности с игровым эффектом — тебе особенно подходят игры с ясным прогрессом, который реально меняет возможности персонажа.',
+            'По мере прохождения здесь открываются или развиваются способности с игровым эффектом — тебе особенно подходят игры с ясным прогрессом, который реально меняет возможности персонажа.',
         )
 
     investigation_details = []
@@ -97,19 +143,23 @@ def _positive_reason(value):
     return None, None
 
 
-def positive_reasons(positive_evidence: Iterable[str], limit: int = 2):
+def positive_reasons(positive_evidence: Iterable[str], limit: int = 2, source_binding=None):
     reasons: List[str] = []
     provenance: List[dict] = []
+    semantic_binding = _normalized_binding(source_binding)
     for raw in positive_evidence or []:
         code, reason = _positive_reason(raw)
         if not code or not reason or reason in reasons:
             continue
         reasons.append(reason)
-        provenance.append({
+        row = {
             'source': 'taste_positive_evidence',
             'policy_code': code,
             'evidence': _normalized_evidence(raw),
-        })
+        }
+        if semantic_binding is not None:
+            row['semantic_binding'] = dict(semantic_binding)
+        provenance.append(row)
         if len(reasons) >= limit:
             break
     return reasons, provenance

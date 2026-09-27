@@ -159,7 +159,8 @@ def apply_card_explanation_policy(game, taste_entry, projection, update_scoring=
     changed = False
 
     reasons, why_fit_provenance = card_explanation_policy.positive_reasons(
-        taste_entry.get('positive_evidence') or []
+        taste_entry.get('positive_evidence') or [],
+        source_binding=taste_entry.get('positive_evidence_binding'),
     )
     changed |= _set_if_changed(game, 'why_fit', reasons)
     changed |= _set_if_changed(

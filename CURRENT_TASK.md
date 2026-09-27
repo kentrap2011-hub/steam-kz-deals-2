@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## ACTIVE — Deep positive evidence card projection fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_DEEP_POSITIVE_EVIDENCE_CARD_PROJECTION_FIX_01.md`;
+- branch: `fix/deep-positive-evidence-card-projection-01`;
+- confirmed root-cause boundary: accepted authoritative Deep `positive_evidence` reaches `semantic_taste_entry()`, but the bounded player-facing `card_explanation_policy` recognizes none of the target evidence and emits empty `why_fit`; current provenance also lacks exact Deep work/state binding;
+- scope remains explanation projection only; no Deep/Dossier/Fast rerun, backlog processing, Scheduled Task, ranking-weight or negative-evidence changes.
+
+
 ## COMPLETE — Analysis last write timestamps UI 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_ANALYSIS_LAST_WRITE_TIMESTAMPS_UI_01.md`;

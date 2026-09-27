@@ -491,7 +491,10 @@ def main():
         if analysis_state == 'analyzed_fit':
             tags = projection.get('fit_tags') or []
             taste_description = projection.get('short_description') or ''
-            reasons, why_fit_provenance = positive_reasons(taste_entry.get('positive_evidence') or [])
+            reasons, why_fit_provenance = positive_reasons(
+                taste_entry.get('positive_evidence') or [],
+                source_binding=taste_entry.get('positive_evidence_binding'),
+            )
             base_facts = [facts.get(appid) or {} for appid in base_appids]
             statuses = [x.get('windows_status') for x in base_facts]
             windows_status = (
