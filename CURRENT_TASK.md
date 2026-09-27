@@ -1,13 +1,17 @@
 # CURRENT TASK
 
-## IN PROGRESS — Deep balanced negative assessment contract fix 01
-Статус: `in_progress`.
+## COMPLETE — Deep balanced negative assessment contract fix 01
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_DEEP_BALANCED_NEGATIVE_ASSESSMENT_CONTRACT_FIX_01.md`;
-- worker slot: `ЧАТ 2`;
-- scope: contract-first balanced Deep negative assessment with grounded confirmed risks, display-only cautions, evaluated-no-relevant-negative, unresolved, and truthful legacy/not-evaluated projection;
-- architecture preflight: GitHub remains control-plane owner; Scheduled ChatGPT remains bounded semantic data plane; Dossier stays neutral; existing risk codes/policy remain the only score-penalty authority; no scheduler/queue/retry/backlog replay change;
-- parallel reconciliation: ЧАТ 1 positive-evidence fix is already merged on `main` and must be preserved before merge;
-- no production Deep/Dossier/Fast semantic rerun, backlog processing, or Scheduled Task change is authorized.
+- implementation PR: `#107`; merge: `54591936f1c31c9cf974a222296913def746e6d5`;
+- canonical model: `PPD-009`; every new completed Deep evaluates exact accepted Dossier negative/mixed observations + conflicts, with existing-code confirmed risks separated from display-only cautions;
+- historical old-contract Deep remains authoritative for fit/not-fit but projects `legacy_not_evaluated` instead of falsely claiming no risks;
+- PR PASS 2 `36345232462` / #254, backlog `36345232394` / #1324 and ranking/UI `36345232475` / #24 succeeded; post-merge PASS 2 `36345297259` / #255 and backlog `36345297060` / #1325 also succeeded;
+- normal full visual run `36345297171` / #819 succeeded and produced `d33c74f5d7df21ec6dd38d8a3f896c0d91704a75`;
+- deploy #860 artifact `10939999664` and latest preserved deploy #861 artifact `10939738733` succeeded;
+- latest deployed Jedi remains rank 1 / strong / 68.6 total / 43.6 personal / 25 purchase, preserves both ЧАТ 1 positive reasons, and now says `В старом Deep-разборе минусы отдельно не оценивались`;
+- no production Deep/Dossier/Fast semantic rerun, manual backlog processing, Scheduled Task change, new retry/scheduler, historical backfill or ranking-weight change was performed;
+- report: `reviews/worker_reports/deep-balanced-negative-assessment-contract-fix-01.md`.
 
 
 ## COMPLETE — Deep positive evidence card projection fix 01
