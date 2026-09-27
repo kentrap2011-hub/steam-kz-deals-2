@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## IN PROGRESS — Russian description publication blocker fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_01.md`;
+- blocker: `game:1213210` / Command & Conquer™ Remastered Collection fails the final meaningful-Russian gate after a successful full visual build;
+- root cause under repair: StoreBrowse does not supply the usable localized text for this exact app, while the existing official Steam `appdetails?cc=kz&l=russian` path does; the quality classifier also falsely matched `Переиздание` as technical edition wording because `издание` lacked word boundaries;
+- implementation PR: `#103`;
+- preservation: no manual Dossier/Fast/Deep backlog processing, no Scheduled Task action, no manual translation/cache population, no validator bypass.
+
 ## BLOCKED — Deep visual authoritative binding fix 01
 Статус: `blocked`.
 - task: `WORKER_TASK_DEEP_VISUAL_AUTHORITATIVE_BINDING_FIX_01.md`;
