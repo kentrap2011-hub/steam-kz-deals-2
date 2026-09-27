@@ -15,6 +15,7 @@ on:
       - "scripts/progressive_pass2.py"
       - "scripts/progressive_work_authority.py"
       - "scripts/test_progressive_async_traversal.py"
+      - "scripts/test_progressive_deep_parallel_frozen_start.py"
       - "scripts/build_progressive_pass2_work.py"
       - "scripts/ingest_progressive_pass1.py"
       - "scripts/stage_progressive_pass1_canonical_writer.sh"
@@ -60,6 +61,7 @@ on:
       - "scripts/progressive_pass2.py"
       - "scripts/progressive_work_authority.py"
       - "scripts/test_progressive_async_traversal.py"
+      - "scripts/test_progressive_deep_parallel_frozen_start.py"
       - "scripts/build_progressive_pass2_work.py"
       - "scripts/ingest_progressive_pass1.py"
       - "scripts/stage_progressive_pass1_canonical_writer.sh"
@@ -108,6 +110,7 @@ jobs:
             scripts/progressive_pass2.py \
             scripts/progressive_work_authority.py \
             scripts/test_progressive_async_traversal.py \
+            scripts/test_progressive_deep_parallel_frozen_start.py \
             scripts/build_progressive_pass2_work.py \
             scripts/ingest_progressive_pass1.py \
             scripts/ingest_progressive_pass2.py \
@@ -121,6 +124,8 @@ jobs:
             scripts/progressive_visual_activation_routing.py
       - name: Progressive async traversal + invalid transport regression
         run: python scripts/test_progressive_async_traversal.py
+      - name: Deep parallel frozen-start regression
+        run: python scripts/test_progressive_deep_parallel_frozen_start.py
       - name: PASS 2 core regression
         run: python scripts/test_progressive_pass2.py
       - name: PASS 2 Dossier integration regression
