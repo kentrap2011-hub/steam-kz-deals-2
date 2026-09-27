@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_PROGRESSIVE_DEEP_PARALLEL_FROZEN_START_AUTHORITY_FIX_01.md` (`IMPLEMENT / VALIDATE`).
-- Latest accepted implementation: `WORKER_TASK_DOSSIER_VISUAL_PROGRESS_REFRESH_FIX_01.md`.
+- No worker task is currently assigned/in progress at the top-level Director state.
+- Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_DEEP_PARALLEL_FROZEN_START_AUTHORITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
 - Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
@@ -13,33 +13,36 @@
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — Deep parallel frozen start authority fix
+## ACCEPTED — ЧАТ 1 — Deep parallel frozen start authority fix
 
 Task:
 `WORKER_TASK_PROGRESSIVE_DEEP_PARALLEL_FROZEN_START_AUTHORITY_FIX_01.md`
 
-Mode:
-`IMPLEMENT / VALIDATE`
-
-User-approved correction:
-- Dossier and Deep must run independently in parallel;
-- Deep freezes one exact GitHub-prepared invocation view at start;
-- later repository/Dossier changes belong to the next invocation and must not cancel the frozen current invocation merely because `main` advanced;
-- anti-race protection remains but must prove exact frozen Deep authority rather than whole-repository head stability.
-
-Architecture:
-- GitHub remains Deep control-plane authority;
-- no arbitrary historical work may be revived;
-- no per-item mutable rereads;
-- no serialization of Dossier and Deep;
-- no Scheduled Task changes.
-
 Report:
 `reviews/worker_reports/progressive-deep-parallel-frozen-start-authority-fix-01.md`
 
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- PR #101 `Fix Deep frozen start authority under parallel Dossier writes` merged to `main` as `544c0400b3290f945d1de5464d8dfa9f4faf2aa0`;
+- Deep start no longer depends on the entire repository head remaining unchanged between observation and durable marker creation;
+- GitHub now selects the exact frozen Deep invocation authority from the actual V2 marker parent and confirms the exact PASS 2 contract/work bindings from that authority;
+- legitimate concurrent Dossier or unrelated GitHub writes no longer cancel a valid frozen Deep invocation merely because `main` advanced;
+- Dossier/profile/work/recovery changes after the frozen invocation boundary belong to a later Deep invocation and are not substituted into the current one;
+- stale, forged, mismatched, arbitrary historical, missing-confirmation and rejected-confirmation cases remain fail-closed;
+- GitHub remains the Deep control-plane authority; no scheduler, queue, retry daemon, backlog manager or per-item mutable reread was introduced;
+- Scheduled Task configuration was not changed and no production Deep backlog was manually processed for validation;
+- PR-head validations passed;
+- post-merge validations passed: PASS 2 core run `36334678553`, backlog dispositions run `36334678558`, execution ownership run `36334678675`.
+
+Decision:
+- implementation accepted;
+- Dossier and Deep are now architecturally allowed to progress independently in parallel without whole-`main` movement invalidating an already frozen valid Deep invocation;
+- no additional implementation task is required for this defect.
+
 Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`;
-- prior physical ЧАТ 1 is retired and must not be reused as an existing chat.
+- physical ЧАТ 1 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 2 — Dossier visual progress refresh fix
