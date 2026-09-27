@@ -48,6 +48,19 @@ def file_bytes_at_commit(commit, relative_path, repo_root=Path('.')):
     return _bytes_at(repo, str(commit), relative)
 
 
+def file_blob_sha_at_commit(commit, relative_path, repo_root=Path('.')):
+    """Return the exact Git blob identity for one path in one immutable commit."""
+    repo = Path(repo_root).resolve()
+    commit = str(commit or '').lower()
+    if not COMMIT_SHA_RE.fullmatch(commit):
+        raise ValueError('Progressive frozen authority commit is invalid')
+    relative = _relative(repo, repo / Path(relative_path))
+    blob_sha = _text(repo, 'rev-parse', f'{commit}:{relative}').lower()
+    if not COMMIT_SHA_RE.fullmatch(blob_sha):
+        raise ValueError(f'Progressive frozen authority blob is invalid for {relative}')
+    return blob_sha
+
+
 def result_introduction_commit(artifact_path, repo_root=Path('.')):
     repo = Path(repo_root).resolve()
     artifact = Path(artifact_path).resolve()
@@ -213,7 +226,7 @@ def validate_run_start_marker_commit(
     *,
     repo_root=Path('.'),
 ):
-    """Prove one create-only marker anchored the actual main parent at run start."""
+    """Prove one create-only marker binds one exact GitHub-prepared Deep view."""
     repo = Path(repo_root).resolve()
     anchor = str(anchor_commit or '').lower()
     if not COMMIT_SHA_RE.fullmatch(anchor):
@@ -222,22 +235,36 @@ def validate_run_start_marker_commit(
         raise ValueError('Progressive run-start anchor commit does not resolve exactly')
     if not isinstance(marker_doc, dict):
         raise ValueError('Progressive run-start marker must be a JSON object')
-    required = {
+
+    contract_name = marker_doc.get('contract')
+    schema_version = marker_doc.get('schema_version')
+    common = {
         'schema_version',
         'contract',
         'observed_main_commit',
         'run_start_nonce',
     }
-    if set(marker_doc) != required:
-        raise ValueError('Progressive run-start marker fields are invalid')
-    if marker_doc.get('schema_version') != 1:
-        raise ValueError('Progressive run-start marker schema mismatch')
-    if marker_doc.get('contract') != 'PROGRESSIVE-PASS2-RUN-START-MARKER-V1':
+    v2_fields = {
+        'progressive_pass2_contract_blob_sha',
+        'progressive_pass2_work_blob_sha',
+    }
+    if contract_name == 'PROGRESSIVE-PASS2-RUN-START-MARKER-V1':
+        if schema_version != 1 or set(marker_doc) != common:
+            raise ValueError('Progressive legacy run-start marker fields are invalid')
+        marker_version = 1
+    elif contract_name == 'PROGRESSIVE-PASS2-RUN-START-MARKER-V2':
+        if schema_version != 2 or set(marker_doc) != common | v2_fields:
+            raise ValueError('Progressive frozen-view run-start marker fields are invalid')
+        marker_version = 2
+    else:
         raise ValueError('Progressive run-start marker contract mismatch')
+
     observed = str(marker_doc.get('observed_main_commit') or '').lower()
     nonce = str(marker_doc.get('run_start_nonce') or '').lower()
     if not COMMIT_SHA_RE.fullmatch(observed):
         raise ValueError('Progressive run-start marker observed main is invalid')
+    if _text(repo, 'rev-parse', f'{observed}^{{commit}}') != observed:
+        raise ValueError('Progressive frozen run-start authority does not resolve exactly')
     if not re.fullmatch(r'[0-9a-f]{32}', nonce):
         raise ValueError('Progressive run-start marker nonce is invalid')
 
@@ -250,17 +277,54 @@ def validate_run_start_marker_commit(
         raise ValueError('Progressive run-start marker path does not match its identity')
 
     parent = commit_parent(anchor, repo)
-    if parent != observed:
-        raise ValueError(
-            'Progressive observed main was superseded before the actual run-start marker'
+    if marker_version == 1:
+        # Transitional compatibility for a marker already created by the previous
+        # worker contract. V1 keeps its original strict whole-head equality rule.
+        if parent != observed:
+            raise ValueError(
+                'Progressive observed main was superseded before the actual run-start marker'
+            )
+        contract_blob_sha = file_blob_sha_at_commit(
+            observed, 'config/progressive_pass2_contract.json', repo
         )
+        work_blob_sha = file_blob_sha_at_commit(
+            observed, 'data/production/pre_ai/progressive_pass2_work.json', repo
+        )
+    else:
+        # V2 freezes the exact prepared Deep authority. Later main movement is
+        # allowed only forward from that immutable commit; it cannot replace the
+        # frozen contract/work blobs or authorize an unrelated historical branch.
+        if not commit_is_ancestor(observed, parent, repo):
+            raise ValueError(
+                'Progressive frozen run-start authority is not an ancestor of the marker parent'
+            )
+        contract_blob_sha = str(
+            marker_doc.get('progressive_pass2_contract_blob_sha') or ''
+        ).lower()
+        work_blob_sha = str(
+            marker_doc.get('progressive_pass2_work_blob_sha') or ''
+        ).lower()
+        if not COMMIT_SHA_RE.fullmatch(contract_blob_sha):
+            raise ValueError('Progressive frozen PASS 2 contract blob identity is invalid')
+        if not COMMIT_SHA_RE.fullmatch(work_blob_sha):
+            raise ValueError('Progressive frozen PASS 2 work blob identity is invalid')
+        actual_contract_blob = file_blob_sha_at_commit(
+            observed, 'config/progressive_pass2_contract.json', repo
+        )
+        actual_work_blob = file_blob_sha_at_commit(
+            observed, 'data/production/pre_ai/progressive_pass2_work.json', repo
+        )
+        if contract_blob_sha != actual_contract_blob:
+            raise ValueError('Progressive frozen PASS 2 contract blob mismatch')
+        if work_blob_sha != actual_work_blob:
+            raise ValueError('Progressive frozen PASS 2 work blob mismatch')
 
     changes = [
         value for value in
         _text(repo, 'diff-tree', '--no-commit-id', '--name-status', '-r', anchor).splitlines()
         if value
     ]
-    if changes != [f'A\t{relative_marker}']:
+    if changes != [f'A\\t{relative_marker}']:
         raise ValueError('Progressive run-start anchor commit is not marker-only create-only transport')
 
     try:
@@ -272,12 +336,15 @@ def validate_run_start_marker_commit(
 
     return {
         'run_start_anchor_commit': anchor,
-        'run_start_authority_commit': parent,
+        'run_start_authority_commit': observed,
+        'run_start_marker_parent_commit': parent,
         'run_started_at_utc': commit_committer_time_utc(anchor, repo),
         'run_start_nonce': nonce,
         'marker_path': relative_marker,
+        'marker_contract': contract_name,
+        'progressive_pass2_contract_blob_sha': contract_blob_sha,
+        'progressive_pass2_work_blob_sha': work_blob_sha,
     }
-
 
 def _file_introduction_commit_with_bytes(
     relative_path,
