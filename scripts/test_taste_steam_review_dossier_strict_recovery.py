@@ -107,7 +107,7 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
         for needle in (
             "title **plus the resolved release year**",
-            "old evidence may still support historical or durable observations",
+            "Old evidence may still support historical or durable observations",
             "Russian-language attempt is mandatory",
             "Steam `appreviews` JSON, cursors, fixed review counts",
             "Never persist raw review bodies",
@@ -207,12 +207,14 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "evidence_status": "historical",
             "source_ids": ["source-004", "source-003"],
             "player_feedback_ids": ["feedback-005", "feedback-006", "feedback-007", "feedback-004"],
+            "evidence_languages": ["russian", "non_russian"],
         })
         self.assertIs(self.validate(doc), doc)
         bad = copy.deepcopy(doc)
         bad["observations"][0]["source_ids"] = ["source-004"]
         bad["observations"][0]["player_feedback_ids"] = ["feedback-005", "feedback-006", "feedback-007"]
         bad["observations"][0]["mention_count"] = 3
+        bad["observations"][0]["evidence_languages"] = ["non_russian"]
         with self.assertRaises(ValueError):
             self.validate(bad)
 
