@@ -48,6 +48,19 @@ def file_bytes_at_commit(commit, relative_path, repo_root=Path('.')):
     return _bytes_at(repo, str(commit), relative)
 
 
+def file_blob_sha_at_commit(commit, relative_path, repo_root=Path('.')):
+    """Return the exact Git blob identity for one path in one immutable commit."""
+    repo = Path(repo_root).resolve()
+    commit = str(commit or '').lower()
+    if not COMMIT_SHA_RE.fullmatch(commit):
+        raise ValueError('Progressive frozen authority commit is invalid')
+    relative = _relative(repo, repo / Path(relative_path))
+    blob_sha = _text(repo, 'rev-parse', f'{commit}:{relative}').lower()
+    if not COMMIT_SHA_RE.fullmatch(blob_sha):
+        raise ValueError(f'Progressive frozen authority blob is invalid for {relative}')
+    return blob_sha
+
+
 def result_introduction_commit(artifact_path, repo_root=Path('.')):
     repo = Path(repo_root).resolve()
     artifact = Path(artifact_path).resolve()
@@ -213,7 +226,7 @@ def validate_run_start_marker_commit(
     *,
     repo_root=Path('.'),
 ):
-    """Prove one create-only marker anchored the actual main parent at run start."""
+    """Prove one create-only marker and return the GitHub-selected frozen authority."""
     repo = Path(repo_root).resolve()
     anchor = str(anchor_commit or '').lower()
     if not COMMIT_SHA_RE.fullmatch(anchor):
@@ -222,38 +235,72 @@ def validate_run_start_marker_commit(
         raise ValueError('Progressive run-start anchor commit does not resolve exactly')
     if not isinstance(marker_doc, dict):
         raise ValueError('Progressive run-start marker must be a JSON object')
-    required = {
+
+    contract_name = marker_doc.get('contract')
+    schema_version = marker_doc.get('schema_version')
+    legacy_fields = {
         'schema_version',
         'contract',
         'observed_main_commit',
         'run_start_nonce',
     }
-    if set(marker_doc) != required:
-        raise ValueError('Progressive run-start marker fields are invalid')
-    if marker_doc.get('schema_version') != 1:
-        raise ValueError('Progressive run-start marker schema mismatch')
-    if marker_doc.get('contract') != 'PROGRESSIVE-PASS2-RUN-START-MARKER-V1':
+    v2_fields = {
+        'schema_version',
+        'contract',
+        'run_start_nonce',
+    }
+    if contract_name == 'PROGRESSIVE-PASS2-RUN-START-MARKER-V1':
+        if schema_version != 1 or set(marker_doc) != legacy_fields:
+            raise ValueError('Progressive legacy run-start marker fields are invalid')
+        marker_version = 1
+    elif contract_name == 'PROGRESSIVE-PASS2-RUN-START-MARKER-V2':
+        if schema_version != 2 or set(marker_doc) != v2_fields:
+            raise ValueError('Progressive GitHub-selected run-start marker fields are invalid')
+        marker_version = 2
+    else:
         raise ValueError('Progressive run-start marker contract mismatch')
-    observed = str(marker_doc.get('observed_main_commit') or '').lower()
+
     nonce = str(marker_doc.get('run_start_nonce') or '').lower()
-    if not COMMIT_SHA_RE.fullmatch(observed):
-        raise ValueError('Progressive run-start marker observed main is invalid')
     if not re.fullmatch(r'[0-9a-f]{32}', nonce):
         raise ValueError('Progressive run-start marker nonce is invalid')
 
-    relative_marker = _relative(repo, repo / Path(marker_path))
-    expected_path = (
-        'data/ai_inbox/progressive_pass2/run_starts/'
-        f'{observed}--{nonce}.json'
-    )
-    if relative_marker != expected_path:
-        raise ValueError('Progressive run-start marker path does not match its identity')
-
     parent = commit_parent(anchor, repo)
-    if parent != observed:
-        raise ValueError(
-            'Progressive observed main was superseded before the actual run-start marker'
+    relative_marker = _relative(repo, repo / Path(marker_path))
+    if marker_version == 1:
+        observed = str(marker_doc.get('observed_main_commit') or '').lower()
+        if not COMMIT_SHA_RE.fullmatch(observed):
+            raise ValueError('Progressive run-start marker observed main is invalid')
+        if _text(repo, 'rev-parse', f'{observed}^{{commit}}') != observed:
+            raise ValueError('Progressive legacy run-start authority does not resolve exactly')
+        expected_path = (
+            'data/ai_inbox/progressive_pass2/run_starts/'
+            f'{observed}--{nonce}.json'
         )
+        if relative_marker != expected_path:
+            raise ValueError('Progressive legacy run-start marker path does not match its identity')
+        # Transitional compatibility only. V1 keeps the old strict equality rule.
+        if parent != observed:
+            raise ValueError(
+                'Progressive observed main was superseded before the actual run-start marker'
+            )
+        authority = observed
+    else:
+        expected_path = (
+            'data/ai_inbox/progressive_pass2/run_starts/'
+            f'{nonce}.json'
+        )
+        if relative_marker != expected_path:
+            raise ValueError('Progressive V2 run-start marker path does not match its identity')
+        # V2 deliberately carries no worker-chosen authority. The actual marker
+        # parent is the GitHub-selected immutable invocation boundary.
+        authority = parent
+
+    contract_blob_sha = file_blob_sha_at_commit(
+        authority, 'config/progressive_pass2_contract.json', repo
+    )
+    work_blob_sha = file_blob_sha_at_commit(
+        authority, 'data/production/pre_ai/progressive_pass2_work.json', repo
+    )
 
     changes = [
         value for value in
@@ -272,12 +319,15 @@ def validate_run_start_marker_commit(
 
     return {
         'run_start_anchor_commit': anchor,
-        'run_start_authority_commit': parent,
+        'run_start_authority_commit': authority,
+        'run_start_marker_parent_commit': parent,
         'run_started_at_utc': commit_committer_time_utc(anchor, repo),
         'run_start_nonce': nonce,
         'marker_path': relative_marker,
+        'marker_contract': contract_name,
+        'progressive_pass2_contract_blob_sha': contract_blob_sha,
+        'progressive_pass2_work_blob_sha': work_blob_sha,
     }
-
 
 def _file_introduction_commit_with_bytes(
     relative_path,
@@ -367,6 +417,17 @@ def load_confirmed_run_start_receipt_for_artifact(
     ):
         if receipt.get(field) != proof[field]:
             raise ValueError(f'Progressive GitHub run-start confirmation {field} mismatch')
+    if proof.get('marker_contract') == 'PROGRESSIVE-PASS2-RUN-START-MARKER-V2':
+        for field in (
+            'marker_contract',
+            'run_start_marker_parent_commit',
+            'progressive_pass2_contract_blob_sha',
+            'progressive_pass2_work_blob_sha',
+        ):
+            if receipt.get(field) != proof[field]:
+                raise ValueError(
+                    f'Progressive GitHub frozen-view confirmation {field} mismatch'
+                )
 
     receipt_commit = _file_introduction_commit_with_bytes(
         receipt_path,

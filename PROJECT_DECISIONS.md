@@ -697,6 +697,23 @@ Before the **first** Deep result or terminal execution receipt from the invocati
 
 ---
 
+## PPD-008 — Deep start authority is the GitHub-selected marker parent, not whole-main stability
+
+**Дата:** 2026-09-27  
+**Статус:** canonical; supersedes only the PPD-006/PPD-007 rule that let a semantic worker preselect an observed whole-`main` commit and required the later marker parent to equal that earlier observation. The create-only marker, GitHub publication guard, immutable invocation view and trusted marker commit time remain mandatory.
+
+**Решение:** Dossier and Deep remain independent stages and may advance in parallel. A new V2 Deep run-start marker contains only its schema/contract and a fresh nonce; it contains no worker-selected authority commit, PASS 2 work blob, contract blob or timestamp. The marker commit's actual single Git parent is the exact GitHub-selected `run_start_authority_commit`. Only after that marker exists does the worker read and freeze from this immutable parent the exact PASS 2 contract/work blobs, ordered work identities, immutable profile pin, exact accepted Dossier content/binding/expiry, recovery authorization and exact result/terminal paths.
+
+A canonical Dossier/profile/work/repository write that lands **before** the marker is naturally included in the marker parent and therefore in this invocation. A write that lands **after** the marker belongs only to the next invocation and cannot retroactively cancel or substitute into the frozen run merely because `main` advanced. The marker commit's Git committer time remains the only trusted `run_started_at_utc`, and no Deep result or terminal execution receipt may cross the publication boundary before the durable GitHub confirmation proves that exact marker-parent authority.
+
+**Stale-work protection:** V2 does not mean “accept any old commit”. The semantic worker cannot nominate an authority at all: GitHub chooses the actual marker parent. GitHub computes the exact PASS 2 contract/work blob identities from that parent, validates active prepared work/profile state, proves marker-only create semantics/path/nonce, and later ingest resolves the exact frozen work item/path/authorization from the confirmed authority. Existing consumed/retired/newer-accepted and exact authorization checks remain fail-closed. A worker therefore cannot revive a historical valid-looking work unit H when the actual V2 marker parent is current authority C; H cannot match C's GitHub receipt and frozen work lookup. Missing/rejected/mismatched confirmation or forged material bindings publish nothing and consume no attempt. Legacy V1 markers retain their original strict parent-equals-observed rule for transitional compatibility only.
+
+**Ownership:** GitHub remains the sole control-plane authority for scope/order, eligibility, start authority, confirmation, attempts, recovery, acceptance, completeness and persistence. Scheduled ChatGPT may perform only a non-authoritative active/nonempty preflight, create one nonce-only V2 marker, then perform bounded semantics against the actual marker-parent view. No second scheduler, queue, retry daemon, backlog manager, Dossier serialization or per-item mutable-current reread is introduced.
+
+**Основные места:** `config/progressive_pass2_contract.json`, `config/progressive_pass2_worker_prompt.md`, `config/execution_ownership_contract.json`, `scripts/progressive_work_authority.py`, `scripts/ingest_progressive_pass2.py`, `scripts/test_progressive_deep_parallel_frozen_start.py`, `.github/workflows/validate-progressive-pass2-core.yml`.
+
+---
+
 ## TASTE-016 — Directly observed exact-product player feedback is usable without permanent per-review identity
 
 **Дата:** 2026-09-26  
