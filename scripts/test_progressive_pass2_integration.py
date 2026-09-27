@@ -121,6 +121,7 @@ def main():
     # DEEP-INT-05: exact identity rebinding invalidates old consumed Deep state and
     # establishes a new normal first-pass identity; no retry budget is reused.
     item1 = next(item for item in with_fast['items'] if item['family_id'] == 'game:1')
+    item1['_dossier_record'] = copy.deepcopy(d1)
     completed, receipts = progressive_pass2.process_result_documents(
         core.work_doc([item1]),
         empty_p2,
@@ -161,6 +162,7 @@ def main():
     # recomputation never emits a blind retry merely because time passes or work
     # is projected again.
     item2 = next(item for item in with_fast['items'] if item['family_id'] == 'game:2')
+    item2['_dossier_record'] = copy.deepcopy(d2)
     unresolved_doc = core.result_doc(
         item2, outcome='analysis_incomplete', issue_code='insufficient_evidence'
     )
