@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## IN PROGRESS — Deep visual authoritative binding fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_DEEP_VISUAL_AUTHORITATIVE_BINDING_FIX_01.md`;
+- scope: bounded repair of the GitHub-owned visual personalized-binding guard for current authoritative Deep/PASS 2 plus focused regression and end-to-end visual publication validation;
+- Dossier production/state/semantics and all Scheduled Tasks are out of scope;
+- no production semantic backlog processing is authorized;
+- branch: `fix/deep-visual-authoritative-binding-01`.
+
+
 ## COMPLETE — Progressive Deep parallel frozen start authority fix 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_PROGRESSIVE_DEEP_PARALLEL_FROZEN_START_AUTHORITY_FIX_01.md`;
