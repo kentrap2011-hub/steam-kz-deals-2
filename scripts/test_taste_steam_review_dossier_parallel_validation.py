@@ -249,7 +249,9 @@ class ParallelValidationTests(unittest.TestCase):
         workflow = (ROOT / ".github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml").read_text(encoding="utf-8")
         self.assertIn("python scripts/ingest_taste_steam_review_dossier_inbox.py --reconcile-nonfatal", workflow)
         self.assertIn("python scripts/taste_steam_review_dossier_parallel_validation.py", workflow)
-        self.assertIn("taste_steam_review_dossier_validation_status.json", workflow)
+        self.assertIn("bash scripts/stage_taste_dossier_canonical_writer.sh stage", workflow)
+        stager = (ROOT / "scripts/stage_taste_dossier_canonical_writer.sh").read_text(encoding="utf-8")
+        self.assertIn("taste_steam_review_dossier_validation_status.json", stager)
         self.assertNotIn("workflow_dispatch", workflow)
 
 

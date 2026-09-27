@@ -127,10 +127,11 @@ class PrepublicationParityTests(unittest.TestCase):
 
     def test_hellish_live_shape_rejected_before_publication(self):
         def mutate(artifact):
-            source = artifact["dossiers"][0]["provenance"]["sources"][2]
-            source["freshness"] = "older"
-            source["evidence_role"] = "durable_trait"
-        self.assert_same_failure(mutate, "freshness is incoherent with publication_date")
+            dossier = artifact["dossiers"][0]
+            dossier["provenance"]["sources"][2]["publication_date"] = None
+            dossier["provenance"]["sources"][2].pop("freshness", None)
+            dossier["provenance"]["player_feedback_records"][3]["publication_date"] = None
+        self.assert_same_failure(mutate, "current claim lacks recent dated current-state feedback")
 
     def test_deeeer_live_single_source_shape_rejected_before_publication(self):
         def mutate(artifact):

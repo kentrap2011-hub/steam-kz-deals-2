@@ -103,11 +103,11 @@ class WebEvidenceSchemaTests(unittest.TestCase):
         self.assertEqual(EVIDENCE_CONTRACT["schema"], "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2")
         self.assertEqual(EVIDENCE_CONTRACT["version"], 2)
         self.assertEqual(SCHEMA["evidence_contract"], EVIDENCE_CONTRACT["schema"])
-        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-pragmatic-observed-feedback-v1")
+        self.assertEqual(current_worker_contract_binding()["worker_prompt_revision"], "web-evidence-v2-github-derived-temporal-classification-v1")
         prompt = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
         for needle in (
             "title **plus the resolved release year**",
-            "recent evidence dominates old launch-era evidence",
+            "Old evidence may still support historical or durable observations",
             "Russian-language attempt is mandatory",
             "Steam `appreviews` JSON, cursors, fixed review counts",
             "Never persist raw review bodies",
@@ -203,14 +203,18 @@ class WebEvidenceSchemaTests(unittest.TestCase):
             "statement": "A launch-era technical complaint is historical because a recent current-state check no longer reproduces it.",
             "sentiment": "negative",
             "recurrence": "moderate",
-            "mention_count": 3,
+            "mention_count": 4,
             "evidence_status": "historical",
             "source_ids": ["source-004", "source-003"],
-            "player_feedback_ids": ["feedback-005", "feedback-006", "feedback-007"],
+            "player_feedback_ids": ["feedback-005", "feedback-006", "feedback-007", "feedback-004"],
+            "evidence_languages": ["russian", "non_russian"],
         })
         self.assertIs(self.validate(doc), doc)
         bad = copy.deepcopy(doc)
         bad["observations"][0]["source_ids"] = ["source-004"]
+        bad["observations"][0]["player_feedback_ids"] = ["feedback-005", "feedback-006", "feedback-007"]
+        bad["observations"][0]["mention_count"] = 3
+        bad["observations"][0]["evidence_languages"] = ["non_russian"]
         with self.assertRaises(ValueError):
             self.validate(bad)
 

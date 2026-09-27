@@ -249,6 +249,7 @@ class CanonicalWriterCoalescingLivenessTests(unittest.TestCase):
             self.assertNotIn("schedule:", workflow)
             staging_surface = workflow
             for helper in (
+                "scripts/stage_taste_dossier_canonical_writer.sh",
                 "scripts/stage_progressive_pass1_canonical_writer.sh",
                 "scripts/stage_progressive_pass2_canonical_writer.sh",
             ):

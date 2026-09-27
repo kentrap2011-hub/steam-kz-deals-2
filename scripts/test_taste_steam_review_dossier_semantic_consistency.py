@@ -63,7 +63,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         same_thread["observations"][1]["player_feedback_ids"] = ["feedback-004", "feedback-005"]
         self.assertIs(self.validate(same_thread, now), same_thread)
 
-    def test_scg02_old_known_child_cannot_be_laundered_by_undated_recent_parent_but_unknown_child_is_preserved(self):
+    def test_scg02_child_dates_drive_current_state_under_undated_parent(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         old_date = (now.date() - timedelta(days=800)).isoformat()
 
@@ -72,15 +72,18 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         old_child["provenance"]["sources"][2]["freshness"] = "recent"
         old_child["provenance"]["sources"][2]["evidence_role"] = "current_state"
         old_child["provenance"]["player_feedback_records"][3]["publication_date"] = old_date
-        with self.assertRaisesRegex(ValueError, "older feedback cannot inherit recent parent-source freshness"):
+        with self.assertRaisesRegex(ValueError, "current claim lacks recent dated current-state feedback"):
             self.validate(old_child, now)
+        self.assertEqual(old_child["provenance"]["sources"][2]["freshness"], "unknown")
 
         unknown_child = web_dossier(620002, now)
         unknown_child["provenance"]["sources"][2]["publication_date"] = None
         unknown_child["provenance"]["sources"][2]["freshness"] = "recent"
         unknown_child["provenance"]["sources"][2]["evidence_role"] = "current_state"
         unknown_child["provenance"]["player_feedback_records"][3]["publication_date"] = None
-        self.assertIs(self.validate(unknown_child, now), unknown_child)
+        with self.assertRaisesRegex(ValueError, "current claim lacks recent dated current-state feedback"):
+            self.validate(unknown_child, now)
+        self.assertEqual(unknown_child["provenance"]["sources"][2]["freshness"], "unknown")
 
     def test_scg03_summary_is_exact_structured_projection_and_cannot_add_claims(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
@@ -546,40 +549,41 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertIn("Never persist raw review bodies", PROMPT)
 
 
-    def test_temporal_prestop_01_historical_technical_requires_recent_check_before_stop(self):
+    def test_temporal_prestop_01_worker_supplies_factual_dates_not_freshness(self):
         self.assertIn("## Temporal pre-stop completeness gate", PROMPT)
-        self.assertIn('do **not** use `stop_reason:"evidence_stable"`', PROMPT)
-        self.assertIn('Do **not** set `research_state:"sufficient"`', PROMPT)
-        self.assertIn("at least one bound source with `evidence_role:\"current_state\"` and `freshness:\"recent\"`", PROMPT)
+        self.assertIn("factual `publication_date` when actually known or `null`", PROMPT)
+        self.assertIn("do **not** choose or serialize `freshness`", PROMPT)
+        self.assertEqual(EVIDENCE["recency"]["temporal_classification_owner"], "github_control_plane")
 
-    def test_temporal_prestop_02_missing_recent_support_continues_bounded_retrieval(self):
-        self.assertIn("continue bounded exact-product recent player-feedback retrieval", PROMPT)
-        self.assertIn("If that recent current-state support is missing, continue bounded exact-product recent player-feedback retrieval while a materially distinct required route remains reasonably discoverable", PROMPT)
+    def test_temporal_prestop_02_missing_dated_current_support_continues_bounded_retrieval(self):
+        self.assertIn("Continue bounded exact-product retrieval for concrete dated current-state feedback", PROMPT)
+        self.assertIn("while a materially distinct dated player-feedback route remains reasonably discoverable", PROMPT)
 
     def test_temporal_prestop_03_historical_semantics_are_unchanged(self):
         self.assertTrue(SCHEMA["observation_invariants"]["historical_requires_historical_and_recent_current_state_sources"])
+        self.assertTrue(SCHEMA["observation_invariants"]["historical_requires_historical_feedback_and_recent_current_state_bound_feedback"])
         self.assertEqual(EVIDENCE["recency"]["launch_only_issue_with_recent_fix_or_material_reduction"], "historical")
         self.assertEqual(set(EVIDENCE["accepted_evidence_statuses"]), {"current", "historical", "durable", "uncertain"})
 
     def test_temporal_prestop_04_unresolved_uses_existing_uncertain_path(self):
         self.assertEqual(EVIDENCE["recency"]["conflicting_or_insufficient_temporal_evidence"], "uncertain")
-        self.assertIn("use the existing `uncertain` path when the old-vs-current state remains unresolved", PROMPT)
-        self.assertIn("never force `historical` merely because the available complaint is old", PROMPT)
+        self.assertIn("use the existing `uncertain` semantics rather than inventing a temporal resolution", PROMPT)
 
     def test_temporal_prestop_05_current_still_requires_recent_support(self):
         self.assertTrue(SCHEMA["observation_invariants"]["current_requires_recent_current_state_source"])
+        self.assertTrue(SCHEMA["observation_invariants"]["current_requires_recent_current_state_bound_feedback"])
         self.assertTrue(EVIDENCE["recency"]["current_state_requires_recent_support"])
-        self.assertIn("unchanged requirement for recent current-state support", PROMPT)
+        self.assertFalse(EVIDENCE["recency"]["unknown_temporal_evidence_satisfies_recent_requirement"])
+        self.assertIn("unknown-dated evidence cannot satisfy a requirement that specifically needs recent support", PROMPT)
 
     def test_temporal_prestop_06_durable_traits_are_not_over_tightened(self):
         durable = set(EVIDENCE["recency"]["old_feedback_remains_valid_for"])
         self.assertTrue({"gameplay", "story", "structure", "difficulty"}.issubset(durable))
-        self.assertIn("Do not apply this extra stop gate to durable gameplay/story/art/music/structure traits", PROMPT)
+        self.assertIn("Durable gameplay/story/art/music/structure traits remain governed by the existing durable-trait rules", PROMPT)
 
-    def test_temporal_prestop_07_recent_retrieval_preserves_early_multi_source_diversification(self):
+    def test_temporal_prestop_07_current_retrieval_preserves_early_multi_source_diversification(self):
         self.assertIn("Apply the active early multi-source diversification strategy", PROMPT)
-        self.assertIn("diversify source-agnostically after an unusable stop-shape", PROMPT)
-        self.assertIn("never turn the recent check into a Steam-only lane", PROMPT)
+        self.assertIn("never turn this into a Steam-only lane", PROMPT)
         diversification = EVIDENCE["adaptive_research"]["russian_discovery"]["retrieval_diversification"]
         self.assertFalse(diversification["steam_required_as_retrieval_source"])
         self.assertFalse(diversification["fixed_named_website_quota"])
@@ -589,7 +593,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertIsNone(bounds["max_web_search_queries"])
         self.assertIsNone(bounds["max_opened_or_read_source_pages"])
         self.assertIn("arbitrary numeric search/page quota", PROMPT)
-        self.assertIn("never turn the recent check into a Steam-only lane, fixed site quota, new retry loop, crawler", PROMPT)
+        self.assertIn("new retry loop, crawler", PROMPT)
 
     def test_temporal_prestop_09_strict_validator_semantics_remain_authoritative(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
@@ -606,7 +610,7 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         doc["provenance"]["sources"][1]["evidence_role"] = "historical"
         doc["observations"] = [historical]
         self.refresh_summary(doc)
-        with self.assertRaisesRegex(ValueError, "historical/fixed claim lacks recent current-state check"):
+        with self.assertRaisesRegex(ValueError, "historical/fixed claim lacks recent dated current-state check"):
             self.validate(doc, now)
 
     def test_temporal_prestop_10_privacy_provenance_and_language_guards_are_unchanged(self):
@@ -615,17 +619,17 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertTrue(EVIDENCE["language_binding"]["strict_exact_equality_required"])
         self.assertTrue(EVIDENCE["compact_provenance"]["internal_join_ids"]["author_identity_independent"])
 
-    def test_temporal_prestop_11_existing_stop_order_is_explicit_without_product_hardcoding(self):
-        order = "collect evidence -> draft/plan observations -> temporal completeness check -> targeted recent retrieval if required -> re-evaluate temporal status -> only then decide sufficient/evidence_stable -> serialize candidate"
+    def test_temporal_prestop_11_new_stop_order_uses_dates_without_worker_age_math(self):
+        order = "collect evidence -> draft/plan observations -> check factual publication dates on supporting records -> targeted current-state retrieval if required -> serialize factual dates -> GitHub derives temporal state"
         self.assertIn(order, PROMPT)
+        self.assertIn("Do not decide the 365-day boundary yourself", PROMPT)
         self.assertNotIn("60 Seconds! Reatomized", PROMPT)
         self.assertNotIn("1012880", PROMPT)
         self.assertNotIn("steamcommunity.com/app/1012880", PROMPT)
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-pragmatic-observed-feedback-v1")
-
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-github-derived-temporal-classification-v1")
 
     def test_ledger_01_marker_binding_and_core_fields(self):
-        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-pragmatic-observed-feedback-v1")
+        self.assertEqual(EVIDENCE["worker_prompt_revision"], "web-evidence-v2-github-derived-temporal-classification-v1")
         self.assertIn("FAIL_CLOSED_EXECUTION_LEDGER_V1", PROMPT)
         for field in (
             "snapshot_id",
@@ -779,8 +783,8 @@ class SemanticConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("1000360", PROMPT)
 
     def test_ledger_09_current_retrieval_semantics_remain_unchanged(self):
-        self.assertEqual(SCHEMA["schema_revision"], "pragmatic-observed-feedback-2026-09-26")
-        self.assertEqual(EVIDENCE["contract_revision"], "pragmatic-observed-feedback-2026-09-26")
+        self.assertEqual(SCHEMA["schema_revision"], "github-derived-temporal-classification-2026-09-27")
+        self.assertEqual(EVIDENCE["contract_revision"], "github-derived-temporal-classification-2026-09-27")
         self.assertEqual(
             EVIDENCE["russian_evidence"]["complete_dossier_allowed_states"],
             ["found_and_used", "searched_no_existence_signal"],

@@ -403,16 +403,19 @@ def _validate_publication_date(value, generated_date, label):
     return parsed
 
 
-def _validate_dated_freshness(publication_date, freshness, generated_date, evidence_contract, label):
+def derive_temporal_state(publication_date, generated_date, evidence_contract):
+    """Derive the canonical evidence temporal state from a factual publication date."""
     if publication_date is None:
-        return
+        return "unknown"
     threshold = int(evidence_contract["recency"]["recent_max_age_days"])
     age_days = (generated_date - publication_date).days
-    expected = "recent" if age_days <= threshold else "older"
-    if freshness != expected:
-        raise ValueError(
-            f"{label}.freshness is incoherent with publication_date: expected {expected} at {age_days} days old"
-        )
+    return "recent" if age_days <= threshold else "older"
+
+
+def _record_temporal_state(record, generated_date, evidence_contract):
+    value = record.get("publication_date")
+    parsed = date.fromisoformat(value) if value is not None else None
+    return derive_temporal_state(parsed, generated_date, evidence_contract)
 
 
 def _is_steam_store_app_page(source):
@@ -512,15 +515,13 @@ def _validate_source(
     publication_date = _validate_publication_date(source.get("publication_date"), generated_date, label)
     if source.get("language") not in enums["source_language"]:
         raise ValueError(f"{label}.language is invalid")
-    freshness = source.get("freshness")
-    if freshness not in enums["source_freshness"]:
+    supplied_freshness = source.get("freshness")
+    if supplied_freshness is not None and supplied_freshness not in enums["source_freshness"]:
         raise ValueError(f"{label}.freshness is invalid")
-    _validate_dated_freshness(publication_date, freshness, generated_date, evidence_contract, label)
+    source["freshness"] = derive_temporal_state(publication_date, generated_date, evidence_contract)
     role = source.get("evidence_role")
     if role not in enums["source_evidence_role"]:
         raise ValueError(f"{label}.evidence_role is invalid")
-    if role == "current_state" and freshness != "recent":
-        raise ValueError(f"{label} current_state evidence must be classified recent")
     if type(source.get("player_feedback")) is not bool:
         raise ValueError(f"{label}.player_feedback must be JSON boolean")
 
@@ -627,11 +628,7 @@ def _validate_feedback_record(
             raise ValueError(f"{label} relaxed observed feedback requires exact-product source binding")
         item_identity = f"local-observed:{source_id}:{feedback_id}"
 
-    publication_date = _validate_publication_date(record.get("publication_date"), generated_date, label)
-    if publication_date is not None:
-        threshold = int(evidence_contract["recency"]["recent_max_age_days"])
-        if (generated_date - publication_date).days > threshold and source.get("freshness") == "recent":
-            raise ValueError(f"{label} older feedback cannot inherit recent parent-source freshness")
+    _validate_publication_date(record.get("publication_date"), generated_date, label)
     language = record.get("language")
     if language not in enums["source_language"]:
         raise ValueError(f"{label}.language is invalid")
@@ -682,7 +679,7 @@ def _validate_game_identity(identity, dossier, source_map, enums, schema_doc, ge
         raise ValueError("game identity must corroborate the exact work-item appid")
 
 
-def _validate_observations(dossier, source_map, feedback_map, enums, schema_doc):
+def _validate_observations(dossier, source_map, feedback_map, enums, schema_doc, generated_date, evidence_contract):
     observations = dossier.get("observations")
     if not isinstance(observations, list) or not observations:
         raise ValueError("dossier observations must be a non-empty list")
@@ -737,19 +734,30 @@ def _validate_observations(dossier, source_map, feedback_map, enums, schema_doc)
             raise ValueError(
                 f"observation {index} evidence_languages must exactly equal the canonical bound-record language projection"
             )
-        referenced = [source_map[source_id] for source_id in source_ids]
+        bound_support = [
+            (record, source_map[record["source_id"]], _record_temporal_state(record, generated_date, evidence_contract))
+            for record in feedback_records
+        ]
         status = observation["evidence_status"]
         if status not in enums["evidence_status"]:
             raise ValueError(f"observation {index} evidence_status is invalid")
-        if status == "current" and not any(s["evidence_role"] == "current_state" and s["freshness"] == "recent" for s in referenced):
-            raise ValueError(f"observation {index} current claim lacks recent current-state evidence")
+        if status == "current" and not any(
+            source["evidence_role"] == "current_state" and temporal_state == "recent"
+            for _record, source, temporal_state in bound_support
+        ):
+            raise ValueError(f"observation {index} current claim lacks recent dated current-state feedback")
         if status == "historical":
-            if not any(s["evidence_role"] == "historical" for s in referenced):
-                raise ValueError(f"observation {index} historical claim lacks historical evidence")
-            if not any(s["evidence_role"] == "current_state" and s["freshness"] == "recent" for s in referenced):
-                raise ValueError(f"observation {index} historical/fixed claim lacks recent current-state check")
-        if status == "durable" and not any(s["evidence_role"] == "durable_trait" for s in referenced):
-            raise ValueError(f"observation {index} durable claim lacks durable-trait evidence")
+            if not any(source["evidence_role"] == "historical" for _record, source, _state in bound_support):
+                raise ValueError(f"observation {index} historical claim lacks historical feedback")
+            if not any(
+                source["evidence_role"] == "current_state" and temporal_state == "recent"
+                for _record, source, temporal_state in bound_support
+            ):
+                raise ValueError(f"observation {index} historical/fixed claim lacks recent dated current-state check")
+        if status == "durable" and not any(
+            source["evidence_role"] == "durable_trait" for _record, source, _state in bound_support
+        ):
+            raise ValueError(f"observation {index} durable claim lacks durable-trait feedback")
         digest = canonical_sha256(observation)
         if digest in seen:
             raise ValueError("dossier contains an exact duplicate observation")
@@ -1031,7 +1039,15 @@ def validate_dossier_strict(
         raise ValueError("player-feedback ids must be sequential dossier-local feedback-NNN tokens")
 
     _validate_game_identity(dossier.get("game_identity"), dossier, source_map, enums, schema_doc, generated)
-    observations, used_feedback_ids = _validate_observations(dossier, source_map, feedback_map, enums, schema_doc)
+    observations, used_feedback_ids = _validate_observations(
+        dossier,
+        source_map,
+        feedback_map,
+        enums,
+        schema_doc,
+        generated.date(),
+        evidence_contract,
+    )
     used_feedback_ids.update(_validate_conflicts(dossier, source_map, feedback_map, enums, schema_doc))
 
     expected_summary = derive_dossier_summary(observations, dossier["conflicts"])

@@ -940,3 +940,14 @@
 - active snapshot `b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5`: 444 required items / 148 groups / next pending sequence 1;
 - no Scheduled Task action, manual Tiny Snow recovery, Dossier/Deep recovery or production backlog replay was performed;
 - report: `reviews/worker_reports/taste-dossier-pragmatic-evidence-model-fix-01.md`.
+
+
+### Taste Dossier GitHub-derived dates + ingest atomicity fix 01
+Статус: `complete_ready_for_director_acceptance`.
+- task: `WORKER_TASK_TASTE_DOSSIER_GITHUB_DATE_DERIVATION_AND_INGEST_ATOMICITY_FIX_01.md`;
+- implementation: PR #99;
+- implementation validation: Dossier run #193 / `36312723478` success; Progressive PASS 2 run #172 / `36312723454` success; backlog run #1249 / `36312723552` success;
+- GitHub now derives recent/older/unknown from factual publication dates under the unchanged 365-day rule; actual bound feedback dates govern current/historical support;
+- failed-group audit/quarantine staging is independent and fail-closed; clean-worktree proof runs before rebase/push;
+- no Scheduled Task action, Tiny Snow production rerun, g000001 recovery, Deep recovery or backlog processing was performed;
+- report: `reviews/worker_reports/taste-dossier-github-date-derivation-and-ingest-atomicity-fix-01.md`.

@@ -171,6 +171,7 @@
       "immutable_group_plan",
       "per_group_pending_accepted_failed_state",
       "strict_validation",
+      "deterministic_recent_older_unknown_derivation_from_factual_publication_dates",
       "canonical_dossier_persistence",
       "failed_group_quarantine_and_recovery_eligibility",
       "next_pending_projection",
@@ -180,7 +181,9 @@
     "scheduled_chatgpt_role": "bounded_semantic_candidate_generation_and_create_only_transport_only",
     "failed_group_blocks_unrelated_groups": false,
     "new_queue_retry_loop_or_scheduler_created": false,
-    "scheduled_worker_may_edit_own_schedule": false
+    "scheduled_worker_may_edit_own_schedule": false,
+    "scheduled_chatgpt_temporal_role": "supply_factual_publication_dates_or_null_only_not_temporal_classification",
+    "unknown_date_recent_support_rule": "unknown_date_never_satisfies_recent_support"
   },
   "progressive_personalization_phase_c_pass2_core": {
     "status": "production_active",
