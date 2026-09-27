@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_TASTE_DOSSIER_STALE_SNAPSHOT_RECONCILIATION_01.md` (`READ-ONLY / RECON`).
+- Active worker assignments: `ЧАТ 1` — `WORKER_TASK_TASTE_DOSSIER_STALE_SNAPSHOT_RECONCILIATION_01.md` (`READ-ONLY / RECON`); `ЧАТ 2` — `WORKER_TASK_DOSSIER_VISUAL_PROGRESS_REFRESH_FIX_01.md` (`IMPLEMENT / VALIDATE`).
 - Latest accepted implementation: `WORKER_TASK_TASTE_DOSSIER_GITHUB_DATE_DERIVATION_AND_INGEST_ATOMICITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -11,6 +11,33 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 2 — Dossier visual progress refresh fix
+
+Task:
+`WORKER_TASK_DOSSIER_VISUAL_PROGRESS_REFRESH_FIX_01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Goal:
+- re-prove why current accepted Dossier progress is not reflected in published site statistics;
+- implement the smallest GitHub-owned propagation/rebuild fix;
+- keep browser read-only and create no new scheduler/queue/Scheduled Task dependency.
+
+Architecture:
+- GitHub owns progress counts, visual rebuild trigger, persistence and publication;
+- Dossier semantic rules and recovery are out of scope;
+- no manual production/backlog processing for validation.
+
+Report:
+`reviews/worker_reports/dossier-visual-progress-refresh-fix-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 2`;
+- previous physical `ЧАТ 2` remains retired and must not be reused as an existing chat;
+- may run alongside ЧАТ 1 only under the task's no-write-conflict guard.
 
 
 ## ACTIVE — НОВЫЙ ЧАТ 1 — stale Dossier snapshot reconciliation
