@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignments: `ЧАТ 1` — `WORKER_TASK_DEEP_POSITIVE_EVIDENCE_CARD_PROJECTION_FIX_01.md` (`IMPLEMENT / VALIDATE`); `ЧАТ 2` — `WORKER_TASK_JEDI_DEEP_MISSING_NEGATIVE_EVIDENCE_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
+- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DEEP_POSITIVE_EVIDENCE_CARD_PROJECTION_FIX_01.md` (`IMPLEMENT / VALIDATE`).
 - Latest accepted implementation: `WORKER_TASK_ANALYSIS_LAST_WRITE_TIMESTAMPS_UI_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -37,31 +37,36 @@ Worker state:
 - use a NEW physical worker conversation in slot `ЧАТ 1`.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 2 — Jedi Deep missing negative evidence diagnostic
+## ACCEPTED — ЧАТ 2 — Jedi Deep missing negative evidence diagnostic
 
 Task:
 `WORKER_TASK_JEDI_DEEP_MISSING_NEGATIVE_EVIDENCE_DIAGNOSTIC_01.md`
 
-Mode:
-`READ-ONLY / RECON`
-
-Goal:
-- trace the exact accepted Dossier -> Deep result -> PASS 2 state -> risk projection -> published card chain for `game:1172380`;
-- prove why no negative/risk finding is visible;
-- distinguish genuine absence of evidence from prompt/result omission, persistence loss or visual projection loss;
-- implement nothing.
-
-Scope guard:
-- no Dossier/Deep/Fast rerun or state change;
-- no Scheduled Task changes;
-- only the report may be written.
-
 Report:
 `reviews/worker_reports/jedi-deep-missing-negative-evidence-diagnostic-01.md`
 
+Final status:
+`needs_fix`
+
+Director acceptance:
+- diagnosis accepted;
+- accepted Jedi Dossier does contain concrete mixed/negative material, including divisive backtracking/no-fast-travel friction and current EA-app launch/access friction;
+- therefore the absence of negatives is not explained by an empty Dossier;
+- the current successful Deep `analyzed_fit` contract/prompt allows positive evidence and taste factors but has no general field for a balanced negative/risk assessment;
+- the exact accepted Jedi Deep result consequently contained no negative/risk field;
+- ingest/state persistence faithfully preserved what Deep returned; no persistence loss was found;
+- downstream PASS 2 projection then explicitly produces empty negative arrays, so visual/risk mapping has nothing grounded to show;
+- two additional authoritative Deep fit games showed the same pattern, proving this is systematic for current `analyzed_fit`, not Jedi-specific;
+- conclusion label accepted: `DEEP_PROMPT_OR_CONTRACT_OMISSION`;
+- current card text `Подтверждённых персональных рисков не найдено` must not be interpreted as proof that the Dossier contained no drawbacks.
+
+Decision:
+- a separate contract-first implementation task is required;
+- that future task must distinguish evaluated grounded negative findings from scoring risk and any allowed display-only caution;
+- no implementation or production rerun was performed here.
+
 Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 2`;
-- prior physical ЧАТ 2 is complete/retired and must not be reused as the same conversation.
+- physical ЧАТ 2 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 2 — Analysis last-write timestamps UI
