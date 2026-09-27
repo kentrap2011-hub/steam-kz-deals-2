@@ -299,7 +299,7 @@ class PragmaticEvidenceModelRegressionTests(unittest.TestCase):
         doc = web_dossier("1002578", self.now)
         doc["observations"][0]["evidence_status"] = "historical"
         doc["provenance"]["sources"][1]["evidence_role"] = "historical"
-        with self.assertRaisesRegex(ValueError, "historical/fixed claim lacks recent current-state check"):
+        with self.assertRaisesRegex(ValueError, "historical/fixed claim lacks recent dated current-state check"):
             self.validate(doc)
 
     def test_prag_14_no_scheduler_queue_retry_crawler_or_author_registry_added(self):
@@ -327,6 +327,7 @@ class PragmaticEvidenceModelRegressionTests(unittest.TestCase):
                 "immutable_group_plan",
                 "per_group_pending_accepted_failed_state",
                 "strict_validation",
+                "deterministic_recent_older_unknown_derivation_from_factual_publication_dates",
                 "canonical_dossier_persistence",
                 "failed_group_quarantine_and_recovery_eligibility",
                 "next_pending_projection",
