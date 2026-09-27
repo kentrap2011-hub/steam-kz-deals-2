@@ -162,7 +162,8 @@ function renderRisk(g){
     el.textContent='';
     el.className='risk-status hidden';
   }
-  textList($('risks'),g.risks,'Риск пока не подготовлен.');
+  textList($('risks'),g.risks,'');
+  textList($('cautions'),(g.cautions||[]).map(x=>`Нюанс: ${x}`),'');
 }
 function renderPackageDeal(g){
   const p=g.better_purchase_option;
@@ -264,7 +265,7 @@ function renderFeed(){
   const gp=(g.gameplay_points||[]).filter(Boolean);$('gameplaySection').classList.toggle('hidden',!gp.length);$('gameplay').innerHTML=gp.map(x=>`<li>${escapeHtml(x)}</li>`).join('');
   $('personalizationSection').classList.toggle('hidden',!personalized);
   if(personalized){textList($('whyFit'),g.why_fit,'Персональная причина пока не подготовлена.');renderRisk(g);renderPriority(g)}
-  else{$('prioritySection').classList.add('hidden');$('riskStatus').classList.add('hidden');$('whyFit').textContent='';$('risks').textContent=''}
+  else{$('prioritySection').classList.add('hidden');$('riskStatus').classList.add('hidden');$('whyFit').textContent='';$('risks').textContent='';$('cautions').textContent=''}
   $('fit').classList.toggle('hidden',!personalized);
   $('fit').textContent=personalized?`Соответствие вкусу: ${g.fit==='strong'?'сильное':'умеренное'}`:'';
   $('wishlist').classList.toggle('hidden',!g.wishlist);renderOffers(g);
