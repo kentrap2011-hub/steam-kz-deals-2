@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "appid": "1227690",
-  "title": "Severed Steel",
+  "appid": "1227890",
+  "title": "Summer Memories",
   "generated_at_utc": "2026-09-27T16:54:32Z",
   "expires_at_utc": "2026-10-17T16:54:32Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Severed Steel",
-    "release_year": 2021,
+    "work_title": "Summer Memories",
+    "release_year": 2020,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,40 +30,37 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1227690"
+        "value": "1227890"
       },
       {
         "kind": "developer",
-        "value": "Greylock Studio"
+        "value": "Dojin Otome"
       }
     ]
   },
   "summary": "Evidence summary: 5 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "mechanics",
-      "statement": "Fast parkour, slow motion, frequent weapon stealing, and destructible environments form a highly expressive shooter loop; Russian and non-Russian players repeatedly describe the movement-and-fire combination as the main source of enjoyment.",
+      "category": "structure",
+      "statement": "Player feedback describes a thirty-day countryside schedule built around exploration and repeatable daily activities such as fishing, bug catching, earning money, and deciding how to spend limited time.",
       "sentiment": "positive",
-      "recurrence": "moderate",
-      "mention_count": 3,
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
-        "russian",
         "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002",
         "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-001",
-        "feedback-002",
-        "feedback-004"
+        "feedback-003",
+        "feedback-005"
       ]
     },
     {
-      "category": "difficulty",
-      "statement": "The game can feel awkward during the first hour while movement and dive limitations are being learned, but one recent player reports that the experience improves markedly once the controls and challenge modes click.",
+      "category": "progression",
+      "statement": "Hidden interactions, multiple outcomes, and a New Game Plus loop reward replay and discovery, although some content is obscure enough that players may consult a guide to see everything.",
       "sentiment": "mixed",
       "recurrence": "anecdotal",
       "mention_count": 1,
@@ -79,9 +76,9 @@
       ]
     },
     {
-      "category": "repetition",
-      "statement": "The main campaign is deliberately compact, and Russian feedback values that it ends before the action becomes stale while optional missions, Rogue Steel, New Game Plus, and Workshop content offer extra replay for players who want more.",
-      "sentiment": "positive",
+      "category": "other",
+      "statement": "Adult relationship content is a central part of the game's identity alongside its light story and life-sim structure, and Russian player feedback makes clear that this can dominate a player's impression more than the everyday activities.",
+      "sentiment": "mixed",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
@@ -96,28 +93,8 @@
       ]
     },
     {
-      "category": "other",
-      "statement": "Story is consistently secondary to the action: player feedback describes the narrative context as extremely thin or nearly absent, which keeps the pace moving but gives little motivation beyond stylish combat.",
-      "sentiment": "mixed",
-      "recurrence": "limited",
-      "mention_count": 2,
-      "evidence_languages": [
-        "russian",
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002",
-        "source-003"
-      ],
-      "player_feedback_ids": [
-        "feedback-002",
-        "feedback-004"
-      ]
-    },
-    {
-      "category": "repetition",
-      "statement": "A separate Russian review finds weak enemy behavior and repeated combat patterns capable of making the game boring despite its stylish premise.",
+      "category": "localization",
+      "statement": "Russian player feedback reports a language barrier, consistent with the exact product not offering Russian interface or subtitles on its Steam listing.",
       "sentiment": "negative",
       "recurrence": "anecdotal",
       "mention_count": 1,
@@ -129,7 +106,24 @@
         "source-002"
       ],
       "player_feedback_ids": [
-        "feedback-003"
+        "feedback-001"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Some players find the management and discovery systems opaque because important interactions are not obvious, making external guidance useful for completion-oriented play.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-004"
       ]
     }
   ],
@@ -140,7 +134,7 @@
     "source_mix_status": "multi_source",
     "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "moderate",
+    "overall_strength": "limited",
     "stop_reason": "evidence_stable",
     "coverage": {
       "dimensions": [
@@ -153,6 +147,19 @@
         },
         {
           "dimension": "controls_game_feel",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            4
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
           "state": "covered",
           "observation_indices": [
             0,
@@ -160,33 +167,17 @@
           ]
         },
         {
-          "dimension": "progression_development_unlocks",
-          "state": "covered",
-          "observation_indices": [
-            2
-          ]
-        },
-        {
-          "dimension": "variety_repetition_over_time",
-          "state": "covered",
-          "observation_indices": [
-            2,
-            4
-          ]
-        },
-        {
           "dimension": "difficulty_mastery_learning_friction",
           "state": "covered",
           "observation_indices": [
-            1
+            4
           ]
         },
         {
           "dimension": "pacing_structure_direction",
           "state": "covered",
           "observation_indices": [
-            2,
-            3
+            0
           ]
         },
         {
@@ -194,7 +185,7 @@
           "state": "covered",
           "observation_indices": [
             0,
-            2
+            1
           ]
         },
         {
@@ -206,7 +197,7 @@
           "dimension": "story_characters_identity_hooks",
           "state": "covered",
           "observation_indices": [
-            3
+            2
           ]
         },
         {
@@ -214,22 +205,23 @@
           "state": "covered",
           "observation_indices": [
             0,
-            2
+            1
           ]
         },
         {
           "dimension": "recurring_complaints_tradeoffs",
           "state": "covered",
           "observation_indices": [
-            1,
             3,
             4
           ]
         },
         {
           "dimension": "technical_performance_localization_regional",
-          "state": "not_material_or_not_applicable",
-          "observation_indices": []
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
         }
       ],
       "closure_basis": "broad_neutral_picture",
@@ -241,48 +233,48 @@
     "sources": [
       {
         "source_id": "source-001",
-        "source_type": "official_metadata",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1227690/Severed_Steel/",
-        "publication_date": "2021-09-17",
+        "source_type": "professional_context",
+        "domain": "steam.ru",
+        "url": "https://steam.ru/games/summer-memories",
+        "publication_date": null,
         "language": "non_russian",
         "evidence_role": "identity",
         "player_feedback": false,
-        "freshness": "older"
+        "freshness": "unknown"
       },
       {
         "source_id": "source-002",
-        "source_type": "other_player_feedback",
-        "domain": "stopgame.ru",
-        "url": "https://stopgame.ru/game/severed_steel",
+        "source_type": "steam_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1227890/_/?curator_clanid=38794803&l=russian",
         "publication_date": null,
         "language": "russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection",
+        "feedback_surface_mode": "search_result_representation",
         "exact_product_binding": {
-          "basis": "source_title_release",
-          "appid": null,
-          "title": "Severed Steel",
-          "release_year": 2021
+          "basis": "source_appid",
+          "appid": "1227890",
+          "title": null,
+          "release_year": null
         },
         "freshness": "unknown"
       },
       {
         "source_id": "source-003",
-        "source_type": "other_player_feedback",
-        "domain": "steamstat.io",
-        "url": "https://steamstat.io/ru/app/1227690",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1227890/reviews/?browsefilter=toprated",
         "publication_date": null,
-        "language": "mixed",
+        "language": "non_russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection",
         "exact_product_binding": {
-          "basis": "source_appid_title_release",
-          "appid": "1227690",
-          "title": "Severed Steel",
-          "release_year": 2021
+          "basis": "source_appid",
+          "appid": "1227890",
+          "title": null,
+          "release_year": null
         },
         "freshness": "unknown"
       }
@@ -291,28 +283,35 @@
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": "2023-11-28",
+        "publication_date": "2026-03-08",
         "language": "russian",
-        "acquisition_mode": "inspected_collection_item"
+        "acquisition_mode": "search_result_observation"
       },
       {
         "feedback_id": "feedback-002",
         "source_id": "source-002",
-        "publication_date": "2023-01-16",
+        "publication_date": "2026-03-07",
         "language": "russian",
-        "acquisition_mode": "inspected_collection_item"
+        "acquisition_mode": "search_result_observation"
       },
       {
         "feedback_id": "feedback-003",
-        "source_id": "source-002",
-        "publication_date": "2026-04-26",
-        "language": "russian",
+        "source_id": "source-003",
+        "publication_date": "2023-06-27",
+        "language": "non_russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
         "feedback_id": "feedback-004",
         "source_id": "source-003",
-        "publication_date": "2026-08-04",
+        "publication_date": "2024-03-02",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": "2021-03-20",
         "language": "non_russian",
         "acquisition_mode": "inspected_collection_item"
       }
