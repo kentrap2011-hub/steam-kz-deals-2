@@ -171,6 +171,9 @@
     "run_start_anchor_commit": {
       "type": "string",
       "pattern": "^[0-9a-f]{40}$"
+    },
+    "negative_assessment": {
+      "$ref": "#/$defs/deepNegativeAssessment"
     }
   },
   "additionalProperties": false,
@@ -230,6 +233,219 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "enum": [
+              "analyzed_fit",
+              "analyzed_not_fit"
+            ]
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "required": [
+          "negative_assessment"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "analysis_incomplete"
+          }
+        },
+        "required": [
+          "outcome"
+        ]
+      },
+      "then": {
+        "not": {
+          "required": [
+            "negative_assessment"
+          ]
+        }
+      }
     }
-  ]
+  ],
+  "$defs": {
+    "deepNegativeEvidenceRef": {
+      "type": "object",
+      "required": [
+        "kind",
+        "index"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "observation",
+            "conflict"
+          ]
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "deepNegativeFinding": {
+      "type": "object",
+      "required": [
+        "disposition",
+        "risk_code",
+        "text_ru",
+        "evidence_refs"
+      ],
+      "properties": {
+        "disposition": {
+          "enum": [
+            "confirmed_personal_risk",
+            "caution"
+          ]
+        },
+        "risk_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "unchanged_repetition",
+            "low_active_gameplay",
+            "directionlessness",
+            "management_routine",
+            "difficulty_punishment",
+            "stealth_restart_pressure",
+            "felt_technical_burden",
+            "other_grounded_taste_risk",
+            null
+          ]
+        },
+        "text_ru": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/deepNegativeEvidenceRef"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "disposition": {
+                "const": "confirmed_personal_risk"
+              }
+            },
+            "required": [
+              "disposition"
+            ]
+          },
+          "then": {
+            "properties": {
+              "risk_code": {
+                "type": "string",
+                "enum": [
+                  "unchanged_repetition",
+                  "low_active_gameplay",
+                  "directionlessness",
+                  "management_routine",
+                  "difficulty_punishment",
+                  "stealth_restart_pressure",
+                  "felt_technical_burden",
+                  "other_grounded_taste_risk"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "disposition": {
+                "const": "caution"
+              }
+            },
+            "required": [
+              "disposition"
+            ]
+          },
+          "then": {
+            "properties": {
+              "risk_code": {
+                "const": null
+              }
+            }
+          }
+        }
+      ]
+    },
+    "deepNegativeAssessment": {
+      "type": "object",
+      "required": [
+        "status",
+        "evaluated_candidate_refs",
+        "findings"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "completed",
+            "unresolved"
+          ]
+        },
+        "evaluated_candidate_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/deepNegativeEvidenceRef"
+          }
+        },
+        "findings": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/deepNegativeFinding"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "unresolved"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "evaluated_candidate_refs": {
+                "minItems": 1
+              },
+              "findings": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
 }
