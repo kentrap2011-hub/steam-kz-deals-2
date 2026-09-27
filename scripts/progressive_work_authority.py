@@ -434,6 +434,17 @@ def load_confirmed_run_start_receipt_for_artifact(
     ):
         if receipt.get(field) != proof[field]:
             raise ValueError(f'Progressive GitHub run-start confirmation {field} mismatch')
+    if proof.get('marker_contract') == 'PROGRESSIVE-PASS2-RUN-START-MARKER-V2':
+        for field in (
+            'marker_contract',
+            'run_start_marker_parent_commit',
+            'progressive_pass2_contract_blob_sha',
+            'progressive_pass2_work_blob_sha',
+        ):
+            if receipt.get(field) != proof[field]:
+                raise ValueError(
+                    f'Progressive GitHub frozen-view confirmation {field} mismatch'
+                )
 
     receipt_commit = _file_introduction_commit_with_bytes(
         receipt_path,
