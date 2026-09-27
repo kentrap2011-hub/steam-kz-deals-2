@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## IN PROGRESS — НОВЫЙ ЧАТ 2 — GitHub-derived Dossier dates + ingest atomicity fix
+## ACCEPTED — ЧАТ 2 — GitHub-derived Dossier dates + ingest atomicity fix
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_GITHUB_DATE_DERIVATION_AND_INGEST_ATOMICITY_FIX_01.md`
@@ -8,41 +8,31 @@ Task:
 Report:
 `reviews/worker_reports/taste-dossier-github-date-derivation-and-ingest-atomicity-fix-01.md`
 
-Status:
-`authorized_implement_validate`
+Final status:
+`complete_ready_for_director_acceptance`
 
-User-approved decisions:
-- semantic worker records factual publication dates or null; it no longer owns the recent/older decision;
-- GitHub deterministically derives recent/older/unknown under the canonical 365-day rule;
-- unknown dates must never qualify as recent by assumption;
-- current-state temporal qualification must use actual supporting evidence dates;
-- do not solve this by adding another prompt-memory rule or ChatGPT-owned pre-create validator;
-- failed-group audit and quarantine outputs remain intentional canonical outputs;
-- optional-path absence must not suppress staging of other canonical outputs;
-- after the local canonical commit, GitHub must prove the worktree clean and print exact leftover paths if not.
+Director acceptance:
+- PR #99 `Derive Dossier dates in GitHub and make ingest staging atomic` merged to `main` as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`;
+- semantic worker now supplies factual publication dates/null and no longer owns recent/older classification;
+- GitHub deterministically derives recent/older/unknown under the unchanged 365-day rule;
+- unknown dates cannot satisfy recent-current-state requirements merely because a page is currently reachable;
+- temporal qualification uses the dates of the actual supporting feedback records rather than a guessed parent-page freshness label;
+- current binding is active with revision `github-derived-temporal-classification-2026-09-27`;
+- failed-group audit/quarantine staging is now handled independently from optional `data/control`;
+- staging errors are no longer broadly suppressed;
+- a clean-worktree assertion runs after the canonical commit and before rebase/push and prints exact leftovers on failure;
+- DATE-01..DATE-10 and the temporary-Git staging regression passed;
+- full buffered Dossier validation run `36312723478`, Progressive PASS 2 core run `36312723454`, and backlog disposition run `36312723552` all succeeded;
+- PR #99 changed only source/contracts/tests/docs/workflow/report; no production Dossier/cache/audit/quarantine data files were part of the implementation PR;
+- no Scheduled Task action, Tiny Snow rerun, g000001 recovery/reconciliation, Deep recovery or manual backlog processing was performed.
 
-Implementation scope:
-- simplify worker temporal responsibility and update canonical contracts/schema/binding as required;
-- centralize GitHub-owned deterministic date classification;
-- preserve TASTE-012, TASTE-014, TASTE-015, exact-product and privacy semantics;
-- repair ingest staging so absent `data/control` cannot leave audit/quarantine unstaged;
-- add a clean-worktree assertion before rebase/push;
-- add focused DATE and Git staging regressions;
-- run relevant full Dossier and execution-ownership validation.
-
-Boundaries:
-- no Scheduled Task action;
-- no manual Tiny Snow rerun;
-- no manual g000001 recovery/reconciliation;
-- no manual backlog processing;
-- no Deep recovery;
-- stale current production group is handled only after this implementation is separately accepted.
+Decision:
+- implementation accepted;
+- GitHub-owned date derivation and atomic failed-group staging are canonical;
+- stale production g000001 remains a separate post-acceptance reconciliation/recovery decision.
 
 Worker state:
-- use a NEW physical conversation for ЧАТ 2;
-- previously retired physical ЧАТ 2 conversations must not be reused;
-- after completion Director independently checks report/source/CI before acceptance.
-
+- physical ЧАТ 2 used for this implementation is retired and can be deleted.
 
 ## ACCEPTED — ЧАТ 1 — Dossier production failure diagnostic
 
