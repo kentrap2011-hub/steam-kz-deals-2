@@ -275,6 +275,36 @@ def build_risk_status(game, policy=None):
             'risk_level': game.get('risk_level') or 'unknown',
             'has_described_risk': True,
         }
+    negative_status = game.get('negative_assessment_status')
+    negative_labels = {
+        'completed_with_caution': (
+            'caution_only',
+            'Есть подтверждённые нюансы — без отдельного штрафа',
+        ),
+        'completed_no_relevant_negative': (
+            'evaluated_no_relevant_negative',
+            'Минусы проверены: значимых персональных рисков не найдено',
+        ),
+        'unresolved': (
+            'negative_assessment_unresolved',
+            'Оценка минусов не завершена',
+        ),
+        'legacy_not_evaluated': (
+            'legacy_negative_not_evaluated',
+            'В старом Deep-разборе минусы отдельно не оценивались',
+        ),
+    }
+    if negative_status in negative_labels:
+        code, label = negative_labels[negative_status]
+        return {
+            'code': code,
+            'label': label,
+            'affects_early_priority': False,
+            'affects_score': False,
+            'serious_rank': 0,
+            'risk_level': game.get('risk_level') or 'low',
+            'has_described_risk': False,
+        }
     return {
         'code': 'no_confirmed_risk',
         'label': 'Подтверждённых персональных рисков не найдено',
