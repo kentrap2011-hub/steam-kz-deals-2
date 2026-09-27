@@ -81,15 +81,28 @@ def process_run_start_markers():
             doc = None
             parse_error = f'{type(exc).__name__}:{exc}'
 
+        claimed_authority = (
+            str(doc.get('observed_main_commit') or '').lower()
+            if isinstance(doc, dict)
+            else parent
+        )
         receipt = {
             'schema_version': 1,
             'contract': 'PROGRESSIVE-PASS2-RUN-START-RECEIPT-V1',
             'status': 'rejected',
             'run_start_anchor_commit': anchor,
-            'run_start_authority_commit': parent,
+            'run_start_authority_commit': claimed_authority,
+            'run_start_marker_parent_commit': parent,
             'run_started_at_utc': started,
             'marker_path': path.as_posix(),
+            'marker_contract': doc.get('contract') if isinstance(doc, dict) else None,
             'run_start_nonce': doc.get('run_start_nonce') if isinstance(doc, dict) else None,
+            'progressive_pass2_contract_blob_sha': (
+                doc.get('progressive_pass2_contract_blob_sha') if isinstance(doc, dict) else None
+            ),
+            'progressive_pass2_work_blob_sha': (
+                doc.get('progressive_pass2_work_blob_sha') if isinstance(doc, dict) else None
+            ),
             'semantic_generation_id': None,
             'profile_pin_sha256': None,
             'reason': parse_error,
@@ -102,26 +115,31 @@ def process_run_start_markers():
                 path,
                 doc,
             )
-            contract = _read_json_at_commit(parent, 'config/progressive_pass2_contract.json')
-            work = _read_json_at_commit(parent, progressive_pass2.WORK.as_posix())
+            authority = proof['run_start_authority_commit']
+            contract = _read_json_at_commit(authority, 'config/progressive_pass2_contract.json')
+            work = _read_json_at_commit(authority, progressive_pass2.WORK.as_posix())
             if contract.get('contract') != 'PROGRESSIVE-PASS2-V1':
                 raise ValueError('Deep run-start contract mismatch')
             if contract.get('implemented') is not True or contract.get('active') is not True:
-                raise ValueError('Deep was not active at the anchored invocation boundary')
+                raise ValueError('Deep was not active in the frozen invocation authority')
             if (
                 work.get('contract') != 'PROGRESSIVE-PASS2-WORK-V1'
                 or work.get('implemented') is not True
                 or work.get('pass2_active') is not True
             ):
-                raise ValueError('Deep work was not active at the anchored invocation boundary')
+                raise ValueError('Deep work was not active in the frozen invocation authority')
             profile_pin = work.get('profile_pin')
             progressive_pass1.validate_profile_pin(profile_pin)
             receipt.update({
                 'status': 'confirmed',
-                'run_start_authority_commit': proof['run_start_authority_commit'],
+                'run_start_authority_commit': authority,
+                'run_start_marker_parent_commit': proof['run_start_marker_parent_commit'],
                 'run_started_at_utc': proof['run_started_at_utc'],
                 'marker_path': proof['marker_path'],
+                'marker_contract': proof['marker_contract'],
                 'run_start_nonce': proof['run_start_nonce'],
+                'progressive_pass2_contract_blob_sha': proof['progressive_pass2_contract_blob_sha'],
+                'progressive_pass2_work_blob_sha': proof['progressive_pass2_work_blob_sha'],
                 'semantic_generation_id': work.get('semantic_generation_id'),
                 'profile_pin_sha256': profile_pin.get('pin_sha256'),
                 'reason': None,
@@ -134,7 +152,6 @@ def process_run_start_markers():
         path.unlink()
 
     return receipts
-
 
 def removable_names(receipts):
     removable = set()
