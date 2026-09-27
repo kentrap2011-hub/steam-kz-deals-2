@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- No worker task is currently assigned/in progress at the top-level Director state.
+- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_PROGRESSIVE_DEEP_PARALLEL_FROZEN_START_AUTHORITY_FIX_01.md` (`IMPLEMENT / VALIDATE`).
 - Latest accepted implementation: `WORKER_TASK_DOSSIER_VISUAL_PROGRESS_REFRESH_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -11,6 +11,35 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 1 — Deep parallel frozen start authority fix
+
+Task:
+`WORKER_TASK_PROGRESSIVE_DEEP_PARALLEL_FROZEN_START_AUTHORITY_FIX_01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+User-approved correction:
+- Dossier and Deep must run independently in parallel;
+- Deep freezes one exact GitHub-prepared invocation view at start;
+- later repository/Dossier changes belong to the next invocation and must not cancel the frozen current invocation merely because `main` advanced;
+- anti-race protection remains but must prove exact frozen Deep authority rather than whole-repository head stability.
+
+Architecture:
+- GitHub remains Deep control-plane authority;
+- no arbitrary historical work may be revived;
+- no per-item mutable rereads;
+- no serialization of Dossier and Deep;
+- no Scheduled Task changes.
+
+Report:
+`reviews/worker_reports/progressive-deep-parallel-frozen-start-authority-fix-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 1`;
+- prior physical ЧАТ 1 is retired and must not be reused as an existing chat.
 
 
 ## ACCEPTED — ЧАТ 2 — Dossier visual progress refresh fix
