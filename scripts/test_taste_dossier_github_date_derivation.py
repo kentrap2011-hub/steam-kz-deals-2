@@ -165,7 +165,8 @@ class GithubDerivedDossierDatesTest(unittest.TestCase):
             "evidence_languages": ["non_russian"],
         })
         doc["provenance"]["sources"][1]["evidence_role"] = "historical"
-        doc["observations"] = [historical]
+        current_control = copy.deepcopy(doc["observations"][1])
+        doc["observations"] = [historical, current_control]
         doc["summary"] = derive_dossier_summary(doc["observations"], doc["conflicts"])
         with self.assertRaisesRegex(ValueError, "historical/fixed claim lacks recent dated current-state check"):
             self.validate(doc)
