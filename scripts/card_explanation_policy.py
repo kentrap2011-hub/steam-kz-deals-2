@@ -231,6 +231,10 @@ def visible_risk_payload(risks: Dict[str, dict], limit: int = 2):
         'has_described_risk': bool(visible),
         'described_risk_count': len(visible),
         'grounding': 'grounded' if visible else 'none',
+        'grounded_taste_negative_witness': any(
+            str(row.get('source') or '') == 'taste_negative_evidence'
+            for row in visible
+        ),
         'heuristic_candidate_count': heuristic_candidates,
     }
     return {
