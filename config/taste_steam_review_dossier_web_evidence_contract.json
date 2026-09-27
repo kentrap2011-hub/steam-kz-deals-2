@@ -2,18 +2,18 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "version": 2,
   "status": "active",
-  "contract_revision": "pragmatic-observed-feedback-2026-09-26",
+  "contract_revision": "github-derived-temporal-classification-2026-09-27",
   "parent_control_plane_contract": "TASTE-STEAM-REVIEW-DOSSIER-CONTRACT-V2",
   "parallel_validation_contract": "TASTE-STEAM-REVIEW-DOSSIER-PARALLEL-VALIDATION-CONTRACT-V1",
   "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "worker_schema_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "worker_prompt_revision": "web-evidence-v2-pragmatic-observed-feedback-v1",
-  "purpose": "Define strict exact-product, privacy-safe, pragmatic observed player-feedback evidence semantics for the neutral Taste Dossier, including directly inspected stable items, exact-product collection cards, and search/discovery result representations, while preserving temporal and neutral coverage sufficiency gates.",
+  "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+  "purpose": "Define strict exact-product, privacy-safe, pragmatic observed player-feedback evidence semantics for the neutral Taste Dossier, with factual publication dates supplied by the semantic worker and recent/older/unknown derived deterministically by GitHub.",
   "supersedes": {
-    "prior_revision": "purpose-coverage-sufficiency-2026-09-25",
-    "limited_scope": "supersedes only item-level permanent locator, transient-author identity, and stable-locator recurrence/count prerequisites from TASTE-008/TASTE-010; exact-product identity, privacy, temporal truth, TASTE-014 boundedness, TASTE-015 coverage sufficiency, GitHub ownership and buffered transport remain strict"
+    "prior_revision": "pragmatic-observed-feedback-2026-09-26",
+    "limited_scope": "supersedes worker-owned temporal freshness judgment only; pragmatic evidence modes, exact-product identity, privacy, TASTE-014 boundedness, TASTE-015 coverage sufficiency, GitHub ownership and buffered transport remain strict"
   },
   "identity": {
     "required_work_binding": [
@@ -305,12 +305,12 @@
   },
   "recency": {
     "search_recent_first": true,
-    "recent_target": "prefer_feedback_from_the_last_12_months_when_available_then_expand_if_sparse",
+    "recent_target": "prefer feedback likely to provide concrete current publication dates when current-state support is needed, without asking the semantic worker to classify age",
     "recent_max_age_days": 365,
-    "dated_source_rule": "when publication_date is known, freshness must be recent at age <=365 days and older at age >365 days relative to generated_at_utc date",
-    "undated_source_rule": "publication_date=null remains allowed; freshness then remains a worker evidence classification and current_state still requires recent",
-    "known_child_date_parent_coherence_rule": "when a bound feedback record has a known date older than recent_max_age_days, its parent player source must not be labeled freshness=recent or used as current_state support merely because the parent publication_date is null",
-    "unknown_child_date_behavior": "when the feedback record publication_date is genuinely null, preserve the existing undated source/item path without inventing a date",
+    "dated_source_rule": "GitHub derives recent at age <=365 days and older at age >365 days relative to generated_at_utc date",
+    "undated_source_rule": "publication_date=null deterministically derives unknown; accessibility_now_never_promotes_unknown_to_recent",
+    "known_child_date_parent_coherence_rule": "known old feedback remains old even when its parent source is undated or currently reachable",
+    "unknown_child_date_behavior": "genuinely unknown feedback publication_date derives unknown and cannot satisfy a recent-support requirement",
     "current_state_topics": [
       "bugs",
       "performance",
@@ -332,7 +332,12 @@
       "difficulty",
       "durable_friction"
     ],
-    "conflicting_or_insufficient_temporal_evidence": "uncertain"
+    "conflicting_or_insufficient_temporal_evidence": "uncertain",
+    "temporal_classification_owner": "github_control_plane",
+    "worker_temporal_input_rule": "semantic_worker_supplies_publication_date_YYYY_MM_DD_when_known_or_null_when_genuinely_unknown_and_does_not_choose_recent_older_unknown",
+    "bound_feedback_temporal_rule": "current_state temporal qualification is based on each actual supporting player_feedback_record publication_date, not guessed parent-page freshness",
+    "mixed_child_dates_rule": "different feedback records under one source are classified independently from their own publication dates",
+    "unknown_temporal_evidence_satisfies_recent_requirement": false
   },
   "russian_evidence": {
     "attempt_required": true,
