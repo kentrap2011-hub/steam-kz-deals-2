@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## IN PROGRESS — Analysis last write timestamps UI 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_ANALYSIS_LAST_WRITE_TIMESTAMPS_UI_01.md`;
+- worker slot: `ЧАТ 2`;
+- scope: add producer-owned durable last-write timestamps for Fast / Dossier / Deep to the existing Statistics payload/UI;
+- architecture boundary: GitHub remains canonical state/persistence owner; browser only formats provided timestamps; no scheduler, queue, retry, heartbeat, watchdog or semantic execution change;
+- parallel constraint: branch started from fresh main `46b236309e4e068f6fbe03afc98d2c52a2c8daab`; re-read/reconcile fresh `main` before merge so ЧАТ 1 and concurrent production writes are preserved.
+- no manual Fast/Dossier/Deep backlog processing and no Scheduled Task changes are authorized.
+
 ## COMPLETE — Russian description publication blocker fix 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_01.md`;
