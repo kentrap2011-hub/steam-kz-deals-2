@@ -3,6 +3,7 @@ import hashlib
 import json
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from russian_description_quality import classify_description, normalize_description, resolve_description
@@ -13,6 +14,8 @@ CACHE_CONTRACT_ID = 'RUSSIAN-DESCRIPTION-TRANSLATION-CACHE-ENTRY-V1'
 
 TRANSLATABLE_STATUSES = {'needs_translation', 'needs_ru_rewrite'}
 TRANSLATABLE_QUALITIES = {'non_ru', 'weak_ru'}
+STEAM_STOREBROWSE_RU_SOURCE = 'IStoreBrowseService/GetItems(language=russian)'
+STEAM_APPDETAILS_RU_SOURCE = 'Steam Store appdetails(l=russian,cc=kz)'
 
 
 def sha256_text(value):
@@ -120,7 +123,9 @@ def _resolution_for_appid(appid, media, content_metadata_by_appid):
     if resolution.get('description_source_locale') == 'english':
         resolution['description_source_path'] = 'data/production/pre_ai/content_metadata.json'
     elif resolution.get('description_source_locale') == 'russian':
-        resolution['description_source_path'] = 'IStoreBrowseService/GetItems(language=russian)'
+        resolution['description_source_path'] = (
+            store.get('short_description_source_path') or STEAM_STOREBROWSE_RU_SOURCE
+        )
     else:
         resolution['description_source_path'] = None
     return resolution
@@ -181,6 +186,50 @@ def build_translation_request(resolution, title):
     }
 
 
+
+def russian_description_from_appdetails_data(data):
+    if not isinstance(data, dict):
+        return None
+    text = normalize_description(data.get('short_description'))
+    return text if classify_description(text) == 'good_ru' else None
+
+
+def apply_russian_appdetails_description_fallback(media_entry, appdetails_data):
+    if not isinstance(media_entry, dict):
+        raise TypeError('media_entry must be a dict')
+    if classify_description(media_entry.get('short_description_source')) == 'good_ru':
+        return False
+    text = russian_description_from_appdetails_data(appdetails_data)
+    if not text:
+        return False
+    media_entry['short_description_source'] = text
+    media_entry['short_description_source_path'] = STEAM_APPDETAILS_RU_SOURCE
+    return True
+
+
+def fetch_russian_appdetails_data(
+    appid,
+    timeout=8,
+    user_agent='steam-kz-deals-translation/1.0',
+):
+    appid = str(appid)
+    if not appid.isdigit():
+        return None
+    url = f'https://store.steampowered.com/api/appdetails?appids={appid}&cc=kz&l=russian'
+    req = urllib.request.Request(
+        url,
+        headers={'User-Agent': user_agent, 'Accept': 'application/json'},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            payload = json.loads(response.read().decode('utf-8'))
+    except Exception:
+        return None
+    wrapper = payload.get(appid) or {}
+    data = wrapper.get('data') if wrapper.get('success') else None
+    return data if isinstance(data, dict) else None
+
+
 def fetch_russian_store_descriptions(appids, timeout=30):
     ids = sorted({str(x) for x in appids if str(x).isdigit()}, key=int)
     result = {}
@@ -208,5 +257,33 @@ def fetch_russian_store_descriptions(appids, timeout=30):
             if not result_key:
                 continue
             text = normalize_description((store_item.get('basic_info') or {}).get('short_description'))
-            result[result_key] = {'short_description_source': text or None}
+            result[result_key] = {
+                'short_description_source': text or None,
+                'short_description_source_path': STEAM_STOREBROWSE_RU_SOURCE,
+            }
+
+    # StoreBrowse occasionally returns English/missing text even though the exact
+    # public Steam app has a localized Russian short description. Reuse the
+    # official exact-appid appdetails endpoint as a deterministic direct-Steam
+    # fallback before semantic translation is requested.
+    fallback_ids = [
+        appid
+        for appid in ids
+        if classify_description((result.get(appid) or {}).get('short_description_source')) != 'good_ru'
+    ]
+    if fallback_ids:
+        fallback_timeout = min(timeout, 8)
+        with ThreadPoolExecutor(max_workers=min(12, len(fallback_ids))) as pool:
+            futures = {
+                pool.submit(fetch_russian_appdetails_data, appid, fallback_timeout): appid
+                for appid in fallback_ids
+            }
+            for future in as_completed(futures):
+                appid = futures[future]
+                try:
+                    data = future.result()
+                except Exception:
+                    data = None
+                entry = result.setdefault(appid, {'short_description_source': None})
+                apply_russian_appdetails_description_fallback(entry, data)
     return result
