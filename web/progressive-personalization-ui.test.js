@@ -76,7 +76,15 @@ assert.deepStrictEqual(noStageFallback.map(x=>x.lit),[false,false,false]);
 assert.deepStrictEqual(noStageFallback.map(x=>x.tone),['unknown','unknown','unknown']);
 
 // Statistics keep Fast, Dossier and Deep on their own canonical scopes.
+const stageTimes={
+  fast:'2026-09-27T11:03:00+00:00',
+  dossier:'2026-09-27T10:05:00+00:00',
+  deep:'2026-09-27T12:04:00+00:00',
+};
 const stats=ui.statisticsSections({
+  fast_last_write_at_utc:stageTimes.fast,
+  dossier_last_write_at_utc:stageTimes.dossier,
+  deep_last_write_at_utc:stageTimes.deep,
   fast_total_current_scope:511,fast_attempted_count:86,fast_completed_fit_count:10,fast_completed_not_fit_count:4,
   fast_incomplete_count:68,fast_error_count:4,fast_skipped_due_to_authoritative_deep_count:7,fast_remaining_count:418,
   dossier_total_current_scope:187,dossier_accepted_count:12,dossier_pending_count:170,dossier_failed_or_recovery_count:5,
@@ -87,6 +95,16 @@ const stats=ui.statisticsSections({
   deep_remaining_until_all_authoritative_count:498,deep_normal_first_pass_complete:false,deep_all_current_authoritative_complete:false,
 });
 assert.deepStrictEqual(stats.map(x=>x.key),['fast','dossier','deep']);
+assert.deepStrictEqual(stats.map(x=>x.lastWriteAtUtc),[
+  stageTimes.fast,stageTimes.dossier,stageTimes.deep
+]);
+const noWriteStats=ui.statisticsSections({});
+assert.deepStrictEqual(noWriteStats.map(x=>x.lastWriteAtUtc),[null,null,null]);
+assert.strictEqual(ui.formatLastWriteAt(null),'ещё не было записей');
+assert.strictEqual(ui.formatLastWriteAt(''),'ещё не было записей');
+assert.strictEqual(ui.formatLastWriteAt('not-a-date'),'ещё не было записей');
+assert.notStrictEqual(ui.formatLastWriteAt(stageTimes.fast),'ещё не было записей');
+assert(!ui.formatLastWriteAt.toString().includes('Date.now'),'timestamp formatter must not infer a heartbeat');
 assert.deepStrictEqual(stats.map(x=>x.denominator),[511,187,499]);
 assert.deepStrictEqual(stats.map(x=>x.scopeLabel),[
   'Всего игр для быстрого разбора','Всего игр для подготовки досье','Всего игр для глубокого разбора'
@@ -138,6 +156,8 @@ assert(app.includes("r.manual_end_at=Date.now();"));
 assert(app.includes("progressiveUi().sortItems(items,urgencyFirstEnabled())"));
 assert(app.includes("data.processing_status||{}"));
 assert(app.includes("progressiveUi().statisticsSections"));
+assert(app.includes("progressiveUi().formatLastWriteAt(section.lastWriteAtUtc)"));
+assert(app.includes('Последняя запись:'));
 assert(app.includes("progressiveUi().stageIndicators"));
 assert(app.includes("ind.lit===true"));
 assert(app.includes("'unlit'"));
@@ -171,6 +191,7 @@ assert(css.includes('.stage-indicator.lit.ready{'));
 assert(css.includes('.stage-indicator.lit.positive{'));
 assert(css.includes('.stage-indicator.lit.negative{'));
 assert(css.includes('.statistics-note{'));
+assert(css.includes('.statistics-last-write{'));
 assert(css.includes('.list-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;min-width:0}'));
 
 console.log('progressive personalization stage/statistics UI regression: ok');
