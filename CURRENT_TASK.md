@@ -1,12 +1,14 @@
 # CURRENT TASK
 
-## IN PROGRESS — Deep visual authoritative binding fix 01
-Статус: `in_progress`.
+## BLOCKED — Deep visual authoritative binding fix 01
+Статус: `blocked`.
 - task: `WORKER_TASK_DEEP_VISUAL_AUTHORITATIVE_BINDING_FIX_01.md`;
-- scope: bounded repair of the GitHub-owned visual personalized-binding guard for current authoritative Deep/PASS 2 plus focused regression and end-to-end visual publication validation;
-- Dossier production/state/semantics and all Scheduled Tasks are out of scope;
-- no production semantic backlog processing is authorized;
-- branch: `fix/deep-visual-authoritative-binding-01`.
+- implementation: PR #102 merged as `54eea6427ff3a5a03643507865d5a02442737831`;
+- authoritative Deep binding regression and Progressive PASS 2 validation are green; post-merge full visual generation reaches `VISUAL_FINAL_BUILD=BUILT` without the old binding RuntimeError;
+- end-to-end persistence/deploy is blocked later by the independent Russian-description gate for `game:1213210` (`Command & Conquer™ Remastered Collection`, `needs_translation`);
+- build runs `36338505197` / #803 and `36338550470` / #804 fail only after successful visual generation at that later gate; deploys #841/#842 are skipped;
+- Dossier production/state/semantics, semantic backlog and Scheduled Tasks were not changed or manually processed;
+- report: `reviews/worker_reports/deep-visual-authoritative-binding-fix-01.md`.
 
 
 ## COMPLETE — Progressive Deep parallel frozen start authority fix 01
