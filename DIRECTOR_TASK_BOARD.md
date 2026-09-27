@@ -1,5 +1,49 @@
 # DIRECTOR TASK BOARD
 
+## IN PROGRESS — НОВЫЙ ЧАТ 2 — GitHub-derived Dossier dates + ingest atomicity fix
+
+Task:
+`WORKER_TASK_TASTE_DOSSIER_GITHUB_DATE_DERIVATION_AND_INGEST_ATOMICITY_FIX_01.md`
+
+Report:
+`reviews/worker_reports/taste-dossier-github-date-derivation-and-ingest-atomicity-fix-01.md`
+
+Status:
+`authorized_implement_validate`
+
+User-approved decisions:
+- semantic worker records factual publication dates or null; it no longer owns the recent/older decision;
+- GitHub deterministically derives recent/older/unknown under the canonical 365-day rule;
+- unknown dates must never qualify as recent by assumption;
+- current-state temporal qualification must use actual supporting evidence dates;
+- do not solve this by adding another prompt-memory rule or ChatGPT-owned pre-create validator;
+- failed-group audit and quarantine outputs remain intentional canonical outputs;
+- optional-path absence must not suppress staging of other canonical outputs;
+- after the local canonical commit, GitHub must prove the worktree clean and print exact leftover paths if not.
+
+Implementation scope:
+- simplify worker temporal responsibility and update canonical contracts/schema/binding as required;
+- centralize GitHub-owned deterministic date classification;
+- preserve TASTE-012, TASTE-014, TASTE-015, exact-product and privacy semantics;
+- repair ingest staging so absent `data/control` cannot leave audit/quarantine unstaged;
+- add a clean-worktree assertion before rebase/push;
+- add focused DATE and Git staging regressions;
+- run relevant full Dossier and execution-ownership validation.
+
+Boundaries:
+- no Scheduled Task action;
+- no manual Tiny Snow rerun;
+- no manual g000001 recovery/reconciliation;
+- no manual backlog processing;
+- no Deep recovery;
+- stale current production group is handled only after this implementation is separately accepted.
+
+Worker state:
+- use a NEW physical conversation for ЧАТ 2;
+- previously retired physical ЧАТ 2 conversations must not be reused;
+- after completion Director independently checks report/source/CI before acceptance.
+
+
 ## ACCEPTED — ЧАТ 1 — Dossier production failure diagnostic
 
 Task:
