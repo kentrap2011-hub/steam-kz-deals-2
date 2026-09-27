@@ -1,5 +1,15 @@
 # CURRENT TASK
 
+## IN PROGRESS — Deep balanced negative assessment contract fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_DEEP_BALANCED_NEGATIVE_ASSESSMENT_CONTRACT_FIX_01.md`;
+- worker slot: `ЧАТ 2`;
+- scope: contract-first balanced Deep negative assessment with grounded confirmed risks, display-only cautions, evaluated-no-relevant-negative, unresolved, and truthful legacy/not-evaluated projection;
+- architecture preflight: GitHub remains control-plane owner; Scheduled ChatGPT remains bounded semantic data plane; Dossier stays neutral; existing risk codes/policy remain the only score-penalty authority; no scheduler/queue/retry/backlog replay change;
+- parallel reconciliation: ЧАТ 1 positive-evidence fix is already merged on `main` and must be preserved before merge;
+- no production Deep/Dossier/Fast semantic rerun, backlog processing, or Scheduled Task change is authorized.
+
+
 ## COMPLETE — Deep positive evidence card projection fix 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_DEEP_POSITIVE_EVIDENCE_CARD_PROJECTION_FIX_01.md`;
