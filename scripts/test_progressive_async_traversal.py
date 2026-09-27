@@ -573,10 +573,11 @@ def main():
     dt = deep['invocation_traversal']
     assert dt['snapshot_boundary'] == 'create_only_v2_marker_then_freeze_actual_marker_parent_and_exact_pass2_contract_work_blobs_then_github_confirm_before_publication'
     assert dt['github_run_start_confirmation_required'] is True
-    assert dt['provisional_semantic_source_commit'] == 'observed_main_commit'
+    assert dt['provisional_semantic_source_commit'] == 'run_start_authority_commit_actual_v2_marker_parent'
     assert dt['provisional_semantic_execution_before_confirmation_allowed'] is True
     assert dt['confirmation_required_before_first_artifact_publication'] is True
-    assert dt['confirmed_authority_must_equal_observed_main_commit'] is True
+    assert dt['confirmed_authority_must_equal_observed_main_commit'] is False
+    assert dt['confirmed_authority_must_equal_v2_marker_parent'] is True
     assert dt['provisional_work_discarded_on_rejected_or_mismatched_confirmation'] is True
     assert dt['missing_confirmation_authorizes_publication'] is False
     assert dt['bounded_confirmation_wait_max_seconds'] == 15
