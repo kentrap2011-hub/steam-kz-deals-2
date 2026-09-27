@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
-    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
-    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
-    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
   "appid": "1179080",
   "title": "FAITH: The Unholy Trinity",
-  "generated_at_utc": "2026-09-24T13:28:00Z",
-  "expires_at_utc": "2026-10-14T13:28:00Z",
+  "generated_at_utc": "2026-09-27T13:15:00Z",
+  "expires_at_utc": "2026-10-17T13:15:00Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "FAITH: The Unholy Trinity",
@@ -38,29 +38,54 @@
       }
     ]
   },
-  "summary": "Evidence summary: 2 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 5 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "difficulty",
-      "statement": "Russian Steam player feedback praises the atmosphere while describing parts of the gameplay as difficult.",
-      "sentiment": "mixed",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "category": "other",
+      "statement": "Atmosphere is the most consistent strength: player feedback praises the low-fi Atari-like visuals, rotoscoped cutscenes, sound design, and religious-horror imagery for creating tension beyond conventional jump scares.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
       "evidence_languages": [
-        "russian"
+        "russian",
+        "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002"
+        "source-002",
+        "source-003",
+        "source-004"
       ],
       "player_feedback_ids": [
-        "fallback-001"
+        "feedback-001",
+        "feedback-002",
+        "feedback-004"
       ]
     },
     {
       "category": "mechanics",
-      "statement": "Reddit player feedback characterizes the game as a creepy retro-styled horror experience built around old-school 2D arcade-like play.",
-      "sentiment": "positive",
+      "statement": "The core interaction is intentionally simple and old-school, combining exploration, cross-based exorcism, light puzzles, and arcade-like hostile encounters rather than a deep combat system.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Slow character movement can make exploration, backtracking, and repeated ending attempts feel laborious, especially in larger or maze-like areas.",
+      "sentiment": "negative",
       "recurrence": "anecdotal",
       "mention_count": 1,
       "evidence_languages": [
@@ -71,19 +96,163 @@
         "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-001"
+        "feedback-002"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Difficulty feedback is mixed: the general curve can feel fair and learnable, but individual bosses or final encounters can spike sharply, while experienced players may later want harder variants.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Multiple endings, collectible notes, secrets, and three connected chapters give players reasons to revisit scenarios and piece together more of the lore after a first completion.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004"
       ]
     }
   ],
-  "conflicts": [],
+  "conflicts": [
+    {
+      "statement": "Challenge is experienced differently over time: one player reports a strong but frustrating late difficulty spike, while a later experienced player asks for a harder mode because current endgame bosses feel too easy.",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "source_ids": [
+        "source-003",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-005"
+      ]
+    }
+  ],
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "multi_source",
     "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "limited",
-    "stop_reason": "evidence_stable"
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            4
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            4
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            4
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            4
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            3
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
     "sources": [
@@ -91,52 +260,109 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1179080/",
+        "url": "https://store.steampowered.com/app/1179080/FAITH_The_Unholy_Trinity/",
         "publication_date": "2022-10-21",
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "older"
       },
       {
         "source_id": "source-002",
-        "source_type": "steam_reviews",
-        "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1179080/FAITH_The_Unholy_Trinity/?curator_clanid=35817248&l=russian",
+        "source_type": "other_player_feedback",
+        "domain": "steamstat.io",
+        "url": "https://steamstat.io/ru/app/1179080",
         "publication_date": null,
         "language": "russian",
-        "freshness": "unknown",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1179080",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
       },
       {
         "source_id": "source-003",
         "source_type": "reddit",
         "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/HorrorGaming/comments/zwh06s/is_faith_the_unholy_trinity_worth_the_money/",
-        "publication_date": "2022-12-27",
+        "url": "https://www.reddit.com/r/Games/comments/y9zp21",
+        "publication_date": "2022-10-22",
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "durable_trait",
-        "player_feedback": true
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "FAITH: The Unholy Trinity",
+          "release_year": 2022
+        },
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/FaithTheUnholyTrinity/comments/1ln6x8k",
+        "publication_date": "2025-06-29",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-005",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/FaithTheUnholyTrinity/comments/1lexm9p",
+        "publication_date": "2025-06-19",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "fallback-001",
+        "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": null,
+        "publication_date": "2026-08-21",
         "language": "russian",
-        "identity_mode": "transient_author_deduped"
+        "acquisition_mode": "inspected_collection_item"
       },
       {
-        "feedback_id": "feedback-001",
+        "feedback_id": "feedback-002",
         "source_id": "source-003",
-        "url": "https://www.reddit.com/r/HorrorGaming/comments/zwh06s/is_faith_the_unholy_trinity_worth_the_money/",
-        "publication_date": "2022-12-27",
+        "publication_date": "2022-10-22",
         "language": "non_russian",
-        "identity_mode": "stable_locator"
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-003",
+        "publication_date": "2022-10-22",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-004",
+        "url": "https://www.reddit.com/r/FaithTheUnholyTrinity/comments/1ln6x8k",
+        "publication_date": "2025-06-29",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-005",
+        "url": "https://www.reddit.com/r/FaithTheUnholyTrinity/comments/1lexm9p",
+        "publication_date": "2025-06-19",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
       }
     ]
   }
