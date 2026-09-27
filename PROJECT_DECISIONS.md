@@ -718,3 +718,26 @@ Before the **first** Deep result or terminal execution receipt from the invocati
 
 **Основные места:** `config/taste_steam_review_dossier_contract.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/taste_steam_review_dossier_compact_provenance.py`, `scripts/test_taste_dossier_pragmatic_evidence_model.py`, `.github/workflows/validate-taste-dossier-buffered.yml`.
 
+
+---
+
+## TASTE-017 — GitHub derives Dossier temporal state from factual publication dates
+
+**Дата:** 2026-09-27  
+**Статус:** implemented by `WORKER_TASK_TASTE_DOSSIER_GITHUB_DATE_DERIVATION_AND_INGEST_ATOMICITY_FIX_01.md`.
+
+**Решение:** Scheduled ChatGPT supplies only factual temporal inputs for Taste Dossier evidence: `publication_date: YYYY-MM-DD` when actually known and `publication_date:null` when genuinely unknown. It does not calculate age in days and does not choose `recent`, `older`, or `unknown`. GitHub derives the effective temporal state deterministically from the dossier `generated_at_utc` date under the unchanged canonical threshold: age <=365 days is `recent`, age >365 days is `older`, and unknown date is `unknown`.
+
+**Supporting evidence:** temporal qualification for a current/historical observation is based on the actual bound `player_feedback_record` dates. An undated or currently reachable parent page cannot make an old or undated child recent. Mixed old/recent children under one source keep their own derived states. Unknown temporal evidence never satisfies a rule that specifically requires recent current-state support. Historical/durable evidence remains usable where the existing TASTE-012 semantics allow it.
+
+**Binding / migration:** the worker schema/evidence/prompt binding changes explicitly. Old immutable candidates are not silently reinterpreted under the new temporal model and historical accepted Dossiers are not manually rewritten. Normal GitHub-owned projection/rebuild/refresh behavior remains the compatibility authority.
+
+**Canonical failed-group outputs:** failed-group audit records and deterministic quarantine copies remain intentional GitHub-owned canonical outputs. They must be committed atomically with the corresponding Dossier progress/projection changes. Optional path absence must be handled per path and must never suppress staging of another canonical output; unexpected staging errors remain fatal.
+
+**Pre-rebase safety:** after the local canonical commit and before any rebase/push, the canonical writer must assert `git status --porcelain --untracked-files=all` is empty. If not empty, it prints the exact remaining paths and stops. It does not stash, discard, auto-add unknown leftovers, or hide the error.
+
+**Почему:** the Tiny Snow failure showed that asking the semantic worker to both collect dates and remember the 365-day classification can create contradictory temporal state even when the strict rule itself is correct. Moving the deterministic classification to GitHub removes redundant semantic judgment instead of adding another prompt-memory/pre-create gate. Separately, ingest run `36241650284` showed that one absent optional `data/control` path could make a combined `git add` fail while `|| true` hid the error, leaving intended audit/quarantine output outside the canonical commit.
+
+**Сохранено:** TASTE-012 temporal completeness, TASTE-014 semantic/adaptive boundedness, TASTE-015 downstream-ready neutral coverage, exact-product identity, privacy, pragmatic evidence modes, immutable create-only transport, per-group non-blocking classification, recovery ownership and the single GitHub canonical-writer boundary remain strict. No scheduler, queue, retry loop, second validator, ChatGPT-owned pre-create gate, manual Tiny Snow recovery, or Scheduled Task action is introduced.
+
+**Основные места:** `config/taste_steam_review_dossier_contract.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `config/execution_ownership_contract.json`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/stage_taste_dossier_canonical_writer.sh`, `.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml`, `scripts/test_taste_dossier_github_date_derivation.py`, `scripts/test_taste_dossier_ingest_atomic_staging.py`.
