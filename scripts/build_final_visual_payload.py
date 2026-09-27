@@ -46,6 +46,9 @@ SEMANTIC_PRESERVED_FIELDS = (
     'risk_codes',
     'risk_status',
     'risk_provenance',
+    'cautions',
+    'caution_provenance',
+    'negative_assessment_status',
     'risk_level',
     'risk_penalty',
     'direct_user_evidence',
@@ -175,10 +178,19 @@ def apply_card_explanation_policy(game, taste_entry, projection, update_scoring=
 
     risks = explanation_risk_candidates(taste_entry, projection, game.get('practical') or {})
     visible = card_explanation_policy.visible_risk_payload(risks)
+    cautions, caution_provenance = card_explanation_policy.deep_cautions(taste_entry)
+    negative_status = (
+        taste_entry.get('deep_negative_assessment_status')
+        if taste_entry.get('semantic_source') == 'progressive_pass2'
+        else None
+    )
     changed |= _set_if_changed(game, 'risks', visible['risks'])
     changed |= _set_if_changed(game, 'risk_codes', visible['risk_codes'])
     changed |= _set_if_changed(game, 'risk_status', visible['risk_status'])
     changed |= _set_if_changed(game, 'risk_provenance', visible['risk_provenance'])
+    changed |= _set_if_changed(game, 'cautions', cautions)
+    changed |= _set_if_changed(game, 'caution_provenance', caution_provenance)
+    changed |= _set_if_changed(game, 'negative_assessment_status', negative_status)
 
     if update_scoring:
         # Preserve the existing ranking semantics: scoring sees all candidates,
