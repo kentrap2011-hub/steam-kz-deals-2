@@ -149,7 +149,7 @@ function stageIndicatorsHtml(g){
 function renderStatisticsView(){
   const root=$('stageStatistics');if(!root)return;
   const sections=progressiveUi().statisticsSections(data.processing_status||{});
-  root.innerHTML=sections.map(section=>`<section class="statistics-stage statistics-stage-${escapeHtml(section.key)}"><div class="statistics-stage-head"><h3>${escapeHtml(section.title)}</h3><div class="statistics-scope"><span>${escapeHtml(section.scopeLabel)}</span><b>${escapeHtml(statisticsValue(section.denominator))}</b></div></div><div class="statistics-metrics">${section.rows.map(row=>`<div class="statistics-metric" data-stat-field="${escapeHtml(row.key)}"><span>${escapeHtml(row.label)}</span><b>${escapeHtml(statisticsValue(row.value))}</b></div>`).join('')}</div>${section.note?`<p class="statistics-note">${escapeHtml(section.note)}</p>`:''}</section>`).join('');
+  root.innerHTML=sections.map(section=>`<section class="statistics-stage statistics-stage-${escapeHtml(section.key)}"><div class="statistics-stage-head"><h3>${escapeHtml(section.title)}</h3><div class="statistics-scope"><span>${escapeHtml(section.scopeLabel)}</span><b>${escapeHtml(statisticsValue(section.denominator))}</b></div></div><div class="statistics-last-write">Последняя запись: <b>${escapeHtml(progressiveUi().formatLastWriteAt(section.lastWriteAtUtc))}</b></div><div class="statistics-metrics">${section.rows.map(row=>`<div class="statistics-metric" data-stat-field="${escapeHtml(row.key)}"><span>${escapeHtml(row.label)}</span><b>${escapeHtml(statisticsValue(row.value))}</b></div>`).join('')}</div>${section.note?`<p class="statistics-note">${escapeHtml(section.note)}</p>`:''}</section>`).join('');
 }
 function renderRisk(g){
   const status=g.risk_status;
