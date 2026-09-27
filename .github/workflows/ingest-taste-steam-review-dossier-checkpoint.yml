@@ -62,21 +62,14 @@ jobs:
           set -euo pipefail
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git add \
-            data/cache/taste_steam_review_dossiers \
-            data/production/pre_ai/taste_steam_review_dossier_work.json \
-            data/production/pre_ai/taste_steam_review_dossier_worker_index.json \
-            data/production/pre_ai/taste_steam_review_dossier_validation_status.json \
-            data/production/pre_ai/progressive_pass2_work.json \
-            data/ai_inbox/taste_steam_review_dossiers
-          git add -A data/production/pre_ai/taste_steam_review_dossier_worker_groups
-          git add -A -- data/control data/quarantine data/audit 2>/dev/null || true
+          bash scripts/stage_taste_dossier_canonical_writer.sh stage
           git diff --cached --check
           if git diff --cached --quiet; then
             echo "No dossier recovery or per-group state changes available"
             exit 0
           fi
           git commit -m "Drain and validate Steam review dossier buffer"
+          bash scripts/stage_taste_dossier_canonical_writer.sh assert-clean
           for attempt in 1 2 3; do
             git fetch origin main:refs/remotes/origin/main
             if ! git rebase origin/main; then
