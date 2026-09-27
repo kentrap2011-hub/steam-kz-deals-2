@@ -1,5 +1,18 @@
 # DIRECTOR TASK BOARD
 
+## CURRENT DIRECTOR STATE — 2026-09-27
+
+- No worker task is currently assigned/in progress at the top-level Director state.
+- Latest accepted implementation: `WORKER_TASK_TASTE_DOSSIER_GITHUB_DATE_DERIVATION_AND_INGEST_ATOMICITY_FIX_01.md`.
+- PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
+- Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
+- Current Dossier snapshot is `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; sequence 1 is pending; 140 groups / 418 dossiers remain, with 0 accepted and 0 failed in this new snapshot.
+- The old failed production experiment used snapshot `b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5`. Do not automatically recover/rerun that old g000001: first verify whether any reconciliation is still required now that the canonical binding/snapshot has rolled forward.
+- No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
+- Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
+- Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
 ## ACCEPTED — ЧАТ 2 — GitHub-derived Dossier dates + ingest atomicity fix
 
 Task:
