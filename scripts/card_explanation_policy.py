@@ -218,8 +218,9 @@ def visible_risk_payload(risks: Dict[str, dict], limit: int = 2):
             'source': str(row.get('source')),
         }
         for field in ('category', 'evidence', 'evidence_refs', 'semantic_binding', 'disposition'):
-            if row.get(field) not in {None, ''}:
-                item[field] = row.get(field)
+            value = row.get(field)
+            if value is not None and value != '':
+                item[field] = value
         provenance.append(item)
     heuristic_candidates = sum(
         1
