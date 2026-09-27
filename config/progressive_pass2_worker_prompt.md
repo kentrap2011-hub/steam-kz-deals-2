@@ -90,7 +90,28 @@ Never overwrite, rename, delete, or invent an alternate transport filename. A st
 
 ## Semantic outcomes
 
-A trustworthy fit may return `analyzed_fit`; a trustworthy completed negative may return `analyzed_not_fit`; unresolved evidence returns `analysis_incomplete`. Insufficient evidence is never a completed negative. Do not use price, discount, sale urgency, wishlist, purchase value or other commercial signals for the semantic judgment.
+A trustworthy fit may return `analyzed_fit`; a trustworthy completed negative may return `analyzed_not_fit`; unresolved overall fit evidence returns `analysis_incomplete`. Insufficient overall fit evidence is never a completed negative. Do not use price, discount, sale urgency, wishlist, purchase value or other commercial signals for the semantic judgment.
+
+### Mandatory balanced negative assessment for every completed Deep result
+
+For every new `analyzed_fit` or `analyzed_not_fit` result, inspect the frozen accepted Dossier **both for favorable evidence and for every negative/mixed observation plus every conflict**. Return `negative_assessment` in the exact result schema.
+
+The assessment is separate from the overall fit verdict:
+
+- `negative_assessment.status = "completed"` only after every candidate negative/mixed observation and every conflict in the exact accepted Dossier has been evaluated. Echo all of those candidate references in `evaluated_candidate_refs`, using only the exact `{"kind":"observation","index":N}` / `{"kind":"conflict","index":N}` references from the frozen Dossier. A completed assessment may have zero surfaced findings, but only after this full explicit evaluation.
+- `negative_assessment.status = "unresolved"` when material negative/mixed evidence exists but cannot be responsibly classified as a personalized risk, display-only caution, or not personally relevant. Echo the candidate references actually evaluated and emit no findings. Unresolved never means “no risk”.
+- Never emit `legacy_not_evaluated`; that value is GitHub-owned compatibility projection for historical accepted Deep state that predates this contract.
+
+Each surfaced finding must be exactly one of:
+
+1. `confirmed_personal_risk`: the frozen Dossier evidence supports a candidate-specific personal risk under the bound profile. It MUST use one existing canonical `risk_code` allowed by the result schema. Do not invent a new risk code, weight, penalty or score. The existing GitHub risk policy alone decides any score effect.
+2. `caution`: the frozen Dossier evidence supports a useful trade-off or friction worth showing, but it is not sufficiently established as a score-affecting personal risk. Its `risk_code` MUST be `null`. A caution is display-only unless a separate pre-existing practical/risk rule independently applies.
+
+Every finding must carry non-empty Russian user-facing `text_ru` and at least one exact Dossier `evidence_refs` reference. Do not turn every public complaint into a personal risk. Do not infer a personal risk solely from recurrence, general review sentiment or a Dossier category. Do not create arbitrary free-form negative claims that are not anchored to the accepted Dossier references.
+
+For `analyzed_not_fit` with `not_fit_basis = "confirmed_personal_negative"`, the balanced negative assessment must be `completed` and contain at least one `confirmed_personal_risk` finding. Other completed not-fit bases still require the same balanced assessment, but they do not automatically imply a score-affecting risk.
+
+Historical accepted Deep results without `negative_assessment` remain historical authoritative fit/not-fit truth. Do not rerun, recreate, recover or invalidate them merely to backfill this field; GitHub projects them as legacy/not-evaluated.
 
 ## Ownership boundary
 
