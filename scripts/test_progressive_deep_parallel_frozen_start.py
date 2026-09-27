@@ -7,7 +7,6 @@ from pathlib import Path
 
 import ingest_progressive_pass2
 import progressive_pass2
-import progressive_work_authority
 import test_progressive_async_traversal as async_regression
 import test_progressive_pass2 as pass2_core
 
@@ -30,31 +29,15 @@ def write_active_authority(repo, item, manifest, dossier, when, message):
     return async_regression.commit(repo, message, when)
 
 
-def v2_marker(repo, observed, nonce):
-    contract_blob = blob_at(repo, observed, 'config/progressive_pass2_contract.json')
-    work_blob = blob_at(repo, observed, 'data/production/pre_ai/progressive_pass2_work.json')
-    path = (
-        repo / 'data/ai_inbox/progressive_pass2/run_starts'
-        / f'{observed}--{nonce}.json'
-    )
+def v2_marker(repo, nonce):
+    path = repo / 'data/ai_inbox/progressive_pass2/run_starts' / f'{nonce}.json'
     doc = {
         'schema_version': 2,
         'contract': 'PROGRESSIVE-PASS2-RUN-START-MARKER-V2',
-        'observed_main_commit': observed,
         'run_start_nonce': nonce,
-        'progressive_pass2_contract_blob_sha': contract_blob,
-        'progressive_pass2_work_blob_sha': work_blob,
     }
     async_regression.write_json(path, doc)
     return path, doc
-
-
-def persist_confirmation(repo, when):
-    async_regression.set_git_identity(
-        repo, 'steam-kz-bot', 'steam-kz-bot@users.noreply.github.com'
-    )
-    async_regression.git(repo, 'add', '-A')
-    return async_regression.commit(repo, 'Persist Deep frozen start confirmation', when)
 
 
 def process_markers(repo):
@@ -64,6 +47,14 @@ def process_markers(repo):
         return ingest_progressive_pass2.process_run_start_markers()
     finally:
         os.chdir(old)
+
+
+def persist_confirmation(repo, when):
+    async_regression.set_git_identity(
+        repo, 'steam-kz-bot', 'steam-kz-bot@users.noreply.github.com'
+    )
+    async_regression.git(repo, 'add', '-A')
+    return async_regression.commit(repo, 'Persist Deep run-start confirmation', when)
 
 
 def resolve(repo, item, doc, persisted_work):
@@ -87,7 +78,7 @@ def concurrent_dossier_success_and_no_substitution():
         async_regression.init_repo(repo)
         authority_a = write_active_authority(
             repo, item, manifest_a, dossier_a,
-            '2026-09-27T10:00:00+00:00', 'prepare frozen Deep authority A',
+            '2026-09-27T10:00:00+00:00', 'prepare Deep authority A',
         )
         frozen_contract_blob = blob_at(
             repo, authority_a, 'config/progressive_pass2_contract.json'
@@ -96,9 +87,18 @@ def concurrent_dossier_success_and_no_substitution():
             repo, authority_a, 'data/production/pre_ai/progressive_pass2_work.json'
         )
 
-        # Canonical Dossier/work progress advances after A was frozen.
+        # The marker itself establishes the immutable boundary. GitHub chooses A
+        # because A is the marker commit's actual parent.
+        marker_path, _ = v2_marker(repo, 'a' * 32)
+        async_regression.git(repo, 'add', marker_path.relative_to(repo).as_posix())
+        anchor = async_regression.commit(
+            repo, 'Deep V2 run-start marker on A',
+            '2026-09-27T10:01:00+00:00',
+        )
+
+        # Dossier/work advances after the marker but before confirmation is durable.
         dossier_b = copy.deepcopy(dossier_a)
-        dossier_b['generated_at_utc'] = '2026-09-27T10:01:00Z'
+        dossier_b['generated_at_utc'] = '2026-09-27T10:01:30Z'
         raw_b = (
             json.dumps(
                 dossier_b, ensure_ascii=False, sort_keys=True, separators=(',', ':')
@@ -113,29 +113,22 @@ def concurrent_dossier_success_and_no_substitution():
         async_regression.git(repo, 'add', '.')
         authority_b = async_regression.commit(
             repo, 'parallel canonical Dossier/work advance B',
-            '2026-09-27T10:01:00+00:00',
-        )
-
-        marker_path, marker_doc = v2_marker(repo, authority_a, 'a' * 32)
-        assert marker_doc['progressive_pass2_contract_blob_sha'] == frozen_contract_blob
-        assert marker_doc['progressive_pass2_work_blob_sha'] == frozen_work_blob
-        async_regression.git(repo, 'add', marker_path.relative_to(repo).as_posix())
-        anchor = async_regression.commit(
-            repo, 'Deep V2 run-start marker after parallel Dossier write',
             '2026-09-27T10:02:00+00:00',
         )
 
         receipts = process_markers(repo)
         assert len(receipts) == 1
         receipt = receipts[0]
-        assert receipt['status'] == 'confirmed'
+        assert receipt['status'] == 'confirmed', receipt
+        assert receipt['run_start_anchor_commit'] == anchor
         assert receipt['run_start_authority_commit'] == authority_a
-        assert receipt['run_start_marker_parent_commit'] == authority_b
-        assert receipt['progressive_pass2_work_blob_sha'] == frozen_work_blob
+        assert receipt['run_start_marker_parent_commit'] == authority_a
         assert receipt['progressive_pass2_contract_blob_sha'] == frozen_contract_blob
-        persist_confirmation(repo, '2026-09-27T10:02:05+00:00')
+        assert receipt['progressive_pass2_work_blob_sha'] == frozen_work_blob
+        assert authority_b != authority_a
+        persist_confirmation(repo, '2026-09-27T10:03:00+00:00')
 
-        # Result is bound to frozen A even though B already exists.
+        # A result remains bound to A; B's newer Dossier is not substituted.
         result = pass2_core.fit_result(item)
         result.update({
             'run_start_anchor_commit': anchor,
@@ -150,7 +143,7 @@ def concurrent_dossier_success_and_no_substitution():
         async_regression.git(repo, 'add', result_path.relative_to(repo).as_posix())
         async_regression.commit(
             repo, 'publish result from frozen A',
-            '2026-09-27T10:03:00+00:00',
+            '2026-09-27T10:04:00+00:00',
         )
         resolved, error = resolve(repo, item, result, manifest_b)
         assert error is None
@@ -164,7 +157,7 @@ def concurrent_dossier_success_and_no_substitution():
             pass2_core.work_doc([resolved]),
             pass2_core.empty_pass2_state(),
             [(result_path.name, result, None)],
-            accepted_at_utc='2026-09-27T10:04:00+00:00',
+            accepted_at_utc='2026-09-27T10:05:00+00:00',
         )
         assert accepted[0]['status'] == 'accepted'
         assert state['entries'][item['family_id']]['normal_first_pass_attempted'] is True
@@ -179,137 +172,209 @@ def unrelated_write_success():
             repo, item, manifest, dossier,
             '2026-09-27T11:00:00+00:00', 'prepare Deep authority A',
         )
-        (repo / 'UNRELATED_CANONICAL_NOTE.txt').write_text('parallel write\n', encoding='utf-8')
-        async_regression.git(repo, 'add', 'UNRELATED_CANONICAL_NOTE.txt')
-        authority_b = async_regression.commit(
-            repo, 'unrelated canonical repository write',
-            '2026-09-27T11:01:00+00:00',
-        )
-        marker_path, _ = v2_marker(repo, authority_a, 'b' * 32)
+        marker_path, _ = v2_marker(repo, 'b' * 32)
         async_regression.git(repo, 'add', marker_path.relative_to(repo).as_posix())
         async_regression.commit(
-            repo, 'Deep marker after unrelated write',
+            repo, 'Deep marker before unrelated write',
+            '2026-09-27T11:01:00+00:00',
+        )
+        (repo / 'UNRELATED_CANONICAL_NOTE.txt').write_text(
+            'parallel write\n', encoding='utf-8'
+        )
+        async_regression.git(repo, 'add', 'UNRELATED_CANONICAL_NOTE.txt')
+        async_regression.commit(
+            repo, 'unrelated canonical repository write',
             '2026-09-27T11:02:00+00:00',
         )
         receipt = process_markers(repo)[0]
-        assert receipt['status'] == 'confirmed'
+        assert receipt['status'] == 'confirmed', receipt
         assert receipt['run_start_authority_commit'] == authority_a
-        assert receipt['run_start_marker_parent_commit'] == authority_b
+        assert receipt['run_start_marker_parent_commit'] == authority_a
 
 
-def material_binding_mismatch_rejected():
+def material_result_binding_mismatch_rejected():
     item, manifest, dossier = async_regression.deep_fixture()
     with tempfile.TemporaryDirectory() as td:
         repo = Path(td)
         async_regression.init_repo(repo)
-        authority_a = write_active_authority(
+        authority = write_active_authority(
             repo, item, manifest, dossier,
-            '2026-09-27T12:00:00+00:00', 'prepare Deep authority A',
+            '2026-09-27T12:00:00+00:00', 'prepare exact Deep authority',
         )
-        marker_path, doc = v2_marker(repo, authority_a, 'c' * 32)
-        doc['progressive_pass2_work_blob_sha'] = '0' * 40
-        async_regression.write_json(marker_path, doc)
+        marker_path, _ = v2_marker(repo, 'c' * 32)
         async_regression.git(repo, 'add', marker_path.relative_to(repo).as_posix())
-        async_regression.commit(
-            repo, 'forged material Deep binding',
+        anchor = async_regression.commit(
+            repo, 'Deep V2 marker',
             '2026-09-27T12:01:00+00:00',
         )
         receipt = process_markers(repo)[0]
-        assert receipt['status'] == 'rejected'
-        assert 'work blob mismatch' in receipt['reason']
+        assert receipt['status'] == 'confirmed', receipt
+        persist_confirmation(repo, '2026-09-27T12:02:00+00:00')
+
+        bad = pass2_core.fit_result(item)
+        bad.update({
+            'authorization_id': '0' * 64,
+            'run_start_anchor_commit': anchor,
+            'run_start_authority_commit': authority,
+            'run_started_at_utc': receipt['run_started_at_utc'],
+        })
+        path = repo / item['result_submission_path']
+        async_regression.write_json(path, bad)
+        async_regression.set_git_identity(
+            repo, 'scheduled-worker', 'scheduled-worker@example.invalid'
+        )
+        async_regression.git(repo, 'add', path.relative_to(repo).as_posix())
+        async_regression.commit(
+            repo, 'forged material result binding',
+            '2026-09-27T12:03:00+00:00',
+        )
+        resolved, error = resolve(repo, item, bad, manifest)
+        assert error is None
+        state, receipts = progressive_pass2.process_result_documents(
+            pass2_core.work_doc([resolved]),
+            pass2_core.empty_pass2_state(),
+            [(path.name, bad, None)],
+            accepted_at_utc='2026-09-27T12:04:00+00:00',
+        )
+        assert state['entries'] == {}
+        assert receipts[0]['status'].startswith('rejected')
 
 
-def arbitrary_historical_binding_rejected():
-    item, manifest_a, dossier = async_regression.deep_fixture()
+def arbitrary_historical_authority_rejected():
+    old_item, manifest_old, dossier_old = async_regression.deep_fixture()
     with tempfile.TemporaryDirectory() as td:
         repo = Path(td)
         async_regression.init_repo(repo)
-        historical_a = write_active_authority(
-            repo, item, manifest_a, dossier,
-            '2026-09-27T13:00:00+00:00', 'prepare historical authority A',
+        historical = write_active_authority(
+            repo, old_item, manifest_old, dossier_old,
+            '2026-09-27T13:00:00+00:00', 'prepare historical Deep authority H',
         )
-        manifest_b = copy.deepcopy(manifest_a)
-        manifest_b['items'][0]['authorization_id'] = 'f' * 64
+
+        dossier_current = copy.deepcopy(dossier_old)
+        dossier_current['generated_at_utc'] = '2026-09-27T13:01:00Z'
+        raw_current = (
+            json.dumps(
+                dossier_current,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(',', ':'),
+            ) + '\n'
+        ).encode('utf-8')
+        manifest_current = copy.deepcopy(manifest_old)
+        current_item = manifest_current['items'][0]
+        current_item['dossier_content_sha256'] = hashlib.sha256(raw_current).hexdigest()
+        current_item['authorization_id'] = 'f' * 64
+        current_item['result_submission_path'] = (
+            'data/ai_inbox/progressive_pass2/results/current-authority.json'
+        )
+        current_item['terminal_execution_submission_path'] = (
+            'data/ai_inbox/progressive_pass2/execution_receipts/current-authority.json'
+        )
+        async_regression.write_json(repo / old_item['dossier_path'], dossier_current)
         async_regression.write_json(
-            repo / 'data/production/pre_ai/progressive_pass2_work.json', manifest_b
+            repo / 'data/production/pre_ai/progressive_pass2_work.json',
+            manifest_current,
         )
         async_regression.git(repo, 'add', '.')
-        current_b = async_regression.commit(
-            repo, 'replace prepared Deep authorization with B',
+        current = async_regression.commit(
+            repo, 'prepare current Deep authority C',
             '2026-09-27T13:01:00+00:00',
         )
 
-        # A historical commit plus current-looking bindings is not a valid freeze.
-        marker_path, doc = v2_marker(repo, historical_a, 'd' * 32)
-        doc['progressive_pass2_work_blob_sha'] = blob_at(
-            repo, current_b, 'data/production/pre_ai/progressive_pass2_work.json'
-        )
-        async_regression.write_json(marker_path, doc)
+        # V2 has no authority field: GitHub selects C because C is the marker parent.
+        marker_path, marker_doc = v2_marker(repo, 'd' * 32)
+        assert 'observed_main_commit' not in marker_doc
+        assert 'progressive_pass2_work_blob_sha' not in marker_doc
         async_regression.git(repo, 'add', marker_path.relative_to(repo).as_posix())
-        async_regression.commit(
-            repo, 'attempt historical Deep authority revival',
+        anchor = async_regression.commit(
+            repo, 'Deep V2 marker selects current C',
             '2026-09-27T13:02:00+00:00',
         )
         receipt = process_markers(repo)[0]
-        assert receipt['status'] == 'rejected'
-        assert 'work blob mismatch' in receipt['reason']
+        assert receipt['status'] == 'confirmed', receipt
+        assert receipt['run_start_authority_commit'] == current
+        assert receipt['run_start_authority_commit'] != historical
+        persist_confirmation(repo, '2026-09-27T13:03:00+00:00')
+
+        # An old valid-looking H item cannot be revived under C's marker/receipt.
+        stale = pass2_core.fit_result(old_item)
+        stale.update({
+            'run_start_anchor_commit': anchor,
+            'run_start_authority_commit': historical,
+            'run_started_at_utc': receipt['run_started_at_utc'],
+        })
+        stale_path = repo / old_item['result_submission_path']
+        async_regression.write_json(stale_path, stale)
+        async_regression.set_git_identity(
+            repo, 'scheduled-worker', 'scheduled-worker@example.invalid'
+        )
+        async_regression.git(repo, 'add', stale_path.relative_to(repo).as_posix())
+        async_regression.commit(
+            repo, 'attempt historical Deep authority revival',
+            '2026-09-27T13:04:00+00:00',
+        )
+        try:
+            resolve(repo, old_item, stale, manifest_current)
+        except ValueError as exc:
+            assert (
+                'does not match GitHub confirmation' in str(exc)
+                or 'does not match exact work item' in str(exc)
+                or 'not found' in str(exc)
+            )
+        else:
+            raise AssertionError('historical Deep authority must fail closed')
 
 
-def non_ancestor_history_rejected():
+def missing_confirmation_zero_attempt():
     item, manifest, dossier = async_regression.deep_fixture()
     with tempfile.TemporaryDirectory() as td:
         repo = Path(td)
         async_regression.init_repo(repo)
-        base = write_active_authority(
+        authority = write_active_authority(
             repo, item, manifest, dossier,
-            '2026-09-27T14:00:00+00:00', 'base authority',
+            '2026-09-27T14:00:00+00:00', 'prepare Deep authority',
         )
-        async_regression.git(repo, 'checkout', '-qb', 'other', base)
-        (repo / 'other.txt').write_text('other branch\n', encoding='utf-8')
-        async_regression.git(repo, 'add', 'other.txt')
-        other = async_regression.commit(
-            repo, 'unrelated historical branch authority',
+        marker_path, _ = v2_marker(repo, 'e' * 32)
+        async_regression.git(repo, 'add', marker_path.relative_to(repo).as_posix())
+        anchor = async_regression.commit(
+            repo, 'Deep V2 marker without confirmation',
             '2026-09-27T14:01:00+00:00',
         )
-        async_regression.git(repo, 'checkout', '-q', 'master')
-        (repo / 'main.txt').write_text('main line\n', encoding='utf-8')
-        async_regression.git(repo, 'add', 'main.txt')
-        async_regression.commit(
-            repo, 'advance canonical line',
-            '2026-09-27T14:02:00+00:00',
-        )
-
-        # Build a syntactically exact marker for a commit that is not in marker-parent lineage.
-        contract_blob = blob_at(repo, other, 'config/progressive_pass2_contract.json')
-        work_blob = blob_at(repo, other, 'data/production/pre_ai/progressive_pass2_work.json')
-        path = (
-            repo / 'data/ai_inbox/progressive_pass2/run_starts'
-            / f'{other}--{"e" * 32}.json'
-        )
-        async_regression.write_json(path, {
-            'schema_version': 2,
-            'contract': 'PROGRESSIVE-PASS2-RUN-START-MARKER-V2',
-            'observed_main_commit': other,
-            'run_start_nonce': 'e' * 32,
-            'progressive_pass2_contract_blob_sha': contract_blob,
-            'progressive_pass2_work_blob_sha': work_blob,
+        result = pass2_core.fit_result(item)
+        result.update({
+            'run_start_anchor_commit': anchor,
+            'run_start_authority_commit': authority,
+            'run_started_at_utc': '2026-09-27T14:01:00+00:00',
         })
+        path = repo / item['result_submission_path']
+        async_regression.write_json(path, result)
         async_regression.git(repo, 'add', path.relative_to(repo).as_posix())
         async_regression.commit(
-            repo, 'attempt non-ancestor historical authority',
-            '2026-09-27T14:03:00+00:00',
+            repo, 'forbidden pre-confirmation result',
+            '2026-09-27T14:02:00+00:00',
         )
-        receipt = process_markers(repo)[0]
-        assert receipt['status'] == 'rejected'
-        assert 'not an ancestor' in receipt['reason']
+        try:
+            resolve(repo, item, result, manifest)
+        except ValueError as exc:
+            assert 'confirmation receipt is missing' in str(exc)
+        else:
+            raise AssertionError('missing confirmation must not authorize result')
+        state, receipts = progressive_pass2.process_result_documents(
+            pass2_core.work_doc([]),
+            pass2_core.empty_pass2_state(),
+            [(path.name, result, None)],
+            accepted_at_utc='2026-09-27T14:03:00+00:00',
+        )
+        assert state['entries'] == {}
+        assert receipts[0]['status'] == 'rejected_stale_or_mismatched'
 
 
 def main():
     concurrent_dossier_success_and_no_substitution()
     unrelated_write_success()
-    material_binding_mismatch_rejected()
-    arbitrary_historical_binding_rejected()
-    non_ancestor_history_rejected()
+    material_result_binding_mismatch_rejected()
+    arbitrary_historical_authority_rejected()
+    missing_confirmation_zero_attempt()
     print('progressive Deep parallel frozen start authority regression: ok')
 
 
