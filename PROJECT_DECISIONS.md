@@ -697,6 +697,23 @@ Before the **first** Deep result or terminal execution receipt from the invocati
 
 ---
 
+## PPD-008 — Deep start authority is the exact frozen prepared view, not whole-main stability
+
+**Дата:** 2026-09-27  
+**Статус:** canonical; supersedes only the PPD-006/PPD-007 clause that made the run-start marker's actual parent equal to the previously observed whole `main` commit. The GitHub-owned publication guard, immutable invocation view and trusted marker commit time remain mandatory.
+
+**Решение:** Dossier and Deep are independent stages and may advance in parallel. A Deep invocation freezes one exact GitHub-prepared view at `observed_main_commit`: the exact PASS 2 contract Git blob, exact PASS 2 work-manifest Git blob, ordered work identities, immutable profile pin, exact Dossier content/binding/expiry, recovery authorization and exact result/terminal paths. The V2 run-start marker binds `observed_main_commit` plus the exact contract/work blob identities. GitHub confirms that exact frozen authority and requires the marker's actual parent to descend from it; the whole repository head is not required to remain equal while the marker is being persisted.
+
+Later canonical Dossier/profile/work/progress or unrelated repository writes therefore belong to the next invocation and do not retroactively cancel or substitute into the already-frozen invocation merely because `main` advanced. The marker commit's Git committer time remains the only trusted `run_started_at_utc`, and no Deep result or terminal execution receipt may cross the publication boundary before the durable GitHub confirmation exists.
+
+**Stale-work protection:** this is not permission to accept an arbitrary stale commit. The claimed observed commit must resolve in the marker-parent lineage, the marker must be create-only and path/nonce exact, the contract/work blob identities must exactly match that observed commit, the frozen work/profile/Dossier/recovery bindings must validate from that commit, and result ingest keeps the existing consumed-work, accepted-newer-work, exact authorization and durable-confirmation checks. A different or forged material binding, non-ancestor authority, missing/rejected confirmation or already-consumed/retired work remains fail-closed and consumes no attempt. Legacy V1 markers retain their original strict parent-equals-observed rule and do not inherit V2 parallel-start semantics.
+
+**Ownership:** GitHub remains the sole control-plane authority for scope/order, eligibility, start confirmation, attempts, recovery, acceptance, completeness and persistence. Scheduled ChatGPT only freezes the exact prepared view, creates one V2 marker and performs bounded semantics against that view. No second scheduler, queue, retry daemon, backlog manager or per-item mutable-current reread is introduced.
+
+**Основные места:** `config/progressive_pass2_contract.json`, `config/progressive_pass2_worker_prompt.md`, `config/execution_ownership_contract.json`, `scripts/progressive_work_authority.py`, `scripts/ingest_progressive_pass2.py`, `scripts/test_progressive_deep_parallel_frozen_start.py`, `.github/workflows/validate-progressive-pass2-core.yml`.
+
+---
+
 ## TASTE-016 — Directly observed exact-product player feedback is usable without permanent per-review identity
 
 **Дата:** 2026-09-26  
