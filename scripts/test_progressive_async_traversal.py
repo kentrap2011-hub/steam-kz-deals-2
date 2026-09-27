@@ -168,7 +168,7 @@ def exact_authority_and_path_reuse():
             os.chdir(previous_cwd)
         assert len(start_receipts) == 1
         start_receipt = start_receipts[0]
-        assert start_receipt['status'] == 'confirmed'
+        assert start_receipt['status'] == 'confirmed', start_receipt
         assert start_receipt['run_start_anchor_commit'] == anchor
         assert start_receipt['run_start_authority_commit'] == authority_b
         assert start_receipt['run_started_at_utc'] == '2026-09-24T11:00:00+00:00'
