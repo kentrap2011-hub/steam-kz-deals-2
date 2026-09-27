@@ -315,6 +315,25 @@ def run():
     assert risk_policy['serious_personal_penalty'] == 10
     assert risk_policy['confirmed_windows_penalty'] == 12
 
+    # 10) Browser is presentation-only: it renders producer-owned risk/caution
+    # payloads and does not classify the negative-assessment statuses itself.
+    app = Path('web/app.js').read_text(encoding='utf-8')
+    index = Path('web/index.html').read_text(encoding='utf-8')
+    assert 'g.cautions' in app
+    assert 'id="cautions"' in index
+    assert 'completed_with_caution' not in app
+    assert 'legacy_not_evaluated' not in app
+    assert 'felt_technical_burden' not in app
+
+    # 11) Control-plane ownership remains unchanged and no scheduler/retry
+    # authority moved into the semantic worker.
+    ownership = json.loads(Path('config/execution_ownership_contract.json').read_text(encoding='utf-8'))
+    deep_owner = ownership['progressive_personalization_phase_c_pass2_core']
+    assert deep_owner['control_plane'] == 'github'
+    assert deep_owner['scheduler']['configuration_owner'] == 'external_user_operator'
+    assert deep_owner['scheduled_chatgpt_responsibilities_when_activated']
+    assert 'blind automatic recovery retry loop or hidden arbitrary recovery quota' in deep_owner['forbidden']
+
     print('DEEP_BALANCED_NEGATIVE_ASSESSMENT_TEST=PASS')
 
 
