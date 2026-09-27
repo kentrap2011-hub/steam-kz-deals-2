@@ -164,28 +164,35 @@ class ContractGapRegressionTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "stable non-identifying feedback item locator"):
             self.validate(vague, now=now)
 
-    def test_gap04_dated_freshness_is_mechanical_at_365_day_boundary(self):
+    def test_gap04_temporal_state_is_github_derived_at_365_day_boundary(self):
         now = datetime.now(timezone.utc).replace(microsecond=0)
         exact = web_dossier(540001, now)
         exact_date = (now.date() - timedelta(days=365)).isoformat()
         exact["provenance"]["sources"][1]["publication_date"] = exact_date
-        exact["provenance"]["sources"][1]["freshness"] = "recent"
+        exact["provenance"]["sources"][1]["freshness"] = "older"
         for record in exact["provenance"]["player_feedback_records"]:
             if record["source_id"] == "source-002":
                 record["publication_date"] = exact_date
         self.assertIs(self.validate(exact, now=now), exact)
+        self.assertEqual(exact["provenance"]["sources"][1]["freshness"], "recent")
 
         too_old = web_dossier(540002, now)
-        too_old["provenance"]["sources"][1]["publication_date"] = (now.date() - timedelta(days=366)).isoformat()
+        too_old_date = (now.date() - timedelta(days=366)).isoformat()
+        too_old["provenance"]["sources"][1]["publication_date"] = too_old_date
         too_old["provenance"]["sources"][1]["freshness"] = "recent"
-        with self.assertRaisesRegex(ValueError, "freshness is incoherent"):
-            self.validate(too_old, now=now)
-        too_old["provenance"]["sources"][1]["freshness"] = "older"
+        for record in too_old["provenance"]["player_feedback_records"]:
+            if record["source_id"] == "source-002":
+                record["publication_date"] = too_old_date
         self.assertIs(self.validate(too_old, now=now), too_old)
+        self.assertEqual(too_old["provenance"]["sources"][1]["freshness"], "older")
 
         false_current = web_dossier(540003, now)
-        false_current["provenance"]["sources"][2]["publication_date"] = (now.date() - timedelta(days=800)).isoformat()
-        with self.assertRaisesRegex(ValueError, "freshness is incoherent"):
+        false_current["provenance"]["sources"][2]["publication_date"] = None
+        false_current["provenance"]["sources"][2].pop("freshness", None)
+        false_current["provenance"]["player_feedback_records"][3]["publication_date"] = (
+            now.date() - timedelta(days=800)
+        ).isoformat()
+        with self.assertRaisesRegex(ValueError, "current claim lacks recent dated current-state feedback"):
             self.validate(false_current, now=now)
 
     def test_gap05_russian_attempt_is_bidirectional(self):
