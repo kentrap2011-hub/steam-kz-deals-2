@@ -9,6 +9,8 @@ from ingest_russian_description_translations import ingest_paths
 from russian_description_translation_runtime import (
     CACHE_CONTRACT_ID,
     RESULT_CONTRACT_ID,
+    STEAM_APPDETAILS_RU_SOURCE,
+    apply_russian_appdetails_description_fallback,
     build_translation_request,
     empty_cache,
     resolve_description_for_appids,
@@ -68,6 +70,63 @@ class TranslationRuntimeTests(unittest.TestCase):
         self.assertEqual(status['resolved_direct_ru_count'], 1)
         self.assertEqual(status['nontranslatable_blocker_count'], 1)
         self.assertEqual(status['queue_request_ids'], [queue[0]['request_id']])
+
+    def test_command_conquer_appdetails_ru_fallback_avoids_translation_queue(self):
+        appid = '1213210'
+        title = 'Command & Conquer™ Remastered Collection'
+        english = (
+            'Command & Conquer and Red Alert are both remastered in 4K by the former '
+            'Westwood Studios team members. Includes all 3 expansions, rebuilt multiplayer, '
+            'a modernized UI, Map Editor, bonus footage gallery, and over 7 hours of remastered music.'
+        )
+        russian = (
+            'Переиздание Command & Conquer и Red Alert в разрешении 4K от бывших сотрудников '
+            'Westwood Studios включает все три дополнения, обновлённый многопользовательский режим, '
+            'современный интерфейс, редактор карт, бонусные материалы и переработанную музыку.'
+        )
+        media = {appid: {'short_description_source': english}}
+        changed = apply_russian_appdetails_description_fallback(
+            media[appid],
+            {'short_description': russian},
+        )
+        self.assertTrue(changed)
+        self.assertEqual(media[appid]['short_description_source_path'], STEAM_APPDETAILS_RU_SOURCE)
+
+        queue, status = build_scope(
+            [row(appid, title)],
+            metadata(appid, english, title),
+            empty_cache(),
+            media,
+            generated_at_utc='2026-09-27T18:00:00Z',
+        )
+        self.assertEqual(queue, [])
+        self.assertEqual(status['resolved_direct_ru_count'], 1)
+        resolution = resolve_description_for_appids(
+            [appid],
+            media,
+            metadata(appid, english, title),
+            empty_cache(),
+        )
+        self.assertEqual(resolution['description_status'], 'ready_ru')
+        self.assertEqual(resolution['description_source_path'], STEAM_APPDETAILS_RU_SOURCE)
+        self.assertEqual(resolution['summary'], russian)
+
+    def test_appdetails_non_russian_does_not_override_translation_source(self):
+        english = 'Explore a strange station and escape the creatures hunting you.'
+        media = {'1': {'short_description_source': english}}
+        changed = apply_russian_appdetails_description_fallback(
+            media['1'],
+            {'short_description': 'Another English description that is still not Russian.'},
+        )
+        self.assertFalse(changed)
+        self.assertEqual(media['1']['short_description_source'], english)
+        resolution = resolve_description_for_appids(
+            ['1'],
+            media,
+            metadata('1', english),
+            empty_cache(),
+        )
+        self.assertEqual(resolution['description_status'], 'needs_translation')
 
     def test_source_change_invalidates_identity(self):
         a = source_binding('App_1', 'Explore the station and escape.')
