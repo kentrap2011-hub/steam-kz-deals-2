@@ -1,4 +1,4 @@
-# WORKER TASK — TASTE DOSSIER PRODUCTION FAILURE DIAGNOSTIC 01
+# WORKER TASK — TASTE DOSSIER GITHUB DATE DERIVATION AND INGEST ATOMICITY FIX 01
 
 Repository: `kentrap2011-hub/steam-kz-deals-2`
 Base branch / source of truth: `main`
@@ -8,49 +8,67 @@ Repository scope guard:
 - do not search, read, modify, or use another repository;
 - if GitHub/tool opens another repository by default or the target is ambiguous, stop and switch to `kentrap2011-hub/steam-kz-deals-2` before continuing.
 
-Task ID: `taste-dossier-production-failure-diagnostic-01`
-Mode: `READ-ONLY / RECON`
-Worker slot: `НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 1`
+Task ID: `taste-dossier-github-date-derivation-and-ingest-atomicity-fix-01`
+Mode: `IMPLEMENT / VALIDATE`
+Worker slot: `НОВЫЙ ФИЗИЧЕСКИЙ ЧАТ — ЧАТ 2`
 
 Durable report:
+`reviews/worker_reports/taste-dossier-github-date-derivation-and-ingest-atomicity-fix-01.md`
+
+## User-approved decisions
+
+The user explicitly approved both changes below.
+
+### Decision A — ChatGPT no longer decides "fresh / old"
+
+Do not add another prompt-memory rule or another semantic self-check to make ChatGPT remember the one-year rule.
+
+Instead simplify the responsibility split:
+
+- the semantic worker records concrete publication dates when known;
+- if a date is genuinely unknown, it records `null`;
+- the semantic worker must not be responsible for deciding whether a dated review/source is `recent` or `older`;
+- GitHub deterministically derives temporal classification from the dates under the canonical 365-day rule;
+- unknown date must remain unknown and must never be promoted to recent merely because the page is accessible now;
+- unknown temporal evidence cannot satisfy a rule that specifically requires recent evidence;
+- do not weaken current-state / temporal completeness semantics.
+
+The implementation should remove redundant worker judgment rather than add a second "remember to check age" layer.
+
+### Decision B — failed-group audit/quarantine remain correct, saving them must be reliable
+
+The failed-group audit record and quarantine copy are intentional canonical outputs and must remain.
+
+Fix the GitHub workflow so:
+- absence of one optional path cannot prevent other intended changed paths from being staged;
+- staging errors are not silently hidden;
+- after the local canonical commit, the worktree must be proven clean before rebase/push;
+- if anything remains modified/untracked, the workflow must stop and print the exact paths rather than continue;
+- no intended audit/quarantine output may be silently omitted from the canonical commit.
+
+## Triggering diagnostic
+
+Read:
 `reviews/worker_reports/taste-dossier-production-failure-diagnostic-01.md`
 
-CURRENT_TASK.md:
-- do not modify.
+Accepted root causes:
 
-## Goal
+1. Tiny Snow / appid 1002560 candidate contained temporal contradictions even though the strict 365-day validator rule was correct.
+2. The Scheduled worker was the component choosing/persisting `freshness`, while canonical validation happened only after create-only publication.
+3. The user does NOT want to solve that by adding another pre-create validation layer to ChatGPT.
+4. In ingest run `36241650284`, failed-group classification correctly created:
+   - modified `data/audit/taste_steam_review_dossier_group_failures.jsonl`;
+   - a new deterministic failed-group quarantine artifact under `data/quarantine/taste_steam_review_dossier_inbox/failed_group/...`.
+5. The workflow then ran:
+   `git add -A -- data/control data/quarantine data/audit 2>/dev/null || true`
+6. Because optional `data/control` did not exist, that command failed as a whole; the failure was suppressed; audit/quarantine remained unstaged; rebase then failed on a dirty worktree.
 
-Establish the exact root causes of two production failures exposed by the first Dossier group under the newly accepted pragmatic evidence model.
-
-Do not implement a fix in this task. Diagnose, prove, and recommend the smallest safe fix for a later separately authorized IMPLEMENT task.
-
-## Production case
-
-Snapshot:
-`b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5`
-
-Group:
+Production refs:
+- snapshot: `b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5`
 - sequence: `1`
 - group SHA-256: `9299039791406b032d652da85c685c8868e4dcaba808168f67c68b6fe5b709b0`
-- games: Crown Trick / appid 1000010; Tiny Snow / appid 1002560; EARTH DEFENSE FORCE 5 / appid 1007040
 - candidate create commit: `2a3a2e2dbd99faf784f22878f0b7ec2252d1f5fa`
-- candidate path:
-  `data/ai_inbox/taste_steam_review_dossiers/b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5--g000001--9299039791406b032d652da85c685c8868e4dcaba808168f67c68b6fe5b709b0.json`
-
-GitHub ingest workflow:
-- workflow: `Ingest Steam review dossier checkpoint`
-- run id: `36241650284`
-- job id observed by Director: `108403182115`
-
-Observed facts from the run:
-- group 1 was locally classified failed;
-- `accepted_group_count_this_run: 0`;
-- `failed_group_count_this_run: 1`;
-- `failed_dossier_count: 3`;
-- local commit `Drain and validate Steam review dossier buffer` was created;
-- publication to main then failed with:
-  `error: cannot rebase: You have unstaged changes.`
-- because the workflow failed before pushing, current main may still show stale pending/validation state. Treat current GitHub truth and the failed run log separately and explicitly.
+- failed ingest run: `36241650284`
 
 ## START gate
 
@@ -61,152 +79,238 @@ Then read this task fully.
 Read current, minimally:
 - `CHAT_CONTEXT.md`
 - `DIRECTOR_TASK_BOARD.md`
-- `DIRECTOR_PROTOCOL.md` only if required by CHAT_PROTOCOL
 - `PROJECT_ROUTES.md`
 - `PROJECT_DECISIONS.md`
 - `config/execution_ownership_contract.json`
-- current Dossier contract, worker prompt, web-evidence contract and schema
-- current strict/prepublication/buffered/ingest/worker-projection code relevant to the two failures
+- current Dossier contract/schema/worker prompt/web-evidence contract
+- current strict / buffered / ingest / worker-projection / prepublication code needed for this task
+- ingest workflow
+- focused Dossier temporal and canonical-writer tests
+- `reviews/worker_reports/taste-dossier-production-failure-diagnostic-01.md`
 - `reviews/worker_reports/taste-dossier-pragmatic-evidence-model-fix-01.md`
-- the exact candidate artifact and exact failed workflow run/logs above.
 
 Do not perform broad repository archaeology.
 
-## Architecture / ownership boundary
+## Architecture preflight
 
-This is diagnosis only.
+Before source/workflow writes prove and preserve:
 
-Preserve and verify:
-- GitHub remains Dossier control plane;
-- Scheduled ChatGPT remains bounded semantic/data producer;
-- no Scheduled Task action;
-- no manual Dossier recovery;
-- no manual Tiny Snow rerun;
-- no Deep recovery;
-- no manual backlog processing;
-- no source/runtime/workflow/contract changes;
-- no production artifact rewrite;
-- only the durable report may be committed by this task.
+1. GitHub remains control plane for deterministic transformations, temporal classification, strict validation, canonical persistence, failed-group quarantine, audit, recovery eligibility and completeness.
+2. Scheduled ChatGPT remains only bounded semantic/evidence collection and create-only candidate transport.
+3. Moving "recent/older" derivation from ChatGPT to GitHub is a move toward the existing ownership contract, not away from it.
+4. Do not create a new scheduler, queue, retry loop, crawler, backlog manager, or second canonical validator.
+5. Do not add a new semantic prepublication gate owned by ChatGPT.
+6. Do not alter the 365-day rule.
+7. Do not alter TASTE-012 temporal completeness semantics except where needed to make temporal classification GitHub-derived.
+8. Do not weaken exact-product identity, TASTE-014 bounded retrieval, TASTE-015 coverage sufficiency, privacy, or pragmatic evidence modes.
+9. No Scheduled Task action is authorized.
+10. No manual Dossier recovery / Tiny Snow rerun / Deep recovery / backlog processing is authorized.
 
-If the recommended future fix would change source/runtime/workflow/checkpoint/ownership behavior, include the required architecture preflight analysis in the report, but do not implement it.
+If the canonical contracts currently assign derived freshness to ChatGPT, update those contracts first/with the implementation so ownership is unambiguous.
 
-## Investigation A — freshness contradiction
+## IMPLEMENT A — GitHub-derived temporal classification
 
-Observed candidate problem:
+### A1. Remove worker-owned freshness judgment
 
-At least one Tiny Snow player-feedback source was serialized with `freshness:"recent"` while one or more concrete bound feedback records under that source had known publication dates older than the canonical 365-day boundary relative to `generated_at_utc`.
+The active worker instructions and candidate contract must no longer require ChatGPT to decide whether dated evidence is `recent` or `older`.
 
-The strict validator already contains the rule that an old dated feedback record cannot inherit a recent parent-source freshness classification.
+The semantic worker should provide factual temporal inputs only:
+- `publication_date: YYYY-MM-DD` when actually known;
+- `publication_date: null` when genuinely unknown.
 
-Determine exactly:
+Do not tell ChatGPT to calculate age in days or choose the final freshness classification.
 
-1. Which exact source/feedback record(s) caused the strict failure.
-2. The exact validator error text and code path.
-3. Why the worker was able to construct and publish the contradictory candidate despite the rule already existing.
-4. Whether the gap is in:
-   - worker prompt compliance only;
-   - prepublication validation coverage;
-   - candidate-generation path;
-   - validator invocation/order;
-   - or a combination.
-5. Whether the worker performed any machine validation before create-file and, if so, why that validation did not stop this candidate.
-6. The smallest machine-enforced future barrier that would make this class of contradiction impossible to publish:
-   - it must not rely on "remembering" the rule;
-   - it must evaluate known child feedback dates against parent freshness/current-state classification before create-file;
-   - it must preserve the allowed undated path without inventing dates.
-7. Exact focused regression(s) needed for a future implementation.
+### A2. GitHub derives the classification deterministically
 
-Do not weaken the 365-day rule.
+Use the canonical generated-at/reference date and the existing threshold:
+- age <= 365 days => recent;
+- age > 365 days => older;
+- unknown date => unknown/undated; never infer recent merely from current page accessibility.
 
-## Investigation B — uncommitted changes before rebase
+Choose the smallest coherent representation.
 
-The ingest workflow created its local canonical-state commit and then failed because Git reported unstaged changes before rebase.
+Preferred design:
+- transport/candidate carries factual dates;
+- GitHub normalization/validation derives effective temporal state before canonical persistence/use.
 
-Do not guess which file caused it.
+It is acceptable for the canonical persisted Dossier to retain a derived freshness field for downstream compatibility, but if retained it must be GitHub-computed, not worker-authored.
 
-Reproduce the workflow path safely from the exact relevant repository state in an isolated/local test environment, without pushing production state.
+Do not duplicate the 365-day calculation in multiple independent implementations. Centralize the deterministic calculation in one canonical helper and reuse it.
 
-Run the same material steps in order and record `git status --porcelain` and relevant `git diff` after each step, especially:
-- after recovery step;
-- after buffered drain/classification;
-- after validation-status generation;
-- after PASS 2 eligibility regeneration;
-- after the workflow's current `git add`;
-- immediately after the local commit;
-- immediately before the attempted rebase.
+### A3. Parent/child temporal coherence
+
+The model must handle the case that caused Tiny Snow:
+
+- a collection/page itself may be undated;
+- individual bound feedback records may have known dates;
+- known old feedback cannot become recent because the parent page is undated or currently reachable;
+- if different feedback records under one source have different dates, temporal qualification of an observation must be based on the actual supporting dated records, not a guessed page-wide "recent" label.
+
+If this requires reducing or removing source-level `freshness` as an authoritative field, do so cleanly rather than preserve a misleading field.
+
+### A4. Current-state evidence
+
+Preserve fail-closed semantics:
+
+- current bugs/performance/compatibility/localization/regional state that requires recent support must be backed by evidence whose date GitHub can deterministically classify as recent;
+- an unknown date does not count as recent;
+- old evidence may still support durable/historical observations where allowed;
+- historical/recent conflict behavior remains as currently intended.
+
+### A5. Candidate compatibility / migration
+
+Handle schema/binding revision explicitly if required.
+
+Do not rewrite historical accepted Dossiers manually.
+
+Do not silently reinterpret an old candidate under a new incompatible binding.
+
+Normal GitHub-owned rebuild/refresh semantics remain authoritative.
+
+### A6. Regressions
+
+At minimum prove:
+
+- DATE-01 known date exactly 365 days old => recent;
+- DATE-02 known date 366 days old => older;
+- DATE-03 unknown date => unknown/undated, never recent;
+- DATE-04 undated parent + old dated child => child remains old;
+- DATE-05 undated parent + recent dated child => child may satisfy recent support;
+- DATE-06 mixed old/recent children under one source are classified per supporting record and do not inherit one guessed parent freshness;
+- DATE-07 unknown child cannot satisfy current-state recent-support requirement;
+- DATE-08 worker candidate no longer has to choose/compute recent-vs-older;
+- DATE-09 GitHub canonical output/downstream semantics receive the deterministic derived state they require;
+- DATE-10 existing TASTE-012 temporal behavior remains strict.
+
+Use the existing Tiny Snow shape as a focused regression, but do not rerun production Tiny Snow.
+
+## IMPLEMENT B — reliable canonical staging of failed-group outputs
+
+### B1. Fix optional-path staging
+
+Replace the current failure-prone pattern:
+
+`git add -A -- data/control data/quarantine data/audit 2>/dev/null || true`
+
+with a form where:
+- each optional path is handled independently;
+- absence of `data/control` does not prevent `data/quarantine` and `data/audit` from being staged;
+- unexpected staging errors are visible and fail the workflow;
+- do not broadly suppress stderr or return status for the whole staging operation.
+
+Prefer the simplest shell that is easy to reason about.
+
+### B2. Clean-worktree proof before rebase/push
+
+After the local canonical commit and before rebase:
+
+- run a deterministic clean-worktree check including untracked files;
+- if dirty, print the exact `git status --porcelain --untracked-files=all` output;
+- fail before rebase;
+- do not stash, discard, auto-add unknown paths, or hide the error.
+
+This is a safety assertion, not a retry mechanism.
+
+### B3. Focused Git regression
+
+Add a regression that executes the real staging logic in a temporary Git repository where:
+
+- `data/control` is absent;
+- `data/audit/taste_steam_review_dossier_group_failures.jsonl` is modified;
+- a quarantine artifact exists under the real quarantine path class;
+- normal manifest/index/candidate changes are present.
 
 Prove:
+- intended audit/quarantine changes are staged;
+- optional absent control path does not fail the operation;
+- local commit includes all intended outputs;
+- worktree is clean immediately afterward;
+- the regression would fail under the old combined `git add ... || true` command.
 
-1. Exact unstaged path(s).
-2. Exact step/function that creates or modifies each path.
-3. Why the workflow's current staging list does not include it.
-4. Whether the file is intended canonical output, temporary output, or accidental side effect.
-5. Why existing tests failed to catch this.
-6. Whether the failure requires concurrent movement of `main` to surface, or can occur deterministically on a clean isolated reproduction.
-7. The smallest safe future fix:
-   - stage the missing intended path;
-   - stop generating it there;
-   - move its generation before/after the commit;
-   - or another proven correction.
-8. Focused regression needed to guarantee a clean worktree before rebase/push.
+Also preserve canonical-writer serialization/concurrency behavior.
 
-The report must include the exact observed `git status --porcelain` evidence. Do not conclude the root cause until the concrete path is proven.
+## Durable decision
 
-## Cross-check
+Update `PROJECT_DECISIONS.md` with a new durable Dossier decision that records:
 
-Determine whether Investigation A and Investigation B are independent defects or causally linked.
+- worker supplies dates/facts, not freshness judgment;
+- GitHub derives recent/older/unknown deterministically under the canonical threshold;
+- unknown dates never become recent by assumption;
+- temporal current-state qualification is based on actual supporting evidence dates;
+- failed-group audit/quarantine outputs remain canonical and must be committed atomically with progress state;
+- optional-path absence must not suppress staging of other canonical outputs;
+- a clean-worktree assertion is required before canonical rebase/push.
 
-Also state clearly:
-- whether the substantive Dossier candidate was rejected for a real semantic/temporal reason;
-- whether the later Git failure merely prevented that already-determined state from reaching main;
-- whether any current main state is stale because of the failed publication.
+Update `config/execution_ownership_contract.json` only if needed to make the deterministic temporal ownership explicit; do not change the broader control-plane model.
 
-Do not repair or recover the group.
+Update `PROJECT_ROUTES.md` only if routing materially changes.
 
-## Done criteria
+## Validation
 
-The task is complete only when:
+Run all focused tests plus the relevant current Dossier validation suite.
 
-- exact freshness failure is reproduced/proven;
-- exact reason it escaped prepublication is proven;
-- a machine-enforced prevention point is identified;
-- exact unstaged file(s) are reproduced/proven;
-- exact creator step and staging omission are proven;
-- the relationship between the two defects is classified;
-- minimal future fixes and focused regressions are specified without implementing them;
-- no Scheduled Task, recovery, backlog, production state, source, workflow, contract, or runtime is modified.
+Required checks include:
+- all DATE regressions above;
+- the real staging/clean-worktree regression;
+- existing TASTE-012 temporal tests;
+- existing pragmatic evidence tests;
+- existing TASTE-014/TASTE-015 tests;
+- buffered group validation/nonblocking traversal;
+- canonical writer/coalescing tests;
+- execution ownership validation.
+
+Do not weaken unrelated tests to make the suite pass.
+
+## Production boundaries
+
+Do NOT:
+- run or modify Scheduled Tasks;
+- manually rerun Tiny Snow;
+- manually recover g000001;
+- manually edit current group progress;
+- manually process Dossier backlog;
+- authorize Deep recovery;
+- rewrite existing production candidate/cache files by hand.
+
+Natural GitHub-owned deterministic rebuilds caused by merged source changes are allowed.
+
+The stale production g000001 state is NOT part of this implementation task. After this fix is independently accepted, Director will decide the normal canonical reconciliation/recovery step separately.
 
 ## Durable report
 
-Commit only:
-`reviews/worker_reports/taste-dossier-production-failure-diagnostic-01.md`
+Commit:
+`reviews/worker_reports/taste-dossier-github-date-derivation-and-ingest-atomicity-fix-01.md`
 
 Required sections:
 1. Final status
-2. Sources / exact production refs
-3. Freshness failure — reproduced facts
-4. Freshness escape path — exact root cause
-5. Machine-enforced prevention point
-6. Rebase failure — exact reproduction
-7. Exact unstaged paths and creator step
-8. Why staging/tests missed it
-9. Relationship between the two defects
-10. Minimal future fixes
-11. Required regression tests
-12. Architecture/ownership preflight for the proposed future fix
-13. Production state / stale-state implications
-14. Unresolved
-15. Director recommendation
+2. Architecture preflight
+3. User-approved simplification
+4. Previous temporal responsibility model
+5. New GitHub-derived date model
+6. Candidate/schema/binding changes
+7. Current-state temporal semantics
+8. Tiny Snow regression
+9. Old staging failure
+10. New staging behavior
+11. Clean-worktree proof
+12. DATE regressions
+13. Full validation results
+14. Files changed
+15. Durable decisions/contracts changed
+16. Production actions explicitly not performed
+17. Unresolved
+18. Director recommendation
 
 Allowed final statuses:
-- `complete_root_cause_proven`
+- `complete_ready_for_director_acceptance`
 - `blocked`
 - `needs_user_decision`
 
 Before completion:
-- commit the durable report to `main`;
+- commit the final durable report to `main`;
 - reread that exact committed report from fresh `main`;
-- make no further task-owned changes after that reread.
+- do not modify it after that reread unless repeating the final commit+reread closeout.
 
 Expected next step after this task:
-- Director reviews the diagnostic report and asks the user for separate authorization before any IMPLEMENT task.
+- Director independently verifies the implementation/report;
+- only after acceptance decide whether/how to reconcile the already-stale production g000001 state through the normal GitHub-owned mechanism.
