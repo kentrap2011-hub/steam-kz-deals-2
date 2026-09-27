@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DEEP_VISUAL_STATISTICS_STALENESS_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
+- No worker task is currently assigned/in progress at the top-level Director state.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_DEEP_PARALLEL_FROZEN_START_AUTHORITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -13,26 +13,33 @@
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — Deep visual statistics staleness diagnostic
+## ACCEPTED — ЧАТ 1 — Deep visual statistics staleness diagnostic
 
 Task:
 `WORKER_TASK_DEEP_VISUAL_STATISTICS_STALENESS_DIAGNOSTIC_01.md`
 
-Mode:
-`READ-ONLY / RECON`
-
-Goal:
-- compare canonical Deep state, canonical visual payload and actually deployed Pages payload;
-- prove exactly why the site can show zero Deep completions while canonical Deep already has accepted results;
-- distinguish browser cache from a repository rebuild/deploy/provenance defect;
-- make no implementation or production changes.
-
 Report:
 `reviews/worker_reports/deep-visual-statistics-staleness-diagnostic-01.md`
 
+Final status:
+`needs_fix`
+
+Director acceptance:
+- diagnosis accepted; the browser is not the primary cause of stale Deep counters;
+- canonical Deep had already advanced to 27 authoritative completions at the worker's pinned snapshot while canonical visual and deployed Pages still showed zero;
+- PASS 2 ingest correctly triggers the existing visual rebuild and PASS 2 provenance mismatch correctly requests a fresh full build;
+- the full visual builder reads and projects current Deep state correctly;
+- publication fails later in `scripts/grounded_negative_visual.py::apply_to_document()` because its current personalized-binding guard recognizes compatible cache/Fast but omits trustworthy authoritative `progressive_pass2`;
+- the first post-Deep build and later builds fail with `personalized card binding is not current/INCLUDE`, so a new visual is never persisted/deployed;
+- exact bounded repair is required in the GitHub-owned visual producer guard plus focused regression and successful full visual build/deploy;
+- no implementation was performed by this diagnostic worker.
+
+Decision:
+- diagnosis accepted;
+- a separate IMPLEMENT task is required before the site can publish current Deep statistics.
+
 Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`;
-- prior physical ЧАТ 1 is retired and must not be reused as an existing chat.
+- physical ЧАТ 1 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 1 — Deep parallel frozen start authority fix
