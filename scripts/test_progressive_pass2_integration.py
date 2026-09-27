@@ -292,7 +292,10 @@ def main():
     assert 'prepared_work_item_dossier_is_live(' not in pass2_ingest[:process_pos]
     assert 'work = build_progressive_pass2_work.build_work_document()' not in pass2_ingest[:process_pos]
     assert 'validate_run_start_commit_boundary' not in work_authority
-    assert 'first_parent_of_create_only_run_start_marker_commit' in read(
+    assert 'exact_observed_main_commit_plus_exact_progressive_pass2_contract_and_work_git_blob_identities' in read(
+        'config/progressive_pass2_contract.json'
+    )
+    assert 'marker_parent_must_descend_from_observed_authority_whole_main_equality_not_required' in read(
         'config/progressive_pass2_contract.json'
     )
 
