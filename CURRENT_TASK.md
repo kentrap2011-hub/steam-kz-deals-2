@@ -940,3 +940,10 @@
 - active snapshot `b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5`: 444 required items / 148 groups / next pending sequence 1;
 - no Scheduled Task action, manual Tiny Snow recovery, Dossier/Deep recovery or production backlog replay was performed;
 - report: `reviews/worker_reports/taste-dossier-pragmatic-evidence-model-fix-01.md`.
+
+
+### Taste Dossier GitHub-derived dates + ingest atomicity fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_TASTE_DOSSIER_GITHUB_DATE_DERIVATION_AND_INGEST_ATOMICITY_FIX_01.md`;
+- scope: GitHub-derived recent/older/unknown from factual publication dates; failed-group audit/quarantine staging atomicity and clean-worktree proof;
+- no Scheduled Task action, Tiny Snow production rerun, g000001 recovery, Deep recovery or backlog processing authorized.
