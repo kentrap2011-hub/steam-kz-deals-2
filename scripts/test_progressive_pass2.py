@@ -9,6 +9,7 @@ import build_progressive_pass1_work
 import progressive_pass1
 import progressive_pass2
 import progressive_personalization
+import test_card_explanation_policy
 
 
 NOW = datetime(2026, 9, 22, 12, 0, 0, tzinfo=timezone.utc)
@@ -580,6 +581,10 @@ def main():
     # its old pre-stage-indicator absence.
     changed_ui_guard = Path('web/progressive-personalization-ui.js').read_text(encoding='utf-8')
     assert 'deep_stage_state' in changed_ui_guard
+
+    # DEEP-23: authoritative Deep positive evidence must survive the shared
+    # player-facing explanation projection with exact accepted-state provenance.
+    test_card_explanation_policy.run()
 
     json.loads(Path('config/progressive_pass2_result_schema.json').read_text(encoding='utf-8'))
     json.loads(Path('config/progressive_pass2_execution_receipt_schema.json').read_text(encoding='utf-8'))
