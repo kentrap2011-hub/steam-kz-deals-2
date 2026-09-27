@@ -88,12 +88,19 @@
     const number=Number(value);
     return Number.isFinite(number)?number:value;
   }
+  function formatLastWriteAt(value){
+    if(value===null||value===undefined||value==='')return 'ещё не было записей';
+    const date=new Date(value);
+    if(Number.isNaN(date.getTime()))return 'ещё не было записей';
+    return date.toLocaleString('ru-RU',{dateStyle:'short',timeStyle:'short'});
+  }
   function statisticsSections(status){
     status=status||{};
     return [
       {
         key:'fast',
         title:'Быстрый разбор',
+        lastWriteAtUtc:status.fast_last_write_at_utc??null,
         scopeLabel:'Всего игр для быстрого разбора',
         denominatorKey:'fast_total_current_scope',
         denominator:field(status,'fast_total_current_scope'),
@@ -111,6 +118,7 @@
       {
         key:'dossier',
         title:'Подготовка досье',
+        lastWriteAtUtc:status.dossier_last_write_at_utc??null,
         scopeLabel:'Всего игр для подготовки досье',
         denominatorKey:'dossier_total_current_scope',
         denominator:field(status,'dossier_total_current_scope'),
@@ -123,6 +131,7 @@
       {
         key:'deep',
         title:'Глубокий разбор',
+        lastWriteAtUtc:status.deep_last_write_at_utc??null,
         scopeLabel:'Всего игр для глубокого разбора',
         denominatorKey:'deep_total_current_coverage_target',
         denominator:field(status,'deep_total_current_coverage_target'),
@@ -140,5 +149,5 @@
     ];
   }
 
-  return {tierOf,urgencyOf,tierScore,compareGames,sortItems,stageIndicators,statisticsSections};
+  return {tierOf,urgencyOf,tierScore,compareGames,sortItems,stageIndicators,formatLastWriteAt,statisticsSections};
 });
