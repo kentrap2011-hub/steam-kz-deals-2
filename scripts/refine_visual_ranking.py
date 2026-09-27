@@ -7,7 +7,7 @@ import urllib.request
 from pathlib import Path
 
 from taste_evidence_contract import evidence_readiness
-from taste_negative_contract import structured_grounded_risks
+from taste_negative_contract import NEGATIVE_FINDING_CATALOG, structured_grounded_risks
 import commercial_reconsideration_bridge as commercial_bridge
 
 ROOT = Path('.')
@@ -208,12 +208,47 @@ def map_negative_evidence(value, risks):
 
 
 def personal_taste_risks(taste_entry):
-    """Use V5 structured personal negatives once exactly evidence-bound.
+    """Use exactly grounded personal negatives without converting cautions into penalties.
 
-    Legacy free text remains a migration fallback so an informed negative such
-    as HighFleet is never silently erased before its V5 backfill completes.
-    Candidate-quality findings are intentionally absent from this path.
+    Deep owns an explicit balanced negative assessment. Its confirmed personal
+    risks use the existing canonical risk-code catalog directly; display-only
+    cautions, unresolved assessments and legacy/not-evaluated Deep results never
+    enter scoring through text heuristics. Fast/cache V5 and legacy behavior is
+    otherwise unchanged.
     """
+    if (
+        isinstance(taste_entry, dict)
+        and taste_entry.get('semantic_source') == 'progressive_pass2'
+        and 'deep_negative_assessment_status' in taste_entry
+    ):
+        risks = {}
+        binding = taste_entry.get('deep_negative_assessment_binding')
+        for finding in taste_entry.get('deep_negative_findings') or []:
+            if not isinstance(finding, dict) or finding.get('disposition') != 'confirmed_personal_risk':
+                continue
+            code = finding.get('risk_code')
+            spec = NEGATIVE_FINDING_CATALOG.get(code)
+            text = str(finding.get('text_ru') or '').strip()
+            refs = finding.get('evidence_refs') or []
+            if not spec or not text or not refs:
+                continue
+            evidence = '; '.join(
+                f"dossier_{ref.get('kind')}[{ref.get('index')}]"
+                for ref in refs
+                if isinstance(ref, dict)
+            )
+            add_risk(risks, code, int(spec['score']), text, 'taste_negative_evidence')
+            row = risks.get(code)
+            if row is not None:
+                row.update({
+                    'category': spec['category'],
+                    'evidence': evidence,
+                    'evidence_refs': [dict(ref) for ref in refs if isinstance(ref, dict)],
+                    'semantic_binding': dict(binding) if isinstance(binding, dict) else None,
+                    'disposition': 'confirmed_personal_risk',
+                })
+        return risks
+
     state = evidence_readiness(taste_entry)
     if state.get('fit_evidence_bound'):
         return structured_grounded_risks(taste_entry)
