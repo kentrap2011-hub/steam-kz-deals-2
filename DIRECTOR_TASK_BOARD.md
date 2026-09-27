@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignments: `ЧАТ 1` — `WORKER_TASK_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_01.md` (`IMPLEMENT / VALIDATE`); `ЧАТ 2` — `WORKER_TASK_ANALYSIS_LAST_WRITE_TIMESTAMPS_UI_01.md` (`IMPLEMENT / VALIDATE`).
-- Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_DEEP_PARALLEL_FROZEN_START_AUTHORITY_FIX_01.md`.
+- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_ANALYSIS_LAST_WRITE_TIMESTAMPS_UI_01.md` (`IMPLEMENT / VALIDATE`).
+- Latest accepted implementation: `WORKER_TASK_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
 - Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
@@ -39,30 +39,36 @@ Worker state:
 - use a NEW physical worker conversation in slot `ЧАТ 2`.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — Russian description publication blocker fix
+## ACCEPTED — ЧАТ 1 — Russian description publication blocker fix
 
 Task:
 `WORKER_TASK_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_01.md`
 
-Mode:
-`IMPLEMENT / VALIDATE`
-
-Goal:
-- repair the existing canonical Russian-description path for `game:1213210` / `Command & Conquer™ Remastered Collection`;
-- do not weaken the Russian-description validation gate or hard-code final visual output;
-- after repair, prove a successful full visual build and Pages deploy with current non-zero Deep statistics.
-
-Scope guard:
-- Dossier is explicitly out of scope;
-- Deep/Fast semantic backlog execution is out of scope;
-- no Scheduled Task changes.
-
 Report:
 `reviews/worker_reports/russian-description-publication-blocker-fix-01.md`
 
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- PR #103 `Fix Russian description fallback before translation` merged to `main` as `f950944b1e9e7ee4433e0ed90c4d262b6ac24c91`;
+- root cause was an over-broad Russian quality classifier: bare `издани[ея]` matched the substring inside `Переиздание`, incorrectly rejecting a meaningful Russian remaster description for `game:1213210`;
+- the repair made that classifier more precise and reused the existing official Steam exact-app Russian source before semantic translation when StoreBrowse is not already `good_ru`;
+- the meaningful-Russian validation gate remains fail-closed and was not bypassed or weakened;
+- focused regressions, PR validation and post-merge validation passed;
+- the normal full visual build succeeded with `invalid_count=0`;
+- Pages deploy run `36339924386` succeeded and artifact `10938334090` contains `game:1213210` as `ready_ru`;
+- the deployed artifact also contains current non-zero Deep statistics: target 397, attempted/completed 29, fit 25, not-fit 4, waiting for Dossier 365, ready/pending 3;
+- this proves the Russian-description blocker and the stale zero-Deep publication chain are repaired end to end;
+- Dossier/Deep/Fast semantic backlogs and Scheduled Tasks were not changed.
+
+Decision:
+- implementation accepted;
+- no further work is required for this publication blocker;
+- ЧАТ 2 remains independently active on last-write timestamps.
+
 Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`;
-- prior physical ЧАТ 1 is retired and must not be reused as an existing chat.
+- physical ЧАТ 1 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED / BLOCKED — ЧАТ 1 — Deep visual authoritative binding fix
