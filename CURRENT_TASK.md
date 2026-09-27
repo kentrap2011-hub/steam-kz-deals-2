@@ -1,6 +1,13 @@
 # CURRENT TASK
 
-Последнее обновление: 2026-09-18
+Последнее обновление: 2026-09-27
+
+## ACTIVE — Dossier visual progress refresh fix 01
+Статус: `in_progress`.
+- worker task: `WORKER_TASK_DOSSIER_VISUAL_PROGRESS_REFRESH_FIX_01.md`;
+- scope: prove and fix GitHub-owned propagation of canonical Dossier progress into published visual statistics;
+- no production Dossier state mutation, no Scheduled Task changes, no manual semantic run.
+
 
 ## COMPLETE — Progressive pinned live-profile handoff fix
 Статус: `complete_ready_for_director_acceptance`.
