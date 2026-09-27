@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from taste_steam_review_dossier import load_policy
+from taste_steam_review_dossier_daily import load_contract
 from taste_steam_review_dossier_strict import (
     derive_dossier_summary,
     derive_temporal_state,
@@ -20,7 +20,7 @@ from taste_steam_review_dossier_strict import (
 )
 from taste_steam_review_dossier_test_fixture import web_dossier
 
-CONTROL = load_policy(ROOT / "config/taste_steam_review_dossier_contract.json")
+CONTROL = load_contract(ROOT / "config/taste_steam_review_dossier_contract.json")
 EVIDENCE = load_web_evidence_contract()
 SCHEMA = load_worker_schema()
 PROMPT = (ROOT / "config/taste_steam_review_dossier_worker_prompt.md").read_text(encoding="utf-8")
