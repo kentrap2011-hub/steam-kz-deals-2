@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignments: `ЧАТ 1` — `WORKER_TASK_DEEP_POSITIVE_EVIDENCE_CARD_PROJECTION_FIX_01.md` (`IMPLEMENT / VALIDATE`); `ЧАТ 2` — `WORKER_TASK_DEEP_BALANCED_NEGATIVE_ASSESSMENT_CONTRACT_FIX_01.md` (`CONTRACT-FIRST IMPLEMENT / VALIDATE`).
-- Latest accepted implementation: `WORKER_TASK_ANALYSIS_LAST_WRITE_TIMESTAMPS_UI_01.md`.
+- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_DEEP_BALANCED_NEGATIVE_ASSESSMENT_CONTRACT_FIX_01.md` (`CONTRACT-FIRST IMPLEMENT / VALIDATE`).
+- Latest accepted implementation: `WORKER_TASK_DEEP_POSITIVE_EVIDENCE_CARD_PROJECTION_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
 - Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
@@ -40,28 +40,35 @@ Worker state:
 - prior physical ЧАТ 2 diagnostic is complete/retired.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — Deep positive evidence card projection fix
+## ACCEPTED — ЧАТ 1 — Deep positive evidence card projection fix
 
 Task:
 `WORKER_TASK_DEEP_POSITIVE_EVIDENCE_CARD_PROJECTION_FIX_01.md`
 
-Mode:
-`IMPLEMENT / VALIDATE`
-
-Goal:
-- repair the proven gap where authoritative Deep `positive_evidence` is used for fit/ranking but not shown in `Почему может зайти`;
-- preserve grounding/provenance and fail-closed behavior;
-- do not change Deep conclusions, Dossier semantics, ranking weights or Scheduled Tasks.
-
-Parallel constraint:
-- НОВЫЙ ЧАТ 2 independently investigates missing negative/risk evidence read-only;
-- before merge, refresh fresh `main` and preserve ЧАТ 2 report/Board changes.
-
 Report:
 `reviews/worker_reports/deep-positive-evidence-card-projection-fix-01.md`
 
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- implementation PR #105 `Project authoritative Deep positives into card why-fit` merged to `main` as `21c3331eec471a18889de0264776216490bee7bf`;
+- closeout PR #106 merged as `9e6f80e20eaa12a64c5d9c941038300746543703`;
+- root cause was not Deep ingest or frontend loss: accepted Deep `positive_evidence` already reached the semantic entry, but the shared explanation mapper did not recognize the Jedi evidence and emitted empty `why_fit`;
+- the fix adds grounded mappings for combat mastery and ability progression and binds every displayed Deep reason to the exact accepted Deep work/Dossier/authorization/state identity;
+- stale/mismatched Deep evidence remains fail-closed; empty evidence remains empty; existing Fast/cache behavior remains unchanged;
+- fit/ranking values were not changed;
+- relevant PR validation, post-merge full visual build and Pages deploy succeeded;
+- deployed Jedi card now has two grounded Russian `Почему может зайти` reasons with exact Deep provenance;
+- Jedi ranking remains unchanged at rank 1, fit strong, total score 68.6, personal 43.6, purchase 25;
+- no Deep/Dossier/Fast rerun, backlog processing, Scheduled Task change, negative-risk implementation or ranking-weight change was performed.
+
+Decision:
+- positive-evidence projection repair accepted and complete;
+- the separate negative-assessment contract work remains exclusively in active ЧАТ 2.
+
 Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`.
+- physical ЧАТ 1 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 2 — Jedi Deep missing negative evidence diagnostic
