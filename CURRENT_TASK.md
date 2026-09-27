@@ -2,11 +2,14 @@
 
 Последнее обновление: 2026-09-27
 
-## ACTIVE — Dossier visual progress refresh fix 01
-Статус: `in_progress`.
+## COMPLETE — Dossier visual progress refresh fix 01
+Статус: `complete_ready_for_director_acceptance`.
 - worker task: `WORKER_TASK_DOSSIER_VISUAL_PROGRESS_REFRESH_FIX_01.md`;
-- scope: prove and fix GitHub-owned propagation of canonical Dossier progress into published visual statistics;
-- no production Dossier state mutation, no Scheduled Task changes, no manual semantic run.
+- implementation PR: `#100`, merge `2ca0d40d65b13cf02dbc684699d95135f1813bbb`;
+- latest validated deploy: run `36319184190`, Pages artifact `10932075636`;
+- published Dossier stats: total `418`, accepted `6`, pending `412`, failed/recovery `0`, bound to canonical Dossier blob `5c6fc0b71ec9560c4237f03e0696a714ad837d5f`;
+- report: `reviews/worker_reports/dossier-visual-progress-refresh-fix-01.md`;
+- no production Dossier candidate/recovery mutation, Scheduled Task change, browser computation, or manual Fast/Dossier/Deep semantic run was used for validation.
 
 
 ## COMPLETE — Progressive pinned live-profile handoff fix
