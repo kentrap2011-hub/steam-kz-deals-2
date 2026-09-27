@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignments: `ЧАТ 1` — `WORKER_TASK_TASTE_DOSSIER_STALE_SNAPSHOT_RECONCILIATION_01.md` (`READ-ONLY / RECON`); `ЧАТ 2` — `WORKER_TASK_DOSSIER_VISUAL_PROGRESS_REFRESH_FIX_01.md` (`IMPLEMENT / VALIDATE`).
+- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_DOSSIER_VISUAL_PROGRESS_REFRESH_FIX_01.md` (`IMPLEMENT / VALIDATE`).
 - Latest accepted implementation: `WORKER_TASK_TASTE_DOSSIER_GITHUB_DATE_DERIVATION_AND_INGEST_ATOMICITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -40,25 +40,28 @@ Worker state:
 - may run alongside ЧАТ 1 only under the task's no-write-conflict guard.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — stale Dossier snapshot reconciliation
+## ACCEPTED — ЧАТ 1 — stale Dossier snapshot reconciliation
 
 Task:
 `WORKER_TASK_TASTE_DOSSIER_STALE_SNAPSHOT_RECONCILIATION_01.md`
 
-Mode:
-`READ-ONLY / RECON`
-
-Goal:
-- verify fresh current Dossier binding/snapshot/index/progress;
-- determine whether obsolete snapshot `b98f869... / g000001` still requires any explicit reconciliation/recovery or is fully superseded/isolated;
-- make no production/recovery/Scheduled Task changes.
-
 Report:
 `reviews/worker_reports/taste-dossier-stale-snapshot-reconciliation-01.md`
 
+Final status:
+`complete`
+
+Director acceptance:
+- conclusion `NO_EXPLICIT_RECONCILIATION_REQUIRED` accepted;
+- current Dossier authority is fully bound to snapshot `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`;
+- current progress had advanced to 2 accepted groups / 6 accepted dossiers, 0 failed, next pending sequence 3 at the worker's final consistent read;
+- obsolete snapshot `b98f869...` is absent from current progress/index/recovery authority;
+- its old candidate is isolated only in GitHub-owned stale quarantine and cannot enter current recovery because recovery is fail-closed to the current manifest snapshot;
+- no deletion, rewrite, rerun, recovery, reconciliation or cleanup of old `g000001` is required;
+- normal current-snapshot Dossier production may continue.
+
 Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`;
-- previous physical `ЧАТ 1` remains retired and must not be reused as an existing chat.
+- physical ЧАТ 1 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 2 — GitHub-derived Dossier dates + ingest atomicity fix
