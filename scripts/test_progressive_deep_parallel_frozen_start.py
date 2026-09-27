@@ -262,13 +262,24 @@ def arbitrary_historical_authority_rejected():
         ).encode('utf-8')
         manifest_current = copy.deepcopy(manifest_old)
         current_item = manifest_current['items'][0]
-        current_item['dossier_content_sha256'] = hashlib.sha256(raw_current).hexdigest()
-        current_item['authorization_id'] = 'f' * 64
+        current_digest = hashlib.sha256(raw_current).hexdigest()
+        current_item['dossier_content_sha256'] = current_digest
+        current_item['authorization_id'] = progressive_pass2.authorization_id(
+            current_item,
+            current_digest,
+            current_item['dossier_compatibility_binding'],
+            work_mode=current_item['work_mode'],
+            recovery_authorization_id=current_item['recovery_authorization_id'],
+        )
+        current_prefix = (
+            f"{current_item['semantic_generation_id'][:16]}--"
+            f"{current_item['work_id']}--{current_item['authorization_id']}"
+        )
         current_item['result_submission_path'] = (
-            'data/ai_inbox/progressive_pass2/results/current-authority.json'
+            f'data/ai_inbox/progressive_pass2/results/{current_prefix}.json'
         )
         current_item['terminal_execution_submission_path'] = (
-            'data/ai_inbox/progressive_pass2/execution_receipts/current-authority.json'
+            f'data/ai_inbox/progressive_pass2/execution_receipts/{current_prefix}.json'
         )
         async_regression.write_json(repo / old_item['dossier_path'], dossier_current)
         async_regression.write_json(
