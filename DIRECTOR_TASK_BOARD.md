@@ -2,42 +2,48 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_DOSSIER_VISUAL_PROGRESS_REFRESH_FIX_01.md` (`IMPLEMENT / VALIDATE`).
-- Latest accepted implementation: `WORKER_TASK_TASTE_DOSSIER_GITHUB_DATE_DERIVATION_AND_INGEST_ATOMICITY_FIX_01.md`.
+- No worker task is currently assigned/in progress at the top-level Director state.
+- Latest accepted implementation: `WORKER_TASK_DOSSIER_VISUAL_PROGRESS_REFRESH_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
-- Current Dossier snapshot is `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; sequence 1 is pending; 140 groups / 418 dossiers remain, with 0 accepted and 0 failed in this new snapshot.
+- Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
 - The old failed production experiment used snapshot `b98f8691529d9c4d1bdf66227f08537fbb5dd385ba8798280da05aa98f4054d5`. Do not automatically recover/rerun that old g000001: first verify whether any reconciliation is still required now that the canonical binding/snapshot has rolled forward.
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 2 — Dossier visual progress refresh fix
+## ACCEPTED — ЧАТ 2 — Dossier visual progress refresh fix
 
 Task:
 `WORKER_TASK_DOSSIER_VISUAL_PROGRESS_REFRESH_FIX_01.md`
 
-Mode:
-`IMPLEMENT / VALIDATE`
-
-Goal:
-- re-prove why current accepted Dossier progress is not reflected in published site statistics;
-- implement the smallest GitHub-owned propagation/rebuild fix;
-- keep browser read-only and create no new scheduler/queue/Scheduled Task dependency.
-
-Architecture:
-- GitHub owns progress counts, visual rebuild trigger, persistence and publication;
-- Dossier semantic rules and recovery are out of scope;
-- no manual production/backlog processing for validation.
-
 Report:
 `reviews/worker_reports/dossier-visual-progress-refresh-fix-01.md`
 
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- PR #100 merged to `main` as `2ca0d40d65b13cf02dbc684699d95135f1813bbb`;
+- root cause had two parts: canonical Dossier ingest did not activate the existing visual rebuild path, and the published visual had no exact Dossier-work provenance binding;
+- the existing GitHub-owned visual workflow now reacts to successful Dossier ingest; no new scheduler, queue, retry loop or Scheduled Task was added;
+- the visual production contract now binds the exact canonical Dossier work-manifest blob so stale Dossier counters cannot pass compatibility solely because other Progressive state is unchanged;
+- browser/frontend remains read-only and no Dossier semantic/recovery rule was changed;
+- focused Progressive validation passed on PR head;
+- post-merge full visual build and Pages deploy succeeded;
+- deployed artifact contained current canonical Dossier statistics: total 418, accepted 6, pending 412, failed/recovery 0;
+- subsequent commercial-only refresh preserved the corrected Dossier statistics and provenance;
+- no manual Fast/Dossier/Deep semantic production or Scheduled Task change was used for validation.
+
+Decision:
+- implementation accepted;
+- repository-owned Dossier -> visual statistics propagation is repaired end to end;
+- no additional implementation task is required for this defect;
+- an already-open browser may require an ordinary refresh to load the newly deployed artifact.
+
 Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 2`;
-- previous physical `ЧАТ 2` remains retired and must not be reused as an existing chat;
-- may run alongside ЧАТ 1 only under the task's no-write-conflict guard.
+- physical ЧАТ 2 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 1 — stale Dossier snapshot reconciliation
