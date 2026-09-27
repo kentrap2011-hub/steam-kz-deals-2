@@ -55,8 +55,8 @@
     "deep_completed_fit_count": 0,
     "deep_completed_not_fit_count": 0,
     "deep_incomplete_or_recovery_count": 0,
-    "deep_waiting_for_dossier_count": 415,
-    "deep_ready_or_pending_count": 3,
+    "deep_waiting_for_dossier_count": 412,
+    "deep_ready_or_pending_count": 6,
     "deep_normal_first_pass_remaining_count": 418,
     "deep_remaining_until_all_authoritative_count": 418,
     "deep_normal_first_pass_complete": false,
@@ -65,9 +65,9 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 0,
-    "dossier_waiting_count": 415,
+    "dossier_waiting_count": 412,
     "pass2_attempted_count": 0,
-    "pass2_eligible_count": 3
+    "pass2_eligible_count": 6
   },
   "items": [
     {
@@ -126,6 +126,116 @@
     {
       "semantic_generation_id": "3042b4c978d691f6b05cec8ceb04572462137d8dbebaf807f255bcca10632170",
       "profile_pin_sha256": "b03b982cd4dad0a193596e8ece3b21f9fe334985dbf655982685fd69622815d8",
+      "family_id": "game:1046400",
+      "taste_subject_key": "App_1046400",
+      "appid": "1046400",
+      "taste_fingerprint": "a289f6ecb68db127b725355c468131a6bd9d6e136e7f67fb7f29d97a1c4adb9b",
+      "candidate_context_sha256": "e98d55ae8ca838885b14dc4a0f60cbf457bcf80e8ef431f0c2f968fc115b82f2",
+      "work_id": "4ed81473ab6f26987a2ca2624294d697b785e45de55e5370c34a0ae93bf5ea6a",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Astalon: Tears of the Earth",
+        "short_description": "Uphold your pact with the Titan of Death, Epimetheus! Fight, climb and solve your way through a twisted tower as three unique adventurers, on a mission to save their village from impending doom!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Exploration",
+          "Fantasy"
+        ],
+        "core_fit_count": 1,
+        "release_date": "3 Jun, 2021",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1046400"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1046400.json",
+      "dossier_content_sha256": "204ba2dbfd336eec31b3ad3e4ee691644d89a57f8809330b64f4fbe06fe5df89",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-17T11:47:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "510b994bc85125d94ce5017a2a5298418d56437efdd39d4cfae99a6337d2b787",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/3042b4c978d691f6--4ed81473ab6f26987a2ca2624294d697b785e45de55e5370c34a0ae93bf5ea6a--510b994bc85125d94ce5017a2a5298418d56437efdd39d4cfae99a6337d2b787.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/3042b4c978d691f6--4ed81473ab6f26987a2ca2624294d697b785e45de55e5370c34a0ae93bf5ea6a--510b994bc85125d94ce5017a2a5298418d56437efdd39d4cfae99a6337d2b787.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "3042b4c978d691f6b05cec8ceb04572462137d8dbebaf807f255bcca10632170",
+      "profile_pin_sha256": "b03b982cd4dad0a193596e8ece3b21f9fe334985dbf655982685fd69622815d8",
+      "family_id": "game:102600",
+      "taste_subject_key": "App_102600",
+      "appid": "102600",
+      "taste_fingerprint": "231ad60f2718ad466a51b539253fad6a999b1ebd74ba5aee657d3de268fe07ee",
+      "candidate_context_sha256": "f58ceb29902b2e4fe8c60034550478d092d05b27aa24bdbb77ef88dbab8677eb",
+      "work_id": "da4d7f547a062d66d47f7755ea00aca4d5e6e49f9569c1a251464739afcc54d0",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Orcs Must Die!",
+        "short_description": "Slice them, burn them, skewer them, and launch them - no matter how you get it done, orcs must die in this fantasy action-strategy game from Robot Entertainment.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Fantasy",
+          "Singleplayer",
+          "Third Person"
+        ],
+        "core_fit_count": 2,
+        "release_date": "11 Oct, 2011",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "102600"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_102600.json",
+      "dossier_content_sha256": "0c2082a9fe10839c934c9abb6f24cb46f6f2b0a198f67a1d4f67a5fd3444a553",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-17T11:47:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "f8bc574a366c99bd2c56db847bef2420de491e7c5ee7da7d2b7412e2c8258a53",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/3042b4c978d691f6--da4d7f547a062d66d47f7755ea00aca4d5e6e49f9569c1a251464739afcc54d0--f8bc574a366c99bd2c56db847bef2420de491e7c5ee7da7d2b7412e2c8258a53.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/3042b4c978d691f6--da4d7f547a062d66d47f7755ea00aca4d5e6e49f9569c1a251464739afcc54d0--f8bc574a366c99bd2c56db847bef2420de491e7c5ee7da7d2b7412e2c8258a53.json",
+      "sequence": 3
+    },
+    {
+      "semantic_generation_id": "3042b4c978d691f6b05cec8ceb04572462137d8dbebaf807f255bcca10632170",
+      "profile_pin_sha256": "b03b982cd4dad0a193596e8ece3b21f9fe334985dbf655982685fd69622815d8",
       "family_id": "game:1000010",
       "taste_subject_key": "App_1000010",
       "appid": "1000010",
@@ -174,7 +284,58 @@
       "authorization_id": "ae0269962fc9f47ed1c604ffe771ad61d42e99fb77dd04469fa914a80bdd7dfd",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/3042b4c978d691f6--d43c58f731f7f34f67c5dbc12edc4f516a064ed1ea4fb7703bb9eab5ac324c0d--ae0269962fc9f47ed1c604ffe771ad61d42e99fb77dd04469fa914a80bdd7dfd.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/3042b4c978d691f6--d43c58f731f7f34f67c5dbc12edc4f516a064ed1ea4fb7703bb9eab5ac324c0d--ae0269962fc9f47ed1c604ffe771ad61d42e99fb77dd04469fa914a80bdd7dfd.json",
-      "sequence": 2
+      "sequence": 4
+    },
+    {
+      "semantic_generation_id": "3042b4c978d691f6b05cec8ceb04572462137d8dbebaf807f255bcca10632170",
+      "profile_pin_sha256": "b03b982cd4dad0a193596e8ece3b21f9fe334985dbf655982685fd69622815d8",
+      "family_id": "game:1054490",
+      "taste_subject_key": "App_1054490",
+      "appid": "1054490",
+      "taste_fingerprint": "bd211174279fa4efc63ea52de880ec9ae2400dc84f4bac23182d31add988bf14",
+      "candidate_context_sha256": "46eb0d0b7f74ce52b911ef9b3398ea1b767ad68face8522281117426bd9dd5c1",
+      "work_id": "512dbec33b42ed9a8bee82603c081edee1bf32897534032c8f24165b9413538b",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Wingspan",
+        "short_description": "Wingspan is a relaxing, award-winning strategy card game about birds for 1 to 5 players. Each bird you play extends a chain of powerful combinations in one of your three habitats. Your goal is to discover and attract the best birds to your network of wildlife preserves.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "17 Sep, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1054490"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1054490.json",
+      "dossier_content_sha256": "b47091d4aa33996f574535a301ed21fdd22caf58a44db0c74c6965970c6faff3",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-17T11:47:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "ed71b787b6591fceae721c955ff32569fa0fb4711cb52afb0f3727e23c5cd2d6",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/3042b4c978d691f6--512dbec33b42ed9a8bee82603c081edee1bf32897534032c8f24165b9413538b--ed71b787b6591fceae721c955ff32569fa0fb4711cb52afb0f3727e23c5cd2d6.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/3042b4c978d691f6--512dbec33b42ed9a8bee82603c081edee1bf32897534032c8f24165b9413538b--ed71b787b6591fceae721c955ff32569fa0fb4711cb52afb0f3727e23c5cd2d6.json",
+      "sequence": 5
     },
     {
       "semantic_generation_id": "3042b4c978d691f6b05cec8ceb04572462137d8dbebaf807f255bcca10632170",
@@ -227,7 +388,7 @@
       "authorization_id": "7e71b7ed9d3f1039f8f638b847faa9cc940174789125c79b054fe7c6b936d6b4",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/3042b4c978d691f6--b795ac5b5b78636037c8407f21c5707a9b4f87bb5eb992f6bac41f78da0fa3f9--7e71b7ed9d3f1039f8f638b847faa9cc940174789125c79b054fe7c6b936d6b4.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/3042b4c978d691f6--b795ac5b5b78636037c8407f21c5707a9b4f87bb5eb992f6bac41f78da0fa3f9--7e71b7ed9d3f1039f8f638b847faa9cc940174789125c79b054fe7c6b936d6b4.json",
-      "sequence": 3
+      "sequence": 6
     }
   ]
 }
