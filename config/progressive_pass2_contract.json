@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
-  "version": 8,
+  "version": 9,
   "status": "production_active",
   "phase": "phase_c_pass2",
   "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; Fast/PASS 1 is never an eligibility prerequisite.",
@@ -155,13 +155,13 @@
       "same_invocation_retry": false
     },
     "run_start_confirmation": {
-      "marker_contract": "PROGRESSIVE-PASS2-RUN-START-MARKER-V1",
+      "marker_contract": "PROGRESSIVE-PASS2-RUN-START-MARKER-V2",
       "marker_directory": "data/ai_inbox/progressive_pass2/run_starts",
       "confirmation_contract": "PROGRESSIVE-PASS2-RUN-START-RECEIPT-V1",
       "confirmation_directory": "data/cache/progressive_pass2_run_start_receipts",
       "confirmation_owner": "github_control_plane",
       "one_confirmation_per_invocation_before_semantic_execution": false,
-      "actual_authority_source": "first_parent_of_create_only_run_start_marker_commit",
+      "actual_authority_source": "exact_observed_main_commit_plus_exact_progressive_pass2_contract_and_work_git_blob_identities",
       "trusted_start_time_source": "git_committer_time_of_run_start_marker_commit",
       "worker_supplied_time_is_authority": false,
       "confirmation_must_be_durable_before_semantic_result_transport": true,
@@ -187,7 +187,18 @@
         "unbounded_polling_allowed": false,
         "rule": "Read once when the first provisional semantic outcome is ready. If absent, wait about 5 seconds and read again; if still absent, wait about 10 additional seconds and read once more while runtime/tool budget safely permits. If still absent, publish nothing and stop. Receipt absence never authorizes transport."
       },
-      "rejected_start_marker_authorizes_semantic_artifact_publication": false
+      "rejected_start_marker_authorizes_semantic_artifact_publication": false,
+      "legacy_marker_contract": "PROGRESSIVE-PASS2-RUN-START-MARKER-V1",
+      "legacy_marker_policy": "transitional_only_keep_original_parent_equals_observed_rule",
+      "marker_parent_rule": "marker_parent_must_descend_from_observed_authority_whole_main_equality_not_required",
+      "frozen_authority_binding_fields": [
+        "observed_main_commit",
+        "progressive_pass2_contract_blob_sha",
+        "progressive_pass2_work_blob_sha"
+      ],
+      "later_main_movement_alone_invalidates_frozen_authority": false,
+      "arbitrary_historical_commit_is_sufficient_authority": false,
+      "confirmation_must_prove_exact_frozen_contract_and_work_blobs": true
     }
   },
   "state": {
@@ -318,9 +329,9 @@
       "recovery_authorization_persistence": ".github/workflows/authorize-progressive-pass2-recovery.yml"
     },
     "serialization_boundary": "github_actions_concurrency_group_taste-steam-review-dossier-canonical-writer_cancel_in_progress_false",
-    "time_expiry_guard": "exact_observed_authority_bytes_with_github_confirmed_marker_time_before_publication",
+    "time_expiry_guard": "exact_frozen_contract_work_and_dossier_authority_with_github_confirmed_marker_time_before_publication",
     "projection_is_attempt_consumption": false,
-    "rule": "Deep reads one exact observed main authority and freezes its work/Dossier/recovery/profile inputs, then creates one create-only run-start marker. Semantic computation may proceed provisionally against only those exact frozen bytes while GitHub confirms the marker. Before any result or terminal receipt crosses the GitHub boundary, the durable confirmed receipt must prove the marker lineage, trusted Git commit time, and run_start_authority_commit equal to the exact observed authority; rejected/mismatched confirmation discards provisional work. After confirmation, later mutable changes apply only to the next invocation and sibling traversal does not wait for ingest.",
+    "rule": "Deep reads one exact observed main authority, freezes the exact PASS 2 contract/work Git blob identities plus all work/Dossier/recovery/profile inputs from that immutable view, and creates one create-only V2 run-start marker. Semantic computation may proceed provisionally against only those frozen bytes while GitHub confirms the marker. Later main movement alone does not invalidate the invocation: GitHub confirms the observed authority and exact frozen contract/work blob identities while requiring the marker parent to descend from that authority. Before any result or terminal receipt crosses the GitHub boundary, the durable confirmed receipt must prove exact marker/nonce/frozen-view lineage and trusted Git commit time. After confirmation, later mutable changes apply only to the next invocation and sibling traversal does not wait for ingest.",
     "reusable_wiring_preserved": true,
     "old_recovery_only_predicate_superseded": true,
     "runtime_predicate_adaptation_required": false
@@ -399,7 +410,7 @@
     "repository_activation_creates_or_modifies_task": false
   },
   "invocation_traversal": {
-    "snapshot_boundary": "exact_observed_main_commit_before_marker_then_github_confirmed_marker_first_parent_before_publication",
+    "snapshot_boundary": "exact_observed_main_commit_and_exact_pass2_contract_work_blobs_before_marker_then_github_confirmed_frozen_view_before_publication",
     "required_result_binding_fields": [
       "run_start_anchor_commit",
       "run_start_authority_commit",
@@ -416,7 +427,7 @@
     "existing_transport_implies_canonical_acceptance": false,
     "same_invocation_retry_after_transport_cleanup": false,
     "github_ingest_validates_against_exact_run_start_authority": true,
-    "rule": "Deep reads one exact observed main commit, freezes that exact work/Dossier/recovery/profile view, and creates one create-only run-start marker before semantic execution. It may compute semantics provisionally against only that observed immutable view while GitHub confirms the marker. No result or terminal execution receipt may be serialized/published until the durable receipt is confirmed, its marker/nonce lineage is exact, and its run_start_authority_commit equals observed_main_commit; rejected/mismatched confirmation discards provisional work. After confirmation, traverse the frozen ordered items without sibling-ingest waits or mutable rereads.",
+    "rule": "Deep reads one exact observed main commit, freezes the exact PASS 2 contract/work Git blob identities and that view's work/Dossier/recovery/profile inputs, then creates one create-only V2 run-start marker before semantic execution. It may compute semantics provisionally only against that immutable view while GitHub confirms the marker. Main may advance concurrently; movement alone is not a rejection. No result or terminal execution receipt may be serialized/published until the durable receipt confirms the same observed authority, exact frozen contract/work blob identities, exact marker/nonce lineage and trusted marker commit time. After confirmation, traverse only the frozen ordered items without sibling-ingest waits or mutable rereads.",
     "github_run_start_confirmation_required": true,
     "worker_supplied_run_started_at_is_authority": false,
     "run_started_at_source": "github_run_start_confirmation_git_commit_time",
@@ -428,6 +439,14 @@
     "missing_confirmation_authorizes_publication": false,
     "bounded_confirmation_wait_max_seconds": 15,
     "bounded_confirmation_wait_max_receipt_reads_after_first_outcome": 3,
-    "unbounded_confirmation_polling_allowed": false
+    "unbounded_confirmation_polling_allowed": false,
+    "required_run_start_marker_binding_fields": [
+      "observed_main_commit",
+      "progressive_pass2_contract_blob_sha",
+      "progressive_pass2_work_blob_sha",
+      "run_start_nonce"
+    ],
+    "whole_main_equality_after_freeze_required": false,
+    "marker_parent_must_descend_from_observed_authority": true
   }
 }
