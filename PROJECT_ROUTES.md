@@ -261,3 +261,20 @@ Production validator проверяет:
 15. Publication remains `.github/workflows/build-daily-visual-payload.yml` → `scripts/build_final_visual_payload.py` → `data/production/visual/current.json` → `.github/workflows/deploy-visual.yml` → `web/data/current.json`.
 
 **Инварианты:** Deep eligibility never requires prior Fast/PASS 1 attempt or Fast `analysis_incomplete`; the V2 marker contains no worker-chosen authority and its actual Git parent is the frozen invocation authority; the worker reads/fixes all PASS 2 work/profile/Dossier/recovery inputs only from that parent; a write before the marker is part of that view, while later parallel `main` movement belongs to the next invocation and does not invalidate the current one; no Deep result/terminal receipt may be published until GitHub durably confirms the same marker-parent authority and lineage; missing/rejected/mismatched confirmation consumes no attempt and publishes nothing; exact-compatible canonically accepted Dossier remains the evidence gate; completed authoritative Deep suppresses future Fast for the same current identity while Fast success never suppresses Deep; Deep incomplete/error does not erase a valid Fast provisional result; unresolved consumed Deep becomes recovery-owned and can return only through a fresh concrete GitHub-owned recovery authorization; normal Deep first-pass completeness and eventual all-authoritative completeness are separate; no blind retry loop or hidden recovery quota; Deep semantic execution remains forbidden while active flags are false.
+
+
+## Russian game descriptions — direct Steam source to publication
+
+Use this route when a visually ready game is blocked by the meaningful-Russian gate.
+
+1. GitHub-owned pre-AI scope: `scripts/build_russian_description_translation_queue.py` calls `scripts/russian_description_translation_runtime.py`.
+2. Direct Russian precedence inside that runtime:
+   - exact-app `IStoreBrowseService/GetItems(language=russian)`;
+   - if that is not `good_ru`, exact-app official Steam `/api/appdetails?cc=kz&l=russian`;
+   - only if neither direct Steam source yields `good_ru`, keep the existing exact-bound semantic translation/cache path.
+3. Canonical unresolved state: `data/production/pre_ai/chatgpt_ru_description_queue.jsonl` and `chatgpt_ru_description_status.json`; accepted semantic translations persist only through `data/cache/russian_description_translations.json`.
+4. Visual producer: `scripts/build_visual_feed_v2.py` reuses the same Russian `appdetails` payload already fetched for practical facts before resolving card descriptions.
+5. Final fail-closed gate: `scripts/validate_russian_descriptions.py`.
+6. Publication chain remains `.github/workflows/build-daily-visual-payload.yml` -> `data/production/visual/current.json` -> `.github/workflows/deploy-visual.yml` -> `web/data/current.json`.
+
+The browser does not fetch or repair descriptions. Interactive chat does not translate production rows or populate the translation cache manually.
