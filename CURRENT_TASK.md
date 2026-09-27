@@ -1,11 +1,18 @@
 # CURRENT TASK
 
-## ACTIVE — Deep positive evidence card projection fix 01
-Статус: `in_progress`.
-- worker task: `WORKER_TASK_DEEP_POSITIVE_EVIDENCE_CARD_PROJECTION_FIX_01.md`;
-- branch: `fix/deep-positive-evidence-card-projection-01`;
-- confirmed root-cause boundary: accepted authoritative Deep `positive_evidence` reaches `semantic_taste_entry()`, but the bounded player-facing `card_explanation_policy` recognizes none of the target evidence and emits empty `why_fit`; current provenance also lacks exact Deep work/state binding;
-- scope remains explanation projection only; no Deep/Dossier/Fast rerun, backlog processing, Scheduled Task, ranking-weight or negative-evidence changes.
+## COMPLETE — Deep positive evidence card projection fix 01
+Статус: `complete_ready_for_director_acceptance`.
+- task: `WORKER_TASK_DEEP_POSITIVE_EVIDENCE_CARD_PROJECTION_FIX_01.md`;
+- implementation PR: `#105`; merge: `21c3331eec471a18889de0264776216490bee7bf`;
+- root cause: current authoritative Deep positives survived state/semantic projection but the shared fail-closed card explanation policy recognized none of Jedi's evidence and emitted empty `why_fit`; visible positive provenance also lacked exact Deep binding;
+- shared fix: grounded combat-mastery / ability-progression mappings plus exact accepted Deep evidence binding in `why_fit_provenance`; stale/unbound Deep remains fail-closed and legacy Fast/cache behavior remains unchanged;
+- PR validation green; normal full visual run `36343208462` / #817 succeeded and produced visual commit `2b66cce6c7afb19d5c5bf7ebe3c4c20ca95d8224`;
+- following Pages deploy `36343242275` / #857 succeeded, artifact `10939772150`; latest deploy #858 / artifact `10939991495` preserves the repaired semantics;
+- deployed Jedi now has two grounded Russian `Почему может зайти` reasons with exact Deep work/generation/Dossier/authorization provenance;
+- rank/fit/scores remain unchanged: rank 1, strong, total 68.6, personal 43.6, purchase 25;
+- ЧАТ 2's separate negative-contract diagnostic was preserved and is not changed by this task;
+- no Deep/Dossier/Fast rerun, manual backlog processing, Scheduled Task change, ranking-weight change, or negative-risk repair was performed;
+- report: `reviews/worker_reports/deep-positive-evidence-card-projection-fix-01.md`.
 
 
 ## COMPLETE — Analysis last write timestamps UI 01
