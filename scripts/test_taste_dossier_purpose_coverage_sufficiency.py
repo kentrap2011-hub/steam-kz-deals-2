@@ -271,7 +271,9 @@ class PurposeCoverageSufficiencyTests(unittest.TestCase):
     def test_cov_12_temporal_completeness_behavior_remains_intact(self):
         self.assertTrue(SCHEMA["observation_invariants"]["historical_requires_historical_and_recent_current_state_sources"])
         self.assertIn("## Temporal pre-stop completeness gate", PROMPT)
-        self.assertIn("continue bounded exact-product recent player-feedback retrieval", PROMPT)
+        self.assertIn("Continue bounded exact-product retrieval for concrete dated current-state feedback", PROMPT)
+        self.assertTrue(EVIDENCE["recency"]["current_state_requires_recent_support"])
+        self.assertFalse(EVIDENCE["recency"]["unknown_temporal_evidence_satisfies_recent_requirement"])
 
     def test_cov_13_no_new_scheduler_queue_retry_or_backlog_owner(self):
         owner = OWNERSHIP["taste_steam_review_dossier_nonblocking_progress"]
