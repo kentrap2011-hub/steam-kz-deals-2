@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "purpose-coverage-sufficiency-2026-09-25",
-    "evidence_contract_sha256": "66b527f77534a8c13eef4e8a60d4d869402f2dd180e1e2633ef5da59154450e8",
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "purpose-coverage-sufficiency-2026-09-25",
-    "worker_schema_sha256": "d467644a6f1369a4af1525a59173af8544811ccb63e60b982cf2c4119bb92a37",
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-purpose-coverage-sufficiency-v1",
-    "worker_prompt_sha256": "90a3b4241dde07778c8b3c002ac181e75b550db006275b4851f269c99e44eeed"
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
   "appid": "1000010",
   "title": "Crown Trick",
-  "generated_at_utc": "2026-09-25T05:34:00Z",
-  "expires_at_utc": "2026-10-15T05:34:00Z",
+  "generated_at_utc": "2026-09-27T11:51:29Z",
+  "expires_at_utc": "2026-10-17T11:51:29Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Crown Trick",
@@ -38,85 +38,91 @@
       }
     ]
   },
-  "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 3 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Player feedback describes the turn-based dungeon combat as rewarding when weapon, relic, elemental, familiar, and terrain interactions combine into different tactical possibilities.",
+      "statement": "Player feedback describes the synchronous turn-based combat as tactically rewarding when weapon patterns, blink/break timing, familiars, elements, and terrain interactions are used deliberately.",
       "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "moderate",
+      "mention_count": 3,
       "evidence_languages": [
+        "russian",
         "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002"
+        "source-002",
+        "source-003",
+        "source-004"
       ],
       "player_feedback_ids": [
-        "fallback-001"
-      ]
-    },
-    {
-      "category": "progression",
-      "statement": "Player feedback criticizes permanent progression as limited or slow, with some upgrades taking multiple runs and not substantially changing play.",
-      "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002"
-      ],
-      "player_feedback_ids": [
-        "fallback-002"
+        "feedback-003",
+        "feedback-004",
+        "feedback-005"
       ]
     },
     {
       "category": "repetition",
-      "statement": "Player feedback reports that the available content and item pool can feel exhausted after completing the story, reducing long-term replay appeal for some players.",
+      "statement": "Some player feedback finds the long-term roguelike depth thin, citing limited meaningful build variety, situational relics, or replay content that can become repetitive after the main progression is understood.",
       "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
-        "non_russian"
+        "russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
         "source-002"
       ],
       "player_feedback_ids": [
-        "fallback-003"
+        "feedback-001",
+        "feedback-002"
       ]
     },
     {
       "category": "difficulty",
-      "statement": "Player feedback describes the game as demanding enough to require repeated adaptation and learning, with long runs possible before clearing later stages.",
+      "statement": "Difficulty feedback is mixed but consistently ties success to learning systems and managing resources: experienced roguelike players may find it approachable, while others report meaningful challenge from boss health, randomness, and the need to master blink/break play.",
       "sentiment": "mixed",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
         "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002"
+        "source-003",
+        "source-004"
       ],
       "player_feedback_ids": [
-        "fallback-001"
+        "feedback-004",
+        "feedback-005"
       ]
     }
   ],
-  "conflicts": [],
+  "conflicts": [
+    {
+      "statement": "Long-term depth is disputed: some players enjoy revisiting the game and accept its meta-progression, while others describe build variety and post-story replay value as too shallow or luck-driven.",
+      "recurrence": "limited",
+      "mention_count": 3,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-004"
+      ]
+    }
+  ],
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "single_source_only",
-    "single_source_reason": "One exact-product user-review collection supplied the final bound player-feedback records; other inspected sources were context, professional material, or did not add a stronger safe item identity.",
-    "russian_attempt": "searched_no_existence_signal",
-    "overall_strength": "limited",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
     "stop_reason": "evidence_stable",
     "coverage": {
       "dimensions": [
@@ -145,21 +151,21 @@
           "dimension": "variety_repetition_over_time",
           "state": "covered",
           "observation_indices": [
-            2
+            1
           ]
         },
         {
           "dimension": "difficulty_mastery_learning_friction",
           "state": "covered",
           "observation_indices": [
-            3
+            2
           ]
         },
         {
           "dimension": "pacing_structure_direction",
           "state": "covered",
           "observation_indices": [
-            2
+            1
           ]
         },
         {
@@ -211,47 +217,97 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1000010",
+        "url": "https://store.steampowered.com/app/1000010/Crown_Trick/",
         "publication_date": "2020-10-16",
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "older"
       },
       {
         "source_id": "source-002",
-        "source_type": "store_user_reviews",
-        "domain": "metacritic.com",
-        "url": "https://www.metacritic.com/game/crown-trick/",
+        "source_type": "steam_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1000010/Crown_Trick/?cc=us&l=russian",
         "publication_date": null,
-        "language": "non_russian",
-        "freshness": "older",
+        "language": "russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid_title_release",
+          "appid": "1000010",
+          "title": "Crown Trick",
+          "release_year": 2020
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/roguelikes/comments/1g0rcui",
+        "publication_date": "2024-10-10",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1000010/discussions/0/3006675644845613144/",
+        "publication_date": "2020-10-22",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1000010",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "older"
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "fallback-001",
+        "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": "2020-10-19",
-        "language": "non_russian",
-        "identity_mode": "transient_author_deduped"
+        "publication_date": "2025-12-02",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
       },
       {
-        "feedback_id": "fallback-002",
+        "feedback_id": "feedback-002",
         "source_id": "source-002",
-        "publication_date": "2020-10-18",
-        "language": "non_russian",
-        "identity_mode": "transient_author_deduped"
+        "publication_date": "2025-12-23",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
       },
       {
-        "feedback_id": "fallback-003",
+        "feedback_id": "feedback-003",
         "source_id": "source-002",
-        "publication_date": "2020-10-23",
+        "publication_date": "2020-10-17",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-003",
+        "url": "https://www.reddit.com/r/roguelikes/comments/1g0rcui",
+        "publication_date": "2024-10-10",
         "language": "non_russian",
-        "identity_mode": "transient_author_deduped"
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-004",
+        "publication_date": "2020-10-22",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
       }
     ]
   }

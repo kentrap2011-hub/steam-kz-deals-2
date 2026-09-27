@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "purpose-coverage-sufficiency-2026-09-25",
-    "evidence_contract_sha256": "66b527f77534a8c13eef4e8a60d4d869402f2dd180e1e2633ef5da59154450e8",
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "purpose-coverage-sufficiency-2026-09-25",
-    "worker_schema_sha256": "d467644a6f1369a4af1525a59173af8544811ccb63e60b982cf2c4119bb92a37",
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-purpose-coverage-sufficiency-v1",
-    "worker_prompt_sha256": "90a3b4241dde07778c8b3c002ac181e75b550db006275b4851f269c99e44eeed"
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
   "appid": "1007040",
   "title": "EARTH DEFENSE FORCE 5",
-  "generated_at_utc": "2026-09-25T05:34:00Z",
-  "expires_at_utc": "2026-10-15T05:34:00Z",
+  "generated_at_utc": "2026-09-27T11:51:29Z",
+  "expires_at_utc": "2026-10-17T11:51:29Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "EARTH DEFENSE FORCE 5",
@@ -42,24 +42,27 @@
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Player feedback emphasizes the appeal of fighting very large enemy hordes with a broad arsenal and four substantially different classes.",
+      "statement": "Player feedback consistently highlights the appeal of very large enemy hordes, a huge weapon pool, and four markedly different classes, with the spectacle and loadout experimentation forming the core loop.",
       "sentiment": "positive",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
-        "russian"
+        "russian",
+        "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002"
+        "source-002",
+        "source-003"
       ],
       "player_feedback_ids": [
-        "fallback-001"
+        "feedback-001",
+        "feedback-003"
       ]
     },
     {
       "category": "coop",
-      "statement": "Player feedback repeatedly frames cooperative play as a major strength, with split-screen or online play making the large-scale combat especially enjoyable.",
+      "statement": "Cooperative play is repeatedly described as a major strength: players report that the simple pick-up-and-play structure, class interactions, and large battles work especially well with friends.",
       "sentiment": "positive",
       "recurrence": "limited",
       "mention_count": 2,
@@ -68,56 +71,76 @@
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-003"
+        "source-003",
+        "source-004"
       ],
       "player_feedback_ids": [
-        "fallback-002",
-        "fallback-003"
+        "feedback-003",
+        "feedback-005"
       ]
     },
     {
       "category": "progression",
-      "statement": "Player feedback identifies weapon and armor grinding, random upgrade acquisition, and repeated missions as a meaningful long-term friction point.",
+      "statement": "Weapon and armor progression can become a friction point because stronger equipment and survivability are tied to repeated mission rewards, and some players experience this as forced grinding when moving into harder content or switching classes.",
       "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
+        "russian",
         "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-003"
+        "source-002",
+        "source-004"
       ],
       "player_feedback_ids": [
-        "fallback-004"
+        "feedback-002",
+        "feedback-004"
       ]
     },
     {
       "category": "difficulty",
-      "statement": "Player feedback describes higher difficulties as capable of becoming punishing enough that progression stalls can outweigh the fun for some players.",
-      "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "statement": "Higher-difficulty and solo feedback emphasizes sharp scaling, loadout knowledge, and class-specific limitations; some late or hard missions can feel punishing without appropriate weapons, strategy, or understanding of online scaling.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
       "evidence_languages": [
         "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-003"
+        "source-004",
+        "source-005"
       ],
       "player_feedback_ids": [
-        "fallback-002"
+        "feedback-004",
+        "feedback-005",
+        "feedback-006"
       ]
     }
   ],
-  "conflicts": [],
+  "conflicts": [
+    {
+      "statement": "The necessity of grinding is disputed: some players describe hard progression as requiring repeated farming for armor or weapons, while others report clearing co-op or hard content primarily through loadout changes, strategy, and accepting occasional failures rather than deliberate farming.",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "source_ids": [
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
+        "feedback-005"
+      ]
+    }
+  ],
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
     "source_mix_status": "multi_source",
     "single_source_reason": null,
     "russian_attempt": "found_and_used",
-    "overall_strength": "limited",
+    "overall_strength": "moderate",
     "stop_reason": "evidence_stable",
     "coverage": {
       "dimensions": [
@@ -132,7 +155,8 @@
           "dimension": "controls_game_feel",
           "state": "covered",
           "observation_indices": [
-            0
+            0,
+            3
           ]
         },
         {
@@ -201,11 +225,11 @@
         },
         {
           "dimension": "technical_performance_localization_regional",
-          "state": "not_material_or_not_applicable",
+          "state": "exhausted_unavailable",
           "observation_indices": []
         }
       ],
-      "closure_basis": "broad_neutral_picture",
+      "closure_basis": "sufficient_after_route_exhaustion",
       "strengths_investigated": true,
       "weaknesses_tradeoffs_investigated": true
     }
@@ -216,12 +240,12 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1007040/EARTH_DEFENSE_FORCE_5",
+        "url": "https://store.steampowered.com/app/1007040/EARTH_DEFENSE_FORCE_5/",
         "publication_date": "2019-07-11",
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "older"
       },
       {
         "source_id": "source-002",
@@ -230,52 +254,108 @@
         "url": "https://steam.kupikod.com/ru-ru/games/earth-defense-force-5",
         "publication_date": null,
         "language": "russian",
-        "freshness": "older",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "EARTH DEFENSE FORCE 5",
+          "release_year": 2019
+        },
+        "freshness": "unknown"
       },
       {
         "source_id": "source-003",
-        "source_type": "store_user_reviews",
-        "domain": "metacritic.com",
-        "url": "https://www.metacritic.com/game/earth-defense-force-5/user-reviews/",
-        "publication_date": null,
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/patientgamers/comments/eu7kxn",
+        "publication_date": "2020-01-26",
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1007040/discussions/0/3730701400334625734/",
+        "publication_date": "2022-12-26",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1007040",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-005",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1007040/discussions/0/4329727351233375968/",
+        "publication_date": "2024-05-31",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1007040",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "older"
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "fallback-001",
+        "feedback_id": "feedback-001",
         "source_id": "source-002",
         "publication_date": "2019-07-11",
         "language": "russian",
-        "identity_mode": "transient_author_deduped"
+        "acquisition_mode": "search_result_observation"
       },
       {
-        "feedback_id": "fallback-002",
-        "source_id": "source-003",
-        "publication_date": "2024-05-28",
-        "language": "non_russian",
-        "identity_mode": "transient_author_deduped"
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2019-07-23",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
       },
       {
-        "feedback_id": "fallback-003",
+        "feedback_id": "feedback-003",
         "source_id": "source-003",
-        "publication_date": "2024-05-01",
+        "url": "https://www.reddit.com/r/patientgamers/comments/eu7kxn",
+        "publication_date": "2020-01-26",
         "language": "non_russian",
-        "identity_mode": "transient_author_deduped"
+        "acquisition_mode": "stable_item"
       },
       {
-        "feedback_id": "fallback-004",
-        "source_id": "source-003",
-        "publication_date": "2019-11-16",
+        "feedback_id": "feedback-004",
+        "source_id": "source-004",
+        "publication_date": "2022-12-26",
         "language": "non_russian",
-        "identity_mode": "transient_author_deduped"
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-004",
+        "publication_date": "2022-12-28",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-006",
+        "source_id": "source-005",
+        "publication_date": "2024-05-31",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
       }
     ]
   }

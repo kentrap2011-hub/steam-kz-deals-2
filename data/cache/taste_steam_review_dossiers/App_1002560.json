@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "purpose-coverage-sufficiency-2026-09-25",
-    "evidence_contract_sha256": "66b527f77534a8c13eef4e8a60d4d869402f2dd180e1e2633ef5da59154450e8",
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "purpose-coverage-sufficiency-2026-09-25",
-    "worker_schema_sha256": "d467644a6f1369a4af1525a59173af8544811ccb63e60b982cf2c4119bb92a37",
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-purpose-coverage-sufficiency-v1",
-    "worker_prompt_sha256": "90a3b4241dde07778c8b3c002ac181e75b550db006275b4851f269c99e44eeed"
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
   "appid": "1002560",
   "title": "Tiny Snow",
-  "generated_at_utc": "2026-09-25T05:34:00Z",
-  "expires_at_utc": "2026-10-15T05:34:00Z",
+  "generated_at_utc": "2026-09-27T11:51:29Z",
+  "expires_at_utc": "2026-10-17T11:51:29Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Tiny Snow",
@@ -42,7 +42,7 @@
   "observations": [
     {
       "category": "other",
-      "statement": "Player feedback highlights the forced-love premise as a thought-provoking hook and finds the visual presentation appealing.",
+      "statement": "A later player review describes the central artificial-love premise as an accessible moral question rather than simple romance, with the branching endings prompting reflection on choice, freedom, and whether engineered affection can still feel genuine.",
       "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
@@ -51,32 +51,34 @@
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002"
+        "source-003"
       ],
       "player_feedback_ids": [
-        "fallback-001"
+        "feedback-002"
       ]
     },
     {
       "category": "other",
-      "statement": "Player feedback can react strongly negatively to the extra story, describing it as undermining the treatment of love established by the main narrative.",
+      "statement": "Other player feedback reacts negatively to the handling of the same philosophical and emotional material, including criticism that the true or side-story material weakens the premise rather than deepening it.",
       "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "recurrence": "limited",
+      "mention_count": 2,
       "evidence_languages": [
+        "russian",
         "non_russian"
       ],
       "evidence_status": "durable",
       "source_ids": [
-        "source-002"
+        "source-004"
       ],
       "player_feedback_ids": [
-        "fallback-001"
+        "feedback-003",
+        "feedback-004"
       ]
     },
     {
-      "category": "pacing",
-      "statement": "Player feedback reports that the story becomes substantially stronger in its middle and later portions after a more conventional opening.",
+      "category": "other",
+      "statement": "Early player feedback praises the visual novel's presentation, including background art, character art, music, and a clean interface, even among buyers who initially could not read the original language.",
       "sentiment": "positive",
       "recurrence": "anecdotal",
       "mention_count": 1,
@@ -88,17 +90,32 @@
         "source-002"
       ],
       "player_feedback_ids": [
-        "fallback-002"
+        "feedback-001"
       ]
     }
   ],
-  "conflicts": [],
+  "conflicts": [
+    {
+      "statement": "The story's central idea is divisive: some players find its treatment of artificial love and choice thought-provoking, while others find the philosophical and emotional execution unconvincing or unpleasant.",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-004"
+      ]
+    }
+  ],
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "single_source_only",
-    "single_source_reason": "One exact-product public player-review collection supplied the final bound player-feedback records; broader searches mainly returned aggregate or editorial context.",
-    "russian_attempt": "searched_no_existence_signal",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
     "overall_strength": "limited",
     "stop_reason": "evidence_stable",
     "coverage": {
@@ -132,7 +149,8 @@
           "dimension": "pacing_structure_direction",
           "state": "covered",
           "observation_indices": [
-            2
+            0,
+            1
           ]
         },
         {
@@ -150,8 +168,7 @@
           "state": "covered",
           "observation_indices": [
             0,
-            1,
-            2
+            1
           ]
         },
         {
@@ -171,11 +188,11 @@
         },
         {
           "dimension": "technical_performance_localization_regional",
-          "state": "not_material_or_not_applicable",
+          "state": "exhausted_unavailable",
           "observation_indices": []
         }
       ],
-      "closure_basis": "compact_central_experience",
+      "closure_basis": "sufficient_after_route_exhaustion",
       "strengths_investigated": true,
       "weaknesses_tradeoffs_investigated": true
     }
@@ -189,37 +206,93 @@
         "url": "https://store.steampowered.com/app/1002560/Tiny_Snow/",
         "publication_date": "2019-02-27",
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "older"
       },
       {
         "source_id": "source-002",
-        "source_type": "other_player_feedback",
-        "domain": "ymgal.games",
-        "url": "https://www.ymgal.games/ga33738",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/1002560/reviews/?browsefilter=toprated&filterLanguage=english&snr=1_5_100010_",
         "publication_date": null,
         "language": "non_russian",
-        "freshness": "recent",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection"
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid_title_release",
+          "appid": "1002560",
+          "title": "Tiny Snow",
+          "release_year": 2019
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "public_ref": "Steam Community exact-product Tiny Snow review result dated 2022-03-22",
+        "publication_date": "2022-03-22",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "Tiny Snow",
+          "release_year": 2019
+        },
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "other_player_feedback",
+        "domain": "stmstat.com",
+        "url": "https://stmstat.com/app/1002560/reviews",
+        "publication_date": null,
+        "language": "mixed",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid_title_release",
+          "appid": "1002560",
+          "title": "Tiny Snow",
+          "release_year": 2019
+        },
+        "freshness": "unknown"
       }
     ],
     "player_feedback_records": [
       {
-        "feedback_id": "fallback-001",
+        "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": null,
+        "publication_date": "2019-03-11",
         "language": "non_russian",
-        "identity_mode": "transient_author_deduped"
+        "acquisition_mode": "search_result_observation"
       },
       {
-        "feedback_id": "fallback-002",
-        "source_id": "source-002",
+        "feedback_id": "feedback-002",
+        "source_id": "source-003",
+        "publication_date": "2022-03-22",
+        "language": "non_russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-004",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-004",
         "publication_date": null,
         "language": "non_russian",
-        "identity_mode": "transient_author_deduped"
+        "acquisition_mode": "search_result_observation"
       }
     ]
   }
