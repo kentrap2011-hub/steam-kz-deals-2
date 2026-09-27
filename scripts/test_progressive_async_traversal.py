@@ -571,7 +571,7 @@ def main():
     assert fast['semantic_generation']['profile_pin']['live_update_after_pin_invalidates_started_work'] is False
 
     dt = deep['invocation_traversal']
-    assert dt['snapshot_boundary'] == 'exact_observed_main_commit_and_exact_pass2_contract_work_blobs_before_marker_then_github_confirmed_frozen_view_before_publication'
+    assert dt['snapshot_boundary'] == 'create_only_v2_marker_then_freeze_actual_marker_parent_and_exact_pass2_contract_work_blobs_then_github_confirm_before_publication'
     assert dt['github_run_start_confirmation_required'] is True
     assert dt['provisional_semantic_source_commit'] == 'observed_main_commit'
     assert dt['provisional_semantic_execution_before_confirmation_allowed'] is True
@@ -588,7 +588,9 @@ def main():
     assert dt['per_item_mutable_manifest_dossier_or_authorization_reread'] is False
     assert dt['changes_after_start_apply_to_next_invocation'] is True
     assert dt['whole_main_equality_after_freeze_required'] is False
-    assert dt['marker_parent_must_descend_from_observed_authority'] is True
+    assert dt['marker_parent_must_descend_from_observed_authority'] is False
+    assert dt['marker_parent_is_frozen_authority'] is True
+    assert dt['worker_chosen_authority_field_allowed'] is False
     assert dt['prior_sibling_ingest_required'] is False
     assert dt['existing_transport_implies_canonical_acceptance'] is False
     assert deep['eligibility']['prior_fast_attempt_required'] is False
@@ -607,7 +609,9 @@ def main():
     assert confirmation['marker_must_exist_before_semantic_execution'] is True
     assert confirmation['provisional_semantic_execution_before_confirmation_allowed'] is True
     assert confirmation['confirmation_required_before_first_semantic_artifact_publication'] is True
-    assert confirmation['confirmation_authority_must_equal_observed_main_commit'] is True
+    assert confirmation['confirmation_authority_must_equal_observed_main_commit'] is False
+    assert confirmation['confirmation_authority_must_equal_v2_marker_parent'] is True
+    assert confirmation['worker_may_supply_v2_authority_commit'] is False
     assert confirmation['marker_contract'] == 'PROGRESSIVE-PASS2-RUN-START-MARKER-V2'
     assert confirmation['later_main_movement_alone_invalidates_frozen_authority'] is False
     assert confirmation['arbitrary_historical_commit_is_sufficient_authority'] is False
