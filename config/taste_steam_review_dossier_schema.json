@@ -2,12 +2,12 @@
   "schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
   "version": 2,
   "status": "active",
-  "schema_revision": "pragmatic-observed-feedback-2026-09-26",
+  "schema_revision": "github-derived-temporal-classification-2026-09-27",
   "evidence_contract": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
   "evidence_contract_version": 2,
   "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
   "dossier_schema_version": 2,
-  "purpose": "Exact worker-facing neutral multi-source web-evidence dossier shape shared with canonical ingress validation, including profile-agnostic downstream-purpose coverage attestation, content-complete compatibility binding, and auditable physical player-feedback identity/count support.",
+  "purpose": "Exact worker-facing neutral multi-source web-evidence dossier shape shared with canonical ingress validation, with factual publication dates supplied by the semantic worker and deterministic temporal classification derived by GitHub before canonical persistence.",
   "unknown_fields_policy": "top_level_and_observation_extras_remain_permissive_but_raw_body_like_and_personal_or_commercial_fields_are_forbidden;provenance_source_and_player_feedback_record_records_are_strict",
   "compact_provenance_policy_source": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2#compact_provenance",
   "prepublication_validation_policy_source": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2#prepublication_validation",
@@ -238,7 +238,9 @@
       "one_observed_item_requires_anecdotal": true,
       "stronger_recurrence_requires_qualitative_material_independence": true
     },
-    "mention_count_is_dossier_sufficiency_gate": false
+    "mention_count_is_dossier_sufficiency_gate": false,
+    "current_requires_recent_current_state_bound_feedback": true,
+    "historical_requires_historical_feedback_and_recent_current_state_bound_feedback": true
   },
   "conflict_invariants": {
     "required_fields": [
@@ -267,7 +269,6 @@
     "same_thread_distinct_feedback_items_allowed": true,
     "reddit_parent_subreddit_and_thread_scope_must_contain_child_when_resolvable": true,
     "steam_review_and_discussion_surfaces_must_not_be_cross_bound": true,
-    "known_older_child_cannot_inherit_recent_parent_freshness": true,
     "unknown_child_publication_date_preserves_existing_undated_behavior": true,
     "parent_child_language_containment": {
       "russian_child_parent_languages": [
@@ -281,7 +282,11 @@
       "mixed_or_unknown_child_additional_containment_rule": false
     },
     "stable_steam_child_exposed_appid_must_equal_dossier_appid": true,
-    "deterministic_steam_parent_child_container_identity_must_match": true
+    "deterministic_steam_parent_child_container_identity_must_match": true,
+    "source_freshness_is_github_derived_from_source_publication_date": true,
+    "bound_feedback_temporal_qualification_uses_own_publication_date": true,
+    "unknown_feedback_publication_date_cannot_satisfy_recent_support": true,
+    "worker_freshness_judgment_required": false
   },
   "evidence_invariants": {
     "strategy": "adaptive_multi_source_web",
@@ -350,7 +355,6 @@
     "domain",
     "publication_date",
     "language",
-    "freshness",
     "evidence_role",
     "player_feedback"
   ],
@@ -700,7 +704,6 @@
                 "domain",
                 "publication_date",
                 "language",
-                "freshness",
                 "evidence_role",
                 "player_feedback"
               ],
