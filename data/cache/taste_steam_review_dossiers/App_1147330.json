@@ -4,21 +4,21 @@
   "web_evidence_contract_binding": {
     "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
     "evidence_contract_version": 2,
-    "evidence_contract_revision": "semantic-bounded-retrieval-2026-09-23",
-    "evidence_contract_sha256": "5ad29bc1e4df614191d380bf832f4865f9ee73bab406e314f8d5687b0daa7ec7",
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
     "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
     "worker_schema_version": 2,
-    "worker_schema_revision": "validator-generator-parity-fix-2026-09-20",
-    "worker_schema_sha256": "d3d02d5060b5a978c827ebaddacac67b9cf4e1fa5369e5921a0762fce940da98",
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
     "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
     "dossier_schema_version": 2,
-    "worker_prompt_revision": "web-evidence-v2-semantic-bounded-retrieval-v1",
-    "worker_prompt_sha256": "d11ffde57f675066f3deb76b048389325358ee11db5b5368fe00acd8298f2600"
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
   "appid": "1147330",
   "title": "Lifeless Moon",
-  "generated_at_utc": "2026-09-24T02:38:00Z",
-  "expires_at_utc": "2026-10-14T02:38:00Z",
+  "generated_at_utc": "2026-09-27T12:40:48Z",
+  "expires_at_utc": "2026-10-17T12:40:48Z",
   "ttl_days": 20,
   "game_identity": {
     "work_title": "Lifeless Moon",
@@ -31,21 +31,17 @@
       {
         "kind": "appid",
         "value": "1147330"
-      },
-      {
-        "kind": "developer",
-        "value": "Stage 2 Studios"
       }
     ]
   },
-  "summary": "Evidence summary: 1 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
-      "category": "friction",
-      "statement": "Player feedback reports a puzzle interaction issue in which collected Sea Fort pictures can disappear from the visible inventory while remaining interactable.",
-      "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
+      "category": "other",
+      "statement": "Player feedback repeatedly praises the surreal science-fiction atmosphere, unusual environments, visual set pieces, and soundtrack, even among players who find other parts of the game underdeveloped.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
       "evidence_languages": [
         "non_russian"
       ],
@@ -54,19 +50,187 @@
         "source-002"
       ],
       "player_feedback_ids": [
-        "feedback-001"
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "The game is consistently described as a short, linear walking-simulator-style adventure with light platforming and simple puzzles; multiple players report completion in roughly two to four hours and limited replay value.",
+      "sentiment": "mixed",
+      "recurrence": "strong",
+      "mention_count": 4,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "Some players find the long traversal stretches, repeated walking, and simple interaction loop monotonous or padded, especially relative to the short overall length.",
+      "sentiment": "negative",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-004",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "Narrative delivery can feel fragmented: player feedback cites abrupt shifts, heavy reliance on written logs, and puzzle-room interruptions that may slow or obscure the story even when the underlying mystery remains appealing.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-005"
       ]
     }
   ],
-  "conflicts": [],
+  "conflicts": [
+    {
+      "statement": "The concise walking-simulator structure divides players: some value it as a brief atmospheric story with simple puzzles, while others see the same short length and sparse interaction as insufficient or repetitive.",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-004",
+        "feedback-005"
+      ]
+    }
+  ],
   "evidence": {
     "strategy": "adaptive_multi_source_web",
     "research_state": "sufficient",
-    "source_mix_status": "single_source_only",
-    "single_source_reason": "One contract-usable exact-product Steam discussion supplied the serialized durable finding.",
-    "russian_attempt": "searched_no_existence_signal",
-    "overall_strength": "limited",
-    "stop_reason": "evidence_stable"
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "strong",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            3
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            3
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2,
+            3
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
   },
   "provenance": {
     "sources": [
@@ -77,30 +241,82 @@
         "url": "https://store.steampowered.com/app/1147330/Lifeless_Moon/",
         "publication_date": "2023-08-10",
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "identity",
-        "player_feedback": false
+        "player_feedback": false,
+        "freshness": "older"
       },
       {
         "source_id": "source-002",
-        "source_type": "steam_community",
+        "source_type": "steam_reviews",
         "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1147330/discussions/0/5590708606427642062/",
-        "publication_date": "2023-08-11",
+        "url": "https://steamcommunity.com/app/1147330/reviews/?browsefilter=toprated",
+        "publication_date": null,
         "language": "non_russian",
-        "freshness": "older",
         "evidence_role": "durable_trait",
-        "player_feedback": true
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1147330",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "forum",
+        "domain": "tapochek.net",
+        "url": "https://tapochek.net/viewtopic.php?t=261031",
+        "publication_date": null,
+        "language": "russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_title_release",
+          "appid": null,
+          "title": "Lifeless Moon",
+          "release_year": 2023
+        },
+        "freshness": "unknown"
       }
     ],
     "player_feedback_records": [
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "url": "https://steamcommunity.com/app/1147330/discussions/0/5590708606427642062/",
-        "publication_date": "2023-08-11",
+        "publication_date": "2024-02-01",
         "language": "non_russian",
-        "identity_mode": "stable_locator"
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2025-06-18",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-002",
+        "publication_date": "2025-08-11",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-002",
+        "publication_date": "2023-09-02",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": "2023-08-23",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
       }
     ]
   }
