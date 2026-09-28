@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+  "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+  "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+  "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+  "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+  "work_id": "cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89",
+  "family_id": "game:1111460",
+  "taste_subject_key": "App_1111460",
+  "appid": "1111460",
+  "taste_fingerprint": "b056e17cc174803015539aa6b3d86a0f01316901524184f818ff3a63474fa1c2",
+  "candidate_context_sha256": "3edef7590b97fd8b2e2cc4f7826518d9aa0bbf73b12a13eb5849e25ef27928bc",
+  "dossier_content_sha256": "d0174979ec4f61ec97472aa1de606b4eb8061344a3d048687cc7886147dbf33b",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6",
+  "work_mode": "legacy_full_reanalysis",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "migration_provenance": {
+    "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+    "migration_target_id": "legacy-full-reanalysis-01:cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89",
+    "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+    "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+    "prior_outcome": "analyzed_not_fit",
+    "prior_fit_level": null,
+    "prior_confidence": "medium",
+    "prior_taste_factors": null,
+    "prior_not_fit_basis": "completed_below_threshold",
+    "prior_work_id": "cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89",
+    "prior_authorization_id": "e3f2c58865748684208084d48e6b99d499e35deb296b639b4efabe46ea2d4706",
+    "prior_accepted_at_utc": "2026-09-27T17:32:19+00:00",
+    "preserved_positive_evidence": [],
+    "preserved_not_fit_evidence": [
+      "The experience is primarily a visual novel with only a light shop-management layer, leaving little of the gameplay mastery or evolving systems that are among the profile's strongest positive signals.",
+      "The deliberately slow reading-heavy structure makes narrative quality carry most of the experience, while player feedback on the story itself is divided rather than consistently strong.",
+      "The management layer is specifically described as shallow relative to the amount of reading, so it does not provide a strong mechanical counterweight to the narrative and pacing risks."
+    ]
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "The experience is primarily a visual novel with only a light shop-management layer, leaving little of the gameplay mastery or evolving systems that are among the profile's strongest positive signals.",
+    "The deliberately slow reading-heavy structure makes narrative quality carry most of the experience, while player feedback on the story itself is divided rather than consistently strong.",
+    "The management layer is specifically described as shallow relative to the amount of reading, so it does not provide a strong mechanical counterweight to the narrative and pacing risks."
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Магазинная система остаётся лёгкой надстройкой над визуальной новеллой и не даёт достаточной механической глубины, чтобы компенсировать длительное чтение.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "other_grounded_taste_risk",
+        "text_ru": "Медленный темп делает качество сюжета главным источником вовлечения, при этом отзывы о самом повествовании заметно расходятся; для профиля это существенный риск именно в почти полностью сюжетной игре.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Официально поддерживаются только упрощённый китайский и английский, а для столь текстовой игры отсутствие удобного языка может стать практическим барьером.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть конкретная жалоба на читаемость и необходимость OCR для одного игрока; это важный сигнал доступности, но он не является универсальным персональным риском для профиля.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  }
+}
