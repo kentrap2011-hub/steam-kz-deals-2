@@ -15,14 +15,14 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "appid": "1196090",
-  "title": "Scars Above",
+  "appid": "1202900",
+  "title": "Assemble with Care",
   "generated_at_utc": "2026-09-28T17:23:00Z",
   "expires_at_utc": "2026-10-18T17:23:00Z",
   "ttl_days": 20,
   "game_identity": {
-    "work_title": "Scars Above",
-    "release_year": 2023,
+    "work_title": "Assemble with Care",
+    "release_year": 2020,
     "resolution_status": "resolved",
     "identity_source_ids": [
       "source-001"
@@ -30,19 +30,19 @@
     "corroborators": [
       {
         "kind": "appid",
-        "value": "1196090"
+        "value": "1202900"
       },
       {
         "kind": "developer",
-        "value": "Mad Head Games"
+        "value": "ustwo games"
       }
     ]
   },
-  "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+  "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
   "observations": [
     {
       "category": "mechanics",
-      "statement": "Combat revolves around identifying enemy weaknesses and combining elemental weapon modes, gadgets and environmental effects, giving encounters a puzzle-like layer beyond basic shooting.",
+      "statement": "Repair puzzles are tactile, simple to understand and generally satisfying, focusing on disassembling and rebuilding a small set of familiar objects rather than complex deduction.",
       "sentiment": "positive",
       "recurrence": "moderate",
       "mention_count": 3,
@@ -53,55 +53,18 @@
       "evidence_status": "durable",
       "source_ids": [
         "source-002",
-        "source-004"
+        "source-003"
       ],
       "player_feedback_ids": [
         "feedback-001",
         "feedback-002",
-        "feedback-004"
-      ]
-    },
-    {
-      "category": "progression",
-      "statement": "Exploring branching linear areas rewards weapon upgrades and skill points, while environmental hazards such as cold or poison add situational resource pressure.",
-      "sentiment": "positive",
-      "recurrence": "limited",
-      "mention_count": 2,
-      "evidence_languages": [
-        "russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-002"
-      ],
-      "player_feedback_ids": [
-        "feedback-001",
-        "feedback-002"
-      ]
-    },
-    {
-      "category": "difficulty",
-      "statement": "Difficulty impressions vary: some players describe a noticeable early skill jump and challenging combat, while others find the game easy and repetitive once its systems are understood.",
-      "sentiment": "mixed",
-      "recurrence": "limited",
-      "mention_count": 2,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "durable",
-      "source_ids": [
-        "source-003",
-        "source-004"
-      ],
-      "player_feedback_ids": [
-        "feedback-003",
         "feedback-004"
       ]
     },
     {
       "category": "structure",
-      "statement": "The alien atmosphere and central science-fiction mystery are recurring strengths, but character depth and later narrative pacing receive more mixed reactions.",
-      "sentiment": "mixed",
+      "statement": "The warm story, artwork and relaxed atmosphere are recurring strengths, with the repair work used as a vehicle for short character stories.",
+      "sentiment": "positive",
       "recurrence": "moderate",
       "mention_count": 3,
       "evidence_languages": [
@@ -111,17 +74,39 @@
       "evidence_status": "durable",
       "source_ids": [
         "source-002",
-        "source-004"
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "The experience is consistently described as very short, with only a small number of repair tasks; some players appreciate the compact length while others want substantially more hands-on repair content.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 4,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003"
       ],
       "player_feedback_ids": [
         "feedback-001",
         "feedback-002",
-        "feedback-004"
+        "feedback-004",
+        "feedback-005"
       ]
     },
     {
-      "category": "repetition",
-      "statement": "The campaign is relatively short and some players find combat or enemy variety repetitive, which limits replay appeal once the story and collectibles are finished.",
+      "category": "friction",
+      "statement": "Object manipulation and perspective controls can feel fiddly or unintuitive, occasionally undermining the otherwise relaxing tone.",
       "sentiment": "negative",
       "recurrence": "limited",
       "mention_count": 2,
@@ -135,25 +120,8 @@
         "source-003"
       ],
       "player_feedback_ids": [
-        "feedback-003",
+        "feedback-001",
         "feedback-005"
-      ]
-    },
-    {
-      "category": "other",
-      "statement": "An English Steam review reports that the single-save checkpoint system can preserve a bad progression state with no fallback save; the present state of that issue is unresolved.",
-      "sentiment": "negative",
-      "recurrence": "anecdotal",
-      "mention_count": 1,
-      "evidence_languages": [
-        "non_russian"
-      ],
-      "evidence_status": "uncertain",
-      "source_ids": [
-        "source-005"
-      ],
-      "player_feedback_ids": [
-        "feedback-006"
       ]
     }
   ],
@@ -179,45 +147,41 @@
           "dimension": "controls_game_feel",
           "state": "covered",
           "observation_indices": [
-            0,
-            2
+            3
           ]
         },
         {
           "dimension": "progression_development_unlocks",
-          "state": "covered",
-          "observation_indices": [
-            1
-          ]
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
         },
         {
           "dimension": "variety_repetition_over_time",
           "state": "covered",
           "observation_indices": [
-            4
+            0,
+            2
           ]
         },
         {
           "dimension": "difficulty_mastery_learning_friction",
           "state": "covered",
           "observation_indices": [
-            2
+            0
           ]
         },
         {
           "dimension": "pacing_structure_direction",
           "state": "covered",
           "observation_indices": [
-            3,
-            4
+            1,
+            2
           ]
         },
         {
           "dimension": "exploration_mission_activity_structure",
-          "state": "covered",
-          "observation_indices": [
-            1
-          ]
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
         },
         {
           "dimension": "multiplayer_coop_dependence",
@@ -228,7 +192,7 @@
           "dimension": "story_characters_identity_hooks",
           "state": "covered",
           "observation_indices": [
-            3
+            1
           ]
         },
         {
@@ -236,8 +200,7 @@
           "state": "covered",
           "observation_indices": [
             0,
-            1,
-            3
+            1
           ]
         },
         {
@@ -245,16 +208,13 @@
           "state": "covered",
           "observation_indices": [
             2,
-            4,
-            5
+            3
           ]
         },
         {
           "dimension": "technical_performance_localization_regional",
-          "state": "covered",
-          "observation_indices": [
-            5
-          ]
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
         }
       ],
       "closure_basis": "broad_neutral_picture",
@@ -268,8 +228,8 @@
         "source_id": "source-001",
         "source_type": "official_metadata",
         "domain": "store.steampowered.com",
-        "url": "https://store.steampowered.com/app/1196090/Scars_Above/",
-        "publication_date": "2023-02-28",
+        "url": "https://store.steampowered.com/app/1202900/Assemble_with_Care/",
+        "publication_date": "2020-03-26",
         "language": "non_russian",
         "evidence_role": "identity",
         "player_feedback": false,
@@ -278,58 +238,36 @@
       {
         "source_id": "source-002",
         "source_type": "steam_reviews",
-        "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1196090/positivereviews/?browsefilter=toprated&l=russian",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1202900/Assemble_with_Care/?curator_clanid=32549618&l=russian",
         "publication_date": null,
         "language": "russian",
         "evidence_role": "durable_trait",
         "player_feedback": true,
-        "feedback_surface_mode": "concrete_item_collection",
+        "feedback_surface_mode": "search_result_representation",
         "exact_product_binding": {
           "basis": "source_appid_title_release",
-          "appid": "1196090",
-          "title": "Scars Above",
-          "release_year": 2023
+          "appid": "1202900",
+          "title": "Assemble with Care",
+          "release_year": 2020
         },
         "freshness": "unknown"
       },
       {
         "source_id": "source-003",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/soulslikes/comments/1ponv7j/how_is_scars_above/",
-        "publication_date": "2025-12-17",
-        "language": "non_russian",
-        "evidence_role": "durable_trait",
-        "player_feedback": true,
-        "freshness": "recent"
-      },
-      {
-        "source_id": "source-004",
-        "source_type": "reddit",
-        "domain": "reddit.com",
-        "url": "https://www.reddit.com/r/GirlGamers/comments/1322nrc/",
-        "publication_date": "2023-04-28",
-        "language": "non_russian",
-        "evidence_role": "durable_trait",
-        "player_feedback": true,
-        "freshness": "older"
-      },
-      {
-        "source_id": "source-005",
         "source_type": "steam_reviews",
         "domain": "steamcommunity.com",
-        "url": "https://steamcommunity.com/app/1196090/reviews/?browsefilter=toprated",
+        "url": "https://steamcommunity.com/app/1202900/reviews/?browsefilter=toprated",
         "publication_date": null,
         "language": "non_russian",
-        "evidence_role": "uncertain",
+        "evidence_role": "durable_trait",
         "player_feedback": true,
         "feedback_surface_mode": "concrete_item_collection",
         "exact_product_binding": {
           "basis": "source_appid_title_release",
-          "appid": "1196090",
-          "title": "Scars Above",
-          "release_year": 2023
+          "appid": "1202900",
+          "title": "Assemble with Care",
+          "release_year": 2020
         },
         "freshness": "unknown"
       }
@@ -338,44 +276,35 @@
       {
         "feedback_id": "feedback-001",
         "source_id": "source-002",
-        "publication_date": "2024-09-18",
+        "publication_date": null,
         "language": "russian",
-        "acquisition_mode": "inspected_collection_item"
+        "acquisition_mode": "search_result_observation"
       },
       {
         "feedback_id": "feedback-002",
         "source_id": "source-002",
-        "publication_date": "2023-03-03",
+        "publication_date": null,
         "language": "russian",
-        "acquisition_mode": "inspected_collection_item"
+        "acquisition_mode": "search_result_observation"
       },
       {
         "feedback_id": "feedback-003",
-        "source_id": "source-003",
-        "url": "https://www.reddit.com/r/soulslikes/comments/1ponv7j/how_is_scars_above/",
-        "publication_date": "2025-12-17",
-        "language": "non_russian",
-        "acquisition_mode": "stable_item"
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
       },
       {
         "feedback_id": "feedback-004",
-        "source_id": "source-004",
-        "url": "https://www.reddit.com/r/GirlGamers/comments/1322nrc/",
-        "publication_date": "2023-04-28",
+        "source_id": "source-003",
+        "publication_date": "2020-12-25",
         "language": "non_russian",
-        "acquisition_mode": "stable_item"
-      },
-      {
-        "feedback_id": "feedback-005",
-        "source_id": "source-002",
-        "publication_date": "2025-04-28",
-        "language": "russian",
         "acquisition_mode": "inspected_collection_item"
       },
       {
-        "feedback_id": "feedback-006",
-        "source_id": "source-005",
-        "publication_date": "2024-02-08",
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": "2023-08-19",
         "language": "non_russian",
         "acquisition_mode": "inspected_collection_item"
       }
