@@ -4,6 +4,7 @@ import json
 from datetime import datetime, timezone
 
 import card_explanation_policy
+import grounded_negative_visual
 import progressive_pass1
 import progressive_pass2
 import progressive_personalization
@@ -250,19 +251,22 @@ def production_history_reconciliation():
         )
         risks = refiner.personal_taste_risks(taste_entry)
         visible = card_explanation_policy.visible_risk_payload(risks)
-        for row in visible['risk_provenance']:
-            if row.get('source') != 'taste_negative_evidence':
-                continue
-            assert (row.get('semantic_binding') or {}).get('semantic_source') == 'progressive_pass2', (
-                family_id, row
-            )
-            assert row.get('evidence_refs'), (family_id, row)
+        finalizer_risks = grounded_negative_visual.all_risk_candidates(taste_entry, {}, {})
+        finalizer_visible = grounded_negative_visual.visible_grounded_payload(finalizer_risks)
+        for payload in (visible, finalizer_visible):
+            for row in payload['risk_provenance']:
+                if row.get('source') != 'taste_negative_evidence':
+                    continue
+                assert (row.get('semantic_binding') or {}).get('semantic_source') == 'progressive_pass2', (
+                    family_id, row
+                )
+                assert row.get('evidence_refs'), (family_id, row)
         deep_fit_projection.append({
             'family_id': family_id,
             'taste_subject_key': binding['taste_subject_key'],
-            'risk_count': len(visible['risks']),
+            'risk_count': len(finalizer_visible['risks']),
             'bound_risk_count': sum(
-                1 for row in visible['risk_provenance']
+                1 for row in finalizer_visible['risk_provenance']
                 if row.get('source') == 'taste_negative_evidence'
                 and (row.get('semantic_binding') or {}).get('semantic_source') == 'progressive_pass2'
                 and row.get('evidence_refs')
