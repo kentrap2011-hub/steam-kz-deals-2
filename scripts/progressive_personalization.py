@@ -686,6 +686,8 @@ def build_processing_status(state_index, visible_items, business_excluded_family
             'accepted_completed_count': 0,
             'changed_result_count': 0,
             'unchanged_result_count': 0,
+            'changed_fit_outcome_count': 0,
+            'unchanged_fit_outcome_count': 0,
             'incomplete_count': 0,
             'confirmed_risk_count': 0,
             'caution_count': 0,
