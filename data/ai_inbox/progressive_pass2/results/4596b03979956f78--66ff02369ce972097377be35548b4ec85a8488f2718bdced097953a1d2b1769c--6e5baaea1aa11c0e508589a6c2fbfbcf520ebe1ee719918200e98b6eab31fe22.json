@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+  "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+  "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+  "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+  "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+  "work_id": "66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c",
+  "family_id": "game:1002560",
+  "taste_subject_key": "App_1002560",
+  "appid": "1002560",
+  "taste_fingerprint": "95d0586d89c23784939258cf0254bf6aaa1f11ca82661e5e46c05aaa3666a97d",
+  "candidate_context_sha256": "cfd589ba021df1db69f2d567d886cded54d6116a8f7c55273af053fe5f6b4821",
+  "dossier_content_sha256": "abf1b20cb1ba2b9a5ecc953580712c6d192c11834439b38ef40ff9bb4da9b8d2",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22",
+  "work_mode": "legacy_full_reanalysis",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "migration_provenance": {
+    "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+    "migration_target_id": "legacy-full-reanalysis-01:66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c",
+    "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+    "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+    "prior_outcome": "analyzed_not_fit",
+    "prior_fit_level": null,
+    "prior_confidence": "medium",
+    "prior_taste_factors": null,
+    "prior_not_fit_basis": "completed_below_threshold",
+    "prior_work_id": "66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c",
+    "prior_authorization_id": "7d630abb43e1727d779ced115f9009652be4b61fde25889a30c50264cb8db0ea",
+    "prior_accepted_at_utc": "2026-09-27T17:32:56+00:00",
+    "preserved_positive_evidence": [],
+    "preserved_not_fit_evidence": [
+      "The dossier establishes no meaningful gameplay, progression or mastery layer; the experience depends almost entirely on its visual-novel story and branching endings.",
+      "Reception of the central artificial-love premise is materially divided, with multiple players criticizing the philosophical or emotional execution, so the narrative does not supply a sufficiently reliable hook to compensate for the absence of gameplay depth.",
+      "Presentation receives some praise, but art and music alone do not satisfy the profile's strong need for evolving play, mastery, or consistently compelling story content."
+    ]
+  },
+  "outcome": "analyzed_not_fit",
+  "confidence": "medium",
+  "not_fit_basis": "completed_below_threshold",
+  "not_fit_evidence": [
+    "The dossier establishes no meaningful gameplay, progression or mastery layer; the experience depends almost entirely on its visual-novel story and branching endings.",
+    "Reception of the central artificial-love premise is materially divided, with multiple players criticizing the philosophical or emotional execution, so the narrative does not supply a sufficiently reliable hook to compensate for the absence of gameplay depth.",
+    "Presentation receives some praise, but art and music alone do not satisfy the profile's strong need for evolving play, mastery, or consistently compelling story content."
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "other_grounded_taste_risk",
+        "text_ru": "Поскольку игра почти полностью держится на истории, заметно разделённая реакция на философскую и эмоциональную реализацию центральной идеи становится ключевым персональным риском: сюжет не даёт достаточно надёжного крючка, чтобы компенсировать отсутствие механической глубины.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
