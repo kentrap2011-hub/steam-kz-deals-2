@@ -108,6 +108,35 @@ def synthetic_rules():
     assert bindings_changed['game:1']['work_id'] != bindings_a['game:1']['work_id']
     assert progressive_pass1.matching_state_entry(bindings_changed['game:1'], state) is None
 
+    # Missing/inconsistent semantic content identity fails closed.
+    missing_content = profile_projection(commit_char='e', content=b'identical-profile')
+    missing_content['current_profile'].pop('content_sha256')
+    try:
+        progressive_pass1.semantic_generation(missing_content)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError('missing profile content identity did not fail closed')
+
+    missing_blob = profile_projection(commit_char='f', content=b'identical-profile')
+    missing_blob['current_profile']['blob_sha'] = 'not-a-git-blob'
+    try:
+        progressive_pass1.semantic_generation(missing_blob)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError('invalid profile blob identity did not fail closed')
+
+    # An arbitrary old result from different semantic content cannot be revived.
+    arbitrary_old = copy.deepcopy(old_entry)
+    arbitrary_old['work_authority_commit'] = '0' * 40
+    assert progressive_pass1.historical_semantic_equivalence(
+        arbitrary_old,
+        bindings_changed['game:1'],
+        manifest_path=progressive_pass1.WORK,
+        expected_contract='PROGRESSIVE-PASS1-WORK-V1',
+    ) is None
+
     # Model / semantics / context-contract changes remain global invalidators.
     for changed in (
         profile_projection(commit_char='d', content=b'identical-profile', model='taste-v4'),
