@@ -830,6 +830,7 @@ def make_legacy_reanalysis_work_item(manifest, target):
     return {
         **binding,
         'work_mode': LEGACY_REANALYSIS_MODE,
+        'migration_sequence': target.get('sequence'),
         'semantic_input': deepcopy(target.get('semantic_input') or {}),
         'dossier_path': target['dossier_path'],
         'dossier_content_sha256': target['dossier_content_sha256'],
