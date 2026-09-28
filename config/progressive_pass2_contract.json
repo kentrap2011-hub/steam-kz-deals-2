@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
-  "version": 10,
+  "version": 11,
   "status": "production_active",
   "phase": "phase_c_pass2",
   "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; completed Deep results include a separately grounded balanced negative assessment, and Fast/PASS 1 is never an eligibility prerequisite.",
@@ -486,5 +486,28 @@
     "new_risk_weights_or_penalties_allowed": false,
     "browser_semantic_inference_forbidden": true,
     "historical_missing_field_policy": "preserve authoritative fit/not-fit completion and project legacy_not_evaluated without automatic replay, invalidation, requeue or recovery"
+  },
+  "legacy_full_reanalysis": {
+    "decision": "PPD-010",
+    "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+    "manifest_path": "data/control/progressive_pass2_legacy_full_reanalysis_manifest.json",
+    "work_mode": "legacy_full_reanalysis",
+    "one_off": true,
+    "status": "prepared",
+    "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+    "target_count": 30,
+    "runtime": "existing_progressive_deep_worker",
+    "run_start_guard": "existing_v2_marker_and_github_confirmation",
+    "evidence_freeze": "exact_dossier_bytes_at_migration_authority_commit_and_exact_frozen_profile_pin",
+    "positive_rule": "reuse_exact_prior_accepted_positive_evidence_no_new_positive_research",
+    "prior_not_fit_rule": "preserve_prior_not_fit_evidence_as_existing_unfavorable_baseline_never_invent_positive_evidence",
+    "negative_rule": "evaluate_every_frozen_negative_mixed_observation_and_conflict_under_ppd_009",
+    "incomplete_rule": "accepted_incomplete_migration_attempt_is_terminal_for_this_one_off_target_and_does_not_displace_prior_completed_deep_revision",
+    "completed_rule": "accepted_completed_migration_revision_becomes_current_and_archives_the_complete_prior_revision",
+    "accounting": "separate_from_normal_first_pass_and_recovery",
+    "normal_work_behavior": "ordinary_deep_work_is_paused_without_attempt_consumption_while_finite_migration_is_active_then_resumes",
+    "dossier_behavior": "dossier_continues_independently_newer_dossier_writes_do_not_replace_frozen_migration_evidence",
+    "recurrence": "fixed_manifest_targets_only_and_never_rediscover_after_terminal_migration_status",
+    "scheduler_change": false
   }
 }
