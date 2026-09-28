@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
-  "version": 7,
+  "version": 8,
   "status": "canonical",
   "phase": "phase_b",
   "purpose": "Publish the current deterministic-eligible Steam KZ catalogue while three independent GitHub-owned stages progress: provisional Fast analysis (PASS 1), neutral Dossier preparation, and eventual authoritative Deep analysis (technical PASS 2) for every current eligible game.",
@@ -193,7 +193,7 @@
         "no canonically accepted exact-compatible current Dossier",
         "Dossier exists only as buffered/unaccepted/failed-or-recovery candidate",
         "stale/expired/wrong-app/wrong-work/cross-release/ambiguous/mismatched-binding Dossier",
-        "current semantic_generation_id or work_id no longer matches the authorized Deep identity",
+        "current semantic profile/model/context or item fingerprint/context identity is incompatible; provenance-only profile commit drift is not semantic incompatibility",
         "current authoritative Deep completion already exists",
         "a failed first pass is recovery-owned but no explicit current recovery condition/authorization exists"
       ]
@@ -286,7 +286,7 @@
       "otherwise use the existing unresolved/not-analyzed projection"
     ],
     "deep_incomplete_or_error_rule": "A Deep incomplete/technical failure never erases a still-valid trustworthy Fast fit/not-fit result.",
-    "provenance_rule": "Fast and Deep stage history remain separate; Deep completion does not rewrite Fast history.",
+    "provenance_rule": "Fast and Deep stage history remain separate; Deep completion does not rewrite Fast history. PPD-012 reconciliation selects semantically equivalent immutable accepted state without rewriting its original execution provenance.",
     "existing_reusable_taste_cache_rule": "This amendment does not rewrite the separately canonical reusable Taste cache. Runtime adaptation must keep its existing compatibility rules and must never present such cache reuse as Fast or Deep stage completion unless exact stage provenance exists."
   },
   "stage_observability": {
@@ -447,6 +447,15 @@
     "history": "prior Deep revision retained verbatim in revision_history with original provenance",
     "positive_evidence": "legacy migration fit reuses exact accepted prior positive_evidence",
     "observability": "separate finite migration counters are producer-owned",
-    "scoring": "existing ranking and risk-code policy only"
+    "scoring": "existing ranking and risk-code policy only",
+    "profile_provenance_refresh": "PPD-012 may keep a completed immutable revision current across commit-only byte-identical profile provenance refresh after exact GitHub equivalence proof; original revision provenance remains unchanged."
+  },
+  "profile_identity_model": {
+    "decision": "PPD-012",
+    "semantic_identity": "canonical profile content/blob identity plus current taste model, taste semantics and candidate-context contract",
+    "execution_provenance": "exact immutable profile source commit/ref/blob/content hash frozen for the prepared invocation",
+    "provenance_only_commit_refresh_invalidates_semantics": false,
+    "real_profile_content_change_invalidates_semantics": true,
+    "historical_result_reconciliation": "GitHub-owned exact immutable-manifest semantic-equivalence proof; no result rewrite or new semantic attempt"
   }
 }
