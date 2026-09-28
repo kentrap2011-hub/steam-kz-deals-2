@@ -43,6 +43,7 @@ on:
       - "scripts/test_progressive_pass1_ingest_activation.py"
       - "scripts/test_progressive_pass1_workflow_staging.py"
       - "scripts/test_progressive_personalization.py"
+      - "scripts/test_deep_first_final_score_order.py"
       - "scripts/test_progressive_unresolved_row_preservation.py"
       - "scripts/test_progressive_visual_activation_routing.py"
       - "data/cache/progressive_pass2_state.json"
@@ -102,6 +103,7 @@ on:
       - "scripts/test_progressive_pass1_ingest_activation.py"
       - "scripts/test_progressive_pass1_workflow_staging.py"
       - "scripts/test_progressive_personalization.py"
+      - "scripts/test_deep_first_final_score_order.py"
       - "scripts/test_progressive_unresolved_row_preservation.py"
       - "scripts/test_progressive_visual_activation_routing.py"
       - "data/cache/progressive_pass2_state.json"
@@ -158,6 +160,7 @@ jobs:
             scripts/test_progressive_pass1_ingest_activation.py \
             scripts/test_progressive_pass1_workflow_staging.py \
             scripts/progressive_personalization.py \
+            scripts/test_deep_first_final_score_order.py \
             scripts/progressive_visual_activation_routing.py
       - name: Progressive async traversal + invalid transport regression
         run: python scripts/test_progressive_async_traversal.py
@@ -189,6 +192,8 @@ jobs:
           python scripts/test_progressive_pass1_workflow_staging.py
       - name: Progressive personalization regression
         run: python scripts/test_progressive_personalization.py
+      - name: Deep-first final-score ordering regression
+        run: python scripts/test_deep_first_final_score_order.py
       - name: Current staged projection accounting
         run: |
           python - <<'PY'

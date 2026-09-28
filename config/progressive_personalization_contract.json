@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
-  "version": 8,
+  "version": 9,
   "status": "canonical",
   "phase": "phase_b",
   "purpose": "Publish the current deterministic-eligible Steam KZ catalogue while three independent GitHub-owned stages progress: provisional Fast analysis (PASS 1), neutral Dossier preparation, and eventual authoritative Deep analysis (technical PASS 2) for every current eligible game.",
@@ -68,21 +68,30 @@
     "pass1_current_exact_result": "current exact-bound PASS 1 outcome may project analyzed_fit, analyzed_not_fit, or analysis_incomplete without mutating the canonical V5 Taste cache"
   },
   "sorting": {
-    "tier_first": true,
-    "tier_1": "existing FINAL-PRIORITY-RANKING-V2 personalized semantics",
-    "tier_2_3": "producer-owned deterministic purchase-only score from the existing purchase component semantics; never total_score",
-    "urgency_off": [
-      "analysis_tier_asc",
-      "tier_specific_score_desc",
+    "canonical_default_order": [
+      "ranking_stage_asc",
+      "stage_score_desc",
       "title_asc"
     ],
-    "urgency_on": [
-      "analysis_tier_asc",
+    "explicit_urgency_view_order": [
+      "ranking_stage_asc",
       "sale_expiry_urgency_asc",
-      "tier_specific_score_desc",
+      "stage_score_desc",
       "title_asc"
     ],
-    "manual_end_at_override": "preserved_absolute_local_override_after_automatic_order"
+    "ranking_stage_precedence": [
+      "deep_fit",
+      "fast_fit",
+      "analysis_incomplete",
+      "not_analyzed"
+    ],
+    "deep_fit_score": "total_score_desc",
+    "fast_fit_score": "total_score_desc",
+    "analysis_incomplete_score": "deterministic_purchase_score_desc",
+    "not_analyzed_score": "deterministic_purchase_score_desc",
+    "urgency_may_cross_ranking_stage": false,
+    "manual_end_at_override": "preserved_absolute_local_override_after_automatic_order",
+    "analysis_tier_note": "analysis_tier remains a durable state/visibility compatibility field; ranking_stage is the canonical automatic order key"
   },
   "aggregate_fields": [
     "total_current_candidates",
@@ -457,5 +466,28 @@
     "provenance_only_commit_refresh_invalidates_semantics": false,
     "real_profile_content_change_invalidates_semantics": true,
     "historical_result_reconciliation": "GitHub-owned exact immutable-manifest semantic-equivalence proof; no result rewrite or new semantic attempt"
+  },
+  "ranking_stage_model": {
+    "decision": "RANK-013",
+    "producer_owned": true,
+    "browser_must_not_infer_from_decorative_ui": true,
+    "field": "ranking_stage",
+    "rank_field": "ranking_stage_rank",
+    "precedence": [
+      "deep_fit",
+      "fast_fit",
+      "analysis_incomplete",
+      "not_analyzed"
+    ],
+    "derivation": {
+      "deep_fit": "analysis_state=analyzed_fit and effective_analysis_source=deep with current authoritative Deep completion",
+      "fast_fit": "analysis_state=analyzed_fit with no current authoritative Deep, where effective_analysis_source=fast or analysis_semantic_source=compatible_cache (existing reusable Fast-path)",
+      "analysis_incomplete": "analysis_state=analysis_incomplete",
+      "not_analyzed": "analysis_state=not_analyzed"
+    },
+    "stale_deep_grants_deep_stage": false,
+    "ppd012_semantically_reconciled_current_deep_grants_deep_stage": true,
+    "deep_incomplete_or_error_with_valid_fast_fit": "fast_fit",
+    "analyzed_not_fit_visibility_unchanged": true
   }
 }

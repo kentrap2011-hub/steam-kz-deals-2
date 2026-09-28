@@ -22,6 +22,8 @@ STATE_TIER = {
     'analyzed_not_fit': None,
 }
 VISIBLE_STATES = {'analyzed_fit', 'analysis_incomplete', 'not_analyzed'}
+RANKING_STAGE_PRECEDENCE = ['deep_fit', 'fast_fit', 'analysis_incomplete', 'not_analyzed']
+RANKING_STAGE_RANK = {stage: index for index, stage in enumerate(RANKING_STAGE_PRECEDENCE, 1)}
 UNRESOLVED_SEMANTIC_FIELDS = {
     'fit', 'source_fit', 'taste_factors', 'why_fit', 'why_fit_status',
     'why_fit_provenance', 'risks', 'risk_codes', 'risk_status',
@@ -84,6 +86,16 @@ def load_contract(path=CONTRACT):
         raise ValueError('Progressive publication must not add durable analysis_in_progress')
     if contract.get('tier_precedence') != ['analyzed_fit', 'analysis_incomplete', 'not_analyzed']:
         raise ValueError('progressive tier precedence mismatch')
+    ranking_model = contract.get('ranking_stage_model') or {}
+    if ranking_model.get('precedence') != RANKING_STAGE_PRECEDENCE:
+        raise ValueError('progressive ranking-stage precedence mismatch')
+    sorting = contract.get('sorting') or {}
+    if sorting.get('canonical_default_order') != ['ranking_stage_asc', 'stage_score_desc', 'title_asc']:
+        raise ValueError('progressive default ranking order mismatch')
+    if sorting.get('explicit_urgency_view_order') != [
+        'ranking_stage_asc', 'sale_expiry_urgency_asc', 'stage_score_desc', 'title_asc'
+    ]:
+        raise ValueError('progressive urgency-view ranking order mismatch')
     phase = contract.get('phase_b_execution') or {}
     if phase.get('pass1_active') is not True or phase.get('pass2_active') is not True:
         raise ValueError('Progressive runtime must activate both Fast/PASS 1 and Deep/PASS 2')
@@ -344,6 +356,37 @@ def strip_unresolved_personalization(game):
     return game
 
 
+def ranking_stage_from_state(state):
+    analysis_state = state.get('analysis_state')
+    if analysis_state == 'analyzed_fit':
+        if state.get('effective_analysis_source') == 'deep':
+            return 'deep_fit'
+        if (
+            state.get('effective_analysis_source') == 'fast'
+            or state.get('analysis_semantic_source') == 'compatible_cache'
+        ):
+            return 'fast_fit'
+        raise ValueError('analyzed_fit requires current Deep or provisional Fast/cache ranking authority')
+    if analysis_state == 'analysis_incomplete':
+        return 'analysis_incomplete'
+    if analysis_state == 'not_analyzed':
+        return 'not_analyzed'
+    return None
+
+
+def stamp_ranking_stage(game):
+    stage = game.get('ranking_stage')
+    if stage not in RANKING_STAGE_RANK:
+        stage = ranking_stage_from_state(game)
+    if stage is None:
+        game.pop('ranking_stage', None)
+        game.pop('ranking_stage_rank', None)
+        return None
+    game['ranking_stage'] = stage
+    game['ranking_stage_rank'] = RANKING_STAGE_RANK[stage]
+    return stage
+
+
 def apply_state_fields(game, state):
     analysis_state = state['analysis_state']
     game['analysis_state'] = analysis_state
@@ -382,24 +425,142 @@ def apply_state_fields(game, state):
     ):
         game[field] = state.get(field)
 
+    stage = ranking_stage_from_state(state)
+    if stage is not None:
+        game['ranking_stage'] = stage
+        game['ranking_stage_rank'] = RANKING_STAGE_RANK[stage]
+    else:
+        game.pop('ranking_stage', None)
+        game.pop('ranking_stage_rank', None)
+
     if analysis_state != 'analyzed_fit':
         strip_unresolved_personalization(game)
     return game
 
-def apply_progressive_order(items, now=None):
-    """Apply tier-first order without ever comparing purchase-only and personalized scores."""
-    now = now or datetime.now(timezone.utc)
-    load_contract()
-    fit_items = [game for game in items if game.get('analysis_state') == 'analyzed_fit']
-    unresolved = [game for game in items if game.get('analysis_state') in {'analysis_incomplete', 'not_analyzed'}]
+def _ranking_stage_score(game):
+    stage = game.get('ranking_stage')
+    if stage in {'deep_fit', 'fast_fit'}:
+        return float(game.get('total_score') or 0)
+    return float(game.get('deterministic_purchase_score') or 0)
 
-    if fit_items:
-        fit_items, personalized_order = priority_ranking.apply_final_priority_order(fit_items, now=now)
-        for game in fit_items:
-            game['personalized_priority_rank'] = game.get('priority_rank')
-            game.pop('deterministic_purchase_score', None)
+
+def _ranking_title_key(game):
+    return (str(game.get('title') or '').casefold(), str(game.get('id') or '').casefold())
+
+
+def _default_ranking_key(game):
+    return (
+        int(game.get('ranking_stage_rank') or 99),
+        -_ranking_stage_score(game),
+        *_ranking_title_key(game),
+    )
+
+
+def _priority_factors(game):
+    stage = game.get('ranking_stage')
+    stage_labels = {
+        'deep_fit': 'Глубокий разбор завершён',
+        'fast_fit': 'Быстрый/предварительный разбор завершён',
+        'analysis_incomplete': 'Разбор не завершён',
+        'not_analyzed': 'Разбор ещё не выполнен',
+    }
+    score_label = 'Итоговый балл' if stage in {'deep_fit', 'fast_fit'} else 'Выгодность покупки'
+    score = _ranking_stage_score(game)
+    return [
+        {
+            'id': 'ranking_stage_asc',
+            'label': 'Этап разбора',
+            'value': stage_labels.get(stage, stage or 'неизвестно'),
+            'sort_value': int(game.get('ranking_stage_rank') or 99),
+        },
+        {
+            'id': 'stage_score_desc',
+            'label': score_label,
+            'value': f'{score:g}',
+            'sort_value': -score,
+        },
+        {
+            'id': 'title_asc',
+            'label': 'Название (последний критерий)',
+            'value': str(game.get('title') or ''),
+            'sort_value': _ranking_title_key(game),
+        },
+    ]
+
+
+def _priority_vs_next(current, next_game):
+    if next_game is None:
+        return None
+    if current.get('ranking_stage_rank') != next_game.get('ranking_stage_rank'):
+        explanation = (
+            f'Этап «{current.get("ranking_stage")}» выше этапа «{next_game.get("ranking_stage")}»; '
+            'баллы разных этапов напрямую не сравниваются.'
+        )
+        factor = 'ranking_stage_asc'
+        label = 'Этап разбора'
+        current_value = current.get('ranking_stage')
+        next_value = next_game.get('ranking_stage')
+    elif _ranking_stage_score(current) != _ranking_stage_score(next_game):
+        explanation = (
+            f'Внутри одного этапа выше итоговый показатель: '
+            f'{_ranking_stage_score(current):g} против {_ranking_stage_score(next_game):g}.'
+        )
+        factor = 'stage_score_desc'
+        label = 'Итоговый показатель этапа'
+        current_value = _ranking_stage_score(current)
+        next_value = _ranking_stage_score(next_game)
     else:
-        personalized_order = priority_ranking.load_final_priority_order()
+        explanation = 'Этап и итоговый показатель совпали; порядок определён названием/ID только для стабильности.'
+        factor = 'title_asc'
+        label = 'Название/ID (последний критерий)'
+        current_value = str(current.get('title') or '')
+        next_value = str(next_game.get('title') or '')
+    return {
+        'next_game_id': next_game.get('id'),
+        'next_game_title': next_game.get('title'),
+        'deciding_factor_id': factor,
+        'deciding_factor_label': label,
+        'current_value': current_value,
+        'next_value': next_value,
+        'explanation': explanation,
+    }
+
+
+def apply_progressive_order(items, now=None):
+    """Apply canonical Deep-first order without comparing scores across stages."""
+    now = now or datetime.now(timezone.utc)
+    contract = load_contract()
+    visible = [
+        game for game in items
+        if game.get('analysis_state') in {'analyzed_fit', 'analysis_incomplete', 'not_analyzed'}
+    ]
+
+    deep_fit = []
+    fast_fit = []
+    unresolved = []
+    for game in visible:
+        stage = stamp_ranking_stage(game)
+        if stage == 'deep_fit':
+            deep_fit.append(game)
+        elif stage == 'fast_fit':
+            fast_fit.append(game)
+        elif stage in {'analysis_incomplete', 'not_analyzed'}:
+            unresolved.append(game)
+        else:
+            raise ValueError(f'visible game missing canonical ranking stage: {game.get("id")}')
+
+    # Score calculation remains exactly the existing V2 scorer, but Deep and
+    # provisional/Fast rows are scored/sorted independently so score can never
+    # cross the authority-stage boundary.
+    for group in (deep_fit, fast_fit):
+        if group:
+            priority_ranking.apply_final_priority_order(group, now=now)
+            for game in group:
+                game.pop('personalized_priority_rank', None)
+                game.pop('priority_rank', None)
+                game.pop('priority_factors', None)
+                game.pop('priority_vs_next', None)
+                game.pop('deterministic_purchase_score', None)
 
     for game in unresolved:
         urgency_rank, urgency_code = priority_ranking.sale_expiry_urgency(game, now)
@@ -412,19 +573,15 @@ def apply_progressive_order(items, now=None):
         game['progressive_purchase_breakdown'] = purchase
         strip_unresolved_personalization(game)
 
-    def default_key(game):
-        tier = int(game.get('analysis_tier') or 99)
-        urgency = int(game.get('sale_expiry_urgency_rank') if game.get('sale_expiry_urgency_rank') is not None else 2)
-        if tier == 1:
-            score = float(game.get('total_score') or 0)
-        else:
-            score = float(game.get('deterministic_purchase_score') or 0)
-        return (tier, urgency, -score, str(game.get('title') or '').casefold())
-
-    ordered = sorted(fit_items + unresolved, key=default_key)
+    ordered = sorted(deep_fit + fast_fit + unresolved, key=_default_ranking_key)
     for index, game in enumerate(ordered, 1):
         game['priority_rank'] = index
-    return ordered, personalized_order
+        game['priority_factors'] = _priority_factors(game)
+    for index, game in enumerate(ordered):
+        next_game = ordered[index + 1] if index + 1 < len(ordered) else None
+        game['priority_vs_next'] = _priority_vs_next(game, next_game)
+
+    return ordered, list((contract.get('sorting') or {})['canonical_default_order'])
 
 
 

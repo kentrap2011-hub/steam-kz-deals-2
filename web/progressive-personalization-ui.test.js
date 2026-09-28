@@ -2,15 +2,28 @@ const assert=require('assert');
 const fs=require('fs');
 const ui=require('./progressive-personalization-ui.js');
 
-const fit={id:'fit',title:'Fit',analysis_state:'analyzed_fit',analysis_tier:1,total_score:10,sale_expiry_urgency_rank:2};
-const error={id:'error',title:'Error',analysis_state:'analysis_incomplete',analysis_tier:2,deterministic_purchase_score:40,sale_expiry_urgency_rank:0};
-const untouched={id:'untouched',title:'Untouched',analysis_state:'not_analyzed',analysis_tier:3,deterministic_purchase_score:40,sale_expiry_urgency_rank:0};
+const deep60={id:'deep60',title:'Deep 60',analysis_state:'analyzed_fit',analysis_tier:1,ranking_stage:'deep_fit',ranking_stage_rank:1,total_score:60,priority_rank:1,sale_expiry_urgency_rank:2};
+const deep70={...deep60,id:'deep70',title:'Deep 70',total_score:70,priority_rank:1};
+const fast99={id:'fast99',title:'Fast 99',analysis_state:'analyzed_fit',analysis_tier:1,ranking_stage:'fast_fit',ranking_stage_rank:2,total_score:99,priority_rank:2,sale_expiry_urgency_rank:0};
+const fast80={...fast99,id:'fast80',title:'Fast 80',total_score:80,priority_rank:3,sale_expiry_urgency_rank:2};
+const error={id:'error',title:'Error',analysis_state:'analysis_incomplete',analysis_tier:2,ranking_stage:'analysis_incomplete',ranking_stage_rank:3,deterministic_purchase_score:40,priority_rank:4,sale_expiry_urgency_rank:0};
+const untouched={id:'untouched',title:'Untouched',analysis_state:'not_analyzed',analysis_tier:3,ranking_stage:'not_analyzed',ranking_stage_rank:4,deterministic_purchase_score:40,priority_rank:5,sale_expiry_urgency_rank:0};
 
-assert.deepStrictEqual(ui.sortItems([untouched,error,fit],false).map(x=>x.id),['fit','error','untouched']);
-assert.deepStrictEqual(ui.sortItems([untouched,error,fit],true).map(x=>x.id),['fit','error','untouched']);
+assert.deepStrictEqual(ui.sortItems([fast99,deep60],false).map(x=>x.id),['deep60','fast99']);
+assert.deepStrictEqual(ui.sortItems([fast99,deep60],true).map(x=>x.id),['deep60','fast99']);
+assert.deepStrictEqual(ui.sortItems([deep60,deep70],false).map(x=>x.id),['deep70','deep60']);
+assert.deepStrictEqual(ui.sortItems([fast80,fast99],false).map(x=>x.id),['fast99','fast80']);
+assert.deepStrictEqual(ui.sortItems([untouched,error,fast99,deep60],false).map(x=>x.id),['deep60','fast99','error','untouched']);
 
-const e1={...error,id:'e1',title:'E1',deterministic_purchase_score:10,sale_expiry_urgency_rank:0};
-const e2={...error,id:'e2',title:'E2',deterministic_purchase_score:40,sale_expiry_urgency_rank:2};
+// Urgency may reorder only inside the same producer-owned ranking stage.
+const deepUrgentLow={...deep60,id:'deep-urgent-low',title:'Deep urgent low',total_score:40,priority_rank:2,sale_expiry_urgency_rank:0};
+const deepLaterHigh={...deep60,id:'deep-later-high',title:'Deep later high',total_score:90,priority_rank:1,sale_expiry_urgency_rank:2};
+assert.deepStrictEqual(ui.sortItems([deepUrgentLow,deepLaterHigh],false).map(x=>x.id),['deep-later-high','deep-urgent-low']);
+assert.deepStrictEqual(ui.sortItems([deepUrgentLow,deepLaterHigh],true).map(x=>x.id),['deep-urgent-low','deep-later-high']);
+assert.deepStrictEqual(ui.sortItems([fast99,deepLaterHigh],true).map(x=>x.id),['deep-later-high','fast99']);
+
+const e1={...error,id:'e1',title:'E1',deterministic_purchase_score:10,priority_rank:5,sale_expiry_urgency_rank:0};
+const e2={...error,id:'e2',title:'E2',deterministic_purchase_score:40,priority_rank:4,sale_expiry_urgency_rank:2};
 assert.deepStrictEqual(ui.sortItems([e1,e2],false).map(x=>x.id),['e2','e1']);
 assert.deepStrictEqual(ui.sortItems([e1,e2],true).map(x=>x.id),['e1','e2']);
 

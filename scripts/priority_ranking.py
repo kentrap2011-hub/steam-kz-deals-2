@@ -105,9 +105,17 @@ def load_final_policy(policy_path=POLICY):
 
 def validate_score_policy(policy):
     order = policy.get('automatic_final_priority_order')
-    expected_order = ['sale_expiry_urgency_asc', 'total_score_desc', 'title_asc']
+    expected_order = ['ranking_stage_asc', 'stage_score_desc', 'title_asc']
     if order != expected_order:
         raise ValueError(f'V2 automatic_final_priority_order must be exactly {expected_order!r}')
+    completed_order = policy.get('completed_fit_stage_order')
+    expected_completed_order = ['total_score_desc', 'title_asc']
+    if completed_order != expected_completed_order:
+        raise ValueError(f'V2 completed_fit_stage_order must be exactly {expected_completed_order!r}')
+    urgency_view_order = policy.get('explicit_urgency_view_order')
+    expected_urgency_view = ['ranking_stage_asc', 'sale_expiry_urgency_asc', 'stage_score_desc', 'title_asc']
+    if urgency_view_order != expected_urgency_view:
+        raise ValueError(f'V2 explicit_urgency_view_order must be exactly {expected_urgency_view!r}')
 
     model = policy.get('score_model') or {}
     personal = model.get('personal') or {}
@@ -219,7 +227,13 @@ def validate_score_policy(policy):
 
 
 def load_final_priority_order(policy_path=POLICY):
+    """Return the canonical cross-stage default automatic order."""
     return list(load_final_policy(policy_path)['automatic_final_priority_order'])
+
+
+def load_completed_fit_stage_order(policy_path=POLICY):
+    """Return the score order used only inside one completed fit ranking stage."""
+    return list(load_final_policy(policy_path)['completed_fit_stage_order'])
 
 
 def _band_points(value, component, unknown_points=0):
@@ -823,14 +837,16 @@ def first_deciding_factor(current, next_game, order, now, policy):
         'deciding_factor_label': None,
         'current_value': None,
         'next_value': None,
-        'explanation': 'Срочность, итоговый балл и название совпали.',
+        'explanation': 'Итоговый балл и название совпали.',
     }
 
 
 def apply_final_priority_order(items, now=None, policy_path=POLICY):
     now = now or datetime.now(timezone.utc)
     policy = load_final_policy(policy_path)
-    order = list(policy['automatic_final_priority_order'])
+    # This scorer is intentionally stage-local. Cross-stage ordering belongs to
+    # progressive_personalization and is governed by ranking_stage.
+    order = list(policy['completed_fit_stage_order'])
 
     for game in items:
         urgency_rank, urgency_code = sale_expiry_urgency(game, now)
