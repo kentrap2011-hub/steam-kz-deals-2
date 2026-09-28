@@ -180,10 +180,18 @@ def run():
         assert migration_scope['accepted_count'] == 30
         assert all(row['work_mode'] != progressive_pass2.LEGACY_REANALYSIS_MODE for row in persisted_work['items'])
     rebuilt = build_progressive_pass2_work.build_work_document()
-    assert rebuilt['projection_status'] == persisted_work['projection_status']
-    assert [row['authorization_id'] for row in rebuilt['items']] == [
-        row['authorization_id'] for row in persisted_work['items']
-    ]
+    assert rebuilt['scope']['legacy_full_reanalysis']['total_count'] == 30
+    assert rebuilt['scope']['legacy_full_reanalysis']['complete'] == migration_scope['complete']
+    if migration_scope['complete'] is False:
+        assert rebuilt['projection_status'] == persisted_work['projection_status']
+        assert [row['authorization_id'] for row in rebuilt['items']] == [
+            row['authorization_id'] for row in persisted_work['items']
+        ]
+    else:
+        assert rebuilt['projection_status'] == 'current_github_owned_fast_dossier_deep_v1_projection'
+        assert rebuilt['scope']['legacy_full_reanalysis']['pending_count'] == 0
+        assert rebuilt['scope']['legacy_full_reanalysis']['accepted_count'] == 30
+        assert all(row['work_mode'] != progressive_pass2.LEGACY_REANALYSIS_MODE for row in rebuilt['items'])
 
     # Run-start validation uses the frozen migration authority Dossier, while the
     # ordinary V2 run-start receipt remains mandatory as publication authority.
