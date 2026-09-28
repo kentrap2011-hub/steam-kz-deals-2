@@ -19,10 +19,13 @@ DOSSIER_STORE = ROOT / 'data/cache/taste_steam_review_dossiers'
 DOSSIER_WORKER_INDEX = ROOT / 'data/production/pre_ai/taste_steam_review_dossier_worker_index.json'
 DOSSIER_WORK = ROOT / 'data/production/pre_ai/taste_steam_review_dossier_work.json'
 CANONICAL_EXECUTION_RECEIPTS = ROOT / 'data/cache/progressive_pass2_execution_receipts'
+LEGACY_REANALYSIS_MANIFEST = ROOT / 'data/control/progressive_pass2_legacy_full_reanalysis_manifest.json'
+LEGACY_REANALYSIS_MODE = 'legacy_full_reanalysis'
+LEGACY_REANALYSIS_CONTRACT = 'PROGRESSIVE-PASS2-LEGACY-FULL-REANALYSIS-MANIFEST-V1'
 
 STATE_SCHEMA_VERSION = 2
 STATE_CONTRACT = 'PROGRESSIVE-PASS2-STATE-V2'
-WORK_MODES = {'normal_first_pass', 'recovery'}
+WORK_MODES = {'normal_first_pass', 'recovery', LEGACY_REANALYSIS_MODE}
 FIT_LEVELS = {'strong', 'moderate'}
 CONFIDENCE = {'medium', 'high'}
 NOT_FIT_BASES = {'completed_below_threshold', 'confirmed_personal_negative'}
@@ -61,6 +64,74 @@ def load_json(path):
 def canonical_sha256(value):
     raw = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')
     return hashlib.sha256(raw).hexdigest()
+
+
+def load_legacy_reanalysis_manifest(path=LEGACY_REANALYSIS_MANIFEST):
+    manifest = load_json(path)
+    if not manifest:
+        return {}
+    if manifest.get('schema_version') != 1 or manifest.get('contract') != LEGACY_REANALYSIS_CONTRACT:
+        raise ValueError('legacy Deep reanalysis manifest contract mismatch')
+    if manifest.get('status') != 'prepared' or manifest.get('one_off') is not True:
+        raise ValueError('legacy Deep reanalysis manifest is not prepared one-off work')
+    migration_id = manifest.get('migration_id')
+    authority = str(manifest.get('migration_authority_commit') or '').lower()
+    frozen_at = parse_utc(manifest.get('migration_frozen_at_utc'))
+    if not isinstance(migration_id, str) or not migration_id:
+        raise ValueError('legacy Deep reanalysis migration_id is missing')
+    if not re.fullmatch(r'[0-9a-f]{40}', authority):
+        raise ValueError('legacy Deep reanalysis authority commit is invalid')
+    if frozen_at is None:
+        raise ValueError('legacy Deep reanalysis frozen time is invalid')
+    targets = manifest.get('targets')
+    scope = manifest.get('scope') or {}
+    if not isinstance(targets, list) or int(scope.get('target_count') or -1) != len(targets):
+        raise ValueError('legacy Deep reanalysis target count mismatch')
+    seen_ids = set()
+    seen_families = set()
+    for sequence, target in enumerate(targets, 1):
+        if not isinstance(target, dict) or target.get('sequence') != sequence:
+            raise ValueError('legacy Deep reanalysis target order is invalid')
+        target_id = target.get('target_id')
+        family_id = target.get('family_id')
+        if not isinstance(target_id, str) or not target_id or target_id in seen_ids:
+            raise ValueError('legacy Deep reanalysis target id is invalid or duplicated')
+        if not isinstance(family_id, str) or not family_id or family_id in seen_families:
+            raise ValueError('legacy Deep reanalysis family id is invalid or duplicated')
+        if target.get('semantic_generation_id') != manifest.get('semantic_generation_id'):
+            raise ValueError('legacy Deep reanalysis target generation mismatch')
+        if target.get('profile_pin_sha256') != (manifest.get('profile_pin') or {}).get('pin_sha256'):
+            raise ValueError('legacy Deep reanalysis target profile pin mismatch')
+        if target.get('dossier_compatibility_binding') != manifest.get('dossier_compatibility_binding'):
+            raise ValueError('legacy Deep reanalysis target Dossier binding mismatch')
+        prior = target.get('prior_revision') or {}
+        if prior.get('outcome') == 'analyzed_fit':
+            if not isinstance(prior.get('positive_evidence'), list) or not prior.get('positive_evidence'):
+                raise ValueError('legacy Deep fit target lacks preserved positive evidence')
+        elif prior.get('outcome') == 'analyzed_not_fit':
+            if not isinstance(prior.get('not_fit_evidence'), list) or not prior.get('not_fit_evidence'):
+                raise ValueError('legacy Deep not-fit target lacks preserved baseline evidence')
+        else:
+            raise ValueError('legacy Deep reanalysis prior outcome is not authoritative')
+        seen_ids.add(target_id)
+        seen_families.add(family_id)
+    return manifest
+
+
+def migration_provenance(manifest, target):
+    prior = target.get('prior_revision') or {}
+    return {
+        'migration_id': manifest['migration_id'],
+        'migration_target_id': target['target_id'],
+        'migration_authority_commit': manifest['migration_authority_commit'],
+        'migration_frozen_at_utc': manifest['migration_frozen_at_utc'],
+        'prior_outcome': prior.get('outcome'),
+        'prior_work_id': target.get('work_id'),
+        'prior_authorization_id': prior.get('authorization_id'),
+        'prior_accepted_at_utc': prior.get('accepted_at_utc'),
+        'preserved_positive_evidence': deepcopy(prior.get('positive_evidence') or []),
+        'preserved_not_fit_evidence': deepcopy(prior.get('not_fit_evidence') or []),
+    }
 
 
 def parse_utc(value):
