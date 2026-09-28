@@ -1,5 +1,22 @@
 # CURRENT TASK
 
+## COMPLETE — Deep legacy full reanalysis with preserved positives 01
+Статус: `complete_ready_for_director_acceptance`.
+- task: `WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md`;
+- implementation PR: `#109`; branch: `worker/deep-legacy-full-reanalysis-01`;
+- canonical decision: `PPD-010`; migration ID: `deep-legacy-full-reanalysis-with-preserved-positives-01`;
+- frozen migration authority: `main@97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a`;
+- exact frozen scope: 30 current old-contract authoritative Deep results = 26 prior fit + 4 prior not-fit; 2 stale older-generation legacy rows excluded;
+- existing Progressive Deep Worker remains the only semantic runtime; exact prior positives / old not-fit baseline are reused and fresh positive research is prohibited;
+- completed migration archives the old revision and promotes the new revision; incomplete migration leaves the prior completed revision current;
+- Dossier remains independent and unmodified; Scheduled Task configuration is unchanged; no second scheduler/retry/backlog owner was added;
+- prepared migration state: total 30, pending 30, submitted 0, accepted 0, complete false; no production per-game reanalysis is claimed before the external canonical worker consumes it;
+- validated implementation commit: `08c1753cedbd0a99674933b3057ed496dd46bed6`;
+- PR checks: PASS 2 run `36378383355` / #292 success; backlog run `36378383385` / #1337 success;
+- durable report commit: `b8be128d1583fbb2cc497c1e6d257bb1ffd87570`;
+- report: `reviews/worker_reports/deep-legacy-full-reanalysis-with-preserved-positives-01.md`;
+- next bounded action: director reviews and merges PR #109; after merge the existing Progressive Deep Worker owns semantic execution.
+
 ## COMPLETE — Deep balanced negative assessment contract fix 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_DEEP_BALANCED_NEGATIVE_ASSESSMENT_CONTRACT_FIX_01.md`;

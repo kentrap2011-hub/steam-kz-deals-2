@@ -14,6 +14,8 @@ on:
       - "config/progressive_pass2_worker_prompt.md"
       - "scripts/progressive_pass2.py"
       - "scripts/test_deep_balanced_negative_assessment.py"
+      - "scripts/test_deep_legacy_full_reanalysis.py"
+      - "data/control/progressive_pass2_legacy_full_reanalysis_manifest.json"
       - "scripts/refine_visual_ranking.py"
       - "scripts/card_explanation_policy.py"
       - "scripts/priority_ranking.py"
@@ -66,6 +68,8 @@ on:
       - "config/progressive_pass2_worker_prompt.md"
       - "scripts/progressive_pass2.py"
       - "scripts/test_deep_balanced_negative_assessment.py"
+      - "scripts/test_deep_legacy_full_reanalysis.py"
+      - "data/control/progressive_pass2_legacy_full_reanalysis_manifest.json"
       - "scripts/refine_visual_ranking.py"
       - "scripts/card_explanation_policy.py"
       - "scripts/priority_ranking.py"
@@ -113,6 +117,8 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -121,6 +127,7 @@ jobs:
           python -m py_compile \
             scripts/progressive_pass2.py \
             scripts/test_deep_balanced_negative_assessment.py \
+            scripts/test_deep_legacy_full_reanalysis.py \
             scripts/refine_visual_ranking.py \
             scripts/card_explanation_policy.py \
             scripts/priority_ranking.py \
@@ -148,6 +155,8 @@ jobs:
         run: python scripts/test_progressive_pass2_integration.py
       - name: Deep balanced negative assessment regression
         run: python scripts/test_deep_balanced_negative_assessment.py
+      - name: Deep legacy full reanalysis regression
+        run: python scripts/test_deep_legacy_full_reanalysis.py
       - name: PASS 2 canonical-writer staging regression
         run: |
           bash -n scripts/stage_progressive_pass2_canonical_writer.sh

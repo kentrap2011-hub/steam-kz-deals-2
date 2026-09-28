@@ -1,11 +1,18 @@
 {
-  "schema_version": 2,
-  "contract": "PROGRESSIVE-PASS2-WORK-V1",
-  "phase": "phase_c_pass2",
-  "implemented": true,
-  "pass1_active": true,
-  "pass2_active": true,
-  "projection_status": "legacy_full_reanalysis_migration_active",
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-LEGACY-FULL-REANALYSIS-MANIFEST-V1",
+  "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+  "status": "prepared",
+  "one_off": true,
+  "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+  "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+  "authority_selection": "current_main_after_start_gate_before_migration_runtime_changes",
+  "source_state_path": "data/cache/progressive_pass2_state.json",
+  "source_state_blob_sha": "dd0bbb5150fad574a1ef17bbe0eaab440de050d6",
+  "source_work_path": "data/production/pre_ai/progressive_pass2_work.json",
+  "source_work_blob_sha": "f5b91294efad83ec58ffa7c55f3296cb78a3e369",
+  "source_dossier_index_path": "data/production/pre_ai/taste_steam_review_dossier_worker_index.json",
+  "source_dossier_index_blob_sha": "97b9d1956cf198b3ca90e087a0518979c34ec53e",
   "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
   "semantic_bindings": {
     "profile_blob_sha": "9b9926031889dbd98ba6585c57836d52c739a0bb",
@@ -43,56 +50,17 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "transport": {
-    "mode": "immutable_item_create_only",
-    "batch_atomicity": false,
-    "maximal_contiguous_prefix": false
-  },
   "scope": {
-    "deep_total_current_coverage_target": 398,
-    "deep_first_pass_attempted_count": 30,
-    "deep_authoritative_completed_count": 30,
-    "deep_completed_fit_count": 26,
-    "deep_completed_not_fit_count": 4,
-    "deep_incomplete_or_recovery_count": 0,
-    "deep_waiting_for_dossier_count": 360,
-    "deep_ready_or_pending_count": 8,
-    "deep_normal_first_pass_remaining_count": 368,
-    "deep_remaining_until_all_authoritative_count": 368,
-    "deep_normal_first_pass_complete": false,
-    "deep_all_current_authoritative_complete": false,
-    "recovery_owned_count": 0,
-    "recovery_eligible_count": 0,
-    "recovery_pending_count": 0,
-    "current_analysis_incomplete_count": 0,
-    "dossier_waiting_count": 360,
-    "pass2_attempted_count": 30,
-    "pass2_eligible_count": 30,
-    "normal_pass2_eligible_count": 8,
-    "deep_normal_work_paused_for_legacy_reanalysis": true,
-    "legacy_full_reanalysis": {
-      "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-      "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-      "total_count": 30,
-      "pending_count": 30,
-      "submitted_count": 0,
-      "accepted_count": 0,
-      "accepted_completed_count": 0,
-      "changed_result_count": 0,
-      "unchanged_result_count": 0,
-      "incomplete_count": 0,
-      "confirmed_risk_count": 0,
-      "caution_count": 0,
-      "completed_no_relevant_negative_count": 0,
-      "stale_or_missing_prior_count": 0,
-      "last_accepted_at_utc": null,
-      "complete": false,
-      "changed_fit_outcome_count": 0,
-      "unchanged_fit_outcome_count": 0
-    }
+    "target_count": 30,
+    "prior_fit_count": 26,
+    "prior_not_fit_count": 4,
+    "stale_older_generation_excluded_count": 2,
+    "ordering": "accepted_at_utc_then_family_id"
   },
-  "items": [
+  "targets": [
     {
+      "sequence": 1,
+      "target_id": "legacy-full-reanalysis-01:0d29c660d43d01ef3088c1f7112342a63e728b49f79eae113a20bdf314d9bf16",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "0d29c660d43d01ef3088c1f7112342a63e728b49f79eae113a20bdf314d9bf16",
@@ -101,8 +69,6 @@
       "appid": "1143810",
       "taste_fingerprint": "be21d660fd5b8311cedd5f8ab4913c049e6f5f4a990953af74b495ea86267f04",
       "candidate_context_sha256": "259063878eaaa43641a481b46df4dd32a20914c25defbf0de5a136572e0e7266",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 1,
       "semantic_input": {
         "title": "Black Skylands",
         "short_description": "Become the captain of an airship and explore the world of the skies, gather resources and build powerful weapons, uncover ancient secrets and fight beneath your ship's sails.",
@@ -122,6 +88,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1143810.json",
+      "dossier_git_blob_sha": "6d67110553f70bf812cfe1952a1a88ae271fb602",
       "dossier_content_sha256": "477ce6761b74647417399e5790eaf3b69beb843b9fa7ac65b9388ce12ca1261c",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -137,41 +104,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T12:40:48Z",
       "dossier_expires_at_utc": "2026-10-17T12:40:48Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:0d29c660d43d01ef3088c1f7112342a63e728b49f79eae113a20bdf314d9bf16",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The airship layer is repeatedly described as a distinctive strength: flying between sky islands, ship combat, boarding and ship upgrades give the core loop a memorable identity.",
+          "The open-world aerial exploration directly supports the profile's strong preference for enjoyable movement and exploration with a clear experiential hook."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 65,
           "development_variety": 45,
           "structure_pacing_direction": 50,
           "identity_hooks": 78,
           "breadth_of_match": 60
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "0d29c660d43d01ef3088c1f7112342a63e728b49f79eae113a20bdf314d9bf16",
-        "prior_authorization_id": "ff24834fc8f9ca15840d339b3402fc3ac5f598ddb1dc403168b7c1187baff229",
-        "prior_accepted_at_utc": "2026-09-27T17:14:20+00:00",
-        "preserved_positive_evidence": [
-          "The airship layer is repeatedly described as a distinctive strength: flying between sky islands, ship combat, boarding and ship upgrades give the core loop a memorable identity.",
-          "The open-world aerial exploration directly supports the profile's strong preference for enjoyable movement and exploration with a clear experiential hook."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "de8f548f341feb9124973390a56d2b2e92d43afe11b3ecb2aa987efa056b06a4",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--0d29c660d43d01ef3088c1f7112342a63e728b49f79eae113a20bdf314d9bf16--de8f548f341feb9124973390a56d2b2e92d43afe11b3ecb2aa987efa056b06a4.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--0d29c660d43d01ef3088c1f7112342a63e728b49f79eae113a20bdf314d9bf16--de8f548f341feb9124973390a56d2b2e92d43afe11b3ecb2aa987efa056b06a4.json",
-      "sequence": 1
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "ff24834fc8f9ca15840d339b3402fc3ac5f598ddb1dc403168b7c1187baff229",
+        "accepted_at_utc": "2026-09-27T17:14:20+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 2,
+      "target_id": "legacy-full-reanalysis-01:7647b3ff49825d45591cc25f2296afc624886d4acfc04640b22a3e2b1433336e",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "7647b3ff49825d45591cc25f2296afc624886d4acfc04640b22a3e2b1433336e",
@@ -180,8 +141,6 @@
       "appid": "1210320",
       "taste_fingerprint": "aab7d81bfbc0da9e98a0afb00bfb1dba8c810368335da2024029567146be736a",
       "candidate_context_sha256": "6eb61f50cc14563e919dbe2b81f2bf770e4903a22de2c6a42a765869745eb4f1",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 2,
       "semantic_input": {
         "title": "Potion Craft: Alchemist Simulator",
         "short_description": "Potion Craft is an alchemist simulator where you physically interact with your tools and ingredients to brew potions. You're in full control of the whole shop: invent new recipes, attract customers and experiment to your heart's content. Just remember: the whole town is counting on you.",
@@ -201,6 +160,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1210320.json",
+      "dossier_git_blob_sha": "a144a580acc31007877b895828d77f21fce9b8b6",
       "dossier_content_sha256": "acc81734a09a6a6a5c9ecbe58b737dcf4b4cd96a1c7aefd350a01d8d3340e522",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -216,41 +176,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T13:29:33Z",
       "dossier_expires_at_utc": "2026-10-17T13:29:33Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:7647b3ff49825d45591cc25f2296afc624886d4acfc04640b22a3e2b1433336e",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The alchemy-map system makes experimentation, ingredient handling and recipe optimization the distinctive core mechanic rather than a generic shop loop.",
+          "Early and mid-game progression repeatedly adds ingredients, recipes, reputation, map discovery and more complex requests, matching the preference for visible development and discovery."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 64,
           "development_variety": 56,
           "structure_pacing_direction": 49,
           "identity_hooks": 72,
           "breadth_of_match": 59
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "7647b3ff49825d45591cc25f2296afc624886d4acfc04640b22a3e2b1433336e",
-        "prior_authorization_id": "aa725c794cf7e32725d33496203ca683cca32bd5582ba40a88492a2d7148b163",
-        "prior_accepted_at_utc": "2026-09-27T17:15:30+00:00",
-        "preserved_positive_evidence": [
-          "The alchemy-map system makes experimentation, ingredient handling and recipe optimization the distinctive core mechanic rather than a generic shop loop.",
-          "Early and mid-game progression repeatedly adds ingredients, recipes, reputation, map discovery and more complex requests, matching the preference for visible development and discovery."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "e768fee892e37988c421b91b7bab8ef345dfebc3c584e09c367c61d98447e397",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--7647b3ff49825d45591cc25f2296afc624886d4acfc04640b22a3e2b1433336e--e768fee892e37988c421b91b7bab8ef345dfebc3c584e09c367c61d98447e397.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--7647b3ff49825d45591cc25f2296afc624886d4acfc04640b22a3e2b1433336e--e768fee892e37988c421b91b7bab8ef345dfebc3c584e09c367c61d98447e397.json",
-      "sequence": 2
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "aa725c794cf7e32725d33496203ca683cca32bd5582ba40a88492a2d7148b163",
+        "accepted_at_utc": "2026-09-27T17:15:30+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 3,
+      "target_id": "legacy-full-reanalysis-01:aa3e00895dc0fc5cadc4358f3f5f7672a16a3151b7a3a5aae9967755dcf0648e",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "aa3e00895dc0fc5cadc4358f3f5f7672a16a3151b7a3a5aae9967755dcf0648e",
@@ -259,8 +213,6 @@
       "appid": "1227280",
       "taste_fingerprint": "c08633ce530ba9379538ec3676c1b8f2475089f4ba8118b5c1adfce88dc641ef",
       "candidate_context_sha256": "574bf5ebed4ed8eae3bdf9d987c6b83d388e152def502b5ea248423c16ddcfeb",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 3,
       "semantic_input": {
         "title": "Despot's Game: Dystopian Battle Simulator",
         "short_description": "Guide puny humans through Despot's Game - a rogue-like tactics army battler. Equip your team and sacrifice them through procedural dungeons as you fight enemies, and other players!",
@@ -280,6 +232,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1227280.json",
+      "dossier_git_blob_sha": "f910f42c4a9d3435d178fbd5c9683a0aa7b603b0",
       "dossier_content_sha256": "777f07750c46dced4d235ea3c0ec96e37b4c26af831841f11cc15d0c384c5b86",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -295,41 +248,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T16:54:32Z",
       "dossier_expires_at_utc": "2026-10-17T16:54:32Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:aa3e00895dc0fc5cadc4358f3f5f7672a16a3151b7a3a5aae9967755dcf0648e",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The meaningful play is concentrated in unit composition, positioning, equipment, mutations, purchases and route planning, which directly supports the profile's strong tactical problem-solving and mastery preferences.",
+          "Build combinations and mutations provide real experimentation across runs rather than relying only on passive auto-battle spectacle."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 69,
           "development_variety": 57,
           "structure_pacing_direction": 51,
           "identity_hooks": 61,
           "breadth_of_match": 63
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "aa3e00895dc0fc5cadc4358f3f5f7672a16a3151b7a3a5aae9967755dcf0648e",
-        "prior_authorization_id": "f1b24b5a3996f1cef4133af648981d1d4de366fc53df3c91455eee21a25ebb96",
-        "prior_accepted_at_utc": "2026-09-27T17:16:09+00:00",
-        "preserved_positive_evidence": [
-          "The meaningful play is concentrated in unit composition, positioning, equipment, mutations, purchases and route planning, which directly supports the profile's strong tactical problem-solving and mastery preferences.",
-          "Build combinations and mutations provide real experimentation across runs rather than relying only on passive auto-battle spectacle."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "04d48a077974dcb21b677533b130f7f69c513f06c85e033909b6d1afccc5842c",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--aa3e00895dc0fc5cadc4358f3f5f7672a16a3151b7a3a5aae9967755dcf0648e--04d48a077974dcb21b677533b130f7f69c513f06c85e033909b6d1afccc5842c.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--aa3e00895dc0fc5cadc4358f3f5f7672a16a3151b7a3a5aae9967755dcf0648e--04d48a077974dcb21b677533b130f7f69c513f06c85e033909b6d1afccc5842c.json",
-      "sequence": 3
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "f1b24b5a3996f1cef4133af648981d1d4de366fc53df3c91455eee21a25ebb96",
+        "accepted_at_utc": "2026-09-27T17:16:09+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 4,
+      "target_id": "legacy-full-reanalysis-01:9ae7b3ff76e8f91f25d6f66285c2c4f47e8b9d97fd343eb4d23798276b9658e2",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "9ae7b3ff76e8f91f25d6f66285c2c4f47e8b9d97fd343eb4d23798276b9658e2",
@@ -338,8 +285,6 @@
       "appid": "1172380",
       "taste_fingerprint": "a454b63213775b52df8312cc1679c81c0ca2697f6ff34b02a2977bba5bb5ef3d",
       "candidate_context_sha256": "a07bf096a4b32d71f5a78c12bb2d0426feb1fc40bb74cffba023e2fff0a43123",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 4,
       "semantic_input": {
         "title": "STAR WARS Jedi: Fallen Order™",
         "short_description": "A galaxy-spanning adventure awaits in Star Wars Jedi: Fallen Order, a 3rd person action-adventure title from Respawn. An abandoned Padawan must complete his training, develop new powerful Force abilities, and master the art of the lightsaber - all while staying one step ahead of the Empire.",
@@ -364,6 +309,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1172380.json",
+      "dossier_git_blob_sha": "bb15bfe5c5a39493cb6479b3ed3ca10aebc10153",
       "dossier_content_sha256": "e06c17a567e1f9a249d2ece40eadad045933262562b8ff35aad74c42bf33b144",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -379,42 +325,36 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T13:07:00Z",
       "dossier_expires_at_utc": "2026-10-17T13:07:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:9ae7b3ff76e8f91f25d6f66285c2c4f47e8b9d97fd343eb4d23798276b9658e2",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "high",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "strong",
+        "confidence": "high",
+        "positive_evidence": [
+          "Lightsaber combat repeatedly emphasizes parrying, dodging, enemy reading and expanding Force abilities, closely matching the profile's strongest mastery and skill-growth signals.",
+          "New movement and Force abilities open previously inaccessible routes, so progression changes both combat and exploration instead of only raising statistics.",
+          "The Star Wars atmosphere, cinematic presentation and character-driven story provide a clear identity hook beyond the mechanical fit."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 88,
           "development_variety": 81,
           "structure_pacing_direction": 71,
           "identity_hooks": 87,
           "breadth_of_match": 86
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "9ae7b3ff76e8f91f25d6f66285c2c4f47e8b9d97fd343eb4d23798276b9658e2",
-        "prior_authorization_id": "a54bba18a1bacab918c0de4022b6192f1eb9a3c6a667369edc712801a5082ee6",
-        "prior_accepted_at_utc": "2026-09-27T17:16:49+00:00",
-        "preserved_positive_evidence": [
-          "Lightsaber combat repeatedly emphasizes parrying, dodging, enemy reading and expanding Force abilities, closely matching the profile's strongest mastery and skill-growth signals.",
-          "New movement and Force abilities open previously inaccessible routes, so progression changes both combat and exploration instead of only raising statistics.",
-          "The Star Wars atmosphere, cinematic presentation and character-driven story provide a clear identity hook beyond the mechanical fit."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "948c73d90dbb223a694e752570855bd719706cdb8cc5092fd9c86c019da27a46",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--9ae7b3ff76e8f91f25d6f66285c2c4f47e8b9d97fd343eb4d23798276b9658e2--948c73d90dbb223a694e752570855bd719706cdb8cc5092fd9c86c019da27a46.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--9ae7b3ff76e8f91f25d6f66285c2c4f47e8b9d97fd343eb4d23798276b9658e2--948c73d90dbb223a694e752570855bd719706cdb8cc5092fd9c86c019da27a46.json",
-      "sequence": 4
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "a54bba18a1bacab918c0de4022b6192f1eb9a3c6a667369edc712801a5082ee6",
+        "accepted_at_utc": "2026-09-27T17:16:49+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 5,
+      "target_id": "legacy-full-reanalysis-01:278e5465a0a72ee4f5503c1809db868ad9843195483dc67087aeb54b14b8f9a3",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "278e5465a0a72ee4f5503c1809db868ad9843195483dc67087aeb54b14b8f9a3",
@@ -423,8 +363,6 @@
       "appid": "1213210",
       "taste_fingerprint": "bab1f739ce39670b89c72b1e50ddffe13a9c2d2d6d357fe79f03c733b8cc3946",
       "candidate_context_sha256": "a23178183c543db00c7e8da3a017dc7d11fa5cfbda685b190b91ca72c572d9e1",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 5,
       "semantic_input": {
         "title": "Command & Conquer™ Remastered Collection",
         "short_description": "Command & Conquer and Red Alert are both remastered in 4K by the former Westwood Studios team members. Includes all 3 expansions, rebuilt multiplayer, a modernized UI, Map Editor, bonus footage gallery, and over 7 hours of remastered music.",
@@ -442,6 +380,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1213210.json",
+      "dossier_git_blob_sha": "bda61fd154a89cf60c5115b58296b71fce9d7f13",
       "dossier_content_sha256": "155ab60b9202e633571b39ddd9525077a588a7b658d48333358f03b1c17f17c2",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -457,41 +396,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T13:29:33Z",
       "dossier_expires_at_utc": "2026-10-17T13:29:33Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:278e5465a0a72ee4f5503c1809db868ad9843195483dc67087aeb54b14b8f9a3",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The preserved real-time base-building and unit-control loop gives the game direct tactical decision-making, matching the profile's durable interest in strategic problem solving.",
+          "The remaster keeps a strong audiovisual and historical identity through restored campaigns, expansions and remastered music instead of feeling like a generic modernized strategy game."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 68,
           "development_variety": 50,
           "structure_pacing_direction": 52,
           "identity_hooks": 73,
           "breadth_of_match": 61
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "278e5465a0a72ee4f5503c1809db868ad9843195483dc67087aeb54b14b8f9a3",
-        "prior_authorization_id": "ebb0b3ccc9ae60228420e89053a7b9177e2b172a0a48e53a870792ed7d2ce87b",
-        "prior_accepted_at_utc": "2026-09-27T17:17:22+00:00",
-        "preserved_positive_evidence": [
-          "The preserved real-time base-building and unit-control loop gives the game direct tactical decision-making, matching the profile's durable interest in strategic problem solving.",
-          "The remaster keeps a strong audiovisual and historical identity through restored campaigns, expansions and remastered music instead of feeling like a generic modernized strategy game."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "1016f8a28669a1e130677f4fdc9acdd38767756d0c7d404c4c88cf4c0f84739d",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--278e5465a0a72ee4f5503c1809db868ad9843195483dc67087aeb54b14b8f9a3--1016f8a28669a1e130677f4fdc9acdd38767756d0c7d404c4c88cf4c0f84739d.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--278e5465a0a72ee4f5503c1809db868ad9843195483dc67087aeb54b14b8f9a3--1016f8a28669a1e130677f4fdc9acdd38767756d0c7d404c4c88cf4c0f84739d.json",
-      "sequence": 5
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "ebb0b3ccc9ae60228420e89053a7b9177e2b172a0a48e53a870792ed7d2ce87b",
+        "accepted_at_utc": "2026-09-27T17:17:22+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 6,
+      "target_id": "legacy-full-reanalysis-01:89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
@@ -500,8 +433,6 @@
       "appid": "1085510",
       "taste_fingerprint": "96ae084aae70febef03440d61952d3bef2a14b0ae80a44348068c5eeb0b2d164",
       "candidate_context_sha256": "fc40b1e5e183b75f96bf032f31babe2094becb209b140a994daa84bfe5145e47",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 6,
       "semantic_input": {
         "title": "Garfield Kart - Furious Racing",
         "short_description": "Garfield, the famous lasagna-loving cat is back to take on Jon, Odie and company in a no-holds-barred racing game!",
@@ -521,6 +452,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1085510.json",
+      "dossier_git_blob_sha": "d0982f016f0343e128b0378ebf850a49cddfcc7c",
       "dossier_content_sha256": "a590a4a62ab63787506a17d2ffb131cc8915106d7e20b862f0f122364e6ccd79",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -536,41 +468,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T12:38:41Z",
       "dossier_expires_at_utc": "2026-10-17T12:38:41Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "Drifting, drift boosts, shortcuts and track knowledge provide a concrete execution-skill layer that can reward mastery beyond the accessible basic handling.",
+          "Local and online multiplayer are recurring strengths, aligning with the profile's strong positive response to shared play that creates common decisions and memories."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 70,
           "development_variety": 43,
           "structure_pacing_direction": 61,
           "identity_hooks": 60,
           "breadth_of_match": 59
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
-        "prior_authorization_id": "680be82782ee1c392f38a6c69dc60dc8f92e3297e66aeb36edef6f7ff8f9e29c",
-        "prior_accepted_at_utc": "2026-09-27T17:17:58+00:00",
-        "preserved_positive_evidence": [
-          "Drifting, drift boosts, shortcuts and track knowledge provide a concrete execution-skill layer that can reward mastery beyond the accessible basic handling.",
-          "Local and online multiplayer are recurring strengths, aligning with the profile's strong positive response to shared play that creates common decisions and memories."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "25269461051e7fff469f52b31df9273121a74c456de2c4841c013a48d1945e3a",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d--25269461051e7fff469f52b31df9273121a74c456de2c4841c013a48d1945e3a.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d--25269461051e7fff469f52b31df9273121a74c456de2c4841c013a48d1945e3a.json",
-      "sequence": 6
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "680be82782ee1c392f38a6c69dc60dc8f92e3297e66aeb36edef6f7ff8f9e29c",
+        "accepted_at_utc": "2026-09-27T17:17:58+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 7,
+      "target_id": "legacy-full-reanalysis-01:9337c47e89b5a161ed93323e730cf71fb9db08cc00a89b1a609daf7d4195086d",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "9337c47e89b5a161ed93323e730cf71fb9db08cc00a89b1a609daf7d4195086d",
@@ -579,8 +505,6 @@
       "appid": "1152300",
       "taste_fingerprint": "bbce699d14e1b989e373d9b138c303ab5539663435bbab4ac6535dec23de6f67",
       "candidate_context_sha256": "bdd2cd812a504b066b1d91a76c4bd681115eda9726767747a462620cfd9ab8a4",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 7,
       "semantic_input": {
         "title": "Atelier Ayesha: The Alchemist of Dusk DX",
         "short_description": "\"The promise begins.\"\r\nThe \"Dusk\" series, a trilogy of RPG titles from Gust's popular Atelier series, tells the story of a world on the verge ruin, told from the perspective of its unique characters.\r\nThe 1st title in the series \"Atelier Ayesha\" is now available as a deluxe version.",
@@ -602,6 +526,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1152300.json",
+      "dossier_git_blob_sha": "8ee37744f6dbfe4ccc3608c9c01bed4c0e8c17e7",
       "dossier_content_sha256": "fe80c1d736159f6a152f0650ac4bfbea4fdf18f0b389288b305dcf7586d3acdd",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -617,41 +542,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T12:47:47Z",
       "dossier_expires_at_utc": "2026-10-17T12:47:47Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:9337c47e89b5a161ed93323e730cf71fb9db08cc00a89b1a609daf7d4195086d",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "Alchemy and item crafting are repeatedly described as the main source of system depth, giving the game meaningful experimentation and development rather than relying only on simple turn-based combat.",
+          "Ayesha, her companions, character events, worldbuilding, art direction and music create a strong cozy-melancholic identity, matching the profile's high value on characters and distinctive atmosphere."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 66,
           "development_variety": 72,
           "structure_pacing_direction": 55,
           "identity_hooks": 80,
           "breadth_of_match": 70
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "9337c47e89b5a161ed93323e730cf71fb9db08cc00a89b1a609daf7d4195086d",
-        "prior_authorization_id": "6ab5ac32a3b3c217869767ff23beb069ae2ada7657255ec2949adf3bb81a9a5d",
-        "prior_accepted_at_utc": "2026-09-27T17:20:33+00:00",
-        "preserved_positive_evidence": [
-          "Alchemy and item crafting are repeatedly described as the main source of system depth, giving the game meaningful experimentation and development rather than relying only on simple turn-based combat.",
-          "Ayesha, her companions, character events, worldbuilding, art direction and music create a strong cozy-melancholic identity, matching the profile's high value on characters and distinctive atmosphere."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "1830c657f9728240ae57afafb683b595fa37f5f0d0702204b4099b5371216a59",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--9337c47e89b5a161ed93323e730cf71fb9db08cc00a89b1a609daf7d4195086d--1830c657f9728240ae57afafb683b595fa37f5f0d0702204b4099b5371216a59.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--9337c47e89b5a161ed93323e730cf71fb9db08cc00a89b1a609daf7d4195086d--1830c657f9728240ae57afafb683b595fa37f5f0d0702204b4099b5371216a59.json",
-      "sequence": 7
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "6ab5ac32a3b3c217869767ff23beb069ae2ada7657255ec2949adf3bb81a9a5d",
+        "accepted_at_utc": "2026-09-27T17:20:33+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 8,
+      "target_id": "legacy-full-reanalysis-01:beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0",
@@ -660,8 +579,6 @@
       "appid": "1152310",
       "taste_fingerprint": "3ebb6a7d9452c0f7f3f356a4c48895af9476287bf06b99dfb5c864b1fc8851df",
       "candidate_context_sha256": "dd825ea7d7d004d0700fac51f942eba39d3d0d321c3c934d509567f3060dc0f7",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 8,
       "semantic_input": {
         "title": "Atelier Escha & Logy: Alchemists of the Dusk Sky DX",
         "short_description": "\"The promise is entrusted to two alchemists...\"\r\nThe \"Dusk\" series, a trilogy of RPG titles from Gust's popular Atelier series, tells the story of a world on the verge ruin, told from the perspective of its unique characters.\r\nThe 2nd title in the series \"Atelier Escha & Logy\" is now available as a deluxe version.",
@@ -684,6 +601,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1152310.json",
+      "dossier_git_blob_sha": "f73ce6f739d8626bc68dbdb0df0ec4f308f2212a",
       "dossier_content_sha256": "41dce0c3148d3b113bc5071b10fe060fe312c8b49861bbf9e84ec71f53930f84",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -699,42 +617,36 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T12:47:47Z",
       "dossier_expires_at_utc": "2026-10-17T12:47:47Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "strong",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The synthesis system starts approachable and becomes substantially more flexible through elemental values, skills, trait transfer and protagonist-specific specialties, directly matching the preference for visible mechanical development.",
+          "Six-character front/back parties and support attacks make combat more dynamic and add tactical planning rather than leaving progression concentrated only in crafting.",
+          "Four-month assignments provide clear short-term goals while usually leaving substantial discretionary time, fitting the preference for direction without excessive lostness or deadline pressure."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 82,
           "development_variety": 84,
           "structure_pacing_direction": 83,
           "identity_hooks": 72,
           "breadth_of_match": 82
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0",
-        "prior_authorization_id": "b7702416dff6ba8343efd85867d15a8095fdc395d3e23e86cac21d1af2197213",
-        "prior_accepted_at_utc": "2026-09-27T17:21:20+00:00",
-        "preserved_positive_evidence": [
-          "The synthesis system starts approachable and becomes substantially more flexible through elemental values, skills, trait transfer and protagonist-specific specialties, directly matching the preference for visible mechanical development.",
-          "Six-character front/back parties and support attacks make combat more dynamic and add tactical planning rather than leaving progression concentrated only in crafting.",
-          "Four-month assignments provide clear short-term goals while usually leaving substantial discretionary time, fitting the preference for direction without excessive lostness or deadline pressure."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "3f0f9e898604a3feb152fa516d2d2d481254f66ab789bcf36d3268980d8b4fa3",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0--3f0f9e898604a3feb152fa516d2d2d481254f66ab789bcf36d3268980d8b4fa3.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0--3f0f9e898604a3feb152fa516d2d2d481254f66ab789bcf36d3268980d8b4fa3.json",
-      "sequence": 8
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "b7702416dff6ba8343efd85867d15a8095fdc395d3e23e86cac21d1af2197213",
+        "accepted_at_utc": "2026-09-27T17:21:20+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 9,
+      "target_id": "legacy-full-reanalysis-01:ec08de9d322a260201292f86737d7f4a7d708bb73f7911646c65f99fe003968a",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "ec08de9d322a260201292f86737d7f4a7d708bb73f7911646c65f99fe003968a",
@@ -743,8 +655,6 @@
       "appid": "1139940",
       "taste_fingerprint": "489500e684b6a214f27ba1bba11ae17bc233bb6e74b25b82155e4911db58cf95",
       "candidate_context_sha256": "a28b4afdf08110afaf8ff70c7a1322f37566138a8fefba626d50da45372e0c3a",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 9,
       "semantic_input": {
         "title": "ATOM RPG Trudograd",
         "short_description": "ATOM RPG: Trudograd is a turn-based post-apocalyptic roleplaying game, which continues the story of ATOM RPG as a stand-alone sequel/expansion, and follows the traditions set by classic cRPGs such as the early Fallout and Wasteland titles.",
@@ -765,6 +675,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1139940.json",
+      "dossier_git_blob_sha": "c17fc9971405e4b6d1417cf62fd97dc27dbb7d33",
       "dossier_content_sha256": "2a462b61eb3ec4e1f90240f987f401410ccf5fbffd688fa37a6e5fa99d3031a1",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -780,41 +691,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T12:40:48Z",
       "dossier_expires_at_utc": "2026-10-17T12:40:48Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:ec08de9d322a260201292f86737d7f4a7d708bb73f7911646c65f99fe003968a",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "Dense urban districts, side quests and skill checks give exploration concrete authored reasons to engage rather than relying on a large but sparse wilderness.",
+          "Skills, perks, milestone bonuses and character-building choices provide visible progression and opportunities for planning, even though balance and early-choice sensitivity are uneven."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 61,
           "development_variety": 66,
           "structure_pacing_direction": 52,
           "identity_hooks": 68,
           "breadth_of_match": 61
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "ec08de9d322a260201292f86737d7f4a7d708bb73f7911646c65f99fe003968a",
-        "prior_authorization_id": "f075f45e023e96fc55534a1d09d3356cbb3642b0d24efe5832dab239ce13e85a",
-        "prior_accepted_at_utc": "2026-09-27T17:22:04+00:00",
-        "preserved_positive_evidence": [
-          "Dense urban districts, side quests and skill checks give exploration concrete authored reasons to engage rather than relying on a large but sparse wilderness.",
-          "Skills, perks, milestone bonuses and character-building choices provide visible progression and opportunities for planning, even though balance and early-choice sensitivity are uneven."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "568bf0d26d999c177f15d2cf219c6b30e4f82d63ef583c4f3a70a2cc748a06c2",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--ec08de9d322a260201292f86737d7f4a7d708bb73f7911646c65f99fe003968a--568bf0d26d999c177f15d2cf219c6b30e4f82d63ef583c4f3a70a2cc748a06c2.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--ec08de9d322a260201292f86737d7f4a7d708bb73f7911646c65f99fe003968a--568bf0d26d999c177f15d2cf219c6b30e4f82d63ef583c4f3a70a2cc748a06c2.json",
-      "sequence": 9
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "f075f45e023e96fc55534a1d09d3356cbb3642b0d24efe5832dab239ce13e85a",
+        "accepted_at_utc": "2026-09-27T17:22:04+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 10,
+      "target_id": "legacy-full-reanalysis-01:d540daa918daed925765c0e97d87d078b141ea5313a06a32a50cd391f6442b6a",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "d540daa918daed925765c0e97d87d078b141ea5313a06a32a50cd391f6442b6a",
@@ -823,8 +728,6 @@
       "appid": "1007040",
       "taste_fingerprint": "61b344b577e35f28a250851ad637b30721311452ee1ff93ff431f96959e9b933",
       "candidate_context_sha256": "5a3415ed19e1e41c917f7fa994783a7e9d3ecb39e0dd4bf603b1f0246a6b15e5",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 10,
       "semantic_input": {
         "title": "EARTH DEFENSE FORCE 5",
         "short_description": "Stand and fight for humanity.\r\nThis arcade shooter takes place in the year 2022, as the Earth Defense Force fends off an all-out attack by unknown life forms.\r\nBecome an EDF soldier, battle against endless hordes of immense enemies, and restore peace to the earth.",
@@ -844,6 +747,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1007040.json",
+      "dossier_git_blob_sha": "6fedac0a20f52690b02b5fe9a00dc47a1e50f828",
       "dossier_content_sha256": "041eafc42f701bfc7c460b7444ab32861bf24d27fc6f36d11c3d32e299b01a77",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -859,42 +763,36 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T11:51:29Z",
       "dossier_expires_at_utc": "2026-10-17T11:51:29Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:d540daa918daed925765c0e97d87d078b141ea5313a06a32a50cd391f6442b6a",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "Four markedly different classes, a very large weapon pool and loadout experimentation provide meaningful mechanical breadth and reasons to learn class-specific approaches.",
+          "Higher difficulties reward weapon selection, strategy and knowledge rather than being only a numerical challenge, aligning with the profile's strong mastery signal.",
+          "Cooperative play is repeatedly described as a major strength, adding the shared tactical experience that the profile values highly."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 80,
           "development_variety": 65,
           "structure_pacing_direction": 56,
           "identity_hooks": 70,
           "breadth_of_match": 74
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "d540daa918daed925765c0e97d87d078b141ea5313a06a32a50cd391f6442b6a",
-        "prior_authorization_id": "8994f2a8e0be66b8047aef1240b736e04cf4d4315f86356eacfcf3aa64d30624",
-        "prior_accepted_at_utc": "2026-09-27T17:22:38+00:00",
-        "preserved_positive_evidence": [
-          "Four markedly different classes, a very large weapon pool and loadout experimentation provide meaningful mechanical breadth and reasons to learn class-specific approaches.",
-          "Higher difficulties reward weapon selection, strategy and knowledge rather than being only a numerical challenge, aligning with the profile's strong mastery signal.",
-          "Cooperative play is repeatedly described as a major strength, adding the shared tactical experience that the profile values highly."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "69144635a1f81633e55c68573e6106a1c968febabf83eca3001dfece88079d55",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--d540daa918daed925765c0e97d87d078b141ea5313a06a32a50cd391f6442b6a--69144635a1f81633e55c68573e6106a1c968febabf83eca3001dfece88079d55.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--d540daa918daed925765c0e97d87d078b141ea5313a06a32a50cd391f6442b6a--69144635a1f81633e55c68573e6106a1c968febabf83eca3001dfece88079d55.json",
-      "sequence": 10
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "8994f2a8e0be66b8047aef1240b736e04cf4d4315f86356eacfcf3aa64d30624",
+        "accepted_at_utc": "2026-09-27T17:22:38+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 11,
+      "target_id": "legacy-full-reanalysis-01:eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d",
@@ -903,8 +801,6 @@
       "appid": "1149620",
       "taste_fingerprint": "ad8e836c12ad34e093f292af1c80dd514b9032c3cf7ca0655ca990222cefb734",
       "candidate_context_sha256": "8ad2328069277eb0fde3302206a6bd4dd10e40785a18ee61bc37e872aace4a24",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 11,
       "semantic_input": {
         "title": "Gas Station Simulator",
         "short_description": "Buy an abandoned gas station and restore it to its full glory. Renovate, upgrade and expand upon the offered services to keep up with your clients demands.",
@@ -924,6 +820,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1149620.json",
+      "dossier_git_blob_sha": "fd9bb89369eb1b74584c143c97a3040fa523973b",
       "dossier_content_sha256": "cb035418ba64c2d43385bb54adddb8ca7724242ecc2502b66a01204b28caafcf",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -939,41 +836,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T12:47:47Z",
       "dossier_expires_at_utc": "2026-10-17T12:47:47Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The management loop starts with several distinct hands-on activities and expands through fueling, retail, cleaning, repairs and stocking instead of exposing one task immediately.",
+          "Station upgrades and employees meaningfully alter which jobs must be handled directly, giving early and middle progression visible effects that match the profile's preference for evolving systems."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 58,
           "development_variety": 63,
           "structure_pacing_direction": 54,
           "identity_hooks": 57,
           "breadth_of_match": 56
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d",
-        "prior_authorization_id": "2f43d4d072086babed631c5c42df3064e6a4a12a27f443fc53a49bc1ff31b382",
-        "prior_accepted_at_utc": "2026-09-27T17:23:19+00:00",
-        "preserved_positive_evidence": [
-          "The management loop starts with several distinct hands-on activities and expands through fueling, retail, cleaning, repairs and stocking instead of exposing one task immediately.",
-          "Station upgrades and employees meaningfully alter which jobs must be handled directly, giving early and middle progression visible effects that match the profile's preference for evolving systems."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "b8c647d4fe8e627d002495542ab1034a5fa948c57d79e64bf07596c4cb38053a",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d--b8c647d4fe8e627d002495542ab1034a5fa948c57d79e64bf07596c4cb38053a.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d--b8c647d4fe8e627d002495542ab1034a5fa948c57d79e64bf07596c4cb38053a.json",
-      "sequence": 11
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "2f43d4d072086babed631c5c42df3064e6a4a12a27f443fc53a49bc1ff31b382",
+        "accepted_at_utc": "2026-09-27T17:23:19+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 12,
+      "target_id": "legacy-full-reanalysis-01:47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262",
@@ -982,8 +873,6 @@
       "appid": "1179080",
       "taste_fingerprint": "6db805fbf34357f3eae2e784de3327fb5b06b679d0bd90a86d44cee5d4e8ba28",
       "candidate_context_sha256": "86b91c3e6f004c2fe2bd514794a1c0442357fd60b40feaf2bcc60e2c39f0afad",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 12,
       "semantic_input": {
         "title": "FAITH: The Unholy Trinity",
         "short_description": "What you are about to do has not been approved by the Vatican. As a young priest, struggle against demons, cultists, and your own weakening faith in this pixel horror game inspired by the era of classic 8-bit gaming and the \"Satanic Panic\" of the 1980s.",
@@ -1004,6 +893,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1179080.json",
+      "dossier_git_blob_sha": "1ef56dbd5d5a74b773b2f86e4492926895f34cb5",
       "dossier_content_sha256": "72190ce31437ee34cda3cd3cfb957843fd77507ef4b6340cb5f0093b15e9bbfc",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1019,41 +909,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T13:15:00Z",
       "dossier_expires_at_utc": "2026-10-17T13:15:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The low-fi visual style, rotoscoped cutscenes, sound design and religious-horror imagery form a highly distinctive atmosphere, directly matching the profile's strong preference for memorable art direction and identity.",
+          "Multiple endings, notes and secrets give the mystery a concrete discovery structure and reasons to piece together additional lore rather than relying only on jump scares."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 55,
           "development_variety": 51,
           "structure_pacing_direction": 57,
           "identity_hooks": 88,
           "breadth_of_match": 66
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262",
-        "prior_authorization_id": "37bf45a16c1208dfa7ad6c0f3a7ac6f58387b6830fd20e22f8e476ec5636dbe8",
-        "prior_accepted_at_utc": "2026-09-27T17:24:20+00:00",
-        "preserved_positive_evidence": [
-          "The low-fi visual style, rotoscoped cutscenes, sound design and religious-horror imagery form a highly distinctive atmosphere, directly matching the profile's strong preference for memorable art direction and identity.",
-          "Multiple endings, notes and secrets give the mystery a concrete discovery structure and reasons to piece together additional lore rather than relying only on jump scares."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "1325055472a8e2beecb0ecbc97e33d20a4f1ba0c5d77bad0aa2763cac66ff353",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262--1325055472a8e2beecb0ecbc97e33d20a4f1ba0c5d77bad0aa2763cac66ff353.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262--1325055472a8e2beecb0ecbc97e33d20a4f1ba0c5d77bad0aa2763cac66ff353.json",
-      "sequence": 12
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "37bf45a16c1208dfa7ad6c0f3a7ac6f58387b6830fd20e22f8e476ec5636dbe8",
+        "accepted_at_utc": "2026-09-27T17:24:20+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 13,
+      "target_id": "legacy-full-reanalysis-01:0b958c513e04e9fb10b5f4871995d2dd6932734d7ae0503c3218e97910ba6dec",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "0b958c513e04e9fb10b5f4871995d2dd6932734d7ae0503c3218e97910ba6dec",
@@ -1062,8 +946,6 @@
       "appid": "1107790",
       "taste_fingerprint": "9396a6acbaa4be164400de8f2ab92ec531ca4865d02c85a712ea3d5544ea5969",
       "candidate_context_sha256": "80b094c03fc8a189c0107c729338faa90811120f9a7d467bd4feaeb9309c382e",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 13,
       "semantic_input": {
         "title": "The Complex",
         "short_description": "After a major bio-weapon attack on London, two scientists find themselves in a locked-down laboratory with time, and air, running out. The Complex is an interactive sci-fi thriller movie where your decisions lead to one of eight suspenseful endings.",
@@ -1085,6 +967,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1107790.json",
+      "dossier_git_blob_sha": "cab8d14bc643d6f09eb5545a01e64be8648aaae4",
       "dossier_content_sha256": "efb1e5ab30671be7b7fbb98af2e1fdb8cbd0b28e286436e0d59911ded8bf1dd9",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1100,36 +983,30 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T12:38:41Z",
       "dossier_expires_at_utc": "2026-10-17T12:38:41Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:0b958c513e04e9fb10b5f4871995d2dd6932734d7ae0503c3218e97910ba6dec",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_not_fit",
-        "prior_fit_level": null,
-        "prior_confidence": "medium",
-        "prior_taste_factors": null,
-        "prior_not_fit_basis": "completed_below_threshold",
-        "prior_work_id": "0b958c513e04e9fb10b5f4871995d2dd6932734d7ae0503c3218e97910ba6dec",
-        "prior_authorization_id": "429139ed49c8224f2c8b84351f600201aaa9c5c696187dc4403cbf40e25421ec",
-        "prior_accepted_at_utc": "2026-09-27T17:24:51+00:00",
-        "preserved_positive_evidence": [],
-        "preserved_not_fit_evidence": [
+      "prior_revision": {
+        "outcome": "analyzed_not_fit",
+        "fit_level": null,
+        "confidence": "medium",
+        "positive_evidence": [],
+        "taste_factors": null,
+        "base_support_compatible": null,
+        "not_fit_basis": "completed_below_threshold",
+        "not_fit_evidence": [
           "The core experience is primarily a feature-film-length sequence of timed or branching choices, leaving little of the gameplay mastery, movement or system development that are among the profile's strongest positive signals.",
           "Story and presentation are only mixed in player feedback, which is especially costly because the profile treats story quality as critical when an experience is close to interactive cinema.",
           "Many branches converge on similar scenes and repeated footage, creating the exact kind of repetition-without-development that the profile repeatedly penalizes."
-        ]
-      },
-      "authorization_id": "caf94ab22efac3f2281be146e31205d4de103eb0f3e9f61b743b730f55417bd0",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--0b958c513e04e9fb10b5f4871995d2dd6932734d7ae0503c3218e97910ba6dec--caf94ab22efac3f2281be146e31205d4de103eb0f3e9f61b743b730f55417bd0.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--0b958c513e04e9fb10b5f4871995d2dd6932734d7ae0503c3218e97910ba6dec--caf94ab22efac3f2281be146e31205d4de103eb0f3e9f61b743b730f55417bd0.json",
-      "sequence": 13
+        ],
+        "authorization_id": "429139ed49c8224f2c8b84351f600201aaa9c5c696187dc4403cbf40e25421ec",
+        "accepted_at_utc": "2026-09-27T17:24:51+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 14,
+      "target_id": "legacy-full-reanalysis-01:a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045",
@@ -1138,8 +1015,6 @@
       "appid": "1147330",
       "taste_fingerprint": "b82717b5b1f091d0ad28ddda52362713ed8ae80652f5960dd5232f566f080b79",
       "candidate_context_sha256": "af7e4f3ad593432a4fb37ed3263f20040986d56ecba42e0ef3beda8797584563",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 14,
       "semantic_input": {
         "title": "Lifeless Moon",
         "short_description": "During an expedition to the Moon, two astronauts find themselves in a familiar town back on Earth. They soon discover the town is the beginning of a strange and mysterious journey...",
@@ -1162,6 +1037,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1147330.json",
+      "dossier_git_blob_sha": "c08b611f64618cd2edb64c69b58ce1ca759be30c",
       "dossier_content_sha256": "68886112d30c25a912cd9ecbb00f777764126633cc3c3c6705a6dd48391bb79b",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1177,36 +1053,30 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T12:40:48Z",
       "dossier_expires_at_utc": "2026-10-17T12:40:48Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_not_fit",
-        "prior_fit_level": null,
-        "prior_confidence": "medium",
-        "prior_taste_factors": null,
-        "prior_not_fit_basis": "completed_below_threshold",
-        "prior_work_id": "a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045",
-        "prior_authorization_id": "e38e97fa02b8a7df43dab511863e6ff977684afc88f52ffabcbd32d36686c81e",
-        "prior_accepted_at_utc": "2026-09-27T17:25:21+00:00",
-        "preserved_positive_evidence": [],
-        "preserved_not_fit_evidence": [
+      "prior_revision": {
+        "outcome": "analyzed_not_fit",
+        "fit_level": null,
+        "confidence": "medium",
+        "positive_evidence": [],
+        "taste_factors": null,
+        "base_support_compatible": null,
+        "not_fit_basis": "completed_below_threshold",
+        "not_fit_evidence": [
           "The experience is consistently described as a short linear walking-simulator-style adventure with light platforming and simple puzzles, providing little mechanical growth or mastery depth.",
           "Repeated walking and long traversal stretches are a documented source of monotony, directly conflicting with the profile's strong sensitivity to repetition without development.",
           "Narrative delivery can be fragmented and heavily dependent on logs, so the strong atmosphere is not consistently reinforced by the clear, engaging story progression the profile prefers."
-        ]
-      },
-      "authorization_id": "6c4d62c8a22d593cbd5fce2116d9971bca07fe9708d42ebe7d9f639c3f9faed1",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045--6c4d62c8a22d593cbd5fce2116d9971bca07fe9708d42ebe7d9f639c3f9faed1.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045--6c4d62c8a22d593cbd5fce2116d9971bca07fe9708d42ebe7d9f639c3f9faed1.json",
-      "sequence": 14
+        ],
+        "authorization_id": "e38e97fa02b8a7df43dab511863e6ff977684afc88f52ffabcbd32d36686c81e",
+        "accepted_at_utc": "2026-09-27T17:25:21+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 15,
+      "target_id": "legacy-full-reanalysis-01:0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
@@ -1215,8 +1085,6 @@
       "appid": "1046400",
       "taste_fingerprint": "a289f6ecb68db127b725355c468131a6bd9d6e136e7f67fb7f29d97a1c4adb9b",
       "candidate_context_sha256": "e98d55ae8ca838885b14dc4a0f60cbf457bcf80e8ef431f0c2f968fc115b82f2",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 15,
       "semantic_input": {
         "title": "Astalon: Tears of the Earth",
         "short_description": "Uphold your pact with the Titan of Death, Epimetheus! Fight, climb and solve your way through a twisted tower as three unique adventurers, on a mission to save their village from impending doom!",
@@ -1237,6 +1105,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1046400.json",
+      "dossier_git_blob_sha": "c744fdbb9332e07d2479324b1dedeb3fc1c60cd1",
       "dossier_content_sha256": "204ba2dbfd336eec31b3ad3e4ee691644d89a57f8809330b64f4fbe06fe5df89",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1252,41 +1121,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T11:47:00Z",
       "dossier_expires_at_utc": "2026-10-17T11:47:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The interconnected tower opens into many routes and secrets, giving exploration concrete discoveries rather than empty traversal.",
+          "Meaningful upgrades and later mobility conveniences materially improve what the player can reach and how the world is navigated, matching the profile's preference for evolving exploration systems."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 68,
           "development_variety": 70,
           "structure_pacing_direction": 56,
           "identity_hooks": 66,
           "breadth_of_match": 67
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011",
-        "prior_authorization_id": "371995d5ede46335ccee70649211b30ed6edb3e1fb45762e66454493a50498c6",
-        "prior_accepted_at_utc": "2026-09-27T17:26:16+00:00",
-        "preserved_positive_evidence": [
-          "The interconnected tower opens into many routes and secrets, giving exploration concrete discoveries rather than empty traversal.",
-          "Meaningful upgrades and later mobility conveniences materially improve what the player can reach and how the world is navigated, matching the profile's preference for evolving exploration systems."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011--e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011--e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed.json",
-      "sequence": 15
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "371995d5ede46335ccee70649211b30ed6edb3e1fb45762e66454493a50498c6",
+        "accepted_at_utc": "2026-09-27T17:26:16+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 16,
+      "target_id": "legacy-full-reanalysis-01:6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
@@ -1295,8 +1158,6 @@
       "appid": "102600",
       "taste_fingerprint": "231ad60f2718ad466a51b539253fad6a999b1ebd74ba5aee657d3de268fe07ee",
       "candidate_context_sha256": "f58ceb29902b2e4fe8c60034550478d092d05b27aa24bdbb77ef88dbab8677eb",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 16,
       "semantic_input": {
         "title": "Orcs Must Die!",
         "short_description": "Slice them, burn them, skewer them, and launch them - no matter how you get it done, orcs must die in this fantasy action-strategy game from Robot Entertainment.",
@@ -1319,6 +1180,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_102600.json",
+      "dossier_git_blob_sha": "98a8bcadca78c0e6c2f7f2f69dfb6a7581ad0aad",
       "dossier_content_sha256": "0c2082a9fe10839c934c9abb6f24cb46f6f2b0a198f67a1d4f67a5fd3444a553",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1334,41 +1196,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T11:47:00Z",
       "dossier_expires_at_utc": "2026-10-17T11:47:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "strong",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The core loop combines direct third-person action with planning trap layouts, kill zones and environmental interactions, closely matching the profile's strong tactical problem-solving and active-gameplay preferences.",
+          "Nightmare difficulty and perfect-clear goals reward learning efficient defenses and improving execution, providing the kind of meaningful mastery challenge that is one of the profile's strongest positive signals."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 89,
           "development_variety": 74,
           "structure_pacing_direction": 82,
           "identity_hooks": 73,
           "breadth_of_match": 85
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574",
-        "prior_authorization_id": "921380ac9cc0464ddf91a284d11e6c988bd8ca0c3236a0474526ab6e3cefbc28",
-        "prior_accepted_at_utc": "2026-09-27T17:26:51+00:00",
-        "preserved_positive_evidence": [
-          "The core loop combines direct third-person action with planning trap layouts, kill zones and environmental interactions, closely matching the profile's strong tactical problem-solving and active-gameplay preferences.",
-          "Nightmare difficulty and perfect-clear goals reward learning efficient defenses and improving execution, providing the kind of meaningful mastery challenge that is one of the profile's strongest positive signals."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574--be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574--be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45.json",
-      "sequence": 16
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "921380ac9cc0464ddf91a284d11e6c988bd8ca0c3236a0474526ab6e3cefbc28",
+        "accepted_at_utc": "2026-09-27T17:26:51+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 17,
+      "target_id": "legacy-full-reanalysis-01:ebc164fb27a0eea0dd6dbb84851454b2cab6b905c656e5993ac19050506ca8c9",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "ebc164fb27a0eea0dd6dbb84851454b2cab6b905c656e5993ac19050506ca8c9",
@@ -1377,8 +1233,6 @@
       "appid": "1058450",
       "taste_fingerprint": "020f47102cedbb27e1135479b5d3217a8c9716fcbbe49c2284c91f55b2a7b6a3",
       "candidate_context_sha256": "8011f47581cf40b40e5448787ca56fd9ef065f786f686a8d3ceb0c0c0398a988",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 17,
       "semantic_input": {
         "title": "MY HERO ONE'S JUSTICE 2",
         "short_description": "MY HERO ONE'S JUSTICE 2, the over-the-top follow-up to the smash hit 3D arena fighter MY HERO ONE'S JUSTICE, makes its heroic debut! Make full use of characters' Quirks as you clash head-to-head in epic battles across huge arenas!",
@@ -1399,6 +1253,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1058450.json",
+      "dossier_git_blob_sha": "3440bf5bc27baf57908d1f8214d919e8432af48f",
       "dossier_content_sha256": "a8056680a62236bb1b632387cd38ead1771dfac0fe2744f4b1dd10c9da3579a2",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1414,41 +1269,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T12:31:14Z",
       "dossier_expires_at_utc": "2026-10-17T12:31:14Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:ebc164fb27a0eea0dd6dbb84851454b2cab6b905c656e5993ac19050506ca8c9",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The expanded roster and distinct Quirk-driven matchups create meaningful character-to-character variation, aligning with the profile's enjoyment of learning differentiated fighting styles.",
+          "Story, villain and mission routes provide several offline structures rather than limiting the experience to repetitive free battles or online matchmaking."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 72,
           "development_variety": 67,
           "structure_pacing_direction": 61,
           "identity_hooks": 71,
           "breadth_of_match": 68
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "ebc164fb27a0eea0dd6dbb84851454b2cab6b905c656e5993ac19050506ca8c9",
-        "prior_authorization_id": "226d7407a1ef2744e469fe21e184d9fa6df03e1ebf9f52f09ed686eb80ba1b31",
-        "prior_accepted_at_utc": "2026-09-27T17:27:27+00:00",
-        "preserved_positive_evidence": [
-          "The expanded roster and distinct Quirk-driven matchups create meaningful character-to-character variation, aligning with the profile's enjoyment of learning differentiated fighting styles.",
-          "Story, villain and mission routes provide several offline structures rather than limiting the experience to repetitive free battles or online matchmaking."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "a351d118d29dac0c6d5d96f2ce37b8e75fccb949f1cc67edfff579d207a3cfb4",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--ebc164fb27a0eea0dd6dbb84851454b2cab6b905c656e5993ac19050506ca8c9--a351d118d29dac0c6d5d96f2ce37b8e75fccb949f1cc67edfff579d207a3cfb4.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--ebc164fb27a0eea0dd6dbb84851454b2cab6b905c656e5993ac19050506ca8c9--a351d118d29dac0c6d5d96f2ce37b8e75fccb949f1cc67edfff579d207a3cfb4.json",
-      "sequence": 17
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "226d7407a1ef2744e469fe21e184d9fa6df03e1ebf9f52f09ed686eb80ba1b31",
+        "accepted_at_utc": "2026-09-27T17:27:27+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 18,
+      "target_id": "legacy-full-reanalysis-01:a3d7c56a32b38599ded8945bc3eed3efab6ea9bd4bba37690ae3eb4214e3092d",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "a3d7c56a32b38599ded8945bc3eed3efab6ea9bd4bba37690ae3eb4214e3092d",
@@ -1457,8 +1306,6 @@
       "appid": "1227690",
       "taste_fingerprint": "823bbcb7f283ebb1e9b838f6073f56822e4bdd8f51d52313d685d854d38af254",
       "candidate_context_sha256": "6bbd30cbaaaeece3955dce3d7cb9c6bd5d8cedca97a39e2da5129f993c2f4b0b",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 18,
       "semantic_input": {
         "title": "Severed Steel",
         "short_description": "An intense single-player FPS featuring a stylish movement system, completely destructible levels, and an acclaimed OST.",
@@ -1478,6 +1325,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1227690.json",
+      "dossier_git_blob_sha": "1d583c91401db7fa1dfef3ce680c9c4d43ae8d8c",
       "dossier_content_sha256": "f5679ea2320030082602bb867c087e525d775c3cd6d660442ef78d7895742e0a",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1493,42 +1341,36 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T16:54:32Z",
       "dossier_expires_at_utc": "2026-10-17T16:54:32Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:a3d7c56a32b38599ded8945bc3eed3efab6ea9bd4bba37690ae3eb4214e3092d",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "high",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "strong",
+        "confidence": "high",
+        "positive_evidence": [
+          "Fast parkour, slow motion, weapon stealing and destructible environments make movement and combat expression the central pleasure, directly matching the profile's very strong preference for enjoyable movement and responsive gameplay.",
+          "The controls have a learnable first-hour friction and then improve markedly as movement and challenge modes click, fitting the profile's strong mastery-through-learning signal.",
+          "The compact campaign can end before its combat pattern becomes stale, while optional challenge and replay modes remain available without forcing prolonged repetition."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 92,
           "development_variety": 82,
           "structure_pacing_direction": 86,
           "identity_hooks": 83,
           "breadth_of_match": 90
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "a3d7c56a32b38599ded8945bc3eed3efab6ea9bd4bba37690ae3eb4214e3092d",
-        "prior_authorization_id": "fe695097895704f561c194f20b81a1a7fb7b40e0f2dc66b38bd532e8e06e280e",
-        "prior_accepted_at_utc": "2026-09-27T17:28:04+00:00",
-        "preserved_positive_evidence": [
-          "Fast parkour, slow motion, weapon stealing and destructible environments make movement and combat expression the central pleasure, directly matching the profile's very strong preference for enjoyable movement and responsive gameplay.",
-          "The controls have a learnable first-hour friction and then improve markedly as movement and challenge modes click, fitting the profile's strong mastery-through-learning signal.",
-          "The compact campaign can end before its combat pattern becomes stale, while optional challenge and replay modes remain available without forcing prolonged repetition."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "f841362b7bb764941d9a6d78525503f2ce46e7d2797b81f00006e5d042dc621e",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--a3d7c56a32b38599ded8945bc3eed3efab6ea9bd4bba37690ae3eb4214e3092d--f841362b7bb764941d9a6d78525503f2ce46e7d2797b81f00006e5d042dc621e.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--a3d7c56a32b38599ded8945bc3eed3efab6ea9bd4bba37690ae3eb4214e3092d--f841362b7bb764941d9a6d78525503f2ce46e7d2797b81f00006e5d042dc621e.json",
-      "sequence": 18
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "fe695097895704f561c194f20b81a1a7fb7b40e0f2dc66b38bd532e8e06e280e",
+        "accepted_at_utc": "2026-09-27T17:28:04+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 19,
+      "target_id": "legacy-full-reanalysis-01:27f199575627289df9429352e2806c96af66ec6634568c71a4f929ce4b6fc59a",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "27f199575627289df9429352e2806c96af66ec6634568c71a4f929ce4b6fc59a",
@@ -1537,8 +1379,6 @@
       "appid": "1000010",
       "taste_fingerprint": "5a4f8afb219b01d3a7153c2970255f8c2d56f42848aea1920dac19bca32f0788",
       "candidate_context_sha256": "f655f241cebbe63fd11eb4eb7dfd60aa5cc62260e2cfc14f160a866016d43149",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 19,
       "semantic_input": {
         "title": "Crown Trick",
         "short_description": "Enter a labyrinth that moves as you move, where mastering the elements is key to defeating enemies and uncovering the mysteries of this underground world. With a new experience awaiting every time you enter the dungeon, let the power bestowed by the crown guide you in this challenging adventure!",
@@ -1558,6 +1398,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1000010.json",
+      "dossier_git_blob_sha": "adedf896c4b33a5a41d0d16f4226b7dfabc65c0a",
       "dossier_content_sha256": "d72cc4facf98c1c348b7fbbe87642ecd4956aedca2acf4bef0a8343f890ce48e",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1573,41 +1414,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T11:51:29Z",
       "dossier_expires_at_utc": "2026-10-17T11:51:29Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:27f199575627289df9429352e2806c96af66ec6634568c71a4f929ce4b6fc59a",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "Synchronous turn-based combat rewards deliberate use of weapon patterns, blink and break timing, familiars, elements and terrain, giving the game substantial tactical decision-making.",
+          "Success is repeatedly tied to learning systems and managing resources, matching the profile's strong preference for mastery-oriented challenge rather than difficulty based only on repetition."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 84,
           "development_variety": 58,
           "structure_pacing_direction": 63,
           "identity_hooks": 61,
           "breadth_of_match": 69
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "27f199575627289df9429352e2806c96af66ec6634568c71a4f929ce4b6fc59a",
-        "prior_authorization_id": "47bb8951ddefc310efd076da66a1629add64365db2e475a1729d1edc2562a82a",
-        "prior_accepted_at_utc": "2026-09-27T17:28:36+00:00",
-        "preserved_positive_evidence": [
-          "Synchronous turn-based combat rewards deliberate use of weapon patterns, blink and break timing, familiars, elements and terrain, giving the game substantial tactical decision-making.",
-          "Success is repeatedly tied to learning systems and managing resources, matching the profile's strong preference for mastery-oriented challenge rather than difficulty based only on repetition."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "df4064cd926d420fccc6d0510d9a4265b1c3672b40dce1ddef6e9e37b57b0166",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--27f199575627289df9429352e2806c96af66ec6634568c71a4f929ce4b6fc59a--df4064cd926d420fccc6d0510d9a4265b1c3672b40dce1ddef6e9e37b57b0166.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--27f199575627289df9429352e2806c96af66ec6634568c71a4f929ce4b6fc59a--df4064cd926d420fccc6d0510d9a4265b1c3672b40dce1ddef6e9e37b57b0166.json",
-      "sequence": 19
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "47bb8951ddefc310efd076da66a1629add64365db2e475a1729d1edc2562a82a",
+        "accepted_at_utc": "2026-09-27T17:28:36+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 20,
+      "target_id": "legacy-full-reanalysis-01:6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
@@ -1616,8 +1451,6 @@
       "appid": "1054490",
       "taste_fingerprint": "bd211174279fa4efc63ea52de880ec9ae2400dc84f4bac23182d31add988bf14",
       "candidate_context_sha256": "46eb0d0b7f74ce52b911ef9b3398ea1b767ad68face8522281117426bd9dd5c1",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 20,
       "semantic_input": {
         "title": "Wingspan",
         "short_description": "Wingspan is a relaxing, award-winning strategy card game about birds for 1 to 5 players. Each bird you play extends a chain of powerful combinations in one of your three habitats. Your goal is to discover and attract the best birds to your network of wildlife preserves.",
@@ -1635,6 +1468,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1054490.json",
+      "dossier_git_blob_sha": "752a57b324177f0100074266fd4aa6534a3a3684",
       "dossier_content_sha256": "b47091d4aa33996f574535a301ed21fdd22caf58a44db0c74c6965970c6faff3",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1650,42 +1484,36 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T11:47:00Z",
       "dossier_expires_at_utc": "2026-10-17T11:47:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "strong",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The engine-building loop repeatedly asks the player to combine birds, food, eggs, cards, habitats and round goals into an efficient plan, closely matching the profile's strong tactical and systems-thinking signals.",
+          "Hot-seat support creates a durable shared-play use case, which is a strong positive amplifier in the profile even when the underlying game is turn-based and relaxed.",
+          "The digital version automates bookkeeping while retaining the board game's strategic decisions, reducing friction without removing the planning layer."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 82,
           "development_variety": 73,
           "structure_pacing_direction": 79,
           "identity_hooks": 66,
           "breadth_of_match": 81
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9",
-        "prior_authorization_id": "9e2d5cd805677387f68716269574526be144beae09054c3ed8303cf3efef83df",
-        "prior_accepted_at_utc": "2026-09-27T17:29:13+00:00",
-        "preserved_positive_evidence": [
-          "The engine-building loop repeatedly asks the player to combine birds, food, eggs, cards, habitats and round goals into an efficient plan, closely matching the profile's strong tactical and systems-thinking signals.",
-          "Hot-seat support creates a durable shared-play use case, which is a strong positive amplifier in the profile even when the underlying game is turn-based and relaxed.",
-          "The digital version automates bookkeeping while retaining the board game's strategic decisions, reducing friction without removing the planning layer."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9--1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9--1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf.json",
-      "sequence": 20
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "9e2d5cd805677387f68716269574526be144beae09054c3ed8303cf3efef83df",
+        "accepted_at_utc": "2026-09-27T17:29:13+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 21,
+      "target_id": "legacy-full-reanalysis-01:9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
@@ -1694,8 +1522,6 @@
       "appid": "1075740",
       "taste_fingerprint": "f9487b78772603603f513134f33002bca9ded25d574235806b1029306e22ee05",
       "candidate_context_sha256": "3e26890bd43f7d7612f2948764df8e4d6a93d8d25c1864df3ba9ce242f3c4d89",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 21,
       "semantic_input": {
         "title": "Banners of Ruin",
         "short_description": "Assemble your party. Answer the call. Win the war. Build a deck and fight a series of turn-based combats with up to 6 party characters through the city of Dawn's Point. Each character can unlock a set of unique cards and abilities that can augment your deck in powerful, exciting ways.",
@@ -1713,6 +1539,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1075740.json",
+      "dossier_git_blob_sha": "5592c772649c81ed3260a6093759b57cc0cb5310",
       "dossier_content_sha256": "6ba33442a113cc9690b2878d4b59cfcb490f25e7bc8fbb1e63b935968aa65904",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1728,41 +1555,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T12:31:14Z",
       "dossier_expires_at_utc": "2026-10-17T12:31:14Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "Combat combines deck construction with party composition, character abilities and battlefield positioning, providing layered tactical decisions beyond a simple card sequence.",
+          "Optional challenge structures can keep pressure meaningful after the basic system is learned, which fits the profile's positive response to mastery-oriented difficulty."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 80,
           "development_variety": 57,
           "structure_pacing_direction": 49,
           "identity_hooks": 59,
           "breadth_of_match": 65
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
-        "prior_authorization_id": "bfdc8938414ace01f66dc6c3efc6376803d4dc0c7c578531e4864dfd71e70336",
-        "prior_accepted_at_utc": "2026-09-27T17:29:49+00:00",
-        "preserved_positive_evidence": [
-          "Combat combines deck construction with party composition, character abilities and battlefield positioning, providing layered tactical decisions beyond a simple card sequence.",
-          "Optional challenge structures can keep pressure meaningful after the basic system is learned, which fits the profile's positive response to mastery-oriented difficulty."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac--b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac--b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44.json",
-      "sequence": 21
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "bfdc8938414ace01f66dc6c3efc6376803d4dc0c7c578531e4864dfd71e70336",
+        "accepted_at_utc": "2026-09-27T17:29:49+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 22,
+      "target_id": "legacy-full-reanalysis-01:8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
@@ -1771,8 +1592,6 @@
       "appid": "1173770",
       "taste_fingerprint": "338597d36a4b25ee6ae216ea3c993044f1b84fb04ad08810e8943d13f5bdfe85",
       "candidate_context_sha256": "d21ca96b03df67c7c336e5c9c864ebea5fa013df666f2fc3f9625ae807518bf6",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 22,
       "semantic_input": {
         "title": "FINAL FANTASY",
         "short_description": "The original FINAL FANTASY comes to life with completely new graphics and audio! A remodeled 2D take on the first game in the world-renowned FINAL FANTASY series! Enjoy the timeless story told through charming retro graphics.",
@@ -1794,6 +1613,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1173770.json",
+      "dossier_git_blob_sha": "a1d7848b2f50721c6e1d1a32b29f38dfbeaeb1b6",
       "dossier_content_sha256": "661db68ee87b44d718fa61466d778f7fabf08b9cdaded728ee915591d115bc1a",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1809,41 +1629,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T13:07:00Z",
       "dossier_expires_at_utc": "2026-10-17T13:07:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "Party composition and class choice provide a clear planning layer even though the underlying combat system is deliberately simple by modern standards.",
+          "Towns, dungeons and world progression still reward curiosity, while the Pixel Remaster's maps, auto-battle and encounter or experience controls substantially reduce old-school grind and navigation friction."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 59,
           "development_variety": 57,
           "structure_pacing_direction": 49,
           "identity_hooks": 62,
           "breadth_of_match": 58
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9",
-        "prior_authorization_id": "0fd015e4ca96cd2ab8acd89f030d2dcb82dee1ebfb669b9731c985865a122549",
-        "prior_accepted_at_utc": "2026-09-27T17:31:00+00:00",
-        "preserved_positive_evidence": [
-          "Party composition and class choice provide a clear planning layer even though the underlying combat system is deliberately simple by modern standards.",
-          "Towns, dungeons and world progression still reward curiosity, while the Pixel Remaster's maps, auto-battle and encounter or experience controls substantially reduce old-school grind and navigation friction."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9--c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9--c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b.json",
-      "sequence": 22
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "0fd015e4ca96cd2ab8acd89f030d2dcb82dee1ebfb669b9731c985865a122549",
+        "accepted_at_utc": "2026-09-27T17:31:00+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 23,
+      "target_id": "legacy-full-reanalysis-01:8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647",
@@ -1852,8 +1666,6 @@
       "appid": "1206610",
       "taste_fingerprint": "37ce186cb43972741ba94c87a88a09d2d3b26d502658a1db139d64d71a5407f7",
       "candidate_context_sha256": "ef497801885dd0f44f416daa512865e800a1a80b7c83dc2d9e1f666a0c7c330a",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 23,
       "semantic_input": {
         "title": "Rubber Bandits",
         "short_description": "Rubber Bandits is a criminally fun multiplayer party game for up to 4 players. With 8 action-packed game modes, players steal, brawl, and dash to the finish line with the most loot to win!",
@@ -1871,6 +1683,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1206610.json",
+      "dossier_git_blob_sha": "81be212f89e2ed0709b95d55161e9264b619183f",
       "dossier_content_sha256": "a8f86c941bf62bf82ea3ec0920e9e5c69ae7ca7cf013fba75bf309e2a3a7a759",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1886,41 +1699,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T13:29:33Z",
       "dossier_expires_at_utc": "2026-10-17T13:29:33Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "Short local or online rounds are built around direct interaction with other players, creating the shared, memorable situations that strongly amplify value in the profile.",
+          "Physics-based grabbing, throwing, stealing and improvised object use make individual matches unpredictable enough to support casual group play despite the deliberately simple rules."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 51,
           "development_variety": 44,
           "structure_pacing_direction": 67,
           "identity_hooks": 59,
           "breadth_of_match": 63
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647",
-        "prior_authorization_id": "1748a7e2028ce3e766774a1b60c63c8f10faa3314bf4078befb5b178e727010f",
-        "prior_accepted_at_utc": "2026-09-27T17:31:00+00:00",
-        "preserved_positive_evidence": [
-          "Short local or online rounds are built around direct interaction with other players, creating the shared, memorable situations that strongly amplify value in the profile.",
-          "Physics-based grabbing, throwing, stealing and improvised object use make individual matches unpredictable enough to support casual group play despite the deliberately simple rules."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647--71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647--71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8.json",
-      "sequence": 23
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "1748a7e2028ce3e766774a1b60c63c8f10faa3314bf4078befb5b178e727010f",
+        "accepted_at_utc": "2026-09-27T17:31:00+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 24,
+      "target_id": "legacy-full-reanalysis-01:0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b",
@@ -1929,8 +1736,6 @@
       "appid": "1173780",
       "taste_fingerprint": "eaec96fcc7b0e8cf8a123a3ff2da11456a712db397a86b97eb34969b0bda2a7a",
       "candidate_context_sha256": "b87b806f62c0f606980ff46544245cf4408b3c6aa917d1a4bde7d05ae7665a71",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 24,
       "semantic_input": {
         "title": "FINAL FANTASY II",
         "short_description": "The original FINAL FANTASY II comes to life with completely new graphics and audio! A remodeled 2D take on the second game in the world-renowned FINAL FANTASY series! Enjoy the timeless story told through charming retro graphics.",
@@ -1953,6 +1758,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1173780.json",
+      "dossier_git_blob_sha": "945b612d52594582a426c096a1e2aec1bb8d317e",
       "dossier_content_sha256": "9f66425f13807a1bf89243682d83cd6608487a239d40ba4c6a35ee16dac59944",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -1968,41 +1774,35 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T13:08:00Z",
       "dossier_expires_at_utc": "2026-10-17T13:08:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The darker rebellion story and named party members provide substantially more narrative and character identity than the first game, matching the profile's contextual value on story and memorable characters.",
+          "Usage-based growth allows flexible character development, and Pixel Remaster boosts can reduce the repetition cost of experimenting with that unusual system."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 61,
           "development_variety": 62,
           "structure_pacing_direction": 53,
           "identity_hooks": 70,
           "breadth_of_match": 61
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b",
-        "prior_authorization_id": "712cd115499d226194e05d11b3f59d189e6b86262fbd6ab5ade264480bcd7a14",
-        "prior_accepted_at_utc": "2026-09-27T17:31:36+00:00",
-        "preserved_positive_evidence": [
-          "The darker rebellion story and named party members provide substantially more narrative and character identity than the first game, matching the profile's contextual value on story and memorable characters.",
-          "Usage-based growth allows flexible character development, and Pixel Remaster boosts can reduce the repetition cost of experimenting with that unusual system."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b--9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b--9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8.json",
-      "sequence": 24
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "712cd115499d226194e05d11b3f59d189e6b86262fbd6ab5ade264480bcd7a14",
+        "accepted_at_utc": "2026-09-27T17:31:36+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 25,
+      "target_id": "legacy-full-reanalysis-01:cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89",
@@ -2011,8 +1811,6 @@
       "appid": "1111460",
       "taste_fingerprint": "b056e17cc174803015539aa6b3d86a0f01316901524184f818ff3a63474fa1c2",
       "candidate_context_sha256": "3edef7590b97fd8b2e2cc4f7826518d9aa0bbf73b12a13eb5849e25ef27928bc",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 25,
       "semantic_input": {
         "title": "小白兔电商~Bunny e-Shop",
         "short_description": "Experience a hilarious and adorable e-commerce game in a magical world where humans and monsters are at war. Help a humble rabbit fairy expand her online store selling homegrown carrots. Uncover hidden secrets while growing the business and becoming a successful entrepreneur.",
@@ -2032,6 +1830,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1111460.json",
+      "dossier_git_blob_sha": "37add54b080b596aefc61ae1a9022196524218a9",
       "dossier_content_sha256": "d0174979ec4f61ec97472aa1de606b4eb8061344a3d048687cc7886147dbf33b",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -2047,36 +1846,30 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T12:38:41Z",
       "dossier_expires_at_utc": "2026-10-17T12:38:41Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_not_fit",
-        "prior_fit_level": null,
-        "prior_confidence": "medium",
-        "prior_taste_factors": null,
-        "prior_not_fit_basis": "completed_below_threshold",
-        "prior_work_id": "cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89",
-        "prior_authorization_id": "e3f2c58865748684208084d48e6b99d499e35deb296b639b4efabe46ea2d4706",
-        "prior_accepted_at_utc": "2026-09-27T17:32:19+00:00",
-        "preserved_positive_evidence": [],
-        "preserved_not_fit_evidence": [
+      "prior_revision": {
+        "outcome": "analyzed_not_fit",
+        "fit_level": null,
+        "confidence": "medium",
+        "positive_evidence": [],
+        "taste_factors": null,
+        "base_support_compatible": null,
+        "not_fit_basis": "completed_below_threshold",
+        "not_fit_evidence": [
           "The experience is primarily a visual novel with only a light shop-management layer, leaving little of the gameplay mastery or evolving systems that are among the profile's strongest positive signals.",
           "The deliberately slow reading-heavy structure makes narrative quality carry most of the experience, while player feedback on the story itself is divided rather than consistently strong.",
           "The management layer is specifically described as shallow relative to the amount of reading, so it does not provide a strong mechanical counterweight to the narrative and pacing risks."
-        ]
-      },
-      "authorization_id": "355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89--355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89--355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6.json",
-      "sequence": 25
+        ],
+        "authorization_id": "e3f2c58865748684208084d48e6b99d499e35deb296b639b4efabe46ea2d4706",
+        "accepted_at_utc": "2026-09-27T17:32:19+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 26,
+      "target_id": "legacy-full-reanalysis-01:66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c",
@@ -2085,8 +1878,6 @@
       "appid": "1002560",
       "taste_fingerprint": "95d0586d89c23784939258cf0254bf6aaa1f11ca82661e5e46c05aaa3666a97d",
       "candidate_context_sha256": "cfd589ba021df1db69f2d567d886cded54d6116a8f7c55273af053fe5f6b4821",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 26,
       "semantic_input": {
         "title": "Tiny Snow",
         "short_description": "On the snowy mountain, in the wooden hut, we are tied together by the world. She and \"I\" can only love each other, we cannot be separated. Is this free affection, or manipulated love? A short visual novel with multiple endings, \"Tiny Snow\", a story with two girls, and you who know what love is.",
@@ -2106,6 +1897,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1002560.json",
+      "dossier_git_blob_sha": "94af3086677f65c462774adbe1e89ff5b9ea7752",
       "dossier_content_sha256": "abf1b20cb1ba2b9a5ecc953580712c6d192c11834439b38ef40ff9bb4da9b8d2",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -2121,36 +1913,30 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T11:51:29Z",
       "dossier_expires_at_utc": "2026-10-17T11:51:29Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_not_fit",
-        "prior_fit_level": null,
-        "prior_confidence": "medium",
-        "prior_taste_factors": null,
-        "prior_not_fit_basis": "completed_below_threshold",
-        "prior_work_id": "66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c",
-        "prior_authorization_id": "7d630abb43e1727d779ced115f9009652be4b61fde25889a30c50264cb8db0ea",
-        "prior_accepted_at_utc": "2026-09-27T17:32:56+00:00",
-        "preserved_positive_evidence": [],
-        "preserved_not_fit_evidence": [
+      "prior_revision": {
+        "outcome": "analyzed_not_fit",
+        "fit_level": null,
+        "confidence": "medium",
+        "positive_evidence": [],
+        "taste_factors": null,
+        "base_support_compatible": null,
+        "not_fit_basis": "completed_below_threshold",
+        "not_fit_evidence": [
           "The dossier establishes no meaningful gameplay, progression or mastery layer; the experience depends almost entirely on its visual-novel story and branching endings.",
           "Reception of the central artificial-love premise is materially divided, with multiple players criticizing the philosophical or emotional execution, so the narrative does not supply a sufficiently reliable hook to compensate for the absence of gameplay depth.",
           "Presentation receives some praise, but art and music alone do not satisfy the profile's strong need for evolving play, mastery, or consistently compelling story content."
-        ]
-      },
-      "authorization_id": "6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c--6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c--6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22.json",
-      "sequence": 26
+        ],
+        "authorization_id": "7d630abb43e1727d779ced115f9009652be4b61fde25889a30c50264cb8db0ea",
+        "accepted_at_utc": "2026-09-27T17:32:56+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 27,
+      "target_id": "legacy-full-reanalysis-01:375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
@@ -2159,8 +1945,6 @@
       "appid": "1173790",
       "taste_fingerprint": "5bfdf7cb10a83b61c25a5ad772424a299486dddde5758d4da06e5dd15d3f727d",
       "candidate_context_sha256": "eb4e62ba1d6f1390320f4f855e21eff1ebdd0ff26fe07036e6241fcfddb12ddc",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 27,
       "semantic_input": {
         "title": "FINAL FANTASY III",
         "short_description": "The original FINAL FANTASY III comes to life with completely new graphics and audio!\r\n\r\nA remodeled 2D take on the third game in the world-renowned FINAL FANTASY series! Enjoy the timeless story told through charming retro graphics.",
@@ -2184,6 +1968,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1173790.json",
+      "dossier_git_blob_sha": "4a8787c2ca1a10948ec6dcbffc02047a84e2b889",
       "dossier_content_sha256": "d821a5a61eccf93cf54a7e77695f43e87326769d79c28aaa9c083e19b951ddc7",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -2199,42 +1984,36 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T13:08:00Z",
       "dossier_expires_at_utc": "2026-10-17T13:08:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "strong",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The job system supports frequent class changes and experimentation with party roles, directly matching the profile's very strong preference for meaningful development and new mechanical possibilities.",
+          "Varied dungeons, several forms of transport and broader world changes make exploration more dynamic than the earlier Pixel Remasters instead of repeating one static structure.",
+          "Late-game difficulty can reward thoughtful job setups, giving the progression system a mastery payoff beyond collecting classes."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 77,
           "development_variety": 84,
           "structure_pacing_direction": 72,
           "identity_hooks": 64,
           "breadth_of_match": 79
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
-        "prior_authorization_id": "6285430c70b583b548e3a24c8ad56d7115fc751f7fb0d0f0882288d6a7b1f3fa",
-        "prior_accepted_at_utc": "2026-09-27T17:33:32+00:00",
-        "preserved_positive_evidence": [
-          "The job system supports frequent class changes and experimentation with party roles, directly matching the profile's very strong preference for meaningful development and new mechanical possibilities.",
-          "Varied dungeons, several forms of transport and broader world changes make exploration more dynamic than the earlier Pixel Remasters instead of repeating one static structure.",
-          "Late-game difficulty can reward thoughtful job setups, giving the progression system a mastery payoff beyond collecting classes."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5--cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5--cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6.json",
-      "sequence": 27
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "6285430c70b583b548e3a24c8ad56d7115fc751f7fb0d0f0882288d6a7b1f3fa",
+        "accepted_at_utc": "2026-09-27T17:33:32+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 28,
+      "target_id": "legacy-full-reanalysis-01:2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
@@ -2243,8 +2022,6 @@
       "appid": "1173800",
       "taste_fingerprint": "f90f07afb0920b8b9c6534fb0f38a3828f6b5295763aa2b701f4eacc359c41e3",
       "candidate_context_sha256": "edb4c4b4632e7c59c764c48b6c9c622a48bd3674b8ce5fc385f0767e748476a2",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 28,
       "semantic_input": {
         "title": "FINAL FANTASY IV",
         "short_description": "The original FINAL FANTASY IV comes to life with completely new graphics and audio! A remodeled 2D take on the fourth game in the world-renowned FINAL FANTASY series! Enjoy the timeless story told through charming retro graphics.",
@@ -2266,6 +2043,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1173800.json",
+      "dossier_git_blob_sha": "3a64f218812abf324abd65f6ec6ded6517e17666",
       "dossier_content_sha256": "965b019c1543d8aa05dbe86fcd40a2e154e1d2cce44efcbc1f447b7ab42d0d3b",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -2281,42 +2059,36 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T13:08:00Z",
       "dossier_expires_at_utc": "2026-10-17T13:08:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "strong",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The defined cast, Cecil's character arc, party relationships and dramatic events give the game a much stronger narrative and character identity than the earlier entries, matching the profile's high value on memorable characters and authored hooks.",
+          "Active Time Battle increases combat urgency and asks the player to make decisions under pressure, adding an execution and pacing dimension beyond purely static turn-taking.",
+          "Fixed classes reduce build freedom but make each party member mechanically distinctive and tightly connected to the story, preserving meaningful changes in party composition as the campaign develops."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 74,
           "development_variety": 66,
           "structure_pacing_direction": 78,
           "identity_hooks": 88,
           "breadth_of_match": 79
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
-        "prior_authorization_id": "25cdeaae3d5336baa1a9d42629b309be5746e3a58f123969b58ff28d29fb04cb",
-        "prior_accepted_at_utc": "2026-09-27T17:35:34+00:00",
-        "preserved_positive_evidence": [
-          "The defined cast, Cecil's character arc, party relationships and dramatic events give the game a much stronger narrative and character identity than the earlier entries, matching the profile's high value on memorable characters and authored hooks.",
-          "Active Time Battle increases combat urgency and asks the player to make decisions under pressure, adding an execution and pacing dimension beyond purely static turn-taking.",
-          "Fixed classes reduce build freedom but make each party member mechanically distinctive and tightly connected to the story, preserving meaningful changes in party composition as the campaign develops."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea--d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea--d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e.json",
-      "sequence": 28
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "25cdeaae3d5336baa1a9d42629b309be5746e3a58f123969b58ff28d29fb04cb",
+        "accepted_at_utc": "2026-09-27T17:35:34+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 29,
+      "target_id": "legacy-full-reanalysis-01:f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
@@ -2325,8 +2097,6 @@
       "appid": "1173810",
       "taste_fingerprint": "6428d8cdc9e3490a839ebf0362c98781cd9482eb40299b7f086259a13ff6f3c4",
       "candidate_context_sha256": "26927c007eeffea581b7c5d1711a925f0f01d0926278ec5f12eda17ab26b5061",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 29,
       "semantic_input": {
         "title": "FINAL FANTASY V",
         "short_description": "The original FINAL FANTASY V comes to life with completely new graphics and audio as a 2D pixel remaster! A remodeled take on the fifth game in the world-renowned FINAL FANTASY series! Enjoy the timeless story told through charming retro graphics.",
@@ -2349,6 +2119,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1173810.json",
+      "dossier_git_blob_sha": "66179b1e0badebdca814e83ef080eba9a8b8e706",
       "dossier_content_sha256": "53bd1a19d297a9289d39174e5632a826410dd4411448002fa0c809dc6f06815c",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -2364,42 +2135,36 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T13:15:00Z",
       "dossier_expires_at_utc": "2026-10-17T13:15:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "high",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "strong",
+        "confidence": "high",
+        "positive_evidence": [
+          "Freely changing jobs, mastering abilities and combining skills across classes creates a highly expressive development system with persistent new mechanical possibilities, directly matching the profile's strongest progression signal.",
+          "Difficulty spikes are frequently solvable by understanding job synergy and adapting party composition, turning challenge into a mastery and tactical-planning problem rather than simple repetition.",
+          "Pixel Remaster quality-of-life options reduce navigation and grinding friction while preserving the underlying job system, improving pacing without flattening its mechanical depth."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 89,
           "development_variety": 93,
           "structure_pacing_direction": 78,
           "identity_hooks": 69,
           "breadth_of_match": 87
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
-        "prior_authorization_id": "f44b7b196ecc4dea97509e8e17a11935560d51dd663cba197e68128930005c34",
-        "prior_accepted_at_utc": "2026-09-27T17:36:10+00:00",
-        "preserved_positive_evidence": [
-          "Freely changing jobs, mastering abilities and combining skills across classes creates a highly expressive development system with persistent new mechanical possibilities, directly matching the profile's strongest progression signal.",
-          "Difficulty spikes are frequently solvable by understanding job synergy and adapting party composition, turning challenge into a mastery and tactical-planning problem rather than simple repetition.",
-          "Pixel Remaster quality-of-life options reduce navigation and grinding friction while preserving the underlying job system, improving pacing without flattening its mechanical depth."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693--d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693--d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274.json",
-      "sequence": 29
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "f44b7b196ecc4dea97509e8e17a11935560d51dd663cba197e68128930005c34",
+        "accepted_at_utc": "2026-09-27T17:36:10+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     },
     {
+      "sequence": 30,
+      "target_id": "legacy-full-reanalysis-01:cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995",
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
       "work_id": "cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995",
@@ -2408,8 +2173,6 @@
       "appid": "1173820",
       "taste_fingerprint": "4b28023e2bc590b09f70efee84c47dbb0d099307033512c87638bb1eb46a9d4f",
       "candidate_context_sha256": "7e7663621bdca452fe9fa72b18b5cf532251c0430ef9d44c5dff7c2462a121a4",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 30,
       "semantic_input": {
         "title": "FINAL FANTASY VI",
         "short_description": "The original FINAL FANTASY VI comes to life with completely new graphics and audio! A remodeled 2D take on the sixth game in the world-renowned FINAL FANTASY series! Enjoy the timeless story told through charming retro graphics.",
@@ -2433,6 +2196,7 @@
         }
       },
       "dossier_path": "data/cache/taste_steam_review_dossiers/App_1173820.json",
+      "dossier_git_blob_sha": "0357fabb19af6f10ac58102ef44360a55d72b038",
       "dossier_content_sha256": "a5d78b8539b97e6e6b103583d1af277ab30ecd2f0ffcccd83edbe26be5a4ba59",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -2448,41 +2212,33 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
+      "dossier_generated_at_utc": "2026-09-27T13:15:00Z",
       "dossier_expires_at_utc": "2026-10-17T13:15:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "high",
-        "prior_taste_factors": {
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "strong",
+        "confidence": "high",
+        "positive_evidence": [
+          "The large ensemble has distinct personal combat commands while Magicite provides shared magic learning and build customization, creating meaningful party variety and development across the campaign.",
+          "Character arcs, darker dramatic turns and distributed narrative attention make story and cast a central strength, closely matching the profile's high value on memorable characters and strong authored identity.",
+          "The rearranged soundtrack, refreshed pixel presentation and expanded set pieces such as the opera reinforce the game's distinctive atmosphere instead of relying only on mechanics.",
+          "Customization is substantial enough to support experimentation, while the main trade-off is optional grinding and some late-game repetition rather than a lack of development."
+        ],
+        "taste_factors": {
           "gameplay_mastery": 81,
           "development_variety": 86,
           "structure_pacing_direction": 83,
           "identity_hooks": 94,
           "breadth_of_match": 89
         },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995",
-        "prior_authorization_id": "011a5097f8fb05763a6193fbfe3ebd5caa5d644e0ce141c03714d477d0346391",
-        "prior_accepted_at_utc": "2026-09-27T17:36:44+00:00",
-        "preserved_positive_evidence": [
-          "The large ensemble has distinct personal combat commands while Magicite provides shared magic learning and build customization, creating meaningful party variety and development across the campaign.",
-          "Character arcs, darker dramatic turns and distributed narrative attention make story and cast a central strength, closely matching the profile's high value on memorable characters and strong authored identity.",
-          "The rearranged soundtrack, refreshed pixel presentation and expanded set pieces such as the opera reinforce the game's distinctive atmosphere instead of relying only on mechanics.",
-          "Customization is substantial enough to support experimentation, while the main trade-off is optional grinding and some late-game repetition rather than a lack of development."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995--187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995--187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc.json",
-      "sequence": 30
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "011a5097f8fb05763a6193fbfe3ebd5caa5d644e0ce141c03714d477d0346391",
+        "accepted_at_utc": "2026-09-27T17:36:44+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
     }
   ]
 }

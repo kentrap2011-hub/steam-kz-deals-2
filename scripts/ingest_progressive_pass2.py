@@ -250,7 +250,8 @@ def resolve_candidate_authority(path, path_field, doc, persisted_work):
             item['_run_start_authority_commit'] = run_commit
             item['_run_started_at_utc'] = run_started
             item['_run_start_authority_verified'] = True
-            item['_dossier_record'] = _dossier_record_at_commit(run_commit, item)
+            if item.get('work_mode') != progressive_pass2.LEGACY_REANALYSIS_MODE:
+                item['_dossier_record'] = _dossier_record_at_commit(run_commit, item)
             return item, None
         except (ValueError, OSError, json.JSONDecodeError) as exc:
             # Once transport claims an invocation run-start anchor, exact GitHub
@@ -260,6 +261,11 @@ def resolve_candidate_authority(path, path_field, doc, persisted_work):
             raise ValueError(str(exc)) from exc
 
     current = _current_item_for_path(persisted_work, path, path_field)
+    if (
+        isinstance(current, dict)
+        and current.get('work_mode') == progressive_pass2.LEGACY_REANALYSIS_MODE
+    ):
+        raise ValueError('legacy Deep reanalysis requires exact GitHub-confirmed run-start authority')
     if current is None:
         if exact_error:
             raise ValueError(exact_error)

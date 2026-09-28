@@ -98,7 +98,8 @@
     "work_mode": {
       "enum": [
         "normal_first_pass",
-        "recovery"
+        "recovery",
+        "legacy_full_reanalysis"
       ]
     },
     "recovery_authorization_id": {
@@ -137,6 +138,117 @@
     "run_start_anchor_commit": {
       "type": "string",
       "pattern": "^[0-9a-f]{40}$"
+    },
+    "migration_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "migration_id",
+        "migration_target_id",
+        "migration_authority_commit",
+        "migration_frozen_at_utc",
+        "prior_outcome",
+        "prior_fit_level",
+        "prior_confidence",
+        "prior_taste_factors",
+        "prior_not_fit_basis",
+        "prior_work_id",
+        "prior_authorization_id",
+        "prior_accepted_at_utc",
+        "preserved_positive_evidence",
+        "preserved_not_fit_evidence"
+      ],
+      "properties": {
+        "migration_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "migration_target_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "migration_authority_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "migration_frozen_at_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "prior_outcome": {
+          "enum": [
+            "analyzed_fit",
+            "analyzed_not_fit"
+          ]
+        },
+        "prior_fit_level": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "strong",
+            "moderate",
+            null
+          ]
+        },
+        "prior_confidence": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "medium",
+            "high",
+            null
+          ]
+        },
+        "prior_taste_factors": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "prior_not_fit_basis": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "completed_below_threshold",
+            "confirmed_personal_negative",
+            null
+          ]
+        },
+        "prior_work_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "prior_authorization_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "prior_accepted_at_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "preserved_positive_evidence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "preserved_not_fit_evidence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
     }
   },
   "additionalProperties": false,
@@ -194,6 +306,72 @@
             "type": "object",
             "minProperties": 1
           }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "work_mode": {
+            "const": "legacy_full_reanalysis"
+          }
+        },
+        "required": [
+          "work_mode"
+        ]
+      },
+      "then": {
+        "required": [
+          "migration_provenance"
+        ],
+        "properties": {
+          "recovery_authorization_id": {
+            "type": "null"
+          },
+          "recovery_reason": {
+            "type": "null"
+          },
+          "recovery_condition_binding": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "work_mode": {
+            "const": "normal_first_pass"
+          }
+        },
+        "required": [
+          "work_mode"
+        ]
+      },
+      "then": {
+        "not": {
+          "required": [
+            "migration_provenance"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "work_mode": {
+            "const": "recovery"
+          }
+        },
+        "required": [
+          "work_mode"
+        ]
+      },
+      "then": {
+        "not": {
+          "required": [
+            "migration_provenance"
+          ]
         }
       }
     }

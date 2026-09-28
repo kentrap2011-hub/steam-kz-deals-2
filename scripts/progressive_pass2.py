@@ -19,10 +19,13 @@ DOSSIER_STORE = ROOT / 'data/cache/taste_steam_review_dossiers'
 DOSSIER_WORKER_INDEX = ROOT / 'data/production/pre_ai/taste_steam_review_dossier_worker_index.json'
 DOSSIER_WORK = ROOT / 'data/production/pre_ai/taste_steam_review_dossier_work.json'
 CANONICAL_EXECUTION_RECEIPTS = ROOT / 'data/cache/progressive_pass2_execution_receipts'
+LEGACY_REANALYSIS_MANIFEST = ROOT / 'data/control/progressive_pass2_legacy_full_reanalysis_manifest.json'
+LEGACY_REANALYSIS_MODE = 'legacy_full_reanalysis'
+LEGACY_REANALYSIS_CONTRACT = 'PROGRESSIVE-PASS2-LEGACY-FULL-REANALYSIS-MANIFEST-V1'
 
 STATE_SCHEMA_VERSION = 2
 STATE_CONTRACT = 'PROGRESSIVE-PASS2-STATE-V2'
-WORK_MODES = {'normal_first_pass', 'recovery'}
+WORK_MODES = {'normal_first_pass', 'recovery', LEGACY_REANALYSIS_MODE}
 FIT_LEVELS = {'strong', 'moderate'}
 CONFIDENCE = {'medium', 'high'}
 NOT_FIT_BASES = {'completed_below_threshold', 'confirmed_personal_negative'}
@@ -61,6 +64,78 @@ def load_json(path):
 def canonical_sha256(value):
     raw = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')
     return hashlib.sha256(raw).hexdigest()
+
+
+def load_legacy_reanalysis_manifest(path=LEGACY_REANALYSIS_MANIFEST):
+    manifest = load_json(path)
+    if not manifest:
+        return {}
+    if manifest.get('schema_version') != 1 or manifest.get('contract') != LEGACY_REANALYSIS_CONTRACT:
+        raise ValueError('legacy Deep reanalysis manifest contract mismatch')
+    if manifest.get('status') != 'prepared' or manifest.get('one_off') is not True:
+        raise ValueError('legacy Deep reanalysis manifest is not prepared one-off work')
+    migration_id = manifest.get('migration_id')
+    authority = str(manifest.get('migration_authority_commit') or '').lower()
+    frozen_at = parse_utc(manifest.get('migration_frozen_at_utc'))
+    if not isinstance(migration_id, str) or not migration_id:
+        raise ValueError('legacy Deep reanalysis migration_id is missing')
+    if not re.fullmatch(r'[0-9a-f]{40}', authority):
+        raise ValueError('legacy Deep reanalysis authority commit is invalid')
+    if frozen_at is None:
+        raise ValueError('legacy Deep reanalysis frozen time is invalid')
+    targets = manifest.get('targets')
+    scope = manifest.get('scope') or {}
+    if not isinstance(targets, list) or int(scope.get('target_count') or -1) != len(targets):
+        raise ValueError('legacy Deep reanalysis target count mismatch')
+    seen_ids = set()
+    seen_families = set()
+    for sequence, target in enumerate(targets, 1):
+        if not isinstance(target, dict) or target.get('sequence') != sequence:
+            raise ValueError('legacy Deep reanalysis target order is invalid')
+        target_id = target.get('target_id')
+        family_id = target.get('family_id')
+        if not isinstance(target_id, str) or not target_id or target_id in seen_ids:
+            raise ValueError('legacy Deep reanalysis target id is invalid or duplicated')
+        if not isinstance(family_id, str) or not family_id or family_id in seen_families:
+            raise ValueError('legacy Deep reanalysis family id is invalid or duplicated')
+        if target.get('semantic_generation_id') != manifest.get('semantic_generation_id'):
+            raise ValueError('legacy Deep reanalysis target generation mismatch')
+        if target.get('profile_pin_sha256') != (manifest.get('profile_pin') or {}).get('pin_sha256'):
+            raise ValueError('legacy Deep reanalysis target profile pin mismatch')
+        if target.get('dossier_compatibility_binding') != manifest.get('dossier_compatibility_binding'):
+            raise ValueError('legacy Deep reanalysis target Dossier binding mismatch')
+        prior = target.get('prior_revision') or {}
+        if prior.get('outcome') == 'analyzed_fit':
+            if not isinstance(prior.get('positive_evidence'), list) or not prior.get('positive_evidence'):
+                raise ValueError('legacy Deep fit target lacks preserved positive evidence')
+        elif prior.get('outcome') == 'analyzed_not_fit':
+            if not isinstance(prior.get('not_fit_evidence'), list) or not prior.get('not_fit_evidence'):
+                raise ValueError('legacy Deep not-fit target lacks preserved baseline evidence')
+        else:
+            raise ValueError('legacy Deep reanalysis prior outcome is not authoritative')
+        seen_ids.add(target_id)
+        seen_families.add(family_id)
+    return manifest
+
+
+def migration_provenance(manifest, target):
+    prior = target.get('prior_revision') or {}
+    return {
+        'migration_id': manifest['migration_id'],
+        'migration_target_id': target['target_id'],
+        'migration_authority_commit': manifest['migration_authority_commit'],
+        'migration_frozen_at_utc': manifest['migration_frozen_at_utc'],
+        'prior_outcome': prior.get('outcome'),
+        'prior_fit_level': prior.get('fit_level'),
+        'prior_confidence': prior.get('confidence'),
+        'prior_taste_factors': deepcopy(prior.get('taste_factors')),
+        'prior_not_fit_basis': prior.get('not_fit_basis'),
+        'prior_work_id': target.get('work_id'),
+        'prior_authorization_id': prior.get('authorization_id'),
+        'prior_accepted_at_utc': prior.get('accepted_at_utc'),
+        'preserved_positive_evidence': deepcopy(prior.get('positive_evidence') or []),
+        'preserved_not_fit_evidence': deepcopy(prior.get('not_fit_evidence') or []),
+    }
 
 
 def parse_utc(value):
@@ -352,6 +427,7 @@ def authorization_id(
     *,
     work_mode='normal_first_pass',
     recovery_authorization_id=None,
+    migration_provenance_value=None,
 ):
     if work_mode not in WORK_MODES:
         raise ValueError('unknown Deep work mode')
@@ -363,11 +439,19 @@ def authorization_id(
         'dossier_compatibility_binding': dossier_compatibility_binding,
         'work_mode': work_mode,
         'recovery_authorization_id': recovery_authorization_id,
+        'migration_provenance': migration_provenance_value,
     }
     if any(not material.get(key) for key in ('semantic_generation_id', 'work_id', 'appid', 'dossier_content_sha256')):
         raise ValueError('Deep authorization material is incomplete')
     if work_mode == 'recovery' and not recovery_authorization_id:
         raise ValueError('Deep recovery work requires recovery_authorization_id')
+    if work_mode == LEGACY_REANALYSIS_MODE:
+        if recovery_authorization_id is not None:
+            raise ValueError('legacy Deep reanalysis cannot consume recovery authorization')
+        if not isinstance(migration_provenance_value, dict) or not migration_provenance_value:
+            raise ValueError('legacy Deep reanalysis requires migration provenance')
+    elif migration_provenance_value is not None:
+        raise ValueError('normal/recovery Deep work cannot carry migration provenance')
     if not isinstance(dossier_compatibility_binding, dict) or not dossier_compatibility_binding:
         raise ValueError('Deep Dossier compatibility binding is missing')
     return canonical_sha256(material)
@@ -432,8 +516,24 @@ def validate_run_start_authority(
     dossier_path = work_item.get('dossier_path')
     if not isinstance(dossier_path, str) or not dossier_path:
         raise ValueError('Deep run-start Dossier path is missing')
+
+    evidence_authority = authority
+    evidence_time = started
+    if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
+        provenance = work_item.get('migration_provenance')
+        if not isinstance(provenance, dict):
+            raise ValueError('legacy Deep reanalysis migration provenance is missing')
+        evidence_authority = str(provenance.get('migration_authority_commit') or '').lower()
+        evidence_time = parse_utc(provenance.get('migration_frozen_at_utc'))
+        if evidence_time is None:
+            raise ValueError('legacy Deep reanalysis frozen evidence time is invalid')
+        if not progressive_work_authority.commit_is_ancestor(
+            evidence_authority, authority, repo_root=repo_root
+        ):
+            raise ValueError('legacy Deep reanalysis authority is not an ancestor of run-start authority')
+
     raw = progressive_work_authority.file_bytes_at_commit(
-        authority, dossier_path, repo_root=repo_root
+        evidence_authority, dossier_path, repo_root=repo_root
     )
     digest = hashlib.sha256(raw).hexdigest()
     if digest != work_item.get('dossier_content_sha256'):
@@ -455,10 +555,12 @@ def validate_run_start_authority(
         semantic_input=work_item.get('semantic_input') or {},
         dossier_record=record,
         current_binding=work_item.get('dossier_compatibility_binding'),
-        now=started,
+        now=evidence_time,
     )
     if not ok:
         raise ValueError('Deep run-start authority is not live: ' + reason)
+    work_item['_dossier_record'] = record
+    work_item['_dossier_evidence_authority_commit'] = evidence_authority
     return True
 
 def prepared_work_item_dossier_is_live(work_item, now=None):
@@ -710,6 +812,161 @@ def make_work_item(
     }
 
 
+
+def make_legacy_reanalysis_work_item(manifest, target):
+    binding = {field: target.get(field) for field in PASS1_IDENTITY_FIELDS}
+    missing = [field for field, value in binding.items() if not isinstance(value, str) or not value]
+    if missing:
+        raise ValueError(f'legacy Deep reanalysis target binding is incomplete: {missing}')
+    provenance = migration_provenance(manifest, target)
+    auth = authorization_id(
+        binding,
+        target['dossier_content_sha256'],
+        target['dossier_compatibility_binding'],
+        work_mode=LEGACY_REANALYSIS_MODE,
+        migration_provenance_value=provenance,
+    )
+    prefix = f"{binding['semantic_generation_id'][:16]}--{binding['work_id']}--{auth}"
+    return {
+        **binding,
+        'work_mode': LEGACY_REANALYSIS_MODE,
+        'migration_sequence': target.get('sequence'),
+        'semantic_input': deepcopy(target.get('semantic_input') or {}),
+        'dossier_path': target['dossier_path'],
+        'dossier_content_sha256': target['dossier_content_sha256'],
+        'dossier_compatibility_binding': deepcopy(target['dossier_compatibility_binding']),
+        'dossier_expires_at_utc': target['dossier_expires_at_utc'],
+        'recovery_authorization_id': None,
+        'recovery_reason': None,
+        'recovery_condition_binding': None,
+        'migration_provenance': provenance,
+        'authorization_id': auth,
+        'result_submission_path': f'data/ai_inbox/progressive_pass2/results/{prefix}.json',
+        'terminal_execution_submission_path': (
+            f'data/ai_inbox/progressive_pass2/execution_receipts/{prefix}.json'
+        ),
+    }
+
+
+def legacy_reanalysis_attempts(entry, migration_id=None):
+    rows = list((entry or {}).get('legacy_reanalysis_attempts') or [])
+    if migration_id is None:
+        return rows
+    return [
+        row for row in rows
+        if isinstance(row, dict)
+        and ((row.get('migration_provenance') or {}).get('migration_id') == migration_id)
+    ]
+
+
+def legacy_reanalysis_target_status(entry, target, migration_id):
+    attempts = legacy_reanalysis_attempts(entry, migration_id)
+    for attempt in reversed(attempts):
+        provenance = attempt.get('migration_provenance') or {}
+        if provenance.get('migration_target_id') != target.get('target_id'):
+            continue
+        if attempt.get('outcome') in AUTHORITATIVE_OUTCOMES:
+            return 'accepted_completed', attempt
+        if attempt.get('outcome') == 'analysis_incomplete':
+            return 'accepted_incomplete', attempt
+    prior = target.get('prior_revision') or {}
+    if not isinstance(entry, dict):
+        return 'stale_or_missing_prior', None
+    if entry.get('authorization_id') != prior.get('authorization_id'):
+        return 'stale_or_missing_prior', None
+    if entry.get('outcome') != prior.get('outcome'):
+        return 'stale_or_missing_prior', None
+    return 'pending', None
+
+
+def legacy_reanalysis_work_and_metrics(state_doc, manifest=None):
+    manifest = manifest if manifest is not None else load_legacy_reanalysis_manifest()
+    if not manifest:
+        return [], {
+            'migration_id': None,
+            'migration_authority_commit': None,
+            'total_count': 0,
+            'pending_count': 0,
+            'submitted_count': 0,
+            'accepted_count': 0,
+            'accepted_completed_count': 0,
+            'changed_result_count': 0,
+            'unchanged_result_count': 0,
+            'changed_fit_outcome_count': 0,
+            'unchanged_fit_outcome_count': 0,
+            'incomplete_count': 0,
+            'confirmed_risk_count': 0,
+            'caution_count': 0,
+            'completed_no_relevant_negative_count': 0,
+            'stale_or_missing_prior_count': 0,
+            'last_accepted_at_utc': None,
+            'complete': True,
+        }
+    migration_id = manifest['migration_id']
+    work = []
+    metrics = {
+        'migration_id': migration_id,
+        'migration_authority_commit': manifest['migration_authority_commit'],
+        'total_count': len(manifest.get('targets') or []),
+        'pending_count': 0,
+        'submitted_count': 0,
+        'accepted_count': 0,
+        'accepted_completed_count': 0,
+        'changed_result_count': 0,
+        'unchanged_result_count': 0,
+        'changed_fit_outcome_count': 0,
+        'unchanged_fit_outcome_count': 0,
+        'incomplete_count': 0,
+        'confirmed_risk_count': 0,
+        'caution_count': 0,
+        'completed_no_relevant_negative_count': 0,
+        'stale_or_missing_prior_count': 0,
+        'last_accepted_at_utc': None,
+        'complete': False,
+    }
+    accepted_times = []
+    for target in manifest.get('targets') or []:
+        entry = (state_doc.get('entries') or {}).get(target.get('family_id'))
+        status, attempt = legacy_reanalysis_target_status(entry, target, migration_id)
+        if status == 'pending':
+            item = make_legacy_reanalysis_work_item(manifest, target)
+            work.append(item)
+            metrics['pending_count'] += 1
+            if Path(item['result_submission_path']).exists() or Path(item['terminal_execution_submission_path']).exists():
+                metrics['submitted_count'] += 1
+            continue
+        if status == 'stale_or_missing_prior':
+            metrics['stale_or_missing_prior_count'] += 1
+            continue
+        metrics['accepted_count'] += 1
+        accepted_at = attempt.get('accepted_at_utc') if isinstance(attempt, dict) else None
+        if accepted_at:
+            accepted_times.append(accepted_at)
+        if status == 'accepted_incomplete':
+            metrics['incomplete_count'] += 1
+            continue
+        metrics['accepted_completed_count'] += 1
+        if attempt.get('migration_result_changed') is True:
+            metrics['changed_result_count'] += 1
+        else:
+            metrics['unchanged_result_count'] += 1
+        if attempt.get('migration_fit_outcome_changed') is True:
+            metrics['changed_fit_outcome_count'] += 1
+        else:
+            metrics['unchanged_fit_outcome_count'] += 1
+        assessment = attempt.get('negative_assessment') or {}
+        findings = list(assessment.get('findings') or [])
+        if any(row.get('disposition') == 'confirmed_personal_risk' for row in findings if isinstance(row, dict)):
+            metrics['confirmed_risk_count'] += 1
+        elif any(row.get('disposition') == 'caution' for row in findings if isinstance(row, dict)):
+            metrics['caution_count'] += 1
+        elif assessment.get('status') == 'completed':
+            metrics['completed_no_relevant_negative_count'] += 1
+    metrics['last_accepted_at_utc'] = max(accepted_times) if accepted_times else None
+    metrics['complete'] = metrics['accepted_count'] == metrics['total_count']
+    return work, metrics
+
+
 def recompute_eligibility(
     *,
     context_rows,
@@ -865,6 +1122,8 @@ def _identity_matches(doc, work_item, contract_name):
         return False
     if doc.get('recovery_condition_binding') != work_item.get('recovery_condition_binding'):
         return False
+    if doc.get('migration_provenance') != work_item.get('migration_provenance'):
+        return False
     run_anchor = work_item.get('_run_start_anchor_commit')
     if run_anchor is not None and doc.get('run_start_anchor_commit') != run_anchor:
         return False
@@ -887,6 +1146,7 @@ def _attempt_base(work_item, outcome, accepted_at_utc, source):
         'recovery_authorization_id': work_item.get('recovery_authorization_id'),
         'recovery_reason': work_item.get('recovery_reason'),
         'recovery_condition_binding': deepcopy(work_item.get('recovery_condition_binding')),
+        'migration_provenance': deepcopy(work_item.get('migration_provenance')),
         'outcome': outcome,
         'analysis_issue_code': None,
         'attempt_consumption_source': source,
@@ -896,6 +1156,31 @@ def _attempt_base(work_item, outcome, accepted_at_utc, source):
         'run_started_at_utc': work_item.get('_run_started_at_utc'),
         'work_authority_commit': work_item.get('_work_authority_commit'),
     }
+
+
+def _migration_result_changed(work_item, attempt):
+    provenance = work_item.get('migration_provenance') or {}
+    if work_item.get('work_mode') != LEGACY_REANALYSIS_MODE:
+        return None
+    if attempt.get('outcome') != provenance.get('prior_outcome'):
+        return True
+    findings = list((attempt.get('negative_assessment') or {}).get('findings') or [])
+    if findings:
+        return True
+    if attempt.get('outcome') == 'analyzed_fit':
+        return any((
+            attempt.get('fit_level') != provenance.get('prior_fit_level'),
+            attempt.get('confidence') != provenance.get('prior_confidence'),
+            attempt.get('taste_factors') != provenance.get('prior_taste_factors'),
+        ))
+    if attempt.get('outcome') == 'analyzed_not_fit':
+        return any((
+            attempt.get('confidence') != provenance.get('prior_confidence'),
+            attempt.get('not_fit_basis') != provenance.get('prior_not_fit_basis'),
+            list(attempt.get('not_fit_evidence') or [])
+            != list(provenance.get('preserved_not_fit_evidence') or []),
+        ))
+    return None
 
 
 def normalize_result(doc, work_item, accepted_at_utc=None):
@@ -919,6 +1204,12 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
         evidence = progressive_pass1._validate_text_list(
             'positive_evidence', doc.get('positive_evidence'), require_nonempty=True
         )
+        if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
+            preserved = list((work_item.get('migration_provenance') or {}).get('preserved_positive_evidence') or [])
+            if not preserved:
+                raise ValueError('legacy Deep reanalysis cannot create fit without preserved accepted positives')
+            if evidence != preserved:
+                raise ValueError('legacy Deep reanalysis fit must reuse exact preserved positive evidence')
         factors = doc.get('taste_factors')
         validate_taste_factors(factors)
         requires_base = bool(
@@ -936,6 +1227,11 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
             'base_support_compatible': True if requires_base else None,
             'negative_assessment': deepcopy(negative_assessment),
         })
+        if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
+            base['migration_result_changed'] = _migration_result_changed(work_item, base)
+            base['migration_fit_outcome_changed'] = (
+                base.get('outcome') != (work_item.get('migration_provenance') or {}).get('prior_outcome')
+            )
         return base
 
     if outcome == 'analyzed_not_fit':
@@ -951,6 +1247,12 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
         evidence = progressive_pass1._validate_text_list(
             'not_fit_evidence', doc.get('not_fit_evidence'), require_nonempty=True
         )
+        if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
+            provenance = work_item.get('migration_provenance') or {}
+            if provenance.get('prior_outcome') == 'analyzed_not_fit':
+                preserved = list(provenance.get('preserved_not_fit_evidence') or [])
+                if not preserved or any(row not in evidence for row in preserved):
+                    raise ValueError('legacy Deep reanalysis not-fit must retain the accepted prior not-fit baseline')
         if basis == 'confirmed_personal_negative':
             confirmed = [
                 row for row in negative_assessment.get('findings') or []
@@ -964,6 +1266,11 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
             'not_fit_evidence': evidence,
             'negative_assessment': deepcopy(negative_assessment),
         })
+        if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
+            base['migration_result_changed'] = _migration_result_changed(work_item, base)
+            base['migration_fit_outcome_changed'] = (
+                base.get('outcome') != (work_item.get('migration_provenance') or {}).get('prior_outcome')
+            )
         return base
 
     if 'negative_assessment' in doc:
@@ -1007,6 +1314,7 @@ def normalize_terminal_execution_receipt(doc, work_item, accepted_at_utc=None, s
         'recovery_authorization_id': work_item.get('recovery_authorization_id'),
         'recovery_reason': work_item.get('recovery_reason'),
         'recovery_condition_binding': deepcopy(work_item.get('recovery_condition_binding')),
+        'migration_provenance': deepcopy(work_item.get('migration_provenance')),
         'execution_status': 'executed_no_accepted_result',
         'execution_started_at_utc': doc['execution_started_at_utc'],
         'execution_finished_at_utc': doc['execution_finished_at_utc'],
@@ -1032,6 +1340,26 @@ def _attempt_authorization_status(existing, work_item):
     mode = work_item.get('work_mode')
     if mode == 'normal_first_pass':
         return 'new' if existing is None else 'replay'
+    if mode == LEGACY_REANALYSIS_MODE:
+        if existing is None:
+            return 'unauthorized'
+        provenance = work_item.get('migration_provenance') or {}
+        migration_id = provenance.get('migration_id')
+        target_id = provenance.get('migration_target_id')
+        for attempt in legacy_reanalysis_attempts(existing, migration_id):
+            attempt_provenance = attempt.get('migration_provenance') or {}
+            if (
+                attempt_provenance.get('migration_target_id') == target_id
+                and attempt.get('authorization_id') == work_item.get('authorization_id')
+            ):
+                return 'replay'
+        if existing.get('authorization_id') != provenance.get('prior_authorization_id'):
+            return 'unauthorized'
+        if existing.get('authoritative_completed') is not True:
+            return 'unauthorized'
+        if existing.get('outcome') != provenance.get('prior_outcome'):
+            return 'unauthorized'
+        return 'new'
     if mode != 'recovery' or existing is None:
         return 'unauthorized'
     recovery_authorization_id = work_item.get('recovery_authorization_id')
@@ -1085,6 +1413,75 @@ def _apply_attempt(existing, work_item, attempt):
             'recovery_owned': not authoritative,
             'recovery_authorization': None,
         }
+        for field in (
+            'fit_level', 'confidence', 'positive_evidence', 'taste_factors',
+            'base_support_compatible', 'not_fit_basis', 'not_fit_evidence',
+            'negative_assessment',
+        ):
+            if field in attempt:
+                entry[field] = deepcopy(attempt[field])
+        return entry
+
+    if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
+        if existing is None or existing.get('authoritative_completed') is not True:
+            raise ValueError('legacy Deep reanalysis requires an existing authoritative prior revision')
+        provenance = work_item.get('migration_provenance') or {}
+        if existing.get('authorization_id') != provenance.get('prior_authorization_id'):
+            raise ValueError('legacy Deep reanalysis prior revision authorization changed')
+        entry = deepcopy(existing)
+        migration_attempts = list(entry.get('legacy_reanalysis_attempts') or [])
+        migration_attempts.append(deepcopy(attempt))
+        entry['legacy_reanalysis_attempts'] = migration_attempts
+        entry['legacy_reanalysis_status'] = {
+            'migration_id': provenance.get('migration_id'),
+            'migration_target_id': provenance.get('migration_target_id'),
+            'attempt_outcome': attempt.get('outcome'),
+            'accepted_at_utc': attempt.get('accepted_at_utc'),
+            'completed_revision_promoted': bool(authoritative),
+        }
+        if not authoritative:
+            # Fail-safe continuity: an incomplete migration attempt is terminal for
+            # this one-off target but cannot displace the prior completed result.
+            return entry
+
+        prior_snapshot = deepcopy(existing)
+        prior_snapshot.pop('revision_history', None)
+        prior_snapshot.pop('legacy_reanalysis_attempts', None)
+        prior_snapshot.pop('legacy_reanalysis_status', None)
+        history = list(entry.get('revision_history') or [])
+        history.append({
+            'revision_kind': 'pre_legacy_full_reanalysis',
+            'migration_id': provenance.get('migration_id'),
+            'superseded_at_utc': attempt.get('accepted_at_utc'),
+            'state': prior_snapshot,
+        })
+        entry['revision_history'] = history
+
+        for field in (
+            'fit_level', 'confidence', 'positive_evidence', 'taste_factors',
+            'base_support_compatible', 'not_fit_basis', 'not_fit_evidence',
+            'negative_assessment',
+        ):
+            entry.pop(field, None)
+        entry['pass2_attempted'] = True
+        entry['authoritative_completed'] = True
+        entry['outcome'] = attempt['outcome']
+        entry['analysis_issue_code'] = attempt.get('analysis_issue_code')
+        entry['attempt_consumption_source'] = attempt.get('attempt_consumption_source')
+        entry['accepted_at_utc'] = attempt.get('accepted_at_utc')
+        entry['work_authority_commit'] = attempt.get('work_authority_commit')
+        entry['dossier_content_sha256'] = attempt.get('dossier_content_sha256')
+        entry['dossier_compatibility_binding'] = deepcopy(attempt.get('dossier_compatibility_binding'))
+        entry['authorization_id'] = attempt.get('authorization_id')
+        entry['work_mode'] = LEGACY_REANALYSIS_MODE
+        entry['recovery_authorization_id'] = None
+        entry['recovery_reason'] = None
+        entry['recovery_condition_binding'] = None
+        entry['recovery_owned'] = False
+        entry['recovery_authorization'] = None
+        entry['migration_provenance'] = deepcopy(attempt.get('migration_provenance'))
+        entry['migration_result_changed'] = attempt.get('migration_result_changed')
+        entry['migration_fit_outcome_changed'] = attempt.get('migration_fit_outcome_changed')
         for field in (
             'fit_level', 'confidence', 'positive_evidence', 'taste_factors',
             'base_support_compatible', 'not_fit_basis', 'not_fit_evidence',
@@ -1187,9 +1584,9 @@ def process_result_documents(work_doc, state_doc, documents, accepted_at_utc=Non
             'work_id': work_item['work_id'],
             'family_id': work_item['family_id'],
             'work_mode': work_item.get('work_mode'),
-            'outcome': entry['outcome'],
-            'analysis_issue_code': entry.get('analysis_issue_code'),
-            'authoritative_completed': entry.get('authoritative_completed'),
+            'outcome': attempt['outcome'],
+            'analysis_issue_code': attempt.get('analysis_issue_code'),
+            'authoritative_completed': attempt.get('outcome') in AUTHORITATIVE_OUTCOMES,
             'recovery_owned': entry.get('recovery_owned'),
         })
         receipts.append(receipt)
@@ -1278,9 +1675,10 @@ def process_terminal_execution_documents(
             'family_id': work_item['family_id'],
             'work_mode': work_item.get('work_mode'),
             'outcome': 'analysis_incomplete',
-            'analysis_issue_code': entry['analysis_issue_code'],
+            'analysis_issue_code': attempt['analysis_issue_code'],
             'authoritative_completed': False,
-            'recovery_owned': True,
+            'recovery_owned': bool(entry.get('recovery_owned')),
+
             'canonical_receipt_path': str(canonical_path).replace('\\', '/'),
         })
         receipts.append(receipt)
@@ -1329,6 +1727,7 @@ def semantic_taste_entry(entry):
         'authorization_id': entry.get('authorization_id'),
         'accepted_at_utc': entry.get('accepted_at_utc'),
         'work_authority_commit': entry.get('work_authority_commit'),
+        'migration_provenance': deepcopy(entry.get('migration_provenance')),
     }
     negative = deep_negative_projection(entry)
     confirmed = [

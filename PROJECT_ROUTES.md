@@ -282,3 +282,22 @@ Use this route when a visually ready game is blocked by the meaningful-Russian g
 6. Publication chain remains `.github/workflows/build-daily-visual-payload.yml` -> `data/production/visual/current.json` -> `.github/workflows/deploy-visual.yml` -> `web/data/current.json`.
 
 The browser does not fetch or repair descriptions. Interactive chat does not translate production rows or populate the translation cache manually.
+
+## Legacy Deep full reanalysis migration
+
+Use this route only for the finite PPD-010 migration `deep-legacy-full-reanalysis-with-preserved-positives-01`.
+
+- Decision: `PROJECT_DECISIONS.md#PPD-010`.
+- Frozen finite scope/evidence authority: `data/control/progressive_pass2_legacy_full_reanalysis_manifest.json`.
+- Runtime contract: `config/progressive_pass2_contract.json#legacy_full_reanalysis`.
+- Semantic worker: existing `config/progressive_pass2_worker_prompt.md`; there is no migration-specific worker or Scheduled Task.
+- Prepared work projection: `scripts/build_progressive_pass2_work.py` -> `data/production/pre_ai/progressive_pass2_work.json`, work mode `legacy_full_reanalysis`.
+- Exact evidence gate: `scripts/progressive_pass2.py::validate_run_start_authority` uses the migration authority Dossier bytes and frozen time while preserving the ordinary V2 run-start publication guard.
+- Result validation/history: `scripts/progressive_pass2.py::normalize_result`, `_attempt_authorization_status`, `_apply_attempt`; prior authoritative Deep revision is archived under `revision_history`, incomplete migration leaves it current.
+- Ingest: `scripts/ingest_progressive_pass2.py::resolve_candidate_authority`; migration requires exact confirmed run-start authority and never falls back to mutable current Dossier bytes.
+- Observability: `scripts/progressive_pass2.py::legacy_reanalysis_work_and_metrics` -> PASS 2 work scope -> `scripts/progressive_personalization.py` producer status.
+- Regression: `scripts/test_deep_legacy_full_reanalysis.py`.
+- Dossier remains in the existing shared canonical-writer domain and continues independently. Scheduled Task configuration is unchanged.
+
+Rediscovery invariant: never regenerate migration membership from later legacy state. The committed manifest is the complete one-off target set.
+

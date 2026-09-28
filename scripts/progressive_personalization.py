@@ -1,5 +1,6 @@
 import json
 import subprocess
+from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -674,6 +675,29 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         raise ValueError('Deep progress arithmetic underflow')
 
     dossier = _dossier_processing_metrics()
+    pass2_work = progressive_pass2.load_json(progressive_pass2.WORK)
+    legacy_reanalysis = deepcopy(
+        ((pass2_work.get('scope') or {}).get('legacy_full_reanalysis')) or {
+            'migration_id': None,
+            'migration_authority_commit': None,
+            'total_count': 0,
+            'pending_count': 0,
+            'submitted_count': 0,
+            'accepted_count': 0,
+            'accepted_completed_count': 0,
+            'changed_result_count': 0,
+            'unchanged_result_count': 0,
+            'changed_fit_outcome_count': 0,
+            'unchanged_fit_outcome_count': 0,
+            'incomplete_count': 0,
+            'confirmed_risk_count': 0,
+            'caution_count': 0,
+            'completed_no_relevant_negative_count': 0,
+            'stale_or_missing_prior_count': 0,
+            'last_accepted_at_utc': None,
+            'complete': True,
+        }
+    )
     return {
         'schema_version': 3,
         'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
@@ -719,6 +743,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'deep_normal_first_pass_complete': deep_normal_remaining == 0,
         'deep_all_current_authoritative_complete': deep_authoritative_remaining == 0,
         'deep_last_write_at_utc': max(deep_write_times) if deep_write_times else None,
+        'deep_legacy_full_reanalysis': legacy_reanalysis,
 
         'fast_stage_counts': {
             'total_current_scope': fast_total,
@@ -758,6 +783,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
             'normal_first_pass_complete': deep_normal_remaining == 0,
             'all_current_authoritative_complete': deep_authoritative_remaining == 0,
             'last_write_at_utc': max(deep_write_times) if deep_write_times else None,
+            'legacy_full_reanalysis': legacy_reanalysis,
         },
         'effective_result_counts': {
             'deep': sum(
@@ -840,6 +866,7 @@ def validate_processing_status(status):
         'deep_remaining_until_all_authoritative_count',
         'deep_normal_first_pass_complete', 'deep_all_current_authoritative_complete',
         'fast_last_write_at_utc', 'dossier_last_write_at_utc', 'deep_last_write_at_utc',
+        'deep_legacy_full_reanalysis',
     }
     if not required.issubset(status):
         raise ValueError('progressive processing status missing required counters')
@@ -910,6 +937,35 @@ def validate_processing_status(status):
         int(status['deep_remaining_until_all_authoritative_count']) == 0
     ):
         raise ValueError('Deep all-authoritative completion flag mismatch')
+
+    migration = status.get('deep_legacy_full_reanalysis')
+    if not isinstance(migration, dict):
+        raise ValueError('Deep legacy reanalysis observability is missing')
+    migration_total = int(migration.get('total_count') or 0)
+    migration_pending = int(migration.get('pending_count') or 0)
+    migration_accepted = int(migration.get('accepted_count') or 0)
+    migration_stale = int(migration.get('stale_or_missing_prior_count') or 0)
+    migration_completed = int(migration.get('accepted_completed_count') or 0)
+    migration_incomplete = int(migration.get('incomplete_count') or 0)
+    if migration_total != migration_pending + migration_accepted + migration_stale:
+        raise ValueError('Deep legacy reanalysis scope invariant failed')
+    if migration_accepted != migration_completed + migration_incomplete:
+        raise ValueError('Deep legacy reanalysis accepted-outcome invariant failed')
+    if migration_completed != (
+        int(migration.get('changed_fit_outcome_count') or 0)
+        + int(migration.get('unchanged_fit_outcome_count') or 0)
+    ):
+        raise ValueError('Deep legacy reanalysis verdict-change invariant failed')
+    if migration_completed != (
+        int(migration.get('changed_result_count') or 0)
+        + int(migration.get('unchanged_result_count') or 0)
+    ):
+        raise ValueError('Deep legacy reanalysis result-change invariant failed')
+    if bool(migration.get('complete')) != (migration_accepted == migration_total):
+        raise ValueError('Deep legacy reanalysis completion flag mismatch')
+    migration_last = migration.get('last_accepted_at_utc')
+    if migration_last is not None and _normalize_utc_timestamp(migration_last) is None:
+        raise ValueError('Deep legacy reanalysis last accepted timestamp is invalid')
 
     if (
         status.get('pass1_active') is not True
