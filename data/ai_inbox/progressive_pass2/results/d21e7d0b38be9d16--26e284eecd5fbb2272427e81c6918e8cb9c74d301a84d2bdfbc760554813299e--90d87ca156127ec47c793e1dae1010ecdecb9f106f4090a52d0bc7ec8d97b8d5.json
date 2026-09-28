@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "06ec757a4eae872e5173977f8a0e4633562fb7ac",
+  "run_start_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+  "run_started_at_utc": "2026-09-28T16:43:36+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+  "work_id": "26e284eecd5fbb2272427e81c6918e8cb9c74d301a84d2bdfbc760554813299e",
+  "family_id": "game:13500",
+  "taste_subject_key": "App_13500",
+  "appid": "13500",
+  "taste_fingerprint": "ca4ac0694ab4752278eb5997c23ced553b869051d1ca3660fdd2b9a201730358",
+  "candidate_context_sha256": "bbabb448bc8f147058b228c99b11cc8c7ad84118898ce95455f5f72589429bd4",
+  "dossier_content_sha256": "b4420102e34319bbcf517190c3958e631e0541a93256372056c999c016319f1b",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "90d87ca156127ec47c793e1dae1010ecdecb9f106f4090a52d0bc7ec8d97b8d5",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Acrobatic platforming, environmental movement, time powers and the expanded combo system make both traversal and combat expressive, matching the profile's strongest movement and mastery signals.",
+    "Weapon interactions and combat options broaden over the campaign, so progression comes through learning a larger toolkit rather than only raising statistics.",
+    "The darker tone, Dahaka pursuits and aggressive audiovisual identity give the sequel a memorable personality distinct from Sands of Time."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 92,
+    "development_variety": 80,
+    "structure_pacing_direction": 64,
+    "identity_hooks": 87,
+    "breadth_of_match": 86
+  },
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "difficulty_punishment",
+        "text_ru": "На высокой сложности часть поздних боёв может превращаться в затяжной барьер из-за большого здоровья врагов, агрессивных групп, чекпоинтов и повторов боссов. Это хуже соответствует предпочтению сложности, которая в первую очередь раскрывается через чистое освоение механик.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "directionlessness",
+        "text_ru": "Постоянные переходы между прошлым и настоящим одной и той же крепости создают сильную структуру времени, но одновременно дают возвраты и моменты, когда неясно, куда двигаться дальше — это напрямую задевает чувствительность профиля к потерянности.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Мрачный тон, тяжёлая музыка и более агрессивный Принц сильно выделяют игру, но часть игроков предпочитает более лёгкую атмосферу и ясную подачу Sands of Time.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Старая ПК-версия может быть капризной на современном железе; свежий отчёт на Steam Deck описывает успешное прохождение после настройки разрешения и V-Sync, поэтому это скорее техническое предупреждение.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  }
+}
