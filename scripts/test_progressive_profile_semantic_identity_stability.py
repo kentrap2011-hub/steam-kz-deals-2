@@ -3,8 +3,11 @@ import hashlib
 import json
 from datetime import datetime, timezone
 
+import card_explanation_policy
 import progressive_pass1
 import progressive_pass2
+import progressive_personalization
+import refine_visual_ranking as refiner
 
 
 def profile_projection(*, commit_char='a', content=b'profile-a', model='taste-v3',
@@ -104,6 +107,35 @@ def synthetic_rules():
     assert generation_changed['semantic_generation_id'] != generation_a['semantic_generation_id']
     assert bindings_changed['game:1']['work_id'] != bindings_a['game:1']['work_id']
     assert progressive_pass1.matching_state_entry(bindings_changed['game:1'], state) is None
+
+    # Missing/inconsistent semantic content identity fails closed.
+    missing_content = profile_projection(commit_char='e', content=b'identical-profile')
+    missing_content['current_profile'].pop('content_sha256')
+    try:
+        progressive_pass1.semantic_generation(missing_content)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError('missing profile content identity did not fail closed')
+
+    missing_blob = profile_projection(commit_char='f', content=b'identical-profile')
+    missing_blob['current_profile']['blob_sha'] = 'not-a-git-blob'
+    try:
+        progressive_pass1.semantic_generation(missing_blob)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError('invalid profile blob identity did not fail closed')
+
+    # An arbitrary old result from different semantic content cannot be revived.
+    arbitrary_old = copy.deepcopy(old_entry)
+    arbitrary_old['work_authority_commit'] = '0' * 40
+    assert progressive_pass1.historical_semantic_equivalence(
+        arbitrary_old,
+        bindings_changed['game:1'],
+        manifest_path=progressive_pass1.WORK,
+        expected_contract='PROGRESSIVE-PASS1-WORK-V1',
+    ) is None
 
     # Model / semantics / context-contract changes remain global invalidators.
     for changed in (
@@ -205,7 +237,45 @@ def production_history_reconciliation():
         'authoritative_count': recomputed['counts']['deep_authoritative_completed_count'],
         'ordinary_emitted_migration_targets': 0,
     }, sort_keys=True))
+    effective = progressive_personalization.effective_taste_entries()
+    deep_fit_projection = []
+    for family_id, binding in bindings.items():
+        entry = progressive_pass2.authoritative_completion_entry(binding, pass2_state)
+        if not isinstance(entry, dict) or entry.get('outcome') != 'analyzed_fit':
+            continue
+        taste_entry = effective.get(binding['taste_subject_key'])
+        assert isinstance(taste_entry, dict), f'current Deep fit missing effective taste entry: {family_id}'
+        assert taste_entry.get('semantic_source') == 'progressive_pass2', (
+            family_id, taste_entry.get('semantic_source')
+        )
+        risks = refiner.personal_taste_risks(taste_entry)
+        visible = card_explanation_policy.visible_risk_payload(risks)
+        for row in visible['risk_provenance']:
+            if row.get('source') != 'taste_negative_evidence':
+                continue
+            assert (row.get('semantic_binding') or {}).get('semantic_source') == 'progressive_pass2', (
+                family_id, row
+            )
+            assert row.get('evidence_refs'), (family_id, row)
+        deep_fit_projection.append({
+            'family_id': family_id,
+            'taste_subject_key': binding['taste_subject_key'],
+            'risk_count': len(visible['risks']),
+            'bound_risk_count': sum(
+                1 for row in visible['risk_provenance']
+                if row.get('source') == 'taste_negative_evidence'
+                and (row.get('semantic_binding') or {}).get('semantic_source') == 'progressive_pass2'
+                and row.get('evidence_refs')
+            ),
+        })
+    assert len(deep_fit_projection) == recomputed['counts']['deep_completed_fit_count']
+
     print('PPD012_NONMIGRATION_INSPECTION=' + json.dumps(nonmigration, sort_keys=True))
+    print('PPD012_DEEP_VISUAL_PROVENANCE=' + json.dumps({
+        'fit_count': len(deep_fit_projection),
+        'cards_with_visible_risk': sum(row['risk_count'] > 0 for row in deep_fit_projection),
+        'bound_visible_risk_rows': sum(row['bound_risk_count'] for row in deep_fit_projection),
+    }, sort_keys=True))
 
 
 def main():
