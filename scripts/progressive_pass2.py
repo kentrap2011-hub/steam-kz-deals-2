@@ -892,6 +892,8 @@ def legacy_reanalysis_work_and_metrics(state_doc, manifest=None):
             'accepted_completed_count': 0,
             'changed_result_count': 0,
             'unchanged_result_count': 0,
+            'changed_fit_outcome_count': 0,
+            'unchanged_fit_outcome_count': 0,
             'incomplete_count': 0,
             'confirmed_risk_count': 0,
             'caution_count': 0,
@@ -912,6 +914,8 @@ def legacy_reanalysis_work_and_metrics(state_doc, manifest=None):
         'accepted_completed_count': 0,
         'changed_result_count': 0,
         'unchanged_result_count': 0,
+        'changed_fit_outcome_count': 0,
+        'unchanged_fit_outcome_count': 0,
         'incomplete_count': 0,
         'confirmed_risk_count': 0,
         'caution_count': 0,
@@ -946,6 +950,10 @@ def legacy_reanalysis_work_and_metrics(state_doc, manifest=None):
             metrics['changed_result_count'] += 1
         else:
             metrics['unchanged_result_count'] += 1
+        if attempt.get('migration_fit_outcome_changed') is True:
+            metrics['changed_fit_outcome_count'] += 1
+        else:
+            metrics['unchanged_fit_outcome_count'] += 1
         assessment = attempt.get('negative_assessment') or {}
         findings = list(assessment.get('findings') or [])
         if any(row.get('disposition') == 'confirmed_personal_risk' for row in findings if isinstance(row, dict)):
@@ -1221,6 +1229,9 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
         })
         if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
             base['migration_result_changed'] = _migration_result_changed(work_item, base)
+            base['migration_fit_outcome_changed'] = (
+                base.get('outcome') != (work_item.get('migration_provenance') or {}).get('prior_outcome')
+            )
         return base
 
     if outcome == 'analyzed_not_fit':
@@ -1257,6 +1268,9 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
         })
         if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
             base['migration_result_changed'] = _migration_result_changed(work_item, base)
+            base['migration_fit_outcome_changed'] = (
+                base.get('outcome') != (work_item.get('migration_provenance') or {}).get('prior_outcome')
+            )
         return base
 
     if 'negative_assessment' in doc:
@@ -1467,6 +1481,7 @@ def _apply_attempt(existing, work_item, attempt):
         entry['recovery_authorization'] = None
         entry['migration_provenance'] = deepcopy(attempt.get('migration_provenance'))
         entry['migration_result_changed'] = attempt.get('migration_result_changed')
+        entry['migration_fit_outcome_changed'] = attempt.get('migration_fit_outcome_changed')
         for field in (
             'fit_level', 'confidence', 'positive_evidence', 'taste_factors',
             'base_support_compatible', 'not_fit_basis', 'not_fit_evidence',
