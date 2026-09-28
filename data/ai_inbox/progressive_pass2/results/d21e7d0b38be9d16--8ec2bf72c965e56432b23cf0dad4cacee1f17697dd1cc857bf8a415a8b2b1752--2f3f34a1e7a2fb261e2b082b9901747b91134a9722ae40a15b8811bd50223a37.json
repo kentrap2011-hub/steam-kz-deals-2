@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "06ec757a4eae872e5173977f8a0e4633562fb7ac",
+  "run_start_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+  "run_started_at_utc": "2026-09-28T16:43:36+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+  "work_id": "8ec2bf72c965e56432b23cf0dad4cacee1f17697dd1cc857bf8a415a8b2b1752",
+  "family_id": "game:1237950",
+  "taste_subject_key": "App_1237950",
+  "appid": "1237950",
+  "taste_fingerprint": "494415d928a3c6497e9c8aa2b729650cdbd2dfc860aecceb7741fcb70eb7c4c0",
+  "candidate_context_sha256": "df837c3f9cfd40df62929abd2f5de774a5975eb8ff95387a11ae97bfbf2cd0dc",
+  "dossier_content_sha256": "cf5edc1b30a71404767b3f42e8862f69b492d39b9d0f701e15caaac85b5ee225",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "2f3f34a1e7a2fb261e2b082b9901747b91134a9722ae40a15b8811bd50223a37",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "The multiplayer package has meaningful breadth across infantry classes, heroes, objective modes, co-op, vehicles and starfighters, with cards and perks providing visible loadout progression.",
+    "Co-op against AI offers a lower-friction shared entry point and aligns with the profile's strong positive response to social play with clear roles and common goals.",
+    "Popular online modes are still findable in 2026, so the core multiplayer loop remains materially accessible rather than purely historical."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 74,
+    "development_variety": 78,
+    "structure_pacing_direction": 68,
+    "identity_hooks": 76,
+    "breadth_of_match": 78
+  },
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Одиночная кампания — вторичная часть пакета, а отзывы о её истории расходятся, поэтому сюжетный вклад заметно слабее мультиплеерного.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть русская жалоба на сбои EA Launcher и проблемы запуска, но доказательство единичное и состояние отмечено как неопределённое.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Доступность матчей зависит от режима, региона и времени: популярные режимы работают, но менее востребованные могут искать дольше.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "В отдельных публичных режимах сейчас встречаются серьёзные проблемы с читерами и сломанными лобби. При этом другие режимы остаются играбельными, поэтому это существенное предупреждение, но не универсальный риск для всего онлайна.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
