@@ -2330,8 +2330,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-27T17:17:58+00:00",
-      "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+      "accepted_at_utc": "2026-09-28T10:20:38+00:00",
+      "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
       "dossier_content_sha256": "a590a4a62ab63787506a17d2ffb131cc8915106d7e20b862f0f122364e6ccd79",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -2347,8 +2347,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "680be82782ee1c392f38a6c69dc60dc8f92e3297e66aeb36edef6f7ff8f9e29c",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "25269461051e7fff469f52b31df9273121a74c456de2c4841c013a48d1945e3a",
+      "work_mode": "legacy_full_reanalysis",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -2407,6 +2407,287 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "legacy_reanalysis_attempts": [
+        {
+          "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+          "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+          "work_id": "89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
+          "family_id": "game:1085510",
+          "taste_subject_key": "App_1085510",
+          "appid": "1085510",
+          "taste_fingerprint": "96ae084aae70febef03440d61952d3bef2a14b0ae80a44348068c5eeb0b2d164",
+          "candidate_context_sha256": "fc40b1e5e183b75f96bf032f31babe2094becb209b140a994daa84bfe5145e47",
+          "dossier_content_sha256": "a590a4a62ab63787506a17d2ffb131cc8915106d7e20b862f0f122364e6ccd79",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "25269461051e7fff469f52b31df9273121a74c456de2c4841c013a48d1945e3a",
+          "work_mode": "legacy_full_reanalysis",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": {
+            "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+            "migration_target_id": "legacy-full-reanalysis-01:89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
+            "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+            "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "moderate",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 70,
+              "development_variety": 43,
+              "structure_pacing_direction": 61,
+              "identity_hooks": 60,
+              "breadth_of_match": 59
+            },
+            "prior_not_fit_basis": null,
+            "prior_work_id": "89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
+            "prior_authorization_id": "680be82782ee1c392f38a6c69dc60dc8f92e3297e66aeb36edef6f7ff8f9e29c",
+            "prior_accepted_at_utc": "2026-09-27T17:17:58+00:00",
+            "preserved_positive_evidence": [
+              "Drifting, drift boosts, shortcuts and track knowledge provide a concrete execution-skill layer that can reward mastery beyond the accessible basic handling.",
+              "Local and online multiplayer are recurring strengths, aligning with the profile's strong positive response to shared play that creates common decisions and memories."
+            ],
+            "preserved_not_fit_evidence": []
+          },
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-28T10:20:38+00:00",
+          "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+          "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+          "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+          "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+          "fit_level": "moderate",
+          "confidence": "medium",
+          "positive_evidence": [
+            "Drifting, drift boosts, shortcuts and track knowledge provide a concrete execution-skill layer that can reward mastery beyond the accessible basic handling.",
+            "Local and online multiplayer are recurring strengths, aligning with the profile's strong positive response to shared play that creates common decisions and memories."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 68,
+            "development_variety": 40,
+            "structure_pacing_direction": 60,
+            "identity_hooks": 60,
+            "breadth_of_match": 57
+          },
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              },
+              {
+                "kind": "conflict",
+                "index": 0
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "Ограниченное разнообразие трасс и ощущение небольших изменений относительно предыдущей игры создают риск быстрого раскрытия формулы и повторяемости без заметного развития.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Одиночная сложность может оказаться невысокой: есть отзыв о слишком легко обгоняемом ИИ, хотя другие данные подтверждают пространство для мастерства в дрифте, срезках и игре с людьми.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Для онлайна есть противоречивые ранние отзывы: у части игроков он работал хорошо, у других возникали проблемы с подключением к друзьям.",
+                "evidence_refs": [
+                  {
+                    "kind": "conflict",
+                    "index": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "migration_result_changed": true,
+          "migration_fit_outcome_changed": false
+        }
+      ],
+      "legacy_reanalysis_status": {
+        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+        "migration_target_id": "legacy-full-reanalysis-01:89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-28T10:20:38+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_legacy_full_reanalysis",
+          "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+          "superseded_at_utc": "2026-09-28T10:20:38+00:00",
+          "state": {
+            "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+            "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+            "work_id": "89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
+            "family_id": "game:1085510",
+            "taste_subject_key": "App_1085510",
+            "appid": "1085510",
+            "taste_fingerprint": "96ae084aae70febef03440d61952d3bef2a14b0ae80a44348068c5eeb0b2d164",
+            "candidate_context_sha256": "fc40b1e5e183b75f96bf032f31babe2094becb209b140a994daa84bfe5145e47",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-27T17:17:58+00:00",
+            "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+            "dossier_content_sha256": "a590a4a62ab63787506a17d2ffb131cc8915106d7e20b862f0f122364e6ccd79",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "680be82782ee1c392f38a6c69dc60dc8f92e3297e66aeb36edef6f7ff8f9e29c",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+              "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+              "work_id": "89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
+              "family_id": "game:1085510",
+              "taste_subject_key": "App_1085510",
+              "appid": "1085510",
+              "taste_fingerprint": "96ae084aae70febef03440d61952d3bef2a14b0ae80a44348068c5eeb0b2d164",
+              "candidate_context_sha256": "fc40b1e5e183b75f96bf032f31babe2094becb209b140a994daa84bfe5145e47",
+              "dossier_content_sha256": "a590a4a62ab63787506a17d2ffb131cc8915106d7e20b862f0f122364e6ccd79",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "680be82782ee1c392f38a6c69dc60dc8f92e3297e66aeb36edef6f7ff8f9e29c",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-27T17:17:58+00:00",
+              "run_start_anchor_commit": "850fd0ab32ce67271497ae9bfafe80a8ab83fdce",
+              "run_start_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "run_started_at_utc": "2026-09-27T17:10:54+00:00",
+              "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "fit_level": "moderate",
+              "confidence": "medium",
+              "positive_evidence": [
+                "Drifting, drift boosts, shortcuts and track knowledge provide a concrete execution-skill layer that can reward mastery beyond the accessible basic handling.",
+                "Local and online multiplayer are recurring strengths, aligning with the profile's strong positive response to shared play that creates common decisions and memories."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 70,
+                "development_variety": 43,
+                "structure_pacing_direction": 61,
+                "identity_hooks": 60,
+                "breadth_of_match": 59
+              },
+              "base_support_compatible": null
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "moderate",
+            "confidence": "medium",
+            "positive_evidence": [
+              "Drifting, drift boosts, shortcuts and track knowledge provide a concrete execution-skill layer that can reward mastery beyond the accessible basic handling.",
+              "Local and online multiplayer are recurring strengths, aligning with the profile's strong positive response to shared play that creates common decisions and memories."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 70,
+              "development_variety": 43,
+              "structure_pacing_direction": 61,
+              "identity_hooks": 60,
+              "breadth_of_match": 59
+            },
+            "base_support_compatible": null
+          }
+        }
+      ],
+      "migration_provenance": {
+        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+        "migration_target_id": "legacy-full-reanalysis-01:89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
+        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "moderate",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 70,
+          "development_variety": 43,
+          "structure_pacing_direction": 61,
+          "identity_hooks": 60,
+          "breadth_of_match": 59
+        },
+        "prior_not_fit_basis": null,
+        "prior_work_id": "89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
+        "prior_authorization_id": "680be82782ee1c392f38a6c69dc60dc8f92e3297e66aeb36edef6f7ff8f9e29c",
+        "prior_accepted_at_utc": "2026-09-27T17:17:58+00:00",
+        "preserved_positive_evidence": [
+          "Drifting, drift boosts, shortcuts and track knowledge provide a concrete execution-skill layer that can reward mastery beyond the accessible basic handling.",
+          "Local and online multiplayer are recurring strengths, aligning with the profile's strong positive response to shared play that creates common decisions and memories."
+        ],
+        "preserved_not_fit_evidence": []
+      },
+      "migration_result_changed": true,
+      "migration_fit_outcome_changed": false,
       "fit_level": "moderate",
       "confidence": "medium",
       "positive_evidence": [
@@ -2414,13 +2695,65 @@
         "Local and online multiplayer are recurring strengths, aligning with the profile's strong positive response to shared play that creates common decisions and memories."
       ],
       "taste_factors": {
-        "gameplay_mastery": 70,
-        "development_variety": 43,
-        "structure_pacing_direction": 61,
+        "gameplay_mastery": 68,
+        "development_variety": 40,
+        "structure_pacing_direction": 60,
         "identity_hooks": 60,
-        "breadth_of_match": 59
+        "breadth_of_match": 57
       },
-      "base_support_compatible": null
+      "base_support_compatible": null,
+      "negative_assessment": {
+        "status": "completed",
+        "evaluated_candidate_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ],
+        "findings": [
+          {
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "unchanged_repetition",
+            "text_ru": "Ограниченное разнообразие трасс и ощущение небольших изменений относительно предыдущей игры создают риск быстрого раскрытия формулы и повторяемости без заметного развития.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 2
+              }
+            ]
+          },
+          {
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Одиночная сложность может оказаться невысокой: есть отзыв о слишком легко обгоняемом ИИ, хотя другие данные подтверждают пространство для мастерства в дрифте, срезках и игре с людьми.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ]
+          },
+          {
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Для онлайна есть противоречивые ранние отзывы: у части игроков он работал хорошо, у других возникали проблемы с подключением к друзьям.",
+            "evidence_refs": [
+              {
+                "kind": "conflict",
+                "index": 0
+              }
+            ]
+          }
+        ]
+      }
     },
     "game:1007040": {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",

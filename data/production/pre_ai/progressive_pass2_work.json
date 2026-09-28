@@ -67,110 +67,31 @@
     "current_analysis_incomplete_count": 0,
     "dossier_waiting_count": 361,
     "pass2_attempted_count": 0,
-    "pass2_eligible_count": 25,
+    "pass2_eligible_count": 24,
     "normal_pass2_eligible_count": 38,
     "deep_normal_work_paused_for_legacy_reanalysis": true,
     "legacy_full_reanalysis": {
       "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
       "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
       "total_count": 30,
-      "pending_count": 25,
+      "pending_count": 24,
       "submitted_count": 0,
-      "accepted_count": 5,
-      "accepted_completed_count": 5,
-      "changed_result_count": 5,
+      "accepted_count": 6,
+      "accepted_completed_count": 6,
+      "changed_result_count": 6,
       "unchanged_result_count": 0,
       "changed_fit_outcome_count": 0,
-      "unchanged_fit_outcome_count": 5,
+      "unchanged_fit_outcome_count": 6,
       "incomplete_count": 0,
-      "confirmed_risk_count": 5,
+      "confirmed_risk_count": 6,
       "caution_count": 0,
       "completed_no_relevant_negative_count": 0,
       "stale_or_missing_prior_count": 0,
-      "last_accepted_at_utc": "2026-09-28T10:20:03+00:00",
+      "last_accepted_at_utc": "2026-09-28T10:20:38+00:00",
       "complete": false
     }
   },
   "items": [
-    {
-      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
-      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
-      "work_id": "89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
-      "family_id": "game:1085510",
-      "taste_subject_key": "App_1085510",
-      "appid": "1085510",
-      "taste_fingerprint": "96ae084aae70febef03440d61952d3bef2a14b0ae80a44348068c5eeb0b2d164",
-      "candidate_context_sha256": "fc40b1e5e183b75f96bf032f31babe2094becb209b140a994daa84bfe5145e47",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 6,
-      "semantic_input": {
-        "title": "Garfield Kart - Furious Racing",
-        "short_description": "Garfield, the famous lasagna-loving cat is back to take on Jon, Odie and company in a no-holds-barred racing game!",
-        "bundle_members": [],
-        "fit_tags": [
-          "Third Person"
-        ],
-        "core_fit_count": 1,
-        "release_date": "6 Nov, 2019",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1085510"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1085510.json",
-      "dossier_content_sha256": "a590a4a62ab63787506a17d2ffb131cc8915106d7e20b862f0f122364e6ccd79",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-17T12:38:41Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
-          "gameplay_mastery": 70,
-          "development_variety": 43,
-          "structure_pacing_direction": 61,
-          "identity_hooks": 60,
-          "breadth_of_match": 59
-        },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
-        "prior_authorization_id": "680be82782ee1c392f38a6c69dc60dc8f92e3297e66aeb36edef6f7ff8f9e29c",
-        "prior_accepted_at_utc": "2026-09-27T17:17:58+00:00",
-        "preserved_positive_evidence": [
-          "Drifting, drift boosts, shortcuts and track knowledge provide a concrete execution-skill layer that can reward mastery beyond the accessible basic handling.",
-          "Local and online multiplayer are recurring strengths, aligning with the profile's strong positive response to shared play that creates common decisions and memories."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "25269461051e7fff469f52b31df9273121a74c456de2c4841c013a48d1945e3a",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d--25269461051e7fff469f52b31df9273121a74c456de2c4841c013a48d1945e3a.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d--25269461051e7fff469f52b31df9273121a74c456de2c4841c013a48d1945e3a.json",
-      "sequence": 1
-    },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
@@ -250,7 +171,7 @@
       "authorization_id": "1830c657f9728240ae57afafb683b595fa37f5f0d0702204b4099b5371216a59",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--9337c47e89b5a161ed93323e730cf71fb9db08cc00a89b1a609daf7d4195086d--1830c657f9728240ae57afafb683b595fa37f5f0d0702204b4099b5371216a59.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--9337c47e89b5a161ed93323e730cf71fb9db08cc00a89b1a609daf7d4195086d--1830c657f9728240ae57afafb683b595fa37f5f0d0702204b4099b5371216a59.json",
-      "sequence": 2
+      "sequence": 1
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -333,7 +254,7 @@
       "authorization_id": "3f0f9e898604a3feb152fa516d2d2d481254f66ab789bcf36d3268980d8b4fa3",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0--3f0f9e898604a3feb152fa516d2d2d481254f66ab789bcf36d3268980d8b4fa3.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0--3f0f9e898604a3feb152fa516d2d2d481254f66ab789bcf36d3268980d8b4fa3.json",
-      "sequence": 3
+      "sequence": 2
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -413,7 +334,7 @@
       "authorization_id": "568bf0d26d999c177f15d2cf219c6b30e4f82d63ef583c4f3a70a2cc748a06c2",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--ec08de9d322a260201292f86737d7f4a7d708bb73f7911646c65f99fe003968a--568bf0d26d999c177f15d2cf219c6b30e4f82d63ef583c4f3a70a2cc748a06c2.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--ec08de9d322a260201292f86737d7f4a7d708bb73f7911646c65f99fe003968a--568bf0d26d999c177f15d2cf219c6b30e4f82d63ef583c4f3a70a2cc748a06c2.json",
-      "sequence": 4
+      "sequence": 3
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -493,7 +414,7 @@
       "authorization_id": "69144635a1f81633e55c68573e6106a1c968febabf83eca3001dfece88079d55",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--d540daa918daed925765c0e97d87d078b141ea5313a06a32a50cd391f6442b6a--69144635a1f81633e55c68573e6106a1c968febabf83eca3001dfece88079d55.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--d540daa918daed925765c0e97d87d078b141ea5313a06a32a50cd391f6442b6a--69144635a1f81633e55c68573e6106a1c968febabf83eca3001dfece88079d55.json",
-      "sequence": 5
+      "sequence": 4
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -572,7 +493,7 @@
       "authorization_id": "b8c647d4fe8e627d002495542ab1034a5fa948c57d79e64bf07596c4cb38053a",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d--b8c647d4fe8e627d002495542ab1034a5fa948c57d79e64bf07596c4cb38053a.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d--b8c647d4fe8e627d002495542ab1034a5fa948c57d79e64bf07596c4cb38053a.json",
-      "sequence": 6
+      "sequence": 5
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -652,7 +573,7 @@
       "authorization_id": "1325055472a8e2beecb0ecbc97e33d20a4f1ba0c5d77bad0aa2763cac66ff353",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262--1325055472a8e2beecb0ecbc97e33d20a4f1ba0c5d77bad0aa2763cac66ff353.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262--1325055472a8e2beecb0ecbc97e33d20a4f1ba0c5d77bad0aa2763cac66ff353.json",
-      "sequence": 7
+      "sequence": 6
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -728,7 +649,7 @@
       "authorization_id": "caf94ab22efac3f2281be146e31205d4de103eb0f3e9f61b743b730f55417bd0",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--0b958c513e04e9fb10b5f4871995d2dd6932734d7ae0503c3218e97910ba6dec--caf94ab22efac3f2281be146e31205d4de103eb0f3e9f61b743b730f55417bd0.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--0b958c513e04e9fb10b5f4871995d2dd6932734d7ae0503c3218e97910ba6dec--caf94ab22efac3f2281be146e31205d4de103eb0f3e9f61b743b730f55417bd0.json",
-      "sequence": 8
+      "sequence": 7
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -805,7 +726,7 @@
       "authorization_id": "6c4d62c8a22d593cbd5fce2116d9971bca07fe9708d42ebe7d9f639c3f9faed1",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045--6c4d62c8a22d593cbd5fce2116d9971bca07fe9708d42ebe7d9f639c3f9faed1.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045--6c4d62c8a22d593cbd5fce2116d9971bca07fe9708d42ebe7d9f639c3f9faed1.json",
-      "sequence": 9
+      "sequence": 8
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -885,7 +806,7 @@
       "authorization_id": "e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011--e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011--e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed.json",
-      "sequence": 10
+      "sequence": 9
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -967,7 +888,7 @@
       "authorization_id": "be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574--be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574--be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45.json",
-      "sequence": 11
+      "sequence": 10
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1047,7 +968,7 @@
       "authorization_id": "a351d118d29dac0c6d5d96f2ce37b8e75fccb949f1cc67edfff579d207a3cfb4",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--ebc164fb27a0eea0dd6dbb84851454b2cab6b905c656e5993ac19050506ca8c9--a351d118d29dac0c6d5d96f2ce37b8e75fccb949f1cc67edfff579d207a3cfb4.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--ebc164fb27a0eea0dd6dbb84851454b2cab6b905c656e5993ac19050506ca8c9--a351d118d29dac0c6d5d96f2ce37b8e75fccb949f1cc67edfff579d207a3cfb4.json",
-      "sequence": 12
+      "sequence": 11
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1127,7 +1048,7 @@
       "authorization_id": "f841362b7bb764941d9a6d78525503f2ce46e7d2797b81f00006e5d042dc621e",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--a3d7c56a32b38599ded8945bc3eed3efab6ea9bd4bba37690ae3eb4214e3092d--f841362b7bb764941d9a6d78525503f2ce46e7d2797b81f00006e5d042dc621e.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--a3d7c56a32b38599ded8945bc3eed3efab6ea9bd4bba37690ae3eb4214e3092d--f841362b7bb764941d9a6d78525503f2ce46e7d2797b81f00006e5d042dc621e.json",
-      "sequence": 13
+      "sequence": 12
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1206,7 +1127,7 @@
       "authorization_id": "df4064cd926d420fccc6d0510d9a4265b1c3672b40dce1ddef6e9e37b57b0166",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--27f199575627289df9429352e2806c96af66ec6634568c71a4f929ce4b6fc59a--df4064cd926d420fccc6d0510d9a4265b1c3672b40dce1ddef6e9e37b57b0166.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--27f199575627289df9429352e2806c96af66ec6634568c71a4f929ce4b6fc59a--df4064cd926d420fccc6d0510d9a4265b1c3672b40dce1ddef6e9e37b57b0166.json",
-      "sequence": 14
+      "sequence": 13
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1284,7 +1205,7 @@
       "authorization_id": "1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9--1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9--1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf.json",
-      "sequence": 15
+      "sequence": 14
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1361,7 +1282,7 @@
       "authorization_id": "b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac--b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac--b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44.json",
-      "sequence": 16
+      "sequence": 15
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1442,7 +1363,7 @@
       "authorization_id": "c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9--c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9--c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b.json",
-      "sequence": 17
+      "sequence": 16
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1519,7 +1440,7 @@
       "authorization_id": "71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647--71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647--71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8.json",
-      "sequence": 18
+      "sequence": 17
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1601,7 +1522,7 @@
       "authorization_id": "9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b--9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b--9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8.json",
-      "sequence": 19
+      "sequence": 18
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1675,7 +1596,7 @@
       "authorization_id": "355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89--355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89--355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6.json",
-      "sequence": 20
+      "sequence": 19
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1749,7 +1670,7 @@
       "authorization_id": "6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c--6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c--6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22.json",
-      "sequence": 21
+      "sequence": 20
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1833,7 +1754,7 @@
       "authorization_id": "cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5--cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5--cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6.json",
-      "sequence": 22
+      "sequence": 21
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1915,7 +1836,7 @@
       "authorization_id": "d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea--d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea--d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e.json",
-      "sequence": 23
+      "sequence": 22
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1998,7 +1919,7 @@
       "authorization_id": "d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693--d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693--d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274.json",
-      "sequence": 24
+      "sequence": 23
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -2083,7 +2004,7 @@
       "authorization_id": "187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995--187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995--187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc.json",
-      "sequence": 25
+      "sequence": 24
     }
   ]
 }
