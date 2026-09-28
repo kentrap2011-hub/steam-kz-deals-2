@@ -3,6 +3,7 @@
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
 - Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DOSSIER_DEEP_RELEASE_YEAR_IDENTITY_COMPATIBILITY_FIX_01.md` (`CONTRACT-FIRST IMPLEMENT / VALIDATE`).
+- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_DEEP_MIGRATION_RESULTS_NOT_REFLECTED_ON_SITE_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
 - Latest accepted implementation: `WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -11,6 +12,38 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 2 — Deep migration results not reflected on site diagnostic
+
+Task:
+`WORKER_TASK_DEEP_MIGRATION_RESULTS_NOT_REFLECTED_ON_SITE_DIAGNOSTIC_01.md`
+
+Mode:
+`READ-ONLY / RECON`
+
+Goal:
+- prove why canonical Deep migration state is complete 30/30 while the published Statistics page still shows Deep completed/fit/not-fit/last-write as zero/never;
+- locate the first divergence between canonical PASS 2 state, statistics projection, generated visual payload and deployed Pages artifact;
+- determine whether cards/ranking are also affected or only Statistics;
+- distinguish intended migration-counter semantics from an actual projection/publication defect.
+
+Parallel constraint:
+- ЧАТ 1 independently fixes Dossier/Deep release-year compatibility;
+- ЧАТ 2 must not modify or interfere with ЧАТ 1.
+
+Scope:
+- read-only diagnosis;
+- no semantic workers;
+- no manual rebuild/deploy;
+- no migration changes;
+- no Scheduled Task changes.
+
+Report:
+`reviews/worker_reports/deep-migration-results-not-reflected-on-site-diagnostic-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 2`.
 
 
 ## ACTIVE — НОВЫЙ ЧАТ 1 — Dossier / Deep release-year identity compatibility fix
