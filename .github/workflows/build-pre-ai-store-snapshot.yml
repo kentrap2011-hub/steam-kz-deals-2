@@ -74,6 +74,7 @@ on:
       - "scripts/build_progressive_pass2_work.py"
       - "scripts/test_progressive_pass1.py"
       - "scripts/test_progressive_profile_pin.py"
+      - "scripts/test_progressive_profile_semantic_identity_stability.py"
       - "scripts/test_progressive_pass2.py"
       - "scripts/test_progressive_pass2_integration.py"
       - "scripts/test_progressive_personalization.py"
@@ -175,6 +176,7 @@ jobs:
       - name: Regression test progressive personalization and PASS 1
         run: |
           python scripts/test_progressive_profile_pin.py
+          python scripts/test_progressive_profile_semantic_identity_stability.py
           python scripts/test_progressive_personalization.py
           python scripts/test_progressive_pass1.py
 
