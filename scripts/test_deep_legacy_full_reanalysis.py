@@ -24,6 +24,34 @@ def at_commit_json(commit, path):
     return json.loads(raw.decode('utf-8')), hashlib.sha256(raw).hexdigest()
 
 
+def migration_work_authority(item):
+    """Find the immutable Git commit that actually prepared this migration work item."""
+    commits = subprocess.check_output(
+        ['git', 'log', '--format=%H', '--', str(WORK_PATH)], text=True
+    ).splitlines()
+    for commit in commits:
+        try:
+            doc, _digest = at_commit_json(commit, WORK_PATH)
+        except (ValueError, UnicodeDecodeError, json.JSONDecodeError):
+            continue
+        if doc.get('contract') != 'PROGRESSIVE-PASS2-WORK-V1':
+            continue
+        candidate = next((
+            row for row in (doc.get('items') or [])
+            if isinstance(row, dict)
+            and row.get('authorization_id') == item.get('authorization_id')
+            and row.get('work_mode') == progressive_pass2.LEGACY_REANALYSIS_MODE
+        ), None)
+        if candidate is None:
+            continue
+        if all(
+            str(candidate.get(field) or '') == str(item.get(field) or '')
+            for field in progressive_pass2.PASS1_IDENTITY_FIELDS
+        ):
+            return commit
+    raise AssertionError('exact immutable migration work authority not found in Git history')
+
+
 def prepared_item(manifest, target):
     item = progressive_pass2.make_legacy_reanalysis_work_item(manifest, target)
     dossier, digest = at_commit_json(
@@ -36,7 +64,7 @@ def prepared_item(manifest, target):
         'doc': copy.deepcopy(dossier),
         'content_sha256': digest,
     }
-    item['_work_authority_commit'] = manifest['migration_authority_commit']
+    item['_work_authority_commit'] = migration_work_authority(item)
     return item, dossier
 
 
@@ -199,8 +227,8 @@ def run():
     jedi_item, jedi_dossier = prepared_item(manifest, jedi_target)
     receipt = {
         'status': 'confirmed',
-        'run_start_authority_commit': authority,
-        'run_start_anchor_commit': authority,
+        'run_start_authority_commit': jedi_item['_work_authority_commit'],
+        'run_start_anchor_commit': jedi_item['_work_authority_commit'],
         'run_started_at_utc': manifest['migration_frozen_at_utc'],
     }
     assert progressive_pass2.validate_run_start_authority(jedi_item, receipt)
