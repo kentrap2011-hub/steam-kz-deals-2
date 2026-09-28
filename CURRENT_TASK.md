@@ -1,13 +1,15 @@
 # CURRENT TASK
 
-## ACTIVE — Deep-first final-score order fix 01
-Статус: `in_progress`.
+## BLOCKED — Deep-first final-score order fix 01
+Статус: `blocked`.
 - task: `WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md`;
-- branch: `fix/deep-first-final-score-order-01`;
-- scope: contract-first correction of automatic ranking to `deep_fit -> fast_fit -> analysis_incomplete -> not_analyzed`, with `total_score DESC` inside completed Deep/Fast stages;
-- preserves score calculation, semantic results, Dossier state, scheduler/queue/retry ownership and Scheduled Tasks;
-- active ЧАТ 2 diagnostic is out of scope and must remain untouched;
-- report target: `reviews/worker_reports/deep-first-final-score-order-fix-01.md`.
+- canonical decision: `RANK-013`; automatic order is `deep_fit -> fast_fit -> analysis_incomplete -> not_analyzed`, with `total_score DESC` inside completed Deep/Fast stages;
+- implementation PR: `#117`; merge: `9cb123765884440d37632740d51695a371338483`;
+- PR validation: backlog dispositions `36458847048` success, package purchase value `36458847059` success, Progressive PASS 2 core `36458847057` success including focused Deep-first, PPD-012, unresolved and UI regressions;
+- post-merge full build `36458961848` passed ranking/build checks but could not persist the visual because pre-existing gate `Require meaningful Russian descriptions before canonical commit` failed; the same gate already failed before this task in run `36457892914`;
+- no fresh canonical visual commit and no fresh Pages proof; deploy `36458961533` cancelled and `36459045495` skipped;
+- score calculation, semantic results, Dossier state, scheduler/queue/retry ownership and Scheduled Tasks were not changed; active ЧАТ 2 diagnostic was not modified;
+- report: `reviews/worker_reports/deep-first-final-score-order-fix-01.md`.
 
 
 ## COMPLETE — Progressive profile semantic identity stability fix 01
