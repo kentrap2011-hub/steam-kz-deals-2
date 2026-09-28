@@ -3,7 +3,7 @@
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
 - No worker task is currently assigned in slot `ЧАТ 1`.
-- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_STALE_DEEP_STATISTICS_PUBLICATION_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
+- No worker task is currently assigned in slot `ЧАТ 2`.
 - Latest accepted implementation: `WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md` (implementation accepted; publication proof blocked by pre-existing Russian-description gate).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -49,32 +49,39 @@ Decision:
 - active ЧАТ 2 continues diagnosing the stale publication/statistics chain and may identify the exact follow-up needed.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 2 — Stale Deep statistics publication diagnostic
+## ACCEPTED — ЧАТ 2 — Stale Deep statistics publication diagnostic
 
 Task:
 `WORKER_TASK_STALE_DEEP_STATISTICS_PUBLICATION_DIAGNOSTIC_01.md`
 
-Mode:
-`READ-ONLY / RECON`
-
-Goal:
-- explain why the live Statistics page still shows old Deep counts after canonical PASS 2 state advanced;
-- trace the first divergence from canonical Deep state through pre-AI, visual build, Pages artifact/deploy and browser/service-worker presentation;
-- explain why later successful visual/deploy workflows still published or served stale statistics.
-
-Scope:
-- read-only only;
-- no semantic worker execution;
-- no workflow reruns/rebuild/deploy;
-- no production/service-worker/ranking changes;
-- no Scheduled Task changes;
-- do not interfere with active ЧАТ 1.
-
 Report:
 `reviews/worker_reports/stale-deep-statistics-publication-diagnostic-01.md`
 
-Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 2`.
+Final status:
+`needs_fix`
+
+Director acceptance:
+- diagnosis accepted;
+- the public Statistics screenshot was not merely a stale browser render: Pages artifact `10986847860` itself contained the old Deep counters;
+- canonical Deep/PASS 2 state had already advanced correctly, so Deep accounting is healthy;
+- first proven divergence occurred in Build daily visual payload run `36453699478`: the visual was built from checkout `53767218...` using old PASS 2 state blob `4435430...`;
+- while that build was running, `main` advanced to `dede9ea...` with newer PASS 2 blob `b1967e42...`;
+- after the initial push was rejected, the workflow rebased the already-generated visual commit onto the newer parent but did not rebuild the JSON from that new parent;
+- final visual commit `2202a668...` therefore had newer parent `dede9ea...` while still carrying old Deep statistics/source binding from `53767218...`;
+- later full visual rebuilds repeatedly failed on the independent Russian-description validation gate, so the stale visual remained canonical;
+- later build run `36459026993` was workflow-level success only because the actual build job was skipped and a degraded/no-fresh-build receipt was emitted;
+- deploy run `36459102720` successfully deployed the existing stale canonical visual and explicitly classified it as `degraded/no_fresh_build`;
+- browser cache/service worker is not the root cause; clearing cache would fetch the same stale Pages payload;
+- 399 vs 387 vs 381 are legitimate different scopes: 399 Deep control-plane target, 387 publication-filtered Statistics scope in that old snapshot, 381 visible cards after excluding 6 analyzed_not_fit;
+- no Fast/Dossier/Deep state, visual, workflow, deployment, ranking or Scheduled Task was changed by the diagnostic.
+
+Decision:
+- diagnostic complete and accepted;
+- exact required next fix is the GitHub-owned full-visual stale-snapshot rebase race;
+- generated visual must be bound to exact semantic/control-plane source blobs;
+- if relevant source blobs change before rebase/push, stale generated JSON must not be persisted unchanged: rebuild on fresh main or fail closed;
+- add focused regression reproducing old PASS 2 blob on a newer parent;
+- physical ЧАТ 2 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 2 — Atelier Deep without positive reason diagnostic
