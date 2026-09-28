@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "06ec757a4eae872e5173977f8a0e4633562fb7ac",
+  "run_start_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+  "run_started_at_utc": "2026-09-28T16:43:36+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+  "work_id": "64ac0ca5203cb999e3d3d1fed9e59847acab57df4b122e47a3f816537991b3b6",
+  "family_id": "game:1238060",
+  "taste_subject_key": "App_1238060",
+  "appid": "1238060",
+  "taste_fingerprint": "9ee11ea678d744b198b805dc47e911e36a7b0b9c33c4aa39789ae27e6e10e5a8",
+  "candidate_context_sha256": "020b8749329e5ea0c811c6ce1383f9af78ba8c138f8f6936e9c342a04361ace4",
+  "dossier_content_sha256": "0b6f2f98ec7e41bc8cbcd5ae0bee9d3a5716da16ea485b8bfd382eaad95b141e",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "e1c5604e2cf8e54f549db29915888ca59bf99bc3f09332e4c71fcf4256f4756d",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "The action-horror combat remains enjoyable for many players, and weapon crafting supports experimentation with personalized loadouts.",
+    "Co-op can create distinctive shared and asymmetric moments, which is a strong amplifier for a profile that values meaningful shared play.",
+    "Tau Volantis, lore and visual atmosphere provide a recognizable sci-fi-horror identity even when the character writing is uneven."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 68,
+    "development_variety": 66,
+    "structure_pacing_direction": 52,
+    "identity_hooks": 74,
+    "breadth_of_match": 67
+  },
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "observation",
+        "index": 5
+      },
+      {
+        "kind": "observation",
+        "index": 6
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Более плотный экшен ослабляет хоррор-напряжение относительно ранних частей; это меняет характер игры, но не делает сам бой слабым.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Кооператив часто усиливает игру, но часть отзывов считает одиночное прохождение заметно менее привлекательным. Это важно как практический компромисс, а не как отдельный штраф.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Гибкий крафт оружия даёт экспериментирование, но одновременно снижает ресурсное давление и может упростить прежнюю survival-horror составляющую.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Длинная кампания с постоянными волнами врагов и перегруженными экшен-сценами может перейти в повторение и ощущение растянутости, что напрямую конфликтует с потребностью профиля в эволюции опыта.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Мир и атмосфера работают лучше, чем часть диалогов и драматических линий; слабее написанные отношения снижают сюжетный вклад, но экшен способен частично это компенсировать.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть свежий единичный отчёт о чёрном экране и проблемах запуска через EA App после длительной диагностики, но распространённость проблемы не установлена.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 5
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Оценка сложности в кооперативе расходится: одни игроки сталкиваются с частыми смертями и раздражающими головоломками, другие проходят расслабленно, поэтому устойчивого персонального риска здесь нет.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 6
+          }
+        ]
+      }
+    ]
+  }
+}
