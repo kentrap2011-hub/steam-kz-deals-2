@@ -1,5 +1,13 @@
 # CURRENT TASK
 
+## ACTIVE — Progressive profile semantic identity stability fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md`;
+- worker slot: `ЧАТ 1`;
+- scope: separate semantic profile identity from exact execution provenance, reconcile provably equivalent historical Fast/Deep state without semantic reruns, preserve PPD-010/PPD-011 and exact run-start provenance;
+- prohibitions: no manual Fast/Deep/Dossier execution; no Scheduled Task changes; no rewrite of accepted historical result provenance.
+
+
 ## COMPLETE — Dossier / Deep release-year identity compatibility fix 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_DOSSIER_DEEP_RELEASE_YEAR_IDENTITY_COMPATIBILITY_FIX_01.md`;
