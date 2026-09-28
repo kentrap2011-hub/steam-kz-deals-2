@@ -67,108 +67,31 @@
     "current_analysis_incomplete_count": 0,
     "dossier_waiting_count": 361,
     "pass2_attempted_count": 0,
-    "pass2_eligible_count": 10,
+    "pass2_eligible_count": 9,
     "normal_pass2_eligible_count": 38,
     "deep_normal_work_paused_for_legacy_reanalysis": true,
     "legacy_full_reanalysis": {
       "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
       "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
       "total_count": 30,
-      "pending_count": 10,
+      "pending_count": 9,
       "submitted_count": 0,
-      "accepted_count": 20,
-      "accepted_completed_count": 20,
-      "changed_result_count": 20,
+      "accepted_count": 21,
+      "accepted_completed_count": 21,
+      "changed_result_count": 21,
       "unchanged_result_count": 0,
       "changed_fit_outcome_count": 0,
-      "unchanged_fit_outcome_count": 20,
+      "unchanged_fit_outcome_count": 21,
       "incomplete_count": 0,
-      "confirmed_risk_count": 15,
+      "confirmed_risk_count": 16,
       "caution_count": 5,
       "completed_no_relevant_negative_count": 0,
       "stale_or_missing_prior_count": 0,
-      "last_accepted_at_utc": "2026-09-28T10:30:07+00:00",
+      "last_accepted_at_utc": "2026-09-28T10:30:43+00:00",
       "complete": false
     }
   },
   "items": [
-    {
-      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
-      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
-      "work_id": "9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
-      "family_id": "game:1075740",
-      "taste_subject_key": "App_1075740",
-      "appid": "1075740",
-      "taste_fingerprint": "f9487b78772603603f513134f33002bca9ded25d574235806b1029306e22ee05",
-      "candidate_context_sha256": "3e26890bd43f7d7612f2948764df8e4d6a93d8d25c1864df3ba9ce242f3c4d89",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 21,
-      "semantic_input": {
-        "title": "Banners of Ruin",
-        "short_description": "Assemble your party. Answer the call. Win the war. Build a deck and fight a series of turn-based combats with up to 6 party characters through the city of Dawn's Point. Each character can unlock a set of unique cards and abilities that can augment your deck in powerful, exciting ways.",
-        "bundle_members": [],
-        "fit_tags": [],
-        "core_fit_count": 0,
-        "release_date": "29 Jul, 2021",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1075740"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1075740.json",
-      "dossier_content_sha256": "6ba33442a113cc9690b2878d4b59cfcb490f25e7bc8fbb1e63b935968aa65904",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-17T12:31:14Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
-          "gameplay_mastery": 80,
-          "development_variety": 57,
-          "structure_pacing_direction": 49,
-          "identity_hooks": 59,
-          "breadth_of_match": 65
-        },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac",
-        "prior_authorization_id": "bfdc8938414ace01f66dc6c3efc6376803d4dc0c7c578531e4864dfd71e70336",
-        "prior_accepted_at_utc": "2026-09-27T17:29:49+00:00",
-        "preserved_positive_evidence": [
-          "Combat combines deck construction with party composition, character abilities and battlefield positioning, providing layered tactical decisions beyond a simple card sequence.",
-          "Optional challenge structures can keep pressure meaningful after the basic system is learned, which fits the profile's positive response to mastery-oriented difficulty."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac--b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac--b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44.json",
-      "sequence": 1
-    },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
@@ -248,7 +171,7 @@
       "authorization_id": "c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9--c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9--c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b.json",
-      "sequence": 2
+      "sequence": 1
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -325,7 +248,7 @@
       "authorization_id": "71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647--71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647--71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8.json",
-      "sequence": 3
+      "sequence": 2
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -407,7 +330,7 @@
       "authorization_id": "9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b--9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b--9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8.json",
-      "sequence": 4
+      "sequence": 3
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -481,7 +404,7 @@
       "authorization_id": "355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89--355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89--355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6.json",
-      "sequence": 5
+      "sequence": 4
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -555,7 +478,7 @@
       "authorization_id": "6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c--6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c--6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22.json",
-      "sequence": 6
+      "sequence": 5
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -639,7 +562,7 @@
       "authorization_id": "cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5--cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5--cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6.json",
-      "sequence": 7
+      "sequence": 6
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -721,7 +644,7 @@
       "authorization_id": "d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea--d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea--d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e.json",
-      "sequence": 8
+      "sequence": 7
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -804,7 +727,7 @@
       "authorization_id": "d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693--d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693--d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274.json",
-      "sequence": 9
+      "sequence": 8
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -889,7 +812,7 @@
       "authorization_id": "187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995--187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995--187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc.json",
-      "sequence": 10
+      "sequence": 9
     }
   ]
 }
