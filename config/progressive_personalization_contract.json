@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
-  "version": 6,
+  "version": 7,
   "status": "canonical",
   "phase": "phase_b",
   "purpose": "Publish the current deterministic-eligible Steam KZ catalogue while three independent GitHub-owned stages progress: provisional Fast analysis (PASS 1), neutral Dossier preparation, and eventual authoritative Deep analysis (technical PASS 2) for every current eligible game.",
@@ -439,5 +439,14 @@
         "deep_normal_first_pass_complete and deep_all_current_authoritative_complete are distinct metrics and may differ while recovery-owned items remain"
       ]
     }
+  },
+  "deep_revision_model": {
+    "decision": "PPD-010",
+    "current_selection": "latest accepted authoritative completed legacy_full_reanalysis revision supersedes its exact prior Deep revision",
+    "incomplete_migration": "does_not_displace_prior_authoritative_completed_revision",
+    "history": "prior Deep revision retained verbatim in revision_history with original provenance",
+    "positive_evidence": "legacy migration fit reuses exact accepted prior positive_evidence",
+    "observability": "separate finite migration counters are producer-owned",
+    "scoring": "existing ranking and risk-code policy only"
   }
 }
