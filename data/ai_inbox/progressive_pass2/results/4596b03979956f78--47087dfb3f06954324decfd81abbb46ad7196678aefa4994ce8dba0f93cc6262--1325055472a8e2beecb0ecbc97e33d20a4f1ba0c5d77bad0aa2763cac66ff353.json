@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+  "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+  "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+  "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+  "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+  "work_id": "47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262",
+  "family_id": "game:1179080",
+  "taste_subject_key": "App_1179080",
+  "appid": "1179080",
+  "taste_fingerprint": "6db805fbf34357f3eae2e784de3327fb5b06b679d0bd90a86d44cee5d4e8ba28",
+  "candidate_context_sha256": "86b91c3e6f004c2fe2bd514794a1c0442357fd60b40feaf2bcc60e2c39f0afad",
+  "dossier_content_sha256": "72190ce31437ee34cda3cd3cfb957843fd77507ef4b6340cb5f0093b15e9bbfc",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "1325055472a8e2beecb0ecbc97e33d20a4f1ba0c5d77bad0aa2763cac66ff353",
+  "work_mode": "legacy_full_reanalysis",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "migration_provenance": {
+    "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+    "migration_target_id": "legacy-full-reanalysis-01:47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262",
+    "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+    "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+    "prior_outcome": "analyzed_fit",
+    "prior_fit_level": "moderate",
+    "prior_confidence": "medium",
+    "prior_taste_factors": {
+      "gameplay_mastery": 55,
+      "development_variety": 51,
+      "structure_pacing_direction": 57,
+      "identity_hooks": 88,
+      "breadth_of_match": 66
+    },
+    "prior_not_fit_basis": null,
+    "prior_work_id": "47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262",
+    "prior_authorization_id": "37bf45a16c1208dfa7ad6c0f3a7ac6f58387b6830fd20e22f8e476ec5636dbe8",
+    "prior_accepted_at_utc": "2026-09-27T17:24:20+00:00",
+    "preserved_positive_evidence": [
+      "The low-fi visual style, rotoscoped cutscenes, sound design and religious-horror imagery form a highly distinctive atmosphere, directly matching the profile's strong preference for memorable art direction and identity.",
+      "Multiple endings, notes and secrets give the mystery a concrete discovery structure and reasons to piece together additional lore rather than relying only on jump scares."
+    ],
+    "preserved_not_fit_evidence": []
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "The low-fi visual style, rotoscoped cutscenes, sound design and religious-horror imagery form a highly distinctive atmosphere, directly matching the profile's strong preference for memorable art direction and identity.",
+    "Multiple endings, notes and secrets give the mystery a concrete discovery structure and reasons to piece together additional lore rather than relying only on jump scares."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 52,
+    "development_variety": 49,
+    "structure_pacing_direction": 53,
+    "identity_hooks": 88,
+    "breadth_of_match": 64
+  },
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Основной игровой набор намеренно простой: исследование, экзорцизм крестом, лёгкие загадки и аркадные столкновения дают меньше механической глубины, чем игры, где мастерство развивается через сложную боевую систему.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "Медленное перемещение делает повторные проходы, возвраты и поиск концовок заметно более утомительными, особенно в крупных или лабиринтных участках.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Сложность отдельных финальных столкновений может резко меняться: одним игрокам они кажутся чрезмерно резкими, более опытным — уже недостаточно трудными. Это не устойчивый самостоятельный минус, но баланс испытаний неравномерен.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
