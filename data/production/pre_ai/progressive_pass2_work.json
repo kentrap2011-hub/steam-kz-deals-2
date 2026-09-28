@@ -51,15 +51,15 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 399,
-    "deep_first_pass_attempted_count": 53,
-    "deep_authoritative_completed_count": 43,
-    "deep_completed_fit_count": 37,
+    "deep_first_pass_attempted_count": 54,
+    "deep_authoritative_completed_count": 44,
+    "deep_completed_fit_count": 38,
     "deep_completed_not_fit_count": 6,
     "deep_incomplete_or_recovery_count": 10,
     "deep_waiting_for_dossier_count": 344,
-    "deep_ready_or_pending_count": 2,
-    "deep_normal_first_pass_remaining_count": 346,
-    "deep_remaining_until_all_authoritative_count": 356,
+    "deep_ready_or_pending_count": 1,
+    "deep_normal_first_pass_remaining_count": 345,
+    "deep_remaining_until_all_authoritative_count": 355,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 10,
@@ -67,9 +67,9 @@
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 3,
     "dossier_waiting_count": 344,
-    "pass2_attempted_count": 53,
-    "pass2_eligible_count": 2,
-    "normal_pass2_eligible_count": 2,
+    "pass2_attempted_count": 54,
+    "pass2_eligible_count": 1,
+    "normal_pass2_eligible_count": 1,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "legacy_full_reanalysis": {
       "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
@@ -151,66 +151,6 @@
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--98d13f395cc26a085a1933350948b282421c1795a4a9cd1fb8373eb49f1b235e--57a7e5b6f8979e089dda6d9e3b7ec5b88913d2ec1c0a861ddf4694e7b77481bb.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--98d13f395cc26a085a1933350948b282421c1795a4a9cd1fb8373eb49f1b235e--57a7e5b6f8979e089dda6d9e3b7ec5b88913d2ec1c0a861ddf4694e7b77481bb.json",
       "sequence": 1
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:13500",
-      "taste_subject_key": "App_13500",
-      "appid": "13500",
-      "taste_fingerprint": "ca4ac0694ab4752278eb5997c23ced553b869051d1ca3660fdd2b9a201730358",
-      "candidate_context_sha256": "bbabb448bc8f147058b228c99b11cc8c7ad84118898ce95455f5f72589429bd4",
-      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
-      "work_id": "26e284eecd5fbb2272427e81c6918e8cb9c74d301a84d2bdfbc760554813299e",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
-      "semantic_input": {
-        "title": "Prince of Persia: Warrior Within™",
-        "short_description": "Enter the dark underworld of Prince of Persia Warrior Within, the sword-slashing sequel to the critically acclaimed Prince of Persia: The Sands of Time™. Hunted by Dahaka, an immortal incarnation of Fate seeking divine retribution, the Prince embarks upon a path of both carnage and mystery to defy his preordained death.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action",
-          "Adventure",
-          "Singleplayer",
-          "Third Person"
-        ],
-        "core_fit_count": 1,
-        "release_date": "27 Aug, 2009",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "13500"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_13500.json",
-      "dossier_content_sha256": "b4420102e34319bbcf517190c3958e631e0541a93256372056c999c016319f1b",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-17T18:40:38Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "authorization_id": "90d87ca156127ec47c793e1dae1010ecdecb9f106f4090a52d0bc7ec8d97b8d5",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--26e284eecd5fbb2272427e81c6918e8cb9c74d301a84d2bdfbc760554813299e--90d87ca156127ec47c793e1dae1010ecdecb9f106f4090a52d0bc7ec8d97b8d5.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--26e284eecd5fbb2272427e81c6918e8cb9c74d301a84d2bdfbc760554813299e--90d87ca156127ec47c793e1dae1010ecdecb9f106f4090a52d0bc7ec8d97b8d5.json",
-      "sequence": 2
     }
   ]
 }
