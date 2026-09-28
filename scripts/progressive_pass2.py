@@ -1152,6 +1152,31 @@ def _attempt_base(work_item, outcome, accepted_at_utc, source):
     }
 
 
+def _migration_result_changed(work_item, attempt):
+    provenance = work_item.get('migration_provenance') or {}
+    if work_item.get('work_mode') != LEGACY_REANALYSIS_MODE:
+        return None
+    if attempt.get('outcome') != provenance.get('prior_outcome'):
+        return True
+    findings = list((attempt.get('negative_assessment') or {}).get('findings') or [])
+    if findings:
+        return True
+    if attempt.get('outcome') == 'analyzed_fit':
+        return any((
+            attempt.get('fit_level') != provenance.get('prior_fit_level'),
+            attempt.get('confidence') != provenance.get('prior_confidence'),
+            attempt.get('taste_factors') != provenance.get('prior_taste_factors'),
+        ))
+    if attempt.get('outcome') == 'analyzed_not_fit':
+        return any((
+            attempt.get('confidence') != provenance.get('prior_confidence'),
+            attempt.get('not_fit_basis') != provenance.get('prior_not_fit_basis'),
+            list(attempt.get('not_fit_evidence') or [])
+            != list(provenance.get('preserved_not_fit_evidence') or []),
+        ))
+    return None
+
+
 def normalize_result(doc, work_item, accepted_at_utc=None):
     if not _identity_matches(doc, work_item, 'PROGRESSIVE-PASS2-RESULT-V1'):
         raise ValueError('Deep result identity does not exactly match prepared work')
@@ -1173,6 +1198,12 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
         evidence = progressive_pass1._validate_text_list(
             'positive_evidence', doc.get('positive_evidence'), require_nonempty=True
         )
+        if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
+            preserved = list((work_item.get('migration_provenance') or {}).get('preserved_positive_evidence') or [])
+            if not preserved:
+                raise ValueError('legacy Deep reanalysis cannot create fit without preserved accepted positives')
+            if evidence != preserved:
+                raise ValueError('legacy Deep reanalysis fit must reuse exact preserved positive evidence')
         factors = doc.get('taste_factors')
         validate_taste_factors(factors)
         requires_base = bool(
@@ -1190,6 +1221,8 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
             'base_support_compatible': True if requires_base else None,
             'negative_assessment': deepcopy(negative_assessment),
         })
+        if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
+            base['migration_result_changed'] = _migration_result_changed(work_item, base)
         return base
 
     if outcome == 'analyzed_not_fit':
@@ -1205,6 +1238,12 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
         evidence = progressive_pass1._validate_text_list(
             'not_fit_evidence', doc.get('not_fit_evidence'), require_nonempty=True
         )
+        if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
+            provenance = work_item.get('migration_provenance') or {}
+            if provenance.get('prior_outcome') == 'analyzed_not_fit':
+                preserved = list(provenance.get('preserved_not_fit_evidence') or [])
+                if not preserved or any(row not in evidence for row in preserved):
+                    raise ValueError('legacy Deep reanalysis not-fit must retain the accepted prior not-fit baseline')
         if basis == 'confirmed_personal_negative':
             confirmed = [
                 row for row in negative_assessment.get('findings') or []
@@ -1218,6 +1257,8 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
             'not_fit_evidence': evidence,
             'negative_assessment': deepcopy(negative_assessment),
         })
+        if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
+            base['migration_result_changed'] = _migration_result_changed(work_item, base)
         return base
 
     if 'negative_assessment' in doc:
