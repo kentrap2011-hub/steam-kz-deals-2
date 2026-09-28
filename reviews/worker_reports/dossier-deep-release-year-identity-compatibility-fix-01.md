@@ -143,6 +143,7 @@ Allow the existing Progressive Deep worker to consume the published ordinary 46-
 ## Exact PR/commit/run/artifact refs
 
 - implementation PR: https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/111
+- documentation closeout PR: https://github.com/kentrap2011-hub/steam-kz-deals-2/pull/112
 - implementation final head: `8f5b6a86d33db7513e421b0530228cc0d7a19070`
 - implementation merge: `ebaa18ff406fb9c1744ed559990043570080b7b2`
 - PR PASS 2 core: run `36423277328` / #310 — success
