@@ -1302,6 +1302,7 @@ def normalize_terminal_execution_receipt(doc, work_item, accepted_at_utc=None, s
         'recovery_authorization_id': work_item.get('recovery_authorization_id'),
         'recovery_reason': work_item.get('recovery_reason'),
         'recovery_condition_binding': deepcopy(work_item.get('recovery_condition_binding')),
+        'migration_provenance': deepcopy(work_item.get('migration_provenance')),
         'execution_status': 'executed_no_accepted_result',
         'execution_started_at_utc': doc['execution_started_at_utc'],
         'execution_finished_at_utc': doc['execution_finished_at_utc'],
@@ -1570,9 +1571,9 @@ def process_result_documents(work_doc, state_doc, documents, accepted_at_utc=Non
             'work_id': work_item['work_id'],
             'family_id': work_item['family_id'],
             'work_mode': work_item.get('work_mode'),
-            'outcome': entry['outcome'],
-            'analysis_issue_code': entry.get('analysis_issue_code'),
-            'authoritative_completed': entry.get('authoritative_completed'),
+            'outcome': attempt['outcome'],
+            'analysis_issue_code': attempt.get('analysis_issue_code'),
+            'authoritative_completed': attempt.get('outcome') in AUTHORITATIVE_OUTCOMES,
             'recovery_owned': entry.get('recovery_owned'),
         })
         receipts.append(receipt)
@@ -1661,9 +1662,10 @@ def process_terminal_execution_documents(
             'family_id': work_item['family_id'],
             'work_mode': work_item.get('work_mode'),
             'outcome': 'analysis_incomplete',
-            'analysis_issue_code': entry['analysis_issue_code'],
+            'analysis_issue_code': attempt['analysis_issue_code'],
             'authoritative_completed': False,
-            'recovery_owned': True,
+            'recovery_owned': bool(entry.get('recovery_owned')),
+
             'canonical_receipt_path': str(canonical_path).replace('\\', '/'),
         })
         receipts.append(receipt)
