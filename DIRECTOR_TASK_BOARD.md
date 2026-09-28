@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DOSSIER_DEEP_READY_COUNT_GAP_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
+- No worker task is currently assigned/in progress at the top-level Director state.
 - Latest accepted implementation: `WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -13,32 +13,33 @@
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — Dossier / Deep ready count gap diagnostic
+## ACCEPTED — ЧАТ 1 — Dossier / Deep ready count gap diagnostic
 
 Task:
 `WORKER_TASK_DOSSIER_DEEP_READY_COUNT_GAP_DIAGNOSTIC_01.md`
 
-Mode:
-`READ-ONLY / RECON`
-
-Goal:
-- prove why current Dossier count is 46 while ordinary Deep ready/pending is 38;
-- identify the exact discrepant identities and reason for each;
-- distinguish ordinary Deep eligibility from the separate 30-game legacy reanalysis migration;
-- decide whether the gap is expected contract behavior or a defect.
-
-Scope guard:
-- diagnosis only;
-- no Dossier/Deep/Fast rerun or backlog processing;
-- no migration mutation;
-- no Scheduled Task changes;
-- only report findings.
-
 Report:
 `reviews/worker_reports/dossier-deep-ready-count-gap-diagnostic-01.md`
 
-Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`.
+Final status:
+`needs_fix`
+
+Director acceptance:
+- diagnosis accepted at pinned `main@637b5e9cdda16f73e31aac05b09b99c88f9f5ce9`;
+- Dossier 46 means 46 current/fresh reusable dossiers in the current 399-game scope;
+- ordinary Deep 38 means 38 dossiers that additionally pass Deep's compatibility gate;
+- the exact eight-game difference is not caused by the 30-game legacy migration;
+- all eight have exact AppID/title/current binding and are fresh, but Deep rejects them as `dossier_wrong_release_year`;
+- Dossier resolves the original/work release year while Deep compares against the current Steam queue release-date year, creating a false incompatibility for older titles re-released on Steam;
+- exact discrepant AppIDs: 1170760, 1237950, 1237970, 1237980, 1238040, 1238060, 1238820, 13500;
+- migration intersection with these eight is zero; concurrent migration progress did not change 46 or 38;
+- this is a cross-stage contract-boundary defect, not missing Dossier work;
+- no production state, backlog, Scheduled Task, Dossier, Deep, Fast, migration or recovery state was changed.
+
+Decision:
+- diagnostic complete and accepted;
+- implementation requires a separate contract-first Dossier/Deep identity compatibility task;
+- physical ЧАТ 1 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 1 — Legacy Deep full reanalysis migration preparation
