@@ -150,30 +150,54 @@ The JS regression additionally verifies explicit urgency reorder only inside one
 
 Package purchase scoring still uses the unchanged stage-local V2 score helper; package-value regression expectation was updated only for the removal of default urgency from that stage-local order.
 
-## 17. Validation wiring
-Canonical workflows now run the focused regression together with existing:
-- priority ranking;
-- Progressive personalization / unresolved-row preservation;
-- PASS 1 / PASS 2 and PPD-012 semantic-identity stability;
-- package purchase-value regressions;
-- Progressive UI regression;
-- full deterministic visual build/publication path after merge.
+## 17. Validation results
+PR #117 validation completed successfully on head `42444aad7f4b3d8b3fc155dfc646cc4fbbcfe6e6`:
+- `Validate backlog dispositions` — run `36458847048` — success;
+- `Validate package purchase value` — run `36458847059` — success;
+- `Validate Progressive PASS 2 core` — run `36458847057` — success.
 
-PR validation is in progress in PR #117.
+The PASS 2 job explicitly passed:
+- PPD-012 Progressive profile semantic identity stability;
+- PASS 2 core and Dossier integration;
+- Deep legacy/recovery regressions;
+- PASS 1 regressions;
+- Progressive personalization;
+- `Deep-first final-score ordering regression`;
+- unresolved-row preservation;
+- visual activation routing;
+- UI provenance regression.
 
-## 18. Fresh-main reconcile / integration refs
+## 18. Fresh-main reconcile / merge / publication evidence
 Initial working branch: `fix/deep-first-final-score-order-01`.
 
-Before PR, `main` advanced by 6 commits containing only Dossier/Deep data/work progress. None overlapped implementation files.
+Before PR, `main` advanced by 6 commits containing only Dossier/Deep data/work progress. None overlapped implementation files. The branch was rebuilt exactly on fresh `main` `85f55df8ee542ebfc47f82d9f7c15dbef2b46141`, preserving that progress.
 
-Reconciled branch was rebuilt exactly on fresh:
-- base `main`: `85f55df8ee542ebfc47f82d9f7c15dbef2b46141`;
-- implementation head before report: `8087b906e20c8cc2c1eef7473f875d17e8c54648`;
-- PR: #117.
+Integration refs:
+- PR: `#117`;
+- validated PR head: `42444aad7f4b3d8b3fc155dfc646cc4fbbcfe6e6`;
+- merge commit on `main`: `9cb123765884440d37632740d51695a371338483`.
 
 Active CHAT 2 / Dossier progress was not modified or reverted.
 
-Final check-run, merge, visual-build, visual commit and Pages-deploy refs will be recorded here after GitHub validation/publication.
+Post-merge normal GitHub publication path:
+- `Build daily visual payload` push run `36458961848` entered the full `build` job;
+- ranking contract validation, focused Deep-first regression, Progressive tests, package-value tests, card-explanation validation and `Build and refresh canonical visual payload once` all succeeded in that runner;
+- publication then stopped at the independent gate `Require meaningful Russian descriptions before canonical commit`;
+- therefore the ranking review/lookup/persist commit steps did not run and no fresh canonical visual commit was created.
+
+This blocker predates this task: pre-merge main build run `36457892914` had already failed at the exact same `Require meaningful Russian descriptions before canonical commit` gate.
+
+A subsequent automatically triggered `Build daily visual payload` run `36459026993` reports overall success only because its full `build` job was skipped after an ineligible/failed pre-AI upstream; it produced only the `no_build_receipt`. It is not publication evidence.
+
+Pages/deploy evidence:
+- push deploy run `36458961533` — cancelled;
+- workflow-run deploy `36459045495` — skipped;
+- no fresh Pages deployment exists for the new ranking;
+- no fresh persisted `data/production/visual/current.json` exists from this task, so final first-position/KOF-vs-MY-HERO verification against persisted production output cannot truthfully be claimed.
+
+The unrelated Russian-description quality gate was not bypassed or modified, because doing so would be a different task.
 
 ## 19. Final status
-`validation_pending`
+`blocked`
+
+Implementation, contracts, regressions, PR validation and merge are complete. The remaining blocker is only the pre-existing Russian-description publication gate, which prevents the task-required fresh canonical visual commit and Pages proof.
