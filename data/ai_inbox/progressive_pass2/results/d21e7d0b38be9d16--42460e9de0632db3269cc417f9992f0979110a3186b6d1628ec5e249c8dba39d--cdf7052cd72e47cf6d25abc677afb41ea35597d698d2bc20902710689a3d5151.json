@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "06ec757a4eae872e5173977f8a0e4633562fb7ac",
+  "run_start_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+  "run_started_at_utc": "2026-09-28T16:43:36+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+  "work_id": "42460e9de0632db3269cc417f9992f0979110a3186b6d1628ec5e249c8dba39d",
+  "family_id": "game:1347030",
+  "taste_subject_key": "App_1347030",
+  "appid": "1347030",
+  "taste_fingerprint": "8a00b347fdcfdcd339218a33aad9bfa5775dbe380bb0010993152da8ad9bda6f",
+  "candidate_context_sha256": "44db20f4c9c3a8bc513a6c44822c27a07724b9a3ae87082999626666a308d905",
+  "dossier_content_sha256": "723e221c2f7ba9603d2f6ea894b59dc36837d02482a8767414853b76115614f9",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "cdf7052cd72e47cf6d25abc677afb41ea35597d698d2bc20902710689a3d5151",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "The repeated corridor is deliberately transformed on each restart, so the short experience keeps introducing new variations instead of simply asking the player to repeat an unchanged task.",
+    "Its fourth-wall conversation, humor and commitment to one self-referential idea give the game a distinctive authored identity that can carry a very short experiment."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 30,
+    "development_variety": 62,
+    "structure_pacing_direction": 82,
+    "identity_hooks": 82,
+    "breadth_of_match": 58
+  },
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "После примерно получаса у концепции почти не остаётся глубины для повторных прохождений, но короткая длительность не заставляет долго жить с исчерпанной формулой.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Игра намеренно несколько раз выбрасывает игрока и требует перезапуска; даже при понимании шутки это может раздражать.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "low_active_gameplay",
+        "text_ru": "Механически опыт почти целиком строится на ходьбе и одной кнопке. Если мета-шутка и авторская идея не зацепят, у профиля практически не останется активного геймплея, который мог бы это компенсировать.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  }
+}
