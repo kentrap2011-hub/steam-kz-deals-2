@@ -777,3 +777,40 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 **Сохранено:** TASTE-012 temporal completeness, TASTE-014 semantic/adaptive boundedness, TASTE-015 downstream-ready neutral coverage, exact-product identity, privacy, pragmatic evidence modes, immutable create-only transport, per-group non-blocking classification, recovery ownership and the single GitHub canonical-writer boundary remain strict. No scheduler, queue, retry loop, second validator, ChatGPT-owned pre-create gate, manual Tiny Snow recovery, or Scheduled Task action is introduced.
 
 **Основные места:** `config/taste_steam_review_dossier_contract.json`, `config/taste_steam_review_dossier_web_evidence_contract.json`, `config/taste_steam_review_dossier_schema.json`, `config/taste_steam_review_dossier_worker_prompt.md`, `config/execution_ownership_contract.json`, `scripts/taste_steam_review_dossier_strict.py`, `scripts/stage_taste_dossier_canonical_writer.sh`, `.github/workflows/ingest-taste-steam-review-dossier-checkpoint.yml`, `scripts/test_taste_dossier_github_date_derivation.py`, `scripts/test_taste_dossier_ingest_atomic_staging.py`.
+
+## PPD-010 — One-off legacy Deep full reanalysis with preserved accepted positives
+
+**Status:** canonical migration decision.
+
+**Problem:** current authoritative Deep completions created before PPD-009 remain valid fit/not-fit truth but project `legacy_not_evaluated` because their result contract could not represent balanced negative assessment. Reusing normal first-pass or recovery to revisit them would corrupt existing attempt/recovery semantics, while mutating the old accepted result in place would destroy audit history.
+
+**Decision:**
+
+1. One finite migration, `deep-legacy-full-reanalysis-with-preserved-positives-01`, may re-evaluate only current authoritative completed Deep identities that, at the immutable migration authority, still lack `negative_assessment` and therefore project `legacy_not_evaluated`.
+2. GitHub owns the migration authority, finite scope/order, immutable identity/profile/Dossier binding, transport authorization, validation, persistence, history/current-result selection, counters and completion. Interactive chats do not author game semantics.
+3. The exact migration evidence/profile view is frozen at one GitHub repository authority commit. Dossier state that lands before that authority may be included; Dossier writes after it remain independent and must not replace or invalidate the frozen migration evidence. No whole-`main` stability lock is created.
+4. The existing Progressive Deep Worker remains the only semantic runtime. It uses the existing PASS 2 V2 run-start marker/confirmation publication gate for every migration invocation. No second Scheduled Task, scheduler, queue manager, retry daemon, or recovery owner is introduced.
+5. Migration work uses the distinct work mode `legacy_full_reanalysis`. It is separate from `normal_first_pass` and `recovery`; it consumes neither the normal-first-pass budget nor recovery authorization/history.
+6. For a prior `analyzed_fit`, the worker must reuse the exact previously accepted `positive_evidence` as the favorable side of the analysis. It must not research, invent, replace, expand, or silently drop those positives. For a prior `analyzed_not_fit`, the old accepted not-fit evidence is retained as the existing unfavorable/decision baseline; absent positive evidence is never invented merely to enable a fit.
+7. The worker must fully evaluate every negative/mixed observation and every conflict in the exact frozen accepted Dossier under PPD-009. The new completed result may change outcome, fit level, confidence, taste factors, negative findings and therefore downstream score/ranking only through already-canonical policies.
+8. A migration result may be `analyzed_fit`, `analyzed_not_fit`, or `analysis_incomplete`. `analysis_incomplete` does not erase the prior authoritative completed Deep revision; the prior revision remains the current effective result until a completed migration revision is accepted.
+9. A successfully accepted completed migration revision becomes the current authoritative Deep revision. The complete prior Deep revision is retained immutably in revision history with its original semantic generation/work/Dossier/authorization/run-start/accepted-result provenance.
+10. Migration transport is create-only and exact-bound. Replays are ignored, invalid/stale artifacts consume no normal or recovery attempt, and a target that no longer matches the frozen/current identity is not silently rebound to a newer identity.
+11. The migration manifest is finite and durable. Once a target has an accepted migration revision it is never emitted again for this migration ID. Once every frozen target is accepted completed, accepted incomplete, or explicitly terminally unresolved under the migration contract, the migration is complete and cannot automatically rediscover later legacy rows.
+12. Migration observability is GitHub-owned and separate from normal Deep accounting: migration id/authority, total/pending/submitted/accepted, changed/unchanged/incomplete, negative-assessment outcome counts, last accepted time and complete status. Existing normal-first-pass/recovery counters remain semantically unchanged.
+13. Dossier production and its Scheduled Task continue normally. The migration does not edit Dossier contracts/state/workflows or any Scheduled Task configuration.
+14. Existing scoring/ranking policy remains the only scoring authority. A confirmed personal risk may affect scoring only via an existing canonical risk code; cautions remain display-only.
+
+**Fail-closed rules:**
+
+- no migration item without exact current Deep identity, exact prior authoritative revision, exact pinned profile identity, exact frozen accepted Dossier path/content hash/binding and finite manifest membership;
+- no fresh positive research and no worker-authored replacement positive evidence;
+- no migration result may overwrite or delete prior revision history;
+- no `legacy_full_reanalysis` item may be interpreted as normal first pass or recovery;
+- no later mutable Dossier/profile/work state may be substituted into an already frozen migration target;
+- no incomplete migration revision may displace a prior completed authoritative result.
+
+**Implementation route:** `config/progressive_pass2_contract.json`, `config/progressive_pass2_result_schema.json`, `config/progressive_pass2_worker_prompt.md`, the finite migration manifest/contract, `scripts/progressive_pass2.py`, `scripts/build_progressive_pass2_work.py`, `scripts/ingest_progressive_pass2.py`, existing V2 run-start authority helpers, Progressive personalization/visual projection, and focused migration regressions.
+
+**Why:** this preserves the accepted positive work already paid for, repairs the missing negative side with the now-canonical balanced Deep contract, retains an auditable old revision, and keeps all production execution ownership in the existing GitHub + Progressive Deep architecture.
+
