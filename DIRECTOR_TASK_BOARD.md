@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- No worker task is currently assigned/in progress at the top-level Director state.
+- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md` (`CONTRACT-FIRST IMPLEMENT / VALIDATE`).
 - Active worker assignment: `ЧАТ 2` — `WORKER_TASK_ATELIER_ESCHA_LOGY_DEEP_WITHOUT_POSITIVE_REASON_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -12,6 +12,43 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 1 — Deep-first final-score order fix
+
+Task:
+`WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md`
+
+Mode:
+`CONTRACT-FIRST IMPLEMENT / VALIDATE`
+
+User decision:
+- completed current Deep/PASS 2 fit always precedes Fast/PASS 1 fit;
+- Fast fit precedes unresolved/not-analyzed;
+- inside the same completed-analysis stage, order by final `total_score DESC`;
+- urgency may never cross a Deep/Fast stage boundary;
+- default feed is stage first, then final score;
+- manual `В конец очереди` remains absolute.
+
+Goal:
+- correct the canonical producer order and matching UI order;
+- supersede conflicting ranking clauses contract-first;
+- preserve score calculation and all semantic results;
+- remove the misleading use of `Приоритет` for a local feed cursor.
+
+Constraints:
+- no semantic worker execution;
+- no score-weight/risk/purchase-policy changes;
+- no Dossier changes;
+- no scheduler/queue/retry changes;
+- no Scheduled Task changes;
+- do not interfere with active ЧАТ 2.
+
+Report:
+`reviews/worker_reports/deep-first-final-score-order-fix-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 1`.
 
 
 ## ACTIVE — НОВЫЙ ЧАТ 2 — Atelier Deep without positive reason diagnostic
