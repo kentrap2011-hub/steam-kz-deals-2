@@ -423,6 +423,7 @@ def authorization_id(
     *,
     work_mode='normal_first_pass',
     recovery_authorization_id=None,
+    migration_provenance_value=None,
 ):
     if work_mode not in WORK_MODES:
         raise ValueError('unknown Deep work mode')
@@ -434,11 +435,19 @@ def authorization_id(
         'dossier_compatibility_binding': dossier_compatibility_binding,
         'work_mode': work_mode,
         'recovery_authorization_id': recovery_authorization_id,
+        'migration_provenance': migration_provenance_value,
     }
     if any(not material.get(key) for key in ('semantic_generation_id', 'work_id', 'appid', 'dossier_content_sha256')):
         raise ValueError('Deep authorization material is incomplete')
     if work_mode == 'recovery' and not recovery_authorization_id:
         raise ValueError('Deep recovery work requires recovery_authorization_id')
+    if work_mode == LEGACY_REANALYSIS_MODE:
+        if recovery_authorization_id is not None:
+            raise ValueError('legacy Deep reanalysis cannot consume recovery authorization')
+        if not isinstance(migration_provenance_value, dict) or not migration_provenance_value:
+            raise ValueError('legacy Deep reanalysis requires migration provenance')
+    elif migration_provenance_value is not None:
+        raise ValueError('normal/recovery Deep work cannot carry migration provenance')
     if not isinstance(dossier_compatibility_binding, dict) or not dossier_compatibility_binding:
         raise ValueError('Deep Dossier compatibility binding is missing')
     return canonical_sha256(material)
@@ -779,6 +788,155 @@ def make_work_item(
             f'data/ai_inbox/progressive_pass2/execution_receipts/{prefix}.json'
         ),
     }
+
+
+
+def make_legacy_reanalysis_work_item(manifest, target):
+    binding = {field: target.get(field) for field in PASS1_IDENTITY_FIELDS}
+    missing = [field for field, value in binding.items() if not isinstance(value, str) or not value]
+    if missing:
+        raise ValueError(f'legacy Deep reanalysis target binding is incomplete: {missing}')
+    provenance = migration_provenance(manifest, target)
+    auth = authorization_id(
+        binding,
+        target['dossier_content_sha256'],
+        target['dossier_compatibility_binding'],
+        work_mode=LEGACY_REANALYSIS_MODE,
+        migration_provenance_value=provenance,
+    )
+    prefix = f"{binding['semantic_generation_id'][:16]}--{binding['work_id']}--{auth}"
+    return {
+        **binding,
+        'work_mode': LEGACY_REANALYSIS_MODE,
+        'semantic_input': deepcopy(target.get('semantic_input') or {}),
+        'dossier_path': target['dossier_path'],
+        'dossier_content_sha256': target['dossier_content_sha256'],
+        'dossier_compatibility_binding': deepcopy(target['dossier_compatibility_binding']),
+        'dossier_expires_at_utc': target['dossier_expires_at_utc'],
+        'recovery_authorization_id': None,
+        'recovery_reason': None,
+        'recovery_condition_binding': None,
+        'migration_provenance': provenance,
+        'authorization_id': auth,
+        'result_submission_path': f'data/ai_inbox/progressive_pass2/results/{prefix}.json',
+        'terminal_execution_submission_path': (
+            f'data/ai_inbox/progressive_pass2/execution_receipts/{prefix}.json'
+        ),
+    }
+
+
+def legacy_reanalysis_attempts(entry, migration_id=None):
+    rows = list((entry or {}).get('legacy_reanalysis_attempts') or [])
+    if migration_id is None:
+        return rows
+    return [
+        row for row in rows
+        if isinstance(row, dict)
+        and ((row.get('migration_provenance') or {}).get('migration_id') == migration_id)
+    ]
+
+
+def legacy_reanalysis_target_status(entry, target, migration_id):
+    attempts = legacy_reanalysis_attempts(entry, migration_id)
+    for attempt in reversed(attempts):
+        provenance = attempt.get('migration_provenance') or {}
+        if provenance.get('migration_target_id') != target.get('target_id'):
+            continue
+        if attempt.get('outcome') in AUTHORITATIVE_OUTCOMES:
+            return 'accepted_completed', attempt
+        if attempt.get('outcome') == 'analysis_incomplete':
+            return 'accepted_incomplete', attempt
+    prior = target.get('prior_revision') or {}
+    if not isinstance(entry, dict):
+        return 'stale_or_missing_prior', None
+    if entry.get('authorization_id') != prior.get('authorization_id'):
+        return 'stale_or_missing_prior', None
+    if entry.get('outcome') != prior.get('outcome'):
+        return 'stale_or_missing_prior', None
+    return 'pending', None
+
+
+def legacy_reanalysis_work_and_metrics(state_doc, manifest=None):
+    manifest = manifest if manifest is not None else load_legacy_reanalysis_manifest()
+    if not manifest:
+        return [], {
+            'migration_id': None,
+            'migration_authority_commit': None,
+            'total_count': 0,
+            'pending_count': 0,
+            'submitted_count': 0,
+            'accepted_count': 0,
+            'accepted_completed_count': 0,
+            'changed_result_count': 0,
+            'unchanged_result_count': 0,
+            'incomplete_count': 0,
+            'confirmed_risk_count': 0,
+            'caution_count': 0,
+            'completed_no_relevant_negative_count': 0,
+            'stale_or_missing_prior_count': 0,
+            'last_accepted_at_utc': None,
+            'complete': True,
+        }
+    migration_id = manifest['migration_id']
+    work = []
+    metrics = {
+        'migration_id': migration_id,
+        'migration_authority_commit': manifest['migration_authority_commit'],
+        'total_count': len(manifest.get('targets') or []),
+        'pending_count': 0,
+        'submitted_count': 0,
+        'accepted_count': 0,
+        'accepted_completed_count': 0,
+        'changed_result_count': 0,
+        'unchanged_result_count': 0,
+        'incomplete_count': 0,
+        'confirmed_risk_count': 0,
+        'caution_count': 0,
+        'completed_no_relevant_negative_count': 0,
+        'stale_or_missing_prior_count': 0,
+        'last_accepted_at_utc': None,
+        'complete': False,
+    }
+    accepted_times = []
+    for target in manifest.get('targets') or []:
+        entry = (state_doc.get('entries') or {}).get(target.get('family_id'))
+        status, attempt = legacy_reanalysis_target_status(entry, target, migration_id)
+        if status == 'pending':
+            item = make_legacy_reanalysis_work_item(manifest, target)
+            work.append(item)
+            metrics['pending_count'] += 1
+            if Path(item['result_submission_path']).exists() or Path(item['terminal_execution_submission_path']).exists():
+                metrics['submitted_count'] += 1
+            continue
+        if status == 'stale_or_missing_prior':
+            metrics['stale_or_missing_prior_count'] += 1
+            continue
+        metrics['accepted_count'] += 1
+        accepted_at = attempt.get('accepted_at_utc') if isinstance(attempt, dict) else None
+        if accepted_at:
+            accepted_times.append(accepted_at)
+        if status == 'accepted_incomplete':
+            metrics['incomplete_count'] += 1
+            continue
+        metrics['accepted_completed_count'] += 1
+        if attempt.get('migration_result_changed') is True:
+            metrics['changed_result_count'] += 1
+        else:
+            metrics['unchanged_result_count'] += 1
+        assessment = attempt.get('negative_assessment') or {}
+        findings = list(assessment.get('findings') or [])
+        if any(row.get('disposition') == 'confirmed_personal_risk' for row in findings if isinstance(row, dict)):
+            metrics['confirmed_risk_count'] += 1
+        elif any(row.get('disposition') == 'caution' for row in findings if isinstance(row, dict)):
+            metrics['caution_count'] += 1
+        elif assessment.get('status') == 'completed':
+            metrics['completed_no_relevant_negative_count'] += 1
+    metrics['last_accepted_at_utc'] = max(accepted_times) if accepted_times else None
+    metrics['complete'] = (
+        metrics['accepted_count'] + metrics['stale_or_missing_prior_count']
+        == metrics['total_count']
+    )
+    return work, metrics
 
 
 def recompute_eligibility(
