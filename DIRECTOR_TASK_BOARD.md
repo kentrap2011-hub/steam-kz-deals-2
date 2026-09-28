@@ -2,9 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DOSSIER_DEEP_RELEASE_YEAR_IDENTITY_COMPATIBILITY_FIX_01.md` (`CONTRACT-FIRST IMPLEMENT / VALIDATE`).
-- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_DEEP_MIGRATION_RESULTS_NOT_REFLECTED_ON_SITE_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
-- Latest accepted implementation: `WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md`.
+- No worker task is currently assigned/in progress at the top-level Director state.
+- Latest accepted implementation: `WORKER_TASK_DOSSIER_DEEP_RELEASE_YEAR_IDENTITY_COMPATIBILITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
 - Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
@@ -14,67 +13,64 @@
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 2 — Deep migration results not reflected on site diagnostic
+## ACCEPTED — ЧАТ 2 — Deep migration results not reflected on site diagnostic
 
 Task:
 `WORKER_TASK_DEEP_MIGRATION_RESULTS_NOT_REFLECTED_ON_SITE_DIAGNOSTIC_01.md`
 
-Mode:
-`READ-ONLY / RECON`
-
-Goal:
-- prove why canonical Deep migration state is complete 30/30 while the published Statistics page still shows Deep completed/fit/not-fit/last-write as zero/never;
-- locate the first divergence between canonical PASS 2 state, statistics projection, generated visual payload and deployed Pages artifact;
-- determine whether cards/ranking are also affected or only Statistics;
-- distinguish intended migration-counter semantics from an actual projection/publication defect.
-
-Parallel constraint:
-- ЧАТ 1 independently fixes Dossier/Deep release-year compatibility;
-- ЧАТ 2 must not modify or interfere with ЧАТ 1.
-
-Scope:
-- read-only diagnosis;
-- no semantic workers;
-- no manual rebuild/deploy;
-- no migration changes;
-- no Scheduled Task changes.
-
 Report:
 `reviews/worker_reports/deep-migration-results-not-reflected-on-site-diagnostic-01.md`
 
-Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 2`.
+Final status:
+`needs_fix`
+
+Director acceptance:
+- diagnosis accepted;
+- durable PASS 2 state retains the completed 30-game migration: 30 accepted completed, 26 fit, 4 not-fit, 0 incomplete;
+- the deployed site zeros are not a Pages/browser/cache problem and are not Statistics-only;
+- the first divergence occurs when durable Deep revisions are matched against the current exact semantic identity;
+- all 30 migration results were created under semantic generation `4596...`, while current work moved to `f76f...`;
+- the underlying taste profile blob/content did NOT change; only the profile provenance commit changed, producing a different profile pin and therefore a different global semantic generation;
+- because exact current matching includes that pin/generation, all 30 valid migrated results became non-current immediately after the provenance-only refresh;
+- consequently cards, ranking, risk/caution presentation and Deep counters all ignore those 30 migrated revisions;
+- the same 30 games were re-emitted as ordinary current Deep work, which would cause unnecessary re-analysis if allowed to proceed;
+- this is broader than the site statistics and is a semantic-identity stability defect;
+- PR #111 from ЧАТ 1 is independent and does not repair this issue;
+- no workers, migration state, visual state, Scheduled Tasks or ЧАТ 1 work were changed by the diagnostic.
+
+Decision:
+- diagnostic complete and accepted;
+- next implementation must be contract-first and make Progressive profile semantic identity stable across byte-identical profile content while preserving immutable provenance/verification;
+- physical ЧАТ 2 is complete, retired, and can be deleted.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — Dossier / Deep release-year identity compatibility fix
+## ACCEPTED — ЧАТ 1 — Dossier / Deep release-year identity compatibility fix
 
 Task:
 `WORKER_TASK_DOSSIER_DEEP_RELEASE_YEAR_IDENTITY_COMPATIBILITY_FIX_01.md`
 
-Mode:
-`CONTRACT-FIRST IMPLEMENT / VALIDATE`
-
-Goal:
-- define one shared release-year identity semantic across Dossier -> Deep;
-- repair the eight false `dossier_wrong_release_year` rejections without weakening exact-product protection;
-- preserve concurrent Dossier progress and the independent legacy Deep migration;
-- let normal GitHub-owned recomputation unlock the affected ordinary Deep identities.
-
-Exact regression AppIDs:
-`1170760, 1237950, 1237970, 1237980, 1238040, 1238060, 1238820, 13500`
-
-Constraints:
-- no manual Dossier rebuild/backlog processing;
-- no manual Deep semantic execution;
-- no migration scope/history changes;
-- no Scheduled Task changes;
-- exact-product/wrong-edition protection remains fail-closed.
-
 Report:
 `reviews/worker_reports/dossier-deep-release-year-identity-compatibility-fix-01.md`
 
-Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`.
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- implementation PR #111 merged to `main` as `ebaa18ff406fb9c1744ed559990043570080b7b2`;
+- closeout PR #112 merged as `765bbb609585fdd5535ea1ebdf86ee83ca75fab1`;
+- PPD-011 and a shared Dossier/Deep identity compatibility contract now distinguish original/work release year from Steam/storefront release-date year;
+- cross-kind year equality is no longer a hard compatibility gate;
+- exact AppID, exact title/work identity, resolved identity, current evidence binding, freshness and exact-product provenance remain fail-closed;
+- all eight known false rejects are repaired without rewriting their Dossier history;
+- negative regressions preserve wrong-AppID, wrong-title/product, unresolved identity, stale/expired Dossier, incompatible binding and cross-product/edition protection;
+- final current counters after recomputation: Dossier accepted 46, pending 353; ordinary Deep ready/pending 46, waiting 353;
+- all eight repaired identities are now ordinary Deep eligible with zero semantic attempts consumed;
+- legacy 30-game migration completed concurrently and was not changed by this task;
+- Dossier remained independent; no backlog/manual semantic execution/Scheduled Task changes.
+
+Decision:
+- implementation accepted and complete;
+- physical ЧАТ 1 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 1 — Dossier / Deep ready count gap diagnostic
