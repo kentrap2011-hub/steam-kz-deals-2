@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+  "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+  "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+  "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+  "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+  "work_id": "beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0",
+  "family_id": "game:1152310",
+  "taste_subject_key": "App_1152310",
+  "appid": "1152310",
+  "taste_fingerprint": "3ebb6a7d9452c0f7f3f356a4c48895af9476287bf06b99dfb5c864b1fc8851df",
+  "candidate_context_sha256": "dd825ea7d7d004d0700fac51f942eba39d3d0d321c3c934d509567f3060dc0f7",
+  "dossier_content_sha256": "41dce0c3148d3b113bc5071b10fe060fe312c8b49861bbf9e84ec71f53930f84",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "3f0f9e898604a3feb152fa516d2d2d481254f66ab789bcf36d3268980d8b4fa3",
+  "work_mode": "legacy_full_reanalysis",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "migration_provenance": {
+    "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+    "migration_target_id": "legacy-full-reanalysis-01:beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0",
+    "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+    "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+    "prior_outcome": "analyzed_fit",
+    "prior_fit_level": "strong",
+    "prior_confidence": "medium",
+    "prior_taste_factors": {
+      "gameplay_mastery": 82,
+      "development_variety": 84,
+      "structure_pacing_direction": 83,
+      "identity_hooks": 72,
+      "breadth_of_match": 82
+    },
+    "prior_not_fit_basis": null,
+    "prior_work_id": "beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0",
+    "prior_authorization_id": "b7702416dff6ba8343efd85867d15a8095fdc395d3e23e86cac21d1af2197213",
+    "prior_accepted_at_utc": "2026-09-27T17:21:20+00:00",
+    "preserved_positive_evidence": [
+      "The synthesis system starts approachable and becomes substantially more flexible through elemental values, skills, trait transfer and protagonist-specific specialties, directly matching the preference for visible mechanical development.",
+      "Six-character front/back parties and support attacks make combat more dynamic and add tactical planning rather than leaving progression concentrated only in crafting.",
+      "Four-month assignments provide clear short-term goals while usually leaving substantial discretionary time, fitting the preference for direction without excessive lostness or deadline pressure."
+    ],
+    "preserved_not_fit_evidence": []
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "medium",
+  "positive_evidence": [
+    "The synthesis system starts approachable and becomes substantially more flexible through elemental values, skills, trait transfer and protagonist-specific specialties, directly matching the preference for visible mechanical development.",
+    "Six-character front/back parties and support attacks make combat more dynamic and add tactical planning rather than leaving progression concentrated only in crafting.",
+    "Four-month assignments provide clear short-term goals while usually leaving substantial discretionary time, fitting the preference for direction without excessive lostness or deadline pressure."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 82,
+    "development_variety": 84,
+    "structure_pacing_direction": 83,
+    "identity_hooks": 72,
+    "breadth_of_match": 82
+  },
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "У английской локализации отмечают опечатки и местами неточные или расплывчатые описания механик; это может мешать осознанному сравнению и настройке систем, хотя не отменяет их глубину.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  }
+}
