@@ -245,6 +245,8 @@ def run():
     assert metrics['accepted_count'] == 1
     assert metrics['accepted_completed_count'] == 1
     assert metrics['changed_result_count'] == 1
+    assert metrics['changed_fit_outcome_count'] == 0
+    assert metrics['unchanged_fit_outcome_count'] == 1
     assert metrics['confirmed_risk_count'] == 1
     assert metrics['pending_count'] == 29
     assert metrics['complete'] is False
@@ -263,6 +265,8 @@ def run():
         unchanged_state, manifest
     )
     assert unchanged_metrics['unchanged_result_count'] == 1
+    assert unchanged_metrics['changed_fit_outcome_count'] == 0
+    assert unchanged_metrics['unchanged_fit_outcome_count'] == 1
     assert unchanged_metrics['completed_no_relevant_negative_count'] == 1
 
     # Incomplete migration is terminal for this one-off target but leaves the old
