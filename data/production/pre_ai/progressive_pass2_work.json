@@ -67,115 +67,31 @@
     "current_analysis_incomplete_count": 0,
     "dossier_waiting_count": 361,
     "pass2_attempted_count": 0,
-    "pass2_eligible_count": 4,
+    "pass2_eligible_count": 3,
     "normal_pass2_eligible_count": 38,
     "deep_normal_work_paused_for_legacy_reanalysis": true,
     "legacy_full_reanalysis": {
       "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
       "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
       "total_count": 30,
-      "pending_count": 4,
+      "pending_count": 3,
       "submitted_count": 0,
-      "accepted_count": 26,
-      "accepted_completed_count": 26,
-      "changed_result_count": 26,
+      "accepted_count": 27,
+      "accepted_completed_count": 27,
+      "changed_result_count": 27,
       "unchanged_result_count": 0,
       "changed_fit_outcome_count": 0,
-      "unchanged_fit_outcome_count": 26,
+      "unchanged_fit_outcome_count": 27,
       "incomplete_count": 0,
-      "confirmed_risk_count": 21,
+      "confirmed_risk_count": 22,
       "caution_count": 5,
       "completed_no_relevant_negative_count": 0,
       "stale_or_missing_prior_count": 0,
-      "last_accepted_at_utc": "2026-09-28T10:33:35+00:00",
+      "last_accepted_at_utc": "2026-09-28T10:34:13+00:00",
       "complete": false
     }
   },
   "items": [
-    {
-      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
-      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
-      "work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
-      "family_id": "game:1173790",
-      "taste_subject_key": "App_1173790",
-      "appid": "1173790",
-      "taste_fingerprint": "5bfdf7cb10a83b61c25a5ad772424a299486dddde5758d4da06e5dd15d3f727d",
-      "candidate_context_sha256": "eb4e62ba1d6f1390320f4f855e21eff1ebdd0ff26fe07036e6241fcfddb12ddc",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 27,
-      "semantic_input": {
-        "title": "FINAL FANTASY III",
-        "short_description": "The original FINAL FANTASY III comes to life with completely new graphics and audio!\r\n\r\nA remodeled 2D take on the third game in the world-renowned FINAL FANTASY series! Enjoy the timeless story told through charming retro graphics.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Adventure",
-          "Exploration",
-          "JRPG",
-          "RPG",
-          "Singleplayer"
-        ],
-        "core_fit_count": 1,
-        "release_date": "12 Aug, 2021",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1173790"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1173790.json",
-      "dossier_content_sha256": "d821a5a61eccf93cf54a7e77695f43e87326769d79c28aaa9c083e19b951ddc7",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-17T13:08:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
-          "gameplay_mastery": 77,
-          "development_variety": 84,
-          "structure_pacing_direction": 72,
-          "identity_hooks": 64,
-          "breadth_of_match": 79
-        },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
-        "prior_authorization_id": "6285430c70b583b548e3a24c8ad56d7115fc751f7fb0d0f0882288d6a7b1f3fa",
-        "prior_accepted_at_utc": "2026-09-27T17:33:32+00:00",
-        "preserved_positive_evidence": [
-          "The job system supports frequent class changes and experimentation with party roles, directly matching the profile's very strong preference for meaningful development and new mechanical possibilities.",
-          "Varied dungeons, several forms of transport and broader world changes make exploration more dynamic than the earlier Pixel Remasters instead of repeating one static structure.",
-          "Late-game difficulty can reward thoughtful job setups, giving the progression system a mastery payoff beyond collecting classes."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5--cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5--cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6.json",
-      "sequence": 1
-    },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
@@ -256,7 +172,7 @@
       "authorization_id": "d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea--d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea--d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e.json",
-      "sequence": 2
+      "sequence": 1
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -339,7 +255,7 @@
       "authorization_id": "d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693--d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693--d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274.json",
-      "sequence": 3
+      "sequence": 2
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -424,7 +340,7 @@
       "authorization_id": "187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995--187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995--187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc.json",
-      "sequence": 4
+      "sequence": 3
     }
   ]
 }
