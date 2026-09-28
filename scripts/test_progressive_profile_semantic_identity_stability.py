@@ -252,7 +252,16 @@ def production_history_reconciliation():
         risks = refiner.personal_taste_risks(taste_entry)
         visible = card_explanation_policy.visible_risk_payload(risks)
         finalizer_risks = grounded_negative_visual.all_risk_candidates(taste_entry, {}, {})
-        finalizer_visible = grounded_negative_visual.visible_grounded_payload(finalizer_risks)
+        finalizer_has_taste_risk = any(
+            row.get('source') == 'taste_negative_evidence'
+            for row in finalizer_risks.values()
+            if isinstance(row, dict)
+        )
+        finalizer_visible = (
+            grounded_negative_visual.visible_grounded_payload(finalizer_risks)
+            if finalizer_has_taste_risk
+            else {'risks': [], 'risk_provenance': []}
+        )
         for payload in (visible, finalizer_visible):
             for row in payload['risk_provenance']:
                 if row.get('source') != 'taste_negative_evidence':
