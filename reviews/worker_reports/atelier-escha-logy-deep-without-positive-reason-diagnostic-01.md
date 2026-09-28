@@ -254,8 +254,8 @@ Atelier accepted Deep:
 
 Relevant accepted fixes/decisions:
 - PPD-010: legacy Deep full reanalysis with preserved positives
-- PPD-012 primary implementation PR #113 merge: `bf4061d3` (full repository history retains the canonical full SHA)
-- PPD-012 production-history regression PR #114 merge: `32f3354d`
+- PPD-012 primary implementation PR #113 merge: `bf4061d3b46f53b3dfcf0fe2a6eee83e770e1896`
+- PPD-012 production-history regression PR #114 merge: `32f3354d1e43647271e8f1aac8884cec4ec92f77`
 - PPD-012 downstream exact Deep-risk projection PR #115 merge: `e864f882d74d26512d1430ab1632d7c93654f058`
 - Deep-positive projection PR #105 merge: `21c3331eec471a18889de0264776216490bee7bf`
 
