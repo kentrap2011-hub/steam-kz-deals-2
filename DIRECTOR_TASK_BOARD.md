@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- No worker task is currently assigned/in progress at the top-level Director state.
+- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DOSSIER_DEEP_READY_COUNT_GAP_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
 - Latest accepted implementation: `WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -11,6 +11,34 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 1 — Dossier / Deep ready count gap diagnostic
+
+Task:
+`WORKER_TASK_DOSSIER_DEEP_READY_COUNT_GAP_DIAGNOSTIC_01.md`
+
+Mode:
+`READ-ONLY / RECON`
+
+Goal:
+- prove why current Dossier count is 46 while ordinary Deep ready/pending is 38;
+- identify the exact discrepant identities and reason for each;
+- distinguish ordinary Deep eligibility from the separate 30-game legacy reanalysis migration;
+- decide whether the gap is expected contract behavior or a defect.
+
+Scope guard:
+- diagnosis only;
+- no Dossier/Deep/Fast rerun or backlog processing;
+- no migration mutation;
+- no Scheduled Task changes;
+- only report findings.
+
+Report:
+`reviews/worker_reports/dossier-deep-ready-count-gap-diagnostic-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 1`.
 
 
 ## ACCEPTED — ЧАТ 1 — Legacy Deep full reanalysis migration preparation
