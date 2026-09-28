@@ -1,11 +1,16 @@
 # CURRENT TASK
 
-## ACTIVE — Progressive profile semantic identity stability fix 01
-Статус: `in_progress`.
+## COMPLETE — Progressive profile semantic identity stability fix 01
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md`;
-- worker slot: `ЧАТ 1`;
-- scope: separate semantic profile identity from exact execution provenance, reconcile provably equivalent historical Fast/Deep state without semantic reruns, preserve PPD-010/PPD-011 and exact run-start provenance;
-- prohibitions: no manual Fast/Deep/Dossier execution; no Scheduled Task changes; no rewrite of accepted historical result provenance.
+- canonical decision: `PPD-012`; semantic profile identity is content-based while exact commit/blob/content provenance remains strict execution/audit identity;
+- implementation PRs: `#113`, `#114`, `#115`; final publication fix merge: `e864f882d74d26512d1430ab1632d7c93654f058`;
+- PPD-010 reconciliation: 30/30 restored current without semantic rerun, migration remains immutable/complete; two non-migration Deep completions are reconciled by the same generic rule;
+- current canonical Deep: 399 target, 42 attempted, 32 authoritative = 26 fit + 6 not-fit, 10 incomplete/recovery, 344 waiting Dossier, 13 ready/pending;
+- published processing statistics are no longer zero; final commercial-filtered publication reports 30 effective Deep results (24 fit + 6 not-fit), with two current Deep-fit candidates removed only by normal downstream purchase/risk rules;
+- final visual `5ad0966f57f593aab94588b6b28b487185b63a6e`, commercial visual `d6d1b6a0ca15a243459b4007df6edaccfb78e39a`; Pages deploy `36432075275` succeeded with artifact `10974421321`;
+- no manual Fast/Deep/Dossier execution; no Scheduled Task change; no accepted result/provenance rewrite;
+- report: `reviews/worker_reports/progressive-profile-semantic-identity-stability-fix-01.md`.
 
 
 ## COMPLETE — Dossier / Deep release-year identity compatibility fix 01
