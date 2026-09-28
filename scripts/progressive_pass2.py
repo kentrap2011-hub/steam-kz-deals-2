@@ -512,8 +512,24 @@ def validate_run_start_authority(
     dossier_path = work_item.get('dossier_path')
     if not isinstance(dossier_path, str) or not dossier_path:
         raise ValueError('Deep run-start Dossier path is missing')
+
+    evidence_authority = authority
+    evidence_time = started
+    if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
+        provenance = work_item.get('migration_provenance')
+        if not isinstance(provenance, dict):
+            raise ValueError('legacy Deep reanalysis migration provenance is missing')
+        evidence_authority = str(provenance.get('migration_authority_commit') or '').lower()
+        evidence_time = parse_utc(provenance.get('migration_frozen_at_utc'))
+        if evidence_time is None:
+            raise ValueError('legacy Deep reanalysis frozen evidence time is invalid')
+        if not progressive_work_authority.commit_is_ancestor(
+            evidence_authority, authority, repo_root=repo_root
+        ):
+            raise ValueError('legacy Deep reanalysis authority is not an ancestor of run-start authority')
+
     raw = progressive_work_authority.file_bytes_at_commit(
-        authority, dossier_path, repo_root=repo_root
+        evidence_authority, dossier_path, repo_root=repo_root
     )
     digest = hashlib.sha256(raw).hexdigest()
     if digest != work_item.get('dossier_content_sha256'):
@@ -535,10 +551,12 @@ def validate_run_start_authority(
         semantic_input=work_item.get('semantic_input') or {},
         dossier_record=record,
         current_binding=work_item.get('dossier_compatibility_binding'),
-        now=started,
+        now=evidence_time,
     )
     if not ok:
         raise ValueError('Deep run-start authority is not live: ' + reason)
+    work_item['_dossier_record'] = record
+    work_item['_dossier_evidence_authority_commit'] = evidence_authority
     return True
 
 def prepared_work_item_dossier_is_live(work_item, now=None):
