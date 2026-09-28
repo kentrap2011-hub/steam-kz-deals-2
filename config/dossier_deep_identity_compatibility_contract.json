@@ -1,0 +1,40 @@
+{
+  "schema": "DOSSIER-DEEP-IDENTITY-COMPATIBILITY-V1",
+  "version": 1,
+  "status": "canonical",
+  "decision": "PPD-011",
+  "purpose": "Define the shared fail-closed identity compatibility boundary between canonically accepted Taste Dossier evidence and Progressive Deep eligibility without conflating original/work release year with Steam/storefront release-date year.",
+  "hard_compatibility_keys": {
+    "exact_appid": true,
+    "exact_prepared_title_work_identity": true,
+    "resolved_dossier_identity": true,
+    "current_dossier_web_evidence_contract_binding": true,
+    "current_nonexpired_dossier": true,
+    "exact_product_identity_provenance_required_by_canonical_dossier_validation": true
+  },
+  "year_semantics": {
+    "dossier_game_identity_release_year": {
+      "canonical_meaning": "original_or_work_release_year",
+      "role": "identity_evidence_and_corroboration",
+      "cross_stage_hard_key_against_storefront_year": false
+    },
+    "progressive_semantic_input_release_year_or_release_date_year": {
+      "canonical_meaning": "steam_storefront_release_date_year",
+      "role": "storefront_context",
+      "cross_stage_hard_key_against_original_or_work_year": false
+    },
+    "cross_kind_exact_equality_required": false,
+    "cross_kind_mismatch_may_be_sole_rejection_reason": false,
+    "hard_year_equality_allowed_only_when_both_values_have_same_canonical_semantic_meaning_and_source_class": true
+  },
+  "fail_closed_rules": [
+    "reject_wrong_appid",
+    "reject_wrong_prepared_title_or_work_identity",
+    "reject_unresolved_or_ambiguous_identity",
+    "reject_stale_or_expired_dossier",
+    "reject_incompatible_web_evidence_contract_binding",
+    "reject_wrong_edition_remaster_dlc_or_cross_product_when_exact_appid_or_exact_product_identity_does_not_match",
+    "reject_missing_or_forged_exact_product_identity_evidence_under_canonical_dossier_validation"
+  ],
+  "compatibility_rule": "A canonically accepted current Dossier for the exact current AppID/product must not be rejected solely because its resolved original/work release year differs from the Steam/storefront release-date year. Release year remains required identity evidence inside Dossier, but cross-kind year equality is forbidden as a Deep compatibility gate."
+}
