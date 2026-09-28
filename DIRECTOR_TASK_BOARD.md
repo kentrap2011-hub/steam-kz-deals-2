@@ -3,7 +3,7 @@
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
 - Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md` (`CONTRACT-FIRST IMPLEMENT / VALIDATE`).
-- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_ATELIER_ESCHA_LOGY_DEEP_WITHOUT_POSITIVE_REASON_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
+- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_STALE_DEEP_STATISTICS_PUBLICATION_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -51,31 +51,62 @@ Worker state:
 - use a NEW physical worker conversation in slot `ЧАТ 1`.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 2 — Atelier Deep without positive reason diagnostic
+## ACTIVE — НОВЫЙ ЧАТ 2 — Stale Deep statistics publication diagnostic
 
 Task:
-`WORKER_TASK_ATELIER_ESCHA_LOGY_DEEP_WITHOUT_POSITIVE_REASON_DIAGNOSTIC_01.md`
+`WORKER_TASK_STALE_DEEP_STATISTICS_PUBLICATION_DIAGNOSTIC_01.md`
 
 Mode:
 `READ-ONLY / RECON`
 
 Goal:
-- explain why Atelier Escha & Logy: Alchemists of the Dusk Sky DX shows completed/current Deep-style caution and a buyable result while `Почему может зайти` says the personal reason is unavailable;
-- prove whether positive evidence is absent at source, suppressed by validation, unmapped in projection, or another exact mechanism applies;
-- determine whether this is intentional contract behavior or a defect.
+- explain why the live Statistics page still shows old Deep counts after canonical PASS 2 state advanced;
+- trace the first divergence from canonical Deep state through pre-AI, visual build, Pages artifact/deploy and browser/service-worker presentation;
+- explain why later successful visual/deploy workflows still published or served stale statistics.
 
 Scope:
 - read-only only;
 - no semantic worker execution;
-- no card/ranking/risk changes;
-- no rebuild/deploy;
-- no Scheduled Task changes.
+- no workflow reruns/rebuild/deploy;
+- no production/service-worker/ranking changes;
+- no Scheduled Task changes;
+- do not interfere with active ЧАТ 1.
+
+Report:
+`reviews/worker_reports/stale-deep-statistics-publication-diagnostic-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 2`.
+
+
+## ACCEPTED — ЧАТ 2 — Atelier Deep without positive reason diagnostic
+
+Task:
+`WORKER_TASK_ATELIER_ESCHA_LOGY_DEEP_WITHOUT_POSITIVE_REASON_DIAGNOSTIC_01.md`
 
 Report:
 `reviews/worker_reports/atelier-escha-logy-deep-without-positive-reason-diagnostic-01.md`
 
-Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 2`.
+Final status:
+`needs_fix`
+
+Director acceptance:
+- diagnosis accepted;
+- Atelier Escha & Logy (AppID 1152310) has a current authoritative Deep `analyzed_fit` result restored through PPD-012 historical semantic equivalence;
+- the accepted Deep result contains three non-empty positive-evidence rows: synthesis/crafting development, six-character party/support tactical depth, and clear short-term assignment goals;
+- PPD-010 preserved those positives exactly; the Deep result is not a zero-positive fit;
+- positive evidence survives Deep persistence and exact provenance handoff into the semantic taste entry;
+- the loss occurs in the shared fail-closed positive explanation mapper: none of Atelier's three sentence shapes matches a currently supported mapping rule;
+- therefore `why_fit=[]` and the UI falls back to `Персональная причина пока не подготовлена`;
+- the caution is visible because PPD-009 negative/caution findings are already stored as structured display-ready Russian text with exact Dossier evidence refs, so they use a different projection path;
+- `МОЖНО БРАТЬ` remains mechanically valid because the authoritative strong Deep fit and commercial branch are separate from the user-facing positive prose mapper, and the caution has no separate penalty;
+- this is the same broad defect class as the prior Jedi positive-projection issue but a different still-uncovered mapper-coverage gap, not a provenance regression;
+- no Deep/Fast/Dossier, ranking, card, visual or Scheduled Task state was changed.
+
+Decision:
+- diagnostic accepted;
+- a bounded follow-up implementation should extend the shared fail-closed positive explanation policy for these grounded evidence shapes while preserving exact Deep provenance and all semantic/ranking behavior;
+- physical Atelier diagnostic CHAT 2 is complete and retired.
 
 
 ## ACCEPTED — ЧАТ 1 — KOF XV high priority without Deep diagnostic
