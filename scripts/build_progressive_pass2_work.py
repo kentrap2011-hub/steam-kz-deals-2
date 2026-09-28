@@ -49,28 +49,57 @@ def build_work_document(now=None):
     )
     context_by_family = {str(row.get('family_id') or ''): row for row in contexts}
 
-    items = []
+    normal_items = []
     for item in recomputed['items']:
         context = context_by_family.get(item['family_id']) or {}
         sale_end = parse_utc((context.get('purchase') or {}).get('sale_end_utc'))
         item = dict(item)
         item['_sale_end_sort'] = sale_end.isoformat() if sale_end else '9999-12-31T23:59:59+00:00'
         item['_purchase_score'] = purchase_score(context)
-        items.append(item)
+        normal_items.append(item)
 
-    items.sort(key=lambda row: (
+    normal_items.sort(key=lambda row: (
         row['_sale_end_sort'],
         -float(row['_purchase_score']),
         row['family_id'],
     ))
-    for sequence, item in enumerate(items, 1):
+    for sequence, item in enumerate(normal_items, 1):
         item['sequence'] = sequence
         item.pop('_sale_end_sort', None)
         item.pop('_purchase_score', None)
 
+    migration_manifest = progressive_pass2.load_legacy_reanalysis_manifest()
+    migration_items, migration_metrics = progressive_pass2.legacy_reanalysis_work_and_metrics(
+        pass2_state,
+        migration_manifest,
+    )
+    migration_active = bool(migration_manifest) and not migration_metrics['complete']
+    if migration_active:
+        # The one-off migration freezes its own profile/evidence authority. Keep one
+        # homogeneous worker manifest until it terminates; ordinary Deep work is
+        # merely paused, not consumed or reordered in its own accounting.
+        items = [dict(item) for item in migration_items]
+        items.sort(key=lambda row: int(row.get('migration_sequence') or 0))
+        for sequence, item in enumerate(items, 1):
+            item['sequence'] = sequence
+        semantic_generation_id = migration_manifest['semantic_generation_id']
+        semantic_bindings = migration_manifest['semantic_bindings']
+        profile_pin = migration_manifest['profile_pin']
+        dossier_binding = migration_manifest['dossier_compatibility_binding']
+        projection_status = 'legacy_full_reanalysis_migration_active'
+    else:
+        items = normal_items
+        semantic_generation_id = recomputed['semantic_generation_id']
+        semantic_bindings = recomputed['semantic_bindings']
+        profile_pin = recomputed['profile_pin']
+        dossier_binding = binding
+        projection_status = 'current_github_owned_fast_dossier_deep_v1_projection'
+
     counts = dict(recomputed['counts'])
-    if counts['pass2_eligible_count'] != len(items):
-        raise SystemExit('PASS 2 eligibility count mismatch')
+    counts['normal_pass2_eligible_count'] = counts['pass2_eligible_count']
+    counts['pass2_eligible_count'] = len(items)
+    counts['deep_normal_work_paused_for_legacy_reanalysis'] = migration_active
+    counts['legacy_full_reanalysis'] = migration_metrics
 
     return {
         'schema_version': 2,
@@ -79,11 +108,11 @@ def build_work_document(now=None):
         'implemented': True,
         'pass1_active': True,
         'pass2_active': bool(contract.get('active')),
-        'projection_status': 'current_github_owned_fast_dossier_deep_v1_projection',
-        'semantic_generation_id': recomputed['semantic_generation_id'],
-        'semantic_bindings': recomputed['semantic_bindings'],
-        'profile_pin': recomputed['profile_pin'],
-        'dossier_compatibility_binding': binding,
+        'projection_status': projection_status,
+        'semantic_generation_id': semantic_generation_id,
+        'semantic_bindings': semantic_bindings,
+        'profile_pin': profile_pin,
+        'dossier_compatibility_binding': dossier_binding,
         'transport': {
             'mode': 'immutable_item_create_only',
             'batch_atomicity': False,
