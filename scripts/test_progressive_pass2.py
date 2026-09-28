@@ -113,6 +113,7 @@ def empty_pass1_state():
 def pass1_entry(binding, outcome='analyzed_fit'):
     row = {
         **{field: binding[field] for field in progressive_pass1.IDENTITY_FIELDS},
+        'profile_semantic_sha256': binding['profile_semantic_sha256'],
         'pass1_attempted': True,
         'outcome': outcome,
         'analysis_issue_code': None,
