@@ -4,32 +4,56 @@
   if(root)root.ProgressivePersonalizationUI=api;
 })(typeof window!=='undefined'?window:globalThis,function(){
   const TIERS={analyzed_fit:1,analysis_incomplete:2,not_analyzed:3};
+  const RANKING_STAGES={deep_fit:1,fast_fit:2,analysis_incomplete:3,not_analyzed:4};
 
   function tierOf(game){
     const explicit=Number(game&&game.analysis_tier);
     if(Number.isFinite(explicit)&&explicit>0)return explicit;
     return TIERS[game&&game.analysis_state]||99;
   }
+  function rankingStageOf(game){
+    const stage=String(game&&game.ranking_stage||'');
+    return Object.prototype.hasOwnProperty.call(RANKING_STAGES,stage)?stage:null;
+  }
+  function rankingStageRank(game){
+    const explicit=Number(game&&game.ranking_stage_rank);
+    return Number.isFinite(explicit)&&explicit>0?explicit:99;
+  }
   function urgencyOf(game){
     const value=Number(game&&game.sale_expiry_urgency_rank);
     return Number.isFinite(value)?value:2;
   }
-  function tierScore(game){
-    const tier=tierOf(game);
-    const value=Number(tier===1?game&&game.total_score:game&&game.deterministic_purchase_score);
+  function stageScore(game){
+    const stage=rankingStageOf(game);
+    const value=Number(stage==='deep_fit'||stage==='fast_fit'
+      ?game&&game.total_score
+      :game&&game.deterministic_purchase_score);
     return Number.isFinite(value)?value:-Infinity;
   }
+  function canonicalRank(game){
+    const value=Number(game&&game.priority_rank);
+    return Number.isFinite(value)&&value>0?value:Infinity;
+  }
   function titleOf(game){return String(game&&game.title||'')}
+  function idOf(game){return String(game&&game.id||'')}
+  function deterministicTie(a,b){
+    const title=titleOf(a).localeCompare(titleOf(b),'ru',{sensitivity:'base'});
+    return title||idOf(a).localeCompare(idOf(b),'ru',{sensitivity:'base'});
+  }
   function compareGames(a,b,urgencyFirst=false){
-    const tierDiff=tierOf(a)-tierOf(b);
-    if(tierDiff)return tierDiff;
+    if(!urgencyFirst){
+      const canonicalDiff=canonicalRank(a)-canonicalRank(b);
+      if(Number.isFinite(canonicalDiff)&&canonicalDiff)return canonicalDiff;
+    }
+    const stageDiff=rankingStageRank(a)-rankingStageRank(b);
+    if(stageDiff)return stageDiff;
     if(urgencyFirst){
       const urgencyDiff=urgencyOf(a)-urgencyOf(b);
       if(urgencyDiff)return urgencyDiff;
     }
-    const scoreDiff=tierScore(b)-tierScore(a);
+    const scoreDiff=stageScore(b)-stageScore(a);
     if(scoreDiff)return scoreDiff;
-    return titleOf(a).localeCompare(titleOf(b),'ru',{sensitivity:'base'});
+    return deterministicTie(a,b);
   }
   function sortItems(items,urgencyFirst=false){
     return [...(items||[])].sort((a,b)=>compareGames(a,b,urgencyFirst));
@@ -149,5 +173,5 @@
     ];
   }
 
-  return {tierOf,urgencyOf,tierScore,compareGames,sortItems,stageIndicators,formatLastWriteAt,statisticsSections};
+  return {tierOf,rankingStageOf,rankingStageRank,urgencyOf,stageScore,compareGames,sortItems,stageIndicators,formatLastWriteAt,statisticsSections};
 });

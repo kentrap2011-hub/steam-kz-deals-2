@@ -387,7 +387,7 @@ def test_deterministic_refresh_reapplies_package_before_ranking():
     assert by_title['Bundled']['score_breakdown']['purchase_route'] == 'fixed_package'
     assert by_title['Bundled']['priority_rank'] == 1
     assert stats['visible_game_count_with_better_package'] == 1
-    assert order == ['sale_expiry_urgency_asc', 'total_score_desc', 'title_asc']
+    assert order == ['total_score_desc', 'title_asc']
     assert ready['production_contract']['fixed_package_touched_game_count'] == 1
 
 

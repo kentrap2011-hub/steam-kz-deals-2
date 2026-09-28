@@ -1,6 +1,6 @@
 const DATA_URL='data/current.json';
 const STORAGE_KEY='steam-deals-visual-state-v1';
-const QUEUE_VERSION=5;
+const QUEUE_VERSION=6;
 let data={items:[],source_mailing_updated_at_utc:null};
 let items=[];
 let byId=new Map();
@@ -56,7 +56,7 @@ function sourceLabel(){
 function urgencyFirstEnabled(){return !!state.settings?.urgency_first}
 function progressiveUi(){return window.ProgressivePersonalizationUI}
 function automaticOrderGames(){return progressiveUi().sortItems(items,urgencyFirstEnabled())}
-function rankingSignature(){return `urgency:${urgencyFirstEnabled()?1:0}|`+items.map(g=>`${g.id}:${g.analysis_state??''}:${g.analysis_tier??''}:${g.priority_rank??''}:${g.total_score??''}:${g.deterministic_purchase_score??''}`).join('|')}
+function rankingSignature(){return `urgency:${urgencyFirstEnabled()?1:0}|`+items.map(g=>`${g.id}:${g.ranking_stage??''}:${g.ranking_stage_rank??''}:${g.priority_rank??''}:${g.sale_expiry_urgency_rank??''}:${g.total_score??''}:${g.deterministic_purchase_score??''}`).join('|')}
 function canonicalQueueIds(){
   const normal=[],manual=[];
   for(const g of automaticOrderGames()){
@@ -219,40 +219,41 @@ function renderPriority(g){
   const rank=Number(g.priority_rank)||null;
   const localRank=queuePosition(g.id);
   const parts=[];
-  if(localRank)parts.push(`Позиция в текущей очереди: №${localRank}.`);
+  if(localRank)parts.push(`Позиция в ленте: №${localRank}.`);
   if(rec(g.id).manual_end_at){
     parts.push('Игра вручную отправлена в конец очереди.');
   }else if(urgencyMode){
-    parts.push('Режим: срочные игры впереди.');
-    if(rank&&rank!==localRank)parts.push(`Канонический рейтинг со срочностью: №${rank}.`);
-    if(vs&&vs.next_game_title&&vs.explanation)parts.push(`Следующая по каноническому рейтингу — «${vs.next_game_title}». ${vs.explanation}`);
+    parts.push('Режим: срочность учитывается только внутри текущего этапа разбора.');
+    if(rank&&rank!==localRank)parts.push(`В обычной Deep-first ленте эта игра №${rank}.`);
   }else{
-    parts.push('Режим: порядок по итоговому баллу; срочность сейчас не меняет очередь.');
+    parts.push('Режим: сначала этап разбора, внутри этапа — итоговый показатель.');
+    if(vs&&vs.next_game_title&&vs.explanation)parts.push(`Следующая в обычной ленте — «${vs.next_game_title}». ${vs.explanation}`);
   }
   $('priorityWhy').textContent=parts.join(' ');
 
-  const deciding=urgencyMode&&vs&&vs.deciding_factor_id;
-  const urgency=factors.find(f=>f.id==='sale_expiry_urgency_asc');
+  const deciding=!urgencyMode&&vs&&vs.deciding_factor_id;
+  const urgencyCode=g.sale_expiry_urgency||'later_or_unknown';
+  const urgencyValue={today:'заканчивается сегодня',tomorrow:'заканчивается завтра',later_or_unknown:'обычная срочность'}[urgencyCode]||urgencyCode;
   let html='';
-  if(urgency){
-    const urgencyNote=urgencyMode?'влияет на текущий порядок':'сейчас не влияет на порядок';
-    html+=`<div class="priority-factor ${deciding==='sale_expiry_urgency_asc'?'deciding':''}"><span>${escapeHtml(urgency.label||'Срочность скидки')}</span><b>${escapeHtml(urgency.value??'—')} · ${urgencyNote}</b></div>`;
+  {
+    const urgencyNote=urgencyMode?'влияет только внутри этапа':'не влияет на обычную ленту';
+    html+=`<div class="priority-factor"><span>Срочность скидки</span><b>${escapeHtml(urgencyValue)} · ${urgencyNote}</b></div>`;
   }
   if(score){
-  html+=`<button class="priority-factor score-total ${!urgencyMode||deciding==='total_score_desc'?'deciding':''}" type="button" data-score-toggle aria-expanded="false" title="Показать детализацию итогового балла"><span>Итоговый балл</span><b>${Number(score.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.total_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></button>`;
+  html+=`<button class="priority-factor score-total ${!urgencyMode&&deciding==='stage_score_desc'?'deciding':''}" type="button" data-score-toggle aria-expanded="false" title="Показать детализацию итогового балла"><span>Итоговый балл</span><b>${Number(score.total_score).toLocaleString('ru-RU',{maximumFractionDigits:1})}/${Number(score.total_max).toLocaleString('ru-RU',{maximumFractionDigits:0})}</b></button>`;
   let details='';
   if(score.precision?.label)details+=`<div class="muted small score-precision">Точность вкусовой части: ${escapeHtml(score.precision.label)}${score.precision.is_coarse_legacy?' — детализируем по мере обновления старых оценок.':''}</div>`;
   if(score.purchase_route_label)details+=`<div class="muted small">Покупка для рейтинга: <b>${escapeHtml(score.purchase_route_label)}</b>${score.purchase_route==='fixed_package'&&score.package_score_delta_vs_standalone>0?` · +${Number(score.package_score_delta_vs_standalone).toLocaleString('ru-RU',{maximumFractionDigits:1})} балла против покупки игры отдельно`:''}</div>`;
   details+=`<div class="score-groups">${scoreGroupHtml(score.personal_label||'Насколько подходит тебе',score.personal_score,score.personal_max,score.personal_components)}${scoreGroupHtml(score.purchase_label||'Выгодность покупки',score.purchase_score,score.purchase_max,score.purchase_components)}</div>`;
   html+=`<div class="score-details hidden" data-score-details>${details}</div>`;
 }else{
-    html+=factors.filter(f=>f.id!=='sale_expiry_urgency_asc').map(f=>`<div class="priority-factor ${f.id===deciding?'deciding':''}"><span>${escapeHtml(f.label||f.id||'Фактор')}</span><b>${escapeHtml(f.value??'—')}</b></div>`).join('');
+    html+=factors.filter(f=>!['sale_expiry_urgency_asc','stage_score_desc'].includes(f.id)).map(f=>`<div class="priority-factor ${f.id===deciding?'deciding':''}"><span>${escapeHtml(f.label||f.id||'Фактор')}</span><b>${escapeHtml(f.value??'—')}</b></div>`).join('');
   }
   $('priorityFactors').innerHTML=html;
 }
 function renderFeed(){
   const g=currentGame();const pos=currentIndex();
-  $('emptyFeed').classList.toggle('hidden',!!g);card.classList.toggle('hidden',!g);$('position').textContent=g?`Приоритет: ${pos+1} из ${queueCount()}`:'';$('seenInfo').textContent=g?(rec(g.id).seen?`Показана раньше: ${rec(g.id).seen}×`:'Первый показ'):'';$('startBtn').classList.toggle('hidden',!g||pos===0);
+  $('emptyFeed').classList.toggle('hidden',!!g);card.classList.toggle('hidden',!g);$('position').textContent=g?`Позиция в ленте: ${pos+1} из ${queueCount()}`:'';$('seenInfo').textContent=g?(rec(g.id).seen?`Показана раньше: ${rec(g.id).seen}×`:'Первый показ'):'';$('startBtn').classList.toggle('hidden',!g||pos===0);
   if(!g){$('prioritySection').classList.add('hidden');return}
   currentShot=0;setShot(g,0);preloadNearby();
   const r=rec(g.id);$('newBadge').classList.toggle('hidden',!isNew(g.id));$('repeatBadge').classList.toggle('hidden',!(r.seen>0));$('repeatBadge').textContent=r.seen?`🔁 Показ №${r.seen+1}`:'';
@@ -274,9 +275,9 @@ function renderFeed(){
 }
 function listPositionText(g){
   const q=queuePosition(g.id),p=Number(g.priority_rank)||null;
-  if(q&&p&&q!==p)return `№${q} в ленте · рейтинг со срочностью №${p}`;
+  if(q&&p&&q!==p)return `№${q} в ленте · обычная Deep-first лента №${p}`;
   if(q)return `№${q} в ленте`;
-  if(p)return `рейтинг со срочностью №${p}`;
+  if(p)return `обычная Deep-first лента №${p}`;
   return 'Позиция неизвестна';
 }
 function miniCard(g,status){

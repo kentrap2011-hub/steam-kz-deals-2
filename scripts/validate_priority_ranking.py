@@ -7,8 +7,12 @@ from pathlib import Path
 import build_final_visual_payload
 import priority_ranking
 
-EXPECTED_ORDER = [
-    'sale_expiry_urgency_asc',
+GLOBAL_ORDER = [
+    'ranking_stage_asc',
+    'stage_score_desc',
+    'title_asc',
+]
+COMPLETED_STAGE_ORDER = [
     'total_score_desc',
     'title_asc',
 ]
@@ -51,7 +55,7 @@ def game(title, **overrides):
 def ranked(rows, policy_path=priority_ranking.POLICY):
     rows = deepcopy(rows)
     rows, order = priority_ranking.apply_final_priority_order(rows, now=NOW, policy_path=policy_path)
-    assert order == EXPECTED_ORDER, (order, EXPECTED_ORDER)
+    assert order == COMPLETED_STAGE_ORDER, (order, COMPLETED_STAGE_ORDER)
     return rows
 
 
@@ -66,7 +70,8 @@ def component(row, section, component_id):
 def main():
     assert callable(build_final_visual_payload.main)
     policy = priority_ranking.load_final_policy()
-    assert priority_ranking.load_final_priority_order() == EXPECTED_ORDER
+    assert priority_ranking.load_final_priority_order() == GLOBAL_ORDER
+    assert priority_ranking.load_completed_fit_stage_order() == COMPLETED_STAGE_ORDER
     assert policy['contract'] == 'FINAL-PRIORITY-RANKING-V2'
 
     model = policy['score_model']
@@ -118,7 +123,7 @@ def main():
         assert 0 <= breakdown['total_score'] <= 100
         assert row['total_score'] == breakdown['total_score']
 
-    # Urgency remains outside 100 points and has absolute automatic precedence.
+    # Urgency remains outside 100 points, but default completed-stage order is score-first.
     urgent_low = game(
         'today-low-score',
         fit='moderate',
@@ -145,11 +150,12 @@ def main():
         sale_end_utc='2026-09-05T18:00:00Z',
     )
     urgency_pair = ranked([later_high, urgent_low])
-    assert titles(urgency_pair) == ['today-low-score', 'later-high-score']
-    assert urgency_pair[0]['total_score'] < urgency_pair[1]['total_score']
-    assert (urgency_pair[0]['priority_vs_next'] or {}).get('deciding_factor_id') == 'sale_expiry_urgency_asc'
+    assert titles(urgency_pair) == ['later-high-score', 'today-low-score']
+    assert urgency_pair[0]['total_score'] > urgency_pair[1]['total_score']
+    assert urgency_pair[1]['sale_expiry_urgency'] == 'today'
+    assert (urgency_pair[0]['priority_vs_next'] or {}).get('deciding_factor_id') == 'total_score_desc'
 
-    # Inside the same urgency, the visible total score is the real ordering rule.
+    # The visible total score is the ordering rule inside one completed stage.
     same_urgency = ranked([moderate, coarse])
     assert titles(same_urgency) == ['coarse', 'moderate']
     assert (same_urgency[0]['priority_vs_next'] or {}).get('deciding_factor_id') == 'total_score_desc'
@@ -342,10 +348,10 @@ def main():
     finally:
         tuned_path.unlink(missing_ok=True)
 
-    # Per-game ranking diagnostics now contain only urgency, visible score and deterministic title fallback.
+    # Stage-local scorer diagnostics contain visible score and deterministic title fallback only.
     diagnostic_pair = ranked([game('B'), game('A', wishlist=True)])
     for row in diagnostic_pair:
-        assert [factor['id'] for factor in row.get('priority_factors') or []] == EXPECTED_ORDER
+        assert [factor['id'] for factor in row.get('priority_factors') or []] == COMPLETED_STAGE_ORDER
         assert all('label' in factor and 'value' in factor and 'sort_value' in factor for factor in row['priority_factors'])
         visible_text = ' '.join(f"{factor.get('label', '')} {factor.get('value', '')}" for factor in row['priority_factors']).casefold()
         assert 'bucket' not in visible_text

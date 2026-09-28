@@ -101,7 +101,14 @@ def game(fid, state, tier, *, price=300, original=1000, urgency=2, why=None):
         'risk_level': 'low',
     }
     if state == 'analyzed_fit':
-        row.update({'fit': 'strong', 'source_fit': 'strong'})
+        row.update({
+            'fit': 'strong',
+            'source_fit': 'strong',
+            'analysis_semantic_source': 'progressive_pass1',
+            'effective_analysis_source': 'fast',
+            'fast_stage_state': 'completed',
+            'fast_stage_outcome': 'fit',
+        })
     return row
 
 
@@ -251,6 +258,8 @@ def main():
     assert all(not g.get('why_fit') for g in ordered if g['analysis_state'] != 'analyzed_fit')
     assert ordered[0]['why_fit'] == ['Подходит тебе по структуре.']
     assert ordered[0]['total_score'] is not None
+    assert ordered[0]['ranking_stage'] == 'fast_fit'
+    assert ordered[0]['ranking_stage_rank'] == 2
 
     status = progressive.build_processing_status(states, ordered)
     progressive.validate_processing_status(status)

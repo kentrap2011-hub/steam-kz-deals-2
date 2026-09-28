@@ -108,12 +108,12 @@
 
 **Канонический контракт:** `FINAL-PRIORITY-RANKING-V2`.
 
-Production `priority_rank` по-прежнему строится только GitHub producer-ом:
-1. `sale_expiry_urgency_asc` — сегодня → завтра → позже/неизвестно;
-2. `total_score_desc` — видимый score 0–100;
-3. `title_asc` — deterministic fallback.
+Production `priority_rank` строится только GitHub producer-ом и означает позицию в обычной Deep-first ленте:
+1. `ranking_stage_asc` — `deep_fit → fast_fit → analysis_incomplete → not_analyzed`;
+2. `stage_score_desc` — для Deep/Fast это видимый `total_score` 0–100, для unresolved/not-analyzed — существующий deterministic purchase-only score;
+3. `title_asc` / ID — deterministic fallback.
 
-Срочность находится вне 100 баллов и не меняет сам score.
+Срочность находится вне 100 баллов, не меняет сам score и не входит в default production `priority_rank`. В явно выбранном режиме «Срочные» она применяется браузером только внутри опубликованного producer-owned `ranking_stage`.
 
 `total_score = personal_score + purchase_score`:
 - personal: максимум 60;
@@ -137,12 +137,12 @@ Purchase:
 
 Production ranking **не меняется**. В `web/app.js` есть отдельный локальный view-mode:
 
-- кнопка **`⏱ Срочные` выключена (default)** → локальная очередь: `total_score DESC → title`;
-- кнопка **`✓ Срочные` включена** → локальная очередь использует готовый production `priority_rank`, то есть `urgency → score → title`;
+- кнопка **`⏱ Срочные` выключена (default)** → локальная очередь следует готовому production `priority_rank`: `stage → stage score → title/id`;
+- кнопка **`✓ Срочные` включена** → локальный view-mode: `stage → urgency → stage score → title/id`; срочность никогда не пересекает границу Deep/Fast/unresolved;
 - выбранный режим хранится в localStorage как `state.settings.urgency_first`;
 - `QUEUE_VERSION=5` заставляет старое состояние один раз пересобрать очередь по новому default;
 - при переключении `buildQueue()` сохраняет текущую открытую игру, если она остаётся активной;
-- UI не пересчитывает semantic score, urgency или ranking factors: он только меняет порядок уже готовых producer-owned полей `total_score` / `priority_rank`.
+- UI не выводит semantic stage из истории или значков: default использует producer-owned `priority_rank`, а explicit urgency view — опубликованные `ranking_stage_rank`, `sale_expiry_urgency_rank` и stage score.
 
 **Критически:** `manual_end_at` («В конец очереди») остаётся абсолютным локальным override в обоих режимах. `canonicalQueueIds()` сначала формирует automatic order, затем всегда отделяет manual items и ставит их после automatic items; manual items сохраняют порядок по времени отправки в конец.
 
@@ -180,7 +180,8 @@ High On Life выше по score благодаря wishlist, отсутстви
 ### Regression / invariants
 
 Production validator проверяет:
-- canonical urgency → score → title;
+- canonical Deep-first stage → stage score → title/id;
+- explicit urgency view не пересекает ranking-stage boundary;
 - 60 + 40 = 100;
 - ruble savings вместо discount percentage;
 - risk/wishlist/achievements/duration weights;
@@ -188,8 +189,8 @@ Production validator проверяет:
 
 Для local UI режима обязательные implementation-инварианты:
 - default `urgency_first=false`;
-- off-mode сортирует automatic items по `total_score`;
-- on-mode использует готовый `priority_rank`;
+- off-mode следует готовому canonical `priority_rank`;
+- on-mode применяет urgency только внутри producer-owned `ranking_stage`;
 - mode входит в queue signature, поэтому переключение реально пересобирает очередь;
 - manual items всегда добавляются после automatic items;
 - `sendCurrentToEnd()` остаётся без изменения семантики.

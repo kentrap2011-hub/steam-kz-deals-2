@@ -1,5 +1,15 @@
 # CURRENT TASK
 
+## ACTIVE — Deep-first final-score order fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md`;
+- branch: `fix/deep-first-final-score-order-01`;
+- scope: contract-first correction of automatic ranking to `deep_fit -> fast_fit -> analysis_incomplete -> not_analyzed`, with `total_score DESC` inside completed Deep/Fast stages;
+- preserves score calculation, semantic results, Dossier state, scheduler/queue/retry ownership and Scheduled Tasks;
+- active ЧАТ 2 diagnostic is out of scope and must remain untouched;
+- report target: `reviews/worker_reports/deep-first-final-score-order-fix-01.md`.
+
+
 ## COMPLETE — Progressive profile semantic identity stability fix 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md`;

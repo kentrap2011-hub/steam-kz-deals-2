@@ -21,6 +21,7 @@ on:
       - "scripts/test_progressive_pass1.py"
       - "scripts/test_progressive_pass2.py"
       - "scripts/test_progressive_personalization.py"
+      - "scripts/test_deep_first_final_score_order.py"
       - "scripts/test_progressive_unresolved_row_preservation.py"
       - "scripts/progressive_visual_activation_routing.py"
       - "scripts/test_progressive_visual_activation_routing.py"
@@ -68,6 +69,8 @@ on:
       - "data/cache/duration_estimates.json"
       - "data/production/giveaways/v1/current.json"
       - "web/app.js"
+      - "web/progressive-personalization-ui.js"
+      - "web/progressive-personalization-ui.test.js"
       - "web/giveaway-ui.js"
       - "web/giveaway-ui.test.js"
       - "web/giveaway-ui.css"
@@ -752,9 +755,11 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/validate_priority_ranking.py
+          python scripts/test_deep_first_final_score_order.py
           python scripts/test_progressive_personalization.py
           python scripts/test_progressive_pass1.py
           python scripts/test_progressive_unresolved_row_preservation.py
+          node web/progressive-personalization-ui.test.js
 
       - name: Validate canonical duration enrichment contract
         shell: bash

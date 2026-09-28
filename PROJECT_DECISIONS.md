@@ -215,6 +215,28 @@
 
 ---
 
+## RANK-013 — Deep-first: этап анализа раньше итогового балла, срочность только внутри этапа
+
+**Дата:** 2026-09-28  
+**Статус:** canonical; supersedes only conflicting cross-stage urgency/order clauses in RANK-002 and RANK-010.
+
+**Решение:** для видимых допустимых Progressive-карточек канонический автоматический порядок сначала определяется текущим producer-owned этапом результата: `deep_fit` → `fast_fit` → `analysis_incomplete` → `not_analyzed`. Текущий authoritative completed Deep/PASS 2 fit всегда выше любого Fast/PASS 1 fit независимо от разницы `total_score`. Если current Deep отсутствует, неполон, ошибочен или не является текущим, но существует current completed Fast fit, карточка остаётся `fast_fit`. Точный current-compatible reusable Taste cache, который по существующему Fast-path заменяет ненужный повторный PASS 1, относится к этому же provisional `fast_fit` ranking stage: он не получает Deep authority, но и не теряет уже подтверждённый текущий fit. PPD-012 semantically reconciled current Deep считается current Deep; stale/non-current Deep не даёт Deep-приоритет.
+
+Внутри `deep_fit` и отдельно внутри `fast_fit` порядок определяется прозрачным `total_score DESC`, затем только детерминированным title/id tie-break. Для `analysis_incomplete` и `not_analyzed`, которым персональный `total_score` запрещён, сохраняется существующий deterministic purchase-only score и детерминированный tie-break.
+
+**Срочность:** RANK-002 больше не является глобальным верхним слоем. В default feed порядок ровно `stage → stage score → deterministic tiebreak`. Явно выбранный пользователем режим «Срочные» может использовать `stage → urgency → stage score → deterministic tiebreak`, но срочность никогда не переносит Fast выше Deep и unresolved/not-analyzed выше completed Deep/Fast. `manual_end_at` («В конец очереди») остаётся абсолютным локальным override поверх любого автоматического/view-mode порядка.
+
+**Один автоматический рейтинг:** producer-owned `priority_rank` означает позицию именно в default automatic feed и не является отдельным urgency-рейтингом. Для explicit urgency view браузер использует только опубликованные producer-owned `ranking_stage`, urgency и score fields; он не выводит semantic stage из декоративных значков и не создаёт второй скрытый рейтинг.
+
+**Не изменено:** формула и значения `total_score`, personal/purchase/risk/wishlist/achievement/history/package компонентов, eligibility/budget gates, `analyzed_not_fit` visibility, Fast/Dossier/Deep semantic ownership и их результаты. Эта правка не требует semantic re-analysis.
+
+**Почему:** объединение Fast-fit и Deep-fit в один `analyzed_fit` ranking tier позволило Fast 68.0 (KOF XV) оказаться выше Deep 67.1 (MY HERO ONE'S JUSTICE 2). Пользователь явно установил Deep authority как более высокий автоматический этап, а итоговый балл — как сортировку только внутри одного этапа.
+
+**Основные места:** `config/final_ranking_policy.json`, `config/progressive_personalization_contract.json`, `scripts/progressive_personalization.py`, `scripts/priority_ranking.py`, `web/progressive-personalization-ui.js`, `web/app.js`.
+
+---
+
+
 ## UI-001 — «В конец очереди» абсолютнее любой автоматической сортировки
 
 **Дата:** 2026-08-30

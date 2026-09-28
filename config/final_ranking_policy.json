@@ -1,8 +1,8 @@
 {
   "contract": "FINAL-PRIORITY-RANKING-V2",
   "status": "canonical",
-  "updated_at": "2026-08-31",
-  "purpose": "Single machine-readable source of truth for the transparent 0-100 final automatic priority_rank after all visual enrichment and refinement are complete. Every numeric weight, threshold and point table used by final scoring lives here so tuning does not require code changes.",
+  "updated_at": "2026-09-28",
+  "purpose": "Single machine-readable source of truth for transparent final scoring plus the canonical Deep-first automatic ranking order. Score calculation remains 0-100; Progressive stage precedence is applied before the stage-specific score.",
   "precedence": {
     "rule": "This contract is authoritative for final priority_rank and score_breakdown. Older sorting arrays and qualitative priority buckets remain eligibility/explanation context only and must not be used as an independent final sort layer.",
     "rationale_log": "PROJECT_DECISIONS.md",
@@ -28,8 +28,8 @@
     "unknown_sale_end_is_not_penalized": true
   },
   "automatic_final_priority_order": [
-    "sale_expiry_urgency_asc",
-    "total_score_desc",
+    "ranking_stage_asc",
+    "stage_score_desc",
     "title_asc"
   ],
   "score_model": {
@@ -384,22 +384,60 @@
     "priority_bucket": "eligibility/explanation context only; not a V2 final ranking factor",
     "purchase_decision": "explanation label only; do not double-count price/history through it",
     "direct_user_evidence": "used as the strongest taste-score source when an exact rating exists and as confirmed prior-play evidence for the context-sensitive achievement component; do not add another independent direct-rating bonus",
-    "sale_expiry_urgency": "absolute display-priority layer outside 0-100"
+    "sale_expiry_urgency": "display/context plus an explicit user-selected urgency view inside the same ranking stage; never a cross-stage automatic priority layer"
   },
   "ui_override": {
     "manual_end_of_queue_has_absolute_precedence": true,
     "stored_locally": true,
     "production_priority_rank_must_not_be_mutated_by_ui": true,
-    "reason": "An explicit user queue decision overrides every automatic priority, including a deal expiring today."
+    "reason": "An explicit user queue decision overrides every automatic or selected-view order, including sale urgency."
   },
   "progressive_personalization": {
     "contract": "config/progressive_personalization_contract.json",
-    "tier_precedes_score": true,
-    "tier_1_uses_existing_personalized_order": true,
-    "tier_2_3_use_total_score": false,
-    "tier_2_3_sort_key": "deterministic_purchase_score_0_40",
+    "ranking_stage_precedes_score": true,
+    "ranking_stage_precedence": [
+      "deep_fit",
+      "fast_fit",
+      "analysis_incomplete",
+      "not_analyzed"
+    ],
+    "deep_fast_use_total_score": true,
+    "unresolved_uses_total_score": false,
+    "unresolved_sort_key": "deterministic_purchase_score_0_40",
     "purchase_component_semantics_reused": true,
-    "urgency_operates_inside_tier": true,
+    "urgency_operates_inside_ranking_stage_only": true,
+    "default_feed_uses_urgency": false,
     "manual_end_of_queue_override_preserved": true
+  },
+  "completed_fit_stage_order": [
+    "total_score_desc",
+    "title_asc"
+  ],
+  "explicit_urgency_view_order": [
+    "ranking_stage_asc",
+    "sale_expiry_urgency_asc",
+    "stage_score_desc",
+    "title_asc"
+  ],
+  "ranking_stage_model": {
+    "producer_field": "ranking_stage",
+    "producer_rank_field": "ranking_stage_rank",
+    "stage_precedence": [
+      "deep_fit",
+      "fast_fit",
+      "analysis_incomplete",
+      "not_analyzed"
+    ],
+    "deep_fit": "current authoritative completed Deep/PASS 2 analyzed_fit, including PPD-012 semantically reconciled current Deep",
+    "fast_fit": "current completed provisional Fast/PASS 1 analyzed_fit, or the existing exact-compatible reusable Taste cache Fast-path, when no current authoritative Deep completion is effective",
+    "analysis_incomplete": "current unresolved/incomplete analysis without a trustworthy completed fit",
+    "not_analyzed": "no trustworthy current semantic outcome",
+    "stale_deep_never_qualifies": true,
+    "deep_incomplete_preserves_valid_fast_fit": true,
+    "completed_stage_score_field": "total_score",
+    "unresolved_stage_score_field": "deterministic_purchase_score",
+    "default_view": "stage -> stage score DESC -> deterministic title/id tiebreak",
+    "urgency_view": "stage -> sale urgency -> stage score DESC -> deterministic title/id tiebreak",
+    "urgency_may_cross_stage": false
   }
 }
