@@ -2,9 +2,9 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md` (`CONTRACT-FIRST IMPLEMENT / VALIDATE`).
+- No worker task is currently assigned in slot `ЧАТ 1`.
 - Active worker assignment: `ЧАТ 2` — `WORKER_TASK_STALE_DEEP_STATISTICS_PUBLICATION_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
-- Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md`.
+- Latest accepted implementation: `WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md` (implementation accepted; publication proof blocked by pre-existing Russian-description gate).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
 - Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
@@ -14,41 +14,39 @@
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — Deep-first final-score order fix
+## ACCEPTED IMPLEMENTATION / BLOCKED PUBLICATION — ЧАТ 1 — Deep-first final-score order fix
 
 Task:
 `WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md`
 
-Mode:
-`CONTRACT-FIRST IMPLEMENT / VALIDATE`
-
-User decision:
-- completed current Deep/PASS 2 fit always precedes Fast/PASS 1 fit;
-- Fast fit precedes unresolved/not-analyzed;
-- inside the same completed-analysis stage, order by final `total_score DESC`;
-- urgency may never cross a Deep/Fast stage boundary;
-- default feed is stage first, then final score;
-- manual `В конец очереди` remains absolute.
-
-Goal:
-- correct the canonical producer order and matching UI order;
-- supersede conflicting ranking clauses contract-first;
-- preserve score calculation and all semantic results;
-- remove the misleading use of `Приоритет` for a local feed cursor.
-
-Constraints:
-- no semantic worker execution;
-- no score-weight/risk/purchase-policy changes;
-- no Dossier changes;
-- no scheduler/queue/retry changes;
-- no Scheduled Task changes;
-- do not interfere with active ЧАТ 2.
-
 Report:
 `reviews/worker_reports/deep-first-final-score-order-fix-01.md`
 
-Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`.
+Final worker status:
+`blocked`
+
+Director acceptance:
+- implementation itself is accepted;
+- PR #117 merged as `9cb123765884440d37632740d51695a371338483`;
+- closeout PR #118 merged as `f200e809f169c7bd6b0ee74de3775bc8b6043614`;
+- canonical RANK-013 now defines the intended order: current Deep fit -> Fast/provisional fit -> analysis incomplete -> not analyzed;
+- inside current Deep and Fast stages, order is `total_score DESC`;
+- a Fast result cannot outrank a current Deep result merely because its score is higher;
+- default feed no longer lets urgency cross stage boundaries;
+- explicit urgency view, if used, may reorder only inside one stage;
+- score weights/formulas, semantic results, Dossier, risks, purchase rules and Scheduled Tasks were not changed;
+- UI wording was changed from ambiguous `Приоритет: N из M` to `Позиция в ленте: N из M`;
+- KOF XV Fast 68.0 vs MY HERO Deep 67.1 is covered by regression: MY HERO must be above KOF under the new rule;
+- all focused/PR validations passed;
+- no fresh canonical visual payload/Pages proof exists yet because normal publication stopped at the pre-existing `Require meaningful Russian descriptions before canonical commit` gate;
+- the later overall-success visual workflow only skipped the full build after a failed/ineligible upstream and is not proof of publication;
+- do not treat the ranking implementation as unmerged or lost: it is in `main`; only production publication/verification remains blocked.
+
+Decision:
+- physical ЧАТ 1 is complete and retired;
+- do not rerun or reopen this implementation task;
+- resolve the independent publication blocker before claiming the live site reflects RANK-013;
+- active ЧАТ 2 continues diagnosing the stale publication/statistics chain and may identify the exact follow-up needed.
 
 
 ## ACTIVE — НОВЫЙ ЧАТ 2 — Stale Deep statistics publication diagnostic
