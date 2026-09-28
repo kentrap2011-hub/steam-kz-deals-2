@@ -831,3 +831,23 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 
 **Основные места:** `config/dossier_deep_identity_compatibility_contract.json`, `config/taste_steam_review_dossier_contract.json`, `config/progressive_pass2_contract.json`, `scripts/progressive_pass2.py`, focused compatibility regressions.
 
+
+
+---
+
+## PPD-012 — Progressive profile semantic identity is content-based; exact source commit remains execution provenance
+
+**Дата:** 2026-09-28  
+**Статус:** canonical for Progressive Fast/Deep profile identity and historical-current reconciliation.
+
+**Проблема:** `PROGRESSIVE-PROFILE-PIN-V1` intentionally hashes exact immutable profile provenance, including `resolved_commit_sha`. That exact pin is correct for proving which bytes a semantic invocation used, but using the same provenance hash as the global semantic identity made a commit-only refresh of byte-identical `gaming_taste_live.json` create a new Progressive generation/work identity. PPD-010's completed 30 Deep migration revisions therefore became non-current even though the profile blob/content and every other semantic input were unchanged.
+
+**Решение:** Progressive stores and validates two distinct identities. (1) **Semantic profile identity** is a GitHub-derived content identity over the canonical profile repository/path plus exact profile blob/content SHA-256/byte count and the existing semantic model/context bindings. A changed source commit/ref alone is excluded from semantic invalidation when those semantic bytes/bindings are identical. (2) **Execution provenance identity** remains the exact immutable profile pin over repository/path/resolved commit/blob/content SHA/bytes/immutable URL and is still frozen into each prepared invocation/result authority for audit and verification. Fast/Deep semantic generation and per-item work identity use the semantic profile identity; exact prepared work/result validation continues to require the frozen provenance pin appropriate to that invocation.
+
+**Invalidation:** real profile byte/blob/content changes, taste model version changes, taste-semantics binding changes, candidate-context contract changes, and existing item fingerprint/context changes still create new semantic identity/work as applicable. Missing, malformed, inconsistent or unresolvable content identity fails closed. A provenance-only commit refresh cannot revive arbitrary historical state.
+
+**Historical reconciliation:** GitHub may select an immutable previously accepted Fast/Deep result as current without rewriting it and without consuming a new semantic attempt only when it can prove exact semantic equivalence between the historical result's frozen profile/input authority and the current semantic binding: same canonical profile content/blob/bytes, same model/semantics/context contract, and same product/taste subject/item fingerprint/context. Compatibility provenance is projected separately; original result generation/work/profile pin/run-start/acceptance fields remain unchanged. If historical material is insufficient or inconsistent, reuse fails closed. PPD-010 migration accounting/history remains immutable and PPD-011 Dossier/year compatibility remains unchanged.
+
+**Ownership:** GitHub remains sole owner of profile resolution, semantic identity/generation, work identities, eligibility, reconciliation/current-result selection, attempt/recovery accounting, persistence and publication. Scheduled ChatGPT remains bounded semantic execution against one exact frozen provenance view. No scheduler, queue, retry loop, recovery shortcut, backlog manager, whole-main stability rule or Scheduled Task change is introduced.
+
+**Основные места:** `config/progressive_pass1_contract.json`, `config/progressive_pass2_contract.json`, `config/progressive_personalization_contract.json`, `scripts/progressive_pass1.py`, `scripts/progressive_pass2.py`, focused Progressive profile identity/reconciliation regressions.
