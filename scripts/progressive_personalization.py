@@ -951,6 +951,16 @@ def validate_processing_status(status):
         raise ValueError('Deep legacy reanalysis scope invariant failed')
     if migration_accepted != migration_completed + migration_incomplete:
         raise ValueError('Deep legacy reanalysis accepted-outcome invariant failed')
+    if migration_completed != (
+        int(migration.get('changed_fit_outcome_count') or 0)
+        + int(migration.get('unchanged_fit_outcome_count') or 0)
+    ):
+        raise ValueError('Deep legacy reanalysis verdict-change invariant failed')
+    if migration_completed != (
+        int(migration.get('changed_result_count') or 0)
+        + int(migration.get('unchanged_result_count') or 0)
+    ):
+        raise ValueError('Deep legacy reanalysis result-change invariant failed')
     if bool(migration.get('complete')) != (migration_accepted == migration_total):
         raise ValueError('Deep legacy reanalysis completion flag mismatch')
     migration_last = migration.get('last_accepted_at_utc')
