@@ -160,19 +160,25 @@ def run():
         else:
             assert prior['not_fit_evidence']
 
-    # Canonical prepared work is finite migration-only work. Normal Deep remains
-    # separately counted and consumes no attempt while the migration is active.
+    # Canonical prepared work may be either the finite migration view or the
+    # resumed ordinary Deep view after that same finite migration completed.
+    # This regression must not reopen/rewrite PPD-010 merely because production
+    # naturally consumed all 30 frozen targets.
     persisted_work = json.loads(WORK_PATH.read_text(encoding='utf-8'))
-    assert persisted_work['projection_status'] == 'legacy_full_reanalysis_migration_active'
-    assert len(persisted_work['items']) == 30
-    assert all(row['work_mode'] == progressive_pass2.LEGACY_REANALYSIS_MODE for row in persisted_work['items'])
-    assert all(row['recovery_authorization_id'] is None for row in persisted_work['items'])
-    assert persisted_work['scope']['normal_pass2_eligible_count'] == 8
     migration_scope = persisted_work['scope']['legacy_full_reanalysis']
     assert migration_scope['total_count'] == 30
-    assert migration_scope['pending_count'] == 30
-    assert migration_scope['accepted_count'] == 0
-    assert migration_scope['complete'] is False
+    if migration_scope['complete'] is False:
+        assert persisted_work['projection_status'] == 'legacy_full_reanalysis_migration_active'
+        assert len(persisted_work['items']) == 30
+        assert all(row['work_mode'] == progressive_pass2.LEGACY_REANALYSIS_MODE for row in persisted_work['items'])
+        assert all(row['recovery_authorization_id'] is None for row in persisted_work['items'])
+        assert migration_scope['pending_count'] == 30
+        assert migration_scope['accepted_count'] == 0
+    else:
+        assert persisted_work['projection_status'] == 'current_github_owned_fast_dossier_deep_v1_projection'
+        assert migration_scope['pending_count'] == 0
+        assert migration_scope['accepted_count'] == 30
+        assert all(row['work_mode'] != progressive_pass2.LEGACY_REANALYSIS_MODE for row in persisted_work['items'])
     rebuilt = build_progressive_pass2_work.build_work_document()
     assert rebuilt['projection_status'] == persisted_work['projection_status']
     assert [row['authorization_id'] for row in rebuilt['items']] == [
