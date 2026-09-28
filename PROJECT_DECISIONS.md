@@ -814,3 +814,20 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 
 **Why:** this preserves the accepted positive work already paid for, repairs the missing negative side with the now-canonical balanced Deep contract, retains an auditable old revision, and keeps all production execution ownership in the existing GitHub + Progressive Deep architecture.
 
+## PPD-011 — Dossier / Deep release-year identity compatibility uses year-kind semantics
+
+**Дата:** 2026-09-28  
+**Статус:** canonical for Dossier -> Deep exact-product compatibility.
+
+**Решение:** Dossier `game_identity.release_year` означает год первоначального выхода произведения/игры, который Dossier установил как часть neutral work identity. Progressive Deep `semantic_input.release_year` либо год, извлечённый из `release_date`, означает год текущего Steam/storefront release-date контекста. Это разные семантические поля. Их точное равенство не является cross-stage compatibility key и их расхождение само по себе не может делать текущий точный Dossier несовместимым.
+
+**Строгая защита сохраняется:** hard compatibility остаётся fail-closed по exact AppID, exact prepared title/work identity, resolved Dossier identity, актуальному Dossier web-evidence binding и freshness/expiry. Неправильное издание, ремастер, DLC/base-game или другой продукт должны отклоняться, когда exact AppID/product identity не совпадает. Dossier release year остаётся обязательным identity evidence/corroboration и не становится игнорируемым полем.
+
+**Правило для любого будущего year-gate:** год может быть hard key только если обе сравниваемые величины имеют один и тот же канонический смысл и класс источника — например original/work year с original/work year либо storefront year со storefront year. Сравнивать original/work year с storefront/re-release year как одно поле запрещено.
+
+**Почему:** восемь текущих canonically accepted exact-AppID/exact-title Dossiers были ложно заблокированы Deep как `dossier_wrong_release_year`: Dossier хранил original/work year, а Deep сравнивал его с Steam release year. Удалить year semantics целиком было бы слишком слабым исправлением; правильная граница должна различать типы года, сохраняя exact-product protection.
+
+**Миграция / ownership:** исторические accepted Dossiers не переписываются ради этой правки. PPD-010 one-off legacy Deep migration остаётся отдельной, её frozen 30-target scope/results не пересобираются и не переигрываются. GitHub остаётся control plane; Scheduled ChatGPT остаётся bounded semantic data plane; scheduler/queue/retry/recovery ownership и Scheduled Task configuration не меняются.
+
+**Основные места:** `config/dossier_deep_identity_compatibility_contract.json`, `config/taste_steam_review_dossier_contract.json`, `config/progressive_pass2_contract.json`, `scripts/progressive_pass2.py`, focused compatibility regressions.
+
