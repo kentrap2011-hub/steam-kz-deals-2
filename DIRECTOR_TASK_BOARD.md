@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md` (`ONE-OFF MIGRATION / CONTRACT-FIRST IMPLEMENT / ORCHESTRATE / VALIDATE`).
-- Latest accepted implementation: `WORKER_TASK_DEEP_BALANCED_NEGATIVE_ASSESSMENT_CONTRACT_FIX_01.md`.
+- No worker task is currently assigned/in progress at the top-level Director state.
+- Latest accepted implementation: `WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
 - Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
@@ -13,36 +13,42 @@
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — Full reanalysis of legacy Deep results
+## ACCEPTED — ЧАТ 1 — Legacy Deep full reanalysis migration preparation
 
 Task:
 `WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md`
 
-Mode:
-`ONE-OFF MIGRATION / CONTRACT-FIRST IMPLEMENT / ORCHESTRATE / VALIDATE`
-
-Goal:
-- re-evaluate every current authoritative old-contract Deep result that still has `legacy_not_evaluated`;
-- reuse already accepted positive evidence instead of researching positives again;
-- evaluate frozen Dossier negative/mixed evidence and make a new full Deep judgment;
-- allow fit/not-fit, fit level, confidence, taste factors, risks/cautions and ranking to change when evidence supports it;
-- retain the old Deep result as history while the accepted migration revision becomes current authority.
-
-Dossier parallelism:
-- Dossier remains active and independent;
-- migration freezes exact Dossier/profile evidence at GitHub-selected run-start authority;
-- later Dossier writes do not alter the in-flight migration.
-
-Execution boundary:
-- worker chat implements/orchestrates only;
-- actual per-game semantics must be executed by the existing canonical Progressive Deep Worker;
-- no Scheduled Task settings may be changed.
-
 Report:
 `reviews/worker_reports/deep-legacy-full-reanalysis-with-preserved-positives-01.md`
 
-Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`.
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- implementation PR #109 `Add one-off legacy Deep full reanalysis migration` merged to `main` as `5219062702be4b9f07e075bfd704bc6d50caf90c`;
+- closeout PR #110 merged as `f2966aaf43c92789e72f888599b7ce262956ae63`;
+- canonical PPD-010 defines a finite one-off migration using the existing Progressive Deep Worker rather than normal first-pass/recovery semantics or a second scheduler;
+- frozen migration scope contains exactly 30 current old-contract authoritative Deep results: 26 prior fit and 4 prior not-fit;
+- accepted positive evidence / old not-fit baseline is preserved and reused; fresh positive research is forbidden for this migration;
+- frozen current Dossier negative/mixed evidence is used for the new full judgment, and the new result may change fit/not-fit, fit level, confidence, taste factors, risk/caution state and ranking when supported;
+- prior Deep revisions remain auditable; only an accepted completed migration revision becomes current authority;
+- incomplete migration does not silently erase prior completed Deep truth;
+- Dossier remains independent and may continue concurrently; later Dossier writes do not replace the frozen evidence inside an in-flight migration;
+- normal Deep first-pass/recovery accounting remains separate;
+- PR and post-merge PASS 2/backlog/pre-AI/visual/deploy checks all succeeded;
+- no Scheduled Task setting was changed and no per-game semantic conclusion was manually authored by the worker chat.
+
+Important execution state:
+- the migration control path is complete and accepted;
+- the 30 games themselves have NOT yet been re-evaluated;
+- current migration accounting at acceptance: 30 pending / 0 submitted / 0 accepted;
+- 38 ordinary Deep ready/pending items are kept separately from the finite migration while it is active;
+- actual semantic reanalysis remains owned by the existing Progressive Deep Worker.
+
+Decision:
+- accept the implementation/control-path task as complete;
+- do not claim migration completion until canonical accepted semantic results exist;
+- physical ЧАТ 1 is complete and retired.
 
 
 ## ACCEPTED — ЧАТ 2 — Deep balanced negative assessment contract fix
