@@ -38,6 +38,7 @@ def run():
     deep_entry = {
         'semantic_generation_id': 'gen-jedi',
         'profile_pin_sha256': 'profile-jedi',
+        'profile_semantic_sha256': 'a' * 64,
         'work_id': 'work-jedi',
         'family_id': 'game:1172380',
         'taste_subject_key': 'App_1172380',
@@ -87,6 +88,7 @@ def run():
         assert binding['accepted_at_utc'] == '2026-09-27T17:16:49+00:00'
 
     binding = {field: deep_entry[field] for field in progressive_pass2.PASS1_IDENTITY_FIELDS}
+    binding['profile_semantic_sha256'] = deep_entry['profile_semantic_sha256']
     state_doc = {'entries': {'game:1172380': deep_entry}}
     assert progressive_pass2.authoritative_completion_entry(binding, state_doc) is deep_entry
     stale_binding = dict(binding)

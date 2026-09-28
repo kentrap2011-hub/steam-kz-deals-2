@@ -1,9 +1,11 @@
 import hashlib
 import json
+import re
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
 
+import progressive_work_authority
 from taste_cache_common import validate_taste_factors
 
 ROOT = Path('.')
@@ -36,11 +38,19 @@ IDENTITY_FIELDS = (
     'candidate_context_sha256',
 )
 PROFILE_PIN_CONTRACT = 'PROGRESSIVE-PROFILE-PIN-V1'
+PROFILE_SEMANTIC_CONTRACT = 'PROGRESSIVE-PROFILE-SEMANTIC-IDENTITY-V1'
 CANONICAL_PROFILE_REPOSITORY = 'kentrap2011-hub/stopgame-ratings-data'
 CANONICAL_PROFILE_PATH = 'gaming_taste_live.json'
 PROFILE_IDENTITY_FIELDS = (
     'repository', 'path', 'resolved_commit_sha', 'blob_sha', 'content_sha256', 'bytes',
 )
+SEMANTIC_ITEM_FIELDS = (
+    'family_id', 'taste_subject_key', 'appid', 'taste_fingerprint', 'candidate_context_sha256',
+)
+SEMANTIC_GLOBAL_FIELDS = (
+    'taste_model_version', 'taste_semantics_sha256', 'candidate_context_contract_blob_sha',
+)
+_HISTORICAL_MANIFEST_CACHE = {}
 
 FORBIDDEN_COMMERCIAL_TEXT = (
     'price', 'discount', 'wishlist', 'steamdb', 'sale price', 'historical price',
@@ -129,6 +139,37 @@ def profile_pin_from_projection(projection_doc):
     return pin
 
 
+def profile_semantic_identity(profile_or_pin):
+    """Derive content identity without conflating immutable source commit provenance."""
+    profile = profile_or_pin
+    if isinstance(profile_or_pin, dict) and isinstance(profile_or_pin.get('profile_identity'), dict):
+        profile = profile_or_pin['profile_identity']
+    if not isinstance(profile, dict):
+        raise ValueError('Progressive semantic profile identity is missing')
+    material = {
+        'schema_version': 1,
+        'contract': PROFILE_SEMANTIC_CONTRACT,
+        'repository': profile.get('repository'),
+        'path': profile.get('path'),
+        'blob_sha': profile.get('blob_sha'),
+        'content_sha256': profile.get('content_sha256'),
+        'bytes': profile.get('bytes'),
+    }
+    if material['repository'] != CANONICAL_PROFILE_REPOSITORY:
+        raise ValueError('Progressive semantic profile repository is not canonical')
+    if material['path'] != CANONICAL_PROFILE_PATH:
+        raise ValueError('Progressive semantic profile path is not canonical')
+    if not isinstance(material['blob_sha'], str) or not re.fullmatch(r'[0-9a-f]{40}', material['blob_sha']):
+        raise ValueError('Progressive semantic profile Git blob identity is missing')
+    if not isinstance(material['content_sha256'], str) or not re.fullmatch(r'[0-9a-f]{64}', material['content_sha256']):
+        raise ValueError('Progressive semantic profile content SHA256 is missing')
+    if not isinstance(material['bytes'], int) or isinstance(material['bytes'], bool) or material['bytes'] <= 0:
+        raise ValueError('Progressive semantic profile byte count is missing')
+    result = dict(material)
+    result['profile_semantic_sha256'] = canonical_sha256(material)
+    return result
+
+
 def validate_profile_pin(pin):
     if not isinstance(pin, dict) or pin.get('schema_version') != 1:
         raise ValueError('Progressive profile pin schema mismatch')
@@ -170,9 +211,11 @@ def semantic_generation(projection_doc=None):
     profile = projection_doc.get('current_profile') or {}
     binding = projection_doc.get('current_binding') or {}
     profile_pin = profile_pin_from_projection(projection_doc)
+    semantic_profile = profile_semantic_identity(profile)
     material = {
-        'profile_blob_sha': profile.get('blob_sha'),
-        'profile_pin_sha256': profile_pin['pin_sha256'],
+        'profile_blob_sha': semantic_profile['blob_sha'],
+        'profile_content_sha256': semantic_profile['content_sha256'],
+        'profile_semantic_sha256': semantic_profile['profile_semantic_sha256'],
         'taste_model_version': binding.get('taste_model_version'),
         'taste_semantics_sha256': binding.get('taste_semantics_sha256'),
         'candidate_context_contract_blob_sha': binding.get('candidate_context_contract_blob_sha'),
@@ -183,6 +226,7 @@ def semantic_generation(projection_doc=None):
     return {
         'semantic_generation_id': canonical_sha256(material),
         'bindings': material,
+        'semantic_profile': semantic_profile,
         'profile_pin': profile_pin,
     }
 
@@ -221,33 +265,173 @@ def current_bindings(context_rows=None, projection_doc=None, queue_rows=None):
             continue
         if str(queue_row.get('family_id')) != family_id or str(queue_row.get('taste_subject_key')) != taste_key:
             raise ValueError(f'PASS 1 queue/context identity mismatch for {family_id}')
-        item_material = {
+        semantic_item_material = {
             'semantic_generation_id': generation['semantic_generation_id'],
-            'profile_pin_sha256': generation['profile_pin']['pin_sha256'],
+            'profile_semantic_sha256': generation['semantic_profile']['profile_semantic_sha256'],
             'family_id': family_id,
             'taste_subject_key': taste_key,
             'appid': str(queue_row.get('appid') or ''),
             'taste_fingerprint': queue_row.get('taste_fingerprint'),
             'candidate_context_sha256': queue_row.get('candidate_context_sha256'),
         }
-        missing = [key for key, value in item_material.items() if not isinstance(value, str) or not value]
+        missing = [key for key, value in semantic_item_material.items() if not isinstance(value, str) or not value]
         if missing:
             raise ValueError(f'PASS 1 work binding missing fields for {family_id}: {missing}')
-        work_id = canonical_sha256(item_material)
-        bindings[family_id] = {**item_material, 'work_id': work_id}
+        work_id = canonical_sha256(semantic_item_material)
+        bindings[family_id] = {
+            **semantic_item_material,
+            'profile_pin_sha256': generation['profile_pin']['pin_sha256'],
+            'work_id': work_id,
+            **{field: generation['bindings'][field] for field in SEMANTIC_GLOBAL_FIELDS},
+        }
         queue_by_family[family_id] = queue_row
 
     return generation, bindings, queue_by_family
 
 
-def matching_state_entry(binding, state_doc=None):
+def _new_semantic_state_matches(entry, binding):
+    if not isinstance(entry, dict) or not isinstance(binding, dict):
+        return False
+    if not isinstance(entry.get('profile_semantic_sha256'), str):
+        return False
+    fields = ('semantic_generation_id', 'profile_semantic_sha256', 'work_id', *SEMANTIC_ITEM_FIELDS)
+    return all(str(entry.get(field) or '') == str(binding.get(field) or '') for field in fields)
+
+
+def _historical_manifest(authority_commit, manifest_path, expected_contract, repo_root=ROOT):
+    authority_commit = str(authority_commit or '').lower()
+    if not re.fullmatch(r'[0-9a-f]{40}', authority_commit):
+        return None
+    manifest_path = Path(manifest_path).as_posix()
+    cache_key = (str(Path(repo_root).resolve()), authority_commit, manifest_path, expected_contract)
+    if cache_key in _HISTORICAL_MANIFEST_CACHE:
+        return _HISTORICAL_MANIFEST_CACHE[cache_key]
+    try:
+        raw = progressive_work_authority.file_bytes_at_commit(
+            authority_commit, manifest_path, repo_root=repo_root
+        )
+        doc = json.loads(raw.decode('utf-8'))
+    except (ValueError, UnicodeDecodeError, json.JSONDecodeError):
+        _HISTORICAL_MANIFEST_CACHE[cache_key] = None
+        return None
+    if doc.get('contract') != expected_contract:
+        _HISTORICAL_MANIFEST_CACHE[cache_key] = None
+        return None
+    _HISTORICAL_MANIFEST_CACHE[cache_key] = doc
+    return doc
+
+
+def historical_semantic_equivalence(
+    entry,
+    binding,
+    *,
+    manifest_path,
+    expected_contract,
+    repo_root=ROOT,
+):
+    """Prove an old accepted result semantically equivalent without rewriting provenance."""
+    if not isinstance(entry, dict) or not isinstance(binding, dict):
+        return None
+    if any(str(entry.get(field) or '') != str(binding.get(field) or '') for field in SEMANTIC_ITEM_FIELDS):
+        return None
+    if not all(isinstance(binding.get(field), str) and binding.get(field) for field in SEMANTIC_GLOBAL_FIELDS):
+        return None
+    current_profile_semantic = binding.get('profile_semantic_sha256')
+    if not isinstance(current_profile_semantic, str) or not re.fullmatch(r'[0-9a-f]{64}', current_profile_semantic):
+        return None
+
+    authority = entry.get('work_authority_commit')
+    doc = _historical_manifest(authority, manifest_path, expected_contract, repo_root=repo_root)
+    if not isinstance(doc, dict):
+        return None
+    profile_pin = doc.get('profile_pin')
+    try:
+        validate_profile_pin(profile_pin)
+        historical_profile_semantic = profile_semantic_identity(profile_pin)
+    except ValueError:
+        return None
+    if historical_profile_semantic['profile_semantic_sha256'] != current_profile_semantic:
+        return None
+
+    historical_bindings = doc.get('semantic_bindings') or {}
+    pin_identity = profile_pin['profile_identity']
+    if historical_bindings.get('profile_blob_sha') != pin_identity.get('blob_sha'):
+        return None
+    if historical_bindings.get('profile_pin_sha256') not in {None, profile_pin.get('pin_sha256')}:
+        return None
+    for field in SEMANTIC_GLOBAL_FIELDS:
+        if str(historical_bindings.get(field) or '') != str(binding.get(field) or ''):
+            return None
+
+    candidate = next((
+        item for item in (doc.get('items') or [])
+        if isinstance(item, dict)
+        and str(item.get('family_id') or '') == str(entry.get('family_id') or '')
+        and str(item.get('work_id') or '') == str(entry.get('work_id') or '')
+    ), None)
+    if not isinstance(candidate, dict):
+        return None
+    if str(candidate.get('profile_pin_sha256') or '') != str(profile_pin.get('pin_sha256') or ''):
+        return None
+    if str(entry.get('profile_pin_sha256') or '') != str(profile_pin.get('pin_sha256') or ''):
+        return None
+    if str(doc.get('semantic_generation_id') or '') != str(candidate.get('semantic_generation_id') or ''):
+        return None
+    for field in IDENTITY_FIELDS:
+        if str(candidate.get(field) or '') != str(entry.get(field) or ''):
+            return None
+
+    return {
+        'decision': 'PPD-012',
+        'mode': 'historical_semantic_equivalence',
+        'historical_work_authority_commit': str(authority),
+        'historical_profile_pin_sha256': profile_pin.get('pin_sha256'),
+        'historical_profile_resolved_commit_sha': pin_identity.get('resolved_commit_sha'),
+        'historical_profile_blob_sha': pin_identity.get('blob_sha'),
+        'historical_profile_content_sha256': pin_identity.get('content_sha256'),
+        'current_profile_semantic_sha256': current_profile_semantic,
+    }
+
+
+def state_entry_semantically_matches(
+    entry,
+    binding,
+    *,
+    manifest_path,
+    expected_contract,
+    repo_root=ROOT,
+):
+    # Exact frozen historical work remains valid against its exact accepted state.
+    # This preserves PPD-010/recovery execution semantics; PPD-012 compatibility is
+    # needed only when the current semantic view no longer has the same provenance IDs.
+    if isinstance(entry, dict) and isinstance(binding, dict) and all(
+        str(entry.get(field) or '') == str(binding.get(field) or '')
+        for field in IDENTITY_FIELDS
+    ):
+        return True
+    if _new_semantic_state_matches(entry, binding):
+        return True
+    return historical_semantic_equivalence(
+        entry,
+        binding,
+        manifest_path=manifest_path,
+        expected_contract=expected_contract,
+        repo_root=repo_root,
+    ) is not None
+
+
+def matching_state_entry(binding, state_doc=None, *, repo_root=ROOT):
     if not binding:
         return None
     state_doc = state_doc if state_doc is not None else load_state()
     entry = (state_doc.get('entries') or {}).get(binding['family_id'])
-    if not isinstance(entry, dict):
-        return None
-    if any(str(entry.get(field) or '') != str(binding.get(field) or '') for field in IDENTITY_FIELDS):
+    if not state_entry_semantically_matches(
+        entry,
+        binding,
+        manifest_path=WORK,
+        expected_contract='PROGRESSIVE-PASS1-WORK-V1',
+        repo_root=repo_root,
+    ):
         return None
     if entry.get('pass1_attempted') is not True:
         return None
@@ -374,6 +558,7 @@ def normalize_submission(doc, work_item, accepted_at_utc=None):
         field: work_item[field]
         for field in IDENTITY_FIELDS
     }
+    base['profile_semantic_sha256'] = work_item.get('profile_semantic_sha256')
     base.update({
         'pass1_attempted': True,
         'outcome': outcome,
@@ -432,6 +617,7 @@ def invalid_result_entry(work_item, accepted_at_utc=None):
     accepted_at_utc = accepted_at_utc or datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     return {
         **{field: work_item[field] for field in IDENTITY_FIELDS},
+        'profile_semantic_sha256': work_item.get('profile_semantic_sha256'),
         'pass1_attempted': True,
         'outcome': 'analysis_incomplete',
         'analysis_issue_code': 'invalid_semantic_result',

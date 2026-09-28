@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS2-V1",
-  "version": 11,
+  "version": 12,
   "status": "production_active",
   "phase": "phase_c_pass2",
   "purpose": "GitHub-owned eventual authoritative Deep analysis for every current eligible Progressive game after an exact-compatible canonically accepted Dossier is ready, with one normal first pass and separately authorized recovery; completed Deep results include a separately grounded balanced negative assessment, and Fast/PASS 1 is never an eligibility prerequisite.",
@@ -37,7 +37,7 @@
     "waiting_for_dossier_consumes_attempt": false,
     "queue_projection_consumes_attempt": false,
     "current_semantic_identity_required": [
-      "profile_pin_sha256",
+      "profile_semantic_sha256",
       "semantic_generation_id",
       "work_id",
       "family_id",
@@ -110,6 +110,7 @@
     "projection_entrypoint": "scripts/build_progressive_pass2_work.py",
     "recomputation_function": "scripts/progressive_pass2.py::recompute_eligibility",
     "immutable_binding_fields": [
+      "profile_semantic_sha256",
       "profile_pin_sha256",
       "semantic_generation_id",
       "work_id",
@@ -134,7 +135,11 @@
       "ingest_profile_rebinding_for_started_work": false,
       "dossier_liveness_revalidation_remains_required": false,
       "dossier_liveness_revalidation_timing": "once_at_invocation_start",
-      "mutable_dossier_or_authorization_change_after_invocation_start_invalidates_started_run": false
+      "mutable_dossier_or_authorization_change_after_invocation_start_invalidates_started_run": false,
+      "role": "exact_execution_provenance",
+      "semantic_generation_invalidation_key": false,
+      "same_bytes_new_commit_invalidates_current_semantic_results": false,
+      "exact_pin_required_for_run_start_and_result_transport": true
     }
   },
   "transport": {
@@ -217,6 +222,7 @@
     "worker_prompt": "config/progressive_pass2_worker_prompt.md",
     "pass1_history_mutation_allowed": false,
     "accepted_outcome_fields": [
+      "profile_semantic_sha256",
       "profile_pin_sha256",
       "work_authority_commit",
       "semantic_generation_id",
@@ -268,7 +274,15 @@
     "schema_version": 2,
     "recovery_authorization_entrypoint": "scripts/authorize_progressive_pass2_recovery.py",
     "recovery_authorization_workflow": ".github/workflows/authorize-progressive-pass2-recovery.yml",
-    "recovery_authorization_contract": "PROGRESSIVE-PASS2-RECOVERY-AUTHORIZATION-V1"
+    "recovery_authorization_contract": "PROGRESSIVE-PASS2-RECOVERY-AUTHORIZATION-V1",
+    "current_result_selection": {
+      "decision": "PPD-012",
+      "direct_current_match": "semantic_generation_id + profile_semantic_sha256 + work_id + exact item semantic fields",
+      "historical_compatibility": "GitHub may reuse immutable accepted Deep state only after exact historical work-authority manifest proves identical semantic profile bytes/model/semantics/context/item identity.",
+      "original_provenance_rewritten": false,
+      "new_attempt_consumed": false,
+      "arbitrary_historical_revival": "forbidden_fail_closed"
+    }
   },
   "outcomes": {
     "analyzed_fit": {
@@ -560,6 +574,24 @@
       "completed_no_relevant_negative_count",
       "last_accepted_at_utc",
       "complete"
-    ]
+    ],
+    "current_authority_after_profile_provenance_refresh": "Completed PPD-010 revisions remain current when PPD-012 semantic equivalence is proven; migration history/manifest/results remain immutable and are not rerun."
+  },
+  "semantic_profile_identity": {
+    "decision": "PPD-012",
+    "source": "shared_progressive_pass1_semantic_profile_identity",
+    "material_fields": [
+      "repository",
+      "path",
+      "blob_sha",
+      "content_sha256",
+      "bytes"
+    ],
+    "resolved_commit_sha_is_semantic_identity": false,
+    "exact_profile_pin_remains_execution_provenance": true,
+    "historical_current_reconciliation_owner": "github_control_plane",
+    "historical_result_mutation_allowed": false,
+    "reconciliation_consumes_semantic_attempt": false,
+    "missing_or_inconsistent_equivalence_material": "fail_closed"
   }
 }

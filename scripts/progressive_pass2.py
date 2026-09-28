@@ -407,13 +407,19 @@ def _identity_matches_binding(entry, binding):
     )
 
 
-def matching_state_entry(binding, state_doc=None):
+def matching_state_entry(binding, state_doc=None, *, repo_root=ROOT):
     if not isinstance(binding, dict):
         return None
     state_doc = state_doc if state_doc is not None else load_state()
     family_id = str(binding.get('family_id') or '')
     entry = (state_doc.get('entries') or {}).get(family_id)
-    if not _identity_matches_binding(entry, binding):
+    if not progressive_pass1.state_entry_semantically_matches(
+        entry,
+        binding,
+        manifest_path=WORK,
+        expected_contract='PROGRESSIVE-PASS2-WORK-V1',
+        repo_root=repo_root,
+    ):
         return None
     if entry.get('normal_first_pass_attempted') is not True:
         return None
@@ -1178,6 +1184,7 @@ def _identity_matches(doc, work_item, contract_name):
 def _attempt_base(work_item, outcome, accepted_at_utc, source):
     return {
         **{field: work_item[field] for field in PASS1_IDENTITY_FIELDS},
+        'profile_semantic_sha256': work_item.get('profile_semantic_sha256'),
         'dossier_content_sha256': work_item['dossier_content_sha256'],
         'dossier_compatibility_binding': deepcopy(work_item['dossier_compatibility_binding']),
         'authorization_id': work_item['authorization_id'],
@@ -1432,6 +1439,7 @@ def _apply_attempt(existing, work_item, attempt):
             raise ValueError('normal Deep first pass cannot overwrite existing current state')
         entry = {
             **{field: work_item[field] for field in PASS1_IDENTITY_FIELDS},
+            'profile_semantic_sha256': work_item.get('profile_semantic_sha256'),
             'pass2_attempted': True,
             'normal_first_pass_attempted': True,
             'authoritative_completed': authoritative,

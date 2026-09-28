@@ -13,6 +13,7 @@ on:
       - "config/progressive_pass2_result_schema.json"
       - "config/progressive_pass2_execution_receipt_schema.json"
       - "config/progressive_pass2_worker_prompt.md"
+      - "scripts/progressive_pass1.py"
       - "scripts/progressive_pass2.py"
       - "scripts/test_deep_balanced_negative_assessment.py"
       - "scripts/test_deep_legacy_full_reanalysis.py"
@@ -33,6 +34,7 @@ on:
       - "scripts/progressive_personalization.py"
       - "scripts/progressive_visual_activation_routing.py"
       - "scripts/build_final_visual_payload.py"
+      - "scripts/test_progressive_profile_semantic_identity_stability.py"
       - "scripts/test_progressive_pass2.py"
       - "scripts/test_progressive_pass2_integration.py"
       - "scripts/test_progressive_pass2_workflow_staging.py"
@@ -69,6 +71,7 @@ on:
       - "config/progressive_pass2_result_schema.json"
       - "config/progressive_pass2_execution_receipt_schema.json"
       - "config/progressive_pass2_worker_prompt.md"
+      - "scripts/progressive_pass1.py"
       - "scripts/progressive_pass2.py"
       - "scripts/test_deep_balanced_negative_assessment.py"
       - "scripts/test_deep_legacy_full_reanalysis.py"
@@ -89,6 +92,7 @@ on:
       - "scripts/progressive_personalization.py"
       - "scripts/progressive_visual_activation_routing.py"
       - "scripts/build_final_visual_payload.py"
+      - "scripts/test_progressive_profile_semantic_identity_stability.py"
       - "scripts/test_progressive_pass2.py"
       - "scripts/test_progressive_pass2_integration.py"
       - "scripts/test_progressive_pass2_workflow_staging.py"
@@ -129,6 +133,7 @@ jobs:
       - name: Compile PASS 2 Python
         run: |
           python -m py_compile \
+            scripts/progressive_pass1.py \
             scripts/progressive_pass2.py \
             scripts/test_deep_balanced_negative_assessment.py \
             scripts/test_deep_legacy_full_reanalysis.py \
@@ -143,6 +148,7 @@ jobs:
             scripts/ingest_progressive_pass1.py \
             scripts/ingest_progressive_pass2.py \
             scripts/authorize_progressive_pass2_recovery.py \
+            scripts/test_progressive_profile_semantic_identity_stability.py \
             scripts/test_progressive_pass2.py \
             scripts/test_progressive_pass2_integration.py \
             scripts/test_progressive_pass2_workflow_staging.py \
@@ -154,6 +160,8 @@ jobs:
         run: python scripts/test_progressive_async_traversal.py
       - name: Deep parallel frozen-start regression
         run: python scripts/test_progressive_deep_parallel_frozen_start.py
+      - name: Progressive profile semantic identity stability regression
+        run: python scripts/test_progressive_profile_semantic_identity_stability.py
       - name: PASS 2 core regression
         run: python scripts/test_progressive_pass2.py
       - name: PASS 2 Dossier integration regression
