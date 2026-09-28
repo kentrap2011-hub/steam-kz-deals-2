@@ -134,7 +134,7 @@ The regression proving later-Dossier non-substitution passed in the final CI run
 
 Control-plane implementation is complete and migration work is durably prepared.
 
-Current prepared migration state on the PR branch:
+Current prepared migration state on `main` after PR #109 merge:
 
 - total: **30**;
 - pending: **30**;
@@ -149,9 +149,9 @@ Current prepared migration state on the PR branch:
 - completed no relevant negative: **0**;
 - complete: **false**.
 
-Normal Deep work remains separately accounted; the current prepared production projection records **8** ordinary ready/pending items and pauses their emission without consuming/reordering their normal/recovery attempts while the finite migration is active.
+Normal Deep work remains separately accounted; after the post-merge deterministic rebuild the current production projection records **38** ordinary ready/pending items and pauses their emission without consuming/reordering their normal/recovery attempts while the finite migration is active. The increase from the earlier branch snapshot reflects later independent Dossier/pre-AI progress; it does not alter the fixed 30-target migration scope.
 
-The external Progressive Deep Worker has not naturally consumed this PR-branch migration because the implementation is not merged into `main`. This chat did not impersonate semantic execution.
+PR #109 is merged into `main`. The external Progressive Deep Worker has not yet naturally consumed the migration: canonical state remains 30 pending / 0 submitted / 0 accepted. This chat did not trigger, reschedule, modify, or impersonate semantic execution.
 
 ## Validation
 
@@ -161,10 +161,15 @@ Final validated implementation commit:
 
 GitHub Actions:
 
-- `Validate Progressive PASS 2 core` run **292**, run ID **36378383355** — **success**;
-- `Validate backlog dispositions` run **1337**, run ID **36378383385** — **success**.
+- PR validation: `Validate Progressive PASS 2 core` run **294**, run ID **36378520359** — **success**;
+- PR validation: `Validate backlog dispositions` run **1339**, run ID **36378520358** — **success**;
+- post-merge `Validate Progressive PASS 2 core` run **295**, run ID **36406259940** — **success**;
+- post-merge `Validate backlog dispositions` run **1340**, run ID **36406259846** — **success**;
+- post-merge `Build pre-AI deterministic payload` run **216**, run ID **36406259871** — **success**;
+- post-merge `Build daily visual payload` run **824**, run ID **36406323648** — **success**;
+- post-merge `Deploy visual mailing` run **864**, run ID **36406389623** — **success**.
 
-Within PASS 2 core run 292, all relevant steps passed, including:
+Within the final PR PASS 2 core run 294, all relevant steps passed, including:
 
 - Compile PASS 2 Python;
 - Progressive async traversal + invalid transport regression;
@@ -200,15 +205,15 @@ The dedicated PPD-010 regression verifies all material task invariants, includin
 16. invalid transport zero-effect/fail-closed;
 17. finite terminal no-rediscovery behavior.
 
-One earlier CI run, PASS 2 core run **286** / ID **36378193436**, failed only because `deepcopy` was referenced without importing it in the new observability code. The import was added; subsequent run 288 passed, and final expanded run 292 also passed.
+One earlier CI run, PASS 2 core run **286** / ID **36378193436**, failed only because `deepcopy` was referenced without importing it in the new observability code. The import was added; subsequent run 288 passed, the final PR run 294 passed, and the post-merge run 295 also passed.
 
 ## Published result
 
 No production per-game migration result has been published yet.
 
-This is intentional and required by the semantic execution boundary: the migration is prepared in PR #109, but only the existing canonical Progressive Deep Worker may create the 30 semantic reanalysis results after the implementation becomes current GitHub truth.
+This is intentional and required by the semantic execution boundary: PR #109 is now merged and the 30-item migration is current GitHub truth, but only the existing canonical Progressive Deep Worker may create the semantic reanalysis results. At the post-merge check it had not yet naturally started this migration.
 
-Therefore no Pages/card/ranking publication is claimed in this report.
+The ordinary post-merge visual pipeline completed successfully, but no migration-specific card/ranking change is claimed because there is still no accepted migration semantic result.
 
 ## Changed outcomes
 
@@ -223,7 +228,7 @@ Operator observability includes both:
 
 ## Remaining / unresolved
 
-Remaining semantic work after merge/acceptance: **30 migration targets**.
+Remaining semantic work on current `main`: **30 migration targets**; current migration state is **30 pending / 0 submitted / 0 accepted**.
 
 There is no known implementation defect after final CI.
 
@@ -233,18 +238,20 @@ End-to-end persistence/card/ranking/Pages validation is intentionally not execut
 
 `complete_ready_for_director_acceptance`
 
-The control path, contracts, immutable scope, prepared work, audit history, observability, Dossier parallelism, and regressions are complete. Production semantic execution remains correctly owned by the existing Progressive Deep Worker after merge.
+The control path, contracts, immutable scope, prepared work, audit history, observability, Dossier parallelism, merge, and post-merge rebuild/validation are complete. Production semantic execution remains correctly owned by the existing Progressive Deep Worker and has not yet naturally consumed the prepared migration.
 
 ## Recommended next step
 
-**Merge PR #109 after director review so the existing Progressive Deep Worker can consume the prepared finite 30-item migration from `main`.**
+**Let the existing Progressive Deep Worker consume the prepared migration on its next natural invocation, then validate canonical persistence; do not manually trigger or change its Scheduled Task.**
 
 ## Exact PR/commit/run/artifact/migration refs
 
 - repository: `kentrap2011-hub/steam-kz-deals-2`;
 - base/source of truth: `main`;
-- PR: **#109** — `Add one-off legacy Deep full reanalysis migration`;
-- branch: `worker/deep-legacy-full-reanalysis-01`;
+- PR: **#109** — `Add one-off legacy Deep full reanalysis migration` — **merged**;
+- implementation branch: `worker/deep-legacy-full-reanalysis-01`;
+- merge commit: `5219062702be4b9f07e075bfd704bc6d50caf90c`;
+- post-merge verified `main`: `949cfc7883e55bc8746d309c5e76ed6e0ec3fb73`;
 - validated code head: `08c1753cedbd0a99674933b3057ed496dd46bed6`;
 - migration authority: `97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a`;
 - migration ID: `deep-legacy-full-reanalysis-with-preserved-positives-01`;
@@ -257,8 +264,13 @@ The control path, contracts, immutable scope, prepared work, audit history, obse
 - terminal transport: `data/ai_inbox/progressive_pass2/execution_receipts/`;
 - run-start markers: `data/ai_inbox/progressive_pass2/run_starts/`;
 - run-start receipts: `data/cache/progressive_pass2_run_start_receipts/`;
-- final PASS 2 CI run: **292**, ID `36378383355`, success;
-- final backlog validation: **1337**, ID `36378383385`, success;
+- final PR PASS 2 CI run: **294**, ID `36378520359`, success;
+- final PR backlog validation: **1339**, ID `36378520358`, success;
+- post-merge PASS 2: **295**, ID `36406259940`, success;
+- post-merge backlog validation: **1340**, ID `36406259846`, success;
+- post-merge pre-AI build: **216**, ID `36406259871`, success;
+- post-merge visual build: **824**, ID `36406323648`, success;
+- post-merge deploy: **864**, ID `36406389623`, success;
 - diagnostic failed run fixed during implementation: PASS 2 run **286**, ID `36378193436`.
 
 ## Efficiency / reusable lesson
