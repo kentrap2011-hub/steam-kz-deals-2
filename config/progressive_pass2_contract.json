@@ -237,7 +237,8 @@
       "migration_result_changed",
       "revision_history",
       "legacy_reanalysis_attempts",
-      "legacy_reanalysis_status"
+      "legacy_reanalysis_status",
+      "migration_fit_outcome_changed"
     ],
     "fast_history_mutation_allowed": false,
     "target_deep_state_model": {
@@ -528,6 +529,21 @@
     "normal_work_behavior": "ordinary_deep_work_is_paused_without_attempt_consumption_while_finite_migration_is_active_then_resumes",
     "dossier_behavior": "dossier_continues_independently_newer_dossier_writes_do_not_replace_frozen_migration_evidence",
     "recurrence": "fixed_manifest_targets_only_and_never_rediscover_after_terminal_migration_status",
-    "scheduler_change": false
+    "scheduler_change": false,
+    "observability": [
+      "migration_id",
+      "total_count",
+      "pending_count",
+      "submitted_count",
+      "accepted_count",
+      "changed_fit_outcome_count",
+      "unchanged_fit_outcome_count",
+      "incomplete_count",
+      "confirmed_risk_count",
+      "caution_count",
+      "completed_no_relevant_negative_count",
+      "last_accepted_at_utc",
+      "complete"
+    ]
   }
 }
