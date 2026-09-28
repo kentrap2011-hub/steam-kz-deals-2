@@ -97,7 +97,12 @@
       "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
       "explicit_canonical_github_recovery_action"
     ],
-    "recovery_attempt_history_separate": true
+    "recovery_attempt_history_separate": true,
+    "legacy_full_reanalysis_attempts_share_normal_first_pass_budget": false,
+    "legacy_full_reanalysis_attempts_share_recovery_history": false,
+    "legacy_full_reanalysis_max_accepted_attempts_per_manifest_target": 1,
+    "legacy_full_reanalysis_automatic_retry_after_terminal_incomplete": false,
+    "legacy_full_reanalysis_scope_owner": "fixed_github_manifest_ppd010"
   },
   "work": {
     "manifest_path": "data/production/pre_ai/progressive_pass2_work.json",
@@ -116,7 +121,8 @@
       "dossier_content_sha256",
       "dossier_compatibility_binding",
       "dossier_expires_at_utc",
-      "authorization_id"
+      "authorization_id",
+      "migration_provenance"
     ],
     "dossier_path_is_canonical_read_only_input": true,
     "profile_pin": {
@@ -226,7 +232,12 @@
       "recovery_attempts",
       "recovery_owned",
       "recovery_authorization",
-      "negative_assessment"
+      "negative_assessment",
+      "migration_provenance",
+      "migration_result_changed",
+      "revision_history",
+      "legacy_reanalysis_attempts",
+      "legacy_reanalysis_status"
     ],
     "fast_history_mutation_allowed": false,
     "target_deep_state_model": {
@@ -247,7 +258,11 @@
         "analyzed_not_fit"
       ],
       "first_pass_and_recovery_history_separate": true,
-      "schema_runtime_adaptation_required": false
+      "schema_runtime_adaptation_required": false,
+      "legacy_full_reanalysis_mode": "finite_one_off_revision_migration_separate_from_normal_first_pass_and_recovery",
+      "legacy_full_reanalysis_incomplete_rule": "record_terminal_migration_attempt_keep_prior_authoritative_completed_revision_current",
+      "legacy_full_reanalysis_completed_rule": "archive_complete_prior_revision_then_promote_new_completed_revision",
+      "legacy_full_reanalysis_history_separate": true
     },
     "schema_version": 2,
     "recovery_authorization_entrypoint": "scripts/authorize_progressive_pass2_recovery.py",
@@ -412,7 +427,8 @@
       "outcome",
       "accepted_at_utc"
     ],
-    "unrelated_normal_first_pass_work_continues": true
+    "unrelated_normal_first_pass_work_continues": true,
+    "ppd010_one_off_migration_pause_exception": "While the finite legacy_full_reanalysis manifest is active, ordinary Deep work emission may be temporarily paused without consuming, cancelling, reordering, or reauthorizing its normal/recovery work; Dossier remains independent and ordinary Deep resumes after migration completion."
   },
   "scheduler": {
     "canonical_title": "Progressive Deep Worker",
@@ -461,7 +477,11 @@
     "marker_parent_must_descend_from_observed_authority": false,
     "worker_chosen_authority_field_allowed": false,
     "marker_parent_is_frozen_authority": true,
-    "confirmed_authority_must_equal_v2_marker_parent": true
+    "confirmed_authority_must_equal_v2_marker_parent": true,
+    "legacy_full_reanalysis_dossier_authority": "migration_provenance.migration_authority_commit",
+    "legacy_full_reanalysis_dossier_time_boundary": "migration_provenance.migration_frozen_at_utc",
+    "legacy_full_reanalysis_may_substitute_run_start_dossier": false,
+    "legacy_full_reanalysis_still_requires_v2_run_start_confirmation_before_publication": true
   },
   "negative_assessment": {
     "decision": "PROJECT_DECISIONS.md#PPD-009",
