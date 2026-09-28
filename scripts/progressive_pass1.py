@@ -401,6 +401,14 @@ def state_entry_semantically_matches(
     expected_contract,
     repo_root=ROOT,
 ):
+    # Exact frozen historical work remains valid against its exact accepted state.
+    # This preserves PPD-010/recovery execution semantics; PPD-012 compatibility is
+    # needed only when the current semantic view no longer has the same provenance IDs.
+    if isinstance(entry, dict) and isinstance(binding, dict) and all(
+        str(entry.get(field) or '') == str(binding.get(field) or '')
+        for field in IDENTITY_FIELDS
+    ):
+        return True
     if _new_semantic_state_matches(entry, binding):
         return True
     return historical_semantic_equivalence(
