@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_DEEP_BALANCED_NEGATIVE_ASSESSMENT_CONTRACT_FIX_01.md` (`CONTRACT-FIRST IMPLEMENT / VALIDATE`).
-- Latest accepted implementation: `WORKER_TASK_DEEP_POSITIVE_EVIDENCE_CARD_PROJECTION_FIX_01.md`.
+- No worker task is currently assigned/in progress at the top-level Director state.
+- Latest accepted implementation: `WORKER_TASK_DEEP_BALANCED_NEGATIVE_ASSESSMENT_CONTRACT_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
 - Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
@@ -13,31 +13,37 @@
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 2 — Deep balanced negative assessment contract fix
+## ACCEPTED — ЧАТ 2 — Deep balanced negative assessment contract fix
 
 Task:
 `WORKER_TASK_DEEP_BALANCED_NEGATIVE_ASSESSMENT_CONTRACT_FIX_01.md`
 
-Mode:
-`CONTRACT-FIRST IMPLEMENT / VALIDATE`
-
-Goal:
-- extend completed Deep results so `analyzed_fit` explicitly evaluates accepted negative/mixed Dossier evidence;
-- distinguish score-affecting confirmed personal risk, display-only caution, evaluated-no-relevant-negative, unresolved, and historical legacy/not-evaluated;
-- stop historical old-contract Deep cards from falsely implying that negatives were checked;
-- preserve existing scoring weights/policy and all GitHub control-plane ownership.
-
-Parallel constraint:
-- ЧАТ 1 is independently fixing positive-evidence card projection;
-- ЧАТ 2 must reread fresh `main` before merge and preserve ЧАТ 1 changes;
-- no semantic worker reruns or Scheduled Task changes.
-
 Report:
 `reviews/worker_reports/deep-balanced-negative-assessment-contract-fix-01.md`
 
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- implementation PR #107 `Add balanced Deep negative assessment contract` merged to `main` as `54591936f1c31c9cf974a222296913def746e6d5`;
+- closeout PR #108 merged as `ef18eb539a03d42a8a8f213e9e9829852e8c6a92`;
+- new completed Deep results now explicitly evaluate negative/mixed Dossier evidence;
+- the contract distinguishes confirmed personal risks, display-only cautions, evaluated-no-relevant-negative, unresolved negative assessment and historical legacy/not-evaluated;
+- confirmed personal risks may affect score only through existing canonical risk codes/policy; cautions add no new penalty by themselves;
+- historical old-contract Deep results remain valid but no longer falsely say that negatives were checked and none found;
+- malformed/unbound negative findings remain fail-closed;
+- no automatic replay/requeue/backfill of historical Deep results was introduced;
+- no Deep/Dossier/Fast semantic worker was manually rerun, no backlog was processed, and Scheduled Tasks were unchanged;
+- PR, post-merge PASS 2, backlog, full visual build and Pages deploy validations all succeeded;
+- deployed Jedi card now truthfully shows the old-result compatibility state: `В старом Deep-разборе минусы отдельно не оценивались`, while preserving the two grounded positive reasons from ЧАТ 1 and unchanged ranking.
+
+Decision:
+- implementation accepted and complete;
+- future naturally authorized Deep executions may populate the new balanced negative assessment;
+- historical Deep results are intentionally not backfilled without a separately authorized future migration/reanalysis task.
+
 Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 2`;
-- prior physical ЧАТ 2 diagnostic is complete/retired.
+- physical ЧАТ 2 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 1 — Deep positive evidence card projection fix
