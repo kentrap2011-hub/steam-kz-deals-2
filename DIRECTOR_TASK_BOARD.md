@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md` (`CONTRACT-FIRST IMPLEMENT / RECONCILE / VALIDATE`).
-- Latest accepted implementation: `WORKER_TASK_DOSSIER_DEEP_RELEASE_YEAR_IDENTITY_COMPATIBILITY_FIX_01.md`.
+- No worker task is currently assigned/in progress at the top-level Director state.
+- Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
 - Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
@@ -13,35 +13,57 @@
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — Progressive profile semantic identity stability fix
+## ACCEPTED — ЧАТ 1 — Progressive profile semantic identity stability fix
 
 Task:
 `WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md`
 
-Mode:
-`CONTRACT-FIRST IMPLEMENT / RECONCILE / VALIDATE`
-
-Goal:
-- separate semantic profile identity from exact execution provenance;
-- prevent commit-only provenance refresh with byte-identical profile content from resetting the Progressive semantic generation;
-- keep real profile/model/semantics/context changes invalidating as before;
-- safely make semantically equivalent durable Deep/Fast results current again without new semantic execution;
-- restore the completed PPD-010 30-game migration results to current authority when exact semantic equivalence is proven;
-- prevent those 30 from being re-emitted as ordinary Deep work.
-
-Constraints:
-- do not rerun the 30 migration targets;
-- do not manually run Deep/Fast/Dossier;
-- do not rewrite original accepted result provenance;
-- preserve strict run-start/work/result provenance binding;
-- preserve PPD-010 migration history and PPD-011 release-year fix;
-- no Scheduled Task changes.
-
 Report:
 `reviews/worker_reports/progressive-profile-semantic-identity-stability-fix-01.md`
 
-Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`.
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- PR #113 merged as `bf4061d3b46f53b3dfcf0fe2a6eee83e770e1896`;
+- PR #114 merged as `32f3354d1e43647271e8f1aac8884cec4ec92f77`;
+- PR #115 merged as `e864f882d74d26512d1430ab1632d7c93654f058`;
+- PPD-012 separates semantic Taste-profile identity from exact immutable execution provenance;
+- a provenance-only resolved-commit change no longer resets the Progressive semantic generation when profile bytes/content and other semantic bindings are unchanged;
+- exact repository/path/commit/blob/content provenance remains strict for prepared work, run-start, result transport and audit;
+- real profile/model/taste-semantics/candidate-context changes still invalidate as before;
+- GitHub-owned historical semantic-equivalence proof restores accepted results without rewriting them, creating fake results, consuming semantic attempts or weakening fail-closed matching;
+- all 30 completed PPD-010 migration results were proven semantically equivalent and restored as current authority;
+- none of those 30 is re-emitted as ordinary Deep work;
+- the two other durable non-migration Deep completions are handled by the same generic rule;
+- Fast uses the same semantic/provenance split without inventing completions;
+- PPD-010 remains complete 30/30 and its immutable history is unchanged;
+- PPD-011 release-year compatibility remains intact;
+- PR #115 additionally preserves exact Deep risk semantic binding and Dossier evidence refs through final visual projection;
+- no Dossier/Fast/Deep semantic worker was manually run and no Scheduled Task setting was changed.
+
+Current canonical Deep state:
+- total scope 399;
+- first-pass attempted 42;
+- authoritative completed 32;
+- fit 26;
+- not-fit 6;
+- incomplete/recovery 10;
+- waiting for Dossier 344;
+- ready/pending 13;
+- remaining until all authoritative 367;
+- migration complete 30/30;
+- the 13 ready/pending items are genuine not-yet-current Deep work and contain none of the reconciled 30 migration targets.
+
+Published result:
+- Statistics/cards/ranking now consume current reconciled Deep authority instead of showing zero because of provenance-only profile commit churn;
+- final publication/deploy validations succeeded;
+- final Pages deploy run `36432075275` succeeded from `d6d1b6a0ca15a243459b4007df6edaccfb78e39a`.
+
+Decision:
+- implementation accepted and complete;
+- keep current Dossier/Fast/Deep workers and Scheduled Task configuration unchanged;
+- physical ЧАТ 1 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 2 — Deep migration results not reflected on site diagnostic
