@@ -1,0 +1,648 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-LEGACY-FULL-REANALYSIS-MANIFEST-V1",
+  "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+  "status": "prepared",
+  "one_off": true,
+  "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+  "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+  "authority_selection": "current_main_after_start_gate_before_migration_runtime_changes",
+  "source_state_path": "data/cache/progressive_pass2_state.json",
+  "source_state_blob_sha": "dd0bbb5150fad574a1ef17bbe0eaab440de050d6",
+  "source_work_path": "data/production/pre_ai/progressive_pass2_work.json",
+  "source_work_blob_sha": "f5b91294efad83ec58ffa7c55f3296cb78a3e369",
+  "source_dossier_index_path": "data/production/pre_ai/taste_steam_review_dossier_worker_index.json",
+  "source_dossier_index_blob_sha": "97b9d1956cf198b3ca90e087a0518979c34ec53e",
+  "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+  "semantic_bindings": {
+    "profile_blob_sha": "9b9926031889dbd98ba6585c57836d52c739a0bb",
+    "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+    "taste_model_version": "taste-v3",
+    "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+    "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804"
+  },
+  "profile_pin": {
+    "schema_version": 1,
+    "contract": "PROGRESSIVE-PROFILE-PIN-V1",
+    "authority": "github_pre_semantic_immutable_live_profile",
+    "profile_identity": {
+      "repository": "kentrap2011-hub/stopgame-ratings-data",
+      "path": "gaming_taste_live.json",
+      "resolved_commit_sha": "feb5e74d5d3d95000612ee2888926618001e6424",
+      "blob_sha": "9b9926031889dbd98ba6585c57836d52c739a0bb",
+      "content_sha256": "e2d5f363778d83ec9fdd269f29744356c1b777201fb3dc0c56e898dbd99a44b4",
+      "bytes": 269906
+    },
+    "immutable_raw_url": "https://raw.githubusercontent.com/kentrap2011-hub/stopgame-ratings-data/feb5e74d5d3d95000612ee2888926618001e6424/gaming_taste_live.json",
+    "pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358"
+  },
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "scope": {
+    "target_count": 30,
+    "prior_fit_count": 26,
+    "prior_not_fit_count": 4,
+    "stale_older_generation_excluded_count": 2,
+    "ordering": "accepted_at_utc_then_family_id"
+  },
+  "targets": [
+    {
+      "sequence": 1,
+      "target_id": "legacy-full-reanalysis-01:0d29c660d43d01ef3088c1f7112342a63e728b49f79eae113a20bdf314d9bf16",
+      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+      "work_id": "0d29c660d43d01ef3088c1f7112342a63e728b49f79eae113a20bdf314d9bf16",
+      "family_id": "game:1143810",
+      "taste_subject_key": "App_1143810",
+      "appid": "1143810",
+      "taste_fingerprint": "be21d660fd5b8311cedd5f8ab4913c049e6f5f4a990953af74b495ea86267f04",
+      "candidate_context_sha256": "259063878eaaa43641a481b46df4dd32a20914c25defbf0de5a136572e0e7266",
+      "semantic_input": {
+        "title": "Black Skylands",
+        "short_description": "Become the captain of an airship and explore the world of the skies, gather resources and build powerful weapons, uncover ancient secrets and fight beneath your ship's sails.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Open World"
+        ],
+        "core_fit_count": 1,
+        "release_date": "15 Aug, 2023",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1143810"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1143810.json",
+      "dossier_git_blob_sha": "6d67110553f70bf812cfe1952a1a88ae271fb602",
+      "dossier_content_sha256": "477ce6761b74647417399e5790eaf3b69beb843b9fa7ac65b9388ce12ca1261c",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_generated_at_utc": "2026-09-27T12:40:48Z",
+      "dossier_expires_at_utc": "2026-10-17T12:40:48Z",
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The airship layer is repeatedly described as a distinctive strength: flying between sky islands, ship combat, boarding and ship upgrades give the core loop a memorable identity.",
+          "The open-world aerial exploration directly supports the profile's strong preference for enjoyable movement and exploration with a clear experiential hook."
+        ],
+        "taste_factors": {
+          "gameplay_mastery": 65,
+          "development_variety": 45,
+          "structure_pacing_direction": 50,
+          "identity_hooks": 78,
+          "breadth_of_match": 60
+        },
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "ff24834fc8f9ca15840d339b3402fc3ac5f598ddb1dc403168b7c1187baff229",
+        "accepted_at_utc": "2026-09-27T17:14:20+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
+    },
+    {
+      "sequence": 2,
+      "target_id": "legacy-full-reanalysis-01:7647b3ff49825d45591cc25f2296afc624886d4acfc04640b22a3e2b1433336e",
+      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+      "work_id": "7647b3ff49825d45591cc25f2296afc624886d4acfc04640b22a3e2b1433336e",
+      "family_id": "game:1210320",
+      "taste_subject_key": "App_1210320",
+      "appid": "1210320",
+      "taste_fingerprint": "aab7d81bfbc0da9e98a0afb00bfb1dba8c810368335da2024029567146be736a",
+      "candidate_context_sha256": "6eb61f50cc14563e919dbe2b81f2bf770e4903a22de2c6a42a765869745eb4f1",
+      "semantic_input": {
+        "title": "Potion Craft: Alchemist Simulator",
+        "short_description": "Potion Craft is an alchemist simulator where you physically interact with your tools and ingredients to brew potions. You're in full control of the whole shop: invent new recipes, attract customers and experiment to your heart's content. Just remember: the whole town is counting on you.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Singleplayer"
+        ],
+        "core_fit_count": 0,
+        "release_date": "13 Dec, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1210320"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1210320.json",
+      "dossier_git_blob_sha": "a144a580acc31007877b895828d77f21fce9b8b6",
+      "dossier_content_sha256": "acc81734a09a6a6a5c9ecbe58b737dcf4b4cd96a1c7aefd350a01d8d3340e522",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_generated_at_utc": "2026-09-27T13:29:33Z",
+      "dossier_expires_at_utc": "2026-10-17T13:29:33Z",
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The alchemy-map system makes experimentation, ingredient handling and recipe optimization the distinctive core mechanic rather than a generic shop loop.",
+          "Early and mid-game progression repeatedly adds ingredients, recipes, reputation, map discovery and more complex requests, matching the preference for visible development and discovery."
+        ],
+        "taste_factors": {
+          "gameplay_mastery": 64,
+          "development_variety": 56,
+          "structure_pacing_direction": 49,
+          "identity_hooks": 72,
+          "breadth_of_match": 59
+        },
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "aa725c794cf7e32725d33496203ca683cca32bd5582ba40a88492a2d7148b163",
+        "accepted_at_utc": "2026-09-27T17:15:30+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
+    },
+    {
+      "sequence": 3,
+      "target_id": "legacy-full-reanalysis-01:aa3e00895dc0fc5cadc4358f3f5f7672a16a3151b7a3a5aae9967755dcf0648e",
+      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+      "work_id": "aa3e00895dc0fc5cadc4358f3f5f7672a16a3151b7a3a5aae9967755dcf0648e",
+      "family_id": "game:1227280",
+      "taste_subject_key": "App_1227280",
+      "appid": "1227280",
+      "taste_fingerprint": "c08633ce530ba9379538ec3676c1b8f2475089f4ba8118b5c1adfce88dc641ef",
+      "candidate_context_sha256": "574bf5ebed4ed8eae3bdf9d987c6b83d388e152def502b5ea248423c16ddcfeb",
+      "semantic_input": {
+        "title": "Despot's Game: Dystopian Battle Simulator",
+        "short_description": "Guide puny humans through Despot's Game - a rogue-like tactics army battler. Equip your team and sacrifice them through procedural dungeons as you fight enemies, and other players!",
+        "bundle_members": [],
+        "fit_tags": [
+          "RPG"
+        ],
+        "core_fit_count": 0,
+        "release_date": "29 Sep, 2022",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1227280"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1227280.json",
+      "dossier_git_blob_sha": "f910f42c4a9d3435d178fbd5c9683a0aa7b603b0",
+      "dossier_content_sha256": "777f07750c46dced4d235ea3c0ec96e37b4c26af831841f11cc15d0c384c5b86",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_generated_at_utc": "2026-09-27T16:54:32Z",
+      "dossier_expires_at_utc": "2026-10-17T16:54:32Z",
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The meaningful play is concentrated in unit composition, positioning, equipment, mutations, purchases and route planning, which directly supports the profile's strong tactical problem-solving and mastery preferences.",
+          "Build combinations and mutations provide real experimentation across runs rather than relying only on passive auto-battle spectacle."
+        ],
+        "taste_factors": {
+          "gameplay_mastery": 69,
+          "development_variety": 57,
+          "structure_pacing_direction": 51,
+          "identity_hooks": 61,
+          "breadth_of_match": 63
+        },
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "f1b24b5a3996f1cef4133af648981d1d4de366fc53df3c91455eee21a25ebb96",
+        "accepted_at_utc": "2026-09-27T17:16:09+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
+    },
+    {
+      "sequence": 4,
+      "target_id": "legacy-full-reanalysis-01:9ae7b3ff76e8f91f25d6f66285c2c4f47e8b9d97fd343eb4d23798276b9658e2",
+      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+      "work_id": "9ae7b3ff76e8f91f25d6f66285c2c4f47e8b9d97fd343eb4d23798276b9658e2",
+      "family_id": "game:1172380",
+      "taste_subject_key": "App_1172380",
+      "appid": "1172380",
+      "taste_fingerprint": "a454b63213775b52df8312cc1679c81c0ca2697f6ff34b02a2977bba5bb5ef3d",
+      "candidate_context_sha256": "a07bf096a4b32d71f5a78c12bb2d0426feb1fc40bb74cffba023e2fff0a43123",
+      "semantic_input": {
+        "title": "STAR WARS Jedi: Fallen Order™",
+        "short_description": "A galaxy-spanning adventure awaits in Star Wars Jedi: Fallen Order, a 3rd person action-adventure title from Respawn. An abandoned Padawan must complete his training, develop new powerful Force abilities, and master the art of the lightsaber - all while staying one step ahead of the Empire.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action-Adventure",
+          "Open World",
+          "Sci-fi",
+          "Souls-like",
+          "Story Rich",
+          "Third Person"
+        ],
+        "core_fit_count": 6,
+        "release_date": "14 Nov, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1172380"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1172380.json",
+      "dossier_git_blob_sha": "bb15bfe5c5a39493cb6479b3ed3ca10aebc10153",
+      "dossier_content_sha256": "e06c17a567e1f9a249d2ece40eadad045933262562b8ff35aad74c42bf33b144",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_generated_at_utc": "2026-09-27T13:07:00Z",
+      "dossier_expires_at_utc": "2026-10-17T13:07:00Z",
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "strong",
+        "confidence": "high",
+        "positive_evidence": [
+          "Lightsaber combat repeatedly emphasizes parrying, dodging, enemy reading and expanding Force abilities, closely matching the profile's strongest mastery and skill-growth signals.",
+          "New movement and Force abilities open previously inaccessible routes, so progression changes both combat and exploration instead of only raising statistics.",
+          "The Star Wars atmosphere, cinematic presentation and character-driven story provide a clear identity hook beyond the mechanical fit."
+        ],
+        "taste_factors": {
+          "gameplay_mastery": 88,
+          "development_variety": 81,
+          "structure_pacing_direction": 71,
+          "identity_hooks": 87,
+          "breadth_of_match": 86
+        },
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "a54bba18a1bacab918c0de4022b6192f1eb9a3c6a667369edc712801a5082ee6",
+        "accepted_at_utc": "2026-09-27T17:16:49+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
+    },
+    {
+      "sequence": 5,
+      "target_id": "legacy-full-reanalysis-01:278e5465a0a72ee4f5503c1809db868ad9843195483dc67087aeb54b14b8f9a3",
+      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+      "work_id": "278e5465a0a72ee4f5503c1809db868ad9843195483dc67087aeb54b14b8f9a3",
+      "family_id": "game:1213210",
+      "taste_subject_key": "App_1213210",
+      "appid": "1213210",
+      "taste_fingerprint": "bab1f739ce39670b89c72b1e50ddffe13a9c2d2d6d357fe79f03c733b8cc3946",
+      "candidate_context_sha256": "a23178183c543db00c7e8da3a017dc7d11fa5cfbda685b190b91ca72c572d9e1",
+      "semantic_input": {
+        "title": "Command & Conquer™ Remastered Collection",
+        "short_description": "Command & Conquer and Red Alert are both remastered in 4K by the former Westwood Studios team members. Includes all 3 expansions, rebuilt multiplayer, a modernized UI, Map Editor, bonus footage gallery, and over 7 hours of remastered music.",
+        "bundle_members": [],
+        "fit_tags": [],
+        "core_fit_count": 0,
+        "release_date": "5 Jun, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1213210"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1213210.json",
+      "dossier_git_blob_sha": "bda61fd154a89cf60c5115b58296b71fce9d7f13",
+      "dossier_content_sha256": "155ab60b9202e633571b39ddd9525077a588a7b658d48333358f03b1c17f17c2",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_generated_at_utc": "2026-09-27T13:29:33Z",
+      "dossier_expires_at_utc": "2026-10-17T13:29:33Z",
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The preserved real-time base-building and unit-control loop gives the game direct tactical decision-making, matching the profile's durable interest in strategic problem solving.",
+          "The remaster keeps a strong audiovisual and historical identity through restored campaigns, expansions and remastered music instead of feeling like a generic modernized strategy game."
+        ],
+        "taste_factors": {
+          "gameplay_mastery": 68,
+          "development_variety": 50,
+          "structure_pacing_direction": 52,
+          "identity_hooks": 73,
+          "breadth_of_match": 61
+        },
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "ebb0b3ccc9ae60228420e89053a7b9177e2b172a0a48e53a870792ed7d2ce87b",
+        "accepted_at_utc": "2026-09-27T17:17:22+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
+    },
+    {
+      "sequence": 6,
+      "target_id": "legacy-full-reanalysis-01:89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
+      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+      "work_id": "89de905d79957808ea74f88994605c8f781dbc3d3361a9449ac2f7e905f6545d",
+      "family_id": "game:1085510",
+      "taste_subject_key": "App_1085510",
+      "appid": "1085510",
+      "taste_fingerprint": "96ae084aae70febef03440d61952d3bef2a14b0ae80a44348068c5eeb0b2d164",
+      "candidate_context_sha256": "fc40b1e5e183b75f96bf032f31babe2094becb209b140a994daa84bfe5145e47",
+      "semantic_input": {
+        "title": "Garfield Kart - Furious Racing",
+        "short_description": "Garfield, the famous lasagna-loving cat is back to take on Jon, Odie and company in a no-holds-barred racing game!",
+        "bundle_members": [],
+        "fit_tags": [
+          "Third Person"
+        ],
+        "core_fit_count": 1,
+        "release_date": "6 Nov, 2019",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1085510"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1085510.json",
+      "dossier_git_blob_sha": "d0982f016f0343e128b0378ebf850a49cddfcc7c",
+      "dossier_content_sha256": "a590a4a62ab63787506a17d2ffb131cc8915106d7e20b862f0f122364e6ccd79",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_generated_at_utc": "2026-09-27T12:38:41Z",
+      "dossier_expires_at_utc": "2026-10-17T12:38:41Z",
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "Drifting, drift boosts, shortcuts and track knowledge provide a concrete execution-skill layer that can reward mastery beyond the accessible basic handling.",
+          "Local and online multiplayer are recurring strengths, aligning with the profile's strong positive response to shared play that creates common decisions and memories."
+        ],
+        "taste_factors": {
+          "gameplay_mastery": 70,
+          "development_variety": 43,
+          "structure_pacing_direction": 61,
+          "identity_hooks": 60,
+          "breadth_of_match": 59
+        },
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "680be82782ee1c392f38a6c69dc60dc8f92e3297e66aeb36edef6f7ff8f9e29c",
+        "accepted_at_utc": "2026-09-27T17:17:58+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
+    },
+    {
+      "sequence": 7,
+      "target_id": "legacy-full-reanalysis-01:9337c47e89b5a161ed93323e730cf71fb9db08cc00a89b1a609daf7d4195086d",
+      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+      "work_id": "9337c47e89b5a161ed93323e730cf71fb9db08cc00a89b1a609daf7d4195086d",
+      "family_id": "game:1152300",
+      "taste_subject_key": "App_1152300",
+      "appid": "1152300",
+      "taste_fingerprint": "bbce699d14e1b989e373d9b138c303ab5539663435bbab4ac6535dec23de6f67",
+      "candidate_context_sha256": "bdd2cd812a504b066b1d91a76c4bd681115eda9726767747a462620cfd9ab8a4",
+      "semantic_input": {
+        "title": "Atelier Ayesha: The Alchemist of Dusk DX",
+        "short_description": "\"The promise begins.\"\r\nThe \"Dusk\" series, a trilogy of RPG titles from Gust's popular Atelier series, tells the story of a world on the verge ruin, told from the perspective of its unique characters.\r\nThe 1st title in the series \"Atelier Ayesha\" is now available as a deluxe version.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Fantasy",
+          "JRPG",
+          "RPG"
+        ],
+        "core_fit_count": 2,
+        "release_date": "14 Jan, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1152300"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1152300.json",
+      "dossier_git_blob_sha": "8ee37744f6dbfe4ccc3608c9c01bed4c0e8c17e7",
+      "dossier_content_sha256": "fe80c1d736159f6a152f0650ac4bfbea4fdf18f0b389288b305dcf7586d3acdd",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_generated_at_utc": "2026-09-27T12:47:47Z",
+      "dossier_expires_at_utc": "2026-10-17T12:47:47Z",
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "moderate",
+        "confidence": "medium",
+        "positive_evidence": [
+          "Alchemy and item crafting are repeatedly described as the main source of system depth, giving the game meaningful experimentation and development rather than relying only on simple turn-based combat.",
+          "Ayesha, her companions, character events, worldbuilding, art direction and music create a strong cozy-melancholic identity, matching the profile's high value on characters and distinctive atmosphere."
+        ],
+        "taste_factors": {
+          "gameplay_mastery": 66,
+          "development_variety": 72,
+          "structure_pacing_direction": 55,
+          "identity_hooks": 80,
+          "breadth_of_match": 70
+        },
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "6ab5ac32a3b3c217869767ff23beb069ae2ada7657255ec2949adf3bb81a9a5d",
+        "accepted_at_utc": "2026-09-27T17:20:33+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
+    },
+    {
+      "sequence": 8,
+      "target_id": "legacy-full-reanalysis-01:beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0",
+      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+      "work_id": "beebff3f680904998a25cfad4ee14a509681f97ab48ececa8894e7a178b73ea0",
+      "family_id": "game:1152310",
+      "taste_subject_key": "App_1152310",
+      "appid": "1152310",
+      "taste_fingerprint": "3ebb6a7d9452c0f7f3f356a4c48895af9476287bf06b99dfb5c864b1fc8851df",
+      "candidate_context_sha256": "dd825ea7d7d004d0700fac51f942eba39d3d0d321c3c934d509567f3060dc0f7",
+      "semantic_input": {
+        "title": "Atelier Escha & Logy: Alchemists of the Dusk Sky DX",
+        "short_description": "\"The promise is entrusted to two alchemists...\"\r\nThe \"Dusk\" series, a trilogy of RPG titles from Gust's popular Atelier series, tells the story of a world on the verge ruin, told from the perspective of its unique characters.\r\nThe 2nd title in the series \"Atelier Escha & Logy\" is now available as a deluxe version.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Fantasy",
+          "JRPG",
+          "RPG"
+        ],
+        "core_fit_count": 2,
+        "release_date": "14 Jan, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1152310"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1152310.json",
+      "dossier_git_blob_sha": "f73ce6f739d8626bc68dbdb0df0ec4f308f2212a",
+      "dossier_content_sha256": "41dce0c3148d3b113bc5071b10fe060fe312c8b49861bbf9e84ec71f53930f84",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_generated_at_utc": "2026-09-27T12:47:47Z",
+      "dossier_expires_at_utc": "2026-10-17T12:47:47Z",
+      "prior_revision": {
+        "outcome": "analyzed_fit",
+        "fit_level": "strong",
+        "confidence": "medium",
+        "positive_evidence": [
+          "The synthesis system starts approachable and becomes substantially more flexible through elemental values, skills, trait transfer and protagonist-specific specialties, directly matching the preference for visible mechanical development.",
+          "Six-character front/back parties and support attacks make combat more dynamic and add tactical planning rather than leaving progression concentrated only in crafting.",
+          "Four-month assignments provide clear short-term goals while usually leaving substantial discretionary time, fitting the preference for direction without excessive lostness or deadline pressure."
+        ],
+        "taste_factors": {
+          "gameplay_mastery": 82,
+          "development_variety": 84,
+          "structure_pacing_direction": 83,
+          "identity_hooks": 72,
+          "breadth_of_match": 82
+        },
+        "base_support_compatible": null,
+        "not_fit_basis": null,
+        "not_fit_evidence": [],
+        "authorization_id": "b7702416dff6ba8343efd85867d15a8095fdc395d3e23e86cac21d1af2197213",
+        "accepted_at_utc": "2026-09-27T17:21:20+00:00",
+        "work_mode": "normal_first_pass",
+        "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148"
+      }
+    }
+  ]
+}
