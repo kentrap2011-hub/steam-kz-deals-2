@@ -3,6 +3,7 @@
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
 - Active worker assignment: `ЧАТ 1` — `WORKER_TASK_KOF_XV_HIGH_PRIORITY_WITHOUT_DEEP_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
+- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_ATELIER_ESCHA_LOGY_DEEP_WITHOUT_POSITIVE_REASON_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -11,6 +12,33 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 2 — Atelier Deep without positive reason diagnostic
+
+Task:
+`WORKER_TASK_ATELIER_ESCHA_LOGY_DEEP_WITHOUT_POSITIVE_REASON_DIAGNOSTIC_01.md`
+
+Mode:
+`READ-ONLY / RECON`
+
+Goal:
+- explain why Atelier Escha & Logy: Alchemists of the Dusk Sky DX shows completed/current Deep-style caution and a buyable result while `Почему может зайти` says the personal reason is unavailable;
+- prove whether positive evidence is absent at source, suppressed by validation, unmapped in projection, or another exact mechanism applies;
+- determine whether this is intentional contract behavior or a defect.
+
+Scope:
+- read-only only;
+- no semantic worker execution;
+- no card/ranking/risk changes;
+- no rebuild/deploy;
+- no Scheduled Task changes.
+
+Report:
+`reviews/worker_reports/atelier-escha-logy-deep-without-positive-reason-diagnostic-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 2`.
 
 
 ## ACTIVE — НОВЫЙ ЧАТ 1 — KOF XV high priority without Deep diagnostic
