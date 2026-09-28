@@ -4951,8 +4951,8 @@
       "outcome": "analyzed_not_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-27T17:25:21+00:00",
-      "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+      "accepted_at_utc": "2026-09-28T10:26:52+00:00",
+      "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
       "dossier_content_sha256": "68886112d30c25a912cd9ecbb00f777764126633cc3c3c6705a6dd48391bb79b",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -4968,8 +4968,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "e38e97fa02b8a7df43dab511863e6ff977684afc88f52ffabcbd32d36686c81e",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "6c4d62c8a22d593cbd5fce2116d9971bca07fe9708d42ebe7d9f639c3f9faed1",
+      "work_mode": "legacy_full_reanalysis",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -5021,13 +5021,331 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "legacy_reanalysis_attempts": [
+        {
+          "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+          "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+          "work_id": "a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045",
+          "family_id": "game:1147330",
+          "taste_subject_key": "App_1147330",
+          "appid": "1147330",
+          "taste_fingerprint": "b82717b5b1f091d0ad28ddda52362713ed8ae80652f5960dd5232f566f080b79",
+          "candidate_context_sha256": "af7e4f3ad593432a4fb37ed3263f20040986d56ecba42e0ef3beda8797584563",
+          "dossier_content_sha256": "68886112d30c25a912cd9ecbb00f777764126633cc3c3c6705a6dd48391bb79b",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "6c4d62c8a22d593cbd5fce2116d9971bca07fe9708d42ebe7d9f639c3f9faed1",
+          "work_mode": "legacy_full_reanalysis",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": {
+            "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+            "migration_target_id": "legacy-full-reanalysis-01:a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045",
+            "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+            "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+            "prior_outcome": "analyzed_not_fit",
+            "prior_fit_level": null,
+            "prior_confidence": "medium",
+            "prior_taste_factors": null,
+            "prior_not_fit_basis": "completed_below_threshold",
+            "prior_work_id": "a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045",
+            "prior_authorization_id": "e38e97fa02b8a7df43dab511863e6ff977684afc88f52ffabcbd32d36686c81e",
+            "prior_accepted_at_utc": "2026-09-27T17:25:21+00:00",
+            "preserved_positive_evidence": [],
+            "preserved_not_fit_evidence": [
+              "The experience is consistently described as a short linear walking-simulator-style adventure with light platforming and simple puzzles, providing little mechanical growth or mastery depth.",
+              "Repeated walking and long traversal stretches are a documented source of monotony, directly conflicting with the profile's strong sensitivity to repetition without development.",
+              "Narrative delivery can be fragmented and heavily dependent on logs, so the strong atmosphere is not consistently reinforced by the clear, engaging story progression the profile prefers."
+            ]
+          },
+          "outcome": "analyzed_not_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-28T10:26:52+00:00",
+          "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+          "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+          "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+          "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+          "confidence": "medium",
+          "not_fit_basis": "completed_below_threshold",
+          "not_fit_evidence": [
+            "The experience is consistently described as a short linear walking-simulator-style adventure with light platforming and simple puzzles, providing little mechanical growth or mastery depth.",
+            "Repeated walking and long traversal stretches are a documented source of monotony, directly conflicting with the profile's strong sensitivity to repetition without development.",
+            "Narrative delivery can be fragmented and heavily dependent on logs, so the strong atmosphere is not consistently reinforced by the clear, engaging story progression the profile prefers."
+          ],
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              },
+              {
+                "kind": "conflict",
+                "index": 0
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "low_active_gameplay",
+                "text_ru": "Основной опыт состоит из линейного перемещения, лёгкого платформинга и простых головоломок; при сильной потребности профиля в активной механике и развитии систем этого недостаточно, даже при хорошей атмосфере.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "conflict",
+                    "index": 0
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "Длинные отрезки ходьбы и повторяющийся цикл простых взаимодействий создают документированный риск монотонности без развития.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "other_grounded_taste_risk",
+                "text_ru": "Фрагментированная подача истории через журналы, резкие переходы и прерывающие сюжет комнаты с загадками может ослабить главный сюжетный крючок именно в игре, где механика сама по себе не способна компенсировать слабый темп повествования.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          },
+          "migration_result_changed": true,
+          "migration_fit_outcome_changed": false
+        }
+      ],
+      "legacy_reanalysis_status": {
+        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+        "migration_target_id": "legacy-full-reanalysis-01:a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045",
+        "attempt_outcome": "analyzed_not_fit",
+        "accepted_at_utc": "2026-09-28T10:26:52+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_legacy_full_reanalysis",
+          "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+          "superseded_at_utc": "2026-09-28T10:26:52+00:00",
+          "state": {
+            "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+            "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+            "work_id": "a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045",
+            "family_id": "game:1147330",
+            "taste_subject_key": "App_1147330",
+            "appid": "1147330",
+            "taste_fingerprint": "b82717b5b1f091d0ad28ddda52362713ed8ae80652f5960dd5232f566f080b79",
+            "candidate_context_sha256": "af7e4f3ad593432a4fb37ed3263f20040986d56ecba42e0ef3beda8797584563",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_not_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-27T17:25:21+00:00",
+            "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+            "dossier_content_sha256": "68886112d30c25a912cd9ecbb00f777764126633cc3c3c6705a6dd48391bb79b",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "e38e97fa02b8a7df43dab511863e6ff977684afc88f52ffabcbd32d36686c81e",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+              "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+              "work_id": "a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045",
+              "family_id": "game:1147330",
+              "taste_subject_key": "App_1147330",
+              "appid": "1147330",
+              "taste_fingerprint": "b82717b5b1f091d0ad28ddda52362713ed8ae80652f5960dd5232f566f080b79",
+              "candidate_context_sha256": "af7e4f3ad593432a4fb37ed3263f20040986d56ecba42e0ef3beda8797584563",
+              "dossier_content_sha256": "68886112d30c25a912cd9ecbb00f777764126633cc3c3c6705a6dd48391bb79b",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "e38e97fa02b8a7df43dab511863e6ff977684afc88f52ffabcbd32d36686c81e",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "outcome": "analyzed_not_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-27T17:25:21+00:00",
+              "run_start_anchor_commit": "850fd0ab32ce67271497ae9bfafe80a8ab83fdce",
+              "run_start_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "run_started_at_utc": "2026-09-27T17:10:54+00:00",
+              "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "confidence": "medium",
+              "not_fit_basis": "completed_below_threshold",
+              "not_fit_evidence": [
+                "The experience is consistently described as a short linear walking-simulator-style adventure with light platforming and simple puzzles, providing little mechanical growth or mastery depth.",
+                "Repeated walking and long traversal stretches are a documented source of monotony, directly conflicting with the profile's strong sensitivity to repetition without development.",
+                "Narrative delivery can be fragmented and heavily dependent on logs, so the strong atmosphere is not consistently reinforced by the clear, engaging story progression the profile prefers."
+              ]
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "confidence": "medium",
+            "not_fit_basis": "completed_below_threshold",
+            "not_fit_evidence": [
+              "The experience is consistently described as a short linear walking-simulator-style adventure with light platforming and simple puzzles, providing little mechanical growth or mastery depth.",
+              "Repeated walking and long traversal stretches are a documented source of monotony, directly conflicting with the profile's strong sensitivity to repetition without development.",
+              "Narrative delivery can be fragmented and heavily dependent on logs, so the strong atmosphere is not consistently reinforced by the clear, engaging story progression the profile prefers."
+            ]
+          }
+        }
+      ],
+      "migration_provenance": {
+        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+        "migration_target_id": "legacy-full-reanalysis-01:a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045",
+        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+        "prior_outcome": "analyzed_not_fit",
+        "prior_fit_level": null,
+        "prior_confidence": "medium",
+        "prior_taste_factors": null,
+        "prior_not_fit_basis": "completed_below_threshold",
+        "prior_work_id": "a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045",
+        "prior_authorization_id": "e38e97fa02b8a7df43dab511863e6ff977684afc88f52ffabcbd32d36686c81e",
+        "prior_accepted_at_utc": "2026-09-27T17:25:21+00:00",
+        "preserved_positive_evidence": [],
+        "preserved_not_fit_evidence": [
+          "The experience is consistently described as a short linear walking-simulator-style adventure with light platforming and simple puzzles, providing little mechanical growth or mastery depth.",
+          "Repeated walking and long traversal stretches are a documented source of monotony, directly conflicting with the profile's strong sensitivity to repetition without development.",
+          "Narrative delivery can be fragmented and heavily dependent on logs, so the strong atmosphere is not consistently reinforced by the clear, engaging story progression the profile prefers."
+        ]
+      },
+      "migration_result_changed": true,
+      "migration_fit_outcome_changed": false,
       "confidence": "medium",
       "not_fit_basis": "completed_below_threshold",
       "not_fit_evidence": [
         "The experience is consistently described as a short linear walking-simulator-style adventure with light platforming and simple puzzles, providing little mechanical growth or mastery depth.",
         "Repeated walking and long traversal stretches are a documented source of monotony, directly conflicting with the profile's strong sensitivity to repetition without development.",
         "Narrative delivery can be fragmented and heavily dependent on logs, so the strong atmosphere is not consistently reinforced by the clear, engaging story progression the profile prefers."
-      ]
+      ],
+      "negative_assessment": {
+        "status": "completed",
+        "evaluated_candidate_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          },
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ],
+        "findings": [
+          {
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "low_active_gameplay",
+            "text_ru": "Основной опыт состоит из линейного перемещения, лёгкого платформинга и простых головоломок; при сильной потребности профиля в активной механике и развитии систем этого недостаточно, даже при хорошей атмосфере.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "conflict",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "unchanged_repetition",
+            "text_ru": "Длинные отрезки ходьбы и повторяющийся цикл простых взаимодействий создают документированный риск монотонности без развития.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 2
+              }
+            ]
+          },
+          {
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "other_grounded_taste_risk",
+            "text_ru": "Фрагментированная подача истории через журналы, резкие переходы и прерывающие сюжет комнаты с загадками может ослабить главный сюжетный крючок именно в игре, где механика сама по себе не способна компенсировать слабый темп повествования.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ]
+          }
+        ]
+      }
     },
     "game:1107790": {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
