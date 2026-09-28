@@ -948,7 +948,7 @@ def validate_processing_status(status):
         raise ValueError('Deep legacy reanalysis scope invariant failed')
     if migration_accepted != migration_completed + migration_incomplete:
         raise ValueError('Deep legacy reanalysis accepted-outcome invariant failed')
-    if bool(migration.get('complete')) != (migration_pending == 0):
+    if bool(migration.get('complete')) != (migration_accepted == migration_total):
         raise ValueError('Deep legacy reanalysis completion flag mismatch')
     migration_last = migration.get('last_accepted_at_utc')
     if migration_last is not None and _normalize_utc_timestamp(migration_last) is None:
