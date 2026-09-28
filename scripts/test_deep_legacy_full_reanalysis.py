@@ -1,6 +1,8 @@
 import copy
 import hashlib
 import json
+import subprocess
+import tempfile
 from pathlib import Path
 
 import build_progressive_pass2_work
@@ -190,6 +192,50 @@ def run():
     assert progressive_pass2.validate_run_start_authority(jedi_item, receipt)
     assert jedi_item['_dossier_evidence_authority_commit'] == authority
 
+    # A later run-start/Dossier commit cannot substitute newer Dossier bytes for
+    # the frozen migration authority. Build a two-commit synthetic repository:
+    # A contains the frozen accepted Dossier, B mutates that Dossier.
+    with tempfile.TemporaryDirectory() as td:
+        temp_repo = Path(td)
+        subprocess.run(['git', 'init', '-q'], cwd=temp_repo, check=True)
+        subprocess.run(['git', 'config', 'user.email', 'migration-test@example.invalid'], cwd=temp_repo, check=True)
+        subprocess.run(['git', 'config', 'user.name', 'Migration Test'], cwd=temp_repo, check=True)
+        frozen_path = temp_repo / jedi_target['dossier_path']
+        frozen_path.parent.mkdir(parents=True, exist_ok=True)
+        frozen_raw = progressive_work_authority.file_bytes_at_commit(authority, jedi_target['dossier_path'])
+        frozen_path.write_bytes(frozen_raw)
+        subprocess.run(['git', 'add', '.'], cwd=temp_repo, check=True)
+        subprocess.run(['git', 'commit', '-q', '-m', 'frozen dossier'], cwd=temp_repo, check=True)
+        synthetic_authority = subprocess.check_output(
+            ['git', 'rev-parse', 'HEAD'], cwd=temp_repo, text=True
+        ).strip()
+        later_doc = json.loads(frozen_raw.decode('utf-8'))
+        later_doc['migration_test_later_write'] = True
+        frozen_path.write_text(json.dumps(later_doc, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        subprocess.run(['git', 'add', '.'], cwd=temp_repo, check=True)
+        subprocess.run(['git', 'commit', '-q', '-m', 'later dossier write'], cwd=temp_repo, check=True)
+        later_authority = subprocess.check_output(
+            ['git', 'rev-parse', 'HEAD'], cwd=temp_repo, text=True
+        ).strip()
+        later_digest = hashlib.sha256(frozen_path.read_bytes()).hexdigest()
+        assert later_digest != jedi_target['dossier_content_sha256']
+
+        frozen_item = copy.deepcopy(jedi_item)
+        frozen_item['migration_provenance']['migration_authority_commit'] = synthetic_authority
+        frozen_item['_work_authority_commit'] = later_authority
+        later_receipt = {
+            'status': 'confirmed',
+            'run_start_authority_commit': later_authority,
+            'run_start_anchor_commit': later_authority,
+            'run_started_at_utc': manifest['migration_frozen_at_utc'],
+        }
+        assert progressive_pass2.validate_run_start_authority(
+            frozen_item, later_receipt, repo_root=temp_repo
+        )
+        assert frozen_item['_dossier_evidence_authority_commit'] == synthetic_authority
+        assert frozen_item['_dossier_record']['content_sha256'] == jedi_target['dossier_content_sha256']
+        assert frozen_item['_dossier_record']['content_sha256'] != later_digest
+
     # Fresh-positive invention is rejected with zero migration attempt.
     old_full_state = copy.deepcopy(frozen_state)
     clean_assessment = assessment_for(jedi_dossier)
@@ -250,6 +296,60 @@ def run():
     assert metrics['confirmed_risk_count'] == 1
     assert metrics['pending_count'] == 29
     assert metrics['complete'] is False
+
+    # A grounded migration may change the old fit verdict to not-fit. This is
+    # synthetic regression evidence only; no production game conclusion is authored here.
+    changed_verdict_doc = result_doc(
+        jedi_item,
+        outcome='analyzed_not_fit',
+        assessment=risk_assessment,
+        confidence='high',
+        not_fit_basis='confirmed_personal_negative',
+        not_fit_evidence=[
+            'Frozen Dossier EA application friction is a confirmed personal technical-burden risk.'
+        ],
+    )
+    changed_verdict_state, receipts = accept(
+        copy.deepcopy(frozen_state), jedi_item, changed_verdict_doc
+    )
+    assert receipts[0]['status'] == 'accepted'
+    changed_verdict = changed_verdict_state['entries'][JEDI_FAMILY]
+    assert changed_verdict['outcome'] == 'analyzed_not_fit'
+    assert changed_verdict['migration_fit_outcome_changed'] is True
+    _, changed_verdict_metrics = progressive_pass2.legacy_reanalysis_work_and_metrics(
+        changed_verdict_state, manifest
+    )
+    assert changed_verdict_metrics['changed_fit_outcome_count'] == 1
+    assert changed_verdict_metrics['unchanged_fit_outcome_count'] == 0
+
+    # Fit level / confidence / taste factors may also be revised while exact old
+    # positive evidence remains byte-for-byte semantically identical.
+    revised_factors = copy.deepcopy(jedi_item['migration_provenance']['prior_taste_factors'])
+    first_factor = next(iter(revised_factors))
+    revised_factors[first_factor] = max(0, int(revised_factors[first_factor]) - 1)
+    caution = {
+        'disposition': 'caution',
+        'risk_code': None,
+        'text_ru': 'Возвраты по знакомым маршрутам без быстрого перемещения могут создавать дополнительное трение.',
+        'evidence_refs': [progressive_pass2.dossier_negative_candidate_refs(jedi_dossier)[0]],
+    }
+    revised_fit_doc = result_doc(
+        jedi_item,
+        assessment=assessment_for(jedi_dossier, [caution]),
+        fit_level=('moderate' if jedi_item['migration_provenance']['prior_fit_level'] == 'strong' else 'strong'),
+        confidence=('medium' if jedi_item['migration_provenance']['prior_confidence'] == 'high' else 'high'),
+        taste_factors=revised_factors,
+    )
+    revised_fit_state, receipts = accept(
+        copy.deepcopy(frozen_state), jedi_item, revised_fit_doc
+    )
+    assert receipts[0]['status'] == 'accepted'
+    revised_fit = revised_fit_state['entries'][JEDI_FAMILY]
+    assert revised_fit['positive_evidence'] == frozen_state['entries'][JEDI_FAMILY]['positive_evidence']
+    assert revised_fit['migration_result_changed'] is True
+    revised_semantic = progressive_pass2.semantic_taste_entry(revised_fit)
+    assert refine_visual_ranking.personal_taste_risks(revised_semantic) == {}
+    assert revised_semantic['deep_negative_assessment_status'] == 'completed_with_caution'
 
     # The same completed core verdict with fully evaluated but empty negative
     # findings is counted unchanged rather than changed merely for schema backfill.
