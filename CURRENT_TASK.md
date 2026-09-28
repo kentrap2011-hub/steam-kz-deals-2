@@ -1,13 +1,18 @@
 # CURRENT TASK
 
-## IN PROGRESS — Dossier / Deep release-year identity compatibility fix 01
-Статус: `in_progress`.
+## COMPLETE — Dossier / Deep release-year identity compatibility fix 01
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_DOSSIER_DEEP_RELEASE_YEAR_IDENTITY_COMPATIBILITY_FIX_01.md`;
-- branch: `fix/dossier-deep-release-year-compatibility-01`;
-- accepted root cause: 8 current/fresh exact-product Dossiers are falsely rejected because Deep compares Dossier original/work year with Steam/storefront release year;
-- scope: contract-first shared identity compatibility repair, regressions, normal GitHub-owned eligibility recomputation and publication validation;
-- preserve: exact AppID/title/product/edition protection, stale/binding fail-closed behavior, independent PPD-010 migration, concurrent Dossier production, Scheduled Task configuration;
-- forbidden: manual Deep processing of the 8 AppIDs, Dossier rebuild workaround, migration rewrite, scheduler/queue/retry changes.
+- implementation PR: `#111`; merge: `ebaa18ff406fb9c1744ed559990043570080b7b2`;
+- canonical decision: `PPD-011`; Dossier original/work year and Steam/storefront release year are explicitly different semantic kinds and are no longer compared as one hard key;
+- strict protection remains fail-closed for exact AppID/title/product identity, unresolved identity, current evidence binding, expiry, exact AppID corroboration and identity provenance;
+- focused regression passes all 8 known false rejects: 1170760, 1237950, 1237970, 1237980, 1238040, 1238060, 1238820, 13500;
+- current production after normal GitHub recomputation: Dossier accepted 46, Deep ready/pending 46, waiting 353, Deep attempts 0; all 8 are accepted + eligible/pending;
+- PPD-010 migration completed concurrently and remains unchanged at 30/30 accepted completed; no frozen scope/result/authority was rewritten;
+- Dossier stayed active; no Dossier rebuild workaround, manual Deep processing, new scheduler/retry queue or Scheduled Task change occurred;
+- post-merge pre-AI build `36423455359` published commit `62524865133ae585c6aaf2264eb7c05a31847fbc`; visual run `36423532818` and deploy `36423530324` succeeded;
+- report: `reviews/worker_reports/dossier-deep-release-year-identity-compatibility-fix-01.md`;
+- next bounded action: existing Progressive Deep worker may consume the published 46 ordinary items on its next natural invocation without schedule changes.
 
 ## COMPLETE — Deep legacy full reanalysis with preserved positives 01
 Статус: `complete_ready_for_director_acceptance`.
