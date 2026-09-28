@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- No worker task is currently assigned/in progress at the top-level Director state.
+- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DOSSIER_DEEP_RELEASE_YEAR_IDENTITY_COMPATIBILITY_FIX_01.md` (`CONTRACT-FIRST IMPLEMENT / VALIDATE`).
 - Latest accepted implementation: `WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -11,6 +11,37 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 1 — Dossier / Deep release-year identity compatibility fix
+
+Task:
+`WORKER_TASK_DOSSIER_DEEP_RELEASE_YEAR_IDENTITY_COMPATIBILITY_FIX_01.md`
+
+Mode:
+`CONTRACT-FIRST IMPLEMENT / VALIDATE`
+
+Goal:
+- define one shared release-year identity semantic across Dossier -> Deep;
+- repair the eight false `dossier_wrong_release_year` rejections without weakening exact-product protection;
+- preserve concurrent Dossier progress and the independent legacy Deep migration;
+- let normal GitHub-owned recomputation unlock the affected ordinary Deep identities.
+
+Exact regression AppIDs:
+`1170760, 1237950, 1237970, 1237980, 1238040, 1238060, 1238820, 13500`
+
+Constraints:
+- no manual Dossier rebuild/backlog processing;
+- no manual Deep semantic execution;
+- no migration scope/history changes;
+- no Scheduled Task changes;
+- exact-product/wrong-edition protection remains fail-closed.
+
+Report:
+`reviews/worker_reports/dossier-deep-release-year-identity-compatibility-fix-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 1`.
 
 
 ## ACCEPTED — ЧАТ 1 — Dossier / Deep ready count gap diagnostic
