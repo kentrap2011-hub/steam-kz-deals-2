@@ -1,0 +1,54 @@
+name: Diagnostic PPD012 visual provenance
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build canonical visual locally
+        env:
+          FORCE_VISUAL_BUILD: "1"
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/build_final_visual_payload.py
+      - name: Print Deep risk provenance diagnostics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          doc = json.loads(Path('data/production/visual/current.json').read_text(encoding='utf-8'))
+          bad = []
+          deep = 0
+          for game in doc.get('items') or []:
+              if game.get('effective_analysis_source') != 'deep':
+                  continue
+              deep += 1
+              for row in game.get('risk_provenance') or []:
+                  if row.get('source') != 'taste_negative_evidence':
+                      continue
+                  if (
+                      (row.get('semantic_binding') or {}).get('semantic_source') != 'progressive_pass2'
+                      or not row.get('evidence_refs')
+                  ):
+                      bad.append({
+                          'id': game.get('id'),
+                          'title': game.get('title'),
+                          'analysis_state': game.get('analysis_state'),
+                          'risk': row,
+                      })
+          print('PPD012_VISUAL_DEEP_COUNT=' + str(deep))
+          print('PPD012_VISUAL_BAD_COUNT=' + str(len(bad)))
+          print('PPD012_VISUAL_BAD_SAMPLE=' + json.dumps(bad[:5], ensure_ascii=False, sort_keys=True))
+          PY
