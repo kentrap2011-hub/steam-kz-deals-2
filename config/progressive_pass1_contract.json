@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PASS1-V1",
-  "version": 3,
+  "version": 4,
   "status": "canonical",
   "phase": "phase_b_pass1",
   "purpose": "GitHub-owned item-level provisional Fast analysis for Progressive Personalized Deals: provide useful early fit/not-fit/incomplete coverage without blocking publication or Deep analysis.",
@@ -18,15 +18,16 @@
   "semantic_generation": {
     "global_binding_fields": [
       "profile_blob_sha",
-      "profile_pin_sha256",
+      "profile_content_sha256",
+      "profile_semantic_sha256",
       "taste_model_version",
       "taste_semantics_sha256",
       "candidate_context_contract_blob_sha"
     ],
     "commercial_source_timestamp_in_generation": false,
-    "rule": "A price/commercial refresh alone never resets PASS 1. Profile/model/semantics/semantic-context contract changes create a new global semantic generation.",
+    "rule": "A price/commercial refresh or immutable source-commit refresh alone never resets PASS 1. Byte-identical canonical profile content keeps the same semantic profile identity; real profile content/model/semantics/semantic-context changes create a new global semantic generation.",
     "per_item_binding_fields": [
-      "profile_pin_sha256",
+      "profile_semantic_sha256",
       "family_id",
       "taste_subject_key",
       "appid",
@@ -50,7 +51,26 @@
       "semantic_worker_must_read_exact_pinned_content": true,
       "mutable_main_lookup_by_worker": false,
       "live_update_after_pin_invalidates_started_work": false,
-      "next_new_generation_uses_then_current_profile": true
+      "next_new_generation_uses_then_current_profile": true,
+      "role": "exact_execution_provenance_not_semantic_invalidation_key",
+      "resolved_commit_sha_remains_required": true,
+      "same_bytes_new_commit_resets_semantic_generation": false,
+      "exact_pin_still_required_for_prepared_worker_execution_and_result_acceptance": true
+    },
+    "decision": "PPD-012",
+    "semantic_profile_identity": {
+      "contract": "PROGRESSIVE-PROFILE-SEMANTIC-IDENTITY-V1",
+      "decision": "PPD-012",
+      "material_fields": [
+        "repository",
+        "path",
+        "blob_sha",
+        "content_sha256",
+        "bytes"
+      ],
+      "resolved_commit_sha_is_semantic_identity": false,
+      "source_ref_is_semantic_identity": false,
+      "missing_or_inconsistent_content_identity": "fail_closed"
     }
   },
   "attempt_budget": {
@@ -140,6 +160,7 @@
     "work_manifest": "data/production/pre_ai/progressive_pass1_work.json",
     "worker_prompt": "config/progressive_pass1_worker_prompt.md",
     "accepted_outcome_fields": [
+      "profile_semantic_sha256",
       "profile_pin_sha256",
       "work_authority_commit",
       "semantic_generation_id",
@@ -148,7 +169,13 @@
       "outcome",
       "analysis_issue_code",
       "accepted_at_utc"
-    ]
+    ],
+    "current_result_selection": {
+      "decision": "PPD-012",
+      "rule": "Exact current semantic identity wins directly; older accepted state may remain current only after GitHub proves historical immutable-manifest semantic equivalence. Original result/provenance is never rewritten and reconciliation consumes no semantic attempt.",
+      "historical_manifest_proof": "exact work_authority_commit + exact historical work item + exact historical profile pin + identical semantic profile/model/semantics/context/item fields",
+      "missing_or_inconsistent_historical_material": "fail_closed"
+    }
   },
   "publication": {
     "phase_a_fallback_remains_valid": true,
