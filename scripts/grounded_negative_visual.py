@@ -43,9 +43,20 @@ def merge_risk(risks, row):
         risks[code] = dict(row)
 
 
+def taste_grounded_risks(taste_entry):
+    """Preserve exact Deep provenance while keeping Fast/cache V4/V5 behavior unchanged."""
+    if (
+        isinstance(taste_entry, dict)
+        and taste_entry.get('semantic_source') == 'progressive_pass2'
+        and 'deep_negative_assessment_status' in taste_entry
+    ):
+        return refiner.personal_taste_risks(taste_entry)
+    return structured_grounded_risks(taste_entry)
+
+
 def all_risk_candidates(taste_entry, projection, practical):
     risks = {}
-    for row in structured_grounded_risks(taste_entry).values():
+    for row in taste_grounded_risks(taste_entry).values():
         merge_risk(risks, row)
     for row in refiner.structural_risks(projection, practical).values():
         merge_risk(risks, row)
@@ -94,6 +105,10 @@ def visible_grounded_payload(risks):
                 'category': str(row.get('category') or ''),
                 'evidence': str(row.get('evidence') or ''),
             })
+            for field in ('evidence_refs', 'semantic_binding', 'disposition'):
+                value = row.get(field)
+                if value is not None and value != '':
+                    item[field] = value
         provenance.append(item)
 
     return {
@@ -187,7 +202,7 @@ def apply_to_document(ready, *, contexts, taste_entries, projections):
 
         risks = all_risk_candidates(taste_entry, projection, game.get('practical') or {})
         visible = visible_grounded_payload(risks)
-        structured = structured_grounded_risks(taste_entry)
+        structured = taste_grounded_risks(taste_entry)
         mapped_count += len(structured)
         neutral_other_count += int('other_grounded_taste_risk' in structured)
 

@@ -21,6 +21,7 @@ on:
       - "data/control/progressive_pass2_legacy_full_reanalysis_manifest.json"
       - "scripts/refine_visual_ranking.py"
       - "scripts/card_explanation_policy.py"
+      - "scripts/grounded_negative_visual.py"
       - "scripts/priority_ranking.py"
       - "scripts/progressive_work_authority.py"
       - "scripts/test_progressive_async_traversal.py"
@@ -79,6 +80,7 @@ on:
       - "data/control/progressive_pass2_legacy_full_reanalysis_manifest.json"
       - "scripts/refine_visual_ranking.py"
       - "scripts/card_explanation_policy.py"
+      - "scripts/grounded_negative_visual.py"
       - "scripts/priority_ranking.py"
       - "scripts/progressive_work_authority.py"
       - "scripts/test_progressive_async_traversal.py"
@@ -140,6 +142,7 @@ jobs:
             scripts/test_dossier_deep_release_year_identity_compatibility.py \
             scripts/refine_visual_ranking.py \
             scripts/card_explanation_policy.py \
+            scripts/grounded_negative_visual.py \
             scripts/priority_ranking.py \
             scripts/progressive_work_authority.py \
             scripts/test_progressive_async_traversal.py \
