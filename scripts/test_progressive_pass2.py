@@ -176,12 +176,25 @@ def dossier_record(appid, title, binding, *, digest=None, expires='2026-10-01T00
             'schema': 'TASTE-STEAM-REVIEW-DOSSIER-V2',
             'schema_version': 2,
             'appid': str(appid),
+            'title': title,
             'generated_at_utc': '2026-09-21T00:00:00Z',
             'expires_at_utc': expires,
             'game_identity': {
                 'work_title': title,
                 'release_year': 2026,
                 'resolution_status': 'resolved' if resolved else 'ambiguous',
+                'identity_source_ids': ['source-001'],
+                'corroborators': [
+                    {'kind': 'appid', 'value': str(appid)},
+                ],
+            },
+            'provenance': {
+                'sources': [
+                    {
+                        'source_id': 'source-001',
+                        'evidence_role': 'identity',
+                    },
+                ],
             },
             'web_evidence_contract_binding': copy.deepcopy(binding),
         },

@@ -479,5 +479,13 @@
     "taste_014_semantic_boundedness_preserved": true,
     "taste_015_coverage_sufficiency_preserved": true,
     "github_control_plane_ownership_preserved": true
+  },
+  "cross_stage_identity_compatibility": {
+    "canonical_contract": "config/dossier_deep_identity_compatibility_contract.json",
+    "decision": "PPD-011",
+    "dossier_release_year_semantics": "game_identity.release_year_is_original_or_work_release_year_identity_evidence",
+    "storefront_year_semantics": "not_a_dossier_hard_key_without_same_kind_canonical_field",
+    "cross_kind_year_equality_forbidden": true,
+    "historical_accepted_dossiers_require_rewrite": false
   }
 }

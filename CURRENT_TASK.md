@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## IN PROGRESS — Dossier / Deep release-year identity compatibility fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_DOSSIER_DEEP_RELEASE_YEAR_IDENTITY_COMPATIBILITY_FIX_01.md`;
+- branch: `fix/dossier-deep-release-year-compatibility-01`;
+- accepted root cause: 8 current/fresh exact-product Dossiers are falsely rejected because Deep compares Dossier original/work year with Steam/storefront release year;
+- scope: contract-first shared identity compatibility repair, regressions, normal GitHub-owned eligibility recomputation and publication validation;
+- preserve: exact AppID/title/product/edition protection, stale/binding fail-closed behavior, independent PPD-010 migration, concurrent Dossier production, Scheduled Task configuration;
+- forbidden: manual Deep processing of the 8 AppIDs, Dossier rebuild workaround, migration rewrite, scheduler/queue/retry changes.
+
 ## COMPLETE — Deep legacy full reanalysis with preserved positives 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md`;

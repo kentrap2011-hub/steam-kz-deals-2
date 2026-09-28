@@ -387,6 +387,17 @@ def release_year_from_semantic_input(semantic_input):
     return int(match.group(1)) if match else None
 
 
+def _cross_stage_release_year_compatible(dossier_release_year, semantic_input):
+    if not isinstance(dossier_release_year, int) or isinstance(dossier_release_year, bool):
+        return False
+    if not 1900 <= dossier_release_year <= 2200:
+        return False
+    # PPD-011: Dossier release_year is original/work identity evidence, while
+    # semantic_input release_year/release_date is Steam/storefront context.
+    # Cross-kind equality is therefore not a hard compatibility key.
+    release_year_from_semantic_input(semantic_input)
+    return True
+
 def _identity_matches_binding(entry, binding):
     if not isinstance(entry, dict) or not isinstance(binding, dict):
         return False
@@ -624,11 +635,39 @@ def dossier_is_eligible(
     if not isinstance(identity, dict) or identity.get('resolution_status') != 'resolved':
         return False, 'dossier_identity_unresolved_or_ambiguous'
     title = semantic_input.get('title')
-    if not isinstance(title, str) or identity.get('work_title') != title:
+    if (
+        not isinstance(title, str)
+        or dossier.get('title') != title
+        or identity.get('work_title') != title
+    ):
         return False, 'dossier_wrong_work_title'
-    release_year = release_year_from_semantic_input(semantic_input)
-    if release_year is not None and identity.get('release_year') != release_year:
-        return False, 'dossier_wrong_release_year'
+    corroborators = identity.get('corroborators')
+    if not isinstance(corroborators, list) or not any(
+        isinstance(item, dict)
+        and item.get('kind') == 'appid'
+        and str(item.get('value') or '') == str(binding.get('appid') or '')
+        for item in corroborators
+    ):
+        return False, 'dossier_identity_missing_exact_appid_corroborator'
+    identity_source_ids = identity.get('identity_source_ids')
+    sources = ((dossier.get('provenance') or {}).get('sources') or [])
+    sources_by_id = {
+        item.get('source_id'): item
+        for item in sources
+        if isinstance(item, dict) and isinstance(item.get('source_id'), str)
+    }
+    if (
+        not isinstance(identity_source_ids, list)
+        or not identity_source_ids
+        or any(source_id not in sources_by_id for source_id in identity_source_ids)
+        or not any(
+            sources_by_id[source_id].get('evidence_role') == 'identity'
+            for source_id in identity_source_ids
+        )
+    ):
+        return False, 'dossier_identity_evidence_missing_or_incompatible'
+    if not _cross_stage_release_year_compatible(identity.get('release_year'), semantic_input):
+        return False, 'dossier_release_year_missing_or_invalid'
 
     binding_copy = dossier.get('web_evidence_contract_binding')
     if not isinstance(current_binding, dict) or binding_copy != current_binding:
