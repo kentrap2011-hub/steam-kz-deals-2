@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "06ec757a4eae872e5173977f8a0e4633562fb7ac",
+  "run_start_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+  "run_started_at_utc": "2026-09-28T16:43:36+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+  "work_id": "fef618d8434f1b4b0237f4857deadc6485494a25bce4bc451187694a50bf957d",
+  "family_id": "game:1238820",
+  "taste_subject_key": "App_1238820",
+  "appid": "1238820",
+  "taste_fingerprint": "50cda4e2b69eae8ae928349e7dadd627232fc272329d6a6ceb9d8d3fea2d1214",
+  "candidate_context_sha256": "5b86ae5ff187bf6fcd5f4e018dfc46d924b2f674690fe8cc8f628872ce3109ee",
+  "dossier_content_sha256": "476b8d7280f1ecefbd890c01ff51d4b6f48eedf82c2080e352351dc131df0cec",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "05cb013858bbee82f246334ce9610b3f3fa2f943178d0eda390fef4938d99f70",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Large-scale multiplayer, weapon feel and sound remain recurring strengths, giving the game a durable active-combat hook instead of relying only on nostalgia.",
+    "Class, weapon and attachment unlocks provide clear long-term goals and visible progression, which matches the profile's preference for understandable development."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 74,
+    "development_variety": 68,
+    "structure_pacing_direction": 58,
+    "identity_hooks": 67,
+    "breadth_of_match": 70
+  },
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Кампания воспринимается неровно: постановка и звук всё ещё работают, но сюжет и общая значимость истории для части игроков слабые. Для Battlefield это ограничение, а не решающий минус, потому что главный крючок остаётся в мультиплеере.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "felt_technical_burden",
+        "text_ru": "Текущий запуск на ПК может требовать EA App, Battlelog в браузере и дополнительных разрешений или обходных действий. Такая внешняя техническая возня способна заметно мешать возвращаться к игре после недельных перерывов.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Есть отдельная жалоба на невозможность подключиться к другу в кооперативе, но распространённость проблемы не подтверждена.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Полное открытие всего оружия и модулей может растянуться надолго, хотя базовая прогрессия по классам и оружию остаётся понятной и даёт конкретные цели.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      }
+    ]
+  }
+}
