@@ -364,7 +364,23 @@
     "rule": "Deep may make a non-authoritative current-main preflight only to avoid needless starts, then creates one create-only V2 run-start marker that carries no worker-chosen authority. The marker commit's actual Git parent is the exact GitHub-selected invocation authority. Deep reads/freezes the PASS 2 contract/work, ordered work/Dossier/recovery/profile inputs and exact Git blob identities only from that immutable parent. Semantic computation may then proceed provisionally while GitHub confirms the same marker parent, exact contract/work blobs and trusted marker commit time. Repository writes after the marker boundary belong only to the next invocation and do not retroactively invalidate or substitute into the frozen run; repository writes that win before the marker simply become part of the marker parent and therefore the invocation's frozen view.",
     "reusable_wiring_preserved": true,
     "old_recovery_only_predicate_superseded": true,
-    "runtime_predicate_adaptation_required": false
+    "runtime_predicate_adaptation_required": false,
+    "identity_compatibility": {
+      "canonical_contract": "config/dossier_deep_identity_compatibility_contract.json",
+      "decision": "PPD-011",
+      "hard_keys": [
+        "exact_appid",
+        "exact_prepared_title_work_identity",
+        "resolved_dossier_identity",
+        "current_dossier_web_evidence_contract_binding",
+        "current_nonexpired_dossier"
+      ],
+      "dossier_release_year_semantics": "original_or_work_release_year_identity_evidence",
+      "semantic_input_release_year_semantics": "steam_storefront_release_date_year",
+      "cross_kind_year_equality_required": false,
+      "cross_kind_year_mismatch_may_be_sole_rejection_reason": false,
+      "same_kind_year_hard_gate_only": true
+    }
   },
   "activation_guard": {
     "pass2_active": true,
