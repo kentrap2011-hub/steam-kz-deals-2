@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- No worker task is currently assigned/in progress at the top-level Director state.
+- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md` (`ONE-OFF MIGRATION / CONTRACT-FIRST IMPLEMENT / ORCHESTRATE / VALIDATE`).
 - Latest accepted implementation: `WORKER_TASK_DEEP_BALANCED_NEGATIVE_ASSESSMENT_CONTRACT_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -11,6 +11,38 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 1 — Full reanalysis of legacy Deep results
+
+Task:
+`WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md`
+
+Mode:
+`ONE-OFF MIGRATION / CONTRACT-FIRST IMPLEMENT / ORCHESTRATE / VALIDATE`
+
+Goal:
+- re-evaluate every current authoritative old-contract Deep result that still has `legacy_not_evaluated`;
+- reuse already accepted positive evidence instead of researching positives again;
+- evaluate frozen Dossier negative/mixed evidence and make a new full Deep judgment;
+- allow fit/not-fit, fit level, confidence, taste factors, risks/cautions and ranking to change when evidence supports it;
+- retain the old Deep result as history while the accepted migration revision becomes current authority.
+
+Dossier parallelism:
+- Dossier remains active and independent;
+- migration freezes exact Dossier/profile evidence at GitHub-selected run-start authority;
+- later Dossier writes do not alter the in-flight migration.
+
+Execution boundary:
+- worker chat implements/orchestrates only;
+- actual per-game semantics must be executed by the existing canonical Progressive Deep Worker;
+- no Scheduled Task settings may be changed.
+
+Report:
+`reviews/worker_reports/deep-legacy-full-reanalysis-with-preserved-positives-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 1`.
 
 
 ## ACCEPTED — ЧАТ 2 — Deep balanced negative assessment contract fix
