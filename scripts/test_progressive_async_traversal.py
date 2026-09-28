@@ -62,12 +62,18 @@ def deep_fixture():
         'schema': 'TASTE-STEAM-REVIEW-DOSSIER-V2',
         'schema_version': 2,
         'appid': '1',
+        'title': 'Game 1',
         'generated_at_utc': '2026-09-23T00:00:00Z',
         'expires_at_utc': '2026-10-01T00:00:00Z',
         'game_identity': {
             'work_title': 'Game 1',
             'release_year': 2026,
             'resolution_status': 'resolved',
+            'identity_source_ids': ['source-001'],
+            'corroborators': [{'kind': 'appid', 'value': '1'}],
+        },
+        'provenance': {
+            'sources': [{'source_id': 'source-001', 'evidence_role': 'identity'}],
         },
         'web_evidence_contract_binding': copy.deepcopy(current_binding),
     }
