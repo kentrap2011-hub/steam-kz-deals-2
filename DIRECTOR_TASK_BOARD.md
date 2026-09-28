@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- No worker task is currently assigned/in progress at the top-level Director state.
+- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md` (`CONTRACT-FIRST IMPLEMENT / RECONCILE / VALIDATE`).
 - Latest accepted implementation: `WORKER_TASK_DOSSIER_DEEP_RELEASE_YEAR_IDENTITY_COMPATIBILITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -11,6 +11,37 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 1 — Progressive profile semantic identity stability fix
+
+Task:
+`WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md`
+
+Mode:
+`CONTRACT-FIRST IMPLEMENT / RECONCILE / VALIDATE`
+
+Goal:
+- separate semantic profile identity from exact execution provenance;
+- prevent commit-only provenance refresh with byte-identical profile content from resetting the Progressive semantic generation;
+- keep real profile/model/semantics/context changes invalidating as before;
+- safely make semantically equivalent durable Deep/Fast results current again without new semantic execution;
+- restore the completed PPD-010 30-game migration results to current authority when exact semantic equivalence is proven;
+- prevent those 30 from being re-emitted as ordinary Deep work.
+
+Constraints:
+- do not rerun the 30 migration targets;
+- do not manually run Deep/Fast/Dossier;
+- do not rewrite original accepted result provenance;
+- preserve strict run-start/work/result provenance binding;
+- preserve PPD-010 migration history and PPD-011 release-year fix;
+- no Scheduled Task changes.
+
+Report:
+`reviews/worker_reports/progressive-profile-semantic-identity-stability-fix-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 1`.
 
 
 ## ACCEPTED — ЧАТ 2 — Deep migration results not reflected on site diagnostic
