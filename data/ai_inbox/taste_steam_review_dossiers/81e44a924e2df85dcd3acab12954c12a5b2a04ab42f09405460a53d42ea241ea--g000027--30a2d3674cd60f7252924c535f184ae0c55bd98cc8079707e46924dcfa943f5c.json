@@ -1,0 +1,1073 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea",
+  "prepared_required_sha256": "57e02f7543afd1521b14470dddc6b2693de180b77a845c70d4357a3db7780863",
+  "group_plan_sha256": "770a1f142f96b7df3f2145a509218e7630e44f302177d475f8e662d4347c7eb5",
+  "group_count": 140,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 27,
+  "start_index": 78,
+  "end_index_exclusive": 81,
+  "appids": [
+    "13520",
+    "13530",
+    "1353270"
+  ],
+  "items_sha256": "37f596233f40d2bd067121ef853c01d599e0fc18ce1ec49c6d812822310b1acb",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "58dfd460185e5e2b3497291d0ec964758cb623374ff30fa57dcb48eff0b406ea",
+  "items": [
+    {
+      "key": "App_13520",
+      "appid": "13520",
+      "title": "Far Cry®",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_13520.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_13530",
+      "appid": "13530",
+      "title": "Prince of Persia: The Two Thrones™",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_13530.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1353270",
+      "appid": "1353270",
+      "title": "Five Dates",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1353270.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "30a2d3674cd60f7252924c535f184ae0c55bd98cc8079707e46924dcfa943f5c",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "13520",
+      "title": "Far Cry®",
+      "generated_at_utc": "2026-09-28T05:36:11Z",
+      "expires_at_utc": "2026-10-18T05:36:11Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Far Cry®",
+        "release_year": 2004,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "13520"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Players describe satisfying gunplay and broad combat spaces that permit multiple tactical approaches.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Enemy detection, accuracy and late-game difficulty are repeatedly described as unusually punishing and sometimes unfair.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "Checkpointing and repeated deaths can force replay of difficult encounters, adding substantial friction.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        },
+        {
+          "category": "technical_performance_localization_regional",
+          "statement": "Current Russian community activity reports Windows 10 launch trouble and community fixes; the Steam release itself lacks Russian language support.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Large outdoor levels and encounter layouts reward scouting, stealth and choosing routes rather than only direct firefights.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "story",
+          "statement": "Player feedback treats the story and presentation as campy or dated, while the tropical atmosphere remains a recurring strength.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                4,
+                5
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/13520/Far_Cry/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/farcry/comments/1ftk097/",
+            "publication_date": "2024-10-01",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "13520",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/patientgamers/comments/1p9aqw4/far_cry_2004_review_surprisingly_wellaged/",
+            "publication_date": "2025-11-29",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Far Cry®",
+              "release_year": 2004
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/13520/",
+            "publication_date": "2026-07-18",
+            "language": "russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "13520",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2024-10-01",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-003",
+            "publication_date": "2025-11-29",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-004",
+            "publication_date": "2026-07-18",
+            "language": "russian",
+            "acquisition_mode": "search_result_observation"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "13530",
+      "title": "Prince of Persia: The Two Thrones™",
+      "generated_at_utc": "2026-09-28T05:36:11Z",
+      "expires_at_utc": "2026-10-18T05:36:11Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Prince of Persia: The Two Thrones™",
+        "release_year": 2005,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "13530"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 6 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The game blends acrobatic platforming, combat and stealth/speed-kill sequences, with the Dark Prince adding a distinct combat rhythm.",
+          "sentiment": "positive",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "controls_game_feel",
+          "statement": "Camera changes, inconsistent movement/input and targeting are recurring sources of frustration, especially during platforming and fights.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Specific boss encounters and chained challenge sections can create sharp frustration spikes and repeated retries.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "technical_performance_localization_regional",
+          "statement": "Modern-PC players report physics and traversal glitches; a current Russian-language community report specifically describes a chain-descent blocker after the second Dark Prince transformation.",
+          "sentiment": "negative",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian",
+            "russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "story",
+          "statement": "Players disagree on the trilogy conclusion: some value the Prince's character arc while others find parts rushed or less satisfying than Warrior Within.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "Forced or repeated platforming/combat sections and checkpoint placement can make failures costly, while successful traversal maintains a brisk action flow.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                5
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                5
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                4
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                4
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2,
+                3,
+                5
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/13530/Prince_of_Persia_The_Two_Thrones/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/13530/discussions/0/591762230004954506/",
+            "publication_date": "2025-02-03",
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "13530",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/13530/discussions/0/3109144584154700784/",
+            "publication_date": "2021-03-04",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "13530",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/13530/",
+            "publication_date": "2026-08-24",
+            "language": "russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "13530",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/13530/discussions/0/600782230528223533/",
+            "publication_date": "2025-07-23",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "13530",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2025-02-03",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-003",
+            "publication_date": "2021-03-04",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-004",
+            "publication_date": "2026-08-24",
+            "language": "russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-005",
+            "publication_date": "2025-07-23",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1353270",
+      "title": "Five Dates",
+      "generated_at_utc": "2026-09-28T05:36:11Z",
+      "expires_at_utc": "2026-10-18T05:36:11Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Five Dates",
+        "release_year": 2020,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1353270"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 5 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The central interaction is choosing dialogue responses in live-action video calls; mechanical complexity beyond conversation choices is limited.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        },
+        {
+          "category": "story",
+          "statement": "Acting and conversational writing are commonly described as natural, engaging and effective at selling the awkwardness of online dating.",
+          "sentiment": "positive",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        },
+        {
+          "category": "structure",
+          "statement": "Multiple potential dates, branching choices and endings provide replay value, although a single route is short.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        },
+        {
+          "category": "pacing",
+          "statement": "A playthrough is brief and focused, which some players enjoy as a compact experience but can make endings feel abrupt.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "Replaying routes to see alternate outcomes is a core source of longevity, but much of the experience remains repeated FMV conversation material.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "searched_no_existence_signal",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                4
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                3,
+                4
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "steampulse.org",
+            "url": "https://steampulse.org/game/1353270",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "other_player_feedback",
+            "domain": "gamebrain.co",
+            "url": "https://gamebrain.co/game/five-dates",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1353270",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "reddit",
+            "domain": "reddit.com",
+            "url": "https://www.reddit.com/r/Trophies/comments/yls6co/",
+            "publication_date": "2022-11-04",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Five Dates",
+              "release_year": 2020
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1353270/",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1353270",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-003",
+            "publication_date": "2022-11-04",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          }
+        ]
+      }
+    }
+  ]
+}
