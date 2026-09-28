@@ -126,6 +126,10 @@ def migration_provenance(manifest, target):
         'migration_authority_commit': manifest['migration_authority_commit'],
         'migration_frozen_at_utc': manifest['migration_frozen_at_utc'],
         'prior_outcome': prior.get('outcome'),
+        'prior_fit_level': prior.get('fit_level'),
+        'prior_confidence': prior.get('confidence'),
+        'prior_taste_factors': deepcopy(prior.get('taste_factors')),
+        'prior_not_fit_basis': prior.get('not_fit_basis'),
         'prior_work_id': target.get('work_id'),
         'prior_authorization_id': prior.get('authorization_id'),
         'prior_accepted_at_utc': prior.get('accepted_at_utc'),
@@ -1112,6 +1116,8 @@ def _identity_matches(doc, work_item, contract_name):
         return False
     if doc.get('recovery_condition_binding') != work_item.get('recovery_condition_binding'):
         return False
+    if doc.get('migration_provenance') != work_item.get('migration_provenance'):
+        return False
     run_anchor = work_item.get('_run_start_anchor_commit')
     if run_anchor is not None and doc.get('run_start_anchor_commit') != run_anchor:
         return False
@@ -1134,6 +1140,7 @@ def _attempt_base(work_item, outcome, accepted_at_utc, source):
         'recovery_authorization_id': work_item.get('recovery_authorization_id'),
         'recovery_reason': work_item.get('recovery_reason'),
         'recovery_condition_binding': deepcopy(work_item.get('recovery_condition_binding')),
+        'migration_provenance': deepcopy(work_item.get('migration_provenance')),
         'outcome': outcome,
         'analysis_issue_code': None,
         'attempt_consumption_source': source,
