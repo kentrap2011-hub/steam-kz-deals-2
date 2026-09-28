@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 38,
     "deep_completed_not_fit_count": 6,
     "deep_incomplete_or_recovery_count": 10,
-    "deep_waiting_for_dossier_count": 340,
-    "deep_ready_or_pending_count": 5,
+    "deep_waiting_for_dossier_count": 338,
+    "deep_ready_or_pending_count": 7,
     "deep_normal_first_pass_remaining_count": 345,
     "deep_remaining_until_all_authoritative_count": 355,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 3,
-    "dossier_waiting_count": 340,
+    "dossier_waiting_count": 338,
     "pass2_attempted_count": 54,
-    "pass2_eligible_count": 5,
-    "normal_pass2_eligible_count": 5,
+    "pass2_eligible_count": 7,
+    "normal_pass2_eligible_count": 7,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "legacy_full_reanalysis": {
       "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
@@ -155,6 +155,123 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1225560",
+      "taste_subject_key": "App_1225560",
+      "appid": "1225560",
+      "taste_fingerprint": "73df5c5ef77ef3eaef9c024ef021d1d15379c9415cdaae18070e6e1925488407",
+      "candidate_context_sha256": "4301906d22a49fcfec9f8d85f511579885ec17448178399739ee7830391ba922",
+      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+      "work_id": "a61ef02ee20131f134b8cec0b93c38e9ca9c5753f87e116b33770e20e0c024af",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Unravel",
+        "short_description": "Unravel is a physics-based puzzle platformer. Yarny, a character made from a single thread of yarn, must embark on a larger than life adventure.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure",
+          "Singleplayer"
+        ],
+        "core_fit_count": 0,
+        "release_date": "4 Jun, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1225560"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1225560.json",
+      "dossier_content_sha256": "1be6d2742a07fa98931a1907a6c59b6312b8ef459d992faf8700638ee7bc7f49",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-18T18:26:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "f1388dbe319e95a0d6c76d4bc1d8afb0d6f6bf61da3aafbb4214390dc53fca02",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a61ef02ee20131f134b8cec0b93c38e9ca9c5753f87e116b33770e20e0c024af--f1388dbe319e95a0d6c76d4bc1d8afb0d6f6bf61da3aafbb4214390dc53fca02.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a61ef02ee20131f134b8cec0b93c38e9ca9c5753f87e116b33770e20e0c024af--f1388dbe319e95a0d6c76d4bc1d8afb0d6f6bf61da3aafbb4214390dc53fca02.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1225570",
+      "taste_subject_key": "App_1225570",
+      "appid": "1225570",
+      "taste_fingerprint": "a74b19128c8c93ab2f1d290a0763caaf69aed8b1fd395329e5e39c74db4364d5",
+      "candidate_context_sha256": "d4803ee7f6c26d15938d5cf2802c6eb65736ef6e4cd498e55cb53cd6ab590398",
+      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+      "work_id": "839423beee09d992b994e3a33b1459bb378d106f818b5a1abcc09fbaf1eb893a",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Unravel Two",
+        "short_description": "When you cut ties to the past, new bonds form. Build relationships with other Yarnys in local co-op or as a single player, fostering friendship and support as you journey together.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure"
+        ],
+        "core_fit_count": 0,
+        "release_date": "4 Jun, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1225570"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1225570.json",
+      "dossier_content_sha256": "5fd238dbda10f26d06c05ec3c968ad50147e1726c89b95f1fc47a6782a8dd6d9",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-18T18:26:00Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "d68813858895ecc9b0c6905d20308181a7caf561ef12ed3384efd676ec88c1ff",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--839423beee09d992b994e3a33b1459bb378d106f818b5a1abcc09fbaf1eb893a--d68813858895ecc9b0c6905d20308181a7caf561ef12ed3384efd676ec88c1ff.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--839423beee09d992b994e3a33b1459bb378d106f818b5a1abcc09fbaf1eb893a--d68813858895ecc9b0c6905d20308181a7caf561ef12ed3384efd676ec88c1ff.json",
+      "sequence": 3
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1196630",
       "taste_subject_key": "App_1196630",
       "appid": "1196630",
@@ -208,7 +325,7 @@
       "authorization_id": "db7bbddff694a0a8d5d8ff135c7bee11946ad33bcd2dfb4e5b4dfe5ed2e1970d",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--49171339d9100b3a7beb50fc9e522a61b9963ab5527e17fe7bf0aea9144731a9--db7bbddff694a0a8d5d8ff135c7bee11946ad33bcd2dfb4e5b4dfe5ed2e1970d.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--49171339d9100b3a7beb50fc9e522a61b9963ab5527e17fe7bf0aea9144731a9--db7bbddff694a0a8d5d8ff135c7bee11946ad33bcd2dfb4e5b4dfe5ed2e1970d.json",
-      "sequence": 2
+      "sequence": 4
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -267,7 +384,7 @@
       "authorization_id": "c406fe2d29e0e59ce5db1488b9befc36d48b1607fc84dfe49206cd612c8607a7",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--b590878a707a25d2c670669657abe0fc845c1e4b491ec86e01d1e8f9e671824c--c406fe2d29e0e59ce5db1488b9befc36d48b1607fc84dfe49206cd612c8607a7.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--b590878a707a25d2c670669657abe0fc845c1e4b491ec86e01d1e8f9e671824c--c406fe2d29e0e59ce5db1488b9befc36d48b1607fc84dfe49206cd612c8607a7.json",
-      "sequence": 3
+      "sequence": 5
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -322,7 +439,7 @@
       "authorization_id": "f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9--f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9--f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443.json",
-      "sequence": 4
+      "sequence": 6
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -379,7 +496,7 @@
       "authorization_id": "d7734f0975991cba39a60789967a6bab7eeec529b1fc976c16cc01efcbfbf5e4",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--cb456a023fd73007cd7cb7dc8ad9f3e509d2016b9db7b07df178340e98144b46--d7734f0975991cba39a60789967a6bab7eeec529b1fc976c16cc01efcbfbf5e4.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--cb456a023fd73007cd7cb7dc8ad9f3e509d2016b9db7b07df178340e98144b46--d7734f0975991cba39a60789967a6bab7eeec529b1fc976c16cc01efcbfbf5e4.json",
-      "sequence": 5
+      "sequence": 7
     }
   ]
 }
