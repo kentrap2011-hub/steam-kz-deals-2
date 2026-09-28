@@ -67,110 +67,31 @@
     "current_analysis_incomplete_count": 0,
     "dossier_waiting_count": 361,
     "pass2_attempted_count": 0,
-    "pass2_eligible_count": 20,
+    "pass2_eligible_count": 19,
     "normal_pass2_eligible_count": 38,
     "deep_normal_work_paused_for_legacy_reanalysis": true,
     "legacy_full_reanalysis": {
       "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
       "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
       "total_count": 30,
-      "pending_count": 20,
+      "pending_count": 19,
       "submitted_count": 0,
-      "accepted_count": 10,
-      "accepted_completed_count": 10,
-      "changed_result_count": 10,
+      "accepted_count": 11,
+      "accepted_completed_count": 11,
+      "changed_result_count": 11,
       "unchanged_result_count": 0,
       "changed_fit_outcome_count": 0,
-      "unchanged_fit_outcome_count": 10,
+      "unchanged_fit_outcome_count": 11,
       "incomplete_count": 0,
-      "confirmed_risk_count": 9,
+      "confirmed_risk_count": 10,
       "caution_count": 1,
       "completed_no_relevant_negative_count": 0,
       "stale_or_missing_prior_count": 0,
-      "last_accepted_at_utc": "2026-09-28T10:24:28+00:00",
+      "last_accepted_at_utc": "2026-09-28T10:25:02+00:00",
       "complete": false
     }
   },
   "items": [
-    {
-      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
-      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
-      "work_id": "eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d",
-      "family_id": "game:1149620",
-      "taste_subject_key": "App_1149620",
-      "appid": "1149620",
-      "taste_fingerprint": "ad8e836c12ad34e093f292af1c80dd514b9032c3cf7ca0655ca990222cefb734",
-      "candidate_context_sha256": "8ad2328069277eb0fde3302206a6bd4dd10e40785a18ee61bc37e872aace4a24",
-      "work_mode": "legacy_full_reanalysis",
-      "migration_sequence": 11,
-      "semantic_input": {
-        "title": "Gas Station Simulator",
-        "short_description": "Buy an abandoned gas station and restore it to its full glory. Renovate, upgrade and expand upon the offered services to keep up with your clients demands.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Singleplayer"
-        ],
-        "core_fit_count": 0,
-        "release_date": "15 Sep, 2021",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1149620"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1149620.json",
-      "dossier_content_sha256": "cb035418ba64c2d43385bb54adddb8ca7724242ecc2502b66a01204b28caafcf",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-17T12:47:47Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "migration_provenance": {
-        "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
-        "migration_target_id": "legacy-full-reanalysis-01:eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d",
-        "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
-        "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
-          "gameplay_mastery": 58,
-          "development_variety": 63,
-          "structure_pacing_direction": 54,
-          "identity_hooks": 57,
-          "breadth_of_match": 56
-        },
-        "prior_not_fit_basis": null,
-        "prior_work_id": "eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d",
-        "prior_authorization_id": "2f43d4d072086babed631c5c42df3064e6a4a12a27f443fc53a49bc1ff31b382",
-        "prior_accepted_at_utc": "2026-09-27T17:23:19+00:00",
-        "preserved_positive_evidence": [
-          "The management loop starts with several distinct hands-on activities and expands through fueling, retail, cleaning, repairs and stocking instead of exposing one task immediately.",
-          "Station upgrades and employees meaningfully alter which jobs must be handled directly, giving early and middle progression visible effects that match the profile's preference for evolving systems."
-        ],
-        "preserved_not_fit_evidence": []
-      },
-      "authorization_id": "b8c647d4fe8e627d002495542ab1034a5fa948c57d79e64bf07596c4cb38053a",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d--b8c647d4fe8e627d002495542ab1034a5fa948c57d79e64bf07596c4cb38053a.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--eca377b07ab9603ed46ecee51ea47bd36fd96e0fd382ac9bf880fc36a7b7202d--b8c647d4fe8e627d002495542ab1034a5fa948c57d79e64bf07596c4cb38053a.json",
-      "sequence": 1
-    },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
       "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
@@ -249,7 +170,7 @@
       "authorization_id": "1325055472a8e2beecb0ecbc97e33d20a4f1ba0c5d77bad0aa2763cac66ff353",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262--1325055472a8e2beecb0ecbc97e33d20a4f1ba0c5d77bad0aa2763cac66ff353.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--47087dfb3f06954324decfd81abbb46ad7196678aefa4994ce8dba0f93cc6262--1325055472a8e2beecb0ecbc97e33d20a4f1ba0c5d77bad0aa2763cac66ff353.json",
-      "sequence": 2
+      "sequence": 1
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -325,7 +246,7 @@
       "authorization_id": "caf94ab22efac3f2281be146e31205d4de103eb0f3e9f61b743b730f55417bd0",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--0b958c513e04e9fb10b5f4871995d2dd6932734d7ae0503c3218e97910ba6dec--caf94ab22efac3f2281be146e31205d4de103eb0f3e9f61b743b730f55417bd0.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--0b958c513e04e9fb10b5f4871995d2dd6932734d7ae0503c3218e97910ba6dec--caf94ab22efac3f2281be146e31205d4de103eb0f3e9f61b743b730f55417bd0.json",
-      "sequence": 3
+      "sequence": 2
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -402,7 +323,7 @@
       "authorization_id": "6c4d62c8a22d593cbd5fce2116d9971bca07fe9708d42ebe7d9f639c3f9faed1",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045--6c4d62c8a22d593cbd5fce2116d9971bca07fe9708d42ebe7d9f639c3f9faed1.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--a05b5eb5168cd1dcbe1457d4241afc57b3a111d2a55e217b4a8606147b95f045--6c4d62c8a22d593cbd5fce2116d9971bca07fe9708d42ebe7d9f639c3f9faed1.json",
-      "sequence": 4
+      "sequence": 3
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -482,7 +403,7 @@
       "authorization_id": "e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011--e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--0d70f44214e58e922c0e749a9056d7ec79a6a6f57e31500ead8678405987d011--e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed.json",
-      "sequence": 5
+      "sequence": 4
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -564,7 +485,7 @@
       "authorization_id": "be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574--be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--6d09747bb216bf0e1bad9bc3c81f5cb429ddf577294835b4b083f0da015bf574--be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45.json",
-      "sequence": 6
+      "sequence": 5
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -644,7 +565,7 @@
       "authorization_id": "a351d118d29dac0c6d5d96f2ce37b8e75fccb949f1cc67edfff579d207a3cfb4",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--ebc164fb27a0eea0dd6dbb84851454b2cab6b905c656e5993ac19050506ca8c9--a351d118d29dac0c6d5d96f2ce37b8e75fccb949f1cc67edfff579d207a3cfb4.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--ebc164fb27a0eea0dd6dbb84851454b2cab6b905c656e5993ac19050506ca8c9--a351d118d29dac0c6d5d96f2ce37b8e75fccb949f1cc67edfff579d207a3cfb4.json",
-      "sequence": 7
+      "sequence": 6
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -724,7 +645,7 @@
       "authorization_id": "f841362b7bb764941d9a6d78525503f2ce46e7d2797b81f00006e5d042dc621e",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--a3d7c56a32b38599ded8945bc3eed3efab6ea9bd4bba37690ae3eb4214e3092d--f841362b7bb764941d9a6d78525503f2ce46e7d2797b81f00006e5d042dc621e.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--a3d7c56a32b38599ded8945bc3eed3efab6ea9bd4bba37690ae3eb4214e3092d--f841362b7bb764941d9a6d78525503f2ce46e7d2797b81f00006e5d042dc621e.json",
-      "sequence": 8
+      "sequence": 7
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -803,7 +724,7 @@
       "authorization_id": "df4064cd926d420fccc6d0510d9a4265b1c3672b40dce1ddef6e9e37b57b0166",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--27f199575627289df9429352e2806c96af66ec6634568c71a4f929ce4b6fc59a--df4064cd926d420fccc6d0510d9a4265b1c3672b40dce1ddef6e9e37b57b0166.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--27f199575627289df9429352e2806c96af66ec6634568c71a4f929ce4b6fc59a--df4064cd926d420fccc6d0510d9a4265b1c3672b40dce1ddef6e9e37b57b0166.json",
-      "sequence": 9
+      "sequence": 8
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -881,7 +802,7 @@
       "authorization_id": "1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9--1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--6d55692931dc2e8c5f03b8e0bb0d757872d9596d34f7438ea8b560f41c2984b9--1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf.json",
-      "sequence": 10
+      "sequence": 9
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -958,7 +879,7 @@
       "authorization_id": "b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac--b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--9661e497021c9be492937258923665ff76c07cc2bb40b3885aed9db2fbeff2ac--b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44.json",
-      "sequence": 11
+      "sequence": 10
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1039,7 +960,7 @@
       "authorization_id": "c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9--c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--8aa8867c5bc8d936fb48c9286d175a7bf963e41e678571b4fc30816e7fead4b9--c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b.json",
-      "sequence": 12
+      "sequence": 11
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1116,7 +1037,7 @@
       "authorization_id": "71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647--71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--8306b2703cf86581c5a42108782b22f61039d7e1fef020e64b7a55ec8cf9c647--71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8.json",
-      "sequence": 13
+      "sequence": 12
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1198,7 +1119,7 @@
       "authorization_id": "9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b--9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--0ea17f28b7bfa56c8d63131fd1a19dd0fed4bb254b1b2af9bc5e802f19b6aa5b--9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8.json",
-      "sequence": 14
+      "sequence": 13
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1272,7 +1193,7 @@
       "authorization_id": "355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89--355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--cb5fb52d52a9584a5728b6413b473f29370995167843c2d166d4b14965503a89--355975e86d018c14d0d785e0b237b509928d770c744232817872044b3673cec6.json",
-      "sequence": 15
+      "sequence": 14
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1346,7 +1267,7 @@
       "authorization_id": "6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c--6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--66ff02369ce972097377be35548b4ec85a8488f2718bdced097953a1d2b1769c--6e5baaea1aa11c0e508589a6c2fbfbcf520ebe1ee719918200e98b6eab31fe22.json",
-      "sequence": 16
+      "sequence": 15
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1430,7 +1351,7 @@
       "authorization_id": "cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5--cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5--cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6.json",
-      "sequence": 17
+      "sequence": 16
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1512,7 +1433,7 @@
       "authorization_id": "d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea--d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea--d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e.json",
-      "sequence": 18
+      "sequence": 17
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1595,7 +1516,7 @@
       "authorization_id": "d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693--d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693--d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274.json",
-      "sequence": 19
+      "sequence": 18
     },
     {
       "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
@@ -1680,7 +1601,7 @@
       "authorization_id": "187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/4596b03979956f78--cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995--187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/4596b03979956f78--cb15c4d494abc70f9780ce03f9cf9b6efb2bb9c0329a6c91a8942f6c2ce0c995--187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc.json",
-      "sequence": 20
+      "sequence": 19
     }
   ]
 }
