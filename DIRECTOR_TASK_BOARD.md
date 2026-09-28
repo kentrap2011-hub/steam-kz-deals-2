@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_KOF_XV_HIGH_PRIORITY_WITHOUT_DEEP_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
+- No worker task is currently assigned/in progress at the top-level Director state.
 - Active worker assignment: `ЧАТ 2` — `WORKER_TASK_ATELIER_ESCHA_LOGY_DEEP_WITHOUT_POSITIVE_REASON_DIAGNOSTIC_01.md` (`READ-ONLY / RECON`).
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_PROFILE_SEMANTIC_IDENTITY_STABILITY_FIX_01.md`.
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -41,31 +41,36 @@ Worker state:
 - use a NEW physical worker conversation in slot `ЧАТ 2`.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — KOF XV high priority without Deep diagnostic
+## ACCEPTED — ЧАТ 1 — KOF XV high priority without Deep diagnostic
 
 Task:
 `WORKER_TASK_KOF_XV_HIGH_PRIORITY_WITHOUT_DEEP_DIAGNOSTIC_01.md`
 
-Mode:
-`READ-ONLY / RECON`
-
-Goal:
-- explain exactly why THE KING OF FIGHTERS XV is current priority #2 while its card shows no completed detailed Deep analysis;
-- trace current semantic source, exact ranking inputs, commercial/urgency/show-history effects and any fallback behavior;
-- determine whether this is intentional ranking semantics, misleading presentation, or a defect.
-
-Scope:
-- read-only only;
-- no Fast/Dossier/Deep execution;
-- no ranking/state/card changes;
-- no rebuild/deploy;
-- no Scheduled Task changes.
-
 Report:
 `reviews/worker_reports/kof-xv-high-priority-without-deep-diagnostic-01.md`
 
-Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`.
+Final status:
+`complete`
+
+Director acceptance:
+- diagnosis accepted against the deployed 391-item snapshot `d6d1b6a0ca15a243459b4007df6edaccfb78e39a`;
+- THE KING OF FIGHTERS XV (AppID 1498570) was not unanalyzed: it had a completed current Fast/PASS 1 `analyzed_fit` result;
+- Dossier was missing and Deep had not been attempted, so Deep correctly remained `waiting_for_dossier`;
+- effective personalized source was Fast, not Deep or stale cache;
+- Fast contributed a real personal score of 45/60 and the commercial/deal component contributed 23/40, total 68/100;
+- in the default local feed, analyzed-fit cards are sorted by total score, so 68 points placed KOF XV second in that exact 391-item snapshot;
+- canonical producer-owned urgency-aware `priority_rank` for the same game was 12, not 2;
+- the large UI label `Приоритет: 2 из 391` actually represented local feed position, not canonical priority rank;
+- `Показ №13` is only browser-local display history and does not affect score/order;
+- there is no bonus for missing Deep or being unexplored;
+- missing Deep carries no numeric penalty while a trustworthy current Fast fit/not-fit result is effective;
+- no ranking defect was found; the defect is misleading UI wording/presentation;
+- no production state, ranking, Fast/Dossier/Deep state, workflows, deployment or Scheduled Tasks were changed.
+
+Decision:
+- diagnostic accepted and complete;
+- recommended bounded follow-up is UI-only: rename the large header to `Позиция в ленте: N из M` and optionally show canonical urgency-aware rank separately;
+- physical ЧАТ 1 is complete, retired, and can be deleted.
 
 
 ## ACCEPTED — ЧАТ 1 — Progressive profile semantic identity stability fix
