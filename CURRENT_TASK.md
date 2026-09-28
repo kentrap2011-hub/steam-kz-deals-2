@@ -1,5 +1,17 @@
 # CURRENT TASK
 
+## IN PROGRESS — Deep legacy full reanalysis with preserved positives 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_DEEP_LEGACY_FULL_REANALYSIS_WITH_PRESERVED_POSITIVES_01.md`;
+- worker slot: ЧАТ 1;
+- scope: one-off full reanalysis of current authoritative old-contract Deep results that still project `legacy_not_evaluated`;
+- preserved input: already accepted Deep positive evidence / old not-fit baseline; no new positive research;
+- semantic execution remains exclusively in the existing canonical Progressive Deep Worker;
+- Dossier continues independently; Scheduled Task configuration is unchanged;
+- implementation branch: `worker/deep-legacy-full-reanalysis-01`;
+- migration authority baseline before runtime changes: `main@97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a`;
+- architecture preflight: GitHub remains control plane; no second scheduler, queue, retry loop, or recovery reinterpretation is authorized.
+
 ## COMPLETE — Deep balanced negative assessment contract fix 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_DEEP_BALANCED_NEGATIVE_ASSESSMENT_CONTRACT_FIX_01.md`;
