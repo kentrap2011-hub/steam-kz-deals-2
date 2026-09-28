@@ -955,10 +955,7 @@ def legacy_reanalysis_work_and_metrics(state_doc, manifest=None):
         elif assessment.get('status') == 'completed':
             metrics['completed_no_relevant_negative_count'] += 1
     metrics['last_accepted_at_utc'] = max(accepted_times) if accepted_times else None
-    metrics['complete'] = (
-        metrics['accepted_count'] + metrics['stale_or_missing_prior_count']
-        == metrics['total_count']
-    )
+    metrics['complete'] = metrics['accepted_count'] == metrics['total_count']
     return work, metrics
 
 
@@ -1715,6 +1712,7 @@ def semantic_taste_entry(entry):
         'authorization_id': entry.get('authorization_id'),
         'accepted_at_utc': entry.get('accepted_at_utc'),
         'work_authority_commit': entry.get('work_authority_commit'),
+        'migration_provenance': deepcopy(entry.get('migration_provenance')),
     }
     negative = deep_negative_projection(entry)
     confirmed = [
