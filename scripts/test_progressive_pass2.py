@@ -154,7 +154,17 @@ def assert_persisted_projection_invariants(state_doc, scope, items):
     assert int(scope.get('deep_remaining_until_all_authoritative_count') or 0) == total - authoritative
     assert bool(scope.get('deep_normal_first_pass_complete')) == (attempted == total)
     assert bool(scope.get('deep_all_current_authoritative_complete')) == (authoritative == total)
-    assert ready == eligible == len(items)
+    migration = scope.get('legacy_full_reanalysis') or {}
+    migration_active = bool(scope.get('deep_normal_work_paused_for_legacy_reanalysis'))
+    normal_eligible = int(scope.get('normal_pass2_eligible_count', ready) or 0)
+    if migration_active:
+        assert normal_eligible == ready
+        assert eligible == len(items) == int(migration.get('pending_count') or 0)
+        assert all(item.get('work_mode') == progressive_pass2.LEGACY_REANALYSIS_MODE for item in items)
+        assert int(migration.get('total_count') or 0) >= eligible
+        assert migration.get('complete') is False
+    else:
+        assert ready == eligible == len(items)
     assert int(scope.get('recovery_pending_count') or 0) <= ready
 
 
