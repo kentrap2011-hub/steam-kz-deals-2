@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## IN PROGRESS — Russian translation nonblocking publication + Statistics 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md`;
+- mode: `IMPLEMENT / VALIDATE`;
+- scope: make explicit unresolved Russian descriptions nonblocking for visual publication, add GitHub-owned translation count/attempt/success observability, and render a dedicated Statistics block;
+- preserve concurrent ЧАТ 1 translation/cache/production writes; no Scheduled Task, Fast, Dossier, Deep, ranking, or expiry changes;
+- report: `reviews/worker_reports/russian-translation-nonblocking-publication-statistics-01.md`.
+
+
 ## BLOCKED — Russian description manual translation run 01
 Статус: `blocked`.
 - task: `WORKER_TASK_RUSSIAN_DESCRIPTION_MANUAL_TRANSLATION_RUN_01.md`;
