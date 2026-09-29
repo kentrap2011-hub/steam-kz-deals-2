@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` is free. Its prior manual-translation attempt is closed as `blocked` because the old ownership model did not yet allow the manual semantic-worker role; no translation was consumed.
+- `ЧАТ 1` assigned: `WORKER_TASK_VISUAL_STALE_SNAPSHOT_REBASE_RACE_FIX_01.md` — authorized fix for the proven full-visual stale-snapshot persistence race and truthful freshness classification.
 - `ЧАТ 2` is free. `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` is accepted complete via PR #125 / merge `070f30807acceffed36a342e1d442f5dcd1c99c7`.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -17,6 +17,39 @@
 - User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## ACTIVE — ЧАТ 1 — Visual stale-snapshot rebase race fix
+
+Task:
+`WORKER_TASK_VISUAL_STALE_SNAPSHOT_REBASE_RACE_FIX_01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Status:
+`authorized_ready_for_worker`
+
+User authorization:
+- fix the already accepted stale visual freshness race;
+- generated visual must never be persisted on a newer parent when material source blobs changed unless it is rebuilt against that state;
+- freshness receipts must remain truthful and must not equate workflow success with fresh data.
+
+Accepted root cause:
+- old full visual was built from checkout `53767218...` / PASS2 blob `4435430...`;
+- `main` advanced to `dede9ea...` / PASS2 blob `b1967e42...`;
+- the already-generated visual was rebased and persisted as `2202a668...` without recomputation;
+- this mixed newer parent with older semantic-derived Statistics.
+
+Scope boundaries:
+- GitHub/GitHub Actions remains visual build/persistence/publication owner;
+- browser remains read-only;
+- preserve PR #125 translation nonblocking + Statistics behavior;
+- preserve concurrent Dossier/Deep/translation production writes;
+- no Fast/Dossier/Deep semantic reruns and no Scheduled Task changes.
+
+Expected report:
+`reviews/worker_reports/visual-stale-snapshot-rebase-race-fix-01.md`
 
 
 ## ACTIVE — ЧАТ 1 — Manual current Russian-description translation
