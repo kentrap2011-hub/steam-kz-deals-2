@@ -153,6 +153,11 @@ Canonicalize this mode in the appropriate ownership/translation contracts before
 
 Create a durable canonical manual-worker prompt/entrypoint in the repository so future runs can be started with a short launcher message rather than duplicating the full semantic contract in chat.
 
+Use this exact canonical prompt path unless an existing current canonical path already owns this role and can be extended without duplication:
+`config/russian_description_manual_semantic_worker_prompt.md`
+
+If a different existing path is reused, record the exact final canonical path prominently in the worker report.
+
 Required manual-worker regressions:
 1. ordinary interactive chat remains forbidden from production catalog translation;
 2. explicitly launched canonical manual semantic worker is allowed to process only current GitHub-prepared requests;
