@@ -1,14 +1,18 @@
 # CURRENT TASK
 
-## IN PROGRESS — Progressive migration current-binding regression fix 01
-Статус: `in_progress`.
+## COMPLETE — Progressive migration current-binding regression fix 01
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md`;
-- branch: `fix/progressive-migration-current-binding-regression-01`;
-- pinned root cause: PPD-012 migration regression incorrectly requires every frozen PPD-010 target to retain a current binding forever, even after the target leaves the current Progressive catalogue;
-- Black Skylands / `game:1143810` had sale end `2026-09-28T15:35:00Z`; PPD-012 validation passed before that boundary and the first confirmed pre-AI failure occurred afterward;
-- fix direction: classify each immutable migration target as current+equivalent, current+semantically-stale, or outside current scope; preserve immutable Deep history and keep current-scope missing bindings fail-closed;
-- no semantic result, attempt, Dossier/Fast/Deep content, scheduler, retry ownership or Scheduled Task is being changed.
-
+- implementation PR: `#122`; merge: `1d8b54114d5aef09adb1c244a848f356987f3048`;
+- root cause: PPD-012 regression treated finite PPD-010 migration membership as permanent current Progressive scope; after Black Skylands left current discounted scope, the regression incorrectly required a current binding;
+- generic fix: every frozen migration target is now classified current+equivalent, current+stale, or outside current scope; an in-scope target still fails closed if its binding disappears;
+- fresh post-merge pre-AI run `36518529454` succeeded end-to-end; former game:1143810 gate passed; fresh scope classifies 18/30 migration targets current+equivalent and 12/30 outside current scope, including Black Skylands;
+- fresh atomic pre-AI payload: `4836bea4c7c0822baa08c954cfbcfe6651ccb0d5`;
+- Russian translation scope is now persisted normally: 71 requests, including App_13500 and Roadwarden/App_1155970;
+- no semantic result, attempt, PPD-010 history, Fast/Dossier/Deep content, scheduler/retry ownership or Scheduled Task was changed;
+- repository truth correction: Black Skylands' accepted PPD-010 result is `analyzed_fit`, not the `analyzed_not_fit` stated in the task prose; state was preserved;
+- report: `reviews/worker_reports/progressive-migration-current-binding-regression-fix-01.md`;
+- next bounded action: Director reviews and accepts this completed task.
 
 ## BLOCKED — Current Russian description publication blocker fix 02
 Статус: `blocked`.
