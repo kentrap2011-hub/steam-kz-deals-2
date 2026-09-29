@@ -1,5 +1,12 @@
 # CURRENT TASK
 
+## IN PROGRESS — Russian description manual translation run 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_RUSSIAN_DESCRIPTION_MANUAL_TRANSLATION_RUN_01.md`;
+- mode: one-shot semantic worker for exact current GitHub-prepared Russian-description translation scope;
+- writes restricted to the canonical translation transport/persistence path; no Scheduled Task or unrelated project changes;
+- report: `reviews/worker_reports/russian-description-manual-translation-run-01.md`.
+
 ## COMPLETE — Progressive migration current-binding regression fix 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md`;
