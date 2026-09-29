@@ -99,6 +99,33 @@ for marker in [
 require((owners.get("interactive_chat") or {}).get("production_catalog_translation_allowed") is False, "interactive chat must not translate the production catalog")
 require((owners.get("interactive_chat") or {}).get("manual_cache_population_allowed") is False, "interactive chat must not populate translation cache")
 
+manual_worker = contract.get("manual_semantic_worker") or {}
+require(manual_worker.get("status") == "authorized_canonical_one_shot", "manual semantic worker must be canonical one-shot")
+require(manual_worker.get("canonical_prompt") == "config/russian_description_manual_semantic_worker_prompt.md", "manual semantic worker prompt path mismatch")
+require(manual_worker.get("authorization") == "explicit_user_launch_required_for_every_run", "manual semantic worker launch authorization mismatch")
+require(manual_worker.get("request_input") == "data/production/pre_ai/chatgpt_ru_description_queue.jsonl", "manual semantic worker queue path mismatch")
+require(manual_worker.get("submission_glob") == "data/ai_inbox/russian_descriptions/*.json", "manual semantic worker submission path mismatch")
+require(manual_worker.get("direct_cache_write_allowed") is False, "manual semantic worker direct cache writes must remain forbidden")
+require(manual_worker.get("current_scope_only") is True, "manual semantic worker must be current-scope only")
+require(manual_worker.get("preserve_github_order") is True, "manual semantic worker must preserve GitHub order")
+require(manual_worker.get("subset_checkpoint_allowed_for_transport_only") is True, "manual semantic worker transport checkpoints must be allowed")
+require(manual_worker.get("checkpoint_defines_quota_or_completeness") is False, "manual semantic worker checkpoints must not define quota/completeness")
+require(manual_worker.get("scheduled_task_action_allowed") is False, "manual semantic worker must not modify Scheduled Tasks")
+require(manual_worker.get("recurring_schedule_allowed") is False, "manual semantic worker must not create recurring schedules")
+require("canonical empty result document" in str(manual_worker.get("empty_queue_rule") or ""), "manual semantic worker empty-queue transport rule missing")
+require("status=error" in str(manual_worker.get("failed_semantic_attempt_rule") or ""), "manual semantic worker failed-attempt result rule missing")
+prompt_path = ROOT / str(manual_worker.get("canonical_prompt") or "")
+require(prompt_path.exists(), "manual semantic worker prompt file is missing")
+prompt_text = prompt_path.read_text(encoding="utf-8")
+for marker in [
+    "one-shot Russian-description semantic data-plane worker",
+    "data/ai_inbox/russian_descriptions/*.json",
+    "Never write directly to:",
+    "results: []",
+    "re-read the current queue and status from fresh",
+]:
+    require(marker in prompt_text, f"manual semantic worker prompt marker missing: {marker}")
+
 boundary = contract.get("implementation_boundary") or {}
 require(boundary.get("translation_scope_and_ingest_implemented") is True, "translation scope/ingest implementation must be canonical")
 require(boundary.get("publication_observability_implementation_in_scope") is True, "publication observability implementation must be authorized")
