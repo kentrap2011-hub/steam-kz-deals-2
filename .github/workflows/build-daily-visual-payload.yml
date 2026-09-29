@@ -38,7 +38,17 @@ on:
       - "scripts/validate_duration_enrichment_contract.py"
       - "scripts/russian_description_quality.py"
       - "scripts/test_russian_description_quality.py"
+      - "scripts/russian_description_translation_runtime.py"
+      - "scripts/build_russian_description_translation_queue.py"
+      - "scripts/ingest_russian_description_translations.py"
+      - "scripts/validate_russian_description_translation_contract.py"
+      - "scripts/test_russian_description_translation_runtime.py"
+      - "scripts/test_validate_russian_descriptions_pending_ai.py"
+      - "scripts/test_russian_translation_observability.py"
       - "scripts/validate_russian_descriptions.py"
+      - "config/russian_description_translation_contract.json"
+      - "config/russian_description_translation_result_contract.json"
+      - "config/russian_description_translation_cache_entry_contract.json"
       - "scripts/apply_fixed_package_purchase_options.py"
       - "scripts/refresh_visual_commercial_fields.py"
       - "scripts/test_commercial_refresh.py"
@@ -820,11 +830,15 @@ jobs:
           python scripts/test_commercial_refresh.py
           python scripts/test_fixed_package_purchase_options.py
 
-      - name: Validate Russian description quality rules
+      - name: Validate Russian description quality and publication rules
         shell: bash
         run: |
           set -euo pipefail
           python scripts/test_russian_description_quality.py
+          python scripts/validate_russian_description_translation_contract.py
+          python scripts/test_russian_description_translation_runtime.py
+          python scripts/test_validate_russian_descriptions_pending_ai.py
+          python scripts/test_russian_translation_observability.py
 
       - name: Require complete history classification coverage before replacing daily visual
         id: history
