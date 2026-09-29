@@ -140,6 +140,8 @@ const stageTimes={
   fast:'2026-09-27T11:03:00+00:00',
   dossier:'2026-09-27T10:05:00+00:00',
   deep:'2026-09-27T12:04:00+00:00',
+  translationSuccess:'2026-09-29T08:05:00+00:00',
+  translationAttempt:'2026-09-29T08:15:00+00:00',
 };
 const stats=ui.statisticsSections({
   fast_last_write_at_utc:stageTimes.fast,
@@ -153,24 +155,26 @@ const stats=ui.statisticsSections({
   deep_completed_fit_count:1,deep_completed_not_fit_count:0,deep_incomplete_or_recovery_count:1,
   deep_waiting_for_dossier_count:470,deep_ready_or_pending_count:27,deep_normal_first_pass_remaining_count:497,
   deep_remaining_until_all_authoritative_count:498,deep_normal_first_pass_complete:false,deep_all_current_authoritative_complete:false,
+  untranslated_game_count:23,last_successful_translation_at:stageTimes.translationSuccess,last_translation_attempt_at:stageTimes.translationAttempt,
 });
-assert.deepStrictEqual(stats.map(x=>x.key),['fast','dossier','deep']);
+assert.deepStrictEqual(stats.map(x=>x.key),['fast','dossier','deep','translation']);
 assert.deepStrictEqual(stats.map(x=>x.lastWriteAtUtc),[
-  stageTimes.fast,stageTimes.dossier,stageTimes.deep
+  stageTimes.fast,stageTimes.dossier,stageTimes.deep,null
 ]);
 const noWriteStats=ui.statisticsSections({});
-assert.deepStrictEqual(noWriteStats.map(x=>x.lastWriteAtUtc),[null,null,null]);
+assert.deepStrictEqual(noWriteStats.map(x=>x.lastWriteAtUtc),[null,null,null,null]);
+assert.strictEqual(noWriteStats[3].denominator,null,'browser must not invent untranslated count');
 assert.strictEqual(ui.formatLastWriteAt(null),'ещё не было записей');
 assert.strictEqual(ui.formatLastWriteAt(''),'ещё не было записей');
 assert.strictEqual(ui.formatLastWriteAt('not-a-date'),'ещё не было записей');
 assert.notStrictEqual(ui.formatLastWriteAt(stageTimes.fast),'ещё не было записей');
 assert(!ui.formatLastWriteAt.toString().includes('Date.now'),'timestamp formatter must not infer a heartbeat');
-assert.deepStrictEqual(stats.map(x=>x.denominator),[511,187,499]);
+assert.deepStrictEqual(stats.map(x=>x.denominator),[511,187,499,23]);
 assert.deepStrictEqual(stats.map(x=>x.scopeLabel),[
-  'Всего игр для быстрого разбора','Всего игр для подготовки досье','Всего игр для глубокого разбора'
+  'Всего игр для быстрого разбора','Всего игр для подготовки досье','Всего игр для глубокого разбора','Игр без перевода'
 ]);
 assert.deepStrictEqual(stats.map(x=>x.denominatorKey),[
-  'fast_total_current_scope','dossier_total_current_scope','deep_total_current_coverage_target'
+  'fast_total_current_scope','dossier_total_current_scope','deep_total_current_coverage_target','untranslated_game_count'
 ]);
 
 const fastRows=Object.fromEntries(stats[0].rows.map(row=>[row.key,row.label]));
@@ -196,6 +200,18 @@ assert.deepStrictEqual(stats[2].rows.map(row=>row.key),[
 assert.strictEqual(stats[2].rows[0].label,'Окончательно разобрано');
 assert.strictEqual(stats[2].rows[stats[2].rows.length-1].label,'Осталось до окончательного разбора');
 assert(stats[2].note.includes('глубокий разбор завершён'));
+
+assert.strictEqual(stats[3].showLastWrite,false);
+assert.deepStrictEqual(stats[3].rows.map(row=>row.key),[
+  'last_successful_translation_at','last_translation_attempt_at'
+]);
+assert.deepStrictEqual(stats[3].rows.map(row=>row.label),[
+  'Последний успешный перевод','Последняя попытка перевода'
+]);
+assert.notStrictEqual(stats[3].rows[0].value,'ещё не было записей');
+assert.notStrictEqual(stats[3].rows[1].value,'ещё не было записей');
+assert(stats[3].note.includes('дата попытки новее'));
+assert(!ui.statisticsSections.toString().includes('Date.now'),'statistics must not invent translation timestamps');
 
 const userFacingStats=stats.flatMap(section=>[section.scopeLabel,section.note||'',...section.rows.map(row=>row.label)]).join(' ');
 for(const jargon of ['authoritative','Fast-scope','Dossier-scope','Deep-покрытие']){
@@ -223,6 +239,7 @@ assert(app.indexOf("items=progressiveUi().filterActiveSaleItems(payloadItems(),n
 assert(app.includes("data.processing_status||{}"));
 assert(app.includes("progressiveUi().statisticsSections"));
 assert(app.includes("progressiveUi().formatLastWriteAt(section.lastWriteAtUtc)"));
+assert(app.includes("section.showLastWrite===false"));
 assert(app.includes('Последняя запись:'));
 assert(app.includes("progressiveUi().stageIndicators"));
 assert(app.includes("ind.lit===true"));
@@ -234,7 +251,7 @@ for(const stale of ['analysisBadge','processingStats','processingUpdated','progr
 }
 
 const html=fs.readFileSync('web/index.html','utf8');
-assert(html.includes('Быстрый разбор, подготовка досье и глубокий разбор считаются отдельно — у каждого свой объём работы.'));
+assert(html.includes('Быстрый разбор, подготовка досье, глубокий разбор и переводы считаются отдельно — у каждого свой объём работы.'));
 for(const id of ['statisticsBtn','statisticsView','stageStatistics','stageIndicators','personalizationSection']){
   assert(html.includes(`id="${id}"`));
 }
