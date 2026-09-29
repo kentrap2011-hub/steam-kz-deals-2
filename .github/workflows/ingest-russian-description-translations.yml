@@ -82,8 +82,8 @@ jobs:
           done
           exit 1
 
-      - name: Rebuild visual payload after accepted translations
-        if: steps.ingest.outputs.accepted_count != '0'
+      - name: Rebuild visual payload after translation attempt/check
+        if: steps.ingest.outputs.submission_count != '0'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run build-daily-visual-payload.yml --ref main
