@@ -1,11 +1,13 @@
 # CURRENT TASK
 
-## IN PROGRESS — Russian description manual translation run 01
-Статус: `in_progress`.
+## BLOCKED — Russian description manual translation run 01
+Статус: `blocked`.
 - task: `WORKER_TASK_RUSSIAN_DESCRIPTION_MANUAL_TRANSLATION_RUN_01.md`;
-- mode: one-shot semantic worker for exact current GitHub-prepared Russian-description translation scope;
-- writes restricted to the canonical translation transport/persistence path; no Scheduled Task or unrelated project changes;
-- report: `reviews/worker_reports/russian-description-manual-translation-run-01.md`.
+- current canonical queue: 71 exact GitHub-prepared requests; translation cache: 0 entries;
+- no item was translated or submitted because current canonical ownership forbids interactive-chat production backlog execution and contains no Russian-description one-shot exception;
+- no Scheduled Task, automation, translation cache, publication logic, UI, Fast, Dossier or Deep state was changed;
+- report: `reviews/worker_reports/russian-description-manual-translation-run-01.md`;
+- report commit: `262b6bf068896520be2b824c0b5b9001aa834831`.
 
 ## COMPLETE — Progressive migration current-binding regression fix 01
 Статус: `complete_ready_for_director_acceptance`.
