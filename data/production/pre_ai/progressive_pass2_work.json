@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 45,
     "deep_completed_not_fit_count": 6,
     "deep_incomplete_or_recovery_count": 10,
-    "deep_waiting_for_dossier_count": 332,
-    "deep_ready_or_pending_count": 6,
+    "deep_waiting_for_dossier_count": 329,
+    "deep_ready_or_pending_count": 9,
     "deep_normal_first_pass_remaining_count": 338,
     "deep_remaining_until_all_authoritative_count": 348,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 3,
-    "dossier_waiting_count": 332,
+    "dossier_waiting_count": 329,
     "pass2_attempted_count": 61,
-    "pass2_eligible_count": 6,
-    "normal_pass2_eligible_count": 6,
+    "pass2_eligible_count": 9,
+    "normal_pass2_eligible_count": 9,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "legacy_full_reanalysis": {
       "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
@@ -323,6 +323,66 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:13560",
+      "taste_subject_key": "App_13560",
+      "appid": "13560",
+      "taste_fingerprint": "961dce81c83d65a1f161a625152f0706253e7fcbc9161120cda7048cf905a9c5",
+      "candidate_context_sha256": "13469d4b52bf8ace6903725f7b0eb272ddd6d3b094bb89ebfc1b4b8acf35768a",
+      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+      "work_id": "549190bb51d567be570651de7cc1b4f9f48f7128fef9a4e64fb5a85a8a648ac5",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Tom Clancy's Splinter Cell®",
+        "short_description": "Enter the world of cinematic stealth action with Splinter Cell, the game that propelled the genre to cult status. You are Sam Fisher, an elite covert agent in the NSA's top-secret division: Third Echelon.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Singleplayer",
+          "Stealth",
+          "Third Person"
+        ],
+        "core_fit_count": 2,
+        "release_date": "1 Apr, 2008",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "13560"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_13560.json",
+      "dossier_content_sha256": "9e54dec2e99ba53c1844c5844835f5fbb39bc8bd9c1915a03e5256e24df4fb84",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-19T03:19:12Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "d9d288c771c586530107066a6bffac3e073061f3d7cc366b5ff61a4b6a07694d",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--549190bb51d567be570651de7cc1b4f9f48f7128fef9a4e64fb5a85a8a648ac5--d9d288c771c586530107066a6bffac3e073061f3d7cc366b5ff61a4b6a07694d.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--549190bb51d567be570651de7cc1b4f9f48f7128fef9a4e64fb5a85a8a648ac5--d9d288c771c586530107066a6bffac3e073061f3d7cc366b5ff61a4b6a07694d.json",
+      "sequence": 5
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:13530",
       "taste_subject_key": "App_13530",
       "appid": "13530",
@@ -379,7 +439,126 @@
       "authorization_id": "7f8653db682b07c5b0f670ac8b4e6f3327fafc33038cdac0818a7e52722774fc",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--c2a7476983262a3d5cfe2f68b8f88f789b87374a3319c4353e154f3cebd53fd7--7f8653db682b07c5b0f670ac8b4e6f3327fafc33038cdac0818a7e52722774fc.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--c2a7476983262a3d5cfe2f68b8f88f789b87374a3319c4353e154f3cebd53fd7--7f8653db682b07c5b0f670ac8b4e6f3327fafc33038cdac0818a7e52722774fc.json",
-      "sequence": 5
+      "sequence": 6
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:13600",
+      "taste_subject_key": "App_13600",
+      "appid": "13600",
+      "taste_fingerprint": "2677d1272ccca20b105d47b3b683aa3641f5e0aa42abecc7d04594adb3a7fe51",
+      "candidate_context_sha256": "05aee1cb6995aee574fc3446092763d06896cbec8090d921c1619474c75160fb",
+      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+      "work_id": "85970d2c5a802ef5165e6b8700e7c2c8e6148c9f1586a9f95249f67b367ac06d",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Prince of Persia®: The Sands of Time",
+        "short_description": "Amidst the scorched sands of ancient Persia, there is a legend spun in an ancient tongue. It speaks of a time borne by blood and ruled by deceit. Drawn to the dark powers of a magic dagger, a young Prince is led to unleash a deadly evil upon a beautiful kingdom.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure",
+          "Singleplayer",
+          "Third Person"
+        ],
+        "core_fit_count": 1,
+        "release_date": "27 Aug, 2009",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "13600"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_13600.json",
+      "dossier_content_sha256": "78c936482d499a46f9f50d6cb29780c2c35358e90b9577eb9ceca152c4da169b",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-19T03:19:12Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "e97a7fabd49e9df20308369c7fed89de4dafd6232984f3cc386b2cfdb07e125d",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--85970d2c5a802ef5165e6b8700e7c2c8e6148c9f1586a9f95249f67b367ac06d--e97a7fabd49e9df20308369c7fed89de4dafd6232984f3cc386b2cfdb07e125d.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--85970d2c5a802ef5165e6b8700e7c2c8e6148c9f1586a9f95249f67b367ac06d--e97a7fabd49e9df20308369c7fed89de4dafd6232984f3cc386b2cfdb07e125d.json",
+      "sequence": 7
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:13570",
+      "taste_subject_key": "App_13570",
+      "appid": "13570",
+      "taste_fingerprint": "e818f6afb680454975cb3666951e94c39cd2781738e5db0298a5783ae12d332c",
+      "candidate_context_sha256": "0ce7001656e6ba03f6f295eae072c3b8030bbf9197e5d0d6f58af35ab71bb82d",
+      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+      "work_id": "b54bd2d2bf528252f039ea7fe3568d3f572e646bca10596d70cad85b927348cf",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Tom Clancy's Splinter Cell Chaos Theory®",
+        "short_description": "Experience one of the most critically acclaimed stealth-action games of all time. Uncover a conspiracy that hits close to home and stop World War III.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Stealth",
+          "Third Person"
+        ],
+        "core_fit_count": 2,
+        "release_date": "27 Aug, 2009",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "13570"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_13570.json",
+      "dossier_content_sha256": "75325d587e6fb65c6e89c6713138d2de4aea5f97710bc50089ae4a56ffe46f69",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-19T03:19:12Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "ce2468e80359febf847e943832d2e28c8bcfa8e2e7395558d8895621156cb2de",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--b54bd2d2bf528252f039ea7fe3568d3f572e646bca10596d70cad85b927348cf--ce2468e80359febf847e943832d2e28c8bcfa8e2e7395558d8895621156cb2de.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--b54bd2d2bf528252f039ea7fe3568d3f572e646bca10596d70cad85b927348cf--ce2468e80359febf847e943832d2e28c8bcfa8e2e7395558d8895621156cb2de.json",
+      "sequence": 8
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -438,7 +617,7 @@
       "authorization_id": "d93bb6844d6acf39bf16fae8fef164ca19037f6cf2284b509b308c0dc5aa1064",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--f8dc529d7c5862154aba2420aac708b5ca734d7667923e3c7b37f737b41f2382--d93bb6844d6acf39bf16fae8fef164ca19037f6cf2284b509b308c0dc5aa1064.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--f8dc529d7c5862154aba2420aac708b5ca734d7667923e3c7b37f737b41f2382--d93bb6844d6acf39bf16fae8fef164ca19037f6cf2284b509b308c0dc5aa1064.json",
-      "sequence": 6
+      "sequence": 9
     }
   ]
 }
