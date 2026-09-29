@@ -111,7 +111,11 @@
     "effective_result_counts",
     "fast_last_write_at_utc",
     "dossier_last_write_at_utc",
-    "deep_last_write_at_utc"
+    "deep_last_write_at_utc",
+    "translation_stage_counts",
+    "untranslated_game_count",
+    "last_translation_attempt_at",
+    "last_successful_translation_at"
   ],
   "invariants": [
     "total_current_candidates = analyzed_fit_count + analyzed_not_fit_count + analysis_incomplete_count + not_analyzed_count",
