@@ -1087,7 +1087,7 @@ def validate_processing_status(status):
     if untranslated is not None and int(untranslated) < 0:
         raise ValueError('Russian untranslated-game count must be nonnegative')
 
-        total = int(status['total_current_candidates'])
+    total = int(status['total_current_candidates'])
     fit = int(status['analyzed_fit_count'])
     not_fit = int(status['analyzed_not_fit_count'])
     incomplete = int(status['analysis_incomplete_count'])
