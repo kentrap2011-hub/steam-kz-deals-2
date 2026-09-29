@@ -1,0 +1,1079 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-BUFFERED-GROUP-V1",
+  "schema_version": 1,
+  "snapshot_id": "9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689",
+  "prepared_required_sha256": "d304f153533d39227d0ad551e7a4195454ccc8f164c4a73c252f171ae5ac3316",
+  "group_plan_sha256": "a1f59224b5acac2ef85750f8a6c6b847352ee6d62c5d448faa1323cdf1f4a65b",
+  "group_count": 81,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "sequence": 9,
+  "start_index": 24,
+  "end_index_exclusive": 27,
+  "appids": [
+    "1732180",
+    "1763250",
+    "1793250"
+  ],
+  "items_sha256": "a1a221802d59f3425bb56225c8834468db85508a9212479145ea74b9b38557e5",
+  "scope_source": "daily_fixed_snapshot_of_full_current_canonical_taste_queue",
+  "source_queue_sha256": "b876e7c8001232163f0edb54f1a216a76764020551873acf090ef59edea6b957",
+  "items": [
+    {
+      "key": "App_1732180",
+      "appid": "1732180",
+      "title": "Kaiju Princess",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1732180.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1763250",
+      "appid": "1763250",
+      "title": "SWORN",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1763250.json",
+      "reason": "missing_dossier"
+    },
+    {
+      "key": "App_1793250",
+      "appid": "1793250",
+      "title": "Take Me To The Dungeon!!",
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1793250.json",
+      "reason": "missing_dossier"
+    }
+  ],
+  "group_sha256": "79ebc086424b6e9b2a8a431db054ec812b493023a3318a90632bd84e489606fd",
+  "dossiers": [
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1732180",
+      "title": "Kaiju Princess",
+      "generated_at_utc": "2026-09-29T16:10:51Z",
+      "expires_at_utc": "2026-10-19T16:10:51Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Kaiju Princess",
+        "release_year": 2022,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1732180"
+          },
+          {
+            "kind": "developer",
+            "value": "PantyParrot"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The central loop mixes light time-management, character care and progression, with money and upgrades feeding back into the household-management routine.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "other",
+          "statement": "Russian-language players describe the story as light, humorous and easy to follow rather than narratively ambitious, with presentation and character interaction carrying much of the appeal.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-002"
+          ]
+        },
+        {
+          "category": "repetition",
+          "statement": "The recurring interaction and management loop can become repetitive over longer sessions even for players who otherwise enjoy the premise.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "A current macOS player report says the Mac build remained on version 1.0 while a newer update was available elsewhere, indicating a platform-specific update lag rather than a general Windows issue.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-003"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            }
+          ],
+          "closure_basis": "compact_central_experience",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1732180/Kaiju_Princess/",
+            "publication_date": "2022-06-21",
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "other_player_feedback",
+            "domain": "stopgame.ru",
+            "url": "https://stopgame.ru/game/kaiju_princess/review/25280",
+            "publication_date": "2025-06-22",
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "other_player_feedback",
+            "domain": "stopgame.ru",
+            "url": "https://stopgame.ru/game/kaiju_princess/reviews",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_title_release",
+              "appid": null,
+              "title": "Kaiju Princess",
+              "release_year": 2022
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1732180",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1732180",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "url": "https://stopgame.ru/game/kaiju_princess/review/25280",
+            "publication_date": "2025-06-22",
+            "language": "russian",
+            "acquisition_mode": "stable_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-003",
+            "publication_date": "2024-02-06",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-004",
+            "publication_date": "2026-07-07",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1763250",
+      "title": "SWORN",
+      "generated_at_utc": "2026-09-29T16:10:51Z",
+      "expires_at_utc": "2026-10-19T16:10:51Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "SWORN",
+        "release_year": 2025,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1763250"
+          },
+          {
+            "kind": "developer",
+            "value": "Windwalk Games"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "The Hades-like action-roguelite loop supports substantial build variety through multiple characters, weapons, abilities and Fae blessings, and players particularly value experimenting with builds in co-op.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-003"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-003"
+          ]
+        },
+        {
+          "category": "coop",
+          "statement": "Co-op is a recurring strength, but losing a connection can be unusually costly because players report that a disconnected teammate may be unable to rejoin the same run.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "russian",
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002",
+            "source-004"
+          ],
+          "player_feedback_ids": [
+            "feedback-001",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "At higher difficulty, enemy health scaling and uneven blessing strength can shift challenge toward long damage checks and reduce the number of builds that feel equally effective.",
+          "sentiment": "negative",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "progression",
+          "statement": "Some full-release feedback argues that version 1.0 delivered less new content than expected from the early-access roadmap, creating a trade-off between a strong core loop and expectations for post-EA expansion.",
+          "sentiment": "negative",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-006"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "limited",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                3
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                2
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                1
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "official_metadata",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1763250/SWORN/",
+            "publication_date": "2025-09-23",
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "store_user_reviews",
+            "domain": "store.steampowered.com",
+            "url": "https://store.steampowered.com/app/1763250/SWORN/?curator_clanid=45481916&l=russian",
+            "publication_date": null,
+            "language": "russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1763250",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1763250",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1763250",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "other_player_feedback",
+            "domain": "stmstat.com",
+            "url": "https://stmstat.com/app/1763250/updates",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "search_result_representation",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1763250",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1763250/eventcomments/591783706468167201/",
+            "publication_date": "2025-10-01",
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1763250",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "steam_reviews",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1763250/reviews/?browsefilter=toprated",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1763250",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2025-12-31",
+            "language": "russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-002",
+            "publication_date": "2026-01-01",
+            "language": "russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-003",
+            "publication_date": "2026-08-25",
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-004",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "search_result_observation"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-005",
+            "publication_date": "2025-10-01",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-006",
+            "source_id": "source-006",
+            "publication_date": "2025-09-23",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+      "schema_version": 2,
+      "web_evidence_contract_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "appid": "1793250",
+      "title": "Take Me To The Dungeon!!",
+      "generated_at_utc": "2026-09-29T16:10:51Z",
+      "expires_at_utc": "2026-10-19T16:10:51Z",
+      "ttl_days": 20,
+      "game_identity": {
+        "work_title": "Take Me To The Dungeon!!",
+        "release_year": 2023,
+        "resolution_status": "resolved",
+        "identity_source_ids": [
+          "source-001"
+        ],
+        "corroborators": [
+          {
+            "kind": "appid",
+            "value": "1793250"
+          },
+          {
+            "kind": "developer",
+            "value": "Hanabi Fuusen"
+          }
+        ]
+      },
+      "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
+      "observations": [
+        {
+          "category": "mechanics",
+          "statement": "Deck construction, runes, status interactions and boss-specific planning give the card-battling system meaningful tactical depth, with multiple viable build approaches across dungeon runs.",
+          "sentiment": "positive",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "difficulty",
+          "statement": "Challenge is deliberately substantial and divides players: some value the need to rethink decks for bosses, while others find later encounters and card attrition unexpectedly punishing.",
+          "sentiment": "mixed",
+          "recurrence": "moderate",
+          "mention_count": 3,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-003",
+            "source-004",
+            "source-006"
+          ],
+          "player_feedback_ids": [
+            "feedback-002",
+            "feedback-003",
+            "feedback-005"
+          ]
+        },
+        {
+          "category": "friction",
+          "statement": "The rule that cards can be discarded over the course of a fight creates resource pressure and strategic planning, but it can also make long encounters feel like a hard turn limit when a deck is poorly matched.",
+          "sentiment": "mixed",
+          "recurrence": "limited",
+          "mention_count": 2,
+          "evidence_languages": [
+            "non_russian"
+          ],
+          "evidence_status": "durable",
+          "source_ids": [
+            "source-004",
+            "source-005"
+          ],
+          "player_feedback_ids": [
+            "feedback-003",
+            "feedback-004"
+          ]
+        },
+        {
+          "category": "localization",
+          "statement": "Russian-speaking players report relying on a community translation because the game contains a large amount of text and reading it entirely in English is burdensome.",
+          "sentiment": "mixed",
+          "recurrence": "anecdotal",
+          "mention_count": 1,
+          "evidence_languages": [
+            "russian"
+          ],
+          "evidence_status": "current",
+          "source_ids": [
+            "source-002"
+          ],
+          "player_feedback_ids": [
+            "feedback-001"
+          ]
+        }
+      ],
+      "conflicts": [],
+      "evidence": {
+        "strategy": "adaptive_multi_source_web",
+        "research_state": "sufficient",
+        "source_mix_status": "multi_source",
+        "single_source_reason": null,
+        "russian_attempt": "found_and_used",
+        "overall_strength": "moderate",
+        "stop_reason": "evidence_stable",
+        "coverage": {
+          "dimensions": [
+            {
+              "dimension": "core_play_mechanics",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "controls_game_feel",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                2
+              ]
+            },
+            {
+              "dimension": "progression_development_unlocks",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "variety_repetition_over_time",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "difficulty_mastery_learning_friction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "pacing_structure_direction",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2
+              ]
+            },
+            {
+              "dimension": "exploration_mission_activity_structure",
+              "state": "covered",
+              "observation_indices": [
+                0,
+                1
+              ]
+            },
+            {
+              "dimension": "multiplayer_coop_dependence",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "story_characters_identity_hooks",
+              "state": "not_material_or_not_applicable",
+              "observation_indices": []
+            },
+            {
+              "dimension": "recurring_strengths",
+              "state": "covered",
+              "observation_indices": [
+                0
+              ]
+            },
+            {
+              "dimension": "recurring_complaints_tradeoffs",
+              "state": "covered",
+              "observation_indices": [
+                1,
+                2,
+                3
+              ]
+            },
+            {
+              "dimension": "technical_performance_localization_regional",
+              "state": "covered",
+              "observation_indices": [
+                3
+              ]
+            }
+          ],
+          "closure_basis": "broad_neutral_picture",
+          "strengths_investigated": true,
+          "weaknesses_tradeoffs_investigated": true
+        }
+      },
+      "provenance": {
+        "sources": [
+          {
+            "source_id": "source-001",
+            "source_type": "professional_context",
+            "domain": "steamdb.info",
+            "url": "https://steamdb.info/app/1793250/",
+            "publication_date": "2023-06-29",
+            "language": "non_russian",
+            "evidence_role": "identity",
+            "player_feedback": false
+          },
+          {
+            "source_id": "source-002",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1793250/discussions/0/803468921025049901/",
+            "publication_date": "2026-03-26",
+            "language": "mixed",
+            "evidence_role": "current_state",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1793250",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-003",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1793250/discussions/0/3805028278541415720/",
+            "publication_date": "2023-07-09",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-004",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1793250/discussions/0/4514379280329791488/",
+            "publication_date": "2024-07-18",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true
+          },
+          {
+            "source_id": "source-005",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1793250/discussions/0/6760518612029975975/",
+            "publication_date": null,
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1793250",
+              "title": null,
+              "release_year": null
+            }
+          },
+          {
+            "source_id": "source-006",
+            "source_type": "steam_community",
+            "domain": "steamcommunity.com",
+            "url": "https://steamcommunity.com/app/1793250/discussions/0/4353373425702871754/",
+            "publication_date": "2024-06-24",
+            "language": "non_russian",
+            "evidence_role": "durable_trait",
+            "player_feedback": true,
+            "feedback_surface_mode": "concrete_item_collection",
+            "exact_product_binding": {
+              "basis": "source_appid",
+              "appid": "1793250",
+              "title": null,
+              "release_year": null
+            }
+          }
+        ],
+        "player_feedback_records": [
+          {
+            "feedback_id": "feedback-001",
+            "source_id": "source-002",
+            "publication_date": "2026-05-22",
+            "language": "russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-002",
+            "source_id": "source-003",
+            "url": "https://steamcommunity.com/app/1793250/discussions/0/3805028278541415720/",
+            "publication_date": "2023-07-09",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item"
+          },
+          {
+            "feedback_id": "feedback-003",
+            "source_id": "source-004",
+            "url": "https://steamcommunity.com/app/1793250/discussions/0/4514379280329791488/",
+            "publication_date": "2024-07-18",
+            "language": "non_russian",
+            "acquisition_mode": "stable_item"
+          },
+          {
+            "feedback_id": "feedback-004",
+            "source_id": "source-005",
+            "publication_date": null,
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          },
+          {
+            "feedback_id": "feedback-005",
+            "source_id": "source-006",
+            "publication_date": "2024-10-06",
+            "language": "non_russian",
+            "acquisition_mode": "inspected_collection_item"
+          }
+        ]
+      }
+    }
+  ]
+}
