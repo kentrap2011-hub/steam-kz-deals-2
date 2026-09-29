@@ -128,7 +128,9 @@
     "browser_must_not_recalculate_semantics_or_external_facts": true,
     "last_known_good_on_source_failure": "preserve_existing_behavior",
     "pass1_remaining_may_be_nonzero": true,
-    "phase_a_fallback_remains_valid": true
+    "phase_a_fallback_remains_valid": true,
+    "explicit_unresolved_russian_description_is_publishable": true,
+    "browser_translation_observability_is_producer_owned": true
   },
   "phase_b_execution": {
     "pass1_active": true,
@@ -447,6 +449,16 @@
         "deep_remaining_until_all_authoritative_count = deep_total_current_coverage_target - deep_authoritative_completed_count",
         "deep_normal_first_pass_complete and deep_all_current_authoritative_complete are distinct metrics and may differ while recovery-owned items remain"
       ]
+    },
+    "translation": {
+      "denominator": "untranslated_game_count",
+      "denominator_label_ru": "Игр без перевода",
+      "fields": [
+        "untranslated_game_count",
+        "last_successful_translation_at",
+        "last_translation_attempt_at"
+      ],
+      "timestamp_rule": "Render producer-owned timestamps only; null means history is unavailable/has not yet been recorded."
     }
   },
   "deep_revision_model": {
