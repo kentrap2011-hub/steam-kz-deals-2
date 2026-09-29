@@ -130,6 +130,41 @@ After implementation:
 
 Do NOT claim the site is fresh if a separate build/deploy problem remains.
 
+### F. Manual one-shot Russian semantic worker chat
+
+The user additionally requires a manually launched semantic worker chat for Russian descriptions, without using ChatGPT Scheduled Tasks.
+
+Implement a canonical one-shot worker mode with these boundaries:
+
+- it is a constrained semantic data-plane worker, not a developer/operator chat and not a scheduler;
+- it may run only from an explicit user-launched invocation using the repository-defined canonical manual worker prompt/entrypoint;
+- GitHub continues to own exact current scope, request identities, ordering, validation, retry state, completeness, cache merge, timestamps and downstream rebuild/publication;
+- the worker may only read exact GitHub-prepared Russian-description work, produce translations/rewrite results, and submit them through the same canonical result/ingest boundary;
+- it must never write directly to the canonical translation cache;
+- it must never invent games, requests, source text, order, retries or completion;
+- it must not create, edit, enable, disable, pause, resume or emulate any Scheduled Task;
+- no recurring schedule is created; every run requires a fresh explicit user launch;
+- checkpointing, if needed for transport/context size, is durability only and not a quota;
+- after each accepted checkpoint, any continuation must re-check the current GitHub-owned queue/binding and continue only with still-authorized work;
+- if the current queue is empty, that manual run is a successful no-work translation check and must participate in the timestamp semantics defined above;
+- failed/manual attempts must participate in the same GitHub-owned attempt/success observability; the chat must not fabricate timestamps itself.
+
+Canonicalize this mode in the appropriate ownership/translation contracts before enabling it. The general `interactive_chat` developer/operator role must remain non-production by default; the new permission must be narrowly scoped to an explicitly launched Russian-description semantic-worker entrypoint.
+
+Create a durable canonical manual-worker prompt/entrypoint in the repository so future runs can be started with a short launcher message rather than duplicating the full semantic contract in chat.
+
+Required manual-worker regressions:
+1. ordinary interactive chat remains forbidden from production catalog translation;
+2. explicitly launched canonical manual semantic worker is allowed to process only current GitHub-prepared requests;
+3. arbitrary/old/forged request identities fail closed;
+4. direct canonical-cache writes remain forbidden;
+5. subset/checkpoint submission leaves missing requests unresolved and does not define completeness;
+6. an empty queue is a successful no-work run;
+7. no Scheduled Task or recurring scheduler is created or modified;
+8. manual-worker attempt/success events feed the same producer-owned translation observability used by Statistics.
+
+Do not actually process the 71 production translations inside this implementation task. This task creates and validates the authorized manual semantic-worker mechanism; production translation will be run afterward in a separate freshly launched semantic-worker chat.
+
 ## Concurrency with ЧАТ 1
 
 ЧАТ 1 may be producing valid translation outputs concurrently.
@@ -177,7 +212,7 @@ Do not:
 - change ChatGPT Scheduled Tasks;
 - modify Fast/Dossier/Deep semantic state;
 - reimplement expired-sale or RANK-013 logic;
-- manually translate production games in this task — that belongs to ЧАТ 1.
+- manually translate production games in this implementation task; after this task lands, translation is performed by a separate explicitly launched canonical manual semantic-worker chat.
 
 ## Delivery
 
