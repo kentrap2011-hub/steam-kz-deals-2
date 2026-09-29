@@ -58,6 +58,29 @@
   function sortItems(items,urgencyFirst=false){
     return [...(items||[])].sort((a,b)=>compareGames(a,b,urgencyFirst));
   }
+  function saleEndTimeMs(value){
+    if(value===null||value===undefined)return null;
+    if(typeof value==='string'&&!value.trim())return null;
+    const ms=new Date(value).getTime();
+    return Number.isFinite(ms)?ms:null;
+  }
+  function hasKnownExpiredSale(game,nowMs=Date.now()){
+    const endMs=saleEndTimeMs(game&&game.sale_end_utc);
+    const now=Number(nowMs);
+    if(endMs===null||!Number.isFinite(now))return false;
+    return endMs<=now;
+  }
+  function filterActiveSaleItems(items,nowMs=Date.now()){
+    return [...(items||[])].filter(game=>!hasKnownExpiredSale(game,nowMs));
+  }
+  function cursorForVisibleIds(oldIds,oldCursor,visibleIds){
+    const old=[...(oldIds||[])];
+    const visible=[...(visibleIds||[])];
+    const cursor=Math.max(0,Math.min(Number(oldCursor)||0,Math.max(0,old.length-1)));
+    const currentId=old[cursor]||null;
+    const found=currentId?visible.indexOf(currentId):-1;
+    return found>=0?found:Math.min(cursor,Math.max(0,visible.length-1));
+  }
 
   function fastIndicator(game){
     const state=game&&game.fast_stage_state;
@@ -173,5 +196,5 @@
     ];
   }
 
-  return {tierOf,rankingStageOf,rankingStageRank,urgencyOf,stageScore,compareGames,sortItems,stageIndicators,formatLastWriteAt,statisticsSections};
+  return {tierOf,rankingStageOf,rankingStageRank,urgencyOf,stageScore,compareGames,sortItems,saleEndTimeMs,hasKnownExpiredSale,filterActiveSaleItems,cursorForVisibleIds,stageIndicators,formatLastWriteAt,statisticsSections};
 });

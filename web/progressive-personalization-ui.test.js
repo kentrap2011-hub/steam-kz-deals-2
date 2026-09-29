@@ -15,6 +15,53 @@ assert.deepStrictEqual(ui.sortItems([deep60,deep70],false).map(x=>x.id),['deep70
 assert.deepStrictEqual(ui.sortItems([fast80,fast99],false).map(x=>x.id),['fast99','fast80']);
 assert.deepStrictEqual(ui.sortItems([untouched,error,fast99,deep60],false).map(x=>x.id),['deep60','fast99','error','untouched']);
 
+// Known passed sale ends are a local visibility gate, independent of semantic stage/state.
+const expiryNow=Date.parse('2026-09-29T07:00:00+00:00');
+const expiryPast='2026-09-28T17:00:00+00:00';
+const expiryExact='2026-09-29T07:00:00+00:00';
+const expiryFuture='2026-09-30T07:00:00+00:00';
+const expiredDeep={...deep60,id:'expired-deep',sale_end_utc:expiryPast};
+const expiredFast={...fast99,id:'expired-fast',sale_end_utc:expiryPast};
+const expiredUnresolved={...error,id:'expired-unresolved',sale_end_utc:expiryPast};
+const expiredManual={...untouched,id:'expired-manual',sale_end_utc:expiryPast,manual_end_at:123};
+for(const game of [expiredDeep,expiredFast,expiredUnresolved,expiredManual]){
+  assert.strictEqual(ui.hasKnownExpiredSale(game,expiryNow),true,`${game.id} must be hidden after its known sale end`);
+}
+assert.strictEqual(ui.hasKnownExpiredSale({...deep60,sale_end_utc:expiryExact},expiryNow),true,'sale end exactly now must be hidden');
+assert.strictEqual(ui.hasKnownExpiredSale({...deep60,sale_end_utc:expiryFuture},expiryNow),false,'future sale remains visible');
+assert.strictEqual(ui.hasKnownExpiredSale({...deep60,sale_end_utc:null},expiryNow),false,'unknown sale end remains visible');
+assert.strictEqual(ui.hasKnownExpiredSale({...deep60,sale_end_utc:'not-a-date'},expiryNow),false,'malformed sale end follows unknown-date semantics');
+assert.strictEqual(ui.hasKnownExpiredSale({...deep60},expiryNow),false,'missing sale end remains visible');
+
+const titanfall={...deep60,id:'1237970',title:'Titanfall® 2',sale_end_utc:'2026-09-28T17:00:00+00:00'};
+assert.strictEqual(ui.filterActiveSaleItems([titanfall],expiryNow).length,0,'pinned Titanfall sale must not remain in active feed after expiry');
+
+const preservedSemantic={...deep60,id:'preserved',sale_end_utc:expiryFuture,deep_stage_state:'completed',deep_stage_outcome:'fit',dossier_stage_state:'accepted',fast_stage_state:'completed',fast_stage_outcome:'fit'};
+const preservedBefore=JSON.parse(JSON.stringify(preservedSemantic));
+const visibleAfterFilter=ui.filterActiveSaleItems([
+  expiredDeep,expiredFast,expiredUnresolved,expiredManual,
+  {...deep60,id:'future',sale_end_utc:expiryFuture},
+  {...deep60,id:'unknown',sale_end_utc:null},
+  {...deep60,id:'malformed',sale_end_utc:'bad-date'},
+  preservedSemantic,
+],expiryNow);
+assert.deepStrictEqual(visibleAfterFilter.map(x=>x.id),['future','unknown','malformed','preserved']);
+assert.strictEqual(visibleAfterFilter[visibleAfterFilter.length-1],preservedSemantic,'visibility filter must preserve semantic object/result identity');
+assert.deepStrictEqual(preservedSemantic,preservedBefore,'visibility filter must not mutate Taste/Fast/Deep/Dossier fields');
+
+const laterSale={...titanfall,sale_end_utc:expiryFuture};
+assert.strictEqual(ui.filterActiveSaleItems([laterSale],expiryNow).length,1,'fresh later sale with new future end becomes visible normally');
+
+const currentExpired={...deep60,id:'current-expired',sale_end_utc:expiryPast,sale_expiry_urgency_rank:0};
+const nextVisible={...deep60,id:'next-visible',sale_end_utc:expiryFuture,sale_expiry_urgency_rank:2};
+const laterVisible={...fast99,id:'later-visible',sale_end_utc:null,sale_expiry_urgency_rank:2};
+const visibleQueue=ui.filterActiveSaleItems([currentExpired,nextVisible,laterVisible],expiryNow);
+assert.deepStrictEqual(visibleQueue.map(x=>x.id),['next-visible','later-visible']);
+assert.strictEqual(visibleQueue.length,2,'visible feed count must exclude expired cards');
+assert.strictEqual(ui.cursorForVisibleIds(['current-expired','next-visible','later-visible'],0,visibleQueue.map(x=>x.id)),0,'expired current card must advance to the next visible card');
+assert.strictEqual(`${ui.cursorForVisibleIds(['current-expired','next-visible','later-visible'],0,visibleQueue.map(x=>x.id))+1} из ${visibleQueue.length}`,'1 из 2','position text inputs must use the filtered visible set');
+assert.deepStrictEqual(ui.sortItems(ui.filterActiveSaleItems([currentExpired,nextVisible],expiryNow),true).map(x=>x.id),['next-visible'],'urgency mode must not resurrect an expired card');
+
 // Urgency may reorder only inside the same producer-owned ranking stage.
 const deepUrgentLow={...deep60,id:'deep-urgent-low',title:'Deep urgent low',total_score:40,priority_rank:2,sale_expiry_urgency_rank:0};
 const deepLaterHigh={...deep60,id:'deep-later-high',title:'Deep later high',total_score:90,priority_rank:1,sale_expiry_urgency_rank:2};
@@ -167,6 +214,12 @@ assert(app.includes("if(r.manual_end_at)manual.push(g.id);else normal.push(g.id)
 assert(app.includes("return [...normal,...manual];"));
 assert(app.includes("r.manual_end_at=Date.now();"));
 assert(app.includes("progressiveUi().sortItems(items,urgencyFirstEnabled())"));
+assert(app.includes("items=progressiveUi().filterActiveSaleItems(payloadItems(),nowMs);"));
+assert(app.includes("function render(){buildQueue();"));
+assert(app.includes("function searchRender(){\n  buildQueue();"));
+assert(app.includes("progressiveUi().cursorForVisibleIds(oldIds,oldCursor,ids)"));
+assert(app.includes("if(Number.isNaN(d.getTime()))return 'Срок скидки неизвестен';"));
+assert(app.indexOf("items=progressiveUi().filterActiveSaleItems(payloadItems(),nowMs);")<app.indexOf("const activeIds=new Set(items.map(x=>x.id));"),'expiry filtering must happen before queue/manual-end reconciliation');
 assert(app.includes("data.processing_status||{}"));
 assert(app.includes("progressiveUi().statisticsSections"));
 assert(app.includes("progressiveUi().formatLastWriteAt(section.lastWriteAtUtc)"));

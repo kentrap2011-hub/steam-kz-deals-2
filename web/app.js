@@ -41,7 +41,8 @@ function fmtDate(value){
 }
 function deadlineText(value){
   if(!value)return 'Срок скидки неизвестен';
-  const d=new Date(value),ms=d-Date.now();
+  const d=new Date(value);if(Number.isNaN(d.getTime()))return 'Срок скидки неизвестен';
+  const ms=d-Date.now();
   if(ms<=0)return '⚠ Скидка закончилась';
   const hours=Math.ceil(ms/3600000);
   if(hours<=24)return `⚠ Заканчивается менее чем через ${hours} ч.`;
@@ -55,6 +56,11 @@ function sourceLabel(){
 }
 function urgencyFirstEnabled(){return !!state.settings?.urgency_first}
 function progressiveUi(){return window.ProgressivePersonalizationUI}
+function payloadItems(){return (data.items||[]).filter(x=>x&&x.id)}
+function syncActiveSaleItems(nowMs=Date.now()){
+  items=progressiveUi().filterActiveSaleItems(payloadItems(),nowMs);
+  byId=new Map(items.map(x=>[x.id,x]));
+}
 function automaticOrderGames(){return progressiveUi().sortItems(items,urgencyFirstEnabled())}
 function rankingSignature(){return `urgency:${urgencyFirstEnabled()?1:0}|`+items.map(g=>`${g.id}:${g.ranking_stage??''}:${g.ranking_stage_rank??''}:${g.priority_rank??''}:${g.sale_expiry_urgency_rank??''}:${g.total_score??''}:${g.deterministic_purchase_score??''}`).join('|')}
 function canonicalQueueIds(){
@@ -66,7 +72,8 @@ function canonicalQueueIds(){
   manual.sort((a,b)=>(Number(rec(a).manual_end_at)||0)-(Number(rec(b).manual_end_at)||0));
   return [...normal,...manual];
 }
-function buildQueue(){
+function buildQueue(nowMs=Date.now()){
+  syncActiveSaleItems(nowMs);
   const source=data.source_mailing_updated_at_utc||'unknown';
   const signature=rankingSignature();
   const activeIds=new Set(items.map(x=>x.id));
@@ -76,8 +83,8 @@ function buildQueue(){
   const currentId=oldIds[oldCursor]||null;
   if(state.queue?.source!==source||state.queue?.version!==QUEUE_VERSION||state.queue?.signature!==signature){
     const ids=canonicalQueueIds();
-    const found=currentId?ids.indexOf(currentId):-1;
-    state.queue={source,signature,ids,cursor:found>=0?found:0,version:QUEUE_VERSION};
+    const cursor=progressiveUi().cursorForVisibleIds(oldIds,oldCursor,ids);
+    state.queue={source,signature,ids,cursor,version:QUEUE_VERSION};
     saveState();return;
   }
   let q=oldIds.filter(id=>activeIds.has(id));
@@ -293,7 +300,7 @@ function renderLists(){
   $('likedList').innerHTML=liked.length?liked.map(g=>miniCard(g,'liked')).join(''):'<div class="empty">Пока пусто.</div>';
   $('finalList').innerHTML=finals.length?finals.map(g=>miniCard(g,'final')).join(''):'<div class="empty">Пока пусто.</div>';
 }
-function render(){renderTabs();renderStats();renderQueueMode();renderFeed();renderLists();saveState()}
+function render(){buildQueue();renderTabs();renderStats();renderQueueMode();renderFeed();renderLists();saveState()}
 function markSeen(g){if(!g)return;const r=rec(g.id);r.seen=(r.seen||0)+1;r.last_seen=new Date().toISOString()}
 function navigate(delta){
   const g=currentGame();const old=currentIndex();const next=Math.max(0,Math.min(state.queue.ids.length-1,old+delta));if(next===old)return;
@@ -310,7 +317,6 @@ function sendCurrentToEnd(){
 }
 function toggleUrgencyFirst(){
   state.settings.urgency_first=!urgencyFirstEnabled();
-  buildQueue();
   saveState();
   render();
   notify(urgencyFirstEnabled()?'Срочность включена внутри каждого уровня разбора':'Срочность отключена — порядок внутри уровней по баллам');
@@ -328,6 +334,7 @@ function openSteam(steamUrl,webUrl){
   setTimeout(()=>{if(!hidden&&webUrl)location.href=webUrl},900);
 }
 function searchRender(){
+  buildQueue();
   const q=$('searchInput').value.trim().toLocaleLowerCase('ru-RU');
   const results=q?items.filter(g=>g.title.toLocaleLowerCase('ru-RU').includes(q)).slice(0,50):items.slice(0,30);
   $('searchResults').innerHTML=results.length?results.map(g=>{const p=g.better_purchase_option;const pkg=p&&p.package_price_rub!=null?` · 🎁 ${Number(p.covered_visible_game_count)||0} игр за ${fmtRub(p.package_price_rub)}`:'';return `<button class="search-item" type="button" data-search-focus="${escapeHtml(g.id)}"><b>${escapeHtml(g.title)}</b><span>${fmtRub(g.current_price_rub)} · −${g.discount_percent}%${pkg} · ${g.decision||''}</span></button>`}).join(''):'<div class="empty">В текущем активном списке такой игры нет.</div>';
@@ -337,10 +344,7 @@ async function init(){
   try{
     const res=await fetch(DATA_URL,{cache:'no-store'});if(!res.ok)throw new Error('data');
     data=await res.json();
-    items=(data.items||[]).filter(x=>x&&x.id);
-    byId=new Map(items.map(x=>[x.id,x]));
     if(window.GiveawayUI)window.GiveawayUI.render(data.giveaways,$('giveawayBlock'));
-    buildQueue();
     render();
   }
   catch{
