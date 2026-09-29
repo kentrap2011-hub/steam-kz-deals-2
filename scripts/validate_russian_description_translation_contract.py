@@ -69,6 +69,10 @@ require(runtime.get("existing_daily_contract_id") == daily.get("contract"), "run
 require(runtime.get("separate_recurring_translation_schedule_allowed") is False, "separate recurring translation schedule must remain forbidden")
 require(runtime.get("translation_is_additional_semantic_work_type_inside_existing_cycle") is True, "translation must be part of the existing nightly semantic cycle")
 require(runtime.get("taste_specific_input_or_result_schema_may_be_reused") is False, "Taste-specific result schema must not be overloaded")
+require(runtime.get("manual_one_shot_semantic_worker_allowed") is True, "manual one-shot semantic worker must be enabled")
+require(runtime.get("manual_worker_prompt_path") == "config/russian_description_manual_semantic_worker_prompt.md", "manual worker prompt path mismatch")
+require(runtime.get("manual_worker_reuses_same_queue_result_ingest") is True, "manual worker must reuse canonical queue/result/ingest")
+require(runtime.get("manual_worker_creates_or_modifies_scheduled_task") is False, "manual worker must not modify Scheduled Tasks")
 
 scope = contract.get("scope") or {}
 require(set(scope.get("eligible_description_statuses") or []) == {"needs_translation", "needs_ru_rewrite"}, "translation scope must be exactly the two unresolved semantic states")
@@ -98,6 +102,12 @@ for marker in [
     require(marker in worker_forbidden, f"scheduled worker prohibition missing: {marker}")
 require((owners.get("interactive_chat") or {}).get("production_catalog_translation_allowed") is False, "interactive chat must not translate the production catalog")
 require((owners.get("interactive_chat") or {}).get("manual_cache_population_allowed") is False, "interactive chat must not populate translation cache")
+manual_worker = owners.get("manual_one_shot_chatgpt_data_plane") or {}
+require(manual_worker.get("role") == "constrained semantic translation worker launched explicitly by the user", "manual one-shot worker role mismatch")
+require(manual_worker.get("canonical_prompt") == "config/russian_description_manual_semantic_worker_prompt.md", "manual one-shot prompt path mismatch")
+require(manual_worker.get("requires_fresh_explicit_user_launch_every_run") is True, "manual one-shot worker must require explicit launch")
+require("write directly to the canonical translation cache" in set(manual_worker.get("forbidden") or []), "manual worker direct-cache prohibition missing")
+require("create or modify any Scheduled Task or recurring scheduler" in set(manual_worker.get("forbidden") or []), "manual worker scheduler prohibition missing")
 
 boundary = contract.get("implementation_boundary") or {}
 require(boundary.get("this_task_is_contract_only") is False, "implemented translation runtime must not remain marked contract-only")
@@ -144,6 +154,9 @@ require(validation.get("translated_text_quality_function") == "scripts/russian_d
 require(validation.get("accepted_translated_text_quality") == "good_ru", "only good_ru may be accepted")
 require(validation.get("fail_closed") is True, "translation validation must fail closed")
 require((result_contract.get("acceptance") or {}).get("placeholder_or_technical_is_rejected") is True, "placeholder/technical results must be rejected")
+allowed_producers = set((result_contract.get("ownership") or {}).get("allowed_semantic_producers") or [])
+require("explicitly user-launched one-shot worker bound to config/russian_description_manual_semantic_worker_prompt.md" in allowed_producers, "manual worker is not bound to canonical result transport")
+require("GitHub ingest only" in str((result_contract.get("ownership") or {}).get("zero_result_no_work_authority") or ""), "zero-work authority must remain GitHub-owned")
 
 persistence = contract.get("persistence_and_invalidation") or {}
 require(persistence.get("cache_owner") == "github_control_plane", "GitHub must own cache")
