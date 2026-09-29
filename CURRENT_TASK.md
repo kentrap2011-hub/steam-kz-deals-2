@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## ACTIVE — Russian translation nonblocking publication + Statistics 01
+Статус: `implementing`.
+- task: `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md`;
+- branch: `fix/russian-translation-nonblocking-statistics-01`;
+- architecture preflight complete: GitHub retains scope/validation/persistence/visual/publication ownership; browser remains read-only; no scheduler/queue/retry owner added;
+- verified blocker: full visual workflow step `Require meaningful Russian descriptions before canonical commit` currently fails on unresolved meaningful-Russian validation;
+- planned bounded change: keep strict translation acceptance/binding rules, make unresolved translation absence publication-nonblocking, persist producer-owned untranslated count + attempt/success timestamps, project them into `processing_status`, and render one dedicated Statistics block;
+- preserve concurrent production/translation writes from fresh `main`; no manual translations in this task.
+
 ## BLOCKED — Russian description manual translation run 01
 Статус: `blocked`.
 - task: `WORKER_TASK_RUSSIAN_DESCRIPTION_MANUAL_TRANSLATION_RUN_01.md`;

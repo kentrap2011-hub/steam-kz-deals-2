@@ -85,7 +85,7 @@ for marker in [
     "track unresolved state, retries, checkpoints, and completeness",
     "validate returned keys, hashes, statuses, and Russian text quality",
     "merge validated results into the canonical translation cache",
-    "rebuild downstream visual artifacts and enforce the final Russian-description gate",
+    "rebuild downstream visual artifacts and publish explicit Russian-description diagnostics/observability",
 ]:
     require(marker in github_owns, f"GitHub ownership marker missing: {marker}")
 worker_forbidden = set((owners.get("scheduled_chatgpt_data_plane") or {}).get("forbidden") or [])
@@ -100,8 +100,8 @@ require((owners.get("interactive_chat") or {}).get("production_catalog_translati
 require((owners.get("interactive_chat") or {}).get("manual_cache_population_allowed") is False, "interactive chat must not populate translation cache")
 
 boundary = contract.get("implementation_boundary") or {}
-require(boundary.get("this_task_is_contract_only") is True, "task boundary must remain contract-only")
-require(boundary.get("translation_producer_or_ingest_implementation_in_scope") is False, "producer/ingest implementation leaked into contract-only task")
+require(boundary.get("this_task_is_contract_only") is False, "implemented translation runtime must not remain marked contract-only")
+require(boundary.get("translation_producer_or_ingest_implementation_in_scope") is True, "implemented producer/ingest boundary must be explicit")
 require(boundary.get("mass_translation_in_scope") is False, "mass translation leaked into contract-only task")
 require(boundary.get("production_cache_population_in_scope") is False, "cache population leaked into contract-only task")
 
@@ -159,8 +159,21 @@ require(retry.get("production_completion_decider") == "GitHub only", "GitHub alo
 
 downstream = contract.get("downstream") or {}
 require(downstream.get("final_quality_gate") == "scripts/validate_russian_descriptions.py", "existing final Russian-description gate must remain canonical")
-require(downstream.get("final_gate_must_remain_fail_closed") is True, "final visual gate must remain fail closed")
+require(downstream.get("final_gate_must_remain_fail_closed") is False, "missing translation must be nonblocking for visual publication")
 require(downstream.get("unresolved_translation_may_not_become_normal_summary") is True, "unresolved text may not silently become a summary")
+require(downstream.get("browser_may_relabel_non_russian_as_russian") is False, "browser must not relabel unresolved text as Russian")
+publication_policy = str(downstream.get("publication_policy") or "")
+require("nonblocking" in publication_policy, "nonblocking publication policy is not explicit")
+require("never becomes ready_ru" in publication_policy, "strict translation acceptance must remain explicit")
+
+observability = contract.get("observability") or {}
+require(observability.get("owner") == "github_control_plane", "translation observability must remain GitHub-owned")
+require(observability.get("current_status_manifest") == "data/production/pre_ai/chatgpt_ru_description_status.json", "translation observability status path mismatch")
+obs_fields = observability.get("fields") or {}
+for field in ["untranslated_game_count", "last_translation_attempt_at_utc", "last_successful_translation_at_utc"]:
+    require(field in obs_fields, f"translation observability field missing: {field}")
+require("queue_count=0" in str(observability.get("zero_work_rule") or ""), "zero-work success semantics are missing")
+require("not last_successful_translation_at_utc" in str(observability.get("failed_attempt_rule") or ""), "failed-attempt timestamp separation is missing")
 
 # Contract-level deterministic fixtures. These exercise identity, shape and quality semantics
 # without implementing or populating any production queue/cache.

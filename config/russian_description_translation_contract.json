@@ -7,8 +7,8 @@
   "result_contract": "config/russian_description_translation_result_contract.json",
   "cache_entry_contract": "config/russian_description_translation_cache_entry_contract.json",
   "implementation_boundary": {
-    "this_task_is_contract_only": true,
-    "translation_producer_or_ingest_implementation_in_scope": false,
+    "this_task_is_contract_only": false,
+    "translation_producer_or_ingest_implementation_in_scope": true,
     "mass_translation_in_scope": false,
     "production_cache_population_in_scope": false,
     "interactive_manual_catalog_fill_allowed": false
@@ -23,7 +23,7 @@
         "validate returned keys, hashes, statuses, and Russian text quality",
         "merge validated results into the canonical translation cache",
         "invalidate stale cache entries when the source-text binding changes",
-        "rebuild downstream visual artifacts and enforce the final Russian-description gate"
+        "rebuild downstream visual artifacts and publish explicit Russian-description diagnostics/observability"
       ],
       "must_not_delegate": [
         "scope selection",
@@ -89,7 +89,7 @@
     "request_status_manifest": "data/production/pre_ai/chatgpt_ru_description_status.json",
     "runtime_submission_glob": "data/ai_inbox/russian_descriptions/*.json",
     "canonical_cache": "data/cache/russian_description_translations.json",
-    "note": "These paths are contractually reserved for the bounded follow-up IMPLEMENT task. This contract-only task must not populate them."
+    "note": "These are the canonical implemented translation artifacts. Semantic workers write only result transport; GitHub validates/persists cache and current status."
   },
   "request_identity": {
     "request_key_field": "request_id",
@@ -195,7 +195,7 @@
     "owner": "github_control_plane",
     "chatgpt_retry_loop_allowed": false,
     "chatgpt_batch_quota_allowed": false,
-    "success_condition": "Every current translatable unresolved request has either an exact valid cache hit or a validated accepted result; technical/missing-source blockers are separately accounted by GitHub and still block final replacement when a visible description remains unresolved.",
+    "success_condition": "Translation semantic work is complete when every current translatable unresolved request has either an exact valid cache hit or a validated accepted result. Technical/missing-source blockers and any remaining untranslated records stay explicitly observable but do not by themselves block replacement/publication of the current visual payload.",
     "stale_or_invalid_result": "remains unresolved and is eligible for GitHub-owned retry in the same/current canonical production lifecycle according to runtime state",
     "production_completion_decider": "GitHub only"
   },
@@ -203,7 +203,23 @@
     "validated_cache_ingest_must_trigger_or_enable_existing_downstream_rebuild": true,
     "final_visual_artifact": "data/production/visual/current.json",
     "final_quality_gate": "scripts/validate_russian_descriptions.py",
-    "final_gate_must_remain_fail_closed": true,
-    "unresolved_translation_may_not_become_normal_summary": true
+    "final_gate_must_remain_fail_closed": false,
+    "unresolved_translation_may_not_become_normal_summary": true,
+    "publication_policy": "Missing/unresolved Russian descriptions are a GitHub-owned nonblocking publication diagnostic. Translation acceptance itself remains fail-closed: non-Russian/weak text, wrong AppID, stale binding, invalid provenance or invalid result transport never becomes ready_ru.",
+    "browser_may_relabel_non_russian_as_russian": false
+  },
+  "observability": {
+    "owner": "github_control_plane",
+    "current_status_manifest": "data/production/pre_ai/chatgpt_ru_description_status.json",
+    "fields": {
+      "untranslated_game_count": "Current number of scope records whose description is not resolved to exact valid ready_ru.",
+      "last_translation_attempt_at_utc": "Advances when the current prepared translation work is actually checked/attempted: an exact-bound result submission is ingested, including a valid worker error, or the GitHub translation-scope check finds queue_count=0.",
+      "last_successful_translation_at_utc": "Advances when at least one exact-bound good_ru translation is accepted/persisted, or when the GitHub translation-scope check finds queue_count=0."
+    },
+    "partial_success_rule": "If one or more exact-bound translations are accepted, last_successful_translation_at_utc advances even when unresolved current items remain; untranslated_game_count is rebuilt honestly from the current scope.",
+    "failed_attempt_rule": "A current exact-bound valid error result advances last_translation_attempt_at_utc but not last_successful_translation_at_utc.",
+    "invalid_or_stale_transport_rule": "A structurally invalid, stale, wrong-AppID or wrong-binding submission is rejected fail-closed and is not recorded as a successful/current-work translation attempt.",
+    "zero_work_rule": "A current translation-scope check with queue_count=0 is both an attempt/check and a successful no-work outcome, even though separately classified nontranslatable source blockers may remain observable.",
+    "browser_rule": "The browser may format these producer-owned values only; it must not infer count or timestamps from page load, deploy time, commit time, card contents or payload age."
   }
 }

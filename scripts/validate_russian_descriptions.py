@@ -17,7 +17,7 @@ def semantic_validation_required(path):
     return source_key is not None
 
 
-def validate(path):
+def validate(path, allow_untranslated=False):
     data = json.loads(Path(path).read_text(encoding='utf-8'))
     items = data.get('items') or []
 
@@ -65,7 +65,7 @@ def validate(path):
                 'description_status': status,
             })
 
-    print(json.dumps({
+    result = {
         'path': str(path),
         'item_count': len(items),
         'validated_personalized_item_count': validated_count,
@@ -73,18 +73,31 @@ def validate(path):
         'category_counts': counts,
         'invalid_count': len(failures),
         'invalid_examples': failures[:20],
-    }, ensure_ascii=False, indent=2))
-    if failures:
+        'publication_blocking': bool(failures) and not allow_untranslated,
+    }
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    if failures and allow_untranslated:
+        print(
+            'RUSSIAN_DESCRIPTION_VALIDATION=NONBLOCKING '
+            f'untranslated_or_invalid={len(failures)} publication_allowed=true'
+        )
+    elif failures:
         raise SystemExit(
             f'Russian description validation failed: {len(failures)}/{validated_count} personalized cards are not meaningful Russian'
         )
+    return result
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('path', nargs='?', default=str(CURRENT_VISUAL))
+    parser.add_argument(
+        '--allow-untranslated',
+        action='store_true',
+        help='report unresolved/invalid Russian descriptions without blocking publication',
+    )
     args = parser.parse_args()
-    validate(args.path)
+    validate(args.path, allow_untranslated=args.allow_untranslated)
 
 
 if __name__ == '__main__':

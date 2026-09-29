@@ -39,6 +39,11 @@ on:
       - "scripts/russian_description_quality.py"
       - "scripts/test_russian_description_quality.py"
       - "scripts/validate_russian_descriptions.py"
+      - "scripts/test_russian_translation_publication_statistics.py"
+      - "scripts/build_russian_description_translation_queue.py"
+      - "scripts/ingest_russian_description_translations.py"
+      - "config/russian_description_translation_contract.json"
+      - "config/progressive_personalization_contract.json"
       - "scripts/apply_fixed_package_purchase_options.py"
       - "scripts/refresh_visual_commercial_fields.py"
       - "scripts/test_commercial_refresh.py"
@@ -820,11 +825,15 @@ jobs:
           python scripts/test_commercial_refresh.py
           python scripts/test_fixed_package_purchase_options.py
 
-      - name: Validate Russian description quality rules
+      - name: Validate Russian description quality and publication observability
         shell: bash
         run: |
           set -euo pipefail
+          python scripts/validate_execution_ownership.py
+          python scripts/validate_russian_description_translation_contract.py
           python scripts/test_russian_description_quality.py
+          python scripts/test_russian_description_translation_runtime.py
+          python scripts/test_russian_translation_publication_statistics.py
 
       - name: Require complete history classification coverage before replacing daily visual
         id: history
@@ -907,12 +916,12 @@ jobs:
           set -euo pipefail
           python scripts/validate_giveaway_visual_payload.py data/production/visual/current.json
 
-      - name: Require meaningful Russian descriptions before canonical commit
+      - name: Record Russian description publication diagnostic
         if: steps.build.outputs.built == 'true'
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/validate_russian_descriptions.py data/production/visual/current.json
+          python scripts/validate_russian_descriptions.py data/production/visual/current.json --allow-untranslated
 
       - name: Build ranking review export
         if: steps.build.outputs.built == 'true'

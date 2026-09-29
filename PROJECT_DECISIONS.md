@@ -873,3 +873,21 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 **Ownership:** GitHub remains sole owner of profile resolution, semantic identity/generation, work identities, eligibility, reconciliation/current-result selection, attempt/recovery accounting, persistence and publication. Scheduled ChatGPT remains bounded semantic execution against one exact frozen provenance view. No scheduler, queue, retry loop, recovery shortcut, backlog manager, whole-main stability rule or Scheduled Task change is introduced.
 
 **Основные места:** `config/progressive_pass1_contract.json`, `config/progressive_pass2_contract.json`, `config/progressive_personalization_contract.json`, `scripts/progressive_pass1.py`, `scripts/progressive_pass2.py`, focused Progressive profile identity/reconciliation regressions.
+
+---
+
+## RU-DESC-001 — Missing Russian descriptions are observable, not a global publication gate
+
+**Дата:** 2026-09-29  
+**Статус:** implementation governed by `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md`.
+
+**Решение:** отсутствие готового русского описания у части текущих игр не останавливает замену канонического visual payload и обычный Pages deploy. Сами правила принятия перевода не смягчаются: только exact-bound `good_ru` может стать `ready_ru`; неверный AppID, stale binding/provenance, weak/non-Russian текст и invalid transport продолжают fail closed на translation acceptance. `scripts/validate_russian_descriptions.py` остаётся строгим по умолчанию, а production build/deploy используют только явный nonblocking diagnostic mode.
+
+**Наблюдаемость:** GitHub-owned translation status хранит `untranslated_game_count`, `last_translation_attempt_at_utc` и `last_successful_translation_at_utc`. Успешно принятый хотя бы один перевод обновляет success даже при оставшемся backlog; exact-bound worker error обновляет attempt, но не success; текущая проверка с нулевой translation queue считается и попыткой/check, и успешным no-work исходом. Исторические даты не выдумываются: при отсутствии достоверной истории допустим `null`.
+
+**Statistics / browser:** финальный producer переносит только эти подготовленные факты в `processing_status` и привязывает payload к translation-status/contract provenance. Browser показывает отдельный блок `Переводы описаний`, может только форматировать producer timestamps в локальное время и не вычисляет их из page-load/deploy/commit time, карточек или возраста payload.
+
+**Архитектурная граница:** GitHub остаётся владельцем scope, очереди, retry/completeness, validation, persistence, observability, visual build и publication. Existing scheduled ChatGPT runtime остаётся bounded semantic translator. Новый scheduler, queue, retry daemon, Fast/Dossier/Deep state или browser authority не создаются.
+
+**Основные места:** `config/russian_description_translation_contract.json`, `config/progressive_personalization_contract.json`, `scripts/build_russian_description_translation_queue.py`, `scripts/ingest_russian_description_translations.py`, `scripts/progressive_personalization.py`, `scripts/validate_russian_descriptions.py`, `.github/workflows/build-daily-visual-payload.yml`, `.github/workflows/deploy-visual.yml`, `web/progressive-personalization-ui.js`.
+

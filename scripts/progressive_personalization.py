@@ -14,6 +14,7 @@ PROGRESSIVE_CONTEXT = ROOT / 'data/production/pre_ai/progressive_candidate_conte
 TASTE_PROJECTION = ROOT / 'data/production/pre_ai/taste_projection.json'
 TASTE_CACHE = ROOT / 'data/cache/taste_fit.json'
 TASTE_OVERLAY = ROOT / 'data/cache/taste_fit.entry_overlay.json'
+RUSSIAN_TRANSLATION_STATUS = ROOT / 'data/production/pre_ai/chatgpt_ru_description_status.json'
 
 STATE_TIER = {
     'analyzed_fit': 1,
@@ -693,6 +694,46 @@ def _dossier_last_write_at_utc(doc):
     return _latest_dossier_transition_from_versions(doc, versions)
 
 
+def _translation_processing_metrics():
+    try:
+        doc = load_json(RUSSIAN_TRANSLATION_STATUS)
+        scope_count = int(doc.get('scope_record_count'))
+        published_untranslated = doc.get('untranslated_game_count')
+        if published_untranslated is not None:
+            untranslated = int(published_untranslated)
+            if untranslated < 0 or untranslated > scope_count:
+                raise ValueError('Russian untranslated-game count outside current scope')
+        else:
+            # Backward-compatible projection for the one legacy status shape that
+            # predates untranslated_game_count. Only derive when every scope row
+            # maps to one unique base app; otherwise fail observable rather than guess.
+            unique_count = int(doc.get('unique_base_app_key_count'))
+            if unique_count != scope_count:
+                raise ValueError('legacy Russian status cannot derive game count safely')
+            resolved_direct = int(doc.get('resolved_direct_ru_count') or 0)
+            resolved_cache = int(doc.get('resolved_translation_cache_count') or 0)
+            untranslated = scope_count - resolved_direct - resolved_cache
+            if untranslated < 0:
+                raise ValueError('Russian translation scope arithmetic underflow')
+        return {
+            'translation_observability': 'available',
+            'untranslated_game_count': untranslated,
+            'last_translation_attempt_at_utc': _normalize_utc_timestamp(
+                doc.get('last_translation_attempt_at_utc')
+            ),
+            'last_successful_translation_at_utc': _normalize_utc_timestamp(
+                doc.get('last_successful_translation_at_utc')
+            ),
+        }
+    except Exception as exc:
+        return {
+            'translation_observability': f'unavailable:{type(exc).__name__}',
+            'untranslated_game_count': None,
+            'last_translation_attempt_at_utc': None,
+            'last_successful_translation_at_utc': None,
+        }
+
+
 def _dossier_processing_metrics():
     try:
         doc = progressive_pass2.load_json(progressive_pass2.DOSSIER_WORK)
@@ -831,6 +872,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
     if deep_normal_remaining < 0 or deep_authoritative_remaining < 0:
         raise ValueError('Deep progress arithmetic underflow')
 
+    translation = _translation_processing_metrics()
     dossier = _dossier_processing_metrics()
     pass2_work = progressive_pass2.load_json(progressive_pass2.WORK)
     legacy_reanalysis = deepcopy(
@@ -874,6 +916,8 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'pass2_implemented': True,
         'pass2_active': True,
         'semantic_queue_zero_required_for_publication': False,
+
+        **translation,
 
         'fast_total_current_scope': fast_total,
         'fast_attempted_count': fast_attempted,
@@ -1023,16 +1067,27 @@ def validate_processing_status(status):
         'deep_remaining_until_all_authoritative_count',
         'deep_normal_first_pass_complete', 'deep_all_current_authoritative_complete',
         'fast_last_write_at_utc', 'dossier_last_write_at_utc', 'deep_last_write_at_utc',
-        'deep_legacy_full_reanalysis',
+        'untranslated_game_count', 'last_translation_attempt_at_utc',
+        'last_successful_translation_at_utc', 'deep_legacy_full_reanalysis',
     }
     if not required.issubset(status):
         raise ValueError('progressive processing status missing required counters')
-    for key in ('fast_last_write_at_utc', 'dossier_last_write_at_utc', 'deep_last_write_at_utc'):
+    for key in (
+        'fast_last_write_at_utc',
+        'dossier_last_write_at_utc',
+        'deep_last_write_at_utc',
+        'last_translation_attempt_at_utc',
+        'last_successful_translation_at_utc',
+    ):
         value = status.get(key)
         if value is not None and _normalize_utc_timestamp(value) is None:
             raise ValueError(f'progressive processing status has invalid UTC timestamp: {key}')
 
-    total = int(status['total_current_candidates'])
+    untranslated = status.get('untranslated_game_count')
+    if untranslated is not None and int(untranslated) < 0:
+        raise ValueError('Russian untranslated-game count must be nonnegative')
+
+        total = int(status['total_current_candidates'])
     fit = int(status['analyzed_fit_count'])
     not_fit = int(status['analyzed_not_fit_count'])
     incomplete = int(status['analysis_incomplete_count'])
