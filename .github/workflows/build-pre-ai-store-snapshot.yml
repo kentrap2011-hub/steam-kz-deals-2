@@ -41,6 +41,8 @@ on:
       - "config/russian_description_translation_contract.json"
       - "config/russian_description_translation_result_contract.json"
       - "config/russian_description_translation_cache_entry_contract.json"
+      - "config/russian_description_manual_semantic_worker_prompt.md"
+      - "config/execution_ownership_contract.json"
       - "data/cache/steamdb_history.json"
       - "data/cache/taste_fit.json"
       - "data/cache/taste_fit.entry_overlay.json"
@@ -100,6 +102,7 @@ on:
       - "scripts/russian_description_translation_runtime.py"
       - "scripts/build_russian_description_translation_queue.py"
       - "scripts/test_russian_description_translation_runtime.py"
+      - "scripts/test_russian_description_manual_semantic_worker.py"
       - ".github/workflows/build-pre-ai-store-snapshot.yml"
 
 permissions:
@@ -211,6 +214,7 @@ jobs:
           set -euo pipefail
           python scripts/validate_russian_description_translation_contract.py
           python scripts/test_russian_description_translation_runtime.py
+          python scripts/test_russian_description_manual_semantic_worker.py
 
       - name: Build canonical Russian description translation scope
         run: python scripts/build_russian_description_translation_queue.py
