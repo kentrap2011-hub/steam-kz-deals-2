@@ -1,13 +1,17 @@
 # CURRENT TASK
 
-## ACTIVE — Russian translation nonblocking publication + Statistics 01
-Статус: `implementing`.
+## COMPLETE — Russian translation nonblocking publication + Statistics 01
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md`;
-- branch: `fix/russian-translation-nonblocking-statistics-01`;
-- architecture preflight complete: GitHub retains scope/validation/persistence/visual/publication ownership; browser remains read-only; no scheduler/queue/retry owner added;
-- verified blocker: full visual workflow step `Require meaningful Russian descriptions before canonical commit` currently fails on unresolved meaningful-Russian validation;
-- planned bounded change: keep strict translation acceptance/binding rules, make unresolved translation absence publication-nonblocking, persist producer-owned untranslated count + attempt/success timestamps, project them into `processing_status`, and render one dedicated Statistics block;
-- preserve concurrent production/translation writes from fresh `main`; no manual translations in this task.
+- implementation PR: `#125`; tested head: `44cac8d88bdcee8c297adfe855eee0ab4d1516cf`; merge: `070f30807acceffed36a342e1d442f5dcd1c99c7`;
+- superseded parallel PR `#124` closed unmerged;
+- missing Russian translations are now explicit nonblocking build/deploy diagnostics; invalid/stale/wrong-AppID/masquerading Russian remains fail-closed;
+- producer-owned translation observability is projected into Statistics; current post-merge visual blob `75b73774c1b9fd079c916f291da843a9096f2900` reports `untranslated_game_count=71`, with attempt/success timestamps `null` until canonical history exists;
+- canonical explicit one-shot manual semantic-worker prompt: `config/russian_description_manual_semantic_worker_prompt.md`; no Scheduled Task or second queue/retry owner created;
+- post-merge full visual build `36559340201` succeeded and committed `1b556604aa99ec8bcd9b22ce1a3a72996de4576e`; exact Pages deploy `36559403117` succeeded;
+- Pages freshness receipt remains independently `degraded/no_fresh_build` because `deterministic_refresh_preserved_semantic_history`; task does not claim whole-site semantic freshness;
+- report: `reviews/worker_reports/russian-translation-nonblocking-publication-statistics-01.md`; report commit: `1dde619da3614dfffe03c88d0bde6535e998c27b`;
+- next bounded action: launch one fresh user-started Russian-description manual semantic-worker chat using the canonical prompt, without changing Scheduled Tasks.
 
 ## BLOCKED — Russian description manual translation run 01
 Статус: `blocked`.
