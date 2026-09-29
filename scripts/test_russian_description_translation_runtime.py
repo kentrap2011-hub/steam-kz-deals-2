@@ -6,6 +6,7 @@ from pathlib import Path
 
 from build_russian_description_translation_queue import build_scope, write_scope
 from ingest_russian_description_translations import ingest_paths
+from validate_russian_descriptions import validate as validate_russian_descriptions
 from russian_description_translation_runtime import (
     CACHE_CONTRACT_ID,
     RESULT_CONTRACT_ID,
@@ -110,6 +111,172 @@ class TranslationRuntimeTests(unittest.TestCase):
         self.assertEqual(resolution['description_status'], 'ready_ru')
         self.assertEqual(resolution['description_source_path'], STEAM_APPDETAILS_RU_SOURCE)
         self.assertEqual(resolution['summary'], russian)
+
+    def test_prince_of_persia_missing_sources_preserves_exact_appdetails_for_translation(self):
+        appid = '13500'
+        title = 'Prince of Persia: Warrior Within™'
+        official_english = (
+            'Enter a dark underworld in this action adventure sequel and master new combat abilities '
+            'while the Prince fights to change his fate.'
+        )
+        media = {appid: {'short_description_source': None}}
+        changed = apply_russian_appdetails_description_fallback(
+            media[appid],
+            {'short_description': official_english},
+        )
+        self.assertTrue(changed)
+        self.assertEqual(media[appid]['short_description_source_path'], STEAM_APPDETAILS_RU_SOURCE)
+
+        unresolved = resolve_description_for_appids(
+            [appid],
+            media,
+            metadata(appid, None, title),
+            empty_cache(),
+        )
+        self.assertEqual(unresolved['description_status'], 'needs_translation')
+        self.assertEqual(unresolved['description_source_quality'], 'non_ru')
+        self.assertEqual(unresolved['description_source_path'], STEAM_APPDETAILS_RU_SOURCE)
+        self.assertIsNone(unresolved['summary'])
+
+        queue, status = build_scope(
+            [row(appid, title)],
+            metadata(appid, None, title),
+            empty_cache(),
+            media,
+            generated_at_utc='2026-09-29T00:00:00Z',
+        )
+        self.assertEqual([request['source_key'] for request in queue], ['App_13500'])
+        self.assertEqual(queue[0]['source_path'], STEAM_APPDETAILS_RU_SOURCE)
+        self.assertEqual(queue[0]['source_quality'], 'non_ru')
+        self.assertNotIn(
+            'App_13500',
+            [blocker['key'] for blocker in status['nontranslatable_blockers']],
+        )
+
+        request = queue[0]
+        cache = {
+            'schema_version': 1,
+            'contract': CACHE_CONTRACT_ID,
+            'updated_at_utc': '2026-09-29T00:00:01Z',
+            'entries': {
+                request['request_id']: {
+                    'request_id': request['request_id'],
+                    'source_key': request['source_key'],
+                    'source_appid': request['source_appid'],
+                    'source_text_sha256': request['source_text_sha256'],
+                    'source_version': request['source_version'],
+                    'translated_text_ru': GOOD_RU,
+                    'target_locale': 'ru',
+                    'validated_quality': 'good_ru',
+                    'result_contract': RESULT_CONTRACT_ID,
+                    'ingested_at_utc': '2026-09-29T00:00:01Z',
+                }
+            },
+        }
+        resolved = resolve_description_for_appids(
+            [appid],
+            media,
+            metadata(appid, None, title),
+            cache,
+        )
+        self.assertEqual(resolved['description_status'], 'ready_ru')
+        self.assertEqual(resolved['description_source_locale'], 'translation_cache')
+        self.assertEqual(resolved['description_source_appid'], appid)
+        self.assertEqual(resolved['summary'], GOOD_RU)
+
+        card = {
+            'id': 'game:13500',
+            'title': title,
+            'analysis_state': 'analyzed_fit',
+            'priority_rank': 7,
+            'total_score': 61.5,
+            'deep_stage_state': 'completed',
+            'deep_stage_outcome': 'fit',
+            'effective_analysis_source': 'deep',
+        }
+        semantic_before = {
+            key: card[key]
+            for key in [
+                'priority_rank',
+                'total_score',
+                'deep_stage_state',
+                'deep_stage_outcome',
+                'effective_analysis_source',
+            ]
+        }
+        card.update({
+            'summary': resolved['summary'],
+            'description_status': resolved['description_status'],
+            'description_source_locale': resolved['description_source_locale'],
+            'description_source_quality': resolved['description_source_quality'],
+            'description_source_appid': resolved['description_source_appid'],
+            'description_source_path': resolved['description_source_path'],
+        })
+        self.assertEqual(
+            semantic_before,
+            {key: card[key] for key in semantic_before},
+        )
+        with tempfile.TemporaryDirectory() as td:
+            visual_path = Path(td) / 'visual.json'
+            visual_path.write_text(
+                json.dumps({'items': [card]}, ensure_ascii=False),
+                encoding='utf-8',
+            )
+            validate_russian_descriptions(visual_path)
+
+    def test_wrong_appid_translation_cache_cannot_repair_prince_of_persia(self):
+        source = 'Exact official English source text for the requested Steam app.'
+        wrong_request = build_translation_request({
+            'description_status': 'needs_translation',
+            'description_source_quality': 'non_ru',
+            'description_source_appid': '13501',
+            'description_source_text': source,
+            'description_source_path': STEAM_APPDETAILS_RU_SOURCE,
+        }, 'Wrong Edition')
+        wrong_cache = {
+            'schema_version': 1,
+            'contract': CACHE_CONTRACT_ID,
+            'updated_at_utc': '2026-09-29T00:00:00Z',
+            'entries': {
+                wrong_request['request_id']: {
+                    'request_id': wrong_request['request_id'],
+                    'source_key': wrong_request['source_key'],
+                    'source_appid': wrong_request['source_appid'],
+                    'source_text_sha256': wrong_request['source_text_sha256'],
+                    'source_version': wrong_request['source_version'],
+                    'translated_text_ru': GOOD_RU,
+                    'target_locale': 'ru',
+                    'validated_quality': 'good_ru',
+                    'result_contract': RESULT_CONTRACT_ID,
+                    'ingested_at_utc': '2026-09-29T00:00:00Z',
+                }
+            },
+        }
+        media = {'13500': {
+            'short_description_source': source,
+            'short_description_source_path': STEAM_APPDETAILS_RU_SOURCE,
+        }}
+        unresolved = resolve_description_for_appids(
+            ['13500'],
+            media,
+            metadata('13500', None, 'Prince of Persia: Warrior Within™'),
+            wrong_cache,
+        )
+        self.assertEqual(unresolved['description_status'], 'needs_translation')
+        self.assertIsNone(unresolved['summary'])
+
+    def test_appdetails_empty_and_boilerplate_never_become_translation_sources(self):
+        for bad_text in [
+            '',
+            'Русское краткое описание для этой игры пока не подготовлено.',
+        ]:
+            media = {'1': {'short_description_source': None}}
+            changed = apply_russian_appdetails_description_fallback(
+                media['1'],
+                {'short_description': bad_text},
+            )
+            self.assertFalse(changed)
+            self.assertIsNone(media['1']['short_description_source'])
 
     def test_appdetails_non_russian_does_not_override_translation_source(self):
         english = 'Explore a strange station and escape the creatures hunting you.'

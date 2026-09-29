@@ -279,7 +279,9 @@ Use this route when a visually ready game is blocked by the meaningful-Russian g
 2. Direct Russian precedence inside that runtime:
    - exact-app `IStoreBrowseService/GetItems(language=russian)`;
    - if that is not `good_ru`, exact-app official Steam `/api/appdetails?cc=kz&l=russian`;
-   - only if neither direct Steam source yields `good_ru`, keep the existing exact-bound semantic translation/cache path.
+   - a `good_ru` appdetails description remains a direct Russian source;
+   - if StoreBrowse has no already-translatable source and exact-app appdetails contains meaningful `non_ru` / `weak_ru` text, preserve that exact text and app provenance only as the existing translation/rewrite source; it is not publishable Russian;
+   - only an exact-bound accepted translation/cache entry can then turn that unresolved source into `ready_ru`.
 3. Canonical unresolved state: `data/production/pre_ai/chatgpt_ru_description_queue.jsonl` and `chatgpt_ru_description_status.json`; accepted semantic translations persist only through `data/cache/russian_description_translations.json`.
 4. Visual producer: `scripts/build_visual_feed_v2.py` reuses the same Russian `appdetails` payload already fetched for practical facts before resolving card descriptions.
 5. Final fail-closed gate: `scripts/validate_russian_descriptions.py`.

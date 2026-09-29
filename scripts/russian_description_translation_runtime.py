@@ -187,21 +187,40 @@ def build_translation_request(resolution, title):
 
 
 
-def russian_description_from_appdetails_data(data):
+def appdetails_description_candidate(data):
     if not isinstance(data, dict):
         return None
     text = normalize_description(data.get('short_description'))
+    quality = classify_description(text)
+    if quality == 'good_ru' or quality in TRANSLATABLE_QUALITIES:
+        return text
+    return None
+
+
+def russian_description_from_appdetails_data(data):
+    text = appdetails_description_candidate(data)
     return text if classify_description(text) == 'good_ru' else None
 
 
 def apply_russian_appdetails_description_fallback(media_entry, appdetails_data):
     if not isinstance(media_entry, dict):
         raise TypeError('media_entry must be a dict')
-    if classify_description(media_entry.get('short_description_source')) == 'good_ru':
+    existing_quality = classify_description(media_entry.get('short_description_source'))
+    if existing_quality == 'good_ru':
         return False
-    text = russian_description_from_appdetails_data(appdetails_data)
+
+    text = appdetails_description_candidate(appdetails_data)
     if not text:
         return False
+    appdetails_quality = classify_description(text)
+
+    # Keep an existing StoreBrowse translatable source stable. appdetails is allowed
+    # to replace it only when it supplies valid direct Russian text. When StoreBrowse
+    # is missing/technical, preserve exact-app appdetails non-Russian/weak-Russian text
+    # as the already-authorized semantic translation/rewrite source.
+    if appdetails_quality != 'good_ru' and existing_quality in TRANSLATABLE_QUALITIES:
+        return False
+
     media_entry['short_description_source'] = text
     media_entry['short_description_source_path'] = STEAM_APPDETAILS_RU_SOURCE
     return True
