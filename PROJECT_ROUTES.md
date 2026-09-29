@@ -307,3 +307,12 @@ Use this route only for the finite PPD-010 migration `deep-legacy-full-reanalysi
 
 Rediscovery invariant: never regenerate migration membership from later legacy state. The committed manifest is the complete one-off target set.
 
+Currentness invariant after PPD-012:
+- the finite PPD-010 manifest is immutable historical membership, not permanent membership in today's commercial/Progressive scope;
+- first determine whether a target exists in the current GitHub-owned Progressive scope;
+- only a target that is currently in scope must have a current binding; a missing binding for such an in-scope target remains a regression;
+- an out-of-scope target keeps its immutable accepted Deep history but has no current binding/result selection until it re-enters current scope;
+- when it re-enters, PPD-012 historical semantic-equivalence must prove the current semantic identity before the old revision can be selected current; a real profile/model/semantics/item-context change remains stale and may establish ordinary new work rather than replaying PPD-010;
+- regression coverage: `scripts/test_progressive_profile_semantic_identity_stability.py` classifies every frozen migration target individually as current+equivalent, current+stale, or outside current scope.
+
+
