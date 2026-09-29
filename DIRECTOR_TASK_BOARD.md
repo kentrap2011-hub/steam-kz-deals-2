@@ -16,7 +16,25 @@
 - Do not reopen PR #121 expiry logic, RANK-013, or the game:1143810 regression merely because the live site is unchanged; first verify what code/payload Pages actually deployed.
 - Recommended next bounded task: READ-ONLY / RECON of the current Pages artifact/source and latest visual/deploy chain, covering both deployed browser code and deployed web/data/current.json.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
-- This Director conversation is retired after refreshing DIRECTOR_BOOTSTRAP.md; continue in a NEW physical Director chat.
+- Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## VERIFIED CURRENT PAGES STATE — 2026-09-29 Director reconciliation
+
+Confirmed against the actual latest successful Pages artifact and current Actions history:
+- latest successful `Deploy visual mailing` is run `36516701438`, Pages artifact `11011058068`, created from workflow head `c25762948500d6f64158047de01c7e4f5952911f`;
+- all later deploy attempts relevant to PR #121 were non-successful: `36518618351` cancelled, `36518623279` skipped, `36518660075` skipped;
+- the deployed artifact's `app.js` blob is `204d854a49ff7ea2a98a17b70fb1fdcace87d07e` and `progressive-personalization-ui.js` blob is `09de470e8692d6d2de060d6e8cdf6553bffd1341`;
+- those browser blobs exactly match commit `c25762948500d6f64158047de01c7e4f5952911f` and do **not** match PR #121/main browser blobs `911232bd29f81773c9f7894bace2b39e481de52a` / `63e4ad5d6944aad6d219ffde5b42c9a97e360bb0`;
+- therefore the actual Pages artifact does not contain the merged PR #121 expired-sale browser filtering;
+- deployed `data/current.json` blob is `77ca2cbbb83695055d76e99577d37f98e1c57464`, exactly the same blob as current canonical `data/production/visual/current.json` in `main`;
+- deploy log classifies that publication as `degraded/no_fresh_build` and identifies canonical visual commit `2202a668cad11f67f0659aa6bcfe5e6cf34bb9ab`;
+- latest full visual build after PR #121, run `36518618313`, failed; no later successful Pages deploy exists in the checked current Actions window.
+
+Director conclusion:
+- the unchanged live site is **not** evidence that PR #121, RANK-013, or the current-binding fix regressed;
+- there are two proven publication gaps in the currently deployed artifact: browser assets are behind `main`, while the canonical visual payload itself remains the stale `2202a668...` snapshot;
+- next work must stay in the publication/build/deploy layer and must not reimplement expiry/ranking/current-binding business logic.
 
 
 ## CURRENT USER-OBSERVED BLOCKER — Live site unchanged after accepted fixes
