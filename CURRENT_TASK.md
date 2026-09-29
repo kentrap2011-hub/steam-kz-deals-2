@@ -1,14 +1,17 @@
 # CURRENT TASK
 
-## IN PROGRESS — Current Russian description publication blocker fix 02
-Статус: `in_progress`.
+## BLOCKED — Current Russian description publication blocker fix 02
+Статус: `blocked`.
 - task: `WORKER_TASK_CURRENT_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_02.md`;
-- pinned failing full build: `36458961848`, build job `109052509111`; exact invalid card is `game:13500` / `App_13500` / `Prince of Persia: Warrior Within™`;
-- current canonical description state: `missing_source / missing`; no `App_13500` translation-queue row and no accepted translation-cache row;
-- proven failure class: Russian StoreBrowse has no usable description and exact-app Steam appdetails in Russian locale yields non-Russian text; PR #103 discards that text because it is not `good_ru`, so the authorized semantic translation fallback is never prepared;
-- architecture preflight: GitHub remains owner of deterministic source acquisition, exact fallback selection, queueing, validation, persistence and publication; browser remains read-only; no Fast/Dossier/Deep, ranking, Scheduled Task, scheduler/retry or ownership change is authorized;
-- next: preserve a meaningful exact-app non-Russian/weak-Russian appdetails description only as the existing translation/rewrite source when no better StoreBrowse source exists, add focused regressions, then validate via PR and fresh `main`.
-
+- implementation PR: `#119`; merge: `c25762948500d6f64158047de01c7e4f5952911f`;
+- generic fix is merged and validated: exact-app appdetails `non_ru/weak_ru` can now feed only the existing exact-bound translation path; English/non-Russian text remains non-publishable and the meaningful-Russian gate remains fail-closed;
+- PR validation: ownership/runtime run `36516586557` success (14 translation-runtime tests, final fixture invalid_count=0); backlog dispositions `36516586551` success;
+- fresh full visual run `36516631672` executed and now classifies `game:13500` plus `game:1155970` as `needs_translation`; final Russian gate correctly failed, so no canonical visual commit was persisted;
+- post-merge pre-AI run `36516631678` cannot refresh App_13500 translation scope because the pre-existing Progressive regression `migration target missing current binding: game:1143810` fails earlier; the same failure is proven in pre-task run `36458961528`;
+- latest canonical visual remains stale commit `2202a668cad11f67f0659aa6bcfe5e6cf34bb9ab`; Pages run `36516701438` deployed it only as `degraded/no_fresh_build`, artifact `11011058068`;
+- no manual translation/cache population, Fast/Dossier/Deep execution, ranking change, scheduler/retry ownership change or Scheduled Task change;
+- report: `reviews/worker_reports/current-russian-description-publication-blocker-fix-02.md`;
+- next bounded action: separate worker fixes only the pre-existing Progressive `game:1143810` current-binding regression so normal pre-AI can reach Russian translation-scope publication.
 
 ## BLOCKED — Deep-first final-score order fix 01
 Статус: `blocked`.
