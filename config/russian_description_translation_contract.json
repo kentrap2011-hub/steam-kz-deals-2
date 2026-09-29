@@ -7,10 +7,10 @@
   "result_contract": "config/russian_description_translation_result_contract.json",
   "cache_entry_contract": "config/russian_description_translation_cache_entry_contract.json",
   "implementation_boundary": {
-    "this_task_is_contract_only": true,
-    "translation_producer_or_ingest_implementation_in_scope": false,
+    "translation_scope_and_ingest_implemented": true,
+    "publication_observability_implementation_in_scope": true,
     "mass_translation_in_scope": false,
-    "production_cache_population_in_scope": false,
+    "production_cache_population_by_interactive_chat_allowed": false,
     "interactive_manual_catalog_fill_allowed": false
   },
   "ownership": {
@@ -23,7 +23,10 @@
         "validate returned keys, hashes, statuses, and Russian text quality",
         "merge validated results into the canonical translation cache",
         "invalidate stale cache entries when the source-text binding changes",
-        "rebuild downstream visual artifacts and enforce the final Russian-description gate"
+        "rebuild downstream visual artifacts and enforce the final Russian-description gate",
+        "derive and persist the current untranslated-game count from the canonical translation/publication scope",
+        "persist durable translation-attempt and successful-translation timestamps from canonical GitHub stage events",
+        "publish explicit unresolved-description diagnostics without relabeling unresolved text as Russian"
       ],
       "must_not_delegate": [
         "scope selection",
@@ -195,15 +198,43 @@
     "owner": "github_control_plane",
     "chatgpt_retry_loop_allowed": false,
     "chatgpt_batch_quota_allowed": false,
-    "success_condition": "Every current translatable unresolved request has either an exact valid cache hit or a validated accepted result; technical/missing-source blockers are separately accounted by GitHub and still block final replacement when a visible description remains unresolved.",
+    "success_condition": "Translation work is complete only when every current translatable unresolved request has an exact valid cache hit or a validated accepted result; unresolved translation or nontranslatable-description state remains explicit and observable but does not by itself block visual publication.",
     "stale_or_invalid_result": "remains unresolved and is eligible for GitHub-owned retry in the same/current canonical production lifecycle according to runtime state",
-    "production_completion_decider": "GitHub only"
+    "production_completion_decider": "GitHub only",
+    "publication_requires_translation_completion": false
   },
   "downstream": {
     "validated_cache_ingest_must_trigger_or_enable_existing_downstream_rebuild": true,
     "final_visual_artifact": "data/production/visual/current.json",
     "final_quality_gate": "scripts/validate_russian_descriptions.py",
     "final_gate_must_remain_fail_closed": true,
-    "unresolved_translation_may_not_become_normal_summary": true
+    "unresolved_translation_may_not_become_normal_summary": true,
+    "explicit_unresolved_description_blocks_publication": false,
+    "final_gate_rule": "The final validator remains fail-closed for masquerading/non-Russian summaries, wrong status combinations, and invalid accepted translation state, while an explicitly unresolved description with no published summary is a nonblocking diagnostic.",
+    "untranslated_games_remain_visible": true
+  },
+  "observability": {
+    "owner": "github_control_plane",
+    "durable_status_manifest": "data/production/pre_ai/chatgpt_ru_description_status.json",
+    "untranslated_game_count": {
+      "field": "untranslated_game_count",
+      "definition": "Number of current translation/publication-scope game rows whose resolved description is not ready_ru after exact direct-source/cache resolution.",
+      "browser_derivation_allowed": false
+    },
+    "last_translation_attempt_at": {
+      "field": "last_translation_attempt_at",
+      "definition": "GitHub-owned UTC timestamp of the latest canonical translation attempt/check: a validated translation submission ingest attempt, or a canonical current-scope check that finds zero translation work.",
+      "advances_on_failed_or_error_result_attempt": true,
+      "zero_work_check_counts_as_attempt": true
+    },
+    "last_successful_translation_at": {
+      "field": "last_successful_translation_at",
+      "definition": "GitHub-owned UTC timestamp of the latest canonical event that either accepted at least one valid translation or completed a current-scope check with zero translation work.",
+      "advances_on_partial_success_with_at_least_one_accepted": true,
+      "advances_on_zero_work_check": true,
+      "does_not_advance_on_attempt_with_zero_accepted_when_work_remains": true
+    },
+    "partial_success_rule": "Attempt and success timestamps both advance when at least one exact-bound translation is accepted; unresolved rows remain in current count/scope.",
+    "browser_rule": "Browser may only render/format these producer-owned facts and must not infer count or timestamps from cards, commits, page-load time, deployment time, or payload age."
   }
 }
