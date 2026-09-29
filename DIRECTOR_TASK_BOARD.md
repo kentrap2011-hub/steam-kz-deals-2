@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- No worker task is currently assigned in slot `ЧАТ 1`.
+- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_CURRENT_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_02.md` (`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`).
 - No worker task is currently assigned in slot `ЧАТ 2`.
 - Latest accepted implementation: `WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md` (implementation accepted; publication proof blocked by pre-existing Russian-description gate).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -12,6 +12,35 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 1 — Current Russian description publication blocker fix
+
+Task:
+`WORKER_TASK_CURRENT_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_02.md`
+
+Mode:
+`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`
+
+Goal:
+- identify the exact current game(s) failing `Require meaningful Russian descriptions before canonical commit`;
+- prove why the PR #103 StoreBrowse -> official appdetails -> translation fallback still leaves those cards invalid;
+- implement the smallest generic fix without weakening the fail-closed Russian-description gate;
+- achieve a real fresh full visual build and publication if no independent blocker intervenes.
+
+Constraints:
+- no handwritten per-game descriptions;
+- no manual translation-cache writes;
+- no Fast/Dossier/Deep semantic execution;
+- no ranking/RANK-013 changes;
+- no Scheduled Task changes;
+- do not fold the separate stale-snapshot rebase-race fix into this task unless publication cannot be completed without it and the report explicitly proves why.
+
+Report:
+`reviews/worker_reports/current-russian-description-publication-blocker-fix-02.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 1`.
 
 
 ## ACCEPTED IMPLEMENTATION / BLOCKED PUBLICATION — ЧАТ 1 — Deep-first final-score order fix
