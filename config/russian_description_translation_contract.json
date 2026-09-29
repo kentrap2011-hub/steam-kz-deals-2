@@ -1,7 +1,7 @@
 {
   "contract": "RUSSIAN-DESCRIPTION-TRANSLATION-V1",
   "status": "canonical",
-  "purpose": "Define the bounded semantic translation interface for unresolved Russian game descriptions while preserving GitHub control-plane ownership and reusing the existing nightly scheduled ChatGPT data-plane.",
+  "purpose": "Define bounded semantic translation interfaces for unresolved Russian game descriptions while preserving GitHub control-plane ownership across the existing scheduled worker and the explicitly user-launched one-shot manual semantic-worker mode.",
   "ownership_contract": "config/execution_ownership_contract.json",
   "daily_execution_contract": "config/daily_execution_contract.json",
   "result_contract": "config/russian_description_translation_result_contract.json",
@@ -55,6 +55,28 @@
       "role": "developer/operator only",
       "production_catalog_translation_allowed": false,
       "manual_cache_population_allowed": false
+    },
+    "manual_one_shot_chatgpt_data_plane": {
+      "role": "constrained semantic translation worker launched explicitly by the user",
+      "canonical_prompt": "config/russian_description_manual_semantic_worker_prompt.md",
+      "requires_fresh_explicit_user_launch_every_run": true,
+      "allowed": [
+        "read only the exact current immutable translation work input prepared by GitHub",
+        "translate non-Russian source text into meaningful Russian",
+        "rewrite weak Russian source text into meaningful Russian without changing material meaning",
+        "return only result records bound to exact request identities supplied by GitHub",
+        "submit a strict subset checkpoint through the existing translation inbox when context durability requires it",
+        "submit a zero-result no-work receipt only when the current canonical queue is empty"
+      ],
+      "forbidden": [
+        "discover or add games independently",
+        "change source selection or canonical request order",
+        "invent new request identities",
+        "choose retry eligibility or completeness",
+        "write directly to the canonical translation cache",
+        "create or modify any Scheduled Task or recurring scheduler",
+        "continue after an accepted checkpoint without rereading the current GitHub-owned queue and bindings"
+      ]
     }
   },
   "runtime_reuse": {
@@ -63,7 +85,12 @@
     "separate_recurring_translation_schedule_allowed": false,
     "translation_is_additional_semantic_work_type_inside_existing_cycle": true,
     "taste_specific_input_or_result_schema_may_be_reused": false,
-    "rule": "Translation may use a translation-specific queue/result schema, but GitHub must attach that work to the same GitHub-owned nightly production cycle and existing scheduled ChatGPT data-plane rather than creating an independent chat-owned scheduler."
+    "rule": "Translation may use a translation-specific queue/result schema, but GitHub must attach that work to the same GitHub-owned nightly production cycle and existing scheduled ChatGPT data-plane rather than creating an independent chat-owned scheduler.",
+    "manual_one_shot_semantic_worker_allowed": true,
+    "manual_worker_prompt_path": "config/russian_description_manual_semantic_worker_prompt.md",
+    "manual_worker_reuses_same_queue_result_ingest": true,
+    "manual_worker_creates_or_modifies_scheduled_task": false,
+    "manual_worker_rule": "Every run requires a fresh explicit user launch. The one-shot chat is a semantic data-plane exception only; ordinary interactive developer/operator chats remain non-production."
   },
   "scope": {
     "owner": "github_control_plane",
@@ -163,7 +190,8 @@
     ],
     "unknown_request_keys_allowed": false,
     "worker_may_return_subset_checkpoint": true,
-    "subset_checkpoint_rule": "A submission may contain a strict subset of current requests for transport/checkpoint reasons. Missing results remain unresolved; subset size never becomes a daily quota or completeness rule."
+    "subset_checkpoint_rule": "A submission may contain a strict subset of current requests for transport/checkpoint reasons. Missing results remain unresolved; subset size never becomes a daily quota or completeness rule.",
+    "zero_result_submission_rule": "A zero-result submission is a successful no-work check only when the exact current canonical queue is empty. With a nonempty queue it is not an attempted translation and does not advance attempt/success observability."
   },
   "github_validation": {
     "exact_current_request_match_required": true,
@@ -219,7 +247,7 @@
     "partial_success_rule": "If one or more exact-bound translations are accepted, last_successful_translation_at_utc advances even when unresolved current items remain; untranslated_game_count is rebuilt honestly from the current scope.",
     "failed_attempt_rule": "A current exact-bound valid error result advances last_translation_attempt_at_utc but not last_successful_translation_at_utc.",
     "invalid_or_stale_transport_rule": "A structurally invalid, stale, wrong-AppID or wrong-binding submission is rejected fail-closed and is not recorded as a successful/current-work translation attempt.",
-    "zero_work_rule": "A current translation-scope check with queue_count=0 is both an attempt/check and a successful no-work outcome, even though separately classified nontranslatable source blockers may remain observable.",
+    "zero_work_rule": "A current translation-scope check with queue_count=0 is both an attempt/check and a successful no-work outcome. An explicitly launched manual semantic worker records this only through a zero-result canonical submission ingested while the current queue is empty; the worker never supplies its own timestamp.",
     "browser_rule": "The browser may format these producer-owned values only; it must not infer count or timestamps from page load, deploy time, commit time, card contents or payload age."
   }
 }
