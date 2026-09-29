@@ -69,6 +69,8 @@ require(runtime.get("existing_daily_contract_id") == daily.get("contract"), "run
 require(runtime.get("separate_recurring_translation_schedule_allowed") is False, "separate recurring translation schedule must remain forbidden")
 require(runtime.get("translation_is_additional_semantic_work_type_inside_existing_cycle") is True, "translation must be part of the existing nightly semantic cycle")
 require(runtime.get("taste_specific_input_or_result_schema_may_be_reused") is False, "Taste-specific result schema must not be overloaded")
+require(runtime.get("manual_one_shot_semantic_worker_allowed") is True, "manual one-shot Russian semantic worker must be authorized")
+require(runtime.get("manual_one_shot_is_recurring_runtime") is False, "manual one-shot Russian semantic worker must not become recurring")
 
 scope = contract.get("scope") or {}
 require(set(scope.get("eligible_description_statuses") or []) == {"needs_translation", "needs_ru_rewrite"}, "translation scope must be exactly the two unresolved semantic states")
@@ -132,6 +134,7 @@ require(boundary.get("publication_observability_implementation_in_scope") is Tru
 require(boundary.get("mass_translation_in_scope") is False, "mass translation must remain out of scope")
 require(boundary.get("production_cache_population_by_interactive_chat_allowed") is False, "interactive chat cache population must remain forbidden")
 require(boundary.get("interactive_manual_catalog_fill_allowed") is False, "interactive manual catalog fill must remain forbidden")
+require(boundary.get("manual_one_shot_semantic_worker_implemented") is True, "canonical manual one-shot semantic worker must be implemented")
 
 artifacts = contract.get("reserved_artifacts_for_followup_implementation") or {}
 expected_artifacts = {
