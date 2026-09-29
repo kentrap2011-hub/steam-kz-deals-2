@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` assigned: `WORKER_TASK_VISUAL_STALE_SNAPSHOT_REBASE_RACE_FIX_01.md` — authorized fix for the proven full-visual stale-snapshot persistence race and truthful freshness classification.
+- `ЧАТ 1` is free. `WORKER_TASK_VISUAL_STALE_SNAPSHOT_REBASE_RACE_FIX_01.md` is accepted complete via PR #126 / merge `f57d5b922ee333759c951de38686eb448a8c10fd`; closeout PR #127 is also merged.
 - `ЧАТ 2` is free. `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` is accepted complete via PR #125 / merge `070f30807acceffed36a342e1d442f5dcd1c99c7`.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -19,7 +19,7 @@
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
 
 
-## ACTIVE — ЧАТ 1 — Visual stale-snapshot rebase race fix
+## ACCEPTED — ЧАТ 1 — Visual stale-snapshot rebase race fix
 
 Task:
 `WORKER_TASK_VISUAL_STALE_SNAPSHOT_REBASE_RACE_FIX_01.md`
@@ -28,7 +28,15 @@ Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`authorized_ready_for_worker`
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- implementation PR #126 merged as `f57d5b922ee333759c951de38686eb448a8c10fd`;
+- closeout PR #127 merged with the durable worker report;
+- post-merge build `36596838833` succeeded and persisted visual commit `51a37b14c38b7f27d103c5f50e2e0788dece4a25`;
+- Pages deploy `36596937298` succeeded with exact material binding and artifact `11046512431`;
+- stale mixed-parent/mixed-source persistence is fixed: material drift rebuilds once from fresh main and a second drift/rebuild failure is fail-closed;
+- current `degraded/no_fresh_build` status may still legitimately appear for `deterministic_refresh_preserved_semantic_history`, but this no longer means the visual is bound to stale material inputs.
 
 User authorization:
 - fix the already accepted stale visual freshness race;
