@@ -18,10 +18,10 @@
     "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
     "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
   },
-  "next_pending_sequence": 7,
+  "next_pending_sequence": 8,
   "accepted_group_count": 4,
-  "failed_group_count": 2,
-  "pending_group_count": 75,
+  "failed_group_count": 3,
+  "pending_group_count": 74,
   "normal_first_pass_complete": false,
   "all_groups_accepted": false,
   "full_backlog_complete": false,
@@ -48,6 +48,17 @@
         "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000004--6ca3d668198b4ad11b4b838d7b7cf67afc1d500c63713b7f448535fc20ebdbf2.json",
         "artifact_sha256": "9461a9753d4da9f2b51516d14a36596891067054d8e842b49baef84304b6e411",
         "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000004/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000004--6ca3d668198b4ad11b4b838d7b7cf67afc1d500c63713b7f448535fc20ebdbf2.json.invalid-9461a9753d4d",
+        "recovery_eligible": true
+      }
+    },
+    {
+      "sequence": 7,
+      "group_sha256": "efb7a4fea632ac7692beb47636f8bcf336abc0fb2954cc355fe6e999c5d32b97",
+      "failure": {
+        "validator_error": "provenance.player_feedback_records[4] acquisition_mode requires concrete_item_collection parent provenance",
+        "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000007--efb7a4fea632ac7692beb47636f8bcf336abc0fb2954cc355fe6e999c5d32b97.json",
+        "artifact_sha256": "eaba69a73bc95d0efe640d9b2a89db9d66089961115bb5050fb999f22e1f9f2f",
+        "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000007/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000007--efb7a4fea632ac7692beb47636f8bcf336abc0fb2954cc355fe6e999c5d32b97.json.invalid-eaba69a73bc9",
         "recovery_eligible": true
       }
     }
