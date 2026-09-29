@@ -49,6 +49,10 @@ on:
       - "config/russian_description_translation_contract.json"
       - "config/russian_description_translation_result_contract.json"
       - "config/russian_description_translation_cache_entry_contract.json"
+      - "config/russian_description_manual_semantic_worker_prompt.md"
+      - "config/execution_ownership_contract.json"
+      - "scripts/validate_execution_ownership.py"
+      - "scripts/test_russian_description_manual_semantic_worker.py"
       - "scripts/apply_fixed_package_purchase_options.py"
       - "scripts/refresh_visual_commercial_fields.py"
       - "scripts/test_commercial_refresh.py"
@@ -837,6 +841,7 @@ jobs:
           python scripts/test_russian_description_quality.py
           python scripts/validate_russian_description_translation_contract.py
           python scripts/test_russian_description_translation_runtime.py
+          python scripts/test_russian_description_manual_semantic_worker.py
           python scripts/test_validate_russian_descriptions_pending_ai.py
           python scripts/test_russian_translation_observability.py
 
