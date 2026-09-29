@@ -32,6 +32,8 @@ def validate(path, allow_untranslated=False):
         return
 
     failures = []
+    nonblocking_untranslated = []
+    blocking_invalid = []
     counts = {}
     validated_count = 0
     for game in items:
@@ -58,13 +60,31 @@ def validate(path, allow_untranslated=False):
             )
             continue
         if category != 'good_ru' or (status is not None and status != 'ready_ru'):
-            failures.append({
+            failure = {
                 'id': game.get('id'),
                 'title': game.get('title'),
                 'category': category,
                 'description_status': status,
-            })
+            }
+            failures.append(failure)
+            explicit_untranslated = (
+                status in {
+                    'needs_translation',
+                    'needs_ru_rewrite',
+                    'technical_source',
+                    'missing_source',
+                }
+                and category != 'good_ru'
+            )
+            if explicit_untranslated:
+                nonblocking_untranslated.append(failure)
+            else:
+                blocking_invalid.append(failure)
 
+    publication_blocking = (
+        bool(blocking_invalid)
+        or (bool(nonblocking_untranslated) and not allow_untranslated)
+    )
     result = {
         'path': str(path),
         'item_count': len(items),
@@ -73,17 +93,26 @@ def validate(path, allow_untranslated=False):
         'category_counts': counts,
         'invalid_count': len(failures),
         'invalid_examples': failures[:20],
-        'publication_blocking': bool(failures) and not allow_untranslated,
+        'nonblocking_untranslated_count': len(nonblocking_untranslated),
+        'blocking_invalid_count': len(blocking_invalid),
+        'blocking_invalid_examples': blocking_invalid[:20],
+        'publication_blocking': publication_blocking,
     }
     print(json.dumps(result, ensure_ascii=False, indent=2))
-    if failures and allow_untranslated:
+    if blocking_invalid:
+        raise SystemExit(
+            'Russian description validation failed: '
+            f'{len(blocking_invalid)} personalized cards have non-untranslated invalid Russian state'
+        )
+    if nonblocking_untranslated and allow_untranslated:
         print(
             'RUSSIAN_DESCRIPTION_VALIDATION=NONBLOCKING '
-            f'untranslated_or_invalid={len(failures)} publication_allowed=true'
+            f'explicit_untranslated={len(nonblocking_untranslated)} publication_allowed=true'
         )
-    elif failures:
+    elif nonblocking_untranslated:
         raise SystemExit(
-            f'Russian description validation failed: {len(failures)}/{validated_count} personalized cards are not meaningful Russian'
+            'Russian description validation failed: '
+            f'{len(nonblocking_untranslated)}/{validated_count} personalized cards are explicitly untranslated'
         )
     return result
 
@@ -94,7 +123,7 @@ def main():
     parser.add_argument(
         '--allow-untranslated',
         action='store_true',
-        help='report unresolved/invalid Russian descriptions without blocking publication',
+        help='allow only explicitly unresolved translation states without blocking publication',
     )
     args = parser.parse_args()
     validate(args.path, allow_untranslated=args.allow_untranslated)
