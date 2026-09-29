@@ -1,5 +1,15 @@
 # CURRENT TASK
 
+## IN PROGRESS — Current Russian description publication blocker fix 02
+Статус: `in_progress`.
+- task: `WORKER_TASK_CURRENT_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_02.md`;
+- pinned failing full build: `36458961848`, build job `109052509111`; exact invalid card is `game:13500` / `App_13500` / `Prince of Persia: Warrior Within™`;
+- current canonical description state: `missing_source / missing`; no `App_13500` translation-queue row and no accepted translation-cache row;
+- proven failure class: Russian StoreBrowse has no usable description and exact-app Steam appdetails in Russian locale yields non-Russian text; PR #103 discards that text because it is not `good_ru`, so the authorized semantic translation fallback is never prepared;
+- architecture preflight: GitHub remains owner of deterministic source acquisition, exact fallback selection, queueing, validation, persistence and publication; browser remains read-only; no Fast/Dossier/Deep, ranking, Scheduled Task, scheduler/retry or ownership change is authorized;
+- next: preserve a meaningful exact-app non-Russian/weak-Russian appdetails description only as the existing translation/rewrite source when no better StoreBrowse source exists, add focused regressions, then validate via PR and fresh `main`.
+
+
 ## BLOCKED — Deep-first final-score order fix 01
 Статус: `blocked`.
 - task: `WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md`;
