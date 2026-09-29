@@ -8,7 +8,9 @@ Repository/source of truth: `kentrap2011-hub/steam-kz-deals-2`, `main`.
 
 Implementation PR: #121 — `Hide expired sales immediately in active browser feed`.
 
-Goal completed at code/regression level: a paid active-sale card with a valid known `sale_end_utc <= now` is removed locally from the browser-visible active sale set without a new Steam request or production rebuild. Unknown/null/malformed sale end remains visible.
+PR #121 is merged into `main` as merge commit `9a500cefd3ec3bf460cf3c51afe92c35e55ab97b`.
+
+Final scoped behavior: a paid active-sale card with a valid known `sale_end_utc <= now` is removed locally from the browser-visible active sale set without a new Steam request or production rebuild. Unknown/null/malformed sale end remains visible.
 
 ## 2. Architecture preflight
 
@@ -134,43 +136,71 @@ Executable coverage in `web/progressive-personalization-ui.test.js` proves:
 
 Integration assertions prove the active-sale filter runs before queue/manual reconciliation and that render/search both trigger re-evaluation.
 
-Final functional implementation head before report-only closeout:
-`82946194677cb32b71e9fef007edf3bf6071ff15`.
+Final rebuilt PR head:
+`382432734586d2b7951dde060ad05dd40a13903a`.
 
-PR validation for that head:
-- Validate Progressive PASS 2 core: run `36517131643` / run #377 — success.
-- PASS 2 validate job: `109241827175` — success.
-- UI provenance regression step — success and executes `node web/progressive-personalization-ui.test.js`.
-- Validate backlog dispositions: run `36517131563` / run #1406 — success.
-- Validate package purchase value: run `36517131574` / run #32 — success.
+Required checks on that rebuilt head all passed:
+- Validate Progressive PASS 2 core: run `36518539660` / run #385 — success;
+- PASS 2 validate job: `109246150807` — success;
+- `UI provenance regression` step — success and executes `node web/progressive-personalization-ui.test.js`;
+- Validate backlog dispositions: run `36518539741` / run #1415 — success;
+- Validate package purchase value: run `36518539636` / run #35 — success.
 
-An earlier implementation head `1718eece3c3ba8327f36bb9aeb74c02bebe855e6` also passed all three workflows; the later head adds executable cursor/count/urgency proof.
+Post-merge checks on `main@9a500cef...` also passed:
+- Validate Progressive PASS 2 core: run `36518618397` / run #386 — success;
+- Validate backlog dispositions: run `36518618404` / run #1416 — success.
 
 ## 9. Fresh-main reconciliation
 
-Concurrent workers continued advancing `main` during this task.
+The original PR branch had fallen behind because concurrent ЧАТ 1 and production/Dossier work continued writing `main`.
 
-Important reconciliation points:
-- after detecting that a generic recent-commit listing is not authoritative for `main` HEAD, the worker branch was explicitly anchored through the `main` branch ref before substantive re-application;
-- the implementation was reapplied from fresh `main` commit `c25762948500d6f64158047de01c7e4f5952911f`;
-- `main` later advanced through `41c03df2d5a670ba9cc4e09d056b433fc9452d2d` and was most recently observed at `10925294b0ba7c393cc6b182c8d11e1d59e2b699`;
-- comparison from `c257629...` to that newer `main` showed concurrent changes in `CURRENT_TASK.md`, `DIRECTOR_TASK_BOARD.md`, Russian-description report and Dossier/Deep production state, but no changes to `web/app.js`, `web/progressive-personalization-ui.js` or its test;
-- raw GitHub PR state for #121 reported `mergeable=true`; the branch is behind only because unrelated concurrent production/control-plane writes continue landing on `main`.
+Final rebuild procedure:
+1. Read exact current `main` branch ref.
+2. Use fresh `main@93d3c7b969fb55c25944a5707a6c1f70b1168b71` as the parent/base tree.
+3. Reapply only the exact task blobs:
+   - `web/app.js`;
+   - `web/progressive-personalization-ui.js`;
+   - `web/progressive-personalization-ui.test.js`;
+   - this worker report.
+4. Do not carry the worker branch's old `CURRENT_TASK.md`; the fresh `main` version was preserved.
+5. Force-move the existing PR branch to rebuilt commit `382432734586d2b7951dde060ad05dd40a13903a`.
 
-No unrelated concurrent production state was copied into or modified by this implementation.
+After the rebuild, `main` continued to advance independently. The intervening commits touched Chat 1 / routing / Progressive tests and then fresh pre-AI/Dossier production state, but did not touch the three implementation `web/**` files.
+
+Immediately before merge, PR #121 reported `mergeable=true`, `mergeable_state=clean`, and all required PR checks were green.
+
+The actual merge commit is:
+`9a500cefd3ec3bf460cf3c51afe92c35e55ab97b`.
+
+Its parents are:
+- first parent `4836bea4c7c0822baa08c954cfbcfe6651ccb0d5` — the then-current `main`, containing the newest Chat 1 and production/Dossier writes;
+- second parent `382432734586d2b7951dde060ad05dd40a13903a` — the rebuilt PR head.
+
+Therefore the merge preserved all concurrent `main` work and added only the scoped task changes; it did not roll back Chat 1 or production/Dossier state.
 
 ## 10. Publication validation
 
-No live/publication success is claimed.
+Implementation is merged in `main`, but live visual publication proof remains independently blocked.
 
-Independent current publication state from `main`:
-- Russian-description fix PR #119 is merged at `c25762948500d6f64158047de01c7e4f5952911f`;
-- fresh full visual run `36516631672` still failed the meaningful-Russian gate with App_13500 and App_1155970 in `needs_translation`;
-- post-merge pre-AI run `36516631678` is additionally stopped earlier by the pre-existing Progressive current-binding regression for `game:1143810`;
-- latest documented canonical visual remains stale commit `2202a668cad11f67f0659aa6bcfe5e6cf34bb9ab`;
-- degraded Pages deploy run `36516701438`, artifact `11011058068`, deployed that existing stale visual.
+The merge push triggered full visual build run `36518618313`:
+- scope job succeeded;
+- build job `109246437198` reached `Require meaningful Russian descriptions before canonical commit`;
+- that unchanged gate failed with `invalid_count=2`;
+- exact unresolved cards were:
+  - `game:13500` / `Prince of Persia: Warrior Within™` — `needs_translation`;
+  - `game:1155970` / `Roadwarden` — `needs_translation`.
 
-This task is deliberately designed to work against a stale payload once its stored end timestamp has passed. PR-level behavior is validated, but the source change is not live until PR #121 is accepted/merged and the normal Pages source is deployed.
+This is the same independent Russian-description publication blocker class already documented outside this task. The expired-sale implementation did not weaken or bypass that gate.
+
+Deploy visual runs associated with the merge did not establish a new live payload:
+- `36518618351` — cancelled;
+- `36518623279` — skipped;
+- `36518660075` — skipped.
+
+Therefore:
+- source implementation is merged and regression-validated in `main`;
+- no new live Pages/publication success is claimed;
+- the local expiry rule is intentionally capable of hiding a passed known timestamp even when the browser receives an older/stale payload.
 
 ## 11. Changes not made
 
@@ -193,35 +223,35 @@ No sale data was edited by hand and no expiry network polling was added.
 
 ## 12. Unresolved
 
-- Live Pages proof is not available before PR #121 is merged/deployed.
-- The independent visual publication chain remains blocked as described above.
-- The current production visual was not rewritten by this task; only the browser's visibility behavior is fixed.
+No scoped implementation or regression issue remains.
 
-No unresolved implementation or regression failure is known for the scoped expiry rule.
+Only publication proof remains unavailable because the independent meaningful-Russian gate blocks a new canonical visual payload. That blocker is outside this task and was not modified here.
 
 ## 13. Status
 
 `complete_ready_for_director_acceptance`
 
-The scoped implementation and required regressions are complete. Publication proof is separately blocked and is not treated as an implementation failure per the task contract.
+PR #121 is merged into `main`; required regressions pass before and after merge. Live publication proof is separately blocked by the already-known Russian-description gate and is not treated as a failure of this scoped task.
 
 ## 14. Recommended next step
 
-Director reviews and accepts PR #121 against the then-current `main`, merging it only if GitHub still reports a clean/mergeable change set.
+none
 
 ## 15. Exact PR/commit/run/artifact refs
 
 - PR: #121 — `Hide expired sales immediately in active browser feed`.
-- Functional implementation head: `82946194677cb32b71e9fef007edf3bf6071ff15`.
-- Main base used for final functional re-application: `c25762948500d6f64158047de01c7e4f5952911f`.
-- Latest main observed during reconciliation: `10925294b0ba7c393cc6b182c8d11e1d59e2b699`.
-- PASS 2 core: `36517131643`, job `109241827175`.
-- Backlog dispositions: `36517131563`.
-- Package purchase value: `36517131574`.
-- Independent Russian-description full visual: `36516631672`.
-- Independent pre-AI blocker run: `36516631678`.
-- Degraded Pages deploy: `36516701438`, artifact `11011058068`.
-- Existing stale canonical visual commit: `2202a668cad11f67f0659aa6bcfe5e6cf34bb9ab`.
+- Rebuilt PR head: `382432734586d2b7951dde060ad05dd40a13903a`.
+- Merge commit in `main`: `9a500cefd3ec3bf460cf3c51afe92c35e55ab97b`.
+- Merge first parent / preserved then-current `main`: `4836bea4c7c0822baa08c954cfbcfe6651ccb0d5`.
+- Merge second parent / task head: `382432734586d2b7951dde060ad05dd40a13903a`.
+- Fresh-main rebuild anchor: `93d3c7b969fb55c25944a5707a6c1f70b1168b71`.
+- PR PASS 2 core: `36518539660`, job `109246150807`.
+- PR backlog dispositions: `36518539741`.
+- PR package purchase value: `36518539636`.
+- Post-merge PASS 2 core: `36518618397`.
+- Post-merge backlog dispositions: `36518618404`.
+- Post-merge full visual build: `36518618313`, build job `109246437198` — blocked by meaningful-Russian gate.
+- Post-merge deploy attempts: `36518618351` cancelled; `36518623279` skipped; `36518660075` skipped.
 
 ## 16. Efficiency / reusable lesson
 
