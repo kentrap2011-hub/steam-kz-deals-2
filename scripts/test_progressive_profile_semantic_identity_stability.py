@@ -156,6 +156,37 @@ def synthetic_rules():
     assert fingerprint_bindings['game:1']['work_id'] != bindings_a['game:1']['work_id']
     assert fingerprint_bindings['game:2']['work_id'] == bindings_a['game:2']['work_id']
 
+    # Current commercial/eligible scope and durable semantic history are separate.
+    # A game can leave today's catalogue (for example after a sale expires) without
+    # deleting or relabelling its accepted Deep result. If the same semantic identity
+    # later re-enters current scope, the preserved result becomes current again.
+    deep_entry = {
+        **{field: bindings_a['game:1'][field] for field in progressive_pass1.IDENTITY_FIELDS},
+        'profile_semantic_sha256': bindings_a['game:1']['profile_semantic_sha256'],
+        'normal_first_pass_attempted': True,
+        'authoritative_completed': True,
+        'outcome': 'analyzed_not_fit',
+        'accepted_at_utc': '2026-09-28T00:00:00+00:00',
+    }
+    deep_state = {
+        'schema_version': 1,
+        'contract': 'PROGRESSIVE-PASS2-STATE-V1',
+        'entries': {'game:1': deep_entry},
+    }
+    assert progressive_pass2.authoritative_completion_entry(bindings_b['game:1'], deep_state) is deep_entry
+    deep_state_before_scope_exit = copy.deepcopy(deep_state)
+    _g, out_of_scope_bindings, _ = progressive_pass1.current_bindings(
+        [contexts()[1]], projection_b, queue_rows()
+    )
+    assert 'game:1' not in out_of_scope_bindings
+    assert deep_state == deep_state_before_scope_exit
+    _g, restored_bindings, _ = progressive_pass1.current_bindings(
+        contexts(), projection_b, queue_rows()
+    )
+    assert progressive_pass2.authoritative_completion_entry(
+        restored_bindings['game:1'], deep_state
+    ) is deep_entry
+
 
 def production_history_reconciliation():
     context_rows = progressive_pass1.load_jsonl(progressive_pass1.PROGRESSIVE_CONTEXT)
@@ -171,26 +202,90 @@ def production_history_reconciliation():
     targets = list(migration.get('targets') or [])
     assert len(targets) == 30
     target_families = {row['family_id'] for row in targets}
+    current_scope_families = {
+        str(row.get('family_id') or '')
+        for row in context_rows
+        if str(row.get('family_id') or '')
+    }
     before = copy.deepcopy(pass2_state)
 
-    reconciled = []
+    classifications = []
+    current_equivalent = set()
+    current_stale = set()
+    out_of_current_scope = set()
+
+    # PPD-010 is immutable historical migration membership, not an evergreen
+    # commercial/current-catalogue membership list. Classify every frozen target
+    # against today's GitHub-owned current scope before asking PPD-012 whether its
+    # accepted historical result is semantically current.
     for target in targets:
         family_id = target['family_id']
         binding = bindings.get(family_id)
-        assert binding is not None, f'migration target missing current binding: {family_id}'
         entry = (pass2_state.get('entries') or {}).get(family_id)
         assert isinstance(entry, dict), f'migration target missing durable state: {family_id}'
+
+        if family_id not in current_scope_families:
+            assert binding is None, f'out-of-scope migration target unexpectedly has current binding: {family_id}'
+            out_of_current_scope.add(family_id)
+            classifications.append({
+                'family_id': family_id,
+                'appid': target.get('appid'),
+                'outcome': entry.get('outcome'),
+                'classification': 'outside_current_progressive_scope',
+                'current_binding': False,
+                'semantically_equivalent': None,
+            })
+            continue
+
+        # If a frozen target is still in the current Progressive catalogue, losing
+        # its binding is a real deterministic projection defect and must still fail.
+        assert binding is not None, f'current-scope migration target missing current binding: {family_id}'
         proof = progressive_pass1.historical_semantic_equivalence(
             entry,
             binding,
             manifest_path=progressive_pass2.WORK,
             expected_contract='PROGRESSIVE-PASS2-WORK-V1',
         )
-        assert proof is not None, f'migration target semantic equivalence not proven: {family_id}'
-        assert progressive_pass2.authoritative_completion_entry(binding, pass2_state) is entry
-        reconciled.append(family_id)
+        selected = progressive_pass2.authoritative_completion_entry(binding, pass2_state)
+        if proof is None:
+            # A real profile/model/semantics/item-context change legitimately makes
+            # the immutable historical revision stale. Never revive it by migration
+            # membership alone.
+            assert selected is None, f'stale migration result incorrectly selected current: {family_id}'
+            current_stale.add(family_id)
+            classifications.append({
+                'family_id': family_id,
+                'appid': target.get('appid'),
+                'outcome': entry.get('outcome'),
+                'classification': 'current_scope_semantically_stale',
+                'current_binding': True,
+                'semantically_equivalent': False,
+            })
+            continue
 
-    # Projection recomputation is read-only and must not emit any of the 30 again.
+        assert selected is entry
+        current_equivalent.add(family_id)
+        classifications.append({
+            'family_id': family_id,
+            'appid': target.get('appid'),
+            'outcome': entry.get('outcome'),
+            'classification': 'current_scope_semantically_current',
+            'current_binding': True,
+            'semantically_equivalent': True,
+        })
+
+    assert len(classifications) == 30
+    assert (
+        current_equivalent | current_stale | out_of_current_scope
+    ) == target_families
+    assert not (current_equivalent & current_stale)
+    assert not (current_equivalent & out_of_current_scope)
+    assert not (current_stale & out_of_current_scope)
+
+    # Projection recomputation is read-only. Semantically current historical
+    # completions and targets outside today's scope must not be re-emitted. A target
+    # whose *real semantic identity* changed may legitimately enter ordinary work
+    # under that new identity; that is not a PPD-010 migration replay.
     current_binding = progressive_pass2.current_dossier_binding()
     recomputed = progressive_pass2.recompute_eligibility(
         context_rows=context_rows,
@@ -199,12 +294,24 @@ def production_history_reconciliation():
         pass1_state_doc=pass1_state,
         pass2_state_doc=pass2_state,
         current_binding=current_binding,
-        now=datetime(2026, 9, 28, 12, 55, tzinfo=timezone.utc),
+        now=datetime.now(timezone.utc),
     )
     emitted = {row['family_id'] for row in recomputed['items']}
-    assert not (target_families & emitted)
-    assert recomputed['counts']['deep_authoritative_completed_count'] >= 30
+    assert not (current_equivalent & emitted)
+    assert not (out_of_current_scope & emitted)
+    assert recomputed['counts']['deep_authoritative_completed_count'] >= len(current_equivalent)
     assert pass2_state == before
+
+    # A completed analyzed_not_fit revision is current by the same semantic rules
+    # as analyzed_fit; UI/card visibility must not erase its currentness.
+    for row in classifications:
+        if (
+            row['classification'] == 'current_scope_semantically_current'
+            and row['outcome'] == 'analyzed_not_fit'
+        ):
+            binding = bindings[row['family_id']]
+            entry = (pass2_state.get('entries') or {})[row['family_id']]
+            assert progressive_pass2.authoritative_completion_entry(binding, pass2_state) is entry
 
     # Inspect every non-migration durable authoritative completion separately.
     nonmigration = []
@@ -231,12 +338,17 @@ def production_history_reconciliation():
         })
     assert len(nonmigration) >= 2
 
-    print('PPD012_MIGRATION_RECONCILED=' + json.dumps({
-        'count': len(reconciled),
+    print('PPD012_MIGRATION_CURRENTNESS=' + json.dumps({
+        'targets': classifications,
+        'current_equivalent_count': len(current_equivalent),
+        'current_stale_count': len(current_stale),
+        'outside_current_scope_count': len(out_of_current_scope),
         'semantic_generation_id': generation['semantic_generation_id'],
         'profile_semantic_sha256': generation['semantic_profile']['profile_semantic_sha256'],
         'authoritative_count': recomputed['counts']['deep_authoritative_completed_count'],
-        'ordinary_emitted_migration_targets': 0,
+        'ordinary_emitted_current_equivalent_targets': len(current_equivalent & emitted),
+        'ordinary_emitted_out_of_scope_targets': len(out_of_current_scope & emitted),
+        'ordinary_emitted_semantically_stale_targets': len(current_stale & emitted),
     }, sort_keys=True))
     effective = progressive_personalization.effective_taste_entries()
     deep_fit_projection = []
@@ -289,7 +401,6 @@ def production_history_reconciliation():
         'cards_with_visible_risk': sum(row['risk_count'] > 0 for row in deep_fit_projection),
         'bound_visible_risk_rows': sum(row['bound_risk_count'] for row in deep_fit_projection),
     }, sort_keys=True))
-
 
 def main():
     synthetic_rules()
