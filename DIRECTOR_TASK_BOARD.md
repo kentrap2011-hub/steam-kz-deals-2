@@ -2,9 +2,9 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_CURRENT_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_02.md` (`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`).
+- No worker task is currently assigned in slot `ЧАТ 1`.
 - Active worker assignment: `ЧАТ 2` — `WORKER_TASK_EXPIRED_SALE_IMMEDIATE_VISIBILITY_FIX_01.md` (`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`).
-- Latest accepted implementation: `WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md` (implementation accepted; publication proof blocked by pre-existing Russian-description gate).
+- Latest accepted implementation: `WORKER_TASK_CURRENT_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_02.md` (implementation accepted; end-to-end publication blocked by pre-existing Progressive current-binding regression).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
 - Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
@@ -46,33 +46,40 @@ Worker state:
 - use a NEW physical worker conversation in slot `ЧАТ 2`.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — Current Russian description publication blocker fix
+## ACCEPTED IMPLEMENTATION / BLOCKED PUBLICATION — ЧАТ 1 — Current Russian description publication blocker fix
 
 Task:
 `WORKER_TASK_CURRENT_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_02.md`
 
-Mode:
-`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`
-
-Goal:
-- identify the exact current game(s) failing `Require meaningful Russian descriptions before canonical commit`;
-- prove why the PR #103 StoreBrowse -> official appdetails -> translation fallback still leaves those cards invalid;
-- implement the smallest generic fix without weakening the fail-closed Russian-description gate;
-- achieve a real fresh full visual build and publication if no independent blocker intervenes.
-
-Constraints:
-- no handwritten per-game descriptions;
-- no manual translation-cache writes;
-- no Fast/Dossier/Deep semantic execution;
-- no ranking/RANK-013 changes;
-- no Scheduled Task changes;
-- do not fold the separate stale-snapshot rebase-race fix into this task unless publication cannot be completed without it and the report explicitly proves why.
-
 Report:
 `reviews/worker_reports/current-russian-description-publication-blocker-fix-02.md`
 
-Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`.
+Final worker status:
+`blocked`
+
+Director acceptance:
+- implementation itself is accepted;
+- PR #119 merged as `c25762948500d6f64158047de01c7e4f5952911f`;
+- closeout PR #120 merged as `cdbdfa721ced95a280fea7289330cae439150d0e`;
+- the pinned blocker was `game:13500` / Prince of Persia: Warrior Within™;
+- before the fix, exact-app Steam appdetails contained meaningful non-Russian text but the runtime discarded it completely, leaving `missing_source` and therefore no authorized translation request;
+- the fix now preserves meaningful exact-app `non_ru` / `weak_ru` appdetails text only as exact-bound translation input when StoreBrowse has no translatable source;
+- non-Russian text still cannot become `ready_ru` directly; the meaningful-Russian gate remains fail-closed;
+- PR #103 direct-`good_ru` precedence and App_1213210 regression remain preserved;
+- wrong AppID/edition, English-as-Russian, empty/boilerplate and stale/incompatible translation controls remain fail-closed;
+- fresh full visual build reached the final Russian gate and proved App_13500 now moves from `missing_source` to `needs_translation`, which is the intended unresolved state;
+- Roadwarden is also currently `needs_translation`;
+- no manual translation/cache write, Fast/Dossier/Deep run, ranking change, RANK-013 change, scheduler/retry change or Scheduled Task change was made;
+- end-to-end publication is still blocked because the normal pre-AI workflow fails earlier on the pre-existing Progressive regression `migration target missing current binding: game:1143810`;
+- that same `game:1143810` failure existed before this task, so it is not caused by PR #119;
+- because pre-AI stops before the Russian translation-scope step, App_13500's newly valid translation request cannot yet be persisted normally;
+- no fresh canonical visual newer than `2202a668cad11f67f0659aa6bcfe5e6cf34bb9ab` has been published yet.
+
+Decision:
+- physical ЧАТ 1 is complete and retired;
+- do not reopen or redo the Russian fallback implementation;
+- next required bounded fix is the pre-existing Progressive current-binding regression for `game:1143810`;
+- after that, allow the normal translation-scope/semantic translation path to process App_13500 and Roadwarden; do not manually populate translations.
 
 
 ## ACCEPTED IMPLEMENTATION / BLOCKED PUBLICATION — ЧАТ 1 — Deep-first final-score order fix
