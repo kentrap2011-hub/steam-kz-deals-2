@@ -1,13 +1,16 @@
 # CURRENT TASK
 
-## IN PROGRESS — Visual stale-snapshot rebase race fix 01
-Статус: `implementing`.
+## COMPLETE — Visual stale-snapshot rebase race fix 01
+Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_VISUAL_STALE_SNAPSHOT_REBASE_RACE_FIX_01.md`;
-- branch: `fix/visual-stale-snapshot-rebase-race-01`;
-- accepted diagnosis: full visual commit may currently be rebased onto newer `main` after material source drift without rebuilding;
-- architecture preflight: GitHub/GitHub Actions remains sole deterministic visual build/persistence/publication owner; browser remains read-only; no scheduler/queue/retry authority moves to ChatGPT;
-- implementation target: bind full builds to exact material blobs, permit unrelated HEAD movement, rebuild once on material drift, fail closed on a second drift/rebuild failure, and make freshness receipts distinguish an aborted-on-drift outcome;
-- preserve PR #125 translation nonblocking/Statistics behavior and all concurrent Dossier/Deep/translation/production writes.
+- implementation PR: `#126`; final tested head: `fd788904b0a6ad09a1d0ac1695e134529bb26aa5`; merge: `f57d5b922ee333759c951de38686eb448a8c10fd`;
+- full visual persistence is now material-blob-bound: unrelated `main` movement may rebase, material drift forces one fresh-main rebuild, and a second drift/rebuild failure is fail-closed;
+- post-merge build #959 / `36596838833` succeeded, persisted exact-bound visual commit `51a37b14c38b7f27d103c5f50e2e0788dece4a25`, visual blob `603254a1dc9a813453baf217bc62afb0e747ce1e`;
+- workflow-run Pages deploy #997 / `36596937298` succeeded and verified the staged payload with `material_binding=exact`; freshness remains truthfully `degraded/no_fresh_build` only for `deterministic_refresh_preserved_semantic_history`;
+- current producer Statistics preserve concurrent truth: Dossier last write `2026-09-29T16:14:41+00:00`, Deep last write `2026-09-29T16:05:12+00:00`, translation attempt/success `2026-09-29T16:04:04+00:00`, untranslated 0;
+- no Scheduled Task, browser authority, semantic worker, ranking/sale-expiry rule, or Fast/Dossier/Deep/translation semantics were changed;
+- report: `reviews/worker_reports/visual-stale-snapshot-rebase-race-fix-01.md`;
+- next bounded action: Director reviews the report and closes this task if accepted.
 
 ## COMPLETE — Russian translation nonblocking publication + Statistics 01
 Статус: `complete_ready_for_director_acceptance`.
