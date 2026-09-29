@@ -70,6 +70,7 @@ class TranslationRuntimeTests(unittest.TestCase):
         self.assertEqual(status['queue_count'], 1)
         self.assertEqual(status['resolved_direct_ru_count'], 1)
         self.assertEqual(status['nontranslatable_blocker_count'], 1)
+        self.assertEqual(status['untranslated_game_count'], 2)
         self.assertEqual(status['queue_request_ids'], [queue[0]['request_id']])
 
     def test_command_conquer_appdetails_ru_fallback_avoids_translation_queue(self):
@@ -294,6 +295,87 @@ class TranslationRuntimeTests(unittest.TestCase):
             empty_cache(),
         )
         self.assertEqual(resolution['description_status'], 'needs_translation')
+
+    def test_zero_work_is_successful_translation_stage_check(self):
+        rows = [row('2', 'Russian Source')]
+        meta = metadata('2', GOOD_RU, 'Russian Source')
+        media = {'2': {'short_description_source': GOOD_RU}}
+        queue, status = build_scope(
+            rows,
+            meta,
+            empty_cache(),
+            media,
+            generated_at_utc='2026-09-29T08:00:00Z',
+        )
+        self.assertEqual(queue, [])
+        self.assertEqual(status['untranslated_game_count'], 0)
+        self.assertEqual(status['last_translation_attempt_at'], '2026-09-29T08:00:00+00:00')
+        self.assertEqual(status['last_successful_translation_at'], '2026-09-29T08:00:00+00:00')
+
+    def test_failed_translation_attempt_advances_only_attempt_timestamp(self):
+        rows = [row('1', 'English Source')]
+        meta = metadata('1', 'Explore a strange station and escape the creatures hunting you.', 'English Source')
+        media = {'1': {'short_description_source': 'Explore a strange station and escape the creatures hunting you.'}}
+        previous = {
+            'last_translation_attempt_at': '2026-09-29T07:00:00+00:00',
+            'last_successful_translation_at': '2026-09-29T06:00:00+00:00',
+        }
+        queue, status = build_scope(
+            rows,
+            meta,
+            empty_cache(),
+            media,
+            generated_at_utc='2026-09-29T08:01:00Z',
+            previous_status=previous,
+            translation_attempt_at_utc='2026-09-29T08:00:00Z',
+            translation_success=False,
+        )
+        self.assertEqual(len(queue), 1)
+        self.assertEqual(status['untranslated_game_count'], 1)
+        self.assertEqual(status['last_translation_attempt_at'], '2026-09-29T08:00:00+00:00')
+        self.assertEqual(status['last_successful_translation_at'], '2026-09-29T06:00:00+00:00')
+
+    def test_partial_success_keeps_remaining_count_and_advances_success(self):
+        source1 = 'Explore a strange station and escape the creatures hunting you.'
+        source2 = 'Investigate a remote colony and uncover the mystery behind its evacuation.'
+        rows = [row('1', 'One'), row('2', 'Two')]
+        meta = {}
+        meta.update(metadata('1', source1, 'One'))
+        meta.update(metadata('2', source2, 'Two'))
+        media = {
+            '1': {'short_description_source': source1},
+            '2': {'short_description_source': source2},
+        }
+        initial, _ = build_scope(rows, meta, empty_cache(), media, generated_at_utc='2026-09-29T07:00:00Z')
+        accepted_request = initial[0]
+        cache = empty_cache()
+        cache['updated_at_utc'] = '2026-09-29T08:00:00+00:00'
+        cache['entries'][accepted_request['request_id']] = {
+            'request_id': accepted_request['request_id'],
+            'source_key': accepted_request['source_key'],
+            'source_appid': accepted_request['source_appid'],
+            'source_text_sha256': accepted_request['source_text_sha256'],
+            'source_version': accepted_request['source_version'],
+            'translated_text_ru': GOOD_RU,
+            'target_locale': 'ru',
+            'validated_quality': 'good_ru',
+            'result_contract': RESULT_CONTRACT_ID,
+            'ingested_at_utc': '2026-09-29T08:00:00+00:00',
+        }
+        remaining, status = build_scope(
+            rows,
+            meta,
+            cache,
+            media,
+            generated_at_utc='2026-09-29T08:00:01Z',
+            translation_attempt_at_utc='2026-09-29T08:00:00Z',
+            translation_success=True,
+        )
+        self.assertEqual(len(remaining), 1)
+        self.assertEqual(status['untranslated_game_count'], 1)
+        self.assertEqual(status['resolved_translation_cache_count'], 1)
+        self.assertEqual(status['last_translation_attempt_at'], '2026-09-29T08:00:00+00:00')
+        self.assertEqual(status['last_successful_translation_at'], '2026-09-29T08:00:00+00:00')
 
     def test_source_change_invalidates_identity(self):
         a = source_binding('App_1', 'Explore the station and escape.')
