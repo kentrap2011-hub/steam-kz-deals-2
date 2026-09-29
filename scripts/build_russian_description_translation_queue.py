@@ -64,13 +64,18 @@ def translation_observability(status, previous_status=None, check_at_utc=None, z
     return observed
 
 
-def record_translation_attempt(status_path, attempted_at_utc, accepted_count):
+def record_translation_attempt(
+    status_path,
+    attempted_at_utc,
+    accepted_count,
+    successful_no_work=False,
+):
     path = Path(status_path)
     status = load_optional_json(path)
     if not status:
         raise ValueError('translation status manifest is unavailable for attempt accounting')
     status['last_translation_attempt_at_utc'] = attempted_at_utc
-    if int(accepted_count or 0) > 0:
+    if int(accepted_count or 0) > 0 or successful_no_work:
         status['last_successful_translation_at_utc'] = attempted_at_utc
     path.write_text(json.dumps(status, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     return status
