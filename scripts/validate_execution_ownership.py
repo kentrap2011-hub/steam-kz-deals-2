@@ -54,6 +54,31 @@ interactive_forbidden = set(interactive.get("forbidden") or [])
 if "manually process a large production backlog item by item as a substitute for repairing automation" not in interactive_forbidden:
     fail("interactive chat manual-backlog prohibition is missing")
 
+if "perform production Russian-description semantic translation outside the explicitly user-launched canonical russian_description_manual_semantic_worker role" not in interactive_forbidden:
+    fail("ordinary interactive chat Russian-production prohibition is missing")
+
+manual_ru = ownership.get("russian_description_manual_semantic_worker") or {}
+if manual_ru.get("status") != "authorized_canonical_one_shot":
+    fail("manual Russian semantic worker must be a canonical one-shot role")
+if manual_ru.get("prompt") != "config/russian_description_manual_semantic_worker_prompt.md":
+    fail("manual Russian semantic worker prompt path mismatch")
+if manual_ru.get("recurring_scheduler") is not False:
+    fail("manual Russian semantic worker must not create a recurring scheduler")
+if manual_ru.get("scheduled_task_action_allowed") is not False:
+    fail("manual Russian semantic worker must not modify Scheduled Tasks")
+if manual_ru.get("explicit_user_launch_required_for_every_run") is not True:
+    fail("manual Russian semantic worker must require explicit user launch")
+if manual_ru.get("github_control_plane_remains_authoritative") is not True:
+    fail("manual Russian semantic worker must preserve GitHub control-plane authority")
+manual_forbidden = set(manual_ru.get("forbidden") or [])
+for marker in [
+    "invent games, request identities, source text, ordering, retries, or completion",
+    "write directly to data/cache/russian_description_translations.json",
+    "create any recurring scheduler, independent queue, retry loop, quota, or backlog owner",
+]:
+    if marker not in manual_forbidden:
+        fail(f"manual Russian semantic worker prohibition missing: {marker}")
+
 if daily.get("ownership_contract") != "config/execution_ownership_contract.json":
     fail("daily execution contract is not bound to ownership contract")
 inv = daily.get("execution_invariants") or {}
