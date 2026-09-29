@@ -253,6 +253,7 @@ Implementation:
 - route documentation commit: `5c388651d7cb26466e976738c1c7d42ed200c57c`;
 - PR #122;
 - merge: `1d8b54114d5aef09adb1c244a848f356987f3048`.
+- closeout PR #123; report commit `4cfa3520cdcd1f381f149c4c09a4007f3d4f389b`; CURRENT_TASK close commit `1010b57f35f14a9c7522ee74772228560270bdc5`.
 
 Pre-fix evidence:
 
