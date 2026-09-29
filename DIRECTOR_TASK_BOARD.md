@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` assigned: `WORKER_TASK_RUSSIAN_DESCRIPTION_MANUAL_TRANSLATION_RUN_01.md` — authorized manual one-shot semantic translation of the current GitHub-prepared Russian-description workload.
-- `ЧАТ 2` assigned: `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` — authorized implementation making missing translations nonblocking for publication and adding the dedicated translation Statistics block with count + success/attempt timestamps.
+- `ЧАТ 1` attempted `WORKER_TASK_RUSSIAN_DESCRIPTION_MANUAL_TRANSLATION_RUN_01.md` and is `blocked`: current canonical ownership forbids ordinary interactive-chat production translation; 71 requests remain and no translation was consumed.
+- `ЧАТ 2` assigned: `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` — authorized implementation making missing translations nonblocking, adding the dedicated translation Statistics block, and canonicalizing an explicitly user-launched one-shot Russian-description semantic-worker chat with no Scheduled Task.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -63,6 +63,10 @@ User-approved behavior:
 - block shows current untranslated-game count, last successful translation date/time, and last translation-attempt date/time;
 - zero games needing translation counts as successful translation handling;
 - an unsuccessful attempt advances only the attempt timestamp, allowing the user to see that translation was tried but did not succeed.
+- add a canonical manual one-shot Russian semantic-worker mode launched from a normal new chat only by explicit user action;
+- the manual semantic worker uses GitHub-prepared scope/order/bindings and canonical ingest, never direct cache writes;
+- no Scheduled Task or recurring automation is created or modified;
+- general interactive chats remain non-production by default.
 
 Concurrency:
 - may run in parallel with ЧАТ 1;
