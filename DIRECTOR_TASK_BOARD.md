@@ -34,7 +34,9 @@ Confirmed against the actual latest successful Pages artifact and current Action
 Director conclusion:
 - the unchanged live site is **not** evidence that PR #121, RANK-013, or the current-binding fix regressed;
 - there are two proven publication gaps in the currently deployed artifact: browser assets are behind `main`, while the canonical visual payload itself remains the stale `2202a668...` snapshot;
-- next work must stay in the publication/build/deploy layer and must not reimplement expiry/ranking/current-binding business logic.
+- next work must stay in the publication/build/deploy layer and must not reimplement expiry/ranking/current-binding business logic;
+- architecture preflight confirms GitHub/GitHub Actions owns publication and downstream orchestration; the next fix must remain GitHub-owned, add no scheduler/queue/retry owner, and keep the browser read-only;
+- proposed next bounded task (not yet authorized/assigned): `WORKER_TASK_PAGES_BROWSER_ASSET_PUBLICATION_DECOUPLING_FIX_01.md` — make current browser assets publishable without pretending the stale visual payload is fresh; Statistics freshness remains a separate accepted visual-build/control-plane problem.
 
 
 ## CURRENT USER-OBSERVED BLOCKER — Live site unchanged after accepted fixes
