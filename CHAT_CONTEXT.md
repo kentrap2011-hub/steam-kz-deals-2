@@ -77,7 +77,7 @@
 
 Особенно важно: **поправка пользователя не отменяет preflight**. Она является сигналом, что текущая модель могла быть неверной. Нельзя автоматически согласиться и немедленно реализовать буквальную формулировку. Сначала нужно сверить её с каноническими контрактами; если именно контракт оказался неполным или неправильным — сначала исправить контракт.
 
-Ordinary интерактивный пользовательский чат нельзя превращать в production worker для большого backlog. Исключение возможно только как отдельная явно user-launched one-shot semantic-worker роль, прямо разрешённая `config/execution_ownership_contract.json` и ограниченная каноническим prompt: GitHub по-прежнему владеет scope/order/retry/completeness/validation/persistence, а чат может делать только разрешённую semantic data-plane работу и canonical result transport. Ручная developer/operator проверка нескольких объектов остаётся bounded verification; без такой отдельной contract-authorized роли перебор десятков/сотен игр считается архитектурным дефектом.
+Интерактивный пользовательский чат нельзя превращать в production worker для большого backlog. Единственное узкое исключение — отдельная явно user-launched one-shot semantic-worker роль, прямо разрешённая `config/execution_ownership_contract.json` и ограниченная каноническим prompt: GitHub по-прежнему владеет scope/order/retry/completeness/validation/persistence, а такой worker может делать только разрешённую semantic data-plane работу и canonical result transport. Ручная developer/operator проверка нескольких объектов остаётся bounded verification; без такой отдельной contract-authorized роли перебор десятков/сотен игр считается архитектурным дефектом.
 
 ## 2. Что читать в начале задачи
 
