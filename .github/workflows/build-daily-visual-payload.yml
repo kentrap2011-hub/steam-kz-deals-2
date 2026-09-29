@@ -64,6 +64,9 @@ on:
       - "scripts/build_ranking_lookup.py"
       - "scripts/visual_freshness_receipt.py"
       - "scripts/test_visual_freshness_receipt.py"
+      - "scripts/visual_material_freshness_guard.py"
+      - "scripts/test_visual_material_freshness_guard.py"
+      - "scripts/build_ranking_review.py"
       - "config/duration_enrichment_contract.json"
       - "config/final_ranking_policy.json"
       - "config/progressive_personalization_contract.json"
@@ -446,6 +449,7 @@ jobs:
           python scripts/test_commercial_refresh.py
           python scripts/test_fixed_package_purchase_options.py
           python scripts/test_visual_freshness_receipt.py
+          python scripts/test_visual_material_freshness_guard.py
           node web/paid-freshness-ui.test.js
 
       - name: Record giveaway sibling fingerprint
@@ -752,6 +756,7 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/test_visual_freshness_receipt.py
+          python scripts/test_visual_material_freshness_guard.py
 
       - name: Validate normalized taste factor contract
         shell: bash
@@ -889,6 +894,16 @@ jobs:
             echo "cache_changed=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Capture exact full visual material state
+        if: steps.history.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/visual_freshness_receipt.py capture-intent \
+            --output /tmp/visual-freshness-intent.json
+          python scripts/visual_material_freshness_guard.py capture \
+            --output /tmp/full-visual-material-state.json
+
       - name: Build and refresh canonical visual payload once
         id: build
         if: steps.history.outputs.ready == 'true'
@@ -928,116 +943,21 @@ jobs:
           set -euo pipefail
           python scripts/validate_russian_descriptions.py data/production/visual/current.json --allow-untranslated
 
+      - name: Validate exact full visual material binding
+        if: steps.build.outputs.built == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/visual_material_freshness_guard.py validate-visual \
+            --state /tmp/full-visual-material-state.json \
+            --visual data/production/visual/current.json
+
       - name: Build ranking review export
         if: steps.build.outputs.built == 'true'
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          src = Path('data/production/visual/current.json')
-          out = Path('data/production/visual/ranking_review.jsonl')
-          data = json.loads(src.read_text(encoding='utf-8'))
-
-          rows = []
-          package_drivers = []
-          package_visible = []
-          for game in sorted(data.get('items') or [], key=lambda g: int(g.get('priority_rank') or 999999)):
-              practical = game.get('practical') or {}
-              direct = game.get('direct_user_evidence') or {}
-              score = game.get('score_breakdown') or {}
-              package_route = score.get('package_route') or {}
-              package = game.get('better_purchase_option') or {}
-              row = {
-                  'rank': game.get('priority_rank'),
-                  'taste_rank': game.get('taste_rank'),
-                  'id': game.get('id'),
-                  'title': game.get('title'),
-                  'sale_expiry_urgency': game.get('sale_expiry_urgency'),
-                  'sale_expiry_urgency_rank': game.get('sale_expiry_urgency_rank'),
-                  'source_fit': game.get('source_fit'),
-                  'fit': game.get('fit'),
-                  'fit_adjustment_reason': game.get('fit_adjustment_reason'),
-                  'taste_confidence': game.get('taste_confidence'),
-                  'direct_user_rating': direct.get('rating'),
-                  'direct_user_evidence_level': direct.get('level'),
-                  'decision': game.get('decision'),
-                  'priority_bucket': game.get('priority_bucket'),
-                  'practical_or_personal_risk_rank': game.get('practical_or_personal_risk_rank'),
-                  'priority_factors': game.get('priority_factors') or [],
-                  'priority_vs_next': game.get('priority_vs_next'),
-                  'strengths': game.get('why_fit') or [],
-                  'gameplay_points': game.get('gameplay_points') or [],
-                  'weaknesses_risks': game.get('risks') or [],
-                  'risk_codes': game.get('risk_codes') or [],
-                  'risk_level': game.get('risk_level'),
-                  'risk_status': game.get('risk_status'),
-                  'risk_penalty': game.get('risk_penalty'),
-                  'windows_status': practical.get('windows_status'),
-                  'legacy_windows_requirement_label': practical.get('legacy_windows_requirement_label'),
-                  'modern_windows_friction': practical.get('modern_windows_friction'),
-                  'steam_achievements': practical.get('steam_achievements'),
-                  'achievement_total': practical.get('achievement_total'),
-                  'achievement_quality': practical.get('achievement_quality'),
-                  'achievement_quality_evidence': practical.get('achievement_quality_evidence'),
-                  'estimated_duration_hours': game.get('estimated_duration_hours'),
-                  'duration_estimate_source': game.get('duration_estimate_source'),
-                  'duration_estimate_provenance': game.get('duration_estimate_provenance'),
-                  'duration_preference_band': game.get('duration_preference_band'),
-                  'wishlist': bool(game.get('wishlist')),
-                  'current_price_rub': game.get('current_price_rub'),
-                  'original_price_rub': game.get('original_price_rub'),
-                  'discount_percent': game.get('discount_percent'),
-                  'historical_minimum_rub': game.get('historical_minimum_rub'),
-                  'history_quality': game.get('history_quality'),
-                  'previously_free': bool(game.get('previously_free')),
-                  'sale_end_utc': game.get('sale_end_utc'),
-                  'purchase_route': score.get('purchase_route'),
-                  'standalone_purchase_score': score.get('standalone_purchase_score'),
-                  'fixed_package_purchase_score': score.get('fixed_package_purchase_score'),
-                  'package_score_delta_vs_standalone': score.get('package_score_delta_vs_standalone'),
-                  'package_value_points': game.get('package_value_points'),
-                  'package_route_status': package_route.get('status'),
-                  'package_route_eligible_for_score': package_route.get('eligible_for_score'),
-                  'package_key': package.get('package_key'),
-                  'package_title': package.get('package_title'),
-                  'package_price_rub': package.get('package_price_rub'),
-                  'package_price_per_visible_game_rub': package.get('package_price_per_visible_game_rub'),
-                  'package_covered_visible_game_count': package.get('covered_visible_game_count'),
-                  'package_standalone_total_rub': package.get('standalone_total_rub'),
-                  'package_savings_rub': package.get('savings_rub'),
-                  'package_savings_percent_vs_standalone': package.get('savings_percent_vs_standalone'),
-                  'package_strict_current_price_savings': package.get('strict_current_price_savings'),
-                  'package_price_delta_vs_standalone_rub': package.get('price_delta_vs_standalone_rub'),
-                  'package_uses_verified_purchase_equivalence': package.get('uses_verified_purchase_equivalence'),
-                  'package_coverage_evidence': package.get('coverage_evidence') or [],
-                  'better_purchase_option': game.get('better_purchase_option'),
-                  'summary': game.get('summary'),
-                  'steam_web_url': game.get('web_url'),
-              }
-              rows.append(json.dumps(row, ensure_ascii=False, separators=(',', ':')))
-              if package:
-                  package_visible.append(row)
-              if score.get('purchase_route') == 'fixed_package':
-                  package_drivers.append(row)
-
-          out.write_text('\n'.join(rows) + '\n', encoding='utf-8')
-          print(f'RANKING_REVIEW_ROWS={len(rows)}')
-          print(f'PACKAGE_VISIBLE_CARDS={len(package_visible)}')
-          print(f'PACKAGE_RANKING_DRIVERS={len(package_drivers)}')
-          for row in package_drivers[:5]:
-              print(
-                  'PACKAGE_RANKING_EXAMPLE '
-                  f"rank={row.get('rank')} title={row.get('title')!r} "
-                  f"package={row.get('package_title')!r} price_rub={row.get('package_price_rub')} "
-                  f"games={row.get('package_covered_visible_game_count')} "
-                  f"standalone_score={row.get('standalone_purchase_score')} "
-                  f"package_score={row.get('fixed_package_purchase_score')} "
-                  f"delta={row.get('package_score_delta_vs_standalone')}"
-              )
-          PY
+          python scripts/build_ranking_review.py
 
       - name: Build bounded ranking lookup
         if: steps.build.outputs.built == 'true'
@@ -1049,31 +969,132 @@ jobs:
       - name: Commit canonical duration cache, payload and review export
         id: persist
         if: steps.build.outputs.built == 'true' || steps.duration.outputs.cache_changed == 'true'
+        env:
+          IGDB_CLIENT_ID: ${{ secrets.IGDB_CLIENT_ID }}
+          IGDB_CLIENT_SECRET: ${{ secrets.IGDB_CLIENT_SECRET }}
+          DURATION_PRODUCTION_ENABLED: ${{ steps.duration_connectivity.outputs.production_enabled }}
+          DURATION_CONNECTIVITY_STATUS: ${{ steps.duration_connectivity.outputs.status }}
+        shell: bash
         run: |
           set -euo pipefail
           git config user.name "steam-kz-bot"
           git config user.email "steam-kz-bot@users.noreply.github.com"
-          git add -A data/cache/duration_estimates.json data/production/visual/current.json data/production/visual/ranking_review.jsonl data/production/visual/ranking_lookup
-          git diff --cached --check
+          echo "reason=" >> "$GITHUB_OUTPUT"
+
+          stage_visual_outputs() {
+            git add -A \
+              data/cache/duration_estimates.json \
+              data/production/visual/current.json \
+              data/production/visual/ranking_review.jsonl \
+              data/production/visual/ranking_lookup
+            git diff --cached --check
+          }
+
+          capture_exact_material_state() {
+            python scripts/visual_freshness_receipt.py capture-intent \
+              --output /tmp/visual-freshness-intent.json
+            python scripts/visual_material_freshness_guard.py capture \
+              --output /tmp/full-visual-material-state.json
+          }
+
+          validate_exact_visual_binding() {
+            python scripts/visual_material_freshness_guard.py validate-visual \
+              --state /tmp/full-visual-material-state.json \
+              --visual data/production/visual/current.json
+          }
+
+          rebuild_full_visual_from_fresh_main() {
+            echo "MATERIAL_DRIFT_REBUILD=true"
+            git reset --hard origin/main
+            git clean -ffd
+
+            if [ "${DURATION_PRODUCTION_ENABLED:-false}" = "true" ] && \
+               [ "${DURATION_CONNECTIVITY_STATUS:-}" != "missing_credentials" ]; then
+              python scripts/duration_enrichment.py | tee /tmp/duration-enrichment-rebuild.log
+            fi
+
+            capture_exact_material_state
+            export FORCE_VISUAL_BUILD=1
+            python scripts/build_final_visual_payload.py | tee /tmp/visual-build-rebuild.log
+            python scripts/normalize_visual_media_urls.py | tee /tmp/media-refresh-rebuild.log
+            python scripts/validate_card_explanations.py data/production/visual/current.json 30
+            python scripts/validate_giveaway_visual_payload.py data/production/visual/current.json
+            python scripts/validate_russian_descriptions.py data/production/visual/current.json --allow-untranslated
+            python scripts/build_ranking_review.py
+            python scripts/build_ranking_lookup.py
+            validate_exact_visual_binding
+            stage_visual_outputs
+          }
+
+          validate_exact_visual_binding
+          stage_visual_outputs
           if git diff --cached --quiet; then
             echo "No duration cache, visual payload or review changes"
+            python scripts/visual_material_freshness_guard.py verify-ref \
+              --state /tmp/full-visual-material-state.json --ref HEAD
             echo "persisted=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+
           git commit -m "Refresh daily visual payload"
+          rebuilt_after_material_drift=false
 
           for attempt in 1 2 3; do
-            git fetch origin main:refs/remotes/origin/main
-            if ! git rebase origin/main; then
-              git rebase --abort || true
-              exit 1
-            fi
             if git push origin HEAD:main; then
+              python scripts/visual_material_freshness_guard.py verify-ref \
+                --state /tmp/full-visual-material-state.json --ref HEAD
+              echo "reason=" >> "$GITHUB_OUTPUT"
               echo "persisted=true" >> "$GITHUB_OUTPUT"
               exit 0
             fi
+
+            git fetch origin main:refs/remotes/origin/main
+            set +e
+            python scripts/visual_material_freshness_guard.py compare-parent \
+              --state /tmp/full-visual-material-state.json \
+              --candidate-ref origin/main
+            drift_rc=$?
+            set -e
+
+            if [ "$drift_rc" -eq 42 ]; then
+              if [ "$rebuilt_after_material_drift" = "true" ]; then
+                echo "reason=material_source_drift_after_rebuild" >> "$GITHUB_OUTPUT"
+                echo "VISUAL_PERSISTENCE_ABORTED=material_source_drift_after_rebuild"
+                exit 1
+              fi
+
+              rebuilt_after_material_drift=true
+              echo "reason=material_source_drift_rebuild_failed" >> "$GITHUB_OUTPUT"
+              rebuild_full_visual_from_fresh_main
+
+              if git diff --cached --quiet; then
+                python scripts/visual_material_freshness_guard.py verify-ref \
+                  --state /tmp/full-visual-material-state.json --ref HEAD
+                echo "reason=" >> "$GITHUB_OUTPUT"
+                echo "persisted=true" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+
+              git commit -m "Refresh daily visual payload after material drift"
+              echo "reason=" >> "$GITHUB_OUTPUT"
+              continue
+            fi
+
+            if [ "$drift_rc" -ne 0 ]; then
+              echo "reason=material_source_comparison_failed" >> "$GITHUB_OUTPUT"
+              exit "$drift_rc"
+            fi
+
+            if ! git rebase origin/main; then
+              git rebase --abort || true
+              echo "reason=canonical_rebase_failed" >> "$GITHUB_OUTPUT"
+              exit 1
+            fi
+            validate_exact_visual_binding
             sleep $((attempt * 3))
           done
+
+          echo "reason=canonical_persistence_failed" >> "$GITHUB_OUTPUT"
           exit 1
 
       - name: Create durable visual freshness receipt
@@ -1088,6 +1109,7 @@ jobs:
           BUILD_REPORTED: ${{ steps.build.outputs.built }}
           PERSISTED: ${{ steps.persist.outputs.persisted }}
           HISTORY_READY: ${{ steps.history.outputs.ready }}
+          PERSIST_REASON: ${{ steps.persist.outputs.reason }}
         shell: bash
         run: |
           set -euo pipefail
@@ -1106,7 +1128,8 @@ jobs:
             --upstream-head-sha "$UPSTREAM_HEAD_SHA" \
             --build-reported "$BUILD_REPORTED" \
             --persisted "$PERSISTED" \
-            --history-ready "$HISTORY_READY"
+            --history-ready "$HISTORY_READY" \
+            --reason "$PERSIST_REASON"
 
       - name: Upload visual freshness receipt
         if: always()

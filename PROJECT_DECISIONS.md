@@ -893,3 +893,20 @@ A canonical Dossier/profile/work/repository write that lands **before** the mark
 
 **Основные места:** `config/execution_ownership_contract.json`, `config/russian_description_translation_contract.json`, `config/russian_description_translation_result_contract.json`, `config/russian_description_manual_semantic_worker_prompt.md`, `config/progressive_personalization_contract.json`, `scripts/build_russian_description_translation_queue.py`, `scripts/ingest_russian_description_translations.py`, `scripts/progressive_personalization.py`, `scripts/validate_russian_descriptions.py`, `.github/workflows/build-daily-visual-payload.yml`, `.github/workflows/deploy-visual.yml`, `web/progressive-personalization-ui.js`.
 
+---
+
+## VISUAL-001 — Full visual persistence binds to material source blobs, not whole `main`
+
+**Дата:** 2026-09-29  
+**Статус:** implementation governed by `WORKER_TASK_VISUAL_STALE_SNAPSHOT_REBASE_RACE_FIX_01.md`.
+
+**Решение:** deterministic full visual build фиксирует точные blob-идентичности material inputs, которые уже образуют production provenance payload: Progressive/PASS2 state, PASS1, Dossier work, translation status/contract, commercial/history/giveaway inputs, producer/policy helpers и профильную identity из подготовленного payload. Если push отклонён из-за движения `main`, GitHub Actions сравнивает именно эти material blobs с новым parent. Движение `HEAD` без material drift разрешает обычный rebase. Любой material drift требует сбросить локальный уже рассчитанный visual, перейти на свежий `main`, заново построить full visual и повторить validations. Повторный material drift до persistence завершает invocation fail-closed без замены предыдущего canonical visual.
+
+**Freshness:** успешный workflow/push не равен свежести данных сам по себе. Receipt обязан отдельно доказывать exact material binding. `deterministic_refresh_preserved_semantic_history` остаётся допустимым `degraded/no_fresh_build` только при точном material binding; abort из-за повторного material drift имеет отдельный outcome и не маскируется под fresh build.
+
+**Почему:** build run #869 построил visual на `53767218...` с PASS2 blob `4435430...`, после concurrent advancement до `dede9ea...` / `b1967e42...` rebased уже рассчитанный JSON на новый parent и сохранил его как `2202a668...`. Whole-HEAD lock был бы слишком сильным и блокировал бы безвредные concurrent изменения, а blind rebase смешивает новый parent со старым derived snapshot.
+
+**Не делать:** не блокировать Dossier/Deep/translation writers глобальной блокировкой; не требовать неизменности всего `main`; не пересчитывать Statistics в browser; не принимать workflow success как доказательство source freshness; не переносить rebuild/persistence authority из GitHub Actions.
+
+**Основные места:** `scripts/visual_material_freshness_guard.py`, `scripts/visual_freshness_receipt.py`, `scripts/build_daily_visual_payload.py`, `scripts/build_final_visual_payload.py`, `.github/workflows/build-daily-visual-payload.yml`, `.github/workflows/deploy-visual.yml`.
+

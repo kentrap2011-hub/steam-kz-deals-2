@@ -7,6 +7,8 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+import visual_material_freshness_guard as material_guard
+
 CONTRACT = "visual-freshness-receipt-v1"
 SCHEMA_VERSION = 1
 HISTORY_PATH = "data/production/pre_ai/history_snapshot.json"
@@ -22,6 +24,10 @@ COMMERCIAL_SCOPE = "commercial_only"
 GIVEAWAY_REASON = "giveaway_only_refresh"
 COMMERCIAL_REASON = "commercial_only_refresh"
 DETERMINISTIC_REFRESH_REASON = "deterministic_refresh_preserved_semantic_history"
+MATERIAL_DRIFT_ABORT_REASONS = {
+    "material_source_drift_after_rebuild",
+    "material_source_drift_rebuild_failed",
+}
 
 COMMERCIAL_BLOB_BINDINGS = {
     "payload_blob_sha": (COMMERCIAL_PAYLOAD_PATH, "commercial_source_payload_blob_sha"),
@@ -144,6 +150,7 @@ def capture_intent(repo: Path) -> dict[str, Any]:
             if value
         },
     }
+    full_visual_material = material_guard.capture_state(repo)
     return {
         "captured_checkout_commit_sha": _git_optional("rev-parse", "HEAD", cwd=repo),
         "history_snapshot_blob_sha": history_blob_sha,
@@ -159,6 +166,7 @@ def capture_intent(repo: Path) -> dict[str, Any]:
             "complete_family_partition": payload.get("complete_family_partition"),
         },
         "commercial_source": commercial_source,
+        "full_visual_material": full_visual_material,
     }
 
 
@@ -176,6 +184,10 @@ def _visual_state(repo: Path) -> dict[str, Any]:
     giveaways = data.get("giveaways") or {}
     paid_freshness = data.get("paid_list_freshness") or {}
     return {
+        "full_visual_material_bindings": {
+            key: contract.get(key)
+            for key in material_guard.FULL_VISUAL_MATERIAL_BINDINGS
+        },
         "blob_sha": blob_sha,
         "commit_sha": commit_sha,
         "source_history_snapshot_blob_sha": contract.get("source_history_snapshot_blob_sha"),
@@ -266,15 +278,30 @@ def create_receipt(
         )
 
     observed_visual: dict[str, Any] | None = None
+    full_material_valid = True
+    full_material_error: str | None = None
+    intended_full_material = intent.get("full_visual_material") or {}
+    if not (scoped_giveaway or scoped_commercial) and build_reported and persisted:
+        try:
+            material_guard.validate_visual_binding(intended_full_material, repo / VISUAL_PATH)
+            material_guard.verify_ref_matches_build_state(intended_full_material, repo, "HEAD")
+            observed_visual = _visual_state(repo)
+        except (material_guard.MaterialDrift, KeyError, TypeError, ValueError) as exc:
+            full_material_valid = False
+            full_material_error = str(exc)
+            fresh_build = False
+
     if scoped_giveaway or scoped_commercial:
         reason = None
+    elif not full_material_valid:
+        reason = "visual_material_source_mismatch"
     elif pending_semantic_queue and build_reported and persisted and not progressive_phase_a:
         reason = DETERMINISTIC_REFRESH_REASON
     else:
         reason = reason_override
 
     if fresh_build:
-        observed_visual = _visual_state(repo)
+        observed_visual = observed_visual or _visual_state(repo)
         if scoped_giveaway:
             if observed_visual.get("source_giveaway_snapshot_blob_sha") != intended_giveaway:
                 fresh_build = False
@@ -315,13 +342,25 @@ def create_receipt(
 
     produced_visual = observed_visual if fresh_build else None
     scoped = scoped_giveaway or scoped_commercial
+    material_drift_aborted = bool(
+        not fresh_build
+        and not persisted
+        and reason in MATERIAL_DRIFT_ABORT_REASONS
+    )
+    outcome = (
+        "fresh_build"
+        if fresh_build
+        else "aborted_on_material_drift"
+        if material_drift_aborted
+        else "degraded/no_fresh_build"
+    )
     receipt = {
         "schema_version": SCHEMA_VERSION,
         "contract": CONTRACT,
         "fresh_build": fresh_build,
         "freshness_scope": freshness_scope,
         "full_visual_freshness": bool(fresh_build and not scoped),
-        "outcome": "fresh_build" if fresh_build else "degraded/no_fresh_build",
+        "outcome": outcome,
         "reason": None if fresh_build else reason,
         "intended_source_cycle": intent,
         "produced_visual": produced_visual,
@@ -336,6 +375,8 @@ def create_receipt(
     }
     if observed_visual and not fresh_build:
         receipt["observed_visual"] = observed_visual
+    if full_material_error:
+        receipt["material_binding_error"] = full_material_error
     return receipt
 
 
@@ -372,11 +413,49 @@ def verify_receipt(
         raise SystemExit(f"unsupported visual freshness scope: {scope}")
 
     if receipt.get("fresh_build") is not True:
-        if receipt.get("outcome") != "degraded/no_fresh_build":
+        outcome = receipt.get("outcome")
+        reason = receipt.get("reason")
+        if outcome == "aborted_on_material_drift":
+            if reason not in MATERIAL_DRIFT_ABORT_REASONS:
+                raise SystemExit("material-drift abort receipt missing canonical drift reason")
+            print(
+                "VISUAL_FRESHNESS=aborted_on_material_drift "
+                f"scope={scope} reason={reason} run_id={expected_run_id}"
+            )
+            return "aborted_on_material_drift"
+        if outcome != "degraded/no_fresh_build":
             raise SystemExit("fresh_build=false receipt missing degraded/no_fresh_build outcome")
+
+        if (
+            scope == FULL_SCOPE
+            and reason == DETERMINISTIC_REFRESH_REASON
+            and receipt.get("observed_visual")
+        ):
+            intended = receipt.get("intended_source_cycle") or {}
+            material = intended.get("full_visual_material") or {}
+            try:
+                material_guard.verify_ref_matches_build_state(material, repo, "HEAD")
+                material_guard.validate_visual_binding(material, repo / VISUAL_PATH)
+            except material_guard.MaterialDrift as exc:
+                raise SystemExit(f"degraded deterministic visual material mismatch: {exc}") from exc
+
+            observed = receipt.get("observed_visual") or {}
+            current_blob = _git("rev-parse", f"HEAD:{VISUAL_PATH}", cwd=repo)
+            current_commit = _git("log", "-1", "--format=%H", "--", VISUAL_PATH, cwd=repo)
+            if observed.get("blob_sha") != current_blob or observed.get("commit_sha") != current_commit:
+                raise SystemExit("degraded deterministic receipt does not bind current canonical visual")
+            if staged_path.read_bytes() != (repo / VISUAL_PATH).read_bytes():
+                raise SystemExit("staged visual payload differs from canonical current.json")
+            print(
+                "VISUAL_FRESHNESS=degraded/no_fresh_build "
+                f"scope={scope} reason={reason} run_id={expected_run_id} "
+                f"material_binding=exact visual_blob={current_blob}"
+            )
+            return "degraded/no_fresh_build"
+
         print(
             "VISUAL_FRESHNESS=degraded/no_fresh_build "
-            f"scope={scope} reason={receipt.get('reason') or 'unspecified'} run_id={expected_run_id}"
+            f"scope={scope} reason={reason or 'unspecified'} run_id={expected_run_id}"
         )
         return "degraded/no_fresh_build"
 
@@ -419,6 +498,12 @@ def verify_receipt(
         intended_history = intended.get("history_snapshot_blob_sha")
         if not intended_history:
             raise SystemExit("fresh receipt missing intended history")
+        material = intended.get("full_visual_material") or {}
+        try:
+            material_guard.verify_ref_matches_build_state(material, repo, "HEAD")
+            material_guard.validate_visual_binding(material, repo / VISUAL_PATH)
+        except material_guard.MaterialDrift as exc:
+            raise SystemExit(f"fresh full visual material mismatch: {exc}") from exc
         current_history = _git("rev-parse", f"HEAD:{HISTORY_PATH}", cwd=repo)
         if current_history != intended_history:
             raise SystemExit(
