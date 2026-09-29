@@ -1,6 +1,6 @@
 # DIRECTOR TASK BOARD
 
-## CURRENT DIRECTOR STATE — 2026-09-27
+## CURRENT DIRECTOR STATE — 2026-09-29
 
 - No worker task is currently assigned in slot `ЧАТ 1`.
 - No worker task is currently assigned in slot `ЧАТ 2`.
@@ -12,6 +12,31 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+- Current user-visible blocker: after the recent merges, the live site still shows expired-sale cards and stale Statistics. Treat actual Pages publication as unresolved.
+- Do not reopen PR #121 expiry logic, RANK-013, or the game:1143810 regression merely because the live site is unchanged; first verify what code/payload Pages actually deployed.
+- Recommended next bounded task: READ-ONLY / RECON of the current Pages artifact/source and latest visual/deploy chain, covering both deployed browser code and deployed web/data/current.json.
+- Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
+- This Director conversation is retired after refreshing DIRECTOR_BOOTSTRAP.md; continue in a NEW physical Director chat.
+
+
+## CURRENT USER-OBSERVED BLOCKER — Live site unchanged after accepted fixes
+
+Observed by user after PR #121/#122/#123 acceptance:
+- games with already-ended discounts are still visible on the live site;
+- Statistics still has the old values.
+
+Known facts:
+- PR #121 expiry filtering is merged in `main`, but its worker report explicitly had no successful live Pages proof;
+- post-merge visual build was blocked by the meaningful-Russian gate and deploy attempts were cancelled/skipped;
+- the previously accepted stale-Statistics diagnostic proved the old payload can be successfully redeployed as `degraded/no_fresh_build`;
+- the stale-snapshot rebase-race implementation has not yet been done;
+- pre-AI current-binding blocker is now fixed and Russian translation scope is persisted normally.
+
+Director decision:
+- do not infer current Pages contents from `main`;
+- first delegate a bounded read-only live-publication diagnostic that pins the exact current Pages artifact, deployed browser code and deployed `web/data/current.json`;
+- determine whether both symptoms come from the same stale Pages deployment or from separate code/payload publication paths;
+- only after that diagnosis authorize the smallest implementation.
 
 
 ## ACCEPTED — ЧАТ 1 — Progressive migration current-binding regression fix
