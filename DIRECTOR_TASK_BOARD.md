@@ -3,8 +3,8 @@
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
 - Active worker assignment: `ЧАТ 1` — `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`).
-- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_EXPIRED_SALE_IMMEDIATE_VISIBILITY_FIX_01.md` (`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`).
-- Latest accepted implementation: `WORKER_TASK_CURRENT_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_02.md` (implementation accepted; end-to-end publication blocked by pre-existing Progressive current-binding regression).
+- No worker task is currently assigned in slot `ЧАТ 2`.
+- Latest accepted implementation: `WORKER_TASK_EXPIRED_SALE_IMMEDIATE_VISIBILITY_FIX_01.md` (implementation accepted; live publication remains blocked by the independent Russian-description chain).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
 - Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
@@ -43,36 +43,37 @@ Worker state:
 - use a NEW physical worker conversation in slot `ЧАТ 1`.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 2 — Expired sale immediate visibility fix
+## ACCEPTED IMPLEMENTATION / BLOCKED LIVE PUBLICATION — ЧАТ 2 — Expired sale immediate visibility fix
 
 Task:
 `WORKER_TASK_EXPIRED_SALE_IMMEDIATE_VISIBILITY_FIX_01.md`
 
-Mode:
-`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`
-
-Goal:
-- enforce the already-canonical rule that a paid offer with known passed `sale_end_utc` is not shown;
-- make expiry work locally even when the published payload is stale;
-- preserve Taste/Fast/Deep/Dossier state for reuse on future sales;
-- keep unknown sale-end cards visible under current policy.
-
-Pinned symptom:
-- Titanfall® 2 remains visible while the card itself says `Скидка закончилась`.
-
-Constraints:
-- no semantic worker execution;
-- no network polling scheduler;
-- no score/ranking changes;
-- no manual commercial-data edits;
-- no Scheduled Task changes;
-- do not interfere with active ЧАТ 1 Russian-description fix or the separate visual stale-snapshot race.
-
 Report:
 `reviews/worker_reports/expired-sale-immediate-visibility-fix-01.md`
 
-Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 2`.
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- implementation accepted;
+- PR #121 merged into `main` as `9a500cefd3ec3bf460cf3c51afe92c35e55ab97b`;
+- rebuilt PR head `382432734586d2b7951dde060ad05dd40a13903a` was reconciled onto fresh main without reverting concurrent ЧАТ 1 or Dossier/production writes;
+- known valid `sale_end_utc <= now` now removes a paid-sale card from the browser-visible active sale set before queue, manual-end, urgency, cursor and count reconciliation;
+- unknown/null/malformed sale-end remains visible under the existing fail-open unknown-date policy;
+- the pinned Titanfall® 2 / AppID 1237970 case is covered: after `2026-09-28T17:00:00+00:00` it is excluded locally;
+- expired Deep-fit, Fast-fit and unresolved cards are all hidden consistently;
+- local `В конец очереди`, old queue state, urgency mode or display history cannot resurrect an expired card;
+- feed count and `Позиция в ленте` are computed from the filtered visible set;
+- Taste/Fast/Dossier/Deep state, score weights, RANK-013, commercial source data and Scheduled Tasks were unchanged;
+- PR checks passed on the rebuilt head, including Progressive PASS 2 core, backlog dispositions, package purchase value and UI provenance/expiry regressions;
+- post-merge PASS 2 core and backlog validations also passed;
+- live Pages proof is not yet available because the independent meaningful-Russian gate still blocks creation of a fresh canonical visual payload;
+- this does not invalidate the scoped implementation: the fix is intentionally browser-local and will hide an already-expired timestamp even when the payload itself is stale.
+
+Decision:
+- scoped task complete and accepted;
+- physical ЧАТ 2 is retired and may be deleted;
+- do not reopen this task for the independent Russian-description/publication blockers.
 
 
 ## ACCEPTED IMPLEMENTATION / BLOCKED PUBLICATION — ЧАТ 1 — Current Russian description publication blocker fix
