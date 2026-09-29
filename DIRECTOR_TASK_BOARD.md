@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- No worker task is currently assigned in slot `ЧАТ 1`.
-- No worker task is currently assigned in slot `ЧАТ 2`.
+- `ЧАТ 1` assigned: `WORKER_TASK_RUSSIAN_DESCRIPTION_MANUAL_TRANSLATION_RUN_01.md` — authorized manual one-shot semantic translation of the current GitHub-prepared Russian-description workload.
+- `ЧАТ 2` assigned: `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` — authorized implementation making missing translations nonblocking for publication and adding the dedicated translation Statistics block with count + success/attempt timestamps.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -14,9 +14,68 @@
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
 - Current user-visible blocker: after the recent merges, the live site still shows expired-sale cards and stale Statistics. Treat actual Pages publication as unresolved.
 - Do not reopen PR #121 expiry logic, RANK-013, or the game:1143810 regression merely because the live site is unchanged; first verify what code/payload Pages actually deployed.
-- Recommended next bounded task: READ-ONLY / RECON of the current Pages artifact/source and latest visual/deploy chain, covering both deployed browser code and deployed web/data/current.json.
+- User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## ACTIVE — ЧАТ 1 — Manual current Russian-description translation
+
+Task:
+`WORKER_TASK_RUSSIAN_DESCRIPTION_MANUAL_TRANSLATION_RUN_01.md`
+
+Mode:
+`SEMANTIC / MANUAL ONE-SHOT`
+
+Status:
+`authorized_ready_for_worker`
+
+User authorization:
+- one immediate manual worker invocation only;
+- process exact current GitHub-prepared Russian translation work through the canonical translation path;
+- do not change translation/publication/UI logic;
+- do not create or modify any Scheduled Task.
+
+Concurrency:
+- may run in parallel with ЧАТ 2;
+- preserve concurrent `main` and production writes;
+- if ЧАТ 2 changes the canonical translation contract in a way that invalidates current work, fail closed rather than rebinding or guessing.
+
+Expected report:
+`reviews/worker_reports/russian-description-manual-translation-run-01.md`
+
+
+## ACTIVE — ЧАТ 2 — Nonblocking translations + Statistics observability
+
+Task:
+`WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Status:
+`authorized_ready_for_worker`
+
+User-approved behavior:
+- missing translations do not block visual build/site publication;
+- untranslated state remains explicit and must not be mislabeled as Russian;
+- Statistics gets a dedicated translation block analogous to existing blocks;
+- block shows current untranslated-game count, last successful translation date/time, and last translation-attempt date/time;
+- zero games needing translation counts as successful translation handling;
+- an unsuccessful attempt advances only the attempt timestamp, allowing the user to see that translation was tried but did not succeed.
+
+Concurrency:
+- may run in parallel with ЧАТ 1;
+- preserve valid translation outputs that land while implementation is in progress;
+- do not depend on ЧАТ 1 completing before making missing translations nonblocking.
+
+Expected report:
+`reviews/worker_reports/russian-translation-nonblocking-publication-statistics-01.md`
+
+Dossier / Deep concurrency:
+- current canonical architecture explicitly allows Dossier and Progressive Deep to run in parallel;
+- PR #101 / merge `544c0400b3290f945d1de5464d8dfa9f4faf2aa0` corrected the old whole-`main` startup coupling;
+- Deep freezes one GitHub-confirmed invocation view; Dossier changes after that boundary belong to a later Deep invocation and must not retroactively cancel the frozen one.
 
 
 ## VERIFIED CURRENT PAGES STATE — 2026-09-29 Director reconciliation
