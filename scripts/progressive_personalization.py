@@ -14,6 +14,8 @@ PROGRESSIVE_CONTEXT = ROOT / 'data/production/pre_ai/progressive_candidate_conte
 TASTE_PROJECTION = ROOT / 'data/production/pre_ai/taste_projection.json'
 TASTE_CACHE = ROOT / 'data/cache/taste_fit.json'
 TASTE_OVERLAY = ROOT / 'data/cache/taste_fit.entry_overlay.json'
+RUSSIAN_TRANSLATION_STATUS = ROOT / 'data/production/pre_ai/chatgpt_ru_description_status.json'
+RUSSIAN_TRANSLATION_CACHE = ROOT / 'data/cache/russian_description_translations.json'
 
 STATE_TIER = {
     'analyzed_fit': 1,
@@ -730,6 +732,64 @@ def _dossier_processing_metrics():
         }
 
 
+def _translation_processing_metrics(status_path=None, cache_path=None):
+    status_path = Path(status_path or RUSSIAN_TRANSLATION_STATUS)
+    cache_path = Path(cache_path or RUSSIAN_TRANSLATION_CACHE)
+    try:
+        status = load_json(status_path)
+        raw_count = status.get('untranslated_game_count')
+        if raw_count is None:
+            # Backward compatibility for a schema-v1 status written by the
+            # concurrently running translation worker before this producer lands.
+            scope = int(status.get('scope_record_count'))
+            direct = int(status.get('resolved_direct_ru_count') or 0)
+            cached = int(status.get('resolved_translation_cache_count') or 0)
+            queued = int(status.get('queue_count') or 0)
+            blockers = int(status.get('nontranslatable_blocker_count') or 0)
+            if scope != direct + cached + queued + blockers:
+                raise ValueError('translation status scope arithmetic mismatch')
+            raw_count = queued + blockers
+        untranslated = int(raw_count)
+        if untranslated < 0:
+            raise ValueError('negative untranslated game count')
+
+        attempt = _normalize_utc_timestamp(status.get('last_translation_attempt_at'))
+        success = _normalize_utc_timestamp(status.get('last_successful_translation_at'))
+
+        # An accepted canonical cache write predating schema-v2 observability is
+        # durable evidence of both a successful attempt and a successful result.
+        if cache_path.exists():
+            cache = load_json(cache_path)
+            accepted_at = _normalize_utc_timestamp(cache.get('updated_at_utc'))
+            if accepted_at:
+                attempt = max([x for x in (attempt, accepted_at) if x is not None])
+                success = max([x for x in (success, accepted_at) if x is not None])
+
+        return {
+            'translation_observability': 'available',
+            'untranslated_game_count': untranslated,
+            'last_translation_attempt_at': attempt,
+            'last_successful_translation_at': success,
+            'translation_stage_counts': {
+                'untranslated_game_count': untranslated,
+                'last_translation_attempt_at': attempt,
+                'last_successful_translation_at': success,
+            },
+        }
+    except Exception as exc:
+        return {
+            'translation_observability': f'unavailable:{type(exc).__name__}',
+            'untranslated_game_count': None,
+            'last_translation_attempt_at': None,
+            'last_successful_translation_at': None,
+            'translation_stage_counts': {
+                'untranslated_game_count': None,
+                'last_translation_attempt_at': None,
+                'last_successful_translation_at': None,
+            },
+        }
+
+
 def build_processing_status(state_index, visible_items, business_excluded_family_ids=None):
     business_excluded = {str(x) for x in (business_excluded_family_ids or [])}
     counts = {
@@ -832,6 +892,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         raise ValueError('Deep progress arithmetic underflow')
 
     dossier = _dossier_processing_metrics()
+    translation = _translation_processing_metrics()
     pass2_work = progressive_pass2.load_json(progressive_pass2.WORK)
     legacy_reanalysis = deepcopy(
         ((pass2_work.get('scope') or {}).get('legacy_full_reanalysis')) or {
@@ -856,7 +917,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         }
     )
     return {
-        'schema_version': 3,
+        'schema_version': 4,
         'contract': 'PROGRESSIVE-PERSONALIZED-DEALS-V1',
         'phase': 'phase_b',
         'total_current_candidates': total,
@@ -886,6 +947,7 @@ def build_processing_status(state_index, visible_items, business_excluded_family
         'fast_last_write_at_utc': max(fast_write_times) if fast_write_times else None,
 
         **dossier,
+        **translation,
 
         'deep_total_current_coverage_target': deep_total,
         'deep_first_pass_attempted_count': deep_first_pass_attempted,
@@ -1023,14 +1085,25 @@ def validate_processing_status(status):
         'deep_remaining_until_all_authoritative_count',
         'deep_normal_first_pass_complete', 'deep_all_current_authoritative_complete',
         'fast_last_write_at_utc', 'dossier_last_write_at_utc', 'deep_last_write_at_utc',
+        'translation_stage_counts', 'untranslated_game_count',
+        'last_translation_attempt_at', 'last_successful_translation_at',
         'deep_legacy_full_reanalysis',
     }
     if not required.issubset(status):
         raise ValueError('progressive processing status missing required counters')
-    for key in ('fast_last_write_at_utc', 'dossier_last_write_at_utc', 'deep_last_write_at_utc'):
+    for key in ('fast_last_write_at_utc', 'dossier_last_write_at_utc', 'deep_last_write_at_utc', 'last_translation_attempt_at', 'last_successful_translation_at'):
         value = status.get(key)
         if value is not None and _normalize_utc_timestamp(value) is None:
             raise ValueError(f'progressive processing status has invalid UTC timestamp: {key}')
+    untranslated = status.get('untranslated_game_count')
+    if untranslated is not None and int(untranslated) < 0:
+        raise ValueError('progressive processing status has negative untranslated_game_count')
+    translation_counts = status.get('translation_stage_counts')
+    if not isinstance(translation_counts, dict):
+        raise ValueError('progressive processing status missing translation_stage_counts')
+    for key in ('untranslated_game_count', 'last_translation_attempt_at', 'last_successful_translation_at'):
+        if translation_counts.get(key) != status.get(key):
+            raise ValueError(f'translation stage projection mismatch: {key}')
 
     total = int(status['total_current_candidates'])
     fit = int(status['analyzed_fit_count'])
