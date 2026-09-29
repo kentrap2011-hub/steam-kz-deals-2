@@ -263,5 +263,33 @@
     },
     "profile_handoff_rule": "Deep creates the V2 marker before choosing its authoritative frozen view. The marker commit's actual Git parent is the GitHub-selected authority; Deep then freezes the exact PASS 2 contract/work Git blobs and profile/work/Dossier/recovery inputs from that parent. Repository changes after that boundary apply only to the next invocation, while changes that land before the marker are naturally included in the parent. ChatGPT cannot nominate a historical V2 authority.",
     "invalid_transport_rule": "Invalid exact authorized Deep transport consumes zero semantic attempts; GitHub persists the rejection receipt then removes the bad active inbox candidate in the same canonical writer transaction. A later retry exists only if a later GitHub run-start view authorizes it."
+  },
+  "russian_description_manual_semantic_worker": {
+    "status": "authorized_canonical_one_shot",
+    "owner": "explicitly_user_launched_chatgpt_semantic_data_plane",
+    "prompt": "config/russian_description_manual_semantic_worker_prompt.md",
+    "recurring_scheduler": false,
+    "scheduled_task_action_allowed": false,
+    "explicit_user_launch_required_for_every_run": true,
+    "github_control_plane_remains_authoritative": true,
+    "allowed": [
+      "read the exact current GitHub-prepared Russian-description queue and canonical translation contracts",
+      "translate or rewrite only exact currently authorized requests in GitHub-provided order",
+      "submit exact-bound translation/error results only through data/ai_inbox/russian_descriptions/*.json",
+      "submit an empty canonical result document only when the just-read current queue is empty so GitHub can record the successful no-work check",
+      "use subset checkpoints only for transport/context durability and re-read current GitHub-owned queue/bindings after canonical acceptance before continuing"
+    ],
+    "forbidden": [
+      "act as a general interactive developer/operator session while performing semantic production translation",
+      "invent games, request identities, source text, ordering, retries, or completion",
+      "write directly to data/cache/russian_description_translations.json",
+      "modify translation scope/status/cache directly",
+      "create, edit, enable, disable, pause, resume, rename, delete, or emulate a ChatGPT Scheduled Task",
+      "create any recurring scheduler, independent queue, retry loop, quota, or backlog owner",
+      "continue after a checkpoint without fresh GitHub-owned current-queue/binding confirmation"
+    ],
+    "attempt_success_observability_owner": "github_control_plane_via_canonical_translation_ingest",
+    "zero_work_transport": "canonical empty RUSSIAN-DESCRIPTION-TRANSLATION-RESULT-V1 submission followed by GitHub ingest and current-scope rebuild",
+    "rule": "This is a narrow explicit one-shot semantic data-plane exception. It does not change the default interactive_chat role, which remains non-production."
   }
 }
