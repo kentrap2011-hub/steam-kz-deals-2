@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- No worker task is currently assigned in slot `ЧАТ 1`.
+- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`).
 - Active worker assignment: `ЧАТ 2` — `WORKER_TASK_EXPIRED_SALE_IMMEDIATE_VISIBILITY_FIX_01.md` (`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`).
 - Latest accepted implementation: `WORKER_TASK_CURRENT_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_02.md` (implementation accepted; end-to-end publication blocked by pre-existing Progressive current-binding regression).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -12,6 +12,35 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 1 — Progressive migration current-binding regression fix
+
+Task:
+`WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md`
+
+Mode:
+`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`
+
+Goal:
+- explain exactly why pre-AI now fails with `migration target missing current binding: game:1143810`;
+- determine whether Black Skylands should still be current under today's semantic identity or whether the regression is asserting the wrong invariant;
+- fix the generic current-binding/reconciliation path without rewriting semantic history or weakening PPD-012;
+- unblock the normal pre-AI path so it can reach the Russian-description translation-scope step.
+
+Constraints:
+- no semantic worker execution;
+- no manual current binding or Deep-result rewrite;
+- no PPD-010 semantic rerun;
+- no identity-matching bypass;
+- no Scheduled Task changes;
+- do not interfere with active ЧАТ 2 or fold in unrelated publication/UI fixes.
+
+Report:
+`reviews/worker_reports/progressive-migration-current-binding-regression-fix-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 1`.
 
 
 ## ACTIVE — НОВЫЙ ЧАТ 2 — Expired sale immediate visibility fix
