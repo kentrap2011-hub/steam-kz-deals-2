@@ -23,7 +23,7 @@ def request(appid, source):
             'description_status': 'needs_translation',
             'description_source_quality': 'non_ru',
             'description_source_appid': str(appid),
-            'summary': source,
+            'description_source_text': source,
             'description_source_path': f'fixture:{appid}',
         },
         f'Fixture {appid}',
