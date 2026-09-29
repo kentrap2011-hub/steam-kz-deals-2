@@ -140,7 +140,10 @@ def ingest_paths(queue_path, cache_path, submission_paths, now_utc=None, delete_
     cache_path.write_text(json.dumps(merged, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
     if rebuild_repo_scope:
-        build_repo_scope()
+        build_repo_scope(
+            translation_attempt_at_utc=now_utc,
+            translation_success=bool(accepted),
+        )
     if delete_processed:
         for path in submission_paths:
             Path(path).unlink()
