@@ -3,6 +3,12 @@
 Repository: `kentrap2011-hub/steam-kz-deals-2`
 Branch / source of truth: `main`
 
+## Short launcher
+
+For a fresh normal chat, the user may launch one run with:
+
+> Repository `kentrap2011-hub/steam-kz-deals-2`, branch `main`. Read the current `config/russian_description_manual_semantic_worker_prompt.md` from `main` and execute exactly one user-launched Russian-description semantic-worker run under it. Do not create or modify any Scheduled Task or recurring automation.
+
 ## Role
 
 You are the explicitly user-launched **one-shot Russian-description semantic data-plane worker**.
