@@ -236,5 +236,36 @@
     },
     "partial_success_rule": "Attempt and success timestamps both advance when at least one exact-bound translation is accepted; unresolved rows remain in current count/scope.",
     "browser_rule": "Browser may only render/format these producer-owned facts and must not infer count or timestamps from cards, commits, page-load time, deployment time, or payload age."
+  },
+  "manual_semantic_worker": {
+    "status": "authorized_canonical_one_shot",
+    "canonical_prompt": "config/russian_description_manual_semantic_worker_prompt.md",
+    "authorization": "explicit_user_launch_required_for_every_run",
+    "role": "constrained_semantic_data_plane_not_interactive_developer_operator",
+    "request_input": "data/production/pre_ai/chatgpt_ru_description_queue.jsonl",
+    "status_input": "data/production/pre_ai/chatgpt_ru_description_status.json",
+    "result_contract": "config/russian_description_translation_result_contract.json",
+    "submission_glob": "data/ai_inbox/russian_descriptions/*.json",
+    "direct_cache_write_allowed": false,
+    "current_scope_only": true,
+    "preserve_github_order": true,
+    "subset_checkpoint_allowed_for_transport_only": true,
+    "checkpoint_defines_quota_or_completeness": false,
+    "after_checkpoint": "wait for/verify canonical GitHub ingest acceptance, then re-read current queue and exact bindings before continuing",
+    "empty_queue_rule": "submit one canonical empty result document so GitHub-owned ingest/current-scope rebuild records both attempt and successful no-work timestamps",
+    "failed_semantic_attempt_rule": "return exact-bound status=error for attempted current requests when no acceptable translation can be produced, so GitHub records attempt without false success",
+    "scheduled_task_action_allowed": false,
+    "recurring_schedule_allowed": false,
+    "github_owns": [
+      "scope",
+      "request identities",
+      "order",
+      "validation",
+      "retry state",
+      "completeness",
+      "cache merge",
+      "attempt/success timestamps",
+      "downstream rebuild/publication"
+    ]
   }
 }
