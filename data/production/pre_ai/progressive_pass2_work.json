@@ -56,8 +56,8 @@
     "deep_completed_fit_count": 45,
     "deep_completed_not_fit_count": 6,
     "deep_incomplete_or_recovery_count": 10,
-    "deep_waiting_for_dossier_count": 335,
-    "deep_ready_or_pending_count": 3,
+    "deep_waiting_for_dossier_count": 332,
+    "deep_ready_or_pending_count": 6,
     "deep_normal_first_pass_remaining_count": 338,
     "deep_remaining_until_all_authoritative_count": 348,
     "deep_normal_first_pass_complete": false,
@@ -66,10 +66,10 @@
     "recovery_eligible_count": 0,
     "recovery_pending_count": 0,
     "current_analysis_incomplete_count": 3,
-    "dossier_waiting_count": 335,
+    "dossier_waiting_count": 332,
     "pass2_attempted_count": 61,
-    "pass2_eligible_count": 3,
-    "normal_pass2_eligible_count": 3,
+    "pass2_eligible_count": 6,
+    "normal_pass2_eligible_count": 6,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "legacy_full_reanalysis": {
       "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
@@ -155,6 +155,64 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:1353270",
+      "taste_subject_key": "App_1353270",
+      "appid": "1353270",
+      "taste_fingerprint": "d20ffcbe166bb56cd27678ae6d9f7a7d83d5e10c95ba3abf57a0ace6abc6fb80",
+      "candidate_context_sha256": "d4e700196c92983db70afd8c4df087edb5080ec58dd8c097bcacbd215ade73c8",
+      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+      "work_id": "1379906886119f0bcd8b2d764fa7ce663140ada66a7da03ec1dd08176679773b",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Five Dates",
+        "short_description": "Five Dates is an interactive rom-com about the unpredictable world of digital dating. With five potential female matches, Vinny explores whether compatibility, chemistry and connection is still possible in a world where physical touch is no longer an option.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Adventure",
+          "Choices Matter"
+        ],
+        "core_fit_count": 1,
+        "release_date": "17 Nov, 2020",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "1353270"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1353270.json",
+      "dossier_content_sha256": "381ef1e995f390e2bc415c9ed52478f987a2b6a83bb38d909c9aca947e9420d4",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-19T03:14:34Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "58e8ea8312bec3291f31f359176ef0d3d3789f7628e1c6bd1be253dde8188c16",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--1379906886119f0bcd8b2d764fa7ce663140ada66a7da03ec1dd08176679773b--58e8ea8312bec3291f31f359176ef0d3d3789f7628e1c6bd1be253dde8188c16.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--1379906886119f0bcd8b2d764fa7ce663140ada66a7da03ec1dd08176679773b--58e8ea8312bec3291f31f359176ef0d3d3789f7628e1c6bd1be253dde8188c16.json",
+      "sequence": 2
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1296770",
       "taste_subject_key": "App_1296770",
       "appid": "1296770",
@@ -205,7 +263,7 @@
       "authorization_id": "c2586b7e898fbd2588250bf47802969ded4d695783ab841977f5f5e5c9e54e60",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a--c2586b7e898fbd2588250bf47802969ded4d695783ab841977f5f5e5c9e54e60.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a--c2586b7e898fbd2588250bf47802969ded4d695783ab841977f5f5e5c9e54e60.json",
-      "sequence": 2
+      "sequence": 3
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -260,7 +318,127 @@
       "authorization_id": "f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9--f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9--f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443.json",
-      "sequence": 3
+      "sequence": 4
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:13530",
+      "taste_subject_key": "App_13530",
+      "appid": "13530",
+      "taste_fingerprint": "cffa52bc75ede49a9019b56ee3069c0f9c80522f4e2c1e5edba7e229beb7af3e",
+      "candidate_context_sha256": "613ac339ebfc7dc3b4de82ffce46f32f591fe17d5804104724a9f0be903cbd6e",
+      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+      "work_id": "c2a7476983262a3d5cfe2f68b8f88f789b87374a3319c4353e154f3cebd53fd7",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Prince of Persia: The Two Thrones™",
+        "short_description": "The Prince of Persia, a seasoned warrior, returns from the Island of Time to Babylon with his love, Kaileena. Instead of the peace that he longs for, he finds his homeland ravaged by war and the kingdom turned against him.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Adventure",
+          "Hack and Slash",
+          "Singleplayer",
+          "Third Person"
+        ],
+        "core_fit_count": 2,
+        "release_date": "27 Aug, 2009",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "13530"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_13530.json",
+      "dossier_content_sha256": "e15562546cc526bf64ec4b4ce08b707a56f88b4a73ce2019e3439b180c5a91d8",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-19T03:14:34Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "7f8653db682b07c5b0f670ac8b4e6f3327fafc33038cdac0818a7e52722774fc",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--c2a7476983262a3d5cfe2f68b8f88f789b87374a3319c4353e154f3cebd53fd7--7f8653db682b07c5b0f670ac8b4e6f3327fafc33038cdac0818a7e52722774fc.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--c2a7476983262a3d5cfe2f68b8f88f789b87374a3319c4353e154f3cebd53fd7--7f8653db682b07c5b0f670ac8b4e6f3327fafc33038cdac0818a7e52722774fc.json",
+      "sequence": 5
+    },
+    {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "family_id": "game:13520",
+      "taste_subject_key": "App_13520",
+      "appid": "13520",
+      "taste_fingerprint": "514feafe857e849276ca13580157f815961660838a6b71ea446059be8b1d53ad",
+      "candidate_context_sha256": "34a57ec54fd63353194ec844ffd17e30038bae20439ab2298ab70a7020e10611",
+      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+      "work_id": "f8dc529d7c5862154aba2420aac708b5ca734d7667923e3c7b37f737b41f2382",
+      "taste_model_version": "taste-v3",
+      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
+      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
+      "work_mode": "normal_first_pass",
+      "semantic_input": {
+        "title": "Far Cry®",
+        "short_description": "A tropical paradise seethes with hidden evil in Far Cry®, a cunningly detailed action shooter that pushes the boundaries of combat to shocking new levels. Freelance mariner Jack Carver is cursing the day he ever came to this island.",
+        "bundle_members": [],
+        "fit_tags": [
+          "Action",
+          "Open World",
+          "Singleplayer"
+        ],
+        "core_fit_count": 1,
+        "release_date": "1 Apr, 2008",
+        "release_year": null,
+        "semantic_condition": {
+          "ai_condition": "taste_subject_include_controls_purchase_family",
+          "requires_ai_base_support": false,
+          "base_appids": [
+            "13520"
+          ]
+        }
+      },
+      "dossier_path": "data/cache/taste_steam_review_dossiers/App_13520.json",
+      "dossier_content_sha256": "532409322aa073faf46f77850291d9c365c7ded16a8a7b847abbbccc2141ddb8",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "dossier_expires_at_utc": "2026-10-19T03:14:34Z",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "authorization_id": "d93bb6844d6acf39bf16fae8fef164ca19037f6cf2284b509b308c0dc5aa1064",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--f8dc529d7c5862154aba2420aac708b5ca734d7667923e3c7b37f737b41f2382--d93bb6844d6acf39bf16fae8fef164ca19037f6cf2284b509b308c0dc5aa1064.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--f8dc529d7c5862154aba2420aac708b5ca734d7667923e3c7b37f737b41f2382--d93bb6844d6acf39bf16fae8fef164ca19037f6cf2284b509b308c0dc5aa1064.json",
+      "sequence": 6
     }
   ]
 }
