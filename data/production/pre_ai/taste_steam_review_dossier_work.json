@@ -9373,7 +9373,14 @@
       {
         "sequence": 1,
         "group_sha256": "04895176c2feba5bd7ab04bea968b363d2652debdea591ed6afc967d06e6ae6f",
-        "state": "pending"
+        "state": "failed_or_invalid_pending_recovery",
+        "failure": {
+          "validator_error": "provenance.player_feedback_records[4] Reddit feedback item cannot use a non-Reddit parent source",
+          "artifact_path": "data/ai_inbox/taste_steam_review_dossiers/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000001--04895176c2feba5bd7ab04bea968b363d2652debdea591ed6afc967d06e6ae6f.json",
+          "artifact_sha256": "518b6257d923509fb7c2ea49bf3bc304efe04d740e122390c2f54a1dfeeb8836",
+          "quarantine_artifact_path": "data/quarantine/taste_steam_review_dossier_inbox/failed_group/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689/g000001/9e6d80d33dd1f82dd31d7b4bee03564953a3f38b69e705c0f9b28a67c9abb689--g000001--04895176c2feba5bd7ab04bea968b363d2652debdea591ed6afc967d06e6ae6f.json.invalid-518b6257d923",
+          "recovery_eligible": true
+        }
       },
       {
         "sequence": 2,
@@ -9777,11 +9784,11 @@
       }
     ],
     "accepted_group_count": 0,
-    "failed_group_count": 0,
-    "pending_group_count": 81,
+    "failed_group_count": 1,
+    "pending_group_count": 80,
     "accepted_dossier_count": 0,
-    "failed_dossier_count": 0,
-    "pending_dossier_count": 241,
+    "failed_dossier_count": 3,
+    "pending_dossier_count": 238,
     "normal_first_pass_complete": false,
     "all_groups_accepted": false
   }
