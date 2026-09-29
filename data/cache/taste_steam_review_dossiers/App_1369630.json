@@ -1,0 +1,330 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "1369630",
+  "title": "ENDER LILIES: Quietus of the Knights",
+  "generated_at_utc": "2026-09-29T08:45:08Z",
+  "expires_at_utc": "2026-10-19T08:45:08Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "ENDER LILIES: Quietus of the Knights",
+    "release_year": 2021,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "1369630"
+      },
+      {
+        "kind": "developer",
+        "value": "Live Wire"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Defeated bosses and minibosses become equipable spirits, giving combat a flexible loadout system that supports multiple melee, ranged and utility combinations.",
+      "sentiment": "positive",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "Boss encounters are a major mastery focus and are often described as demanding but fair, although difficulty varies sharply and a few fights or areas can feel disproportionately punishing or tedious.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "Exploration rewards new spirits and upgrades, but the abstract room-box map and repeated backtracking are recurring sources of navigation friction for some players.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-004",
+        "source-005"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "The melancholic atmosphere, hand-drawn visual style and soundtrack are recurring strengths and remain central to the game's identity even among players who criticize parts of the level design or combat.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            2
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            3
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1369630/ENDER_LILIES_Quietus_of_the_Knights/",
+        "publication_date": "2021-06-21",
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "store_user_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/1369630/ender_lilies?l=russian",
+        "publication_date": null,
+        "language": "russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "1369630",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/metroidvania/comments/w0rbev",
+        "publication_date": "2022-07-16",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/metroidvania/comments/1eopsga",
+        "publication_date": "2024-08-10",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-005",
+        "source_type": "reddit",
+        "domain": "reddit.com",
+        "url": "https://www.reddit.com/r/metroidvania/comments/sbj3s5",
+        "publication_date": "2022-01-24",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": null,
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-003",
+        "url": "https://www.reddit.com/r/metroidvania/comments/w0rbev",
+        "publication_date": "2022-07-16",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-004",
+        "url": "https://www.reddit.com/r/metroidvania/comments/1eopsga",
+        "publication_date": "2024-08-10",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-005",
+        "url": "https://www.reddit.com/r/metroidvania/comments/sbj3s5",
+        "publication_date": "2022-01-24",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      }
+    ]
+  }
+}
