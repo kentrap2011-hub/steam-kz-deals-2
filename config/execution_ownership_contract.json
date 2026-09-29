@@ -8,7 +8,8 @@
       "SteamDB history resolution",
       "semantic production stages",
       "runtime retries and checkpoints",
-      "automation changes"
+      "automation changes",
+      "explicit user-launched one-shot semantic worker chats"
     ],
     "rule": "When deciding which component should perform a step, this ownership contract must be checked before temporary task state, automation prompts, workflow implementation details, logs, batch files, or prior chat conclusions."
   },
@@ -263,5 +264,43 @@
     },
     "profile_handoff_rule": "Deep creates the V2 marker before choosing its authoritative frozen view. The marker commit's actual Git parent is the GitHub-selected authority; Deep then freezes the exact PASS 2 contract/work Git blobs and profile/work/Dossier/recovery inputs from that parent. Repository changes after that boundary apply only to the next invocation, while changes that land before the marker are naturally included in the parent. ChatGPT cannot nominate a historical V2 authority.",
     "invalid_transport_rule": "Invalid exact authorized Deep transport consumes zero semantic attempts; GitHub persists the rejection receipt then removes the bad active inbox candidate in the same canonical writer transaction. A later retry exists only if a later GitHub run-start view authorizes it."
+  },
+  "explicit_manual_semantic_worker_chats": {
+    "owner": "GitHub control plane with explicit external user launch",
+    "ordinary_interactive_chat_role_unchanged": true,
+    "russian_description_one_shot": {
+      "allowed": true,
+      "authorization_source": "WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md",
+      "canonical_prompt": "config/russian_description_manual_semantic_worker_prompt.md",
+      "requires_fresh_explicit_user_launch_every_run": true,
+      "recurring_schedule_allowed": false,
+      "may_create_or_modify_scheduled_task": false,
+      "role": "constrained_russian_description_semantic_data_plane_only",
+      "github_owns": [
+        "exact current translation scope and order",
+        "request identity and source binding",
+        "result validation",
+        "retry and unresolved state",
+        "completeness",
+        "canonical cache merge",
+        "attempt and success timestamps",
+        "downstream rebuild and publication"
+      ],
+      "worker_may": [
+        "read current GitHub-prepared Russian-description requests in canonical order",
+        "translate or rewrite only exact authorized request source text",
+        "submit exact-bound result records through data/ai_inbox/russian_descriptions/*.json",
+        "use subset checkpoints only for transport/context durability",
+        "submit an empty result document only when the current canonical queue is empty to record a successful no-work check"
+      ],
+      "forbidden": [
+        "developer/operator source or contract edits while acting as the semantic worker",
+        "direct writes to data/cache/russian_description_translations.json",
+        "inventing or reordering requests, source text, retries or completion",
+        "continuing from a stale queue after an accepted checkpoint without rereading current main",
+        "creating, editing, enabling, disabling, pausing, resuming or emulating any Scheduled Task",
+        "creating a recurring scheduler, second queue, retry loop or backlog manager"
+      ]
+    }
   }
 }

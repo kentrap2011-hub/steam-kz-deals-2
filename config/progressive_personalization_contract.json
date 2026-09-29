@@ -1,6 +1,6 @@
 {
   "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
-  "version": 9,
+  "version": 10,
   "status": "canonical",
   "phase": "phase_b",
   "purpose": "Publish the current deterministic-eligible Steam KZ catalogue while three independent GitHub-owned stages progress: provisional Fast analysis (PASS 1), neutral Dossier preparation, and eventual authoritative Deep analysis (technical PASS 2) for every current eligible game.",
@@ -111,7 +111,10 @@
     "effective_result_counts",
     "fast_last_write_at_utc",
     "dossier_last_write_at_utc",
-    "deep_last_write_at_utc"
+    "deep_last_write_at_utc",
+    "untranslated_game_count",
+    "last_translation_attempt_at_utc",
+    "last_successful_translation_at_utc"
   ],
   "invariants": [
     "total_current_candidates = analyzed_fit_count + analyzed_not_fit_count + analysis_incomplete_count + not_analyzed_count",
@@ -447,6 +450,16 @@
         "deep_remaining_until_all_authoritative_count = deep_total_current_coverage_target - deep_authoritative_completed_count",
         "deep_normal_first_pass_complete and deep_all_current_authoritative_complete are distinct metrics and may differ while recovery-owned items remain"
       ]
+    },
+    "translation": {
+      "denominator": "untranslated_game_count",
+      "label_ru": "Переводы описаний",
+      "fields": [
+        "untranslated_game_count",
+        "last_successful_translation_at_utc",
+        "last_translation_attempt_at_utc"
+      ],
+      "browser_rule": "Render producer-owned count/timestamps only; do not derive them from cards, commits, payload age or page-load time."
     }
   },
   "deep_revision_model": {
@@ -489,5 +502,17 @@
     "ppd012_semantically_reconciled_current_deep_grants_deep_stage": true,
     "deep_incomplete_or_error_with_valid_fast_fit": "fast_fit",
     "analyzed_not_fit_visibility_unchanged": true
+  },
+  "translation_observability": {
+    "source": "data/production/pre_ai/chatgpt_ru_description_status.json",
+    "producer_owned": true,
+    "browser_inference_forbidden": true,
+    "fields": {
+      "untranslated_game_count": "Current number of current translation-scope game records without valid ready_ru.",
+      "last_translation_attempt_at_utc": "Last GitHub-recorded current-work translation attempt/check.",
+      "last_successful_translation_at_utc": "Last GitHub-recorded accepted translation or successful zero-work check."
+    },
+    "timestamp_display_rule": "Browser may only format producer-provided UTC timestamps in viewer local time; null means no recorded history.",
+    "publication_rule": "Untranslated count may be nonzero while the visual remains publishable; invalid text is never promoted to ready_ru."
   }
 }

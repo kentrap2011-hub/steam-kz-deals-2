@@ -54,6 +54,21 @@ interactive_forbidden = set(interactive.get("forbidden") or [])
 if "manually process a large production backlog item by item as a substitute for repairing automation" not in interactive_forbidden:
     fail("interactive chat manual-backlog prohibition is missing")
 
+manual_workers = ownership.get("explicit_manual_semantic_worker_chats") or {}
+if manual_workers.get("ordinary_interactive_chat_role_unchanged") is not True:
+    fail("manual semantic-worker exception must not broaden ordinary interactive chat")
+russian_manual = manual_workers.get("russian_description_one_shot") or {}
+if russian_manual.get("allowed") is not True:
+    fail("canonical manual Russian semantic worker is not enabled")
+if russian_manual.get("canonical_prompt") != "config/russian_description_manual_semantic_worker_prompt.md":
+    fail("manual Russian semantic worker prompt path mismatch")
+if russian_manual.get("requires_fresh_explicit_user_launch_every_run") is not True:
+    fail("manual Russian semantic worker must require explicit launch every run")
+if russian_manual.get("recurring_schedule_allowed") is not False:
+    fail("manual Russian semantic worker must not become recurring")
+if russian_manual.get("may_create_or_modify_scheduled_task") is not False:
+    fail("manual Russian semantic worker must not modify Scheduled Tasks")
+
 if daily.get("ownership_contract") != "config/execution_ownership_contract.json":
     fail("daily execution contract is not bound to ownership contract")
 inv = daily.get("execution_invariants") or {}

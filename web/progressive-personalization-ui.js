@@ -193,6 +193,28 @@
         ].map(([label,key])=>({label,key,value:field(status,key)})),
         note:'«Окончательно разобрано» — глубокий разбор завершён с итогом «подходит» или «не подходит».',
       },
+      {
+        key:'translation',
+        title:'Переводы описаний',
+        showLastWrite:false,
+        lastWriteAtUtc:null,
+        scopeLabel:'Игр без перевода:',
+        denominatorKey:'untranslated_game_count',
+        denominator:field(status,'untranslated_game_count'),
+        rows:[
+          {
+            label:'Последний успешный перевод',
+            key:'last_successful_translation_at_utc',
+            value:formatLastWriteAt(status.last_successful_translation_at_utc??null),
+          },
+          {
+            label:'Последняя попытка перевода',
+            key:'last_translation_attempt_at_utc',
+            value:formatLastWriteAt(status.last_translation_attempt_at_utc??null),
+          },
+        ],
+        note:'Игры без перевода остаются видимыми и учитываются отдельно; отсутствие перевода не останавливает публикацию.',
+      },
     ];
   }
 

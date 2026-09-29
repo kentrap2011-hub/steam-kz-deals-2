@@ -2,7 +2,7 @@
   "contract": "RUSSIAN-DESCRIPTION-TRANSLATION-RESULT-V1",
   "status": "canonical",
   "request_contract": "config/russian_description_translation_contract.json",
-  "purpose": "Define the only translation-specific semantic result shape accepted from the existing scheduled ChatGPT data-plane.",
+  "purpose": "Define the only translation-specific semantic result shape accepted from either the existing scheduled ChatGPT data-plane or the explicitly user-launched canonical one-shot Russian-description semantic worker.",
   "submission_schema": {
     "schema_version": 1,
     "additional_fields_allowed": false,
@@ -14,7 +14,7 @@
     "field_rules": {
       "contract": "RUSSIAN-DESCRIPTION-TRANSLATION-RESULT-V1",
       "schema_version": 1,
-      "results": "array of zero or more unique result records; zero results do not imply completeness"
+      "results": "array of zero or more unique result records; zero results do not imply completeness and qualify as a successful no-work check only when GitHub validates that the exact current queue is empty"
     }
   },
   "result_record_schema": {
@@ -66,6 +66,11 @@
     "worker_only_produces_result_records": true,
     "github_validates_and_persists": true,
     "worker_decides_completeness": false,
-    "worker_controls_retry": false
+    "worker_controls_retry": false,
+    "allowed_semantic_producers": [
+      "existing scheduled ChatGPT translation data-plane",
+      "explicitly user-launched one-shot worker bound to config/russian_description_manual_semantic_worker_prompt.md"
+    ],
+    "zero_result_no_work_authority": "GitHub ingest only; worker may submit zero results but cannot decide that the queue is empty or stamp timestamps"
   }
 }

@@ -20,6 +20,7 @@
 - [ ] Если текущий чат — **новый Director conversation после ротации**, сначала прочитать `DIRECTOR_BOOTSTRAP.md` и `DIRECTOR_TASK_BOARD.md`; полный `CURRENT_TASK.md` открывать только если compact bootstrap/Board недостаточны для конкретного управленческого решения.
 - [ ] Если это обычный worker-чат и продолжается незаконченная работа — прочитать `CURRENT_TASK.md`.
 - [ ] Если worker запущен ссылкой на конкретный `WORKER_TASK_*.md`, первым task-specific действием полностью прочитать актуальную версию этого task-файла из `main` и зафиксировать обязательный checklist: scope, запреты, разрешённые/обязательные зависимости, acceptance checks, путь worker-report и допустимые финальные статусы. До этого не начинать широкий поиск по репозиторию.
+- [ ] Если пользователь явно запустил канонический one-shot semantic worker по пути, разрешённому `config/execution_ownership_contract.json`, прочитать этот prompt после `CHAT_CONTEXT.md` и работать только в его узкой data-plane роли. Такой semantic worker не создаёт developer branch/PR и не обновляет `CURRENT_TASK.md`, если canonical prompt прямо запрещает developer/operator writes.
 - [ ] До широкого поиска проверить релевантный маршрут в `PROJECT_ROUTES.md`.
 - [ ] Если задача совпадает с известным operational trigger, проверить только релевантную запись в `KNOWN_WORKER_PITFALLS.md`; для unrelated-задач не читать весь файл и не делать broad pitfall/history search «на всякий случай».
 - [ ] Если нужно понять, **почему** принято неочевидное решение — до Git history проверить `PROJECT_DECISIONS.md`.
@@ -29,7 +30,7 @@
 
 ## DURING — во время работы
 
-- [ ] Не превращать interactive chat в production worker или backlog manager, если этим по контракту владеет GitHub/scheduled worker.
+- [ ] Не превращать ordinary interactive chat в production worker или backlog manager. Исключение допустимо только для явно user-launched canonical one-shot semantic-worker роли, прямо разрешённой ownership contract; её scope/writes остаются ограничены canonical prompt и GitHub-owned control plane.
 - [ ] Если чат работает в director mode — не выполнять проектную работу вместо worker-а; соблюдать исключения только из `DIRECTOR_PROTOCOL.md`.
 - [ ] Читать только минимально нужные файлы/диапазоны; не восстанавливать проект заново из старых чатов и больших JSON.
 - [ ] Если task-файл ссылается на изменившийся путь/структуру, разрешить ссылку одним bounded lookup и вернуться к task-checklist; не переходить в серию повторяющихся search/fetch без новой конкретной необходимости.

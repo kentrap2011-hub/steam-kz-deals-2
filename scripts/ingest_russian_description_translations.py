@@ -6,7 +6,12 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
-from build_russian_description_translation_queue import build_repo_scope, load_jsonl
+from build_russian_description_translation_queue import (
+    STATUS_OUT,
+    build_repo_scope,
+    load_jsonl,
+    record_translation_attempt,
+)
 from russian_description_quality import classify_description, normalize_description
 from russian_description_translation_runtime import (
     CACHE_CONTRACT_ID,
@@ -127,10 +132,21 @@ def merge_validated_results(cache, accepted, ingested_at_utc):
     return cache
 
 
-def ingest_paths(queue_path, cache_path, submission_paths, now_utc=None, delete_processed=False, rebuild_repo_scope=False):
+def ingest_paths(
+    queue_path,
+    cache_path,
+    submission_paths,
+    now_utc=None,
+    delete_processed=False,
+    rebuild_repo_scope=False,
+    status_path=None,
+):
     queue = load_jsonl(queue_path)
     docs = [(str(path), load_submission(path)) for path in submission_paths]
     accepted, errors = validate_submissions(queue, docs)
+    result_count = sum(len(doc.get('results') or []) for _, doc in docs)
+    successful_no_work = bool(docs) and not queue and result_count == 0
+    attempted_current_work = result_count > 0 or successful_no_work
     now_utc = now_utc or datetime.now(timezone.utc).isoformat()
     cache = load_translation_cache(cache_path)
     merged = merge_validated_results(cache, accepted, now_utc)
@@ -140,7 +156,21 @@ def ingest_paths(queue_path, cache_path, submission_paths, now_utc=None, delete_
     cache_path.write_text(json.dumps(merged, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
     if rebuild_repo_scope:
-        build_repo_scope()
+        build_repo_scope(generated_at_utc=now_utc, zero_work_check=False)
+        if attempted_current_work:
+            record_translation_attempt(
+                status_path or STATUS_OUT,
+                now_utc,
+                len(accepted),
+                successful_no_work=successful_no_work,
+            )
+    elif status_path is not None and attempted_current_work:
+        record_translation_attempt(
+            status_path,
+            now_utc,
+            len(accepted),
+            successful_no_work=successful_no_work,
+        )
     if delete_processed:
         for path in submission_paths:
             Path(path).unlink()
@@ -150,6 +180,8 @@ def ingest_paths(queue_path, cache_path, submission_paths, now_utc=None, delete_
         'accepted_count': len(accepted),
         'error_count': len(errors),
         'cache_entry_count': len(merged.get('entries') or {}),
+        'attempted_current_work': attempted_current_work,
+        'successful_no_work': successful_no_work,
         'error_results': errors,
     }
 

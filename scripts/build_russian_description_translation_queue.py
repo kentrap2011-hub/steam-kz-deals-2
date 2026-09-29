@@ -40,6 +40,47 @@ def load_json(path):
     return json.loads(Path(path).read_text(encoding='utf-8'))
 
 
+def load_optional_json(path):
+    path = Path(path)
+    if not path.exists():
+        return {}
+    try:
+        doc = json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return doc if isinstance(doc, dict) else {}
+
+
+def translation_observability(status, previous_status=None, check_at_utc=None, zero_work_check=False):
+    previous_status = previous_status if isinstance(previous_status, dict) else {}
+    observed = dict(status)
+    observed['untranslated_game_count'] = int(observed.get('untranslated_game_count') or 0)
+    observed['last_translation_attempt_at_utc'] = previous_status.get('last_translation_attempt_at_utc')
+    observed['last_successful_translation_at_utc'] = previous_status.get('last_successful_translation_at_utc')
+    if zero_work_check and int(observed.get('queue_count') or 0) == 0:
+        stamp = check_at_utc or observed.get('generated_at_utc') or datetime.now(timezone.utc).isoformat()
+        observed['last_translation_attempt_at_utc'] = stamp
+        observed['last_successful_translation_at_utc'] = stamp
+    return observed
+
+
+def record_translation_attempt(
+    status_path,
+    attempted_at_utc,
+    accepted_count,
+    successful_no_work=False,
+):
+    path = Path(status_path)
+    status = load_optional_json(path)
+    if not status:
+        raise ValueError('translation status manifest is unavailable for attempt accounting')
+    status['last_translation_attempt_at_utc'] = attempted_at_utc
+    if int(accepted_count or 0) > 0 or successful_no_work:
+        status['last_successful_translation_at_utc'] = attempted_at_utc
+    path.write_text(json.dumps(status, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    return status
+
+
 def load_jsonl(path):
     path = Path(path)
     if not path.exists():
@@ -114,6 +155,7 @@ def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at
     resolved_direct = set()
     resolved_cache = set()
     scope_keys = set()
+    untranslated_game_count = 0
 
     for row in rows:
         base_appids = base_appids_for_row(row)
@@ -135,6 +177,7 @@ def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at
         if source_appid.isdigit():
             title = (metadata_by_appid.get(source_appid) or {}).get('store_name')
         title = title or (row.get('purchase') or {}).get('title') or row.get('taste_subject_key')
+        untranslated_game_count += 1
         request = build_translation_request(resolution, title)
         if request:
             request_id = request['request_id']
@@ -176,6 +219,9 @@ def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at
         'resolved_translation_cache_count': len(resolved_cache),
         'nontranslatable_blockers': blocker_rows,
         'nontranslatable_blocker_count': len(blocker_rows),
+        'untranslated_game_count': untranslated_game_count,
+        'last_translation_attempt_at_utc': None,
+        'last_successful_translation_at_utc': None,
         'retry_and_completeness_owner': 'github_control_plane',
         'worker_completeness_authority': False,
         'daily_item_quota': None,
@@ -227,7 +273,8 @@ def attach_to_chatgpt_payload(payload_path, queue_count):
     payload_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
-def build_repo_scope(fetcher=fetch_russian_store_descriptions):
+def build_repo_scope(fetcher=fetch_russian_store_descriptions, generated_at_utc=None, zero_work_check=True):
+    previous_status = load_optional_json(STATUS_OUT)
     rows = load_jsonl(PURCHASE_CONTEXT)
     metadata = content_metadata_by_appid(load_json(CONTENT_METADATA))
     cache = load_translation_cache(CACHE_PATH)
@@ -242,6 +289,13 @@ def build_repo_scope(fetcher=fetch_russian_store_descriptions):
         cache,
         media,
         source_mailing_updated_at_utc=payload.get('source_mailing_updated_at_utc'),
+        generated_at_utc=generated_at_utc,
+    )
+    status = translation_observability(
+        status,
+        previous_status=previous_status,
+        check_at_utc=generated_at_utc,
+        zero_work_check=zero_work_check,
     )
     write_scope(queue, status)
     attach_to_chatgpt_payload(CHATGPT_PAYLOAD, len(queue))
@@ -253,6 +307,9 @@ def build_repo_scope(fetcher=fetch_russian_store_descriptions):
         'resolved_direct_ru_count': status['resolved_direct_ru_count'],
         'resolved_translation_cache_count': status['resolved_translation_cache_count'],
         'nontranslatable_blocker_count': status['nontranslatable_blocker_count'],
+        'untranslated_game_count': status['untranslated_game_count'],
+        'last_translation_attempt_at_utc': status['last_translation_attempt_at_utc'],
+        'last_successful_translation_at_utc': status['last_successful_translation_at_utc'],
         'queue_sha256': status['queue_sha256'],
     }, ensure_ascii=False, indent=2))
     return queue, status

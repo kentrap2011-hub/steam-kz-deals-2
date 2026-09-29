@@ -273,7 +273,7 @@ Production validator проверяет:
 
 ## Russian game descriptions — direct Steam source to publication
 
-Use this route when a visually ready game is blocked by the meaningful-Russian gate.
+Use this route for Russian-description resolution, translation observability, or publication diagnostics.
 
 1. GitHub-owned pre-AI scope: `scripts/build_russian_description_translation_queue.py` calls `scripts/russian_description_translation_runtime.py`.
 2. Direct Russian precedence inside that runtime:
@@ -282,12 +282,18 @@ Use this route when a visually ready game is blocked by the meaningful-Russian g
    - a `good_ru` appdetails description remains a direct Russian source;
    - if StoreBrowse has no already-translatable source and exact-app appdetails contains meaningful `non_ru` / `weak_ru` text, preserve that exact text and app provenance only as the existing translation/rewrite source; it is not publishable Russian;
    - only an exact-bound accepted translation/cache entry can then turn that unresolved source into `ready_ru`.
-3. Canonical unresolved state: `data/production/pre_ai/chatgpt_ru_description_queue.jsonl` and `chatgpt_ru_description_status.json`; accepted semantic translations persist only through `data/cache/russian_description_translations.json`.
-4. Visual producer: `scripts/build_visual_feed_v2.py` reuses the same Russian `appdetails` payload already fetched for practical facts before resolving card descriptions.
-5. Final fail-closed gate: `scripts/validate_russian_descriptions.py`.
-6. Publication chain remains `.github/workflows/build-daily-visual-payload.yml` -> `data/production/visual/current.json` -> `.github/workflows/deploy-visual.yml` -> `web/data/current.json`.
+3. Canonical unresolved/observability state: `data/production/pre_ai/chatgpt_ru_description_queue.jsonl` and `chatgpt_ru_description_status.json`; accepted semantic translations persist only through `data/cache/russian_description_translations.json`.
+   - `untranslated_game_count` is the current producer-owned count of scope records without valid `ready_ru`;
+   - `last_translation_attempt_at_utc` advances on a current exact-bound attempt/check, including a zero-queue check;
+   - `last_successful_translation_at_utc` advances on at least one accepted exact-bound translation or a zero-queue successful check;
+   - a valid exact-bound worker error advances attempt only; invalid/stale/wrong-AppID transport remains rejected and does not create success.
+4. Visual producer: `scripts/build_visual_feed_v2.py` resolves card descriptions; `scripts/progressive_personalization.py::_translation_processing_metrics` projects translation observability into `processing_status`; `scripts/build_final_visual_payload.py` binds the final payload to the translation-status/contract blobs.
+5. `scripts/validate_russian_descriptions.py` remains strict by default, but the normal build/deploy workflows call its explicit `--allow-untranslated` diagnostic mode. Missing translations therefore remain visible/unresolved facts but do not alone block replacing or deploying the visual payload.
+6. Statistics route: producer-owned `processing_status` -> `web/progressive-personalization-ui.js::statisticsSections` -> dedicated `Переводы описаний` block. The browser formats only the prepared count/timestamps and does not infer them.
+7. Explicit manual one-shot semantic worker: a fresh user-launched chat reads `config/russian_description_manual_semantic_worker_prompt.md`. It may consume only the exact current GitHub queue in order and create only result transport under `data/ai_inbox/russian_descriptions/*.json`; GitHub ingest remains the sole validator/cache/timestamp/completeness owner. Empty queue is recorded by a zero-result submission that GitHub validates against the current queue. No Scheduled Task is created or modified.
+8. Publication chain remains `.github/workflows/build-daily-visual-payload.yml` -> `data/production/visual/current.json` -> `.github/workflows/deploy-visual.yml` -> `web/data/current.json`.
 
-The browser does not fetch or repair descriptions. Interactive chat does not translate production rows or populate the translation cache manually.
+The browser does not fetch or repair descriptions. Ordinary interactive developer/operator chat does not translate production rows or populate the translation cache manually. Only the explicitly user-launched canonical one-shot semantic-worker role may translate current prepared requests, and it still cannot write canonical cache/state directly. Translation acceptance remains fail-closed even though publication is nonblocking for unresolved descriptions.
 
 ## Legacy Deep full reanalysis migration
 

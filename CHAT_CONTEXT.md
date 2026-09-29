@@ -33,7 +33,7 @@
 - `config/final_ranking_policy.json` — канонический машинный контракт финального автоматического `priority_rank`.
 - `config/mailing_policy.md` — короткое человекочитаемое описание политики.
 - `config/daily_execution_contract.json` — канонический контракт суточного выполнения: ночной production в 01:00, без отдельной доставки в 08:00, витрина работает pull-based.
-- `config/execution_ownership_contract.json` — каноническая граница ответственности: GitHub = control plane, scheduled ChatGPT = ограниченный external/semantic worker, интерактивный чат = developer/operator session, но не production executor.
+- `config/execution_ownership_contract.json` — каноническая граница ответственности: GitHub = control plane, scheduled ChatGPT = ограниченный external/semantic worker, ordinary interactive chat = developer/operator session, но не production executor; отдельно contract может разрешить узкий explicitly user-launched one-shot semantic-worker prompt без переноса control plane.
 - `PROJECT_ROUTES.md` — быстрый индекс уже исследованных маршрутов проекта. Перед широким поиском по репозиторию сначала проверить его; дополнять только по мере реальной работы.
 - `PROJECT_RULES.md` — подтверждённые пользователем цели и бизнес-правила поведения проекта. Не читать целиком для каждой задачи.
 - `PROJECT_DECISIONS.md` — долговечный журнал **почему** приняты неочевидные правила: причина, проблема, сознательно отвергнутые альтернативы и основные места реализации. Использовать его до Git history, когда смысл существующей логики не очевиден.
@@ -77,7 +77,7 @@
 
 Особенно важно: **поправка пользователя не отменяет preflight**. Она является сигналом, что текущая модель могла быть неверной. Нельзя автоматически согласиться и немедленно реализовать буквальную формулировку. Сначала нужно сверить её с каноническими контрактами; если именно контракт оказался неполным или неправильным — сначала исправить контракт.
 
-Интерактивный пользовательский чат нельзя превращать в production worker для большого backlog. Ручная проверка нескольких объектов допустима только как bounded verification реализации. Если для закрытия production-задачи чат начинает вручную перебирать десятки/сотни игр, это считается архитектурным дефектом: остановить ручной перебор и чинить автоматический owning component.
+Интерактивный пользовательский чат нельзя превращать в production worker для большого backlog. Единственное узкое исключение — отдельная явно user-launched one-shot semantic-worker роль, прямо разрешённая `config/execution_ownership_contract.json` и ограниченная каноническим prompt: GitHub по-прежнему владеет scope/order/retry/completeness/validation/persistence, а такой worker может делать только разрешённую semantic data-plane работу и canonical result transport. Ручная developer/operator проверка нескольких объектов остаётся bounded verification; без такой отдельной contract-authorized роли перебор десятков/сотен игр считается архитектурным дефектом.
 
 ## 2. Что читать в начале задачи
 
