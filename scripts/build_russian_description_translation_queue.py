@@ -47,6 +47,24 @@ def load_jsonl(path):
     return [json.loads(line) for line in path.read_text(encoding='utf-8').splitlines() if line.strip()]
 
 
+def _normalize_utc_timestamp(value):
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc).isoformat()
+
+
+def _latest_timestamp(*values):
+    normalized = [_normalize_utc_timestamp(value) for value in values]
+    normalized = [value for value in normalized if value is not None]
+    return max(normalized) if normalized else None
+
+
 def content_metadata_by_appid(doc):
     entries = doc.get('entries') or {}
     return {
@@ -107,13 +125,15 @@ def merge_same_identity_request(existing, incoming):
     return merged
 
 
-def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at_utc=None, generated_at_utc=None):
-    generated_at_utc = generated_at_utc or datetime.now(timezone.utc).isoformat()
+def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at_utc=None, generated_at_utc=None, previous_status=None, translation_attempt_at_utc=None, translation_success=False):
+    generated_at_utc = _normalize_utc_timestamp(generated_at_utc or datetime.now(timezone.utc).isoformat())
+    previous_status = previous_status if isinstance(previous_status, dict) else {}
     queue_by_id = {}
     blocker_by_key = {}
     resolved_direct = set()
     resolved_cache = set()
     scope_keys = set()
+    untranslated_game_count = 0
 
     for row in rows:
         base_appids = base_appids_for_row(row)
@@ -131,6 +151,7 @@ def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at
                 resolved_direct.add(source_key)
             continue
 
+        untranslated_game_count += 1
         title = None
         if source_appid.isdigit():
             title = (metadata_by_appid.get(source_appid) or {}).get('store_name')
@@ -157,8 +178,30 @@ def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at
     else:
         status_value = 'translation_complete'
 
+    cache_accepted_at = (cache or {}).get('updated_at_utc') if isinstance(cache, dict) else None
+    last_attempt = _latest_timestamp(
+        previous_status.get('last_translation_attempt_at'),
+        cache_accepted_at,
+    )
+    last_success = _latest_timestamp(
+        previous_status.get('last_successful_translation_at'),
+        cache_accepted_at,
+    )
+    attempt_at = _normalize_utc_timestamp(translation_attempt_at_utc)
+    if attempt_at:
+        last_attempt = _latest_timestamp(last_attempt, attempt_at)
+        if translation_success:
+            last_success = _latest_timestamp(last_success, attempt_at)
+
+    # A current canonical check with no semantic translation work is itself a
+    # successful translation-stage outcome. Nontranslatable blockers remain
+    # explicit in untranslated_game_count but are not semantic translation work.
+    if not queue:
+        last_attempt = _latest_timestamp(last_attempt, generated_at_utc)
+        last_success = _latest_timestamp(last_success, generated_at_utc)
+
     status = {
-        'schema_version': 1,
+        'schema_version': 2,
         'contract': REQUEST_CONTRACT_ID,
         'status': status_value,
         'generated_at_utc': generated_at_utc,
@@ -176,6 +219,9 @@ def build_scope(rows, metadata_by_appid, cache, media, source_mailing_updated_at
         'resolved_translation_cache_count': len(resolved_cache),
         'nontranslatable_blockers': blocker_rows,
         'nontranslatable_blocker_count': len(blocker_rows),
+        'untranslated_game_count': untranslated_game_count,
+        'last_translation_attempt_at': last_attempt,
+        'last_successful_translation_at': last_success,
         'retry_and_completeness_owner': 'github_control_plane',
         'worker_completeness_authority': False,
         'daily_item_quota': None,
@@ -227,7 +273,7 @@ def attach_to_chatgpt_payload(payload_path, queue_count):
     payload_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
-def build_repo_scope(fetcher=fetch_russian_store_descriptions):
+def build_repo_scope(fetcher=fetch_russian_store_descriptions, translation_attempt_at_utc=None, translation_success=False):
     rows = load_jsonl(PURCHASE_CONTEXT)
     metadata = content_metadata_by_appid(load_json(CONTENT_METADATA))
     cache = load_translation_cache(CACHE_PATH)
@@ -236,12 +282,16 @@ def build_repo_scope(fetcher=fetch_russian_store_descriptions):
         appids.extend(base_appids_for_row(row))
     media = fetcher(appids)
     payload = load_json(CHATGPT_PAYLOAD)
+    previous_status = load_json(STATUS_OUT) if STATUS_OUT.exists() else {}
     queue, status = build_scope(
         rows,
         metadata,
         cache,
         media,
         source_mailing_updated_at_utc=payload.get('source_mailing_updated_at_utc'),
+        previous_status=previous_status,
+        translation_attempt_at_utc=translation_attempt_at_utc,
+        translation_success=translation_success,
     )
     write_scope(queue, status)
     attach_to_chatgpt_payload(CHATGPT_PAYLOAD, len(queue))
@@ -253,6 +303,9 @@ def build_repo_scope(fetcher=fetch_russian_store_descriptions):
         'resolved_direct_ru_count': status['resolved_direct_ru_count'],
         'resolved_translation_cache_count': status['resolved_translation_cache_count'],
         'nontranslatable_blocker_count': status['nontranslatable_blocker_count'],
+        'untranslated_game_count': status['untranslated_game_count'],
+        'last_translation_attempt_at': status['last_translation_attempt_at'],
+        'last_successful_translation_at': status['last_successful_translation_at'],
         'queue_sha256': status['queue_sha256'],
     }, ensure_ascii=False, indent=2))
     return queue, status
