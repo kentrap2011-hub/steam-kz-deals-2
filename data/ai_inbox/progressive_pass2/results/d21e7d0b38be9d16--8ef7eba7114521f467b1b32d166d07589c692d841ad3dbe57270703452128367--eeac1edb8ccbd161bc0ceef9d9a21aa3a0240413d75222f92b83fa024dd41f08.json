@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "010acccfb84238991f060ad680d11c73b3c29b21",
+  "run_start_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+  "run_started_at_utc": "2026-09-29T15:56:59+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "work_id": "8ef7eba7114521f467b1b32d166d07589c692d841ad3dbe57270703452128367",
+  "family_id": "game:15370",
+  "taste_subject_key": "App_15370",
+  "appid": "15370",
+  "taste_fingerprint": "dd6dae7eb509e7cf49773f4c10222615eba2f3fc0865aae2f3e96ffbb72bf352",
+  "candidate_context_sha256": "86e1b9249f307863d98cb6b474616b351f09b28873785fd311ce7013c2796f43",
+  "dossier_content_sha256": "6c9110e83f48df3ea4315fda1cbb0bc046a657c965ac2bd52388dd2b606f0d00",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "eeac1edb8ccbd161bc0ceef9d9a21aa3a0240413d75222f92b83fa024dd41f08",
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "positive_evidence": [
+    "The Orc faction and rage mechanic add a substantially different strategic identity rather than a cosmetic faction variant.",
+    "Alternative unit upgrades widen army-building choices and make progression more flexible across multiple factions.",
+    "The expansion strengthens the already deep Heroes V loop of hero development, army composition, map exploration and tactical combat."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 93,
+    "development_variety": 96,
+    "structure_pacing_direction": 82,
+    "identity_hooks": 82,
+    "breadth_of_match": 94
+  },
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Некоторые ограниченные по времени и поздние миссии заметно сложнее остальной кампании, а сюжетная часть местами слабее самих стратегических систем.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "На отдельных Windows-конфигурациях встречаются проблемы сохранений и камеры/ввода, которые удаётся исправить сменой системной локали для не-Unicode программ.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      }
+    ]
+  }
+}
