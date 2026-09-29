@@ -10,6 +10,18 @@
 - no semantic result, attempt, Dossier/Fast/Deep content, scheduler, retry ownership or Scheduled Task is being changed.
 
 
+
+## COMPLETE — Expired sale immediate visibility fix 01
+Статус: `complete_ready_for_director_acceptance`.
+- task: `WORKER_TASK_EXPIRED_SALE_IMMEDIATE_VISIBILITY_FIX_01.md`;
+- PR: `#121`; merge: `9a500cefd3ec3bf460cf3c51afe92c35e55ab97b`;
+- known valid `sale_end_utc <= now` is now a browser-local active-sale visibility gate before urgency/manual queue reconciliation; unknown/malformed end remains visible;
+- rebuilt-head validations: PASS 2 core `36518539660`, backlog `36518539741`, package purchase `36518539636` — success;
+- post-merge validations: PASS 2 core `36518618397`, backlog `36518618404` — success;
+- live visual publication remains independently blocked by meaningful-Russian validation in run `36518618313`; this task did not alter that gate;
+- report: `reviews/worker_reports/expired-sale-immediate-visibility-fix-01.md`.
+
+
 ## BLOCKED — Current Russian description publication blocker fix 02
 Статус: `blocked`.
 - task: `WORKER_TASK_CURRENT_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_02.md`;
