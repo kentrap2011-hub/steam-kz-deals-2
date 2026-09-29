@@ -1,5 +1,14 @@
 # CURRENT TASK
 
+## IN PROGRESS — Visual stale-snapshot rebase race fix 01
+Статус: `implementing`.
+- task: `WORKER_TASK_VISUAL_STALE_SNAPSHOT_REBASE_RACE_FIX_01.md`;
+- branch: `fix/visual-stale-snapshot-rebase-race-01`;
+- accepted diagnosis: full visual commit may currently be rebased onto newer `main` after material source drift without rebuilding;
+- architecture preflight: GitHub/GitHub Actions remains sole deterministic visual build/persistence/publication owner; browser remains read-only; no scheduler/queue/retry authority moves to ChatGPT;
+- implementation target: bind full builds to exact material blobs, permit unrelated HEAD movement, rebuild once on material drift, fail closed on a second drift/rebuild failure, and make freshness receipts distinguish an aborted-on-drift outcome;
+- preserve PR #125 translation nonblocking/Statistics behavior and all concurrent Dossier/Deep/translation/production writes.
+
 ## COMPLETE — Russian translation nonblocking publication + Statistics 01
 Статус: `complete_ready_for_director_acceptance`.
 - task: `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md`;

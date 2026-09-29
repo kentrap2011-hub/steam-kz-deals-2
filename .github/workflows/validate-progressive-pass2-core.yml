@@ -35,6 +35,13 @@ on:
       - "scripts/progressive_personalization.py"
       - "scripts/progressive_visual_activation_routing.py"
       - "scripts/build_final_visual_payload.py"
+      - "scripts/build_daily_visual_payload.py"
+      - "scripts/build_ranking_review.py"
+      - "scripts/visual_freshness_receipt.py"
+      - "scripts/test_visual_freshness_receipt.py"
+      - "scripts/visual_material_freshness_guard.py"
+      - "scripts/test_visual_material_freshness_guard.py"
+      - ".github/workflows/deploy-visual.yml"
       - "scripts/test_progressive_profile_semantic_identity_stability.py"
       - "scripts/test_progressive_pass2.py"
       - "scripts/test_progressive_pass2_integration.py"
@@ -95,6 +102,13 @@ on:
       - "scripts/progressive_personalization.py"
       - "scripts/progressive_visual_activation_routing.py"
       - "scripts/build_final_visual_payload.py"
+      - "scripts/build_daily_visual_payload.py"
+      - "scripts/build_ranking_review.py"
+      - "scripts/visual_freshness_receipt.py"
+      - "scripts/test_visual_freshness_receipt.py"
+      - "scripts/visual_material_freshness_guard.py"
+      - "scripts/test_visual_material_freshness_guard.py"
+      - ".github/workflows/deploy-visual.yml"
       - "scripts/test_progressive_profile_semantic_identity_stability.py"
       - "scripts/test_progressive_pass2.py"
       - "scripts/test_progressive_pass2_integration.py"
@@ -161,7 +175,18 @@ jobs:
             scripts/test_progressive_pass1_workflow_staging.py \
             scripts/progressive_personalization.py \
             scripts/test_deep_first_final_score_order.py \
-            scripts/progressive_visual_activation_routing.py
+            scripts/progressive_visual_activation_routing.py \
+            scripts/build_daily_visual_payload.py \
+            scripts/build_ranking_review.py \
+            scripts/visual_freshness_receipt.py \
+            scripts/test_visual_freshness_receipt.py \
+            scripts/visual_material_freshness_guard.py \
+            scripts/test_visual_material_freshness_guard.py
+      - name: Visual material freshness regressions
+        run: |
+          python scripts/test_visual_material_freshness_guard.py
+          python scripts/test_visual_freshness_receipt.py
+
       - name: Progressive async traversal + invalid transport regression
         run: python scripts/test_progressive_async_traversal.py
       - name: Deep parallel frozen-start regression

@@ -7,6 +7,7 @@ import tempfile
 from pathlib import Path
 
 import visual_freshness_receipt as freshness
+import visual_material_freshness_guard as material_guard
 
 
 SOURCE = "2026-09-03T00:00:00+00:00"
@@ -34,6 +35,12 @@ def make_repo(root: Path) -> tuple[Path, dict]:
     subprocess.check_call(["git", "config", "user.email", "test@example.com"], cwd=repo)
     subprocess.check_call(["git", "config", "user.name", "test"], cwd=repo)
 
+    for material_path in material_guard.unique_material_paths():
+        path = repo / material_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if not path.exists():
+            path.write_text(f"fixture:{material_path}\n", encoding="utf-8")
+
     write_json(
         repo / freshness.HISTORY_PATH,
         {
@@ -47,6 +54,10 @@ def make_repo(root: Path) -> tuple[Path, dict]:
         {
             "source_mailing_updated_at_utc": SOURCE,
             "fx_binding": {"kzt_per_rub": 5.0},
+            "profile_binding": {
+                "canonical_profile_blob_sha": "profile-fixture",
+                "taste_model_version": "taste-v3",
+            },
         },
     )
     write_json(
@@ -94,6 +105,16 @@ def make_repo(root: Path) -> tuple[Path, dict]:
     return repo, intent
 
 
+def full_material_contract(intent: dict, **overrides) -> dict:
+    contract = {
+        key: spec["blob_sha"]
+        for key, spec in intent["full_visual_material"]["visual_contract_bindings"].items()
+    }
+    contract.update(intent["full_visual_material"]["derived_visual_bindings"])
+    contract.update(overrides)
+    return contract
+
+
 def commercial_contract(commercial: dict) -> dict:
     return {
         contract_key: commercial[intent_key]
@@ -118,10 +139,10 @@ def test_fresh_path() -> None:
         write_json(
             repo / freshness.VISUAL_PATH,
             {
-                "production_contract": {
-                    "source_history_snapshot_blob_sha": history_blob,
-                    "source_giveaway_snapshot_blob_sha": "old-giveaway",
-                },
+                "production_contract": full_material_contract(
+                    intent,
+                    source_history_snapshot_blob_sha=history_blob,
+                ),
                 "items": [{"id": 1}],
             },
         )
@@ -251,6 +272,10 @@ def test_progressive_open_semantic_queue_is_fresh_current_catalogue() -> None:
                 "status": "degraded",
                 "ai_queue_count": 3,
                 "complete_family_partition": True,
+                "profile_binding": {
+                    "canonical_profile_blob_sha": "profile-fixture",
+                    "taste_model_version": "taste-v3",
+                },
             },
         )
         commit_all(repo, "open semantic queue")
@@ -260,10 +285,10 @@ def test_progressive_open_semantic_queue_is_fresh_current_catalogue() -> None:
             repo / freshness.VISUAL_PATH,
             {
                 "status": "complete",
-                "production_contract": {
-                    "source_history_snapshot_blob_sha": history_blob,
-                    "source_giveaway_snapshot_blob_sha": "old-giveaway",
-                },
+                "production_contract": full_material_contract(
+                    intent,
+                    source_history_snapshot_blob_sha=history_blob,
+                ),
                 "progressive_personalization": {
                     "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
                     "phase": "phase_a",
@@ -324,6 +349,10 @@ def test_phase_b_open_pass1_is_fresh_current_catalogue() -> None:
                 "status": "degraded",
                 "ai_queue_count": 3,
                 "complete_family_partition": True,
+                "profile_binding": {
+                    "canonical_profile_blob_sha": "profile-fixture",
+                    "taste_model_version": "taste-v3",
+                },
             },
         )
         commit_all(repo, "open semantic queue phase b")
@@ -333,10 +362,10 @@ def test_phase_b_open_pass1_is_fresh_current_catalogue() -> None:
             repo / freshness.VISUAL_PATH,
             {
                 "status": "complete",
-                "production_contract": {
-                    "source_history_snapshot_blob_sha": history_blob,
-                    "source_giveaway_snapshot_blob_sha": "old-giveaway",
-                },
+                "production_contract": full_material_contract(
+                    intent,
+                    source_history_snapshot_blob_sha=history_blob,
+                ),
                 "progressive_personalization": {
                     "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
                     "phase": "phase_b",
@@ -400,6 +429,10 @@ def test_contradictory_progressive_flags_fail_closed() -> None:
                 "status": "degraded",
                 "ai_queue_count": 3,
                 "complete_family_partition": True,
+                "profile_binding": {
+                    "canonical_profile_blob_sha": "profile-fixture",
+                    "taste_model_version": "taste-v3",
+                },
             },
         )
         commit_all(repo, "open semantic queue contradictory")
@@ -409,7 +442,10 @@ def test_contradictory_progressive_flags_fail_closed() -> None:
             repo / freshness.VISUAL_PATH,
             {
                 "status": "complete",
-                "production_contract": {"source_history_snapshot_blob_sha": history_blob},
+                "production_contract": full_material_contract(
+                    intent,
+                    source_history_snapshot_blob_sha=history_blob,
+                ),
                 "progressive_personalization": {
                     "contract": "PROGRESSIVE-PERSONALIZED-DEALS-V1",
                     "phase": "phase_a",
@@ -464,7 +500,7 @@ def test_stale_mismatch_fails_closed() -> None:
         history_blob = intent["history_snapshot_blob_sha"]
         write_json(
             repo / freshness.VISUAL_PATH,
-            {"production_contract": {"source_history_snapshot_blob_sha": history_blob}, "items": [{"id": 1}]},
+            {"production_contract": full_material_contract(intent, source_history_snapshot_blob_sha=history_blob), "items": [{"id": 1}]},
         )
         commit_all(repo, "fresh visual")
         receipt = freshness.create_receipt(
@@ -484,7 +520,7 @@ def test_stale_mismatch_fails_closed() -> None:
 
         write_json(
             repo / freshness.VISUAL_PATH,
-            {"production_contract": {"source_history_snapshot_blob_sha": "older-history"}, "items": [{"id": 0}]},
+            {"production_contract": full_material_contract(intent, source_history_snapshot_blob_sha=history_blob), "items": [{"id": 0}]},
         )
         commit_all(repo, "stale replacement")
         staged = repo / "staged.json"
@@ -567,6 +603,33 @@ def test_commercial_source_mismatch_fails_closed() -> None:
         assert receipt["reason"] == "visual_source_commercial_mismatch"
 
 
+def test_material_drift_abort_is_explicit() -> None:
+    with tempfile.TemporaryDirectory() as td:
+        repo, intent = make_repo(Path(td))
+        receipt = freshness.create_receipt(
+            repo,
+            intent,
+            run_id="606",
+            run_attempt="1",
+            event_name="workflow_run",
+            workflow_head_sha=run(repo, "git", "rev-parse", "HEAD"),
+            upstream_run_id=None,
+            upstream_head_sha=None,
+            build_reported=True,
+            persisted=False,
+            history_ready=True,
+            reason_override="material_source_drift_after_rebuild",
+        )
+        assert receipt["fresh_build"] is False
+        assert receipt["outcome"] == "aborted_on_material_drift"
+        assert receipt["reason"] == "material_source_drift_after_rebuild"
+        staged = repo / "staged.json"
+        staged.write_bytes((repo / freshness.VISUAL_PATH).read_bytes())
+        assert freshness.verify_receipt(
+            repo, receipt, expected_run_id="606", staged_path=staged
+        ) == "aborted_on_material_drift"
+
+
 if __name__ == "__main__":
     test_fresh_path()
     test_fresh_giveaway_only_path_does_not_claim_full_visual_freshness()
@@ -578,6 +641,7 @@ if __name__ == "__main__":
     test_stale_mismatch_fails_closed()
     test_giveaway_source_mismatch_fails_closed()
     test_commercial_source_mismatch_fails_closed()
+    test_material_drift_abort_is_explicit()
     print(
         "VISUAL_FRESHNESS_RECEIPT_TESTS=PASS "
         "cases=fresh_full,fresh_giveaway,fresh_commercial,phase_a_open_queue,phase_b_open_pass1,contradictory_progressive,degraded,stale_mismatch,giveaway_mismatch,commercial_mismatch"

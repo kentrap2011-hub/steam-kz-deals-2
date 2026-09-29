@@ -76,7 +76,11 @@ def nonempty_line_count(path: Path):
 
 
 def git_sha(path: str):
-    return subprocess.check_output(['git', 'rev-parse', f'HEAD:{path}'], text=True).strip()
+    # Use the exact working-tree bytes consumed by the current deterministic build.
+    # In normal clean checkouts this is identical to HEAD:<path>; for producer-owned
+    # inputs refreshed earlier in the same workflow (notably duration cache), this
+    # records the actual blob used by the visual rather than the stale parent blob.
+    return subprocess.check_output(['git', 'hash-object', path], text=True).strip()
 
 
 def rub_from_kzt(value, rate):
