@@ -2,8 +2,8 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` attempted `WORKER_TASK_RUSSIAN_DESCRIPTION_MANUAL_TRANSLATION_RUN_01.md` and is `blocked`: current canonical ownership forbids ordinary interactive-chat production translation; 71 requests remain and no translation was consumed.
-- `ЧАТ 2` assigned: `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` — authorized implementation making missing translations nonblocking, adding the dedicated translation Statistics block, and canonicalizing an explicitly user-launched one-shot Russian-description semantic-worker chat with no Scheduled Task.
+- `ЧАТ 1` is free. Its prior manual-translation attempt is closed as `blocked` because the old ownership model did not yet allow the manual semantic-worker role; no translation was consumed.
+- `ЧАТ 2` is free. `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` is accepted complete via PR #125 / merge `070f30807acceffed36a342e1d442f5dcd1c99c7`.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -45,7 +45,7 @@ Expected report:
 `reviews/worker_reports/russian-description-manual-translation-run-01.md`
 
 
-## ACTIVE — ЧАТ 2 — Nonblocking translations + Statistics observability
+## ACCEPTED — ЧАТ 2 — Nonblocking translations + Statistics observability
 
 Task:
 `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md`
@@ -54,7 +54,18 @@ Mode:
 `IMPLEMENT / VALIDATE`
 
 Status:
-`authorized_ready_for_worker`
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- PR #125 merged as `070f30807acceffed36a342e1d442f5dcd1c99c7`;
+- superseded PR #124 closed unmerged;
+- post-merge full visual build `36559340201` succeeded and produced visual commit `1b556604aa99ec8bcd9b22ce1a3a72996de4576e`;
+- Pages deploy `36559403117` succeeded with artifact `11028907548`;
+- Russian translation absence is no longer a publication blocker, while invalid/stale/wrong-AppID/non-Russian masquerading remains fail-closed;
+- Statistics translation block and producer-owned attempt/success timestamps are implemented;
+- canonical manual one-shot semantic worker is now authorized through `config/russian_description_manual_semantic_worker_prompt.md` with no Scheduled Task;
+- current untranslated count remains 71 and timestamps remain null until the first canonical manual/normal translation attempt;
+- separate site freshness remains `degraded/no_fresh_build` because of `deterministic_refresh_preserved_semantic_history`; this is not reopened by this acceptance.
 
 User-approved behavior:
 - missing translations do not block visual build/site publication;
