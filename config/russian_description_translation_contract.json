@@ -11,7 +11,8 @@
     "publication_observability_implementation_in_scope": true,
     "mass_translation_in_scope": false,
     "production_cache_population_by_interactive_chat_allowed": false,
-    "interactive_manual_catalog_fill_allowed": false
+    "interactive_manual_catalog_fill_allowed": false,
+    "manual_one_shot_semantic_worker_implemented": true
   },
   "ownership": {
     "github_control_plane": {
@@ -66,7 +67,9 @@
     "separate_recurring_translation_schedule_allowed": false,
     "translation_is_additional_semantic_work_type_inside_existing_cycle": true,
     "taste_specific_input_or_result_schema_may_be_reused": false,
-    "rule": "Translation may use a translation-specific queue/result schema, but GitHub must attach that work to the same GitHub-owned nightly production cycle and existing scheduled ChatGPT data-plane rather than creating an independent chat-owned scheduler."
+    "rule": "Translation may use a translation-specific queue/result schema, but GitHub must attach that work to the same GitHub-owned nightly production cycle and existing scheduled ChatGPT data-plane rather than creating an independent chat-owned scheduler.",
+    "manual_one_shot_semantic_worker_allowed": true,
+    "manual_one_shot_is_recurring_runtime": false
   },
   "scope": {
     "owner": "github_control_plane",
