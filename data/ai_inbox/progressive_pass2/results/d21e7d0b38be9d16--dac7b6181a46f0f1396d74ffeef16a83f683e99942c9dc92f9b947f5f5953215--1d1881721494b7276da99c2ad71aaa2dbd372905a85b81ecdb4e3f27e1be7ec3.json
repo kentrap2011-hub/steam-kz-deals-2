@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "010acccfb84238991f060ad680d11c73b3c29b21",
+  "run_start_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+  "run_started_at_utc": "2026-09-29T15:56:59+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "work_id": "dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215",
+  "family_id": "game:15170",
+  "taste_subject_key": "App_15170",
+  "appid": "15170",
+  "taste_fingerprint": "b24bacd24b1641b04b15c488f1c54ae2e809e96d56cff56594cf3dd1ba70958e",
+  "candidate_context_sha256": "30fe1b3875c953ea8fc0a0ed607f891fa46b815c4db107cf490cfb48abddf971",
+  "dossier_content_sha256": "2d629873c3c2ebb0e8427f88305aae300e47019c78c22a1517ef14521edce901",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "1d1881721494b7276da99c2ad71aaa2dbd372905a85b81ecdb4e3f27e1be7ec3",
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "positive_evidence": [
+    "Turn-based battles, faction differences and hero development create a deep mastery loop with many strategic choices.",
+    "Build freedom and map exploration provide clear progression with tangible effects on armies, skills and tactics.",
+    "Campaign and scenario maps continually combine exploration, resource decisions, army growth and combat instead of relying on one isolated system."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 91,
+    "development_variety": 93,
+    "structure_pacing_direction": 82,
+    "identity_hooks": 78,
+    "breadth_of_match": 91
+  },
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "unchanged_repetition",
+        "text_ru": "В отдельных кампаниях скачки сложности, гринд и повторяющиеся шаблоны миссий могут накапливаться и превращать длинные сценарии в рутину вместо развития тактики.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Доступность русского языка в текущих Steam-установках неоднородна: есть свежие сообщения и о полностью русской версии, и об отсутствии русского языка в списке.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "На отдельных современных системах встречается проблема с путём сохранений и камерой, которую удаётся исправить сменой системной локали для не-Unicode программ.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      }
+    ]
+  }
+}
