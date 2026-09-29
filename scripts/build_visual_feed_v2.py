@@ -12,11 +12,11 @@ from russian_description_quality import classify_description
 import commercial_reconsideration_bridge as commercial_bridge
 import progressive_personalization
 from russian_description_translation_runtime import (
-    STEAM_APPDETAILS_RU_SOURCE,
+    apply_russian_appdetails_description_fallback,
+    appdetails_description_candidate,
     fetch_russian_appdetails_data,
     load_translation_cache,
     resolve_description_for_appids as resolve_description_with_translation_cache,
-    russian_description_from_appdetails_data,
 )
 
 ROOT = Path('.')
@@ -237,7 +237,7 @@ def fetch_appdetails(appid):
             'steam_achievements': achievements,
             'achievement_total': int(total) if total is not None else None,
             'windows_status': classify_windows(recommendation),
-            '_russian_short_description': russian_description_from_appdetails_data(data),
+            '_appdetails_short_description_candidate': appdetails_description_candidate(data),
         }
     except Exception:
         return str(appid), {'steam_achievements': None, 'achievement_total': None, 'windows_status': 'unknown'}
@@ -411,16 +411,17 @@ def main():
     media = storebrowse_media(wanted_personalized_appids) if wanted_personalized_appids else {}
     facts = practical_facts(wanted_personalized_appids) if wanted_personalized_appids else {}
     for appid, app_facts in facts.items():
-        ru_description = app_facts.pop('_russian_short_description', None)
-        if not ru_description:
+        appdetails_description = app_facts.pop('_appdetails_short_description_candidate', None)
+        if not appdetails_description:
             continue
         media_entry = media.setdefault(appid, {})
-        if classify_description(media_entry.get('short_description_source')) == 'good_ru':
-            continue
-        media_entry['short_description_source'] = ru_description
-        media_entry['short_description_source_quality'] = 'good_ru'
-        media_entry['short_description_ru'] = ru_description
-        media_entry['short_description_source_path'] = STEAM_APPDETAILS_RU_SOURCE
+        changed = apply_russian_appdetails_description_fallback(
+            media_entry,
+            {'short_description': appdetails_description},
+        )
+        if changed and classify_description(media_entry.get('short_description_source')) == 'good_ru':
+            media_entry['short_description_source_quality'] = 'good_ru'
+            media_entry['short_description_ru'] = media_entry['short_description_source']
     visible = []
 
     for row, state, scenario, family_id, fam, base_appids in prepared:
