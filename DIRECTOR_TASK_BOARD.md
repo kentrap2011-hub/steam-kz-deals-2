@@ -2,9 +2,9 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
-- Active worker assignment: `ЧАТ 1` — `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`).
+- No worker task is currently assigned in slot `ЧАТ 1`.
 - No worker task is currently assigned in slot `ЧАТ 2`.
-- Latest accepted implementation: `WORKER_TASK_EXPIRED_SALE_IMMEDIATE_VISIBILITY_FIX_01.md` (implementation accepted; live publication remains blocked by the independent Russian-description chain).
+- Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
 - Current Dossier snapshot remains `81e44a924e2df85dcd3acab12954c12a5b2a04ab42f09405460a53d42ea241ea`; latest accepted worker verification showed 6 accepted dossiers, 412 pending, 0 failed/recovery. Production may advance beyond these counts independently.
@@ -14,33 +14,40 @@
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
 
 
-## ACTIVE — НОВЫЙ ЧАТ 1 — Progressive migration current-binding regression fix
+## ACCEPTED — ЧАТ 1 — Progressive migration current-binding regression fix
 
 Task:
 `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md`
 
-Mode:
-`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`
-
-Goal:
-- explain exactly why pre-AI now fails with `migration target missing current binding: game:1143810`;
-- determine whether Black Skylands should still be current under today's semantic identity or whether the regression is asserting the wrong invariant;
-- fix the generic current-binding/reconciliation path without rewriting semantic history or weakening PPD-012;
-- unblock the normal pre-AI path so it can reach the Russian-description translation-scope step.
-
-Constraints:
-- no semantic worker execution;
-- no manual current binding or Deep-result rewrite;
-- no PPD-010 semantic rerun;
-- no identity-matching bypass;
-- no Scheduled Task changes;
-- do not interfere with active ЧАТ 2 or fold in unrelated publication/UI fixes.
-
 Report:
 `reviews/worker_reports/progressive-migration-current-binding-regression-fix-01.md`
 
-Worker state:
-- use a NEW physical worker conversation in slot `ЧАТ 1`.
+Final status:
+`complete_ready_for_director_acceptance`
+
+Director acceptance:
+- implementation accepted;
+- PR #122 merged as `1d8b54114d5aef09adb1c244a848f356987f3048`;
+- closeout PR #123 merged as `0c9c343cdde12480d4ae631ba2f5f161d1e8b5d0`;
+- root cause was not a lost Progressive binding: the regression incorrectly treated the fixed 30-game PPD-010 historical migration set as permanent current-catalogue membership;
+- Black Skylands / `game:1143810` correctly left current Progressive scope after its known sale ended; therefore no current binding should exist while it is outside current discounted scope;
+- immutable PPD-010/PPD-012 Deep history remains preserved and is not rewritten or rerun;
+- the regression now classifies each migration target as current+equivalent, current+semantically-stale, or outside current scope;
+- current-scope items still require a valid current binding and stale/incompatible semantic truth remains fail-closed;
+- out-of-scope migration targets retain durable history but are not required to have a current binding and are not emitted as ordinary work;
+- no semantic attempt was consumed and no Fast/Dossier/Deep result was changed;
+- post-merge pre-AI run `36518529454` succeeded end-to-end, including the formerly failing Progressive regression and Russian translation-scope persistence;
+- fresh atomic pre-AI payload commit is `4836bea4c7c0822baa08c954cfbcfe6651ccb0d5`;
+- fresh migration classification: 30 total, 18 current+equivalent, 0 current+stale, 12 outside current Progressive scope;
+- normal Russian translation scope is now restored: 283 scoped records, 71 queued translations, 212 direct-Russian resolutions, 0 nontranslatable blockers;
+- App_13500 / Prince of Persia: Warrior Within™ and App_1155970 / Roadwarden now have normal exact-bound translation requests persisted;
+- no manual translations, translation-cache edits, scheduler changes or Scheduled Task changes were made;
+- canonical repository truth shows Black Skylands' preserved PPD-010 migration result as `analyzed_fit`; the earlier task prose saying `analyzed_not_fit` was incorrect and was not used to rewrite state.
+
+Decision:
+- task complete and accepted;
+- physical ЧАТ 1 is retired and may be deleted;
+- do not reopen this current-binding task for the remaining Russian semantic translations or unrelated visual-publication race.
 
 
 ## ACCEPTED IMPLEMENTATION / BLOCKED LIVE PUBLICATION — ЧАТ 2 — Expired sale immediate visibility fix
