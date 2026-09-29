@@ -3,7 +3,7 @@
 ## CURRENT DIRECTOR STATE — 2026-09-27
 
 - Active worker assignment: `ЧАТ 1` — `WORKER_TASK_CURRENT_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_02.md` (`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`).
-- No worker task is currently assigned in slot `ЧАТ 2`.
+- Active worker assignment: `ЧАТ 2` — `WORKER_TASK_EXPIRED_SALE_IMMEDIATE_VISIBILITY_FIX_01.md` (`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`).
 - Latest accepted implementation: `WORKER_TASK_DEEP_FIRST_FINAL_SCORE_ORDER_FIX_01.md` (implementation accepted; publication proof blocked by pre-existing Russian-description gate).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
 - Current Dossier binding is `github-derived-temporal-classification-2026-09-27`.
@@ -12,6 +12,38 @@
 - No Scheduled Task action is currently authorized. The user remains the operator for Scheduled Task UI/run actions.
 - Physical worker chats used for the latest ЧАТ 1 diagnostic and ЧАТ 2 implementation are retired and may be deleted.
 - Older lower sections whose headings still say `ACTIVE`, `LIVE`, or `PAUSED` are historical project records and may be stale. For current assignment state, this section plus the newest accepted sections above them take precedence; verify exact current task/report before reviving any older item.
+
+
+## ACTIVE — НОВЫЙ ЧАТ 2 — Expired sale immediate visibility fix
+
+Task:
+`WORKER_TASK_EXPIRED_SALE_IMMEDIATE_VISIBILITY_FIX_01.md`
+
+Mode:
+`DIAGNOSE -> CONTRACT-FIRST IMPLEMENT / VALIDATE`
+
+Goal:
+- enforce the already-canonical rule that a paid offer with known passed `sale_end_utc` is not shown;
+- make expiry work locally even when the published payload is stale;
+- preserve Taste/Fast/Deep/Dossier state for reuse on future sales;
+- keep unknown sale-end cards visible under current policy.
+
+Pinned symptom:
+- Titanfall® 2 remains visible while the card itself says `Скидка закончилась`.
+
+Constraints:
+- no semantic worker execution;
+- no network polling scheduler;
+- no score/ranking changes;
+- no manual commercial-data edits;
+- no Scheduled Task changes;
+- do not interfere with active ЧАТ 1 Russian-description fix or the separate visual stale-snapshot race.
+
+Report:
+`reviews/worker_reports/expired-sale-immediate-visibility-fix-01.md`
+
+Worker state:
+- use a NEW physical worker conversation in slot `ЧАТ 2`.
 
 
 ## ACTIVE — НОВЫЙ ЧАТ 1 — Current Russian description publication blocker fix
