@@ -282,12 +282,13 @@ Use this route when a visually ready game is blocked by the meaningful-Russian g
    - a `good_ru` appdetails description remains a direct Russian source;
    - if StoreBrowse has no already-translatable source and exact-app appdetails contains meaningful `non_ru` / `weak_ru` text, preserve that exact text and app provenance only as the existing translation/rewrite source; it is not publishable Russian;
    - only an exact-bound accepted translation/cache entry can then turn that unresolved source into `ready_ru`.
-3. Canonical unresolved state: `data/production/pre_ai/chatgpt_ru_description_queue.jsonl` and `chatgpt_ru_description_status.json`; accepted semantic translations persist only through `data/cache/russian_description_translations.json`.
-4. Visual producer: `scripts/build_visual_feed_v2.py` reuses the same Russian `appdetails` payload already fetched for practical facts before resolving card descriptions.
-5. Final fail-closed gate: `scripts/validate_russian_descriptions.py`.
-6. Publication chain remains `.github/workflows/build-daily-visual-payload.yml` -> `data/production/visual/current.json` -> `.github/workflows/deploy-visual.yml` -> `web/data/current.json`.
+3. Canonical unresolved/observability state: `data/production/pre_ai/chatgpt_ru_description_queue.jsonl` and `chatgpt_ru_description_status.json`; accepted semantic translations persist only through `data/cache/russian_description_translations.json`.
+4. Explicit user-launched one-shot semantic worker: `config/russian_description_manual_semantic_worker_prompt.md`; it reads only the current GitHub-prepared queue and writes create-only result submissions to `data/ai_inbox/russian_descriptions/*.json`, after which GitHub validates/ingests them. It is not the general interactive-chat role and never creates or modifies a Scheduled Task.
+5. Visual producer: `scripts/build_visual_feed_v2.py` reuses the same Russian `appdetails` payload already fetched for practical facts before resolving card descriptions; `scripts/progressive_personalization.py` projects producer-owned translation count/attempt/success observability into Statistics.
+6. Final gate: `scripts/validate_russian_descriptions.py` remains fail-closed for masquerading/non-Russian summaries and invalid accepted state, while an explicit unresolved state with no published summary is nonblocking.
+7. Publication chain remains `.github/workflows/build-daily-visual-payload.yml` -> `data/production/visual/current.json` -> `.github/workflows/deploy-visual.yml` -> `web/data/current.json`.
 
-The browser does not fetch or repair descriptions. Interactive chat does not translate production rows or populate the translation cache manually.
+The browser does not fetch, repair, count, or timestamp descriptions. Ordinary interactive developer/operator chat does not translate production rows or populate the translation cache manually; only the explicitly user-launched canonical one-shot semantic-worker role is authorized to submit exact-bound translation results through the GitHub-owned ingest path.
 
 ## Legacy Deep full reanalysis migration
 
