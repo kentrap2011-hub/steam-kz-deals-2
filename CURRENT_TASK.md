@@ -1,5 +1,15 @@
 # CURRENT TASK
 
+## IN PROGRESS — Progressive migration current-binding regression fix 01
+Статус: `in_progress`.
+- task: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md`;
+- branch: `fix/progressive-migration-current-binding-regression-01`;
+- pinned root cause: PPD-012 migration regression incorrectly requires every frozen PPD-010 target to retain a current binding forever, even after the target leaves the current Progressive catalogue;
+- Black Skylands / `game:1143810` had sale end `2026-09-28T15:35:00Z`; PPD-012 validation passed before that boundary and the first confirmed pre-AI failure occurred afterward;
+- fix direction: classify each immutable migration target as current+equivalent, current+semantically-stale, or outside current scope; preserve immutable Deep history and keep current-scope missing bindings fail-closed;
+- no semantic result, attempt, Dossier/Fast/Deep content, scheduler, retry ownership or Scheduled Task is being changed.
+
+
 ## BLOCKED — Current Russian description publication blocker fix 02
 Статус: `blocked`.
 - task: `WORKER_TASK_CURRENT_RUSSIAN_DESCRIPTION_PUBLICATION_BLOCKER_FIX_02.md`;
