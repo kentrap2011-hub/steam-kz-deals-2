@@ -39,6 +39,7 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/test_russian_description_translation_runtime.py
+          python scripts/test_russian_description_manual_semantic_worker.py
           python -m py_compile \
             scripts/russian_description_translation_runtime.py \
             scripts/build_russian_description_translation_queue.py \
