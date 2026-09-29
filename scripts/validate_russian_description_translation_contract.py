@@ -100,10 +100,11 @@ require((owners.get("interactive_chat") or {}).get("production_catalog_translati
 require((owners.get("interactive_chat") or {}).get("manual_cache_population_allowed") is False, "interactive chat must not populate translation cache")
 
 boundary = contract.get("implementation_boundary") or {}
-require(boundary.get("this_task_is_contract_only") is True, "task boundary must remain contract-only")
-require(boundary.get("translation_producer_or_ingest_implementation_in_scope") is False, "producer/ingest implementation leaked into contract-only task")
-require(boundary.get("mass_translation_in_scope") is False, "mass translation leaked into contract-only task")
-require(boundary.get("production_cache_population_in_scope") is False, "cache population leaked into contract-only task")
+require(boundary.get("translation_scope_and_ingest_implemented") is True, "translation scope/ingest implementation must be canonical")
+require(boundary.get("publication_observability_implementation_in_scope") is True, "publication observability implementation must be authorized")
+require(boundary.get("mass_translation_in_scope") is False, "mass translation must remain out of scope")
+require(boundary.get("production_cache_population_by_interactive_chat_allowed") is False, "interactive chat cache population must remain forbidden")
+require(boundary.get("interactive_manual_catalog_fill_allowed") is False, "interactive manual catalog fill must remain forbidden")
 
 artifacts = contract.get("reserved_artifacts_for_followup_implementation") or {}
 expected_artifacts = {
@@ -157,10 +158,28 @@ require(retry.get("chatgpt_retry_loop_allowed") is False, "ChatGPT retry loop mu
 require(retry.get("chatgpt_batch_quota_allowed") is False, "ChatGPT batch quota must be forbidden")
 require(retry.get("production_completion_decider") == "GitHub only", "GitHub alone must decide completion")
 
+observability = contract.get("observability") or {}
+require(observability.get("owner") == "github_control_plane", "translation observability must be GitHub-owned")
+require(observability.get("durable_status_manifest") == "data/production/pre_ai/chatgpt_ru_description_status.json", "translation observability status path mismatch")
+untranslated = observability.get("untranslated_game_count") or {}
+require(untranslated.get("field") == "untranslated_game_count", "untranslated count field mismatch")
+require(untranslated.get("browser_derivation_allowed") is False, "browser must not derive untranslated count")
+attempt = observability.get("last_translation_attempt_at") or {}
+require(attempt.get("zero_work_check_counts_as_attempt") is True, "zero-work check must count as an attempt")
+require(attempt.get("advances_on_failed_or_error_result_attempt") is True, "failed/error attempt timestamp semantics missing")
+success = observability.get("last_successful_translation_at") or {}
+require(success.get("advances_on_partial_success_with_at_least_one_accepted") is True, "partial-success timestamp semantics missing")
+require(success.get("advances_on_zero_work_check") is True, "zero-work successful timestamp semantics missing")
+require(success.get("does_not_advance_on_attempt_with_zero_accepted_when_work_remains") is True, "failed-work success timestamp guard missing")
+require("Browser may only render/format" in str(observability.get("browser_rule") or ""), "browser observability rule missing")
+
 downstream = contract.get("downstream") or {}
 require(downstream.get("final_quality_gate") == "scripts/validate_russian_descriptions.py", "existing final Russian-description gate must remain canonical")
-require(downstream.get("final_gate_must_remain_fail_closed") is True, "final visual gate must remain fail closed")
+require(downstream.get("final_gate_must_remain_fail_closed") is True, "final visual gate must remain fail closed for invalid/masquerading state")
+require(downstream.get("explicit_unresolved_description_blocks_publication") is False, "explicit unresolved descriptions must be nonblocking")
 require(downstream.get("unresolved_translation_may_not_become_normal_summary") is True, "unresolved text may not silently become a summary")
+require(downstream.get("untranslated_games_remain_visible") is True, "untranslated games must remain visible")
+require((contract.get("retry_and_completeness") or {}).get("publication_requires_translation_completion") is False, "publication must not require translation completion")
 
 # Contract-level deterministic fixtures. These exercise identity, shape and quality semantics
 # without implementing or populating any production queue/cache.
