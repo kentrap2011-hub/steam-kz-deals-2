@@ -229,10 +229,38 @@ def main():
             raise AssertionError('strict Russian validation must still reject unresolved text')
         diagnostic = validate_russian_descriptions(visual, allow_untranslated=True)
         assert diagnostic['invalid_count'] == 1
+        assert diagnostic['nonblocking_untranslated_count'] == 1
+        assert diagnostic['blocking_invalid_count'] == 0
         assert diagnostic['publication_blocking'] is False
         unchanged = json.loads(visual.read_text(encoding='utf-8'))['items'][0]
         assert unchanged['summary'] is None
         assert unchanged['description_status'] == 'needs_translation'
+
+        # 7b. Nonblocking mode is not a blanket quality bypass: a card claiming
+        # ready_ru while carrying non-Russian text must still block publication.
+        masquerading = root / 'masquerading.json'
+        masquerading.write_text(
+            json.dumps(
+                {
+                    'items': [{
+                        'id': 'game:bad',
+                        'title': 'Bad Russian state',
+                        'analysis_state': 'analyzed_fit',
+                        'summary': 'This is still English and must not be presented as Russian.',
+                        'description_status': 'ready_ru',
+                    }]
+                }
+            ),
+            encoding='utf-8',
+        )
+        try:
+            validate_russian_descriptions(masquerading, allow_untranslated=True)
+        except SystemExit:
+            pass
+        else:
+            raise AssertionError(
+                'allow_untranslated must not publish ready_ru state with non-Russian text'
+            )
 
     # 8. Publication and post-attempt refresh must be explicit GitHub workflow
     # behavior; the browser is not allowed to create either fact.
