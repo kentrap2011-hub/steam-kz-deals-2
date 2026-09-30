@@ -13309,9 +13309,9 @@
       }
     },
     "game:1173800": {
-      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
-      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
-      "work_id": "2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "aca10d6c8e2909453a4e2d61e8bc6cf89d4a8a3274b19f28c0616b95ec795d74",
       "family_id": "game:1173800",
       "taste_subject_key": "App_1173800",
       "appid": "1173800",
@@ -13323,8 +13323,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-28T10:34:49+00:00",
-      "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+      "accepted_at_utc": "2026-09-30T06:31:04+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "965b019c1543d8aa05dbe86fcd40a2e154e1d2cce44efcbc1f447b7ab42d0d3b",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -13340,8 +13340,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e",
-      "work_mode": "legacy_full_reanalysis",
+      "authorization_id": "88915d7a57f39b6194251d6d2d2433fe554e97166f9e952c604e93c9d9d7a243",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -13665,6 +13665,358 @@
             },
             "base_support_compatible": null
           }
+        },
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:31:04+00:00",
+          "state": {
+            "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+            "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+            "work_id": "2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
+            "family_id": "game:1173800",
+            "taste_subject_key": "App_1173800",
+            "appid": "1173800",
+            "taste_fingerprint": "f90f07afb0920b8b9c6534fb0f38a3828f6b5295763aa2b701f4eacc359c41e3",
+            "candidate_context_sha256": "edb4c4b4632e7c59c764c48b6c9c622a48bd3674b8ce5fc385f0767e748476a2",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-28T10:34:49+00:00",
+            "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+            "dossier_content_sha256": "965b019c1543d8aa05dbe86fcd40a2e154e1d2cce44efcbc1f447b7ab42d0d3b",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e",
+            "work_mode": "legacy_full_reanalysis",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+              "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+              "work_id": "2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
+              "family_id": "game:1173800",
+              "taste_subject_key": "App_1173800",
+              "appid": "1173800",
+              "taste_fingerprint": "f90f07afb0920b8b9c6534fb0f38a3828f6b5295763aa2b701f4eacc359c41e3",
+              "candidate_context_sha256": "edb4c4b4632e7c59c764c48b6c9c622a48bd3674b8ce5fc385f0767e748476a2",
+              "dossier_content_sha256": "965b019c1543d8aa05dbe86fcd40a2e154e1d2cce44efcbc1f447b7ab42d0d3b",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "25cdeaae3d5336baa1a9d42629b309be5746e3a58f123969b58ff28d29fb04cb",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-27T17:35:34+00:00",
+              "run_start_anchor_commit": "850fd0ab32ce67271497ae9bfafe80a8ab83fdce",
+              "run_start_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "run_started_at_utc": "2026-09-27T17:10:54+00:00",
+              "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "fit_level": "strong",
+              "confidence": "medium",
+              "positive_evidence": [
+                "The defined cast, Cecil's character arc, party relationships and dramatic events give the game a much stronger narrative and character identity than the earlier entries, matching the profile's high value on memorable characters and authored hooks.",
+                "Active Time Battle increases combat urgency and asks the player to make decisions under pressure, adding an execution and pacing dimension beyond purely static turn-taking.",
+                "Fixed classes reduce build freedom but make each party member mechanically distinctive and tightly connected to the story, preserving meaningful changes in party composition as the campaign develops."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 74,
+                "development_variety": 66,
+                "structure_pacing_direction": 78,
+                "identity_hooks": 88,
+                "breadth_of_match": 79
+              },
+              "base_support_compatible": null
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "legacy_reanalysis_attempts": [
+              {
+                "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+                "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+                "work_id": "2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
+                "family_id": "game:1173800",
+                "taste_subject_key": "App_1173800",
+                "appid": "1173800",
+                "taste_fingerprint": "f90f07afb0920b8b9c6534fb0f38a3828f6b5295763aa2b701f4eacc359c41e3",
+                "candidate_context_sha256": "edb4c4b4632e7c59c764c48b6c9c622a48bd3674b8ce5fc385f0767e748476a2",
+                "dossier_content_sha256": "965b019c1543d8aa05dbe86fcd40a2e154e1d2cce44efcbc1f447b7ab42d0d3b",
+                "dossier_compatibility_binding": {
+                  "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                  "evidence_contract_version": 2,
+                  "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                  "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                  "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                  "worker_schema_version": 2,
+                  "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                  "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                  "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                  "dossier_schema_version": 2,
+                  "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                  "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+                },
+                "authorization_id": "d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e",
+                "work_mode": "legacy_full_reanalysis",
+                "recovery_authorization_id": null,
+                "recovery_reason": null,
+                "recovery_condition_binding": null,
+                "migration_provenance": {
+                  "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+                  "migration_target_id": "legacy-full-reanalysis-01:2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
+                  "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+                  "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+                  "prior_outcome": "analyzed_fit",
+                  "prior_fit_level": "strong",
+                  "prior_confidence": "medium",
+                  "prior_taste_factors": {
+                    "gameplay_mastery": 74,
+                    "development_variety": 66,
+                    "structure_pacing_direction": 78,
+                    "identity_hooks": 88,
+                    "breadth_of_match": 79
+                  },
+                  "prior_not_fit_basis": null,
+                  "prior_work_id": "2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
+                  "prior_authorization_id": "25cdeaae3d5336baa1a9d42629b309be5746e3a58f123969b58ff28d29fb04cb",
+                  "prior_accepted_at_utc": "2026-09-27T17:35:34+00:00",
+                  "preserved_positive_evidence": [
+                    "The defined cast, Cecil's character arc, party relationships and dramatic events give the game a much stronger narrative and character identity than the earlier entries, matching the profile's high value on memorable characters and authored hooks.",
+                    "Active Time Battle increases combat urgency and asks the player to make decisions under pressure, adding an execution and pacing dimension beyond purely static turn-taking.",
+                    "Fixed classes reduce build freedom but make each party member mechanically distinctive and tightly connected to the story, preserving meaningful changes in party composition as the campaign develops."
+                  ],
+                  "preserved_not_fit_evidence": []
+                },
+                "outcome": "analyzed_fit",
+                "analysis_issue_code": null,
+                "attempt_consumption_source": "accepted_result",
+                "accepted_at_utc": "2026-09-28T10:34:49+00:00",
+                "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+                "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+                "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "fit_level": "strong",
+                "confidence": "medium",
+                "positive_evidence": [
+                  "The defined cast, Cecil's character arc, party relationships and dramatic events give the game a much stronger narrative and character identity than the earlier entries, matching the profile's high value on memorable characters and authored hooks.",
+                  "Active Time Battle increases combat urgency and asks the player to make decisions under pressure, adding an execution and pacing dimension beyond purely static turn-taking.",
+                  "Fixed classes reduce build freedom but make each party member mechanically distinctive and tightly connected to the story, preserving meaningful changes in party composition as the campaign develops."
+                ],
+                "taste_factors": {
+                  "gameplay_mastery": 73,
+                  "development_variety": 65,
+                  "structure_pacing_direction": 77,
+                  "identity_hooks": 88,
+                  "breadth_of_match": 78
+                },
+                "base_support_compatible": null,
+                "negative_assessment": {
+                  "status": "completed",
+                  "evaluated_candidate_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    },
+                    {
+                      "kind": "conflict",
+                      "index": 0
+                    }
+                  ],
+                  "findings": [
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Active Time Battle добавляет темп и давление времени; для профиля это может усилить вовлечённость, но часть игроков воспринимает такой ритм как менее комфортный, чем полностью пошаговые команды.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 1
+                        },
+                        {
+                          "kind": "conflict",
+                          "index": 0
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Общая сложность ремастера сравнительно мягкая, но отдельные боссы и поздние участки могут давать резкие скачки, поэтому кривая испытания не полностью ровная.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 2
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Фиксированные классы уменьшают свободу сборок относительно третьей части, хотя взамен делают состав партии и смену ролей теснее связанными с персонажами и сюжетом.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 3
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "migration_result_changed": true,
+                "migration_fit_outcome_changed": false
+              }
+            ],
+            "legacy_reanalysis_status": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
+              "attempt_outcome": "analyzed_fit",
+              "accepted_at_utc": "2026-09-28T10:34:49+00:00",
+              "completed_revision_promoted": true
+            },
+            "migration_provenance": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
+              "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+              "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+              "prior_outcome": "analyzed_fit",
+              "prior_fit_level": "strong",
+              "prior_confidence": "medium",
+              "prior_taste_factors": {
+                "gameplay_mastery": 74,
+                "development_variety": 66,
+                "structure_pacing_direction": 78,
+                "identity_hooks": 88,
+                "breadth_of_match": 79
+              },
+              "prior_not_fit_basis": null,
+              "prior_work_id": "2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea",
+              "prior_authorization_id": "25cdeaae3d5336baa1a9d42629b309be5746e3a58f123969b58ff28d29fb04cb",
+              "prior_accepted_at_utc": "2026-09-27T17:35:34+00:00",
+              "preserved_positive_evidence": [
+                "The defined cast, Cecil's character arc, party relationships and dramatic events give the game a much stronger narrative and character identity than the earlier entries, matching the profile's high value on memorable characters and authored hooks.",
+                "Active Time Battle increases combat urgency and asks the player to make decisions under pressure, adding an execution and pacing dimension beyond purely static turn-taking.",
+                "Fixed classes reduce build freedom but make each party member mechanically distinctive and tightly connected to the story, preserving meaningful changes in party composition as the campaign develops."
+              ],
+              "preserved_not_fit_evidence": []
+            },
+            "migration_result_changed": true,
+            "migration_fit_outcome_changed": false,
+            "fit_level": "strong",
+            "confidence": "medium",
+            "positive_evidence": [
+              "The defined cast, Cecil's character arc, party relationships and dramatic events give the game a much stronger narrative and character identity than the earlier entries, matching the profile's high value on memorable characters and authored hooks.",
+              "Active Time Battle increases combat urgency and asks the player to make decisions under pressure, adding an execution and pacing dimension beyond purely static turn-taking.",
+              "Fixed classes reduce build freedom but make each party member mechanically distinctive and tightly connected to the story, preserving meaningful changes in party composition as the campaign develops."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 73,
+              "development_variety": 65,
+              "structure_pacing_direction": 77,
+              "identity_hooks": 88,
+              "breadth_of_match": 78
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                },
+                {
+                  "kind": "conflict",
+                  "index": 0
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Active Time Battle добавляет темп и давление времени; для профиля это может усилить вовлечённость, но часть игроков воспринимает такой ритм как менее комфортный, чем полностью пошаговые команды.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    },
+                    {
+                      "kind": "conflict",
+                      "index": 0
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Общая сложность ремастера сравнительно мягкая, но отдельные боссы и поздние участки могут давать резкие скачки, поэтому кривая испытания не полностью ровная.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Фиксированные классы уменьшают свободу сборок относительно третьей части, хотя взамен делают состав партии и смену ролей теснее связанными с персонажами и сюжетом.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
         }
       ],
       "migration_provenance": {
@@ -13695,20 +14047,391 @@
       },
       "migration_result_changed": true,
       "migration_fit_outcome_changed": false,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "aca10d6c8e2909453a4e2d61e8bc6cf89d4a8a3274b19f28c0616b95ec795d74",
+          "family_id": "game:1173800",
+          "taste_subject_key": "App_1173800",
+          "appid": "1173800",
+          "taste_fingerprint": "f90f07afb0920b8b9c6534fb0f38a3828f6b5295763aa2b701f4eacc359c41e3",
+          "candidate_context_sha256": "edb4c4b4632e7c59c764c48b6c9c622a48bd3674b8ce5fc385f0767e748476a2",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "965b019c1543d8aa05dbe86fcd40a2e154e1d2cce44efcbc1f447b7ab42d0d3b",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "88915d7a57f39b6194251d6d2d2433fe554e97166f9e952c604e93c9d9d7a243",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:31:04+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1173800:d5470bf56f725184",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e",
+            "prior_accepted_at_utc": "2026-09-28T10:34:49+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 73,
+              "development_variety": 65,
+              "structure_pacing_direction": 77,
+              "identity_hooks": 88,
+              "breadth_of_match": 78
+            },
+            "prior_positive_evidence": [
+              "The defined cast, Cecil's character arc, party relationships and dramatic events give the game a much stronger narrative and character identity than the earlier entries, matching the profile's high value on memorable characters and authored hooks.",
+              "Active Time Battle increases combat urgency and asks the player to make decisions under pressure, adding an execution and pacing dimension beyond purely static turn-taking.",
+              "Fixed classes reduce build freedom but make each party member mechanically distinctive and tightly connected to the story, preserving meaningful changes in party composition as the campaign develops."
+            ],
+            "prior_work_id": "2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "The defined cast, Cecil's arc and dramatic events give the game a much stronger narrative identity than the earlier entries.",
+            "Active Time Battle adds urgency and execution to combat, while fixed classes keep party members mechanically distinct."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 74,
+            "development_variety": 66,
+            "structure_pacing_direction": 78,
+            "identity_hooks": 90,
+            "breadth_of_match": 79
+          },
+          "score_findings": [
+            {
+              "finding_id": "ff4-story-cast",
+              "text_ru": "Арка Сесила, отношения внутри группы и драматические события дают игре именно тот персонажный и сюжетный крючок, который заметно повышает твою вовлечённость.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/3/pattern",
+                  "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+                  "match_text_ru": "Сюжет и персонажи для тебя важны, особенно когда становятся главным авторским крючком."
+                },
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Яркая художественная и эмоциональная идентичность помогает игре запомниться."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 90
+                },
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 78
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 79
+                }
+              ]
+            },
+            {
+              "finding_id": "ff4-atb",
+              "text_ru": "Active Time Battle добавляет решения под давлением времени и делает бои более исполнительскими, чем полностью статичная пошаговая система.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Тебе нравится, когда система раскрывается через освоение исполнения и таймингов."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 74
+                }
+              ]
+            },
+            {
+              "finding_id": "ff4-fixed-roles",
+              "text_ru": "Фиксированные классы уменьшают свободу билдов, но зато смена состава и роли персонажей тесно связаны с сюжетом и регулярно меняют устройство группы.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Тебе нужна эволюция опыта по ходу игры, а не неизменная формула."
+                },
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Понятный эффект развития и смены возможностей для тебя важен."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 66
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              },
+              {
+                "kind": "conflict",
+                "index": 0
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "ATB одновременно ускоряет бои и создаёт нежелательное давление времени для тех, кто предпочитает спокойно выбирать команды.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "conflict",
+                    "index": 0
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Сложность в Pixel Remaster в целом мягче старых версий, но отдельные боссы и участки всё ещё дают резкие скачки.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Фиксированные классы ограничивают свободу настройки по сравнению с Final Fantasy III.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1173800:d5470bf56f725184",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:31:04+00:00",
+        "completed_revision_promoted": true
+      },
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1173800:d5470bf56f725184",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e",
+        "prior_accepted_at_utc": "2026-09-28T10:34:49+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 73,
+          "development_variety": 65,
+          "structure_pacing_direction": 77,
+          "identity_hooks": 88,
+          "breadth_of_match": 78
+        },
+        "prior_positive_evidence": [
+          "The defined cast, Cecil's character arc, party relationships and dramatic events give the game a much stronger narrative and character identity than the earlier entries, matching the profile's high value on memorable characters and authored hooks.",
+          "Active Time Battle increases combat urgency and asks the player to make decisions under pressure, adding an execution and pacing dimension beyond purely static turn-taking.",
+          "Fixed classes reduce build freedom but make each party member mechanically distinctive and tightly connected to the story, preserving meaningful changes in party composition as the campaign develops."
+        ],
+        "prior_work_id": "2c93e6a2a8cc699d1f952d3c2449cabd892378f8da0f8ef02541ae0668d7e9ea"
+      },
       "fit_level": "strong",
-      "confidence": "medium",
+      "confidence": "high",
       "positive_evidence": [
-        "The defined cast, Cecil's character arc, party relationships and dramatic events give the game a much stronger narrative and character identity than the earlier entries, matching the profile's high value on memorable characters and authored hooks.",
-        "Active Time Battle increases combat urgency and asks the player to make decisions under pressure, adding an execution and pacing dimension beyond purely static turn-taking.",
-        "Fixed classes reduce build freedom but make each party member mechanically distinctive and tightly connected to the story, preserving meaningful changes in party composition as the campaign develops."
+        "The defined cast, Cecil's arc and dramatic events give the game a much stronger narrative identity than the earlier entries.",
+        "Active Time Battle adds urgency and execution to combat, while fixed classes keep party members mechanically distinct."
       ],
       "taste_factors": {
-        "gameplay_mastery": 73,
-        "development_variety": 65,
-        "structure_pacing_direction": 77,
-        "identity_hooks": 88,
-        "breadth_of_match": 78
+        "gameplay_mastery": 74,
+        "development_variety": 66,
+        "structure_pacing_direction": 78,
+        "identity_hooks": 90,
+        "breadth_of_match": 79
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "ff4-story-cast",
+          "text_ru": "Арка Сесила, отношения внутри группы и драматические события дают игре именно тот персонажный и сюжетный крючок, который заметно повышает твою вовлечённость.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/3/pattern",
+              "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+              "match_text_ru": "Сюжет и персонажи для тебя важны, особенно когда становятся главным авторским крючком."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Яркая художественная и эмоциональная идентичность помогает игре запомниться."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 90
+            },
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 78
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 79
+            }
+          ]
+        },
+        {
+          "finding_id": "ff4-atb",
+          "text_ru": "Active Time Battle добавляет решения под давлением времени и делает бои более исполнительскими, чем полностью статичная пошаговая система.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Тебе нравится, когда система раскрывается через освоение исполнения и таймингов."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 74
+            }
+          ]
+        },
+        {
+          "finding_id": "ff4-fixed-roles",
+          "text_ru": "Фиксированные классы уменьшают свободу билдов, но зато смена состава и роли персонажей тесно связаны с сюжетом и регулярно меняют устройство группы.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 3
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Тебе нужна эволюция опыта по ходу игры, а не неизменная формула."
+            },
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Понятный эффект развития и смены возможностей для тебя важен."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 66
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -13734,7 +14457,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Active Time Battle добавляет темп и давление времени; для профиля это может усилить вовлечённость, но часть игроков воспринимает такой ритм как менее комфортный, чем полностью пошаговые команды.",
+            "text_ru": "ATB одновременно ускоряет бои и создаёт нежелательное давление времени для тех, кто предпочитает спокойно выбирать команды.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -13749,7 +14472,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Общая сложность ремастера сравнительно мягкая, но отдельные боссы и поздние участки могут давать резкие скачки, поэтому кривая испытания не полностью ровная.",
+            "text_ru": "Сложность в Pixel Remaster в целом мягче старых версий, но отдельные боссы и участки всё ещё дают резкие скачки.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -13760,7 +14483,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Фиксированные классы уменьшают свободу сборок относительно третьей части, хотя взамен делают состав партии и смену ролей теснее связанными с персонажами и сюжетом.",
+            "text_ru": "Фиксированные классы ограничивают свободу настройки по сравнению с Final Fantasy III.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -13772,9 +14495,9 @@
       }
     },
     "game:1173810": {
-      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
-      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
-      "work_id": "f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "e4ef861d9140a4648fefeb1dedd9003efc5bd95d7314fa9c185643db1b1b2623",
       "family_id": "game:1173810",
       "taste_subject_key": "App_1173810",
       "appid": "1173810",
@@ -13786,8 +14509,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-28T10:35:25+00:00",
-      "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+      "accepted_at_utc": "2026-09-30T06:31:04+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "53bd1a19d297a9289d39174e5632a826410dd4411448002fa0c809dc6f06815c",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -13803,8 +14526,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274",
-      "work_mode": "legacy_full_reanalysis",
+      "authorization_id": "0addda5cf264fa9957e7096dc66fcf0933d12083b8e2f92c8b5c5e92df589877",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -14128,6 +14851,358 @@
             },
             "base_support_compatible": null
           }
+        },
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:31:04+00:00",
+          "state": {
+            "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+            "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+            "work_id": "f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
+            "family_id": "game:1173810",
+            "taste_subject_key": "App_1173810",
+            "appid": "1173810",
+            "taste_fingerprint": "6428d8cdc9e3490a839ebf0362c98781cd9482eb40299b7f086259a13ff6f3c4",
+            "candidate_context_sha256": "26927c007eeffea581b7c5d1711a925f0f01d0926278ec5f12eda17ab26b5061",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-28T10:35:25+00:00",
+            "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+            "dossier_content_sha256": "53bd1a19d297a9289d39174e5632a826410dd4411448002fa0c809dc6f06815c",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274",
+            "work_mode": "legacy_full_reanalysis",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+              "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+              "work_id": "f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
+              "family_id": "game:1173810",
+              "taste_subject_key": "App_1173810",
+              "appid": "1173810",
+              "taste_fingerprint": "6428d8cdc9e3490a839ebf0362c98781cd9482eb40299b7f086259a13ff6f3c4",
+              "candidate_context_sha256": "26927c007eeffea581b7c5d1711a925f0f01d0926278ec5f12eda17ab26b5061",
+              "dossier_content_sha256": "53bd1a19d297a9289d39174e5632a826410dd4411448002fa0c809dc6f06815c",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "f44b7b196ecc4dea97509e8e17a11935560d51dd663cba197e68128930005c34",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-27T17:36:10+00:00",
+              "run_start_anchor_commit": "850fd0ab32ce67271497ae9bfafe80a8ab83fdce",
+              "run_start_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "run_started_at_utc": "2026-09-27T17:10:54+00:00",
+              "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "fit_level": "strong",
+              "confidence": "high",
+              "positive_evidence": [
+                "Freely changing jobs, mastering abilities and combining skills across classes creates a highly expressive development system with persistent new mechanical possibilities, directly matching the profile's strongest progression signal.",
+                "Difficulty spikes are frequently solvable by understanding job synergy and adapting party composition, turning challenge into a mastery and tactical-planning problem rather than simple repetition.",
+                "Pixel Remaster quality-of-life options reduce navigation and grinding friction while preserving the underlying job system, improving pacing without flattening its mechanical depth."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 89,
+                "development_variety": 93,
+                "structure_pacing_direction": 78,
+                "identity_hooks": 69,
+                "breadth_of_match": 87
+              },
+              "base_support_compatible": null
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "legacy_reanalysis_attempts": [
+              {
+                "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+                "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+                "work_id": "f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
+                "family_id": "game:1173810",
+                "taste_subject_key": "App_1173810",
+                "appid": "1173810",
+                "taste_fingerprint": "6428d8cdc9e3490a839ebf0362c98781cd9482eb40299b7f086259a13ff6f3c4",
+                "candidate_context_sha256": "26927c007eeffea581b7c5d1711a925f0f01d0926278ec5f12eda17ab26b5061",
+                "dossier_content_sha256": "53bd1a19d297a9289d39174e5632a826410dd4411448002fa0c809dc6f06815c",
+                "dossier_compatibility_binding": {
+                  "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                  "evidence_contract_version": 2,
+                  "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                  "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                  "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                  "worker_schema_version": 2,
+                  "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                  "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                  "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                  "dossier_schema_version": 2,
+                  "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                  "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+                },
+                "authorization_id": "d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274",
+                "work_mode": "legacy_full_reanalysis",
+                "recovery_authorization_id": null,
+                "recovery_reason": null,
+                "recovery_condition_binding": null,
+                "migration_provenance": {
+                  "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+                  "migration_target_id": "legacy-full-reanalysis-01:f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
+                  "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+                  "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+                  "prior_outcome": "analyzed_fit",
+                  "prior_fit_level": "strong",
+                  "prior_confidence": "high",
+                  "prior_taste_factors": {
+                    "gameplay_mastery": 89,
+                    "development_variety": 93,
+                    "structure_pacing_direction": 78,
+                    "identity_hooks": 69,
+                    "breadth_of_match": 87
+                  },
+                  "prior_not_fit_basis": null,
+                  "prior_work_id": "f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
+                  "prior_authorization_id": "f44b7b196ecc4dea97509e8e17a11935560d51dd663cba197e68128930005c34",
+                  "prior_accepted_at_utc": "2026-09-27T17:36:10+00:00",
+                  "preserved_positive_evidence": [
+                    "Freely changing jobs, mastering abilities and combining skills across classes creates a highly expressive development system with persistent new mechanical possibilities, directly matching the profile's strongest progression signal.",
+                    "Difficulty spikes are frequently solvable by understanding job synergy and adapting party composition, turning challenge into a mastery and tactical-planning problem rather than simple repetition.",
+                    "Pixel Remaster quality-of-life options reduce navigation and grinding friction while preserving the underlying job system, improving pacing without flattening its mechanical depth."
+                  ],
+                  "preserved_not_fit_evidence": []
+                },
+                "outcome": "analyzed_fit",
+                "analysis_issue_code": null,
+                "attempt_consumption_source": "accepted_result",
+                "accepted_at_utc": "2026-09-28T10:35:25+00:00",
+                "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+                "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+                "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "fit_level": "strong",
+                "confidence": "high",
+                "positive_evidence": [
+                  "Freely changing jobs, mastering abilities and combining skills across classes creates a highly expressive development system with persistent new mechanical possibilities, directly matching the profile's strongest progression signal.",
+                  "Difficulty spikes are frequently solvable by understanding job synergy and adapting party composition, turning challenge into a mastery and tactical-planning problem rather than simple repetition.",
+                  "Pixel Remaster quality-of-life options reduce navigation and grinding friction while preserving the underlying job system, improving pacing without flattening its mechanical depth."
+                ],
+                "taste_factors": {
+                  "gameplay_mastery": 89,
+                  "development_variety": 93,
+                  "structure_pacing_direction": 78,
+                  "identity_hooks": 68,
+                  "breadth_of_match": 87
+                },
+                "base_support_compatible": null,
+                "negative_assessment": {
+                  "status": "completed",
+                  "evaluated_candidate_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 4
+                    },
+                    {
+                      "kind": "conflict",
+                      "index": 0
+                    }
+                  ],
+                  "findings": [
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Резкие участки сложности могут потребовать сменить профессии и комбинации умений; это скорее проверка понимания системы, чем самостоятельный минус, но игроку, который долго держится за одну сборку, придётся перестраиваться.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 1
+                        },
+                        {
+                          "kind": "conflict",
+                          "index": 0
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "История легче и проще, чем в четвёртой и шестой частях, поэтому сюжетный крючок здесь слабее выдающейся системы профессий.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 2
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Pixel Remaster не содержит часть профессий, подземелий и бонусного контента поздних GBA-версий; ценность этих дополнений спорна, но по объёму это менее полная ветка игры.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 4
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "migration_result_changed": true,
+                "migration_fit_outcome_changed": false
+              }
+            ],
+            "legacy_reanalysis_status": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
+              "attempt_outcome": "analyzed_fit",
+              "accepted_at_utc": "2026-09-28T10:35:25+00:00",
+              "completed_revision_promoted": true
+            },
+            "migration_provenance": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
+              "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+              "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+              "prior_outcome": "analyzed_fit",
+              "prior_fit_level": "strong",
+              "prior_confidence": "high",
+              "prior_taste_factors": {
+                "gameplay_mastery": 89,
+                "development_variety": 93,
+                "structure_pacing_direction": 78,
+                "identity_hooks": 69,
+                "breadth_of_match": 87
+              },
+              "prior_not_fit_basis": null,
+              "prior_work_id": "f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693",
+              "prior_authorization_id": "f44b7b196ecc4dea97509e8e17a11935560d51dd663cba197e68128930005c34",
+              "prior_accepted_at_utc": "2026-09-27T17:36:10+00:00",
+              "preserved_positive_evidence": [
+                "Freely changing jobs, mastering abilities and combining skills across classes creates a highly expressive development system with persistent new mechanical possibilities, directly matching the profile's strongest progression signal.",
+                "Difficulty spikes are frequently solvable by understanding job synergy and adapting party composition, turning challenge into a mastery and tactical-planning problem rather than simple repetition.",
+                "Pixel Remaster quality-of-life options reduce navigation and grinding friction while preserving the underlying job system, improving pacing without flattening its mechanical depth."
+              ],
+              "preserved_not_fit_evidence": []
+            },
+            "migration_result_changed": true,
+            "migration_fit_outcome_changed": false,
+            "fit_level": "strong",
+            "confidence": "high",
+            "positive_evidence": [
+              "Freely changing jobs, mastering abilities and combining skills across classes creates a highly expressive development system with persistent new mechanical possibilities, directly matching the profile's strongest progression signal.",
+              "Difficulty spikes are frequently solvable by understanding job synergy and adapting party composition, turning challenge into a mastery and tactical-planning problem rather than simple repetition.",
+              "Pixel Remaster quality-of-life options reduce navigation and grinding friction while preserving the underlying job system, improving pacing without flattening its mechanical depth."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 89,
+              "development_variety": 93,
+              "structure_pacing_direction": 78,
+              "identity_hooks": 68,
+              "breadth_of_match": 87
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 4
+                },
+                {
+                  "kind": "conflict",
+                  "index": 0
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Резкие участки сложности могут потребовать сменить профессии и комбинации умений; это скорее проверка понимания системы, чем самостоятельный минус, но игроку, который долго держится за одну сборку, придётся перестраиваться.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    },
+                    {
+                      "kind": "conflict",
+                      "index": 0
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "История легче и проще, чем в четвёртой и шестой частях, поэтому сюжетный крючок здесь слабее выдающейся системы профессий.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Pixel Remaster не содержит часть профессий, подземелий и бонусного контента поздних GBA-версий; ценность этих дополнений спорна, но по объёму это менее полная ветка игры.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          }
         }
       ],
       "migration_provenance": {
@@ -14158,20 +15233,403 @@
       },
       "migration_result_changed": true,
       "migration_fit_outcome_changed": false,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "e4ef861d9140a4648fefeb1dedd9003efc5bd95d7314fa9c185643db1b1b2623",
+          "family_id": "game:1173810",
+          "taste_subject_key": "App_1173810",
+          "appid": "1173810",
+          "taste_fingerprint": "6428d8cdc9e3490a839ebf0362c98781cd9482eb40299b7f086259a13ff6f3c4",
+          "candidate_context_sha256": "26927c007eeffea581b7c5d1711a925f0f01d0926278ec5f12eda17ab26b5061",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "53bd1a19d297a9289d39174e5632a826410dd4411448002fa0c809dc6f06815c",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "0addda5cf264fa9957e7096dc66fcf0933d12083b8e2f92c8b5c5e92df589877",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:31:04+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1173810:d408a0bd25149a19",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274",
+            "prior_accepted_at_utc": "2026-09-28T10:35:25+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "high",
+            "prior_taste_factors": {
+              "gameplay_mastery": 89,
+              "development_variety": 93,
+              "structure_pacing_direction": 78,
+              "identity_hooks": 68,
+              "breadth_of_match": 87
+            },
+            "prior_positive_evidence": [
+              "Freely changing jobs, mastering abilities and combining skills across classes creates a highly expressive development system with persistent new mechanical possibilities, directly matching the profile's strongest progression signal.",
+              "Difficulty spikes are frequently solvable by understanding job synergy and adapting party composition, turning challenge into a mastery and tactical-planning problem rather than simple repetition.",
+              "Pixel Remaster quality-of-life options reduce navigation and grinding friction while preserving the underlying job system, improving pacing without flattening its mechanical depth."
+            ],
+            "prior_work_id": "f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "Freely changing jobs, mastering abilities and combining skills across classes creates a highly expressive development system.",
+            "Difficulty spikes are usually solvable through job synergy and party adaptation rather than raw repetition.",
+            "Pixel Remaster quality-of-life options reduce navigation and grinding friction without flattening the job system."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 90,
+            "development_variety": 94,
+            "structure_pacing_direction": 80,
+            "identity_hooks": 69,
+            "breadth_of_match": 88
+          },
+          "score_findings": [
+            {
+              "finding_id": "ff5-job-depth",
+              "text_ru": "Свободная смена профессий, освоение способностей и перенос умений между классами дают очень выразительную систему билдов, где почти каждый новый навык открывает новые сочетания.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Тебе особенно нравится прогрессия, когда улучшения заметно меняют игровой набор."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Глубокое освоение системы — один из твоих сильнейших положительных сигналов."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 90
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 94
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 88
+                }
+              ]
+            },
+            {
+              "finding_id": "ff5-adaptive-difficulty",
+              "text_ru": "Резкие сложные встречи обычно решаются пониманием синергии профессий и перестройкой группы, поэтому испытание чаще поощряет освоение, а не бессодержательные повторы.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Тебе нравится сложность, когда она раскрывает способы прохождения и рост навыка."
+                },
+                {
+                  "json_pointer": "/taste_profile/5/pattern",
+                  "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+                  "match_text_ru": "Понятная причина менять подход помогает тебе сохранять ощущение движения вперёд."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 80
+                }
+              ]
+            },
+            {
+              "finding_id": "ff5-story-tradeoff",
+              "text_ru": "Приключение и герои остаются симпатичными, но сюжет проще и легче, чем в IV или VI, поэтому эмоциональная идентичность здесь уступает механической.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/3/pattern",
+                  "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+                  "match_text_ru": "Сюжет и персонажи для тебя важны, но их вес зависит от силы игрового слоя."
+                },
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Яркая идентичность обычно усиливает запоминаемость."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "qualifies",
+                  "normalized_value": 69
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 4
+              },
+              {
+                "kind": "conflict",
+                "index": 0
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Если не адаптировать профессии и способности, отдельные встречи дают резкие скачки сложности.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "conflict",
+                    "index": 0
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Сюжет заметно легче и проще, чем в Final Fantasy IV или VI.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Pixel Remaster не содержит часть профессий, подземелий и бонусного контента более поздних GBA-версий.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 4
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1173810:d408a0bd25149a19",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:31:04+00:00",
+        "completed_revision_promoted": true
+      },
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1173810:d408a0bd25149a19",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274",
+        "prior_accepted_at_utc": "2026-09-28T10:35:25+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "high",
+        "prior_taste_factors": {
+          "gameplay_mastery": 89,
+          "development_variety": 93,
+          "structure_pacing_direction": 78,
+          "identity_hooks": 68,
+          "breadth_of_match": 87
+        },
+        "prior_positive_evidence": [
+          "Freely changing jobs, mastering abilities and combining skills across classes creates a highly expressive development system with persistent new mechanical possibilities, directly matching the profile's strongest progression signal.",
+          "Difficulty spikes are frequently solvable by understanding job synergy and adapting party composition, turning challenge into a mastery and tactical-planning problem rather than simple repetition.",
+          "Pixel Remaster quality-of-life options reduce navigation and grinding friction while preserving the underlying job system, improving pacing without flattening its mechanical depth."
+        ],
+        "prior_work_id": "f759765f152db3bbf6d011e34ff9e410c75de1f40be0baa6412f67cdb973e693"
+      },
       "fit_level": "strong",
       "confidence": "high",
       "positive_evidence": [
-        "Freely changing jobs, mastering abilities and combining skills across classes creates a highly expressive development system with persistent new mechanical possibilities, directly matching the profile's strongest progression signal.",
-        "Difficulty spikes are frequently solvable by understanding job synergy and adapting party composition, turning challenge into a mastery and tactical-planning problem rather than simple repetition.",
-        "Pixel Remaster quality-of-life options reduce navigation and grinding friction while preserving the underlying job system, improving pacing without flattening its mechanical depth."
+        "Freely changing jobs, mastering abilities and combining skills across classes creates a highly expressive development system.",
+        "Difficulty spikes are usually solvable through job synergy and party adaptation rather than raw repetition.",
+        "Pixel Remaster quality-of-life options reduce navigation and grinding friction without flattening the job system."
       ],
       "taste_factors": {
-        "gameplay_mastery": 89,
-        "development_variety": 93,
-        "structure_pacing_direction": 78,
-        "identity_hooks": 68,
-        "breadth_of_match": 87
+        "gameplay_mastery": 90,
+        "development_variety": 94,
+        "structure_pacing_direction": 80,
+        "identity_hooks": 69,
+        "breadth_of_match": 88
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "ff5-job-depth",
+          "text_ru": "Свободная смена профессий, освоение способностей и перенос умений между классами дают очень выразительную систему билдов, где почти каждый новый навык открывает новые сочетания.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Тебе особенно нравится прогрессия, когда улучшения заметно меняют игровой набор."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Глубокое освоение системы — один из твоих сильнейших положительных сигналов."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 90
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 94
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 88
+            }
+          ]
+        },
+        {
+          "finding_id": "ff5-adaptive-difficulty",
+          "text_ru": "Резкие сложные встречи обычно решаются пониманием синергии профессий и перестройкой группы, поэтому испытание чаще поощряет освоение, а не бессодержательные повторы.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Тебе нравится сложность, когда она раскрывает способы прохождения и рост навыка."
+            },
+            {
+              "json_pointer": "/taste_profile/5/pattern",
+              "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+              "match_text_ru": "Понятная причина менять подход помогает тебе сохранять ощущение движения вперёд."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 80
+            }
+          ]
+        },
+        {
+          "finding_id": "ff5-story-tradeoff",
+          "text_ru": "Приключение и герои остаются симпатичными, но сюжет проще и легче, чем в IV или VI, поэтому эмоциональная идентичность здесь уступает механической.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/3/pattern",
+              "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+              "match_text_ru": "Сюжет и персонажи для тебя важны, но их вес зависит от силы игрового слоя."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Яркая идентичность обычно усиливает запоминаемость."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "qualifies",
+              "normalized_value": 69
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -14197,7 +15655,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Резкие участки сложности могут потребовать сменить профессии и комбинации умений; это скорее проверка понимания системы, чем самостоятельный минус, но игроку, который долго держится за одну сборку, придётся перестраиваться.",
+            "text_ru": "Если не адаптировать профессии и способности, отдельные встречи дают резкие скачки сложности.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -14212,7 +15670,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "История легче и проще, чем в четвёртой и шестой частях, поэтому сюжетный крючок здесь слабее выдающейся системы профессий.",
+            "text_ru": "Сюжет заметно легче и проще, чем в Final Fantasy IV или VI.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -14223,7 +15681,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Pixel Remaster не содержит часть профессий, подземелий и бонусного контента поздних GBA-версий; ценность этих дополнений спорна, но по объёму это менее полная ветка игры.",
+            "text_ru": "Pixel Remaster не содержит часть профессий, подземелий и бонусного контента более поздних GBA-версий.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -18184,9 +19642,9 @@
       }
     },
     "game:1173790": {
-      "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
-      "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
-      "work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "d7c6ed888b0f4f418a16a941b59950a46625c6b91cad69f31bb6e86c2fcbff66",
       "family_id": "game:1173790",
       "taste_subject_key": "App_1173790",
       "appid": "1173790",
@@ -18198,8 +19656,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-28T10:34:13+00:00",
-      "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+      "accepted_at_utc": "2026-09-30T06:31:04+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "d821a5a61eccf93cf54a7e77695f43e87326769d79c28aaa9c083e19b951ddc7",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -18215,8 +19673,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6",
-      "work_mode": "legacy_full_reanalysis",
+      "authorization_id": "1adbf2cd15f819792520cd80aeded507b4a964a58c3416003e0818374e9feed6",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -18555,6 +20013,388 @@
             },
             "base_support_compatible": null
           }
+        },
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:31:04+00:00",
+          "state": {
+            "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+            "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+            "work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
+            "family_id": "game:1173790",
+            "taste_subject_key": "App_1173790",
+            "appid": "1173790",
+            "taste_fingerprint": "5bfdf7cb10a83b61c25a5ad772424a299486dddde5758d4da06e5dd15d3f727d",
+            "candidate_context_sha256": "eb4e62ba1d6f1390320f4f855e21eff1ebdd0ff26fe07036e6241fcfddb12ddc",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-28T10:34:13+00:00",
+            "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+            "dossier_content_sha256": "d821a5a61eccf93cf54a7e77695f43e87326769d79c28aaa9c083e19b951ddc7",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6",
+            "work_mode": "legacy_full_reanalysis",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+              "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+              "work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
+              "family_id": "game:1173790",
+              "taste_subject_key": "App_1173790",
+              "appid": "1173790",
+              "taste_fingerprint": "5bfdf7cb10a83b61c25a5ad772424a299486dddde5758d4da06e5dd15d3f727d",
+              "candidate_context_sha256": "eb4e62ba1d6f1390320f4f855e21eff1ebdd0ff26fe07036e6241fcfddb12ddc",
+              "dossier_content_sha256": "d821a5a61eccf93cf54a7e77695f43e87326769d79c28aaa9c083e19b951ddc7",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "6285430c70b583b548e3a24c8ad56d7115fc751f7fb0d0f0882288d6a7b1f3fa",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-27T17:33:32+00:00",
+              "run_start_anchor_commit": "850fd0ab32ce67271497ae9bfafe80a8ab83fdce",
+              "run_start_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "run_started_at_utc": "2026-09-27T17:10:54+00:00",
+              "work_authority_commit": "f8f8370bf647edf05db79eeb4ec82caeee3d5148",
+              "fit_level": "strong",
+              "confidence": "medium",
+              "positive_evidence": [
+                "The job system supports frequent class changes and experimentation with party roles, directly matching the profile's very strong preference for meaningful development and new mechanical possibilities.",
+                "Varied dungeons, several forms of transport and broader world changes make exploration more dynamic than the earlier Pixel Remasters instead of repeating one static structure.",
+                "Late-game difficulty can reward thoughtful job setups, giving the progression system a mastery payoff beyond collecting classes."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 77,
+                "development_variety": 84,
+                "structure_pacing_direction": 72,
+                "identity_hooks": 64,
+                "breadth_of_match": 79
+              },
+              "base_support_compatible": null
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "legacy_reanalysis_attempts": [
+              {
+                "semantic_generation_id": "4596b03979956f78c308551a75fdbe9f432ed3f80925c29b0835bdb052222033",
+                "profile_pin_sha256": "cb64c290e037aade65d4269ae2ebe54b681367cad899d7dd9c9838603370f358",
+                "work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
+                "family_id": "game:1173790",
+                "taste_subject_key": "App_1173790",
+                "appid": "1173790",
+                "taste_fingerprint": "5bfdf7cb10a83b61c25a5ad772424a299486dddde5758d4da06e5dd15d3f727d",
+                "candidate_context_sha256": "eb4e62ba1d6f1390320f4f855e21eff1ebdd0ff26fe07036e6241fcfddb12ddc",
+                "dossier_content_sha256": "d821a5a61eccf93cf54a7e77695f43e87326769d79c28aaa9c083e19b951ddc7",
+                "dossier_compatibility_binding": {
+                  "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                  "evidence_contract_version": 2,
+                  "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                  "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                  "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                  "worker_schema_version": 2,
+                  "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                  "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                  "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                  "dossier_schema_version": 2,
+                  "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                  "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+                },
+                "authorization_id": "cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6",
+                "work_mode": "legacy_full_reanalysis",
+                "recovery_authorization_id": null,
+                "recovery_reason": null,
+                "recovery_condition_binding": null,
+                "migration_provenance": {
+                  "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+                  "migration_target_id": "legacy-full-reanalysis-01:375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
+                  "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+                  "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+                  "prior_outcome": "analyzed_fit",
+                  "prior_fit_level": "strong",
+                  "prior_confidence": "medium",
+                  "prior_taste_factors": {
+                    "gameplay_mastery": 77,
+                    "development_variety": 84,
+                    "structure_pacing_direction": 72,
+                    "identity_hooks": 64,
+                    "breadth_of_match": 79
+                  },
+                  "prior_not_fit_basis": null,
+                  "prior_work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
+                  "prior_authorization_id": "6285430c70b583b548e3a24c8ad56d7115fc751f7fb0d0f0882288d6a7b1f3fa",
+                  "prior_accepted_at_utc": "2026-09-27T17:33:32+00:00",
+                  "preserved_positive_evidence": [
+                    "The job system supports frequent class changes and experimentation with party roles, directly matching the profile's very strong preference for meaningful development and new mechanical possibilities.",
+                    "Varied dungeons, several forms of transport and broader world changes make exploration more dynamic than the earlier Pixel Remasters instead of repeating one static structure.",
+                    "Late-game difficulty can reward thoughtful job setups, giving the progression system a mastery payoff beyond collecting classes."
+                  ],
+                  "preserved_not_fit_evidence": []
+                },
+                "outcome": "analyzed_fit",
+                "analysis_issue_code": null,
+                "attempt_consumption_source": "accepted_result",
+                "accepted_at_utc": "2026-09-28T10:34:13+00:00",
+                "run_start_anchor_commit": "f4e158c1557a5d95c819a90e42c0778ad1d77ede",
+                "run_start_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "run_started_at_utc": "2026-09-28T10:13:37+00:00",
+                "work_authority_commit": "637b5e9cdda16f73e31aac05b09b99c88f9f5ce9",
+                "fit_level": "strong",
+                "confidence": "medium",
+                "positive_evidence": [
+                  "The job system supports frequent class changes and experimentation with party roles, directly matching the profile's very strong preference for meaningful development and new mechanical possibilities.",
+                  "Varied dungeons, several forms of transport and broader world changes make exploration more dynamic than the earlier Pixel Remasters instead of repeating one static structure.",
+                  "Late-game difficulty can reward thoughtful job setups, giving the progression system a mastery payoff beyond collecting classes."
+                ],
+                "taste_factors": {
+                  "gameplay_mastery": 76,
+                  "development_variety": 82,
+                  "structure_pacing_direction": 71,
+                  "identity_hooks": 62,
+                  "breadth_of_match": 77
+                },
+                "base_support_compatible": null,
+                "negative_assessment": {
+                  "status": "completed",
+                  "evaluated_candidate_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 0
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    },
+                    {
+                      "kind": "observation",
+                      "index": 4
+                    },
+                    {
+                      "kind": "conflict",
+                      "index": 0
+                    }
+                  ],
+                  "findings": [
+                    {
+                      "disposition": "confirmed_personal_risk",
+                      "risk_code": "unchanged_repetition",
+                      "text_ru": "Свободная смена профессий даёт сильное разнообразие, но развитие большого числа классов способно потребовать повторяющегося гринда; это реальный риск именно при желании активно экспериментировать со всей системой.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 0
+                        },
+                        {
+                          "kind": "conflict",
+                          "index": 0
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Поздний скачок сложности может наказать слабую комбинацию профессий, однако он в основном проверяет понимание системы и потому частично соответствует предпочтению мастерства.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 2
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "История и герои проще и менее выражены, чем во второй части, поэтому повествовательный крючок слабее системного.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 3
+                        }
+                      ]
+                    },
+                    {
+                      "disposition": "caution",
+                      "risk_code": null,
+                      "text_ru": "Часть профессий открывается поздно или дублирует другие, поэтому фактическая полезность большого списка классов ниже его номинального разнообразия.",
+                      "evidence_refs": [
+                        {
+                          "kind": "observation",
+                          "index": 4
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "migration_result_changed": true,
+                "migration_fit_outcome_changed": false
+              }
+            ],
+            "legacy_reanalysis_status": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
+              "attempt_outcome": "analyzed_fit",
+              "accepted_at_utc": "2026-09-28T10:34:13+00:00",
+              "completed_revision_promoted": true
+            },
+            "migration_provenance": {
+              "migration_id": "deep-legacy-full-reanalysis-with-preserved-positives-01",
+              "migration_target_id": "legacy-full-reanalysis-01:375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
+              "migration_authority_commit": "97d7798dfbf113ff0c3c4e71a75c7d50b39f3b3a",
+              "migration_frozen_at_utc": "2026-09-28T04:01:33Z",
+              "prior_outcome": "analyzed_fit",
+              "prior_fit_level": "strong",
+              "prior_confidence": "medium",
+              "prior_taste_factors": {
+                "gameplay_mastery": 77,
+                "development_variety": 84,
+                "structure_pacing_direction": 72,
+                "identity_hooks": 64,
+                "breadth_of_match": 79
+              },
+              "prior_not_fit_basis": null,
+              "prior_work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5",
+              "prior_authorization_id": "6285430c70b583b548e3a24c8ad56d7115fc751f7fb0d0f0882288d6a7b1f3fa",
+              "prior_accepted_at_utc": "2026-09-27T17:33:32+00:00",
+              "preserved_positive_evidence": [
+                "The job system supports frequent class changes and experimentation with party roles, directly matching the profile's very strong preference for meaningful development and new mechanical possibilities.",
+                "Varied dungeons, several forms of transport and broader world changes make exploration more dynamic than the earlier Pixel Remasters instead of repeating one static structure.",
+                "Late-game difficulty can reward thoughtful job setups, giving the progression system a mastery payoff beyond collecting classes."
+              ],
+              "preserved_not_fit_evidence": []
+            },
+            "migration_result_changed": true,
+            "migration_fit_outcome_changed": false,
+            "fit_level": "strong",
+            "confidence": "medium",
+            "positive_evidence": [
+              "The job system supports frequent class changes and experimentation with party roles, directly matching the profile's very strong preference for meaningful development and new mechanical possibilities.",
+              "Varied dungeons, several forms of transport and broader world changes make exploration more dynamic than the earlier Pixel Remasters instead of repeating one static structure.",
+              "Late-game difficulty can reward thoughtful job setups, giving the progression system a mastery payoff beyond collecting classes."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 76,
+              "development_variety": 82,
+              "structure_pacing_direction": 71,
+              "identity_hooks": 62,
+              "breadth_of_match": 77
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                },
+                {
+                  "kind": "observation",
+                  "index": 4
+                },
+                {
+                  "kind": "conflict",
+                  "index": 0
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "unchanged_repetition",
+                  "text_ru": "Свободная смена профессий даёт сильное разнообразие, но развитие большого числа классов способно потребовать повторяющегося гринда; это реальный риск именно при желании активно экспериментировать со всей системой.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 0
+                    },
+                    {
+                      "kind": "conflict",
+                      "index": 0
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Поздний скачок сложности может наказать слабую комбинацию профессий, однако он в основном проверяет понимание системы и потому частично соответствует предпочтению мастерства.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "История и герои проще и менее выражены, чем во второй части, поэтому повествовательный крючок слабее системного.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Часть профессий открывается поздно или дублирует другие, поэтому фактическая полезность большого списка классов ниже его номинального разнообразия.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          }
         }
       ],
       "migration_provenance": {
@@ -18585,20 +20425,423 @@
       },
       "migration_result_changed": true,
       "migration_fit_outcome_changed": false,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "d7c6ed888b0f4f418a16a941b59950a46625c6b91cad69f31bb6e86c2fcbff66",
+          "family_id": "game:1173790",
+          "taste_subject_key": "App_1173790",
+          "appid": "1173790",
+          "taste_fingerprint": "5bfdf7cb10a83b61c25a5ad772424a299486dddde5758d4da06e5dd15d3f727d",
+          "candidate_context_sha256": "eb4e62ba1d6f1390320f4f855e21eff1ebdd0ff26fe07036e6241fcfddb12ddc",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "d821a5a61eccf93cf54a7e77695f43e87326769d79c28aaa9c083e19b951ddc7",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "1adbf2cd15f819792520cd80aeded507b4a964a58c3416003e0818374e9feed6",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:31:04+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1173790:cf10282009a9fba0",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6",
+            "prior_accepted_at_utc": "2026-09-28T10:34:13+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 76,
+              "development_variety": 82,
+              "structure_pacing_direction": 71,
+              "identity_hooks": 62,
+              "breadth_of_match": 77
+            },
+            "prior_positive_evidence": [
+              "The job system supports frequent class changes and experimentation with party roles, directly matching the profile's very strong preference for meaningful development and new mechanical possibilities.",
+              "Varied dungeons, several forms of transport and broader world changes make exploration more dynamic than the earlier Pixel Remasters instead of repeating one static structure.",
+              "Late-game difficulty can reward thoughtful job setups, giving the progression system a mastery payoff beyond collecting classes."
+            ],
+            "prior_work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "medium",
+          "positive_evidence": [
+            "The job system supports frequent class changes and experimentation with party roles.",
+            "Varied dungeons, multiple forms of transport and world changes make the adventure structure more dynamic than the earlier entries."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 78,
+            "development_variety": 84,
+            "structure_pacing_direction": 72,
+            "identity_hooks": 63,
+            "breadth_of_match": 79
+          },
+          "score_findings": [
+            {
+              "finding_id": "ff3-jobs",
+              "text_ru": "Свободная смена профессий и ролей позволяет постоянно перестраивать группу и осваивать новые сочетания, что хорошо попадает в твою любовь к развивающейся системе.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Тебе особенно нравится прогрессия, когда выбор заметно меняет возможности."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Освоение разных систем и ролей — сильный плюс для тебя."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 78
+                },
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 84
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 79
+                }
+              ]
+            },
+            {
+              "finding_id": "ff3-adventure",
+              "text_ru": "Разные подземелья, виды транспорта и изменения мира делают путешествие заметно более разнообразным и дают ясное ощущение расширения приключения.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Тебе важно, чтобы игра по ходу прохождения реально менялась и расширялась."
+                },
+                {
+                  "json_pointer": "/taste_profile/5/pattern",
+                  "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+                  "match_text_ru": "Исследование лучше работает для тебя, когда сохраняется понятный вектор."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 72
+                }
+              ]
+            },
+            {
+              "finding_id": "ff3-story-light",
+              "text_ru": "Классический лёгкий сюжет и слабо выраженные герои дают меньше характерных эмоциональных крючков, чем более персонажные части серии.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/3/pattern",
+                  "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+                  "match_text_ru": "Сюжет и персонажи для тебя важны как отдельный источник вовлечённости."
+                },
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Яркий собственный крючок помогает игре запомниться."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "qualifies",
+                  "normalized_value": 63
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 0
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              },
+              {
+                "kind": "observation",
+                "index": 4
+              },
+              {
+                "kind": "conflict",
+                "index": 0
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Большой выбор профессий иногда создаёт гринд и перегруз выбором.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 0
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Поздний скачок сложности может наказать слабую конфигурацию профессий, хотя именно адаптация состава обычно решает проблему.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "История и характеризация героев проще, чем в более поздних частях.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Часть профессий открывается поздно или ощущается избыточной, поэтому реальная полезность всего набора ниже заявленной широты.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 4
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Гибкость профессий одновременно является сильной стороной и источником гринда/перегруза.",
+                "evidence_refs": [
+                  {
+                    "kind": "conflict",
+                    "index": 0
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1173790:cf10282009a9fba0",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:31:04+00:00",
+        "completed_revision_promoted": true
+      },
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1173790:cf10282009a9fba0",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6",
+        "prior_accepted_at_utc": "2026-09-28T10:34:13+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 76,
+          "development_variety": 82,
+          "structure_pacing_direction": 71,
+          "identity_hooks": 62,
+          "breadth_of_match": 77
+        },
+        "prior_positive_evidence": [
+          "The job system supports frequent class changes and experimentation with party roles, directly matching the profile's very strong preference for meaningful development and new mechanical possibilities.",
+          "Varied dungeons, several forms of transport and broader world changes make exploration more dynamic than the earlier Pixel Remasters instead of repeating one static structure.",
+          "Late-game difficulty can reward thoughtful job setups, giving the progression system a mastery payoff beyond collecting classes."
+        ],
+        "prior_work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5"
+      },
       "fit_level": "strong",
       "confidence": "medium",
       "positive_evidence": [
-        "The job system supports frequent class changes and experimentation with party roles, directly matching the profile's very strong preference for meaningful development and new mechanical possibilities.",
-        "Varied dungeons, several forms of transport and broader world changes make exploration more dynamic than the earlier Pixel Remasters instead of repeating one static structure.",
-        "Late-game difficulty can reward thoughtful job setups, giving the progression system a mastery payoff beyond collecting classes."
+        "The job system supports frequent class changes and experimentation with party roles.",
+        "Varied dungeons, multiple forms of transport and world changes make the adventure structure more dynamic than the earlier entries."
       ],
       "taste_factors": {
-        "gameplay_mastery": 76,
-        "development_variety": 82,
-        "structure_pacing_direction": 71,
-        "identity_hooks": 62,
-        "breadth_of_match": 77
+        "gameplay_mastery": 78,
+        "development_variety": 84,
+        "structure_pacing_direction": 72,
+        "identity_hooks": 63,
+        "breadth_of_match": 79
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "ff3-jobs",
+          "text_ru": "Свободная смена профессий и ролей позволяет постоянно перестраивать группу и осваивать новые сочетания, что хорошо попадает в твою любовь к развивающейся системе.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Тебе особенно нравится прогрессия, когда выбор заметно меняет возможности."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Освоение разных систем и ролей — сильный плюс для тебя."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 78
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 84
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 79
+            }
+          ]
+        },
+        {
+          "finding_id": "ff3-adventure",
+          "text_ru": "Разные подземелья, виды транспорта и изменения мира делают путешествие заметно более разнообразным и дают ясное ощущение расширения приключения.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Тебе важно, чтобы игра по ходу прохождения реально менялась и расширялась."
+            },
+            {
+              "json_pointer": "/taste_profile/5/pattern",
+              "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+              "match_text_ru": "Исследование лучше работает для тебя, когда сохраняется понятный вектор."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 72
+            }
+          ]
+        },
+        {
+          "finding_id": "ff3-story-light",
+          "text_ru": "Классический лёгкий сюжет и слабо выраженные герои дают меньше характерных эмоциональных крючков, чем более персонажные части серии.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 3
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/3/pattern",
+              "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+              "match_text_ru": "Сюжет и персонажи для тебя важны как отдельный источник вовлечённости."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Яркий собственный крючок помогает игре запомниться."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "qualifies",
+              "normalized_value": 63
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -18626,16 +20869,12 @@
         ],
         "findings": [
           {
-            "disposition": "confirmed_personal_risk",
-            "risk_code": "unchanged_repetition",
-            "text_ru": "Свободная смена профессий даёт сильное разнообразие, но развитие большого числа классов способно потребовать повторяющегося гринда; это реальный риск именно при желании активно экспериментировать со всей системой.",
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Большой выбор профессий иногда создаёт гринд и перегруз выбором.",
             "evidence_refs": [
               {
                 "kind": "observation",
-                "index": 0
-              },
-              {
-                "kind": "conflict",
                 "index": 0
               }
             ]
@@ -18643,7 +20882,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Поздний скачок сложности может наказать слабую комбинацию профессий, однако он в основном проверяет понимание системы и потому частично соответствует предпочтению мастерства.",
+            "text_ru": "Поздний скачок сложности может наказать слабую конфигурацию профессий, хотя именно адаптация состава обычно решает проблему.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -18654,7 +20893,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "История и герои проще и менее выражены, чем во второй части, поэтому повествовательный крючок слабее системного.",
+            "text_ru": "История и характеризация героев проще, чем в более поздних частях.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -18665,11 +20904,22 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Часть профессий открывается поздно или дублирует другие, поэтому фактическая полезность большого списка классов ниже его номинального разнообразия.",
+            "text_ru": "Часть профессий открывается поздно или ощущается избыточной, поэтому реальная полезность всего набора ниже заявленной широты.",
             "evidence_refs": [
               {
                 "kind": "observation",
                 "index": 4
+              }
+            ]
+          },
+          {
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Гибкость профессий одновременно является сильной стороной и источником гринда/перегруза.",
+            "evidence_refs": [
+              {
+                "kind": "conflict",
+                "index": 0
               }
             ]
           }
@@ -23787,7 +26037,7 @@
     },
     "game:1343240": {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
       "work_id": "3cbaa437a3f192ed18503b9fce095a16eaba045416d0229b5183e7f949a6fb7f",
       "family_id": "game:1343240",
       "taste_subject_key": "App_1343240",
@@ -23801,8 +26051,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-28T16:52:31+00:00",
-      "work_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+      "accepted_at_utc": "2026-09-30T06:31:04+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "4df7490cd06a7554ea7eb3efa09e76a1dee1e53b52848f0dc3b0c5c9e8c27058",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -23818,8 +26068,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "3d71e18361a3abec5756460cdd500751b8b3411219d1c4d5883ee88bb509d929",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "9e6a41c30a8b79cd57fc5042bb2821aeed91c664ef98a6fdc3af5dc8a29f5485",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -23948,20 +26198,670 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "3cbaa437a3f192ed18503b9fce095a16eaba045416d0229b5183e7f949a6fb7f",
+          "family_id": "game:1343240",
+          "taste_subject_key": "App_1343240",
+          "appid": "1343240",
+          "taste_fingerprint": "1e2e297567c8675d94460b44ab268da5a19e19bade623fdf38df9c56e2a296e3",
+          "candidate_context_sha256": "6ddbc27b25046948eca43104fff8aff9190caeca8cf3a7da25f7fb518d627d67",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "4df7490cd06a7554ea7eb3efa09e76a1dee1e53b52848f0dc3b0c5c9e8c27058",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "9e6a41c30a8b79cd57fc5042bb2821aeed91c664ef98a6fdc3af5dc8a29f5485",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:31:04+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1343240:3d71e18361a3abec",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "3d71e18361a3abec5756460cdd500751b8b3411219d1c4d5883ee88bb509d929",
+            "prior_accepted_at_utc": "2026-09-28T16:52:31+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "high",
+            "prior_taste_factors": {
+              "gameplay_mastery": 94,
+              "development_variety": 78,
+              "structure_pacing_direction": 75,
+              "identity_hooks": 84,
+              "breadth_of_match": 87
+            },
+            "prior_positive_evidence": [
+              "Fast sword-and-claw combat, parries, wound pressure and plague weapons create a mastery-heavy aggressive rhythm that strongly matches the profile's preference for learning timing and execution.",
+              "Talents and plague weapons support switching between parry, dodge and weapon-focused approaches, providing meaningful experimentation during the compact campaign.",
+              "The plague-doctor art direction, dark atmosphere and music give the game a clear identity beyond its mechanical fit."
+            ],
+            "prior_work_id": "3cbaa437a3f192ed18503b9fce095a16eaba045416d0229b5183e7f949a6fb7f"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "Fast sword-and-claw combat, parries, wound pressure and plague weapons create a mastery-heavy aggressive rhythm.",
+            "Talents and plague weapons support switching between parry, dodge and weapon-focused approaches.",
+            "The plague-doctor visual identity, atmosphere and music give the game a distinct authored hook."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 95,
+            "development_variety": 78,
+            "structure_pacing_direction": 75,
+            "identity_hooks": 86,
+            "breadth_of_match": 88
+          },
+          "score_findings": [
+            {
+              "finding_id": "thymesia-combat",
+              "text_ru": "Быстрый бой мечом и когтем, парирования, заживление ран и plague-оружие строят игру вокруг таймингов и агрессивного освоения — это очень сильное совпадение с твоим профилем мастерства.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Механическое мастерство — один из сильнейших положительных сигналов твоего профиля."
+                },
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Тебе нравится менять подход под механику противника, а не повторять один шаблон."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 95
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 88
+                }
+              ]
+            },
+            {
+              "finding_id": "thymesia-builds",
+              "text_ru": "Таланты и plague-оружие позволяют переключаться между парированием, уклонением и оружейными подходами, поэтому компактная кампания всё же даёт заметное пространство для экспериментов.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Тебе нравится прогрессия, когда новые возможности меняют способ игры."
+                },
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Ты ценишь развитие игрового опыта по мере прохождения."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 78
+                }
+              ]
+            },
+            {
+              "finding_id": "thymesia-compact-identity",
+              "text_ru": "Короткая структура держит фокус на боях, а образ чумного доктора, тёмная атмосфера и музыка дают игре собственное лицо даже при небольшом объёме.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 3
+                },
+                {
+                  "kind": "observation",
+                  "index": 5
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Яркая художественная идентичность сильно повышает шанс, что игра запомнится."
+                },
+                {
+                  "json_pointer": "/taste_profile/8/pattern",
+                  "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+                  "match_text_ru": "Повторяемость для тебя терпима, пока сильный основной цикл не успевает выдохнуться."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "supports",
+                  "normalized_value": 75
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 86
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              },
+              {
+                "kind": "observation",
+                "index": 4
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "После освоения основной системы потолок долгосрочных билдов сравнительно неглубок.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Восприятие сложности резко зависит от того, насколько быстро освоены парирование и перо; до этого игра может казаться чрезмерно наказующей.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "Небольшое число окружений и повторное посещение уровней с вариациями могут начать ощущаться тонко после полного освоения боя.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Уровни, разнообразие врагов и подача сюжета получают более слабые отзывы, чем сама боевая система.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 4
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1343240:3d71e18361a3abec",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:31:04+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:31:04+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+            "work_id": "3cbaa437a3f192ed18503b9fce095a16eaba045416d0229b5183e7f949a6fb7f",
+            "family_id": "game:1343240",
+            "taste_subject_key": "App_1343240",
+            "appid": "1343240",
+            "taste_fingerprint": "1e2e297567c8675d94460b44ab268da5a19e19bade623fdf38df9c56e2a296e3",
+            "candidate_context_sha256": "6ddbc27b25046948eca43104fff8aff9190caeca8cf3a7da25f7fb518d627d67",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-28T16:52:31+00:00",
+            "work_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+            "dossier_content_sha256": "4df7490cd06a7554ea7eb3efa09e76a1dee1e53b52848f0dc3b0c5c9e8c27058",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "3d71e18361a3abec5756460cdd500751b8b3411219d1c4d5883ee88bb509d929",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "6a91b6840ccea5729af09475b71d174ab10047e324f27a65e3fab43a4c83e3f4",
+              "work_id": "3cbaa437a3f192ed18503b9fce095a16eaba045416d0229b5183e7f949a6fb7f",
+              "family_id": "game:1343240",
+              "taste_subject_key": "App_1343240",
+              "appid": "1343240",
+              "taste_fingerprint": "1e2e297567c8675d94460b44ab268da5a19e19bade623fdf38df9c56e2a296e3",
+              "candidate_context_sha256": "6ddbc27b25046948eca43104fff8aff9190caeca8cf3a7da25f7fb518d627d67",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "4df7490cd06a7554ea7eb3efa09e76a1dee1e53b52848f0dc3b0c5c9e8c27058",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "3d71e18361a3abec5756460cdd500751b8b3411219d1c4d5883ee88bb509d929",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-28T16:52:31+00:00",
+              "run_start_anchor_commit": "06ec757a4eae872e5173977f8a0e4633562fb7ac",
+              "run_start_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+              "run_started_at_utc": "2026-09-28T16:43:36+00:00",
+              "work_authority_commit": "3d4915a2da67a3643f9a23c4a433b755ed2b07c0",
+              "fit_level": "strong",
+              "confidence": "high",
+              "positive_evidence": [
+                "Fast sword-and-claw combat, parries, wound pressure and plague weapons create a mastery-heavy aggressive rhythm that strongly matches the profile's preference for learning timing and execution.",
+                "Talents and plague weapons support switching between parry, dodge and weapon-focused approaches, providing meaningful experimentation during the compact campaign.",
+                "The plague-doctor art direction, dark atmosphere and music give the game a clear identity beyond its mechanical fit."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 94,
+                "development_variety": 78,
+                "structure_pacing_direction": 75,
+                "identity_hooks": 84,
+                "breadth_of_match": 87
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 4
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "После освоения основных талантов и plague weapons потолок долгосрочных сборок сравнительно невысок, поэтому повторные прохождения дают меньше нового системного развития.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Сложность резко меняется после понимания парирования и feather-механики; это скорее сильный сигнал мастерства, чем минус, но старт может быть заметно жёстче до момента освоения.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Локаций немного, а часть уровней посещается повторно с вариациями. Короткая длительность снижает риск усталости, но после освоения боя содержание может ощущаться тонким.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Дизайн уровней, разнообразие врагов и подача истории слабее боевой системы, поэтому основная ценность игры лежит именно в механическом освоении.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 4
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "strong",
+            "confidence": "high",
+            "positive_evidence": [
+              "Fast sword-and-claw combat, parries, wound pressure and plague weapons create a mastery-heavy aggressive rhythm that strongly matches the profile's preference for learning timing and execution.",
+              "Talents and plague weapons support switching between parry, dodge and weapon-focused approaches, providing meaningful experimentation during the compact campaign.",
+              "The plague-doctor art direction, dark atmosphere and music give the game a clear identity beyond its mechanical fit."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 94,
+              "development_variety": 78,
+              "structure_pacing_direction": 75,
+              "identity_hooks": 84,
+              "breadth_of_match": 87
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                },
+                {
+                  "kind": "observation",
+                  "index": 4
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "После освоения основных талантов и plague weapons потолок долгосрочных сборок сравнительно невысок, поэтому повторные прохождения дают меньше нового системного развития.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Сложность резко меняется после понимания парирования и feather-механики; это скорее сильный сигнал мастерства, чем минус, но старт может быть заметно жёстче до момента освоения.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Локаций немного, а часть уровней посещается повторно с вариациями. Короткая длительность снижает риск усталости, но после освоения боя содержание может ощущаться тонким.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Дизайн уровней, разнообразие врагов и подача истории слабее боевой системы, поэтому основная ценность игры лежит именно в механическом освоении.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 4
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1343240:3d71e18361a3abec",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "3d71e18361a3abec5756460cdd500751b8b3411219d1c4d5883ee88bb509d929",
+        "prior_accepted_at_utc": "2026-09-28T16:52:31+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "high",
+        "prior_taste_factors": {
+          "gameplay_mastery": 94,
+          "development_variety": 78,
+          "structure_pacing_direction": 75,
+          "identity_hooks": 84,
+          "breadth_of_match": 87
+        },
+        "prior_positive_evidence": [
+          "Fast sword-and-claw combat, parries, wound pressure and plague weapons create a mastery-heavy aggressive rhythm that strongly matches the profile's preference for learning timing and execution.",
+          "Talents and plague weapons support switching between parry, dodge and weapon-focused approaches, providing meaningful experimentation during the compact campaign.",
+          "The plague-doctor art direction, dark atmosphere and music give the game a clear identity beyond its mechanical fit."
+        ],
+        "prior_work_id": "3cbaa437a3f192ed18503b9fce095a16eaba045416d0229b5183e7f949a6fb7f"
+      },
       "fit_level": "strong",
       "confidence": "high",
       "positive_evidence": [
-        "Fast sword-and-claw combat, parries, wound pressure and plague weapons create a mastery-heavy aggressive rhythm that strongly matches the profile's preference for learning timing and execution.",
-        "Talents and plague weapons support switching between parry, dodge and weapon-focused approaches, providing meaningful experimentation during the compact campaign.",
-        "The plague-doctor art direction, dark atmosphere and music give the game a clear identity beyond its mechanical fit."
+        "Fast sword-and-claw combat, parries, wound pressure and plague weapons create a mastery-heavy aggressive rhythm.",
+        "Talents and plague weapons support switching between parry, dodge and weapon-focused approaches.",
+        "The plague-doctor visual identity, atmosphere and music give the game a distinct authored hook."
       ],
       "taste_factors": {
-        "gameplay_mastery": 94,
+        "gameplay_mastery": 95,
         "development_variety": 78,
         "structure_pacing_direction": 75,
-        "identity_hooks": 84,
-        "breadth_of_match": 87
+        "identity_hooks": 86,
+        "breadth_of_match": 88
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "thymesia-combat",
+          "text_ru": "Быстрый бой мечом и когтем, парирования, заживление ран и plague-оружие строят игру вокруг таймингов и агрессивного освоения — это очень сильное совпадение с твоим профилем мастерства.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Механическое мастерство — один из сильнейших положительных сигналов твоего профиля."
+            },
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Тебе нравится менять подход под механику противника, а не повторять один шаблон."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 95
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 88
+            }
+          ]
+        },
+        {
+          "finding_id": "thymesia-builds",
+          "text_ru": "Таланты и plague-оружие позволяют переключаться между парированием, уклонением и оружейными подходами, поэтому компактная кампания всё же даёт заметное пространство для экспериментов.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Тебе нравится прогрессия, когда новые возможности меняют способ игры."
+            },
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Ты ценишь развитие игрового опыта по мере прохождения."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 78
+            }
+          ]
+        },
+        {
+          "finding_id": "thymesia-compact-identity",
+          "text_ru": "Короткая структура держит фокус на боях, а образ чумного доктора, тёмная атмосфера и музыка дают игре собственное лицо даже при небольшом объёме.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 3
+            },
+            {
+              "kind": "observation",
+              "index": 5
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Яркая художественная идентичность сильно повышает шанс, что игра запомнится."
+            },
+            {
+              "json_pointer": "/taste_profile/8/pattern",
+              "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+              "match_text_ru": "Повторяемость для тебя терпима, пока сильный основной цикл не успевает выдохнуться."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 75
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 86
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -23987,7 +26887,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "После освоения основных талантов и plague weapons потолок долгосрочных сборок сравнительно невысок, поэтому повторные прохождения дают меньше нового системного развития.",
+            "text_ru": "После освоения основной системы потолок долгосрочных билдов сравнительно неглубок.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -23998,7 +26898,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Сложность резко меняется после понимания парирования и feather-механики; это скорее сильный сигнал мастерства, чем минус, но старт может быть заметно жёстче до момента освоения.",
+            "text_ru": "Восприятие сложности резко зависит от того, насколько быстро освоены парирование и перо; до этого игра может казаться чрезмерно наказующей.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -24007,9 +26907,9 @@
             ]
           },
           {
-            "disposition": "caution",
-            "risk_code": null,
-            "text_ru": "Локаций немного, а часть уровней посещается повторно с вариациями. Короткая длительность снижает риск усталости, но после освоения боя содержание может ощущаться тонким.",
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "unchanged_repetition",
+            "text_ru": "Небольшое число окружений и повторное посещение уровней с вариациями могут начать ощущаться тонко после полного освоения боя.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -24020,7 +26920,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Дизайн уровней, разнообразие врагов и подача истории слабее боевой системы, поэтому основная ценность игры лежит именно в механическом освоении.",
+            "text_ru": "Уровни, разнообразие врагов и подача сюжета получают более слабые отзывы, чем сама боевая система.",
             "evidence_refs": [
               {
                 "kind": "observation",
