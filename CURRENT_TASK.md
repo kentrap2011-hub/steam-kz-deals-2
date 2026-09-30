@@ -1184,10 +1184,16 @@
 ## Worker in progress — 2026-09-30
 
 ### Deep invalid not-fit contract loop fix 01
-Статус: `implementing`.
+Статус: `recovery_prepared_needs_semantic_execution`.
 - task: `WORKER_TASK_DEEP_INVALID_NOT_FIT_CONTRACT_LOOP_FIX_01.md`;
 - branch: `fix/deep-invalid-not-fit-contract-loop-fix-01`;
 - scope: align Deep result schema / worker prompt / PASS 2 contract / ingest around `confirmed_personal_negative => confidence=high`, and move proven exact-bound semantic contract failures through the existing attempt/recovery architecture instead of repeating ordinary first-pass work;
 - preserve DEEP-SCORE-EVIDENCE-V1, RANK-013, frozen sibling nonblocking traversal and existing Progressive Deep worker;
 - do not execute semantic Deep or change Scheduled Tasks;
 - required report: `reviews/worker_reports/deep-invalid-not-fit-contract-loop-fix-01.md`.
+
+- PR: `#129` (`Fix Deep invalid not-fit contract retry loop`).
+- generic fix validated at `b21bdfd773162e9856c1b12015b1b497b4999363`;
+- pinned reconciliation state commit: `9131071437f98f64c911f1700bbdea373fa6ce6f`;
+- final validated reconciliation tree: `3a41184d7293b23f1f9c9fe184f31222ed91b8f4` / no-op validation head `c53d7907d1b37316411ad7e96acd2264e760dc65`;
+- semantic recovery intentionally not executed in developer chat.
