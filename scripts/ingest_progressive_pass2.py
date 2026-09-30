@@ -190,6 +190,7 @@ def removable_names(receipts):
             'replay_ignored',
             'rejected_stale_or_mismatched',
             'rejected_invalid_result_no_attempt',
+            'rejected_semantic_contract_result_attempt_consumed',
             'rejected_invalid_execution_receipt_no_attempt',
         }:
             removable.add(receipt['artifact'])
@@ -467,6 +468,10 @@ def main():
         ),
         'rejected_invalid_result_no_attempt_count': sum(
             r['status'] == 'rejected_invalid_result_no_attempt' for r in result_receipts
+        ),
+        'rejected_semantic_contract_result_attempt_consumed_count': sum(
+            r['status'] == 'rejected_semantic_contract_result_attempt_consumed'
+            for r in result_receipts
         ),
         'rejected_invalid_execution_receipt_no_attempt_count': sum(
             r['status'] == 'rejected_invalid_execution_receipt_no_attempt'
