@@ -261,13 +261,35 @@ def main():
             'b21bdfd773162e9856c1b12015b1b497b4999363'
         )
 
+    production_contexts = progressive_pass1.load_jsonl(progressive_pass1.PROGRESSIVE_CONTEXT)
+    production_projection = progressive_pass2.load_json(progressive_pass1.TASTE_PROJECTION)
+    production_queue = progressive_pass1.load_jsonl(progressive_pass1.TASTE_QUEUE)
+    _prod_generation, production_bindings, _prod_queue_by_family = progressive_pass1.current_bindings(
+        production_contexts,
+        production_projection,
+        production_queue,
+    )
+    production_binding = progressive_pass2.current_dossier_binding()
+    for family_id, expected in pinned.items():
+        persisted_auth = production_state['entries'][family_id]['recovery_authorization']
+        _same_state, recalculated_auth = progressive_pass2.authorize_recovery(
+            binding=production_bindings[family_id],
+            state_doc=production_state,
+            dossier_record=progressive_pass2.canonical_dossier_loader(expected['appid']),
+            current_binding=production_binding,
+            recovery_reason=persisted_auth['recovery_reason'],
+            recovery_condition_binding=persisted_auth['recovery_condition_binding'],
+            authorized_at_utc=persisted_auth['authorized_at_utc'],
+        )
+        assert recalculated_auth['recovery_authorization_id'] == expected['recovery_authorization_id']
+
     production = progressive_pass2.recompute_eligibility(
-        context_rows=progressive_pass1.load_jsonl(progressive_pass1.PROGRESSIVE_CONTEXT),
-        projection_doc=progressive_pass2.load_json(progressive_pass1.TASTE_PROJECTION),
-        queue_rows=progressive_pass1.load_jsonl(progressive_pass1.TASTE_QUEUE),
+        context_rows=production_contexts,
+        projection_doc=production_projection,
+        queue_rows=production_queue,
         pass1_state_doc=progressive_pass1.load_state(),
         pass2_state_doc=production_state,
-        current_binding=progressive_pass2.current_dossier_binding(),
+        current_binding=production_binding,
         now=datetime(2026, 9, 30, 6, 50, tzinfo=timezone.utc),
     )
     production_items = {row['family_id']: row for row in production['items']}
