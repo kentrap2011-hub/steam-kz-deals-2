@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+  "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+  "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "d7c6ed888b0f4f418a16a941b59950a46625c6b91cad69f31bb6e86c2fcbff66",
+  "family_id": "game:1173790",
+  "taste_subject_key": "App_1173790",
+  "appid": "1173790",
+  "taste_fingerprint": "5bfdf7cb10a83b61c25a5ad772424a299486dddde5758d4da06e5dd15d3f727d",
+  "candidate_context_sha256": "eb4e62ba1d6f1390320f4f855e21eff1ebdd0ff26fe07036e6241fcfddb12ddc",
+  "dossier_content_sha256": "d821a5a61eccf93cf54a7e77695f43e87326769d79c28aaa9c083e19b951ddc7",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "1adbf2cd15f819792520cd80aeded507b4a964a58c3416003e0818374e9feed6",
+  "work_mode": "score_explainability_migration",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_migration_provenance": {
+    "migration_id": "deep-score-evidence-explainability-alignment-01",
+    "migration_target_id": "deep-score-explainability-01:game:1173790:cf10282009a9fba0",
+    "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+    "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+    "prior_authorization_id": "cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6",
+    "prior_accepted_at_utc": "2026-09-28T10:34:13+00:00",
+    "prior_outcome": "analyzed_fit",
+    "prior_fit_level": "strong",
+    "prior_confidence": "medium",
+    "prior_taste_factors": {
+      "gameplay_mastery": 76,
+      "development_variety": 82,
+      "structure_pacing_direction": 71,
+      "identity_hooks": 62,
+      "breadth_of_match": 77
+    },
+    "prior_positive_evidence": [
+      "The job system supports frequent class changes and experimentation with party roles, directly matching the profile's very strong preference for meaningful development and new mechanical possibilities.",
+      "Varied dungeons, several forms of transport and broader world changes make exploration more dynamic than the earlier Pixel Remasters instead of repeating one static structure.",
+      "Late-game difficulty can reward thoughtful job setups, giving the progression system a mastery payoff beyond collecting classes."
+    ],
+    "prior_work_id": "375d608eb2ea05d00cdbb79f9d3af8afed83c1674e06cf8394d10c1924e297a5"
+  },
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "medium",
+  "positive_evidence": [
+    "The job system supports frequent class changes and experimentation with party roles.",
+    "Varied dungeons, multiple forms of transport and world changes make the adventure structure more dynamic than the earlier entries."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 78,
+    "development_variety": 84,
+    "structure_pacing_direction": 72,
+    "identity_hooks": 63,
+    "breadth_of_match": 79
+  },
+  "score_findings": [
+    {
+      "finding_id": "ff3-jobs",
+      "text_ru": "Свободная смена профессий и ролей позволяет постоянно перестраивать группу и осваивать новые сочетания, что хорошо попадает в твою любовь к развивающейся системе.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/2/pattern",
+          "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+          "match_text_ru": "Тебе особенно нравится прогрессия, когда выбор заметно меняет возможности."
+        },
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Освоение разных систем и ролей — сильный плюс для тебя."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 78
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 84
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 79
+        }
+      ]
+    },
+    {
+      "finding_id": "ff3-adventure",
+      "text_ru": "Разные подземелья, виды транспорта и изменения мира делают путешествие заметно более разнообразным и дают ясное ощущение расширения приключения.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Тебе важно, чтобы игра по ходу прохождения реально менялась и расширялась."
+        },
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Исследование лучше работает для тебя, когда сохраняется понятный вектор."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 72
+        }
+      ]
+    },
+    {
+      "finding_id": "ff3-story-light",
+      "text_ru": "Классический лёгкий сюжет и слабо выраженные герои дают меньше характерных эмоциональных крючков, чем более персонажные части серии.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/3/pattern",
+          "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+          "match_text_ru": "Сюжет и персонажи для тебя важны как отдельный источник вовлечённости."
+        },
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Яркий собственный крючок помогает игре запомниться."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "qualifies",
+          "normalized_value": 63
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 0
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      },
+      {
+        "kind": "observation",
+        "index": 4
+      },
+      {
+        "kind": "conflict",
+        "index": 0
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Большой выбор профессий иногда создаёт гринд и перегруз выбором.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Поздний скачок сложности может наказать слабую конфигурацию профессий, хотя именно адаптация состава обычно решает проблему.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "История и характеризация героев проще, чем в более поздних частях.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Часть профессий открывается поздно или ощущается избыточной, поэтому реальная полезность всего набора ниже заявленной широты.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 4
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Гибкость профессий одновременно является сильной стороной и источником гринда/перегруза.",
+        "evidence_refs": [
+          {
+            "kind": "conflict",
+            "index": 0
+          }
+        ]
+      }
+    ]
+  }
+}
