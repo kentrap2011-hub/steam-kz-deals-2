@@ -202,8 +202,7 @@ def _score_candidate_ref(value, field, dossier):
 def normalize_score_findings(value, work_item, factors):
     if not isinstance(value, list) or not value:
         raise ValueError('Deep analyzed_fit requires non-empty score_findings')
-    record = _bound_dossier(work_item)
-    dossier = (record or {}).get('doc') or {}
+    dossier = _bound_dossier(work_item)
     if not dossier:
         raise ValueError('Deep score findings require exact bound Dossier bytes')
 
