@@ -152,17 +152,42 @@ def accept_one(item, doc, state):
     return out, receipts
 
 
-ORIGINAL_STATE = progressive_pass2.load_state()
+MANIFEST = progressive_pass2.load_score_explainability_manifest()
+CURRENT_STATE = progressive_pass2.load_state()
+ORIGINAL_STATE = progressive_pass2._json_at_commit(
+    MANIFEST['migration_authority_commit'],
+    progressive_pass2.STATE,
+)
 
 
 def run():
-    manifest = progressive_pass2.load_score_explainability_manifest()
+    manifest = MANIFEST
     assert manifest['migration_id'] == 'deep-score-evidence-explainability-alignment-01'
     assert manifest['scope']['target_count'] == 43
     assert manifest['scope']['prior_not_fit_not_applicable_count'] == 4
     assert len(manifest['targets']) == 43
     assert any(row.get('appid') == '1498570' for row in manifest['targets'])
 
+    # Production state is allowed to advance while this migration is being
+    # executed. Validate accounting against the current durable state without
+    # pinning the regression to the original 43-pending snapshot.
+    current_work, current_metrics, _current_frozen = (
+        progressive_pass2.score_explainability_work_and_metrics(CURRENT_STATE, manifest)
+    )
+    assert current_metrics['total_count'] == 43
+    assert (
+        current_metrics['pending_count']
+        + current_metrics['accepted_count']
+        + current_metrics['stale_or_missing_prior_count']
+    ) == 43
+    assert len(current_work) == current_metrics['pending_count']
+    assert all(
+        row['work_mode'] == progressive_pass2.SCORE_EXPLAINABILITY_MODE
+        for row in current_work
+    )
+
+    # Detailed semantic regression remains deterministic against the migration's
+    # frozen authority snapshot, independent of later accepted production work.
     work, metrics, frozen = progressive_pass2.score_explainability_work_and_metrics(
         ORIGINAL_STATE, manifest
     )
@@ -173,10 +198,19 @@ def run():
     assert all(row['work_mode'] == progressive_pass2.SCORE_EXPLAINABILITY_MODE for row in work)
 
     built = build_progressive_pass2_work.build_work_document()
-    assert built['projection_status'] == 'score_explainability_migration_active'
-    assert built['scope']['score_explainability_migration']['total_count'] == 43
-    assert len(built['items']) == 43
-    assert all(row['work_mode'] == progressive_pass2.SCORE_EXPLAINABILITY_MODE for row in built['items'])
+    built_migration = built['scope']['score_explainability_migration']
+    assert built_migration['total_count'] == 43
+    assert built_migration['pending_count'] == current_metrics['pending_count']
+    assert built_migration['accepted_count'] == current_metrics['accepted_count']
+    if current_metrics['complete']:
+        assert built['projection_status'] != 'score_explainability_migration_active'
+    else:
+        assert built['projection_status'] == 'score_explainability_migration_active'
+        assert len(built['items']) == current_metrics['pending_count']
+        assert all(
+            row['work_mode'] == progressive_pass2.SCORE_EXPLAINABILITY_MODE
+            for row in built['items']
+        )
 
     item = copy.deepcopy(next(row for row in work if row['family_id'] == KOF_FAMILY))
     dossier = attach_frozen_dossier(item)

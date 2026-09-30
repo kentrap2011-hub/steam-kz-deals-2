@@ -81,7 +81,8 @@
     "changed_semantic_generation_or_work_id_may_establish_new_budget": true,
     "attempt_consumption_sources": [
       "exact_bound_accepted_result",
-      "github_owned_terminal_execution_receipt"
+      "github_owned_terminal_execution_receipt",
+      "github_derived_semantic_contract_failure"
     ],
     "invalid_or_stale_result_consumes_attempt": false,
     "invalid_or_stale_execution_receipt_consumes_attempt": false,
@@ -102,7 +103,25 @@
     "legacy_full_reanalysis_attempts_share_recovery_history": false,
     "legacy_full_reanalysis_max_accepted_attempts_per_manifest_target": 1,
     "legacy_full_reanalysis_automatic_retry_after_terminal_incomplete": false,
-    "legacy_full_reanalysis_scope_owner": "fixed_github_manifest_ppd010"
+    "legacy_full_reanalysis_scope_owner": "fixed_github_manifest_ppd010",
+    "semantic_contract_invalid_exact_bound_result": {
+      "exact_authority_and_identity_required": true,
+      "parseable_result_required": true,
+      "behavior": "consume_the_authorized_semantic_attempt_as_terminal_analysis_incomplete_and_move_unresolved_identity_to_existing_github_owned_recovery_state",
+      "issue_code": "terminal_execution_failure",
+      "authoritative_completion": false,
+      "recovery_reason_after_defect_fix": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+      "deterministic_confidence_rewrite_forbidden": true
+    },
+    "transport_or_authority_invalid_result": {
+      "behavior": "reject_without_attempt_consumption",
+      "includes": [
+        "malformed_json",
+        "stale_or_wrong_path",
+        "wrong_work_identity",
+        "wrong_run_start_or_unconfirmed_authority"
+      ]
+    }
   },
   "work": {
     "manifest_path": "data/production/pre_ai/progressive_pass2_work.json",
@@ -165,7 +184,9 @@
       "raw_rejected_payload_archive": false,
       "new_rejected_payload_fingerprint_field": false,
       "retry_scope_owner": "github_next_invocation_authority",
-      "same_invocation_retry": false
+      "same_invocation_retry": false,
+      "semantic_contract_invalid_exact_bound_result_excluded": true,
+      "rule": "Zero-attempt rejection is only for transport/authority/identity failures that do not prove an exact authorized semantic execution. A parseable exact-bound result that reaches semantic result validation and violates a result invariant consumes the authorized semantic attempt through the existing recovery-owned architecture."
     },
     "run_start_confirmation": {
       "marker_contract": "PROGRESSIVE-PASS2-RUN-START-MARKER-V2",
@@ -314,7 +335,10 @@
       ],
       "require_completed_candidate_specific_evidence": true,
       "insufficient_information_forbidden": true,
-      "require_balanced_negative_assessment": true
+      "require_balanced_negative_assessment": true,
+      "confirmed_personal_negative_requires_confidence": "high",
+      "medium_confidence_confirmed_personal_negative_forbidden": true,
+      "medium_confidence_rule": "do_not_promote_mechanically_choose_another_genuinely_supported_completed_basis_or_analysis_incomplete"
     },
     "analysis_incomplete": {
       "issue_codes": [

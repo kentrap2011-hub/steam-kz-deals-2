@@ -18,6 +18,7 @@ on:
       - "scripts/test_deep_balanced_negative_assessment.py"
       - "scripts/test_deep_legacy_full_reanalysis.py"
       - "scripts/test_deep_score_evidence_explainability.py"
+      - "scripts/test_deep_invalid_not_fit_contract_loop.py"
       - "scripts/test_dossier_deep_release_year_identity_compatibility.py"
       - "data/control/progressive_pass2_legacy_full_reanalysis_manifest.json"
       - "scripts/refine_visual_ranking.py"
@@ -86,6 +87,7 @@ on:
       - "scripts/test_deep_balanced_negative_assessment.py"
       - "scripts/test_deep_legacy_full_reanalysis.py"
       - "scripts/test_deep_score_evidence_explainability.py"
+      - "scripts/test_deep_invalid_not_fit_contract_loop.py"
       - "scripts/test_dossier_deep_release_year_identity_compatibility.py"
       - "data/control/progressive_pass2_legacy_full_reanalysis_manifest.json"
       - "scripts/refine_visual_ranking.py"
@@ -158,6 +160,7 @@ jobs:
             scripts/test_deep_balanced_negative_assessment.py \
             scripts/test_deep_legacy_full_reanalysis.py \
             scripts/test_deep_score_evidence_explainability.py \
+            scripts/test_deep_invalid_not_fit_contract_loop.py \
             scripts/test_dossier_deep_release_year_identity_compatibility.py \
             scripts/refine_visual_ranking.py \
             scripts/card_explanation_policy.py \
@@ -208,6 +211,8 @@ jobs:
         run: python scripts/test_deep_legacy_full_reanalysis.py
       - name: Deep score evidence explainability regression
         run: python scripts/test_deep_score_evidence_explainability.py
+      - name: Deep invalid not-fit contract loop regression
+        run: python scripts/test_deep_invalid_not_fit_contract_loop.py
       - name: PASS 2 canonical-writer staging regression
         run: |
           bash -n scripts/stage_progressive_pass2_canonical_writer.sh

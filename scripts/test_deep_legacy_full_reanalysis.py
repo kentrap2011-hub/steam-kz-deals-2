@@ -294,14 +294,20 @@ def run():
         assert frozen_item['_dossier_record']['content_sha256'] == jedi_target['dossier_content_sha256']
         assert frozen_item['_dossier_record']['content_sha256'] != later_digest
 
-    # Fresh-positive invention is rejected with zero migration attempt.
+    # Fresh-positive invention is rejected, but because the result is parseable
+    # and exact-bound it consumes this finite migration attempt as terminal incomplete.
     old_full_state = copy.deepcopy(frozen_state)
     clean_assessment = assessment_for(jedi_dossier)
     bad = result_doc(jedi_item, assessment=clean_assessment)
     bad['positive_evidence'] = list(bad['positive_evidence']) + ['invented fresh positive']
     rejected_state, receipts = accept(old_full_state, jedi_item, bad)
-    assert receipts[0]['status'] == 'rejected_invalid_result_no_attempt'
-    assert rejected_state == old_full_state
+    assert receipts[0]['status'] == 'rejected_semantic_contract_result_attempt_consumed'
+    assert receipts[0]['attempt_consumed'] is True
+    rejected_entry = rejected_state['entries'][JEDI_FAMILY]
+    assert rejected_entry['authorization_id'] == old_full_state['entries'][JEDI_FAMILY]['authorization_id']
+    attempts = progressive_pass2.legacy_reanalysis_attempts(rejected_entry, MIGRATION_ID)
+    assert attempts[-1]['outcome'] == 'analysis_incomplete'
+    assert attempts[-1]['attempt_consumption_source'] == 'github_derived_semantic_contract_failure'
 
     # A completed migration can change grounded risk while reusing exact positives.
     ea_index = next(
@@ -473,8 +479,14 @@ def run():
         },
     )
     rejected_state, receipts = accept(copy.deepcopy(frozen_state), not_fit_item, invented_fit)
-    assert receipts[0]['status'] == 'rejected_invalid_result_no_attempt'
-    assert rejected_state == frozen_state
+    assert receipts[0]['status'] == 'rejected_semantic_contract_result_attempt_consumed'
+    assert receipts[0]['attempt_consumed'] is True
+    not_fit_attempts = progressive_pass2.legacy_reanalysis_attempts(
+        rejected_state['entries'][not_fit_item['family_id']],
+        MIGRATION_ID,
+    )
+    assert not_fit_attempts[-1]['outcome'] == 'analysis_incomplete'
+    assert not_fit_attempts[-1]['attempt_consumption_source'] == 'github_derived_semantic_contract_failure'
 
     # Normal first-pass/recovery accounting is unchanged by migration acceptance.
     contexts = progressive_pass1.load_jsonl(progressive_pass1.PROGRESSIVE_CONTEXT)

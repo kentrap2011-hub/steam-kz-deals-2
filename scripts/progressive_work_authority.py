@@ -464,7 +464,11 @@ def consumed_work_ids(receipt_dir):
             continue
         status = str(receipt.get('status') or '')
         work_id = receipt.get('work_id')
-        if work_id and (status.startswith('accepted') or status == 'replay_ignored'):
+        if work_id and (
+            receipt.get('attempt_consumed') is True
+            or status.startswith('accepted')
+            or status == 'replay_ignored'
+        ):
             consumed.add(str(work_id))
     return consumed
 
