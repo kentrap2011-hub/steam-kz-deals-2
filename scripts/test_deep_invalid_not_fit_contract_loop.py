@@ -1,5 +1,6 @@
 import copy
 import json
+from datetime import datetime, timezone
 import sys
 import tempfile
 from pathlib import Path
@@ -210,6 +211,79 @@ def main():
             'attempt_consumed': True,
         }), encoding='utf-8')
         assert item['work_id'] in progressive_work_authority.consumed_work_ids(Path(tmp))
+
+    # Pinned production reconciliation: the three proven 2026-09-30 contract
+    # failures are consumed once and may continue only as explicitly authorized
+    # recovery work. They must never reappear as fresh normal first-pass work.
+    pinned = {
+        'game:1353270': {
+            'appid': '1353270',
+            'work_id': '1379906886119f0bcd8b2d764fa7ce663140ada66a7da03ec1dd08176679773b',
+            'recovery_authorization_id': '78a3660c5930d60c03f6b71d97bea1b9575aac496c684ebccd69143b97a18814',
+            'prior_result_commit': '6919dcb927526f716e4448d3013eb2c74736e3bb',
+        },
+        'game:1296770': {
+            'appid': '1296770',
+            'work_id': 'a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a',
+            'recovery_authorization_id': 'd330d77dcc3803008332a0291baafdf7f842ee878c5e377bf3527f4e77df00f4',
+            'prior_result_commit': '57a31a9789673b6e10464c02938b76c4991a6e40',
+        },
+        'game:1158940': {
+            'appid': '1158940',
+            'work_id': 'ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9',
+            'recovery_authorization_id': 'c2ef1322b725a4551341e7e013f2949ecba572bc636b313a1e64e64c3950cc19',
+            'prior_result_commit': '911e1b1e00fdc5dbed1bff3d9e3f0148a18c58ac',
+        },
+    }
+    production_state = progressive_pass2.load_state()
+    for family_id, expected in pinned.items():
+        pinned_entry = production_state['entries'][family_id]
+        assert pinned_entry['appid'] == expected['appid']
+        assert pinned_entry['work_id'] == expected['work_id']
+        assert pinned_entry['normal_first_pass_attempted'] is True
+        assert pinned_entry['outcome'] == 'analysis_incomplete'
+        assert pinned_entry['analysis_issue_code'] == 'terminal_execution_failure'
+        assert pinned_entry['attempt_consumption_source'] == 'github_derived_semantic_contract_failure'
+        assert pinned_entry['recovery_owned'] is True
+        first = pinned_entry['normal_first_pass']
+        assert first['semantic_contract_failure_reason'] == 'confirmed personal negative requires high confidence'
+        assert first['historical_reconciliation_proof']['prior_result_commit'] == expected['prior_result_commit']
+        assert first['historical_reconciliation_proof']['prior_ingest_rejection_commit'] == (
+            '5651782bb91a18aaaedc1b26b5973159e3e021d0'
+        )
+        auth = pinned_entry['recovery_authorization']
+        assert auth['status'] == 'authorized'
+        assert auth['recovery_authorization_id'] == expected['recovery_authorization_id']
+        assert auth['recovery_reason'] == (
+            'corrected_runtime_or_validation_defect_material_to_the_prior_failure'
+        )
+        assert auth['recovery_condition_binding']['defect_fix_binding']['validated_fix_commit'] == (
+            'b21bdfd773162e9856c1b12015b1b497b4999363'
+        )
+
+    production = progressive_pass2.recompute_eligibility(
+        context_rows=progressive_pass1.load_jsonl(progressive_pass1.PROGRESSIVE_CONTEXT),
+        projection_doc=progressive_pass2.load_json(progressive_pass1.TASTE_PROJECTION),
+        queue_rows=progressive_pass1.load_jsonl(progressive_pass1.TASTE_QUEUE),
+        pass1_state_doc=progressive_pass1.load_state(),
+        pass2_state_doc=production_state,
+        current_binding=progressive_pass2.current_dossier_binding(),
+        now=datetime(2026, 9, 30, 6, 50, tzinfo=timezone.utc),
+    )
+    production_items = {row['family_id']: row for row in production['items']}
+    for family_id, expected in pinned.items():
+        row = production_items[family_id]
+        assert row['work_id'] == expected['work_id']
+        assert row['work_mode'] == 'recovery'
+        assert row['recovery_authorization_id'] == expected['recovery_authorization_id']
+        assert row['recovery_reason'] == (
+            'corrected_runtime_or_validation_defect_material_to_the_prior_failure'
+        )
+        assert production['reasons'][family_id] == 'eligible_recovery_authorization'
+    assert not any(
+        row['family_id'] in pinned and row['work_mode'] == 'normal_first_pass'
+        for row in production['items']
+    )
 
     traversal = contract['invocation_traversal']
     assert traversal['prior_sibling_ingest_required'] is False
