@@ -31,6 +31,20 @@ POSITIVE_BINDING_FIELDS = (
     'work_authority_commit',
 )
 
+DEEP_SCORE_REQUIRED_BINDING_FIELDS = (
+    'semantic_generation_id',
+    'profile_pin_sha256',
+    'work_id',
+    'family_id',
+    'taste_subject_key',
+    'appid',
+    'taste_fingerprint',
+    'candidate_context_sha256',
+    'dossier_content_sha256',
+    'authorization_id',
+    'accepted_at_utc',
+)
+
 
 def _normalized_binding(value):
     if not isinstance(value, dict):
@@ -41,6 +55,18 @@ def _normalized_binding(value):
         if value.get(field) not in {None, ''}
     }
     return binding or None
+
+
+def linked_deep_score_binding(value):
+    """Return only complete accepted linked-Deep provenance bindings."""
+    binding = _normalized_binding(value)
+    if (
+        binding is None
+        or binding.get('semantic_source') != 'progressive_pass2'
+        or any(binding.get(field) in {None, ''} for field in DEEP_SCORE_REQUIRED_BINDING_FIELDS)
+    ):
+        return None
+    return binding
 
 
 def _positive_reason(value):
@@ -152,7 +178,7 @@ def deep_score_reasons(taste_entry: dict, limit: int = 2):
         or taste_entry.get('deep_score_explainability_status') != 'linked_v1'
     ):
         return [], []
-    binding = _normalized_binding(taste_entry.get('deep_score_evidence_binding'))
+    binding = linked_deep_score_binding(taste_entry.get('deep_score_evidence_binding'))
     if binding is None:
         return [], []
     reasons = []
