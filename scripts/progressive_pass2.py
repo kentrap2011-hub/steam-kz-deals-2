@@ -77,6 +77,7 @@ RECOVERY_REASONS = {
     'corrected_runtime_or_validation_defect_material_to_the_prior_failure',
     'explicit_canonical_github_recovery_action_with_recorded_reason',
 }
+SEMANTIC_CONTRACT_FAILURE_ATTEMPT_SOURCE = 'github_derived_semantic_contract_failure'
 PASS1_IDENTITY_FIELDS = progressive_pass1.IDENTITY_FIELDS
 IMMUTABLE_RESULT_FIELDS = PASS1_IDENTITY_FIELDS + (
     'dossier_content_sha256',
@@ -683,6 +684,12 @@ def load_contract(path=CONTRACT):
         raise ValueError('Deep recovery requires fresh GitHub authorization')
     if budget.get('recovery_has_hidden_fixed_quota') is not False:
         raise ValueError('Deep recovery must not introduce a hidden fixed quota')
+    semantic_failure = budget.get('semantic_contract_invalid_exact_bound_result') or {}
+    if semantic_failure.get('deterministic_confidence_rewrite_forbidden') is not True:
+        raise ValueError('Deep semantic-contract failure must never auto-rewrite confidence')
+    not_fit = ((contract.get('outcomes') or {}).get('analyzed_not_fit') or {})
+    if not_fit.get('confirmed_personal_negative_requires_confidence') != 'high':
+        raise ValueError('Deep confirmed-personal-negative confidence invariant mismatch')
     transport = contract.get('transport') or {}
     if transport.get('batch_atomicity') is not False or transport.get('maximal_contiguous_prefix') is not False:
         raise ValueError('progressive Deep must remain independent item-level transport')
@@ -1685,6 +1692,19 @@ def _attempt_base(work_item, outcome, accepted_at_utc, source):
     return attempt
 
 
+def semantic_contract_failure_attempt(work_item, reason, accepted_at_utc=None):
+    accepted_at_utc = accepted_at_utc or datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    attempt = _attempt_base(
+        work_item,
+        'analysis_incomplete',
+        accepted_at_utc,
+        SEMANTIC_CONTRACT_FAILURE_ATTEMPT_SOURCE,
+    )
+    attempt['analysis_issue_code'] = 'terminal_execution_failure'
+    attempt['semantic_contract_failure_reason'] = str(reason)
+    return attempt
+
+
 def _migration_result_changed(work_item, attempt):
     provenance = work_item.get('migration_provenance') or {}
     if work_item.get('work_mode') != LEGACY_REANALYSIS_MODE:
@@ -2196,17 +2216,65 @@ def process_result_documents(work_doc, state_doc, documents, accepted_at_utc=Non
                 'status': 'rejected_invalid_result_no_attempt',
                 'work_id': work_item['work_id'],
                 'reason': parse_error or 'malformed_json',
+                'attempt_consumed': False,
+            })
+            receipts.append(receipt)
+            continue
+        if not _identity_matches(doc, work_item, 'PROGRESSIVE-PASS2-RESULT-V1'):
+            receipt.update({
+                'status': 'rejected_invalid_result_no_attempt',
+                'work_id': work_item['work_id'],
+                'reason': 'Deep result identity does not exactly match prepared work',
+                'attempt_consumed': False,
             })
             receipts.append(receipt)
             continue
         try:
             attempt = normalize_result(doc, work_item, accepted_at_utc=accepted_at_utc)
+        except ValueError as exc:
+            # Exact authorization/identity has already been proven before this
+            # semantic validator runs. A parseable result that now violates the
+            # result contract proves an executed semantic attempt and must not
+            # return to ordinary first-pass work as if nothing happened.
+            failure_attempt = semantic_contract_failure_attempt(
+                work_item,
+                str(exc),
+                accepted_at_utc=accepted_at_utc,
+            )
+            try:
+                entry = _apply_attempt(existing, work_item, failure_attempt)
+            except ValueError as state_exc:
+                receipt.update({
+                    'status': 'rejected_invalid_result_no_attempt',
+                    'work_id': work_item['work_id'],
+                    'reason': str(state_exc),
+                    'attempt_consumed': False,
+                })
+                receipts.append(receipt)
+                continue
+            state['entries'][work_item['family_id']] = entry
+            receipt.update({
+                'status': 'rejected_semantic_contract_result_attempt_consumed',
+                'work_id': work_item['work_id'],
+                'family_id': work_item['family_id'],
+                'work_mode': work_item.get('work_mode'),
+                'reason': str(exc),
+                'attempt_consumed': True,
+                'outcome': 'analysis_incomplete',
+                'analysis_issue_code': 'terminal_execution_failure',
+                'authoritative_completed': False,
+                'recovery_owned': bool(entry.get('recovery_owned')),
+            })
+            receipts.append(receipt)
+            continue
+        try:
             entry = _apply_attempt(existing, work_item, attempt)
         except ValueError as exc:
             receipt.update({
                 'status': 'rejected_invalid_result_no_attempt',
                 'work_id': work_item['work_id'],
                 'reason': str(exc),
+                'attempt_consumed': False,
             })
             receipts.append(receipt)
             continue
@@ -2221,6 +2289,7 @@ def process_result_documents(work_doc, state_doc, documents, accepted_at_utc=Non
             'analysis_issue_code': attempt.get('analysis_issue_code'),
             'authoritative_completed': attempt.get('outcome') in AUTHORITATIVE_OUTCOMES,
             'recovery_owned': entry.get('recovery_owned'),
+            'attempt_consumed': True,
         })
         receipts.append(receipt)
 
@@ -2312,6 +2381,7 @@ def process_terminal_execution_documents(
             'authoritative_completed': False,
             'recovery_owned': bool(entry.get('recovery_owned')),
 
+            'attempt_consumed': True,
             'canonical_receipt_path': str(canonical_path).replace('\\', '/'),
         })
         receipts.append(receipt)
