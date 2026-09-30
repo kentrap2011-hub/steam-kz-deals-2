@@ -1,0 +1,387 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "2111190",
+  "title": "MULLET MADJACK",
+  "generated_at_utc": "2026-09-30T09:44:48Z",
+  "expires_at_utc": "2026-10-20T09:44:48Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "MULLET MADJACK",
+    "release_year": 2024,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "2111190"
+      },
+      {
+        "kind": "developer",
+        "value": "HAMMER95"
+      },
+      {
+        "kind": "publisher",
+        "value": "Epopeia Games, HAMMER95"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 7 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "The central loop is a very fast first-person shooter built around a ten-second survival timer, aggressive movement, rapid target selection, and continuous forward momentum through short floors.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-003",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "progression",
+      "statement": "Run progression uses roguelite-style random perks and repeated floor attempts; this supports experimentation but can also make the FPS loop feel constrained by repeated randomized run structure.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "repetition",
+      "statement": "Repeated layouts and similar floor structure are a recurring tradeoff: some players enjoy the endless high-speed loop, while others report that the levels become samey after extended play.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian",
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-002",
+        "source-004"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "difficulty",
+      "statement": "The time pressure creates deliberate challenge, and current Russian feedback notes that the difficulty can demand repeated attempts while remaining adjustable when deaths become too frequent.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "pacing",
+      "statement": "The campaign is repeatedly described as short and very concentrated; endless floors and score-oriented modes provide additional play after the main run.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "The anime-inspired visual style, music, effects, and deliberately excessive 1990s presentation are recurring strengths alongside the fast shooting.",
+      "sentiment": "positive",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-002",
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-001",
+        "feedback-002",
+        "feedback-003"
+      ]
+    },
+    {
+      "category": "other",
+      "statement": "Story and character development are secondary to the action; one current Russian review praises the experience while also finding the campaign too short to fully develop its characters.",
+      "sentiment": "mixed",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            4
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            6
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            5
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2,
+            3,
+            4,
+            6
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/2111190/MULLET_MAD_JACK/",
+        "publication_date": null,
+        "language": "mixed",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "store_user_reviews",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/2111190/?l=russian",
+        "publication_date": null,
+        "language": "mixed",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "2111190",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "other_player_feedback",
+        "domain": "steamstat.io",
+        "url": "https://steamstat.io/ru/app/2111190",
+        "publication_date": null,
+        "language": "russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "feedback_surface_mode": "search_result_representation",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "2111190",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      },
+      {
+        "source_id": "source-004",
+        "source_type": "steam_community",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/2111190/discussions/0/600775809837304002/",
+        "publication_date": "2025-05-27",
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "freshness": "older"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "publication_date": "2026-03-16",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-002",
+        "publication_date": "2026-06-06",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-003",
+        "publication_date": "2026-09-05",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-004",
+        "url": "https://steamcommunity.com/app/2111190/discussions/0/600775809837304002/",
+        "publication_date": "2025-05-27",
+        "language": "non_russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-002",
+        "publication_date": "2026-06-08",
+        "language": "russian",
+        "acquisition_mode": "search_result_observation"
+      }
+    ]
+  }
+}
