@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+  "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+  "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "b54bd2d2bf528252f039ea7fe3568d3f572e646bca10596d70cad85b927348cf",
+  "family_id": "game:13570",
+  "taste_subject_key": "App_13570",
+  "appid": "13570",
+  "taste_fingerprint": "e818f6afb680454975cb3666951e94c39cd2781738e5db0298a5783ae12d332c",
+  "candidate_context_sha256": "0ce7001656e6ba03f6f295eae072c3b8030bbf9197e5d0d6f58af35ab71bb82d",
+  "dossier_content_sha256": "75325d587e6fb65c6e89c6713138d2de4aea5f97710bc50089ae4a56ffe46f69",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "d16eadbe9be051cb29a080e211955e27008f928db109a1940e72a14b16d66631",
+  "work_mode": "score_explainability_migration",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_migration_provenance": {
+    "migration_id": "deep-score-evidence-explainability-alignment-01",
+    "migration_target_id": "deep-score-explainability-01:game:13570:ce2468e80359febf",
+    "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+    "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+    "prior_authorization_id": "ce2468e80359febf847e943832d2e28c8bcfa8e2e7395558d8895621156cb2de",
+    "prior_accepted_at_utc": "2026-09-29T08:41:47+00:00",
+    "prior_outcome": "analyzed_fit",
+    "prior_fit_level": "strong",
+    "prior_confidence": "high",
+    "prior_taste_factors": {
+      "gameplay_mastery": 94,
+      "development_variety": 82,
+      "structure_pacing_direction": 84,
+      "identity_hooks": 80,
+      "breadth_of_match": 91
+    },
+    "prior_positive_evidence": [
+      "Light and sound management, nonlethal options and gadgets create a deliberate stealth system with multiple interacting skills rather than a binary detection check.",
+      "Distinct mission identities and alternative routes support experimentation and replay through different approaches to objectives.",
+      "The cooperative mode has separate missions and partner-specific traversal interactions, adding a mechanically distinct shared-play layer instead of merely duplicating the solo campaign."
+    ],
+    "prior_work_id": "b54bd2d2bf528252f039ea7fe3568d3f572e646bca10596d70cad85b927348cf"
+  },
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "strong",
+  "confidence": "high",
+  "positive_evidence": [
+    "Light, sound, nonlethal options and gadgets form a deliberate multi-skill stealth system.",
+    "Distinct missions and alternative routes encourage experimentation.",
+    "Co-op has separate missions and partner-specific traversal, making shared play mechanically distinct."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 95,
+    "development_variety": 84,
+    "structure_pacing_direction": 85,
+    "identity_hooks": 82,
+    "breadth_of_match": 93
+  },
+  "score_findings": [
+    {
+      "finding_id": "ct-stealth-depth",
+      "text_ru": "Свет, звук, нелетальные приёмы, гаджеты и последствия обнаружения работают как связанная система, где терпение и понимание маршрута дают заметный рост мастерства.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Глубокое освоение механики — один из сильнейших положительных сигналов твоего профиля."
+        },
+        {
+          "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+          "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+          "match_text_ru": "Тебе нравятся задачи, где разные условия требуют менять подход."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 95
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 84
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 93
+        }
+      ]
+    },
+    {
+      "finding_id": "ct-mission-routes",
+      "text_ru": "Миссии имеют собственную структуру и альтернативные маршруты, поэтому игра регулярно даёт новый контекст для уже освоенных стелс-инструментов.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Тебе важно, чтобы знакомые механики получали новые ситуации, а не повторялись без изменений."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "supports",
+          "normalized_value": 85
+        }
+      ]
+    },
+    {
+      "finding_id": "ct-coop-identity",
+      "text_ru": "Отдельные кооперативные миссии и совместные приёмы перемещения делают co-op самостоятельным механическим слоем, а не копией одиночной кампании.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 3
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/9/pattern",
+          "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+          "match_text_ru": "Совместные роли и уникальные взаимодействия — сильный усилитель для твоего профиля."
+        },
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Собственная характерная механика помогает игре оставлять более сильный след."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 82
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Несмотря на альтернативные маршруты, оптимальное ghost-прохождение иногда уже, чем кажется, а базовый ритм скрыться–отключить–обойти может повторяться.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "felt_technical_burden",
+        "text_ru": "Современная ПК-совместимость неоднородна: есть жалобы на старые управления, вылеты и зависания в Windows 11.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      }
+    ]
+  }
+}
