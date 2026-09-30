@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+  "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+  "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "e7f374918b5b7d1bd4a7ca74004583885113b35dfeb5ff4a1a17c0b43d841635",
+  "family_id": "game:1372110",
+  "taste_subject_key": "App_1372110",
+  "appid": "1372110",
+  "taste_fingerprint": "089ef35134f4138b48cab144602f2c9a7243f39be71448268f70d12afb233297",
+  "candidate_context_sha256": "d5b798ce8a4dfeb3514e4d6e8e638293c1785578916aa6caef8b8eb6780ff646",
+  "dossier_content_sha256": "2de558432970b11c52e814c9e4b3c9fbed095f9c225e2d076e47006ac8940a24",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "d1f69a5cd663695bf5662b1fc1edf9900b3216d6084b6eca761feab8296635de",
+  "work_mode": "score_explainability_migration",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_migration_provenance": {
+    "migration_id": "deep-score-evidence-explainability-alignment-01",
+    "migration_target_id": "deep-score-explainability-01:game:1372110:8e55552c2db06931",
+    "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+    "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+    "prior_authorization_id": "8e55552c2db0693135afbaccf408546d15ee426fc629c0cd49498fd1f14598af",
+    "prior_accepted_at_utc": "2026-09-29T11:30:35+00:00",
+    "prior_outcome": "analyzed_fit",
+    "prior_fit_level": "moderate",
+    "prior_confidence": "medium",
+    "prior_taste_factors": {
+      "gameplay_mastery": 84,
+      "development_variety": 73,
+      "structure_pacing_direction": 62,
+      "identity_hooks": 80,
+      "breadth_of_match": 76
+    },
+    "prior_positive_evidence": [
+      "Character-specific combos and matchup differences create a real fighting-game mastery layer rather than a purely fan-service arena.",
+      "Large move-set and character differences support experimentation across many fighters.",
+      "Faithful poses, dialogue and visual references give the presentation a highly distinctive identity for players who connect with JoJo."
+    ],
+    "prior_work_id": "e7f374918b5b7d1bd4a7ca74004583885113b35dfeb5ff4a1a17c0b43d841635"
+  },
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "Character-specific combos and matchup differences create a real fighting-game mastery layer.",
+    "Faithful poses, dialogue and visual references give the presentation a distinctive JoJo identity."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 84,
+    "development_variety": 73,
+    "structure_pacing_direction": 62,
+    "identity_hooks": 81,
+    "breadth_of_match": 77
+  },
+  "score_findings": [
+    {
+      "finding_id": "jojo-matchups",
+      "text_ru": "Персонажи заметно различаются приёмами, комбо и матчапами, поэтому файтинг даёт пространство для изучения разных бойцов, а не только фан-сервис.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Тебе особенно нравится осваивать отличающиеся стили и становиться заметно лучше."
+        },
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Разные игровые варианты помогают удерживать развитие опыта."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "supports",
+          "normalized_value": 84
+        },
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 73
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 77
+        }
+      ]
+    },
+    {
+      "finding_id": "jojo-fan-identity",
+      "text_ru": "Позы, реплики и визуальные отсылки очень точно передают JoJo и дают игре сильное собственное лицо, если тебе близок исходный материал.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Яркая художественная идентичность сильно повышает шанс, что игра запомнится."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 81
+        }
+      ]
+    },
+    {
+      "finding_id": "jojo-online-friction",
+      "text_ru": "Задержки ввода, delay-based netcode и небольшой пул игроков делают онлайн менее надёжным и ухудшают удобство регулярных соревновательных сессий.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Тебе важно, чтобы игровой цикл оставался понятным и доступным без лишней внешней фрикции."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "lowers",
+          "normalized_value": 62
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 1
+      },
+      {
+        "kind": "observation",
+        "index": 2
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Баланс и ширина наборов приёмов различаются между персонажами, поэтому часть матчапов заметно сильнее других.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          }
+        ]
+      },
+      {
+        "disposition": "confirmed_personal_risk",
+        "risk_code": "felt_technical_burden",
+        "text_ru": "Онлайн в 2026 году страдает от delay-based netcode, задержек ввода и небольшого числа игроков, что мешает стабильному соревновательному опыту.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      }
+    ]
+  }
+}
