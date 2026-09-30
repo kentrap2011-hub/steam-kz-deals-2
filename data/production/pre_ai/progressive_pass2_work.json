@@ -68,7 +68,7 @@
     "current_analysis_incomplete_count": 3,
     "dossier_waiting_count": 206,
     "pass2_attempted_count": 52,
-    "pass2_eligible_count": 11,
+    "pass2_eligible_count": 9,
     "normal_pass2_eligible_count": 8,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
     "deep_normal_work_paused_for_score_explainability_migration": true,
@@ -96,14 +96,14 @@
       "migration_id": "deep-score-evidence-explainability-alignment-01",
       "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
       "total_count": 43,
-      "pending_count": 11,
+      "pending_count": 9,
       "submitted_count": 0,
-      "accepted_count": 32,
-      "accepted_completed_count": 32,
+      "accepted_count": 34,
+      "accepted_completed_count": 34,
       "incomplete_count": 0,
       "already_compliant_count": 0,
       "stale_or_missing_prior_count": 0,
-      "last_accepted_at_utc": "2026-09-30T06:37:46+00:00",
+      "last_accepted_at_utc": "2026-09-30T06:38:05+00:00",
       "complete": false
     }
   },
@@ -203,181 +203,6 @@
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1498570",
-      "taste_subject_key": "App_1498570",
-      "appid": "1498570",
-      "taste_fingerprint": "0325ee08a558e0901e61c507162c83332f2934b8e9fbc2cbec251e0d55dbd9f0",
-      "candidate_context_sha256": "554bf9933c94c2d81ad80970417e274896f9b6d53b33d7e87fba0b4e364a6245",
-      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-      "work_id": "30958cc0d3bf530f846dfcea23f7b382cd60659cf525fc4550b2f863ccf7a3a5",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "score_explainability_migration",
-      "migration_sequence": 34,
-      "semantic_input": {
-        "title": "THE KING OF FIGHTERS XV",
-        "short_description": "SHATTER ALL EXPECTATIONS!\r\nTranscend beyond your limits with KOF XV!",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action",
-          "Singleplayer"
-        ],
-        "core_fit_count": 0,
-        "release_date": "12 Dec, 2024",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1498570"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1498570.json",
-      "dossier_content_sha256": "69061fd36eea80763e61c1fb2eec9886b6e242248f9966335a0e45eb90aa2123",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-19T08:51:30Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "score_migration_provenance": {
-        "migration_id": "deep-score-evidence-explainability-alignment-01",
-        "migration_target_id": "deep-score-explainability-01:game:1498570:14dbe354ac94de42",
-        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
-        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
-        "prior_authorization_id": "14dbe354ac94de42af2204527b3733f41ea9a1d5a856b79383673da18eaba117",
-        "prior_accepted_at_utc": "2026-09-29T11:32:43+00:00",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "strong",
-        "prior_confidence": "high",
-        "prior_taste_factors": {
-          "gameplay_mastery": 96,
-          "development_variety": 83,
-          "structure_pacing_direction": 70,
-          "identity_hooks": 78,
-          "breadth_of_match": 89
-        },
-        "prior_positive_evidence": [
-          "The 3-on-3 system combines fast movement, hops, meter management, cancels and chained supers into a deep mastery-focused fighting loop.",
-          "The large roster and team combinations create substantial long-term experimentation across characters and lineups.",
-          "Character endings and the extensive music collection add identity and variety around the core competitive mechanics."
-        ],
-        "prior_work_id": "30958cc0d3bf530f846dfcea23f7b382cd60659cf525fc4550b2f863ccf7a3a5"
-      },
-      "authorization_id": "c7b8f4623263ac40a2a61275bbf4c1bb2bbe0a3095294856ea71d1c169d1eb2f",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--30958cc0d3bf530f846dfcea23f7b382cd60659cf525fc4550b2f863ccf7a3a5--c7b8f4623263ac40a2a61275bbf4c1bb2bbe0a3095294856ea71d1c169d1eb2f.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--30958cc0d3bf530f846dfcea23f7b382cd60659cf525fc4550b2f863ccf7a3a5--c7b8f4623263ac40a2a61275bbf4c1bb2bbe0a3095294856ea71d1c169d1eb2f.json",
-      "sequence": 2
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
-      "family_id": "game:1522820",
-      "taste_subject_key": "App_1522820",
-      "appid": "1522820",
-      "taste_fingerprint": "7bcc7b9d2892044bca3b129e1e2b0186ea055748fe48b0d0993f0a0ac82ac475",
-      "candidate_context_sha256": "b5287352b81744ed3efad37e9a2902bdb2b83b3d70232bb20fccbe0b75150648",
-      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-      "work_id": "3ecd6438a32b8d78e7a40a318659bbfa5371d59229f2e54dfca33d4e63dcf7fc",
-      "taste_model_version": "taste-v3",
-      "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
-      "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "score_explainability_migration",
-      "migration_sequence": 35,
-      "semantic_input": {
-        "title": "Orcs Must Die! 3",
-        "short_description": "Slice, burn, toss, zap, grind and gib massive hordes of repugnant orcs in this long-awaited successor to the award-winning Orcs Must Die! series.",
-        "bundle_members": [],
-        "fit_tags": [
-          "Action"
-        ],
-        "core_fit_count": 0,
-        "release_date": "23 Jul, 2021",
-        "release_year": null,
-        "semantic_condition": {
-          "ai_condition": "taste_subject_include_controls_purchase_family",
-          "requires_ai_base_support": false,
-          "base_appids": [
-            "1522820"
-          ]
-        }
-      },
-      "dossier_path": "data/cache/taste_steam_review_dossiers/App_1522820.json",
-      "dossier_content_sha256": "15373d77ce87ec0ac6f502a6192d7be35c691849a74dd496f02625c384cee403",
-      "dossier_compatibility_binding": {
-        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-        "evidence_contract_version": 2,
-        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-        "worker_schema_version": 2,
-        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-        "dossier_schema_version": 2,
-        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-      },
-      "dossier_expires_at_utc": "2026-10-19T11:34:18Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
-      "score_evidence_contract": {
-        "schema_version": 1,
-        "contract": "DEEP-SCORE-EVIDENCE-V1",
-        "required": true
-      },
-      "score_migration_provenance": {
-        "migration_id": "deep-score-evidence-explainability-alignment-01",
-        "migration_target_id": "deep-score-explainability-01:game:1522820:48626eb09ea6c062",
-        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
-        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
-        "prior_authorization_id": "48626eb09ea6c0629064fdf1736a5e4c0b4c0b827afee39f993841eedc386f45",
-        "prior_accepted_at_utc": "2026-09-29T15:59:18+00:00",
-        "prior_outcome": "analyzed_fit",
-        "prior_fit_level": "moderate",
-        "prior_confidence": "medium",
-        "prior_taste_factors": {
-          "gameplay_mastery": 82,
-          "development_variety": 78,
-          "structure_pacing_direction": 74,
-          "identity_hooks": 66,
-          "breadth_of_match": 80
-        },
-        "prior_positive_evidence": [
-          "The trap-building/action-tower-defense loop supports experimentation through killbox construction, trap combinations and direct intervention.",
-          "Co-op adds a useful shared-planning layer and can make large waves more dynamic.",
-          "War Scenarios broaden scale and force multi-lane planning rather than simply repeating ordinary maps."
-        ],
-        "prior_work_id": "3ecd6438a32b8d78e7a40a318659bbfa5371d59229f2e54dfca33d4e63dcf7fc"
-      },
-      "authorization_id": "ca8737fdd2536d93f1edb5f5b094b1daa944d850e2ec94c3901f4f9a0fa65ed1",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--3ecd6438a32b8d78e7a40a318659bbfa5371d59229f2e54dfca33d4e63dcf7fc--ca8737fdd2536d93f1edb5f5b094b1daa944d850e2ec94c3901f4f9a0fa65ed1.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--3ecd6438a32b8d78e7a40a318659bbfa5371d59229f2e54dfca33d4e63dcf7fc--ca8737fdd2536d93f1edb5f5b094b1daa944d850e2ec94c3901f4f9a0fa65ed1.json",
-      "sequence": 3
-    },
-    {
-      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "family_id": "game:1556790",
       "taste_subject_key": "App_1556790",
       "appid": "1556790",
@@ -458,7 +283,7 @@
       "authorization_id": "6c6526cbf670a1d31903cd48a4f11ac8094418e9fe4404285002bf0616d8e186",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--37ddf9c3e4f5d03af2deb77fd2d8a9f8c4044e73d210149505b64c785b4785c8--6c6526cbf670a1d31903cd48a4f11ac8094418e9fe4404285002bf0616d8e186.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--37ddf9c3e4f5d03af2deb77fd2d8a9f8c4044e73d210149505b64c785b4785c8--6c6526cbf670a1d31903cd48a4f11ac8094418e9fe4404285002bf0616d8e186.json",
-      "sequence": 4
+      "sequence": 2
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -546,7 +371,7 @@
       "authorization_id": "85005a855502822739a9900b80c162d276b5b25e6981de4b118d77aed64c9e1a",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215--85005a855502822739a9900b80c162d276b5b25e6981de4b118d77aed64c9e1a.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--dac7b6181a46f0f1396d74ffeef16a83f683e99942c9dc92f9b947f5f5953215--85005a855502822739a9900b80c162d276b5b25e6981de4b118d77aed64c9e1a.json",
-      "sequence": 5
+      "sequence": 3
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -635,7 +460,7 @@
       "authorization_id": "4a7b37ba4e0404636d03213d819c038372b4a14f74a6b86a8eeaccb44af308d3",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8ef7eba7114521f467b1b32d166d07589c692d841ad3dbe57270703452128367--4a7b37ba4e0404636d03213d819c038372b4a14f74a6b86a8eeaccb44af308d3.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8ef7eba7114521f467b1b32d166d07589c692d841ad3dbe57270703452128367--4a7b37ba4e0404636d03213d819c038372b4a14f74a6b86a8eeaccb44af308d3.json",
-      "sequence": 6
+      "sequence": 4
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -724,7 +549,7 @@
       "authorization_id": "4770276078f15b0447e4e90e158fcb6773014b2d43fac07a59199cb51cd7232c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--258be2302da4fdc18267494a3770a4baf3e13bd809cec595597dc9a9066e25ce--4770276078f15b0447e4e90e158fcb6773014b2d43fac07a59199cb51cd7232c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--258be2302da4fdc18267494a3770a4baf3e13bd809cec595597dc9a9066e25ce--4770276078f15b0447e4e90e158fcb6773014b2d43fac07a59199cb51cd7232c.json",
-      "sequence": 7
+      "sequence": 5
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -812,7 +637,7 @@
       "authorization_id": "0b546546cfae014fd9be92a9b046ad7e9084a747952e1641b08a322986cc99e8",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--8cad5fd1ed968726684bff7b74db69356323e1eeeba1d06db6b3c40d30638e00--0b546546cfae014fd9be92a9b046ad7e9084a747952e1641b08a322986cc99e8.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--8cad5fd1ed968726684bff7b74db69356323e1eeeba1d06db6b3c40d30638e00--0b546546cfae014fd9be92a9b046ad7e9084a747952e1641b08a322986cc99e8.json",
-      "sequence": 8
+      "sequence": 6
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -900,7 +725,7 @@
       "authorization_id": "b087bd645968cbe36a4043a8b058497dd9af58d09fb8978f44467e18e85ebbeb",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--bdfbe05110ae49d2fe43c6e5a225d23ed39525a09147aa0dc5f049a1695cc2b5--b087bd645968cbe36a4043a8b058497dd9af58d09fb8978f44467e18e85ebbeb.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--bdfbe05110ae49d2fe43c6e5a225d23ed39525a09147aa0dc5f049a1695cc2b5--b087bd645968cbe36a4043a8b058497dd9af58d09fb8978f44467e18e85ebbeb.json",
-      "sequence": 9
+      "sequence": 7
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -990,7 +815,7 @@
       "authorization_id": "4d9204b43e4f68077e2dc5a83999803fb357c2e2abe424cf085d9cf95c1f462c",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--b5767f14dcc858391e7c853bef83067fa32353908668db9f9668cc7cbc6211ca--4d9204b43e4f68077e2dc5a83999803fb357c2e2abe424cf085d9cf95c1f462c.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--b5767f14dcc858391e7c853bef83067fa32353908668db9f9668cc7cbc6211ca--4d9204b43e4f68077e2dc5a83999803fb357c2e2abe424cf085d9cf95c1f462c.json",
-      "sequence": 10
+      "sequence": 8
     },
     {
       "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
@@ -1081,7 +906,7 @@
       "authorization_id": "8802bda9c1a5e6f3e57034d320687f399842b594231e187bc5051cc938c6b2ce",
       "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--7d14e2b5a2abde60325579f9379b9b8d13352a94ae7ccde800b7de29d5b8133e--8802bda9c1a5e6f3e57034d320687f399842b594231e187bc5051cc938c6b2ce.json",
       "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--7d14e2b5a2abde60325579f9379b9b8d13352a94ae7ccde800b7de29d5b8133e--8802bda9c1a5e6f3e57034d320687f399842b594231e187bc5051cc938c6b2ce.json",
-      "sequence": 11
+      "sequence": 9
     }
   ]
 }

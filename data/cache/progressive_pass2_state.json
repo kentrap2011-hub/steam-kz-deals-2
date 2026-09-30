@@ -40756,8 +40756,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-29T11:32:43+00:00",
-      "work_authority_commit": "21b1d01477d15a9f87c1e0231afbf768f5d42b59",
+      "accepted_at_utc": "2026-09-30T06:38:05+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "69061fd36eea80763e61c1fb2eec9886b6e242248f9966335a0e45eb90aa2123",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -40773,8 +40773,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "14dbe354ac94de42af2204527b3733f41ea9a1d5a856b79383673da18eaba117",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "c7b8f4623263ac40a2a61275bbf4c1bb2bbe0a3095294856ea71d1c169d1eb2f",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -40873,20 +40873,562 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "30958cc0d3bf530f846dfcea23f7b382cd60659cf525fc4550b2f863ccf7a3a5",
+          "family_id": "game:1498570",
+          "taste_subject_key": "App_1498570",
+          "appid": "1498570",
+          "taste_fingerprint": "0325ee08a558e0901e61c507162c83332f2934b8e9fbc2cbec251e0d55dbd9f0",
+          "candidate_context_sha256": "554bf9933c94c2d81ad80970417e274896f9b6d53b33d7e87fba0b4e364a6245",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "69061fd36eea80763e61c1fb2eec9886b6e242248f9966335a0e45eb90aa2123",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "c7b8f4623263ac40a2a61275bbf4c1bb2bbe0a3095294856ea71d1c169d1eb2f",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:38:05+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1498570:14dbe354ac94de42",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "14dbe354ac94de42af2204527b3733f41ea9a1d5a856b79383673da18eaba117",
+            "prior_accepted_at_utc": "2026-09-29T11:32:43+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "strong",
+            "prior_confidence": "high",
+            "prior_taste_factors": {
+              "gameplay_mastery": 96,
+              "development_variety": 83,
+              "structure_pacing_direction": 70,
+              "identity_hooks": 78,
+              "breadth_of_match": 89
+            },
+            "prior_positive_evidence": [
+              "The 3-on-3 system combines fast movement, hops, meter management, cancels and chained supers into a deep mastery-focused fighting loop.",
+              "The large roster and team combinations create substantial long-term experimentation across characters and lineups.",
+              "Character endings and the extensive music collection add identity and variety around the core competitive mechanics."
+            ],
+            "prior_work_id": "30958cc0d3bf530f846dfcea23f7b382cd60659cf525fc4550b2f863ccf7a3a5"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "strong",
+          "confidence": "high",
+          "positive_evidence": [
+            "The 3-on-3 system combines fast movement, hops, meter management, cancels and chained supers into a deep mastery-focused loop.",
+            "The large roster and team combinations create substantial long-term experimentation.",
+            "Character endings and the music collection add identity around the competitive mechanics."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 96,
+            "development_variety": 84,
+            "structure_pacing_direction": 70,
+            "identity_hooks": 80,
+            "breadth_of_match": 90
+          },
+          "score_findings": [
+            {
+              "finding_id": "kof-combat-depth",
+              "text_ru": "Хопы, управление шкалой, отмены и цепочки суперприёмов дают глубокий 3-на-3 бой, где точное движение и освоение связок заметно улучшают результат.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Тебе особенно важны системы, где можно заметно вырасти в исполнении."
+                },
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Разные ситуации и соперники должны требовать адаптации, а не одного безопасного шаблона."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 96
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 90
+                }
+              ]
+            },
+            {
+              "finding_id": "kof-roster-teams",
+              "text_ru": "Большой ростер и сочетания трёх бойцов создают много пространства для экспериментов с персонажами и составом команды.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Тебе важно, чтобы игра долго открывала новые варианты и ситуации."
+                },
+                {
+                  "json_pointer": "/taste_profile/7/pattern",
+                  "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                  "match_text_ru": "Характерные персонажи и музыка усиливают запоминаемость."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "development_variety",
+                  "effect": "supports",
+                  "normalized_value": 84
+                },
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 80
+                }
+              ]
+            },
+            {
+              "finding_id": "kof-offline-light",
+              "text_ru": "Одиночная история и офлайн-структура сравнительно лёгкие, поэтому основной вектор игры почти полностью держится на освоении боевой системы.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/5/pattern",
+                  "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+                  "match_text_ru": "Тебе важно регулярно иметь понятную причину продолжать, а не только повторять базовый цикл."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "lowers",
+                  "normalized_value": 70
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Вход проще старых KOF, но motion inputs, особое движение серии и опытные соперники всё ещё создают заметную кривую обучения.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Сюжет и одиночные режимы сравнительно неглубокие; главная ценность игры сосредоточена в самом файтинге.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1498570:14dbe354ac94de42",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:38:05+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:38:05+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "30958cc0d3bf530f846dfcea23f7b382cd60659cf525fc4550b2f863ccf7a3a5",
+            "family_id": "game:1498570",
+            "taste_subject_key": "App_1498570",
+            "appid": "1498570",
+            "taste_fingerprint": "0325ee08a558e0901e61c507162c83332f2934b8e9fbc2cbec251e0d55dbd9f0",
+            "candidate_context_sha256": "554bf9933c94c2d81ad80970417e274896f9b6d53b33d7e87fba0b4e364a6245",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-29T11:32:43+00:00",
+            "work_authority_commit": "21b1d01477d15a9f87c1e0231afbf768f5d42b59",
+            "dossier_content_sha256": "69061fd36eea80763e61c1fb2eec9886b6e242248f9966335a0e45eb90aa2123",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "14dbe354ac94de42af2204527b3733f41ea9a1d5a856b79383673da18eaba117",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "30958cc0d3bf530f846dfcea23f7b382cd60659cf525fc4550b2f863ccf7a3a5",
+              "family_id": "game:1498570",
+              "taste_subject_key": "App_1498570",
+              "appid": "1498570",
+              "taste_fingerprint": "0325ee08a558e0901e61c507162c83332f2934b8e9fbc2cbec251e0d55dbd9f0",
+              "candidate_context_sha256": "554bf9933c94c2d81ad80970417e274896f9b6d53b33d7e87fba0b4e364a6245",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "69061fd36eea80763e61c1fb2eec9886b6e242248f9966335a0e45eb90aa2123",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "14dbe354ac94de42af2204527b3733f41ea9a1d5a856b79383673da18eaba117",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-29T11:32:43+00:00",
+              "run_start_anchor_commit": "0a1fd55e46646a4b41203b08ddd83a2cc1dd7cd8",
+              "run_start_authority_commit": "21b1d01477d15a9f87c1e0231afbf768f5d42b59",
+              "run_started_at_utc": "2026-09-29T11:25:32+00:00",
+              "work_authority_commit": "21b1d01477d15a9f87c1e0231afbf768f5d42b59",
+              "fit_level": "strong",
+              "confidence": "high",
+              "positive_evidence": [
+                "The 3-on-3 system combines fast movement, hops, meter management, cancels and chained supers into a deep mastery-focused fighting loop.",
+                "The large roster and team combinations create substantial long-term experimentation across characters and lineups.",
+                "Character endings and the extensive music collection add identity and variety around the core competitive mechanics."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 96,
+                "development_variety": 83,
+                "structure_pacing_direction": 70,
+                "identity_hooks": 78,
+                "breadth_of_match": 89
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Вход проще, чем во многие старые KOF, но motion inputs, характерное движение серии и опытные соперники всё равно создают заметную кривую обучения. Для профиля это скорее пространство для освоения, чем самостоятельный минус.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Сюжетный и одиночный контент сравнительно неглубок по сравнению с боевой системой, поэтому основная ценность игры находится именно в файтинге, составах команд и повторных матчах.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "strong",
+            "confidence": "high",
+            "positive_evidence": [
+              "The 3-on-3 system combines fast movement, hops, meter management, cancels and chained supers into a deep mastery-focused fighting loop.",
+              "The large roster and team combinations create substantial long-term experimentation across characters and lineups.",
+              "Character endings and the extensive music collection add identity and variety around the core competitive mechanics."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 96,
+              "development_variety": 83,
+              "structure_pacing_direction": 70,
+              "identity_hooks": 78,
+              "breadth_of_match": 89
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Вход проще, чем во многие старые KOF, но motion inputs, характерное движение серии и опытные соперники всё равно создают заметную кривую обучения. Для профиля это скорее пространство для освоения, чем самостоятельный минус.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Сюжетный и одиночный контент сравнительно неглубок по сравнению с боевой системой, поэтому основная ценность игры находится именно в файтинге, составах команд и повторных матчах.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1498570:14dbe354ac94de42",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "14dbe354ac94de42af2204527b3733f41ea9a1d5a856b79383673da18eaba117",
+        "prior_accepted_at_utc": "2026-09-29T11:32:43+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "strong",
+        "prior_confidence": "high",
+        "prior_taste_factors": {
+          "gameplay_mastery": 96,
+          "development_variety": 83,
+          "structure_pacing_direction": 70,
+          "identity_hooks": 78,
+          "breadth_of_match": 89
+        },
+        "prior_positive_evidence": [
+          "The 3-on-3 system combines fast movement, hops, meter management, cancels and chained supers into a deep mastery-focused fighting loop.",
+          "The large roster and team combinations create substantial long-term experimentation across characters and lineups.",
+          "Character endings and the extensive music collection add identity and variety around the core competitive mechanics."
+        ],
+        "prior_work_id": "30958cc0d3bf530f846dfcea23f7b382cd60659cf525fc4550b2f863ccf7a3a5"
+      },
       "fit_level": "strong",
       "confidence": "high",
       "positive_evidence": [
-        "The 3-on-3 system combines fast movement, hops, meter management, cancels and chained supers into a deep mastery-focused fighting loop.",
-        "The large roster and team combinations create substantial long-term experimentation across characters and lineups.",
-        "Character endings and the extensive music collection add identity and variety around the core competitive mechanics."
+        "The 3-on-3 system combines fast movement, hops, meter management, cancels and chained supers into a deep mastery-focused loop.",
+        "The large roster and team combinations create substantial long-term experimentation.",
+        "Character endings and the music collection add identity around the competitive mechanics."
       ],
       "taste_factors": {
         "gameplay_mastery": 96,
-        "development_variety": 83,
+        "development_variety": 84,
         "structure_pacing_direction": 70,
-        "identity_hooks": 78,
-        "breadth_of_match": 89
+        "identity_hooks": 80,
+        "breadth_of_match": 90
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "kof-combat-depth",
+          "text_ru": "Хопы, управление шкалой, отмены и цепочки суперприёмов дают глубокий 3-на-3 бой, где точное движение и освоение связок заметно улучшают результат.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Тебе особенно важны системы, где можно заметно вырасти в исполнении."
+            },
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Разные ситуации и соперники должны требовать адаптации, а не одного безопасного шаблона."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 96
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 90
+            }
+          ]
+        },
+        {
+          "finding_id": "kof-roster-teams",
+          "text_ru": "Большой ростер и сочетания трёх бойцов создают много пространства для экспериментов с персонажами и составом команды.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Тебе важно, чтобы игра долго открывала новые варианты и ситуации."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Характерные персонажи и музыка усиливают запоминаемость."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 84
+            },
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 80
+            }
+          ]
+        },
+        {
+          "finding_id": "kof-offline-light",
+          "text_ru": "Одиночная история и офлайн-структура сравнительно лёгкие, поэтому основной вектор игры почти полностью держится на освоении боевой системы.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 3
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/5/pattern",
+              "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+              "match_text_ru": "Тебе важно регулярно иметь понятную причину продолжать, а не только повторять базовый цикл."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "lowers",
+              "normalized_value": 70
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -40904,7 +41446,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Вход проще, чем во многие старые KOF, но motion inputs, характерное движение серии и опытные соперники всё равно создают заметную кривую обучения. Для профиля это скорее пространство для освоения, чем самостоятельный минус.",
+            "text_ru": "Вход проще старых KOF, но motion inputs, особое движение серии и опытные соперники всё ещё создают заметную кривую обучения.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -40915,7 +41457,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Сюжетный и одиночный контент сравнительно неглубок по сравнению с боевой системой, поэтому основная ценность игры находится именно в файтинге, составах команд и повторных матчах.",
+            "text_ru": "Сюжет и одиночные режимы сравнительно неглубокие; главная ценность игры сосредоточена в самом файтинге.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -40942,8 +41484,8 @@
       "outcome": "analyzed_fit",
       "analysis_issue_code": null,
       "attempt_consumption_source": "accepted_result",
-      "accepted_at_utc": "2026-09-29T15:59:18+00:00",
-      "work_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+      "accepted_at_utc": "2026-09-30T06:38:05+00:00",
+      "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
       "dossier_content_sha256": "15373d77ce87ec0ac6f502a6192d7be35c691849a74dd496f02625c384cee403",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -40959,8 +41501,8 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "48626eb09ea6c0629064fdf1736a5e4c0b4c0b827afee39f993841eedc386f45",
-      "work_mode": "normal_first_pass",
+      "authorization_id": "ca8737fdd2536d93f1edb5f5b094b1daa944d850e2ec94c3901f4f9a0fa65ed1",
+      "work_mode": "score_explainability_migration",
       "recovery_authorization_id": null,
       "recovery_reason": null,
       "recovery_condition_binding": null,
@@ -41074,20 +41616,615 @@
       "recovery_attempts": [],
       "recovery_owned": false,
       "recovery_authorization": null,
+      "score_explainability_migration_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "3ecd6438a32b8d78e7a40a318659bbfa5371d59229f2e54dfca33d4e63dcf7fc",
+          "family_id": "game:1522820",
+          "taste_subject_key": "App_1522820",
+          "appid": "1522820",
+          "taste_fingerprint": "7bcc7b9d2892044bca3b129e1e2b0186ea055748fe48b0d0993f0a0ac82ac475",
+          "candidate_context_sha256": "b5287352b81744ed3efad37e9a2902bdb2b83b3d70232bb20fccbe0b75150648",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "15373d77ce87ec0ac6f502a6192d7be35c691849a74dd496f02625c384cee403",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "ca8737fdd2536d93f1edb5f5b094b1daa944d850e2ec94c3901f4f9a0fa65ed1",
+          "work_mode": "score_explainability_migration",
+          "recovery_authorization_id": null,
+          "recovery_reason": null,
+          "recovery_condition_binding": null,
+          "migration_provenance": null,
+          "outcome": "analyzed_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T06:38:05+00:00",
+          "run_start_anchor_commit": "69644035e78c61ecac97800e4e78dccb4c4df532",
+          "run_start_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "run_started_at_utc": "2026-09-30T06:21:09+00:00",
+          "work_authority_commit": "253d66ffdffe928cb6b20ae083a59433633ed3f3",
+          "score_migration_provenance": {
+            "migration_id": "deep-score-evidence-explainability-alignment-01",
+            "migration_target_id": "deep-score-explainability-01:game:1522820:48626eb09ea6c062",
+            "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+            "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+            "prior_authorization_id": "48626eb09ea6c0629064fdf1736a5e4c0b4c0b827afee39f993841eedc386f45",
+            "prior_accepted_at_utc": "2026-09-29T15:59:18+00:00",
+            "prior_outcome": "analyzed_fit",
+            "prior_fit_level": "moderate",
+            "prior_confidence": "medium",
+            "prior_taste_factors": {
+              "gameplay_mastery": 82,
+              "development_variety": 78,
+              "structure_pacing_direction": 74,
+              "identity_hooks": 66,
+              "breadth_of_match": 80
+            },
+            "prior_positive_evidence": [
+              "The trap-building/action-tower-defense loop supports experimentation through killbox construction, trap combinations and direct intervention.",
+              "Co-op adds a useful shared-planning layer and can make large waves more dynamic.",
+              "War Scenarios broaden scale and force multi-lane planning rather than simply repeating ordinary maps."
+            ],
+            "prior_work_id": "3ecd6438a32b8d78e7a40a318659bbfa5371d59229f2e54dfca33d4e63dcf7fc"
+          },
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "fit_level": "moderate",
+          "confidence": "medium",
+          "positive_evidence": [
+            "Trap building and direct action still support killbox experimentation.",
+            "Co-op adds a shared planning layer.",
+            "War Scenarios broaden scale through multi-lane planning."
+          ],
+          "taste_factors": {
+            "gameplay_mastery": 82,
+            "development_variety": 74,
+            "structure_pacing_direction": 74,
+            "identity_hooks": 68,
+            "breadth_of_match": 79
+          },
+          "score_findings": [
+            {
+              "finding_id": "omd3-traps-action",
+              "text_ru": "Ловушки, killbox-схемы и прямое вмешательство всё ещё дают хороший тактический цикл, где можно пробовать разные комбинации защиты.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 0
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                  "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                  "match_text_ru": "Тебе нравятся системы, где приходится подбирать тактику под ситуацию."
+                },
+                {
+                  "json_pointer": "/mastery_profile/summary",
+                  "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                  "match_text_ru": "Освоение взаимодействующих механик — сильный плюс для твоего профиля."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "gameplay_mastery",
+                  "effect": "supports",
+                  "normalized_value": 82
+                },
+                {
+                  "factor_id": "breadth_of_match",
+                  "effect": "supports",
+                  "normalized_value": 79
+                }
+              ]
+            },
+            {
+              "finding_id": "omd3-coop",
+              "text_ru": "Кооператив добавляет совместное планирование и распределение действий, что усиливает даже знакомую формулу больших волн.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 2
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/9/pattern",
+                  "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+                  "match_text_ru": "Совместные роли и решения — сильный усилитель твоего игрового опыта."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "identity_hooks",
+                  "effect": "supports",
+                  "normalized_value": 68
+                }
+              ]
+            },
+            {
+              "finding_id": "omd3-war-scenarios",
+              "text_ru": "War Scenarios добавляют масштаб и несколько направлений атаки, но крупные волны нравятся не всем и не полностью компенсируют ослабление части ловушек.",
+              "candidate_evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "profile_evidence_refs": [
+                {
+                  "json_pointer": "/taste_profile/0/pattern",
+                  "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+                  "match_text_ru": "Тебе нужна эволюция ситуаций, но новые форматы ценны только если реально улучшают игровой опыт."
+                },
+                {
+                  "json_pointer": "/taste_profile/2/pattern",
+                  "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                  "match_text_ru": "Новые инструменты должны давать понятный эффект и расширять варианты."
+                }
+              ],
+              "factor_impacts": [
+                {
+                  "factor_id": "development_variety",
+                  "effect": "qualifies",
+                  "normalized_value": 74
+                },
+                {
+                  "factor_id": "structure_pacing_direction",
+                  "effect": "qualifies",
+                  "normalized_value": 74
+                }
+              ]
+            }
+          ],
+          "score_explainability_status": "linked_v1",
+          "base_support_compatible": null,
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "other_grounded_taste_risk",
+                "text_ru": "Часть ловушек ощущается слабее и медленнее предыдущих частей, из-за чего прямой урон героя чаще вытесняет любимое экспериментирование с защитными схемами.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Кооператив хорош, но поиск партнёров и отсутствие простого матчмейкинга создают дополнительную фрикцию.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "War Scenarios дают новый масштаб, но часть игроков считает их менее удобными и приятными, чем обычные карты.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "score_explainability_migration_status": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1522820:48626eb09ea6c062",
+        "attempt_outcome": "analyzed_fit",
+        "accepted_at_utc": "2026-09-30T06:38:05+00:00",
+        "completed_revision_promoted": true
+      },
+      "revision_history": [
+        {
+          "revision_kind": "pre_score_explainability_migration",
+          "migration_id": "deep-score-evidence-explainability-alignment-01",
+          "superseded_at_utc": "2026-09-30T06:38:05+00:00",
+          "state": {
+            "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+            "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+            "work_id": "3ecd6438a32b8d78e7a40a318659bbfa5371d59229f2e54dfca33d4e63dcf7fc",
+            "family_id": "game:1522820",
+            "taste_subject_key": "App_1522820",
+            "appid": "1522820",
+            "taste_fingerprint": "7bcc7b9d2892044bca3b129e1e2b0186ea055748fe48b0d0993f0a0ac82ac475",
+            "candidate_context_sha256": "b5287352b81744ed3efad37e9a2902bdb2b83b3d70232bb20fccbe0b75150648",
+            "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+            "pass2_attempted": true,
+            "normal_first_pass_attempted": true,
+            "authoritative_completed": true,
+            "outcome": "analyzed_fit",
+            "analysis_issue_code": null,
+            "attempt_consumption_source": "accepted_result",
+            "accepted_at_utc": "2026-09-29T15:59:18+00:00",
+            "work_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+            "dossier_content_sha256": "15373d77ce87ec0ac6f502a6192d7be35c691849a74dd496f02625c384cee403",
+            "dossier_compatibility_binding": {
+              "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+              "evidence_contract_version": 2,
+              "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+              "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+              "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+              "worker_schema_version": 2,
+              "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+              "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+              "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+              "dossier_schema_version": 2,
+              "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+              "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+            },
+            "authorization_id": "48626eb09ea6c0629064fdf1736a5e4c0b4c0b827afee39f993841eedc386f45",
+            "work_mode": "normal_first_pass",
+            "recovery_authorization_id": null,
+            "recovery_reason": null,
+            "recovery_condition_binding": null,
+            "normal_first_pass": {
+              "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+              "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+              "work_id": "3ecd6438a32b8d78e7a40a318659bbfa5371d59229f2e54dfca33d4e63dcf7fc",
+              "family_id": "game:1522820",
+              "taste_subject_key": "App_1522820",
+              "appid": "1522820",
+              "taste_fingerprint": "7bcc7b9d2892044bca3b129e1e2b0186ea055748fe48b0d0993f0a0ac82ac475",
+              "candidate_context_sha256": "b5287352b81744ed3efad37e9a2902bdb2b83b3d70232bb20fccbe0b75150648",
+              "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+              "dossier_content_sha256": "15373d77ce87ec0ac6f502a6192d7be35c691849a74dd496f02625c384cee403",
+              "dossier_compatibility_binding": {
+                "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+                "evidence_contract_version": 2,
+                "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+                "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+                "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+                "worker_schema_version": 2,
+                "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+                "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+                "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+                "dossier_schema_version": 2,
+                "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+                "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+              },
+              "authorization_id": "48626eb09ea6c0629064fdf1736a5e4c0b4c0b827afee39f993841eedc386f45",
+              "work_mode": "normal_first_pass",
+              "recovery_authorization_id": null,
+              "recovery_reason": null,
+              "recovery_condition_binding": null,
+              "migration_provenance": null,
+              "outcome": "analyzed_fit",
+              "analysis_issue_code": null,
+              "attempt_consumption_source": "accepted_result",
+              "accepted_at_utc": "2026-09-29T15:59:18+00:00",
+              "run_start_anchor_commit": "010acccfb84238991f060ad680d11c73b3c29b21",
+              "run_start_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+              "run_started_at_utc": "2026-09-29T15:56:59+00:00",
+              "work_authority_commit": "e0033d19bef33b3f29a4fcacd6f59f7baec7c371",
+              "fit_level": "moderate",
+              "confidence": "medium",
+              "positive_evidence": [
+                "The trap-building/action-tower-defense loop supports experimentation through killbox construction, trap combinations and direct intervention.",
+                "Co-op adds a useful shared-planning layer and can make large waves more dynamic.",
+                "War Scenarios broaden scale and force multi-lane planning rather than simply repeating ordinary maps."
+              ],
+              "taste_factors": {
+                "gameplay_mastery": 82,
+                "development_variety": 78,
+                "structure_pacing_direction": 74,
+                "identity_hooks": 66,
+                "breadth_of_match": 80
+              },
+              "base_support_compatible": null,
+              "negative_assessment": {
+                "status": "completed",
+                "evaluated_candidate_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  },
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ],
+                "findings": [
+                  {
+                    "disposition": "confirmed_personal_risk",
+                    "risk_code": "other_grounded_taste_risk",
+                    "text_ru": "Часть игроков считает ловушки слабее и медленнее, чем в прошлых частях, а прямой урон персонажа — более обязательным. Это уменьшает пространство для чистого экспериментирования с системами ловушек, которое хорошо совпадает с профилем.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 1
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "Кооператив остаётся сильной стороной, но текущий подбор партнёров неудобен: аудитория ограничена, а простого встроенного матчмейкинга не хватает.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 2
+                      }
+                    ]
+                  },
+                  {
+                    "disposition": "caution",
+                    "risk_code": null,
+                    "text_ru": "War Scenarios дают больше масштаба и многополосного планирования, но часть игроков считает их менее удобными и менее приятными, чем обычные карты.",
+                    "evidence_refs": [
+                      {
+                        "kind": "observation",
+                        "index": 3
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "recovery_attempts": [],
+            "recovery_owned": false,
+            "recovery_authorization": null,
+            "fit_level": "moderate",
+            "confidence": "medium",
+            "positive_evidence": [
+              "The trap-building/action-tower-defense loop supports experimentation through killbox construction, trap combinations and direct intervention.",
+              "Co-op adds a useful shared-planning layer and can make large waves more dynamic.",
+              "War Scenarios broaden scale and force multi-lane planning rather than simply repeating ordinary maps."
+            ],
+            "taste_factors": {
+              "gameplay_mastery": 82,
+              "development_variety": 78,
+              "structure_pacing_direction": 74,
+              "identity_hooks": 66,
+              "breadth_of_match": 80
+            },
+            "base_support_compatible": null,
+            "negative_assessment": {
+              "status": "completed",
+              "evaluated_candidate_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                },
+                {
+                  "kind": "observation",
+                  "index": 2
+                },
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ],
+              "findings": [
+                {
+                  "disposition": "confirmed_personal_risk",
+                  "risk_code": "other_grounded_taste_risk",
+                  "text_ru": "Часть игроков считает ловушки слабее и медленнее, чем в прошлых частях, а прямой урон персонажа — более обязательным. Это уменьшает пространство для чистого экспериментирования с системами ловушек, которое хорошо совпадает с профилем.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 1
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "Кооператив остаётся сильной стороной, но текущий подбор партнёров неудобен: аудитория ограничена, а простого встроенного матчмейкинга не хватает.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 2
+                    }
+                  ]
+                },
+                {
+                  "disposition": "caution",
+                  "risk_code": null,
+                  "text_ru": "War Scenarios дают больше масштаба и многополосного планирования, но часть игроков считает их менее удобными и менее приятными, чем обычные карты.",
+                  "evidence_refs": [
+                    {
+                      "kind": "observation",
+                      "index": 3
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "score_migration_provenance": {
+        "migration_id": "deep-score-evidence-explainability-alignment-01",
+        "migration_target_id": "deep-score-explainability-01:game:1522820:48626eb09ea6c062",
+        "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+        "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+        "prior_authorization_id": "48626eb09ea6c0629064fdf1736a5e4c0b4c0b827afee39f993841eedc386f45",
+        "prior_accepted_at_utc": "2026-09-29T15:59:18+00:00",
+        "prior_outcome": "analyzed_fit",
+        "prior_fit_level": "moderate",
+        "prior_confidence": "medium",
+        "prior_taste_factors": {
+          "gameplay_mastery": 82,
+          "development_variety": 78,
+          "structure_pacing_direction": 74,
+          "identity_hooks": 66,
+          "breadth_of_match": 80
+        },
+        "prior_positive_evidence": [
+          "The trap-building/action-tower-defense loop supports experimentation through killbox construction, trap combinations and direct intervention.",
+          "Co-op adds a useful shared-planning layer and can make large waves more dynamic.",
+          "War Scenarios broaden scale and force multi-lane planning rather than simply repeating ordinary maps."
+        ],
+        "prior_work_id": "3ecd6438a32b8d78e7a40a318659bbfa5371d59229f2e54dfca33d4e63dcf7fc"
+      },
       "fit_level": "moderate",
       "confidence": "medium",
       "positive_evidence": [
-        "The trap-building/action-tower-defense loop supports experimentation through killbox construction, trap combinations and direct intervention.",
-        "Co-op adds a useful shared-planning layer and can make large waves more dynamic.",
-        "War Scenarios broaden scale and force multi-lane planning rather than simply repeating ordinary maps."
+        "Trap building and direct action still support killbox experimentation.",
+        "Co-op adds a shared planning layer.",
+        "War Scenarios broaden scale through multi-lane planning."
       ],
       "taste_factors": {
         "gameplay_mastery": 82,
-        "development_variety": 78,
+        "development_variety": 74,
         "structure_pacing_direction": 74,
-        "identity_hooks": 66,
-        "breadth_of_match": 80
+        "identity_hooks": 68,
+        "breadth_of_match": 79
       },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "omd3-traps-action",
+          "text_ru": "Ловушки, killbox-схемы и прямое вмешательство всё ещё дают хороший тактический цикл, где можно пробовать разные комбинации защиты.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Тебе нравятся системы, где приходится подбирать тактику под ситуацию."
+            },
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Освоение взаимодействующих механик — сильный плюс для твоего профиля."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 82
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 79
+            }
+          ]
+        },
+        {
+          "finding_id": "omd3-coop",
+          "text_ru": "Кооператив добавляет совместное планирование и распределение действий, что усиливает даже знакомую формулу больших волн.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/9/pattern",
+              "profile_value_sha256": "449f187a81d55f8cbd9c1190f62fc0bc653e6fa737b636f4b3590248ed1c4c98",
+              "match_text_ru": "Совместные роли и решения — сильный усилитель твоего игрового опыта."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 68
+            }
+          ]
+        },
+        {
+          "finding_id": "omd3-war-scenarios",
+          "text_ru": "War Scenarios добавляют масштаб и несколько направлений атаки, но крупные волны нравятся не всем и не полностью компенсируют ослабление части ловушек.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            },
+            {
+              "kind": "observation",
+              "index": 3
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/0/pattern",
+              "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+              "match_text_ru": "Тебе нужна эволюция ситуаций, но новые форматы ценны только если реально улучшают игровой опыт."
+            },
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Новые инструменты должны давать понятный эффект и расширять варианты."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "development_variety",
+              "effect": "qualifies",
+              "normalized_value": 74
+            },
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "qualifies",
+              "normalized_value": 74
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
       "base_support_compatible": null,
       "negative_assessment": {
         "status": "completed",
@@ -41109,7 +42246,7 @@
           {
             "disposition": "confirmed_personal_risk",
             "risk_code": "other_grounded_taste_risk",
-            "text_ru": "Часть игроков считает ловушки слабее и медленнее, чем в прошлых частях, а прямой урон персонажа — более обязательным. Это уменьшает пространство для чистого экспериментирования с системами ловушек, которое хорошо совпадает с профилем.",
+            "text_ru": "Часть ловушек ощущается слабее и медленнее предыдущих частей, из-за чего прямой урон героя чаще вытесняет любимое экспериментирование с защитными схемами.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -41120,7 +42257,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "Кооператив остаётся сильной стороной, но текущий подбор партнёров неудобен: аудитория ограничена, а простого встроенного матчмейкинга не хватает.",
+            "text_ru": "Кооператив хорош, но поиск партнёров и отсутствие простого матчмейкинга создают дополнительную фрикцию.",
             "evidence_refs": [
               {
                 "kind": "observation",
@@ -41131,7 +42268,7 @@
           {
             "disposition": "caution",
             "risk_code": null,
-            "text_ru": "War Scenarios дают больше масштаба и многополосного планирования, но часть игроков считает их менее удобными и менее приятными, чем обычные карты.",
+            "text_ru": "War Scenarios дают новый масштаб, но часть игроков считает их менее удобными и приятными, чем обычные карты.",
             "evidence_refs": [
               {
                 "kind": "observation",
