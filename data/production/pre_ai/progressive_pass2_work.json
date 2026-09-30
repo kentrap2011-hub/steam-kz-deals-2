@@ -51,23 +51,23 @@
   },
   "scope": {
     "deep_total_current_coverage_target": 266,
-    "deep_first_pass_attempted_count": 52,
+    "deep_first_pass_attempted_count": 55,
     "deep_authoritative_completed_count": 45,
     "deep_completed_fit_count": 41,
     "deep_completed_not_fit_count": 4,
-    "deep_incomplete_or_recovery_count": 7,
+    "deep_incomplete_or_recovery_count": 10,
     "deep_waiting_for_dossier_count": 188,
     "deep_ready_or_pending_count": 26,
-    "deep_normal_first_pass_remaining_count": 214,
+    "deep_normal_first_pass_remaining_count": 211,
     "deep_remaining_until_all_authoritative_count": 221,
     "deep_normal_first_pass_complete": false,
     "deep_all_current_authoritative_complete": false,
     "recovery_owned_count": 7,
-    "recovery_eligible_count": 0,
-    "recovery_pending_count": 0,
+    "recovery_eligible_count": 3,
+    "recovery_pending_count": 3,
     "current_analysis_incomplete_count": 3,
     "dossier_waiting_count": 188,
-    "pass2_attempted_count": 52,
+    "pass2_attempted_count": 55,
     "pass2_eligible_count": 26,
     "normal_pass2_eligible_count": 26,
     "deep_normal_work_paused_for_legacy_reanalysis": false,
@@ -121,7 +121,7 @@
       "taste_model_version": "taste-v3",
       "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
+      "work_mode": "recovery",
       "semantic_input": {
         "title": "Five Dates",
         "short_description": "Five Dates is an interactive rom-com about the unpredictable world of digital dating. With five potential female matches, Vinny explores whether compatibility, chemistry and connection is still possible in a world where physical touch is no longer an option.",
@@ -158,17 +158,47 @@
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
       "dossier_expires_at_utc": "2026-10-19T03:14:34Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
+      "recovery_authorization_id": "78a3660c5930d60c03f6b71d97bea1b9575aac496c684ebccd69143b97a18814",
+      "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+      "recovery_condition_binding": {
+        "semantic_input": {
+          "title": "Five Dates",
+          "short_description": "Five Dates is an interactive rom-com about the unpredictable world of digital dating. With five potential female matches, Vinny explores whether compatibility, chemistry and connection is still possible in a world where physical touch is no longer an option.",
+          "bundle_members": [],
+          "fit_tags": [
+            "Adventure",
+            "Choices Matter"
+          ],
+          "core_fit_count": 1,
+          "release_date": "17 Nov, 2020",
+          "release_year": null,
+          "semantic_condition": {
+            "ai_condition": "taste_subject_include_controls_purchase_family",
+            "requires_ai_base_support": false,
+            "base_appids": [
+              "1353270"
+            ]
+          }
+        },
+        "defect_fix_binding": {
+          "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
+          "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
+          "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
+          "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+          "prior_result_commit": "6919dcb927526f716e4448d3013eb2c74736e3bb",
+          "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
+          "prior_result_authorization_id": "58e8ea8312bec3291f31f359176ef0d3d3789f7628e1c6bd1be253dde8188c16",
+          "prior_rejection_reason": "confirmed personal negative requires high confidence"
+        }
+      },
       "score_evidence_contract": {
         "schema_version": 1,
         "contract": "DEEP-SCORE-EVIDENCE-V1",
         "required": true
       },
-      "authorization_id": "5ff7c42ca4307b2817dd5bd2a98736efc2a3281d023e95dc17cfde9be392bf00",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--1379906886119f0bcd8b2d764fa7ce663140ada66a7da03ec1dd08176679773b--5ff7c42ca4307b2817dd5bd2a98736efc2a3281d023e95dc17cfde9be392bf00.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--1379906886119f0bcd8b2d764fa7ce663140ada66a7da03ec1dd08176679773b--5ff7c42ca4307b2817dd5bd2a98736efc2a3281d023e95dc17cfde9be392bf00.json",
+      "authorization_id": "0f6f9d8ab89d7e947ddeeed3a2af7436cbb8aa956a5d8e28630f8964306a7651",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--1379906886119f0bcd8b2d764fa7ce663140ada66a7da03ec1dd08176679773b--0f6f9d8ab89d7e947ddeeed3a2af7436cbb8aa956a5d8e28630f8964306a7651.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--1379906886119f0bcd8b2d764fa7ce663140ada66a7da03ec1dd08176679773b--0f6f9d8ab89d7e947ddeeed3a2af7436cbb8aa956a5d8e28630f8964306a7651.json",
       "sequence": 1
     },
     {
@@ -248,7 +278,7 @@
       "taste_model_version": "taste-v3",
       "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
+      "work_mode": "recovery",
       "semantic_input": {
         "title": "Her New Memory - Hentai Simulator",
         "short_description": "One day, you find a shivering, barefooted girl in ragged clothes knocking on your door. She has no recollections of her past, and she doesn’t even remember her name. You can help her recover her memories or let her stay at your side forever.",
@@ -282,17 +312,44 @@
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
       "dossier_expires_at_utc": "2026-10-18T18:26:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
+      "recovery_authorization_id": "d330d77dcc3803008332a0291baafdf7f842ee878c5e377bf3527f4e77df00f4",
+      "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+      "recovery_condition_binding": {
+        "semantic_input": {
+          "title": "Her New Memory - Hentai Simulator",
+          "short_description": "One day, you find a shivering, barefooted girl in ragged clothes knocking on your door. She has no recollections of her past, and she doesn’t even remember her name. You can help her recover her memories or let her stay at your side forever.",
+          "bundle_members": [],
+          "fit_tags": [],
+          "core_fit_count": 0,
+          "release_date": "8 Feb, 2022",
+          "release_year": null,
+          "semantic_condition": {
+            "ai_condition": "taste_subject_include_controls_purchase_family",
+            "requires_ai_base_support": false,
+            "base_appids": [
+              "1296770"
+            ]
+          }
+        },
+        "defect_fix_binding": {
+          "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
+          "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
+          "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
+          "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+          "prior_result_commit": "57a31a9789673b6e10464c02938b76c4991a6e40",
+          "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
+          "prior_result_authorization_id": "c2586b7e898fbd2588250bf47802969ded4d695783ab841977f5f5e5c9e54e60",
+          "prior_rejection_reason": "confirmed personal negative requires high confidence"
+        }
+      },
       "score_evidence_contract": {
         "schema_version": 1,
         "contract": "DEEP-SCORE-EVIDENCE-V1",
         "required": true
       },
-      "authorization_id": "40cc4d4a5624aead2aae4b9c8495b3d610b425f27bee2677a3988d51c0ffd71c",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a--40cc4d4a5624aead2aae4b9c8495b3d610b425f27bee2677a3988d51c0ffd71c.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a--40cc4d4a5624aead2aae4b9c8495b3d610b425f27bee2677a3988d51c0ffd71c.json",
+      "authorization_id": "a8dc0237b8f0a78244c71ef19554d85032503978cf87fd9daea5e06108751323",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a--a8dc0237b8f0a78244c71ef19554d85032503978cf87fd9daea5e06108751323.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a--a8dc0237b8f0a78244c71ef19554d85032503978cf87fd9daea5e06108751323.json",
       "sequence": 3
     },
     {
@@ -878,7 +935,7 @@
       "taste_model_version": "taste-v3",
       "taste_semantics_sha256": "0dbcc4c167a995bf6505b4e1e361e38103c5eacb254a308b4ba6d5ae13eb2828",
       "candidate_context_contract_blob_sha": "077dd7cf1f1c300f5029a34be87f056d25d01804",
-      "work_mode": "normal_first_pass",
+      "work_mode": "recovery",
       "semantic_input": {
         "title": "Blazing Sails",
         "short_description": "Fight for survival in Blazing Sails, a fast-paced pirate PvP game! Create your own unique pirate and ship. Band together with other players to command your mighty vessel! Explore different game-modes, maps, weapons, ship types and more while eliminating other crews in epic battles on land and sea!",
@@ -912,17 +969,44 @@
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
       "dossier_expires_at_utc": "2026-10-18T17:16:00Z",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
+      "recovery_authorization_id": "c2ef1322b725a4551341e7e013f2949ecba572bc636b313a1e64e64c3950cc19",
+      "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+      "recovery_condition_binding": {
+        "semantic_input": {
+          "title": "Blazing Sails",
+          "short_description": "Fight for survival in Blazing Sails, a fast-paced pirate PvP game! Create your own unique pirate and ship. Band together with other players to command your mighty vessel! Explore different game-modes, maps, weapons, ship types and more while eliminating other crews in epic battles on land and sea!",
+          "bundle_members": [],
+          "fit_tags": [],
+          "core_fit_count": 0,
+          "release_date": "13 Nov, 2023",
+          "release_year": null,
+          "semantic_condition": {
+            "ai_condition": "taste_subject_include_controls_purchase_family",
+            "requires_ai_base_support": false,
+            "base_appids": [
+              "1158940"
+            ]
+          }
+        },
+        "defect_fix_binding": {
+          "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
+          "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
+          "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
+          "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+          "prior_result_commit": "911e1b1e00fdc5dbed1bff3d9e3f0148a18c58ac",
+          "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
+          "prior_result_authorization_id": "f938b2ec18f080adb6fe5d867dc46ddb43e9ce8da11566cc64807d6f95cce443",
+          "prior_rejection_reason": "confirmed personal negative requires high confidence"
+        }
+      },
       "score_evidence_contract": {
         "schema_version": 1,
         "contract": "DEEP-SCORE-EVIDENCE-V1",
         "required": true
       },
-      "authorization_id": "dc0e9819baf24e4d3ae80ccddf6a18fd5986ed39bee5bdf8dbe34f6d4f5140f1",
-      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9--dc0e9819baf24e4d3ae80ccddf6a18fd5986ed39bee5bdf8dbe34f6d4f5140f1.json",
-      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9--dc0e9819baf24e4d3ae80ccddf6a18fd5986ed39bee5bdf8dbe34f6d4f5140f1.json",
+      "authorization_id": "9049c31d90687acc1a33d80087925fff5bdb1e19b83dada28c6732bd874d07ec",
+      "result_submission_path": "data/ai_inbox/progressive_pass2/results/d21e7d0b38be9d16--ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9--9049c31d90687acc1a33d80087925fff5bdb1e19b83dada28c6732bd874d07ec.json",
+      "terminal_execution_submission_path": "data/ai_inbox/progressive_pass2/execution_receipts/d21e7d0b38be9d16--ddb33cb3665250557120ce1deaa1af3f23fe213fd96119e7335f5d17a9c01fe9--9049c31d90687acc1a33d80087925fff5bdb1e19b83dada28c6732bd874d07ec.json",
       "sequence": 13
     },
     {
