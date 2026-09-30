@@ -209,8 +209,9 @@ def run():
     incomplete_eval = assessment([], evaluated=[{'kind': 'observation', 'index': 1}])
     bad_item = work_item(dossier, digest, 'incomplete-eval')
     bad_state, bad_receipts = accept(bad_item, result_doc(bad_item, incomplete_eval))
-    assert bad_state['entries'] == {}
-    assert bad_receipts[0]['status'] == 'rejected_invalid_result_no_attempt'
+    assert bad_receipts[0]['status'] == 'rejected_semantic_contract_result_attempt_consumed'
+    assert bad_receipts[0]['attempt_consumed'] is True
+    assert bad_state['entries']['game:1172380']['recovery_owned'] is True
 
     # 4) Unresolved negative assessment remains a visible unresolved state and is
     # never projected as no-risk.
@@ -247,7 +248,8 @@ def run():
     assert legacy_status['code'] == 'legacy_negative_not_evaluated'
     assert 'не оценивались' in legacy_status['label']
 
-    # 6) Unbound/malformed negative evidence fails closed and consumes no attempt.
+    # 6) Exact-bound semantic evidence that violates the result contract fails
+    # closed, consumes the proven semantic attempt, and enters recovery ownership.
     unbound_item = work_item(dossier, digest, 'unbound')
     unbound = assessment([
         {
@@ -258,8 +260,9 @@ def run():
         },
     ])
     unbound_state, unbound_receipts = accept(unbound_item, result_doc(unbound_item, unbound))
-    assert unbound_state['entries'] == {}
-    assert unbound_receipts[0]['status'] == 'rejected_invalid_result_no_attempt'
+    assert unbound_receipts[0]['status'] == 'rejected_semantic_contract_result_attempt_consumed'
+    assert unbound_receipts[0]['attempt_consumed'] is True
+    assert unbound_state['entries']['game:1172380']['recovery_owned'] is True
 
     malformed_item = work_item(dossier, digest, 'malformed')
     malformed = assessment(caution_findings)
@@ -267,8 +270,9 @@ def run():
     malformed_state, malformed_receipts = accept(
         malformed_item, result_doc(malformed_item, malformed)
     )
-    assert malformed_state['entries'] == {}
-    assert malformed_receipts[0]['status'] == 'rejected_invalid_result_no_attempt'
+    assert malformed_receipts[0]['status'] == 'rejected_semantic_contract_result_attempt_consumed'
+    assert malformed_receipts[0]['attempt_consumed'] is True
+    assert malformed_state['entries']['game:1172380']['recovery_owned'] is True
 
     # 7) analyzed_not_fit stays coherent: confirmed_personal_negative must carry
     # a completed confirmed risk, not merely a caution.
@@ -295,8 +299,9 @@ def run():
         not_fit_evidence=['This basis cannot be supported by caution-only findings.'],
     )
     state, receipts = accept(caution_not_fit_item, caution_not_fit_doc)
-    assert state['entries'] == {}
-    assert receipts[0]['status'] == 'rejected_invalid_result_no_attempt'
+    assert receipts[0]['status'] == 'rejected_semantic_contract_result_attempt_consumed'
+    assert receipts[0]['attempt_consumed'] is True
+    assert state['entries']['game:1172380']['recovery_owned'] is True
 
     # 8) Existing non-Deep Fast/cache negative mapping remains unchanged.
     legacy_fast = {'negative_evidence': ['repetitive grind under the same conditions']}
