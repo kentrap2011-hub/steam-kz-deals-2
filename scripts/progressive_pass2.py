@@ -22,10 +22,43 @@ CANONICAL_EXECUTION_RECEIPTS = ROOT / 'data/cache/progressive_pass2_execution_re
 LEGACY_REANALYSIS_MANIFEST = ROOT / 'data/control/progressive_pass2_legacy_full_reanalysis_manifest.json'
 LEGACY_REANALYSIS_MODE = 'legacy_full_reanalysis'
 LEGACY_REANALYSIS_CONTRACT = 'PROGRESSIVE-PASS2-LEGACY-FULL-REANALYSIS-MANIFEST-V1'
+SCORE_EXPLAINABILITY_MANIFEST = ROOT / 'data/control/progressive_pass2_score_explainability_migration_manifest.json'
+SCORE_EXPLAINABILITY_MODE = 'score_explainability_migration'
+SCORE_EXPLAINABILITY_MIGRATION_CONTRACT = 'PROGRESSIVE-PASS2-SCORE-EXPLAINABILITY-MIGRATION-V1'
+SCORE_EVIDENCE_CONTRACT = {
+    'schema_version': 1,
+    'contract': 'DEEP-SCORE-EVIDENCE-V1',
+    'required': True,
+}
+SCORE_FACTOR_IDS = (
+    'gameplay_mastery',
+    'development_variety',
+    'structure_pacing_direction',
+    'identity_hooks',
+    'breadth_of_match',
+)
+SCORE_EFFECTS = {'supports', 'lowers', 'qualifies'}
+SCORE_EXPLANATION_FORBIDDEN_TEXT = (
+    'price', 'discount', 'wishlist', 'sale',
+    'personal score', 'total score', 'purchase score', 'deal score',
+    'ranking position', 'priority rank',
+    'цена', 'скидк', 'вишлист', 'распродаж',
+    'место в рейтинге', 'место в очеред', 'персональный балл', 'итоговый балл', 'оценка сделки',
+)
+GENERIC_SCORE_EXPLANATION_TEXT = {
+    'отличная игра',
+    'хорошая игра',
+    'хороший файтинг',
+    'подходит тебе',
+    'great game',
+    'good game',
+    'great fighting game',
+    'good fighting game',
+}
 
 STATE_SCHEMA_VERSION = 2
 STATE_CONTRACT = 'PROGRESSIVE-PASS2-STATE-V2'
-WORK_MODES = {'normal_first_pass', 'recovery', LEGACY_REANALYSIS_MODE}
+WORK_MODES = {'normal_first_pass', 'recovery', LEGACY_REANALYSIS_MODE, SCORE_EXPLAINABILITY_MODE}
 FIT_LEVELS = {'strong', 'moderate'}
 CONFIDENCE = {'medium', 'high'}
 NOT_FIT_BASES = {'completed_below_threshold', 'confirmed_personal_negative'}
@@ -135,6 +168,322 @@ def migration_provenance(manifest, target):
         'prior_accepted_at_utc': prior.get('accepted_at_utc'),
         'preserved_positive_evidence': deepcopy(prior.get('positive_evidence') or []),
         'preserved_not_fit_evidence': deepcopy(prior.get('not_fit_evidence') or []),
+    }
+
+
+def _profile_ref(value, field):
+    if not isinstance(value, dict):
+        raise ValueError(f'{field} must be an object')
+    pointer = value.get('json_pointer')
+    digest = value.get('profile_value_sha256')
+    match_text = ' '.join(str(value.get('match_text_ru') or '').split())
+    if not isinstance(pointer, str) or not pointer.startswith('/'):
+        raise ValueError(f'{field}.json_pointer must be an exact JSON pointer')
+    if not isinstance(digest, str) or not re.fullmatch(r'[0-9a-f]{64}', digest):
+        raise ValueError(f'{field}.profile_value_sha256 must be sha256')
+    if not match_text or not re.search(r'[А-Яа-яЁё]', match_text):
+        raise ValueError(f'{field}.match_text_ru must be non-empty Russian text')
+    return {
+        'json_pointer': pointer,
+        'profile_value_sha256': digest,
+        'match_text_ru': match_text,
+    }
+
+
+def _score_candidate_ref(value, field, dossier):
+    ref = _normalize_negative_ref(value, field)
+    kind = ref['kind']
+    rows = dossier.get('observations') if kind == 'observation' else dossier.get('conflicts')
+    if not isinstance(rows, list) or ref['index'] >= len(rows):
+        raise ValueError(f'{field} points outside exact accepted Dossier')
+    return ref
+
+
+def normalize_score_findings(value, work_item, factors):
+    if not isinstance(value, list) or not value:
+        raise ValueError('Deep analyzed_fit requires non-empty score_findings')
+    dossier = _bound_dossier(work_item)
+    if not dossier:
+        raise ValueError('Deep score findings require exact bound Dossier bytes')
+
+    normalized = []
+    seen_ids = set()
+    factor_coverage = set()
+    support_count = 0
+    for index, raw in enumerate(value):
+        field = f'score_findings[{index}]'
+        if not isinstance(raw, dict):
+            raise ValueError(f'{field} must be an object')
+        allowed = {'finding_id', 'text_ru', 'candidate_evidence_refs', 'profile_evidence_refs', 'factor_impacts'}
+        if set(raw) != allowed:
+            raise ValueError(f'{field} has unsupported or missing fields')
+        finding_id = str(raw.get('finding_id') or '').strip()
+        text_ru = ' '.join(str(raw.get('text_ru') or '').split())
+        if not finding_id or finding_id in seen_ids:
+            raise ValueError(f'{field}.finding_id is missing or duplicated')
+        if not text_ru or not re.search(r'[А-Яа-яЁё]', text_ru):
+            raise ValueError(f'{field}.text_ru must be non-empty Russian user-facing text')
+        lowered = text_ru.casefold()
+        if any(term in lowered for term in SCORE_EXPLANATION_FORBIDDEN_TEXT):
+            raise ValueError(f'{field}.text_ru contains commercial/ranking-only language')
+        if lowered.strip(' .,!?:;—-') in GENERIC_SCORE_EXPLANATION_TEXT:
+            raise ValueError(f'{field}.text_ru is generic praise, not a concrete score reason')
+
+        candidate_refs_raw = raw.get('candidate_evidence_refs')
+        if not isinstance(candidate_refs_raw, list) or not candidate_refs_raw:
+            raise ValueError(f'{field} requires exact candidate_evidence_refs')
+        candidate_refs = [
+            _score_candidate_ref(ref, f'{field}.candidate_evidence_refs[{i}]', dossier)
+            for i, ref in enumerate(candidate_refs_raw)
+        ]
+        if len({(ref['kind'], ref['index']) for ref in candidate_refs}) != len(candidate_refs):
+            raise ValueError(f'{field}.candidate_evidence_refs contains duplicates')
+
+        profile_refs_raw = raw.get('profile_evidence_refs')
+        if not isinstance(profile_refs_raw, list) or not profile_refs_raw:
+            raise ValueError(f'{field} requires exact pinned-profile evidence refs')
+        profile_refs = [
+            _profile_ref(ref, f'{field}.profile_evidence_refs[{i}]')
+            for i, ref in enumerate(profile_refs_raw)
+        ]
+
+        impacts_raw = raw.get('factor_impacts')
+        if not isinstance(impacts_raw, list) or not impacts_raw:
+            raise ValueError(f'{field} requires factor_impacts')
+        impacts = []
+        local_factors = set()
+        local_effects = set()
+        for i, impact in enumerate(impacts_raw):
+            impact_field = f'{field}.factor_impacts[{i}]'
+            if not isinstance(impact, dict) or set(impact) != {'factor_id', 'effect', 'normalized_value'}:
+                raise ValueError(f'{impact_field} has unsupported or missing fields')
+            factor_id = impact.get('factor_id')
+            effect = impact.get('effect')
+            normalized_value = impact.get('normalized_value')
+            if factor_id not in SCORE_FACTOR_IDS or factor_id in local_factors:
+                raise ValueError(f'{impact_field}.factor_id is invalid or duplicated in finding')
+            if effect not in SCORE_EFFECTS:
+                raise ValueError(f'{impact_field}.effect is invalid')
+            expected = factors.get(factor_id)
+            if (
+                not isinstance(normalized_value, (int, float))
+                or isinstance(normalized_value, bool)
+                or float(normalized_value) != float(expected)
+            ):
+                raise ValueError(f'{impact_field}.normalized_value must equal accepted taste_factors')
+            impacts.append({
+                'factor_id': factor_id,
+                'effect': effect,
+                'normalized_value': normalized_value,
+            })
+            local_factors.add(factor_id)
+            local_effects.add(effect)
+            factor_coverage.add(factor_id)
+            if effect == 'supports':
+                support_count += 1
+
+        observation_rows = [
+            dossier['observations'][ref['index']]
+            for ref in candidate_refs
+            if ref['kind'] == 'observation'
+        ]
+        sentiments = {str(row.get('sentiment') or '') for row in observation_rows if isinstance(row, dict)}
+        if 'supports' in local_effects and not sentiments.intersection({'positive', 'mixed'}):
+            raise ValueError(f'{field} supporting impact lacks positive/mixed Dossier evidence')
+        if local_effects.intersection({'lowers', 'qualifies'}):
+            has_conflict = any(ref['kind'] == 'conflict' for ref in candidate_refs)
+            if not has_conflict and not sentiments.intersection({'negative', 'mixed'}):
+                raise ValueError(f'{field} lowering/qualifying impact lacks negative/mixed Dossier evidence')
+
+        normalized.append({
+            'finding_id': finding_id,
+            'text_ru': text_ru,
+            'candidate_evidence_refs': candidate_refs,
+            'profile_evidence_refs': profile_refs,
+            'factor_impacts': impacts,
+        })
+        seen_ids.add(finding_id)
+
+    if factor_coverage != set(SCORE_FACTOR_IDS):
+        missing = sorted(set(SCORE_FACTOR_IDS) - factor_coverage)
+        raise ValueError(f'Deep score_findings do not explain every score-bearing factor: {missing}')
+    if support_count < 1:
+        raise ValueError('Deep analyzed_fit requires at least one supporting score finding')
+    return normalized
+
+
+def score_explainability_status(entry):
+    if not isinstance(entry, dict) or entry.get('outcome') != 'analyzed_fit':
+        return 'not_applicable'
+    if (
+        entry.get('score_evidence_contract') == SCORE_EVIDENCE_CONTRACT
+        and isinstance(entry.get('score_findings'), list)
+        and entry.get('score_findings')
+    ):
+        return 'linked_v1'
+    return 'migration_required'
+
+
+def load_score_explainability_manifest(path=SCORE_EXPLAINABILITY_MANIFEST):
+    manifest = load_json(path)
+    if not manifest:
+        return {}
+    if (
+        manifest.get('schema_version') != 1
+        or manifest.get('contract') != SCORE_EXPLAINABILITY_MIGRATION_CONTRACT
+        or manifest.get('status') != 'prepared'
+        or manifest.get('one_off') is not True
+    ):
+        raise ValueError('Deep score explainability migration manifest contract mismatch')
+    migration_id = manifest.get('migration_id')
+    authority = str(manifest.get('migration_authority_commit') or '').lower()
+    frozen_at = parse_utc(manifest.get('migration_frozen_at_utc'))
+    targets = manifest.get('targets')
+    if not isinstance(migration_id, str) or not migration_id:
+        raise ValueError('Deep score explainability migration_id is missing')
+    if not re.fullmatch(r'[0-9a-f]{40}', authority) or frozen_at is None:
+        raise ValueError('Deep score explainability migration authority is invalid')
+    if not isinstance(targets, list) or int((manifest.get('scope') or {}).get('target_count') or -1) != len(targets):
+        raise ValueError('Deep score explainability migration target count mismatch')
+    seen = set()
+    for sequence, target in enumerate(targets, 1):
+        if not isinstance(target, dict) or target.get('sequence') != sequence:
+            raise ValueError('Deep score explainability migration target order is invalid')
+        family_id = target.get('family_id')
+        target_id = target.get('target_id')
+        if not isinstance(family_id, str) or not family_id or family_id in seen:
+            raise ValueError('Deep score explainability migration family is invalid or duplicated')
+        if not isinstance(target_id, str) or not target_id:
+            raise ValueError('Deep score explainability migration target_id is missing')
+        if not isinstance(target.get('prior_authorization_id'), str):
+            raise ValueError('Deep score explainability migration prior authorization is missing')
+        if parse_utc(target.get('prior_accepted_at_utc')) is None:
+            raise ValueError('Deep score explainability migration prior accepted time is invalid')
+        seen.add(family_id)
+    return manifest
+
+
+def _json_at_commit(commit, path, *, repo_root=ROOT):
+    raw = progressive_work_authority.file_bytes_at_commit(commit, str(path), repo_root=repo_root)
+    return json.loads(raw.decode('utf-8'))
+
+
+def _jsonl_at_commit(commit, path, *, repo_root=ROOT):
+    raw = progressive_work_authority.file_bytes_at_commit(commit, str(path), repo_root=repo_root)
+    return [
+        json.loads(line)
+        for line in raw.decode('utf-8').splitlines()
+        if line.strip()
+    ]
+
+
+def _score_migration_provenance(manifest, target, prior):
+    return {
+        'migration_id': manifest['migration_id'],
+        'migration_target_id': target['target_id'],
+        'migration_authority_commit': manifest['migration_authority_commit'],
+        'migration_frozen_at_utc': manifest['migration_frozen_at_utc'],
+        'prior_authorization_id': prior.get('authorization_id'),
+        'prior_accepted_at_utc': prior.get('accepted_at_utc'),
+        'prior_outcome': prior.get('outcome'),
+        'prior_fit_level': prior.get('fit_level'),
+        'prior_confidence': prior.get('confidence'),
+        'prior_taste_factors': deepcopy(prior.get('taste_factors')),
+        'prior_positive_evidence': deepcopy(prior.get('positive_evidence') or []),
+        'prior_work_id': prior.get('work_id'),
+    }
+
+
+def _score_explainability_frozen_scope(manifest, *, repo_root=ROOT):
+    authority = manifest['migration_authority_commit']
+    frozen_at = parse_utc(manifest['migration_frozen_at_utc'])
+    contexts = _jsonl_at_commit(authority, progressive_pass1.PROGRESSIVE_CONTEXT, repo_root=repo_root)
+    projection = _json_at_commit(authority, progressive_pass1.TASTE_PROJECTION, repo_root=repo_root)
+    queue_rows = _jsonl_at_commit(authority, progressive_pass1.TASTE_QUEUE, repo_root=repo_root)
+    state = _json_at_commit(authority, STATE, repo_root=repo_root)
+    index_doc = _json_at_commit(authority, DOSSIER_WORKER_INDEX, repo_root=repo_root)
+    current_binding = index_doc.get('web_evidence_contract_binding') or {}
+    generation, bindings, queue_by_family = progressive_pass1.current_bindings(
+        contexts, projection, queue_rows
+    )
+    context_families = {str(row.get('family_id') or '') for row in contexts}
+    items = []
+    for target in manifest.get('targets') or []:
+        family_id = target['family_id']
+        if family_id not in context_families:
+            raise ValueError(f'Deep score migration target left frozen candidate scope: {family_id}')
+        prior = (state.get('entries') or {}).get(family_id)
+        if (
+            not isinstance(prior, dict)
+            or prior.get('authoritative_completed') is not True
+            or prior.get('outcome') != 'analyzed_fit'
+            or score_explainability_status(prior) != 'migration_required'
+        ):
+            raise ValueError(f'Deep score migration target is not frozen legacy fit: {family_id}')
+        if (
+            prior.get('authorization_id') != target.get('prior_authorization_id')
+            or prior.get('accepted_at_utc') != target.get('prior_accepted_at_utc')
+        ):
+            raise ValueError(f'Deep score migration prior revision binding changed: {family_id}')
+        binding = bindings.get(family_id)
+        queue_row = queue_by_family.get(family_id)
+        if not isinstance(binding, dict) or not isinstance(queue_row, dict):
+            raise ValueError(f'Deep score migration target lacks frozen current semantic binding: {family_id}')
+        dossier_path = DOSSIER_STORE / f"App_{binding['appid']}.json"
+        raw = progressive_work_authority.file_bytes_at_commit(
+            authority, str(dossier_path).replace('\\', '/'), repo_root=repo_root
+        )
+        dossier = json.loads(raw.decode('utf-8'))
+        dossier_record = {
+            'path': str(dossier_path).replace('\\', '/'),
+            'doc': dossier,
+            'content_sha256': hashlib.sha256(raw).hexdigest(),
+        }
+        ok, reason = dossier_is_eligible(
+            binding=binding,
+            semantic_input=_semantic_input(queue_row),
+            dossier_record=dossier_record,
+            current_binding=current_binding,
+            now=frozen_at,
+        )
+        if not ok:
+            raise ValueError(f'Deep score migration frozen Dossier is ineligible for {family_id}: {reason}')
+        provenance = _score_migration_provenance(manifest, target, prior)
+        auth = authorization_id(
+            binding,
+            dossier_record['content_sha256'],
+            current_binding,
+            work_mode=SCORE_EXPLAINABILITY_MODE,
+            score_migration_provenance_value=provenance,
+            score_evidence_contract_value=SCORE_EVIDENCE_CONTRACT,
+        )
+        prefix = f"{binding['semantic_generation_id'][:16]}--{binding['work_id']}--{auth}"
+        items.append({
+            **binding,
+            'work_mode': SCORE_EXPLAINABILITY_MODE,
+            'migration_sequence': target['sequence'],
+            'semantic_input': _semantic_input(queue_row),
+            'dossier_path': dossier_record['path'],
+            'dossier_content_sha256': dossier_record['content_sha256'],
+            'dossier_compatibility_binding': deepcopy(current_binding),
+            'dossier_expires_at_utc': dossier.get('expires_at_utc'),
+            'recovery_authorization_id': None,
+            'recovery_reason': None,
+            'recovery_condition_binding': None,
+            'score_evidence_contract': deepcopy(SCORE_EVIDENCE_CONTRACT),
+            'score_migration_provenance': provenance,
+            'authorization_id': auth,
+            'result_submission_path': f'data/ai_inbox/progressive_pass2/results/{prefix}.json',
+            'terminal_execution_submission_path': (
+                f'data/ai_inbox/progressive_pass2/execution_receipts/{prefix}.json'
+            ),
+        })
+    return {
+        'semantic_generation_id': generation['semantic_generation_id'],
+        'semantic_bindings': generation['bindings'],
+        'profile_pin': generation['profile_pin'],
+        'dossier_compatibility_binding': current_binding,
+        'items': items,
     }
 
 
@@ -445,6 +794,8 @@ def authorization_id(
     work_mode='normal_first_pass',
     recovery_authorization_id=None,
     migration_provenance_value=None,
+    score_migration_provenance_value=None,
+    score_evidence_contract_value=None,
 ):
     if work_mode not in WORK_MODES:
         raise ValueError('unknown Deep work mode')
@@ -458,6 +809,10 @@ def authorization_id(
         'recovery_authorization_id': recovery_authorization_id,
         'migration_provenance': migration_provenance_value,
     }
+    if score_migration_provenance_value is not None:
+        material['score_migration_provenance'] = score_migration_provenance_value
+    if score_evidence_contract_value is not None:
+        material['score_evidence_contract'] = score_evidence_contract_value
     if any(not material.get(key) for key in ('semantic_generation_id', 'work_id', 'appid', 'dossier_content_sha256')):
         raise ValueError('Deep authorization material is incomplete')
     if work_mode == 'recovery' and not recovery_authorization_id:
@@ -467,7 +822,18 @@ def authorization_id(
             raise ValueError('legacy Deep reanalysis cannot consume recovery authorization')
         if not isinstance(migration_provenance_value, dict) or not migration_provenance_value:
             raise ValueError('legacy Deep reanalysis requires migration provenance')
-    elif migration_provenance_value is not None:
+        if score_migration_provenance_value is not None:
+            raise ValueError('legacy Deep reanalysis cannot carry score migration provenance')
+    elif work_mode == SCORE_EXPLAINABILITY_MODE:
+        if recovery_authorization_id is not None:
+            raise ValueError('score explainability migration cannot consume recovery authorization')
+        if migration_provenance_value is not None:
+            raise ValueError('score explainability migration cannot carry legacy migration provenance')
+        if not isinstance(score_migration_provenance_value, dict) or not score_migration_provenance_value:
+            raise ValueError('score explainability migration requires provenance')
+        if score_evidence_contract_value != SCORE_EVIDENCE_CONTRACT:
+            raise ValueError('score explainability migration requires current score evidence contract')
+    elif migration_provenance_value is not None or score_migration_provenance_value is not None:
         raise ValueError('normal/recovery Deep work cannot carry migration provenance')
     if not isinstance(dossier_compatibility_binding, dict) or not dossier_compatibility_binding:
         raise ValueError('Deep Dossier compatibility binding is missing')
@@ -536,18 +902,24 @@ def validate_run_start_authority(
 
     evidence_authority = authority
     evidence_time = started
-    if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
-        provenance = work_item.get('migration_provenance')
+    migration_mode = work_item.get('work_mode')
+    if migration_mode in {LEGACY_REANALYSIS_MODE, SCORE_EXPLAINABILITY_MODE}:
+        provenance_field = (
+            'migration_provenance'
+            if migration_mode == LEGACY_REANALYSIS_MODE
+            else 'score_migration_provenance'
+        )
+        provenance = work_item.get(provenance_field)
         if not isinstance(provenance, dict):
-            raise ValueError('legacy Deep reanalysis migration provenance is missing')
+            raise ValueError('Deep migration provenance is missing')
         evidence_authority = str(provenance.get('migration_authority_commit') or '').lower()
         evidence_time = parse_utc(provenance.get('migration_frozen_at_utc'))
         if evidence_time is None:
-            raise ValueError('legacy Deep reanalysis frozen evidence time is invalid')
+            raise ValueError('Deep migration frozen evidence time is invalid')
         if not progressive_work_authority.commit_is_ancestor(
             evidence_authority, authority, repo_root=repo_root
         ):
-            raise ValueError('legacy Deep reanalysis authority is not an ancestor of run-start authority')
+            raise ValueError('Deep migration authority is not an ancestor of run-start authority')
 
     raw = progressive_work_authority.file_bytes_at_commit(
         evidence_authority, dossier_path, repo_root=repo_root
@@ -830,12 +1202,14 @@ def make_work_item(
         deepcopy(recovery_authorization.get('recovery_condition_binding'))
         if recovery_authorization else None
     )
+    score_contract = deepcopy(SCORE_EVIDENCE_CONTRACT)
     auth = authorization_id(
         binding,
         digest,
         current_binding,
         work_mode=work_mode,
         recovery_authorization_id=recovery_authorization_id,
+        score_evidence_contract_value=score_contract,
     )
     prefix = f"{binding['semantic_generation_id'][:16]}--{binding['work_id']}--{auth}"
     return {
@@ -849,6 +1223,7 @@ def make_work_item(
         'recovery_authorization_id': recovery_authorization_id,
         'recovery_reason': recovery_reason,
         'recovery_condition_binding': recovery_condition_binding,
+        'score_evidence_contract': score_contract,
         'authorization_id': auth,
         'result_submission_path': f'data/ai_inbox/progressive_pass2/results/{prefix}.json',
         'terminal_execution_submission_path': (
@@ -1012,6 +1387,103 @@ def legacy_reanalysis_work_and_metrics(state_doc, manifest=None):
     return work, metrics
 
 
+
+def score_explainability_migration_attempts(entry, migration_id=None):
+    rows = list((entry or {}).get('score_explainability_migration_attempts') or [])
+    if migration_id is None:
+        return rows
+    return [
+        row for row in rows
+        if isinstance(row, dict)
+        and ((row.get('score_migration_provenance') or {}).get('migration_id') == migration_id)
+    ]
+
+
+def score_explainability_target_status(entry, item, migration_id):
+    target_id = (item.get('score_migration_provenance') or {}).get('migration_target_id')
+    for attempt in reversed(score_explainability_migration_attempts(entry, migration_id)):
+        provenance = attempt.get('score_migration_provenance') or {}
+        if provenance.get('migration_target_id') != target_id:
+            continue
+        if attempt.get('outcome') in AUTHORITATIVE_OUTCOMES:
+            return 'accepted_completed', attempt
+        if attempt.get('outcome') == 'analysis_incomplete':
+            return 'accepted_incomplete', attempt
+    if not isinstance(entry, dict):
+        return 'stale_or_missing_prior', None
+    if score_explainability_status(entry) == 'linked_v1':
+        return 'already_compliant', entry
+    provenance = item.get('score_migration_provenance') or {}
+    if (
+        entry.get('authorization_id') != provenance.get('prior_authorization_id')
+        or entry.get('outcome') != 'analyzed_fit'
+        or entry.get('authoritative_completed') is not True
+    ):
+        return 'stale_or_missing_prior', None
+    return 'pending', None
+
+
+def score_explainability_work_and_metrics(state_doc, manifest=None, *, repo_root=ROOT):
+    manifest = manifest if manifest is not None else load_score_explainability_manifest()
+    if not manifest:
+        return [], {
+            'migration_id': None,
+            'migration_authority_commit': None,
+            'total_count': 0,
+            'pending_count': 0,
+            'submitted_count': 0,
+            'accepted_count': 0,
+            'accepted_completed_count': 0,
+            'incomplete_count': 0,
+            'already_compliant_count': 0,
+            'stale_or_missing_prior_count': 0,
+            'complete': True,
+        }, {}
+    frozen = _score_explainability_frozen_scope(manifest, repo_root=repo_root)
+    migration_id = manifest['migration_id']
+    metrics = {
+        'migration_id': migration_id,
+        'migration_authority_commit': manifest['migration_authority_commit'],
+        'total_count': len(frozen['items']),
+        'pending_count': 0,
+        'submitted_count': 0,
+        'accepted_count': 0,
+        'accepted_completed_count': 0,
+        'incomplete_count': 0,
+        'already_compliant_count': 0,
+        'stale_or_missing_prior_count': 0,
+        'last_accepted_at_utc': None,
+        'complete': False,
+    }
+    work = []
+    accepted_times = []
+    for item in frozen['items']:
+        entry = (state_doc.get('entries') or {}).get(item['family_id'])
+        status, attempt = score_explainability_target_status(entry, item, migration_id)
+        if status == 'pending':
+            work.append(deepcopy(item))
+            metrics['pending_count'] += 1
+            if Path(item['result_submission_path']).exists() or Path(item['terminal_execution_submission_path']).exists():
+                metrics['submitted_count'] += 1
+            continue
+        if status == 'stale_or_missing_prior':
+            metrics['stale_or_missing_prior_count'] += 1
+            continue
+        metrics['accepted_count'] += 1
+        accepted_at = attempt.get('accepted_at_utc') if isinstance(attempt, dict) else None
+        if accepted_at:
+            accepted_times.append(accepted_at)
+        if status == 'accepted_incomplete':
+            metrics['incomplete_count'] += 1
+        elif status == 'already_compliant':
+            metrics['already_compliant_count'] += 1
+            metrics['accepted_completed_count'] += 1
+        else:
+            metrics['accepted_completed_count'] += 1
+    metrics['last_accepted_at_utc'] = max(accepted_times) if accepted_times else None
+    metrics['complete'] = metrics['accepted_count'] == metrics['total_count']
+    return work, metrics, frozen
+
 def recompute_eligibility(
     *,
     context_rows,
@@ -1169,6 +1641,10 @@ def _identity_matches(doc, work_item, contract_name):
         return False
     if doc.get('migration_provenance') != work_item.get('migration_provenance'):
         return False
+    if doc.get('score_migration_provenance') != work_item.get('score_migration_provenance'):
+        return False
+    if doc.get('score_evidence_contract') != work_item.get('score_evidence_contract'):
+        return False
     run_anchor = work_item.get('_run_start_anchor_commit')
     if run_anchor is not None and doc.get('run_start_anchor_commit') != run_anchor:
         return False
@@ -1182,7 +1658,7 @@ def _identity_matches(doc, work_item, contract_name):
 
 
 def _attempt_base(work_item, outcome, accepted_at_utc, source):
-    return {
+    attempt = {
         **{field: work_item[field] for field in PASS1_IDENTITY_FIELDS},
         'profile_semantic_sha256': work_item.get('profile_semantic_sha256'),
         'dossier_content_sha256': work_item['dossier_content_sha256'],
@@ -1202,6 +1678,11 @@ def _attempt_base(work_item, outcome, accepted_at_utc, source):
         'run_started_at_utc': work_item.get('_run_started_at_utc'),
         'work_authority_commit': work_item.get('_work_authority_commit'),
     }
+    if work_item.get('score_migration_provenance') is not None:
+        attempt['score_migration_provenance'] = deepcopy(work_item.get('score_migration_provenance'))
+    if work_item.get('score_evidence_contract') is not None:
+        attempt['score_evidence_contract'] = deepcopy(work_item.get('score_evidence_contract'))
+    return attempt
 
 
 def _migration_result_changed(work_item, attempt):
@@ -1238,7 +1719,6 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
 
     accepted_at_utc = accepted_at_utc or datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     base = _attempt_base(work_item, outcome, accepted_at_utc, 'accepted_result')
-
     if outcome == 'analyzed_fit':
         negative_assessment = normalize_negative_assessment(doc.get('negative_assessment'), work_item)
         fit_level = doc.get('fit_level')
@@ -1258,6 +1738,11 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
                 raise ValueError('legacy Deep reanalysis fit must reuse exact preserved positive evidence')
         factors = doc.get('taste_factors')
         validate_taste_factors(factors)
+        score_findings = None
+        if work_item.get('score_evidence_contract') == SCORE_EVIDENCE_CONTRACT:
+            score_findings = normalize_score_findings(doc.get('score_findings'), work_item, factors)
+        elif 'score_findings' in doc or doc.get('score_evidence_contract') is not None:
+            raise ValueError('legacy Deep work cannot invent score evidence binding')
         requires_base = bool(
             ((work_item.get('semantic_input') or {}).get('semantic_condition') or {}).get(
                 'requires_ai_base_support'
@@ -1270,9 +1755,13 @@ def normalize_result(doc, work_item, accepted_at_utc=None):
             'confidence': confidence,
             'positive_evidence': evidence,
             'taste_factors': deepcopy(factors),
+            'score_findings': deepcopy(score_findings) if score_findings is not None else None,
+            'score_explainability_status': 'linked_v1' if score_findings is not None else 'migration_required',
             'base_support_compatible': True if requires_base else None,
             'negative_assessment': deepcopy(negative_assessment),
         })
+        if base.get('score_findings') is None:
+            base.pop('score_findings', None)
         if work_item.get('work_mode') == LEGACY_REANALYSIS_MODE:
             base['migration_result_changed'] = _migration_result_changed(work_item, base)
             base['migration_fit_outcome_changed'] = (
@@ -1371,6 +1860,10 @@ def normalize_terminal_execution_receipt(doc, work_item, accepted_at_utc=None, s
         'run_start_authority_commit': work_item.get('_run_start_authority_commit'),
         'run_started_at_utc': work_item.get('_run_started_at_utc'),
     }
+    if work_item.get('score_migration_provenance') is not None:
+        canonical_receipt['score_migration_provenance'] = deepcopy(work_item.get('score_migration_provenance'))
+    if work_item.get('score_evidence_contract') is not None:
+        canonical_receipt['score_evidence_contract'] = deepcopy(work_item.get('score_evidence_contract'))
     return attempt, canonical_receipt
 
 
@@ -1386,6 +1879,26 @@ def _attempt_authorization_status(existing, work_item):
     mode = work_item.get('work_mode')
     if mode == 'normal_first_pass':
         return 'new' if existing is None else 'replay'
+    if mode == SCORE_EXPLAINABILITY_MODE:
+        if existing is None:
+            return 'unauthorized'
+        provenance = work_item.get('score_migration_provenance') or {}
+        migration_id = provenance.get('migration_id')
+        target_id = provenance.get('migration_target_id')
+        for attempt in score_explainability_migration_attempts(existing, migration_id):
+            attempt_provenance = attempt.get('score_migration_provenance') or {}
+            if (
+                attempt_provenance.get('migration_target_id') == target_id
+                and attempt.get('authorization_id') == work_item.get('authorization_id')
+            ):
+                return 'replay'
+        if existing.get('authorization_id') != provenance.get('prior_authorization_id'):
+            return 'unauthorized'
+        if existing.get('authoritative_completed') is not True or existing.get('outcome') != 'analyzed_fit':
+            return 'unauthorized'
+        if score_explainability_status(existing) != 'migration_required':
+            return 'unauthorized'
+        return 'new'
     if mode == LEGACY_REANALYSIS_MODE:
         if existing is None:
             return 'unauthorized'
@@ -1462,6 +1975,77 @@ def _apply_attempt(existing, work_item, attempt):
         }
         for field in (
             'fit_level', 'confidence', 'positive_evidence', 'taste_factors',
+            'score_evidence_contract', 'score_findings', 'score_explainability_status',
+            'base_support_compatible', 'not_fit_basis', 'not_fit_evidence',
+            'negative_assessment',
+        ):
+            if field in attempt:
+                entry[field] = deepcopy(attempt[field])
+        return entry
+
+    if work_item.get('work_mode') == SCORE_EXPLAINABILITY_MODE:
+        if existing is None or existing.get('authoritative_completed') is not True:
+            raise ValueError('score explainability migration requires an existing authoritative prior revision')
+        provenance = work_item.get('score_migration_provenance') or {}
+        if existing.get('authorization_id') != provenance.get('prior_authorization_id'):
+            raise ValueError('score explainability migration prior revision authorization changed')
+        entry = deepcopy(existing)
+        attempts = list(entry.get('score_explainability_migration_attempts') or [])
+        attempts.append(deepcopy(attempt))
+        entry['score_explainability_migration_attempts'] = attempts
+        entry['score_explainability_migration_status'] = {
+            'migration_id': provenance.get('migration_id'),
+            'migration_target_id': provenance.get('migration_target_id'),
+            'attempt_outcome': attempt.get('outcome'),
+            'accepted_at_utc': attempt.get('accepted_at_utc'),
+            'completed_revision_promoted': bool(authoritative),
+        }
+        if not authoritative:
+            return entry
+
+        prior_snapshot = deepcopy(existing)
+        prior_snapshot.pop('revision_history', None)
+        prior_snapshot.pop('score_explainability_migration_attempts', None)
+        prior_snapshot.pop('score_explainability_migration_status', None)
+        history = list(entry.get('revision_history') or [])
+        history.append({
+            'revision_kind': 'pre_score_explainability_migration',
+            'migration_id': provenance.get('migration_id'),
+            'superseded_at_utc': attempt.get('accepted_at_utc'),
+            'state': prior_snapshot,
+        })
+        entry['revision_history'] = history
+
+        for field in (
+            'fit_level', 'confidence', 'positive_evidence', 'taste_factors',
+            'score_evidence_contract', 'score_findings', 'score_explainability_status',
+            'base_support_compatible', 'not_fit_basis', 'not_fit_evidence',
+            'negative_assessment',
+        ):
+            entry.pop(field, None)
+        for field in PASS1_IDENTITY_FIELDS:
+            entry[field] = work_item[field]
+        entry['profile_semantic_sha256'] = work_item.get('profile_semantic_sha256')
+        entry['pass2_attempted'] = True
+        entry['authoritative_completed'] = True
+        entry['outcome'] = attempt['outcome']
+        entry['analysis_issue_code'] = attempt.get('analysis_issue_code')
+        entry['attempt_consumption_source'] = attempt.get('attempt_consumption_source')
+        entry['accepted_at_utc'] = attempt.get('accepted_at_utc')
+        entry['work_authority_commit'] = attempt.get('work_authority_commit')
+        entry['dossier_content_sha256'] = attempt.get('dossier_content_sha256')
+        entry['dossier_compatibility_binding'] = deepcopy(attempt.get('dossier_compatibility_binding'))
+        entry['authorization_id'] = attempt.get('authorization_id')
+        entry['work_mode'] = SCORE_EXPLAINABILITY_MODE
+        entry['recovery_authorization_id'] = None
+        entry['recovery_reason'] = None
+        entry['recovery_condition_binding'] = None
+        entry['recovery_owned'] = False
+        entry['recovery_authorization'] = None
+        entry['score_migration_provenance'] = deepcopy(attempt.get('score_migration_provenance'))
+        for field in (
+            'fit_level', 'confidence', 'positive_evidence', 'taste_factors',
+            'score_evidence_contract', 'score_findings', 'score_explainability_status',
             'base_support_compatible', 'not_fit_basis', 'not_fit_evidence',
             'negative_assessment',
         ):
@@ -1506,6 +2090,7 @@ def _apply_attempt(existing, work_item, attempt):
 
         for field in (
             'fit_level', 'confidence', 'positive_evidence', 'taste_factors',
+            'score_evidence_contract', 'score_findings', 'score_explainability_status',
             'base_support_compatible', 'not_fit_basis', 'not_fit_evidence',
             'negative_assessment',
         ):
@@ -1531,6 +2116,7 @@ def _apply_attempt(existing, work_item, attempt):
         entry['migration_fit_outcome_changed'] = attempt.get('migration_fit_outcome_changed')
         for field in (
             'fit_level', 'confidence', 'positive_evidence', 'taste_factors',
+            'score_evidence_contract', 'score_findings', 'score_explainability_status',
             'base_support_compatible', 'not_fit_basis', 'not_fit_evidence',
             'negative_assessment',
         ):
@@ -1810,6 +2396,10 @@ def semantic_taste_entry(entry):
         'candidate_context_sha256': entry.get('candidate_context_sha256'),
         'positive_evidence': list(entry.get('positive_evidence') or []),
         'positive_evidence_binding': deepcopy(binding),
+        'deep_score_findings': deepcopy(entry.get('score_findings') or []),
+        'deep_score_evidence_contract': deepcopy(entry.get('score_evidence_contract')),
+        'deep_score_explainability_status': score_explainability_status(entry),
+        'deep_score_evidence_binding': deepcopy(binding),
         'negative_analysis_status': (
             'complete_with_confirmed_negative'
             if legacy_findings else 'incomplete_no_confirmed_negative'

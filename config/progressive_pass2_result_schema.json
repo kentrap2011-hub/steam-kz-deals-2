@@ -133,7 +133,8 @@
       "enum": [
         "normal_first_pass",
         "recovery",
-        "legacy_full_reanalysis"
+        "legacy_full_reanalysis",
+        "score_explainability_migration"
       ]
     },
     "recovery_authorization_id": {
@@ -286,6 +287,44 @@
           "uniqueItems": true
         }
       }
+    },
+    "score_evidence_contract": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema_version",
+            "contract",
+            "required"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": 1
+            },
+            "contract": {
+              "const": "DEEP-SCORE-EVIDENCE-V1"
+            },
+            "required": {
+              "const": true
+            }
+          }
+        }
+      ]
+    },
+    "score_findings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/deepScoreFinding"
+      }
+    },
+    "score_migration_provenance": {
+      "$ref": "#/$defs/deepScoreMigrationProvenance"
     }
   },
   "additionalProperties": false,
@@ -448,6 +487,85 @@
           "required": [
             "migration_provenance"
           ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "outcome": {
+            "const": "analyzed_fit"
+          },
+          "score_evidence_contract": {
+            "type": "object",
+            "properties": {
+              "contract": {
+                "const": "DEEP-SCORE-EVIDENCE-V1"
+              },
+              "required": {
+                "const": true
+              }
+            },
+            "required": [
+              "contract",
+              "required"
+            ]
+          }
+        },
+        "required": [
+          "outcome",
+          "score_evidence_contract"
+        ]
+      },
+      "then": {
+        "required": [
+          "score_findings"
+        ]
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "score_findings"
+        ]
+      },
+      "then": {
+        "required": [
+          "score_evidence_contract"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "work_mode": {
+            "const": "score_explainability_migration"
+          }
+        },
+        "required": [
+          "work_mode"
+        ]
+      },
+      "then": {
+        "required": [
+          "score_migration_provenance",
+          "score_evidence_contract"
+        ],
+        "not": {
+          "required": [
+            "migration_provenance"
+          ]
+        },
+        "properties": {
+          "recovery_authorization_id": {
+            "type": "null"
+          },
+          "recovery_reason": {
+            "type": "null"
+          },
+          "recovery_condition_binding": {
+            "type": "null"
+          }
         }
       }
     }
@@ -624,6 +742,180 @@
           }
         }
       ]
+    },
+    "deepProfileEvidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "json_pointer",
+        "profile_value_sha256",
+        "match_text_ru"
+      ],
+      "properties": {
+        "json_pointer": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "profile_value_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "match_text_ru": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "deepScoreFactorImpact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "factor_id",
+        "effect",
+        "normalized_value"
+      ],
+      "properties": {
+        "factor_id": {
+          "enum": [
+            "gameplay_mastery",
+            "development_variety",
+            "structure_pacing_direction",
+            "identity_hooks",
+            "breadth_of_match"
+          ]
+        },
+        "effect": {
+          "enum": [
+            "supports",
+            "lowers",
+            "qualifies"
+          ]
+        },
+        "normalized_value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "deepScoreFinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "finding_id",
+        "text_ru",
+        "candidate_evidence_refs",
+        "profile_evidence_refs",
+        "factor_impacts"
+      ],
+      "properties": {
+        "finding_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_ru": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/deepNegativeEvidenceRef"
+          }
+        },
+        "profile_evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/deepProfileEvidenceRef"
+          }
+        },
+        "factor_impacts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/deepScoreFactorImpact"
+          }
+        }
+      }
+    },
+    "deepScoreMigrationProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "migration_id",
+        "migration_target_id",
+        "migration_authority_commit",
+        "migration_frozen_at_utc",
+        "prior_authorization_id",
+        "prior_accepted_at_utc",
+        "prior_outcome",
+        "prior_fit_level",
+        "prior_confidence",
+        "prior_taste_factors",
+        "prior_positive_evidence",
+        "prior_work_id"
+      ],
+      "properties": {
+        "migration_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "migration_target_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "migration_authority_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "migration_frozen_at_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "prior_authorization_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "prior_accepted_at_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "prior_outcome": {
+          "const": "analyzed_fit"
+        },
+        "prior_fit_level": {
+          "enum": [
+            "strong",
+            "moderate"
+          ]
+        },
+        "prior_confidence": {
+          "enum": [
+            "medium",
+            "high"
+          ]
+        },
+        "prior_taste_factors": {
+          "type": "object"
+        },
+        "prior_positive_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "prior_work_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
     }
   }
 }

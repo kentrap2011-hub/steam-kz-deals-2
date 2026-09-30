@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-SCORE-EXPLAINABILITY-MIGRATION-V1",
+  "migration_id": "deep-score-evidence-explainability-alignment-01",
+  "status": "prepared",
+  "one_off": true,
+  "migration_authority_commit": "7beb2624e8a659f4bdb311f64c4534a7af844263",
+  "migration_frozen_at_utc": "2026-09-30T03:35:38Z",
+  "authority_selection": "fresh_main_after_start_gate_before_score_explainability_runtime_merge",
+  "source_state_path": "data/cache/progressive_pass2_state.json",
+  "source_state_blob_sha": "33c69cd9d22c1aadfd9b5a0aa595b1cb934216cc",
+  "source_context_path": "data/production/pre_ai/progressive_candidate_context.jsonl",
+  "source_context_blob_sha": "e0fa229acf00bdecf7533446bcaaad006f6cc715",
+  "scope": {
+    "target_count": 43,
+    "prior_fit_count": 43,
+    "prior_not_fit_not_applicable_count": 4,
+    "already_linked_fit_count": 0,
+    "ordering": "accepted_at_utc_then_family_id"
+  },
+  "targets": [
+    {
+      "sequence": 1,
+      "target_id": "deep-score-explainability-01:game:1046400:e60c0610f37d8280",
+      "family_id": "game:1046400",
+      "appid": "1046400",
+      "prior_authorization_id": "e60c0610f37d8280190c0b41048de32b52dcae65171204f51bf29cb32261d2ed",
+      "prior_accepted_at_utc": "2026-09-28T10:27:23+00:00"
+    },
+    {
+      "sequence": 2,
+      "target_id": "deep-score-explainability-01:game:102600:be8658ebefd1b3b7",
+      "family_id": "game:102600",
+      "appid": "102600",
+      "prior_authorization_id": "be8658ebefd1b3b79d5bc94b4240f4f3f03d435020838b54094263f7d0dcea45",
+      "prior_accepted_at_utc": "2026-09-28T10:27:53+00:00"
+    },
+    {
+      "sequence": 3,
+      "target_id": "deep-score-explainability-01:game:1058450:a351d118d29dac0c",
+      "family_id": "game:1058450",
+      "appid": "1058450",
+      "prior_authorization_id": "a351d118d29dac0c6d5d96f2ce37b8e75fccb949f1cc67edfff579d207a3cfb4",
+      "prior_accepted_at_utc": "2026-09-28T10:28:28+00:00"
+    },
+    {
+      "sequence": 4,
+      "target_id": "deep-score-explainability-01:game:1227690:f841362b7bb76494",
+      "family_id": "game:1227690",
+      "appid": "1227690",
+      "prior_authorization_id": "f841362b7bb764941d9a6d78525503f2ce46e7d2797b81f00006e5d042dc621e",
+      "prior_accepted_at_utc": "2026-09-28T10:29:02+00:00"
+    },
+    {
+      "sequence": 5,
+      "target_id": "deep-score-explainability-01:game:1000010:df4064cd926d420f",
+      "family_id": "game:1000010",
+      "appid": "1000010",
+      "prior_authorization_id": "df4064cd926d420fccc6d0510d9a4265b1c3672b40dce1ddef6e9e37b57b0166",
+      "prior_accepted_at_utc": "2026-09-28T10:29:39+00:00"
+    },
+    {
+      "sequence": 6,
+      "target_id": "deep-score-explainability-01:game:1054490:1c0e7684c46b771e",
+      "family_id": "game:1054490",
+      "appid": "1054490",
+      "prior_authorization_id": "1c0e7684c46b771edf1969b80ac9de851a6c57345b72b00d756f0d8661e132cf",
+      "prior_accepted_at_utc": "2026-09-28T10:30:07+00:00"
+    },
+    {
+      "sequence": 7,
+      "target_id": "deep-score-explainability-01:game:1075740:b94fbda6533078aa",
+      "family_id": "game:1075740",
+      "appid": "1075740",
+      "prior_authorization_id": "b94fbda6533078aa9943b6b5141ac85570dbf1dad967dd869da8b95c67168e44",
+      "prior_accepted_at_utc": "2026-09-28T10:30:43+00:00"
+    },
+    {
+      "sequence": 8,
+      "target_id": "deep-score-explainability-01:game:1173770:c904a9e4ea355972",
+      "family_id": "game:1173770",
+      "appid": "1173770",
+      "prior_authorization_id": "c904a9e4ea35597214c10fa33126bf7eeba4f7148c29b8edbff53e11a41a438b",
+      "prior_accepted_at_utc": "2026-09-28T10:31:19+00:00"
+    },
+    {
+      "sequence": 9,
+      "target_id": "deep-score-explainability-01:game:1206610:71d5b8ec75463129",
+      "family_id": "game:1206610",
+      "appid": "1206610",
+      "prior_authorization_id": "71d5b8ec754631295e57903fc157f994a48873ea65b3561196f87e59eb8274d8",
+      "prior_accepted_at_utc": "2026-09-28T10:31:54+00:00"
+    },
+    {
+      "sequence": 10,
+      "target_id": "deep-score-explainability-01:game:1173780:9bf4c0571c7a46b4",
+      "family_id": "game:1173780",
+      "appid": "1173780",
+      "prior_authorization_id": "9bf4c0571c7a46b45266cc2db772c3ce3567f92b0c8f0bdc9d6a64b0dfde8ed8",
+      "prior_accepted_at_utc": "2026-09-28T10:32:27+00:00"
+    },
+    {
+      "sequence": 11,
+      "target_id": "deep-score-explainability-01:game:1173790:cf10282009a9fba0",
+      "family_id": "game:1173790",
+      "appid": "1173790",
+      "prior_authorization_id": "cf10282009a9fba0b0b9e8c26a563337fce67c24465485975b655845ff6606b6",
+      "prior_accepted_at_utc": "2026-09-28T10:34:13+00:00"
+    },
+    {
+      "sequence": 12,
+      "target_id": "deep-score-explainability-01:game:1173800:d5470bf56f725184",
+      "family_id": "game:1173800",
+      "appid": "1173800",
+      "prior_authorization_id": "d5470bf56f725184c17f614819818e46bdaa2413bebb58fa0165eaf7aac30d8e",
+      "prior_accepted_at_utc": "2026-09-28T10:34:49+00:00"
+    },
+    {
+      "sequence": 13,
+      "target_id": "deep-score-explainability-01:game:1173810:d408a0bd25149a19",
+      "family_id": "game:1173810",
+      "appid": "1173810",
+      "prior_authorization_id": "d408a0bd25149a198f5d6dfeba2ac19273d57afed428ddfe7bbe862b1e4fe274",
+      "prior_accepted_at_utc": "2026-09-28T10:35:25+00:00"
+    },
+    {
+      "sequence": 14,
+      "target_id": "deep-score-explainability-01:game:1173820:187a2489fc910d96",
+      "family_id": "game:1173820",
+      "appid": "1173820",
+      "prior_authorization_id": "187a2489fc910d96663857d803e482ee0b13d98dde1d06dc950e5eb2f87ff9dc",
+      "prior_accepted_at_utc": "2026-09-28T10:36:02+00:00"
+    },
+    {
+      "sequence": 15,
+      "target_id": "deep-score-explainability-01:game:1343240:3d71e18361a3abec",
+      "family_id": "game:1343240",
+      "appid": "1343240",
+      "prior_authorization_id": "3d71e18361a3abec5756460cdd500751b8b3411219d1c4d5883ee88bb509d929",
+      "prior_accepted_at_utc": "2026-09-28T16:52:31+00:00"
+    },
+    {
+      "sequence": 16,
+      "target_id": "deep-score-explainability-01:game:1337010:2ad09f2a66fbd7db",
+      "family_id": "game:1337010",
+      "appid": "1337010",
+      "prior_authorization_id": "2ad09f2a66fbd7db34bf968d8126fc424e4197cd35b00e330146684c50493ac3",
+      "prior_accepted_at_utc": "2026-09-28T16:53:12+00:00"
+    },
+    {
+      "sequence": 17,
+      "target_id": "deep-score-explainability-01:game:13500:90d87ca156127ec4",
+      "family_id": "game:13500",
+      "appid": "13500",
+      "prior_authorization_id": "90d87ca156127ec47c793e1dae1010ecdecb9f106f4090a52d0bc7ec8d97b8d5",
+      "prior_accepted_at_utc": "2026-09-28T16:53:58+00:00"
+    },
+    {
+      "sequence": 18,
+      "target_id": "deep-score-explainability-01:game:1196630:db7bbddff694a0a8",
+      "family_id": "game:1196630",
+      "appid": "1196630",
+      "prior_authorization_id": "db7bbddff694a0a8d5d8ff135c7bee11946ad33bcd2dfb4e5b4dfe5ed2e1970d",
+      "prior_accepted_at_utc": "2026-09-29T03:13:50+00:00"
+    },
+    {
+      "sequence": 19,
+      "target_id": "deep-score-explainability-01:game:1155970:c406fe2d29e0e59c",
+      "family_id": "game:1155970",
+      "appid": "1155970",
+      "prior_authorization_id": "c406fe2d29e0e59ce5db1488b9befc36d48b1607fc84dfe49206cd612c8607a7",
+      "prior_accepted_at_utc": "2026-09-29T03:14:50+00:00"
+    },
+    {
+      "sequence": 20,
+      "target_id": "deep-score-explainability-01:game:1202900:d7734f0975991cba",
+      "family_id": "game:1202900",
+      "appid": "1202900",
+      "prior_authorization_id": "d7734f0975991cba39a60789967a6bab7eeec529b1fc976c16cc01efcbfbf5e4",
+      "prior_accepted_at_utc": "2026-09-29T03:15:52+00:00"
+    },
+    {
+      "sequence": 21,
+      "target_id": "deep-score-explainability-01:game:1286580:4c0e181919a63463",
+      "family_id": "game:1286580",
+      "appid": "1286580",
+      "prior_authorization_id": "4c0e181919a63463a317765597bf13fa2a702e82a071bb0f75367e7b5dca3af7",
+      "prior_accepted_at_utc": "2026-09-29T03:15:52+00:00"
+    },
+    {
+      "sequence": 22,
+      "target_id": "deep-score-explainability-01:game:1372280:0d6c7641d2599179",
+      "family_id": "game:1372280",
+      "appid": "1372280",
+      "prior_authorization_id": "0d6c7641d2599179e13ab9765b2f7fdcee91072a172849c89b802c42e0639e0d",
+      "prior_accepted_at_utc": "2026-09-29T08:37:03+00:00"
+    },
+    {
+      "sequence": 23,
+      "target_id": "deep-score-explainability-01:game:1388880:e3cdf3a7e129a612",
+      "family_id": "game:1388880",
+      "appid": "1388880",
+      "prior_authorization_id": "e3cdf3a7e129a61265aa44c4fb1fbed98fc5449c82ea735be3049ec7bcc94a68",
+      "prior_accepted_at_utc": "2026-09-29T08:38:13+00:00"
+    },
+    {
+      "sequence": 24,
+      "target_id": "deep-score-explainability-01:game:13560:d9d288c771c58653",
+      "family_id": "game:13560",
+      "appid": "13560",
+      "prior_authorization_id": "d9d288c771c586530107066a6bffac3e073061f3d7cc366b5ff61a4b6a07694d",
+      "prior_accepted_at_utc": "2026-09-29T08:39:38+00:00"
+    },
+    {
+      "sequence": 25,
+      "target_id": "deep-score-explainability-01:game:13530:7f8653db682b07c5",
+      "family_id": "game:13530",
+      "appid": "13530",
+      "prior_authorization_id": "7f8653db682b07c5b0f670ac8b4e6f3327fafc33038cdac0818a7e52722774fc",
+      "prior_accepted_at_utc": "2026-09-29T08:40:38+00:00"
+    },
+    {
+      "sequence": 26,
+      "target_id": "deep-score-explainability-01:game:13600:e97a7fabd49e9df2",
+      "family_id": "game:13600",
+      "appid": "13600",
+      "prior_authorization_id": "e97a7fabd49e9df20308369c7fed89de4dafd6232984f3cc386b2cfdb07e125d",
+      "prior_accepted_at_utc": "2026-09-29T08:40:38+00:00"
+    },
+    {
+      "sequence": 27,
+      "target_id": "deep-score-explainability-01:game:13520:d93bb6844d6acf39",
+      "family_id": "game:13520",
+      "appid": "13520",
+      "prior_authorization_id": "d93bb6844d6acf39bf16fae8fef164ca19037f6cf2284b509b308c0dc5aa1064",
+      "prior_accepted_at_utc": "2026-09-29T08:41:47+00:00"
+    },
+    {
+      "sequence": 28,
+      "target_id": "deep-score-explainability-01:game:13570:ce2468e80359febf",
+      "family_id": "game:13570",
+      "appid": "13570",
+      "prior_authorization_id": "ce2468e80359febf847e943832d2e28c8bcfa8e2e7395558d8895621156cb2de",
+      "prior_accepted_at_utc": "2026-09-29T08:41:47+00:00"
+    },
+    {
+      "sequence": 29,
+      "target_id": "deep-score-explainability-01:game:1321440:fd5ba92db5eb37f5",
+      "family_id": "game:1321440",
+      "appid": "1321440",
+      "prior_authorization_id": "fd5ba92db5eb37f530adb1512c7da88ca7490e23f27ba7092993bc0d5107188b",
+      "prior_accepted_at_utc": "2026-09-29T11:28:28+00:00"
+    },
+    {
+      "sequence": 30,
+      "target_id": "deep-score-explainability-01:game:1364100:6144f9f177f582ee",
+      "family_id": "game:1364100",
+      "appid": "1364100",
+      "prior_authorization_id": "6144f9f177f582eee74d858e164face59506987185f5316ce07a4ad693dba1a6",
+      "prior_accepted_at_utc": "2026-09-29T11:30:05+00:00"
+    },
+    {
+      "sequence": 31,
+      "target_id": "deep-score-explainability-01:game:1372110:8e55552c2db06931",
+      "family_id": "game:1372110",
+      "appid": "1372110",
+      "prior_authorization_id": "8e55552c2db0693135afbaccf408546d15ee426fc629c0cd49498fd1f14598af",
+      "prior_accepted_at_utc": "2026-09-29T11:30:35+00:00"
+    },
+    {
+      "sequence": 32,
+      "target_id": "deep-score-explainability-01:game:1416230:7940f0d7d5cf4d96",
+      "family_id": "game:1416230",
+      "appid": "1416230",
+      "prior_authorization_id": "7940f0d7d5cf4d964e79055c178184489d4992606152b1412e37fc5993bd3c8f",
+      "prior_accepted_at_utc": "2026-09-29T11:30:35+00:00"
+    },
+    {
+      "sequence": 33,
+      "target_id": "deep-score-explainability-01:game:1369630:69cab5337a9a7ed0",
+      "family_id": "game:1369630",
+      "appid": "1369630",
+      "prior_authorization_id": "69cab5337a9a7ed0e99cf462dfdaea4b43b467243dea3919923cb237c5234b51",
+      "prior_accepted_at_utc": "2026-09-29T11:31:34+00:00"
+    },
+    {
+      "sequence": 34,
+      "target_id": "deep-score-explainability-01:game:1498570:14dbe354ac94de42",
+      "family_id": "game:1498570",
+      "appid": "1498570",
+      "prior_authorization_id": "14dbe354ac94de42af2204527b3733f41ea9a1d5a856b79383673da18eaba117",
+      "prior_accepted_at_utc": "2026-09-29T11:32:43+00:00"
+    },
+    {
+      "sequence": 35,
+      "target_id": "deep-score-explainability-01:game:1522820:48626eb09ea6c062",
+      "family_id": "game:1522820",
+      "appid": "1522820",
+      "prior_authorization_id": "48626eb09ea6c0629064fdf1736a5e4c0b4c0b827afee39f993841eedc386f45",
+      "prior_accepted_at_utc": "2026-09-29T15:59:18+00:00"
+    },
+    {
+      "sequence": 36,
+      "target_id": "deep-score-explainability-01:game:1556790:5c33e8bbb9415306",
+      "family_id": "game:1556790",
+      "appid": "1556790",
+      "prior_authorization_id": "5c33e8bbb941530691cd9b2e324e8935871d9c1a125fe217c9f0fa21477bf16c",
+      "prior_accepted_at_utc": "2026-09-29T16:00:45+00:00"
+    },
+    {
+      "sequence": 37,
+      "target_id": "deep-score-explainability-01:game:15170:1d1881721494b727",
+      "family_id": "game:15170",
+      "appid": "15170",
+      "prior_authorization_id": "1d1881721494b7276da99c2ad71aaa2dbd372905a85b81ecdb4e3f27e1be7ec3",
+      "prior_accepted_at_utc": "2026-09-29T16:02:04+00:00"
+    },
+    {
+      "sequence": 38,
+      "target_id": "deep-score-explainability-01:game:15370:eeac1edb8ccbd161",
+      "family_id": "game:15370",
+      "appid": "15370",
+      "prior_authorization_id": "eeac1edb8ccbd161bc0ceef9d9a21aa3a0240413d75222f92b83fa024dd41f08",
+      "prior_accepted_at_utc": "2026-09-29T16:03:33+00:00"
+    },
+    {
+      "sequence": 39,
+      "target_id": "deep-score-explainability-01:game:15390:2630c2b92369e737",
+      "family_id": "game:15390",
+      "appid": "15390",
+      "prior_authorization_id": "2630c2b92369e7375ce56820e916f1ddf0b94b2123be918e658487ea800aa968",
+      "prior_accepted_at_utc": "2026-09-29T16:05:12+00:00"
+    },
+    {
+      "sequence": 40,
+      "target_id": "deep-score-explainability-01:game:1570010:9c78791d7b59686d",
+      "family_id": "game:1570010",
+      "appid": "1570010",
+      "prior_authorization_id": "9c78791d7b59686d0df6a90f5c58468cab7ce0037f8a134c56d54e2e0d38727d",
+      "prior_accepted_at_utc": "2026-09-29T17:37:41+00:00"
+    },
+    {
+      "sequence": 41,
+      "target_id": "deep-score-explainability-01:game:201790:558cb389883702c2",
+      "family_id": "game:201790",
+      "appid": "201790",
+      "prior_authorization_id": "558cb389883702c2d4c78c3a5fbf0766b9041907b60816ac215975a0823769fc",
+      "prior_accepted_at_utc": "2026-09-30T02:06:47+00:00"
+    },
+    {
+      "sequence": 42,
+      "target_id": "deep-score-explainability-01:game:200710:bb6f18b4b4892ebf",
+      "family_id": "game:200710",
+      "appid": "200710",
+      "prior_authorization_id": "bb6f18b4b4892ebf3d24e1135c941be5593e4f9a933d6c4c86e5d839017b1a36",
+      "prior_accepted_at_utc": "2026-09-30T02:07:06+00:00"
+    },
+    {
+      "sequence": 43,
+      "target_id": "deep-score-explainability-01:game:201870:463e8924a70678c3",
+      "family_id": "game:201870",
+      "appid": "201870",
+      "prior_authorization_id": "463e8924a70678c31b91a6dd41f68c9b97dab02629d07b9568062344bb7bad19",
+      "prior_accepted_at_utc": "2026-09-30T02:07:06+00:00"
+    }
+  ],
+  "source_dossier_index_path": "data/production/pre_ai/taste_steam_review_dossier_worker_index.json",
+  "source_dossier_index_blob_sha": "5e2c46ae288459837a24d2ec833133df5f519a5e"
+}

@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 
-from card_explanation_policy import positive_reasons
+from card_explanation_policy import deep_score_reasons, positive_reasons
 from semantic_runtime_completion import apply_visual_semantic_status
 from russian_description_quality import classify_description
 import commercial_reconsideration_bridge as commercial_bridge
@@ -492,10 +492,13 @@ def main():
         if analysis_state == 'analyzed_fit':
             tags = projection.get('fit_tags') or []
             taste_description = projection.get('short_description') or ''
-            reasons, why_fit_provenance = positive_reasons(
-                taste_entry.get('positive_evidence') or [],
-                source_binding=taste_entry.get('positive_evidence_binding'),
-            )
+            if taste_entry.get('semantic_source') == 'progressive_pass2':
+                reasons, why_fit_provenance = deep_score_reasons(taste_entry)
+            else:
+                reasons, why_fit_provenance = positive_reasons(
+                    taste_entry.get('positive_evidence') or [],
+                    source_binding=taste_entry.get('positive_evidence_binding'),
+                )
             base_facts = [facts.get(appid) or {} for appid in base_appids]
             statuses = [x.get('windows_status') for x in base_facts]
             windows_status = (
@@ -586,9 +589,16 @@ def main():
                 'why_fit': reasons[:2],
                 'why_fit_status': {
                     'has_described_fit': bool(reasons),
-                    'grounding': 'grounded' if reasons else 'insufficient_evidence',
+                    'grounding': (
+                        'grounded' if reasons else (
+                            'migration_required'
+                            if taste_entry.get('deep_score_explainability_status') == 'migration_required'
+                            else 'insufficient_evidence'
+                        )
+                    ),
                 },
                 'why_fit_provenance': why_fit_provenance[:2],
+                'score_explainability_status': taste_entry.get('deep_score_explainability_status'),
                 'risks': risks,
             })
 

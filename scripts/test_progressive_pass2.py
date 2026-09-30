@@ -157,13 +157,27 @@ def assert_persisted_projection_invariants(state_doc, scope, items):
     assert bool(scope.get('deep_all_current_authoritative_complete')) == (authoritative == total)
     migration = scope.get('legacy_full_reanalysis') or {}
     migration_active = bool(scope.get('deep_normal_work_paused_for_legacy_reanalysis'))
+    score_migration = scope.get('score_explainability_migration') or {}
+    score_migration_active = bool(
+        scope.get('deep_normal_work_paused_for_score_explainability_migration')
+    )
     normal_eligible = int(scope.get('normal_pass2_eligible_count', ready) or 0)
     if migration_active:
+        assert score_migration_active is False
         assert normal_eligible == ready
         assert eligible == len(items) == int(migration.get('pending_count') or 0)
         assert all(item.get('work_mode') == progressive_pass2.LEGACY_REANALYSIS_MODE for item in items)
         assert int(migration.get('total_count') or 0) >= eligible
         assert migration.get('complete') is False
+    elif score_migration_active:
+        assert normal_eligible == ready
+        assert eligible == len(items) == int(score_migration.get('pending_count') or 0)
+        assert all(
+            item.get('work_mode') == progressive_pass2.SCORE_EXPLAINABILITY_MODE
+            for item in items
+        )
+        assert int(score_migration.get('total_count') or 0) >= eligible
+        assert score_migration.get('complete') is False
     else:
         assert ready == eligible == len(items)
     assert int(scope.get('recovery_pending_count') or 0) <= ready
@@ -197,6 +211,13 @@ def dossier_record(appid, title, binding, *, digest=None, expires='2026-10-01T00
                     },
                 ],
             },
+            'observations': [
+                {
+                    'sentiment': 'positive',
+                    'summary': 'Candidate-specific mastery and variety evidence for regression fixtures.',
+                },
+            ],
+            'conflicts': [],
             'web_evidence_contract_binding': copy.deepcopy(binding),
         },
     }
@@ -221,6 +242,10 @@ def result_doc(item, outcome='analyzed_fit', **extra):
         'recovery_condition_binding': copy.deepcopy(item.get('recovery_condition_binding')),
         'outcome': outcome,
     }
+    if item.get('score_evidence_contract') is not None:
+        doc['score_evidence_contract'] = copy.deepcopy(item.get('score_evidence_contract'))
+    if item.get('score_migration_provenance') is not None:
+        doc['score_migration_provenance'] = copy.deepcopy(item.get('score_migration_provenance'))
     if outcome in {'analyzed_fit', 'analyzed_not_fit'}:
         doc['negative_assessment'] = {
             'status': 'completed',
@@ -232,7 +257,7 @@ def result_doc(item, outcome='analyzed_fit', **extra):
 
 
 def terminal_doc(item, reason='worker_failure'):
-    return {
+    doc = {
         'schema_version': 1,
         'contract': 'PROGRESSIVE-PASS2-EXECUTION-RECEIPT-V1',
         **{field: item.get(field) for field in progressive_pass2.IMMUTABLE_RESULT_FIELDS},
@@ -243,6 +268,11 @@ def terminal_doc(item, reason='worker_failure'):
         'execution_finished_at_utc': '2026-09-22T10:01:00Z',
         'terminal_reason': reason,
     }
+    if item.get('score_evidence_contract') is not None:
+        doc['score_evidence_contract'] = copy.deepcopy(item.get('score_evidence_contract'))
+    if item.get('score_migration_provenance') is not None:
+        doc['score_migration_provenance'] = copy.deepcopy(item.get('score_migration_provenance'))
+    return doc
 
 
 def recompute(bindings, p1, p2, dossiers, current_binding, *, proj=None):
@@ -264,14 +294,48 @@ def recompute(bindings, p1, p2, dossiers, current_binding, *, proj=None):
     return result
 
 
+def score_findings(item, factors=None):
+    factors = copy.deepcopy(factors or FACTOR_VALUES)
+    if item.get('score_evidence_contract') != progressive_pass2.SCORE_EVIDENCE_CONTRACT:
+        return None
+    return [
+        {
+            'finding_id': 'fixture-grounded-fit',
+            'text_ru': (
+                'Конкретная механика из принятого досье даёт тебе пространство для освоения, '
+                'экспериментов и разнообразных игровых решений.'
+            ),
+            'candidate_evidence_refs': [{'kind': 'observation', 'index': 0}],
+            'profile_evidence_refs': [
+                {
+                    'json_pointer': '/fixture/preferences',
+                    'profile_value_sha256': hashlib.sha256(b'fixture-profile-value').hexdigest(),
+                    'match_text_ru': 'Тебе важны освоение механик и разнообразие игровых решений.',
+                },
+            ],
+            'factor_impacts': [
+                {
+                    'factor_id': factor_id,
+                    'effect': 'supports',
+                    'normalized_value': factors[factor_id],
+                }
+                for factor_id in progressive_pass2.SCORE_FACTOR_IDS
+            ],
+        },
+    ]
+
+
 def fit_result(item):
-    return result_doc(
-        item,
-        fit_level='strong',
-        confidence='high',
-        positive_evidence=['candidate-specific dossier-supported gameplay fit'],
-        taste_factors=FACTOR_VALUES,
-    )
+    extra = {
+        'fit_level': 'strong',
+        'confidence': 'high',
+        'positive_evidence': ['candidate-specific dossier-supported gameplay fit'],
+        'taste_factors': copy.deepcopy(FACTOR_VALUES),
+    }
+    findings = score_findings(item, FACTOR_VALUES)
+    if findings is not None:
+        extra['score_findings'] = findings
+    return result_doc(item, **extra)
 
 
 def main():

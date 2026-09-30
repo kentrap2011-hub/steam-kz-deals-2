@@ -203,10 +203,18 @@ def run():
         assert migration_scope['pending_count'] == 30
         assert migration_scope['accepted_count'] == 0
     else:
-        assert persisted_work['projection_status'] == 'current_github_owned_fast_dossier_deep_v1_projection'
         assert migration_scope['pending_count'] == 0
         assert migration_scope['accepted_count'] == 30
         assert all(row['work_mode'] != progressive_pass2.LEGACY_REANALYSIS_MODE for row in persisted_work['items'])
+        score_scope = persisted_work['scope'].get('score_explainability_migration') or {}
+        if score_scope and score_scope.get('complete') is False:
+            assert persisted_work['projection_status'] == 'score_explainability_migration_active'
+            assert all(
+                row['work_mode'] == progressive_pass2.SCORE_EXPLAINABILITY_MODE
+                for row in persisted_work['items']
+            )
+        else:
+            assert persisted_work['projection_status'] == 'current_github_owned_fast_dossier_deep_v1_projection'
     rebuilt = build_progressive_pass2_work.build_work_document()
     assert rebuilt['scope']['legacy_full_reanalysis']['total_count'] == 30
     assert rebuilt['scope']['legacy_full_reanalysis']['complete'] == migration_scope['complete']
@@ -216,10 +224,18 @@ def run():
             row['authorization_id'] for row in persisted_work['items']
         ]
     else:
-        assert rebuilt['projection_status'] == 'current_github_owned_fast_dossier_deep_v1_projection'
         assert rebuilt['scope']['legacy_full_reanalysis']['pending_count'] == 0
         assert rebuilt['scope']['legacy_full_reanalysis']['accepted_count'] == 30
         assert all(row['work_mode'] != progressive_pass2.LEGACY_REANALYSIS_MODE for row in rebuilt['items'])
+        score_scope = rebuilt['scope'].get('score_explainability_migration') or {}
+        if score_scope and score_scope.get('complete') is False:
+            assert rebuilt['projection_status'] == 'score_explainability_migration_active'
+            assert all(
+                row['work_mode'] == progressive_pass2.SCORE_EXPLAINABILITY_MODE
+                for row in rebuilt['items']
+            )
+        else:
+            assert rebuilt['projection_status'] == 'current_github_owned_fast_dossier_deep_v1_projection'
 
     # Run-start validation uses the frozen migration authority Dossier, while the
     # ordinary V2 run-start receipt remains mandatory as publication authority.

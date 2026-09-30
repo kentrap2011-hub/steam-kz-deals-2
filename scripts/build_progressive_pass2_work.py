@@ -74,6 +74,27 @@ def build_work_document(now=None):
         migration_manifest,
     )
     migration_active = bool(migration_manifest) and not migration_metrics['complete']
+    score_manifest = progressive_pass2.load_score_explainability_manifest()
+    if score_manifest:
+        score_items, score_metrics, score_frozen = progressive_pass2.score_explainability_work_and_metrics(
+            pass2_state,
+            score_manifest,
+        )
+    else:
+        score_items, score_metrics, score_frozen = [], {
+            'migration_id': None,
+            'migration_authority_commit': None,
+            'total_count': 0,
+            'pending_count': 0,
+            'submitted_count': 0,
+            'accepted_count': 0,
+            'accepted_completed_count': 0,
+            'incomplete_count': 0,
+            'already_compliant_count': 0,
+            'stale_or_missing_prior_count': 0,
+            'complete': True,
+        }, {}
+    score_migration_active = bool(score_manifest) and not score_metrics['complete']
     if migration_active:
         # The one-off migration freezes its own profile/evidence authority. Keep one
         # homogeneous worker manifest until it terminates; ordinary Deep work is
@@ -87,6 +108,16 @@ def build_work_document(now=None):
         profile_pin = migration_manifest['profile_pin']
         dossier_binding = migration_manifest['dossier_compatibility_binding']
         projection_status = 'legacy_full_reanalysis_migration_active'
+    elif score_migration_active:
+        items = [dict(item) for item in score_items]
+        items.sort(key=lambda row: int(row.get('migration_sequence') or 0))
+        for sequence, item in enumerate(items, 1):
+            item['sequence'] = sequence
+        semantic_generation_id = score_frozen['semantic_generation_id']
+        semantic_bindings = score_frozen['semantic_bindings']
+        profile_pin = score_frozen['profile_pin']
+        dossier_binding = score_frozen['dossier_compatibility_binding']
+        projection_status = 'score_explainability_migration_active'
     else:
         items = normal_items
         semantic_generation_id = recomputed['semantic_generation_id']
@@ -99,7 +130,9 @@ def build_work_document(now=None):
     counts['normal_pass2_eligible_count'] = counts['pass2_eligible_count']
     counts['pass2_eligible_count'] = len(items)
     counts['deep_normal_work_paused_for_legacy_reanalysis'] = migration_active
+    counts['deep_normal_work_paused_for_score_explainability_migration'] = score_migration_active
     counts['legacy_full_reanalysis'] = migration_metrics
+    counts['score_explainability_migration'] = score_metrics
 
     return {
         'schema_version': 2,

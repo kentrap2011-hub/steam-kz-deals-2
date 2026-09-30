@@ -143,6 +143,83 @@ def _positive_reason(value):
     return None, None
 
 
+
+def deep_score_reasons(taste_entry: dict, limit: int = 2):
+    """Project accepted score-bearing Deep findings without lexical reinterpretation."""
+    if (
+        not isinstance(taste_entry, dict)
+        or taste_entry.get('semantic_source') != 'progressive_pass2'
+        or taste_entry.get('deep_score_explainability_status') != 'linked_v1'
+    ):
+        return [], []
+    binding = _normalized_binding(taste_entry.get('deep_score_evidence_binding'))
+    if binding is None:
+        return [], []
+    reasons = []
+    provenance = []
+    for finding in taste_entry.get('deep_score_findings') or []:
+        if not isinstance(finding, dict):
+            continue
+        impacts = [row for row in finding.get('factor_impacts') or [] if isinstance(row, dict)]
+        if not any(row.get('effect') == 'supports' for row in impacts):
+            continue
+        text = _normalized_evidence(finding.get('text_ru'))
+        evidence_refs = [dict(ref) for ref in finding.get('candidate_evidence_refs') or [] if isinstance(ref, dict)]
+        profile_refs = [dict(ref) for ref in finding.get('profile_evidence_refs') or [] if isinstance(ref, dict)]
+        if not text or not impacts or not evidence_refs or not profile_refs:
+            continue
+        reasons.append(text)
+        provenance.append({
+            'source': 'deep_score_finding',
+            'finding_id': finding.get('finding_id'),
+            'factor_impacts': [dict(row) for row in impacts],
+            'evidence_refs': evidence_refs,
+            'profile_evidence_refs': profile_refs,
+            'semantic_binding': dict(binding),
+        })
+        if len(reasons) >= limit:
+            break
+    return reasons, provenance
+
+
+def deep_score_qualifiers(taste_entry: dict, limit: int = 2):
+    """Expose non-risk score qualifiers without turning them into a second penalty."""
+    if (
+        not isinstance(taste_entry, dict)
+        or taste_entry.get('semantic_source') != 'progressive_pass2'
+        or taste_entry.get('deep_score_explainability_status') != 'linked_v1'
+    ):
+        return [], []
+    binding = _normalized_binding(taste_entry.get('deep_score_evidence_binding'))
+    if binding is None:
+        return [], []
+    cautions = []
+    provenance = []
+    for finding in taste_entry.get('deep_score_findings') or []:
+        if not isinstance(finding, dict):
+            continue
+        impacts = [row for row in finding.get('factor_impacts') or [] if isinstance(row, dict)]
+        effects = {row.get('effect') for row in impacts}
+        if not effects.intersection({'lowers', 'qualifies'}) or 'supports' in effects:
+            continue
+        text = _normalized_evidence(finding.get('text_ru'))
+        evidence_refs = [dict(ref) for ref in finding.get('candidate_evidence_refs') or [] if isinstance(ref, dict)]
+        profile_refs = [dict(ref) for ref in finding.get('profile_evidence_refs') or [] if isinstance(ref, dict)]
+        if not text or not evidence_refs or not profile_refs:
+            continue
+        cautions.append(text)
+        provenance.append({
+            'source': 'deep_score_finding_qualifier',
+            'finding_id': finding.get('finding_id'),
+            'factor_impacts': [dict(row) for row in impacts],
+            'evidence_refs': evidence_refs,
+            'profile_evidence_refs': profile_refs,
+            'semantic_binding': dict(binding),
+        })
+        if len(cautions) >= limit:
+            break
+    return cautions, provenance
+
 def positive_reasons(positive_evidence: Iterable[str], limit: int = 2, source_binding=None):
     reasons: List[str] = []
     provenance: List[dict] = []
