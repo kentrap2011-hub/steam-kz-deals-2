@@ -48909,12 +48909,12 @@
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "pass2_attempted": true,
       "normal_first_pass_attempted": true,
-      "authoritative_completed": false,
-      "outcome": "analysis_incomplete",
-      "analysis_issue_code": "terminal_execution_failure",
-      "attempt_consumption_source": "github_derived_semantic_contract_failure",
-      "accepted_at_utc": "2026-09-30T03:24:16+00:00",
-      "work_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+      "authoritative_completed": true,
+      "outcome": "analyzed_not_fit",
+      "analysis_issue_code": null,
+      "attempt_consumption_source": "accepted_result",
+      "accepted_at_utc": "2026-09-30T12:02:42+00:00",
+      "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
       "dossier_content_sha256": "381ef1e995f390e2bc415c9ed52478f987a2b6a83bb38d909c9aca947e9420d4",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -48930,11 +48930,41 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "58e8ea8312bec3291f31f359176ef0d3d3789f7628e1c6bd1be253dde8188c16",
-      "work_mode": "normal_first_pass",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
+      "authorization_id": "0f6f9d8ab89d7e947ddeeed3a2af7436cbb8aa956a5d8e28630f8964306a7651",
+      "work_mode": "recovery",
+      "recovery_authorization_id": "78a3660c5930d60c03f6b71d97bea1b9575aac496c684ebccd69143b97a18814",
+      "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+      "recovery_condition_binding": {
+        "semantic_input": {
+          "title": "Five Dates",
+          "short_description": "Five Dates is an interactive rom-com about the unpredictable world of digital dating. With five potential female matches, Vinny explores whether compatibility, chemistry and connection is still possible in a world where physical touch is no longer an option.",
+          "bundle_members": [],
+          "fit_tags": [
+            "Adventure",
+            "Choices Matter"
+          ],
+          "core_fit_count": 1,
+          "release_date": "17 Nov, 2020",
+          "release_year": null,
+          "semantic_condition": {
+            "ai_condition": "taste_subject_include_controls_purchase_family",
+            "requires_ai_base_support": false,
+            "base_appids": [
+              "1353270"
+            ]
+          }
+        },
+        "defect_fix_binding": {
+          "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
+          "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
+          "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
+          "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+          "prior_result_commit": "6919dcb927526f716e4448d3013eb2c74736e3bb",
+          "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
+          "prior_result_authorization_id": "58e8ea8312bec3291f31f359176ef0d3d3789f7628e1c6bd1be253dde8188c16",
+          "prior_rejection_reason": "confirmed personal negative requires high confidence"
+        }
+      },
       "normal_first_pass": {
         "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
         "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
@@ -48988,67 +49018,202 @@
           "prior_appid": "1353270"
         }
       },
-      "recovery_attempts": [],
-      "recovery_owned": true,
-      "recovery_authorization": {
-        "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-        "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-        "work_id": "1379906886119f0bcd8b2d764fa7ce663140ada66a7da03ec1dd08176679773b",
-        "family_id": "game:1353270",
-        "taste_subject_key": "App_1353270",
-        "appid": "1353270",
-        "taste_fingerprint": "d20ffcbe166bb56cd27678ae6d9f7a7d83d5e10c95ba3abf57a0ace6abc6fb80",
-        "candidate_context_sha256": "d4e700196c92983db70afd8c4df087edb5080ec58dd8c097bcacbd215ade73c8",
-        "recovery_authorization_id": "78a3660c5930d60c03f6b71d97bea1b9575aac496c684ebccd69143b97a18814",
-        "status": "authorized",
-        "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
-        "recovery_condition_binding": {
-          "semantic_input": {
-            "title": "Five Dates",
-            "short_description": "Five Dates is an interactive rom-com about the unpredictable world of digital dating. With five potential female matches, Vinny explores whether compatibility, chemistry and connection is still possible in a world where physical touch is no longer an option.",
-            "bundle_members": [],
-            "fit_tags": [
-              "Adventure",
-              "Choices Matter"
-            ],
-            "core_fit_count": 1,
-            "release_date": "17 Nov, 2020",
-            "release_year": null,
-            "semantic_condition": {
-              "ai_condition": "taste_subject_include_controls_purchase_family",
-              "requires_ai_base_support": false,
-              "base_appids": [
-                "1353270"
-              ]
+      "recovery_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "1379906886119f0bcd8b2d764fa7ce663140ada66a7da03ec1dd08176679773b",
+          "family_id": "game:1353270",
+          "taste_subject_key": "App_1353270",
+          "appid": "1353270",
+          "taste_fingerprint": "d20ffcbe166bb56cd27678ae6d9f7a7d83d5e10c95ba3abf57a0ace6abc6fb80",
+          "candidate_context_sha256": "d4e700196c92983db70afd8c4df087edb5080ec58dd8c097bcacbd215ade73c8",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "381ef1e995f390e2bc415c9ed52478f987a2b6a83bb38d909c9aca947e9420d4",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "0f6f9d8ab89d7e947ddeeed3a2af7436cbb8aa956a5d8e28630f8964306a7651",
+          "work_mode": "recovery",
+          "recovery_authorization_id": "78a3660c5930d60c03f6b71d97bea1b9575aac496c684ebccd69143b97a18814",
+          "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+          "recovery_condition_binding": {
+            "semantic_input": {
+              "title": "Five Dates",
+              "short_description": "Five Dates is an interactive rom-com about the unpredictable world of digital dating. With five potential female matches, Vinny explores whether compatibility, chemistry and connection is still possible in a world where physical touch is no longer an option.",
+              "bundle_members": [],
+              "fit_tags": [
+                "Adventure",
+                "Choices Matter"
+              ],
+              "core_fit_count": 1,
+              "release_date": "17 Nov, 2020",
+              "release_year": null,
+              "semantic_condition": {
+                "ai_condition": "taste_subject_include_controls_purchase_family",
+                "requires_ai_base_support": false,
+                "base_appids": [
+                  "1353270"
+                ]
+              }
+            },
+            "defect_fix_binding": {
+              "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
+              "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
+              "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
+              "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+              "prior_result_commit": "6919dcb927526f716e4448d3013eb2c74736e3bb",
+              "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
+              "prior_result_authorization_id": "58e8ea8312bec3291f31f359176ef0d3d3789f7628e1c6bd1be253dde8188c16",
+              "prior_rejection_reason": "confirmed personal negative requires high confidence"
             }
           },
-          "defect_fix_binding": {
-            "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
-            "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
-            "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
-            "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
-            "prior_result_commit": "6919dcb927526f716e4448d3013eb2c74736e3bb",
-            "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
-            "prior_result_authorization_id": "58e8ea8312bec3291f31f359176ef0d3d3789f7628e1c6bd1be253dde8188c16",
-            "prior_rejection_reason": "confirmed personal negative requires high confidence"
+          "migration_provenance": null,
+          "outcome": "analyzed_not_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T12:02:42+00:00",
+          "run_start_anchor_commit": "98f766a847449a9697ba6c4a2370ffad08aee506",
+          "run_start_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+          "run_started_at_utc": "2026-09-30T11:59:25+00:00",
+          "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "confidence": "high",
+          "not_fit_basis": "confirmed_personal_negative",
+          "not_fit_evidence": [
+            "The core format is a compact FMV dating story dominated by watching scenes and choosing dialogue rather than sustained mechanical play.",
+            "Completion-oriented replays require substantial repeated footage with limited skipping.",
+            "For this profile, the combination of low active mechanical depth and repeated familiar material is a strong mismatch despite believable acting and branching partners."
+          ],
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 0
+              },
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "low_active_gameplay",
+                "text_ru": "Основной формат — просмотр FMV-сцен и выбор реплик; для профиля, которому особенно важны активные механики и освоение систем, этого игрового слоя устойчиво мало.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 0
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Актёрская игра и бытовые сцены часто убедительны, но сюжет и арки могут ощущаться знакомыми и предсказуемыми.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "Повторные прохождения ради других веток требуют снова смотреть много знакомого материала, а возможности быстро пропускать увиденное ограничены.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              }
+            ]
           }
-        },
-        "dossier_content_sha256": "381ef1e995f390e2bc415c9ed52478f987a2b6a83bb38d909c9aca947e9420d4",
-        "dossier_compatibility_binding": {
-          "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-          "evidence_contract_version": 2,
-          "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-          "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-          "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-          "worker_schema_version": 2,
-          "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-          "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-          "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-          "dossier_schema_version": 2,
-          "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-          "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-        },
-        "authorized_at_utc": "2026-09-30T06:43:26+00:00"
+        }
+      ],
+      "recovery_owned": false,
+      "recovery_authorization": null,
+      "confidence": "high",
+      "not_fit_basis": "confirmed_personal_negative",
+      "not_fit_evidence": [
+        "The core format is a compact FMV dating story dominated by watching scenes and choosing dialogue rather than sustained mechanical play.",
+        "Completion-oriented replays require substantial repeated footage with limited skipping.",
+        "For this profile, the combination of low active mechanical depth and repeated familiar material is a strong mismatch despite believable acting and branching partners."
+      ],
+      "negative_assessment": {
+        "status": "completed",
+        "evaluated_candidate_refs": [
+          {
+            "kind": "observation",
+            "index": 0
+          },
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ],
+        "findings": [
+          {
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "low_active_gameplay",
+            "text_ru": "Основной формат — просмотр FMV-сцен и выбор реплик; для профиля, которому особенно важны активные механики и освоение систем, этого игрового слоя устойчиво мало.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 0
+              }
+            ]
+          },
+          {
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Актёрская игра и бытовые сцены часто убедительны, но сюжет и арки могут ощущаться знакомыми и предсказуемыми.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              }
+            ]
+          },
+          {
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "unchanged_repetition",
+            "text_ru": "Повторные прохождения ради других веток требуют снова смотреть много знакомого материала, а возможности быстро пропускать увиденное ограничены.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 2
+              }
+            ]
+          }
+        ]
       }
     },
     "game:1296770": {
@@ -49063,12 +49228,12 @@
       "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
       "pass2_attempted": true,
       "normal_first_pass_attempted": true,
-      "authoritative_completed": false,
-      "outcome": "analysis_incomplete",
-      "analysis_issue_code": "terminal_execution_failure",
-      "attempt_consumption_source": "github_derived_semantic_contract_failure",
-      "accepted_at_utc": "2026-09-30T03:24:16+00:00",
-      "work_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+      "authoritative_completed": true,
+      "outcome": "analyzed_not_fit",
+      "analysis_issue_code": null,
+      "attempt_consumption_source": "accepted_result",
+      "accepted_at_utc": "2026-09-30T12:02:42+00:00",
+      "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
       "dossier_content_sha256": "8a998c504111582b002efe98fe4eee397083124b867bf180e4f2590d52d6db03",
       "dossier_compatibility_binding": {
         "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
@@ -49084,11 +49249,38 @@
         "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
         "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
       },
-      "authorization_id": "c2586b7e898fbd2588250bf47802969ded4d695783ab841977f5f5e5c9e54e60",
-      "work_mode": "normal_first_pass",
-      "recovery_authorization_id": null,
-      "recovery_reason": null,
-      "recovery_condition_binding": null,
+      "authorization_id": "a8dc0237b8f0a78244c71ef19554d85032503978cf87fd9daea5e06108751323",
+      "work_mode": "recovery",
+      "recovery_authorization_id": "d330d77dcc3803008332a0291baafdf7f842ee878c5e377bf3527f4e77df00f4",
+      "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+      "recovery_condition_binding": {
+        "semantic_input": {
+          "title": "Her New Memory - Hentai Simulator",
+          "short_description": "One day, you find a shivering, barefooted girl in ragged clothes knocking on your door. She has no recollections of her past, and she doesn’t even remember her name. You can help her recover her memories or let her stay at your side forever.",
+          "bundle_members": [],
+          "fit_tags": [],
+          "core_fit_count": 0,
+          "release_date": "8 Feb, 2022",
+          "release_year": null,
+          "semantic_condition": {
+            "ai_condition": "taste_subject_include_controls_purchase_family",
+            "requires_ai_base_support": false,
+            "base_appids": [
+              "1296770"
+            ]
+          }
+        },
+        "defect_fix_binding": {
+          "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
+          "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
+          "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
+          "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+          "prior_result_commit": "57a31a9789673b6e10464c02938b76c4991a6e40",
+          "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
+          "prior_result_authorization_id": "c2586b7e898fbd2588250bf47802969ded4d695783ab841977f5f5e5c9e54e60",
+          "prior_rejection_reason": "confirmed personal negative requires high confidence"
+        }
+      },
       "normal_first_pass": {
         "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
         "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
@@ -49142,64 +49334,199 @@
           "prior_appid": "1296770"
         }
       },
-      "recovery_attempts": [],
-      "recovery_owned": true,
-      "recovery_authorization": {
-        "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
-        "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
-        "work_id": "a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a",
-        "family_id": "game:1296770",
-        "taste_subject_key": "App_1296770",
-        "appid": "1296770",
-        "taste_fingerprint": "b8fdc904a0b14b7a94c33ef8eb484b43a6a6751c9ead7a50e1e465e7c4ffbb68",
-        "candidate_context_sha256": "65c1745a97ce1806ceede5797c5f05cfdb2f3042d616df3b713db606cedf090f",
-        "recovery_authorization_id": "d330d77dcc3803008332a0291baafdf7f842ee878c5e377bf3527f4e77df00f4",
-        "status": "authorized",
-        "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
-        "recovery_condition_binding": {
-          "semantic_input": {
-            "title": "Her New Memory - Hentai Simulator",
-            "short_description": "One day, you find a shivering, barefooted girl in ragged clothes knocking on your door. She has no recollections of her past, and she doesn’t even remember her name. You can help her recover her memories or let her stay at your side forever.",
-            "bundle_members": [],
-            "fit_tags": [],
-            "core_fit_count": 0,
-            "release_date": "8 Feb, 2022",
-            "release_year": null,
-            "semantic_condition": {
-              "ai_condition": "taste_subject_include_controls_purchase_family",
-              "requires_ai_base_support": false,
-              "base_appids": [
-                "1296770"
-              ]
+      "recovery_attempts": [
+        {
+          "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+          "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+          "work_id": "a349c27f3663446a76886e22218455525bc43a2428278ca450257ad916f6239a",
+          "family_id": "game:1296770",
+          "taste_subject_key": "App_1296770",
+          "appid": "1296770",
+          "taste_fingerprint": "b8fdc904a0b14b7a94c33ef8eb484b43a6a6751c9ead7a50e1e465e7c4ffbb68",
+          "candidate_context_sha256": "65c1745a97ce1806ceede5797c5f05cfdb2f3042d616df3b713db606cedf090f",
+          "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+          "dossier_content_sha256": "8a998c504111582b002efe98fe4eee397083124b867bf180e4f2590d52d6db03",
+          "dossier_compatibility_binding": {
+            "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+            "evidence_contract_version": 2,
+            "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+            "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+            "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+            "worker_schema_version": 2,
+            "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+            "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+            "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+            "dossier_schema_version": 2,
+            "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+            "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+          },
+          "authorization_id": "a8dc0237b8f0a78244c71ef19554d85032503978cf87fd9daea5e06108751323",
+          "work_mode": "recovery",
+          "recovery_authorization_id": "d330d77dcc3803008332a0291baafdf7f842ee878c5e377bf3527f4e77df00f4",
+          "recovery_reason": "corrected_runtime_or_validation_defect_material_to_the_prior_failure",
+          "recovery_condition_binding": {
+            "semantic_input": {
+              "title": "Her New Memory - Hentai Simulator",
+              "short_description": "One day, you find a shivering, barefooted girl in ragged clothes knocking on your door. She has no recollections of her past, and she doesn’t even remember her name. You can help her recover her memories or let her stay at your side forever.",
+              "bundle_members": [],
+              "fit_tags": [],
+              "core_fit_count": 0,
+              "release_date": "8 Feb, 2022",
+              "release_year": null,
+              "semantic_condition": {
+                "ai_condition": "taste_subject_include_controls_purchase_family",
+                "requires_ai_base_support": false,
+                "base_appids": [
+                  "1296770"
+                ]
+              }
+            },
+            "defect_fix_binding": {
+              "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
+              "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
+              "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
+              "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
+              "prior_result_commit": "57a31a9789673b6e10464c02938b76c4991a6e40",
+              "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
+              "prior_result_authorization_id": "c2586b7e898fbd2588250bf47802969ded4d695783ab841977f5f5e5c9e54e60",
+              "prior_rejection_reason": "confirmed personal negative requires high confidence"
             }
           },
-          "defect_fix_binding": {
-            "task_id": "deep-invalid-not-fit-contract-loop-fix-01",
-            "validated_fix_commit": "b21bdfd773162e9856c1b12015b1b497b4999363",
-            "prior_run_start_anchor_commit": "4d1a1c573289358713897559e79b754907ff91c8",
-            "prior_run_start_authority_commit": "ab9f5f1c841b9c6d40ace1932c7d32437763eb8a",
-            "prior_result_commit": "57a31a9789673b6e10464c02938b76c4991a6e40",
-            "prior_ingest_rejection_commit": "5651782bb91a18aaaedc1b26b5973159e3e021d0",
-            "prior_result_authorization_id": "c2586b7e898fbd2588250bf47802969ded4d695783ab841977f5f5e5c9e54e60",
-            "prior_rejection_reason": "confirmed personal negative requires high confidence"
+          "migration_provenance": null,
+          "outcome": "analyzed_not_fit",
+          "analysis_issue_code": null,
+          "attempt_consumption_source": "accepted_result",
+          "accepted_at_utc": "2026-09-30T12:02:42+00:00",
+          "run_start_anchor_commit": "98f766a847449a9697ba6c4a2370ffad08aee506",
+          "run_start_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+          "run_started_at_utc": "2026-09-30T11:59:25+00:00",
+          "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+          "score_evidence_contract": {
+            "schema_version": 1,
+            "contract": "DEEP-SCORE-EVIDENCE-V1",
+            "required": true
+          },
+          "confidence": "high",
+          "not_fit_basis": "confirmed_personal_negative",
+          "not_fit_evidence": [
+            "The day-to-day progression loop repeatedly falls into slow clicking and grind between meaningful relationship events.",
+            "Important event and work requirements can be opaque enough that players need external guidance to restore or unlock activities.",
+            "The warm relationship scenes are a real strength, but the recurring grind and unclear progression directly conflict with this profile's need for evolving, legible play."
+          ],
+          "negative_assessment": {
+            "status": "completed",
+            "evaluated_candidate_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              },
+              {
+                "kind": "observation",
+                "index": 2
+              },
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "findings": [
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "unchanged_repetition",
+                "text_ru": "После повторения диалогов ежедневный цикл устойчиво сводится к длинным участкам однообразных кликов и медленного прогресса между значимыми событиями.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 1
+                  }
+                ]
+              },
+              {
+                "disposition": "confirmed_personal_risk",
+                "risk_code": "directionlessness",
+                "text_ru": "Условия некоторых событий и занятий непрозрачны: игроки отдельно выясняют, как вернуть активности или открыть совместную работу, что создаёт устойчивый риск непонимания следующего шага.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 2
+                  }
+                ]
+              },
+              {
+                "disposition": "caution",
+                "risk_code": null,
+                "text_ru": "Темп отношений неоднороден: тёплые сцены соседствуют с очень быстрым развитием и слабо завершёнными побочными эпизодами.",
+                "evidence_refs": [
+                  {
+                    "kind": "observation",
+                    "index": 3
+                  }
+                ]
+              }
+            ]
           }
-        },
-        "dossier_content_sha256": "8a998c504111582b002efe98fe4eee397083124b867bf180e4f2590d52d6db03",
-        "dossier_compatibility_binding": {
-          "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
-          "evidence_contract_version": 2,
-          "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
-          "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
-          "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
-          "worker_schema_version": 2,
-          "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
-          "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
-          "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
-          "dossier_schema_version": 2,
-          "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
-          "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
-        },
-        "authorized_at_utc": "2026-09-30T06:43:26+00:00"
+        }
+      ],
+      "recovery_owned": false,
+      "recovery_authorization": null,
+      "confidence": "high",
+      "not_fit_basis": "confirmed_personal_negative",
+      "not_fit_evidence": [
+        "The day-to-day progression loop repeatedly falls into slow clicking and grind between meaningful relationship events.",
+        "Important event and work requirements can be opaque enough that players need external guidance to restore or unlock activities.",
+        "The warm relationship scenes are a real strength, but the recurring grind and unclear progression directly conflict with this profile's need for evolving, legible play."
+      ],
+      "negative_assessment": {
+        "status": "completed",
+        "evaluated_candidate_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 2
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ],
+        "findings": [
+          {
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "unchanged_repetition",
+            "text_ru": "После повторения диалогов ежедневный цикл устойчиво сводится к длинным участкам однообразных кликов и медленного прогресса между значимыми событиями.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              }
+            ]
+          },
+          {
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "directionlessness",
+            "text_ru": "Условия некоторых событий и занятий непрозрачны: игроки отдельно выясняют, как вернуть активности или открыть совместную работу, что создаёт устойчивый риск непонимания следующего шага.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 2
+              }
+            ]
+          },
+          {
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Темп отношений неоднороден: тёплые сцены соседствуют с очень быстрым развитием и слабо завершёнными побочными эпизодами.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ]
+          }
+        ]
       }
     },
     "game:1158940": {
@@ -49351,6 +49678,636 @@
           "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
         },
         "authorized_at_utc": "2026-09-30T06:43:26+00:00"
+      }
+    },
+    "game:1921980": {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "8f2a4d0cc8f1660997e8d1d4f160997c2a8555809a27a0ceba0d29863d61a8f1",
+      "family_id": "game:1921980",
+      "taste_subject_key": "App_1921980",
+      "appid": "1921980",
+      "taste_fingerprint": "cc7dbf42c3f3a92525996a8b51cbc93665419639c9ebdaf23eeabf077e1f48b1",
+      "candidate_context_sha256": "b16647534fa1e83393878008e3605b7a4426b2009df6b7993b8b813a34cfaabc",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "pass2_attempted": true,
+      "normal_first_pass_attempted": true,
+      "authoritative_completed": true,
+      "outcome": "analyzed_fit",
+      "analysis_issue_code": null,
+      "attempt_consumption_source": "accepted_result",
+      "accepted_at_utc": "2026-09-30T12:02:42+00:00",
+      "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+      "dossier_content_sha256": "ec446330a50e8687155a3bb1d2908cc37f81255df4ffe83ddfa9fb3f3b356985",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "authorization_id": "2ee7a9af8b0783469334490f9e2883decf75ef2985b660e075789bebba920e1f",
+      "work_mode": "normal_first_pass",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "normal_first_pass": {
+        "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+        "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+        "work_id": "8f2a4d0cc8f1660997e8d1d4f160997c2a8555809a27a0ceba0d29863d61a8f1",
+        "family_id": "game:1921980",
+        "taste_subject_key": "App_1921980",
+        "appid": "1921980",
+        "taste_fingerprint": "cc7dbf42c3f3a92525996a8b51cbc93665419639c9ebdaf23eeabf077e1f48b1",
+        "candidate_context_sha256": "b16647534fa1e83393878008e3605b7a4426b2009df6b7993b8b813a34cfaabc",
+        "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+        "dossier_content_sha256": "ec446330a50e8687155a3bb1d2908cc37f81255df4ffe83ddfa9fb3f3b356985",
+        "dossier_compatibility_binding": {
+          "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+          "evidence_contract_version": 2,
+          "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+          "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+          "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+          "worker_schema_version": 2,
+          "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+          "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+          "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+          "dossier_schema_version": 2,
+          "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+          "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+        },
+        "authorization_id": "2ee7a9af8b0783469334490f9e2883decf75ef2985b660e075789bebba920e1f",
+        "work_mode": "normal_first_pass",
+        "recovery_authorization_id": null,
+        "recovery_reason": null,
+        "recovery_condition_binding": null,
+        "migration_provenance": null,
+        "outcome": "analyzed_fit",
+        "analysis_issue_code": null,
+        "attempt_consumption_source": "accepted_result",
+        "accepted_at_utc": "2026-09-30T12:02:42+00:00",
+        "run_start_anchor_commit": "98f766a847449a9697ba6c4a2370ffad08aee506",
+        "run_start_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+        "run_started_at_utc": "2026-09-30T11:59:25+00:00",
+        "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+        "score_evidence_contract": {
+          "schema_version": 1,
+          "contract": "DEEP-SCORE-EVIDENCE-V1",
+          "required": true
+        },
+        "fit_level": "strong",
+        "confidence": "high",
+        "positive_evidence": [
+          "Cases are solved through collecting evidence, combining clues, questioning characters and committing deductions.",
+          "Failed deductions and choices can persist, making investigation decisions consequential rather than disposable.",
+          "The generation-ship setting, branching mystery and audiovisual presentation give the detective structure a strong authored identity."
+        ],
+        "taste_factors": {
+          "gameplay_mastery": 84,
+          "development_variety": 80,
+          "structure_pacing_direction": 86,
+          "identity_hooks": 91,
+          "breadth_of_match": 88
+        },
+        "score_findings": [
+          {
+            "finding_id": "between-detective-system",
+            "text_ru": "Сбор улик, сопоставление фактов, допросы и фиксация выводов делают расследование полноценной игровой системой, где внимательность и логика прямо влияют на результат.",
+            "candidate_evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 0
+              }
+            ],
+            "profile_evidence_refs": [
+              {
+                "json_pointer": "/mastery_profile/summary",
+                "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+                "match_text_ru": "Тебе нравится, когда понимание системы и внимательность заметно улучшают результат."
+              },
+              {
+                "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+                "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+                "match_text_ru": "Содержательные решения и адаптация под факты хорошо совпадают с твоей любовью к тактическим задачам."
+              }
+            ],
+            "factor_impacts": [
+              {
+                "factor_id": "gameplay_mastery",
+                "effect": "supports",
+                "normalized_value": 84
+              },
+              {
+                "factor_id": "development_variety",
+                "effect": "supports",
+                "normalized_value": 80
+              },
+              {
+                "factor_id": "breadth_of_match",
+                "effect": "supports",
+                "normalized_value": 88
+              }
+            ]
+          },
+          {
+            "finding_id": "between-consequences",
+            "text_ru": "Ошибочный вывод не всегда откатывается: последствия могут продолжить историю, поэтому решения ощущаются весомыми и поддерживают ясный детективный вектор.",
+            "candidate_evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              }
+            ],
+            "profile_evidence_refs": [
+              {
+                "json_pointer": "/taste_profile/2/pattern",
+                "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+                "match_text_ru": "Тебе важны решения с понятными последствиями и развитием ситуации."
+              },
+              {
+                "json_pointer": "/taste_profile/5/pattern",
+                "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+                "match_text_ru": "Ясная цель расследования помогает удерживать интерес без бесцельного блуждания."
+              }
+            ],
+            "factor_impacts": [
+              {
+                "factor_id": "structure_pacing_direction",
+                "effect": "supports",
+                "normalized_value": 86
+              }
+            ]
+          },
+          {
+            "finding_id": "between-world",
+            "text_ru": "Корабль поколений, пиксельная подача, музыка и ветвящийся научно-фантастический детектив дают игре сильное собственное лицо.",
+            "candidate_evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 2
+              }
+            ],
+            "profile_evidence_refs": [
+              {
+                "json_pointer": "/taste_profile/3/pattern",
+                "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+                "match_text_ru": "Сюжет и персонажи для тебя важны как самостоятельный источник вовлечённости."
+              },
+              {
+                "json_pointer": "/taste_profile/7/pattern",
+                "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+                "match_text_ru": "Выразительная авторская идентичность повышает шанс, что игра запомнится."
+              }
+            ],
+            "factor_impacts": [
+              {
+                "factor_id": "identity_hooks",
+                "effect": "supports",
+                "normalized_value": 91
+              }
+            ]
+          },
+          {
+            "finding_id": "between-backtracking",
+            "text_ru": "Часть расследований страдает от повторяющихся ответов персонажей, возвратов по кораблю и слишком прямолинейных дел, поэтому не вся заявленная детективная глубина раскрывается одинаково хорошо.",
+            "candidate_evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ],
+            "profile_evidence_refs": [
+              {
+                "json_pointer": "/taste_profile/8/pattern",
+                "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+                "match_text_ru": "Повтор без нового содержания для тебя быстро становится минусом."
+              }
+            ],
+            "factor_impacts": [
+              {
+                "factor_id": "development_variety",
+                "effect": "qualifies",
+                "normalized_value": 80
+              }
+            ]
+          }
+        ],
+        "score_explainability_status": "linked_v1",
+        "base_support_compatible": null,
+        "negative_assessment": {
+          "status": "completed",
+          "evaluated_candidate_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            },
+            {
+              "kind": "observation",
+              "index": 3
+            }
+          ],
+          "findings": [
+            {
+              "disposition": "caution",
+              "risk_code": null,
+              "text_ru": "Ошибки в выводах могут дорого стоить, потому что игра сознательно не строится вокруг обычного сохранения и мгновенного отката.",
+              "evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 1
+                }
+              ]
+            },
+            {
+              "disposition": "confirmed_personal_risk",
+              "risk_code": "unchanged_repetition",
+              "text_ru": "Повторяющиеся ответы персонажей и заметный backtracking иногда дают мало нового содержания между содержательными дедукциями.",
+              "evidence_refs": [
+                {
+                  "kind": "observation",
+                  "index": 3
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "recovery_attempts": [],
+      "recovery_owned": false,
+      "recovery_authorization": null,
+      "fit_level": "strong",
+      "confidence": "high",
+      "positive_evidence": [
+        "Cases are solved through collecting evidence, combining clues, questioning characters and committing deductions.",
+        "Failed deductions and choices can persist, making investigation decisions consequential rather than disposable.",
+        "The generation-ship setting, branching mystery and audiovisual presentation give the detective structure a strong authored identity."
+      ],
+      "taste_factors": {
+        "gameplay_mastery": 84,
+        "development_variety": 80,
+        "structure_pacing_direction": 86,
+        "identity_hooks": 91,
+        "breadth_of_match": 88
+      },
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      },
+      "score_findings": [
+        {
+          "finding_id": "between-detective-system",
+          "text_ru": "Сбор улик, сопоставление фактов, допросы и фиксация выводов делают расследование полноценной игровой системой, где внимательность и логика прямо влияют на результат.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 0
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/mastery_profile/summary",
+              "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+              "match_text_ru": "Тебе нравится, когда понимание системы и внимательность заметно улучшают результат."
+            },
+            {
+              "json_pointer": "/contextual_preferences/tactical_problem_solving/positive_when/0",
+              "profile_value_sha256": "9c7333410a254d56ad5f94f5f4e3e0cd7f1beb183e330ca2406e3a303fc12a59",
+              "match_text_ru": "Содержательные решения и адаптация под факты хорошо совпадают с твоей любовью к тактическим задачам."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "gameplay_mastery",
+              "effect": "supports",
+              "normalized_value": 84
+            },
+            {
+              "factor_id": "development_variety",
+              "effect": "supports",
+              "normalized_value": 80
+            },
+            {
+              "factor_id": "breadth_of_match",
+              "effect": "supports",
+              "normalized_value": 88
+            }
+          ]
+        },
+        {
+          "finding_id": "between-consequences",
+          "text_ru": "Ошибочный вывод не всегда откатывается: последствия могут продолжить историю, поэтому решения ощущаются весомыми и поддерживают ясный детективный вектор.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 1
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/2/pattern",
+              "profile_value_sha256": "80cfabe9c8546468cff7ffec388158e65a3b97a7ed9b945ae3b3305ad9b505cc",
+              "match_text_ru": "Тебе важны решения с понятными последствиями и развитием ситуации."
+            },
+            {
+              "json_pointer": "/taste_profile/5/pattern",
+              "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+              "match_text_ru": "Ясная цель расследования помогает удерживать интерес без бесцельного блуждания."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "structure_pacing_direction",
+              "effect": "supports",
+              "normalized_value": 86
+            }
+          ]
+        },
+        {
+          "finding_id": "between-world",
+          "text_ru": "Корабль поколений, пиксельная подача, музыка и ветвящийся научно-фантастический детектив дают игре сильное собственное лицо.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 2
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/3/pattern",
+              "profile_value_sha256": "78a34e5c5355fe6bf3dc064bbc7f9ee723ae4045cb2ccba27e3ea1e54b98ab4c",
+              "match_text_ru": "Сюжет и персонажи для тебя важны как самостоятельный источник вовлечённости."
+            },
+            {
+              "json_pointer": "/taste_profile/7/pattern",
+              "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+              "match_text_ru": "Выразительная авторская идентичность повышает шанс, что игра запомнится."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "identity_hooks",
+              "effect": "supports",
+              "normalized_value": 91
+            }
+          ]
+        },
+        {
+          "finding_id": "between-backtracking",
+          "text_ru": "Часть расследований страдает от повторяющихся ответов персонажей, возвратов по кораблю и слишком прямолинейных дел, поэтому не вся заявленная детективная глубина раскрывается одинаково хорошо.",
+          "candidate_evidence_refs": [
+            {
+              "kind": "observation",
+              "index": 3
+            }
+          ],
+          "profile_evidence_refs": [
+            {
+              "json_pointer": "/taste_profile/8/pattern",
+              "profile_value_sha256": "fdcd729ff968a02cbe17d2b5f13d7cdf006c8adbb47fe5e6c3cbd0a9de30d285",
+              "match_text_ru": "Повтор без нового содержания для тебя быстро становится минусом."
+            }
+          ],
+          "factor_impacts": [
+            {
+              "factor_id": "development_variety",
+              "effect": "qualifies",
+              "normalized_value": 80
+            }
+          ]
+        }
+      ],
+      "score_explainability_status": "linked_v1",
+      "base_support_compatible": null,
+      "negative_assessment": {
+        "status": "completed",
+        "evaluated_candidate_refs": [
+          {
+            "kind": "observation",
+            "index": 1
+          },
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ],
+        "findings": [
+          {
+            "disposition": "caution",
+            "risk_code": null,
+            "text_ru": "Ошибки в выводах могут дорого стоить, потому что игра сознательно не строится вокруг обычного сохранения и мгновенного отката.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 1
+              }
+            ]
+          },
+          {
+            "disposition": "confirmed_personal_risk",
+            "risk_code": "unchanged_repetition",
+            "text_ru": "Повторяющиеся ответы персонажей и заметный backtracking иногда дают мало нового содержания между содержательными дедукциями.",
+            "evidence_refs": [
+              {
+                "kind": "observation",
+                "index": 3
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "game:2019760": {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "b997e64c7c860078ca4093c8bdda8016d07c7093555cbc39ec42e6caea3d72f4",
+      "family_id": "game:2019760",
+      "taste_subject_key": "App_2019760",
+      "appid": "2019760",
+      "taste_fingerprint": "79588afcf3800ba86793100ed407ecd6da25e1dd82eb41d741e1fe2845dcf1a9",
+      "candidate_context_sha256": "a94468b15bb4101515c9613cb66d0b73825b3b210f98ba5159e24bf933a05c9d",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "pass2_attempted": true,
+      "normal_first_pass_attempted": true,
+      "authoritative_completed": false,
+      "outcome": "analysis_incomplete",
+      "analysis_issue_code": "terminal_execution_failure",
+      "attempt_consumption_source": "github_derived_semantic_contract_failure",
+      "accepted_at_utc": "2026-09-30T12:02:42+00:00",
+      "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+      "dossier_content_sha256": "a8d7499eeb9d07f68ea726a6fc8287ce1d710e3fc2ddd1dd08a55a8c37d8cb98",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "authorization_id": "c5c8f65c6350180a9e4c3a49f7bd59896316b9ed3ab2f68ed1317f3569717dac",
+      "work_mode": "normal_first_pass",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "normal_first_pass": {
+        "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+        "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+        "work_id": "b997e64c7c860078ca4093c8bdda8016d07c7093555cbc39ec42e6caea3d72f4",
+        "family_id": "game:2019760",
+        "taste_subject_key": "App_2019760",
+        "appid": "2019760",
+        "taste_fingerprint": "79588afcf3800ba86793100ed407ecd6da25e1dd82eb41d741e1fe2845dcf1a9",
+        "candidate_context_sha256": "a94468b15bb4101515c9613cb66d0b73825b3b210f98ba5159e24bf933a05c9d",
+        "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+        "dossier_content_sha256": "a8d7499eeb9d07f68ea726a6fc8287ce1d710e3fc2ddd1dd08a55a8c37d8cb98",
+        "dossier_compatibility_binding": {
+          "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+          "evidence_contract_version": 2,
+          "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+          "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+          "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+          "worker_schema_version": 2,
+          "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+          "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+          "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+          "dossier_schema_version": 2,
+          "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+          "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+        },
+        "authorization_id": "c5c8f65c6350180a9e4c3a49f7bd59896316b9ed3ab2f68ed1317f3569717dac",
+        "work_mode": "normal_first_pass",
+        "recovery_authorization_id": null,
+        "recovery_reason": null,
+        "recovery_condition_binding": null,
+        "migration_provenance": null,
+        "outcome": "analysis_incomplete",
+        "analysis_issue_code": "terminal_execution_failure",
+        "attempt_consumption_source": "github_derived_semantic_contract_failure",
+        "accepted_at_utc": "2026-09-30T12:02:42+00:00",
+        "run_start_anchor_commit": "98f766a847449a9697ba6c4a2370ffad08aee506",
+        "run_start_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+        "run_started_at_utc": "2026-09-30T11:59:25+00:00",
+        "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+        "score_evidence_contract": {
+          "schema_version": 1,
+          "contract": "DEEP-SCORE-EVIDENCE-V1",
+          "required": true
+        },
+        "semantic_contract_failure_reason": "score_findings[2] lowering/qualifying impact lacks negative/mixed Dossier evidence"
+      },
+      "recovery_attempts": [],
+      "recovery_owned": true,
+      "recovery_authorization": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
+      }
+    },
+    "game:2094320": {
+      "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+      "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+      "work_id": "eb60f31b87eaf0bf0a175b09eed16f11187743f4547098dacd3401b676163e62",
+      "family_id": "game:2094320",
+      "taste_subject_key": "App_2094320",
+      "appid": "2094320",
+      "taste_fingerprint": "000a08bcec6ab896917f68c7e69aaf107e7ed856999d91b5c3fccddfa429b178",
+      "candidate_context_sha256": "dc04fdc3eb640d0b692f580216305148179079a0a0ab835e2e61298a016bd278",
+      "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+      "pass2_attempted": true,
+      "normal_first_pass_attempted": true,
+      "authoritative_completed": false,
+      "outcome": "analysis_incomplete",
+      "analysis_issue_code": "terminal_execution_failure",
+      "attempt_consumption_source": "github_derived_semantic_contract_failure",
+      "accepted_at_utc": "2026-09-30T12:02:42+00:00",
+      "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+      "dossier_content_sha256": "90cf2e2bbbf0454fbf8e91648c893ed7b939b8ea3f307ba50aaafc81ef14f8d4",
+      "dossier_compatibility_binding": {
+        "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+        "evidence_contract_version": 2,
+        "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+        "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+        "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+        "worker_schema_version": 2,
+        "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+        "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+        "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+        "dossier_schema_version": 2,
+        "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+        "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+      },
+      "authorization_id": "7695b935d9e6973970e4f0455b6d52467d75b0abcfad6af9f602495e82ae0938",
+      "work_mode": "normal_first_pass",
+      "recovery_authorization_id": null,
+      "recovery_reason": null,
+      "recovery_condition_binding": null,
+      "normal_first_pass": {
+        "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+        "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+        "work_id": "eb60f31b87eaf0bf0a175b09eed16f11187743f4547098dacd3401b676163e62",
+        "family_id": "game:2094320",
+        "taste_subject_key": "App_2094320",
+        "appid": "2094320",
+        "taste_fingerprint": "000a08bcec6ab896917f68c7e69aaf107e7ed856999d91b5c3fccddfa429b178",
+        "candidate_context_sha256": "dc04fdc3eb640d0b692f580216305148179079a0a0ab835e2e61298a016bd278",
+        "profile_semantic_sha256": "f0852fd520755bedafb764da25d3aa391fd0706eae4878d6f89ef10894fd915e",
+        "dossier_content_sha256": "90cf2e2bbbf0454fbf8e91648c893ed7b939b8ea3f307ba50aaafc81ef14f8d4",
+        "dossier_compatibility_binding": {
+          "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+          "evidence_contract_version": 2,
+          "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+          "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+          "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+          "worker_schema_version": 2,
+          "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+          "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+          "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+          "dossier_schema_version": 2,
+          "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+          "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+        },
+        "authorization_id": "7695b935d9e6973970e4f0455b6d52467d75b0abcfad6af9f602495e82ae0938",
+        "work_mode": "normal_first_pass",
+        "recovery_authorization_id": null,
+        "recovery_reason": null,
+        "recovery_condition_binding": null,
+        "migration_provenance": null,
+        "outcome": "analysis_incomplete",
+        "analysis_issue_code": "terminal_execution_failure",
+        "attempt_consumption_source": "github_derived_semantic_contract_failure",
+        "accepted_at_utc": "2026-09-30T12:02:42+00:00",
+        "run_start_anchor_commit": "98f766a847449a9697ba6c4a2370ffad08aee506",
+        "run_start_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+        "run_started_at_utc": "2026-09-30T11:59:25+00:00",
+        "work_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+        "score_evidence_contract": {
+          "schema_version": 1,
+          "contract": "DEEP-SCORE-EVIDENCE-V1",
+          "required": true
+        },
+        "semantic_contract_failure_reason": "score_findings[1] supporting impact lacks positive/mixed Dossier evidence"
+      },
+      "recovery_attempts": [],
+      "recovery_owned": true,
+      "recovery_authorization": null,
+      "score_evidence_contract": {
+        "schema_version": 1,
+        "contract": "DEEP-SCORE-EVIDENCE-V1",
+        "required": true
       }
     }
   }
