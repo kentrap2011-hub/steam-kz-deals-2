@@ -1,0 +1,310 @@
+{
+  "schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+  "schema_version": 2,
+  "web_evidence_contract_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "appid": "20530",
+  "title": "Red Faction",
+  "generated_at_utc": "2026-09-30T07:31:00Z",
+  "expires_at_utc": "2026-10-20T07:31:00Z",
+  "ttl_days": 20,
+  "game_identity": {
+    "work_title": "Red Faction",
+    "release_year": 2001,
+    "resolution_status": "resolved",
+    "identity_source_ids": [
+      "source-001"
+    ],
+    "corroborators": [
+      {
+        "kind": "appid",
+        "value": "20530"
+      },
+      {
+        "kind": "developer",
+        "value": "Volition"
+      },
+      {
+        "kind": "publisher",
+        "value": "Deep Silver"
+      }
+    ]
+  },
+  "summary": "Evidence summary: 4 validated structured observations; consult observations and conflicts for supported findings.",
+  "observations": [
+    {
+      "category": "mechanics",
+      "statement": "Geo-Mod destruction is the defining mechanic: explosives can open alternate routes, bypass doors and create shortcuts, although players also note that the campaign uses this freedom less often than the technology suggests.",
+      "sentiment": "mixed",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "structure",
+      "statement": "The single-player campaign is an old-school Mars-set first-person shooter with a story-driven continuous level flow, varied weapons and occasional vehicles; players still value the premise and variety but describe some later stretches as more linear than the opening suggests.",
+      "sentiment": "mixed",
+      "recurrence": "limited",
+      "mention_count": 2,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-003",
+        "feedback-004"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Backtracking, manual-save dependence, tedious stealth sections and difficult late-game enemies are recurring sources of friction in the original campaign.",
+      "sentiment": "negative",
+      "recurrence": "moderate",
+      "mention_count": 3,
+      "evidence_languages": [
+        "non_russian"
+      ],
+      "evidence_status": "durable",
+      "source_ids": [
+        "source-003"
+      ],
+      "player_feedback_ids": [
+        "feedback-002",
+        "feedback-003",
+        "feedback-005"
+      ]
+    },
+    {
+      "category": "friction",
+      "statement": "Modern-PC setup can still need community help: a Russian-language player review from August 2026 recommends a fan engine patch for modern DirectX, widescreen and high-resolution support.",
+      "sentiment": "negative",
+      "recurrence": "anecdotal",
+      "mention_count": 1,
+      "evidence_languages": [
+        "russian"
+      ],
+      "evidence_status": "current",
+      "source_ids": [
+        "source-002"
+      ],
+      "player_feedback_ids": [
+        "feedback-001"
+      ]
+    }
+  ],
+  "conflicts": [],
+  "evidence": {
+    "strategy": "adaptive_multi_source_web",
+    "research_state": "sufficient",
+    "source_mix_status": "multi_source",
+    "single_source_reason": null,
+    "russian_attempt": "found_and_used",
+    "overall_strength": "moderate",
+    "stop_reason": "evidence_stable",
+    "coverage": {
+      "dimensions": [
+        {
+          "dimension": "core_play_mechanics",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "controls_game_feel",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            3
+          ]
+        },
+        {
+          "dimension": "progression_development_unlocks",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "variety_repetition_over_time",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "difficulty_mastery_learning_friction",
+          "state": "covered",
+          "observation_indices": [
+            2,
+            3
+          ]
+        },
+        {
+          "dimension": "pacing_structure_direction",
+          "state": "covered",
+          "observation_indices": [
+            1,
+            2
+          ]
+        },
+        {
+          "dimension": "exploration_mission_activity_structure",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "multiplayer_coop_dependence",
+          "state": "not_material_or_not_applicable",
+          "observation_indices": []
+        },
+        {
+          "dimension": "story_characters_identity_hooks",
+          "state": "covered",
+          "observation_indices": [
+            1
+          ]
+        },
+        {
+          "dimension": "recurring_strengths",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "dimension": "recurring_complaints_tradeoffs",
+          "state": "covered",
+          "observation_indices": [
+            0,
+            2,
+            3
+          ]
+        },
+        {
+          "dimension": "technical_performance_localization_regional",
+          "state": "covered",
+          "observation_indices": [
+            3
+          ]
+        }
+      ],
+      "closure_basis": "broad_neutral_picture",
+      "strengths_investigated": true,
+      "weaknesses_tradeoffs_investigated": true
+    }
+  },
+  "provenance": {
+    "sources": [
+      {
+        "source_id": "source-001",
+        "source_type": "official_metadata",
+        "domain": "store.steampowered.com",
+        "url": "https://store.steampowered.com/app/20530/Red_Faction/",
+        "publication_date": "2001-09-18",
+        "language": "non_russian",
+        "evidence_role": "identity",
+        "player_feedback": false,
+        "freshness": "older"
+      },
+      {
+        "source_id": "source-002",
+        "source_type": "other_player_feedback",
+        "domain": "stopgame.ru",
+        "url": "https://stopgame.ru/game/red_faction/review/39507",
+        "publication_date": "2026-08-18",
+        "language": "russian",
+        "evidence_role": "current_state",
+        "player_feedback": true,
+        "freshness": "recent"
+      },
+      {
+        "source_id": "source-003",
+        "source_type": "steam_reviews",
+        "domain": "steamcommunity.com",
+        "url": "https://steamcommunity.com/app/20530/reviews/?browsefilter=toprated",
+        "publication_date": null,
+        "language": "non_russian",
+        "evidence_role": "durable_trait",
+        "player_feedback": true,
+        "feedback_surface_mode": "concrete_item_collection",
+        "exact_product_binding": {
+          "basis": "source_appid",
+          "appid": "20530",
+          "title": null,
+          "release_year": null
+        },
+        "freshness": "unknown"
+      }
+    ],
+    "player_feedback_records": [
+      {
+        "feedback_id": "feedback-001",
+        "source_id": "source-002",
+        "url": "https://stopgame.ru/game/red_faction/review/39507",
+        "publication_date": "2026-08-18",
+        "language": "russian",
+        "acquisition_mode": "stable_item"
+      },
+      {
+        "feedback_id": "feedback-002",
+        "source_id": "source-003",
+        "publication_date": "2014-06-13",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-003",
+        "source_id": "source-003",
+        "publication_date": "2014-07-09",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-004",
+        "source_id": "source-003",
+        "publication_date": "2026-02-14",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      },
+      {
+        "feedback_id": "feedback-005",
+        "source_id": "source-003",
+        "publication_date": "2021-07-30",
+        "language": "non_russian",
+        "acquisition_mode": "inspected_collection_item"
+      }
+    ]
+  }
+}
