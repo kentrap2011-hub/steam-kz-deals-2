@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "contract": "PROGRESSIVE-PASS2-RESULT-V1",
+  "run_start_anchor_commit": "98f766a847449a9697ba6c4a2370ffad08aee506",
+  "run_start_authority_commit": "dce165043350a62aeff1c4f8470aa084539472be",
+  "run_started_at_utc": "2026-09-30T11:59:25+00:00",
+  "semantic_generation_id": "d21e7d0b38be9d16dbd931900610ff8603715150eec3d0e666f5c84a93e52408",
+  "profile_pin_sha256": "95561ab1f3e432b35d242ed3d90e2600640f2c68a46c47813ca11f6b8a722551",
+  "work_id": "8a7c52e870937fd31c409ea901c904111f5d232e047ef02aa29006701be40689",
+  "family_id": "game:1839510",
+  "taste_subject_key": "App_1839510",
+  "appid": "1839510",
+  "taste_fingerprint": "8cbf6e8d95efbbb4b298501536b322e1d07828effaad133b748f727a987f26be",
+  "candidate_context_sha256": "99297936b2ef9c429f04244a8ee3636a9b5be621176d467ca3f66342f5613ffb",
+  "dossier_content_sha256": "3edede88b322684e8a49dcdbd3574b0dc3e886d4178aa9d0f5f75f410a550cc3",
+  "dossier_compatibility_binding": {
+    "evidence_contract_schema": "TASTE-STEAM-REVIEW-DOSSIER-WEB-EVIDENCE-CONTRACT-V2",
+    "evidence_contract_version": 2,
+    "evidence_contract_revision": "github-derived-temporal-classification-2026-09-27",
+    "evidence_contract_sha256": "81d3feabea2f84f1605e82cae3f0f7c0a0f268c40a104ab01d5163d36788faed",
+    "worker_schema": "TASTE-STEAM-REVIEW-DOSSIER-WORKER-SCHEMA-V2",
+    "worker_schema_version": 2,
+    "worker_schema_revision": "github-derived-temporal-classification-2026-09-27",
+    "worker_schema_sha256": "3bc3486627f7a5eed3ab4c00fef8ef563550a6fbd83232fdccb1ec59fa6a2986",
+    "dossier_schema": "TASTE-STEAM-REVIEW-DOSSIER-V2",
+    "dossier_schema_version": 2,
+    "worker_prompt_revision": "web-evidence-v2-github-derived-temporal-classification-v1",
+    "worker_prompt_sha256": "719722e85584c32bf10f877cdd19465dfc74a40a0a0992fe1f5e02ae828ff18d"
+  },
+  "authorization_id": "5a52e4250af6356a847a1eea74819c2134519a5059907963fd35af42c2e86242",
+  "work_mode": "normal_first_pass",
+  "recovery_authorization_id": null,
+  "recovery_reason": null,
+  "recovery_condition_binding": null,
+  "score_evidence_contract": {
+    "schema_version": 1,
+    "contract": "DEEP-SCORE-EVIDENCE-V1",
+    "required": true
+  },
+  "outcome": "analyzed_fit",
+  "fit_level": "moderate",
+  "confidence": "medium",
+  "positive_evidence": [
+    "The handmade notebook presentation constantly introduces playful visual and mechanical ideas.",
+    "Charm and creativity provide a distinctive identity even though the systems are simple."
+  ],
+  "taste_factors": {
+    "gameplay_mastery": 40,
+    "development_variety": 72,
+    "structure_pacing_direction": 70,
+    "identity_hooks": 94,
+    "breadth_of_match": 66
+  },
+  "score_findings": [
+    {
+      "finding_id": "rpgtime-invention",
+      "text_ru": "Рисованный школьный блокнот постоянно придумывает новые маленькие механики и способы взаимодействия, поэтому короткая игра ощущается изобретательной, даже если отдельные системы неглубокие.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 1
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/0/pattern",
+          "profile_value_sha256": "8dac24a1392ea20289bab9335c8b336d227bfb31ab62860647ea74c55846e616",
+          "match_text_ru": "Тебе важно, чтобы игра регулярно показывала что-то новое."
+        },
+        {
+          "json_pointer": "/taste_profile/7/pattern",
+          "profile_value_sha256": "9a4bb2dd3feb0f5947084c3337701240f36a1f6fde8d71d5bab8409094d8d197",
+          "match_text_ru": "Необычная авторская подача сильно повышает запоминаемость."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "development_variety",
+          "effect": "supports",
+          "normalized_value": 72
+        },
+        {
+          "factor_id": "identity_hooks",
+          "effect": "supports",
+          "normalized_value": 94
+        },
+        {
+          "factor_id": "breadth_of_match",
+          "effect": "supports",
+          "normalized_value": 66
+        }
+      ]
+    },
+    {
+      "finding_id": "rpgtime-simple",
+      "text_ru": "По сути это интерактивное приключение, а не глубокая RPG, поэтому механического освоения здесь сравнительно мало.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 0
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/mastery_profile/summary",
+          "profile_value_sha256": "531c325b1ae67734599275ebd097837fda06c06f4add2f8663a7cb019b9ed11d",
+          "match_text_ru": "Механическое мастерство обычно является для тебя сильным плюсом, поэтому простота ограничивает этот фактор."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "gameplay_mastery",
+          "effect": "qualifies",
+          "normalized_value": 40
+        }
+      ]
+    },
+    {
+      "finding_id": "rpgtime-pacing",
+      "text_ru": "Постоянное руководство и рассказчик помогают держать ясный маршрут, но местами слишком сильно ведут за руку и замедляют темп.",
+      "candidate_evidence_refs": [
+        {
+          "kind": "observation",
+          "index": 2
+        }
+      ],
+      "profile_evidence_refs": [
+        {
+          "json_pointer": "/taste_profile/5/pattern",
+          "profile_value_sha256": "e6a6988afba1de43249d7ef74a4bd3d19f1808a4e7fb65f4242a86fa5a1c2c68",
+          "match_text_ru": "Понятный вектор полезен для тебя, но чрезмерная режиссура может уменьшать свободу."
+        }
+      ],
+      "factor_impacts": [
+        {
+          "factor_id": "structure_pacing_direction",
+          "effect": "qualifies",
+          "normalized_value": 70
+        }
+      ]
+    }
+  ],
+  "base_support_compatible": null,
+  "negative_assessment": {
+    "status": "completed",
+    "evaluated_candidate_refs": [
+      {
+        "kind": "observation",
+        "index": 2
+      },
+      {
+        "kind": "observation",
+        "index": 3
+      }
+    ],
+    "findings": [
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Кампания короткая, механически простая и иногда слишком медленная или переобъяснённая.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 2
+          }
+        ]
+      },
+      {
+        "disposition": "caution",
+        "risk_code": null,
+        "text_ru": "Необычные решения меню, выхода и сохранения создают лишнюю интерфейсную фрикцию.",
+        "evidence_refs": [
+          {
+            "kind": "observation",
+            "index": 3
+          }
+        ]
+      }
+    ]
+  }
+}
