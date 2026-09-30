@@ -2,7 +2,7 @@
 
 ## CURRENT DIRECTOR STATE — 2026-09-29
 
-- `ЧАТ 1` is free. `WORKER_TASK_KOF_XV_MISSING_POSITIVE_REASONS_DIAGNOSTIC_01.md` is accepted complete: root cause is overly narrow positive-explanation template coverage in `scripts/card_explanation_policy.py`, not missing semantic evidence or ranking.
+- `ЧАТ 1` assigned: `WORKER_TASK_DEEP_SCORE_EVIDENCE_EXPLAINABILITY_ALIGNMENT_01.md` — align Deep score-bearing evidence with the same grounded reasons shown to the user; no presentation-only template fix.
 - `ЧАТ 2` is free. `WORKER_TASK_RUSSIAN_TRANSLATION_NONBLOCKING_PUBLICATION_STATISTICS_01.md` is accepted complete via PR #125 / merge `070f30807acceffed36a342e1d442f5dcd1c99c7`.
 - Latest accepted implementation: `WORKER_TASK_PROGRESSIVE_MIGRATION_CURRENT_BINDING_REGRESSION_FIX_01.md` (implementation accepted; pre-AI and Russian translation scope unblocked).
 - PR #99 merged as `5a296a98b256ea32ea1e0eb6e7d05b64ebefffc3`; Director acceptance commit: `fea60f54b5d007c458f62b1889e765b01a526ff1`.
@@ -17,6 +17,38 @@
 - User-authorized current recovery direction: process current translations in ЧАТ 1 while ЧАТ 2 makes translation absence nonblocking and adds translation observability to Statistics. The earlier browser-asset decoupling proposal is not the current task; reassess it only if publication still lags after these authorized changes.
 - Accepted stale-snapshot rebase-race diagnosis remains unfixed and may still be relevant after the live artifact is pinned.
 - Previous physical Director conversation is retired. The NEW Director conversation completed START/reconciliation on 2026-09-29 and is the active Director.
+
+
+## ACTIVE — ЧАТ 1 — Deep score evidence / explainability alignment
+
+Task:
+`WORKER_TASK_DEEP_SCORE_EVIDENCE_EXPLAINABILITY_ALIGNMENT_01.md`
+
+Mode:
+`IMPLEMENT / VALIDATE`
+
+Status:
+`authorized_ready_for_worker`
+
+User requirement:
+- the reasons allowed to influence Deep personal score must be the same grounded reasons the site can show;
+- invalid/generic hidden positives must not raise the score;
+- valid specific positives must not disappear due to a small lexical/template whitelist;
+- visible positive and negative/caution reasons must explain the actual personal rating;
+- purchase value remains separate from personal fit.
+
+Architecture:
+- semantic specificity remains owned by the existing Deep semantic worker;
+- GitHub validates bindings, factor/evidence linkage, completeness and provenance;
+- browser remains read-only;
+- no second scoring system, semantic worker, scheduler, queue or retry owner;
+- if historical Deep results lack provable linkage, prepare a finite migration through the existing Deep worker rather than inventing compatibility.
+
+Pinned regression:
+- KOF XV / AppID 1498570.
+
+Expected report:
+`reviews/worker_reports/deep-score-evidence-explainability-alignment-01.md`
 
 
 ## ACCEPTED — ЧАТ 1 — KOF XV missing positive reasons diagnostic
